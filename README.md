@@ -62,8 +62,9 @@ In order to
 2. invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project; further communications will use skype;
 3. present the results at UseR! 2016.
 
-we will need euro 6500 (1), 1000 euro (2) and 1500 euro (3), which
-sums to euro 9000. Cutting down costs would start at 3.
+we will need &euro; 6500 for (1), &euro; 1000 for (2) and &euro; 1500 for
+(3), which sums to &euro; 9000 (9750 USD).
+
 
 ## Dissemination
 
