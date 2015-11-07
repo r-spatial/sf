@@ -21,7 +21,7 @@ The problems I want to solve are
 3. The lack of simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain
 4. Several current approaches (e.g. `ggmap`, `ggplot`) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations, or tend to make overly simplifying assumptions (spatial data come as longitude/latitude and have datum `WGS84`).
 
-It will mainly affect those who use data bases or modern javascript-based web APIs, as these converged on adopting simple features, and call for simple and light-weight handling in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to reuse the R code for this, and lead to a good, sustainable shared R code base for this.
+Solving this problem will mainly affect those who use data bases or modern javascript-based web APIs, as these largely converged on adopting simple features, and those who need a simpler and more light-weight handling of spatial data in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to build upon and reuse the R code for this, and lead to a good, sustainable shared R code base.
 
 On the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do).
 
