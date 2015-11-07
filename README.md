@@ -58,8 +58,8 @@ _Please note that the budget for the ISC is currently limited. We are likely to 
 
 In order to
 
-1. employ a student assistant for one year (10 hrs/week), and
-2. invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project,
+1. employ a student assistant for one year (10 hrs/week),
+2. invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project; further communications will use skype;
 3. present the results at UseR! 2016.
 
 we will need euro 6500 (1), 1000 euro (2) and 1500 euro (3), which
