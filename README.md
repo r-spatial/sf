@@ -37,7 +37,7 @@ The plan is to
 
 |  Failure mode    |  Recovery plan     |
 |------------------|--------------------|
-| S3 classes are too simple to represent simple features | use a list column with geometry, and nested lists to represent nested structures | 
+| S3 classes are too simple to represent simple features class hierarchy | use a list column with geometry, and nested lists to represent nested structures; use a `WKT` character column | 
 | CRAN does not (yet) support GDAL 2.0 | ask Roger Bivand for help, convince Uwe Ligges and Simon Urbanek |
 | migrating sp break downstream packages | discuss with Roger Bivand, Barry Rowlingson, Robert Hijmans and Tim Keitt how to proceed; be patient and try to smooth out problems |
 
