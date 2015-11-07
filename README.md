@@ -50,10 +50,13 @@ _What can we do to help you? If you need money, how much? How will you spend it?
 _Please note that the budget for the ISC is currently limited. We are likely to fund one or two projects with a budget of $20-30k projects, and handful of projects with budgets of  of $5-10k. We do not pay overhead._
 
 
-I need to employ a student assistant for one year (10 hrs/week),
-which costs euro 6500, and 1000 euro for travel and subsistance
-when Roger Bivand will visit us for one week, halfway the project.
-There are no overheads involved in these costs.
+I need 
+
+1. to employ a student assistant for one year (10 hrs/week), and
+2. to invite Roger Bivand to visit us for one week, halfway the project.
+
+The first will cost euro 6500, the second around 1000 euro for travel
+and subsistance. There are no overheads involved in these costs.
 
 ## Dissemination
 
