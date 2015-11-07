@@ -14,7 +14,7 @@ Since [2005](https://stat.ethz.ch/pipermail/r-sig-geo/2005-April/000378.html), C
 ## The problem
 _What problem do you want to solve? Why is it a problem? Who does it affect? What will solving the problem enable? This section should include a brief summary of existing work, such as other packages. If you are proposing a change to R itself, you must include a letter of support from a member of R core._
 
-The problems I want to solve are 
+The problems we want to solve are 
 
 1. R can currently not represent simple features. It can read most simple feature classes, but has its own representation for this, and cannot write them back without loss of information (as it does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`, and cannot deal with `FEATURECOLLECTION`).
 2. The current implementation of lines and vector data in package `sp` is partly ambiguous (does slot `ringDir` or slot `hole` indicate whether a polygon is a hole?), complicated (to which exterior polygon does a hole belong?), and by some considered difficult to work with (S4).
@@ -23,7 +23,7 @@ The problems I want to solve are
 
 Solving this problem will mainly affect those who use data bases or modern javascript-based web APIs, as these largely converged on adopting simple features, and those who need a simpler and more light-weight handling of spatial data in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to build upon and reuse the R code for this, and lead to a good, sustainable shared R code base.
 
-On the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do).
+On the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do), making it possible to work with data that do not fit in memory.
 
 ## The plan
 _How are you going to solve the problem? Include the concrete actions you will take and an estimated timeline. What are likely failure modes and how will you recover from them?_
