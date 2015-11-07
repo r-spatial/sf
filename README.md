@@ -16,7 +16,7 @@ _What problem do you want to solve? Why is it a problem? Who does it affect? Wha
 
 The problems we want to solve are:
 
-1. R can currently not represent simple features. It can read most simple feature classes, but has its own representation for this, and cannot write them back without loss of information (as it does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`, and cannot deal with `FEATURECOLLECTION`).
+1. R can currently not represent simple features. It can read most simple feature classes in `sp` classes, but uses its own representation for this, and cannot write them back without loss of information (it does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`, and cannot deal with several simple feature classes, including `TIN` and `GEOMETRYCOLLECTION`).
 2. The current implementation of lines and vector data in package `sp` is partly ambiguous (does slot `ringDir` or slot `hole` indicate whether a polygon is a hole?), complicated (to which exterior polygon does a hole belong?), and by some considered difficult to work with (S4).
 3. The lack of simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain.
 4. Several current approaches (e.g. `ggmap`, `ggplot`) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations, or tend to make simplifying assumptions (e.g., spatial data come as longitude/latitude and have datum `WGS84`; all web maps use _web Mercator_).
