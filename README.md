@@ -29,6 +29,7 @@ On the longer run it will affect all packages currently using sp, when we manage
 _How are you going to solve the problem? Include the concrete actions you will take and an estimated timeline. What are likely failure modes and how will you recover from them?_
 
 The plan is to 
+
 1. implement simple features in R, including a representation that uses S3 and extends `data.frame`.
 2. develop a C++ interface to GDAL 2.0, to read and write simple feature objects, and to interface other functionality (coordinate transformation, geometry operations)
 3. develop vignettes with data base connections, web API's, leaflet, ggmap, dplyr
