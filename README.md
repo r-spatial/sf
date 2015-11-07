@@ -30,10 +30,10 @@ _How are you going to solve the problem? Include the concrete actions you will t
 
 The plan is to 
 
-1. implement simple features in R, including a representation that uses S3 and extends `data.frame`.
-2. develop a C++ interface to GDAL 2.0, to read and write simple feature objects, and to interface other functionality (coordinate transformation, geometry operations)
-3. develop vignettes with data base connections, web API's, leaflet, ggmap, dplyr
-4. develop and prototypically implement a migration path for sp to become compliant with simple features.
+1. implement simple features in R, including a representation that uses S3 and extends `data.frame` (M1-3).
+2. develop a C++ interface to GDAL 2.0, to read and write simple feature objects, and to interface other functionality (coordinate transformation, geometry operations) (M3-8)
+3. develop vignettes with data base connections, web API's, leaflet, ggmap, dplyr (M7-10)
+4. develop and prototypically implement a migration path for sp to become compliant with simple features. (M10-12)
 
 |  Failure mode    |  Recovery plan     |
 |------------------|--------------------|
