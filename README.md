@@ -14,12 +14,12 @@ Since [2005](https://stat.ethz.ch/pipermail/r-sig-geo/2005-April/000378.html), C
 ## The problem
 _What problem do you want to solve? Why is it a problem? Who does it affect? What will solving the problem enable? This section should include a brief summary of existing work, such as other packages. If you are proposing a change to R itself, you must include a letter of support from a member of R core._
 
-The problems we want to solve are 
+The problems we want to solve are:
 
 1. R can currently not represent simple features. It can read most simple feature classes, but has its own representation for this, and cannot write them back without loss of information (as it does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`, and cannot deal with `FEATURECOLLECTION`).
 2. The current implementation of lines and vector data in package `sp` is partly ambiguous (does slot `ringDir` or slot `hole` indicate whether a polygon is a hole?), complicated (to which exterior polygon does a hole belong?), and by some considered difficult to work with (S4).
-3. The lack of simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain
-4. Several current approaches (e.g. `ggmap`, `ggplot`) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations, or tend to make overly simplifying assumptions (spatial data come as longitude/latitude and have datum `WGS84`).
+3. The lack of simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain.
+4. Several current approaches (e.g. `ggmap`, `ggplot`) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations, or tend to make simplifying assumptions (e.g., spatial data come as longitude/latitude and have datum `WGS84`; all web maps use _web Mercator_).
 
 Solving this problem will mainly affect those who use data bases or modern javascript-based web APIs, as these largely converged on adopting simple features, and those who need a simpler and more light-weight handling of spatial data in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to build upon and reuse the R code for this, and lead to a good, sustainable shared R code base.
 
@@ -30,11 +30,12 @@ _How are you going to solve the problem? Include the concrete actions you will t
 
 The plan is to 
 
-1. develop an R package that implements simple features in R, that is simple yet gives users access to the complete data, and has a representation that uses S3 by extending `data.frame` (M1-3).
+1. develop an R package that implements simple features in R, that is simple yet gives users access to the complete data, and has a representation that uses S3 by extending `data.frame` (M1-3)
 2. add to this package a C++ interface to GDAL 2.0, to read and write simple feature data, and to interface other functionality (coordinate transformation, geometry operations) (M3-8)
-3. write user-oriented tutorial vignettes showing how to use it with files, data base connections, web API's, leaflet, ggmap, dplyr and so on (M7-10)
-4. write a tutorial vignette for R package writers reusing the package (M10)
-5. develop and prototypically implement a migration path for sp to become compliant with simple features. (M7-12)
+3. develop and prototypically implement a migration path for sp to become compliant with simple features (M7-12)
+4. write user-oriented tutorial vignettes showing how to use it with files, data base connections, web API's, leaflet, ggmap, dplyr and so on (M7-10)
+5. write a tutorial vignette for R package writers reusing the package (M10)
+6. Collect and process community feed back (M11-12).
 
 |  Failure mode    |  Recovery plan     |
 |------------------|--------------------|
