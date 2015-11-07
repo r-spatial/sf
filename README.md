@@ -19,7 +19,7 @@ The problems I want to solve are
 1. R can currently not represent simple features. It can read most simple feature classes, but has its own representation for this, and cannot write them back without loss of information (as it does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`, and cannot deal with `FEATURECOLLECTION`).
 2. The current implementation of lines and vector data in package `sp` is partly ambiguous (does slot `ringDir` or slot `hole` indicate whether a polygon is a hole?), complicated (to which exterior polygon does a hole belong?), and by some considered difficult to work with (S4).
 3. The lack of simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain
-4. Several current approaches (e.g. ggmap, ggmap2) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations.
+4. Several current approaches (e.g. `ggmap`, `ggplot`) tend to use non-standardised, R-only, and partly outdated libraries for coordinate transformations, or tend to make overly simplifying assumptions (spatial data come as longitude/latitude and have datum `WGS84`).
 
 It will mainly affect those who use data bases or modern javascript-based web APIs, as these converged on adopting simple features, and call for simple and light-weight handling in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to reuse the R code for this, and lead to a good, sustainable shared R code base for this.
 
