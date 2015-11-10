@@ -57,7 +57,7 @@ _What can we do to help you? If you need money, how much? How will you spend it?
 _Please note that the budget for the ISC is currently limited. We are likely to fund one or two projects with a budget of $20-30k projects, and handful of projects with budgets of  of $5-10k. We do not pay overhead._
 
 
-The following table contains the cost items, one by one
+The following table contains the cost items.
 
 | Item | Cost |
 | ---- | ---- |
