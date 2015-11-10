@@ -62,11 +62,11 @@ The following table contains the cost items, one by one
 | Item | Cost |
 | ---- | ---- |
 | employ a student assistant for one year (10 hrs/week) | &euro; 6500  |
-| invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project; ( further communications will use skype) | &euro; 1000 |
+| invite Roger Bivand to visit the Institute for Geoinformatics for one week | &euro; 1000 |
 | present the results at UseR! 2016 | &euro; 1500 |
-| ==== | ==== |
-| total | &euro; 9000 (9750 USD) |
+| Total: | &euro; 9000 (9750 USD) |
 
+The visit of Roger is anticipated halfway the project; further communications will use skype. The project has a planned duration of 12 months.
 
 ## Dissemination
 
