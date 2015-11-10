@@ -57,14 +57,15 @@ _What can we do to help you? If you need money, how much? How will you spend it?
 _Please note that the budget for the ISC is currently limited. We are likely to fund one or two projects with a budget of $20-30k projects, and handful of projects with budgets of  of $5-10k. We do not pay overhead._
 
 
-In order to
+The following table contains the cost items, one by one
 
-1. employ a student assistant for one year (10 hrs/week),
-2. invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project; further communications will use skype;
-3. present the results at UseR! 2016.
-
-we will need &euro; 6500 for (1), &euro; 1000 for (2) and &euro; 1500 for
-(3), which sums to &euro; 9000 (9750 USD).
+| Item | Cost |
+| ---- | ---- |
+| employ a student assistant for one year (10 hrs/week) | &euro; 6500  |
+| invite Roger Bivand to visit the Institute for Geoinformatics for one week, halfway the project; ( further communications will use skype) | &euro; 1000 |
+| present the results at UseR! 2016 | &euro; 1500 |
+| ==== | ==== |
+| total | &euro; 9000 (9750 USD) |
 
 
 ## Dissemination
