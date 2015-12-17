@@ -30,7 +30,7 @@ The problems we want to solve are:
 
 Solving this problem will mainly affect those who use data bases or modern javascript-based web APIs, as these largely converged on adopting simple features, and those who need a simpler and more light-weight handling of spatial data in R. It will also reduce the effort for users and developers to understand the way spatial information is represented in R, make it easier to build upon and reuse the R code for this, and lead to a good, sustainable shared R code base.
 
-In the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes for representing vector data. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do), making it possible to work with data that do not fit in memory.
+In the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes for representing vector data. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do), making it possible for R to manipulate spatial data that do not fit in memory.
 
 ## The plan
 _How are you going to solve the problem? Include the concrete actions you will take and an estimated timeline. What are likely failure modes and how will you recover from them?_
