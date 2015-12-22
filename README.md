@@ -1,6 +1,8 @@
 # sfr - simple features for R
 
-Authors: Edzer Pebesma, Roger Bivand, ...
+Applicant: Edzer Pebesma, Institute for Geoinformatics, University of Muenster, Germany; edzer.pebesma@uni-muenster.de
+
+Proposal authors: Edzer Pebesma, Roger Bivand, Michael Sumner and Robert Hijmans
 
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) is an open ([OGC](http://www.opengeospatial.org/standards/sfa) and [ISO](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114)) interface standard for access and manipulation of spatial vector data (points, lines, polygons). It includes a standard [SQL schema](http://www.opengeospatial.org/standards/sfs) that supports storage, retrieval, query and update of feature collections via a SQL interface. All commonly used databases provide this interface. [GeoJSON](http://geojson.org/) is a standard for encoding simple features in JSON, and is used in JavaScript and MongoDB. Well-known-text ([WKT](https://en.wikipedia.org/wiki/Well-known_text)) is a text representation of simple features used often in linked data; well-known-binary ([WKB] (https://en.wikipedia.org/wiki/Well-known_text)) a standard binary representation used in databases. _Simple Feature Access_ defines coordinate reference systems, and makes it easy to move data from longitude-latitude to projections back and forth in a standardized way. 
 
@@ -18,7 +20,6 @@ Off-CRAN package [rgdal2](https://github.com/thk686/rgdal2) is an interface to G
 -->
 
 ## The problem
-_What problem do you want to solve? Why is it a problem? Who does it affect? What will solving the problem enable? This section should include a brief summary of existing work, such as other packages. If you are proposing a change to R itself, you must include a letter of support from a member of R core._
 
 The problems we want to solve are:
 
@@ -33,9 +34,8 @@ Solving this problem will mainly affect those who use data bases or modern javas
 In the longer run it will affect all packages currently using sp, when we manage to migrate sp to exclusively use the simple feature classes for representing vector data. Since the recent [2.0](http://www.gdal.org/index.html) release of GDAL integrates raster and vector data, having an R package that mirrors its classes makes it possible to implement operations in-database (similar to what `DBI`, `RPostgreSQL` and `dplyr` do), making it possible for R to manipulate spatial data that do not fit in memory.
 
 ## The plan
-_How are you going to solve the problem? Include the concrete actions you will take and an estimated timeline. What are likely failure modes and how will you recover from them?_
 
-The plan is to 
+We will solve the problem by carrying out the following steps (M1 refers to month 1):
 
 1. develop an R package that implements simple features in R, that is simple yet gives users access to the complete data, and has a representation that uses S3 by extending `data.frame` (M1-3)
 2. add to this package a C++ interface to GDAL 2.0, to read and write simple feature data, and to interface other functionality (coordinate transformation, geometry operations) (M3-8)
@@ -44,33 +44,32 @@ The plan is to
 5. write a tutorial vignette for R package writers reusing the package (M10)
 6. Collect and process community feed back (M11-12).
 
-|  Failure mode    |  Recovery plan     |
-|------------------|--------------------|
-| S3 classes are too simple to represent simple features class hierarchy | try (i) using a list column with geometry, and nested lists to represent nested structures; (ii) use a `WKT` character column; (iii) using a `WKB` blob column | 
-| CRAN does not (yet) support GDAL 2.0 | develop simple features in a package not depending on GDAL 2.0, and the GDAL 2.0 code in a second package; convince CRAN maintainers to update |
-| migrating `sp` breaks downstream packages | discuss with Roger Bivand, Barry Rowlingson, Robert Hijmans (`raster`) and Tim Keitt (`rgdal`/`rgdal2`) how to proceed; be patient and try to smooth out problems |
+Failure modes and recovery plan:
+
+1. Failure mode: S3 classes are too simple to represent simple
+features class hierarchy. Recovery plan: try (i) using a list column
+with geometry, and nested lists to represent nested structures; (ii) 
+use a `WKT` character column; (iii) using a `WKB` blob column
+
+2. migrating `sp` breaks downstream packages. Recovery plan: discuss
+with Roger Bivand, Barry Rowlingson, Robert Hijmans (`raster`)
+and Tim Keitt (`rgdal`/`rgdal2`) how to proceed; be patient and
+smooth out problems together with package maintainers.
 
 
 ## How can the ISC help
-_What can we do to help you? If you need money, how much? How will you spend it? We expect that most of the budget will be on people, but we will  consider funding travel and equipment if you have good justification. How can we help promote your project? How else could we help?_
-
-_Please note that the budget for the ISC is currently limited. We are likely to fund one or two projects with a budget of $20-30k projects, and handful of projects with budgets of  of $5-10k. We do not pay overhead._
-
 
 The following table contains the cost items.
 
 | Item | Cost |
 | ---- | ---- |
 | employ a student assistant for one year (10 hrs/week) | &euro; 6500  |
-| invite Roger Bivand to visit the Institute for Geoinformatics for one week | &euro; 1000 |
+| one week visit of Roger Bivand to the Inst. for Geoinformatics | &euro; 1000 |
 | present the results at UseR! 2016 | &euro; 1500 |
 | Total: | &euro; 9000 (9750 USD) |
 
 The visit of Roger is anticipated halfway the project; further communications will use skype. The project has a planned duration of 12 months.
 
 ## Dissemination
-
-_How will you ensure that your work is available to the widest number of people? What open source license will you use? How will host your code so that others can contribute? How will you publicise your work? We encourage you to plan at least two blog posts to the R consortium blog: once to announce the project, and one to write up what you achieved._
-
 
 Development will take place on github, information will be shared and reactions and contributions invited through [r-sig-geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo), as well as [StackOverflow](http://stackoverflow.com/) and [GIS StackExchange](http://gis.stackexchange.com/). The project will use an Apache 2.0 license for maximum dissemination (similar to GDAL, which uses X/MIT). The work will be published in 4 blogs (quarterly), announced on r-sig-geo (3300 subscribers), and intermediary results will be presented at [UseR! 2016](http://user2016.org/). The final result will be published in a paper either submitted to [The R Journal](https://journal.r-project.org/) or to the [Journal of Statistical Software](http://www.jstatsoft.org/).
