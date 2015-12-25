@@ -1,0 +1,107 @@
+## Tutorial Title
+
+_Handling and analyzing spatial, spatiotemporal and movement data_
+
+## Instructor Details
+
+|             |                                                       |
+|-------------|-------------------------------------------------------|
+|Name:        | Edzer Pebesma                                         |
+|             |                                                       |
+|Institution: | Institute for Geoinformatics, University of Muenster  |
+|             |                                                       |
+|Address:     | Heisenbergerstrasse 2, Muenster, Germany              |
+|             |                                                       |
+|Email:       | edzer.pebesma@uni-muenster.de                         |
+
+
+## Short Instructor Biography
+
+_The bio should enable the scientific committee to gauge the
+instructor's qualifications for the tutorial. Links to works previous
+tutorials and/or relevant publications may be included._
+
+Edzer Pebesma is professor in geoinformatics since
+2007, developer of several popular package packages for
+handling and analyzing spatial and spatiotemporal data
+([sp](https://cran.rstudio.com/web/packages/sp/index.html),
+[spacetime](https://cran.rstudio.com/web/packages/spacetime/index.html),
+[trajectories](https://cran.rstudio.com/web/packages/trajectories/index.html)),
+and co-author of the book [Applied Spatial Data Analysis
+with R](http://www.asdar-book.org/), and active member of the
+[r-sig-geo](http://markmail.org/search/?q=r-sig-geo) community. He
+has given several tutorials on this topic, for instance on several
+of the yearly [geostat](http://geostat-course.org/) summer schools,
+but the tutorial material on analyzing trajectory (movement) data is new.
+
+[google scholar page](https://scholar.google.de/citations?user=d6jdqdQAAAAJ&hl=en)
+
+## Brief Description of Tutorial
+
+The tutorial will introduce users to the different types of spatial
+data (points, lines, polygons, rasters) and demonstrate how they
+are read into R. It will also explain how time series data can
+be imported, handled and analyzed in R. Then, it will explain
+the different types of spatiotemporal data and trajectory data,
+and present ways of importing them and analyzing them.
+
+## Goals
+
+The goals of this tutorial are to make participants familiar with
+
+1. basic R packages for handling spatial data (sp, rgdal, rgeos, raster)
+2. basic R packages for time series data analysis (zoo, xts)
+3. R packages for spatiotemporal analysis (spacetime, trajectories)
+4. spatiotemporal fields (continuously varying phenomena), events, objects, and trajectories, and the meaningfulness of analysis methods on each of these
+5. how temporal and spatial information can be strongly referenced in R
+
+In addition, participants will be pointed to further resources
+(packages, CRAN task views, software papers).
+
+## Detailed Outline
+
+Using a small number of use cases, following this sequence, the tutorial will illustrate how to
+
+1. import spatial, temporal, and spatiotemporal data in R
+2. map these data structures to and from matrix and data.frame objects
+3. work with points, lines, polygons, and rasters
+4. work with time series of each of these
+5. work with space-time events, and moving objects
+6. intersect various spacetime objects, e.g. for spatial and/or temporal selection or for spatial, temporal or spatiotemporal aggregation
+7. represent higher concepts such as fields, objects, events, trajectories, and aggregations into the classes, and how to carry out meaningful analysis of these
+
+and give users the opportunity to experiment with this material.
+
+The tutorial consists of three one-hour blocks, where 45 mins
+lecturing/demonstration is followed by 15 mins breaks where
+participants can try to replicate the analysis, work on their own
+data, or start small-group discussions.
+
+Prospective planning: 
+* first hour: spatial, temporal
+* second hour: spatiotemporal, intersections, aggregations
+* third hour: movement data, meaningfulness
+
+## Justification
+
+1. In recent years, trajectory data (sequences of space-time fixes
+for e.g. persons, cars, or animals) have become abundant, and a
+source for research. This tutorial will demonstrate how such data
+can be used in traditional spatial statistical analysis methods,
+including aggregation, regression modelling, interpolation, and
+density estimation.
+2. Many R packages do not make explicit whether spatial or temporal data
+refer to continuously varying phenomena (fields), aggregations, or discrete
+objects. Case studies that illustrate the difference between these will help
+participants to choose appropriate analysis methods.
+3. All tutorial material will be published on github. A single, up-to
+date tutorial with this scope does currently not exist.
+
+## Background Knowledge
+
+Some prior familiarity with handling spatial and/or temporal data
+is of benefit, but not required. Familiarity with R is assumed.
+
+## Expected Number of Attendees
+
+30-50.
