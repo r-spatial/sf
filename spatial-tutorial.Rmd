@@ -21,20 +21,26 @@ _The bio should enable the scientific committee to gauge the
 instructor's qualifications for the tutorial. Links to works previous
 tutorials and/or relevant publications may be included._
 
-Edzer Pebesma is professor in geoinformatics since
-2007, developer of several popular package packages for
-handling and analyzing spatial and spatiotemporal data
-([sp](https://cran.rstudio.com/web/packages/sp/index.html),
+Edzer Pebesma is professor in geoinformatics since 2007.
+He is Co-Editor-in-Chief for the [Journal of Statistical
+Software](http://www.jstatsoft.org/) and [Computers &
+Geosciences](http://www.journals.elsevier.com/computers-and-geosciences),
+and associate editor for [Spatial
+Statistics](http://www.journals.elsevier.com/spatial-statistics).
+He is developer and maintainer of several popular package
+packages for handling and analyzing spatial and spatiotemporal
+data ([sp](https://cran.rstudio.com/web/packages/sp/index.html),
 [spacetime](https://cran.rstudio.com/web/packages/spacetime/index.html),
-[trajectories](https://cran.rstudio.com/web/packages/trajectories/index.html)),
+[trajectories](https://cran.rstudio.com/web/packages/trajectories/index.html),
+[gstat](https://cran.rstudio.com/web/packages/gstat/index.html)),
 and co-author of the book [Applied Spatial Data Analysis
 with R](http://www.asdar-book.org/), and active member of the
 [r-sig-geo](http://markmail.org/search/?q=r-sig-geo) community. He
-has given several tutorials on this topic, for instance on several
-of the yearly [geostat](http://geostat-course.org/) summer schools,
-but the tutorial material on analyzing trajectory (movement) data is new.
+has given several tutorials on this topic, for instance on several of
+the yearly [geostat](http://geostat-course.org/) summer schools, but
+the tutorial material on analyzing trajectory (movement) data is new.
 
-[google scholar page](https://scholar.google.de/citations?user=d6jdqdQAAAAJ&hl=en)
+Edzer's [google scholar page](https://scholar.google.de/citations?user=d6jdqdQAAAAJ&hl=en).
 
 ## Brief Description of Tutorial
 
@@ -86,14 +92,14 @@ Prospective planning:
 
 1. In recent years, trajectory data (sequences of space-time fixes
 for e.g. persons, cars, or animals) have become abundant, and a
-source for research. This tutorial will demonstrate how such data
-can be used in traditional spatial statistical analysis methods,
-including aggregation, regression modelling, interpolation, and
-density estimation.
-2. Many R packages do not make explicit whether spatial or temporal data
+source for research. This tutorial demonstrates how such data can
+be used in spatial statistical analysis methods, (aggregation,
+regression modelling, interpolation, and density estimation),
+as well as which new analysis perspectives arise.
+2. Many R packages do not make explicit whether spatial and/or temporal data
 refer to continuously varying phenomena (fields), aggregations, or discrete
-objects. Case studies that illustrate the difference between these will help
-participants to choose appropriate analysis methods.
+objects/events. Case studies that illustrate the difference between these will 
+improve the ability of participants to choose appropriate analysis methods.
 3. All tutorial material will be published on github. A single, up-to
 date tutorial with this scope does currently not exist.
 
