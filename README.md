@@ -1,4 +1,4 @@
-# Simple features for R
+# Simple Features for R
 
 Applicant: [Edzer Pebesma](https://github.com/edzer/), [Institute for Geoinformatics](http://ifgi.uni-muenster.de/en), University of Muenster, Germany; [edzer.pebesma@uni-muenster.de](mailto:edzer.pebesma@uni-muenster.de)
 
@@ -24,7 +24,7 @@ Off-CRAN package [rgdal2](https://github.com/thk686/rgdal2) is an interface to G
 The problems we will solve are:
 
 1. R can currently not represent simple features directly. It can read most simple feature classes in `sp` classes, but uses its own representation for this, and can only write data back without loss of information if it is furnished with ancilliary metadata encoded in a comment attribute to each Polygons object. It does for instance internally not distinguish between `POLYGON` and `MULTIPOLYGON`  nor deal with several simple feature classes, including `TIN` and `GEOMETRYCOLLECTION`, nor handle `CURVE` geometries.
-2. The current implementation of lines and vector data in package `sp` is partly ambiguous (both slot `ringDir` or slot `hole` indicate whether a Polygon is a hole but are superceded by the comment attribute), complicated (to which exterior polygon does a hole belong - handled by the comment attribute), and by some considered difficult to work with (S4). The current implementation is hard to maintain because it contains incremental changes from a baseline that predated the industry-standard OGC/ISO [Simple Feature Interface Specification](http://www.opengeospatial.org/standards/sfa)).
+2. The current implementation of lines and vector data in package `sp` is partly ambiguous (both slot `ringDir` or slot `hole` indicate whether a Polygon is a hole but are superceded by the comment attribute), complicated (to which exterior polygon does a hole belong - handled by the comment attribute), and by some considered difficult to work with (S4). The current implementation is hard to maintain because it contains incremental changes from a baseline that predated the industry-standard OGC/ISO ([Simple Feature Interface Specification](http://www.opengeospatial.org/standards/sfa)).
 3. The lack of support for simple features makes current interfaces to open source libraries (GDAL/OGR and PROJ.4: rgdal, GEOS: rgeos) difficult to understand and maintain, even though they work to specification.
 4. The current implementation has no [scale model](http://geos.osgeo.org/doxygen/classgeos_1_1geom_1_1PrecisionModel.html#details) for coordinates.
 5. It is desirable that other R packages are offered the opportunity to migrate to more up-to-date libraries for coordinate transformations (providing proper support for datum transformation), and to avoid having to make simplifying assumptions (e.g., all spatial data come as longitude/latitude using datum `WGS84`; all web maps use [_web Mercator_](https://en.wikipedia.org/wiki/Web_Mercator)).
@@ -37,14 +37,14 @@ Big Data analysis with R often proceeds by connecting R to a database that holds
 
 ## The plan
 
-We will solve the problem by carrying out the following steps (M1 refers to month 1):
+We want to solve the problem by carrying out the following steps (M1 refers to month 1):
 
 1. develop an R package that implements simple features in R, that is simple yet gives users access to the complete data, and includes an S3 representation that extends `data.frame` (M1-3)
 2. add to this package a C++ interface to GDAL 2.0, to read and write simple feature data, and to interface other functionality (coordinate transformation, geometry operations) (M3-8)
 3. develop and prototypically implement a migration path for sp to become compliant with simple features (M7-12)
 4. write user-oriented tutorial vignettes showing how to use it with files, data base connections, web API's, leaflet, ggmap, dplyr and so on (M7-10)
 5. write a tutorial vignette for R package writers reusing the package (M10)
-6. Collect and process community feed back (M11-12).
+6. Collect and process community feed back (M6-12).
 
 Failure modes and recovery plan:
 
@@ -53,7 +53,7 @@ features class hierarchy. Recovery plan: try (i) using a list column
 with geometry, and nested lists to represent nested structures; (ii) 
 use a `WKT` character column; (iii) using a `WKB` blob column
 
-2. migrating `sp` breaks downstream packages. Recovery plan: involve
+2. Migrating `sp` breaks downstream packages. Recovery plan: involve
 Roger Bivand, Barry Rowlingson, Robert Hijmans (`raster`)
 and Tim Keitt (`rgdal`/`rgdal2`) how to proceed; be patient and
 smooth out problems together with package maintainers.
@@ -73,4 +73,4 @@ The visit of Roger is anticipated halfway the project; further communications wi
 
 ## Dissemination
 
-Development will take place on github, information will be shared and reactions and contributions invited through [r-sig-geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo), as well as [StackOverflow](http://stackoverflow.com/) and [GIS StackExchange](http://gis.stackexchange.com/). The project will use an Apache 2.0 license for maximum dissemination (similar to GDAL, which uses X/MIT). The work will be published in 4 blogs (quarterly), announced on r-sig-geo (3300 subscribers), and intermediary results will be presented at [UseR! 2016](http://user2016.org/). The final result will be published in a paper either submitted to [The R Journal](https://journal.r-project.org/) or to the [Journal of Statistical Software](http://www.jstatsoft.org/).
+Development will take place on github, information will be shared and reactions and contributions invited through [r-sig-geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo), as well as [StackOverflow](http://stackoverflow.com/) and [GIS StackExchange](http://gis.stackexchange.com/). The project will use an Apache 2.0 license for maximum dissemination (similar to GDAL, which uses X/MIT). The work will be published in 4 blogs (quarterly), announced on r-sig-geo (3300 subscribers), and intermediary results will be presented at [UseR! 2016](http://user2016.org/). The final result will be published in a paper either submitted to [The R Journal](https://journal.r-project.org/) or to the [Journal of Statistical Software](http://www.jstatsoft.org/); this paper will be available before publication as a package vignette.
