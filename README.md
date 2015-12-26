@@ -2,7 +2,7 @@
 
 Applicant: [Edzer Pebesma](https://github.com/edzer/), [Institute for Geoinformatics](http://ifgi.uni-muenster.de/en), University of Muenster, Germany; [edzer.pebesma@uni-muenster.de](mailto:edzer.pebesma@uni-muenster.de)
 
-Supporting authors: Edzer Pebesma, Roger Bivand, Michael Sumner, Robert Hijmans, Virgilio G\'{o}mez-Rubio
+Supporting authors: Edzer Pebesma, Roger Bivand, Michael Sumner, Robert Hijmans, Virgilio Gómez-Rubio
 
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) is an open ([OGC](http://www.opengeospatial.org/standards/sfa) and [ISO](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114)) interface standard for access and manipulation of spatial vector data (points, lines, polygons). It includes a standard [SQL schema](http://www.opengeospatial.org/standards/sfs) that supports storage, retrieval, query and update of feature collections via a SQL interface. All commonly used databases provide this interface. [GeoJSON](http://geojson.org/) is a standard for encoding simple features in JSON, and is used in JavaScript and MongoDB. Well-known-text ([WKT](https://en.wikipedia.org/wiki/Well-known_text)) is a text representation of simple features used often in linked data; well-known-binary ([WKB] (https://en.wikipedia.org/wiki/Well-known_text)) a standard binary representation used in databases. _Simple Feature Access_ defines coordinate reference systems, and makes it easy to move data from longitude-latitude to projections back and forth in a standardized way. 
 
