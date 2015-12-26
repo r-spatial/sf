@@ -1,4 +1,4 @@
-# sfr - simple features for R
+# Simple features for R
 
 Applicant: [Edzer Pebesma](https://github.com/edzer/), [Institute for Geoinformatics](http://ifgi.uni-muenster.de/en), University of Muenster, Germany; [edzer.pebesma@uni-muenster.de](mailto:edzer.pebesma@uni-muenster.de)
 
