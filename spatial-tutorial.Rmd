@@ -4,22 +4,18 @@ _Handling and analyzing spatial, spatiotemporal and movement data_
 
 ## Instructor Details
 
-|             |                                                       |
 |-------------|-------------------------------------------------------|
 |Name:        | Edzer Pebesma                                         |
 |             |                                                       |
 |Institution: | Institute for Geoinformatics, University of Muenster  |
 |             |                                                       |
-|Address:     | Heisenbergerstrasse 2, Muenster, Germany              |
+|Address:     | Heisenbergerstraße 2, Muenster, Germany              |
 |             |                                                       |
 |Email:       | edzer.pebesma@uni-muenster.de                         |
+|-------------|-------------------------------------------------------|
 
 
 ## Short Instructor Biography
-
-_The bio should enable the scientific committee to gauge the
-instructor's qualifications for the tutorial. Links to works previous
-tutorials and/or relevant publications may be included._
 
 Edzer Pebesma is professor in geoinformatics since 2007.
 He is Co-Editor-in-Chief for the [Journal of Statistical
@@ -33,14 +29,14 @@ data ([sp](https://cran.rstudio.com/web/packages/sp/index.html),
 [spacetime](https://cran.rstudio.com/web/packages/spacetime/index.html),
 [trajectories](https://cran.rstudio.com/web/packages/trajectories/index.html),
 [gstat](https://cran.rstudio.com/web/packages/gstat/index.html)),
-and co-author of the book [Applied Spatial Data Analysis
-with R](http://www.asdar-book.org/), and active member of the
+co-author of the book [Applied Spatial Data Analysis
+with R, second edition](http://www.asdar-book.org/), and active member of the
 [r-sig-geo](http://markmail.org/search/?q=r-sig-geo) community. He
-has given several tutorials on this topic, for instance on several of
-the yearly [geostat](http://geostat-course.org/) summer schools, but
-the tutorial material on analyzing trajectory (movement) data is new.
+gives regular tutorials on this topic area, for instance during
+the yearly [geostat](http://geostat-course.org/) summer schools.
+The tutorial material on analyzing trajectory (movement) data is new.
 
-Edzer's [google scholar page](https://scholar.google.de/citations?user=d6jdqdQAAAAJ&hl=en).
+Edzer's google scholar page is found [here](https://scholar.google.de/citations?user=d6jdqdQAAAAJ&hl=en).
 
 ## Brief Description of Tutorial
 
@@ -59,10 +55,10 @@ The goals of this tutorial are to make participants familiar with
 2. basic R packages for time series data analysis (zoo, xts)
 3. R packages for spatiotemporal analysis (spacetime, trajectories)
 4. spatiotemporal fields (continuously varying phenomena), events, objects, and trajectories, and the meaningfulness of analysis methods on each of these
-5. how temporal and spatial information can be strongly referenced in R
+5. strong referencing in R, and how it allows the integration of different data types
 
-In addition, participants will be pointed to further resources
-(packages, CRAN task views, software papers).
+In addition, participants will be pointed to further resources (R
+packages, CRAN task views, software papers, scientific literature).
 
 ## Detailed Outline
 
@@ -84,24 +80,25 @@ participants can try to replicate the analysis, work on their own
 data, or start small-group discussions.
 
 Prospective planning: 
-* first hour: spatial, temporal
+* first hour: spatial and temporal
 * second hour: spatiotemporal, intersections, aggregations
-* third hour: movement data, meaningfulness
+* third hour: movement data, meaningfulness, data integration
 
 ## Justification
 
 1. In recent years, trajectory data (sequences of space-time fixes
 for e.g. persons, cars, or animals) have become abundant, and a
-source for research. This tutorial demonstrates how such data can
+source for research and valorisation. This tutorial discusses inference
+opportunities arising in different domains, and demonstrates how such data can
 be used in spatial statistical analysis methods, (aggregation,
-regression modelling, interpolation, and density estimation),
-as well as which new analysis perspectives arise.
+regression modelling, interpolation, and density estimation).
 2. Many R packages do not make explicit whether spatial and/or temporal data
 refer to continuously varying phenomena (fields), aggregations, or discrete
 objects/events. Case studies that illustrate the difference between these will 
 improve the ability of participants to choose appropriate analysis methods.
-3. All tutorial material will be published on github. A single, up-to
-date tutorial with this scope does currently not exist.
+3. All tutorial material will be published on github, and include
+executable R scripts with example data. A comprehensive tutorial
+with this scope does currently not exist.
 
 ## Background Knowledge
 
@@ -110,4 +107,4 @@ is of benefit, but not required. Familiarity with R is assumed.
 
 ## Expected Number of Attendees
 
-30-50.
+30.
