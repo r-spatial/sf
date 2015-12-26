@@ -4,6 +4,7 @@ _Handling and analyzing spatial, spatiotemporal and movement data_
 
 ## Instructor Details
 
+|             |                                                       |
 |-------------|-------------------------------------------------------|
 |Name:        | Edzer Pebesma                                         |
 |             |                                                       |
@@ -12,7 +13,6 @@ _Handling and analyzing spatial, spatiotemporal and movement data_
 |Address:     | Heisenbergerstraße 2, Muenster, Germany              |
 |             |                                                       |
 |Email:       | edzer.pebesma@uni-muenster.de                         |
-|-------------|-------------------------------------------------------|
 
 
 ## Short Instructor Biography
