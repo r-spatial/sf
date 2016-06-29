@@ -74,3 +74,7 @@ The visit of Roger is anticipated halfway the project; further communications wi
 ## Dissemination
 
 Development will take place on github, information will be shared and reactions and contributions invited through [r-sig-geo](https://stat.ethz.ch/mailman/listinfo/r-sig-geo), as well as [StackOverflow](http://stackoverflow.com/) and [GIS StackExchange](http://gis.stackexchange.com/). The project will use an Apache 2.0 license for maximum dissemination (similar to GDAL, which uses X/MIT). The work will be published in 4 blogs (quarterly), announced on r-sig-geo (3300 subscribers), and intermediary results will be presented at [UseR! 2016](http://user2016.org/). The final result will be published in a paper either submitted to [The R Journal](https://journal.r-project.org/) or to the [Journal of Statistical Software](http://www.jstatsoft.org/); this paper will be available before publication as a package vignette.
+
+## UseR! slides
+
+UseR! 2016 slides are found [here](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf).
