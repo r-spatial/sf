@@ -4,10 +4,10 @@ Title: Simple Features for R
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 				email = "edzer.pebesma@uni-muenster.de"))
 Depends: R (>= 3.0.0)
-Imports: sp, rgdal
+Imports: methods, sp, rgdal, rgeos
 Suggests: knitr
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
-License: GPL-2
-URL: https://github.com/edzer/sf/
+License: GPL-2 | MIT + file LICENSE
+URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1

@@ -15,12 +15,13 @@ bbox.MtrxSetSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSetSet)
 	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
 }
+
 #' Return bounding of a simple feature or simple feature set
 #'
 #' Return bounding of a simple feature or simple feature set
 #' @param obj object to compute the bounding box from
 #' @export
-bbox = function(obj) UseMethod("bbox")
+bbox = function(obj) UseMethod("bbox") # not needed if sp exports bbox
 
 #' @export
 bbox.POINT = function(obj) c(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2])

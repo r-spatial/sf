@@ -29,7 +29,7 @@ MtrxSet = function(x, third = "Z", type) {
 	x
 }
 MtrxSetSet = function(x, third = "Z", type) {
-	nc = unique(unlist(sapply(x, function(y) sapply(y, ncol))))
+	nc = unique(as.vector(sapply(x, function(y) sapply(y, ncol))))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
@@ -158,5 +158,5 @@ print.sfi = function(x, ...) { # avoids having to write print methods for 68 cla
 			"GEOMETRYCOLLECTION ZM" = prnt.GEOMETRYCOLLECTION,
 		stop(paste("no print method available for object of class", class(x)[1]))
 	)
-	fn(x, ...)
+	print(fn(x, ...))
 }

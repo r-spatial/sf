@@ -55,7 +55,7 @@ checkTypes = function(lst) { # breaks on errors, or returns the unique class
 #' @method summary sfc
 #' @export
 summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
-	u = factor(sapply(object, class))
+	u = factor(sapply(object, function(x) class(x)[1]))
     epsg = paste0("epsg:", attr(object, "epsg"))
 	levels(u) = c(levels(u), epsg)
     p4s = attr(object, "proj4string")
