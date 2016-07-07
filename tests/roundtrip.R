@@ -1,0 +1,20 @@
+#library(rgdal2)
+#openOGRLayer("PG:dbname=postgis" , "meuse2")
+
+library(sf)
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+outer
+hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+pol1 = list(outer, hole1, hole2)
+pol2 = list(outer + 12, hole1 + 12)
+pol3 = list(outer + 24)
+mp = list(pol1,pol2,pol3)
+mp1 = MULTIPOLYGON(mp)
+df = data.frame(a=1)
+df$geom = sfc(list(mp1))
+a = as(sf(df), "Spatial")
+class(a)
+b = as.sf(a)
+a2 = as(a, "SpatialPolygonsDataFrame")
+all.equal(a, a2) # round-trip

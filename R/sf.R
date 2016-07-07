@@ -94,3 +94,10 @@ sf = function(df) {
 	class(df) = c("sf", class(df))
 	df
 }
+
+#' get geometry from sf object
+#' 
+#' get geometry from sf object
+#' @param obj object of class \link{sf}
+#' @export
+setMethod("geometry", "sf", function(obj) obj[[attr(obj, "sf_column")]])

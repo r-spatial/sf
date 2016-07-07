@@ -54,7 +54,7 @@ as.sf.Spatial = function(x) {
 setCRS = function(lst, x) {
 	p4 = x@proj4string@projargs
 	if (is.na(p4))
-		return(sfc(lst, epsg = NA, proj4string = NA))
+		return(sfc(lst, epsg = as.integer(NA), proj4string = as.character(NA)))
 	getEPSG = function(x) { # gets EPSG code out of proj4string:
 		spl = strsplit(x, " ")[[1]]
 		w = grep("+init=epsg:", spl)
@@ -138,5 +138,58 @@ Polygons2MULTIPOLYGON = function(PolygonsLst, cmt) {
 
 Polygons2POLYGON = function(PolygonsLst) {
 	# here we have one outer ring, followed by (0+) holes inside this ring
-	lapply(PolygonsLst, function(x) x@coords)
+	lapply(PolygonsLst, function(x) x@coords[rev(1:nrow(x@coords)),])
+}
+
+setAs("sf", "Spatial", function(from) {
+	df = from
+	# remove geometry column:
+	df[[attr(df, "sf_column")]] = NULL
+	addAttrToGeom(as(geometry(from), "Spatial"), as.data.frame(df), match.ID = FALSE)
+})
+
+setAs("sfc", "Spatial", function(from) {
+	switch(attr(from, "type"),
+		"POINT" = , "POINT Z" = sfc2SpatialPoints(from),
+		"MULTIPOINT" = , "MULTIPOINT Z" = sfc2SpatialMultiPoints(from),
+		"LINESTRING" = , "MULTILINESTRING" = sfc2SpatialLines(from),
+		"POLYGON" = , "MULTIPOLYGON" = sfc2SpatialPolygons(from),
+		"POINT ZM" = , "MULTIPOINT ZM" = ,
+		"POINT M" = , "MULTIPOINT M" = , "LINESTRING M" = , "POLYGON M" = , 
+		"MULTIPOLYGON M" = , "MULTILINESTRING M" = 
+			stop("geometries containing M not supported by sp"),
+		"LINESTRING Z" = , "LINESTRING ZM" = , "MULTILINESTRING Z" = , "MULTILINESTRING ZM" = 
+			stop("Z or ZM linestrings not supported by sp"),
+		"POLYGON Z" = , "POLYGON ZM" = , "MULTIPOLYGON Z" = , "MULTIPOLYGON ZM" = 
+			stop("Z or ZM (multi)polygons not supported by sp"),
+		stop("converstion from this feature type to sp is not supported")
+	)
+})
+
+sfc2SpatialPoints = function(from)
+	SpatialPoints(do.call(rbind(from)), proj4string = CRS(attr(from, "proj4string")))
+
+sfc2SpatialMultiPoints = function(from)
+	SpatialMultiPoints(from, proj4string = CRS(attr(from, "proj4string")))
+
+sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
+	l = if (attr(from, "type") == "MULTILINESTRING")
+		lapply(from, function(x) Lines(lapply(x, Line)))
+	else lapply(from, function(x) Lines(list(Line(x))))
+	for (i in 1:length(from))
+		l[[i]]@ID = IDs[i]
+	SpatialLines(l, proj4string = CRS(attr(from, "proj4string")))
+}
+
+sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
+	l = if (attr(from, "type") == "MULTIPOLYGON")
+		lapply(from, function(x)  # for each sfc item, return a Polygons
+				Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
+					lapply(y, function(z) Polygon(z[rev(1:nrow(z)),]))), 
+						recursive = FALSE), "ID"))
+	else lapply(from, function(x) 
+		Polygons(lapply(x, function(y) Polygon(y[rev(1:nrow(y)),])), "ID"))
+	for (i in 1:length(from))
+		l[[i]]@ID = IDs[i]
+	SpatialPolygons(l, proj4string = CRS(attr(from, "proj4string")))
 }

@@ -29,7 +29,7 @@ MtrxSet = function(x, third = "Z", type) {
 	x
 }
 MtrxSetSet = function(x, third = "Z", type) {
-	nc = unique(as.vector(sapply(x, function(y) sapply(y, ncol))))
+	nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))

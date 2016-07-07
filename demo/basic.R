@@ -1,13 +1,4 @@
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Examples of using sf}
--->
-
-# Examples of using package `sf`
-
-Demonstrate construction functions and print methods:
-## Point
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 library(sf)
 (p1 = POINT(c(1,2)))
 bbox(p1)
@@ -16,10 +7,8 @@ bbox(p1)
 (p4 = POINT(c(1,2,3,4)))
 try(POINT(1)) # Error:
 try(POINT(1:5)) # Error:
-```
 
-## MultiPoint
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 pts = matrix(1:10, , 2)
 (mp1 = MULTIPOINT(pts))
 pts = matrix(1:15, , 3)
@@ -30,10 +19,8 @@ pts = matrix(1:20, , 4)
 try(MULTIPOINT(1)) # Error:
 try(MULTIPOINT(1:5)) # Error:
 bbox(mp1)
-```
 
-## LineString
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 pts = matrix(1:10, , 2)
 (ls1 = LINESTRING(pts))
 pts = matrix(1:15, , 3)
@@ -44,10 +31,8 @@ pts = matrix(1:20, , 4)
 try(LINESTRING(pts[1,])) # Error:
 try(LINESTRING(matrix(1:10, 2))) # Error:
 bbox(ls1)
-```
 
-## MultiLineString
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 outer
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
@@ -60,10 +45,8 @@ pts3 = lapply(pts, function(x) cbind(x, 0))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (ml4 = MULTILINESTRING(pts4))
 bbox(ml1)
-```
 
-## Polygon
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 outer
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
@@ -76,10 +59,8 @@ pts3 = lapply(pts, function(x) cbind(x, 0))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (pl4 = POLYGON(pts4))
 bbox(pl1)
-```
 
-## MultiPolygon
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 outer
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
@@ -95,10 +76,8 @@ pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
 pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp4 = MULTIPOLYGON(pts4))
 bbox(mp1)
-```
 
-## GeometryCollection
-```{r error=TRUE}
+## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 outer
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
@@ -111,4 +90,4 @@ mp1 = MULTIPOLYGON(mp)
 (gc = GEOMETRYCOLLECTION(list(p1, ls1, pl1, mp1)))
 (gc3 = GEOMETRYCOLLECTION(list(mp3, pl1)))
 bbox(gc)
-```
+
