@@ -4,13 +4,18 @@
 \alias{sf}
 \title{create sf object}
 \usage{
-sf(df)
+sf(df, is_what = rep(as.character(NA), ncol(df) - 1))
 }
 \arguments{
 \item{df}{object of class \code{data.frame}}
+
+\item{is_what}{character vector; indicates for each attribute column how it relates to the geometry; see Details}
 }
 \description{
 create sf, which extends data.frame-like objects with a simple feature list column
+}
+\details{
+is_what specified for each attribute column how it relates to the geometry, and can have one of following values: constant, aggregation, identifier.
 }
 \examples{
 pt1 = POINT(c(0,1))

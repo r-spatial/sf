@@ -4,7 +4,7 @@ Title: Simple Features for R
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 				email = "edzer.pebesma@uni-muenster.de"))
 Depends: R (>= 3.0.0)
-Imports: methods, sp, rgdal, rgeos
+Imports: methods, sp, rgdal, rgeos, rgdal2 (>= 0.3)
 Suggests: knitr
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.

@@ -72,7 +72,10 @@ summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
 #' create sf, which extends data.frame-like objects with a simple feature list column
 #'
 #' @param df object of class \code{data.frame}
+#' @param is_what character vector; indicates for each attribute column how it relates to the geometry; see Details
 #'
+#' @details is_what specified for each attribute column how it relates to the geometry, and can have one of following values: constant, aggregation, identifier.
+#' 
 #' @examples
 #' pt1 = POINT(c(0,1))
 #' pt2 = POINT(c(1,1))
@@ -83,14 +86,18 @@ summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
 #' d$geom2 = sfc(list(pt1, pt2))
 #' sf(df) # warns
 #' @export
-sf = function(df) {
+sf = function(df, is_what = rep(as.character(NA), ncol(df)-1)) {
 	sf = sapply(df, function(x) inherits(x, "sfc"))
 	if (!any(sf))
 		stop("no simple features geometry column present")
 	sf_column = which(sf)
 	if (length(sf_column) > 1)
-		warning("more than one geometry column not allowed, picking first")
+		warning("more than one geometry column not allowed, choosing first")
 	attr(df, "sf_column") = which(sf)[1]
+#	is_what = rep(is_what, length.out = ncol(df) - 1)
+#	if (any(!is.na(is_what)) && 
+#		!all(na.omit(is_what) %in% c("constant", "aggregation", "identifier")))
+#		stop("unknown value for is_what; allowed values: constant, aggregation, identifier")
 	class(df) = c("sf", class(df))
 	df
 }
