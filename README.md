@@ -10,6 +10,12 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
+The current version depends on a development fork of `rgdal2`, installed by
+
+```
+install_github("edzer/rgdal2")
+```
+
 See also:
 
 * the original R Consortium ISC [proposal](PROPOSAL.md)
