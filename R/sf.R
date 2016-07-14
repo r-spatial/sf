@@ -93,18 +93,20 @@ summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
 #' d$geom2 = sfc(list(pt1, pt2))
 #' sf(df) # warns
 #' @export
-sf = function(df, is_what = rep(as.character(NA), ncol(df)-1)) {
+sf = function(df, is_what = rep(as.character(NA), ncol(df) - 1)) {
 	sf = sapply(df, function(x) inherits(x, "sfc"))
 	if (!any(sf))
 		stop("no simple features geometry column present")
 	sf_column = which(sf)
-	if (length(sf_column) > 1)
-		warning("more than one geometry column not allowed, choosing first")
-	attr(df, "sf_column") = which(sf)[1]
-#	is_what = rep(is_what, length.out = ncol(df) - 1)
-#	if (any(!is.na(is_what)) && 
-#		!all(na.omit(is_what) %in% c("constant", "aggregation", "identifier")))
-#		stop("unknown value for is_what; allowed values: constant, aggregation, identifier")
+	if (length(sf_column) > 1) {
+		warning("more than one geometry column: ignoring all but first")
+		df = df[,-sf_column[-1]]
+	}
+	attr(df, "sf_column") = sf_column[1]
+ 	is_what = rep(is_what, length.out = ncol(df) - 1)
+ 	if (any(!is.na(is_what)) && !all(na.omit(is_what) %in% c("field", "lattice", "entity")))
+	 		stop("unknown value for is_what; allowed values: field, lattice, entity")
+	# TODO: check that lattice has to anything but POINT
 	class(df) = c("sf", class(df))
 	df
 }
