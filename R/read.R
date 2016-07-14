@@ -39,7 +39,7 @@ read.sf = function(dsn, layer) {
 	ids = getIDs(o)
 	geom = sfc(lapply(ids, function(id) readFeature(o, id)))
 	f = lapply(ids, function(id) getFields(getFeature(o, id)))
-	df = data.frame(F_IDS = ids, apply(do.call(rbind, f), 2, unlist))
+	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
 	sf(df)
 }

@@ -121,6 +121,22 @@ MULTIPOLYGON = function(x, third = "Z", ...) MtrxSetSet(x, third, type = "MULTIP
 #' @export
 GEOMETRYCOLLECTION = function(x, third = "Z", ...) CheckGC(x, third, type = "GEOMETRYCOLLECTION")
 
+POINT2MULTIPOINT = function(x, third = "Z") {
+	if (length(x) == 3) # disambiguate Z/M:
+		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+	MULTIPOINT(matrix(unclass(x), 1), third = third)
+}
+LINESTRING2MULTILINESTRING = function(x, third = "Z") {
+	if (ncol(x) == 3) # disambiguate Z/M:
+		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+	MULTILINESTRING(list(unclass(x)), third = third)
+}
+POLYGON2MULTIPOLYGON = function(x, third = "Z") {
+	if (ncol(x[[1]]) == 3) # disambiguate Z/M:
+		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+	MULTIPOLYGON(list(unclass(x)), third = third)
+}
+
 # print helper functions
 prnt.POINT = function(x, ...) {
 	nr = paste0(x, collapse = " ")

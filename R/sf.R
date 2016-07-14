@@ -15,9 +15,9 @@
 #' @export
 sfc = function(lst, epsg = -1, proj4string = as.character(NA)) {
 	stopifnot(is.list(lst))
-	type = checkTypes(lst)
+	lst = checkTypes(lst)
 	class(lst) = "sfc"
-	attr(lst, "type") = type
+	attr(lst, "type") = class(lst[[1]])[1] # after checkTypes, they all are identical
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = bbox(lst)
 	if (missing(proj4string) && epsg > 0)
@@ -26,11 +26,18 @@ sfc = function(lst, epsg = -1, proj4string = as.character(NA)) {
 	lst
 }
 
-checkTypes = function(lst) { # breaks on errors, or returns the unique class
+checkTypes = function(lst) { # breaks on errors, or returns the list
 	sfi = sapply(lst, function(x) inherits(x, "sfi"))
 	if (any(!sfi))
 		stop(paste("list item", which(sfi)[1], "is not of class sfi"))
 	cls = unique(sapply(lst, function(x) class(x)[1]))
+	# sync XX and MULTIXX to uniform MULTIXX set, just like PostGIS does:
+	if (all(cls %in% c("POINT", "MULTIPOINT")))
+		return(lapply(lst, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x))
+	if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
+		return(lapply(lst, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x))
+	if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
+		return(lapply(lst, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x))
 	if (length(cls) > 1)
 		stop("multiple simple feature types not allowed in a simple feature list column")
 	cls
