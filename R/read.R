@@ -10,16 +10,18 @@
 #' }
 #' @export
 read.sf = function(dsn, layer) {
+	if (!requireNamespace("rgdal2", quietly = TRUE))
+		stop("package rgdal2 required for read.sf; try devtools::install_github(\"edzer/rgdal2\")")
 	flatten = function(x)
 		if (all(c("x", "y") %in% names(x))) # we're at the deepest level
 			do.call(cbind, x) 
 		else 
 			lapply(x, flatten)
 	readFeature = function(layer, id) {
-		ft = getFeature(layer, id)
-		geom = getGeometry(ft)
-		pts = flatten(getPoints(geom, nested = TRUE))
-		switch (getGeometryType(geom),
+		ft = rgdal2::getFeature(layer, id)
+		geom = rgdal2::getGeometry(ft)
+		pts = flatten(rgdal2::getPoints(geom, nested = TRUE))
+		switch (rgdal2::getGeometryType(geom),
            	POINT25D = ,
            	POINT = POINT(unlist(pts)),
            	LINESTRING25D = ,
@@ -32,13 +34,13 @@ read.sf = function(dsn, layer) {
            	MULTIPOINT = ,
            	MULTIPOINT25D = MULTIPOINT(pts),
            	LINEARRING = ,
-           	MULTILINESTRING25D = stop(paste(getGeometryType(geom), "not supported"))
+           	MULTILINESTRING25D = stop(paste(rgdal2::getGeometryType(geom), "not supported"))
 		)
 	}
-	o = openOGRLayer(dsn, layer)
-	ids = getIDs(o)
+	o = rgdal2::openOGRLayer(dsn, layer)
+	ids = rgdal2::getIDs(o)
 	geom = sfc(lapply(ids, function(id) readFeature(o, id)))
-	f = lapply(ids, function(id) getFields(getFeature(o, id)))
+	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
 	sf(df)
