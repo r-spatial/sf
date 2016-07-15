@@ -157,10 +157,20 @@ prnt.POLYGON = function(x, ...) paste0(class(x)[1], prnt.MatrixList(x, ...))
 prnt.MULTILINESTRING = function(x, ...) paste0(class(x)[1], prnt.MatrixList(x, ...))
 prnt.MULTIPOLYGON = function(x, ...) paste0(class(x)[1], prnt.MatrixListList(x, ...))
 prnt.GEOMETRYCOLLECTION = function(x,...) 
-	paste0(class(x)[1], "(", paste0(sapply(x, print), collapse=", "), ")")
+	paste0(class(x)[1], "(", paste0(sapply(x, as.WKT), collapse=", "), ")")
+
+#' Return Well-known Text representation of simple feature item
+#'
+#' Return Well-known Text representation of simple feature item
+#' @param x object of class sfi
+#' @export
+as.WKT = function(x) UseMethod("as.WKT") # not needed if sp exports bbox
 
 #' @export
-print.sfi = function(x, ...) { # avoids having to write print methods for 68 classes:
+as.WKT.default = function(x) stop(paste("no as.WKT method for object of class", class(x)[1]))
+
+#' @export
+as.WKT.sfi = function(x) {
 	fn = switch(class(x)[1], 
 		"POINT" = , "POINT Z" = , "POINT M" = , "POINT ZM" = prnt.POINT,
 		"MULTIPOINT" = , "MULTIPOINT Z" = , "MULTIPOINT M" = , "MULTIPOINT ZM" = prnt.MULTIPOINT,
@@ -174,5 +184,21 @@ print.sfi = function(x, ...) { # avoids having to write print methods for 68 cla
 			"GEOMETRYCOLLECTION ZM" = prnt.GEOMETRYCOLLECTION,
 		stop(paste("no print method available for object of class", class(x)[1]))
 	)
-	print(fn(x, ...))
+	fn(x)
+}
+
+#' @export
+print.sfi = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
+	invisible(print(format(x, ..., digits = digits)))
+}
+
+#' @export
+format.sfi = function(x, ..., digits = 30) {
+	if (is.null(digits)) 
+		digits = 30
+	pr = as.WKT(x)
+	if (digits > 0 && nchar(pr) > digits - 3)
+		paste(substr(pr, 1, digits), "...")
+	else
+		pr
 }

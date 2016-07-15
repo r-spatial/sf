@@ -1,19 +1,24 @@
+bb = function(xmin, xmax, ymin, ymax) {
+	c(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
+	# or return matrix instead, compatible to sp::bbox?
+}
+
 bbox.Mtrx = function(obj) {
 	mn = apply(obj, 2, min)
 	mx = apply(obj, 2, max)
-	c(xmin = mn[1], xmax = mx[1], ymin = mn[2], ymax = mx[2])
+	bb(xmin = mn[1], xmax = mx[1], ymin = mn[2], ymax = mx[2])
 }
 bbox.MtrxSet = function(obj) {
 	s = sapply(obj, bbox.Mtrx)
-	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
+	bb(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
 }
 bbox.MtrxSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSet)
-	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
+	bb(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
 }
 bbox.MtrxSetSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSetSet)
-	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
+	bb(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
 }
 
 #' Return bounding of a simple feature or simple feature set
@@ -24,7 +29,7 @@ bbox.MtrxSetSetSet = function(obj) {
 bbox = function(obj) UseMethod("bbox") # not needed if sp exports bbox
 
 #' @export
-bbox.POINT = function(obj) c(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2])
+bbox.POINT = function(obj) bb(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2])
 #' @export
 bbox.MULTIPOINT = bbox.Mtrx
 #' @export
@@ -59,4 +64,9 @@ bbox.sfc = function(obj) {
 			},
 		stop("simple feature type not supported")
 	)
+}
+
+#' @export
+format.sfc = function(x, ..., digits = 30) {
+	sapply(x, format, ..., digits = digits)
 }

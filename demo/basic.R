@@ -91,3 +91,7 @@ mp1 = MULTIPOLYGON(mp)
 (gc3 = GEOMETRYCOLLECTION(list(mp3, pl1)))
 bbox(gc)
 
+## ----error=TRUE----------------------------------------------------------
+(s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+summary(s)
+
