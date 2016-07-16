@@ -39,7 +39,9 @@ read.sf = function(dsn, layer) {
 	}
 	o = rgdal2::openOGRLayer(dsn, layer)
 	ids = rgdal2::getIDs(o)
-	geom = sfc(lapply(ids, function(id) readFeature(o, id)))
+	srs = rgdal2::getSRS(o)
+	p4s = if (is.null(srs)) as.character(NA) else rgdal2::getPROJ4(srs)
+	geom = sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
 	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
