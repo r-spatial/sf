@@ -27,9 +27,7 @@ before_install:
 
 install:
   - ./pkg-build.sh install_deps
-
-r_github_packages:
-  - edzer/rgdal2
+  - Rscript -e 'devtools::install_github("edzer/rgdal2")'
 
 script:
   - ./pkg-build.sh run_tests
