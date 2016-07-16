@@ -22,6 +22,7 @@ before_install:
   - ./configure --prefix=/usr
   - make
   - sudo make install
+  - sudo ldconfig
   - cd /home/travis/build/edzer/sfr
 
 install:
