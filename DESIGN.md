@@ -1,34 +1,40 @@
-Simple features in R: design v. 1
+Simple features in R: design v. 2
 =================================
 
-Jun 10, 2016
+Jul 16, 2016
 
 Assumptions:
 ------------
 
 1.  *simple features* refer to a set of 1 or more simple feature items
-2.  we restrict simple features to sets that share a common coordinate
-    reference system
-3.  simple feature items are composed of one or more points
-4.  points have two components (xy), or three (xym or xyz), or
+2.  simple feature items are composed of one or more points, or (nested) sets of those
+3.  points have two components (xy), or three (xym or xyz), or
     four (xyzm)
 
-Requirements:
--------------
+Requirements/decisions:
+-----------------------
 
-1.  it shall be possible to store simple features as a variable in a
-    data.frame, where each data.frame records relate to the
-    corresponding feature
-2.  simple features shall use simple R data structures
-3.  simple features shall use class attributes
-4.  subsetting simple features shall retain the coordinate reference
+1.  we restrict simple features to sets that share a common coordinate
+    reference system \*
+2.  we restrict simple features sets to those with a common type; mixed
+    type can be encapsulated by GeometryCollections \*
+3.  it shall be possible to store simple features as a variable
+    (list column) in a data.frame, where each data.frame record relates
+    to the corresponding feature; this column has bounding box and
+    coordinate reference system as attributes
+4.  simple features shall use simple R data structures (vector,
+    matrix, list)
+5.  simple features shall use class attributes (S3)
+6.  subsetting simple features shall retain the coordinate reference
     system information
-5.  a single point is represented as a numerical vector
-6.  a set of points is represented by a matrix, each row representing a
+7.  a single point is represented as a numerical vector
+8.  a set of points is represented by a matrix, each row representing a
     point
-7.  a set of sets, or of pointsets, is represented by a list
-8.  for heterogeneous sets (GeometryCollection, CompoundCurve) the list
+9.  a set of sets, or of pointsets, is represented by a list
+10. for heterogeneous sets (GeometryCollection, CompoundCurve) the list
     shall be named
+
+in this list, \* refers to properties shared by PostGIS tables
 
 Simple represenations in R:
 ---------------------------
