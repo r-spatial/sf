@@ -24,12 +24,14 @@ y3 = x3 + 3
 library(sp)
 p = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(y2), Polygon(x3), 
    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
-r = rgeos::createSPComment(SpatialPolygons(list(p)))
-comment(r)
-comment(r@polygons[[1]])
-scan(text = comment(r@polygons[[1]]), quiet = TRUE)
-library(sf)
-a = as.sf(r)
-summary(a)
+if (require("rgeos")) {
+  r = createSPComment(SpatialPolygons(list(p)))
+  comment(r)
+  comment(r@polygons[[1]])
+  scan(text = comment(r@polygons[[1]]), quiet = TRUE)
+  library(sf)
+  a = as.sf(r)
+  summary(a)
+}
 }
 

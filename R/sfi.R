@@ -18,22 +18,22 @@ Mtrx = function(x, third = "Z", type) {
 	class(x) = c(getClassDim(x, ncol(x), third, type), "sfi")
 	x
 }
-MtrxSet = function(x, third = "Z", type) {
+MtrxSet = function(x, third = "Z", type, needClosed = FALSE) {
 	nc = unique(sapply(x, ncol))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-	if (any(sapply(x, NotClosed)))
+	if (needClosed && any(sapply(x, NotClosed)))
 		stop("polygons not (all) closed")
 	class(x) = c(getClassDim(x, ncol(x[[1]]), third, type), "sfi")
 	x
 }
-MtrxSetSet = function(x, third = "Z", type) {
+MtrxSetSet = function(x, third = "Z", type, needClosed = FALSE) {
 	nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-	if (any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
+	if (needClosed && any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
 		stop("polygons not (all) closed")
 	class(x) = c(getClassDim(x, ncol(x[[1]][[1]]), third, type), "sfi")
 	x
@@ -91,7 +91,7 @@ LINESTRING = function(x, third = "Z", ...) Mtrx(x, third, type = "LINESTRING")
 #' @param ... ignored
 #'
 #' @export
-POLYGON = function(x, third = "Z", ...) MtrxSet(x, third, type = "POLYGON")
+POLYGON = function(x, third = "Z", ...) MtrxSet(x, third, type = "POLYGON", needClosed = TRUE)
 #' Create a multilinestring simple feature from a list with coordinate matrices
 #' 
 #' Create a multilinestring simple feature from a list with coordinate matrices
@@ -100,7 +100,7 @@ POLYGON = function(x, third = "Z", ...) MtrxSet(x, third, type = "POLYGON")
 #' @param ... ignored
 #'
 #' @export
-MULTILINESTRING = function(x, third = "Z", ...) MtrxSet(x, third, type = "MULTILINESTRING")
+MULTILINESTRING = function(x, third = "Z", ...) MtrxSet(x, third, type = "MULTILINESTRING", needClosed = FALSE)
 #' Create a multipolygon simple feature from a list of lists with coordinate matrices
 #' 
 #' Create a multipolygon simple feature from a list of lists with coordinate matrices
@@ -109,7 +109,7 @@ MULTILINESTRING = function(x, third = "Z", ...) MtrxSet(x, third, type = "MULTIL
 #' @param ... ignored
 #'
 #' @export
-MULTIPOLYGON = function(x, third = "Z", ...) MtrxSetSet(x, third, type = "MULTIPOLYGON")
+MULTIPOLYGON = function(x, third = "Z", ...) MtrxSetSet(x, third, type = "MULTIPOLYGON", needClosed = TRUE)
 #' Create a geometrycollection from a list other simple feature items
 #'
 #' Create a geometrycollection from a list other simple feature items

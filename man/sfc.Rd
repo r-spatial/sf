@@ -4,7 +4,7 @@
 \alias{sfc}
 \title{verify simple feature}
 \usage{
-sfc(lst, epsg = -1, proj4string = as.character(NA))
+sfc(lst, epsg = as.integer(NA), proj4string = as.character(NA))
 }
 \arguments{
 \item{lst}{list with simple feature objects}

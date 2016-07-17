@@ -1,8 +1,7 @@
 #' @importFrom utils head tail
 #' @importFrom stats na.omit
-#' @import sp
-#' @importFrom rgeos createSPComment
 #' @importFrom methods as slotNames
+#' @import sp
 NULL
 
 setOldClass("sf")

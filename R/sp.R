@@ -17,13 +17,15 @@
 #' library(sp)
 #' p = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(y2), Polygon(x3), 
 #'    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
-#' r = rgeos::createSPComment(SpatialPolygons(list(p)))
-#' comment(r)
-#' comment(r@polygons[[1]])
-#' scan(text = comment(r@polygons[[1]]), quiet = TRUE)
-#' library(sf)
-#' a = as.sf(r)
-#' summary(a)
+#' if (require("rgeos")) {
+#'   r = createSPComment(SpatialPolygons(list(p)))
+#'   comment(r)
+#'   comment(r@polygons[[1]])
+#'   scan(text = comment(r@polygons[[1]]), quiet = TRUE)
+#'   library(sf)
+#'   a = as.sf(r)
+#'   summary(a)
+#' }
 as.sf = function(x) UseMethod("as.sf")
 
 #' convert foreign object to an sf object
@@ -114,8 +116,11 @@ as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 #' @export
 as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
-		if (comment(x) == "FALSE")
+		if (comment(x) == "FALSE") {
+			if (!requireNamespace("rgeos", quietly = TRUE))
+				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 			x = rgeos::createSPComment(x)
+		}
 		lapply(x@polygons, function(y) 
 			MULTIPOLYGON(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else

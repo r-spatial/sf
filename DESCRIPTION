@@ -3,8 +3,8 @@ Version: 0.1
 Title: Simple Features for R
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"))
 Depends: R (>= 3.0.0)
-Imports: utils, stats, methods, sp, rgeos
-Suggests: knitr, maptools, rgdal2 (>= 0.3)
+Imports: utils, stats, methods, sp
+Suggests: knitr, maptools, rgdal2 (>= 0.3), rgeos
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
 License: GPL-2 | MIT + file LICENSE

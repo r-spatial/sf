@@ -86,14 +86,14 @@ format.sfc = function(x, ..., digits = 30) {
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-sfc = function(lst, epsg = -1, proj4string = as.character(NA)) {
+sfc = function(lst, epsg = as.integer(NA), proj4string = as.character(NA)) {
 	stopifnot(is.list(lst))
 	lst = checkTypes(lst)
 	class(lst) = "sfc"
 	attr(lst, "type") = class(lst[[1]])[1] # after checkTypes, they all are identical
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = bbox(lst)
-	if (missing(proj4string) && epsg > 0)
+	if (missing(proj4string) && !is.na(epsg) && epsg > 0)
 		proj4string = CRS(paste0("+init=epsg:", epsg))@projargs
 	attr(lst, "proj4string") = proj4string
 	lst
