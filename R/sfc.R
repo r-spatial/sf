@@ -104,16 +104,17 @@ checkTypes = function(lst) { # breaks on errors, or returns the list
 	if (any(!sfi))
 		stop(paste("list item", which(sfi)[1], "is not of class sfi"))
 	cls = unique(sapply(lst, function(x) class(x)[1]))
-	# sync XX and MULTIXX to uniform MULTIXX set, just like PostGIS does:
-	if (all(cls %in% c("POINT", "MULTIPOINT")))
-		return(lapply(lst, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x))
-	if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
-		return(lapply(lst, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x))
-	if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
-		return(lapply(lst, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x))
-	if (length(cls) > 1)
+	if (length(cls) > 1) {
+		# sync XX and MULTIXX to uniform MULTIXX set, just like PostGIS does:
+		if (all(cls %in% c("POINT", "MULTIPOINT")))
+			return(lapply(lst, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x))
+		if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
+			return(lapply(lst, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x))
+		if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
+			return(lapply(lst, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x))
 		stop("multiple simple feature types not allowed in a simple feature list column")
-	cls
+	}
+	lst
 }
 
 #' @export
