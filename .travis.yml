@@ -1,46 +1,21 @@
-## Sample .travis.yml file for use with metacran/r-builder
-## See https://github.com/metacran/r-builder for details.
-
-language: c
-sudo: required
-
 before_install:
-  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
-  - chmod 755 pkg-build.sh
-  - ./pkg-build.sh bootstrap
+  - pwd
+  - export CURWD=`pwd`
   - cd
-  - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
-  - tar zxf gdal-2.1.0.tar.gz
-  - cd gdal-2.1.0
-  - ./configure --prefix=/usr
-  - make
-  - sudo make install
-  - cd
-  - wget http://download.osgeo.org/proj/proj-4.9.2.tar.gz
-  - tar zxvf proj-4.9.2.tar.gz
-  - cd proj-4.9.2
-  - ./configure --prefix=/usr
+  - sudo apt-get install libproj-dev
+  - wget http://download.osgeo.org/gdal/2.0.1/gdal-2.0.1.tar.gz
+  - tar zxf gdal-2.0.1.tar.gz
+  - cd gdal-2.0.1
+  - ./configure
   - make
   - sudo make install
   - sudo ldconfig
-  - cd /home/travis/build/edzer/sfr
+  - cd $CURWD
 
-install:
-  - ./pkg-build.sh install_deps
-  - Rscript -e 'devtools::install_github("edzer/rgdal2")'
+language: r
 
-script:
-  - ./pkg-build.sh run_tests
+sudo: required
 
-after_failure:
-  - ./pkg-build.sh dump_logs
+warnings_are_errors: false
 
-notifications:
-  email:
-    on_success: change
-    on_failure: change
-
-env:
-  matrix:
-    - RVERSION=release
-    - RVERSION=devel
+r_github_packages: edzer/rgdal2
