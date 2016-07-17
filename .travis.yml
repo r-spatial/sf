@@ -18,4 +18,6 @@ sudo: required
 
 warnings_are_errors: false
 
+r_packages: roxygen2
+
 r_github_packages: edzer/rgdal2
