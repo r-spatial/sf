@@ -20,4 +20,4 @@ See also:
 
 * the original R Consortium ISC [proposal](PROPOSAL.md)
 * UseR! 2016 [slides presentations](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf).
-* Blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/17/sf2.html)
+* Blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html)
