@@ -3,9 +3,9 @@
 #' create sf, which extends data.frame-like objects with a simple feature list column
 #'
 #' @param df object of class \code{data.frame}
-#' @param is_what character vector; indicates for each attribute column how it relates to the geometry; see Details
+#' @param relation_to_geometry character vector; indicates for each attribute column how it relates to the geometry; see Details
 #'
-#' @details is_what specified for each attribute column how it relates to the geometry, and can have one of following values: constant, aggregation, identifier.
+#' @details is_what specified for each attribute column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city.
 #' 
 #' @examples
 #' pt1 = POINT(c(0,1))
@@ -17,7 +17,7 @@
 #' d$geom2 = sfc(list(pt1, pt2))
 #' sf(df) # warns
 #' @export
-sf = function(df, is_what = rep(as.character(NA), ncol(df) - 1)) {
+sf = function(df, relation_to_geometry = rep(as.character(NA), ncol(df) - 1)) {
 	sf = sapply(df, function(x) inherits(x, "sfc"))
 	if (!any(sf))
 		stop("no simple features geometry column present")
@@ -27,9 +27,9 @@ sf = function(df, is_what = rep(as.character(NA), ncol(df) - 1)) {
 		df = df[,-sf_column[-1]]
 	}
 	attr(df, "sf_column") = sf_column[1]
- 	is_what = rep(is_what, length.out = ncol(df) - 1)
- 	if (any(!is.na(is_what)) && !all(na.omit(is_what) %in% c("field", "lattice", "entity")))
-	 		stop("unknown value for is_what; allowed values: field, lattice, entity")
+	f = factor(rep(is_what, length.out = ncol(df) - 1), levels = c("field", "lattice", "entity"))
+	names(f) = names(df)[-sf_column[1]]
+	attr(df, "relation_to_geometry") = f
 	# TODO: check that lattice has to anything but POINT
 	class(df) = c("sf", class(df))
 	df
