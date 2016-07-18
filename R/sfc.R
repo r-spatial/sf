@@ -86,9 +86,9 @@ format.sfc = function(x, ..., digits = 30) {
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-sfc = function(lst, epsg = as.integer(NA), proj4string = as.character(NA)) {
+sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	stopifnot(is.list(lst))
-	lst = checkTypes(lst)
+	lst = coerceTypes(lst) # may coerce X to MULTIX
 	class(lst) = "sfc"
 	attr(lst, "type") = class(lst[[1]])[1] # after checkTypes, they all are identical
 	attr(lst, "epsg") = epsg
@@ -99,20 +99,24 @@ sfc = function(lst, epsg = as.integer(NA), proj4string = as.character(NA)) {
 	lst
 }
 
-checkTypes = function(lst) { # breaks on errors, or returns the list
+# sync XX and MULTIXX to uniform MULTIXX set, just like PostGIS does:
+coerceTypes = function(lst) { # breaks on errors, or returns the list
 	sfi = sapply(lst, function(x) inherits(x, "sfi"))
 	if (any(!sfi))
 		stop(paste("list item", which(sfi)[1], "is not of class sfi"))
 	cls = unique(sapply(lst, function(x) class(x)[1]))
 	if (length(cls) > 1) {
-		# sync XX and MULTIXX to uniform MULTIXX set, just like PostGIS does:
 		if (all(cls %in% c("POINT", "MULTIPOINT")))
-			return(lapply(lst, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x))
+			return(lapply(lst, 
+				function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x))
 		if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
-			return(lapply(lst, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x))
+			return(lapply(lst, 
+				function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x))
 		if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
-			return(lapply(lst, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x))
-		stop("multiple simple feature types not allowed in a simple feature list column")
+			return(lapply(lst, 
+				function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x))
+		stop(paste("multiple simple feature types [", paste(cls, collapse = ","),
+			"] not allowed in a simple feature list column"))
 	}
 	lst
 }
