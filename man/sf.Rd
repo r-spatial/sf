@@ -15,7 +15,7 @@ sf(df, relation_to_geometry = rep(as.character(NA), ncol(df) - 1))
 create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
-is_what specified for each attribute column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city.
+\code{relation_to_geometry} specified for each attribute column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city.
 }
 \examples{
 pt1 = POINT(c(0,1))
