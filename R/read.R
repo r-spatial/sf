@@ -8,6 +8,8 @@
 #'  (s = read.sf("PG:dbname=test", "test"))
 #'  summary(s)
 #' }
+#' (s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+#' summary(s)
 #' @export
 read.sf = function(dsn, layer) {
 	if (!requireNamespace("rgdal2", quietly = TRUE))
@@ -23,27 +25,28 @@ read.sf = function(dsn, layer) {
 		pts = flatten(rgdal2::getPoints(geom, nested = TRUE))
 		switch (rgdal2::getGeometryType(geom),
            	POINT25D = ,
-           	POINT = POINT(unlist(pts)),
+           	POINT = ST_Point(unlist(pts)),
            	LINESTRING25D = ,
-           	LINESTRING = LINESTRING(pts),
-           	MULTILINESTRING = MULTILINESTRING(pts),
+           	LINESTRING = ST_LineString(pts),
+           	MULTILINESTRING = ST_MultiLineString(pts),
            	POLYGON25D = ,
-           	POLYGON = POLYGON(pts),
+           	POLYGON = ST_Polygon(pts),
            	MULTIPOLYGON25D = ,
-           	MULTIPOLYGON = MULTIPOLYGON(pts),
+           	MULTIPOLYGON = ST_MultiPolygon(pts),
            	MULTIPOINT = ,
-           	MULTIPOINT25D = MULTIPOINT(pts),
+           	MULTIPOINT25D = ST_MultiPoint(pts),
            	LINEARRING = ,
-           	MULTILINESTRING25D = stop(paste(rgdal2::getGeometryType(geom), "not supported"))
+           	MULTILINESTRING25D = ,
+				stop(paste(rgdal2::getGeometryType(geom), "not supported"))
 		)
 	}
 	o = rgdal2::openOGRLayer(dsn, layer)
 	ids = rgdal2::getIDs(o)
 	srs = rgdal2::getSRS(o)
 	p4s = if (is.null(srs)) as.character(NA) else rgdal2::getPROJ4(srs)
-	geom = sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
+	geom = ST_sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
 	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
-	sf(df)
+	ST_sf(df)
 }

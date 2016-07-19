@@ -8,7 +8,7 @@
 \S4method{geometry}{sf}(obj)
 }
 \arguments{
-\item{obj}{object of class \link{sf}}
+\item{obj}{object of class \code{sf}}
 }
 \description{
 get geometry from sf object

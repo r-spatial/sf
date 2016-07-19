@@ -80,13 +80,13 @@ format.sfc = function(x, ..., digits = 30) {
 #' @param proj4string character; describing the coordinate reference systems in PROJ.4 syntax
 #' 
 #' @examples
-#' pt1 = POINT(c(0,1))
-#' pt2 = POINT(c(1,1))
-#' (sfc = sfc(list(pt1, pt2)))
+#' pt1 = ST_Point(c(0,1))
+#' pt2 = ST_Point(c(1,1))
+#' (sfc = ST_sfc(list(pt1, pt2)))
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
+ST_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	stopifnot(is.list(lst))
 	lst = coerceTypes(lst) # may coerce X to MULTIX
 	class(lst) = "sfc"

@@ -23,10 +23,10 @@
 #'   comment(r@polygons[[1]])
 #'   scan(text = comment(r@polygons[[1]]), quiet = TRUE)
 #'   library(sf)
-#'   a = as.sf(r)
+#'   a = ST_as.sf(r)
 #'   summary(a)
 #' }
-as.sf = function(x) UseMethod("as.sf")
+ST_as.sf = function(x) UseMethod("ST_as.sf")
 
 #' convert foreign object to an sf object
 #'
@@ -35,28 +35,28 @@ as.sf = function(x) UseMethod("as.sf")
 #' @examples
 #' library(sp)
 #' demo(meuse, ask = FALSE, echo = FALSE)
-#' summary(as.sf(meuse))
-#' summary(as.sf(meuse.grid))
-#' summary(as.sf(meuse.area))
-#' summary(as.sf(meuse.riv))
-#' summary(as.sf(as(meuse.riv, "SpatialLines")))
+#' summary(ST_as.sf(meuse))
+#' summary(ST_as.sf(meuse.grid))
+#' summary(ST_as.sf(meuse.area))
+#' summary(ST_as.sf(meuse.riv))
+#' summary(ST_as.sf(as(meuse.riv, "SpatialLines")))
 #' pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
-#' summary(as.sf(pol.grd))
-#' summary(as.sf(as(pol.grd, "SpatialLinesDataFrame")))
+#' summary(ST_as.sf(pol.grd))
+#' summary(ST_as.sf(as(pol.grd, "SpatialLinesDataFrame")))
 #' @export
-as.sf.Spatial = function(x) {
+ST_as.sf.Spatial = function(x) {
 	if ("data" %in% slotNames(x))
 		df = x@data
 	else 
 		df = data.frame(row.names = row.names(x)) # empty
-	df$geom = as.sfc(geometry(x))
-	sf(df)
+	df$geom = ST_as.sfc(geometry(x))
+	ST_sf(df)
 }
 
 setCRS = function(lst, x) {
 	p4 = x@proj4string@projargs
 	if (is.na(p4))
-		return(sfc(lst, epsg = as.integer(NA), proj4string = as.character(NA)))
+		return(ST_sfc(lst, epsg = as.integer(NA), proj4string = as.character(NA)))
 	getEPSG = function(x) { # gets EPSG code out of proj4string:
 		spl = strsplit(x, " ")[[1]]
 		w = grep("+init=epsg:", spl)
@@ -66,7 +66,7 @@ setCRS = function(lst, x) {
 			NA
 	}
 	epsg = getEPSG(p4)
-	sfc(lst, epsg, proj4string = p4)
+	ST_sfc(lst, epsg, proj4string = p4)
 }
 
 #' convert foreign geometry object to an sfc object
@@ -75,21 +75,21 @@ setCRS = function(lst, x) {
 #' @param x object to convert
 #' @param ... further arguments
 #' @export
-as.sfc = function(x, ...) UseMethod("as.sfc")
+ST_as.sfc = function(x, ...) UseMethod("ST_as.sfc")
 
 #' @export
-as.sfc.SpatialPoints = function(x,...) {
+ST_as.sfc.SpatialPoints = function(x,...) {
 	cc = x@coords
-	lst = lapply(seq_len(nrow(cc)), function(x) POINT(cc[x,]))
+	lst = lapply(seq_len(nrow(cc)), function(x) ST_Point(cc[x,]))
 	setCRS(lst, x)
 }
 #' @export
-as.sfc.SpatialPixels = function(x,...) {
-	as.sfc(as(x, "SpatialPoints"))
+ST_as.sfc.SpatialPixels = function(x,...) {
+	ST_as.sfc(as(x, "SpatialPoints"))
 }
 #' @export
-as.sfc.SpatialMultiPoints = function(x,...) {
-	lst = lapply(x@coords, MULTIPOINT)
+ST_as.sfc.SpatialMultiPoints = function(x,...) {
+	lst = lapply(x@coords, ST_MultiPoint)
 	setCRS(lst, x)
 }
 #' coerce SpatialLines object into sfc
@@ -99,12 +99,12 @@ as.sfc.SpatialMultiPoints = function(x,...) {
 #' @param ... ignored
 #' @param forceMulti logical: force coercion into MultiPolygon objects (TRUE), or autodetect
 #' @export
-as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
+ST_as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
 		lapply(x@lines, 
-			function(y) MULTILINESTRING(lapply(y@Lines, function(z) z@coords)))
+			function(y) ST_MultiLineString(lapply(y@Lines, function(z) z@coords)))
 	else
-		lapply(x@lines, function(y) LINESTRING(y@Lines[[1]]@coords))
+		lapply(x@lines, function(y) ST_LineString(y@Lines[[1]]@coords))
 	setCRS(lst, x)
 }
 #' coerce SpatialPolygons object into sfc
@@ -114,7 +114,7 @@ as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 #' @param ... ignored
 #' @param forceMulti logical: force coercion into MultiPolygon objects (TRUE), or autodetect
 #' @export
-as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
+ST_as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (comment(x) == "FALSE") {
 			if (!requireNamespace("rgeos", quietly = TRUE))
@@ -122,9 +122,9 @@ as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 			x = rgeos::createSPComment(x)
 		}
 		lapply(x@polygons, function(y) 
-			MULTIPOLYGON(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
+			ST_MultiPolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
-		lapply(x@polygons, function(y) POLYGON(Polygons2POLYGON(y@Polygons)))
+		lapply(x@polygons, function(y) ST_Polygon(Polygons2POLYGON(y@Polygons)))
 	setCRS(lst, x)
 }
 
@@ -197,4 +197,5 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
 	SpatialPolygons(l, proj4string = CRS(attr(from, "proj4string")))
+	# TODO: add comments() ?
 }
