@@ -19,7 +19,9 @@ if (Sys.getenv("USER") == "edzer") {
  (s = read.sf("PG:dbname=test", "test"))
  summary(s)
 }
-(s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
-summary(s)
+if (require(rgdal2)) {
+ (s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+ summary(s)
+}
 }
 
