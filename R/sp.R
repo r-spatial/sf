@@ -3,9 +3,13 @@
 #' convert foreign object to an sf object
 #'
 #' convert foreign object to an sf object
-#' @param x object to convert
 #' @export
+ST_as.sf = function(x) UseMethod("ST_as.sf")
+
+#' @name ST_as.sf
+#' @param x object deriving from \link[sp]{Spatial}
 #' @examples
+#' library(sp)
 #' x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 #' x1 = 0.1 * x + 0.1
 #' x2 = 0.1 * x + 0.4
@@ -14,7 +18,6 @@
 #' y1 = x1 + 3
 #' y2 = x2 + 3
 #' y3 = x3 + 3
-#' library(sp)
 #' p = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(y2), Polygon(x3), 
 #'    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 #' if (require("rgeos")) {
@@ -26,14 +29,6 @@
 #'   a = ST_as.sf(r)
 #'   summary(a)
 #' }
-ST_as.sf = function(x) UseMethod("ST_as.sf")
-
-#' convert foreign object to an sf object
-#'
-#' convert foreign object to an sf object
-#' @param x object deriving from \link[sp]{Spatial}
-#' @examples
-#' library(sp)
 #' demo(meuse, ask = FALSE, echo = FALSE)
 #' summary(ST_as.sf(meuse))
 #' summary(ST_as.sf(meuse.grid))
@@ -74,6 +69,8 @@ setCRS = function(lst, x) {
 #' convert foreign geometry object to an sfc object
 #' @param x object to convert
 #' @param ... further arguments
+#' @param forceMulti logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc = function(x, ...) UseMethod("ST_as.sfc")
 
@@ -92,12 +89,7 @@ ST_as.sfc.SpatialMultiPoints = function(x,...) {
 	lst = lapply(x@coords, ST_MultiPoint)
 	setCRS(lst, x)
 }
-#' coerce SpatialLines object into sfc
-#'
-#' coerce SpatialLines object into sfc
-#' @param x object of class \link[sp]{SpatialLines}
-#' @param ... ignored
-#' @param forceMulti logical: force coercion into MultiPolygon objects (TRUE), or autodetect
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
@@ -107,12 +99,7 @@ ST_as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 		lapply(x@lines, function(y) ST_LineString(y@Lines[[1]]@coords))
 	setCRS(lst, x)
 }
-#' coerce SpatialPolygons object into sfc
-#'
-#' coerce SpatialPolygons object into sfc
-#' @param x object of class \link[sp]{SpatialPolygons}
-#' @param ... ignored
-#' @param forceMulti logical: force coercion into MultiPolygon objects (TRUE), or autodetect
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {

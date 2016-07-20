@@ -2,17 +2,21 @@
 % Please edit documentation in R/sp.R
 \name{ST_as.sf}
 \alias{ST_as.sf}
+\alias{ST_as.sf.Spatial}
 \title{convert foreign object to an sf object}
 \usage{
 ST_as.sf(x)
+
+\method{ST_as.sf}{Spatial}(x)
 }
 \arguments{
-\item{x}{object to convert}
+\item{x}{object deriving from \link[sp]{Spatial}}
 }
 \description{
 convert foreign object to an sf object
 }
 \examples{
+library(sp)
 x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 x1 = 0.1 * x + 0.1
 x2 = 0.1 * x + 0.4
@@ -21,7 +25,6 @@ y = x + 3
 y1 = x1 + 3
 y2 = x2 + 3
 y3 = x3 + 3
-library(sp)
 p = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(y2), Polygon(x3), 
    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 if (require("rgeos")) {
@@ -33,5 +36,14 @@ if (require("rgeos")) {
   a = ST_as.sf(r)
   summary(a)
 }
+demo(meuse, ask = FALSE, echo = FALSE)
+summary(ST_as.sf(meuse))
+summary(ST_as.sf(meuse.grid))
+summary(ST_as.sf(meuse.area))
+summary(ST_as.sf(meuse.riv))
+summary(ST_as.sf(as(meuse.riv, "SpatialLines")))
+pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
+summary(ST_as.sf(pol.grd))
+summary(ST_as.sf(as(pol.grd, "SpatialLinesDataFrame")))
 }
 

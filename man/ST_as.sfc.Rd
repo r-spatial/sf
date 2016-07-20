@@ -2,14 +2,22 @@
 % Please edit documentation in R/sp.R
 \name{ST_as.sfc}
 \alias{ST_as.sfc}
+\alias{ST_as.sfc.SpatialLines}
+\alias{ST_as.sfc.SpatialPolygons}
 \title{convert foreign geometry object to an sfc object}
 \usage{
 ST_as.sfc(x, ...)
+
+\method{ST_as.sfc}{SpatialLines}(x, ..., forceMulti = FALSE)
+
+\method{ST_as.sfc}{SpatialPolygons}(x, ..., forceMulti = FALSE)
 }
 \arguments{
 \item{x}{object to convert}
 
 \item{...}{further arguments}
+
+\item{forceMulti}{logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect}
 }
 \description{
 convert foreign geometry object to an sfc object
