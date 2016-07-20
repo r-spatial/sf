@@ -29,7 +29,7 @@ Type 'q()' to quit R.
 > mp1 = ST_MultiPolygon(mp)
 > df = data.frame(a=1)
 > df$geom = ST_sfc(list(mp1))
-> a = as(ST_sf(df), "Spatial")
+> a = as(ST_as.sf(df), "Spatial")
 > class(a)
 [1] "SpatialPolygonsDataFrame"
 attr(,"package")
@@ -41,4 +41,4 @@ attr(,"package")
 > 
 > proc.time()
    user  system elapsed 
-  0.428   0.260   0.377 
+  0.380   0.164   0.399 

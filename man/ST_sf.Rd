@@ -4,27 +4,23 @@
 \alias{ST_sf}
 \title{create sf object}
 \usage{
-ST_sf(df, relation_to_geometry = rep(NA_character_, ncol(df) - 1))
+ST_sf(..., relation_to_geometry = NA_character_, row.names)
 }
 \arguments{
-\item{df}{object of class \code{data.frame}}
+\item{...}{column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}}
 
-\item{relation_to_geometry}{character vector; indicates for each attribute column how it relates to the geometry; see Details}
+\item{relation_to_geometry}{character vector; see details below.}
+
+\item{row.names}{row.names for the created \code{sf} object}
 }
 \description{
 create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
-\code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city.
-}
-\examples{
-pt1 = ST_Point(c(0,1))
-pt2 = ST_Point(c(1,1))
-ST_sfc(list(pt1, pt2))
-d = data.frame(a = 1:2)
-d$geom = ST_sfc(list(pt1, pt2))
-df = ST_sf(d)
-d$geom2 = ST_sfc(list(pt1, pt2))
-ST_sf(df) # warns
+\code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  #' @examples
+g = ST_sfc(list(ST_Point(1:2)))
+ST_sf2(a=3,g)
+ST_sf2(g, a=3)
+ST_sf2(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
 }
 

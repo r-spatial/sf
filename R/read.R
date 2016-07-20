@@ -50,5 +50,5 @@ read.sf = function(dsn, layer) {
 	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
-	ST_sf(df)
+	ST_as.sf(df)
 }

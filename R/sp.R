@@ -1,13 +1,4 @@
-# convert to, and from, sp::Spatial objects
-
-#' convert foreign object to an sf object
-#'
-#' convert foreign object to an sf object
-#' @export
-ST_as.sf = function(x) UseMethod("ST_as.sf")
-
 #' @name ST_as.sf
-#' @param x object deriving from \link[sp]{Spatial}
 #' @examples
 #' library(sp)
 #' x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
@@ -39,13 +30,13 @@ ST_as.sf = function(x) UseMethod("ST_as.sf")
 #' summary(ST_as.sf(pol.grd))
 #' summary(ST_as.sf(as(pol.grd, "SpatialLinesDataFrame")))
 #' @export
-ST_as.sf.Spatial = function(x) {
+ST_as.sf.Spatial = function(x, ...) {
 	if ("data" %in% slotNames(x))
 		df = x@data
 	else 
 		df = data.frame(row.names = row.names(x)) # empty
 	df$geom = ST_as.sfc(geometry(x))
-	ST_sf(df)
+	ST_as.sf(df)
 }
 
 setCRS = function(lst, x) {
