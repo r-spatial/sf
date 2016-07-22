@@ -1,3 +1,17 @@
+before_install:
+  - pwd
+  - export CURWD=`pwd`
+  - cd
+  - sudo apt-get install libproj-dev
+  - wget http://download.osgeo.org/gdal/2.0.1/gdal-2.0.1.tar.gz
+  - tar zxf gdal-2.0.1.tar.gz
+  - cd gdal-2.0.1
+  - ./configure
+  - make
+  - sudo make install
+  - sudo ldconfig
+  - cd $CURWD
+
 language: r
 
 sudo: required
