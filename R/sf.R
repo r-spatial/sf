@@ -83,6 +83,7 @@ ST_sf = function(..., relation_to_geometry = NA_character_, row.names) {
 }
 
 #' @name sf
+#' @param x object of class \code{sf}
 #' @param i record selection, see \link{[.data.frame}
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}
