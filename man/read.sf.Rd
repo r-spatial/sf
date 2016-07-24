@@ -4,12 +4,14 @@
 \alias{read.sf}
 \title{read simple features from file or database}
 \usage{
-read.sf(dsn, layer)
+read.sf(dsn, layer, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)}
 
 \item{layer}{layer name (varies by driver, may be a file name without extension)}
+
+\item{...}{parameter(s) passed on to \link{ST_as.sf}}
 }
 \description{
 read simple features from file or database
@@ -19,9 +21,7 @@ if (Sys.getenv("USER") == "edzer") {
  (s = read.sf("PG:dbname=test", "test"))
  summary(s)
 }
-if (require(rgdal2)) {
- (s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
- summary(s)
-}
+(s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+summary(s)
 }
 
