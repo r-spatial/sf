@@ -17,3 +17,9 @@ class(a)
 b = ST_as.sf(a)
 a2 = as(a, "SpatialPolygonsDataFrame")
 all.equal(a, a2) # round-trip
+
+# SpatialMultiPoints
+library(sp)
+example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
+m = ST_as.sf(mpdf)
+all.equal(as(m, "Spatial"), mpdf) # TRUE

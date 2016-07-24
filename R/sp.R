@@ -42,17 +42,16 @@ ST_as.sf.Spatial = function(x, ...) {
 setCRS = function(lst, x) {
 	p4 = x@proj4string@projargs
 	if (is.na(p4))
-		return(ST_sfc(lst, epsg = as.integer(NA), proj4string = as.character(NA)))
+		return(ST_sfc(lst, epsg = NA_integer_, proj4string = NA_character_))
 	getEPSG = function(x) { # gets EPSG code out of proj4string:
 		spl = strsplit(x, " ")[[1]]
 		w = grep("+init=epsg:", spl)
-		if (length(w) == 1) {
-			epsg = as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
-		} else
-			NA
+		if (length(w) == 1)
+			as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
+		else
+			NA_integer_
 	}
-	epsg = getEPSG(p4)
-	ST_sfc(lst, epsg, proj4string = p4)
+	ST_sfc(lst, epsg = getEPSG(p4), proj4string = p4)
 }
 
 #' convert foreign geometry object to an sfc object
@@ -65,21 +64,27 @@ setCRS = function(lst, x) {
 #' @export
 ST_as.sfc = function(x, ...) UseMethod("ST_as.sfc")
 
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialPoints = function(x,...) {
 	cc = x@coords
 	lst = lapply(seq_len(nrow(cc)), function(x) ST_Point(cc[x,]))
 	setCRS(lst, x)
 }
+
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialPixels = function(x,...) {
 	ST_as.sfc(as(x, "SpatialPoints"))
 }
+
+#' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialMultiPoints = function(x,...) {
 	lst = lapply(x@coords, ST_MultiPoint)
 	setCRS(lst, x)
 }
+
 #' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
@@ -90,6 +95,7 @@ ST_as.sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 		lapply(x@lines, function(y) ST_LineString(y@Lines[[1]]@coords))
 	setCRS(lst, x)
 }
+
 #' @name ST_as.sfc
 #' @export
 ST_as.sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
@@ -125,10 +131,9 @@ Polygons2POLYGON = function(PolygonsLst) {
 }
 
 setAs("sf", "Spatial", function(from) {
-	df = from
-	# remove geometry column:
-	df[[attr(df, "sf_column")]] = NULL
-	addAttrToGeom(as(geometry(from), "Spatial"), as.data.frame(df), match.ID = FALSE)
+	geom = geometry(from)
+	from[[attr(from, "sf_column")]] = NULL # remove sf column list
+	addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
 })
 
 setAs("sfc", "Spatial", function(from) {
@@ -150,10 +155,10 @@ setAs("sfc", "Spatial", function(from) {
 })
 
 sfc2SpatialPoints = function(from)
-	SpatialPoints(do.call(rbind(from)), proj4string = CRS(attr(from, "proj4string")))
+	SpatialPoints(do.call(rbind, from), proj4string = CRS(attr(from, "proj4string")))
 
 sfc2SpatialMultiPoints = function(from)
-	SpatialMultiPoints(from, proj4string = CRS(attr(from, "proj4string")))
+	SpatialMultiPoints(lapply(from, unclass), proj4string = CRS(attr(from, "proj4string")))
 
 sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 	l = if (attr(from, "type") == "MULTILINESTRING")
@@ -175,5 +180,5 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
 	SpatialPolygons(l, proj4string = CRS(attr(from, "proj4string")))
-	# TODO: add comments() ?
+	# TODO: add comments()
 }

@@ -3,10 +3,19 @@
 \name{ST_as.sfc}
 \alias{ST_as.sfc}
 \alias{ST_as.sfc.SpatialLines}
+\alias{ST_as.sfc.SpatialMultiPoints}
+\alias{ST_as.sfc.SpatialPixels}
+\alias{ST_as.sfc.SpatialPoints}
 \alias{ST_as.sfc.SpatialPolygons}
 \title{convert foreign geometry object to an sfc object}
 \usage{
 ST_as.sfc(x, ...)
+
+\method{ST_as.sfc}{SpatialPoints}(x, ...)
+
+\method{ST_as.sfc}{SpatialPixels}(x, ...)
+
+\method{ST_as.sfc}{SpatialMultiPoints}(x, ...)
 
 \method{ST_as.sfc}{SpatialLines}(x, ..., forceMulti = FALSE)
 
