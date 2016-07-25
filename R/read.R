@@ -35,15 +35,15 @@ readFeature = function(layer, id) {
 #' @param ... parameter(s) passed on to \link{ST_as.sf}
 #' @examples
 #' if (Sys.getenv("USER") == "edzer") {
-#'  (s = read.sf("PG:dbname=test", "test"))
+#'  (s = ST_read("PG:dbname=test", "test"))
 #'  summary(s)
 #' }
-#' (s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+#' (s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 #' summary(s)
 #' @export
-read.sf = function(dsn, layer, ...) {
+ST_read = function(dsn, layer, ...) {
 	if (!requireNamespace("rgdal2", quietly = TRUE))
-		stop("package rgdal2 required for read.sf; try devtools::install_github(\"edzer/rgdal2\")")
+		stop("package rgdal2 required for ST_read; try devtools::install_github(\"edzer/rgdal2\")")
 	o = rgdal2::openOGRLayer(dsn, layer)
 	ids = rgdal2::getIDs(o)
 	srs = rgdal2::getSRS(o)

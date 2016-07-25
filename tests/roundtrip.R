@@ -20,6 +20,7 @@ all.equal(a, a2) # round-trip
 
 # SpatialMultiPoints
 library(sp)
+set.seed(1331)
 example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
 m = ST_as.sf(mpdf)
 all.equal(as(m, "Spatial"), mpdf) # TRUE

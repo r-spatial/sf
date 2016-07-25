@@ -94,6 +94,6 @@ bbox(gc)
 
 ## ----error=TRUE----------------------------------------------------------
 library(rgdal2)
-(s = read.sf(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+(s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 summary(s)
 

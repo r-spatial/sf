@@ -39,6 +39,30 @@ attr(,"package")
 > all.equal(a, a2) # round-trip
 [1] TRUE
 > 
+> # SpatialMultiPoints
+> library(sp)
+
+Attaching package: 'sp'
+
+The following object is masked from 'package:sf':
+
+    bbox
+
+> set.seed(1331)
+> example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
+SpatialMultiPoints:
+                                                                                   geometry
+1                                                MULTIPOINT (9.38 11.5,11.1 9.85,9.76 11.2)
+2                     MULTIPOINT (10.4 -0.583,10.5 -0.313,9.8 -1.05,10.3 -0.719,11.4 -1.05)
+3 MULTIPOINT (-0.844 9.18,1.14 10.8,1.95 10.8,-0.451 10.7,0.67 10.3,0.127 10.5,-0.727 9.23)
+Coordinate Reference System (CRS) arguments: NA 
+Warning message:
+In data.row.names(row.names, rowsi, i) :
+  some row.names duplicated: 2,3,5,6,7,8,10,11,12,13,14,15 --> row.names NOT used
+> m = ST_as.sf(mpdf)
+> all.equal(as(m, "Spatial"), mpdf) # TRUE
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  0.380   0.164   0.399 
+  0.496   0.276   0.461 
