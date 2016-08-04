@@ -1,0 +1,26 @@
+#library(rgdal2)
+#openOGRLayer("PG:dbname=postgis" , "meuse2")
+
+library(sf)
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+pol1 = list(outer, hole1, hole2)
+pol2 = list(outer + 12, hole1 + 12)
+pol3 = list(outer + 24)
+mp = list(pol1,pol2,pol3)
+mp1 = ST_MultiPolygon(mp)
+df = data.frame(a=1)
+df$geom = ST_sfc(list(mp1))
+a = as(ST_as.sf(df), "Spatial")
+class(a)
+b = ST_as.sf(a)
+a2 = as(a, "SpatialPolygonsDataFrame")
+all.equal(a, a2) # round-trip
+
+# SpatialMultiPoints
+library(sp)
+set.seed(1331)
+example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
+m = ST_as.sf(mpdf)
+all.equal(as(m, "Spatial"), mpdf) # TRUE

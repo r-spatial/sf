@@ -1,0 +1,68 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #library(rgdal2)
+> #openOGRLayer("PG:dbname=postgis" , "meuse2")
+> 
+> library(sf)
+> outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+> hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+> hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+> pol1 = list(outer, hole1, hole2)
+> pol2 = list(outer + 12, hole1 + 12)
+> pol3 = list(outer + 24)
+> mp = list(pol1,pol2,pol3)
+> mp1 = ST_MultiPolygon(mp)
+> df = data.frame(a=1)
+> df$geom = ST_sfc(list(mp1))
+> a = as(ST_as.sf(df), "Spatial")
+> class(a)
+[1] "SpatialPolygonsDataFrame"
+attr(,"package")
+[1] "sp"
+> b = ST_as.sf(a)
+> a2 = as(a, "SpatialPolygonsDataFrame")
+> all.equal(a, a2) # round-trip
+[1] TRUE
+> 
+> # SpatialMultiPoints
+> library(sp)
+
+Attaching package: 'sp'
+
+The following object is masked from 'package:sf':
+
+    bbox
+
+> set.seed(1331)
+> example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
+SpatialMultiPoints:
+                                                                                   geometry
+1                                                MULTIPOINT (9.38 11.5,11.1 9.85,9.76 11.2)
+2                     MULTIPOINT (10.4 -0.583,10.5 -0.313,9.8 -1.05,10.3 -0.719,11.4 -1.05)
+3 MULTIPOINT (-0.844 9.18,1.14 10.8,1.95 10.8,-0.451 10.7,0.67 10.3,0.127 10.5,-0.727 9.23)
+Coordinate Reference System (CRS) arguments: NA 
+Warning message:
+In data.row.names(row.names, rowsi, i) :
+  some row.names duplicated: 2,3,5,6,7,8,10,11,12,13,14,15 --> row.names NOT used
+> m = ST_as.sf(mpdf)
+> all.equal(as(m, "Spatial"), mpdf) # TRUE
+[1] TRUE
+> 
+> proc.time()
+   user  system elapsed 
+  0.496   0.276   0.461 
