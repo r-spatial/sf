@@ -119,7 +119,8 @@ readData = function(rc, EWKB = FALSE) {
 		LINESTRING = readMatrix(rc, pt$dims, endian),
 		POLYGON = , TRIANGLE = readMatrixList(rc, pt$dims, endian),
 		MULTILINESTRING = , MULTIPOLYGON = , POLYHEDRALSURFACE = , 
-		TIN = , GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
+		TIN = lapply(readGC(rc, pt$dims, endian, EWKB), unclass),
+		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
 			stop(paste("type", pt$tp, "unsupported")))
 	class(ret) <- c(pt$tp, "sfi")
 	if (pt$dims > 2)
