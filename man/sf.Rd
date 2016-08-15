@@ -7,7 +7,8 @@
 \alias{sf}
 \title{create sf object}
 \usage{
-ST_sf(..., relation_to_geometry = NA_character_, row.names)
+ST_sf(..., relation_to_geometry = NA_character_, row.names,
+  stringsAsFactors = default.stringsAsFactors())
 
 \method{[}{sf}(x, i, j, drop)
 
@@ -19,6 +20,8 @@ p4s(obj)
 \item{relation_to_geometry}{character vector; see details below.}
 
 \item{row.names}{row.names for the created \code{sf} object}
+
+\item{stringsAsFactors}{logical; see \link{data.frame}}
 
 \item{x}{object of class \code{sf}}
 

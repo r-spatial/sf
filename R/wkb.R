@@ -171,9 +171,7 @@ ST_as.WKB.sfc = function(x, ..., endian = .Platform$endian) {
 	ret
 }
 
-wkbType = function(x) {
-	if (inherits(x, "sfi"))
-		x = class(x)
+createType = function(x, endian, EWKB = FALSE) {
 	dims = "XY"
 	if (length(x) == 3) {
 		dims = x[1] 
@@ -183,7 +181,17 @@ wkbType = function(x) {
 	m = match(cl, sf.tp)
 	if (is.na(m))
 		stop(paste("Class", cl, "not matched"))
-	as.integer(m + switch(dims, "Z" = 1000, "M" = 2000, "ZM" = 3000, 0))
+	if (! EWKB) # ISO: add 1000s
+		as.integer(m + switch(dims, "Z" = 1000, "M" = 2000, "ZM" = 3000, 0))
+	else { # EWKB: set higher bits
+		ret = raw(4)
+		ret[1] = as.raw(m) # set up little-endian
+		ret[4] = as.raw(switch(dims, "Z" = 0x80, "M" = 0x40, "ZM" = 0xC0, 0))
+		if (endian == "big")
+			rev(ret)
+		else
+			ret
+	}
 }
 
 #' @name ST_as.WKB
@@ -198,24 +206,39 @@ ST_as.WKB.sfi = function(x, ..., endian = .Platform$endian) {
 	rawConnectionValue(rc)
 }
 
-writeData = function(x, rc, endian, writeType = TRUE) {
+writeData = function(x, rc, endian, EWKB = FALSE) {
 	stop("to be done")
 	if (endian == "big")
 		writeBin(as.raw(0L), rc)
 	else
 		writeBin(as.raw(1L), rc)
-	if (writeType)
-		writeBin(wkbType(x), rc, size = 4L, endian = endian) # type
+	if (EWKB)
+		writeBin(createType(class(x), endian, TRUE), rc, size = 1L, endian = endian)
+	else
+		writeBin(createType(class(x)), rc, size = 4L, endian = endian)
+	# TODO (?): write SRID in case of EWKB?
 	# write out x:
 	if (inherits(x, "POINT"))
 		writeBin(as.vector(x), rc, size = 8L, endian = endian)
+	else if (inherits(x, "MULTIPOINT"))
+		writeMPoints(x, rc, endian, EWKB)
 	else if (is.matrix(x)) {
 		writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
 		writeBin(as.double(as.vector(t(x))), rc, size = 8L, endian = endian)
 	} else if (is.list(x)) {
 		writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
-		lapply(x, writeData, rc = rc, endian = endian, 
-			writeType = inherits(x, "GEOMETRYCOLLECTION"))
+		lapply(x, writeData, rc = rc, endian = endian, EWKB = EWKB) 
 	} else 
 		stop(paste("unexpected possibility:", class(x)))
+}
+
+writeMPoints = function(x, rc, endian, EWKB) {
+	getPoint = function(pt, cls) {
+		if (length(cls) == 2)
+			ST_Point(pt)
+		else
+			ST_Point(pt, cls[1])
+	}
+	writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
+	apply(x, 1, function(y) writeData(getPoint(y, class(x)), rc, endian, EWKB))
 }
