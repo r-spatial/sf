@@ -4,7 +4,9 @@
 ST_as.sfc.WKB = function(x, ..., EWKB = FALSE) {
 	ret = lapply(x, readWKB, EWKB = EWKB)
 	epsg = unique(sapply(ret, function(x) attr(x, "epsg")))
-	if (length(epsg) > 1)
+	if (is.list(epsg)) # they were all NULL
+		epsg = NA_integer_
+	else if (length(epsg) > 1)
 		stop(paste("more than one SRID found:", paste(epsg, collapse = ", ")))
 	ST_sfc(ret, epsg = epsg, ...)
 }
@@ -116,14 +118,14 @@ readData = function(rc, EWKB = FALSE) {
 		MULTIPOINT = readMPoints(rc, pt$dims, endian, EWKB),
 		LINESTRING = readMatrix(rc, pt$dims, endian),
 		POLYGON = , TRIANGLE = readMatrixList(rc, pt$dims, endian),
-		MULTILINESTRING = ,
-		MULTIPOLYGON = , POLYHEDRALSURFACE = , TIN = readGC(rc, pt$dims, endian, EWKB),
-		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
+		MULTILINESTRING = , MULTIPOLYGON = , POLYHEDRALSURFACE = , 
+		TIN = , GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
 			stop(paste("type", pt$tp, "unsupported")))
 	class(ret) <- c(pt$tp, "sfi")
 	if (pt$dims > 2)
 		class(ret) <- c(pt$zm, class(ret))
-	attr(ret, "epsg") <- srid
+	if (!is.na(srid))
+		attr(ret, "epsg") <- srid
 	ret
 }
 
@@ -174,7 +176,7 @@ ST_as.WKB.sfc = function(x, ..., endian = .Platform$endian) {
 createType = function(x, endian, EWKB = FALSE) {
 	dims = "XY"
 	if (length(x) == 3) {
-		dims = x[1] 
+		dims = x[1]  # "Z", "M", or "ZM"
 		cl = x[2]
 	} else
 		cl = x[1]
@@ -207,7 +209,6 @@ ST_as.WKB.sfi = function(x, ..., endian = .Platform$endian) {
 }
 
 writeData = function(x, rc, endian, EWKB = FALSE) {
-	stop("to be done")
 	if (endian == "big")
 		writeBin(as.raw(0L), rc)
 	else
@@ -218,23 +219,45 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 		writeBin(createType(class(x)), rc, size = 4L, endian = endian)
 	# TODO (?): write SRID in case of EWKB?
 	# write out x:
-	if (inherits(x, "POINT"))
-		writeBin(as.vector(x), rc, size = 8L, endian = endian)
-	else if (inherits(x, "MULTIPOINT"))
-		writeMPoints(x, rc, endian, EWKB)
-	else if (is.matrix(x)) {
-		writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
-		writeBin(as.double(as.vector(t(x))), rc, size = 8L, endian = endian)
-	} else if (is.list(x)) {
-		writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
-		lapply(x, writeData, rc = rc, endian = endian, EWKB = EWKB) 
-	} else 
+	type = ifelse(length(class(x)) == 3, class(x)[2], class(x)[1])
+	switch(type,
+		POINT = writeBin(as.vector(as.double(x)), rc, size = 8L, endian = endian),
+		MULTIPOINT = writeMPoints(x, rc, endian, EWKB),
+		LINESTRING = writeMatrix(x, rc, endian),
+		POLYGON = , TRIANGLE = writeMatrixList(x, rc, endian),
+		POLYHEDRALSURFACE = , TIN = , 
+		MULTILINESTRING = , MULTIPOLYGON = writeMulti(x, rc, endian, EWKB),
+		GEOMETRYCOLLECTION = writeGC(x, rc, endian, EWKB),
 		stop(paste("unexpected possibility:", class(x)))
+	)
 }
 
+writeMulti = function(x, rc, endian, EWKB) {
+	zm = if (length(class(x)) == 3)
+			class(x)[1]
+		else "Z"
+	unMulti = if (inherits(x, "MULTILINESTRING"))
+		ST_LineString
+	else # MULTIPOLYGON, POLYHEDRALSURFACE, TIN:
+		ST_Polygon
+	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
+	lapply(lapply(x, unMulti, zm), writeData, rc = rc, endian = endian, EWKB = EWKB)
+}
+writeGC = function(x, rc, endian, EWKB) {
+	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
+	lapply(x, writeData, rc = rc, endian = endian, EWKB = EWKB) 
+}
+writeMatrix = function(x, rc, endian) {
+	writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
+	writeBin(as.double(as.vector(t(x))), rc, size = 8L, endian = endian)
+}
+writeMatrixList = function(x, rc, endian) {
+	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
+	lapply(x, function(y) writeMatrix(y, rc, endian))
+}
 writeMPoints = function(x, rc, endian, EWKB) {
 	getPoint = function(pt, cls) {
-		if (length(cls) == 2)
+		if (length(cls) != 3)
 			ST_Point(pt)
 		else
 			ST_Point(pt, cls[1])
