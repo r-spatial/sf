@@ -1,21 +1,22 @@
 getClassDim = function(x, d, third = "Z", type) {
-	type = toupper(type)
 	stopifnot(third %in% c("Z", "M"))
+	stopifnot(d > 1)
+	type = toupper(type)
 	if (d == 2)
-		return(type)
-	if (d == 3)
-		return(c(paste(type, third, sep = "_"), type))
-	if (d == 4)
-		return(c(paste0(type, "_ZM"), type))
-	stop(paste(d, "is an illegal number of columns for a", type))
+		c(type, "sfi")
+	else if (d == 3)
+		c(third, type, "sfi")
+	else if (d == 4)
+		c("ZM", type, "sfi")
+	else stop(paste(d, "is an illegal number of columns for a", type))
 }
 
 Pt = function(x, third = "Z", type) {
-	class(x) = c(getClassDim(x, length(x), third, type), "sfi")
+	class(x) = getClassDim(x, length(x), third, type)
 	x
 }
 Mtrx = function(x, third = "Z", type) {
-	class(x) = c(getClassDim(x, ncol(x), third, type), "sfi")
+	class(x) = getClassDim(x, ncol(x), third, type)
 	x
 }
 MtrxSet = function(x, third = "Z", type, needClosed = FALSE) {
@@ -25,7 +26,7 @@ MtrxSet = function(x, third = "Z", type, needClosed = FALSE) {
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
 	if (needClosed && any(sapply(x, NotClosed)))
 		stop("polygons not (all) closed")
-	class(x) = c(getClassDim(x, ncol(x[[1]]), third, type), "sfi")
+	class(x) = getClassDim(x, ncol(x[[1]]), third, type)
 	x
 }
 MtrxSetSet = function(x, third = "Z", type, needClosed = FALSE) {
@@ -35,24 +36,26 @@ MtrxSetSet = function(x, third = "Z", type, needClosed = FALSE) {
 	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
 	if (needClosed && any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
 		stop("polygons not (all) closed")
-	class(x) = c(getClassDim(x, ncol(x[[1]][[1]]), third, type), "sfi")
+	class(x) = getClassDim(x, ncol(x[[1]][[1]]), third, type)
 	x
 }
 
-#Dimension = function(x) { # should also return "XY", "XYZ", "XYM", "XYZM"?
-#	if (is.matrix(x))
-#		return(ncol(x))
-#	if (is.numeric(x)) # Point
-#		return(length(x))
-#	# recurse:
-#	return(Dimension(x[[1]]))
-#}
+#return "XY", "XYZ", "XYM", or "XYZM"
+Dimension = function(x) { 
+	stopifnot(inherits(x, "sfi"))
+	cls = class(x)
+	if (length(cls) == 3)
+		paste0("XY", cls[1])
+	else
+		"XY"
+}
 
 CheckGC = function(x, third = "Z", type = "GeometryCollection") {
-	# TODO
-	# check all dimensions are equal
-	#class(x) = c(getClassDim(x, Dimension(x[[1]]), third, type), "sfi") -> I'M NOT SURE!!
-	class(x) = c(type, "sfi")
+	# check all dimensions are equal:
+	cls = unique(sapply(x, Dimension))
+	if (length(cls) > 1)
+		stop(paste("multiple dimensions found:", paste(cls, collapse = ", ")))
+	class(x) = c(type, "sfi") # no Z/M/ZM modifier??
 	x
 }
 
@@ -115,7 +118,6 @@ CheckGC = function(x, third = "Z", type = "GeometryCollection") {
 #' pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 #' (mp4 = ST_MultiPolygon(pts4))
 #' (gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))
-#' (gc3 = ST_GeometryCollection(list(mp3, pl1)))
 #' @export
 ST_Point = function(x, third = "Z", ...) Pt(x, third, type = "POINT")
 #' @name ST
@@ -139,62 +141,19 @@ ST_GeometryCollection = function(x, third = "Z", ...) CheckGC(x, third, type = "
 
 POINT2MULTIPOINT = function(x, third = "Z") {
 	if (length(x) == 3) # disambiguate Z/M:
-		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+		third = class(x)[1]
 	ST_MultiPoint(matrix(unclass(x), 1), third = third)
 }
 LINESTRING2MULTILINESTRING = function(x, third = "Z") {
 	if (ncol(x) == 3) # disambiguate Z/M:
-		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+		third = class(x)[1]
 	ST_MultiLineString(list(unclass(x)), third = third)
 }
 POLYGON2MULTIPOLYGON = function(x, third = "Z") {
 	if (ncol(x[[1]]) == 3) # disambiguate Z/M:
-		third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+		#third = if (length(grep("Z", class(x)[1])) > 0) "Z" else "M"
+		third = class(x)[1]
 	ST_MultiPolygon(list(unclass(x)), third = third)
-}
-
-# print helper functions
-prnt.POINT = function(x, ...) {
-	nr = paste0(x, collapse = " ")
-	paste0(class(x)[1], "(", nr, ")")
-}
-prnt.Matrix = function(x, ...)
-	paste0("(", paste0(apply(x, 1, paste0, collapse = " "), collapse = ", "), ")")
-
-prnt.MatrixList = function(x, ...)
-	paste0("(", paste0(unlist(lapply(x, prnt.Matrix)), collapse = ", "), ")")
-
-prnt.MatrixListList = function(x, ...)
-	paste0("(", paste0(unlist(lapply(x, prnt.MatrixList)), collapse = ", "), ")")
-
-prnt.MULTIPOINT = function(x, ...) paste0(class(x)[1], prnt.Matrix(x, ...))
-prnt.LINESTRING = function(x, ...) paste0(class(x)[1], prnt.Matrix(x, ...))
-prnt.POLYGON = function(x, ...) paste0(class(x)[1], prnt.MatrixList(x, ...))
-prnt.MULTILINESTRING = function(x, ...) paste0(class(x)[1], prnt.MatrixList(x, ...))
-prnt.MULTIPOLYGON = function(x, ...) paste0(class(x)[1], prnt.MatrixListList(x, ...))
-prnt.GEOMETRYCOLLECTION = function(x,...) 
-	paste0(class(x)[1], "(", paste0(sapply(x, ST_as.WKT), collapse=", "), ")")
-
-#' Return Well-known Text representation of simple feature item
-#'
-#' Return Well-known Text representation of simple feature item
-#' @param x object of class sfi
-#' @export
-ST_as.WKT = function(x) UseMethod("ST_as.WKT") # not needed if sp exports bbox
-
-#' @export
-ST_as.WKT.default = function(x) stop(paste("no as.WKT method for object of class", class(x)[1]))
-
-#' @export
-ST_as.WKT.sfi = function(x) {
-	if (inherits(x, "POINT")) return(prnt.POINT(x))
-	if (inherits(x, "MULTIPOINT")) return(prnt.MULTIPOINT(x))
-	if (inherits(x, "LINESTRING")) return(prnt.LINESTRING(x))
-	if (inherits(x, "POLYGON")) return(prnt.POLYGON(x))
-	if (inherits(x, "MULTILINESTRING")) return(prnt.MULTILINESTRING(x))
-	if (inherits(x, "MULTIPOLYGON")) return(prnt.MULTIPOLYGON(x))
-	if (inherits(x, "GEOMETRYCOLLECTION")) return(prnt.GEOMETRYCOLLECTION(x))
-	stop(paste("no print method available for object of class", class(x)[1]))
 }
 
 #' @export

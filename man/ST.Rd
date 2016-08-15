@@ -87,6 +87,5 @@ pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
 pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp4 = ST_MultiPolygon(pts4))
 (gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))
-(gc3 = ST_GeometryCollection(list(mp3, pl1)))
 }
 

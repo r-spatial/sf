@@ -2,9 +2,13 @@
 % Please edit documentation in R/read.R
 \name{ST_read}
 \alias{ST_read}
+\alias{ST_write}
 \title{read simple features from file or database}
 \usage{
 ST_read(dsn, layer, ...)
+
+ST_write(sf, dsn = ".", layer, driver = "ESRI Shapefile",
+  opts = character(), ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)}
@@ -12,6 +16,12 @@ ST_read(dsn, layer, ...)
 \item{layer}{layer name (varies by driver, may be a file name without extension)}
 
 \item{...}{parameter(s) passed on to \link{ST_as.sf}}
+
+\item{sf}{object of class \code{sf}}
+
+\item{driver}{driver name}
+
+\item{opts}{options to pass on to driver}
 }
 \description{
 read simple features from file or database

@@ -40,6 +40,7 @@ readFeature = function(layer, id) {
 #' }
 #' (s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 #' summary(s)
+#' @name ST_read
 #' @export
 ST_read = function(dsn, layer, ...) {
 	if (!requireNamespace("rgdal2", quietly = TRUE))
@@ -53,4 +54,19 @@ ST_read = function(dsn, layer, ...) {
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
 	ST_as.sf(df, ...)
+}
+
+#' @name ST_read
+#' @param sf object of class \code{sf}
+#' @param driver driver name
+#' @param opts options to pass on to driver
+#' @export
+ST_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = character(), ...) {
+	if (!requireNamespace("rgdal2", quietly = TRUE))
+		stop("package rgdal2 required for ST_read; try devtools::install_github(\"edzer/rgdal2\")")
+	o = rgdal2::newOGRDatasource(driver = driver, fname = dsn, opts = opts)
+	geomType = class(geometry(sf)[[1]])[1]
+	rgdal2::addLayer(o, layer, geomType = geomType, srs = rgdal2::newSRS(p4s(sf)), opts = opts)
+	# how to add fields and features to the layer?
+	stop("adding fields and features to layers not yet implemented")
 }

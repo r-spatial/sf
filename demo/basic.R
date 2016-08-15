@@ -89,8 +89,8 @@ pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
 mp1 = ST_MultiPolygon(mp)
 (gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))
-(gc3 = ST_GeometryCollection(list(mp3, pl1)))
 bbox(gc)
+attr(try(ST_GeometryCollection(list(mp3, pl1))), "condition") # Error:
 
 ## ----error=TRUE----------------------------------------------------------
 library(rgdal2)

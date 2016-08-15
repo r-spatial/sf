@@ -1,13 +1,17 @@
 Package: sf
 Version: 0.1-1
 Title: Simple Features for R
-Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"))
+Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), 
+		email = "edzer.pebesma@uni-muenster.de"),
+	person("Roger", "Bivand", role = "ctb"),
+	person("Ian", "Cook", role = "ctb"),
+	person("Michael", "Sumner", role = "ctb"))
 Depends: R (>= 3.0.0)
 Imports: utils, stats, methods, sp
-Suggests: knitr, maptools, rgeos, rgdal2 (>= 0.3)
+Suggests: knitr, maptools, rgeos, rgdal2 (>= 0.3), RPostgreSQL
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1
-Collate: init.R read.R sfc.R sfi.R sf.R sf_types.R sp.R
+Collate: init.R bbox.R read.R sfc.R sfi.R sf.R sf_types.R sp.R wkb.R wkt.R

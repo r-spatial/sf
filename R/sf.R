@@ -101,3 +101,19 @@ ST_sf = function(..., relation_to_geometry = NA_character_, row.names) {
 	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]
 	x
 }
+
+#' @name sf
+#' @param obj object of class \code{sf} or \code{sfc}
+#' @details \code{p4s} returns the PROJ.4 string; if an EPSG code is available, it constructs it from this, otherwise, it takes the \code{proj4string} attribute, if none of these is available (both are missing-valued), \code{NULL} is returned.
+#' @export
+p4s = function(obj) {
+	if (inherits(obj, "sf"))
+		obj = geometry(obj)
+	epsg = attr(obj, "epsg")
+	if (!is.na(epsg))
+		return(paste0("+init=epsg:", epsg))
+	p4s = attr(obj, "proj4string")
+	if (!is.na(p4s))
+		return(p4s)
+	NULL
+}

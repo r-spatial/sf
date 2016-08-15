@@ -1,0 +1,116 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> if (Sys.getenv("USER") == "edzer") {
++   library(RPostgreSQL)
++   library(sf)
++   cn = dbConnect(PostgreSQL(), dbname = "postgis")
++   round_trip = function(cn, wkt) {
++   	query = paste0("SELECT '", wkt, "'::geometry;")
++   	w = options("warn")[[1]]
++   	options(warn = -1)
++ 	returnstr = dbGetQuery(cn, query)$geometry
++ 	# print(returnstr)
++   	options(warn = w)
++   	options(warn = 2)
++   	n = nchar(returnstr)/2
++     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
++   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
++   	class(wkb) = "WKB"
++     ret = ST_as.sfc(wkb, EWKB = TRUE)[[1]]
++ 	cat(returnstr, "\n")
++     cat(paste(wkt, "<-->", ST_as.WKT(ret, EWKT=TRUE), "\n"))
++ 	invisible(ret)
++   }
++   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
++   round_trip(cn, "POINTZ(0 0 0)")
++   round_trip(cn, "POINTZM(0 0 0 0)")
++   round_trip(cn, "POINT(0 0)")
++   round_trip(cn, "LINESTRING(0 0,1 1,2 2)")
++   round_trip(cn, "MULTIPOINT(0 0,1 1,2 2)")
++   round_trip(cn, "POLYGON((0 0,1 0,1 1,0 0))")
++   round_trip(cn, "MULTIPOLYGON(((0 0,1 0,1 1,0 0)),((2 2,3 2,3 3,2 2)))")
++   round_trip(cn, "MULTIPOLYGON(((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2)),((2 2,3 2,3 3,2 2)))")
++   round_trip(cn, "MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))")
++ 
++ 
++ options(warn = -1)
++ query = paste0("SELECT geom from meuse2 limit 2;")
++ returnstr = dbGetQuery(cn, query)$geom
++ # print(returnstr)
++ n = nchar(returnstr)/2
++ wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
++   sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
++ class(wkb) = "WKB"
++ ret = ST_as.sfc(wkb, EWKB = TRUE)
++ ret 
++ 
++ # nc:
++ #query = paste0("SELECT geom from nc;")
++ #returnstr = dbGetQuery(cn, query)$geom
++ #wkb = lapply(returnstr, function(y) { 
++ #	  n = nchar(y)/2
++ #	  as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
++ #	}
++ #)
++ #class(wkb) = "WKB"
++ #ret = ST_as.sfc(wkb)
++ #ret 
++ 
++ }
+Loading required package: DBI
+0101000060E6100000000000000000000000000000000000000000000000000000 
+SRID=4326;POINTM(0 0 0) <--> SRID=4326;POINTM(0 0 0) 
+0101000080000000000000000000000000000000000000000000000000 
+POINTZ(0 0 0) <--> POINTZ(0 0 0) 
+01010000C00000000000000000000000000000000000000000000000000000000000000000 
+POINTZM(0 0 0 0) <--> POINTZM(0 0 0 0) 
+010100000000000000000000000000000000000000 
+POINT(0 0) <--> POINT(0 0) 
+01020000000300000000000000000000000000000000000000000000000000F03F000000000000F03F00000000000000400000000000000040 
+LINESTRING(0 0,1 1,2 2) <--> LINESTRING(0 0, 1 1, 2 2) 
+0104000000030000000101000000000000000000000000000000000000000101000000000000000000F03F000000000000F03F010100000000000000000000400000000000000040 
+MULTIPOINT(0 0,1 1,2 2) <--> MULTIPOINT(0 0, 1 1, 2 2) 
+0103000000010000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F00000000000000000000000000000000 
+POLYGON((0 0,1 0,1 1,0 0)) <--> POLYGON((0 0, 1 0, 1 1, 0 0)) 
+0106000000020000000103000000010000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F000000000000000000000000000000000103000000010000000400000000000000000000400000000000000040000000000000084000000000000000400000000000000840000000000000084000000000000000400000000000000040 
+MULTIPOLYGON(((0 0,1 0,1 1,0 0)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1 0, 1 1, 0 0)), ((2 2, 3 2, 3 3, 2 2))) 
+0106000000020000000103000000020000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F00000000000000000000000000000000040000009A9999999999C93F9A9999999999C93F9A9999999999E93F9A9999999999C93F9A9999999999E93F9A9999999999E93F9A9999999999C93F9A9999999999C93F0103000000010000000400000000000000000000400000000000000040000000000000084000000000000000400000000000000840000000000000084000000000000000400000000000000040 
+MULTIPOLYGON(((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2)), ((2 2, 3 2, 3 3, 2 2))) 
+01050000000300000001020000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F000000000000000000000000000000000102000000040000009A9999999999C93F9A9999999999C93F9A9999999999E93F9A9999999999C93F9A9999999999E93F9A9999999999E93F9A9999999999C93F9A9999999999C93F01020000000400000000000000000000400000000000000040000000000000084000000000000000400000000000000840000000000000084000000000000000400000000000000040 
+MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2)) <--> MULTILINESTRING((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2), (2 2, 3 2, 3 3, 2 2)) 
+[[1]]
+SRID=28992;POINT(181072 333611) 
+
+[[2]]
+SRID=28992;POINT(181025 333558) 
+
+attr(,"class")
+[1] "sfc"
+attr(,"type")
+[1] "POINT"
+attr(,"epsg")
+[1] 28992
+attr(,"bbox")
+  xmin   xmax   ymin   ymax 
+181025 181072 333558 333611 
+attr(,"proj4string")
+[1] "+init=epsg:28992 +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
+> 
+> proc.time()
+   user  system elapsed 
+  0.524   0.292   0.532 
