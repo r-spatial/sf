@@ -173,3 +173,14 @@ format.sfi = function(x, ..., digits = 30) {
 	else
 		pr
 }
+
+# tibble stuff:
+#' @export
+type_sum.sfc <- function(x, ...) {
+   "simple_feature"
+}
+
+#' @export
+obj_sum.sfc <- function(x) {
+	sapply(x, function(sfi) format(sfi, digits = 15))
+}
