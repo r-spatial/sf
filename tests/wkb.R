@@ -17,7 +17,7 @@ round_trip = function(x, EWKB = FALSE) {
 }
 
 p3 = ST_Point(c(0,0,0))
-p3m = ST_Point(c(0,0,0), "M")
+p3m = ST_Point(c(0,0,0), "XYM")
 p4 = ST_Point(c(0,0,0,0))
 p2 = ST_Point(c(0,0))
 ls = ST_LineString(matrix(1:6,3))

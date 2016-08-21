@@ -137,7 +137,8 @@ setAs("sf", "Spatial", function(from) {
 })
 
 setAs("sfc", "Spatial", function(from) {
-	switch(attr(from, "type"),
+	type = attr(from, "type")
+	switch(type,
 		"POINT" = , "POINT Z" = sfc2SpatialPoints(from),
 		"MULTIPOINT" = , "MULTIPOINT Z" = sfc2SpatialMultiPoints(from),
 		"LINESTRING" = , "MULTILINESTRING" = sfc2SpatialLines(from),
@@ -150,7 +151,7 @@ setAs("sfc", "Spatial", function(from) {
 			stop("Z or ZM linestrings not supported by sp"),
 		"POLYGON Z" = , "POLYGON ZM" = , "MULTIPOLYGON Z" = , "MULTIPOLYGON ZM" = 
 			stop("Z or ZM (multi)polygons not supported by sp"),
-		stop("converstion from this feature type to sp is not supported")
+		stop(paste("conversion from feature type", type, "to sp is not supported"))
 	)
 })
 

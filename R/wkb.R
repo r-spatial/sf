@@ -59,41 +59,33 @@ parseTypeEWKB = function(wkbType, endian) {
 	}
 	tp = sf.tp[sf_type] 
 	has_srid = as.logical(info & as.raw(2)) # 2-bit is "on"?
-	if ((info & as.raw(12)) == as.raw(12)) { 
-		dims = 4
-		zm = "ZM"
-	} else if (info & as.raw(8)) { 
-		dims = 3
-		zm = "Z"
-	} else if (info & as.raw(4)) {
-		dims = 3
-		zm = "M"
-	} else if (info == as.raw(0) || info == as.raw(2)) {
-		dims = 2
-		zm = "XY"
-	} else 
+	zm = if ((info & as.raw(12)) == as.raw(12))
+		"XYZM"
+	else if (info & as.raw(8))
+		"XYZ"
+	else if (info & as.raw(4))
+		"XYM"
+	else if (info == as.raw(0) || info == as.raw(2))
+		"XY"
+	else 
 		stop(paste("unknown value for info:", info))
-	list(dims = dims, zm = zm, tp = tp, has_srid = has_srid)
+	list(dims = nchar(zm), zm = zm, tp = tp, has_srid = has_srid)
 }
 
 parseTypeISO = function(wkbType) {
 	tp = sf.tp[wkbType %% 1000] 
 	dd = wkbType %/% 1000
-	if (dd == 0) {
-		dims = 2
-		zm = "XY"
-	} else if (dd == 1) {
-		dims = 3
-		zm = "Z"
-	} else if (dd == 2) { 
-		dims = 3
-		zm = "M"
-	} else if (dd == 3) {
-		dims = 4
-		zm = "ZM"
-	} else
+	zm = if (dd == 0)
+		"XY"
+	else if (dd == 1)
+		"XYZ"
+	else if (dd == 2)
+		"XYM"
+	else if (dd == 3)
+		"XYZM"
+	else
 		stop(paste("unknown value for wkbType:", wkbType))
-	list(dims = dims, zm = zm, tp = tp, has_srid = FALSE)
+	list(dims = nchar(zm), zm = zm, tp = tp, has_srid = FALSE)
 }
 
 readData = function(rc, EWKB = FALSE) {
@@ -122,9 +114,7 @@ readData = function(rc, EWKB = FALSE) {
 		TIN = lapply(readGC(rc, pt$dims, endian, EWKB), unclass),
 		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
 			stop(paste("type", pt$tp, "unsupported")))
-	class(ret) <- c(pt$tp, "sfi")
-	if (pt$dims > 2)
-		class(ret) <- c(pt$zm, class(ret))
+	class(ret) <- c(pt$zm, pt$tp, "sfi")
 	if (!is.na(srid))
 		attr(ret, "epsg") <- srid
 	ret
@@ -175,21 +165,18 @@ ST_as.WKB.sfc = function(x, ..., endian = .Platform$endian) {
 }
 
 createType = function(x, endian, EWKB = FALSE) {
-	dims = "XY"
-	if (length(x) == 3) {
-		dims = x[1]  # "Z", "M", or "ZM"
-		cl = x[2]
-	} else
-		cl = x[1]
+	dims = x[1]  # "XY", "XYZ", "XYM", or "XYZM"
+	cl = x[2]
 	m = match(cl, sf.tp)
 	if (is.na(m))
 		stop(paste("Class", cl, "not matched"))
+	# return:
 	if (! EWKB) # ISO: add 1000s
-		as.integer(m + switch(dims, "Z" = 1000, "M" = 2000, "ZM" = 3000, 0))
+		as.integer(m + switch(dims, "XYZ" = 1000, "XYM" = 2000, "XYZM" = 3000, 0))
 	else { # EWKB: set higher bits
 		ret = raw(4)
 		ret[1] = as.raw(m) # set up little-endian
-		ret[4] = as.raw(switch(dims, "Z" = 0x80, "M" = 0x40, "ZM" = 0xC0, 0))
+		ret[4] = as.raw(switch(dims, "XYZ" = 0x80, "XYM" = 0x40, "XYZM" = 0xC0, 0))
 		if (endian == "big")
 			rev(ret)
 		else
@@ -220,8 +207,7 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 		writeBin(createType(class(x)), rc, size = 4L, endian = endian)
 	# TODO (?): write SRID in case of EWKB?
 	# write out x:
-	type = ifelse(length(class(x)) == 3, class(x)[2], class(x)[1])
-	switch(type,
+	switch(class(x)[2],
 		POINT = writeBin(as.vector(as.double(x)), rc, size = 8L, endian = endian),
 		MULTIPOINT = writeMPoints(x, rc, endian, EWKB),
 		LINESTRING = writeMatrix(x, rc, endian),
@@ -234,15 +220,12 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 }
 
 writeMulti = function(x, rc, endian, EWKB) {
-	zm = if (length(class(x)) == 3)
-			class(x)[1]
-		else "Z"
 	unMulti = if (inherits(x, "MULTILINESTRING"))
 		ST_LineString
 	else # MULTIPOLYGON, POLYHEDRALSURFACE, TIN:
 		ST_Polygon
 	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
-	lapply(lapply(x, unMulti, zm), writeData, rc = rc, endian = endian, EWKB = EWKB)
+	lapply(lapply(x, unMulti, class(x)[1]), writeData, rc = rc, endian = endian, EWKB = EWKB)
 }
 writeGC = function(x, rc, endian, EWKB) {
 	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
@@ -257,12 +240,6 @@ writeMatrixList = function(x, rc, endian) {
 	lapply(x, function(y) writeMatrix(y, rc, endian))
 }
 writeMPoints = function(x, rc, endian, EWKB) {
-	getPoint = function(pt, cls) {
-		if (length(cls) != 3)
-			ST_Point(pt)
-		else
-			ST_Point(pt, cls[1])
-	}
 	writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
-	apply(x, 1, function(y) writeData(getPoint(y, class(x)), rc, endian, EWKB))
+	apply(x, 1, function(y) writeData(ST_Point(y, class(x)[1]), rc, endian, EWKB))
 }

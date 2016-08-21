@@ -1,10 +1,7 @@
 # composed, WKT class name: "Z", "POINT" -> "POINT_Z"
 WKT_name = function(x, EWKT = TRUE) {
 	cls = class(x)
-	retval = if (length(cls) == 3)
-		paste0(cls[2], cls[1])
-	else
-		cls[1]
+	retval = paste0(cls[2], substr(cls[1], 3, 4))
 	if (EWKT && !is.null(attr(x, "epsg")) && !is.na(attr(x, "epsg")))
 		paste0("SRID=", attr(x, "epsg"), ";", retval)
 	else

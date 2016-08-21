@@ -11,24 +11,24 @@
 \alias{ST_Polygon}
 \title{Create a point simple feature from a numeric vector}
 \usage{
-ST_Point(x, third = "Z", ...)
+ST_Point(x, third = "XYZ", ...)
 
-ST_MultiPoint(x, third = "Z", ...)
+ST_MultiPoint(x, third = "XYZ", ...)
 
-ST_LineString(x, third = "Z", ...)
+ST_LineString(x, third = "XYZ", ...)
 
-ST_Polygon(x, third = "Z", ...)
+ST_Polygon(x, third = "XYZ", ...)
 
-ST_MultiLineString(x, third = "Z", ...)
+ST_MultiLineString(x, third = "XYZ", ...)
 
-ST_MultiPolygon(x, third = "Z", ...)
+ST_MultiPolygon(x, third = "XYZ", ...)
 
-ST_GeometryCollection(x, third = "Z", ...)
+ST_GeometryCollection(x, third = "XYZ", ...)
 }
 \arguments{
 \item{x}{numeric vector of length 2, 3 or 4}
 
-\item{third}{character, indicating what a 3-dimensional point refers to ("Z" or "M")}
+\item{third}{character, indicating what a 3-dimensional point refers to ("XYZ" or "XYM")}
 
 \item{...}{ignored}
 }
@@ -41,19 +41,19 @@ class(p1)
 bbox(p1)
 (p2 = ST_Point(c(1,2,3)))
 class(p2)
-(p3 = ST_Point(c(1,2,3), "M"))
+(p3 = ST_Point(c(1,2,3), "XYM"))
 pts = matrix(1:10, , 2)
 (mp1 = ST_MultiPoint(pts))
 pts = matrix(1:15, , 3)
 (mp2 = ST_MultiPoint(pts))
-(mp3 = ST_MultiPoint(pts, "M"))
+(mp3 = ST_MultiPoint(pts, "XYM"))
 pts = matrix(1:20, , 4)
 (mp4 = ST_MultiPoint(pts))
 pts = matrix(1:10, , 2)
 (ls1 = ST_LineString(pts))
 pts = matrix(1:15, , 3)
 (ls2 = ST_LineString(pts))
-(ls3 = ST_LineString(pts, "M"))
+(ls3 = ST_LineString(pts, "XYM"))
 pts = matrix(1:20, , 4)
 (ls4 = ST_LineString(pts))
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -63,7 +63,7 @@ pts = list(outer, hole1, hole2)
 (ml1 = ST_MultiLineString(pts))
 pts3 = lapply(pts, function(x) cbind(x, 0))
 (ml2 = ST_MultiLineString(pts3))
-(ml3 = ST_MultiLineString(pts3, "M"))
+(ml3 = ST_MultiLineString(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (ml4 = ST_MultiLineString(pts4))
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -73,7 +73,7 @@ pts = list(outer, hole1, hole2)
 (pl1 = ST_Polygon(pts))
 pts3 = lapply(pts, function(x) cbind(x, 0))
 (pl2 = ST_Polygon(pts3))
-(pl3 = ST_Polygon(pts3, "M"))
+(pl3 = ST_Polygon(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (pl4 = ST_Polygon(pts4))
 pol1 = list(outer, hole1, hole2)
@@ -83,7 +83,7 @@ mp = list(pol1,pol2,pol3)
 (mp1 = ST_MultiPolygon(mp))
 pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp2 = ST_MultiPolygon(pts3))
-(mp3 = ST_MultiPolygon(pts3, "M"))
+(mp3 = ST_MultiPolygon(pts3, "XYM"))
 pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp4 = ST_MultiPolygon(pts4))
 (gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))

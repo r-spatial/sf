@@ -34,7 +34,7 @@ Type 'q()' to quit R.
 + }
 > 
 > p3 = ST_Point(c(0,0,0))
-> p3m = ST_Point(c(0,0,0), "M")
+> p3m = ST_Point(c(0,0,0), "XYM")
 > p4 = ST_Point(c(0,0,0,0))
 > p2 = ST_Point(c(0,0))
 > ls = ST_LineString(matrix(1:6,3))
@@ -61,4 +61,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  0.352   0.212   0.357 
+  0.380   0.280   0.349 

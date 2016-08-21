@@ -1,4 +1,3 @@
-
 #' @export
 format.sfc = function(x, ..., digits = 30) {
 	sapply(x, format, ..., digits = digits)
@@ -20,10 +19,11 @@ format.sfc = function(x, ..., digits = 30) {
 #" d$geom = sfc
 #' @export
 ST_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
-	stopifnot(is.list(lst))
+	if (!is.list(lst))
+		lst = list(lst)
 	lst = coerceTypes(lst) # may coerce X to MULTIX, or a mix to a GeometryCollection
 	class(lst) = "sfc"
-	attr(lst, "type") = class(lst[[1]])[1] # after coerceTypes, they are identical
+	attr(lst, "type") = class(lst[[1]])[2] # after coerceTypes, they are identical
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = bbox(lst)
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0)
@@ -79,7 +79,7 @@ coerceTypes = function(lst) { # breaks on errors, or returns the list
 #' @method summary sfc
 #' @export
 summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
-	u = factor(sapply(object, function(x) class(x)[1]))
+	u = factor(sapply(object, function(x) WKT_name(x, FALSE)))
     epsg = paste0("epsg:", attr(object, "epsg"))
 	levels(u) = c(levels(u), epsg)
     p4s = attr(object, "proj4string")
@@ -89,4 +89,24 @@ summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
 		levels(u) = c(levels(u), p4s)	
 	}
     summary(u, maxsum = maxsum, ...)
+}
+
+#' summarize simple feature type for tibble
+#'
+#' summarize simple feature type for tibble
+#' @param x object of class sfc
+#' @param ... ignored
+#' @name tibble
+#' @export
+type_sum.sfc <- function(x, ...) {
+   "simple_feature"
+}
+
+#' summarize simple feature item for tibble
+#'
+#' summarize simple feature item for tibble
+#' @name tibble
+#' @export
+obj_sum.sfc <- function(x) {
+	sapply(x, function(sfi) format(sfi, digits = 15))
 }
