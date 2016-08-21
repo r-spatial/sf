@@ -14,4 +14,4 @@ Description: Support for simple features, a standardized way to encode spatial d
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1
-Collate: init.R bbox.R read.R sfc.R sfi.R sf.R sf_types.R sp.R wkb.R wkt.R
+Collate: init.R bbox.R read.R sfc.R sfi.R sf.R sp.R wkb.R wkt.R
