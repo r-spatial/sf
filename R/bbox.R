@@ -48,20 +48,14 @@ bbox.GEOMETRYCOLLECTION = function(obj) {
 
 #' @export
 bbox.sfc = function(obj) {
-	switch(attr(obj, "type"),
-		"POINT" = , "POINT_Z" = , "POINT_M" = , "POINT_ZM" = bbox.Mtrx(do.call(rbind, obj)),
-		"MULTIPOINT" = , "MULTIPOINT_Z" = , "MULTIPOINT_M" = , "MULTIPOINT_ZM" = bbox.MtrxSet(obj),
-		"LINESTRING" = , "LINESTRING_Z" = , "LINESTRING_M" = , "LINESTRING_ZM" = bbox.MtrxSet(obj),
-		"POLYGON" = , "POLYGON_Z" = , "POLYGON_M" = , "POLYGON_ZM" = bbox.MtrxSetSet(obj),
-		"MULTILINESTRING" = , "MULTILINESTRING_Z" = , "MULTILINESTRING_M" = , 
-			"MULTILINESTRING_ZM" = bbox.MtrxSetSet(obj),
-		"MULTIPOLYGON" = , "MULTIPOLYGON_Z" = , "MULTIPOLYGON_M" = , 
-			"MULTIPOLYGON_ZM" = bbox.MtrxSetSetSet(obj),
-		"GEOMETRYCOLLECTION" = , "GEOMETRYCOLLECTION_Z" = , "GEOMETRYCOLLECTION_M" = , 
-			"GEOMETRYCOLLECTION_ZM" = { 
-				s = sapply(obj, bbox)
-				bb(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
-			}
-		#, warning(paste("bbox: simple feature type", attr(obj, "type"), "not supported"))
+	switch(class(obj)[1],
+		"sfc_POINT" = bbox.Mtrx(do.call(rbind, obj)),
+		"sfc_MULTIPOINT" = bbox.MtrxSet(obj),
+		"sfc_LINESTRING" = bbox.MtrxSet(obj),
+		"sfc_POLYGON" = bbox.MtrxSetSet(obj),
+		"sfc_MULTILINESTRING" = bbox.MtrxSetSet(obj),
+		"sfc_MULTIPOLYGON" =  bbox.MtrxSetSetSet(obj),
+		"sfc_GEOMETRYCOLLECTION" = bbox.GEOMETRYCOLLECTION(obj),
+		warning(paste("bbox: simple feature type", class(obj)[1], "not supported"))
 	)
 }

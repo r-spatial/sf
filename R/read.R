@@ -70,3 +70,25 @@ ST_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 	# how to add fields and features to the layer?
 	stop("adding fields and features to layers not yet implemented")
 }
+
+ST_read_pg = function(cn = NULL, query, dbname) {
+	if (!requireNamespace("RPostgreSQL", quietly = TRUE))
+		stop("package RPostgreSQL required for ST_read_pg")
+	if (is.null(cn))
+		cn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
+  	w = options("warn")[[1]]
+  	options(warn = -1)
+	tbl = RPostgreSQL::dbGetQuery(cn, query)
+  	options(warn = w)
+	# find the geometry column:
+	geom = tail(which(sapply(tbl, is.character)), 1)
+	wkbCharToRaw = function(y) {
+		stopifnot((nchar(y) %% 2) == 0)
+		n = nchar(y)/2
+		as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
+	}
+    wkb = lapply(tbl[[geom]], wkbCharToRaw)
+  	class(wkb) = "WKB"
+    tbl[[geom]] = ST_as.sfc(wkb, EWKB = TRUE)
+	tbl
+}

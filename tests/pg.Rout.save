@@ -100,9 +100,7 @@ SRID=28992;POINT(181072 333611)
 SRID=28992;POINT(181025 333558) 
 
 attr(,"class")
-[1] "sfc"
-attr(,"type")
-[1] "POINT"
+[1] "sfc_POINT" "sfc"      
 attr(,"epsg")
 [1] 28992
 attr(,"bbox")
@@ -113,4 +111,4 @@ attr(,"proj4string")
 > 
 > proc.time()
    user  system elapsed 
-  0.524   0.292   0.532 
+  0.552   0.264   0.532 

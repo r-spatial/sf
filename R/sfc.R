@@ -22,8 +22,7 @@ ST_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	if (!is.list(lst))
 		lst = list(lst)
 	lst = coerceTypes(lst) # may coerce X to MULTIX, or a mix to a GeometryCollection
-	class(lst) = "sfc"
-	attr(lst, "type") = class(lst[[1]])[2] # after coerceTypes, they are identical
+	class(lst) = c(paste0("sfc_", class(lst[[1]])[2]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = bbox(lst)
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0)
