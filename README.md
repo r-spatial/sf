@@ -1,6 +1,9 @@
 # Simple Features for R
 
-[![Build Status](https://travis-ci.org/edzer/sfr.png?branch=master)](https://travis-ci.org/edzer/sfr) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf) [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
+[![Build Status](https://travis-ci.org/edzer/sfr.png?branch=master)](https://travis-ci.org/edzer/sfr)
+[![Coverage Status](https://img.shields.io/codecov/c/github/edzer/sfr/master.svg)](https://codecov.io/github/edzer/sfr?branch=master)
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
+[![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf)
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
 
@@ -10,10 +13,10 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-The current version depends on a development fork of `rgdal2`, installed by
+The current version depends on Tim Keitt's github package `rgdal2`, which is installed by
 
 ```
-install_github("edzer/rgdal2")
+install_github("thk686/rgdal2")
 ```
 
 See also:
