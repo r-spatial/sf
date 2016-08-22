@@ -91,6 +91,15 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}
 #' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped, an \code{sfc} object if only the geometry column is selected, otherwise the behavior depending on \code{drop} is identical to that of \link{[.data.frame}.
+#' @examples
+#' g = st_sfc(list(st_point(1:2), st_point(3:4)))
+#' s = st_sf(a=3:4, g)
+#' s[1,]
+#' class(s[1,])
+#' s[,1]
+#' class(s[,1])
+#' s[,2]
+#' class(s[,2])
 #' @export
 "[.sf" = function(x, i, j, drop) {
 	rtg = attr(x, "relation_to_geometry")
