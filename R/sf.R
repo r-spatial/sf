@@ -40,10 +40,10 @@ setMethod("geometry", "sf", function(obj) obj[[attr(obj, "sf_column")]])
 #' @param stringsAsFactors logical; see \link{data.frame}
 #' @details \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
-#' #g = ST_sfc(list(ST_Point(1:2)))
-#' #ST_sf(a=3,g)
-#' #ST_sf(g, a=3)
-#' #ST_sf(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
+#' g = ST_sfc(list(ST_Point(1:2)))
+#' ST_sf(a=3,g)
+#' ST_sf(g, a=3)
+#' ST_sf(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
 #' @export
 ST_sf = function(..., relation_to_geometry = NA_character_, row.names, 
 		stringsAsFactors = default.stringsAsFactors()) {
@@ -97,7 +97,7 @@ ST_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	x = NextMethod("[")
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
 		return(x)
-	if (!sf_column %in% names(x)) # geom was deselected
+	if (!(sf_column %in% names(x))) # geom was deselected
 		return(as.data.frame(x))
 	attr(x, "sf_column") = sf_column
 	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]

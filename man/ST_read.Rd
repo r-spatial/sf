@@ -2,6 +2,7 @@
 % Please edit documentation in R/read.R
 \name{ST_read}
 \alias{ST_read}
+\alias{ST_read_pg}
 \alias{ST_write}
 \title{read simple features from file or database}
 \usage{
@@ -9,6 +10,8 @@ ST_read(dsn, layer, ...)
 
 ST_write(sf, dsn = ".", layer, driver = "ESRI Shapefile",
   opts = character(), ...)
+
+ST_read_pg(cn = NULL, query, dbname, geom_column = NULL, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)}
@@ -22,9 +25,19 @@ ST_write(sf, dsn = ".", layer, driver = "ESRI Shapefile",
 \item{driver}{driver name}
 
 \item{opts}{options to pass on to driver}
+
+\item{cn}{open database connection}
+
+\item{query}{SQL query to select records}
+
+\item{dbname}{character; database name, only used if cn is \code{NULL}}
+
+\item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
 }
 \description{
 read simple features from file or database
+
+read PostGIS table directly through DBI and RPostgreSQL interface, converting wkb
 }
 \examples{
 if (Sys.getenv("USER") == "edzer") {
@@ -33,5 +46,8 @@ if (Sys.getenv("USER") == "edzer") {
 }
 (s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 summary(s)
+if (Sys.getenv("USER") == "edzer") {
+  ST_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
+}
 }
 

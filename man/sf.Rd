@@ -44,9 +44,9 @@ create sf, which extends data.frame-like objects with a simple feature list colu
 \code{p4s} returns the PROJ.4 string; if an EPSG code is available, it constructs it from this, otherwise, it takes the \code{proj4string} attribute, if none of these is available (both are missing-valued), \code{NULL} is returned.
 }
 \examples{
-#g = ST_sfc(list(ST_Point(1:2)))
-#ST_sf(a=3,g)
-#ST_sf(g, a=3)
-#ST_sf(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
+g = ST_sfc(list(ST_Point(1:2)))
+ST_sf(a=3,g)
+ST_sf(g, a=3)
+ST_sf(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
 }
 

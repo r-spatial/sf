@@ -71,7 +71,20 @@ ST_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 	stop("adding fields and features to layers not yet implemented")
 }
 
-ST_read_pg = function(cn = NULL, query, dbname) {
+#' read PostGIS table directly, using DBI and wkb conversion
+#' 
+#' read PostGIS table directly through DBI and RPostgreSQL interface, converting wkb
+#' @param cn open database connection
+#' @param query SQL query to select records
+#' @param dbname character; database name, only used if cn is \code{NULL}
+#' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
+#' @examples 
+#' if (Sys.getenv("USER") == "edzer") {
+#'   ST_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
+#' }
+#' @name ST_read
+#' @export
+ST_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
 	if (!requireNamespace("RPostgreSQL", quietly = TRUE))
 		stop("package RPostgreSQL required for ST_read_pg")
 	if (is.null(cn))
@@ -80,15 +93,15 @@ ST_read_pg = function(cn = NULL, query, dbname) {
   	options(warn = -1)
 	tbl = RPostgreSQL::dbGetQuery(cn, query)
   	options(warn = w)
+	if (is.null(geom_column))
 	# find the geometry column:
-	geom = tail(which(sapply(tbl, is.character)), 1)
+		geom_column = tail(which(sapply(tbl, is.character)), 1)
 	wkbCharToRaw = function(y) {
 		stopifnot((nchar(y) %% 2) == 0)
 		n = nchar(y)/2
 		as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
 	}
-    wkb = lapply(tbl[[geom]], wkbCharToRaw)
-  	class(wkb) = "WKB"
-    tbl[[geom]] = ST_as.sfc(wkb, EWKB = TRUE)
-	tbl
+    wkb = structure(lapply(tbl[[geom_column]], wkbCharToRaw), class = "WKB")
+    tbl[[geom_column]] = ST_as.sfc(wkb, EWKB = TRUE)
+	ST_as.sf(tbl, ...)
 }

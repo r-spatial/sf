@@ -164,8 +164,8 @@ format.sfi = function(x, ..., digits = 30) {
 	if (is.null(digits)) 
 		digits = 30
 	pr = ST_as.WKT(x)
-	if (digits > 0 && nchar(pr) > digits - 3)
-		paste(substr(pr, 1, digits), "...")
+	if (digits > 0 && nchar(pr) > digits)
+		paste0(substr(pr, 1, digits - 3), "...")
 	else
 		pr
 }
