@@ -4,24 +4,24 @@
 #' @param x object to be converted into an object class \code{sf}
 #' @param ... further arguments
 #' @export
-ST_as.sf = function(x, ...) UseMethod("ST_as.sf")
+st_as_sf = function(x, ...) UseMethod("st_as_sf")
 
-#' @name ST_as.sf
+#' @name st_as_sf
 #'
-#' @param relation_to_geometry character vector; see details section of \link{ST_sf}
+#' @param relation_to_geometry character vector; see details section of \link{st_sf}
 #' 
 #' @examples
-#' pt1 = ST_Point(c(0,1))
-#' pt2 = ST_Point(c(1,1))
-#' ST_sfc(list(pt1, pt2))
+#' pt1 = st_point(c(0,1))
+#' pt2 = st_point(c(1,1))
+#' st_sfc(list(pt1, pt2))
 #' d = data.frame(a = 1:2)
-#' d$geom = ST_sfc(list(pt1, pt2))
-#' df = ST_as.sf(d)
-#' d$geom2 = ST_sfc(list(pt1, pt2))
-#' ST_as.sf(df) # should warn
+#' d$geom = st_sfc(list(pt1, pt2))
+#' df = st_as_sf(d)
+#' d$geom2 = st_sfc(list(pt1, pt2))
+#' st_as_sf(df) # should warn
 #' @export
-ST_as.sf.data.frame = function(x, ..., relation_to_geometry = NA_character_)
-	do.call(ST_sf, c(as.list(x), relation_to_geometry = relation_to_geometry))
+st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_)
+	do.call(st_sf, c(as.list(x), relation_to_geometry = relation_to_geometry))
 
 #' get geometry from sf object
 #' 
@@ -40,12 +40,12 @@ setMethod("geometry", "sf", function(obj) obj[[attr(obj, "sf_column")]])
 #' @param stringsAsFactors logical; see \link{data.frame}
 #' @details \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
-#' g = ST_sfc(list(ST_Point(1:2)))
-#' ST_sf(a=3,g)
-#' ST_sf(g, a=3)
-#' ST_sf(a=3, ST_sfc(list(ST_Point(1:2)))) # better to name it!
+#' g = st_sfc(list(st_point(1:2)))
+#' st_sf(a=3,g)
+#' st_sf(g, a=3)
+#' st_sf(a=3, st_sfc(list(st_point(1:2)))) # better to name it!
 #' @export
-ST_sf = function(..., relation_to_geometry = NA_character_, row.names, 
+st_sf = function(..., relation_to_geometry = NA_character_, row.names, 
 		stringsAsFactors = default.stringsAsFactors()) {
 	x = list(...)
 	# find & remove the sfc column:
@@ -55,6 +55,7 @@ ST_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	sf_column = which(sf)
 	if (length(sf_column) > 1) {
 		warning("more than one geometry column: ignoring all but first")
+		x[sf_column[-1]] = NULL
 		sf_column = sf_column[1]
 	}
 	if (missing(row.names))

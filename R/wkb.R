@@ -1,14 +1,14 @@
-#' @name ST_as.sfc
+#' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
 #' @export
-ST_as.sfc.WKB = function(x, ..., EWKB = FALSE) {
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
 	ret = lapply(x, readWKB, EWKB = EWKB)
 	epsg = unique(sapply(ret, function(x) attr(x, "epsg")))
 	if (is.list(epsg)) # they were all NULL
 		epsg = NA_integer_
 	else if (length(epsg) > 1)
 		stop(paste("more than one SRID found:", paste(epsg, collapse = ", ")))
-	ST_sfc(ret, epsg = epsg, ...)
+	st_sfc(ret, epsg = epsg, ...)
 }
 
 sf.tp = toupper(c(
@@ -150,16 +150,16 @@ readGC = function(rc, dims, endian, EWKB) {
 #' convert sfc object to an WKB object
 #' @param x object to convert
 #' @param ... further arguments
-#' @name ST_as.WKB
+#' @name st_as_wkb
 #' @export
-ST_as.WKB = function(x, ...) UseMethod("ST_as.WKB")
+st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 
-#' @name ST_as.WKB
+#' @name st_as_wkb
 #' @param endian character; either "big" or "little"; default: use that of platform
 #' @export
-ST_as.WKB.sfc = function(x, ..., endian = .Platform$endian) {
+st_as_wkb.sfc = function(x, ..., endian = .Platform$endian) {
 	stopifnot(endian %in% c("big", "little"))
-	ret = lapply(x, ST_as.WKB, ..., endian = endian)
+	ret = lapply(x, st_as_wkb, ..., endian = endian)
 	class(ret) = "WKB"
 	ret
 }
@@ -184,9 +184,9 @@ createType = function(x, endian, EWKB = FALSE) {
 	}
 }
 
-#' @name ST_as.WKB
+#' @name st_as_wkb
 #' @export
-ST_as.WKB.sfi = function(x, ..., endian = .Platform$endian) {
+st_as_wkb.sfi = function(x, ..., endian = .Platform$endian) {
 	stopifnot(endian %in% c("big", "little"))
 	# preamble:
 	rc <- rawConnection(raw(0), "r+")
@@ -221,9 +221,9 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 
 writeMulti = function(x, rc, endian, EWKB) {
 	unMulti = if (inherits(x, "MULTILINESTRING"))
-		ST_LineString
+		st_linestring
 	else # MULTIPOLYGON, POLYHEDRALSURFACE, TIN:
-		ST_Polygon
+		st_polygon
 	writeBin(as.integer(length(x)), rc, size = 4L, endian = endian)
 	lapply(lapply(x, unMulti, class(x)[1]), writeData, rc = rc, endian = endian, EWKB = EWKB)
 }
@@ -241,5 +241,5 @@ writeMatrixList = function(x, rc, endian) {
 }
 writeMPoints = function(x, rc, endian, EWKB) {
 	writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
-	apply(x, 1, function(y) writeData(ST_Point(y, class(x)[1]), rc, endian, EWKB))
+	apply(x, 1, function(y) writeData(st_point(y, class(x)[1]), rc, endian, EWKB))
 }

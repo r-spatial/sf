@@ -11,16 +11,16 @@ readFeature = function(layer, id) {
 	pts = xylst2mtrx(rgdal2::getPoints(geom, nested = TRUE))
 	switch (rgdal2::getGeometryType(geom),
       	POINT25D = ,
-       	POINT = ST_Point(unlist(pts)),
+       	POINT = st_point(unlist(pts)),
       	LINESTRING25D = ,
-       	LINESTRING = ST_LineString(pts),
-       	MULTILINESTRING = ST_MultiLineString(pts),
+       	LINESTRING = st_linestring(pts),
+       	MULTILINESTRING = st_multilinestring(pts),
        	POLYGON25D = ,
-       	POLYGON = ST_Polygon(pts),
+       	POLYGON = st_polygon(pts),
        	MULTIPOLYGON25D = ,
-       	MULTIPOLYGON = ST_MultiPolygon(pts),
+       	MULTIPOLYGON = st_multipolygon(pts),
        	MULTIPOINT = ,
-       	MULTIPOINT25D = ST_MultiPoint(pts),
+       	MULTIPOINT25D = st_multipoint(pts),
        	LINEARRING = ,
        	MULTILINESTRING25D = ,
 			stop(paste("geometry type", rgdal2::getGeometryType(geom), "not supported"))
@@ -32,38 +32,38 @@ readFeature = function(layer, id) {
 #' read simple features from file or database
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)
-#' @param ... parameter(s) passed on to \link{ST_as.sf}
+#' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @examples
 #' if (Sys.getenv("USER") == "edzer") {
-#'  (s = ST_read("PG:dbname=test", "test"))
+#'  (s = st_read("PG:dbname=test", "test"))
 #'  summary(s)
 #' }
-#' (s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+#' (s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 #' summary(s)
-#' @name ST_read
+#' @name st_read
 #' @export
-ST_read = function(dsn, layer, ...) {
+st_read = function(dsn, layer, ...) {
 	if (!requireNamespace("rgdal2", quietly = TRUE))
-		stop("package rgdal2 required for ST_read; try devtools::install_github(\"edzer/rgdal2\")")
+		stop("package rgdal2 required for st_read; try devtools::install_github(\"edzer/rgdal2\")")
 	o = rgdal2::openOGRLayer(dsn, layer)
 	ids = rgdal2::getIDs(o)
 	srs = rgdal2::getSRS(o)
 	p4s = if (is.null(srs)) as.character(NA) else rgdal2::getPROJ4(srs)
-	geom = ST_sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
+	geom = st_sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
 	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom
-	ST_as.sf(df, ...)
+	st_as_sf(df, ...)
 }
 
-#' @name ST_read
+#' @name st_read
 #' @param sf object of class \code{sf}
 #' @param driver driver name
 #' @param opts options to pass on to driver
 #' @export
-ST_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = character(), ...) {
+st_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = character(), ...) {
 	if (!requireNamespace("rgdal2", quietly = TRUE))
-		stop("package rgdal2 required for ST_read; try devtools::install_github(\"edzer/rgdal2\")")
+		stop("package rgdal2 required for st_read; try devtools::install_github(\"edzer/rgdal2\")")
 	o = rgdal2::newOGRDatasource(driver = driver, fname = dsn, opts = opts)
 	geomType = class(geometry(sf)[[1]])[1]
 	rgdal2::addLayer(o, layer, geomType = geomType, srs = rgdal2::newSRS(p4s(sf)), opts = opts)
@@ -80,13 +80,13 @@ ST_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @examples 
 #' if (Sys.getenv("USER") == "edzer") {
-#'   ST_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
+#'   st_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
 #' }
-#' @name ST_read
+#' @name st_read
 #' @export
-ST_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
+st_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
 	if (!requireNamespace("RPostgreSQL", quietly = TRUE))
-		stop("package RPostgreSQL required for ST_read_pg")
+		stop("package RPostgreSQL required for st_read_pg")
 	if (is.null(cn))
 		cn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
   	w = options("warn")[[1]]
@@ -102,6 +102,6 @@ ST_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
 		as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
 	}
     wkb = structure(lapply(tbl[[geom_column]], wkbCharToRaw), class = "WKB")
-    tbl[[geom_column]] = ST_as.sfc(wkb, EWKB = TRUE)
-	ST_as.sf(tbl, ...)
+    tbl[[geom_column]] = st_as_sfc(wkb, EWKB = TRUE)
+	st_as_sf(tbl, ...)
 }

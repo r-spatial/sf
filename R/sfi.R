@@ -62,94 +62,94 @@ CheckGC = function(x, third = "XYZ", type = "GeometryCollection") {
 #' @param x numeric vector of length 2, 3 or 4
 #' @param third character, indicating what a 3-dimensional point refers to ("XYZ" or "XYM")
 #' @param ... ignored
-#' @name ST
+#' @name st
 #' @examples 
-#' (p1 = ST_Point(c(1,2)))
+#' (p1 = st_point(c(1,2)))
 #' class(p1)
 #' bbox(p1)
-#' (p2 = ST_Point(c(1,2,3)))
+#' (p2 = st_point(c(1,2,3)))
 #' class(p2)
-#' (p3 = ST_Point(c(1,2,3), "XYM"))
+#' (p3 = st_point(c(1,2,3), "XYM"))
 #' pts = matrix(1:10, , 2)
-#' (mp1 = ST_MultiPoint(pts))
+#' (mp1 = st_multipoint(pts))
 #' pts = matrix(1:15, , 3)
-#' (mp2 = ST_MultiPoint(pts))
-#' (mp3 = ST_MultiPoint(pts, "XYM"))
+#' (mp2 = st_multipoint(pts))
+#' (mp3 = st_multipoint(pts, "XYM"))
 #' pts = matrix(1:20, , 4)
-#' (mp4 = ST_MultiPoint(pts))
+#' (mp4 = st_multipoint(pts))
 #' pts = matrix(1:10, , 2)
-#' (ls1 = ST_LineString(pts))
+#' (ls1 = st_linestring(pts))
 #' pts = matrix(1:15, , 3)
-#' (ls2 = ST_LineString(pts))
-#' (ls3 = ST_LineString(pts, "XYM"))
+#' (ls2 = st_linestring(pts))
+#' (ls3 = st_linestring(pts, "XYM"))
 #' pts = matrix(1:20, , 4)
-#' (ls4 = ST_LineString(pts))
+#' (ls4 = st_linestring(pts))
 #' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 #' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 #' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 #' pts = list(outer, hole1, hole2)
-#' (ml1 = ST_MultiLineString(pts))
+#' (ml1 = st_multilinestring(pts))
 #' pts3 = lapply(pts, function(x) cbind(x, 0))
-#' (ml2 = ST_MultiLineString(pts3))
-#' (ml3 = ST_MultiLineString(pts3, "XYM"))
+#' (ml2 = st_multilinestring(pts3))
+#' (ml3 = st_multilinestring(pts3, "XYM"))
 #' pts4 = lapply(pts3, function(x) cbind(x, 0))
-#' (ml4 = ST_MultiLineString(pts4))
+#' (ml4 = st_multilinestring(pts4))
 #' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 #' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 #' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 #' pts = list(outer, hole1, hole2)
-#' (pl1 = ST_Polygon(pts))
+#' (pl1 = st_polygon(pts))
 #' pts3 = lapply(pts, function(x) cbind(x, 0))
-#' (pl2 = ST_Polygon(pts3))
-#' (pl3 = ST_Polygon(pts3, "XYM"))
+#' (pl2 = st_polygon(pts3))
+#' (pl3 = st_polygon(pts3, "XYM"))
 #' pts4 = lapply(pts3, function(x) cbind(x, 0))
-#' (pl4 = ST_Polygon(pts4))
+#' (pl4 = st_polygon(pts4))
 #' pol1 = list(outer, hole1, hole2)
 #' pol2 = list(outer + 12, hole1 + 12)
 #' pol3 = list(outer + 24)
 #' mp = list(pol1,pol2,pol3)
-#' (mp1 = ST_MultiPolygon(mp))
+#' (mp1 = st_multipolygon(mp))
 #' pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
-#' (mp2 = ST_MultiPolygon(pts3))
-#' (mp3 = ST_MultiPolygon(pts3, "XYM"))
+#' (mp2 = st_multipolygon(pts3))
+#' (mp3 = st_multipolygon(pts3, "XYM"))
 #' pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
-#' (mp4 = ST_MultiPolygon(pts4))
-#' (gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))
+#' (mp4 = st_multipolygon(pts4))
+#' (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
 #' @export
-ST_Point = function(x, third = "XYZ", ...) Pt(x, third, type = "POINT")
-#' @name ST
+st_point = function(x, third = "XYZ", ...) Pt(x, third, type = "POINT")
+#' @name st
 #' @export
-ST_MultiPoint = function(x, third = "XYZ", ...) Mtrx(x, third, type = "MULTIPOINT")
-#' @name ST
+st_multipoint = function(x, third = "XYZ", ...) Mtrx(x, third, type = "MULTIPOINT")
+#' @name st
 #' @export
-ST_LineString = function(x, third = "XYZ", ...) Mtrx(x, third, type = "LINESTRING")
-#' @name ST
+st_linestring = function(x, third = "XYZ", ...) Mtrx(x, third, type = "LINESTRING")
+#' @name st
 #' @export
-ST_Polygon = function(x, third = "XYZ", ...) MtrxSet(x, third, type = "POLYGON", needClosed = TRUE)
-#' @name ST
+st_polygon = function(x, third = "XYZ", ...) MtrxSet(x, third, type = "POLYGON", needClosed = TRUE)
+#' @name st
 #' @export
-ST_MultiLineString = function(x, third = "XYZ", ...) MtrxSet(x, third, type = "MULTILINESTRING", needClosed = FALSE)
-#' @name ST
+st_multilinestring = function(x, third = "XYZ", ...) MtrxSet(x, third, type = "MULTILINESTRING", needClosed = FALSE)
+#' @name st
 #' @export
-ST_MultiPolygon = function(x, third = "XYZ", ...) MtrxSetSet(x, third, type = "MULTIPOLYGON", needClosed = TRUE)
-#' @name ST
+st_multipolygon = function(x, third = "XYZ", ...) MtrxSetSet(x, third, type = "MULTIPOLYGON", needClosed = TRUE)
+#' @name st
 #' @export
-ST_GeometryCollection = function(x, third = "XYZ", ...) CheckGC(x, third, type = "GEOMETRYCOLLECTION")
+st_geometrycollection = function(x, third = "XYZ", ...) CheckGC(x, third, type = "GEOMETRYCOLLECTION")
 
 POINT2MULTIPOINT = function(x, third = "XYZ") {
 	if (length(x) == 3) # disambiguate Z/M:
 		third = class(x)[1]
-	ST_MultiPoint(matrix(unclass(x), 1), third = third)
+	st_multipoint(matrix(unclass(x), 1), third = third)
 }
 LINESTRING2MULTILINESTRING = function(x, third = "XYZ") {
 	if (ncol(x) == 3) # disambiguate Z/M:
 		third = class(x)[1]
-	ST_MultiLineString(list(unclass(x)), third = third)
+	st_multilinestring(list(unclass(x)), third = third)
 }
 POLYGON2MULTIPOLYGON = function(x, third = "XYZ") {
 	if (ncol(x[[1]]) == 3) # disambiguate Z/M:
 		third = class(x)[1]
-	ST_MultiPolygon(list(unclass(x)), third = third)
+	st_multipolygon(list(unclass(x)), third = third)
 }
 
 #' @export
@@ -163,7 +163,7 @@ print.sfi = function(x, ..., digits = 0) { # avoids having to write print method
 format.sfi = function(x, ..., digits = 30) {
 	if (is.null(digits)) 
 		digits = 30
-	pr = ST_as.WKT(x)
+	pr = st_as_wkt(x)
 	if (digits > 0 && nchar(pr) > digits)
 		paste0(substr(pr, 1, digits - 3), "...")
 	else

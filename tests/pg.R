@@ -14,9 +14,9 @@ if (Sys.getenv("USER") == "edzer") {
     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
   	class(wkb) = "WKB"
-    ret = ST_as.sfc(wkb, EWKB = TRUE)[[1]]
+    ret = st_as_sfc(wkb, EWKB = TRUE)[[1]]
 	cat(returnstr, "\n")
-    cat(paste(wkt, "<-->", ST_as.WKT(ret, EWKT=TRUE), "\n"))
+    cat(paste(wkt, "<-->", st_as_wkt(ret, EWKT=TRUE), "\n"))
 	invisible(ret)
   }
   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
@@ -39,7 +39,7 @@ n = nchar(returnstr)/2
 wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
   sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
 class(wkb) = "WKB"
-ret = ST_as.sfc(wkb, EWKB = TRUE)
+ret = st_as_sfc(wkb, EWKB = TRUE)
 ret 
 
 # nc:
@@ -51,7 +51,7 @@ ret
 #	}
 #)
 #class(wkb) = "WKB"
-#ret = ST_as.sfc(wkb)
+#ret = st_as_sfc(wkb)
 #ret 
 
 }

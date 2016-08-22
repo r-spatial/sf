@@ -9,11 +9,11 @@ pol1 = list(outer, hole1, hole2)
 pol2 = list(outer + 12, hole1 + 12)
 pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
-mp1 = ST_MultiPolygon(mp)
-sf = ST_sf(a=1, ST_sfc(list(mp1)))
+mp1 = st_multipolygon(mp)
+sf = st_sf(a=1, st_sfc(list(mp1)))
 a = as(sf, "Spatial")
 class(a)
-b = ST_as.sf(a)
+b = st_as_sf(a)
 a2 = as(a, "SpatialPolygonsDataFrame")
 all.equal(a, a2) # round-trip
 
@@ -21,5 +21,5 @@ all.equal(a, a2) # round-trip
 library(sp)
 set.seed(1331)
 example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
-m = ST_as.sf(mpdf)
+m = st_as_sf(mpdf)
 all.equal(as(m, "Spatial"), mpdf) # TRUE

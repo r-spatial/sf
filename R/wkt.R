@@ -25,27 +25,23 @@ prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
 prnt.GEOMETRYCOLLECTION = function(x, ...) 
-	paste0(WKT_name(x, ...), "(", paste0(sapply(x, ST_as.WKT), collapse=", "), ")")
+	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_wkt), collapse=", "), ")")
 
 #' Return Well-known Text representation of simple feature item
 #'
 #' Return Well-known Text representation of simple feature item
 #' @param x object of class sfi or sfc
 #' @param ... passed on to WKT_name
-#' @name ST_as.WKT
+#' @name st_as_wkt
 #' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
 #' @export
-ST_as.WKT = function(x, ...) UseMethod("ST_as.WKT") # not needed if sp exports bbox
+st_as_wkt = function(x, ...) UseMethod("st_as_wkt") # not needed if sp exports bbox
 
-##' @name ST_as.WKT
-##' @export
-#ST_as.WKT.default = function(x) stop(paste("no as.WKT method for object of class", class(x)[1]))
-
-#' @name ST_as.WKT
+#' @name st_as_wkt
 #' @export
 #' @examples
-#' ST_as.WKT(ST_Point(1:2))
-ST_as.WKT.sfi = function(x, ...) {
+#' st_as_wkt(st_point(1:2))
+st_as_wkt.sfi = function(x, ...) {
 	if (inherits(x, "POINT")) return(prnt.POINT(x, ...))
 	if (inherits(x, "MULTIPOINT")) return(prnt.MULTIPOINT(x, ...))
 	if (inherits(x, "LINESTRING")) return(prnt.LINESTRING(x, ...))
@@ -56,8 +52,8 @@ ST_as.WKT.sfi = function(x, ...) {
 	stop(paste("no print method available for object of class", class(x)[1]))
 }
 
-#' @name ST_as.WKT
+#' @name st_as_wkt
 #' @export
-ST_as.WKT.sfc = function(x, ...) {
-	lapply(x, ST_as.WKT, ...)
+st_as_wkt.sfc = function(x, ...) {
+	lapply(x, st_as_wkt, ...)
 }

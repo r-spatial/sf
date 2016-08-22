@@ -31,9 +31,9 @@ Type 'q()' to quit R.
 +     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
 +   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
 +   	class(wkb) = "WKB"
-+     ret = ST_as.sfc(wkb, EWKB = TRUE)[[1]]
++     ret = st_as_sfc(wkb, EWKB = TRUE)[[1]]
 + 	cat(returnstr, "\n")
-+     cat(paste(wkt, "<-->", ST_as.WKT(ret, EWKT=TRUE), "\n"))
++     cat(paste(wkt, "<-->", st_as_wkt(ret, EWKT=TRUE), "\n"))
 + 	invisible(ret)
 +   }
 +   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
@@ -56,7 +56,7 @@ Type 'q()' to quit R.
 + wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
 +   sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
 + class(wkb) = "WKB"
-+ ret = ST_as.sfc(wkb, EWKB = TRUE)
++ ret = st_as_sfc(wkb, EWKB = TRUE)
 + ret 
 + 
 + # nc:
@@ -68,7 +68,7 @@ Type 'q()' to quit R.
 + #	}
 + #)
 + #class(wkb) = "WKB"
-+ #ret = ST_as.sfc(wkb)
++ #ret = st_as_sfc(wkb)
 + #ret 
 + 
 + }
@@ -111,4 +111,4 @@ attr(,"proj4string")
 > 
 > proc.time()
    user  system elapsed 
-  0.552   0.264   0.532 
+  0.524   0.288   0.525 

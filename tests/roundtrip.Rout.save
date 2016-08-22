@@ -26,14 +26,14 @@ Type 'q()' to quit R.
 > pol2 = list(outer + 12, hole1 + 12)
 > pol3 = list(outer + 24)
 > mp = list(pol1,pol2,pol3)
-> mp1 = ST_MultiPolygon(mp)
-> sf = ST_sf(a=1, ST_sfc(list(mp1)))
+> mp1 = st_multipolygon(mp)
+> sf = st_sf(a=1, st_sfc(list(mp1)))
 > a = as(sf, "Spatial")
 > class(a)
 [1] "SpatialPolygonsDataFrame"
 attr(,"package")
 [1] "sp"
-> b = ST_as.sf(a)
+> b = st_as_sf(a)
 > a2 = as(a, "SpatialPolygonsDataFrame")
 > all.equal(a, a2) # round-trip
 [1] TRUE
@@ -58,10 +58,10 @@ Coordinate Reference System (CRS) arguments: NA
 Warning message:
 In data.row.names(row.names, rowsi, i) :
   some row.names duplicated: 2,3,5,6,7,8,10,11,12,13,14,15 --> row.names NOT used
-> m = ST_as.sf(mpdf)
+> m = st_as_sf(mpdf)
 > all.equal(as(m, "Spatial"), mpdf) # TRUE
 [1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  0.488   0.296   0.475 
+  0.496   0.272   0.459 
