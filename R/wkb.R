@@ -1,13 +1,35 @@
+# convert character string, as typically PostgreSQL returned blobs, to raw vector;
+# skips a leading "0x", as this is created by PostGIS when using ST_asBinary() 
+charToWKB = function(y) {
+	stopifnot((nchar(y) %% 2) == 0)
+	if (substr(y, 1, 2) == "0x")
+		y = substr(y, 3, nchar(y))
+	as.raw(as.numeric(paste0("0x", sapply(1:(nchar(y)/2), function(x) substr(y, (x-1)*2+1, x*2)))))
+}
+
 #' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
+#' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary form.
+#' @examples
+#' wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
+#' st_as_sfc(wkb, EWKB = TRUE)
+#' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
+#' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
+    if (all(sapply(x, is.character)))
+		x = structure(lapply(x, charToWKB), class = "WKB")
 	ret = lapply(x, readWKB, EWKB = EWKB)
-	epsg = unique(sapply(ret, function(x) attr(x, "epsg")))
-	if (is.list(epsg)) # they were all NULL
+	if (EWKB) {
+		epsg = sapply(ret, function(x) attr(x, "epsg"))
+		epsg = if (is.list(epsg)) # they were all NULL -> missing
+				NA_integer_
+			else
+				unique(epsg)
+		if (length(epsg) > 1)
+			stop(paste("more than one unique SRID found:", paste(epsg, collapse = ", ")))
+	} else
 		epsg = NA_integer_
-	else if (length(epsg) > 1)
-		stop(paste("more than one SRID found:", paste(epsg, collapse = ", ")))
 	st_sfc(ret, epsg = epsg, ...)
 }
 

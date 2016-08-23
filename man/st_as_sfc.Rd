@@ -36,4 +36,13 @@ st_as_sfc(x, ...)
 \description{
 convert foreign geometry object to an sfc object
 }
+\details{
+when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary form.
+}
+\examples{
+wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
+st_as_sfc(wkb, EWKB = TRUE)
+wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
+st_as_sfc(wkb, EWKB = TRUE)
+}
 

@@ -48,5 +48,13 @@ g = st_sfc(list(st_point(1:2)))
 st_sf(a=3,g)
 st_sf(g, a=3)
 st_sf(a=3, st_sfc(list(st_point(1:2)))) # better to name it!
+g = st_sfc(list(st_point(1:2), st_point(3:4)))
+s = st_sf(a=3:4, g)
+s[1,]
+class(s[1,])
+s[,1]
+class(s[,1])
+s[,2]
+class(s[,2])
 }
 

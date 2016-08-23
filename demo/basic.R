@@ -1,37 +1,37 @@
 ## ----error=TRUE----------------------------------------------------------
 library(sf)
-(p1 = ST_Point(c(1,2)))
+(p1 = st_point(c(1,2)))
 class(p1)
 bbox(p1)
-(p2 = ST_Point(c(1,2,3)))
+(p2 = st_point(c(1,2,3)))
 class(p2)
-(p3 = ST_Point(c(1,2,3), "XYM"))
-(p4 = ST_Point(c(1,2,3,4)))
-attr(try(ST_Point(1)), "condition") # Error:
-attr(try(ST_Point(1:5)), "condition") # Error:
+(p3 = st_point(c(1,2,3), "XYM"))
+(p4 = st_point(c(1,2,3,4)))
+attr(try(st_point(1)), "condition") # Error:
+attr(try(st_point(1:5)), "condition") # Error:
 
 ## ----error=TRUE----------------------------------------------------------
 pts = matrix(1:10, , 2)
-(mp1 = ST_MultiPoint(pts))
+(mp1 = st_multipoint(pts))
 pts = matrix(1:15, , 3)
-(mp2 = ST_MultiPoint(pts))
-(mp3 = ST_MultiPoint(pts, "XYM"))
+(mp2 = st_multipoint(pts))
+(mp3 = st_multipoint(pts, "XYM"))
 pts = matrix(1:20, , 4)
-(mp4 = ST_MultiPoint(pts))
-attr(try(ST_MultiPoint(1)), "condition") # Error:
-attr(try(ST_MultiPoint(1:5)), "condition") # Error:
+(mp4 = st_multipoint(pts))
+attr(try(st_multipoint(1)), "condition") # Error:
+attr(try(st_multipoint(1:5)), "condition") # Error:
 bbox(mp1)
 
 ## ----error=TRUE----------------------------------------------------------
 pts = matrix(1:10, , 2)
-(ls1 = ST_LineString(pts))
+(ls1 = st_linestring(pts))
 pts = matrix(1:15, , 3)
-(ls2 = ST_LineString(pts))
-(ls3 = ST_LineString(pts, "XYM"))
+(ls2 = st_linestring(pts))
+(ls3 = st_linestring(pts, "XYM"))
 pts = matrix(1:20, , 4)
-(ls4 = ST_LineString(pts))
-attr(try(ST_LineString(pts[1,])), "condition") # Error:
-attr(try(ST_LineString(matrix(1:10, 2))), "condition")# Error:
+(ls4 = st_linestring(pts))
+attr(try(st_linestring(pts[1,])), "condition") # Error:
+attr(try(st_linestring(matrix(1:10, 2))), "condition")# Error:
 bbox(ls1)
 
 ## ----error=TRUE----------------------------------------------------------
@@ -39,12 +39,12 @@ outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 pts = list(outer, hole1, hole2)
-(ml1 = ST_MultiLineString(pts))
+(ml1 = st_multilinestring(pts))
 pts3 = lapply(pts, function(x) cbind(x, 0))
-(ml2 = ST_MultiLineString(pts3))
-(ml3 = ST_MultiLineString(pts3, "XYM"))
+(ml2 = st_multilinestring(pts3))
+(ml3 = st_multilinestring(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
-(ml4 = ST_MultiLineString(pts4))
+(ml4 = st_multilinestring(pts4))
 bbox(ml1)
 
 ## ----error=TRUE----------------------------------------------------------
@@ -53,12 +53,12 @@ outer
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 pts = list(outer, hole1, hole2)
-(pl1 = ST_Polygon(pts))
+(pl1 = st_polygon(pts))
 pts3 = lapply(pts, function(x) cbind(x, 0))
-(pl2 = ST_Polygon(pts3))
-(pl3 = ST_Polygon(pts3, "XYM"))
+(pl2 = st_polygon(pts3))
+(pl3 = st_polygon(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
-(pl4 = ST_Polygon(pts4))
+(pl4 = st_polygon(pts4))
 bbox(pl1)
 
 ## ----error=TRUE----------------------------------------------------------
@@ -70,12 +70,12 @@ pol1 = list(outer, hole1, hole2)
 pol2 = list(outer + 12, hole1 + 12)
 pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
-(mp1 = ST_MultiPolygon(mp))
+(mp1 = st_multipolygon(mp))
 pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
-(mp2 = ST_MultiPolygon(pts3))
-(mp3 = ST_MultiPolygon(pts3, "XYM"))
+(mp2 = st_multipolygon(pts3))
+(mp3 = st_multipolygon(pts3, "XYM"))
 pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
-(mp4 = ST_MultiPolygon(pts4))
+(mp4 = st_multipolygon(pts4))
 bbox(mp1)
 
 ## ----error=TRUE----------------------------------------------------------
@@ -87,13 +87,13 @@ pol1 = list(outer, hole1, hole2)
 pol2 = list(outer + 12, hole1 + 12)
 pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
-mp1 = ST_MultiPolygon(mp)
-(gc = ST_GeometryCollection(list(p1, ls1, pl1, mp1)))
+mp1 = st_multipolygon(mp)
+(gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
 bbox(gc)
-attr(try(ST_GeometryCollection(list(mp3, pl1))), "condition") # Error:
+attr(try(st_geometrycollection(list(mp3, pl1))), "condition") # Error:
 
 ## ----error=TRUE----------------------------------------------------------
 library(rgdal2)
-(s = ST_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
+(s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 summary(s)
 

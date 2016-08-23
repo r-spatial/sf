@@ -89,19 +89,10 @@ st_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
 		stop("package RPostgreSQL required for st_read_pg")
 	if (is.null(cn))
 		cn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
-  	w = options("warn")[[1]]
-  	options(warn = -1)
-	tbl = RPostgreSQL::dbGetQuery(cn, query)
-  	options(warn = w)
-	if (is.null(geom_column))
-	# find the geometry column:
+  	# suppress warning about unknown type "geometry":
+	suppressWarnings(tbl <- RPostgreSQL::dbGetQuery(cn, query))
+	if (is.null(geom_column)) # find the geometry column:
 		geom_column = tail(which(sapply(tbl, is.character)), 1)
-	wkbCharToRaw = function(y) {
-		stopifnot((nchar(y) %% 2) == 0)
-		n = nchar(y)/2
-		as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
-	}
-    wkb = structure(lapply(tbl[[geom_column]], wkbCharToRaw), class = "WKB")
-    tbl[[geom_column]] = st_as_sfc(wkb, EWKB = TRUE)
+    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = TRUE)
 	st_as_sf(tbl, ...)
 }
