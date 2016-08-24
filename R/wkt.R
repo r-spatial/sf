@@ -49,11 +49,11 @@ st_as_wkt.sfi = function(x, ...) {
 	if (inherits(x, "MULTILINESTRING")) return(prnt.MULTILINESTRING(x, ...))
 	if (inherits(x, "MULTIPOLYGON")) return(prnt.MULTIPOLYGON(x, ...))
 	if (inherits(x, "GEOMETRYCOLLECTION")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	stop(paste("no print method available for object of class", class(x)[1]))
+	stop(paste("no print method available for object of class", class(x)[1])) # nocov
 }
 
 #' @name st_as_wkt
 #' @export
 st_as_wkt.sfc = function(x, ...) {
-	lapply(x, st_as_wkt, ...)
+	sapply(x, st_as_wkt, ...)
 }
