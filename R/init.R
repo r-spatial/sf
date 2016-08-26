@@ -1,7 +1,10 @@
 #' @importFrom utils head tail
 #' @importFrom stats na.omit
 #' @importFrom methods as slotNames
-#' @import sp
+#' @importFrom graphics plot axis box lines plot.new plot.window points
+#' @importFrom sp geometry CRS Line Lines Polygon Polygons SpatialLines SpatialMultiPoints SpatialPoints SpatialPolygons addAttrToGeom
+#' @import Rcpp
+#' @useDynLib sf
 NULL
 
 setOldClass("sf")

@@ -21,8 +21,15 @@ charToWKB = function(y) {
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
+	skip0x = function(x) {
+		if (substr(x, 1, 2) == "0x")
+			substr(x, 3, nchar(x))
+		else
+			x
+	}
     if (all(sapply(x, is.character)))
-		x = structure(lapply(x, charToWKB), class = "WKB")
+		#x = structure(lapply(x, charToWKB), class = "WKB")
+		x = structure(lapply(x, function(y) HexToRaw(skip0x(y))), class = "WKB")
 	ret = lapply(x, readWKB, EWKB = EWKB)
 	if (EWKB) {
 		epsg = sapply(ret, function(x) attr(x, "epsg"))

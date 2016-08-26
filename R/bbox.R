@@ -59,3 +59,6 @@ bbox.sfc = function(obj) {
 		warning(paste("bbox: simple feature type", class(obj)[1], "not supported"))
 	)
 }
+
+#' @export
+bbox.sf = function(obj) bbox(geometry(obj))
