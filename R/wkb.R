@@ -1,5 +1,9 @@
 # convert character string, as typically PostgreSQL returned blobs, to raw vector;
 # skips a leading "0x", as this is created by PostGIS when using ST_asBinary() 
+#
+# most wkb read/write stuff was modified & extended from Ian Cook's wkb package, 
+# https://cran.r-project.org/web/packages/wkb/index.html
+#
 charToWKB = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
 	if (substr(y, 1, 2) == "0x")
@@ -34,6 +38,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
 }
 
 sf.tp = toupper(c(
+	# "Geometry",          # 0
 	"Point",               # 1
 	"LineString",          # 2
 	"Polygon",             # 3
@@ -46,17 +51,17 @@ sf.tp = toupper(c(
 	"CurvePolygon",        # 10 x
 	"MultiCurve",          # 11 x
 	"MultiSurface",        # 12 x
-	"Curve",               # 13 x
-	"Surface",             # 14 x
+	"Curve",               # 13 x *
+	"Surface",             # 14 x *
 	"PolyhedralSurface",   # 15
 	"TIN",                 # 16
 	"Triangle"             # 17
-	)) # "Geometry" = 0, should not be matched, is more of a superclass
+	)) # "Geometry" = 0, should not be matched, is a superclass only
 	   # x: not described in ISO document
+	   # *: GDAL support described in https://trac.osgeo.org/gdal/ticket/6401
 
 readWKB = function(x, EWKB = FALSE) {
 	stopifnot(inherits(x, "raw"))
-	# most wkb read/write stuff is modified from Ian Cook's wkb package
 	rc <- rawConnection(x, "r")
 	on.exit(close(rc))
 	seek(rc, 0L)
