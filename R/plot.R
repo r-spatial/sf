@@ -11,22 +11,22 @@ projected = function(x) {
 # another idea:
 #plot.sf = function(x, y, ...) plot(as(x, "Spatial"), ...)
 
-#' plot sf objects
+#' plot sf object
 #'
-#' plot sf objects
 #' @param x object of class sf
 #' @param y ignored
-##' @param xlim see \link{plot.window}
-##' @param ylim see \link{plot.window}
-##' @param xaxs see \link{plot.window}
-##' @param yaxs see \link{plot.window}
-##' @param lab see \link{plot.window}
-##' @param asp aspect ratio, see \link{plot.window}
-##' @param axes logical; plot axes?
-##' @param add logical; add to existing plot?
-#' @param ... passed on to plotting functions
+#' @param ... further specifications, see \link{plot}
+#' @param xlim see \link{plot.window}
+#' @param ylim see \link{plot.window}
+#' @param xaxs see \link{plot.window}
+#' @param yaxs see \link{plot.window}
+#' @param lab see \link{plot.window}
+#' @param asp aspect ratio, see \link{plot.window}
+#' @param axes logical; plot axes?
+#' @param add logical; add to existing plot?
+#' @method plot sf
 #' @export
-plot.sf = function(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE, add = FALSE) {
+plot.sf <- function(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE, add = FALSE) {
 	stopifnot(missing(y))
 	if (!add) {
 		plot.new()
@@ -93,3 +93,4 @@ lines.sfc_MULTILINESTRING = function(x, ..., lty = 1, lwd = 1, col = 1, pch = 1)
 			lines(L, lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], ...)))
 	invisible(NULL)
 }
+

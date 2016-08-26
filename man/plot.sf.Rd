@@ -2,17 +2,17 @@
 % Please edit documentation in R/plot.R
 \name{plot.sf}
 \alias{plot.sf}
-\title{plot sf objects}
+\title{plot sf object}
 \usage{
-plot.sf(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE,
-  add = FALSE)
+\method{plot}{sf}(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA,
+  axes = TRUE, add = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}
 
 \item{y}{ignored}
 
-\item{...}{passed on to plotting functions}
+\item{...}{further specifications, see \link{plot}}
 
 \item{xlim}{see \link{plot.window}}
 
@@ -31,6 +31,6 @@ plot.sf(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE,
 \item{add}{logical; add to existing plot?}
 }
 \description{
-plot sf objects
+plot sf object
 }
 
