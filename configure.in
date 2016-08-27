@@ -1,0 +1,32 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/wkb.cpp)
+
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+
+# compile Rcpp stuff:
+${R_HOME}/bin/Rscript -e "Rcpp:::compileAttributes()"
+
+if test ! -e src/RcppExports.cpp
+then
+  echo ''
+  echo 'For some reason Rcpp is not working.'
+  echo 'Is it installed?'
+  echo ''
+  exit 1
+fi
+
+# generate docs & NAMESPACE:
+${R_HOME}/bin/Rscript -e 'roxygen2::roxygenise(roclets = c("namespace", "rd"))'
+
+if test ! -e man/sf.Rd
+then
+  echo ''
+  echo 'For some reason roxygen2 is not working.'
+  echo 'Is it installed?'
+  echo ''
+  exit 1
+fi
