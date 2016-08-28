@@ -66,7 +66,7 @@ sf.tp = toupper(c(
 	"Triangle"             # 17
 	)) # "Geometry" = 0, should not be matched, is a superclass only
 	   # x: not described in ISO document
-	   # *: GDAL support described in https://trac.osgeo.org/gdal/ticket/6401
+	   # *: GDAL support see https://trac.osgeo.org/gdal/ticket/6401
 
 readWKB = function(x, EWKB = FALSE) {
 	stopifnot(inherits(x, "raw"))

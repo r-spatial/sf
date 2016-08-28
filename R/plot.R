@@ -104,7 +104,7 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 	cex = rep(cex, length.out = n)
 	lwd = rep(lwd, length.out = n)
 	lty = rep(lty, length.out = n)
-	lapply(1:n, function(i) points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
+	lapply(seq_along(x), function(i) points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
 		cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
 	invisible(NULL)
 }
@@ -118,7 +118,7 @@ plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, ty
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
-	lapply(1:length(x), function(i)
+	lapply(seq_along(x), function(i)
 		lines(x[[i]], lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type))
 	invisible(NULL)
 }
@@ -132,7 +132,7 @@ plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
-	lapply(1:length(x), function(i)
+	lapply(seq_along(x), function(i)
 		lapply(x[[i]], function(L)
 			lines(L, lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type)))
 	invisible(NULL)
@@ -156,7 +156,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = 
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	lapply(1:length(x), function(i)
+	lapply(seq_along(x), function(i)
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
@@ -169,7 +169,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, a
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	lapply(1:length(x), function(i)
+	lapply(seq_along(x), function(i)
 		lapply(x[[i]], function(L)
 			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i])))
 	invisible(NULL)
@@ -206,7 +206,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	lapply(1:length(x), function(i) plot_gc(x[[i]], 
+	lapply(seq_along(x), function(i) plot_gc(x[[i]], 
 			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
 			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
