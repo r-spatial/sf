@@ -11,6 +11,13 @@ charToWKB = function(y) {
 	as.raw(as.numeric(paste0("0x", sapply(1:(nchar(y)/2), function(x) substr(y, (x-1)*2+1, x*2)))))
 }
 
+skip0x = function(x) {
+	if (substr(x, 1, 2) == "0x")
+		substr(x, 3, nchar(x))
+	else
+		x
+}
+
 #' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
 #' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary form.
@@ -21,15 +28,9 @@ charToWKB = function(y) {
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
-	skip0x = function(x) {
-		if (substr(x, 1, 2) == "0x")
-			substr(x, 3, nchar(x))
-		else
-			x
-	}
     if (all(sapply(x, is.character)))
 		#x = structure(lapply(x, charToWKB), class = "WKB")
-		x = structure(lapply(x, function(y) HexToRaw(skip0x(y))), class = "WKB")
+		x = structure(HexToRaw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
 	ret = lapply(x, readWKB, EWKB = EWKB)
 	if (EWKB) {
 		epsg = sapply(ret, function(x) attr(x, "epsg"))

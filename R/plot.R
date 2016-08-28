@@ -16,81 +16,225 @@ projected = function(x) {
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot}
-#' @param xlim see \link{plot.window}
-#' @param ylim see \link{plot.window}
-#' @param xaxs see \link{plot.window}
-#' @param yaxs see \link{plot.window}
-#' @param lab see \link{plot.window}
-#' @param asp aspect ratio, see \link{plot.window}
-#' @param axes logical; plot axes?
-#' @param add logical; add to existing plot?
 #' @method plot sf
+#' @examples
+#' # plot linestrings:
+#' l1 = st_linestring(matrix(runif(6)-0.5,,2))
+#' l2 = st_linestring(matrix(runif(6)-0.5,,2))
+#' l3 = st_linestring(matrix(runif(6)-0.5,,2))
+#' s = st_sf(a=2:4, b=st_sfc(list(l1,l2,l3)))
+#' plot(s, col = s$a, axes = FALSE)
+#' plot(s, col = s$a)
+#' attr(s$b, "proj4string") = sp:::CRS("+init=epsg:4326")@projargs
+#' plot(s, col = s$a)
+#' plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
+#' l4 = st_linestring(matrix(runif(6),,2))
+#' plot(st_sf(a=1,b=st_sfc(list(l4))), add = TRUE)
+#' # plot multilinestrings:
+#' ml1 = st_multilinestring(list(l1, l2))
+#' ml2 = st_multilinestring(list(l3, l4))
+#' ml = st_sf(a = 2:3, b = st_sfc(list(ml1, ml2)))
+#' plot(ml, col = ml$a, lty = ml$a, lwd = ml$a, pch = ml$a, type = 'b')
+#' # plot points:
+#' p1 = st_point(c(1,2))
+#' p2 = st_point(c(3,3))
+#' p3 = st_point(c(3,0))
+#' p = st_sf(a=2:4, b=st_sfc(list(p1,p2,p3)))
+#' plot(p, col = s$a, axes = FALSE)
+#' plot(p, col = s$a)
+#' plot(p, col = p$a, pch = p$a, cex = p$a, bg = s$a, lwd = 2, lty = 2, type = 'b')
+#' p4 = st_point(c(2,2))
+#' plot(st_sf(a=1, st_sfc(list(p4))), add = TRUE)
+#' # multipoints:
+#' mp1 = st_multipoint(matrix(1:4,2))
+#' mp2 = st_multipoint(matrix(5:8,2))
+#' mp = st_sf(a = 2:3, b = st_sfc(list(mp1, mp2)))
+#' plot(mp)
+#' plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
+#' # polygon:
+#' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+#' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+#' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+#' pl1 = st_polygon(list(outer, hole1, hole2))
+#' pl2 = st_polygon(list(outer+10, hole1+10, hole2+10))
+#' po = st_sf(a = 2:3, st_sfc(list(pl1,pl2)))
+#' plot(po, col = po$a, border = rev(po$a), lwd=3)
+#' # multipolygon
+#' r10 = matrix(rep(c(0,10),each=5),5)
+#' pl1 = list(outer, hole1, hole2)
+#' pl2 = list(outer+10, hole1+10, hole2+10)
+#' pl3 = list(outer+r10, hole1+r10, hole2+r10)
+#' mpo1 = st_multipolygon(list(pl1,pl2))
+#' mpo2 = st_multipolygon(list(pl3))
+#' mpo = st_sf(a=2:3, b=st_sfc(list(mpo1,mpo2)))
+#' plot(mpo, col = mpo$a, border = rev(mpo$a), lwd = 2)
+#' # geometrycollection:
+#' gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
+#' gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
+#' gc = st_sf(a=2:3, b = st_sfc(list(gc1,gc2)))
+#' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE, add = FALSE) {
+plot.sf <- function(x, y, ...) {
 	stopifnot(missing(y))
-	if (!add) {
-		plot.new()
-		if (missing(xlim)) xlim = bbox(x)[c("xmin", "xmax")]
-		if (missing(ylim)) ylim = bbox(x)[c("ymin", "ymax")]
-    	if (is.na(asp))
-        	asp <- if (is.na(projected(x)) || projected(x))
-					1.0
-				else
-					1./cos((mean(ylim) * pi)/180)
-    	args = list(xlim = xlim, ylim = ylim, asp = asp)
-    	if (!missing(xaxs)) args$xaxs = xaxs
-    	if (!missing(yaxs)) args$yaxs = yaxs
-    	if (!missing(lab)) args$lab = lab
-    	do.call(plot.window, args)
-    	if (axes) { # set up default axes system & box:
-        	box()
-        	if (identical(projected(x), FALSE)) {
-            	sp::degAxis(1, ...)
-            	sp::degAxis(2, ...)
-        	} else {
-            	axis(1, ...)
-            	axis(2, ...)
-        	}
-		}
-	}
-	g = geometry(x)
-	switch(class(g)[1],
-		sfc_POINT = points(g, ...),
-		sfc_LINESTRING = , sfc_MULTILINESTRING = lines(g, ...),
-		stop(paste("plotting of", class(g)[1], "not supported"))
-	)
+	plot(geometry(x), ...)
 }
 
-points.sfc_POINT = function(x, ..., pch = 1, col = 1, bg = 0, cex = 1, lwd = 1, lty = 1) {
-	pch = rep(pch, length.out = length(x))
-	col = rep(col, length.out = length(x))
-	bg = rep(bg, length.out = length(x))
-	cex = rep(cex, length.out = length(x))
-	lwd = rep(lwd, length.out = length(x))
-	lty = rep(lty, length.out = length(x))
-	lapply(1:length(x), 
-		function(i) points(x[[i]][1], x[[i]][2], pch = pch[i], col = col[i], bg = bg[i], 
-			cex = cex[i], lwd = lwd[i], lty = lty[i], ...))
+plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
+		type = 'p', add = FALSE) {
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	npts = length(x)
+	pch = rep(pch, length.out = npts)
+	col = rep(col, length.out = npts)
+	bg = rep(bg, length.out = npts)
+	cex = rep(cex, length.out = npts)
+	points(do.call(rbind, x), pch = pch, col = col, bg = bg, cex = cex, lwd = lwd, lty = lty,
+		type = type)
 }
-
-lines.sfc_LINESTRING = function(x, ..., lty = 1, lwd = 1, col = 1, pch = 1) {
+plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
+		type = 'p', add = FALSE) {
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	n = length(x)
+	pch = rep(pch, length.out = n)
+	col = rep(col, length.out = n)
+	bg = rep(bg, length.out = n)
+	cex = rep(cex, length.out = n)
+	lwd = rep(lwd, length.out = n)
+	lty = rep(lty, length.out = n)
+	lapply(1:n, function(i) points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
+		cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
+	invisible(NULL)
+}
+plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l', 
+		add = FALSE) {
+# FIXME: take care of lend, ljoin, and lmitre
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
 	lty = rep(lty, length.out = length(x))
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
 	lapply(1:length(x), function(i)
-		lines(x[[i]], lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], ...))
+		lines(x[[i]], lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type))
 	invisible(NULL)
 }
-
-lines.sfc_MULTILINESTRING = function(x, ..., lty = 1, lwd = 1, col = 1, pch = 1) {
+plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l',
+		add = FALSE) {
+# FIXME: take care of lend, ljoin, and lmitre
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
 	lty = rep(lty, length.out = length(x))
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
 	lapply(1:length(x), function(i)
 		lapply(x[[i]], function(L)
-			lines(L, lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], ...)))
+			lines(L, lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type)))
 	invisible(NULL)
 }
 
+# sf (list) -> polypath (mtrx) : rbind polygon rings with NA rows inbetween
+p_bind = function(lst) {
+	if (length(lst) == 1)
+		return(lst[[1]])
+	ret = vector("list", length(lst) * 2 - 1)
+	ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
+	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
+	do.call(rbind, ret) # replicates the NA to form an NA row
+}
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = FALSE) {
+# FIXME: take care of lend, ljoin, xpd, and lmitre
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	lty = rep(lty, length.out = length(x))
+	lwd = rep(lwd, length.out = length(x))
+	col = rep(col, length.out = length(x))
+	border = rep(border, length.out = length(x))
+	lapply(1:length(x), function(i)
+		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
+	invisible(NULL)
+}
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = FALSE) {
+# FIXME: take care of lend, ljoin, xpd, and lmitre
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	lty = rep(lty, length.out = length(x))
+	lwd = rep(lwd, length.out = length(x))
+	col = rep(col, length.out = length(x))
+	border = rep(border, length.out = length(x))
+	lapply(1:length(x), function(i)
+		lapply(x[[i]], function(L)
+			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i])))
+	invisible(NULL)
+}
+
+# plot single geometrycollection:
+plot_gc = function(x, pch, cex, bg, border, lty, lwd, col) {
+	lapply(x, function(subx) {
+		args = list(list(subx), pch = pch, cex = cex, bg = bg, border = border, 
+			lty = lty, lwd = lwd, col = col, add = TRUE)
+		fn = switch(class(subx)[2],
+			POINT = plot.sfc_POINT,
+			MULTIPOINT = plot.sfc_MULTIPOINT,
+			LINESTRING = plot.sfc_LINESTRING,
+			MULTILINESTRING = plot.sfc_MULTILINESTRING,
+			POLYGON = plot.sfc_POLYGON,
+			MULTIPOLYGON = plot.sfc_MULTIPOLYGON,
+			stop(paste("plotting of", class(x)[2], "not yet supported: please file an issue"))
+		)
+		do.call(fn, args)
+	})
+	invisible(NULL)
+}
+
+plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
+	col = 1, border, add = FALSE) {
+# FIXME: take care of lend, ljoin, xpd, and lmitre
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	cex = rep(cex, length.out = length(x))
+	pch = rep(pch, length.out = length(x))
+	lty = rep(lty, length.out = length(x))
+	lwd = rep(lwd, length.out = length(x))
+	col = rep(col, length.out = length(x))
+	border = rep(border, length.out = length(x))
+	lapply(1:length(x), function(i) plot_gc(x[[i]], 
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+			lwd = lwd[i], col = col[i]))
+	invisible(NULL)
+}
+
+# set up plotting area & axes; taken from sp:::plot.Spatial
+plot_sf = function(x, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE) {
+	plot.new()
+	if (missing(xlim)) xlim = bbox(x)[c("xmin", "xmax")]
+	if (missing(ylim)) ylim = bbox(x)[c("ymin", "ymax")]
+   	if (is.na(asp))
+       	asp <- if (is.na(projected(x)) || projected(x))
+				1.0
+			else
+				1./cos((mean(ylim) * pi)/180)
+   	args = list(xlim = xlim, ylim = ylim, asp = asp)
+   	if (!missing(xaxs)) args$xaxs = xaxs
+   	if (!missing(yaxs)) args$yaxs = yaxs
+   	if (!missing(lab)) args$lab = lab
+   	do.call(plot.window, args)
+   	if (axes) { # set up default axes system & box:
+       	box()
+       	if (identical(projected(x), FALSE)) {
+           	sp::degAxis(1, ...)
+           	sp::degAxis(2, ...)
+       	} else {
+           	axis(1, ...)
+           	axis(2, ...)
+       	}
+	}
+}
