@@ -25,8 +25,12 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	class(lst) = c(paste0("sfc_", class(lst[[1]])[2]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = bbox(lst)
-	if (missing(proj4string) && !is.na(epsg) && epsg > 0)
-		proj4string = CRS(paste0("+init=epsg:", epsg))@projargs
+	if (missing(proj4string) && !is.na(epsg) && epsg > 0) {
+		proj4string = if (requireNamespace("sp", quietly = TRUE))
+				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, if rgdal
+			else
+				paste0("+init=epsg:", epsg)
+	}
 	attr(lst, "proj4string") = proj4string
 	lst
 }

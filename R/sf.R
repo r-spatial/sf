@@ -30,6 +30,10 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_)
 #' @export
 setMethod("geometry", "sf", function(obj) obj[[attr(obj, "sf_column")]])
 
+# S3:
+##geometry = function(obj, ...) UseMethod("geometry")
+## geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
+
 #' create sf object
 #' 
 #' create sf, which extends data.frame-like objects with a simple feature list column

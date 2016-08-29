@@ -43,9 +43,9 @@ attr(,"package")
 
 Attaching package: 'sp'
 
-The following object is masked from 'package:sf':
+The following objects are masked from 'package:sf':
 
-    bbox
+    bbox, geometry
 
 > set.seed(1331)
 > example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
@@ -64,4 +64,4 @@ In data.row.names(row.names, rowsi, i) :
 > 
 > proc.time()
    user  system elapsed 
-  0.496   0.272   0.459 
+  0.568   0.264   0.538 

@@ -35,7 +35,11 @@ st_as_sf.Spatial = function(x, ...) {
 		df = x@data
 	else 
 		df = data.frame(row.names = row.names(x)) # empty
-	df$geom = st_as_sfc(geometry(x))
+	if ("geometry" %in% names(df))
+		warning("column geometry will be overwritten by geometry column")
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	df$geometry = st_as_sfc(sp::geometry(x))
 	st_as_sf(df)
 }
 
@@ -131,9 +135,11 @@ Polygons2POLYGON = function(PolygonsLst) {
 }
 
 setAs("sf", "Spatial", function(from) {
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
 	geom = geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
-	addAttrToGeom(as_Spatial(geom), data.frame(from), match.ID = FALSE)
+	sp::addAttrToGeom(as_Spatial(geom), data.frame(from), match.ID = FALSE)
 })
 
 #setAs("sfc", "Spatial", function(from) {
@@ -152,32 +158,42 @@ as_Spatial = function(from) {
 }
 #)
 
-sfc2SpatialPoints = function(from)
-	SpatialPoints(do.call(rbind, from), proj4string = CRS(attr(from, "proj4string")))
+sfc2SpatialPoints = function(from) {
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "proj4string")))
+}
 
-sfc2SpatialMultiPoints = function(from)
-	SpatialMultiPoints(lapply(from, unclass), proj4string = CRS(attr(from, "proj4string")))
+sfc2SpatialMultiPoints = function(from) {
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	sp::SpatialMultiPoints(lapply(from, unclass), proj4string = sp::CRS(attr(from, "proj4string")))
+}
 
 sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
 	l = if (class(from)[1]  == "sfc_MULTILINESTRING")
-		lapply(from, function(x) Lines(lapply(x, Line)))
+		lapply(from, function(x) sp::Lines(lapply(x, sp::Line)))
 	else 
-		lapply(from, function(x) Lines(list(Line(x))))
+		lapply(from, function(x) sp::Lines(list(sp::Line(x))))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
-	SpatialLines(l, proj4string = CRS(attr(from, "proj4string")))
+	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "proj4string")))
 }
 
 sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
 	l = if (class(from)[1] == "sfc_MULTIPOLYGON")
 		lapply(from, function(x)  # for each sfc item, return a Polygons
-				Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
-					lapply(y, function(z) Polygon(z[rev(1:nrow(z)),]))), 
+				sp::Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
+					lapply(y, function(z) sp::Polygon(z[rev(1:nrow(z)),]))), 
 						recursive = FALSE), "ID"))
 	else lapply(from, function(x) 
-		Polygons(lapply(x, function(y) Polygon(y[rev(1:nrow(y)),])), "ID"))
+		sp::Polygons(lapply(x, function(y) sp::Polygon(y[rev(1:nrow(y)),])), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
-	SpatialPolygons(l, proj4string = CRS(attr(from, "proj4string")))
+	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "proj4string")))
 	# TODO: add comments()
 }

@@ -8,9 +8,6 @@ projected = function(x) {
 		length(grep("longlat", p4str, fixed = TRUE)) == 0
 }
 
-# another idea:
-#plot.sf = function(x, y, ...) plot(as(x, "Spatial"), ...)
-
 #' plot sf object
 #'
 #' @param x object of class sf
@@ -25,8 +22,8 @@ projected = function(x) {
 #' s = st_sf(a=2:4, b=st_sfc(list(l1,l2,l3)))
 #' plot(s, col = s$a, axes = FALSE)
 #' plot(s, col = s$a)
-#' attr(s$b, "proj4string") = sp:::CRS("+init=epsg:4326")@projargs
-#' plot(s, col = s$a)
+#' attr(s$b, "proj4string") = sp::CRS("+init=epsg:4326")@projargs
+#' plot(s, col = s$a, axes = TRUE)
 #' plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 #' l4 = st_linestring(matrix(runif(6),,2))
 #' plot(st_sf(a=1,b=st_sfc(list(l4))), add = TRUE)
@@ -40,7 +37,7 @@ projected = function(x) {
 #' p2 = st_point(c(3,3))
 #' p3 = st_point(c(3,0))
 #' p = st_sf(a=2:4, b=st_sfc(list(p1,p2,p3)))
-#' plot(p, col = s$a, axes = FALSE)
+#' plot(p, col = s$a, axes = TRUE)
 #' plot(p, col = s$a)
 #' plot(p, col = p$a, pch = p$a, cex = p$a, bg = s$a, lwd = 2, lty = 2, type = 'b')
 #' p4 = st_point(c(2,2))
@@ -212,29 +209,15 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 	invisible(NULL)
 }
 
-# set up plotting area & axes; taken from sp:::plot.Spatial
-plot_sf = function(x, ..., xlim, ylim, xaxs, yaxs, lab, asp = NA, axes = TRUE) {
-	plot.new()
-	if (missing(xlim)) xlim = bbox(x)[c("xmin", "xmax")]
-	if (missing(ylim)) ylim = bbox(x)[c("ymin", "ymax")]
-   	if (is.na(asp))
-       	asp <- if (is.na(projected(x)) || projected(x))
-				1.0
-			else
-				1./cos((mean(ylim) * pi)/180)
-   	args = list(xlim = xlim, ylim = ylim, asp = asp)
-   	if (!missing(xaxs)) args$xaxs = xaxs
-   	if (!missing(yaxs)) args$yaxs = yaxs
-   	if (!missing(lab)) args$lab = lab
-   	do.call(plot.window, args)
-   	if (axes) { # set up default axes system & box:
-       	box()
-       	if (identical(projected(x), FALSE)) {
-           	sp::degAxis(1, ...)
-           	sp::degAxis(2, ...)
-       	} else {
-           	axis(1, ...)
-           	axis(2, ...)
-       	}
-	}
+# set up plotting area & axes; reuses sp:::plot.Spatial
+plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par("bg"), ..., 
+    xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0)) {
+
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	bb = matrix(sf::bbox(x), 2, byrow = TRUE, dimnames=list(c("x", "y"), c("min", "max")))
+	sp = new("Spatial", bbox = bb, proj4string = sp::CRS(attr(x, "proj4string")))
+	sp::plot(sp, ..., xlim = xlim, ylim = ylim, asp = asp, axes = axes, bg = bg, 
+    	xaxs = xaxs, yaxs = yaxs, lab = lab, setParUsrBB = setParUsrBB, bgMap = bgMap, 
+		expandBB = expandBB)
 }

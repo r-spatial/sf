@@ -21,33 +21,39 @@ bbox.MtrxSetSetSet = function(obj) {
 	bb(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
 }
 
-#' Return bounding of a simple feature or simple feature set
-#'
-#' Return bounding of a simple feature or simple feature set
-#' @param obj object to compute the bounding box from
-#' @export
-bbox = function(obj) UseMethod("bbox") # not needed if sp exports bbox
+##' Return bounding of a simple feature or simple feature set
+##'
+##' Return bounding of a simple feature or simple feature set
+##' @param obj object to compute the bounding box from
+##' @export
+#bbox = function(obj) UseMethod("bbox") # not needed if sp exports bbox
 
 #' @export
-bbox.POINT = function(obj) bb(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2])
+setMethod("bbox", "POINT", 
+	function(obj) bb(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2]))
 #' @export
-bbox.MULTIPOINT = bbox.Mtrx
+setMethod("bbox", "MULTIPOINT",  bbox.Mtrx)
+
 #' @export
-bbox.LINESTRING = bbox.Mtrx
+setMethod("bbox", "LINESTRING", bbox.Mtrx)
+
 #' @export
-bbox.POLYGON = bbox.MtrxSet
+setMethod("bbox", "POLYGON",  bbox.MtrxSet)
+
 #' @export
-bbox.MULTILINESTRING = bbox.MtrxSet
+setMethod("bbox", "MULTILINESTRING", bbox.MtrxSet)
+
 #' @export
-bbox.MULTIPOLYGON = bbox.MtrxSetSet
+setMethod("bbox", "MULTIPOLYGON", bbox.MtrxSetSet)
+
 #' @export
-bbox.GEOMETRYCOLLECTION = function(obj) {
+setMethod("bbox", "GEOMETRYCOLLECTION", function(obj) {
 	s = sapply(obj, bbox) # dispatch on class
 	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
-}
+})
 
 #' @export
-bbox.sfc = function(obj) {
+setMethod("bbox", "sfc", function(obj) {
 	switch(class(obj)[1],
 		"sfc_POINT" = bbox.Mtrx(do.call(rbind, obj)),
 		"sfc_MULTIPOINT" = bbox.MtrxSet(obj),
@@ -58,7 +64,7 @@ bbox.sfc = function(obj) {
 		"sfc_GEOMETRYCOLLECTION" = bbox.GEOMETRYCOLLECTION(obj),
 		warning(paste("bbox: simple feature type", class(obj)[1], "not supported"))
 	)
-}
+})
 
 #' @export
-bbox.sf = function(obj) bbox(geometry(obj))
+setMethod("bbox", "sf",  function(obj) bbox(geometry(obj)))
