@@ -2,7 +2,7 @@
 library(sf)
 (p1 = st_point(c(1,2)))
 class(p1)
-bbox(p1)
+st_bbox(p1)
 (p2 = st_point(c(1,2,3)))
 class(p2)
 (p3 = st_point(c(1,2,3), "XYM"))
@@ -20,7 +20,7 @@ pts = matrix(1:20, , 4)
 (mp4 = st_multipoint(pts))
 attr(try(st_multipoint(1)), "condition") # Error:
 attr(try(st_multipoint(1:5)), "condition") # Error:
-bbox(mp1)
+st_bbox(mp1)
 
 ## ----error=TRUE----------------------------------------------------------
 pts = matrix(1:10, , 2)
@@ -32,7 +32,7 @@ pts = matrix(1:20, , 4)
 (ls4 = st_linestring(pts))
 attr(try(st_linestring(pts[1,])), "condition") # Error:
 attr(try(st_linestring(matrix(1:10, 2))), "condition")# Error:
-bbox(ls1)
+st_bbox(ls1)
 
 ## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -45,7 +45,7 @@ pts3 = lapply(pts, function(x) cbind(x, 0))
 (ml3 = st_multilinestring(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (ml4 = st_multilinestring(pts4))
-bbox(ml1)
+st_bbox(ml1)
 
 ## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -59,7 +59,7 @@ pts3 = lapply(pts, function(x) cbind(x, 0))
 (pl3 = st_polygon(pts3, "XYM"))
 pts4 = lapply(pts3, function(x) cbind(x, 0))
 (pl4 = st_polygon(pts4))
-bbox(pl1)
+st_bbox(pl1)
 
 ## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -76,7 +76,7 @@ pts3 = lapply(mp, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp3 = st_multipolygon(pts3, "XYM"))
 pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 (mp4 = st_multipolygon(pts4))
-bbox(mp1)
+st_bbox(mp1)
 
 ## ----error=TRUE----------------------------------------------------------
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -89,7 +89,7 @@ pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
 mp1 = st_multipolygon(mp)
 (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
-bbox(gc)
+st_bbox(gc)
 attr(try(st_geometrycollection(list(mp3, pl1))), "condition") # Error:
 
 ## ----error=TRUE----------------------------------------------------------

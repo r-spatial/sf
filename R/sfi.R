@@ -66,7 +66,7 @@ CheckGC = function(x, third = "XYZ", type = "GeometryCollection") {
 #' @examples 
 #' (p1 = st_point(c(1,2)))
 #' class(p1)
-#' bbox(p1)
+#' st_bbox(p1)
 #' (p2 = st_point(c(1,2,3)))
 #' class(p2)
 #' (p3 = st_point(c(1,2,3), "XYM"))

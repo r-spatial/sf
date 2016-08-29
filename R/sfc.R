@@ -24,7 +24,7 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	lst = coerceTypes(lst) # may coerce X to MULTIX, or a mix to a GeometryCollection
 	class(lst) = c(paste0("sfc_", class(lst[[1]])[2]), "sfc")
 	attr(lst, "epsg") = epsg
-	attr(lst, "bbox") = bbox(lst)
+	attr(lst, "bbox") = st_bbox(lst)
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0) {
 		proj4string = if (requireNamespace("sp", quietly = TRUE))
 				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, if rgdal
@@ -67,7 +67,7 @@ coerceTypes = function(lst) { # breaks on errors, or returns the list
     x = NextMethod("[")
     attributes(x) = attributes(old)
 	if (recompute_bb)
-		attr(x, "bbox") = bbox(x)
+		attr(x, "bbox") = st_bbox(x)
     class(x) = class(old)
     x
 }

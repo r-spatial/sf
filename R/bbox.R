@@ -26,45 +26,39 @@ bbox.MtrxSetSetSet = function(obj) {
 ##' Return bounding of a simple feature or simple feature set
 ##' @param obj object to compute the bounding box from
 ##' @export
-#bbox = function(obj) UseMethod("bbox") # not needed if sp exports bbox
+st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
-setMethod("bbox", "POINT", 
-	function(obj) bb(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2]))
+st_bbox.POINT = function(obj) bb(xmin = obj[1], xmax = obj[1], ymin = obj[2], ymax = obj[2])
 #' @export
-setMethod("bbox", "MULTIPOINT",  bbox.Mtrx)
-
+st_bbox.MULTIPOINT = bbox.Mtrx
 #' @export
-setMethod("bbox", "LINESTRING", bbox.Mtrx)
-
+st_bbox.LINESTRING = bbox.Mtrx
 #' @export
-setMethod("bbox", "POLYGON",  bbox.MtrxSet)
-
+st_bbox.POLYGON = bbox.MtrxSet
 #' @export
-setMethod("bbox", "MULTILINESTRING", bbox.MtrxSet)
-
+st_bbox.MULTILINESTRING = bbox.MtrxSet
 #' @export
-setMethod("bbox", "MULTIPOLYGON", bbox.MtrxSetSet)
-
+st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
 #' @export
-setMethod("bbox", "GEOMETRYCOLLECTION", function(obj) {
-	s = sapply(obj, bbox) # dispatch on class
+st_bbox.GEOMETRYCOLLECTION = function(obj) {
+	s = sapply(obj, st_bbox) # dispatch on class
 	c(xmin = min(s[1,]), xmax = max(s[2,]), ymin = min(s[3,]), ymax = max(s[4,]))
-})
+}
 
 #' @export
-setMethod("bbox", "sfc", function(obj) {
-	switch(class(obj)[1],
-		"sfc_POINT" = bbox.Mtrx(do.call(rbind, obj)),
-		"sfc_MULTIPOINT" = bbox.MtrxSet(obj),
-		"sfc_LINESTRING" = bbox.MtrxSet(obj),
-		"sfc_POLYGON" = bbox.MtrxSetSet(obj),
-		"sfc_MULTILINESTRING" = bbox.MtrxSetSet(obj),
-		"sfc_MULTIPOLYGON" =  bbox.MtrxSetSetSet(obj),
-		"sfc_GEOMETRYCOLLECTION" = bbox.GEOMETRYCOLLECTION(obj),
-		warning(paste("bbox: simple feature type", class(obj)[1], "not supported"))
-	)
-})
-
+st_bbox.sfc_POINT = function(obj) bbox.Mtrx(do.call(rbind, obj))
 #' @export
-setMethod("bbox", "sf",  function(obj) bbox(geometry(obj)))
+st_bbox.sfc_MULTIPOINT = bbox.MtrxSet
+#' @export
+st_bbox.sfc_LINESTRING = bbox.MtrxSet
+#' @export
+st_bbox.sfc_POLYGON = bbox.MtrxSetSet
+#' @export
+st_bbox.sfc_MULTILINESTRING = bbox.MtrxSetSet
+#' @export
+st_bbox.sfc_MULTIPOLYGON = bbox.MtrxSetSetSet
+#' @export
+st_bbox.sfc_GEOMETRYCOLLECTION = st_bbox.GEOMETRYCOLLECTION
+#' @export
+st_bbox.sf = function(obj) st_bbox(st_geometry(obj))

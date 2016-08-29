@@ -7,9 +7,9 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 	person("Ian", "Cook", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"))
 Depends: R (>= 3.0.0)
-Imports: utils, stats, graphics, methods, Rcpp, sp
+Imports: utils, stats, graphics, methods, Rcpp
 LinkingTo: Rcpp
-Suggests: maptools, rgeos, rgdal2 (>= 0.3), RPostgreSQL, testthat, knitr
+Suggests: sp, maptools, rgeos, rgdal2 (>= 0.3), RPostgreSQL, testthat, knitr
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
 License: GPL-2 | MIT + file LICENSE

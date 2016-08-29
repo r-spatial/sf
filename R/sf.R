@@ -27,12 +27,12 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_)
 #' 
 #' get geometry from sf object
 #' @param obj object of class \code{sf}
+#' @param ... ignored
 #' @export
-setMethod("geometry", "sf", function(obj) obj[[attr(obj, "sf_column")]])
+st_geometry = function(obj, ...) UseMethod("st_geometry")
 
-# S3:
-##geometry = function(obj, ...) UseMethod("geometry")
-## geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
+#' @export
+st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 
 #' create sf object
 #' 
@@ -122,9 +122,9 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @details \code{p4s} returns the PROJ.4 string; if an EPSG code is available, it constructs it from this, otherwise, it takes the \code{proj4string} attribute, if none of these is available (both are missing-valued), \code{NULL} is returned.
 #' @export
-p4s = function(obj) {
+st_p4s = function(obj) {
 	if (inherits(obj, "sf"))
-		obj = geometry(obj)
+		obj = st_geometry(obj)
 	epsg = attr(obj, "epsg")
 	if (!is.na(epsg))
 		return(paste0("+init=epsg:", epsg))

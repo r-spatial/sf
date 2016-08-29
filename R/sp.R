@@ -137,7 +137,7 @@ Polygons2POLYGON = function(PolygonsLst) {
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	geom = geometry(from)
+	geom = st_geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
 	sp::addAttrToGeom(as_Spatial(geom), data.frame(from), match.ID = FALSE)
 })

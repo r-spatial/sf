@@ -35,7 +35,7 @@ prnt.GEOMETRYCOLLECTION = function(x, ...)
 #' @name st_as_wkt
 #' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
 #' @export
-st_as_wkt = function(x, ...) UseMethod("st_as_wkt") # not needed if sp exports bbox
+st_as_wkt = function(x, ...) UseMethod("st_as_wkt")
 
 #' @name st_as_wkt
 #' @export

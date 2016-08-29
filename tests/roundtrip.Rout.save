@@ -40,13 +40,6 @@ attr(,"package")
 > 
 > # SpatialMultiPoints
 > library(sp)
-
-Attaching package: 'sp'
-
-The following objects are masked from 'package:sf':
-
-    bbox, geometry
-
 > set.seed(1331)
 > example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
 SpatialMultiPoints:
@@ -64,4 +57,4 @@ In data.row.names(row.names, rowsi, i) :
 > 
 > proc.time()
    user  system elapsed 
-  0.568   0.264   0.538 
+  0.552   0.280   0.546 
