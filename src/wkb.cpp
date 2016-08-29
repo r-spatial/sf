@@ -99,13 +99,13 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 		}
 	}
 	if (debug) {
-		Rprintf("sf_type: %d\n", sf_type);
-		Rprintf("n_dims:  %d\n", n_dims);
-		Rprintf("dim_str: %s\n", dim_str.c_str());
+		Rcpp::Rcout << "sf_type: " << sf_type << std::endl;
+		Rcpp::Rcout << "n_dims:  " << n_dims << std::endl;
+		Rcpp::Rcout << "dim_str: " << dim_str << std::endl;
 		if (srid != NULL)
-			Rprintf("srid: NA\n");
+			Rcpp::Rcout << "srid: NA" << std::endl;
 		else
-			Rprintf("srid: %d\n", *srid);
+			Rcpp::Rcout << "srid: " <<  *srid << std::endl;
 	}
 	switch(sf_type) {
 		case 1: 
