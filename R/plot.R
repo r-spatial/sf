@@ -144,7 +144,7 @@ p_bind = function(lst) {
 	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
 	do.call(rbind, ret) # replicates the NA to form an NA row
 }
-plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = FALSE) {
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -157,7 +157,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = 
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, add = FALSE) {
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -173,7 +173,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border, a
 }
 
 # plot single geometrycollection:
-plot_gc = function(x, pch, cex, bg, border, lty, lwd, col) {
+plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 	lapply(x, function(subx) {
 		args = list(list(subx), pch = pch, cex = cex, bg = bg, border = border, 
 			lty = lty, lwd = lwd, col = col, add = TRUE)
@@ -192,7 +192,7 @@ plot_gc = function(x, pch, cex, bg, border, lty, lwd, col) {
 }
 
 plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
-	col = 1, border, add = FALSE) {
+	col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
