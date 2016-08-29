@@ -16,12 +16,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-> round_trip = function(x, EWKB = FALSE) {
+> round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 + 	if (inherits(x, "sfi"))
 + 		x = st_sfc(list(x))
 + 	wkb = st_as_wkb(x, EWKB = EWKB)
 + 	class(wkb) = "WKB"
-+ 	y = st_as_sfc(wkb)
++ 	# print(wkb)
++ 	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
 + 	a = all.equal(x, y)
 + 	if (length(a) == 1 && is.logical(a))
 + 		TRUE
@@ -58,7 +59,11 @@ Type 'q()' to quit R.
  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALSE)
  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE, pureR = TRUE)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALSE, pureR = TRUE)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
 > proc.time()
    user  system elapsed 
-  0.348   0.308   0.351 
+  0.452   0.288   0.440 

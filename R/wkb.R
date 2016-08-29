@@ -8,7 +8,8 @@ charToWKB = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
 	if (substr(y, 1, 2) == "0x")
 		y = substr(y, 3, nchar(y))
-	as.raw(as.numeric(paste0("0x", sapply(1:(nchar(y)/2), function(x) substr(y, (x-1)*2+1, x*2)))))
+	as.raw(as.numeric(paste0("0x", sapply(seq_len(nchar(y)/2), 
+		function(x) substr(y, (x-1)*2+1, x*2))))) # SLOW, hence the Rcpp implementation
 }
 
 skip0x = function(x) {
@@ -20,6 +21,7 @@ skip0x = function(x) {
 
 #' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
+#' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code
 #' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary form.
 #' @examples
 #' wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
@@ -27,11 +29,16 @@ skip0x = function(x) {
 #' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
-st_as_sfc.WKB = function(x, ..., EWKB = FALSE) {
-    if (all(sapply(x, is.character)))
-		#x = structure(lapply(x, charToWKB), class = "WKB")
-		x = structure(HexToRaw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
-	ret = lapply(x, readWKB, EWKB = EWKB)
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
+    if (all(sapply(x, is.character))) # anticipate direct calls with raw
+		x <- if (pureR)
+				structure(lapply(x, charToWKB), class = "WKB")
+			else 
+				structure(HexToRaw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
+	ret = if (pureR)
+			lapply(x, readWKB, EWKB = EWKB)
+		else
+			ReadWKB(x, EWKB = EWKB, endian = .Platform$endian == "little")
 	if (EWKB) {
 		epsg = sapply(ret, function(x) attr(x, "epsg"))
 		epsg = if (is.list(epsg)) # they were all NULL -> missing
@@ -93,6 +100,7 @@ parseTypeEWKB = function(wkbType, endian) {
 		info = as.raw(as.integer(wkbType[1]) %/% 2^4)
 	}
 	tp = sf.tp[sf_type] 
+	stopifnot(!is.na(tp))
 	has_srid = as.logical(info & as.raw(2)) # 2-bit is "on"?
 	zm = if ((info & as.raw(12)) == as.raw(12))
 		"XYZM"
@@ -109,6 +117,7 @@ parseTypeEWKB = function(wkbType, endian) {
 
 parseTypeISO = function(wkbType) {
 	tp = sf.tp[wkbType %% 1000] 
+	stopifnot(!is.na(tp))
 	dd = wkbType %/% 1000
 	zm = if (dd == 0)
 		"XY"
@@ -142,13 +151,16 @@ readData = function(rc, EWKB = FALSE) {
 	# read data part:
 	ret = switch(pt$tp,
 		POINT = readPoint(rc, pt$dims, endian),
-		MULTIPOINT = readMPoints(rc, pt$dims, endian, EWKB),
 		LINESTRING = readMatrix(rc, pt$dims, endian),
-		POLYGON = , TRIANGLE = readMatrixList(rc, pt$dims, endian),
-		MULTILINESTRING = , MULTIPOLYGON = , POLYHEDRALSURFACE = , 
+		POLYGON = , 
+		TRIANGLE = readMatrixList(rc, pt$dims, endian),
+		MULTIPOINT = readMPoints(rc, pt$dims, endian, EWKB),
+		MULTILINESTRING = , 
+		MULTIPOLYGON = , 
+		POLYHEDRALSURFACE = , 
 		TIN = lapply(readGC(rc, pt$dims, endian, EWKB), unclass),
 		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
-			stop(paste("type", pt$tp, "unsupported")))
+		stop(paste("type", pt$tp, "unsupported")))
 	class(ret) <- c(pt$zm, pt$tp, "sfi")
 	if (!is.na(srid))
 		attr(ret, "epsg") <- srid
@@ -160,7 +172,7 @@ readPoint = function(rc, dims, endian) {
 }
 readMPoints = function(rc, dims, endian, EWKB) {
 	npts = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
-	do.call(rbind, lapply(1:npts, function(x) readData(rc, EWKB)))
+	do.call(rbind, lapply(seq_len(npts), function(x) readData(rc, EWKB)))
 }
 readMatrix = function(rc, dims, endian) {
 	npts = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
@@ -169,15 +181,15 @@ readMatrix = function(rc, dims, endian) {
 }
 readMatrixList = function(rc, dims, endian) {
 	nmtrx = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
-	lapply(1:nmtrx, function(x) readMatrix(rc, dims, endian))
+	lapply(seq_len(nmtrx), function(x) readMatrix(rc, dims, endian))
 }
-readMatrixListList = function(rc, dims, endian) {
-	nmtrxl = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
-	lapply(1:nmtrxl, function(x) readMatrixList(rc, dims, endian))
-}
+#readMatrixListList = function(rc, dims, endian) {
+#	nmtrxl = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
+#	lapply(seq_len(nmtrxl), function(x) readMatrixList(rc, dims, endian))
+#}
 readGC = function(rc, dims, endian, EWKB) {
 	ngc = readBin(rc, what = "integer", n = 1L, size = 4L, endian = endian)
-	lapply(1:ngc, function(x) readData(rc, EWKB))
+	lapply(seq_len(ngc), function(x) readData(rc, EWKB))
 }
 
 #' convert sfc object to an WKB object
@@ -227,7 +239,7 @@ st_as_wkb.sfi = function(x, ..., endian = .Platform$endian) {
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))
 	# data:
-	writeData(x, rc, endian)
+	writeData(x, rc, endian, ...)
 	rawConnectionValue(rc)
 }
 
@@ -244,11 +256,14 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 	# write out x:
 	switch(class(x)[2],
 		POINT = writeBin(as.vector(as.double(x)), rc, size = 8L, endian = endian),
-		MULTIPOINT = writeMPoints(x, rc, endian, EWKB),
 		LINESTRING = writeMatrix(x, rc, endian),
-		POLYGON = , TRIANGLE = writeMatrixList(x, rc, endian),
-		POLYHEDRALSURFACE = , TIN = , 
-		MULTILINESTRING = , MULTIPOLYGON = writeMulti(x, rc, endian, EWKB),
+		POLYGON = , 
+		TRIANGLE = writeMatrixList(x, rc, endian),
+		MULTIPOINT = writeMPoints(x, rc, endian, EWKB),
+		POLYHEDRALSURFACE = , 
+		TIN = , 
+		MULTILINESTRING = , 
+		MULTIPOLYGON = writeMulti(x, rc, endian, EWKB),
 		GEOMETRYCOLLECTION = writeGC(x, rc, endian, EWKB),
 		stop(paste("unexpected possibility:", class(x)))
 	)

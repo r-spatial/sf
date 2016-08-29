@@ -1,10 +1,11 @@
 library(sf)
-round_trip = function(x, EWKB = FALSE) {
+round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 	if (inherits(x, "sfi"))
 		x = st_sfc(list(x))
 	wkb = st_as_wkb(x, EWKB = EWKB)
 	class(wkb) = "WKB"
-	y = st_as_sfc(wkb)
+	# print(wkb)
+	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
 	a = all.equal(x, y)
 	if (length(a) == 1 && is.logical(a))
 		TRUE
@@ -39,3 +40,5 @@ gc = st_geometrycollection(list(p2, ls, pl1, mp1))
 
 sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE)
 sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALSE)
+sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE, pureR = TRUE)
+sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALSE, pureR = TRUE)
