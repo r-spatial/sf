@@ -215,7 +215,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	bb = matrix(st_bbox(x), 2, byrow = TRUE, dimnames=list(c("x", "y"), c("min", "max")))
+	bb = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	sp = new("Spatial", bbox = bb, proj4string = sp::CRS(attr(x, "proj4string")))
 	sp::plot(sp, ..., xlim = xlim, ylim = ylim, asp = asp, axes = axes, bg = bg, 
     	xaxs = xaxs, yaxs = yaxs, lab = lab, setParUsrBB = setParUsrBB, bgMap = bgMap, 
