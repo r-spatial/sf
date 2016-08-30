@@ -21,8 +21,8 @@ skip0x = function(x) {
 
 #' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
-#' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code
-#' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary form.
+#' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the wkb differs from the host machine (\code{.Platform$endian}).
+#' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 #' @examples
 #' wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
@@ -37,7 +37,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
 				structure(HexToRaw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
 	ret = if (pureR)
 			lapply(x, readWKB, EWKB = EWKB)
-		else
+		else # use C++ code:
 			ReadWKB(x, EWKB = EWKB, endian = .Platform$endian == "little")
 	if (EWKB) {
 		epsg = sapply(ret, function(x) attr(x, "epsg"))

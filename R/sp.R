@@ -174,9 +174,9 @@ sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
 	l = if (class(from)[1]  == "sfc_MULTILINESTRING")
-		lapply(from, function(x) sp::Lines(lapply(x, sp::Line)))
+		lapply(from, function(x) sp::Lines(lapply(x, function(y) sp::Line(unclass(y))), "ID"))
 	else 
-		lapply(from, function(x) sp::Lines(list(sp::Line(x))))
+		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
 	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "proj4string")))

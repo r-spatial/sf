@@ -55,6 +55,94 @@ In data.row.names(row.names, rowsi, i) :
 > all.equal(as(m, "Spatial"), mpdf) # TRUE
 [1] TRUE
 > 
+> demo(meuse, ask = FALSE, echo = FALSE)
+> summary(st_as_sf(meuse))
+    cadmium           copper            lead            zinc       
+ Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
+ 1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
+ Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
+ Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  
+ 3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  
+ Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  
+                                                                   
+      elev             dist               om         ffreq  soil   lime   
+ Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  
+ 1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  
+ Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          
+ Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
+ 3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
+ Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
+                                    NA's   :2                             
+    landuse       dist.m                geometry  
+ W      :50   Min.   :  10.0   POINT        :155  
+ Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
+ Am     :22   Median : 270.0   +init=epsg...:  0  
+ Fw     :10   Mean   : 290.3                      
+ Ab     : 8   3rd Qu.: 450.0                      
+ (Other):25   Max.   :1000.0                      
+ NA's   : 1                                       
+> summary(st_as_sf(meuse.grid))
+     part.a           part.b            dist        soil     ffreq   
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
+ Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
+ Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
+ 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
+ Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
+          geometry   
+ POINT        :3103  
+ epsg:28992   :   0  
+ +init=epsg...:   0  
+                     
+                     
+                     
+> summary(st_as_sf(meuse.area))
+          geometry
+ POLYGON      :1  
+ epsg:28992   :0  
+ +init=epsg...:0  
+> summary(st_as_sf(meuse.riv))
+          geometry
+ POLYGON      :1  
+ epsg:28992   :0  
+ +init=epsg...:0  
+> summary(st_as_sf(as(meuse.riv, "SpatialLines")))
+          geometry
+ LINESTRING   :1  
+ epsg:28992   :0  
+ +init=epsg...:0  
+> pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
+> summary(st_as_sf(pol.grd))
+     part.a           part.b            dist        soil     ffreq   
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
+ Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
+ Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
+ 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
+ Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
+          geometry   
+ POLYGON      :3103  
+ epsg:28992   :   0  
+ +init=epsg...:   0  
+                     
+                     
+                     
+> summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+     part.a           part.b            dist        soil     ffreq   
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
+ 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
+ Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
+ Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
+ 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
+ Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
+          geometry   
+ LINESTRING   :3103  
+ epsg:28992   :   0  
+ +init=epsg...:   0  
+                     
+                     
+                     
+> 
 > proc.time()
    user  system elapsed 
-  0.552   0.280   0.546 
+  3.672   0.308   3.669 

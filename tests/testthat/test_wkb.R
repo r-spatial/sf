@@ -21,3 +21,9 @@ test_that("Char -> Raw conversion in R and C++ gives identical results", {
 	sf:::HexToRaw( "01010000204071000000000000801A064100000000AC5C1441")[[1]]
   )
 })
+
+test_that("C++ conversion of big-endian fails on little-endian machine", {
+  wkb = structure(list("0x00010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
+  if (.Platform$endian == "little")
+    expect_error(st_as_sfc(wkb, EWKB = TRUE), "non native endian: use pureR = TRUE")
+})
