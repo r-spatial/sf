@@ -9,6 +9,11 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @name st_as_sf
 #'
 #' @param relation_to_geometry character vector; see details section of \link{st_sf}
+#' @param coords in case of point data: coordinate names or numbers
+#' @param third passed on to \link{st_point} (only when coords is given)
+#' @param epsg integer denoting the epsg ID (only when coords is given)
+#' @param proj4string character; giving the proj4 string (only when coords is given)
+#' @param remove_coordinates logical; when coords is given, remove coordinate columns from data.frame?
 #' 
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -18,10 +23,23 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' d$geom = st_sfc(list(pt1, pt2))
 #' df = st_as_sf(d)
 #' d$geom2 = st_sfc(list(pt1, pt2))
-#' st_as_sf(df) # should warn
+#' st_as_sf(d) # should warn
+#' data(meuse, package = "sp")
+#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+#' meuse_sf[1:3,]
+#' summary(meuse_sf)
 #' @export
-st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_)
-	do.call(st_sf, c(as.list(x), relation_to_geometry = relation_to_geometry))
+st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
+		epsg = NA_integer_, proj4string = NA_character_, remove_coordinates = TRUE) {
+	if (! missing(coords)) {
+		geom = st_sfc(lapply(seq_len(nrow(x)), function(i) st_point(unlist(x[i, coords]), third = third)),
+			epsg = epsg, proj4string = proj4string)
+		x$geometry = geom
+		if (remove_coordinates)
+			x[coords] = NULL
+	}
+	do.call(st_sf, c(as.list(x), list(...), relation_to_geometry = relation_to_geometry))
+}
 
 #' get geometry from sf object
 #' 

@@ -48,28 +48,18 @@ Type 'q()' to quit R.
 +   round_trip(cn, "MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))")
 + 
 + 
-+ options(warn = -1)
-+ query = paste0("SELECT geom from meuse2 limit 2;")
-+ returnstr = dbGetQuery(cn, query)$geom
-+ # print(returnstr)
-+ n = nchar(returnstr)/2
-+ wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
-+   sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
-+ class(wkb) = "WKB"
-+ ret = st_as_sfc(wkb, EWKB = TRUE)
-+ ret 
++   options(warn = -1)
++   query = paste0("SELECT geom from meuse2 limit 2;")
++   returnstr = dbGetQuery(cn, query)$geom
++   # print(returnstr)
++   n = nchar(returnstr)/2
++   wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
++     sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
++   class(wkb) = "WKB"
++   ret = st_as_sfc(wkb, EWKB = TRUE)
++   ret 
 + 
-+ # nc:
-+ #query = paste0("SELECT geom from nc;")
-+ #returnstr = dbGetQuery(cn, query)$geom
-+ #wkb = lapply(returnstr, function(y) { 
-+ #	  n = nchar(y)/2
-+ #	  as.raw(as.numeric(paste0("0x", sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2)))))
-+ #	}
-+ #)
-+ #class(wkb) = "WKB"
-+ #ret = st_as_sfc(wkb)
-+ #ret 
++   m3 = st_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
 + 
 + }
 Loading required package: DBI
@@ -93,22 +83,7 @@ MULTIPOLYGON(((0 0,1 0,1 1,0 0)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1
 MULTIPOLYGON(((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2)), ((2 2, 3 2, 3 3, 2 2))) 
 01050000000300000001020000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F000000000000000000000000000000000102000000040000009A9999999999C93F9A9999999999C93F9A9999999999E93F9A9999999999C93F9A9999999999E93F9A9999999999E93F9A9999999999C93F9A9999999999C93F01020000000400000000000000000000400000000000000040000000000000084000000000000000400000000000000840000000000000084000000000000000400000000000000040 
 MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2)) <--> MULTILINESTRING((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2), (2 2, 3 2, 3 3, 2 2)) 
-[[1]]
-SRID=28992;POINT(181072 333611) 
-
-[[2]]
-SRID=28992;POINT(181025 333558) 
-
-attr(,"class")
-[1] "sfc_POINT" "sfc"      
-attr(,"epsg")
-[1] 28992
-attr(,"bbox")
-  xmin   ymin   xmax   ymax 
-181025 333558 181072 333611 
-attr(,"proj4string")
-[1] "+init=epsg:28992 +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
 > 
 > proc.time()
    user  system elapsed 
-  0.576   0.300   0.594 
+  0.632   0.268   0.656 

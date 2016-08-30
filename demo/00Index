@@ -1,1 +1,3 @@
-basic	simple feature test script
+basic		simple feature test script
+meuse_sf	create meuse simple feature table from data.frame
+webmap		webmap demo from sp, modified to plot sf objects
