@@ -72,7 +72,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	# add sfc column, with right name:
 	object = as.list(substitute(list(...)))[-1L] 
 	arg_nm = sapply(object, function(x) deparse(x))
-	sfc_name = if (nzchar(names(x)[sf_column]))
+	sfc_name = if (!is.null(names(x)) && nzchar(names(x)[sf_column]))
 		names(x)[sf_column]
 	else 
 		make.names(arg_nm[sf_column])
