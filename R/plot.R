@@ -14,7 +14,17 @@
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot}
+#' @param pch plotting symbol
+#' @param cex symbol size
+#' @param bg symbol background color
+#' @param lty line type
+#' @param lwd line width
+#' @param col color
+#' @param border color of polygon border
+#' @param add logical; add to current plot?
+#' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @method plot sf
+#' @name plot
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -77,6 +87,8 @@ plot.sf <- function(x, y, ...) {
 	plot(st_geometry(x), ...)
 }
 
+#' @name plot
+#' @export
 plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
 	stopifnot(missing(y))
@@ -90,6 +102,9 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	points(do.call(rbind, x), pch = pch, col = col, bg = bg, cex = cex, lwd = lwd, lty = lty,
 		type = type)
 }
+
+#' @name plot
+#' @export
 plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
 	stopifnot(missing(y))
@@ -106,6 +121,9 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 		cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
 	invisible(NULL)
 }
+
+#' @name plot
+#' @export
 plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l', 
 		add = FALSE) {
 # FIXME: take care of lend, ljoin, and lmitre
@@ -120,6 +138,9 @@ plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, ty
 		lines(x[[i]], lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type))
 	invisible(NULL)
 }
+
+#' @name plot
+#' @export
 plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l',
 		add = FALSE) {
 # FIXME: take care of lend, ljoin, and lmitre
@@ -145,6 +166,9 @@ p_bind = function(lst) {
 	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
 	do.call(rbind, ret) # replicates the NA to form an NA row
 }
+
+#' @name plot
+#' @export
 plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
@@ -158,6 +182,9 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
+
+#' @name plot
+#' @export
 plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
@@ -192,6 +219,8 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 	invisible(NULL)
 }
 
+#' @name plot
+#' @export
 plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre

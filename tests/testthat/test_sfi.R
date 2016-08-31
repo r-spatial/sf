@@ -37,3 +37,20 @@ test_that("xx2multixx works", {
   pts = list(outer, hole1, hole2)
   expect_identical(sf:::POLYGON2MULTIPOLYGON(st_polygon(pts)), st_multipolygon(list(pts)))
 })
+
+test_that("format works", {
+	expect_identical(format(st_multipoint(matrix(1:6/6,3))), "MULTIPOINT(0.16666666666666...")
+	expect_identical(format(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
+		"MULTIPOINT(0.16666666666666...")
+	expect_identical(obj_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
+		"MULTIPOINT(0...")
+	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "simple_feature")
+})
+
+test_that("coerceType works in sfc", {
+  m = matrix(1:6,,2)
+  sfc = st_sfc(list(st_linestring(m), st_multilinestring(list(m))))
+  expect_true(all(class(sfc) == c("sfc_MULTILINESTRING", "sfc")))
+  sfc = st_sfc(list(st_point(1:2), st_multilinestring(list(m))))
+  expect_true(all(class(sfc) == c("sfc_GEOMETRYCOLLECTION", "sfc")))
+})

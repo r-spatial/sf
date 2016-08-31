@@ -32,9 +32,9 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
 		epsg = NA_integer_, proj4string = NA_character_, remove_coordinates = TRUE) {
 	if (! missing(coords)) {
-		geom = st_sfc(lapply(seq_len(nrow(x)), function(i) st_point(unlist(x[i, coords]), third = third)),
-			epsg = epsg, proj4string = proj4string)
-		x$geometry = geom
+		x$geometry = st_sfc(lapply(seq_len(nrow(x)), 
+				function(i) st_point(unlist(x[i, coords]), third = third)
+					), epsg = epsg, proj4string = proj4string)
 		if (remove_coordinates)
 			x[coords] = NULL
 	}
@@ -102,9 +102,8 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		levels = c("field", "lattice", "entity"))
 	names(f) = names(df)[-sf_column]
 	attr(df, "relation_to_geometry") = f
-	# TODO: check that lattice has to be anything but POINT
-	class(df) = c("sf", class(df)) # OR: c("sf", "data.frame") ??
-	df
+	# TODO: check that if one of them is lattice, geom cannot be POINT
+	structure(df, class = c("sf", class(df)))
 }
 
 #' @name sf
