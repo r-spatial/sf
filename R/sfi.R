@@ -13,14 +13,17 @@ getClassDim = function(x, d, third = "XYZ", type) {
 }
 
 Pt = function(x, third = "XYZ", type) {
+	stopifnot(is.numeric(x))
 	class(x) = getClassDim(x, length(x), third, type)
 	x
 }
 Mtrx = function(x, third = "XYZ", type) {
+	stopifnot(is.matrix(x) && is.numeric(x))
 	class(x) = getClassDim(x, ncol(x), third, type)
 	x
 }
 MtrxSet = function(x, third = "XYZ", type, needClosed = FALSE) {
+	stopifnot(is.list(x))
 	nc = unique(sapply(x, ncol))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
@@ -31,6 +34,7 @@ MtrxSet = function(x, third = "XYZ", type, needClosed = FALSE) {
 	x
 }
 MtrxSetSet = function(x, third = "XYZ", type, needClosed = FALSE) {
+	stopifnot(is.list(x) && all(sapply(x, is.list)))
 	nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
 	if (length(nc) != 1)
 		stop("matrices having unequal number of columns")
