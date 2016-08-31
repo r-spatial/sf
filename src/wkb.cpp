@@ -136,6 +136,26 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true, srid);
 			break;
+		case 8:
+			output[0] = ReadNumericMatrix(pt, n_dims, addclass ?
+				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfi") : "", srid); 
+			break;
+		case 11:
+			output[0] = ReadGC(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfi"), false, srid);
+			break;
+		case 12:
+			output[0] = ReadGC(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfi"), false, srid);
+			break;
+		case 13:
+			output[0] = ReadNumericMatrix(pt, n_dims, addclass ?
+				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfi") : "", srid); 
+			break;
+		case 14: 
+			output[0] = ReadMatrixList(pt, n_dims, addclass ?
+				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfi") : "", srid);
+			break;
 		case 15: 
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfi"), false, srid);
