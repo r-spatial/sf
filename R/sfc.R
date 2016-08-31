@@ -27,6 +27,7 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)
+	attr(lst, "bbox") = rep(0,4)
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0L) {
 		proj4string = if (requireNamespace("sp", quietly = TRUE))
 				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
@@ -39,7 +40,7 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 
 # coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:
 coerceTypes = function(lst) {
-	if (any(! sapply(lst, function(x) inherits(x, "sfi"))))
+	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfi"))
 		stop("list item(s) not of class sfi") # sanity check
 	cls = unique(sapply(lst, function(x) class(x)[2L]))
 	if (length(cls) > 1) {

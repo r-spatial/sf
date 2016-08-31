@@ -1,18 +1,22 @@
 bbox.Mtrx = function(obj) {
-	r = apply(obj, 2L, range) # min row 1, max row 2
-	c(xmin = r[1L,1L], ymin = r[1L,2L], xmax = r[2L,1L], ymax = r[2L,2L])
+	# r = apply(obj, 2L, range) # min row 1, max row 2
+	# c(xmin = r[1L,1L], ymin = r[1L,2L], xmax = r[2L,1L], ymax = r[2L,2L])
+	structure(GetBBOX(list(obj), 1), names = c("xmin", "ymin", "xmax", "ymax"))
 }
 bbox.MtrxSet = function(obj) {
-	s = sapply(obj, bbox.Mtrx)
-	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	#s = sapply(obj, bbox.Mtrx)
+	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	structure(GetBBOX(obj, 1), names = c("xmin", "ymin", "xmax", "ymax"))
 }
 bbox.MtrxSetSet = function(obj) {
-	s = sapply(obj, bbox.MtrxSet)
-	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	#s = sapply(obj, bbox.MtrxSet)
+	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	structure(GetBBOX(obj, 2), names = c("xmin", "ymin", "xmax", "ymax"))
 }
 bbox.MtrxSetSetSet = function(obj) {
-	s = sapply(obj, bbox.MtrxSetSet)
-	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	#s = sapply(obj, bbox.MtrxSetSet)
+	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	structure(GetBBOX(obj, 3), names = c("xmin", "ymin", "xmax", "ymax"))
 }
 
 ##' Return bounding of a simple feature or simple feature set
@@ -41,7 +45,8 @@ st_bbox.GEOMETRYCOLLECTION = function(obj) {
 }
 
 #' @export
-st_bbox.sfc_POINT = function(obj) bbox.Mtrx(do.call(rbind, obj))
+st_bbox.sfc_POINT = function(obj)
+	structure(GetBBOX(obj, 0), names = c("xmin", "ymin", "xmax", "ymax")) 
 #' @export
 st_bbox.sfc_MULTIPOINT = bbox.MtrxSet
 #' @export
