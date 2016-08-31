@@ -5,12 +5,10 @@ bbox.Mtrx = function(obj) {
 bbox.MtrxSet = function(obj) {
 	s = sapply(obj, bbox.Mtrx)
 	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
-	# bbox.Mtrx(do.call(rbind, obj))
 }
 bbox.MtrxSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSet)
 	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
-	# bbox.Mtrx(do.call(rbind, lapply(obj, function(x) do.call(rbind, x))))
 }
 bbox.MtrxSetSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSetSet)
