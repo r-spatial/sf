@@ -1,24 +1,20 @@
-bb = function(xmin, ymin, xmax, ymax) {
-	c(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax)
-	# or return matrix instead, compatible to sp::bbox?
-}
-
 bbox.Mtrx = function(obj) {
-	mn = apply(obj, 2, min)
-	mx = apply(obj, 2, max)
-	bb(xmin = mn[1], ymin = mn[2], xmax = mx[1], ymax = mx[2])
+	r = apply(obj, 2L, range) # min row 1, max row 2
+	c(xmin = r[1L,1L], ymin = r[1L,2L], xmax = r[2L,1L], ymax = r[2L,2L])
 }
 bbox.MtrxSet = function(obj) {
 	s = sapply(obj, bbox.Mtrx)
-	bb(xmin = min(s[1,]), ymin = min(s[2,]), xmax = max(s[3,]), ymax = max(s[4,]))
+	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	# bbox.Mtrx(do.call(rbind, obj))
 }
 bbox.MtrxSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSet)
-	bb(xmin = min(s[1,]), ymin = min(s[2,]), xmax = max(s[3,]), ymax = max(s[4,]))
+	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
+	# bbox.Mtrx(do.call(rbind, lapply(obj, function(x) do.call(rbind, x))))
 }
 bbox.MtrxSetSetSet = function(obj) {
 	s = sapply(obj, bbox.MtrxSetSet)
-	bb(xmin = min(s[1,]), ymin = min(s[2,]), xmax = max(s[3,]), ymax = max(s[4,]))
+	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 }
 
 ##' Return bounding of a simple feature or simple feature set
@@ -29,7 +25,7 @@ bbox.MtrxSetSetSet = function(obj) {
 st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
-st_bbox.POINT = function(obj) bb(xmin = obj[1], ymin = obj[2], xmax = obj[1], ymax = obj[2])
+st_bbox.POINT = function(obj) c(xmin = obj[1L], ymin = obj[2L], xmax = obj[1L], ymax = obj[2L])
 #' @export
 st_bbox.MULTIPOINT = bbox.Mtrx
 #' @export
@@ -43,7 +39,7 @@ st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
 #' @export
 st_bbox.GEOMETRYCOLLECTION = function(obj) {
 	s = sapply(obj, st_bbox) # dispatch on class
-	bb(xmin = min(s[1,]), ymin = min(s[2,]), xmax = max(s[3,]), ymax = max(s[4,]))
+	c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 }
 
 #' @export

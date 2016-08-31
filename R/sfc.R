@@ -24,10 +24,10 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	if (!is.list(lst))
 		lst = list(lst)
 	lst = coerceTypes(lst)
-	class(lst) = c(paste0("sfc_", class(lst[[1]])[2]), "sfc")
+	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)
-	if (missing(proj4string) && !is.na(epsg) && epsg > 0) {
+	if (missing(proj4string) && !is.na(epsg) && epsg > 0L) {
 		proj4string = if (requireNamespace("sp", quietly = TRUE))
 				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
 			else
@@ -41,7 +41,7 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 coerceTypes = function(lst) {
 	if (any(! sapply(lst, function(x) inherits(x, "sfi"))))
 		stop("list item(s) not of class sfi") # sanity check
-	cls = unique(sapply(lst, function(x) tail(class(x), 2L)[1]))
+	cls = unique(sapply(lst, function(x) class(x)[2L]))
 	if (length(cls) > 1) {
 		if (all(cls %in% c("POINT", "MULTIPOINT")))
 			lapply(lst, 
@@ -79,14 +79,14 @@ coerceTypes = function(lst) {
 #' @param maxp4s maximum number of characters to print from the PROJ.4 string
 #' @method summary sfc
 #' @export
-summary.sfc = function(object, ..., maxsum = 7, maxp4s = 10) {
+summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 	u = factor(sapply(object, function(x) WKT_name(x, FALSE)))
     epsg = paste0("epsg:", attr(object, "epsg"))
 	levels(u) = c(levels(u), epsg)
     p4s = attr(object, "proj4string")
 	if (!is.na(p4s)) { 
 		if (nchar(p4s) > maxp4s)
-			p4s = paste0(substr(p4s, 1, maxp4s), "...")
+			p4s = paste0(substr(p4s, 1L, maxp4s), "...")
 		levels(u) = c(levels(u), p4s)	
 	}
     summary(u, maxsum = maxsum, ...)
@@ -109,5 +109,5 @@ type_sum.sfc <- function(x, ...) {
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {
-	sapply(x, function(sfi) format(sfi, digits = 15))
+	sapply(x, function(sfi) format(sfi, digits = 15L))
 }

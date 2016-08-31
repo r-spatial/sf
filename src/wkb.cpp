@@ -149,13 +149,8 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"), srid);
 			break;
 		default: 
-			throw std::range_error("unknown type in switch");
+			throw std::range_error("reading this sf type is not (yet) supported, please file an issue");
 	}
-	// handle srid
-	//if (srid != NULL)
-	//	output.attr("srid") = (double) *srid;
-	// handle sf_type -> class
-	// handle dim (in class?)
 	return(output);
 }
 
@@ -198,7 +193,8 @@ Rcpp::NumericVector ReadNumericVector(unsigned char **pt, int n,
 	Rcpp::NumericVector ret(n);
 	double *d = (double *) (*pt);
 	for (int i=0; i<n; i++)
-		ret(i) = *d++, (*pt) += 8;
+		ret(i) = *d++;
+	(*pt) = (unsigned char *) d;
 	if (cls.size() == 3) {
 		ret.attr("class") = cls;
 		if (srid != NULL)
@@ -215,7 +211,8 @@ Rcpp::NumericMatrix ReadNumericMatrix(unsigned char **pt, int n_dims,
 	double *d = (double *) (*pt);
 	for (int i=0; i<(*npts); i++)
 		for (int j=0; j<n_dims; j++)
-			ret(i,j) = *d++, (*pt) += 8;
+			ret(i,j) = *d++;
+	(*pt) = (unsigned char *) d;
 	if (cls.size() == 3) {
 		ret.attr("class") = cls;
 		if (srid != NULL)
