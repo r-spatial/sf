@@ -23,7 +23,8 @@ format.sfc = function(x, ..., digits = 30) {
 st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	if (!is.list(lst))
 		lst = list(lst)
-	lst = coerceTypes(lst)
+	if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
+		lst = coerceTypes(lst)
 	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)

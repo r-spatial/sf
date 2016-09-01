@@ -15,7 +15,8 @@ Rcpp::List ReadMatrixList(unsigned char **pt, int n_dims,
 	Rcpp::CharacterVector cls, uint32_t *srid);
 Rcpp::List ReadGC(unsigned char **pt, int n_dims, bool EWKB, int endian, 
 	Rcpp::CharacterVector cls, bool addclass, uint32_t *srid);
-Rcpp::List ReadData(unsigned char **pt, bool EWKB, int endian, bool debug, bool addclass);
+Rcpp::List ReadData(unsigned char **pt, bool EWKB, int endian, bool debug, 
+	bool addclass, int *type);
 Rcpp::NumericVector GetBBOX(Rcpp::List sf, int depth);
 
 // [[Rcpp::export]]
@@ -47,18 +48,26 @@ Rcpp::List HexToRaw(Rcpp::CharacterVector cx) {
 // [[Rcpp::export]]
 Rcpp::List ReadWKB(Rcpp::List wkb_list, bool EWKB = false, int endian = 0, bool debug = false) {
 	Rcpp::List output(wkb_list.size());
+
+	int type = 0, last_type = 0, n_types = 0;
+
 	for (int i = 0; i < wkb_list.size(); i++) {
 		Rcpp::RawVector raw = wkb_list[i];
 		unsigned char *pt = &(raw[0]);
-		output[i] = ReadData(&pt, EWKB, endian, debug, true)[0];
+		output[i] = ReadData(&pt, EWKB, endian, debug, true, &type)[0];
+		if (type != last_type) {
+			last_type = type;
+			n_types++;
+		}
 	}
+	output.attr("n_types") = n_types;
 	return output;
 }
 
 Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0, 
-		bool debug = false, bool addclass = true) {
+		bool debug = false, bool addclass = true, int *type = NULL) {
 
-	Rcpp::List output(1);
+	Rcpp::List output(1); // to make result type opaque
 	// do endian check, only support native endian WKB:
 	if ((int) (**pt) != (int) endian)
 		throw std::range_error("non native endian: use pureR = TRUE");
@@ -172,6 +181,8 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 		default: 
 			throw std::range_error("reading this sf type is not (yet) supported, please file an issue");
 	}
+	if (type != NULL)
+		*type = sf_type;
 	return(output);
 }
 
