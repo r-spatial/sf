@@ -24,6 +24,8 @@ Rcpp::List HexToRaw(Rcpp::CharacterVector cx) {
 // HexToRaw modified from cmhh, see https://github.com/ianmcook/wkb/issues/10
 // @cmhh: if you make yourself known, I can add you to the contributors
 
+// convert a hexadecimal string into a raw vector
+
 	Rcpp::List output(cx.size());
 	Rcpp::CharacterVector invec(cx);
 	for (int j=0; j<cx.size(); j++) {
@@ -60,7 +62,7 @@ Rcpp::List ReadWKB(Rcpp::List wkb_list, bool EWKB = false, int endian = 0, bool 
 			n_types++;
 		}
 	}
-	output.attr("n_types") = n_types;
+	output.attr("n_types") = n_types; // if this is 1, we can skip the coerceTypes later on
 	return output;
 }
 
@@ -70,10 +72,10 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 	Rcpp::List output(1); // to make result type opaque
 	// do endian check, only support native endian WKB:
 	if ((int) (**pt) != (int) endian)
-		throw std::range_error("non native endian: use pureR = TRUE");
+		throw std::range_error("non native endian: use pureR = TRUE"); // life is too short
 	(*pt)++;
 	// read type:
-	uint32_t *wkbType = (uint32_t *) (*pt); // requires -std=c++11
+	uint32_t *wkbType = (uint32_t *) (*pt); // uint32_t requires -std=c++11
 	(*pt) += 4;
 	uint32_t *srid = NULL;
 	// Rprintf("[%u]\n", *wkbType);
@@ -178,8 +180,10 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 			output[0] = ReadMatrixList(pt, n_dims,
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"), srid);
 			break;
-		default: 
-			throw std::range_error("reading this sf type is not (yet) supported, please file an issue");
+		default: {
+			Rcpp::Rcout << "type is " << sf_type << "\n";
+			throw std::range_error("reading this sf type is not supported, please file an issue");
+		}
 	}
 	if (type != NULL)
 		*type = sf_type;
