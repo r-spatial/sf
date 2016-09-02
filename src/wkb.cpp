@@ -54,6 +54,7 @@ Rcpp::List ReadWKB(Rcpp::List wkb_list, bool EWKB = false, int endian = 0, bool 
 	int type = 0, last_type = 0, n_types = 0;
 
 	for (int i = 0; i < wkb_list.size(); i++) {
+		Rcpp::checkUserInterrupt();
 		Rcpp::RawVector raw = wkb_list[i];
 		unsigned char *pt = &(raw[0]);
 		output[i] = ReadData(&pt, EWKB, endian, debug, true, &type)[0];

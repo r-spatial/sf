@@ -11,6 +11,7 @@ Imports: utils, stats, graphics, methods, Rcpp
 LinkingTo: Rcpp
 Suggests: sp, maptools, rgeos, rgdal2 (>= 0.3), RPostgreSQL, testthat, knitr
 VignetteBuilder: knitr
+SystemRequirements: C++11
 Description: Support for simple features, a standardized way to encode spatial data, in R.
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/

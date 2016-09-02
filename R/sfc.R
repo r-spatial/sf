@@ -25,6 +25,8 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 		lst = list(lst)
 	if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
 		lst = coerceTypes(lst)
+	else
+		attr(lst, "n_types") = NULL # remove
 	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)

@@ -30,3 +30,19 @@ then
   echo ''
   exit 1
 fi
+
+GEOS_CONFIG=`which geos-config`
+if test `geos-config --version`
+then
+  echo "geos version" `geos-config --version`
+  GEOS_LIBS=`geos-config --libs`
+  GEOS_CPPFLAGS=`geos-config --cflags`
+  HAVE_GEOS="-DHAVE_GEOS"
+else
+  echo "no geos support: geos not installed"
+fi
+AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS} ${HAVE_GEOS}"])
+AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS}"])
+
+AC_CONFIG_FILES(src/Makevars)
+AC_OUTPUT

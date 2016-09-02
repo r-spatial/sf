@@ -201,7 +201,7 @@ readGC = function(rc, dims, endian, EWKB) {
 #'
 #' convert sfc object to an WKB object
 #' @param x object to convert
-#' @param ... further arguments
+#' @param ... ignored
 #' @name st_as_wkb
 #' @export
 st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
@@ -237,14 +237,15 @@ createType = function(x, endian, EWKB = FALSE) {
 }
 
 #' @name st_as_wkb
+#' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @export
-st_as_wkb.sfi = function(x, ..., endian = .Platform$endian) {
+st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	# preamble:
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))
 	# data:
-	writeData(x, rc, endian, ...)
+	writeData(x, rc, endian, EWKB)
 	rawConnectionValue(rc)
 }
 
