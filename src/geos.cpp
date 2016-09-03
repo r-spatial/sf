@@ -10,13 +10,13 @@ bool have_geos(bool err = false) {
 #include <iostream>
 #include <sstream>
 
+#include <Rcpp.h>
+
 #ifdef HAVE_GEOS
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKBReader.h>
 #include <geos/operation/distance/DistanceOp.h>
 #endif
-
-#include <Rcpp.h>
 
 // [[Rcpp::export]]
 double wkb_dist(Rcpp::RawVector wkb1, Rcpp::RawVector wkb2) {
