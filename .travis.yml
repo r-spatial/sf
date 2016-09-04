@@ -1,6 +1,5 @@
 before_install:
   - pwd
-  - ls -R /usr/include/geos*
   - export CURWD=`pwd`
   - cd
   - sudo apt-get install libproj-dev libgeos++-dev

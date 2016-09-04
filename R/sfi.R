@@ -131,6 +131,7 @@ st_geometrycollection = function(x, third = "XYZ") {
 	if (!is.matrix(cls) || !is.character(cls) || nrow(cls) != 3)
 		stop("st_geometrycollection parameter x error: list elements should be simple features")
 	stopifnot(all(cls[3,] == "sfi"))
+	stopifnot(all(cls[2,] != "GEOMETRYCOLLECTION")) # can't recurse!
 	# check all dimensions are equal:
 	dims = unique(cls[1,])
 	if (length(dims) > 1)
@@ -170,4 +171,75 @@ format.sfi = function(x, ..., digits = 30) {
 		paste0(substr(pr, 1, digits - 3), "...")
 	else
 		pr
+}
+
+#' @export
+#' @name st
+#' @param ... objects to be pasted together into a single simple feature
+#' @param recursive logical; ignored
+#' @examples
+#' c(st_point(1:2), st_point(5:6))
+#' c(st_point(1:2), st_multipoint(matrix(5:8,2)))
+#' c(st_multipoint(matrix(1:4,2)), st_multipoint(matrix(5:8,2)))
+#' c(st_linestring(matrix(1:6,3)), st_linestring(matrix(11:16,3)))
+#' c(st_multilinestring(list(matrix(1:6,3))), st_multilinestring(list(matrix(11:16,3))))
+#' pl = list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))
+#' c(st_polygon(pl), st_polygon(pl))
+#' c(st_polygon(pl), st_multipolygon(list(pl)))
+#' c(st_linestring(matrix(1:6,3)), st_point(1:2))
+#' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
+#'   st_geometrycollection(list(st_multilinestring(list(matrix(11:16,3))))))
+#' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
+#'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
+#'   st_geometrycollection(list(st_point(10:11))))
+#' @details c.sfi may merge points into a multipoint structure, and does not try to preserve the order of subelements; it cannot be reverted ("fish soup").
+c.sfi = function(..., recursive = FALSE) {
+	stopifnot(! recursive)
+	Paste0 = function(lst) lapply(lst, unclass)
+	Paste1 = function(lst) do.call(c, lapply(lst, unclass))
+	lst = list(...)
+	cls = sapply(lst, function(x) class(x)[2])
+	ucls = unique(cls)
+	if (length(ucls) == 1) {
+		return(switch(ucls, 
+			POINT = st_multipoint(do.call(rbind, lst)),
+			# CURVE = st_multicurve(Paste0(lst))
+			# CIRCULARSTRING = st_geometrycollection(lst), # FIXME??
+			LINESTRING = st_multilinestring(Paste0(lst)),
+			# SURFACE = st_multisurface(Paste0(lst)),
+			POLYGON = st_multipolygon(Paste0(lst)),
+			# TRIANGLE = st_geometrycollection(lst),
+			MULTIPOINT = st_multipoint(do.call(rbind, lst)),
+			MULTILINESTRING = st_multilinestring(Paste1(lst)),
+			# MULTICURVE = st_multicurve(Paste1(lst)),
+			MULTIPOLYGON = st_multipolygon(Paste1(lst)),
+			# MULTISURFACE = st_multisurface(Paste1(lst)),
+			# POLYHEDRALSURFACE = st_polyhedralsurface(Paste1(lst)),
+			# TIN = st_tin(Paste1(lst)),
+			GEOMETRYCOLLECTION = st_geometrycollection(Paste1(lst)),
+			stop(paste("type", cls, "not supported"))
+		))
+	} else if (length(ucls) == 2) {
+		if (all(ucls %in% c("POINT", "MULTIPOINT")))
+			return(st_multipoint(do.call(rbind, lst)))
+		else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
+			ls = which(cls == "LINESTRING")
+			mls = st_multilinestring(lst[ls])
+			return(st_multilinestring(c(unlist(lst[-ls], FALSE), unclass(mls))))
+		} else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
+			po = which(cls == "POLYGON")
+			mpo = st_multipolygon(lst[po])
+			return(st_multipolygon(c(unlist(lst[-po], FALSE), unclass(mpo))))
+		}
+		# else: fall through:
+	} 
+	# unfold GC objects first, then
+	gc = (cls == "GEOMETRYCOLLECTION")
+	ret = lst[!gc]
+	if (any(gc)) {
+		wgc = which(gc)
+		for (i in seq_len(length(wgc)))
+			ret = append(ret, lst[[wgc[i]]])
+	}
+	st_geometrycollection(ret)
 }

@@ -1,0 +1,48 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+> c(st_point(1:2), st_point(5:6))
+MULTIPOINT(1 2, 5 6) 
+> c(st_point(1:2), st_multipoint(matrix(5:8,2)))
+MULTIPOINT(1 2, 5 7, 6 8) 
+> c(st_multipoint(matrix(1:4,2)), st_multipoint(matrix(5:8,2)))
+MULTIPOINT(1 3, 2 4, 5 7, 6 8) 
+> c(st_linestring(matrix(1:6,3)), st_linestring(matrix(11:16,3)))
+MULTILINESTRING((1 4, 2 5, 3 6), (11 14, 12 15, 13 16)) 
+> c(st_linestring(matrix(1:6,3)), st_multilinestring(list(matrix(11:16,3))))
+MULTILINESTRING((11 14, 12 15, 13 16), (1 4, 2 5, 3 6)) 
+> c(st_multilinestring(list(matrix(1:6,3))), st_multilinestring(list(matrix(11:16,3))))
+MULTILINESTRING((1 4, 2 5, 3 6), (11 14, 12 15, 13 16)) 
+> pl = list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))
+> c(st_polygon(pl), st_polygon(pl))
+MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((0 0, 1 0, 1 1, 0 1, 0 0))) 
+> c(st_polygon(pl), st_multipolygon(list(pl)))
+MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((0 0, 1 0, 1 1, 0 1, 0 0))) 
+> c(st_linestring(matrix(1:6,3)), st_point(1:2))
+GEOMETRYCOLLECTION(LINESTRING(1 4, 2 5, 3 6), POINT(1 2)) 
+> c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
++   st_geometrycollection(list(st_multilinestring(list(matrix(11:16,3))))))
+GEOMETRYCOLLECTION(POINT(1 2), LINESTRING(1 4, 2 5, 3 6), MULTILINESTRING((11 14, 12 15, 13 16))) 
+> c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
++   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
++   st_geometrycollection(list(st_point(10:11))))
+GEOMETRYCOLLECTION(MULTILINESTRING((11 14, 12 15, 13 16)), POINT(5 6), POINT(1 2), LINESTRING(1 4, 2 5, 3 6), POINT(10 11)) 
+> 
+> proc.time()
+   user  system elapsed 
+  0.292   0.272   0.256 

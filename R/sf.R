@@ -150,13 +150,3 @@ st_p4s = function(obj) {
 		return(p4s)
 	NULL
 }
-
-#' indicate whether sf is linked to GEOS
-#' 
-#' indicate whether sf is linked to GEOS
-#' @export
-#' @examples
-#' sf_has_geos()
-sf_has_geos = function() {
-	have_geos()
-}
