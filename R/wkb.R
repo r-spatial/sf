@@ -211,9 +211,7 @@ st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 #' @export
 st_as_wkb.sfc = function(x, ..., endian = .Platform$endian) {
 	stopifnot(endian %in% c("big", "little"))
-	ret = lapply(x, st_as_wkb, ..., endian = endian)
-	class(ret) = "WKB"
-	ret
+	structure(lapply(x, st_as_wkb, ..., endian = endian), class = "WKB")
 }
 
 createType = function(x, endian, EWKB = FALSE) {

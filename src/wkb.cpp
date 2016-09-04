@@ -3,6 +3,24 @@
 
 #include <Rcpp.h>
 
+#define SF_Point               1
+#define SF_LineString          2
+#define SF_Polygon             3
+#define SF_MultiPoint          4
+#define SF_MultiLineString     5
+#define SF_MultiPolygon        6
+#define SF_GeometryCollection  7
+#define SF_CircularString      8
+#define SF_CompoundCurve       9
+#define SF_CurvePolygon       10
+#define SF_MultiCurve         11
+#define SF_MultiSurface       12
+#define SF_Curve              13
+#define SF_Surface            14
+#define SF_PolyhedralSurface  15
+#define SF_TIN                16
+#define SF_Triangle           17
+
 // using namespace Rcpp;
 
 Rcpp::NumericMatrix ReadMPoints(unsigned char **pt, int n_dims, bool EWKB, int endian, 
@@ -121,63 +139,63 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB = false, int endian = 0,
 			Rcpp::Rcout << "srid: " <<  *srid << std::endl;
 	}
 	switch(sf_type) {
-		case 1: 
+		case SF_Point: 
 			output[0] = ReadNumericVector(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "POINT", "sfi") : "", srid);
 			break;
-		case 2:
+		case SF_LineString:
 			output[0] = ReadNumericMatrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfi") : "", srid); 
 			break;
-		case 3: 
+		case SF_Polygon: 
 			output[0] = ReadMatrixList(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfi") : "", srid);
 			break;
-		case 4: 
+		case SF_MultiPoint: 
 			output[0] = ReadMPoints(pt, n_dims, EWKB, endian, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfi") : "", srid); 
 			break;
-		case 5:
+		case SF_MultiLineString:
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTILINESTRING", "sfi"), false, srid);
 			break;
-		case 6:
+		case SF_MultiPolygon:
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfi"), false, srid);
 			break;
-		case 7: 
+		case SF_GeometryCollection: 
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true, srid);
 			break;
-		case 8:
+		case SF_CircularString:
 			output[0] = ReadNumericMatrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfi") : "", srid); 
 			break;
-		case 11:
+		case SF_MultiCurve:
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfi"), false, srid);
 			break;
-		case 12:
+		case SF_MultiSurface:
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfi"), false, srid);
 			break;
-		case 13:
+		case SF_Curve:
 			output[0] = ReadNumericMatrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfi") : "", srid); 
 			break;
-		case 14: 
+		case SF_Surface: 
 			output[0] = ReadMatrixList(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfi") : "", srid);
 			break;
-		case 15: 
+		case SF_PolyhedralSurface: 
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfi"), false, srid);
 			break;
-		case 16: 
+		case SF_TIN: 
 			output[0] = ReadGC(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "TIN", "sfi"), false, srid);
 			break;
-		case 17:
+		case SF_Triangle:
 			output[0] = ReadMatrixList(pt, n_dims,
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"), srid);
 			break;
@@ -272,26 +290,6 @@ Rcpp::List ReadMatrixList(unsigned char **pt, int n_dims,
 	}
 	return(ret);
 }
-
-/*
-    "Point",               # 1
-    "LineString",          # 2
-    "Polygon",             # 3
-    "MultiPoint",          # 4
-    "MultiLineString",     # 5
-    "MultiPolygon",        # 6
-    "GeometryCollection",  # 7
-    "CircularString",      # 8 x
-    "CompoundCurve",       # 9 x
-    "CurvePolygon",        # 10 x
-    "MultiCurve",          # 11 x
-    "MultiSurface",        # 12 x
-    "Curve",               # 13 x *
-    "Surface",             # 14 x *
-    "PolyhedralSurface",   # 15
-    "TIN",                 # 16
-    "Triangle"             # 17
-*/
 
 // [[Rcpp::export]]
 Rcpp::NumericVector GetBBOX(Rcpp::List sf, int depth = 0) {

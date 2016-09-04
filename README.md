@@ -13,10 +13,10 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-The current version depends on a fork of Tim Keitt's github package `rgdal2`, installed by
+The current version depends on Tim Keitt's [github package `rgdal2`](https://github.com/thk686/rgdal2), installed by
 
 ```
-install_github("edzer/rgdal2")
+install_github("thk686/rgdal2")
 ```
 
 See also:
