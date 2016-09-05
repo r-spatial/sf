@@ -301,23 +301,9 @@ Rcpp::List ReadMatrixList(unsigned char **pt, int n_dims,
 	return(ret);
 }
 
-// writeBin:
-
-void addByte(std::ostringstream& os, char c);
-void addInt(std::ostringstream& os, unsigned int i);
-void addDouble(std::ostringstream& os, double d);
-
-void addByte(std::ostringstream& os, char c) {
-  os.write((char*) &c, sizeof(char));
-}
-void addInt(std::ostringstream& os, unsigned int i) {
-  const char *cp = (char *)&i;
-  os.write((char*) cp, sizeof(int));
-}
-void addDouble(std::ostringstream& os, double d) {
-  const char *cp = (char *)&d;
-  os.write((char*) cp, sizeof(double));
-}
+//
+// WriteWKB:
+//
 
 // [[Rcpp::export]]
 Rcpp::List WriteWKB(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
@@ -326,14 +312,14 @@ Rcpp::List WriteWKB(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	Rcpp::List output(sfc.size()); // with raw vectors
 	int type = 0, last_type = 0, n_types = 0;
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
-	const char *cls = cls_attr[0], *dm = dim[0]; // , *dm = dim[0];
+	const char *cls = cls_attr[0], *dm = dim[0];
 	if (debug) 
 		Rcpp::Rcout << dm << std::endl;
 
 	for (int i = 0; i < sfc.size(); i++) {
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
-		WriteData(os, sfc, i, EWKB, endian, debug, cls, dm); // write sf to ostringstream
+		WriteData(os, sfc, i, EWKB, endian, debug, cls, dm);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();
 		const char *cp = str.c_str();
@@ -402,64 +388,77 @@ unsigned int mkType(const char *cls, const char *dim, bool EWKB = false, int *tp
 	return(type);
 }
 
-void WriteVector(std::ostringstream& os, Rcpp::NumericVector v) {
-	for (unsigned int i = 0; i < v.length(); i++)
-		addDouble(os, v(i));
+void addByte(std::ostringstream& os, char c) {
+  os.write((char*) &c, sizeof(char));
 }
 
-void WriteMatrix(std::ostringstream& os, Rcpp::NumericMatrix m) {
-	unsigned int rows = m.nrow(), cols = m.ncol();
-	addInt(os, rows);
-	for (unsigned int i = 0; i < rows; i++)
-		for (unsigned int j = 0; j < cols; j++)
-			addDouble(os, m(i,j));
+void addInt(std::ostringstream& os, unsigned int i) {
+  const char *cp = (char *)&i;
+  os.write((char*) cp, sizeof(int));
 }
 
-void WriteMatrixList(std::ostringstream& os, Rcpp::List l) {
-	unsigned int L = l.length();
-	addInt(os, L);
-	for (unsigned int i = 0; i < L; i++)
-		WriteMatrix(os, l[i]);
+void addDouble(std::ostringstream& os, double d) {
+  const char *cp = (char *)&d;
+  os.write((char*) cp, sizeof(double));
 }
 
-void WriteMultiLineString(std::ostringstream& os, Rcpp::List l, bool EWKB = false, int endian = 0) {
-	Rcpp::CharacterVector cl_attr = l.attr("class");
+void WriteVector(std::ostringstream& os, Rcpp::NumericVector vec) {
+	for (unsigned int i = 0; i < vec.length(); i++)
+		addDouble(os, vec(i));
+}
+
+void WriteMatrix(std::ostringstream& os, Rcpp::NumericMatrix mat) {
+	addInt(os, mat.nrow());
+	for (unsigned int i = 0; i < mat.nrow(); i++)
+		for (unsigned int j = 0; j < mat.ncol(); j++)
+			addDouble(os, mat(i,j));
+}
+
+void WriteMatrixList(std::ostringstream& os, Rcpp::List lst) {
+	unsigned int len = lst.length();
+	addInt(os, len);
+	for (unsigned int i = 0; i < len; i++)
+		WriteMatrix(os, lst[i]);
+}
+
+void WriteMultiLineString(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
-	addInt(os, l.length());
-	for (int i = 0; i < l.length(); i++)
-		WriteData(os, l, i, EWKB, endian, false, "LINESTRING", dim);
+	addInt(os, lst.length());
+	for (int i = 0; i < lst.length(); i++)
+		WriteData(os, lst, i, EWKB, endian, false, "LINESTRING", dim);
 }
 
-void WriteMultiPolygon(std::ostringstream& os, Rcpp::List l, bool EWKB = false, int endian = 0) {
-	Rcpp::CharacterVector cl_attr = l.attr("class");
+void WriteMultiPolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
-	addInt(os, l.length());
-	for (int i = 0; i < l.length(); i++)
-		WriteData(os, l, i, EWKB, endian, false, "POLYGON", dim);
+	addInt(os, lst.length());
+	for (int i = 0; i < lst.length(); i++)
+		WriteData(os, lst, i, EWKB, endian, false, "POLYGON", dim);
 }
 
-void WriteGC(std::ostringstream& os, Rcpp::List l, bool EWKB = false, int endian = 0) {
-	addInt(os, l.length());
+void WriteGC(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+	addInt(os, lst.length());
 	Rcpp::Function Rclass("class");
-	for (int i = 0; i < l.length(); i++) {
-		Rcpp::CharacterVector cl_attr = Rclass(l[i]); 
+	for (int i = 0; i < lst.length(); i++) {
+		Rcpp::CharacterVector cl_attr = Rclass(lst[i]); 
 		const char *cls = cl_attr[1], *dim = cl_attr[0];
-		WriteData(os, l, i, EWKB, endian, false, cls, dim);
+		WriteData(os, lst, i, EWKB, endian, false, cls, dim);
 	}
 }
 
-void WriteMultiPoint(std::ostringstream& os, Rcpp::NumericMatrix m, 
+void WriteMultiPoint(std::ostringstream& os, Rcpp::NumericMatrix mat, 
 		bool EWKB = false, int endian = 0) {
-	addInt(os, m.nrow());
-	Rcpp::CharacterVector cl_attr = m.attr("class");
+	addInt(os, mat.nrow());
+	Rcpp::CharacterVector cl_attr = mat.attr("class");
 	const char *dim = cl_attr[0];
-	Rcpp::NumericVector v(m.ncol()); // copy row i
-	Rcpp::List l(1);
-	for (int i = 0; i < m.nrow(); i++) {
-		for (int j = 0; j < m.ncol(); j++)
-			v(j) = m(i,j);
-		l[0] = v;
-		WriteData(os, l, 0, EWKB, endian, false, "POINT", dim);
+	Rcpp::NumericVector v(mat.ncol()); // copy row i
+	Rcpp::List lst(1);
+	for (int i = 0; i < mat.nrow(); i++) {
+		for (int j = 0; j < mat.ncol(); j++)
+			v(j) = mat(i,j);
+		lst[0] = v;
+		WriteData(os, lst, 0, EWKB, endian, false, "POINT", dim);
 	}
 }
 
