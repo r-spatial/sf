@@ -208,10 +208,17 @@ st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 
 #' @name st_as_wkb
 #' @param endian character; either "big" or "little"; default: use that of platform
+#' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
+#' @param pureR logical; use pure R solution, or C++?
 #' @export
-st_as_wkb.sfc = function(x, ..., endian = .Platform$endian) {
+st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = TRUE) {
 	stopifnot(endian %in% c("big", "little"))
-	structure(lapply(x, st_as_wkb, ..., endian = endian), class = "WKB")
+	if (pureR) 
+		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
+	else {
+		stopifnot(endian == .Platform$endian)
+		structure(WriteWKB(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE), class = "WKB")
+	}
 }
 
 createType = function(x, endian, EWKB = FALSE) {
@@ -235,10 +242,13 @@ createType = function(x, endian, EWKB = FALSE) {
 }
 
 #' @name st_as_wkb
-#' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @export
-st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE) {
+st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = TRUE) {
 	stopifnot(endian %in% c("big", "little"))
+	if (! pureR) {
+		stopifnot(endian == .Platform$endian)
+		return(WriteWKB(st_sfc(list(x)), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
+	}
 	# preamble:
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))
