@@ -211,7 +211,7 @@ st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
 #' @export
-st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = TRUE) {
+st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (pureR) 
 		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
@@ -243,7 +243,7 @@ createType = function(x, endian, EWKB = FALSE) {
 
 #' @name st_as_wkb
 #' @export
-st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = TRUE) {
+st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)

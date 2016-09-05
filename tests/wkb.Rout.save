@@ -19,12 +19,12 @@ Type 'q()' to quit R.
 > round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 + 	if (inherits(x, "sfi"))
 + 		x = st_sfc(list(x))
-+ 	wkb = st_as_wkb(x, EWKB = EWKB)
++ 	wkb = st_as_wkb(x, EWKB = EWKB, pureR = pureR)
 + 	class(wkb) = "WKB"
 + 	# print(wkb)
 + 	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
 + 	a = all.equal(x, y)
-+ 	if (length(a) == 1 && is.logical(a))
++ 	if (length(a) == 1 && is.logical(a) && a)
 + 		TRUE
 + 	else {
 + 		print(x)
@@ -66,4 +66,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  0.452   0.288   0.440 
+  0.292   0.316   0.296 
