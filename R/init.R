@@ -9,3 +9,8 @@ NULL
 setOldClass("sf")
 setOldClass("sfc")
 setOldClass("sfi")
+
+.onLoad = function(libname, pkgname)
+{
+	packageStartupMessage(paste("Linking to GEOS", st_g_geosversion()))
+}

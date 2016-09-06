@@ -36,7 +36,12 @@ Rcpp::List st_g_relate(Rcpp::RawVector wkb0, Rcpp::RawVector wkb1) {
 }
 
 // [[Rcpp::export]]
-bool st_g_isValid (Rcpp::RawVector wkb) { 
+bool st_g_isValid(Rcpp::RawVector wkb) { 
 	geos::geom::Geometry *g = GeomFromRaw(wkb);
 	return(geos::operation::valid::IsValidOp::isValid(*g));
+}
+
+// [[Rcpp::export]]
+std::string st_g_geosversion(bool b = false) {
+	return(geos::geom::geosversion());
 }

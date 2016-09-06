@@ -50,7 +50,7 @@ Dimension = function(x) {
 #' @param third character, indicating what a 3-dimensional point is ("XYZ" or "XYM"); see details
 #' @name st
 #' @details "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
-#' @value object of the same nature as \code{x}, but with appropriate class attribute set
+#' @return object of the same nature as \code{x}, but with appropriate class attribute set
 #' @examples 
 #' (p1 = st_point(c(1,2)))
 #' class(p1)
