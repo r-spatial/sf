@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rm -fr man R/Rcpp*R src/Rcpp*cpp src/Makevars
+rm -fr man R/Rcpp*R src/Rcpp*cpp src/Makevars config.log config.status autom4te.cache
