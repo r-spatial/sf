@@ -6,3 +6,4 @@ makefile
 Postgis
 PROPOSAL.md
 spatial-tutorial.Rmd
+cov
