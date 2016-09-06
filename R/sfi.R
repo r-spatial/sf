@@ -162,10 +162,16 @@ print.sfi = function(x, ..., digits = 0) { # avoids having to write print method
 	invisible(f)
 }
 
+head.sfi = function(x, n = 10L, ...) {
+	structure(head(unclass(x), n, ...), class = class(x))
+}
+
 #' @export
 format.sfi = function(x, ..., digits = 30) {
 	if (is.null(digits)) 
 		digits = 30
+	if (object.size(x) > 1000)
+		x = head(x, 10)
 	pr = st_as_wkt(x)
 	if (digits > 0 && nchar(pr) > digits)
 		paste0(substr(pr, 1, digits - 3), "...")

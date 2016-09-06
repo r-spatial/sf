@@ -74,7 +74,7 @@ st_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 #' read PostGIS table directly, using DBI and wkb conversion
 #' 
 #' read PostGIS table directly through DBI and RPostgreSQL interface, converting wkb
-#' @param cn open database connection
+#' @param conn (open) database connection
 #' @param query SQL query to select records
 #' @param dbname character; database name, only used if cn is \code{NULL}
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
@@ -84,13 +84,13 @@ st_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 #' }
 #' @name st_read
 #' @export
-st_read_pg = function(cn = NULL, query, dbname, geom_column = NULL, ...) {
+st_read_pg = function(conn = NULL, query, dbname, geom_column = NULL, ...) {
 	if (!requireNamespace("RPostgreSQL", quietly = TRUE))
 		stop("package RPostgreSQL required for st_read_pg")
-	if (is.null(cn))
-		cn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
+	if (is.null(conn))
+		conn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
   	# suppress warning about unknown type "geometry":
-	suppressWarnings(tbl <- RPostgreSQL::dbGetQuery(cn, query))
+	suppressWarnings(tbl <- RPostgreSQL::dbGetQuery(conn, query))
 	if (is.null(geom_column)) # find the geometry column:
 		geom_column = tail(which(sapply(tbl, is.character)), 1)
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = TRUE)
