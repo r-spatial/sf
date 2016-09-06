@@ -43,13 +43,14 @@ Dimension = function(x) {
 	class(x)[1]
 }
 
-#' Create a point simple feature from a numeric vector
+#' Create simple feature from a numeric vector, matrix or list
 #' 
-#' Create a point simple feature from a numeric vector
+#' Create simple feature from a numeric vector, matrix or list
 #' @param x for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects
 #' @param third character, indicating what a 3-dimensional point is ("XYZ" or "XYM"); see details
 #' @name st
 #' @details "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
+#' @value object of the same nature as \code{x}, but with appropriate class attribute set
 #' @examples 
 #' (p1 = st_point(c(1,2)))
 #' class(p1)
@@ -155,6 +156,8 @@ POLYGON2MULTIPOLYGON = function(x, third = "XYZ") {
 	st_multipolygon(list(unclass(x)), third = third)
 }
 
+#' @name st
+#' @param digits integer; number of characters to be printed (max 30; 0 means print everything)
 #' @export
 print.sfi = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
 	f = format(x, ..., digits = digits)
@@ -162,10 +165,14 @@ print.sfi = function(x, ..., digits = 0) { # avoids having to write print method
 	invisible(f)
 }
 
+#' @name st
+#' @param n integer; number of elements to be selected
+#' @export
 head.sfi = function(x, n = 10L, ...) {
-	structure(head(unclass(x), n, ...), class = class(x))
+	structure(head(unclass(x), n = n, ...), class = class(x))
 }
 
+#' @name st
 #' @export
 format.sfi = function(x, ..., digits = 30) {
 	if (is.null(digits)) 

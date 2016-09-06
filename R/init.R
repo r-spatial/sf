@@ -1,4 +1,4 @@
-#' @importFrom utils head tail
+#' @importFrom utils head tail object.size
 #' @importFrom stats na.omit
 #' @importFrom methods as slotNames new
 #' @import graphics
