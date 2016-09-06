@@ -177,6 +177,7 @@ format.sfi = function(x, ..., digits = 30) {
 #' @name st
 #' @param ... objects to be pasted together into a single simple feature
 #' @param recursive logical; ignored
+#' @param flatten logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects
 #' @examples
 #' c(st_point(1:2), st_point(5:6))
 #' c(st_point(1:2), st_multipoint(matrix(5:8,2)))
@@ -192,12 +193,16 @@ format.sfi = function(x, ..., digits = 30) {
 #' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
 #'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
 #'   st_geometrycollection(list(st_point(10:11))))
-#' @details c.sfi may merge points into a multipoint structure, and does not try to preserve the order of subelements; it cannot be reverted ("fish soup").
-c.sfi = function(..., recursive = FALSE) {
+#' @details when \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup. 
+c.sfi = function(..., recursive = FALSE, flatten = TRUE) {
+
 	stopifnot(! recursive)
 	Paste0 = function(lst) lapply(lst, unclass)
 	Paste1 = function(lst) do.call(c, lapply(lst, unclass))
 	lst = list(...)
+	if (!flatten)
+		return(st_geometrycollection(lst)) # breaks if one of them is a GC
+
 	cls = sapply(lst, function(x) class(x)[2])
 	ucls = unique(cls)
 	if (length(ucls) == 1) {
@@ -236,7 +241,7 @@ c.sfi = function(..., recursive = FALSE) {
 	# unfold GC objects first, then
 	gc = (cls == "GEOMETRYCOLLECTION")
 	ret = lst[!gc]
-	if (any(gc)) {
+	if (any(gc)) { # append the _contents_ of GC's to the non-GC elements:
 		wgc = which(gc)
 		for (i in seq_len(length(wgc)))
 			ret = append(ret, lst[[wgc[i]]])

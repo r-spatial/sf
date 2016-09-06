@@ -249,10 +249,8 @@ st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR 
 		stopifnot(endian == .Platform$endian)
 		return(WriteWKB(st_sfc(list(x)), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
 	}
-	# preamble:
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))
-	# data:
 	writeData(x, rc, endian, EWKB)
 	rawConnectionValue(rc)
 }
