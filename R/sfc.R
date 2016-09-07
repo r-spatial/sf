@@ -77,6 +77,26 @@ coerceTypes = function(lst) {
     structure(x, class = class(old))
 }
 
+#' @export
+print.sfi = function(x,...) { 
+	if (length(x) != 1) 
+		sep = "s\n" 
+	else
+		sep = "\n"
+	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
+	cat(paste0("Simple feature collection with ", length(x), " feature", sep))
+	cat(paste0("Feature type: ", cls, "\n"))
+	cat(paste0("Dimension:    ", class(x[[1]])[1], "\n"))
+	cat(paste0("Bbox:         "))
+	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
+	cat("\n")
+	# attributes: epsg, proj4string, precision
+	cat(paste0("SRID (epsg):  ", attr(x, "epsg"), "\n"))
+	cat(paste0("PROJ4 string: ", attr(x, "proj4string"), "\n"))
+	cat(paste0("Precision:    ", attr(x, "precision"), "\n"))
+	invisible(x)
+}
+
 #' summarize simple feature column
 #'
 #' summarize simple feature column
