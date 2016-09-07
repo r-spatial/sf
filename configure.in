@@ -34,7 +34,7 @@ fi
 GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
-  echo "linking againt geos version" `geos-config --version`
+  echo "linking against geos version" `geos-config --version`
   GEOS_LIBS=`geos-config --libs`
   GEOS_CPPFLAGS=`geos-config --cflags`
 else
