@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
+Linking to GEOS 3.5.0
 > round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 + 	if (inherits(x, "sfi"))
 + 		x = st_sfc(list(x))
@@ -66,4 +67,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  0.292   0.316   0.296 
+  0.340   0.264   0.293 

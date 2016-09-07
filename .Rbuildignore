@@ -1,11 +1,6 @@
 .travis.yml
 attic
-DESIGN.md
-DESIGN.Rmd
-makefile
-Postgis
 PROPOSAL.md
-spatial-tutorial.Rmd
 cov
 config.log
 TODO

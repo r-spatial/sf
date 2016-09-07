@@ -23,6 +23,8 @@ format.sfc = function(x, ..., digits = 30) {
 st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	if (!is.list(lst))
 		lst = list(lst)
+	stopifnot(is.numeric(epsg))
+	stopifnot(is.character(proj4string))
 	if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
 		lst = coerceTypes(lst)
 	else

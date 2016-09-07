@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
+Linking to GEOS 3.5.0
 > c(st_point(1:2), st_point(5:6))
 MULTIPOINT(1 2, 5 6) 
 > c(st_point(1:2), st_multipoint(matrix(5:8,2)))
@@ -45,4 +46,4 @@ GEOMETRYCOLLECTION(MULTILINESTRING((11 14, 12 15, 13 16)), POINT(5 6), POINT(1 2
 > 
 > proc.time()
    user  system elapsed 
-  0.292   0.272   0.256 
+  0.288   0.284   0.262 

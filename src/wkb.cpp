@@ -6,6 +6,8 @@
 
 #include <Rcpp.h>
 
+#include "wkb.h"
+
 #define SF_Point               1
 #define SF_LineString          2
 #define SF_Polygon             3
@@ -24,11 +26,9 @@
 #define SF_TIN                16
 #define SF_Triangle           17
 
-#define EWKB_Z_BIT             0x80000000
-#define EWKB_M_BIT             0x40000000
-#define EWKB_SRID_BIT          0x20000000
-
-// using namespace Rcpp;
+#define EWKB_Z_BIT    0x80000000
+#define EWKB_M_BIT    0x40000000
+#define EWKB_SRID_BIT 0x20000000
 
 Rcpp::NumericMatrix ReadMultiPoint(unsigned char **pt, int n_dims, bool EWKB, int endian, 
 	Rcpp::CharacterVector cls, uint32_t *srid);

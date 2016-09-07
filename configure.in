@@ -37,11 +37,11 @@ then
   echo "linking againt geos version" `geos-config --version`
   GEOS_LIBS=`geos-config --libs`
   GEOS_CPPFLAGS=`geos-config --cflags`
-  HAVE_GEOS="-DHAVE_GEOS"
 else
   echo "no geos support: geos not installed"
+  exit 1
 fi
-AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS} ${HAVE_GEOS}"])
+AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"])
 AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS}"])
 
 AC_CONFIG_FILES(src/Makevars)

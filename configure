@@ -1699,11 +1699,11 @@ then
   echo "linking againt geos version" `geos-config --version`
   GEOS_LIBS=`geos-config --libs`
   GEOS_CPPFLAGS=`geos-config --cflags`
-  HAVE_GEOS="-DHAVE_GEOS"
 else
   echo "no geos support: geos not installed"
+  exit 1
 fi
-PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS} ${HAVE_GEOS}"
+PKG_CPPFLAGS="${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"
 
 PKG_LIBS="${PKG_LIBS} ${GEOS_LIBS}"
 
