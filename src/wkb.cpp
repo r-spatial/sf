@@ -44,7 +44,7 @@ Rcpp::List ReadData(unsigned char **pt, bool EWKB, int endian, bool debug,
 	bool addclass, int *type);
 Rcpp::NumericVector GetBBOX(Rcpp::List sf, int depth);
 void WriteData(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, int endian,
-	bool debug, const char *cls, const char *dim);
+	bool debug, const char *cls, const char *dim, double precision);
 unsigned int mkType(const char *cls, const char *dim, bool EWKB, int *tp);
 
 // [[Rcpp::export]]
@@ -307,7 +307,7 @@ Rcpp::List ReadMatrixList(unsigned char **pt, int n_dims,
 
 // [[Rcpp::export]]
 Rcpp::List WriteWKB(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
-		Rcpp::CharacterVector dim = "XY", bool debug = false) {
+		Rcpp::CharacterVector dim = "XY", bool debug = false, double precision = 0.0) {
 
 	Rcpp::List output(sfc.size()); // with raw vectors
 	int type = 0, last_type = 0, n_types = 0;
@@ -319,7 +319,7 @@ Rcpp::List WriteWKB(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	for (int i = 0; i < sfc.size(); i++) {
 		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
-		WriteData(os, sfc, i, EWKB, endian, debug, cls, dm);
+		WriteData(os, sfc, i, EWKB, endian, debug, cls, dm, precision);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();
 		const char *cp = str.c_str();
@@ -397,58 +397,72 @@ void addInt(std::ostringstream& os, unsigned int i) {
   os.write((char*) cp, sizeof(int));
 }
 
-void addDouble(std::ostringstream& os, double d) {
+double mkPrecise(double d, double precision) {
+	if (precision == 0.0)
+		return(d);
+	if (precision < 0.0) { // float, 4-byte precision
+		float f = d;
+		return((double) f);
+	}
+	return(std::round(d * precision) / precision);
+}
+
+void addDouble(std::ostringstream& os, double d, double prec = 0.0) {
+  d = mkPrecise(d, prec);
   const char *cp = (char *)&d;
   os.write((char*) cp, sizeof(double));
 }
 
-void WriteVector(std::ostringstream& os, Rcpp::NumericVector vec) {
+void WriteVector(std::ostringstream& os, Rcpp::NumericVector vec, double prec) {
 	for (unsigned int i = 0; i < vec.length(); i++)
-		addDouble(os, vec(i));
+		addDouble(os, vec(i), prec);
 }
 
-void WriteMatrix(std::ostringstream& os, Rcpp::NumericMatrix mat) {
+void WriteMatrix(std::ostringstream& os, Rcpp::NumericMatrix mat, double prec) {
 	addInt(os, mat.nrow());
 	for (unsigned int i = 0; i < mat.nrow(); i++)
 		for (unsigned int j = 0; j < mat.ncol(); j++)
-			addDouble(os, mat(i,j));
+			addDouble(os, mat(i,j), prec);
 }
 
-void WriteMatrixList(std::ostringstream& os, Rcpp::List lst) {
+void WriteMatrixList(std::ostringstream& os, Rcpp::List lst, double prec) {
 	unsigned int len = lst.length();
 	addInt(os, len);
 	for (unsigned int i = 0; i < len; i++)
-		WriteMatrix(os, lst[i]);
+		WriteMatrix(os, lst[i], prec);
 }
 
-void WriteMultiLineString(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+void WriteMultiLineString(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+		int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
 	addInt(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		WriteData(os, lst, i, EWKB, endian, false, "LINESTRING", dim);
+		WriteData(os, lst, i, EWKB, endian, false, "LINESTRING", dim, prec);
 }
 
-void WriteMultiPolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+void WriteMultiPolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+		int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
 	addInt(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		WriteData(os, lst, i, EWKB, endian, false, "POLYGON", dim);
+		WriteData(os, lst, i, EWKB, endian, false, "POLYGON", dim, prec);
 }
 
-void WriteGC(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, int endian = 0) {
+void WriteGC(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+		int endian = 0, double prec = 0.0) {
 	addInt(os, lst.length());
 	Rcpp::Function Rclass("class");
 	for (int i = 0; i < lst.length(); i++) {
 		Rcpp::CharacterVector cl_attr = Rclass(lst[i]); 
 		const char *cls = cl_attr[1], *dim = cl_attr[0];
-		WriteData(os, lst, i, EWKB, endian, false, cls, dim);
+		WriteData(os, lst, i, EWKB, endian, false, cls, dim, prec);
 	}
 }
 
 void WriteMultiPoint(std::ostringstream& os, Rcpp::NumericMatrix mat, 
-		bool EWKB = false, int endian = 0) {
+		bool EWKB = false, int endian = 0, double prec = 0.0) {
 	addInt(os, mat.nrow());
 	Rcpp::CharacterVector cl_attr = mat.attr("class");
 	const char *dim = cl_attr[0];
@@ -458,13 +472,14 @@ void WriteMultiPoint(std::ostringstream& os, Rcpp::NumericMatrix mat,
 		for (int j = 0; j < mat.ncol(); j++)
 			v(j) = mat(i,j);
 		lst[0] = v;
-		WriteData(os, lst, 0, EWKB, endian, false, "POINT", dim);
+		WriteData(os, lst, 0, EWKB, endian, false, "POINT", dim, prec);
 	}
 }
 
 // write single simple feature object as WKB to stream os
 void WriteData(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false, 
-		int endian = 0, bool debug = false, const char *cls = NULL, const char *dim = NULL) {
+		int endian = 0, bool debug = false, const char *cls = NULL, const char *dim = NULL,
+		double prec = 0.0) {
 	
 	addByte(os, (char) endian);
 	int tp;
@@ -473,35 +488,35 @@ void WriteData(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = fa
 		Rcpp::Rcout << "sf_type:" << sf_type << std::endl;
 	addInt(os, sf_type);
 	switch(tp) {
-		case SF_Point: WriteVector(os, sfc[i]);
+		case SF_Point: WriteVector(os, sfc[i], prec);
 			break;
-		case SF_LineString: WriteMatrix(os, sfc[i]);
+		case SF_LineString: WriteMatrix(os, sfc[i], prec);
 			break;
-		case SF_Polygon: WriteMatrixList(os, sfc[i]);
+		case SF_Polygon: WriteMatrixList(os, sfc[i], prec);
 			break;
-		case SF_MultiPoint: WriteMultiPoint(os, sfc[i], EWKB, endian);
+		case SF_MultiPoint: WriteMultiPoint(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_MultiLineString: WriteMultiLineString(os, sfc[i], EWKB, endian);
+		case SF_MultiLineString: WriteMultiLineString(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_MultiPolygon: WriteMultiPolygon(os, sfc[i], EWKB, endian);
+		case SF_MultiPolygon: WriteMultiPolygon(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_GeometryCollection: WriteGC(os, sfc[i], EWKB, endian);
+		case SF_GeometryCollection: WriteGC(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_CircularString: WriteMatrix(os, sfc[i]);
+		case SF_CircularString: WriteMatrix(os, sfc[i], prec);
 			break;
-		case SF_MultiCurve: WriteGC(os, sfc[i], EWKB, endian);
+		case SF_MultiCurve: WriteGC(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_MultiSurface: WriteGC(os, sfc[i], EWKB, endian);
+		case SF_MultiSurface: WriteGC(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_Curve: WriteMatrix(os, sfc[i]);
+		case SF_Curve: WriteMatrix(os, sfc[i], prec);
 			break;
-		case SF_Surface: WriteMatrixList(os, sfc[i]);
+		case SF_Surface: WriteMatrixList(os, sfc[i], prec);
 			break;
-		case SF_PolyhedralSurface: WriteMultiPolygon(os, sfc[i], EWKB, endian);
+		case SF_PolyhedralSurface: WriteMultiPolygon(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_TIN: WriteMultiPolygon(os, sfc[i], EWKB, endian);
+		case SF_TIN: WriteMultiPolygon(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_Triangle: WriteMatrixList(os, sfc[i]);
+		case SF_Triangle: WriteMatrixList(os, sfc[i], prec);
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << "\n";

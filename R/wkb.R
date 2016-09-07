@@ -210,14 +210,20 @@ st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 #' @param endian character; either "big" or "little"; default: use that of platform
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
+#' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision.
+#' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}
 #' @export
-st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE) {
+st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
+		precision = attr(x, "precision")) {
 	stopifnot(endian %in% c("big", "little"))
+	if (pureR && precision != 0.0)
+		stop("for non-zero precision values, use pureR = FALSE")
 	if (pureR) 
 		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(WriteWKB(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE), class = "WKB")
+		structure(WriteWKB(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE, precision), 
+			class = "WKB")
 	}
 }
 

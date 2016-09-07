@@ -9,6 +9,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' @param lst list with simple feature objects, or single simple feature
 #' @param epsg integer; epsg code
+#' @param precision double; the precisoin model to use when converting to WKB; see \link{st_as_wkb}
 #' @param proj4string character; describing the coordinate reference systems in PROJ.4 syntax
 #' 
 #' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfi}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
@@ -20,7 +21,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
+st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
 	if (!is.list(lst))
 		lst = list(lst)
 	stopifnot(is.numeric(epsg))
@@ -32,7 +33,7 @@ st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_) {
 	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)
-	attr(lst, "bbox") = rep(0,4)
+	attr(lst, "precision") = precision
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0L) {
 		proj4string = if (requireNamespace("sp", quietly = TRUE))
 				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
