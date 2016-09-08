@@ -78,7 +78,7 @@ coerceTypes = function(lst) {
 }
 
 #' @export
-print.sfi = function(x,...) { 
+print.sfc = function(x,..., n = 5L) { 
 	if (length(x) != 1) 
 		sep = "s\n" 
 	else
@@ -88,12 +88,21 @@ print.sfi = function(x,...) {
 	cat(paste0("Feature type: ", cls, "\n"))
 	cat(paste0("Dimension:    ", class(x[[1]])[1], "\n"))
 	cat(paste0("Bbox:         "))
+	bb = signif(attr(x, "bbox"), 7)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	# attributes: epsg, proj4string, precision
 	cat(paste0("SRID (epsg):  ", attr(x, "epsg"), "\n"))
 	cat(paste0("PROJ4 string: ", attr(x, "proj4string"), "\n"))
-	cat(paste0("Precision:    ", attr(x, "precision"), "\n"))
+	cat(paste0("Precision:    ", attr(x, "precision")))
+	if (attr(x, "precision") == 0.0)
+		cat(" (default; no precision model)\n")
+	else
+		cat("\n")
+	if (length(x) > n)
+		cat(paste0("First ", n, " geometries:\n"))
+	for (i in 1:min(n, length(x)))
+		print(x[[i]], digits = 50)
 	invisible(x)
 }
 

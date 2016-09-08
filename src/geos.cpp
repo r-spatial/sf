@@ -12,6 +12,8 @@
 
 #include "wkb.h"
 
+Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, bool sparse);
+
 geos::geom::Geometry *GeomFromRaw(Rcpp::RawVector wkb) {
 	std::istringstream s;
 	std::istringstream& str(s);
@@ -30,29 +32,117 @@ std::vector<geos::geom::Geometry *> GeomFromSfc(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-double st_g_dist(Rcpp::RawVector wkb0, Rcpp::RawVector wkb1) {
-	return(geos::operation::distance::DistanceOp::distance(
-		GeomFromRaw(wkb0), GeomFromRaw(wkb1)));
+Rcpp::NumericMatrix st_g_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::NumericMatrix out = st_g_binop(sfc0, sfc1, "distance", 0.0, false)[0];
+	return(out);
 }
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector st_g_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::CharacterVector out = st_g_binop(sfc0, sfc1, "relate", 0.0, false)[0];
+	return(out);	
+}
+
+Rcpp::NumericVector get_dim(double dim0, double dim1) {
+	Rcpp::NumericVector dim(2);
+	dim(0) = dim0;
+	dim(1) = dim1;
+	return(dim);
+}
+
+Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
+	int j = 0;
+	for (int i = 0; i < row.length(); i++)
+		if (row(i))
+			j++;
+	Rcpp::IntegerVector ret(j);
+	for (int i = 0, j = 0; i < row.length(); i++)
+		if (row(i))
+			ret(j++) = i + 1; // R is 1-based
+	return(ret);
+}
+
+// [[Rcpp::export]]
+Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
+		bool sparse = true) {
 	std::vector<geos::geom::Geometry *> gmv0 = GeomFromSfc(sfc0);
 	std::vector<geos::geom::Geometry *> gmv1 = GeomFromSfc(sfc1);
+	Rcpp::List out_list(1); // generalize return type
 
-	Rcpp::CharacterVector out(sfc0.length() * sfc1.length());
-	for (int i = 0; i < sfc0.length(); i++) {
-		for (int j = 0; j < sfc1.length(); j++) {
-			static geos::geom::IntersectionMatrix* im;
-			im = geos::operation::relate::RelateOp::relate(gmv0[i], gmv1[j]);
-			out[i * sfc1.length() + j] = im->toString(); // TODO: does this copy the string?
+	using namespace Rcpp;
+	if (op == "relate") { // character return matrix:
+		Rcpp::CharacterVector out(sfc0.length() * sfc1.length());
+		for (int i = 0; i < sfc0.length(); i++) {
+			for (int j = 0; j < sfc1.length(); j++) {
+				static geos::geom::IntersectionMatrix* im;
+				im = geos::operation::relate::RelateOp::relate(gmv0[i], gmv1[j]);
+				out[j * sfc0.length() + i] = im->toString(); // TODO: does this copy the string?
+			}
 		}
+		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
+		out_list[0] = out;
+		return(out_list);
+	} 
+	if (op == "distance") { // double return matrix:
+		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
+		for (int i = 0; i < sfc0.length(); i++)
+			for (int j = 0; j < sfc1.length(); j++)
+				out(i,j) = gmv0[i]->distance(gmv1[j]);
+		out_list[0] = out;
+		return(out_list);
 	}
-	Rcpp::NumericVector dim(2);
-	dim(0) = sfc1.length(); 
-	dim(1) = sfc0.length();
-	out.attr("dim") = dim;
-	return(out);
+	// other: boolean return matrix, possibly sparse
+	Rcpp::LogicalMatrix outm;
+	if (! sparse) 
+		outm = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
+	Rcpp::List outl(sfc0.length());
+	for (int i = 0; i < sfc0.length(); i++) { // row
+		Rcpp::LogicalVector rowi(sfc1.length()); 
+		if (op == "intersects") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->intersects(gmv1[j]);
+		} else if (op == "disjoint") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->disjoint(gmv1[j]);
+		} else if (op == "touches") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->touches(gmv1[j]);
+		} else if (op == "crosses") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->crosses(gmv1[j]);
+		} else if (op == "within") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->within(gmv1[j]);
+		} else if (op == "contains") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->contains(gmv1[j]);
+		} else if (op == "overlaps") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->overlaps(gmv1[j]);
+		} else if (op == "equals") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->equals(gmv1[j]);
+		} else if (op == "covers") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->covers(gmv1[j]);
+		} else if (op == "coveredBy") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->coveredBy(gmv1[j]);
+		} else if (op == "equalsExact") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->equalsExact(gmv1[j], par);
+		} else if (op == "isWithinDistance") {
+			for (int j = 0; j < sfc1.length(); j++) 
+				rowi(j) = gmv0[i]->isWithinDistance(gmv1[j], par);
+		} else
+			throw std::range_error("wrong value for op");
+		if (! sparse)
+			outm(i,_) = rowi;
+		else
+			outl[i] = get_which(rowi);
+	}
+	out_list[0] = sparse ? outl : outm;
+	return(out_list);
 }
 
 // [[Rcpp::export]]
