@@ -3,7 +3,7 @@ context("sf: subset; p4s")
 test_that("we can subset sf objects", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)
-  s1 = st_sf(a = c("x", "y"), geom = st_sfc(list(pt1, pt2)))
+  s1 = st_sf(a = c("x", "y"), geom = st_sfc(pt1, pt2))
   expect_equal(s1[[1]], factor(c("x", "y")))
   expect_equal(s1[,1], data.frame(x = c("x", "y")))
 
@@ -12,7 +12,7 @@ test_that("we can subset sf objects", {
   expect_equal(st_p4s(s1[1,]), NULL)
 
   a = c("x", "y")
-  g = st_sfc(list(pt1, pt2))
+  g = st_sfc(pt1, pt2)
   expect_warning(st_sf(a,g,g), "more than one geometry column: ignoring all but first")
 })
 

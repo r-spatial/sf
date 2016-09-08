@@ -49,7 +49,7 @@ st_read = function(dsn, layer, ...) {
 	ids = rgdal2::getIDs(o)
 	srs = rgdal2::getSRS(o)
 	p4s = if (is.null(srs)) as.character(NA) else rgdal2::getPROJ4(srs)
-	geom = st_sfc(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s)
+	geom = do.call(st_sfc, c(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s))
 	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
 	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
 	df$geom = geom

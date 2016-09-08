@@ -30,33 +30,33 @@
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
 #' l2 = st_linestring(matrix(runif(6)-0.5,,2))
 #' l3 = st_linestring(matrix(runif(6)-0.5,,2))
-#' s = st_sf(a=2:4, b=st_sfc(list(l1,l2,l3)))
+#' s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
 #' plot(s, col = s$a, axes = FALSE)
 #' plot(s, col = s$a)
 #' attr(s$b, "proj4string") = sp::CRS("+init=epsg:4326")@projargs
 #' plot(s, col = s$a, axes = TRUE)
 #' plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 #' l4 = st_linestring(matrix(runif(6),,2))
-#' plot(st_sf(a=1,b=st_sfc(list(l4))), add = TRUE)
+#' plot(st_sf(a=1,b=st_sfc(l4)), add = TRUE)
 #' # plot multilinestrings:
 #' ml1 = st_multilinestring(list(l1, l2))
 #' ml2 = st_multilinestring(list(l3, l4))
-#' ml = st_sf(a = 2:3, b = st_sfc(list(ml1, ml2)))
+#' ml = st_sf(a = 2:3, b = st_sfc(ml1, ml2))
 #' plot(ml, col = ml$a, lty = ml$a, lwd = ml$a, pch = ml$a, type = 'b')
 #' # plot points:
 #' p1 = st_point(c(1,2))
 #' p2 = st_point(c(3,3))
 #' p3 = st_point(c(3,0))
-#' p = st_sf(a=2:4, b=st_sfc(list(p1,p2,p3)))
+#' p = st_sf(a=2:4, b=st_sfc(p1,p2,p3))
 #' plot(p, col = s$a, axes = TRUE)
 #' plot(p, col = s$a)
 #' plot(p, col = p$a, pch = p$a, cex = p$a, bg = s$a, lwd = 2, lty = 2, type = 'b')
 #' p4 = st_point(c(2,2))
-#' plot(st_sf(a=1, st_sfc(list(p4))), add = TRUE)
+#' plot(st_sf(a=1, st_sfc(p4)), add = TRUE)
 #' # multipoints:
 #' mp1 = st_multipoint(matrix(1:4,2))
 #' mp2 = st_multipoint(matrix(5:8,2))
-#' mp = st_sf(a = 2:3, b = st_sfc(list(mp1, mp2)))
+#' mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
 #' plot(mp)
 #' plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
 #' # polygon:
@@ -65,7 +65,7 @@
 #' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 #' pl1 = st_polygon(list(outer, hole1, hole2))
 #' pl2 = st_polygon(list(outer+10, hole1+10, hole2+10))
-#' po = st_sf(a = 2:3, st_sfc(list(pl1,pl2)))
+#' po = st_sf(a = 2:3, st_sfc(pl1,pl2))
 #' plot(po, col = po$a, border = rev(po$a), lwd=3)
 #' # multipolygon
 #' r10 = matrix(rep(c(0,10),each=5),5)
@@ -74,12 +74,12 @@
 #' pl3 = list(outer+r10, hole1+r10, hole2+r10)
 #' mpo1 = st_multipolygon(list(pl1,pl2))
 #' mpo2 = st_multipolygon(list(pl3))
-#' mpo = st_sf(a=2:3, b=st_sfc(list(mpo1,mpo2)))
+#' mpo = st_sf(a=2:3, b=st_sfc(mpo1,mpo2))
 #' plot(mpo, col = mpo$a, border = rev(mpo$a), lwd = 2)
 #' # geometrycollection:
 #' gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
 #' gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
-#' gc = st_sf(a=2:3, b = st_sfc(list(gc1,gc2)))
+#' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
 plot.sf <- function(x, y, ...) {

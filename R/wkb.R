@@ -49,7 +49,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
 			stop(paste("more than one unique SRID found:", paste(epsg, collapse = ", ")))
 	} else
 		epsg = NA_integer_
-	st_sfc(ret, epsg = epsg, ...)
+	do.call(st_sfc, c(ret, epsg = epsg))
 }
 
 sf.tp = toupper(c(
@@ -253,7 +253,7 @@ st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR 
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)
-		return(WriteWKB(st_sfc(list(x)), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
+		return(WriteWKB(st_sfc(x), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
 	}
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))

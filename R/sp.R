@@ -46,7 +46,7 @@ st_as_sf.Spatial = function(x, ...) {
 setCRS = function(lst, x) {
 	p4 = x@proj4string@projargs
 	if (is.na(p4))
-		return(st_sfc(lst, epsg = NA_integer_, proj4string = NA_character_))
+		return(do.call(st_sfc, c(lst, epsg = NA_integer_, proj4string = NA_character_)))
 	getEPSG = function(x) { # gets EPSG code out of proj4string:
 		spl = strsplit(x, " ")[[1]]
 		w = grep("+init=epsg:", spl)
@@ -55,7 +55,7 @@ setCRS = function(lst, x) {
 		else
 			NA_integer_
 	}
-	st_sfc(lst, epsg = getEPSG(p4), proj4string = p4)
+	do.call(st_sfc, c(lst, epsg = getEPSG(p4), proj4string = p4))
 }
 
 #' convert foreign geometry object to an sfc object

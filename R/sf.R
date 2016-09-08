@@ -18,11 +18,11 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
-#' st_sfc(list(pt1, pt2))
+#' st_sfc(pt1, pt2)
 #' d = data.frame(a = 1:2)
-#' d$geom = st_sfc(list(pt1, pt2))
+#' d$geom = st_sfc(pt1, pt2)
 #' df = st_as_sf(d)
-#' d$geom2 = st_sfc(list(pt1, pt2))
+#' d$geom2 = st_sfc(pt1, pt2)
 #' st_as_sf(d) # should warn
 #' data(meuse, package = "sp")
 #' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
@@ -32,9 +32,9 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
 		epsg = NA_integer_, proj4string = NA_character_, remove_coordinates = TRUE) {
 	if (! missing(coords)) {
-		x$geometry = st_sfc(lapply(seq_len(nrow(x)), 
+		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
 				function(i) st_point(unlist(x[i, coords]), third = third)
-					), epsg = epsg, proj4string = proj4string)
+					), epsg = epsg, proj4string = proj4string))
 		if (remove_coordinates)
 			x[coords] = NULL
 	}
@@ -62,10 +62,10 @@ st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 #' @param stringsAsFactors logical; see \link{data.frame}
 #' @details \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
-#' g = st_sfc(list(st_point(1:2)))
+#' g = st_sfc(st_point(1:2))
 #' st_sf(a=3,g)
 #' st_sf(g, a=3)
-#' st_sf(a=3, st_sfc(list(st_point(1:2)))) # better to name it!
+#' st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
 #' @export
 st_sf = function(..., relation_to_geometry = NA_character_, row.names, 
 		stringsAsFactors = default.stringsAsFactors()) {
@@ -113,7 +113,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' @param drop whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}
 #' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped, an \code{sfc} object if only the geometry column is selected, otherwise the behavior depending on \code{drop} is identical to that of \link{[.data.frame}.
 #' @examples
-#' g = st_sfc(list(st_point(1:2), st_point(3:4)))
+#' g = st_sfc(st_point(1:2), st_point(3:4))
 #' s = st_sf(a=3:4, g)
 #' s[1,]
 #' class(s[1,])

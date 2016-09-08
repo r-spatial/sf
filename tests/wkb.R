@@ -1,7 +1,7 @@
 library(sf)
 round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 	if (inherits(x, "sfi"))
-		x = st_sfc(list(x))
+		x = st_sfc(x)
 	wkb = st_as_wkb(x, EWKB = EWKB, pureR = pureR)
 	class(wkb) = "WKB"
 	# print(wkb)

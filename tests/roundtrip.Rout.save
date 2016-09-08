@@ -28,7 +28,7 @@ Linking to GEOS 3.5.0
 > pol3 = list(outer + 24)
 > mp = list(pol1,pol2,pol3)
 > mp1 = st_multipolygon(mp)
-> sf = st_sf(a=1, st_sfc(list(mp1)))
+> sf = st_sf(a=1, st_sfc(mp1))
 > a = as(sf, "Spatial")
 > class(a)
 [1] "SpatialPolygonsDataFrame"
@@ -146,4 +146,4 @@ In data.row.names(row.names, rowsi, i) :
 > 
 > proc.time()
    user  system elapsed 
-  3.156   0.312   3.162 
+  3.264   0.300   3.254 

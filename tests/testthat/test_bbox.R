@@ -8,6 +8,6 @@ test_that("st_bbox", {
   x = st_geometrycollection(list(st_point(1:2),st_linestring(matrix(1:4,2))))
   expect_true(all(st_bbox(x) == c(1,2,2,4)))
   expect_true(all(names(st_bbox(x)) == c("xmin","ymin","xmax","ymax")))
-  x = st_sf(a = 1, geom = st_sfc(list(x)))
+  x = st_sf(a = 1, geom = st_sfc(x))
   expect_true(all(st_bbox(x) == c(1,2,2,4)))
 })

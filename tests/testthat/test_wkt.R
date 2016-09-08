@@ -5,6 +5,6 @@ test_that("well-known text", {
   expect_identical(x, "GEOMETRYCOLLECTION(POINT(1 2), LINESTRING(1 3, 2 4))")
   p1 = st_point(1:3)
   p2 = st_point(5:7)
-  sfc = st_sfc(list(p1,p2))
+  sfc = st_sfc(p1,p2)
   expect_identical(st_as_wkt(sfc), c("POINTZ(1 2 3)", "POINTZ(5 6 7)"))
 })

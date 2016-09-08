@@ -7,8 +7,8 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' create simple feature list column, set class, and add coordinate reference system
 #' 
-#' @param lst list with simple feature objects, or single simple feature
-#' @param epsg integer; epsg code
+#' @param ... one or more simple feature objects
+#' @param epsg integer; epsg (or SRID) code
 #' @param precision double; the precisoin model to use when converting to WKB; see \link{st_as_wkb}
 #' @param proj4string character; describing the coordinate reference systems in PROJ.4 syntax
 #' 
@@ -17,20 +17,23 @@ format.sfc = function(x, ..., digits = 30) {
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
-#' (sfc = st_sfc(list(pt1, pt2)))
+#' (sfc = st_sfc(pt1, pt2))
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-st_sfc = function(lst, epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
-	if (!is.list(lst))
-		lst = list(lst)
+st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
+	lst = list(...)
 	stopifnot(is.numeric(epsg))
 	stopifnot(is.character(proj4string))
-	if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
-		lst = coerceTypes(lst)
-	else
-		attr(lst, "n_types") = NULL # remove
-	class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+	if (length(lst) == 0) # empty set
+		class(lst) = "sfc"
+	else {
+		if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
+			lst = coerceTypes(lst)
+		else
+			attr(lst, "n_types") = NULL # remove
+		class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+	}
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)
 	attr(lst, "precision") = precision
@@ -85,8 +88,10 @@ print.sfc = function(x,..., n = 5L) {
 		sep = "\n"
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
 	cat(paste0("Simple feature collection with ", length(x), " feature", sep))
-	cat(paste0("Feature type: ", cls, "\n"))
-	cat(paste0("Dimension:    ", class(x[[1]])[1], "\n"))
+	if (length(x)) {
+		cat(paste0("Feature type: ", cls, "\n"))
+		cat(paste0("Dimension:    ", class(x[[1]])[1], "\n"))
+	}
 	cat(paste0("Bbox:         "))
 	bb = signif(attr(x, "bbox"), 7)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
@@ -94,14 +99,16 @@ print.sfc = function(x,..., n = 5L) {
 	# attributes: epsg, proj4string, precision
 	cat(paste0("SRID (epsg):  ", attr(x, "epsg"), "\n"))
 	cat(paste0("PROJ4 string: ", attr(x, "proj4string"), "\n"))
-	cat(paste0("Precision:    ", attr(x, "precision")))
+	cat(paste0("Precision:    "))
 	if (attr(x, "precision") == 0.0)
-		cat(" (default; no precision model)\n")
+		cat("double (default; no precision model)\n")
+	else if (attr(x, "precision") < 0.0)
+		cat("float (single precision)\n")
 	else
-		cat("\n")
+		cat(paste(attr(x, "precision"), "\n"))
 	if (length(x) > n)
 		cat(paste0("First ", n, " geometries:\n"))
-	for (i in 1:min(n, length(x)))
+	for (i in seq_len(min(n, length(x))))
 		print(x[[i]], digits = 50)
 	invisible(x)
 }

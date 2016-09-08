@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 Linking to GEOS 3.5.0
 > round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 + 	if (inherits(x, "sfi"))
-+ 		x = st_sfc(list(x))
++ 		x = st_sfc(x)
 + 	wkb = st_as_wkb(x, EWKB = EWKB, pureR = pureR)
 + 	class(wkb) = "WKB"
 + 	# print(wkb)
@@ -67,4 +67,4 @@ Linking to GEOS 3.5.0
 > 
 > proc.time()
    user  system elapsed 
-  0.340   0.264   0.293 
+  0.304   0.304   0.298 
