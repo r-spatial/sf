@@ -9,6 +9,7 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
 
 #include "wkb.h"
 
@@ -91,57 +92,58 @@ Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double p
 		out_list[0] = out;
 		return(out_list);
 	}
-	// other: boolean return matrix, possibly sparse
-	Rcpp::LogicalMatrix outm;
-	if (! sparse) 
-		outm = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
-	Rcpp::List outl(sfc0.length());
+	// other cases: boolean return matrix, either dense or sparse
+	Rcpp::LogicalMatrix outmat;
+	if (! sparse)  // allocate:
+		outmat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
+	Rcpp::List outlist(sfc0.length());
 	for (int i = 0; i < sfc0.length(); i++) { // row
+	// TODO: speed up contains, containsproperly, covers, and intersects with prepared geometry i
 		Rcpp::LogicalVector rowi(sfc1.length()); 
-		if (op == "intersects") {
+		if (op == "intersects")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->intersects(gmv1[j]);
-		} else if (op == "disjoint") {
+		else if (op == "disjoint")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->disjoint(gmv1[j]);
-		} else if (op == "touches") {
+		else if (op == "touches")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->touches(gmv1[j]);
-		} else if (op == "crosses") {
+		else if (op == "crosses")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->crosses(gmv1[j]);
-		} else if (op == "within") {
+		else if (op == "within")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->within(gmv1[j]);
-		} else if (op == "contains") {
+		else if (op == "contains")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->contains(gmv1[j]);
-		} else if (op == "overlaps") {
+		else if (op == "overlaps")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->overlaps(gmv1[j]);
-		} else if (op == "equals") {
+		else if (op == "equals")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->equals(gmv1[j]);
-		} else if (op == "covers") {
+		else if (op == "covers")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->covers(gmv1[j]);
-		} else if (op == "coveredBy") {
+		else if (op == "coveredBy")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->coveredBy(gmv1[j]);
-		} else if (op == "equalsExact") {
+		else if (op == "equalsExact")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->equalsExact(gmv1[j], par);
-		} else if (op == "isWithinDistance") {
+		else if (op == "isWithinDistance")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->isWithinDistance(gmv1[j], par);
-		} else
+		else
 			throw std::range_error("wrong value for op");
 		if (! sparse)
-			outm(i,_) = rowi;
+			outmat(i,_) = rowi;
 		else
-			outl[i] = get_which(rowi);
+			outlist[i] = get_which(rowi);
 	}
-	out_list[0] = sparse ? outl : outm;
+	out_list[0] = sparse ? outlist : outmat;
 	return(out_list);
 }
 
