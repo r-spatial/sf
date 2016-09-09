@@ -43,6 +43,7 @@ st_transform.sf = function(x, proj4string = NA_character_, ...) {
 
 #' @name st_transform
 #' @export
+#' @details the st_transform method for sfi objects assumes that the proj4string of the object is available as an attribute of that name.
 #' @examples 
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform.sfi = function(x, proj4string = NA_character_, ...) {

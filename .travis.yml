@@ -1,6 +1,7 @@
 before_install:
   - export CURWD=`pwd`
   - sudo apt-get install libproj-dev libgeos++-dev
+  - cd
   - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
   - tar zxf gdal-2.1.0.tar.gz
   - cd gdal-2.1.0
