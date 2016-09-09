@@ -74,7 +74,6 @@ Rcpp::List HexToRaw(Rcpp::CharacterVector cx) {
 	return output;
 }
 
-
 // [[Rcpp::export]]
 Rcpp::List ReadWKB(Rcpp::List wkb_list, bool EWKB = false, int endian = 0, bool debug = false) {
 	Rcpp::List output(wkb_list.size());

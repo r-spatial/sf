@@ -31,15 +31,15 @@ then
   exit 1
 fi
 
-#if test `gdal-config --version`
-#then
-#  echo "linking against gdal version" `gdal-config --version`
-#  GDAL_CPPFLAGS=`gdal-config --cflags`
-#  GDAL_LIBS=`gdal-config --libs`
-#else
-#    echo 'Unable to find gdal-dev'
-#    exit 1
-#fi
+if test `gdal-config --version`
+then
+  echo "linking against gdal version" `gdal-config --version`
+  GDAL_CPPFLAGS=`gdal-config --cflags`
+  GDAL_LIBS=`gdal-config --libs`
+else
+    echo 'Unable to find gdal-dev'
+    exit 1
+fi
 
 GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
@@ -51,11 +51,11 @@ else
   echo "no geos support: geos++-dev not installed"
   exit 1
 fi
-AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS}"])
+#AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"])
+#AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS}"])
 
-#AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-#AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
+AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
+AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
 
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT

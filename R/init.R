@@ -10,15 +10,15 @@ setOldClass("sf")
 setOldClass("sfc")
 setOldClass("sfi")
 
-#.onLoad = function(libname, pkgname) {
-#	GDALInit()
-#}
-#
-#.onUnload = function(libname, pkgname) {
-#	RGDAL_CleanupAll()
-#}
+.onLoad = function(libname, pkgname) {
+	GDALInit()
+}
+
+.onUnload = function(libname, pkgname) {
+	RGDAL_CleanupAll()
+}
 
 .onAttach = function(libname, pkgname) {
-#	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion(), "; ", versionInfo()))
-	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion()))
+	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion(), ", GDAL ", versionInfo()))
+#	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion()))
 }

@@ -135,6 +135,10 @@ summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
     summary(u, maxsum = maxsum, ...)
 }
 
+#' @name st_geometry
+#' @export
+st_geometry.sfc = function(obj, ...) obj
+
 #' summarize simple feature type for tibble
 #'
 #' summarize simple feature type for tibble

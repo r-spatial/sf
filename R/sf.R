@@ -44,11 +44,12 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 #' get geometry from sf object
 #' 
 #' get geometry from sf object
-#' @param obj object of class \code{sf}
+#' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
 #' @export
 st_geometry = function(obj, ...) UseMethod("st_geometry")
 
+#' @name st_geometry
 #' @export
 st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 
