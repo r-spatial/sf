@@ -67,7 +67,7 @@ const char* versionInfo(const char* what = "RELEASE_NAME")
   return GDALVersionInfo(what);
 }
 
-void OGR_Error(OGRErr err) {
+void HandleError(OGRErr err) {
 	if (err != 0) {
 		Rcpp::Rcout << "Error code: " << err << std::endl;
 		throw std::range_error("OGR error");
@@ -80,10 +80,10 @@ std::vector<OGRGeometry *> OGRGeometryFromSfc(Rcpp::List sfc, const char *proj4)
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *ref = new OGRSpatialReference;
-	OGR_Error(ref->importFromProj4(proj4));
+	HandleError(ref->importFromProj4(proj4));
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		OGR_Error(f.createFromWkb(&(r[0]), ref, &(g[i]), -1, wkbVariantIso));
+		HandleError(f.createFromWkb(&(r[0]), ref, &(g[i]), -1, wkbVariantIso));
 	}
 	ref->Release();
 	return(g);
@@ -94,32 +94,37 @@ Rcpp::List SfcFromOGRGeometries(std::vector<OGRGeometry *> g) {
 	OGRGeometryFactory f;
 	for (int i = 0; i < g.size(); i++) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
-		OGR_Error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
+		HandleError(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
 		f.destroyGeometry(g[i]);
 	}
-	Rcpp::List ret = ReadWKB(lst, false, 1, false);
-	return(ret);
+	return(ReadWKB(lst, false, 1, false));
 }
 
 // [[Rcpp::export]]
 Rcpp::List OGR_Transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
-	std::vector<OGRGeometry *> g = OGRGeometryFromSfc(sfc, sfc.attr("proj4string"));
+
+	// import proj4string:
 	OGRSpatialReference *dest = new OGRSpatialReference;
-	const char *prj = proj4[0];
-	OGR_Error(dest->importFromProj4(prj));
+	HandleError(dest->importFromProj4((const char *) (proj4[0])));
+
+	// get the proj4string as OGR thinks it is (e.g., resolve epsg)
 	Rcpp::CharacterVector p4atr(1);
 	char *cp = NULL; 
 	dest->exportToProj4(&cp);
 	p4atr[0] = cp;
+
+	// transform geometries:
+	std::vector<OGRGeometry *> g = OGRGeometryFromSfc(sfc, sfc.attr("proj4string"));
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	for (int i = 0; i < g.size(); i++)
-		OGR_Error(g[i]->transform(ct));
+		HandleError(g[i]->transform(ct));
+
+	ct->DestroyCT(ct);
+	dest->Release();
 	Rcpp::List ret = SfcFromOGRGeometries(g); // will destroy g;
 	ret.attr("proj4string") = p4atr;
 	free(cp); // valgrind said
-	delete dest;
-	ct->DestroyCT(ct);
 	return(ret);
 }
