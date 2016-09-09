@@ -79,12 +79,13 @@ std::vector<OGRGeometry *> OGRGeometryFromSfc(Rcpp::List sfc, const char *proj4)
 	Rcpp::List wkblst = WriteWKB(sfc, false, 1, "XY", false, precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
+	OGRSpatialReference *ref = new OGRSpatialReference;
+	OGR_Error(ref->importFromProj4(proj4));
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		OGRSpatialReference *ref = new OGRSpatialReference;
-		OGR_Error(ref->importFromProj4(strdup(proj4))); // TODO: strdup every time?
 		OGR_Error(f.createFromWkb(&(r[0]), ref, &(g[i]), -1, wkbVariantIso));
 	}
+	ref->Release();
 	return(g);
 }
 
@@ -106,18 +107,18 @@ Rcpp::List OGR_Transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	std::vector<OGRGeometry *> g = OGRGeometryFromSfc(sfc, sfc.attr("proj4string"));
 	OGRSpatialReference *dest = new OGRSpatialReference;
 	const char *prj = proj4[0];
-	OGR_Error(dest->importFromProj4(strdup(prj)));
-	// return value for proj4string: get substitutions from GDAL:
+	OGR_Error(dest->importFromProj4(prj));
 	Rcpp::CharacterVector p4atr(1);
-	char *cp; 
+	char *cp = NULL; 
 	dest->exportToProj4(&cp);
 	p4atr[0] = cp;
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	for (int i = 0; i < g.size(); i++)
 		OGR_Error(g[i]->transform(ct));
-	Rcpp::List ret = SfcFromOGRGeometries(g); // destroys g;
+	Rcpp::List ret = SfcFromOGRGeometries(g); // will destroy g;
 	ret.attr("proj4string") = p4atr;
+	free(cp); // valgrind said
 	delete dest;
 	ct->DestroyCT(ct);
 	return(ret);
