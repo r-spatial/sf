@@ -55,7 +55,7 @@ void GDALInit()
 }
 
 // [[Rcpp::export]]
-void RGDAL_CleanupAll()
+void GDAL_CleanupAll()
 {
     OGRCleanupAll();
     OSRCleanup();
@@ -76,7 +76,7 @@ void HandleError(OGRErr err) {
 
 std::vector<OGRGeometry *> OGRGeometryFromSfc(Rcpp::List sfc, const char *proj4) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = WriteWKB(sfc, false, 1, "XY", false, precision);
+	Rcpp::List wkblst = WriteWKB(sfc, false, native_endian(), "XY", false, precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *ref = new OGRSpatialReference;
@@ -98,7 +98,7 @@ Rcpp::List SfcFromOGRGeometries(std::vector<OGRGeometry *> g) {
 		lst[i] = raw;
 		f.destroyGeometry(g[i]);
 	}
-	return(ReadWKB(lst, false, 1, false));
+	return(ReadWKB(lst, false, native_endian(), false));
 }
 
 // [[Rcpp::export]]

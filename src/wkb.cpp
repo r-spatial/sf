@@ -523,3 +523,10 @@ void WriteData(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = fa
 		}
 	}
 }
+
+int native_endian(void) {
+	const int one = 1;
+	unsigned char *cp = (unsigned char *) &one;
+	// Rcpp::Rcout << "native endian: " << (int) *cp << std::endl;
+	return((int) *cp);
+}

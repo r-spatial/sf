@@ -25,7 +25,7 @@ geos::geom::Geometry *GeomFromRaw(Rcpp::RawVector wkb) {
 
 std::vector<geos::geom::Geometry *> GeomFromSfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = WriteWKB(sfc, false, 1, "XY", false, precision);
+	Rcpp::List wkblst = WriteWKB(sfc, false, native_endian(), "XY", false, precision);
 	std::vector<geos::geom::Geometry *> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = GeomFromRaw(wkblst[i]);
