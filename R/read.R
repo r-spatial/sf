@@ -34,8 +34,15 @@ readFeature = function(layer, id) {
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @examples
-#' if (Sys.getenv("USER") == "edzer") {
-#'  (s = st_read("PG:dbname=postgis", "meuse2"))
+#' if (Sys.getenv("USER") == "travis") { # load meuse to postgis
+#'  library(sp)
+#'  example(meuse, ask = FALSE, echo = FALSE)
+#'  proj4string(meuse) = NA_character_
+#'  library(rgdal)
+#'  writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
+#' }
+#' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }
 #' (s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
@@ -79,8 +86,8 @@ st_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = char
 #' @param dbname character; database name, only used if cn is \code{NULL}
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @examples 
-#' if (Sys.getenv("USER") == "edzer") {
-#'   st_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
+#' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#'   st_read_pg(dbname = "postgis", query = "select * from meuse limit 3;")
 #' }
 #' @name st_read
 #' @export
