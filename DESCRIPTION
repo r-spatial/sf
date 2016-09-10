@@ -5,6 +5,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 		email = "edzer.pebesma@uni-muenster.de"),
 	person("Roger", "Bivand", role = "ctb"),
 	person("Ian", "Cook", role = "ctb"),
+	person("Tim", "Keitt", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"))
 Depends: R (>= 3.0.0)
 Imports: utils, stats, graphics, methods, Rcpp
@@ -16,4 +17,4 @@ SystemRequirements: GEOS++
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1
-Collate: RcppExports.R init.R bbox.R read.R sfc.R sfi.R sf.R sp.R wkb.R wkt.R plot.R transform.R
+Collate: RcppExports.R init.R bbox.R read.R sfc.R sfi.R sf.R wkb.R wkt.R plot.R transform.R sp.R

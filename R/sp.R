@@ -47,15 +47,7 @@ setCRS = function(lst, x) {
 	p4 = x@proj4string@projargs
 	if (is.na(p4))
 		return(do.call(st_sfc, c(lst, epsg = NA_integer_, proj4string = NA_character_)))
-	getEPSG = function(x) { # gets EPSG code out of proj4string:
-		spl = strsplit(x, " ")[[1]]
-		w = grep("+init=epsg:", spl)
-		if (length(w) == 1)
-			as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
-		else
-			NA_integer_
-	}
-	do.call(st_sfc, c(lst, epsg = getEPSG(p4), proj4string = p4))
+	do.call(st_sfc, c(lst, epsg = epsgFromProj4(p4), proj4string = p4))
 }
 
 #' convert foreign geometry object to an sfc object
@@ -72,6 +64,7 @@ st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 #' @export
 st_as_sfc.SpatialPoints = function(x,...) {
 	cc = x@coords
+	dimnames(cc) = NULL
 	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
 	setCRS(lst, x)
 }
@@ -139,11 +132,11 @@ setAs("sf", "Spatial", function(from) {
 		stop("package sp required, please install it first")
 	geom = st_geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
-	sp::addAttrToGeom(as_Spatial(geom), data.frame(from), match.ID = FALSE)
+	sp::addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
 })
 
-#setAs("sfc", "Spatial", function(from) {
-as_Spatial = function(from) {
+setAs("sfc", "Spatial", function(from) {
+# as_Spatial = function(from) {
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
@@ -155,8 +148,7 @@ as_Spatial = function(from) {
 		"sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from) },
 		stop(paste("conversion from feature type", class(from)[1], "to sp is not supported"))
 	)
-}
-#)
+})
 
 sfc2SpatialPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))

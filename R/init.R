@@ -7,7 +7,12 @@
 NULL
 
 setOldClass("sf")
-setOldClass("sfc")
+setOldClass(c("sfc_POINT", "sfc"))
+setOldClass(c("sfc_MULTIPOINT", "sfc"))
+setOldClass(c("sfc_LINESTRING", "sfc"))
+setOldClass(c("sfc_MULTILINESTRING", "sfc"))
+setOldClass(c("sfc_POLYGON", "sfc"))
+setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass("sfi")
 
 .onLoad = function(libname, pkgname) {
@@ -15,7 +20,7 @@ setOldClass("sfi")
 }
 
 .onUnload = function(libname, pkgname) {
-	RGDAL_CleanupAll()
+	GDAL_CleanupAll()
 }
 
 .onAttach = function(libname, pkgname) {

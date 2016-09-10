@@ -1,3 +1,12 @@
+epsgFromProj4 = function(x) { # grep EPSG code out of proj4string:
+	spl = strsplit(x, " ")[[1]]
+	w = grep("+init=epsg:", spl)
+	if (length(w) == 1)
+		as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
+	else
+		NA_integer_
+}
+
 #' coordinate transformation or conversion
 #' 
 #' coordinate transformation or conversion
@@ -25,7 +34,8 @@ st_transform.sfc = function(x, proj4string = NA_character_, ...) {
 	if (is.na(proj4string))
 		stop("argument proj4string cannot be missing")
 	out = OGR_Transform(x, proj4string)
-	do.call(st_sfc, c(out, proj4string = attr(out, "proj4string")))
+	do.call(st_sfc, c(out, proj4string = attr(out, "proj4string"), 
+		epsg = epsgFromProj4(proj4string)))
 }
 
 #' @name st_transform

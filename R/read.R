@@ -35,7 +35,7 @@ readFeature = function(layer, id) {
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @examples
 #' if (Sys.getenv("USER") == "edzer") {
-#'  (s = st_read("PG:dbname=test", "test"))
+#'  (s = st_read("PG:dbname=postgis", "meuse2"))
 #'  summary(s)
 #' }
 #' (s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
