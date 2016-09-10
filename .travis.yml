@@ -1,12 +1,12 @@
 addons:
-  postgresql: "9.5"
+  postgresql: "9.4"
 
 before_script:
   - psql -U postgres -c "create extension postgis"
-  - createdb postgis
 
 before_install:
-  - sudo apt-get remove postgresql-9.1
+  - createdb postgis
+  - psql -d postgis -c "CREATE EXTENSION postgis;"
   - sudo apt-get install libproj-dev libgeos++-dev
   - export CURWD=`pwd`
   - cd
