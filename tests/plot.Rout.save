@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.5.0
+Linking to GEOS 3.5.0, GDAL 2.1.0
 > # plot linestrings:
 > l1 = st_linestring(matrix(runif(6)-0.5,,2))
 > l2 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -75,4 +75,4 @@ Linking to GEOS 3.5.0
 > 
 > proc.time()
    user  system elapsed 
-  0.524   0.268   0.487 
+  0.516   0.296   0.500 
