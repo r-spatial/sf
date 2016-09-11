@@ -1,3 +1,9 @@
+language: r
+
+sudo: required
+
+dist: trusty
+
 addons:
   postgresql: "9.4"
   apt:
@@ -6,17 +12,9 @@ addons:
       - libproj-dev
       - libgeos++-dev
 
-before_script:
-  - psql -U postgres -c "create extension postgis"
-
 before_install:
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
-  - sudo apt-get install libgdal-dev libproj-dev libgeos++-dev
-
-language: r
-
-sudo: required
 
 warnings_are_errors: false
 
