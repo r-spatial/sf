@@ -12,6 +12,7 @@ before_script:
 before_install:
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
+  - sudo apt-get install libgdal-dev libproj-dev libgeos++-dev
 
 language: r
 

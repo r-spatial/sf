@@ -116,7 +116,6 @@ attr(try(st_geometrycollection(list(mp3, pl1))), "condition") # Error:
 
 ## Reading a dataset into an sf object
 ```{r error=TRUE}
-library(rgdal2)
 (s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
 summary(s)
 ```

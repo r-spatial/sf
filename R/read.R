@@ -5,12 +5,12 @@
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @examples
-#' if (Sys.getenv("USER") == "travis") { # load meuse to postgis
+#' if (Sys.getenv("USER") == "edzer") { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  proj4string(meuse) = NA_character_
-#'  library(rgdal)
-#'  writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
+#'  #library(rgdal)
+#'  #writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
 #' }
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
