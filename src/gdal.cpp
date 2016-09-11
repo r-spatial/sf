@@ -50,7 +50,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
 void GDALInit()
 {
     CPLSetErrorHandler((CPLErrorHandler)__err_handler);
-    // GDALAllRegister();
+    GDALAllRegister();
     OGRRegisterAll();
 }
 
@@ -89,16 +89,24 @@ std::vector<OGRGeometry *> OGRGeometryFromSfc(Rcpp::List sfc, const char *proj4)
 	return(g);
 }
 
-Rcpp::List SfcFromOGRGeometries(std::vector<OGRGeometry *> g) {
+Rcpp::List SfcFromOGRGeometries(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
 	OGRGeometryFactory f;
 	for (int i = 0; i < g.size(); i++) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		HandleError(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
-		f.destroyGeometry(g[i]);
+		if (destroy)
+			f.destroyGeometry(g[i]);
 	}
 	return(ReadWKB(lst, false, native_endian(), false));
+}
+
+Rcpp::CharacterVector proj4stringFromSpatialReference(OGRSpatialReference *ref, char **cp) {
+	Rcpp::CharacterVector proj4string(1);
+	ref->exportToProj4(cp);
+	proj4string[0] = *cp;
+	return(proj4string);
 }
 
 // [[Rcpp::export]]
@@ -109,10 +117,8 @@ Rcpp::List OGR_Transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	HandleError(dest->importFromProj4((const char *) (proj4[0])));
 
 	// get the proj4string as OGR thinks it is (e.g., resolve epsg)
-	Rcpp::CharacterVector p4atr(1);
-	char *cp = NULL; 
-	dest->exportToProj4(&cp);
-	p4atr[0] = cp;
+	char *cp;
+	Rcpp::CharacterVector proj4string = proj4stringFromSpatialReference(dest, &cp);
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = OGRGeometryFromSfc(sfc, sfc.attr("proj4string"));
@@ -123,8 +129,8 @@ Rcpp::List OGR_Transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 
 	ct->DestroyCT(ct);
 	dest->Release();
-	Rcpp::List ret = SfcFromOGRGeometries(g); // will destroy g;
-	ret.attr("proj4string") = p4atr;
-	free(cp); // valgrind said
+	Rcpp::List ret = SfcFromOGRGeometries(g, true); // destroys g;
+	ret.attr("proj4string") = proj4string;
+	CPLFree(cp); // valgrind said
 	return(ret);
 }

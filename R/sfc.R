@@ -23,6 +23,10 @@ format.sfc = function(x, ..., digits = 30) {
 #' @export
 st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
 	lst = list(...)
+	# if we have only one arg, which is already a list with sfi's, but NOT a geometrycollection:
+	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfi") 
+			&& inherits(lst[[1]][[1]], "sfi"))
+		lst = lst[[1]]
 	stopifnot(is.numeric(epsg))
 	stopifnot(is.character(proj4string))
 	if (length(lst) == 0) # empty set

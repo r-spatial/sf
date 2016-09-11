@@ -1,32 +1,3 @@
-# read feature id from layer:
-readFeature = function(layer, id) {
-	# xylst2mtrx cbinds list(x=...,y=...) instances to matrix in nested lists:
-	xylst2mtrx = function(x) 
-		if (all(c("x", "y") %in% names(x))) # we're at the deepest level
-			do.call(cbind, x) 
-		else 
-			lapply(x, xylst2mtrx)
-	ft = rgdal2::getFeature(layer, id)
-	geom = rgdal2::getGeometry(ft)
-	pts = xylst2mtrx(rgdal2::getPoints(geom, nested = TRUE))
-	switch (rgdal2::getGeometryType(geom),
-      	POINT25D = ,
-       	POINT = st_point(unlist(pts)),
-      	LINESTRING25D = ,
-       	LINESTRING = st_linestring(pts),
-       	MULTILINESTRING = st_multilinestring(pts),
-       	POLYGON25D = ,
-       	POLYGON = st_polygon(pts),
-       	MULTIPOLYGON25D = ,
-       	MULTIPOLYGON = st_multipolygon(pts),
-       	MULTIPOINT = ,
-       	MULTIPOINT25D = st_multipoint(pts),
-       	LINEARRING = ,
-       	MULTILINESTRING25D = ,
-			stop(paste("geometry type", rgdal2::getGeometryType(geom), "not supported"))
-	)
-}
-
 #' read simple features from file or database
 #'
 #' read simple features from file or database
@@ -50,32 +21,12 @@ readFeature = function(layer, id) {
 #' @name st_read
 #' @export
 st_read = function(dsn, layer, ...) {
-	if (!requireNamespace("rgdal2", quietly = TRUE))
-		stop("package rgdal2 required for st_read; try devtools::install_github(\"edzer/rgdal2\")")
-	o = rgdal2::openOGRLayer(dsn, layer)
-	ids = rgdal2::getIDs(o)
-	srs = rgdal2::getSRS(o)
-	p4s = if (is.null(srs)) as.character(NA) else rgdal2::getPROJ4(srs)
-	geom = do.call(st_sfc, c(lapply(ids, function(id) readFeature(o, id)), proj4string = p4s))
-	f = lapply(ids, function(id) rgdal2::getFields(rgdal2::getFeature(o, id)))
-	df = data.frame(row.names = ids, apply(do.call(rbind, f), 2, unlist))
-	df$geom = geom
-	st_as_sf(df, ...)
-}
-
-#' @name st_read
-#' @param sf object of class \code{sf}
-#' @param driver driver name
-#' @param opts options to pass on to driver
-#' @export
-st_write = function(sf, dsn = ".", layer, driver = "ESRI Shapefile", opts = character(), ...) {
-	if (!requireNamespace("rgdal2", quietly = TRUE))
-		stop("package rgdal2 required for st_read; try devtools::install_github(\"edzer/rgdal2\")")
-	o = rgdal2::newOGRDatasource(driver = driver, fname = dsn, opts = opts)
-	geomType = class(st_geometry(sf)[[1]])[1]
-	rgdal2::addLayer(o, layer, geomType = geomType, srs = rgdal2::newSRS(st_p4s(sf)), opts = opts)
-	# how to add fields and features to the layer?
-	stop("adding fields and features to layers not yet implemented")
+	x = Read_OGR(dsn, layer)
+	geom = x$geometry
+	x$geometry = NULL
+	x = as.data.frame(x)
+	x$geometry = st_sfc(geom)
+	st_as_sf(x, ...)
 }
 
 #' read PostGIS table directly, using DBI and wkb conversion

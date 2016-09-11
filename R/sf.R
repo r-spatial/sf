@@ -89,12 +89,13 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 			data.frame(x[-sf_column], row.names = row.names, stringsAsFactors = stringsAsFactors)
 
 	# add sfc column, with right name:
-	object = as.list(substitute(list(...)))[-1L] 
-	arg_nm = sapply(object, function(x) deparse(x))
 	sfc_name = if (!is.null(names(x)) && nzchar(names(x)[sf_column]))
 		names(x)[sf_column]
-	else 
+	else {
+		object = as.list(substitute(list(...)))[-1L] 
+		arg_nm = sapply(object, function(x) deparse(x))
 		make.names(arg_nm[sf_column])
+	}
 	df[[sfc_name]] = x[[sf_column]]
 
 	# add attributes:
