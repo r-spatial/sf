@@ -1,5 +1,10 @@
 addons:
   postgresql: "9.4"
+  apt:
+    packages:
+      - libgdal-dev
+      - libproj-dev
+      - libgeos++-dev
 
 before_script:
   - psql -U postgres -c "create extension postgis"
@@ -7,24 +12,6 @@ before_script:
 before_install:
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
-  - sudo apt-get install libproj-dev libgeos++-dev
-  - export CURWD=`pwd`
-  - cd
-  - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
-  - tar zxf gdal-2.1.0.tar.gz
-  - cd gdal-2.1.0
-  - ./configure
-  - make
-  - sudo make install
-  - cd
-  - wget http://download.osgeo.org/proj/proj-4.9.2.tar.gz
-  - tar zxvf proj-4.9.2.tar.gz
-  - cd proj-4.9.2
-  - ./configure
-  - make
-  - sudo make install
-  - sudo ldconfig
-  - cd $CURWD
 
 language: r
 
@@ -35,7 +22,6 @@ warnings_are_errors: false
 r_packages: roxygen2
 
 r_github_packages: 
-  - edzer/rgdal2
   - jimhester/covr
 
 after_success:
