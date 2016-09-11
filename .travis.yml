@@ -16,6 +16,13 @@ before_install:
   - ./configure
   - make
   - sudo make install
+  - cd
+  - wget http://download.osgeo.org/proj/proj-4.9.2.tar.gz
+  - tar zxvf proj-4.9.2.tar.gz
+  - cd proj-4.9.2
+  - ./configure
+  - make
+  - sudo make install
   - sudo ldconfig
   - cd $CURWD
 
