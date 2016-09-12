@@ -56,3 +56,16 @@ st_read_pg = function(conn = NULL, query, dbname, geom_column = NULL, ...) {
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = TRUE)
 	st_as_sf(tbl, ...)
 }
+
+#st_read_sqlite = function(conn = NULL, query, dbname, geom_column = NULL, ...) {
+#	if (!requireNamespace("RSQLite", quietly = TRUE))
+#		stop("package RSQLite required for st_read_sqlite")
+#	if (is.null(conn))
+#		conn = RSQLite::dbConnect(RSQLite::SQLite(), dbname = dbname)
+#  	# suppress warning about unknown type "geometry":
+#	suppressWarnings(tbl <- RSQLite::dbGetQuery(conn, query))
+#	if (is.null(geom_column)) # find the geometry column - guess it's the last character column:
+#		geom_column = tail(which(sapply(tbl, is.character)), 1)
+#    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = TRUE)
+#	st_as_sf(tbl, ...)
+#}

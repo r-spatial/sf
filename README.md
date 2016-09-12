@@ -9,6 +9,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 
 * native representation of simple features in R
 * interfaces to [GEOS](https://trac.osgeo.org/geos) and [GDAL](http://www.gdal.org/)
+* direct reading from [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
 * fast I/O using reading and writing of [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary), written in C++ and Rcpp
 * support for all 17 simple feature types, for all dimensions (XY, XYZ, XYM, XYZM)
 
