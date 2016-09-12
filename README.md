@@ -5,7 +5,12 @@
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf)
 
-A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
+A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. It currently features:
+
+* native representation of simple features in R
+* interfaces to [GEOS](https://trac.osgeo.org/geos) and [GDAL](http://www.gdal.org/)
+* fast I/O using reading and writing of [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary), written in C++ and Rcpp
+* support for all 17 simple feature types, for all dimensions (XY, XYZ, XYM, XYZM)
 
 Install by
 ```
@@ -13,11 +18,10 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-The current version depends on Tim Keitt's [github package `rgdal2`](https://github.com/thk686/rgdal2), installed by
+To compile, the current package needs a C++ compiler, and binary development versions of GDAL 2.x and GEOS. For e.g. Ubuntu or debian operating systems, one could either
 
-```
-install_github("thk686/rgdal2")
-```
+* install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints, or
+* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories, and then `sudo apt-get install libgdal-dev libgeos++-dev`.
 
 See also:
 
