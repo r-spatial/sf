@@ -33,7 +33,7 @@ st_transform.sfc = function(x, proj4string = NA_character_, ...) {
 		stop("sfc object should have proj4string set")
 	if (is.na(proj4string))
 		stop("argument proj4string cannot be missing")
-	out = OGR_Transform(x, proj4string)
+	out = CPL_transform(x, proj4string)
 	do.call(st_sfc, c(out, proj4string = attr(out, "proj4string"), 
 		epsg = epsgFromProj4(proj4string)))
 }
@@ -46,8 +46,7 @@ st_transform.sf = function(x, proj4string = NA_character_, ...) {
 		stop("sfc object should have proj4string set")
 	if (is.na(proj4string))
 		stop("argument proj4string cannot be missing")
-	geom = st_transform(geom, proj4string)
-	x[[attr(x, "sf_column")]] = geom # replace 
+	x[[attr(x, "sf_column")]] = st_transform(geom, proj4string)
 	x
 }
 
@@ -60,5 +59,5 @@ st_transform.sfi = function(x, proj4string = NA_character_, ...) {
 	x = st_sfc(x, proj4string = attr(x, "proj4string"))
 	if (is.na(proj4string))
 		stop("argument proj4string cannot be missing")
-	OGR_Transform(x, proj4string)[[1]]
+	CPL_transform(x, proj4string)[[1]]
 }

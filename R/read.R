@@ -21,7 +21,7 @@
 #' @name st_read
 #' @export
 st_read = function(dsn, layer, ...) {
-	x = Read_OGR(dsn, layer)
+	x = CPL_read_ogr(dsn, layer)
 	geom = x$geometry
 	x$geometry = NULL
 	x = as.data.frame(x)
@@ -49,7 +49,7 @@ st_read_pg = function(conn = NULL, query, dbname, geom_column = NULL, ...) {
 		conn = RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = dbname)
   	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- RPostgreSQL::dbGetQuery(conn, query))
-	if (is.null(geom_column)) # find the geometry column:
+	if (is.null(geom_column)) # find the geometry column - guess it's the last character column:
 		geom_column = tail(which(sapply(tbl, is.character)), 1)
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = TRUE)
 	st_as_sf(tbl, ...)

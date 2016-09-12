@@ -13,9 +13,7 @@
 
 #include "wkb.h"
 
-Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, bool sparse);
-
-geos::geom::Geometry *GeomFromRaw(Rcpp::RawVector wkb) {
+geos::geom::Geometry *geometry_from_raw(Rcpp::RawVector wkb) {
 	std::istringstream s;
 	std::istringstream& str(s);
 	str.rdbuf()->pubsetbuf( (char *) &(wkb[0]), wkb.size());
@@ -23,25 +21,13 @@ geos::geom::Geometry *GeomFromRaw(Rcpp::RawVector wkb) {
 	return(r.read(str));
 }
 
-std::vector<geos::geom::Geometry *> GeomFromSfc(Rcpp::List sfc) {
+std::vector<geos::geom::Geometry *> geometries_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = WriteWKB(sfc, false, native_endian(), "XY", false, precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", false, precision);
 	std::vector<geos::geom::Geometry *> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
-		g[i] = GeomFromRaw(wkblst[i]);
+		g[i] = geometry_from_raw(wkblst[i]);
 	return(g);
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericMatrix st_g_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::NumericMatrix out = st_g_binop(sfc0, sfc1, "distance", 0.0, false)[0];
-	return(out);
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector st_g_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::CharacterVector out = st_g_binop(sfc0, sfc1, "relate", 0.0, false)[0];
-	return(out);	
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {
@@ -64,10 +50,10 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
 		bool sparse = true) {
-	std::vector<geos::geom::Geometry *> gmv0 = GeomFromSfc(sfc0);
-	std::vector<geos::geom::Geometry *> gmv1 = GeomFromSfc(sfc1);
+	std::vector<geos::geom::Geometry *> gmv0 = geometries_from_sfc(sfc0);
+	std::vector<geos::geom::Geometry *> gmv1 = geometries_from_sfc(sfc1);
 	Rcpp::List out_list(1); // generalize return type
 
 	using namespace Rcpp;
@@ -148,8 +134,8 @@ Rcpp::List st_g_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double p
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector st_g_isValid(Rcpp::List sfc) { 
-	std::vector<geos::geom::Geometry *> gmv = GeomFromSfc(sfc);
+Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) { 
+	std::vector<geos::geom::Geometry *> gmv = geometries_from_sfc(sfc);
 	Rcpp::LogicalVector out(sfc.length());
 	for (int i; i < sfc.length(); i++)
 		out[i] = geos::operation::valid::IsValidOp::isValid(*gmv[i]);
@@ -157,6 +143,18 @@ Rcpp::LogicalVector st_g_isValid(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-std::string st_g_geosversion(bool b = false) {
+std::string CPL_geos_version(bool b = false) {
 	return(geos::geom::geosversion());
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, false)[0];
+	return(out);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, false)[0];
+	return(out);	
 }

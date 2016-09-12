@@ -16,14 +16,14 @@ setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass("sfi")
 
 .onLoad = function(libname, pkgname) {
-	GDALInit()
+	CPL_gdal_init()
 }
 
 .onUnload = function(libname, pkgname) {
-	GDAL_CleanupAll()
+	CPL_gdal_cleanup_all()
 }
 
 .onAttach = function(libname, pkgname) {
-	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion(), ", GDAL ", versionInfo()))
-#	packageStartupMessage(paste0("Linking to GEOS ", st_g_geosversion()))
+	packageStartupMessage(paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", 
+		CPL_gdal_version()))
 }

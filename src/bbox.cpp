@@ -1,7 +1,9 @@
 #include <Rcpp.h>
 
+#include "bbox.h"
+
 // [[Rcpp::export]]
-Rcpp::NumericVector GetBBOX(Rcpp::List sf, int depth = 0) {
+Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 	Rcpp::NumericVector bb(4);
 	switch(depth) {
 		case 0: 
@@ -35,7 +37,7 @@ Rcpp::NumericVector GetBBOX(Rcpp::List sf, int depth = 0) {
 		break;
 		default:
 		for (int i = 0; i < sf.size(); i++) {
-			Rcpp::NumericVector bbi = GetBBOX(sf[i], depth - 1); // recurse
+			Rcpp::NumericVector bbi = CPL_get_bbox(sf[i], depth - 1); // recurse
 			if (i == 0) {
 				bb(0) = bbi(0);
 				bb(1) = bbi(1);

@@ -5,7 +5,7 @@
 // #include "wkb.h"
 #include "gdal.h"
 
-Rcpp::List AllocateOutList(OGRFeatureDefn *poFDefn, int n_features) {
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features) {
 	int n = poFDefn->GetFieldCount() + 1; // last one for features
 	Rcpp::List out(n);
 	Rcpp::CharacterVector names(poFDefn->GetFieldCount() + 1);
@@ -35,7 +35,7 @@ Rcpp::List AllocateOutList(OGRFeatureDefn *poFDefn, int n_features) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List Read_OGR(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer)
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer)
 {
 	// adapted from the OGR tutorial @ www.gdal.org
     GDALDataset     *poDS;
@@ -60,7 +60,7 @@ Rcpp::List Read_OGR(Rcpp::CharacterVector datasource, Rcpp::CharacterVector laye
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-	Rcpp::List out = AllocateOutList(poFDefn, n);
+	Rcpp::List out = allocate_out_list(poFDefn, n);
 
     poLayer->ResetReading();
 	int i = 0;
@@ -110,8 +110,8 @@ Rcpp::List Read_OGR(Rcpp::CharacterVector datasource, Rcpp::CharacterVector laye
 	// convert to R:
 	// OGRSpatialReference *ref = poLayer->GetSpatialRef();	
 	// char *cp = NULL;
-	//Rcpp::CharacterVector proj4string = proj4stringFromSpatialReference(ref, &cp);
-	out[ poFDefn->GetFieldCount() ] = SfcFromOGRGeometries(poGeometryV, false); // don't destroy
+	//Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(ref, &cp);
+	out[ poFDefn->GetFieldCount() ] = sfc_from_geometries(poGeometryV, false); // don't destroy
 
 	//ret.attr("proj4string") = proj4string;
 	//CPLFree(cp);

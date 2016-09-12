@@ -4,7 +4,7 @@
 # most wkb read/write stuff was modified & extended from Ian Cook's wkb package, 
 # https://cran.r-project.org/web/packages/wkb/index.html
 #
-charToWKB = function(y) {
+hex_to_raw = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
 	if (substr(y, 1, 2) == "0x")
 		y = substr(y, 3, nchar(y))
@@ -30,18 +30,20 @@ skip0x = function(x) {
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
-    if (all(sapply(x, is.character))) # anticipate direct calls with raw
+    if (all(sapply(x, is.character))) { # anticipate direct calls with raw
 		x <- if (pureR)
-				structure(lapply(x, charToWKB), class = "WKB")
+				structure(lapply(x, hex_to_raw), class = "WKB")
 			else 
-				structure(HexToRaw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
+				structure(CPL_hex_to_raw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
+	} else
+		stopifnot(inherits(x, "WKB")) # WKB as raw
 	ret = if (pureR)
 			lapply(x, readWKB, EWKB = EWKB)
-		else # use C++ code:
-			ReadWKB(x, EWKB = EWKB, endian = .Platform$endian == "little")
+		else
+			CPL_read_wkb(x, EWKB = EWKB, endian = .Platform$endian == "little")
 	if (EWKB) {
 		epsg = sapply(ret, function(x) attr(x, "epsg"))
-		epsg = if (is.list(epsg)) # they were all NULL -> missing
+		epsg = if (is.list(epsg)) # they were all NULL -> return NA
 				NA_integer_
 			else
 				unique(epsg)
@@ -222,7 +224,7 @@ st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR 
 		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(WriteWKB(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE, precision), 
+		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE, precision), 
 			class = "WKB")
 	}
 }
@@ -253,7 +255,7 @@ st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR 
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)
-		return(WriteWKB(st_sfc(x), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
+		return(CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
 	}
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))
