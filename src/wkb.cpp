@@ -52,6 +52,8 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 // @cmhh: if you make yourself known, I can add you to the contributors
 
 // convert a hexadecimal string into a raw vector
+// this version, dropping istringstream and std::hex, is 12 time faster than
+// the one in the wkb github issue. C rules.
 
 	Rcpp::List output(cx.size());
 	for (int j = 0; j < cx.size(); j++) {
@@ -67,7 +69,7 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 		if (j % 1000 == 0)
 			Rcpp::checkUserInterrupt();
 	}
-	return output;
+	return(output);
 }
 
 Rcpp::NumericMatrix read_multipoint(unsigned char **pt, int n_dims, bool EWKB = 0, int endian = 0, 
@@ -146,7 +148,6 @@ Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0,
 	// read type:
 	uint32_t *wkbType = (uint32_t *) (*pt); // uint32_t requires -std=c++11
 	(*pt) += 4;
-	// Rprintf("[%u]\n", *wkbType);
 	int sf_type = 0, dim = 0, n_dims = 0;
 	std::string dim_str = ""; 
 	if (EWKB) { // EWKB: PostGIS default
@@ -261,7 +262,7 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 		Rcpp::RawVector raw = wkb_list[i];
 		unsigned char *pt = &(raw[0]);
 		output[i] = read_data(&pt, EWKB, endian, true, &type, &srid)[0];
-		if (type != last_type) {
+		if (n_types <= 1 && type != last_type) { // check if there's more than 1 type:
 			last_type = type;
 			n_types++;
 		}
@@ -491,14 +492,12 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 		srid = 0; // now we know: non-zero means: we have an srid
 
 	for (int i = 0; i < sfc.size(); i++) {
-		std::ostringstream os;
 		Rcpp::checkUserInterrupt();
+		std::ostringstream os;
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();
-		const char *cp = str.c_str();
-		for (int j = 0; j < str.size(); j++)
-			raw[j] = cp[j];
+		memcpy(raw, str.c_str(), str.size());
 		output[i] = raw; // raw vector to list
 	}
 	return output;
