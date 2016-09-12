@@ -5,7 +5,7 @@
 // #include "wkb.h"
 #include "gdal.h"
 
-Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features) {
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char *geom_name) {
 	int n = poFDefn->GetFieldCount() + 1; // last one for features
 	Rcpp::List out(n);
 	Rcpp::CharacterVector names(poFDefn->GetFieldCount() + 1);
@@ -29,7 +29,10 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features) {
 		}
 		names[i] = poFieldDefn->GetNameRef();
 	}
-	names[poFDefn->GetFieldCount()] = "geometry";
+	if (*geom_name == '\0')
+		names[poFDefn->GetFieldCount()] = "geometry";
+	else
+		names[poFDefn->GetFieldCount()] = geom_name;
 	out.attr("names") = names;
 	return(out);
 }
@@ -60,13 +63,20 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-	Rcpp::List out = allocate_out_list(poFDefn, n);
 	if (! quiet) {
 		Rcpp::Rcout << "Reading layer " << layer[0] << " from data source " << datasource[0] <<
 			" using driver " << poDS->GetDriverName() << std::endl;
 		Rcpp::Rcout << "features:    " << n << std::endl;
 		Rcpp::Rcout << "fields:      " << poFDefn->GetFieldCount() << std::endl;
 	}
+	OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(iGeomField);
+	if (poGFDefn == NULL)
+		throw std::range_error("wrong value for iGeomField");
+	Rcpp::List out = allocate_out_list(poFDefn, n, poGFDefn->GetNameRef());
+	/*
+	if (type >= 0)
+		poFDefn->SetGeomType((OGRwkbGeometryType) type);
+	*/
 
     poLayer->ResetReading();
 	int i = 0;
@@ -74,8 +84,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	bool warn_int64 = false;
     while( (poFeature = poLayer->GetNextFeature()) != NULL )
     {
-		if (i == 0 && (iGeomField < 0 || iGeomField >= poFeature->GetGeomFieldCount()))
-			throw std::range_error("wrong value for iGeomField");
 
         int iField;
         for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
@@ -134,6 +142,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (warn_int64)
 		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
 			" lost significance after conversion to double" << std::endl;
+	sfc.attr("class") = "sfc";
 	out[ poFDefn->GetFieldCount() ] = sfc;
 
 	// clean up:

@@ -24,10 +24,12 @@
 #' @export
 st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
 	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L)
-	geom = x$geometry
-	x$geometry = NULL
+	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
+	nm = names(x)[which.geom]
+	geom = x[[which.geom]]
+	x[[which.geom]] = NULL
 	x = as.data.frame(x)
-	x$geometry = st_sfc(geom)
+	x[[nm]] = st_sfc(geom)
 	st_as_sf(x, ...)
 }
 
