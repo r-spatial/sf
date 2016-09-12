@@ -47,6 +47,16 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, int en
 	bool debug, const char *cls, const char *dim, double precision);
 unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp);
 
+unsigned char char2int(char c) {
+	if (c >= '0' && c <= '9')
+		return(c - '0');
+	if (c >= 'a' && c <= 'f')
+		return(c - 'a' + 10);
+	if (c >= 'A' && c <= 'F')
+		return(c - 'A' + 10);
+	throw std::range_error("char2int: false character in hex string");
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 // HexToRaw modified from cmhh, see https://github.com/ianmcook/wkb/issues/10
@@ -55,15 +65,12 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 // convert a hexadecimal string into a raw vector
 
 	Rcpp::List output(cx.size());
-	Rcpp::CharacterVector invec(cx);
-	for (int j=0; j<cx.size(); j++) {
-		Rcpp::RawVector raw(invec[j].size() / 2);
-		std::string s = Rcpp::as<std::string>(invec[j]);
-		int x;
-		for (int i=0; i<raw.size(); i++){
-			std::istringstream iss(s.substr(i*2, 2));
-			iss >> std::hex >> x;
-			raw[i] = x;
+	for (int j = 0; j < cx.size(); j++) {
+		Rcpp::RawVector raw(cx[j].size() / 2);
+		const char *cp = &(cx[j][0]);
+		for (int i = 0; i < raw.size(); i++) {
+			raw[i] = (char2int(cp[0]) << 4) + char2int(cp[1]);
+			cp += 2;
 			if (i % 100000 == 0)
 				Rcpp::checkUserInterrupt();
 		}
@@ -91,7 +98,7 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0,
 			n_types++;
 		}
 	}
-	output.attr("n_types") = n_types; // if this is 1, we can skip the coerceTypes later on
+	output.attr("single_type") = n_types == 1; // if 1, we can skip coerceTypes() later on
 	return output;
 }
 
