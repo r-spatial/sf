@@ -497,7 +497,9 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();
-		memcpy(raw, str.c_str(), str.size());
+		const char *cp = str.c_str();
+		for (int j = 0; j < str.size(); j++)
+			raw[j] = cp[j];
 		output[i] = raw; // raw vector to list
 	}
 	return output;
