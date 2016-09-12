@@ -15,7 +15,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features) {
 			case OFTInteger:
 				out[i] = Rcpp::IntegerVector(n_features);
 				break;
-            case OFTInteger64: // fall through, but warn if > 2^53!
+            case OFTInteger64: // fall through: Int64 -> double
             case OFTReal:
 				out[i] = Rcpp::NumericVector(n_features);
 				break;
@@ -35,8 +35,8 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer)
-{
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+		bool quiet = false, int iGeomField = 0) {
 	// adapted from the OGR tutorial @ www.gdal.org
     GDALDataset     *poDS;
     poDS = (GDALDataset*) GDALOpenEx( datasource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
@@ -61,11 +61,22 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 	Rcpp::List out = allocate_out_list(poFDefn, n);
+	if (! quiet) {
+		Rcpp::Rcout << "Reading layer " << layer[0] << " from data source " << datasource[0] <<
+			" using driver " << poDS->GetDriverName() << std::endl;
+		Rcpp::Rcout << "features:    " << n << std::endl;
+		Rcpp::Rcout << "fields:      " << poFDefn->GetFieldCount() << std::endl;
+	}
 
     poLayer->ResetReading();
 	int i = 0;
+	double dbl_max_int64 = pow(2.0, 53);
+	bool warn_int64 = false;
     while( (poFeature = poLayer->GetNextFeature()) != NULL )
     {
+		if (i == 0 && (iGeomField < 0 || iGeomField >= poFeature->GetGeomFieldCount()))
+			throw std::range_error("wrong value for iGeomField");
+
         int iField;
         for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
         {
@@ -81,7 +92,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					Rcpp::NumericVector nv;
 					nv = out[iField];
 					nv[i] = (double) poFeature->GetFieldAsInteger64(iField);
-					// check overflow?
+					if (nv[i] > dbl_max_int64)
+						warn_int64 = true;
 					}
 					break;
 				case OFTReal: {
@@ -103,18 +115,26 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
         }
 		// poFeature->SetGeometryDirectly(OGRGeometryFactory::forceToMultiPolygon(
 		//	poFeature->GetGeometryRef()));
-		poGeometryV[i] = poFeature->GetGeometryRef();
+		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
+		// poGeometryV[i] = poFeature->StealGeometry();
 		poFeatureV[i] = poFeature; // so we can delete once converted
 		i++;
     }
 	// convert to R:
-	// OGRSpatialReference *ref = poLayer->GetSpatialRef();	
-	// char *cp = NULL;
-	//Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(ref, &cp);
-	out[ poFDefn->GetFieldCount() ] = sfc_from_geometries(poGeometryV, false); // don't destroy
-
-	//ret.attr("proj4string") = proj4string;
-	//CPLFree(cp);
+	Rcpp::List sfc = sfc_from_geometries(poGeometryV, false); // don't destroy
+	OGRSpatialReference *ref = poLayer->GetSpatialRef();	
+	if (ref == NULL) // try from Geometry
+		ref = poGeometryV[0]->getSpatialReference();
+	if (ref != NULL) {
+		Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(ref);
+		sfc.attr("proj4string") = proj4string;
+		if (! quiet)
+			Rcpp::Rcout << "proj4string: " << proj4string[0] << std::endl;
+	} 
+	if (warn_int64)
+		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
+			" lost significance after conversion to double" << std::endl;
+	out[ poFDefn->GetFieldCount() ] = sfc;
 
 	// clean up:
     for (int i = 0; i < n; i++)

@@ -4,13 +4,15 @@
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param ... parameter(s) passed on to \link{st_as_sf}
+#' @param quiet logical; suppress info on name, driver, size and spatial reference
+#' @param iGeomField integer; in case of multiple geometry fields, which one to take?
+#' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
 #' @examples
-#' if (Sys.getenv("USER") == "edzer") { # load meuse to postgis
+#' if (Sys.getenv("USER") == "travis") { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
-#'  proj4string(meuse) = NA_character_
-#'  #library(rgdal)
-#'  #writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
+#'  if (require(rgdal))
+#'    writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
 #' }
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
@@ -20,8 +22,8 @@
 #' summary(s)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer, ...) {
-	x = CPL_read_ogr(dsn, layer)
+st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
+	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L)
 	geom = x$geometry
 	x$geometry = NULL
 	x = as.data.frame(x)

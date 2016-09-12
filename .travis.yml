@@ -32,7 +32,9 @@ sudo: required
 
 warnings_are_errors: false
 
-r_packages: roxygen2
+r_packages:
+  - rgdal
+  - roxygen2
 
 r_github_packages: 
   - jimhester/covr

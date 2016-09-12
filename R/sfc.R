@@ -32,27 +32,33 @@ st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precisio
 	if (length(lst) == 0) # empty set
 		class(lst) = "sfc"
 	else {
-		if (is.null(attr(lst, "n_types")) || attr(lst, "n_types") != 1)
-			lst = coerceTypes(lst)
+		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
+			lst = coerce_types(lst)
 		else
-			attr(lst, "n_types") = NULL # remove
+			attr(lst, "single_type") = NULL # remove
 		class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	}
 	attr(lst, "epsg") = epsg
 	attr(lst, "bbox") = st_bbox(lst)
 	attr(lst, "precision") = precision
 	if (missing(proj4string) && !is.na(epsg) && epsg > 0L) {
-		proj4string = if (requireNamespace("sp", quietly = TRUE))
-				sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
-			else
-				paste0("+init=epsg:", epsg)
+		proj4string = CPL_proj4string_from_epsg(epsg)
+		if (proj4string == "") # no success:
+			proj4string = NA_character_
+
+			### PRIOR, this was:
+			# proj4string = if (requireNamespace("sp", quietly = TRUE))
+			#	sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
+			# else
+			#	paste0("+init=epsg:", epsg)
 	}
-	attr(lst, "proj4string") = proj4string
+	if (is.null(attr(lst, "proj4string")))
+		attr(lst, "proj4string") = proj4string
 	lst
 }
 
 # coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:
-coerceTypes = function(lst) {
+coerce_types = function(lst) {
 	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfi"))
 		stop("list item(s) not of class sfi") # sanity check
 	cls = unique(sapply(lst, function(x) class(x)[2L]))

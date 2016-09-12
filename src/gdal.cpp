@@ -102,10 +102,14 @@ Rcpp::List sfc_from_geometries(std::vector<OGRGeometry *> g, bool destroy = fals
 	return(CPL_read_wkb(lst, false, native_endian(), false));
 }
 
-Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref, char **cp) {
+Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	Rcpp::CharacterVector proj4string(1);
-	ref->exportToProj4(cp);
-	proj4string[0] = *cp;
+	char *cp;
+	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
+	OGRErr err = ref->exportToProj4(&cp);
+	proj4string[0] = cp;
+	CPLFree(cp);
+	CPLPopErrorHandler();
 	return(proj4string);
 }
 
@@ -117,8 +121,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	handle_error(dest->importFromProj4((const char *) (proj4[0])));
 
 	// get the proj4string as OGR thinks it is (e.g., resolve epsg)
-	char *cp;
-	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest, &cp);
+	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest);
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = geometries_from_sfc(sfc, sfc.attr("proj4string"));
@@ -131,6 +134,12 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	dest->Release();
 	Rcpp::List ret = sfc_from_geometries(g, true); // destroys g;
 	ret.attr("proj4string") = proj4string;
-	CPLFree(cp); // valgrind said
 	return(ret);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_proj4string_from_epsg(int epsg) {
+	OGRSpatialReference ref;
+	ref.importFromEPSG(epsg);
+	return(p4s_from_spatial_reference(&ref));
 }
