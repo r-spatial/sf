@@ -76,7 +76,7 @@ void handle_error(OGRErr err) {
 
 std::vector<OGRGeometry *> geometries_from_sfc(Rcpp::List sfc, const char *proj4) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", false, precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *ref = new OGRSpatialReference;
@@ -99,7 +99,7 @@ Rcpp::List sfc_from_geometries(std::vector<OGRGeometry *> g, bool destroy = fals
 		if (destroy)
 			f.destroyGeometry(g[i]);
 	}
-	return(CPL_read_wkb(lst, false, native_endian(), false));
+	return(CPL_read_wkb(lst, false, native_endian()));
 }
 
 Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {

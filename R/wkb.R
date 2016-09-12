@@ -30,27 +30,21 @@ skip0x = function(x) {
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
-    if (all(sapply(x, is.character))) { # anticipate direct calls with raw
+    if (all(sapply(x, is.character))) {
 		x <- if (pureR)
 				structure(lapply(x, hex_to_raw), class = "WKB")
 			else 
 				structure(CPL_hex_to_raw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
-	} else
-		stopifnot(inherits(x, "WKB")) # WKB as raw
+	} else # direct call with raw:
+		stopifnot(inherits(x, "WKB") && all(sapply(x, is.raw))) # WKB as raw
 	ret = if (pureR)
 			lapply(x, readWKB, EWKB = EWKB)
 		else
 			CPL_read_wkb(x, EWKB = EWKB, endian = .Platform$endian == "little")
-	if (EWKB) {
-		epsg = sapply(ret, function(x) attr(x, "epsg"))
-		epsg = if (is.list(epsg)) # they were all NULL -> return NA
-				NA_integer_
-			else
-				unique(epsg)
-		if (length(epsg) > 1)
-			stop(paste("more than one unique SRID found:", paste(epsg, collapse = ", ")))
-	} else
-		epsg = NA_integer_
+	epsg = if (EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
+			attr(ret, "epsg")
+		else
+			epsg = NA_integer_
 	do.call(st_sfc, c(ret, epsg = epsg))
 }
 
@@ -224,7 +218,7 @@ st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR 
 		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), FALSE, precision), 
+		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), 
 			class = "WKB")
 	}
 }

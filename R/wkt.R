@@ -53,7 +53,13 @@ st_as_wkt.sfi = function(x, ...) {
 }
 
 #' @name st_as_wkt
+#' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available
 #' @export
-st_as_wkt.sfc = function(x, ...) {
-	sapply(x, st_as_wkt, ...)
+st_as_wkt.sfc = function(x, ..., EWKT = FALSE) {
+	if (EWKT) {
+		epsg = attr(x, "epsg")
+		if (!is.na(epsg) && epsg != 0)
+			x = lapply(x, function(sfi) structure(sfi, epsg = epsg))
+	}
+	sapply(x, st_as_wkt, ..., EWKT = EWKT)
 }

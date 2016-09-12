@@ -23,7 +23,7 @@ geos::geom::Geometry *geometry_from_raw(Rcpp::RawVector wkb) {
 
 std::vector<geos::geom::Geometry *> geometries_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", false, precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<geos::geom::Geometry *> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = geometry_from_raw(wkblst[i]);
@@ -54,7 +54,6 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		bool sparse = true) {
 	std::vector<geos::geom::Geometry *> gmv0 = geometries_from_sfc(sfc0);
 	std::vector<geos::geom::Geometry *> gmv1 = geometries_from_sfc(sfc1);
-	Rcpp::List out_list(1); // generalize return type
 
 	using namespace Rcpp;
 	if (op == "relate") { // character return matrix:
@@ -67,22 +66,20 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
-		out_list[0] = out;
-		return(out_list);
+		return(Rcpp::List::create(out));
 	} 
 	if (op == "distance") { // double return matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++)
 			for (int j = 0; j < sfc1.length(); j++)
 				out(i,j) = gmv0[i]->distance(gmv1[j]);
-		out_list[0] = out;
-		return(out_list);
+		return(Rcpp::List::create(out));
 	}
 	// other cases: boolean return matrix, either dense or sparse
-	Rcpp::LogicalMatrix outmat;
+	Rcpp::LogicalMatrix densemat;
 	if (! sparse)  // allocate:
-		outmat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
-	Rcpp::List outlist(sfc0.length());
+		densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
+	Rcpp::List sparsemat(sfc0.length());
 	for (int i = 0; i < sfc0.length(); i++) { // row
 	// TODO: speed up contains, containsproperly, covers, and intersects with prepared geometry i
 		Rcpp::LogicalVector rowi(sfc1.length()); 
@@ -125,12 +122,14 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		else
 			throw std::range_error("wrong value for op");
 		if (! sparse)
-			outmat(i,_) = rowi;
+			densemat(i,_) = rowi;
 		else
-			outlist[i] = get_which(rowi);
+			sparsemat[i] = get_which(rowi);
 	}
-	out_list[0] = sparse ? outlist : outmat;
-	return(out_list);
+	if (sparse)
+		return(sparsemat);
+	else
+		return(Rcpp::List::create(densemat));
 }
 
 // [[Rcpp::export]]

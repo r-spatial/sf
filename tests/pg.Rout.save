@@ -31,9 +31,9 @@ Type 'q()' to quit R.
 +     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
 +   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
 +   	class(wkb) = "WKB"
-+     ret = st_as_sfc(wkb, EWKB = TRUE)[[1]]
++     ret = st_as_sfc(wkb, EWKB = TRUE)
 + 	cat(returnstr, "\n")
-+     cat(paste(wkt, "<-->", st_as_wkt(ret, EWKT=TRUE), "\n"))
++     cat(paste(wkt, "<-->", st_as_wkt(ret, EWKT=TRUE)[[1]], "\n"))
 + 	invisible(ret)
 +   }
 +   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
@@ -87,4 +87,4 @@ MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))
 > 
 > proc.time()
    user  system elapsed 
-  0.664   0.272   0.665 
+  0.444   0.284   0.459 

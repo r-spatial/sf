@@ -31,21 +31,10 @@
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
 
-Rcpp::NumericMatrix read_multipoint(unsigned char **pt, int n_dims, bool EWKB, int endian, 
-	Rcpp::CharacterVector cls, uint32_t *srid);
-Rcpp::NumericVector read_numeric_vector(unsigned char **pt, int n, 
-	Rcpp::CharacterVector cls, uint32_t *srid);
-Rcpp::NumericMatrix read_numeric_matrix(unsigned char **pt, int n_dims, 
-	Rcpp::CharacterVector cls, uint32_t *srid);
-Rcpp::List read_matrix_list(unsigned char **pt, int n_dims, 
-	Rcpp::CharacterVector cls, uint32_t *srid);
-Rcpp::List read_geometrycollection(unsigned char **pt, int n_dims, bool EWKB, int endian, 
-	Rcpp::CharacterVector cls, bool addclass, uint32_t *srid);
-Rcpp::List read_data(unsigned char **pt, bool EWKB, int endian, bool debug, 
-	bool addclass, int *type);
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, int endian,
-	bool debug, const char *cls, const char *dim, double precision);
-unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp);
+Rcpp::List read_data(unsigned char **pt, bool EWKB, int endian, bool addclass, 
+	int *type, uint32_t *srid);
+void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
+		int endian, const char *cls, const char *dim, double prec, int srid);
 
 unsigned char char2int(char c) {
 	if (c >= '0' && c <= '9')
@@ -67,7 +56,7 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 	Rcpp::List output(cx.size());
 	for (int j = 0; j < cx.size(); j++) {
 		Rcpp::RawVector raw(cx[j].size() / 2);
-		const char *cp = &(cx[j][0]);
+		const char *cp = cx[j];
 		for (int i = 0; i < raw.size(); i++) {
 			raw[i] = (char2int(cp[0]) << 4) + char2int(cp[1]);
 			cp += 2;
@@ -81,29 +70,73 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 	return output;
 }
 
-// [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0, 
-		bool debug = false) {
-	Rcpp::List output(wkb_list.size());
-
-	int type = 0, last_type = 0, n_types = 0;
-
-	for (int i = 0; i < wkb_list.size(); i++) {
-		Rcpp::checkUserInterrupt();
-		Rcpp::RawVector raw = wkb_list[i];
-		unsigned char *pt = &(raw[0]);
-		output[i] = read_data(&pt, EWKB, endian, debug, true, &type)[0];
-		if (type != last_type) {
-			last_type = type;
-			n_types++;
-		}
+Rcpp::NumericMatrix read_multipoint(unsigned char **pt, int n_dims, bool EWKB = 0, int endian = 0, 
+		Rcpp::CharacterVector cls = "") {
+	uint32_t *npts = (uint32_t *) (*pt); // requires -std=c++11
+	(*pt) += 4;
+	Rcpp::NumericMatrix ret(*npts, n_dims);
+	for (int i = 0; i < *npts; i++) {
+		Rcpp::List lst = read_data(pt, EWKB, endian, false, NULL, NULL);
+		Rcpp::NumericVector vec = lst[0];
+		for (int j = 0; j < n_dims; j++)
+			ret(i,j) = vec(j);
 	}
-	output.attr("single_type") = n_types == 1; // if 1, we can skip coerceTypes() later on
-	return output;
+	if (cls.size() == 3)
+		ret.attr("class") = cls;
+	return(ret);
+}
+
+Rcpp::List read_geometrycollection(unsigned char **pt, int n_dims, bool EWKB = 0, int endian = 0, 
+		Rcpp::CharacterVector cls = "", bool isGC = true) {
+	uint32_t *nlst = (uint32_t *) (*pt); // requires -std=c++11
+	(*pt) += 4;
+	Rcpp::List ret(*nlst);
+	for (int i = 0; i < *nlst; i++)
+		ret[i] = read_data(pt, EWKB, endian, isGC, NULL, NULL)[0];
+	if (cls.size() == 3)
+		ret.attr("class") = cls;
+	return(ret);
+}
+
+Rcpp::NumericVector read_numeric_vector(unsigned char **pt, int n, Rcpp::CharacterVector cls = "") {
+	Rcpp::NumericVector ret(n);
+	double *d = (double *) (*pt);
+	for (int i=0; i<n; i++)
+		ret(i) = *d++;
+	(*pt) = (unsigned char *) d;
+	if (cls.size() == 3)
+		ret.attr("class") = cls;
+	return ret;
+}
+
+Rcpp::NumericMatrix read_numeric_matrix(unsigned char **pt, int n_dims, 
+		Rcpp::CharacterVector cls = "") {
+	uint32_t *npts = (uint32_t *) (*pt); // requires -std=c++11
+	(*pt) += 4;
+	Rcpp::NumericMatrix ret(*npts, n_dims);
+	double *d = (double *) (*pt);
+	for (int i=0; i<(*npts); i++)
+		for (int j=0; j<n_dims; j++)
+			ret(i,j) = *d++;
+	(*pt) = (unsigned char *) d;
+	if (cls.size() == 3)
+		ret.attr("class") = cls;
+	return ret;
+}
+
+Rcpp::List read_matrix_list(unsigned char **pt, int n_dims, Rcpp::CharacterVector cls = "") {
+	uint32_t *nlst = (uint32_t *) (*pt); // requires -std=c++11
+	(*pt) += 4;
+	Rcpp::List ret(*nlst);
+	for (int i = 0; i < (*nlst); i++)
+		ret[i] = read_numeric_matrix(pt, n_dims, "");
+	if (cls.size() == 3)
+		ret.attr("class") = cls;
+	return(ret);
 }
 
 Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0, 
-		bool debug = false, bool addclass = true, int *type = NULL) {
+		bool addclass = true, int *type = NULL, uint32_t *srid = NULL) {
 
 	Rcpp::List output(1); // to make result type opaque
 	// do endian check, only support native endian WKB:
@@ -113,7 +146,6 @@ Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0,
 	// read type:
 	uint32_t *wkbType = (uint32_t *) (*pt); // uint32_t requires -std=c++11
 	(*pt) += 4;
-	uint32_t *srid = NULL;
 	// Rprintf("[%u]\n", *wkbType);
 	int sf_type = 0, dim = 0, n_dims = 0;
 	std::string dim_str = ""; 
@@ -131,8 +163,8 @@ Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0,
 			dim_str = "XYM";
 		else
 			dim_str = "XYZM";
-		if (wkbSRID != 0) {
-			srid = (uint32_t *) (*pt);
+		if (wkbSRID != 0 && srid != NULL) {
+			*srid = *((uint32_t *) (*pt));
 			(*pt) += 4;
 		}
 	} else { // ISO
@@ -146,75 +178,66 @@ Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0,
 				throw std::range_error("unknown wkbType dim in switch");
 		}
 	}
-	if (debug) {
-		Rcpp::Rcout << "sf_type: " << sf_type << std::endl;
-		Rcpp::Rcout << "n_dims:  " << n_dims << std::endl;
-		Rcpp::Rcout << "dim_str: " << dim_str << std::endl;
-		if (srid != NULL)
-			Rcpp::Rcout << "srid: NA" << std::endl;
-		else
-			Rcpp::Rcout << "srid: " <<  *srid << std::endl;
-	}
 	switch(sf_type) {
 		case SF_Point: 
 			output[0] = read_numeric_vector(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "POINT", "sfi") : "", srid);
+				Rcpp::CharacterVector::create(dim_str, "POINT", "sfi") : "");
 			break;
 		case SF_LineString:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfi") : "", srid); 
+				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfi") : ""); 
 			break;
 		case SF_Polygon: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfi") : "", srid);
+				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfi") : "");
 			break;
 		case SF_MultiPoint: 
 			output[0] = read_multipoint(pt, n_dims, EWKB, endian, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfi") : "", srid); 
+				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfi") : ""); 
 			break;
 		case SF_MultiLineString:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTILINESTRING", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "MULTILINESTRING", "sfi"), false);
 			break;
 		case SF_MultiPolygon:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfi"), false);
 			break;
 		case SF_GeometryCollection: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true, srid);
+				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true);
 			break;
 		case SF_CircularString:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfi") : "", srid); 
+				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfi") : ""); 
 			break;
 		case SF_MultiCurve:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfi"), false);
 			break;
 		case SF_MultiSurface:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfi"), false);
 			break;
 		case SF_Curve:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfi") : "", srid); 
+				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfi") : ""); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfi") : "", srid);
+				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfi") : "");
 			break;
 		case SF_PolyhedralSurface: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfi"), false);
 			break;
 		case SF_TIN: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "TIN", "sfi"), false, srid);
+				Rcpp::CharacterVector::create(dim_str, "TIN", "sfi"), false);
 			break;
 		case SF_Triangle:
 			output[0] = read_matrix_list(pt, n_dims,
-				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"), srid);
+				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"));
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << "\n";
@@ -226,118 +249,34 @@ Rcpp::List read_data(unsigned char **pt, bool EWKB = false, int endian = 0,
 	return(output);
 }
 
-Rcpp::NumericMatrix read_multipoint(unsigned char **pt, int n_dims, bool EWKB = 0, int endian = 0, 
-		Rcpp::CharacterVector cls = "", uint32_t *srid = NULL) {
-	uint32_t *npts = (uint32_t *) (*pt); // requires -std=c++11
-	(*pt) += 4;
-	Rcpp::NumericMatrix ret(*npts, n_dims);
-	for (int i = 0; i < *npts; i++) {
-		Rcpp::List lst = read_data(pt, EWKB, endian);
-		Rcpp::NumericVector vec = lst[0];
-		for (int j = 0; j < n_dims; j++)
-			ret(i,j) = vec(j);
-	}
-	if (cls.size() == 3) {
-		ret.attr("class") = cls;
-		if (srid != NULL)
-			ret.attr("epsg") = (int) *srid;
-	}
-	return(ret);
-}
+// [[Rcpp::export]]
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) {
+	Rcpp::List output(wkb_list.size());
 
-Rcpp::List read_geometrycollection(unsigned char **pt, int n_dims, bool EWKB = 0, int endian = 0, 
-		Rcpp::CharacterVector cls = "", bool isGC = true, uint32_t *srid = NULL) {
-	uint32_t *nlst = (uint32_t *) (*pt); // requires -std=c++11
-	(*pt) += 4;
-	Rcpp::List ret(*nlst);
-	for (int i = 0; i < *nlst; i++)
-		ret[i] = read_data(pt, EWKB, endian, false, isGC)[0];
-	if (cls.size() == 3) {
-		ret.attr("class") = cls;
-		if (srid != NULL)
-			ret.attr("epsg") = (int) *srid;
-	}
-	return(ret);
-}
+	int type = 0, last_type = 0, n_types = 0;
 
-Rcpp::NumericVector read_numeric_vector(unsigned char **pt, int n, 
-		Rcpp::CharacterVector cls = "", uint32_t *srid = NULL) {
-	Rcpp::NumericVector ret(n);
-	double *d = (double *) (*pt);
-	for (int i=0; i<n; i++)
-		ret(i) = *d++;
-	(*pt) = (unsigned char *) d;
-	if (cls.size() == 3) {
-		ret.attr("class") = cls;
-		if (srid != NULL)
-			ret.attr("epsg") = (int) *srid;
+	uint32_t srid = 0;
+	for (int i = 0; i < wkb_list.size(); i++) {
+		Rcpp::checkUserInterrupt();
+		Rcpp::RawVector raw = wkb_list[i];
+		unsigned char *pt = &(raw[0]);
+		output[i] = read_data(&pt, EWKB, endian, true, &type, &srid)[0];
+		if (type != last_type) {
+			last_type = type;
+			n_types++;
+		}
 	}
-	return ret;
-}
-
-Rcpp::NumericMatrix read_numeric_matrix(unsigned char **pt, int n_dims, 
-		Rcpp::CharacterVector cls = "", uint32_t *srid = NULL) {
-	uint32_t *npts = (uint32_t *) (*pt); // requires -std=c++11
-	(*pt) += 4;
-	Rcpp::NumericMatrix ret(*npts, n_dims);
-	double *d = (double *) (*pt);
-	for (int i=0; i<(*npts); i++)
-		for (int j=0; j<n_dims; j++)
-			ret(i,j) = *d++;
-	(*pt) = (unsigned char *) d;
-	if (cls.size() == 3) {
-		ret.attr("class") = cls;
-		if (srid != NULL)
-			ret.attr("epsg") = (int) *srid;
-	}
-	return ret;
-}
-
-Rcpp::List read_matrix_list(unsigned char **pt, int n_dims, 
-		Rcpp::CharacterVector cls = "", uint32_t *srid = NULL) {
-	uint32_t *nlst = (uint32_t *) (*pt); // requires -std=c++11
-	(*pt) += 4;
-	Rcpp::List ret(*nlst);
-	for (int i = 0; i < (*nlst); i++)
-		ret[i] = read_numeric_matrix(pt, n_dims, "");
-	if (cls.size() == 3) {
-		ret.attr("class") = cls;
-		if (srid != NULL)
-			ret.attr("epsg") = (int) *srid;
-	}
-	return(ret);
+	output.attr("single_type") = n_types == 1; // if 1, we can skip coerceTypes() later on
+	output.attr("epsg") = (int) srid;
+	return output;
 }
 
 //
 // WriteWKB:
 //
 
-// [[Rcpp::export]]
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
-		Rcpp::CharacterVector dim = "XY", bool debug = false, double precision = 0.0) {
-
-	Rcpp::List output(sfc.size()); // with raw vectors
-	int type = 0, last_type = 0, n_types = 0;
-	Rcpp::CharacterVector cls_attr = sfc.attr("class");
-	const char *cls = cls_attr[0], *dm = dim[0];
-	if (debug) 
-		Rcpp::Rcout << dm << std::endl;
-
-	for (int i = 0; i < sfc.size(); i++) {
-		std::ostringstream os;
-		Rcpp::checkUserInterrupt();
-		write_data(os, sfc, i, EWKB, endian, debug, cls, dm, precision);
-		Rcpp::RawVector raw(os.str().size()); // os -> raw:
-		std::string str = os.str();
-		const char *cp = str.c_str();
-		for (int j = 0; j < str.size(); j++)
-			raw[j] = cp[j];
-		output[i] = raw; // raw vector to list
-	}
-	return output;
-}
-
-unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int *tp = NULL) {
+unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int *tp = NULL,
+		int srid = 0) {
 	int type = 0;
 	if (strstr(cls, "sfc_") == cls)
 		cls += 4;
@@ -384,6 +323,8 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 			type = type | EWKB_M_BIT;
 		else if (strcmp(dim, "XYZM") == 0)
 			type = type | EWKB_M_BIT | EWKB_Z_BIT;
+		if (srid != 0)
+			type = type | EWKB_SRID_BIT;
 	} else {
 		if (strcmp(dim, "XYZ") == 0)
 			type += 1000;
@@ -445,7 +386,7 @@ void write_multilinestring(std::ostringstream& os, Rcpp::List lst, bool EWKB = f
 	const char *dim = cl_attr[0];
 	add_int(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		write_data(os, lst, i, EWKB, endian, false, "LINESTRING", dim, prec);
+		write_data(os, lst, i, EWKB, endian, "LINESTRING", dim, prec, 0);
 }
 
 void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
@@ -454,7 +395,7 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 	const char *dim = cl_attr[0];
 	add_int(os, lst.length());
 	for (int i = 0; i < lst.length(); i++)
-		write_data(os, lst, i, EWKB, endian, false, "POLYGON", dim, prec);
+		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
 }
 
 void write_geometrycollection(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
@@ -464,7 +405,7 @@ void write_geometrycollection(std::ostringstream& os, Rcpp::List lst, bool EWKB 
 	for (int i = 0; i < lst.length(); i++) {
 		Rcpp::CharacterVector cl_attr = Rclass(lst[i]); 
 		const char *cls = cl_attr[1], *dim = cl_attr[0];
-		write_data(os, lst, i, EWKB, endian, false, cls, dim, prec);
+		write_data(os, lst, i, EWKB, endian, cls, dim, prec, 0);
 	}
 }
 
@@ -474,26 +415,24 @@ void write_multipoint(std::ostringstream& os, Rcpp::NumericMatrix mat,
 	Rcpp::CharacterVector cl_attr = mat.attr("class");
 	const char *dim = cl_attr[0];
 	Rcpp::NumericVector v(mat.ncol()); // copy row i
-	Rcpp::List lst(1);
 	for (int i = 0; i < mat.nrow(); i++) {
 		for (int j = 0; j < mat.ncol(); j++)
 			v(j) = mat(i,j);
-		lst[0] = v;
-		write_data(os, lst, 0, EWKB, endian, false, "POINT", dim, prec);
+		write_data(os, Rcpp::List::create(v), 0, EWKB, endian, "POINT", dim, prec, 0);
 	}
 }
 
 // write single simple feature object as WKB to stream os
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false, 
-		int endian = 0, bool debug = false, const char *cls = NULL, const char *dim = NULL,
-		double prec = 0.0) {
+		int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
+		int srid = 0) {
 	
 	add_byte(os, (char) endian);
 	int tp;
-	unsigned int sf_type = make_type(cls, dim, EWKB, &tp);
-	if (debug)
-		Rcpp::Rcout << "sf_type:" << sf_type << std::endl;
+	unsigned int sf_type = make_type(cls, dim, EWKB, &tp, srid);
 	add_int(os, sf_type);
+	if (EWKB && srid != 0)
+		add_int(os, srid);
 	switch(tp) {
 		case SF_Point: write_vector(os, sfc[i], prec);
 			break;
@@ -537,4 +476,30 @@ int native_endian(void) {
 	unsigned char *cp = (unsigned char *) &one;
 	// Rcpp::Rcout << "native endian: " << (int) *cp << std::endl;
 	return((int) *cp);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
+		Rcpp::CharacterVector dim = "XY", double precision = 0.0) {
+
+	Rcpp::List output(sfc.size()); // with raw vectors
+	int type = 0, last_type = 0, n_types = 0;
+	Rcpp::CharacterVector cls_attr = sfc.attr("class");
+	const char *cls = cls_attr[0], *dm = dim[0];
+	int srid = sfc.attr("epsg"); 
+	if (srid == NA_INTEGER)
+		srid = 0; // now we know: non-zero means: we have an srid
+
+	for (int i = 0; i < sfc.size(); i++) {
+		std::ostringstream os;
+		Rcpp::checkUserInterrupt();
+		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
+		Rcpp::RawVector raw(os.str().size()); // os -> raw:
+		std::string str = os.str();
+		const char *cp = str.c_str();
+		for (int j = 0; j < str.size(); j++)
+			raw[j] = cp[j];
+		output[i] = raw; // raw vector to list
+	}
+	return output;
 }

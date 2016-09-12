@@ -24,6 +24,8 @@ format.sfc = function(x, ..., digits = 30) {
 st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfi's, but NOT a geometrycollection:
+	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
+	# already contains a zillion sfi objects, than do.call(st_sfc, lst) ...
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfi") 
 			&& inherits(lst[[1]][[1]], "sfi"))
 		lst = lst[[1]]
