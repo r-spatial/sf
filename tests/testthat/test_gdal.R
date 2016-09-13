@@ -13,4 +13,13 @@ test_that("st_transform works", {
   attr(s2.tr, "proj4string") = NULL # they take different tours to fill proj4string from epsg
   attr(s1.tr, "proj4string") = NULL
   expect_equal(s1.tr, s2.tr)
+
+  sf.tr = st_transform(st_sf(a=1:3, s), toCrs) # for sf
+  sfi.tr = st_transform(structure(s[[1]], proj4string="+proj=longlat +datum=WGS84 +no_defs"), toCrs) # sfi
+})
+
+test_that("gdal can be unloaded, and loaded", {
+  library(sf)
+  sf:::.onUnload()
+  sf:::.onLoad()
 })

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <Rcpp.h>
+
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKBReader.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -8,8 +10,6 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
-
-#include <Rcpp.h>
 
 #include "wkb.h"
 
