@@ -206,8 +206,8 @@ st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
 #' @param endian character; either "big" or "little"; default: use that of platform
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
-#' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision.
-#' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''.
+#' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.
+#' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.
 #' @export
 st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
 		precision = attr(x, "precision")) {
