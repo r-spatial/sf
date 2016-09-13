@@ -92,7 +92,7 @@ std::vector<OGRGeometry *> geometries_from_sfc(Rcpp::List sfc, const char *proj4
 Rcpp::List sfc_from_geometries(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
 	OGRGeometryFactory f;
-	for (int i = 0; i < g.size(); i++) {
+	for (size_t i = 0; i < g.size(); i++) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
@@ -106,7 +106,7 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	Rcpp::CharacterVector proj4string(1);
 	char *cp;
 	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
-	OGRErr err = ref->exportToProj4(&cp);
+	(void) ref->exportToProj4(&cp);
 	proj4string[0] = cp;
 	CPLFree(cp);
 	CPLPopErrorHandler();
@@ -127,7 +127,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	std::vector<OGRGeometry *> g = geometries_from_sfc(sfc, sfc.attr("proj4string"));
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
-	for (int i = 0; i < g.size(); i++)
+	for (size_t i = 0; i < g.size(); i++)
 		handle_error(g[i]->transform(ct));
 
 	ct->DestroyCT(ct);

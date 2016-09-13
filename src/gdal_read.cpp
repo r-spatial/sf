@@ -57,7 +57,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		throw std::out_of_range("Cannot read layer with unknown number of features");
 	if (n_d > INT_MAX)
 		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
-	int n = (int) n_d; // what is List's max length?
+	size_t n = (size_t) n_d; // what is List's max length?
     OGRFeature *poFeature;
 	std::vector<OGRGeometry *> poGeometryV(n); // full archive
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
@@ -146,7 +146,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	out[ poFDefn->GetFieldCount() ] = sfc;
 
 	// clean up:
-    for (int i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
 		OGRFeature::DestroyFeature( poFeatureV[i] );
     GDALClose( poDS ); // close & destroys data source
 

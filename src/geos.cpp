@@ -1,8 +1,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <Rcpp.h>
-
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKBReader.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -10,6 +8,8 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+
+#include <Rcpp.h>
 
 #include "wkb.h"
 
@@ -136,7 +136,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) { 
 	std::vector<geos::geom::Geometry *> gmv = geometries_from_sfc(sfc);
 	Rcpp::LogicalVector out(sfc.length());
-	for (int i; i < sfc.length(); i++)
+	for (int i = 0; i < out.length(); i++)
 		out[i] = geos::operation::valid::IsValidOp::isValid(*gmv[i]);
 	return(out);
 }
