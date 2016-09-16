@@ -32,7 +32,7 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 
 
   options(warn = -1)
-  query = paste0("SELECT geom from meuse limit 2;")
+  query = paste0("SELECT wkb_geometry from meuse limit 2;")
   returnstr = dbGetQuery(cn, query)$geom
   # print(returnstr)
   n = nchar(returnstr)/2
