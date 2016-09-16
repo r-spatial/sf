@@ -1,0 +1,14 @@
+GEOS_INC_DIR=${GEOS_HOME}/include
+GEOS_LIB_DIR=${GEOS_HOME}/lib
+
+GDAL_INC_DIR=$(GDAL_HOME)/include
+GDAL_LIB_DIR=$(GDAL_HOME)/lib
+
+PKG_CPPFLAGS=-I${GEOS_INC_DIR} -I$(GDAL_INC_DIR)
+ifeq "$(WIN)" "64"
+PKG_LIBS=-L${GEOS_LIB_DIR}/x64 -lgeos -L$(GDAL_LIB_DIR)/x64 -lgdal -lproj -lexpat -lsqlite3 -lodbc32 -lodbccp32 -liconv -lws2_32
+else
+PKG_LIBS=-L${GEOS_LIB_DIR}/i386 -lgeos -L$(GDAL_LIB_DIR)/i386 -lgdal -lproj -lexpat -lsqlite3 -lodbc32 -lodbccp32 -liconv -lws2_32
+endif
+
+CXX_STD=CXX11

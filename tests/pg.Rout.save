@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> if (Sys.getenv("USER") == "edzer") {
+> if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   library(RPostgreSQL)
 +   library(sf)
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")

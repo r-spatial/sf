@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#include <math.h> // round()
+
 #include <Rcpp.h>
 
 #include "bbox.h"
@@ -362,7 +364,7 @@ double make_precise(double d, double precision) {
 		float f = d;
 		return((double) f);
 	}
-	return(std::round(d * precision) / precision);
+	return(round(d * precision) / precision);
 }
 
 void add_double(std::ostringstream& os, double d, double prec = 0.0) {
