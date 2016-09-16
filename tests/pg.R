@@ -32,7 +32,7 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 
 
   options(warn = -1)
-  query = paste0("SELECT geom from meuse2 limit 2;")
+  query = paste0("SELECT geom from meuse limit 2;")
   returnstr = dbGetQuery(cn, query)$geom
   # print(returnstr)
   n = nchar(returnstr)/2
@@ -42,6 +42,5 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   ret = st_as_sfc(wkb, EWKB = TRUE)
   ret 
 
-  m3 = st_read_pg(dbname = "postgis", query = "select * from meuse2 limit 3;")
-
+  m3 = st_read_pg(dbname = "postgis", query = "select * from meuse limit 3;")
 }
