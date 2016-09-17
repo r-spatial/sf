@@ -1,4 +1,5 @@
-if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+if (Sys.getenv("USER") %in% c("edzer")) {
   library(RPostgreSQL)
   library(sf)
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
