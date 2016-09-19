@@ -1,14 +1,26 @@
-GEOS_INC_DIR=${GEOS_HOME}/include
-GEOS_LIB_DIR=${GEOS_HOME}/lib
+COMPILED_BY ?= gcc-4.6.3
+RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
 
-GDAL_INC_DIR=$(GDAL_HOME)/include
-GDAL_LIB_DIR=$(GDAL_HOME)/lib
+PKG_CPPFLAGS =\
+	-I../windows/gdal2-2.1.1/include/gdal \
+	-I../windows/gdal2-2.1.1/include/geos
 
-PKG_CPPFLAGS=-I${GEOS_INC_DIR} -I$(GDAL_INC_DIR)
-ifeq "$(WIN)" "64"
-PKG_LIBS=-L${GEOS_LIB_DIR}/x64 -lgeos -L$(GDAL_LIB_DIR)/x64 -lgdal -lproj -lexpat -lsqlite3 -lodbc32 -lodbccp32 -liconv -lws2_32
-else
-PKG_LIBS=-L${GEOS_LIB_DIR}/i386 -lgeos -L$(GDAL_LIB_DIR)/i386 -lgdal -lproj -lexpat -lsqlite3 -lodbc32 -lodbccp32 -liconv -lws2_32
-endif
+PKG_LIBS = \
+	-L../windows/gdal2-2.1.1/${RWINLIB} \
+	-lgdal -lsqlite3 -lspatialite -lproj -lgeos_c -lgeos  \
+	-lhdf5 -lexpat -lfreexl -lcfitsio \
+	-lpng16 -ljpeg -ltiff -lgeotiff -lgif -lxml2 -llzma -lszip \
+	-lodbc32 -lodbccp32 -liconv -lz -lws2_32
 
 CXX_STD=CXX11
+
+all: clean winlibs
+
+winlibs:
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
+
+clean:
+	rm -f $(OBJECTS) $(SHLIB)
+
+.PHONY: all winlibs clean
+
