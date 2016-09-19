@@ -3,6 +3,7 @@
 #' @importFrom methods as slotNames new
 #' @import graphics
 #' @importFrom Rcpp evalCpp
+#' @importFrom DBI dbGetQuery dbWriteTable
 #' @useDynLib sf
 NULL
 

@@ -74,13 +74,17 @@ void handle_error(OGRErr err) {
 	}
 }
 
-std::vector<OGRGeometry *> geometries_from_sfc(Rcpp::List sfc, const char *proj4) {
+std::vector<OGRGeometry *> ogr_geometries_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *ref = new OGRSpatialReference;
-	handle_error(ref->importFromProj4(proj4));
+	Rcpp::String p4s = sfc.attr("proj4string");
+	if (p4s != NA_STRING) {
+		Rcpp::CharacterVector cv = sfc.attr("proj4string");
+		handle_error(ref->importFromProj4(cv[0]));
+	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
 		handle_error(f.createFromWkb(&(r[0]), ref, &(g[i]), -1, wkbVariantIso));
@@ -124,7 +128,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest);
 
 	// transform geometries:
-	std::vector<OGRGeometry *> g = geometries_from_sfc(sfc, sfc.attr("proj4string"));
+	std::vector<OGRGeometry *> g = ogr_geometries_from_sfc(sfc);
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	for (size_t i = 0; i < g.size(); i++)

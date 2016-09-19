@@ -34,14 +34,10 @@ if (Sys.getenv("USER") %in% c("edzer")) {
 
   options(warn = -1)
   query = paste0("SELECT wkb_geometry from meuse limit 2;")
-  returnstr = dbGetQuery(cn, query)$geom
-  # print(returnstr)
-  n = nchar(returnstr)/2
-  wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
-    sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
+  wkb = as.list(dbGetQuery(cn, query)$wkb_geometry)
   class(wkb) = "WKB"
   ret = st_as_sfc(wkb, EWKB = TRUE)
   ret 
 
-  m3 = st_read_pg(dbname = "postgis", query = "select * from meuse limit 3;")
+  # m3 = st_read_pg(dbname = "postgis", query = "select * from meuse limit 3;")
 }

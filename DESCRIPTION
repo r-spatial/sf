@@ -8,7 +8,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 	person("Tim", "Keitt", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"))
 Depends: R (>= 3.0.0)
-Imports: utils, stats, graphics, methods, Rcpp
+Imports: utils, stats, graphics, methods, Rcpp, DBI
 LinkingTo: Rcpp
 Suggests: sp, rgdal, rgeos, maptools, RPostgreSQL, testthat, knitr, roxygen2
 VignetteBuilder: knitr

@@ -327,7 +327,8 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_Triangle;
 	else
 		throw std::range_error("unknown type!");
-	*tp = type;
+	if (tp != NULL)
+		*tp = type;
 	if (EWKB) {
 		if (strcmp(dim, "XYZ") == 0)
 			type = type | EWKB_Z_BIT;
