@@ -74,6 +74,21 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 	return(output);
 }
 
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
+	std::ostringstream os;
+	char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+		'a', 'b', 'c', 'd', 'e', 'f' };
+	unsigned char *cp = &(raw[0]);
+	for (int i = 0; i < raw.size(); i++) {
+		int high = ((int) cp[i]) / 16;
+		int low =  ((int) cp[i]) % 16;
+  		os.write(&hex[high], sizeof(char));
+  		os.write(&hex[low], sizeof(char));
+	}
+	return(Rcpp::CharacterVector::create(os.str()));
+}
+
 Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool EWKB = 0, 
 		int endian = 0, Rcpp::CharacterVector cls = "") {
 	uint32_t npts = *(uint32_t *) (*pt); // requires -std=c++11

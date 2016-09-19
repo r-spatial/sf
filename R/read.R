@@ -8,13 +8,7 @@
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
 #' @examples
-#' if (Sys.getenv("USER") == "travis") { # load meuse to postgis
-#'  library(sp)
-#'  example(meuse, ask = FALSE, echo = FALSE)
-#'  if (require(rgdal))
-#'    writeOGR(meuse, "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
-#' }
-#' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }
@@ -80,7 +74,8 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., quiet = FAL
 #' read PostGIS table directly, using DBI and wkb conversion
 #' 
 #' read PostGIS table directly through DBI and RPostgreSQL interface, converting wkb
-#' @param conn database connection
+#' @param conn open database connection
+#' @param table table name
 #' @param query SQL query to select records
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @examples 
@@ -92,7 +87,8 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., quiet = FAL
 #' }
 #' @name st_read
 #' @export
-st_read_db = function(conn = NULL, query, geom_column = NULL, ...) {
+st_read_db = function(conn = NULL, table, query = paste("select * from ", table, ";"),
+		geom_column = NULL, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
   	# suppress warning about unknown type "geometry":
@@ -104,26 +100,59 @@ st_read_db = function(conn = NULL, query, geom_column = NULL, ...) {
 	st_as_sf(tbl, ...)
 }
 
+#' write simple feature table to a spatial database
+#' 
+#' write simple feature table to a spatial database
+#' @param conn open database connection
+#' @param obj object of class \code{sf}
+#' @param table_name name for the table in the database
+#' @param geom_name name of the geometry column in the database
+#' @param ... arguments passed on to \code{dbWriteTable}
+#' @param dropTable logical; should \code{table_name} be dropped first?
+#' @export
+#' @examples
+#' library(sp)
+#' data(meuse)
+#' sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+#' library(RPostgreSQL)
+#' conn = dbConnect(PostgreSQL(), dbname = "postgis")
+#' st_write_db(conn, sf, "meuse", dropTable = FALSE)
 st_write_db = function(conn = NULL, obj, table_name = substitute(obj), geom_name = "wkb_geometry",
-		..., drop = FALSE) {
+		..., dropTable = FALSE, wkb = TRUE) {
 	if (is.null(conn))
 		stop("if no provided")
-	if (drop)
+	if (dropTable)
 		dbGetQuery(conn, paste("drop table", table_name, ";"))
-	# write sf
 	df = obj
 	df[[attr(df, "sf_column")]] = NULL
+	class(df) = "data.frame"
+	if (dropTable)
+		dbSendQuery(conn, paste("drop table ", table_name, ";"))
 	dbWriteTable(conn, table_name, df, ...)
-	# SELECT AddGeometryColumn('','gis.osm_buildings_v06','geom','0','MULTIPOLYGON',2);
 	geom = st_geometry(obj)
-	DIM = nchar(class(geom[[1]])[1]) # XY, XYZ, XYZM
+	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
 	SRID = attr(obj, "epsg")
+	if (is.null(SRID) || is.na(SRID))
+		SRID = 0
 	TYPE = class(geom[[1]])[2]
 	query = paste0("SELECT AddGeometryColumn('','", table_name, "','", geom_name, 
-		"','", SRID, "','", TYPE, "',", DIM, ");")
-	print(query)
-	# find out how to only write geometry, but to the right record -- create pkey first, 
-	# based on row.names?
+			"','", SRID, "','", TYPE, "',", DIM, ");")
 	dbGetQuery(conn, query)
-	stop("not yet working")
+	rn = row.names(obj)
+	if (! wkb) {
+		wkt = st_as_wkt(geom)
+		for (r in seq_along(rn)) {
+			cmd = paste0("UPDATE ", table_name, " SET ", geom_name, 
+				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';")
+			dbGetQuery(conn, cmd)
+		}
+	} else {
+		wkb = st_as_wkb(geom)
+		for (r in seq_along(rn)) {
+			cmd = paste0("UPDATE ", table_name, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
+				"' WHERE \"row.names\" = '", rn[r], "';")
+			dbGetQuery(conn, cmd)
+		}
+	}
+	dbDisconnect(conn)
 }
