@@ -116,12 +116,12 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @export
 #' @examples
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-#'  library(sp)
-#'  data(meuse)
-#'  sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
-#'  library(RPostgreSQL)
-#'  conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'  st_write_db(conn, sf, "meuse", dropTable = FALSE)
+#'   library(sp)
+#'   data(meuse)
+#'   sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+#'   library(RPostgreSQL)
+#'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
+#'   st_write_db(conn, sf, "meuse", dropTable = FALSE)
 #' }
 st_write_db = function(conn = NULL, obj, table_name = substitute(obj), geom_name = "wkb_geometry",
 		..., dropTable = FALSE, wkb = TRUE) {
