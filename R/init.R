@@ -17,6 +17,14 @@ setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass("sfi")
 
 .onLoad = function(libname, pkgname) {
+	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+		prj = system.file("proj", package = "sf")[1]
+		packageStartupMessage("Setting environment variable PROJ_LIB to ", prj, "\n")
+		Sys.setenv("PROJ_LIB" = prj)
+		gdl = system.file("gdal", package = "sf")[1]
+		packageStartupMessage("Setting environment variable GDAL_DATA to ", gdl, "\n")
+		Sys.setenv("GDAL_DATA" = gdl)
+	}
 	CPL_gdal_init()
 }
 
