@@ -26,6 +26,13 @@ st_geos_binop(op = "intersects", sf1, sf2 = sf1, par = 0, sparse = TRUE)
 
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 }
+\value{
+numeric matrix of dimension length(sf1) x length(sf2)
+
+logical vector
+
+matrix (sparse or dense) of type \code{character} for op \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{sf1} x \code{sf2}.
+}
 \description{
 Compute distance between pairs of simple feature geometries
 }

@@ -26,11 +26,13 @@ st_write_db(conn = NULL, obj, table_name = substitute(obj),
 write simple feature table to a spatial database
 }
 \examples{
-library(sp)
-data(meuse)
-sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
-library(RPostgreSQL)
-conn = dbConnect(PostgreSQL(), dbname = "postgis")
-st_write_db(conn, sf, "meuse", dropTable = FALSE)
+if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
+  library(sp)
+  data(meuse)
+  sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+  library(RPostgreSQL)
+  conn = dbConnect(PostgreSQL(), dbname = "postgis")
+  st_write_db(conn, sf, "meuse", dropTable = FALSE)
+}
 }
 
