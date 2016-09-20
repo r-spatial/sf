@@ -17,6 +17,12 @@ setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass("sfi")
 
 .onLoad = function(libname, pkgname) {
+	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+		prj = system.file("proj", package = "sf")[1]
+		Sys.setenv("PROJ_LIB" = prj)
+		gdl = system.file("gdal", package = "sf")[1]
+		Sys.setenv("GDAL_DATA" = gdl)
+	}
 	CPL_gdal_init()
 }
 
@@ -28,3 +34,4 @@ setOldClass("sfi")
 	packageStartupMessage(paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", 
 		CPL_gdal_version()))
 }
+
