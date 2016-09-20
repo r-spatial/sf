@@ -121,7 +121,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					break;
 			}
         }
-		// poFeature->SetGeometryDirectly(OGRGeometryFactory::forceToMultiPolygon(
+		// poFeature->SetGeometry(OGRGeometryFactory::forceToMultiPolygon(
 		//	poFeature->GetGeometryRef()));
 		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
 		// poGeometryV[i] = poFeature->StealGeometry();
