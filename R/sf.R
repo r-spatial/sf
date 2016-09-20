@@ -123,9 +123,16 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' class(s[,1])
 #' s[,2]
 #' class(s[,2])
+#' g = st_sf(a=2:3, g)
+#' pol = st_sfc(st_polygon(list(cbind(c(0,3,3,0,0),c(0,0,3,3,0)))))
+#' h = st_sf(r = 5, pol)
+#' g[h,]
+#' h[g,]
 #' @export
-"[.sf" = function(x, i, j, drop) {
+"[.sf" = function(x, i, j, ..., drop) {
 	rtg = attr(x, "relation_to_geometry")
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
+		i = sapply(st_geos_binop("intersects", x, i, ...), length) != 0
 	sf_column = attr(x, "sf_column")
 	x = NextMethod("[")
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only

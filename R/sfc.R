@@ -85,6 +85,8 @@ coerce_types = function(lst) {
 "[.sfc" = function(x, i, j, ...) {
 	recompute_bb = !missing(i)
     old = x
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
+		i = sapply(st_geos_binop("intersects", x, i, ...), length) != 0
     x = NextMethod("[")
     attributes(x) = attributes(old)
 	if (recompute_bb)

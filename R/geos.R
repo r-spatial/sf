@@ -32,7 +32,7 @@ st_is_valid = function(sf) {
 #' @param op character; one of "intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "coveredBy", "equalsExact", or "isWithinDistance", "relate", "distance"
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
 #' @param par numeric; parameter used for "equalsExact" (margin) and "isWithinDistance"
-#' @return matrix (sparse or dense) of type \code{character} for op \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{sf1} x \code{sf2}.
+#' @return matrix (sparse or dense); if dense: of type \code{character} for op \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{sf1} x \code{sf2}; if sparse (only possible for those who return logical in case of dense): return list of length length(sf1) with indices of the TRUE values.
 st_geos_binop = function(op = "intersects", sf1, sf2 = sf1, par = 0.0, sparse = TRUE) {
 	if (inherits(sf1, "sf"))
 		sf1 = st_geometry(sf1)
