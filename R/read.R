@@ -9,6 +9,9 @@
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
+#'  library(sp)
+#'  example(meuse, ask = FALSE, echo = FALSE)
+#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }
@@ -109,6 +112,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param geom_name name of the geometry column in the database
 #' @param ... arguments passed on to \code{dbWriteTable}
 #' @param dropTable logical; should \code{table_name} be dropped first?
+#' @param wkb logical; use well-known-binary for transfer?
 #' @export
 #' @examples
 #' library(sp)
