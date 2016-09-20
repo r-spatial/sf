@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/edzer/sfr.png?branch=master)](https://travis-ci.org/edzer/sfr)
 [![Coverage Status](https://img.shields.io/codecov/c/github/edzer/sfr/master.svg)](https://codecov.io/github/edzer/sfr?branch=master)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
-[![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf)
+[![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf)[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/edzer/sfr?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/sfr)
+
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. It currently features:
 
