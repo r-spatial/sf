@@ -10,7 +10,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	std::vector<OGRFieldType> ret(obj.size());
 	Rcpp::CharacterVector cls = obj.attr("colclasses");
 	Rcpp::CharacterVector nm  = obj.attr("names");
-	for (size_t i = 0; i < obj.size(); i++) {
+	for (int i = 0; i < obj.size(); i++) {
 		if (strcmp(cls[i], "character") == 0) {
 			ret[i] = OFTString;
     		// oField.SetWidth(32); // FIXME: should be known here???
@@ -32,7 +32,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 }
 
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
-	for (int j = 0; j < tp.size(); j++) {
+	for (size_t j = 0; j < tp.size(); j++) {
 		if (j == poFeature->GetFieldCount())
 			throw std::invalid_argument("Impossible: field count reached\n");
 		switch (tp[j]) {
@@ -51,6 +51,10 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv = obj[j];
 				poFeature->SetField( j, (double) nv[i] );
 				} break;
+			default:
+				// FIXME: we shouldn't get here!
+				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
+				break;
 		}
 	}
 }
