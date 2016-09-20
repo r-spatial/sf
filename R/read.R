@@ -42,7 +42,7 @@ st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @examples
-#' if (Sys.getenv("USER") == "travis") { # load meuse to postgis
+#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL")

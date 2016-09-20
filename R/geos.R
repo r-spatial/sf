@@ -4,6 +4,7 @@
 #' @param sf1 first simple feature (sf) or simple feature geometry (sfc) collection
 #' @param sf2 second simple feature (sf) or simple feature geometry (sfc) collection
 #' @name geos
+#' @returns numeric matrix of dimension length(sf1) x length(sf2)
 #' @export
 st_distance = function(sf1, sf2 = sf1) {
 	if (inherits(sf1, "sf"))
@@ -17,6 +18,7 @@ st_distance = function(sf1, sf2 = sf1) {
 
 #' @name geos
 #' @param sf simple feautures (sf) or simple feature geometries (sfc) object
+#' @returns logical vector
 #' @export
 st_is_valid = function(sf) {
 	if (inherits(sf, "sf"))
@@ -27,9 +29,10 @@ st_is_valid = function(sf) {
 
 #' @name geos
 #' @export
-#' @param op character; one of "intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "coveredBy", "equalsExact", or "isWithinDistance"
+#' @param op character; one of "intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "coveredBy", "equalsExact", or "isWithinDistance", "relate", "distance"
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
 #' @param par numeric; parameter used for "equalsExact" (margin) and "isWithinDistance"
+#' @returns matrix (sparse or dense) of type \code{character} for op \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{sf1} x \code{sf2}.
 st_geos_binop = function(op = "intersects", sf1, sf2 = sf1, par = 0.0, sparse = TRUE) {
 	if (inherits(sf1, "sf"))
 		sf1 = st_geometry(sf1)
