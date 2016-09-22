@@ -109,8 +109,9 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
     if (poDriver == NULL) {
 		Rcpp::Rcout << driver[0] << " driver not available." << std::endl;
 		throw std::invalid_argument("Driver not available.\n");
-    } else if (! quiet)
-		Rcpp::Rcout << "using OGR driver " << driver << std::endl;
+    }  else if (! quiet)
+		Rcpp::Rcout << "Writing layer " << layer[0] << " to data source " << dsn[0] <<
+			" using driver " << driver << std::endl;
 
 	// open data set:
     GDALDataset *poDS = poDriver->Create( dsn[0], 0, 0, 0, GDT_Unknown, NULL );
@@ -120,8 +121,6 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
     }
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
-	if (! quiet)
-		Rcpp::Rcout << "wkbGeometryType: " << OGRGeometryTypeToName(wkbType) << std::endl;
 
 	char **papszOptions = layer_creation_options(lco, quiet);
 	// create layer:
@@ -142,8 +141,10 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	std::vector<OGRGeometry *> geomv = ogr_geometries_from_sfc(geom, sref);
 	sref->Release();
 	if (! quiet) {
-		Rcpp::Rcout << "features:        " << geomv.size() << std::endl;
-		Rcpp::Rcout << "fields:          " << fieldTypes.size() << std::endl;
+		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
+		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
+	//  Rcpp::Rcout << "geometry type:  " << OGRGeometryTypeToName(wkbType) << std::endl;
+		Rcpp::Rcout << "geometry type:  " << geomv[0]->getGeometryName() << std::endl;
 	}
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
         OGRFeature *poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );

@@ -1,5 +1,5 @@
 #if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-if (Sys.getenv("USER") %in% c("edzer")) {
+if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   library(RPostgreSQL)
   library(sf)
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
@@ -39,5 +39,5 @@ if (Sys.getenv("USER") %in% c("edzer")) {
   ret = st_as_sfc(wkb, EWKB = TRUE)
   ret 
 
-  # m3 = st_read_pg(dbname = "postgis", query = "select * from meuse limit 3;")
+  m = st_read_db(cn, query = "select * from meuse;")
 }

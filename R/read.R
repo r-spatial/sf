@@ -115,10 +115,10 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' write simple feature table to a spatial database
 #' @param conn open database connection
 #' @param obj object of class \code{sf}
-#' @param table_name name for the table in the database
+#' @param table name for the table in the database
 #' @param geom_name name of the geometry column in the database
 #' @param ... arguments passed on to \code{dbWriteTable}
-#' @param dropTable logical; should \code{table_name} be dropped first?
+#' @param dropTable logical; should \code{table} be dropped first?
 #' @param wkb logical; use well-known-binary for transfer?
 #' @export
 #' @examples
@@ -130,42 +130,41 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   st_write_db(conn, sf, "meuse", dropTable = FALSE)
 #' }
-st_write_db = function(conn = NULL, obj, table_name = substitute(obj), geom_name = "wkb_geometry",
+st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
 		..., dropTable = FALSE, wkb = TRUE) {
 	if (is.null(conn))
 		stop("if no provided")
 	if (dropTable)
-		dbGetQuery(conn, paste("drop table", table_name, ";"))
+		dbGetQuery(conn, paste("drop table", table, ";"))
 	df = obj
 	df[[attr(df, "sf_column")]] = NULL
 	class(df) = "data.frame"
 	if (dropTable)
-		dbSendQuery(conn, paste("drop table ", table_name, ";"))
-	dbWriteTable(conn, table_name, df, ...)
+		dbSendQuery(conn, paste("drop table ", table, ";"))
+	dbWriteTable(conn, table, df, ...)
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
 	SRID = attr(obj, "epsg")
 	if (is.null(SRID) || is.na(SRID))
 		SRID = 0
 	TYPE = class(geom[[1]])[2]
-	query = paste0("SELECT AddGeometryColumn('','", table_name, "','", geom_name, 
+	query = paste0("SELECT AddGeometryColumn('','", table, "','", geom_name, 
 			"','", SRID, "','", TYPE, "',", DIM, ");")
 	dbGetQuery(conn, query)
 	rn = row.names(obj)
 	if (! wkb) {
 		wkt = st_as_wkt(geom)
 		for (r in seq_along(rn)) {
-			cmd = paste0("UPDATE ", table_name, " SET ", geom_name, 
+			cmd = paste0("UPDATE ", table, " SET ", geom_name, 
 				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';")
 			dbGetQuery(conn, cmd)
 		}
 	} else {
 		wkb = st_as_wkb(geom)
 		for (r in seq_along(rn)) {
-			cmd = paste0("UPDATE ", table_name, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
+			cmd = paste0("UPDATE ", table, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
 				"' WHERE \"row.names\" = '", rn[r], "';")
 			dbGetQuery(conn, cmd)
 		}
 	}
-	dbDisconnect(conn)
 }

@@ -7,6 +7,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' create simple feature list column, set class, and add coordinate reference system
 #' 
+#' @name sfc
 #' @param ... one or more simple feature objects
 #' @param epsg integer; epsg (or SRID) code
 #' @param precision double; the precisoin model to use when converting to WKB; see \link{st_as_wkb}

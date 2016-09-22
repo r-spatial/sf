@@ -1,3 +1,8 @@
+#' retrieve coordinate reference system from object
+#'
+#' retrieve coordinate reference system from object
+#' @param x object of class \link{sf} or \link{sfc}
+#' @param ... ignored
 #' @export
 st_crs = function(x, ...) UseMethod("st_crs")
 
@@ -9,6 +14,15 @@ st_crs.sfc = function(x, ...) {
 	attr(x, "proj4string")
 }
 
+#' set or replace coordinate reference system from object
+#'
+#' set or replace retrieve coordinate reference system from object
+#' @param x object of class \link{sf} or \link{sfc}
+#' @param value either proj4string (character) or epsg value (numeric)
+#' @details in case a coordinate reference system is replaced, no transformation takes
+#' place and a warning is raised to stress this. epsg values are either read from proj4strings
+#' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
+#' and +datum=WGS84, literally
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
