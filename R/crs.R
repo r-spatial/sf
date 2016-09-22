@@ -12,6 +12,7 @@ st_crs.sfc = function(x, ...) {
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
+#' @export
 `st_crs<-.sf` = function(x, value) {
 	check_replace(st_geometry(x))
 	col = attr(x, "sf_column")
@@ -21,10 +22,11 @@ st_crs.sfc = function(x, ...) {
 	}
 	if (!is.character(value))
 		stop("crs should be either numeric (epsg code) or character (proj4string)")
-	attr(x[[col]], proj4string) = value
+	attr(x[[col]], "proj4string") = value
 	x
 }
 
+#' @export
 `st_crs<-.sfc` = function(x, value) {
 	check_replace(x)
 	if (is.numeric(value)) {
@@ -33,7 +35,7 @@ st_crs.sfc = function(x, ...) {
 	}
 	if (!is.character(value))
 		stop("crs should be either numeric (epsg code) or character (proj4string)")
-	attr(x, proj4string) = value
+	attr(x, "proj4string") = value
 	x
 }
 
