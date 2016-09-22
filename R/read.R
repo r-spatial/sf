@@ -6,12 +6,15 @@
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
-#' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+#' @param toType integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value present will be attempted.
+#' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{toField} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around may drop secondary rings without warnings. 
+#' @return object of class \link{sf}
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", driver = "PostgreSQL")
+#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", driver = "PostgreSQL", 
+#'    options = "OVERWRITE=true")
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }
@@ -19,8 +22,8 @@
 #' summary(s)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
-	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L)
+st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, toType = 0) {
+	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L, toType)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
@@ -38,6 +41,7 @@ st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param driver character; OGR driver name to be used
 #' @param ... ignored
+#' @param options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
 #' @details columns (variables) of a class not supported are dropped with a warning.
@@ -45,12 +49,13 @@ st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L) {
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL")
+#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL",
+#'    options = c("OVERWRITE=yes", "LAUNDER=true"))
 #'  sids = st_read(system.file("shapes/", package="maptools"), "sids")
-#'  st_write(sids, "PG:dbname=postgis", "sids", driver = "PostgreSQL")
+#'  st_write(sids, "PG:dbname=postgis", "sids", driver = "PostgreSQL", options = "OVERWRITE=true")
 #' }
 #' @export
-st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., quiet = FALSE,
+st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = NULL, quiet = FALSE,
 		factorsAsCharacter = TRUE) {
 
 	if (inherits(obj, "sfc"))
@@ -71,7 +76,7 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., quiet = FAL
 	}
 	attr(obj, "colclasses") = sapply(obj, class)
 	dim = class(geom[[1]])[1]
-	CPL_write_ogr(obj, dsn, layer, driver, geom, dim, quiet)
+	CPL_write_ogr(obj, dsn, layer, driver, as.character(options), geom, dim, quiet)
 }
 
 #' read PostGIS table directly, using DBI and wkb conversion
