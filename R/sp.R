@@ -8,7 +8,7 @@
 #' y = x + 3
 #' y1 = x1 + 3
 #' y3 = x3 + 3
-#' m = matrix(c(3,0),5,2,byrow=T)
+#' m = matrix(c(3, 0), 5, 2, byrow = TRUE)
 #' z = x + m
 #' z1 = x1 + m
 #' z2 = x2 + m
@@ -135,7 +135,7 @@ Polygons2POLYGON = function(PolygonsLst) {
 
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
-		LTstop("package sp required, please install it first")
+		stop("package sp required, please install it first")
 	geom = st_geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
 	sp::addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
