@@ -7,12 +7,18 @@
 #' x3 = 0.1 * x + 0.7
 #' y = x + 3
 #' y1 = x1 + 3
-#' y2 = x2 + 3
 #' y3 = x3 + 3
-#' p = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(y2), Polygon(x3), 
+#' m = matrix(c(3,0),5,2,byrow=T)
+#' z = x + m
+#' z1 = x1 + m
+#' z2 = x2 + m
+#' z3 = x3 + m
+#' p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3), 
 #'    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
+#' p2 = Polygons(list( Polygon(z[5:1,]), Polygon(z2), Polygon(z3), Polygon(z1)),
+#'   "ID2")
 #' if (require("rgeos")) {
-#'   r = createSPComment(SpatialPolygons(list(p)))
+#'   r = createSPComment(SpatialPolygons(list(p1,p2)))
 #'   comment(r)
 #'   comment(r@polygons[[1]])
 #'   scan(text = comment(r@polygons[[1]]), quiet = TRUE)
@@ -129,14 +135,15 @@ Polygons2POLYGON = function(PolygonsLst) {
 
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
-		stop("package sp required, please install it first")
+		LTstop("package sp required, please install it first")
 	geom = st_geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
 	sp::addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
 })
 
-setAs("sfc", "Spatial", function(from) {
-# as_Spatial = function(from) {
+setAs("sfc", "Spatial", function(from) as_Spatial(from))
+
+as_Spatial = function(from) {
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
@@ -148,7 +155,7 @@ setAs("sfc", "Spatial", function(from) {
 		"sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from) },
 		stop(paste("conversion from feature type", class(from)[1], "to sp is not supported"))
 	)
-})
+}
 
 sfc2SpatialPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
@@ -184,8 +191,27 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 						recursive = FALSE), "ID"))
 	else lapply(from, function(x) 
 		sp::Polygons(lapply(x, function(y) sp::Polygon(y[rev(1:nrow(y)),])), "ID"))
-	for (i in 1:length(from))
+	for (i in 1:length(from)) {
 		l[[i]]@ID = IDs[i]
-	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "proj4string")))
+		if (class(from)[1] == "sfc_MULTIPOLYGON")
+			comm = get_comment(from[[i]])
+		else
+			comm = c(0, rep(1, length(from[[i]])-1))
+		comment(l[[i]]) = paste(as.character(comm), collapse = " ")
+	}
 	# TODO: add comments()
+	# ?Polygons: "Exterior rings are coded zero, while interior rings are coded with the 
+	# 1-based index of the exterior ring to which they belong."
+	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "proj4string")))
+}
+
+get_comment = function(mp) { # for MULTIPOLYGON
+	l = lapply(mp, function(from) c(0, rep(1, length(from) - 1)))
+	offset = 0
+	for (i in 1:length(l)) {
+		l[[i]] = l[[i]] + offset
+		offset = offset + length(l[[i]])
+		l[[i]][1] = 0
+	}
+	unlist(l)
 }
