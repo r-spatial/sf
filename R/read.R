@@ -6,7 +6,7 @@
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
-#' @param toType integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value present will be attempted.
+#' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value present will be attempted.
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{toField} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around may drop secondary rings without warnings. 
 #' @return object of class \link{sf}
 #' @examples
@@ -22,14 +22,14 @@
 #' summary(s)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, toType = 0) {
-	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L, toType)
+st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, type = 0) {
+	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L, type)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
 	x[[which.geom]] = NULL
 	x = as.data.frame(x)
-	x[[nm]] = st_sfc(geom)
+	x[[nm]] = st_sfc(geom, epsg = epsgFromProj4(attr(geom, "proj4string")))
 	st_as_sf(x, ...)
 }
 
@@ -54,6 +54,8 @@ st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, toType = 0) 
 #'  sids = st_read(system.file("shapes/", package="maptools"), "sids")
 #'  st_write(sids, "PG:dbname=postgis", "sids", driver = "PostgreSQL", options = "OVERWRITE=true")
 #' }
+#' s = st_read(system.file("shapes/", package="maptools"), "sids")
+#' st_write(s, ".", "sids")
 #' @export
 st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = NULL, quiet = FALSE,
 		factorsAsCharacter = TRUE) {

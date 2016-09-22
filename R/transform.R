@@ -1,10 +1,17 @@
 epsgFromProj4 = function(x) { # grep EPSG code out of proj4string:
+	if (is.null(x))
+		return(NA_integer_)
 	spl = strsplit(x, " ")[[1]]
 	w = grep("+init=epsg:", spl)
 	if (length(w) == 1)
 		as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
-	else
-		NA_integer_
+	else {
+		if (length(grep("+proj=longlat", x)) == 1 && 
+			length(grep("+datum=WGS84",  x)) == 1)
+			4326
+		else
+			NA_integer_
+	}
 }
 
 #' coordinate transformation or conversion
