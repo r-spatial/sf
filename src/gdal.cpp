@@ -74,22 +74,27 @@ void handle_error(OGRErr err) {
 	}
 }
 
-std::vector<OGRGeometry *> ogr_geometries_from_sfc(Rcpp::List sfc) {
+std::vector<OGRGeometry *> ogr_geometries_from_sfc(Rcpp::List sfc, OGRSpatialReference *sref) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
+	int release_sref = 0;
 	OGRGeometryFactory f;
-	OGRSpatialReference *ref = new OGRSpatialReference;
-	Rcpp::String p4s = sfc.attr("proj4string");
-	if (p4s != NA_STRING) {
-		Rcpp::CharacterVector cv = sfc.attr("proj4string");
-		handle_error(ref->importFromProj4(cv[0]));
+	if (sref == NULL) {
+		Rcpp::String p4s = sfc.attr("proj4string");
+		if (p4s != NA_STRING) {
+			sref = new OGRSpatialReference;
+			release_sref = 1;
+			Rcpp::CharacterVector cv = sfc.attr("proj4string");
+			handle_error(sref->importFromProj4(cv[0]));
+		}
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		handle_error(f.createFromWkb(&(r[0]), ref, &(g[i]), -1, wkbVariantIso));
+		handle_error(f.createFromWkb(&(r[0]), sref, &(g[i]), -1, wkbVariantIso));
 	}
-	ref->Release();
+	if (release_sref)
+		sref->Release();
 	return(g);
 }
 
@@ -128,7 +133,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest);
 
 	// transform geometries:
-	std::vector<OGRGeometry *> g = ogr_geometries_from_sfc(sfc);
+	std::vector<OGRGeometry *> g = ogr_geometries_from_sfc(sfc, NULL);
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	for (size_t i = 0; i < g.size(); i++)
