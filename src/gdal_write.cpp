@@ -35,7 +35,9 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	return(ret);
 }
 
-Rcpp::NumericVector get_dbl6(Rcpp::List in) {
+// this is like an unlist -> dbl, but only does the first 6; if we'd do unlist on the POSIXlt
+// object, we'd get a character vector...
+Rcpp::NumericVector get_dbl6(Rcpp::List in) { 
 	Rcpp::NumericVector ret(6);
 	for (int i = 0; i < 6; i++) {
 		Rcpp::NumericVector x = in(i);

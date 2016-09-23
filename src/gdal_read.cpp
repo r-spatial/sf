@@ -122,7 +122,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					float Second;
 					poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
 						&Second, &TZFlag);
-					//  sec   min  hour  mday   mon  year  wday  yday isdst
+					//  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
 					Rcpp::List dtlst = 
 						Rcpp::List::create((double) Second, (double) Minute, 
 						(double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
@@ -149,17 +149,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					}
 					break;
 				default: // break through:
-/*
-int OGRFeature::GetFieldAsDateTime	(	int 	iField,
-int * 	pnYear, (including century)
-int * 	pnMonth,
-int * 	pnDay,
-int * 	pnHour,
-int * 	pnMinute,
-float * 	pfSecond,
-int * 	pnTZFlag (0=unknown, 1=localtime, 100=GMT, see data model for details) 
-)	
-*/
 				case OFTString: {
 					Rcpp::CharacterVector cv;
 					cv = out[iField];
