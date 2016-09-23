@@ -11,22 +11,35 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	Rcpp::CharacterVector cls = obj.attr("colclasses");
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (int i = 0; i < obj.size(); i++) {
-		if (strcmp(cls[i], "character") == 0) {
+		if (strcmp(cls[i], "character") == 0)
 			ret[i] = OFTString;
-    		// oField.SetWidth(32); // FIXME: should be known here???
-		} else if (strcmp(cls[i], "integer") == 0) {
+    		// oField.SetWidth(32); // FIXME: should this be known here???
+		else if (strcmp(cls[i], "integer") == 0)
 			ret[i] = OFTInteger;
-		} else if (strcmp(cls[i], "numeric") == 0) {
+		else if (strcmp(cls[i], "numeric") == 0)
 			ret[i] = OFTReal;
-		} else {
-        	Rcpp::Rcout << "Field of type " << nm[i] << " ignored." << std::endl;
+		else if (strcmp(cls[i], "Date") == 0)
+			ret[i] = OFTDate;
+		else if (strcmp(cls[i], "POSIXct") == 0)
+			ret[i] = OFTDateTime;
+		else {
+        	Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
+			throw std::invalid_argument("Layer creation failed.\n");
 		}
-		// FIXME: do Date -> OFTDate, POSIXct -> OFTDateTime
     	OGRFieldDefn oField(nm[i], ret[i]);
     	if( poLayer->CreateField( &oField ) != OGRERR_NONE ) {
         	Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
     	}
+	}
+	return(ret);
+}
+
+Rcpp::NumericVector get_dbl6(Rcpp::List in) {
+	Rcpp::NumericVector ret(6);
+	for (int i = 0; i < 6; i++) {
+		Rcpp::NumericVector x = in(i);
+		ret(i) = x(0);
 	}
 	return(ret);
 }
@@ -51,15 +64,38 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv = obj[j];
 				poFeature->SetField( j, (double) nv[i] );
 				} break;
+			case OFTDate: {
+				Rcpp::NumericVector nv;
+				nv = obj[j];
+				Rcpp::NumericVector nv0(1);
+				nv0[0] = nv[i];
+				nv0.attr("class") = "Date";
+				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
+				Rcpp::Function unlist("unlist");
+				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
+				poFeature->SetField( j, 1900 + (int) ret[5], (int) ret[4], (int) ret[3]);
+				} break;
+			case OFTDateTime: {
+				Rcpp::NumericVector nv;
+				nv = obj[j];
+				Rcpp::NumericVector nv0(1);
+				nv0[0] = nv[i];
+				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
+				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
+				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4], 
+					(int) rd[3], (int) rd[2], (int) rd[1], 
+					(float) rd[0], 100); // nTZFlag 100: GMT
+				} break;
 			default:
-				// FIXME: we shouldn't get here!
+				// we should never get here!
 				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
+				throw std::invalid_argument("Layer creation failed.\n");
 				break;
 		}
 	}
 }
 
-OGRSpatialReference *ref_from_p4s(Rcpp::List sfc) {
+OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
 	Rcpp::String p4s = sfc.attr("proj4string");
 	OGRSpatialReference *sref = new OGRSpatialReference;
 	if (p4s != NA_STRING) {
@@ -74,16 +110,17 @@ OGRSpatialReference *ref_from_p4s(Rcpp::List sfc) {
 }
 
 std::vector<char *> layer_creation_options(Rcpp::CharacterVector lco, bool quiet = false) {
-	std::vector<char *> ret(lco.size() + 1);
+	if (lco.size() == 0)
+		quiet = true; // nothing to report
 	if (! quiet)
 		Rcpp::Rcout << "options:        ";
-	int i;
-	for (i = 0; i < lco.size(); i++) {
+	std::vector<char *> ret(lco.size() + 1);
+	for (int i = 0; i < lco.size(); i++) {
 		ret[i] = (char *) (lco[i]);
 		if (! quiet)
 			Rcpp::Rcout << ret[i] << " ";
 	}
-	ret[i] = NULL;
+	ret[lco.size()] = NULL;
 	if (! quiet)
 		Rcpp::Rcout << std::endl;
 	return(ret);
@@ -121,7 +158,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// create layer:
 	std::vector <char *> papszOptions = layer_creation_options(lco, quiet);
-	OGRSpatialReference *sref = ref_from_p4s(geom); // breaks on errror
+	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
     OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions.data() );
     if (poLayer == NULL)  {
         Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;

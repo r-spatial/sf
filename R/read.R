@@ -70,13 +70,13 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = N
 	else
 		obj = lapply(obj, function(x) if (is.factor(x)) as.numeric(x) else x)
 	ccls = sapply(obj, function(x) class(x)[1])
-	ccls.ok = ccls %in% c("character", "integer", "numeric")
+	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct")
 	if (any(!ccls.ok)) {
 		cat("ignoring columns with unsupported type:\n")
 		print(cbind(names(obj)[!ccls.ok], ccls[!ccls.ok]))
 		obj = obj[ccls.ok]
 	}
-	attr(obj, "colclasses") = sapply(obj, class)
+	attr(obj, "colclasses") = sapply(obj, function(x) class(x)[1])
 	dim = class(geom[[1]])[1]
 	CPL_write_ogr(obj, dsn, layer, driver, as.character(options), geom, dim, quiet)
 }

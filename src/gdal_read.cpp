@@ -15,14 +15,27 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 			case OFTInteger:
 				out[i] = Rcpp::IntegerVector(n_features);
 				break;
-            case OFTInteger64: // fall through: Int64 -> double
+			case OFTDate: {
+				Rcpp::NumericVector ret(n_features);
+				ret.attr("class") = "Date";
+				out[i] = ret;
+				} break;
+			case OFTDateTime: {
+				Rcpp::NumericVector ret(n_features);
+				Rcpp::CharacterVector cls(2);
+				cls(0) = "POSIXct";
+				cls(1) = "POSIXt";
+				ret.attr("class") = cls;
+				out[i] = ret;
+				} break;
+            case OFTInteger64: // fall through: converts Int64 -> double
             case OFTReal:
 				out[i] = Rcpp::NumericVector(n_features);
 				break;
 			case OFTString:
 				out[i] = Rcpp::CharacterVector(n_features);
 				break;
-			// FIXME: OFTDate, Time, DateTime, Binary?
+			// perhaps FIXME: Time, Binary?
 			default:
 				throw std::invalid_argument("Unrecognized field type\n");
 				break;
@@ -65,7 +78,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 	if (! quiet) {
 		Rcpp::Rcout << "Reading layer " << layer[0] << " from data source " << datasource[0] <<
-			" using driver " << poDS->GetDriverName() << std::endl;
+			" using driver \"" << poDS->GetDriverName() << "\"" << std::endl;
 		Rcpp::Rcout << "features:       " << n << std::endl;
 		Rcpp::Rcout << "fields:         " << poFDefn->GetFieldCount() << std::endl;
 	}
@@ -74,11 +87,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (poGFDefn == NULL)
 		throw std::range_error("wrong value for iGeomField");
 	Rcpp::List out = allocate_out_list(poFDefn, n, poGFDefn->GetNameRef());
-	/*
-	if (type >= 0)
-		poFDefn->SetGeomType((OGRwkbGeometryType) type);
-	*/
 
+	// read all features:
     poLayer->ResetReading();
 	int i = 0, lastType = 0, toType = 0;
 	double dbl_max_int64 = pow(2.0, 53);
@@ -106,6 +116,32 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 						warn_int64 = true;
 					}
 					break;
+				case OFTDateTime:
+				case OFTDate: {
+					int Year, Month, Day, Hour, Minute, TZFlag;
+					float Second;
+					poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
+						&Second, &TZFlag);
+					//  sec   min  hour  mday   mon  year  wday  yday isdst
+					Rcpp::List dtlst = 
+						Rcpp::List::create((double) Second, (double) Minute, 
+						(double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
+						0.0, 0.0, 0.0);
+					dtlst.attr("class") = "POSIXlt";
+					Rcpp::NumericVector nv;
+					nv = out[iField];
+					if (poFieldDefn->GetType() == OFTDateTime) {
+						Rcpp::Function as_POSIXct_POSIXlt("as.POSIXct.POSIXlt");
+						Rcpp::NumericVector ret = as_POSIXct_POSIXlt(dtlst);
+						nv[i] = ret[0];
+					} else {
+						Rcpp::Function as_Date_POSIXlt("as.Date.POSIXlt");
+						Rcpp::NumericVector ret = as_Date_POSIXlt(dtlst);
+						nv[i] = ret[0];
+					}
+					break;
+					}
+					break;
 				case OFTReal: {
 					Rcpp::NumericVector nv;
 					nv = out[iField];
@@ -113,13 +149,23 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					}
 					break;
 				default: // break through:
+/*
+int OGRFeature::GetFieldAsDateTime	(	int 	iField,
+int * 	pnYear, (including century)
+int * 	pnMonth,
+int * 	pnDay,
+int * 	pnHour,
+int * 	pnMinute,
+float * 	pfSecond,
+int * 	pnTZFlag (0=unknown, 1=localtime, 100=GMT, see data model for details) 
+)	
+*/
 				case OFTString: {
 					Rcpp::CharacterVector cv;
 					cv = out[iField];
 					cv[i] = poFeature->GetFieldAsString(iField);
 					}
 					break;
-				// handle other types...
 			}
         }
 
