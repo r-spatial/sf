@@ -1,5 +1,4 @@
 #include <string.h>
-#include <stdlib.h> /* malloc! */
 
 #include "Rcpp.h"
 
@@ -74,12 +73,10 @@ OGRSpatialReference *ref_from_p4s(Rcpp::List sfc) {
 	return(sref);
 }
 
-char **layer_creation_options(Rcpp::CharacterVector lco, bool quiet = false) {
-	if (lco.size() == 0)
-		return(NULL);
-	char **ret = (char **) malloc((1 + lco.size()) * sizeof(char *)); // how can I get this garbage collected?
+std::vector<char *> layer_creation_options(Rcpp::CharacterVector lco, bool quiet = false) {
+	std::vector<char *> ret(lco.size() + 1);
 	if (! quiet)
-		Rcpp::Rcout << "options:         ";
+		Rcpp::Rcout << "options:        ";
 	int i;
 	for (i = 0; i < lco.size(); i++) {
 		ret[i] = (char *) (lco[i]);
@@ -122,19 +119,15 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 
-	char **papszOptions = layer_creation_options(lco, quiet);
 	// create layer:
+	std::vector <char *> papszOptions = layer_creation_options(lco, quiet);
 	OGRSpatialReference *sref = ref_from_p4s(geom); // breaks on errror
-    OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions );
+    OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions.data() );
     if (poLayer == NULL)  {
         Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
     	GDALClose( poDS );
-		if (papszOptions != NULL)
-			free(papszOptions);
 		throw std::invalid_argument("Layer creation failed.\n");
     }
-	if (papszOptions != NULL)
-		free(papszOptions);
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj);
@@ -143,7 +136,6 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	if (! quiet) {
 		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
 		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
-	//  Rcpp::Rcout << "geometry type:  " << OGRGeometryTypeToName(wkbType) << std::endl;
 		Rcpp::Rcout << "geometry type:  " << geomv[0]->getGeometryName() << std::endl;
 	}
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
