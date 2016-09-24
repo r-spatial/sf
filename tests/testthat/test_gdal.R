@@ -23,8 +23,9 @@ test_that("st_transform works", {
   sfi.tr = st_transform(structure(s[[1]], proj4string="+proj=longlat +datum=WGS84 +no_defs"), toCrs) # sfi
 })
 
-test_that("gdal can be unloaded, and loaded", {
+test_that("gdal can be loaded, unloaded, and loaded", {
   library(sf)
+  sf:::.onLoad()
   sf:::.onUnload()
   sf:::.onLoad()
 })

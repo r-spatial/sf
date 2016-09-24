@@ -16,9 +16,10 @@ setOldClass(c("sfc_POLYGON", "sfc"))
 setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass("sfi")
 
+.sf_cache <- new.env(FALSE, parent=globalenv())
+
 .onLoad = function(libname, pkgname) {
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		.sf_cache <- new.env(FALSE, parent=globalenv())
   		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
 		prj = system.file("proj", package = "sf")[1]
 		Sys.setenv("PROJ_LIB" = prj)
