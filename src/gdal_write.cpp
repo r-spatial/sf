@@ -111,23 +111,6 @@ OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
 	return(sref);
 }
 
-std::vector<char *> layer_creation_options(Rcpp::CharacterVector lco, bool quiet = false) {
-	if (lco.size() == 0)
-		quiet = true; // nothing to report
-	if (! quiet)
-		Rcpp::Rcout << "options:        ";
-	std::vector<char *> ret(lco.size() + 1);
-	for (int i = 0; i < lco.size(); i++) {
-		ret[i] = (char *) (lco[i]);
-		if (! quiet)
-			Rcpp::Rcout << ret[i] << " ";
-	}
-	ret[lco.size()] = NULL;
-	if (! quiet)
-		Rcpp::Rcout << std::endl;
-	return(ret);
-}
-
 // [[Rcpp::export]]
 void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector lco,
@@ -159,7 +142,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 
 	// create layer:
-	std::vector <char *> papszOptions = layer_creation_options(lco, quiet);
+	std::vector <char *> papszOptions = layer_options(lco, quiet);
 	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
     OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions.data() );
     if (poLayer == NULL)  {

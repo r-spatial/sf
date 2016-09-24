@@ -98,6 +98,23 @@ std::vector<OGRGeometry *> ogr_geometries_from_sfc(Rcpp::List sfc, OGRSpatialRef
 	return(g);
 }
 
+std::vector<char *> layer_options(Rcpp::CharacterVector lco, bool quiet = false) {
+	if (lco.size() == 0)
+		quiet = true; // nothing to report
+	if (! quiet)
+		Rcpp::Rcout << "options:        ";
+	std::vector<char *> ret(lco.size() + 1);
+	for (int i = 0; i < lco.size(); i++) {
+		ret[i] = (char *) (lco[i]);
+		if (! quiet)
+			Rcpp::Rcout << ret[i] << " ";
+	}
+	ret[lco.size()] = NULL;
+	if (! quiet)
+		Rcpp::Rcout << std::endl;
+	return(ret);
+}
+
 Rcpp::List sfc_from_geometries(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
 	OGRGeometryFactory f;

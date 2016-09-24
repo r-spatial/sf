@@ -4,6 +4,7 @@
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param ... parameter(s) passed on to \link{st_as_sf}
+#' @param options character; driver dependent layer reading options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
@@ -22,8 +23,9 @@
 #' summary(s)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, type = 0) {
-	x = CPL_read_ogr(dsn, layer, quiet, iGeomField - 1L, type)
+st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0) {
+
+	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
