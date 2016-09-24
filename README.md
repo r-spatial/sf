@@ -29,14 +29,12 @@ See also:
 
 ### Features
 
-* native R representation of all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* use S3 classes, simple feature sets are a list column in a `data.frame`
-* full support for coordinate reference systems and transformations through PROJ.4
-* interfaces to [GEOS](https://trac.osgeo.org/geos) and [GDAL](http://www.gdal.org/)
-* fast I/O using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary), written in C++ and Rcpp; up to a factor 10 speedup compared to `rgdal` 
-* direct reading and writing from and to spatial databases, such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
-* GDAL reading supports driver dependent layer creation options
-* GDAL reading and writing support for Date and DateTime (`POSIXct`) columns
+* represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
+* uses S3 classes, simple feature sets are a list column in a `data.frame`
+* interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
+* interfaces to [GDAL](http://www.gdal.org/) with driver dependent layer creation options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ.4](http://proj4.org/)
+* provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++ and Rcpp
+* reads and writes from and to spatial databases such as [PostGIS](http://postgis.net/), using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
 
 ### Acknowledgment
 
