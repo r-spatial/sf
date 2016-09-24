@@ -49,12 +49,6 @@ st_as_sf.Spatial = function(x, ...) {
 	st_as_sf(df)
 }
 
-setCRS = function(lst, x) {
-	p4 = x@proj4string@projargs
-	if (is.na(p4))
-		return(do.call(st_sfc, c(lst, epsg = NA_integer_, proj4string = NA_character_)))
-	do.call(st_sfc, c(lst, epsg = epsgFromProj4(p4), proj4string = p4))
-}
 
 #' convert foreign geometry object to an sfc object
 #'
@@ -72,7 +66,7 @@ st_as_sfc.SpatialPoints = function(x,...) {
 	cc = x@coords
 	dimnames(cc) = NULL
 	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
-	setCRS(lst, x)
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
 }
 
 #' @name st_as_sfc
@@ -85,7 +79,7 @@ st_as_sfc.SpatialPixels = function(x,...) {
 #' @export
 st_as_sfc.SpatialMultiPoints = function(x,...) {
 	lst = lapply(x@coords, st_multipoint)
-	setCRS(lst, x)
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
 }
 
 #' @name st_as_sfc
@@ -96,7 +90,7 @@ st_as_sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
 	else
 		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
-	setCRS(lst, x)
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
 }
 
 #' @name st_as_sfc
@@ -112,7 +106,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
 		lapply(x@polygons, function(y) st_polygon(Polygons2POLYGON(y@Polygons)))
-	setCRS(lst, x)
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
 }
 
 moreThanOneOuterRing = function(PolygonsLst) {

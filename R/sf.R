@@ -11,8 +11,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param relation_to_geometry character vector; see details section of \link{st_sf}
 #' @param coords in case of point data: coordinate names or numbers
 #' @param third passed on to \link{st_point} (only when coords is given)
-#' @param epsg integer denoting the epsg ID (only when coords is given)
-#' @param proj4string character; giving the proj4 string (only when coords is given)
+#' @param crs (only relevant when coords is given) coordinate reference sytem: integer denoting the epsg code, or character denoting proj4string
 #' @param remove_coordinates logical; when coords is given, remove coordinate columns from data.frame?
 #' 
 #' @examples
@@ -30,11 +29,11 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
-		epsg = NA_integer_, proj4string = NA_character_, remove_coordinates = TRUE) {
+		crs = NA_integer_, remove_coordinates = TRUE) {
 	if (! missing(coords)) {
 		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
 				function(i) st_point(unlist(x[i, coords]), third = third)
-					), epsg = epsg, proj4string = proj4string))
+					), crs = crs))
 		if (remove_coordinates)
 			x[coords] = NULL
 	}
@@ -58,6 +57,7 @@ st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 #' create sf, which extends data.frame-like objects with a simple feature list column
 #' @name sf
 #' @param ... column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}
+#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param relation_to_geometry character vector; see details below.
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; see \link{data.frame}
@@ -69,7 +69,7 @@ st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 #' st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
 #' @export
 st_sf = function(..., relation_to_geometry = NA_character_, row.names, 
-		stringsAsFactors = default.stringsAsFactors()) {
+		stringsAsFactors = default.stringsAsFactors(), crs) {
 	x = list(...)
 	# find & remove the sfc column:
 	sf = sapply(x, function(x) inherits(x, "sfc"))
@@ -105,7 +105,10 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	names(f) = names(df)[-sf_column]
 	attr(df, "relation_to_geometry") = f
 	# TODO: check that if one of them is lattice, geom cannot be POINT
-	structure(df, class = c("sf", class(df)))
+	class(df) = c("sf", class(df))
+	if (! missing(crs))
+		st_crs(df) = crs
+	df
 }
 
 #' @name sf

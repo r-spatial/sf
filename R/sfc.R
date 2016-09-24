@@ -9,9 +9,8 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' @name sfc
 #' @param ... one or more simple feature objects
-#' @param epsg integer; epsg (or SRID) code
-#' @param precision double; the precisoin model to use when converting to WKB; see \link{st_as_wkb}
-#' @param proj4string character; describing the coordinate reference systems in PROJ.4 syntax
+#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
+#' @param precision numeric; see \link{st_as_wkb}
 #' 
 #' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfi}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
 #' @details in case \code{epsg} is given but \code{proj4string} is not and packages \code{sp} and \code{rgdal} can be loaded, the \code{proj4string} is expanded using the PROJ.4 epsg database.
@@ -22,7 +21,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precision = 0.0) {
+st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfi's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -30,33 +29,19 @@ st_sfc = function(..., epsg = NA_integer_, proj4string = NA_character_, precisio
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfi") 
 			&& inherits(lst[[1]][[1]], "sfi"))
 		lst = lst[[1]]
-	stopifnot(is.numeric(epsg))
-	stopifnot(is.character(proj4string))
+	stopifnot(is.numeric(crs) || is.character(crs))
 	if (length(lst) == 0) # empty set
 		class(lst) = "sfc"
 	else {
 		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
 			lst = coerce_types(lst)
 		else
-			attr(lst, "single_type") = NULL # remove
+			attr(lst, "single_type") = NULL # we can go on; remove attr
 		class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	}
-	attr(lst, "epsg") = epsg
-	attr(lst, "bbox") = st_bbox(lst)
 	attr(lst, "precision") = precision
-	if (missing(proj4string) && !is.na(epsg) && epsg > 0L) {
-		proj4string = CPL_proj4string_from_epsg(epsg)
-		if (proj4string == "") # no success:
-			proj4string = NA_character_
-
-			### PRIOR, this was:
-			# proj4string = if (requireNamespace("sp", quietly = TRUE))
-			#	sp::CRS(paste0("+init=epsg:", epsg))@projargs # resolve from proj lib, uses rgdal
-			# else
-			#	paste0("+init=epsg:", epsg)
-	}
-	if (is.null(attr(lst, "proj4string")))
-		attr(lst, "proj4string") = proj4string
+	attr(lst, "bbox") = st_bbox(lst)
+	st_crs(lst) = crs
 	lst
 }
 

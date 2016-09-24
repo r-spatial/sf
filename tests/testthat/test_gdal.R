@@ -2,7 +2,7 @@ context("sf: gdal tests")
 
 test_that("st_transform works", {
   library(sf)
-  (s = st_sfc(st_point(c(1,1)), st_point(c(10,10)), st_point(c(5,5)), epsg = 4326))
+  (s = st_sfc(st_point(c(1,1)), st_point(c(10,10)), st_point(c(5,5)), crs = 4326))
   toCrs = "+init=epsg:3857"
   (s1.tr = st_transform(s, toCrs))
   
@@ -11,6 +11,11 @@ test_that("st_transform works", {
   sp.tr = spTransform(sp, CRS(toCrs))
   (s2.tr = st_as_sfc(sp.tr))
   attr(s2.tr, "proj4string") = NULL # they take different tours to fill proj4string from epsg
+  attr(s1.tr, "proj4string") = NULL
+  expect_equal(s1.tr, s2.tr)
+
+  toCrs = 3857
+  (s1.tr = st_transform(s, toCrs))
   attr(s1.tr, "proj4string") = NULL
   expect_equal(s1.tr, s2.tr)
 

@@ -41,11 +41,11 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
 			lapply(x, readWKB, EWKB = EWKB)
 		else
 			CPL_read_wkb(x, EWKB = EWKB, endian = .Platform$endian == "little")
-	epsg = if (EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
+	crs = if (EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
 			attr(ret, "epsg")
 		else
-			epsg = NA_integer_
-	do.call(st_sfc, c(ret, epsg = epsg))
+			NA_integer_
+	do.call(st_sfc, c(ret, crs = crs))
 }
 
 sf.tp = toupper(c(

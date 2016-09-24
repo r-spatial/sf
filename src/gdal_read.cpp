@@ -132,11 +132,11 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					nv = out[iField];
 					if (poFieldDefn->GetType() == OFTDateTime) {
 						Rcpp::Function as_POSIXct_POSIXlt("as.POSIXct.POSIXlt");
-						Rcpp::NumericVector ret = as_POSIXct_POSIXlt(dtlst);
+						Rcpp::NumericVector ret = as_POSIXct_POSIXlt(dtlst); // R help me!
 						nv[i] = ret[0];
 					} else {
 						Rcpp::Function as_Date_POSIXlt("as.Date.POSIXlt");
-						Rcpp::NumericVector ret = as_Date_POSIXlt(dtlst);
+						Rcpp::NumericVector ret = as_Date_POSIXlt(dtlst); // R help me!
 						nv[i] = ret[0];
 					}
 					break;

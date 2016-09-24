@@ -1,70 +1,53 @@
-epsgFromProj4 = function(x) { # grep EPSG code out of proj4string:
-	if (is.null(x))
-		return(NA_integer_)
-	spl = strsplit(x, " ")[[1]]
-	w = grep("+init=epsg:", spl)
-	if (length(w) == 1)
-		as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
-	else {
-		if (length(grep("+proj=longlat", x)) == 1 && 
-			length(grep("+datum=WGS84",  x)) == 1)
-			4326
-		else
-			NA_integer_
-	}
-}
-
 #' coordinate transformation or conversion
 #' 
 #' coordinate transformation or conversion
 #' 
 #' @param x object of class sf, sfc or sfi
-#' @param proj4string character; describing the coordinate reference systems in PROJ.4 syntax
+#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
 #' 
 #' @details transforms coordinates of object to new projection
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
-#' sfc = st_sfc(p1, p2, proj4string = "+init=epsg:4326")
+#' sfc = st_sfc(p1, p2, crs = "+init=epsg:4326")
 #' st_transform(sfc, "+init=epsg:3857")
 #' @export
-st_transform = function(x, proj4string) UseMethod("st_transform")
+st_transform = function(x, crs) UseMethod("st_transform")
 
 #' @name st_transform
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, proj4string = NA_character_, ...) {
-	if (is.na(attr(x, "proj4string")))
-		stop("sfc object should have proj4string set")
-	if (is.na(proj4string))
-		stop("argument proj4string cannot be missing")
-	out = CPL_transform(x, proj4string)
-	do.call(st_sfc, c(out, proj4string = attr(out, "proj4string"), 
-		epsg = epsgFromProj4(proj4string)))
+st_transform.sfc = function(x, crs, ...) {
+	if (is.na(st_crs(x)))
+		stop("sfc object should have crs set")
+	if (missing(crs))
+		stop("argument crs cannot be missing")
+	if (is.numeric(crs)) { # keep epsg:
+		proj4string = CPL_proj4string_from_epsg(crs)
+		st_sfc(CPL_transform(x, proj4string), crs = crs)
+	} else
+		st_sfc(CPL_transform(x, crs), crs = crs)
 }
 
 #' @name st_transform
 #' @export
-st_transform.sf = function(x, proj4string = NA_character_, ...) {
-	geom = st_geometry(x)
-	if (is.na(attr(geom, "proj4string")))
-		stop("sfc object should have proj4string set")
-	if (is.na(proj4string))
-		stop("argument proj4string cannot be missing")
-	x[[attr(x, "sf_column")]] = st_transform(geom, proj4string)
+st_transform.sf = function(x, crs, ...) {
+	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs)
 	x
 }
 
 #' @name st_transform
 #' @export
-#' @details the st_transform method for sfi objects assumes that the proj4string of the object is available as an attribute of that name.
+#' @details the st_transform method for sfi objects assumes that the crs of the object is available as an attribute of that name.
 #' @examples 
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_transform.sfi = function(x, proj4string = NA_character_, ...) {
-	x = st_sfc(x, proj4string = attr(x, "proj4string"))
-	if (is.na(proj4string))
-		stop("argument proj4string cannot be missing")
-	CPL_transform(x, proj4string)[[1]]
+st_transform.sfi = function(x, crs , ...) {
+	x = st_sfc(x, crs = attr(x, "proj4string"))
+	if (missing(crs))
+		stop("argument crs cannot be missing")
+	if (is.numeric(crs)) # epsg
+		crs = CPL_proj4string_from_epsg(crs)
+	CPL_transform(x, crs)[[1]]
 }

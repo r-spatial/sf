@@ -29,7 +29,11 @@ st_read = function(dsn, layer, ..., quiet = FALSE, iGeomField = 1L, type = 0) {
 	geom = x[[which.geom]]
 	x[[which.geom]] = NULL
 	x = as.data.frame(x)
-	x[[nm]] = st_sfc(geom, epsg = epsgFromProj4(attr(geom, "proj4string")))
+	crs = if (is.null(attr(geom, "proj4string")))
+			NA_integer_
+		else
+			attr(geom, "proj4string")
+	x[[nm]] = st_sfc(geom, crs = crs)
 	st_as_sf(x, ...)
 }
 
@@ -125,7 +129,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'   library(sp)
 #'   data(meuse)
-#'   sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+#'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   st_write_db(conn, sf, "meuse", dropTable = FALSE)
