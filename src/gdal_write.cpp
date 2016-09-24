@@ -163,6 +163,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
     OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions.data() );
     if (poLayer == NULL)  {
+		sref->Release();
         Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
     	GDALClose( poDS );
 		throw std::invalid_argument("Layer creation failed.\n");

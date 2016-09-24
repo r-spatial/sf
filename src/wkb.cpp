@@ -502,7 +502,6 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 int native_endian(void) {
 	const int one = 1;
 	unsigned char *cp = (unsigned char *) &one;
-	// Rcpp::Rcout << "native endian: " << (int) *cp << std::endl;
 	return((int) *cp);
 }
 
@@ -515,7 +514,7 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	const char *cls = cls_attr[0], *dm = dim[0];
 	int srid = sfc.attr("epsg"); 
 	if (srid == NA_INTEGER)
-		srid = 0; // now we know: non-zero means: we have an srid
+		srid = 0; // non-zero now means: we have an srid
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();

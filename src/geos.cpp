@@ -15,8 +15,8 @@
 
 geos::geom::Geometry *geometry_from_raw(Rcpp::RawVector wkb) {
 	std::istringstream s;
+	s.rdbuf()->pubsetbuf( (char *) &(wkb[0]), wkb.size());
 	std::istringstream& str(s);
-	str.rdbuf()->pubsetbuf( (char *) &(wkb[0]), wkb.size());
 	geos::io::WKBReader r;
 	return(r.read(str));
 }
