@@ -16,11 +16,10 @@
 typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
 GeomPtr geometry_from_raw(Rcpp::RawVector wkb) {
-	std::istringstream s;
-	s.rdbuf()->pubsetbuf( (char *) &(wkb[0]), wkb.size());
-	std::istringstream& str(s);
+	std::string str( (char *) &(wkb[0]), wkb.size() );
+	std::stringstream strm(str);
 	geos::io::WKBReader r;
-	return(GeomPtr(r.read(str)));
+	return(GeomPtr(r.read(strm)));
 }
 
 std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
