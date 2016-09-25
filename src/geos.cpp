@@ -13,18 +13,20 @@
 
 #include "wkb.h"
 
-geos::geom::Geometry *geometry_from_raw(Rcpp::RawVector wkb) {
+typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+
+GeomPtr geometry_from_raw(Rcpp::RawVector wkb) {
 	std::istringstream s;
 	s.rdbuf()->pubsetbuf( (char *) &(wkb[0]), wkb.size());
 	std::istringstream& str(s);
 	geos::io::WKBReader r;
-	return(r.read(str));
+	return(GeomPtr(r.read(str)));
 }
 
-std::vector<geos::geom::Geometry *> geometries_from_sfc(Rcpp::List sfc) {
+std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
-	std::vector<geos::geom::Geometry *> g(sfc.length());
+	std::vector<GeomPtr> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = geometry_from_raw(wkblst[i]);
 	return(g);
@@ -52,8 +54,8 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
 		bool sparse = true) {
-	std::vector<geos::geom::Geometry *> gmv0 = geometries_from_sfc(sfc0);
-	std::vector<geos::geom::Geometry *> gmv1 = geometries_from_sfc(sfc1);
+	std::vector<GeomPtr> gmv0 = geometries_from_sfc(sfc0);
+	std::vector<GeomPtr> gmv1 = geometries_from_sfc(sfc1);
 
 	using namespace Rcpp;
 	if (op == "relate") { // character return matrix:
@@ -61,7 +63,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		for (int i = 0; i < sfc0.length(); i++) {
 			for (int j = 0; j < sfc1.length(); j++) {
 				static geos::geom::IntersectionMatrix* im;
-				im = geos::operation::relate::RelateOp::relate(gmv0[i], gmv1[j]);
+				im = geos::operation::relate::RelateOp::relate(gmv0[i].get(), gmv1[j].get());
 				out[j * sfc0.length() + i] = im->toString(); // TODO: does this copy the string?
 			}
 		}
@@ -72,7 +74,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++)
 			for (int j = 0; j < sfc1.length(); j++)
-				out(i,j) = gmv0[i]->distance(gmv1[j]);
+				out(i,j) = gmv0[i]->distance(gmv1[j].get());
 		return(Rcpp::List::create(out));
 	}
 	// other cases: boolean return matrix, either dense or sparse
@@ -85,40 +87,40 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		Rcpp::LogicalVector rowi(sfc1.length()); 
 		if (op == "intersects")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->intersects(gmv1[j]);
+				rowi(j) = gmv0[i]->intersects(gmv1[j].get());
 		else if (op == "disjoint")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->disjoint(gmv1[j]);
+				rowi(j) = gmv0[i]->disjoint(gmv1[j].get());
 		else if (op == "touches")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->touches(gmv1[j]);
+				rowi(j) = gmv0[i]->touches(gmv1[j].get());
 		else if (op == "crosses")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->crosses(gmv1[j]);
+				rowi(j) = gmv0[i]->crosses(gmv1[j].get());
 		else if (op == "within")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->within(gmv1[j]);
+				rowi(j) = gmv0[i]->within(gmv1[j].get());
 		else if (op == "contains")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->contains(gmv1[j]);
+				rowi(j) = gmv0[i]->contains(gmv1[j].get());
 		else if (op == "overlaps")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->overlaps(gmv1[j]);
+				rowi(j) = gmv0[i]->overlaps(gmv1[j].get());
 		else if (op == "equals")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->equals(gmv1[j]);
+				rowi(j) = gmv0[i]->equals(gmv1[j].get());
 		else if (op == "covers")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->covers(gmv1[j]);
+				rowi(j) = gmv0[i]->covers(gmv1[j].get());
 		else if (op == "coveredBy")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->coveredBy(gmv1[j]);
+				rowi(j) = gmv0[i]->coveredBy(gmv1[j].get());
 		else if (op == "equalsExact")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->equalsExact(gmv1[j], par);
+				rowi(j) = gmv0[i]->equalsExact(gmv1[j].get(), par);
 		else if (op == "isWithinDistance")
 			for (int j = 0; j < sfc1.length(); j++) 
-				rowi(j) = gmv0[i]->isWithinDistance(gmv1[j], par);
+				rowi(j) = gmv0[i]->isWithinDistance(gmv1[j].get(), par);
 		else
 			throw std::range_error("wrong value for op");
 		if (! sparse)
@@ -134,7 +136,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) { 
-	std::vector<geos::geom::Geometry *> gmv = geometries_from_sfc(sfc);
+	std::vector<GeomPtr> gmv = geometries_from_sfc(sfc);
 	Rcpp::LogicalVector out(sfc.length());
 	for (int i = 0; i < out.length(); i++)
 		out[i] = geos::operation::valid::IsValidOp::isValid(*gmv[i]);
