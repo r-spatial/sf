@@ -6,7 +6,7 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/edzer/sfr/master.svg)](https://codecov.io/github/edzer/sfr?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf) 
 
-A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. It currently features:
+A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
 
 Install by
 ```
@@ -27,7 +27,7 @@ See also:
 * UseR! 2016 [slides presentations](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf),
 * Blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html).
 
-### Features
+### The sf package
 
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
 * uses S3 classes, simple feature sets are a list column in a `data.frame`
