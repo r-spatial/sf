@@ -131,7 +131,6 @@ st_polygonize = function(x) st_sfc(CPL_geom_op("polygonize", st_geometry(x)))
 #' @name geos
 #' @export
 #' @examples
-#' s = st_read(system.file("shapes/", package="maptools"), "sids")
 #' plot(s)
 #' plot(st_centroid(s), add = TRUE, pch = 3)
 st_centroid = function(x) st_sfc(CPL_geom_op("centroid", st_geometry(x)))
@@ -144,21 +143,26 @@ st_segmentize  = function(x, dfMaxLength)
 
 #' @name geos
 #' @export
+#' m = st_merge(s)
+#' plot(st_convexhull(s))
+#' plot(s, border = grey(.5))
+st_merge = function(x) st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x))
+
+#' @name geos
+#' @export
 #' @param y0 object of class \code{sfc} which is merged, using \code{c.sfi} (\link{st}), before intersection etc. with it is computed 
-st_intersection = function(x, y0) CPL_geom_op2("intersection", st_geometry(x), 
-	st_sfc(do.call(c, st_geometry(y0))))
+st_intersection = function(x, y0) CPL_geom_op2("intersection", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_union = function(x, y0) CPL_geom_op2("union", st_geometry(x), 
-	st_sfc(do.call(c, st_geometry(y0))))
+st_union = function(x, y0) CPL_geom_op2("union", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_difference = function(x, y0) CPL_geom_op2("difference", st_geometry(x), 
-	st_sfc(do.call(c, st_geometry(y0))))
+st_difference = function(x, y0) CPL_geom_op2("difference", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_sym_difference = function(x, y0) CPL_geom_op2("sym_difference", st_geometry(x), 
-	st_sfc(do.call(c, st_geometry(y0))))
+st_sym_difference = function(x, y0) CPL_geom_op2("sym_difference", st_geometry(x), st_merge(y0))
+
+

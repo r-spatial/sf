@@ -17,5 +17,5 @@ SystemRequirements: GEOS++
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1
-Collate: RcppExports.R init.R bbox.R read.R sfc.R sfi.R sf.R sfa.R wkb.R wkt.R
+Collate: RcppExports.R init.R bbox.R read.R sfc.R sfi.R sf.R wkb.R wkt.R
 	plot.R geom.R transform.R sp.R crs.R
