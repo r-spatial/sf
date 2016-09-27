@@ -197,7 +197,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			Rcpp::Rcout << "geometry type:  " << poGeometryV[0]->getGeometryName() << std::endl;
 	}
 	// convert to R:
-	Rcpp::List sfc = sfc_from_geometries(poGeometryV, false); // don't destroy
+	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
 	OGRSpatialReference *ref = poLayer->GetSpatialRef();	
 	if (ref == NULL) // try from Geometry
 		ref = poGeometryV[0]->getSpatialReference();

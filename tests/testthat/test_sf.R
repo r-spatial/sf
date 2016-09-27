@@ -1,4 +1,4 @@
-context("sf: subset; p4s")
+context("sf: subset")
 
 test_that("we can subset sf objects", {
   pt1 = st_point(1:2)
@@ -9,7 +9,6 @@ test_that("we can subset sf objects", {
 
   expect_equal(nrow(s1[1,]), 1)
   expect_equal(st_bbox(s1[1,]), c(xmin=1,ymin=2,xmax=1,ymax=2))
-  expect_equal(st_p4s(s1[1,]), NULL)
 
   a = c("x", "y")
   g = st_sfc(pt1, pt2)

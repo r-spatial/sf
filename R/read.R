@@ -87,9 +87,9 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = N
 	CPL_write_ogr(obj, dsn, layer, driver, as.character(options), geom, dim, quiet)
 }
 
-#' read PostGIS table directly, using DBI and wkb conversion
+#' read PostGIS table directly, using DBI and binary conversion
 #' 
-#' read PostGIS table directly through DBI and RPostgreSQL interface, converting wkb
+#' read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 #' @param conn open database connection
 #' @param table table name
 #' @param query SQL query to select records
@@ -125,7 +125,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param geom_name name of the geometry column in the database
 #' @param ... arguments passed on to \code{dbWriteTable}
 #' @param dropTable logical; should \code{table} be dropped first?
-#' @param wkb logical; use well-known-binary for transfer?
+#' @param binary logical; use well-known-binary for transfer?
 #' @export
 #' @examples
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
@@ -137,7 +137,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #'   st_write_db(conn, sf, "meuse", dropTable = FALSE)
 #' }
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
-		..., dropTable = FALSE, wkb = TRUE) {
+		..., dropTable = FALSE, binary = TRUE) {
 	if (is.null(conn))
 		stop("if no provided")
 	if (dropTable)
@@ -158,15 +158,15 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 			"','", SRID, "','", TYPE, "',", DIM, ");")
 	dbGetQuery(conn, query)
 	rn = row.names(obj)
-	if (! wkb) {
-		wkt = st_as_wkt(geom)
+	if (! binary) {
+		wkt = st_as_text(geom)
 		for (r in seq_along(rn)) {
 			cmd = paste0("UPDATE ", table, " SET ", geom_name, 
 				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';")
 			dbGetQuery(conn, cmd)
 		}
 	} else {
-		wkb = st_as_wkb(geom)
+		wkb = st_as_binary(geom)
 		for (r in seq_along(rn)) {
 			cmd = paste0("UPDATE ", table, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
 				"' WHERE \"row.names\" = '", rn[r], "';")

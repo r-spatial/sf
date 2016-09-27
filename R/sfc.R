@@ -10,7 +10,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' @name sfc
 #' @param ... one or more simple feature objects
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
-#' @param precision numeric; see \link{st_as_wkb}
+#' @param precision numeric; see \link{st_as_binary}
 #' 
 #' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfi}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
 #' @details in case \code{epsg} is given but \code{proj4string} is not and packages \code{sp} and \code{rgdal} can be loaded, the \code{proj4string} is expanded using the PROJ.4 epsg database.
@@ -35,13 +35,15 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	else {
 		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
 			lst = coerce_types(lst)
-		else
-			attr(lst, "single_type") = NULL # we can go on; remove attr
+		attr(lst, "single_type") = NULL # removes attr
 		class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
-	st_crs(lst) = crs
+	if (is.na(crs))
+		st_crs(lst) = attributes(lst) # they might be in there, returned from a CPL_*
+	else
+		st_crs(lst) = crs
 	lst
 }
 

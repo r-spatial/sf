@@ -27,7 +27,7 @@ epsg (SRID):  NA
 proj4string:  NA
 precision:    1000 
 POINT(0.333333333333333 0.166666666666667) 
-> st_as_sfc(st_as_wkb(st_sfc(p, precision = 0L)))
+> st_as_sfc(st_as_binary(st_sfc(p, precision = 0L)))
 Simple feature collection with 1 feature
 feature type: POINT
 dimension:    XY
@@ -36,7 +36,7 @@ epsg (SRID):  NA
 proj4string:  NA
 precision:    double (default; no precision model)
 POINT(0.333333333333333 0.166666666666667) 
-> st_as_sfc(st_as_wkb(st_sfc(p, precision = 1000)))
+> st_as_sfc(st_as_binary(st_sfc(p, precision = 1000)))
 Simple feature collection with 1 feature
 feature type: POINT
 dimension:    XY
@@ -45,7 +45,7 @@ epsg (SRID):  NA
 proj4string:  NA
 precision:    double (default; no precision model)
 POINT(0.333 0.167) 
-> st_as_sfc(st_as_wkb(st_sfc(p, precision = 1000000)))
+> st_as_sfc(st_as_binary(st_sfc(p, precision = 1000000)))
 Simple feature collection with 1 feature
 feature type: POINT
 dimension:    XY
@@ -54,7 +54,7 @@ epsg (SRID):  NA
 proj4string:  NA
 precision:    double (default; no precision model)
 POINT(0.333333 0.166667) 
-> st_as_sfc(st_as_wkb(st_sfc(p, precision = 10L)))
+> st_as_sfc(st_as_binary(st_sfc(p, precision = 10L)))
 Simple feature collection with 1 feature
 feature type: POINT
 dimension:    XY
@@ -63,7 +63,7 @@ epsg (SRID):  NA
 proj4string:  NA
 precision:    double (default; no precision model)
 POINT(0.3 0.2) 
-> st_as_sfc(st_as_wkb(st_sfc(p, precision = -1)))
+> st_as_sfc(st_as_binary(st_sfc(p, precision = -1)))
 Simple feature collection with 1 feature
 feature type: POINT
 dimension:    XY
@@ -75,4 +75,4 @@ POINT(0.333333343267441 0.16666667163372)
 > 
 > proc.time()
    user  system elapsed 
-  0.316   0.284   0.291 
+  0.392   0.268   0.355 

@@ -52,6 +52,27 @@ st_geometry = function(obj, ...) UseMethod("st_geometry")
 #' @export
 st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 
+#' @name st_geometry
+#' @export
+st_geometry.sfc = function(obj, ...) obj
+
+#' @name st_geometry
+#' @param x object of class \code{data.frame}
+#' @param value object of class \code{sfc}
+#' @export
+#' @return object of class \link{sfc}; assigning geometry to a data.frame creates an \link{sf} object
+#' @examples 
+#' df = data.frame(a = 1:2)
+#' sfc = st_sfc(st_point(c(3,4)), st_point(c(10,11)))
+#' st_geometry(sfc)
+#' st_geometry(df) <- sfc
+#' class(df)
+#' st_geometry(df)
+`st_geometry<-` = function(x, value) {
+	stopifnot(inherits(value, "sfc"))
+	st_sf(x, value)
+}
+
 #' create sf object
 #' 
 #' create sf, which extends data.frame-like objects with a simple feature list column
@@ -145,20 +166,4 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	attr(x, "sf_column") = sf_column
 	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]
 	x
-}
-
-#' @name sf
-#' @param obj object of class \code{sf} or \code{sfc}
-#' @details \code{p4s} returns the PROJ.4 string; if an EPSG code is available, it constructs it from this, otherwise, it takes the \code{proj4string} attribute, if none of these is available (both are missing-valued), \code{NULL} is returned.
-#' @export
-st_p4s = function(obj) {
-	if (inherits(obj, "sf"))
-		obj = st_geometry(obj)
-	epsg = attr(obj, "epsg")
-	if (!is.na(epsg))
-		return(paste0("+init=epsg:", epsg))
-	p4s = attr(obj, "proj4string")
-	if (!is.na(p4s))
-		return(p4s)
-	NULL
 }

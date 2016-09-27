@@ -25,23 +25,23 @@ prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
 prnt.GEOMETRYCOLLECTION = function(x, ...) 
-	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_wkt), collapse=", "), ")")
+	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_text), collapse=", "), ")")
 
 #' Return Well-known Text representation of simple feature item
 #'
 #' Return Well-known Text representation of simple feature item
 #' @param x object of class sfi or sfc
 #' @param ... passed on to WKT_name
-#' @name st_as_wkt
+#' @name st_as_text
 #' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
 #' @export
-st_as_wkt = function(x, ...) UseMethod("st_as_wkt")
+st_as_text = function(x, ...) UseMethod("st_as_text")
 
-#' @name st_as_wkt
+#' @name st_as_text
 #' @export
 #' @examples
-#' st_as_wkt(st_point(1:2))
-st_as_wkt.sfi = function(x, ...) {
+#' st_as_text(st_point(1:2))
+st_as_text.sfi = function(x, ...) {
 	if (inherits(x, "POINT")) return(prnt.POINT(x, ...))
 	if (inherits(x, "MULTIPOINT")) return(prnt.MULTIPOINT(x, ...))
 	if (inherits(x, "LINESTRING")) return(prnt.LINESTRING(x, ...))
@@ -52,14 +52,14 @@ st_as_wkt.sfi = function(x, ...) {
 	stop(paste("no print method available for object of class", class(x)[1])) # nocov
 }
 
-#' @name st_as_wkt
+#' @name st_as_text
 #' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available
 #' @export
-st_as_wkt.sfc = function(x, ..., EWKT = FALSE) {
+st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 	if (EWKT) {
 		epsg = attr(x, "epsg")
 		if (!is.na(epsg) && epsg != 0)
 			x = lapply(x, function(sfi) structure(sfi, epsg = epsg))
 	}
-	sapply(x, st_as_wkt, ..., EWKT = EWKT)
+	sapply(x, st_as_text, ..., EWKT = EWKT)
 }

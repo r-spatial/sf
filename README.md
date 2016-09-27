@@ -14,12 +14,10 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-To compile, the current package needs a C++ compiler, and binary development versions of GDAL 2.x and GEOS. For e.g. Ubuntu or debian operating systems, one could either
+which currently works directly under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For e.g. Ubuntu, a recent C++ compiler and binary development versions of GDAL 2.x and GEOS are needed; to install the libraries, either
 
-* install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints, or
-* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories, and then `sudo apt-get install libgdal-dev libgeos++-dev`.
-
-With [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed, this currently works under Windows.
+* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories, and then `sudo apt-get install libgdal-dev libgeos++-dev`
+* install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints.
 
 See also:
 
@@ -27,7 +25,9 @@ See also:
 * UseR! 2016 [slides presentations](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf),
 * Blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html).
 
-### The sf package
+### What it does
+
+The sf package
 
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
 * uses S3 classes, simple feature sets are a list column in a `data.frame`

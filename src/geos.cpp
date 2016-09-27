@@ -8,6 +8,7 @@
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 

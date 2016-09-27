@@ -8,8 +8,8 @@ st_is_valid(s)
 ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
 "covers", "coveredBy", "equalsExact", "isWithinDistance")
 for (op in ops) {
-	x = st_geos_binop(op, s[1:50,], s[51:100,], 0, FALSE)
-	x = st_geos_binop(op, s[1:50,], s[51:100,], 0, TRUE)
+	x = sf:::st_geos_binop(op, s[1:50,], s[51:100,], 0, FALSE)
+	x = sf:::st_geos_binop(op, s[1:50,], s[51:100,], 0, TRUE)
 }
 
-try(x <- st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))
+try(x <- sf:::st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))

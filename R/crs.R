@@ -50,16 +50,29 @@ st_crs.sfc = function(x, ...) {
 #' @export
 `st_crs<-.sfc` = function(x, value) {
 	# init:
-	if (!(is.numeric(value) || is.character(value)))
+	if (!(is.numeric(value) || is.character(value) || is.list(value)))
 		stop("crs should be either numeric (epsg code) or character (proj4string)")
 	attr(x, "proj4string") = NA_character_
 	attr(x, "epsg") = NA_integer_
+	if (is.list(value)) { # try to get value from the attribute list:
+		if (!is.null(value$epsg) && !is.na(value$epsg))
+			value = value$epsg
+		else if (!is.null(value$proj4string) && !is.na(value$proj4string))
+			value = value$proj4string
+		else 
+			value = NA_integer_
+	}
 	if (! is.na(value)) {
 		check_replace(x)
 		if (is.numeric(value)) {
 			value = as.integer(value)
-			attr(x, "epsg") = value
-			value = CPL_proj4string_from_epsg(value)
+			if (value == 0) {
+				attr(x, "epsg") = NA_integer_
+				value = NA_character_
+			} else {
+				attr(x, "epsg") = value
+				value = CPL_proj4string_from_epsg(value)
+			}
 		} else 
 			attr(x, "epsg") = epsgFromProj4(value)
 		attr(x, "proj4string") = value
@@ -77,7 +90,7 @@ check_replace = function(x) {
 }
 
 epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue about it:
-	if (is.null(x))
+	if (is.null(x) || !is.character(x))
 		return(NA_integer_)
 	spl = strsplit(x, " ")[[1]]
 	w = grep("+init=epsg:", spl)

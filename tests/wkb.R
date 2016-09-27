@@ -2,7 +2,7 @@ library(sf)
 round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 	if (inherits(x, "sfi"))
 		x = st_sfc(x)
-	wkb = st_as_wkb(x, EWKB = EWKB, pureR = pureR)
+	wkb = st_as_binary(x, EWKB = EWKB, pureR = pureR)
 	class(wkb) = "WKB"
 	# print(wkb)
 	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)

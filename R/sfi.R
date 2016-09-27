@@ -179,7 +179,7 @@ format.sfi = function(x, ..., digits = 30) {
 		digits = 30
 	if (object.size(x) > 1000)
 		x = head(x, 10)
-	pr = st_as_wkt(x)
+	pr = st_as_text(x)
 	if (digits > 0 && nchar(pr) > digits)
 		paste0(substr(pr, 1, digits - 3), "...")
 	else

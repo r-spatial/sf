@@ -74,7 +74,7 @@ void handle_error(OGRErr err) {
 	}
 }
 
-std::vector<OGRGeometry *> ogr_geometries_from_sfc(Rcpp::List sfc, OGRSpatialReference *sref) {
+std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference *sref) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
@@ -115,7 +115,7 @@ std::vector<char *> layer_options(Rcpp::CharacterVector lco, bool quiet = false)
 	return(ret);
 }
 
-Rcpp::List sfc_from_geometries(std::vector<OGRGeometry *> g, bool destroy = false) {
+Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
 	OGRGeometryFactory f;
 	for (size_t i = 0; i < g.size(); i++) {
@@ -150,7 +150,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest);
 
 	// transform geometries:
-	std::vector<OGRGeometry *> g = ogr_geometries_from_sfc(sfc, NULL);
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	for (size_t i = 0; i < g.size(); i++)
@@ -158,7 +158,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 
 	ct->DestroyCT(ct);
 	dest->Release();
-	Rcpp::List ret = sfc_from_geometries(g, true); // destroys g;
+	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ret.attr("proj4string") = proj4string;
 	return(ret);
 }

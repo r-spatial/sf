@@ -103,7 +103,7 @@ OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
 	if (p4s != NA_STRING) {
 		Rcpp::CharacterVector p4s_cv = sfc.attr("proj4string");
 		char *cp = p4s_cv[0];
-		if (sref->importFromProj4(cp) != OGRERR_NONE) {
+		if (sref->importFromProj4(cp) != OGRERR_NONE || *cp == '\0') {
 			sref->Release();
 			throw std::invalid_argument("Object with invalid proj4string.\n");
 		}
@@ -154,7 +154,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj);
-	std::vector<OGRGeometry *> geomv = ogr_geometries_from_sfc(geom, sref);
+	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, sref);
 	sref->Release();
 	if (! quiet) {
 		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;

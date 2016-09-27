@@ -17,7 +17,7 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   	class(wkb) = "WKB"
     ret = st_as_sfc(wkb, EWKB = TRUE)
 	cat(returnstr, "\n")
-    cat(paste(wkt, "<-->", st_as_wkt(ret, EWKT=TRUE)[[1]], "\n"))
+    cat(paste(wkt, "<-->", st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
 	invisible(ret)
   }
   round_trip(cn, "SRID=4326;POINTM(0 0 0)")

@@ -21,7 +21,7 @@ skip0x = function(x) {
 
 #' @name st_as_sfc
 #' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
-#' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the wkb differs from the host machine (\code{.Platform$endian}).
+#' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).
 #' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 #' @examples
 #' wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
@@ -198,24 +198,24 @@ readGC = function(rc, dims, endian, EWKB) {
 #' convert sfc object to an WKB object
 #' @param x object to convert
 #' @param ... ignored
-#' @name st_as_wkb
+#' @name st_as_binary
 #' @export
-st_as_wkb = function(x, ...) UseMethod("st_as_wkb")
+st_as_binary = function(x, ...) UseMethod("st_as_binary")
 
-#' @name st_as_wkb
+#' @name st_as_binary
 #' @param endian character; either "big" or "little"; default: use that of platform
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
 #' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.
 #' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.
 #' @export
-st_as_wkb.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
+st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
 		precision = attr(x, "precision")) {
 	stopifnot(endian %in% c("big", "little"))
 	if (pureR && precision != 0.0)
 		stop("for non-zero precision values, use pureR = FALSE")
 	if (pureR) 
-		structure(lapply(x, st_as_wkb, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
+		structure(lapply(x, st_as_binary, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
 		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), 
@@ -243,9 +243,9 @@ createType = function(x, endian, EWKB = FALSE) {
 	}
 }
 
-#' @name st_as_wkb
+#' @name st_as_binary
 #' @export
-st_as_wkb.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
+st_as_binary.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)

@@ -186,7 +186,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 
 #' @name plot
 #' @export
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = 1, border = 1, add = FALSE) {
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
