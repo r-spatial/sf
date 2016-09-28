@@ -83,7 +83,7 @@ coerce_types = function(lst) {
 }
 
 #' @export
-print.sfc = function(x,..., n = 5L) { 
+print.sfc = function(x, ..., n = 5L) { 
 	if (length(x) != 1) 
 		sep = "s\n" 
 	else
@@ -108,7 +108,7 @@ print.sfc = function(x,..., n = 5L) {
 		cat("float (single precision)\n")
 	else
 		cat(paste(attr(x, "precision"), "\n"))
-	if (length(x) > n)
+	if (length(x) > n && n > 0)
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
 		print(x[[i]], digits = 50)

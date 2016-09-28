@@ -167,3 +167,15 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]
 	x
 }
+
+#' @export
+print.sf = function(x, ..., n = 20L) { 
+	print(st_geometry(x), n = 0)
+	y <- x
+	if (nrow(y) > n) {
+		cat(paste("First", n, "features:\n"))
+		y <- x[1:n, ]
+	} 
+	print.data.frame(y, ...)
+	invisible(x)
+}

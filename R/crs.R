@@ -21,11 +21,13 @@ st_crs.sfc = function(x, ...) {
 #'
 #' set or replace retrieve coordinate reference system from object
 #' @name crs
-#' @param value either proj4string (character) or epsg value (numeric)
+#' @param value one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).
 #' @details in case a coordinate reference system is replaced, no transformation takes
 #' place and a warning is raised to stress this. epsg values are either read from proj4strings
 #' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
 #' and +datum=WGS84, literally
+#' 
+#' If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4).
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
