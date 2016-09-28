@@ -26,7 +26,7 @@ st_crs.sfc = function(x, ...)
 #' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
 #' and +datum=WGS84, literally
 #' 
-#' If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4).
+#' If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when epsg is not consistent with a proj4string that is already present.
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
