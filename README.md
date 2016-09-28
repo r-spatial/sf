@@ -8,16 +8,19 @@
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
 
-Install by
-```
+Install with:
+
+```r
 library(devtools)
 install_github("edzer/sfr")
 ```
 
-which currently works directly under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For e.g. Ubuntu, a recent C++ compiler and binary development versions of GDAL 2.x and GEOS are needed; to install the libraries, either
+This currently works directly under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Unix-alikes, a recent C++ compiler and binary development versions of GDAL 2.x and GEOS are needed.
+
+To install these libraries on Ubuntu, for example, either:
 
 * add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories, and then `sudo apt-get install libgdal-dev libgeos++-dev`
-* install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints.
+* or install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints.
 
 See also:
 
