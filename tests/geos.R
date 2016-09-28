@@ -1,15 +1,15 @@
 library(sf)
-s = st_read(system.file("shapes/", package="maptools"), "sids")
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
 
-st_distance(s[1:10,], s[1:10,])
+st_distance(nc[1:10,], nc[1:10,])
 
-st_is_valid(s)
+st_is_valid(nc)
 
 ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
 "covers", "coveredBy", "equalsExact", "isWithinDistance")
 for (op in ops) {
-	x = sf:::st_geos_binop(op, s[1:50,], s[51:100,], 0, FALSE)
-	x = sf:::st_geos_binop(op, s[1:50,], s[51:100,], 0, TRUE)
+	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
+	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
 }
 
 try(x <- sf:::st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))

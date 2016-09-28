@@ -91,9 +91,3 @@ mp1 = st_multipolygon(mp)
 (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
 st_bbox(gc)
 attr(try(st_geometrycollection(list(mp3, pl1))), "condition") # Error:
-
-## ----error=TRUE----------------------------------------------------------
-library(rgdal2)
-(s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
-summary(s)
-

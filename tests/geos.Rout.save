@@ -1,0 +1,75 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+Linking to GEOS 3.5.0, GDAL 2.1.0
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+features:       100
+fields:         14
+geometry type:  MULTIPOLYGON
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Warning message:
+In check_replace(st_geometry(x)) :
+  st_crs: replacing crs does not reproject data; use st_transform for that
+> 
+> st_distance(nc[1:10,], nc[1:10,])
+           [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
+ [1,] 0.0000000 0.0000000 0.2853452 4.9133394 3.3418107 4.0241471 4.6801614
+ [2,] 0.0000000 0.0000000 0.0000000 4.5731979 3.0027451 3.7000092 4.3398704
+ [3,] 0.2853452 0.0000000 0.0000000 4.1050598 2.5344376 3.2304627 3.8717293
+ [4,] 4.9133394 4.5731979 4.1050598 0.0000000 0.7485792 0.4751628 0.0000000
+ [5,] 3.3418107 3.0027451 2.5344376 0.7485792 0.0000000 0.0000000 0.5167300
+ [6,] 4.0241471 3.7000092 3.2304627 0.4751628 0.0000000 0.0000000 0.2986033
+ [7,] 4.6801614 4.3398704 3.8717293 0.0000000 0.5167300 0.2986033 0.0000000
+ [8,] 4.2865552 3.9524648 3.4841303 0.1759961 0.1318409 0.0000000 0.0000000
+ [9,] 2.9241633 2.5822665 2.1140666 1.5686066 0.0000000 0.7212210 1.3352757
+[10,] 0.7919658 0.4681372 0.0000000 3.6938184 2.1230093 2.8080148 3.4604872
+           [,8]      [,9]     [,10]
+ [1,] 4.2865552 2.9241633 0.7919658
+ [2,] 3.9524648 2.5822665 0.4681372
+ [3,] 3.4841303 2.1140666 0.0000000
+ [4,] 0.1759961 1.5686066 3.6938184
+ [5,] 0.1318409 0.0000000 2.1230093
+ [6,] 0.0000000 0.7212210 2.8080148
+ [7,] 0.0000000 1.3352757 3.4604872
+ [8,] 0.0000000 0.9518596 3.0710251
+ [9,] 0.9518596 0.0000000 1.7028046
+[10,] 3.0710251 1.7028046 0.0000000
+> 
+> st_is_valid(nc)
+  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [46] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [61] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> 
+> ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
++ "covers", "coveredBy", "equalsExact", "isWithinDistance")
+> for (op in ops) {
++ 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
++ 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
++ }
+> 
+> try(x <- sf:::st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))
+Error in st_geometry(x) : object 's' not found
+> 
+> proc.time()
+   user  system elapsed 
+  0.448   0.304   0.440 

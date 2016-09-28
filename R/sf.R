@@ -2,7 +2,6 @@
 #'
 #' convert foreign object to an sf object
 #' @param x object to be converted into an object class \code{sf}
-#' @param ... further arguments
 #' @export
 st_as_sf = function(x, ...) UseMethod("st_as_sf")
 
@@ -11,8 +10,8 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param relation_to_geometry character vector; see details section of \link{st_sf}
 #' @param coords in case of point data: coordinate names or numbers
 #' @param third passed on to \link{st_point} (only when coords is given)
-#' @param crs (only relevant when coords is given) coordinate reference sytem: integer denoting the epsg code, or character denoting proj4string
 #' @param remove_coordinates logical; when coords is given, remove coordinate columns from data.frame?
+#' @param ... passed on to \link{st_sf}, might included crs
 #' 
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -29,11 +28,10 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
-		crs = NA_integer_, remove_coordinates = TRUE) {
+		remove_coordinates = TRUE) {
 	if (! missing(coords)) {
 		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
-				function(i) st_point(unlist(x[i, coords]), third = third)
-					), crs = crs))
+				function(i) st_point(unlist(x[i, coords]), third = third))))
 		if (remove_coordinates)
 			x[coords] = NULL
 	}
@@ -169,7 +167,9 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 }
 
 #' @export
-print.sf = function(x, ..., n = 20L) { 
+print.sf = function(x, ..., n = 
+		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) { 
+
 	print(st_geometry(x), n = 0, what = "Simple feature collection with")
 	y <- x
 	if (nrow(y) > n) {

@@ -32,12 +32,12 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   round_trip(cn, "MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))")
 
 
-  options(warn = -1)
-  query = paste0("SELECT wkb_geometry from meuse limit 2;")
-  wkb = as.list(dbGetQuery(cn, query)$wkb_geometry)
-  class(wkb) = "WKB"
-  ret = st_as_sfc(wkb, EWKB = TRUE)
-  ret 
+  #options(warn = -1)
+  #query = paste0("SELECT wkb_geometry from meuse limit 2;")
+  #wkb = as.list(dbGetQuery(cn, query)$wkb_geometry)
+  #class(wkb) = "WKB"
+  #ret = st_as_sfc(wkb, EWKB = TRUE)
+  #ret 
 
-  m = st_read_db(cn, query = "select * from meuse;")
+  #m = st_read_db(cn, query = "select * from meuse;")
 }

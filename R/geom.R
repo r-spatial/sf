@@ -92,7 +92,7 @@ st_is_within_distance = function(x, y, par, sparse = TRUE)
 #' @export
 #' @param dist buffer distance
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
-#' @returns st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
+#' @return st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30)
 	st_sfc(CPL_geom_op("buffer", st_geometry(x), dist, nQuadSegs))
 
@@ -107,8 +107,8 @@ st_convexhull = function(x) st_sfc(CPL_geom_op("convexhull", st_geometry(x)))
 #' @name geos
 #' @export
 #' @examples 
-#' s = st_read(system.file("shapes/", package="maptools"), "sids")
-#' plot(st_unioncascaded(st_sfc(do.call(c, st_geometry(s)))),col=0)
+#' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+#' plot(st_unioncascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
 st_unioncascaded = function(x) st_sfc(CPL_geom_op("unioncascaded", st_geometry(x)))
 
 #' @name geos
@@ -131,8 +131,8 @@ st_polygonize = function(x) st_sfc(CPL_geom_op("polygonize", st_geometry(x)))
 #' @name geos
 #' @export
 #' @examples
-#' plot(s)
-#' plot(st_centroid(s), add = TRUE, pch = 3)
+#' plot(nc, axes = TRUE)
+#' plot(st_centroid(nc), add = TRUE, pch = 3)
 st_centroid = function(x) st_sfc(CPL_geom_op("centroid", st_geometry(x)))
 
 #' @name geos
@@ -144,9 +144,9 @@ st_segmentize  = function(x, dfMaxLength)
 #' @name geos
 #' @export
 #' @param union logical; apply \code{st_unioncascaded} to the merged geometry set?
-#' m = st_merge(s)
-#' plot(st_convexhull(s))
-#' plot(s, border = grey(.5))
+#' m = st_merge(nc)
+#' plot(st_convexhull(nc))
+#' plot(nc, border = grey(.5))
 st_merge = function(x, union = FALSE) {
 	x = st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x))
 	if (union)

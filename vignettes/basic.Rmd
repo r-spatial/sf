@@ -116,6 +116,7 @@ attr(try(st_geometrycollection(list(mp3, pl1))), "condition") # Error:
 
 ## Reading a dataset into an sf object
 ```{r error=TRUE}
-(s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
-summary(s)
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+print(nc, n = 3)
+summary(nc)
 ```

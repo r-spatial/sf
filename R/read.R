@@ -19,8 +19,8 @@
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }
-#' (s = st_read(system.file("shapes/", package="maptools"), "sids"))[1:10,]
-#' summary(s)
+#' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+#' summary(nc)
 #' @name st_read
 #' @export
 st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0) {
@@ -57,11 +57,11 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL",
 #'    options = c("OVERWRITE=yes", "LAUNDER=true"))
-#'  sids = st_read(system.file("shapes/", package="maptools"), "sids")
-#'  st_write(sids, "PG:dbname=postgis", "sids", driver = "PostgreSQL", options = "OVERWRITE=true")
+#'  demo(nc, ask = FALSE)
+#'  st_write(nc, "PG:dbname=postgis", "sids", driver = "PostgreSQL", options = "OVERWRITE=true")
 #' }
-#' s = st_read(system.file("shapes/", package="maptools"), "sids")
-#' st_write(s, ".", "sids")
+#' demo(nc, ask = FALSE)
+#' st_write(nc, ".", "nc")
 #' @export
 st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = NULL, quiet = FALSE,
 		factorsAsCharacter = TRUE) {
