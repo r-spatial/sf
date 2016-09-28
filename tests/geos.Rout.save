@@ -23,9 +23,6 @@ features:       100
 fields:         14
 geometry type:  MULTIPOLYGON
 proj4string:    +proj=longlat +datum=NAD27 +no_defs 
-Warning message:
-In check_replace(st_geometry(x)) :
-  st_crs: replacing crs does not reproject data; use st_transform for that
 > 
 > st_distance(nc[1:10,], nc[1:10,])
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
@@ -72,4 +69,4 @@ Error in st_geometry(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.448   0.304   0.440 
+  0.476   0.256   0.447 

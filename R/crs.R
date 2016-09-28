@@ -13,9 +13,8 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x, ...))
 
 #' @name crs
 #' @export
-st_crs.sfc = function(x, ...) {
-	attr(x, "proj4string")
-}
+st_crs.sfc = function(x, ...)
+	list(epsg = attr(x, "epsg"), proj4string = attr(x, "proj4string"))
 
 #' set or replace coordinate reference system from object
 #'
@@ -39,7 +38,6 @@ st_crs.sfc = function(x, ...) {
 #'  st_geometry(sf)
 #' @export
 `st_crs<-.sf` = function(x, value) {
-	check_replace(st_geometry(x))
 	st_crs(x[[ attr(x, "sf_column") ]]) = value
 	x
 }
@@ -51,9 +49,11 @@ st_crs.sfc = function(x, ...) {
 #'  sfc
 #' @export
 `st_crs<-.sfc` = function(x, value) {
+	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 	# init:
 	if (!(is.numeric(value) || is.character(value) || is.list(value)))
-		stop("crs should be either numeric (epsg code) or character (proj4string)")
+		stop("crs should be either numeric (epsg), character (proj4string), or list")
+	check_replace(x, value)
 	attr(x, "proj4string") = NA_character_
 	attr(x, "epsg") = NA_integer_
 	if (is.list(value)) { # try to get value from the attribute list:
@@ -65,7 +65,6 @@ st_crs.sfc = function(x, ...) {
 			value = NA_integer_
 	}
 	if (! is.na(value)) {
-		check_replace(x)
 		if (is.numeric(value)) {
 			value = as.integer(value)
 			if (value == 0) {
@@ -77,17 +76,26 @@ st_crs.sfc = function(x, ...) {
 			}
 		} else 
 			attr(x, "epsg") = epsgFromProj4(value)
-		attr(x, "proj4string") = value
+		attr(x, "proj4string") = trim(value)
 	}
 	x
 }
 
-check_replace = function(x) {
+check_replace = function(x, value) {
+	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+	if (is.na(value) || is.list(value))
+		return()
 	epsg = attr(x, "epsg")
 	proj4string = attr(x, "proj4string")
 	if (is.null(epsg) && is.null(proj4string))
-		return();
-	if (!is.na(epsg) || !is.na(proj4string))
+		return()
+	if (!is.null(epsg) && is.na(epsg) && is.numeric(value) && !is.na(proj4string)
+			&& proj4string ==  trim(CPL_proj4string_from_epsg(value)))
+		return() # the epsg is "additional" info, but matches the already present proj4string
+	if (!is.null(value) && !is.na(value) && is.character(value) 
+		&& !is.null(proj4string) && !is.na(proj4string) && trim(value) == trim(proj4string))
+		return() # trying to replace proj4string with identical value
+	if (!is.na(epsg) || !is.na(proj4string))  # possibly warn:
 		warning("st_crs: replacing crs does not reproject data; use st_transform for that")
 }
 
