@@ -83,25 +83,25 @@ coerce_types = function(lst) {
 }
 
 #' @export
-print.sfc = function(x, ..., n = 5L) { 
+print.sfc = function(x, ..., n = 5L, what = "Geometry set for") { 
 	if (length(x) != 1) 
 		sep = "s\n" 
 	else
 		sep = "\n"
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
-	cat(paste0("Simple feature collection with ", length(x), " feature", sep))
+	cat(paste0(what, " ", length(x), " feature", sep))
 	if (length(x)) {
-		cat(paste0("feature type: ", cls, "\n"))
-		cat(paste0("dimension:    ", class(x[[1]])[1], "\n"))
+		cat(paste0("geometry type:  ", cls, "\n"))
+		cat(paste0("dimension:      ", class(x[[1]])[1], "\n"))
 	}
-	cat(paste0("bbox:         "))
+	cat(paste0("bbox:           "))
 	bb = signif(attr(x, "bbox"), 7)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	# attributes: epsg, proj4string, precision
-	cat(paste0("epsg (SRID):  ", attr(x, "epsg"), "\n"))
-	cat(paste0("proj4string:  ", attr(x, "proj4string"), "\n"))
-	cat(paste0("precision:    "))
+	cat(paste0("epsg (SRID):    ", attr(x, "epsg"), "\n"))
+	cat(paste0("proj4string:    ", attr(x, "proj4string"), "\n"))
+	cat(paste0("precision:      "))
 	if (attr(x, "precision") == 0.0)
 		cat("double (default; no precision model)\n")
 	else if (attr(x, "precision") < 0.0)

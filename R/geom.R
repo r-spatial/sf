@@ -143,10 +143,17 @@ st_segmentize  = function(x, dfMaxLength)
 
 #' @name geos
 #' @export
+#' @param union logical; apply \code{st_unioncascaded} to the merged geometry set?
 #' m = st_merge(s)
 #' plot(st_convexhull(s))
 #' plot(s, border = grey(.5))
-st_merge = function(x) st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x))
+st_merge = function(x, union = FALSE) {
+	x = st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x))
+	if (union)
+		st_unioncascaded(x)
+	else
+		x
+}
 
 #' @name geos
 #' @export

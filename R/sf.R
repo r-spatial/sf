@@ -170,7 +170,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 
 #' @export
 print.sf = function(x, ..., n = 20L) { 
-	print(st_geometry(x), n = 0)
+	print(st_geometry(x), n = 0, what = "Simple feature collection with")
 	y <- x
 	if (nrow(y) > n) {
 		cat(paste("First", n, "features:\n"))
