@@ -10,7 +10,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"),
 Depends: R (>= 3.0.0)
 Imports: utils, stats, graphics, methods, Rcpp, DBI
 LinkingTo: Rcpp
-Suggests: sp, rgeos, RPostgreSQL, testthat, knitr, roxygen2
+Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, roxygen2
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
 SystemRequirements: GEOS++
