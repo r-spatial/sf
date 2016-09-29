@@ -103,6 +103,7 @@ Dimension = function(x) {
 #' pts4 = lapply(mp2, function(x) lapply(x, function(y) cbind(y, 0)))
 #' (mp4 = st_multipolygon(pts4))
 #' (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
+#' st_geometrycollection() # empty geometry
 #' @export
 st_point = function(x, third = "XYZ") {
 	stopifnot(is.numeric(x))
@@ -126,17 +127,21 @@ st_multilinestring = function(x, third = "XYZ") MtrxSet(x, third, type = "MULTIL
 #' @export
 st_multipolygon = function(x, third = "XYZ") MtrxSetSet(x, third, type = "MULTIPOLYGON", needClosed = TRUE)
 #' @name st
+#' @param dims character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case \code{x} is the empty \code{list()}.
 #' @export
-st_geometrycollection = function(x, third = "XYZ") {
+st_geometrycollection = function(x = list(), dims = "XY") {
 	cls = sapply(x, class)
-	if (!is.matrix(cls) || !is.character(cls) || nrow(cls) != 3)
-		stop("st_geometrycollection parameter x error: list elements should be simple features")
-	stopifnot(all(cls[3,] == "sfi"))
-	stopifnot(all(cls[2,] != "GEOMETRYCOLLECTION")) # can't recurse!
-	# check all dimensions are equal:
-	dims = unique(cls[1,])
-	if (length(dims) > 1)
-		stop(paste("multiple dimensions found:", paste(dims, collapse = ", ")))
+	if (length(cls)) {
+		if (!is.matrix(cls) || !is.character(cls) || nrow(cls) != 3)
+			stop("st_geometrycollection parameter x error: list elements should be simple features")
+		stopifnot(all(cls[3,] == "sfi"))
+		stopifnot(all(cls[2,] != "GEOMETRYCOLLECTION")) # can't recurse!
+		# check all dimensions are equal:
+		dims = unique(cls[1,])
+		if (length(dims) > 1)
+			stop(paste("multiple dimensions found:", paste(dims, collapse = ", ")))
+	} else
+		dims = "XY"
 	structure(x, class = c(dims, "GEOMETRYCOLLECTION", "sfi")) # TODO: no Z/M/ZM modifier here??
 }
 
