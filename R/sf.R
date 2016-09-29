@@ -170,12 +170,14 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 print.sf = function(x, ..., n = 
 		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) { 
 
-	print(st_geometry(x), n = 0, what = "Simple feature collection with")
+	nf = length(x) - 1
+	app = paste("and", nf, ifelse(nf == 1, "field", "fields"))
+	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	y <- x
 	if (nrow(y) > n) {
 		cat(paste("First", n, "features:\n"))
-		y <- x[1:n, ]
-	} 
+		y <- x[1:n, , drop = FALSE]
+	}
 	print.data.frame(y, ...)
 	invisible(x)
 }

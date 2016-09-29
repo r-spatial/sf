@@ -29,7 +29,7 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfi") 
 			&& inherits(lst[[1]][[1]], "sfi"))
 		lst = lst[[1]]
-	stopifnot(is.numeric(crs) || is.character(crs))
+	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
 	if (length(lst) == 0) # empty set
 		class(lst) = "sfc"
 	else {
@@ -83,13 +83,13 @@ coerce_types = function(lst) {
 }
 
 #' @export
-print.sfc = function(x, ..., n = 5L, what = "Geometry set for") { 
+print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") { 
 	if (length(x) != 1) 
-		sep = "s\n" 
+		sep = "s" 
 	else
-		sep = "\n"
+		sep = ""
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
-	cat(paste0(what, " ", length(x), " feature", sep))
+	cat(paste0(what, " ", length(x), " feature", sep, " ", append, "\n"))
 	if (length(x)) {
 		cat(paste0("geometry type:  ", cls, "\n"))
 		cat(paste0("dimension:      ", class(x[[1]])[1], "\n"))

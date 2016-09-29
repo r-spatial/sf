@@ -14,7 +14,11 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x, ...))
 #' @name crs
 #' @export
 st_crs.sfc = function(x, ...)
-	list(epsg = attr(x, "epsg"), proj4string = attr(x, "proj4string"))
+	structure(list(epsg = attr(x, "epsg"), proj4string = attr(x, "proj4string")), class = "crs")
+
+#' @export
+#' @method is.na crs
+is.na.crs = function(x) { is.na(x$epsg) && is.na(x@proj4string) }
 
 #' set or replace coordinate reference system from object
 #'

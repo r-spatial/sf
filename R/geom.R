@@ -17,8 +17,13 @@ st_is_simple = function(x) CPL_is_simple(st_geometry(x))
 
 # returning matrix, distance or relation string -- the work horse is:
 
-st_geos_binop = function(op = "intersects", x, y = x, par = 0.0, sparse = TRUE)
-	CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
+st_geos_binop = function(op = "intersects", x, y = x, par = 0.0, sparse = TRUE) {
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
+	if (sparse)
+		ret
+	else
+		ret[[1]]
+}
 
 #' @param x first simple feature (sf) or simple feature geometry (sfc) collection
 #' @param y second simple feature (sf) or simple feature geometry (sfc) collection
@@ -155,21 +160,24 @@ st_merge = function(x, union = FALSE) {
 		x
 }
 
+geom_op2 = function(op, x, y) {
+	st_sfc(CPL_geom_op2(op, x, y), crs = st_crs(x))
+}
+
 #' @name geos
 #' @export
 #' @param y0 object of class \code{sfc} which is merged, using \code{c.sfi} (\link{st}), before intersection etc. with it is computed 
-st_intersection = function(x, y0) CPL_geom_op2("intersection", st_geometry(x), st_merge(y0))
+st_intersection = function(x, y0)   geom_op2("intersection", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_union = function(x, y0) CPL_geom_op2("union", st_geometry(x), st_merge(y0))
+st_union = function(x, y0)          geom_op2("union", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_difference = function(x, y0) CPL_geom_op2("difference", st_geometry(x), st_merge(y0))
+st_difference = function(x, y0)     geom_op2("difference", st_geometry(x), st_merge(y0))
 
 #' @name geos
 #' @export
-st_sym_difference = function(x, y0) CPL_geom_op2("sym_difference", st_geometry(x), st_merge(y0))
-
+st_sym_difference = function(x, y0) geom_op2("sym_difference", st_geometry(x), st_merge(y0))
 

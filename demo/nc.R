@@ -5,5 +5,4 @@
 # print(nc, n = 3)
 # st_write(nc, "nc.gpkg", "nc.gpkg", driver = "GPKG")
 
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-suppressWarnings(st_crs(nc) <- 4267)
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)

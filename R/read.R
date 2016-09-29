@@ -30,7 +30,10 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
 	x[[which.geom]] = NULL
-	x = as.data.frame(x)
+	if (length(x) == 0)
+		x = data.frame(row.names = seq_along(geom))
+	else
+		x = as.data.frame(x)
 	crs = if (is.null(attr(geom, "proj4string")))
 			NA_integer_
 		else
