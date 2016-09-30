@@ -36,15 +36,20 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
 			lst = coerce_types(lst)
 		attr(lst, "single_type") = NULL # removes attr
-		non_empty = attr(lst, "non_empty")
-		attr(lst, "non_empty") = NULL
-		cls = if (is.null(non_empty) || non_empty == -1)
-				c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+		if (is.null(attr(lst, "non_empty"))) {
+			l = sapply(lst, function(x) length(x) > 0)
+			if (any(l))
+				non_empty = l[1] # 0-based
 			else
-				c(paste0("sfc_", class(lst[[non_empty+1]])[2L]), "sfc")
-		class(lst) = cls
+				non_empty = 1
+			attr(lst, "n_empty") = sum(! l)
+		} else {
+			non_empty = attr(lst, "non_empty")
+			attr(lst, "non_empty") = NULL
+		}
+		class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
 		# FIXME: deal with attr(lst, "n_empty"), # of empty geoms?
-		attr(lst, "n_empty") = NULL # remove
+		#attr(lst, "n_empty") = NULL # remove
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
