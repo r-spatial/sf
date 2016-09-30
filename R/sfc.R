@@ -30,13 +30,21 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 			&& inherits(lst[[1]][[1]], "sfi"))
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
-	if (length(lst) == 0) # empty set
+	if (length(lst) == 0) # empty set: no geometries read
 		class(lst) = "sfc"
 	else {
 		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
 			lst = coerce_types(lst)
 		attr(lst, "single_type") = NULL # removes attr
-		class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+		non_empty = attr(lst, "non_empty")
+		attr(lst, "non_empty") = NULL
+		cls = if (is.null(non_empty) || non_empty == -1)
+				c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+			else
+				c(paste0("sfc_", class(lst[[non_empty+1]])[2L]), "sfc")
+		class(lst) = cls
+		# FIXME: deal with attr(lst, "n_empty"), # of empty geoms?
+		attr(lst, "n_empty") = NULL # remove
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
@@ -89,7 +97,13 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	else
 		sep = ""
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
-	cat(paste0(what, " ", length(x), " feature", sep, " ", append, "\n"))
+	cat(paste0(what, " ", length(x), " feature", sep, " ", append))
+	if (! is.null(attr(x, "n_empty"))) {
+		ne = attr(x, "n_empty")
+		if (ne > 0)
+			cat(paste0("(of which ", ne, ifelse(ne > 1, " are ", " is "), "empty)"))
+	}
+	cat("\n")
 	if (length(x)) {
 		cat(paste0("geometry type:  ", cls, "\n"))
 		cat(paste0("dimension:      ", class(x[[1]])[1], "\n"))

@@ -97,6 +97,7 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = N
 #' @param table table name
 #' @param query SQL query to select records
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
+#' @param EWKB logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}
 #' @examples 
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'   library(RPostgreSQL)
@@ -107,14 +108,15 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = N
 #' @name st_read
 #' @export
 st_read_db = function(conn = NULL, table, query = paste("select * from ", table, ";"),
-		geom_column = NULL, ...) {
+		geom_column = NULL, EWKB, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
   	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
 	if (is.null(geom_column)) # find the geometry column - guess it's the last character column:
 		geom_column = tail(which(sapply(tbl, is.character)), 1)
-	EWKB = inherits(conn, "PostgreSQLConnection")
+	if (missing(EWKB))
+		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB)
 	st_as_sf(tbl, ...)
 }

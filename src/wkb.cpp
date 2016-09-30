@@ -11,6 +11,7 @@
 #include "bbox.h"
 #include "wkb.h"
 
+/*      NULL/EMPTY             0 */
 #define SF_Point               1
 #define SF_LineString          2
 #define SF_Polygon             3
@@ -106,9 +107,11 @@ Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool E
 }
 
 Rcpp::List read_geometrycollection(const unsigned char **pt, int n_dims, bool EWKB = 0, 
-		int endian = 0, Rcpp::CharacterVector cls = "", bool isGC = true) {
+		int endian = 0, Rcpp::CharacterVector cls = "", bool isGC = true, bool *isEmpty = NULL) {
 	uint32_t nlst = *(uint32_t *) (*pt); // requires -std=c++11
 	(*pt) += 4;
+	if (isEmpty != NULL)
+		*isEmpty = (nlst == 0);
 	Rcpp::List ret(nlst);
 	for (size_t i = 0; i < nlst; i++)
 		ret[i] = read_data(pt, EWKB, endian, isGC, NULL, NULL)[0];
@@ -206,6 +209,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 				throw std::range_error("unknown wkbType dim in switch");
 		}
 	}
+	bool gcEmpty = false;
 	switch(sf_type) {
 		case SF_Point: 
 			output[0] = read_numeric_vector(pt, n_dims, addclass ?
@@ -233,7 +237,8 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 			break;
 		case SF_GeometryCollection: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true);
+				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true,
+				&gcEmpty);
 			break;
 		case SF_CircularString:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
@@ -268,12 +273,16 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"));
 			break;
 		default: {
-			Rcpp::Rcout << "type is " << sf_type << "\n";
+			Rcpp::Rcout << "type is " << sf_type << std::endl;
 			throw std::range_error("reading this sf type is not supported, please file an issue");
 		}
 	}
-	if (type != NULL)
-		*type = sf_type;
+	if (type != NULL) {
+		if (sf_type == SF_GeometryCollection && gcEmpty)
+			*type = 0;
+		else
+			*type = sf_type;
+	}
 	return(output);
 }
 
@@ -281,7 +290,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) {
 	Rcpp::List output(wkb_list.size());
 
-	int type = 0, last_type = 0, n_types = 0;
+	int type = 0, last_type = 0, n_types = 0, n_empty = 0, non_empty = -1;
 
 	uint32_t srid = 0;
 	for (int i = 0; i < wkb_list.size(); i++) {
@@ -289,12 +298,18 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 		Rcpp::RawVector raw = wkb_list[i];
 		const unsigned char *pt = &(raw[0]);
 		output[i] = read_data(&pt, EWKB, endian, true, &type, &srid)[0];
-		if (n_types <= 1 && type != last_type) { // check if there's more than 1 type:
+		if (type == 0)
+			n_empty++;
+		else if (n_types <= 1 && type != last_type) { 
 			last_type = type;
-			n_types++;
+			n_types++; // check if there's more than 1 type:
+			non_empty = i; // communicates the type of this set, in case there's only one
 		}
 	}
-	output.attr("single_type") = n_types == 1; // if 1, we can skip coerceTypes() later on
+	output.attr("single_type") = n_types <= 1; // if 1, we can skip coerceTypes() later on
+	                                           // if 0, we have only empty geometrycollections
+	output.attr("n_empty") = (int) n_empty;
+	output.attr("non_empty") = (int) non_empty;
 	output.attr("epsg") = (int) srid;
 	return output;
 }
