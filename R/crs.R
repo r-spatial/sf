@@ -18,7 +18,7 @@ st_crs.sfc = function(x, ...)
 
 #' @export
 #' @method is.na crs
-is.na.crs = function(x) { is.na(x$epsg) && is.na(x@proj4string) }
+is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 
 #' set or replace coordinate reference system from object
 #'
