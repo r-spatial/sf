@@ -41,7 +41,7 @@ st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
 #' @export
 st_bbox.GEOMETRYCOLLECTION = function(obj) {
 	s = sapply(obj, st_bbox) # dispatch on class
-	if (length(s) == 0)
+	if (length(s) == 0 || all(is.na(s[1L,])))
 		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
 	else
 		c(xmin = min(s[1L,], na.rm = TRUE), ymin = min(s[2L,], na.rm = TRUE), 
