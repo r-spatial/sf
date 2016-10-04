@@ -15,7 +15,7 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-This currently works directly under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed with R 3.3 or newer. For Unix-alikes, a recent C++ compiler (c++11) and binary development versions of GDAL 2.x and GEOS are needed.
+This currently works directly under windows with R 3.3 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Unix-alikes, a recent C++ compiler (c++11) and binary development versions of GDAL 2.x and GEOS are needed.
 
 To install these libraries on Ubuntu, for example, either:
 
