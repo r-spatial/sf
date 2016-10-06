@@ -15,8 +15,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> #if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-> if (Sys.getenv("USER") %in% c("edzer", "travis")) {
+> #if (Sys.getenv("USER") %in% c("edzer", "travis")) {
+> if (Sys.getenv("USER") %in% c("edzer")) {
 +   library(RPostgreSQL)
 +   library(sf)
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")
@@ -83,4 +83,4 @@ MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))
 > 
 > proc.time()
    user  system elapsed 
-  0.456   0.256   0.430 
+  0.440   0.288   0.437 

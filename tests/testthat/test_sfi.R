@@ -46,11 +46,3 @@ test_that("format works", {
 		"MULTIPOINT(0...")
 	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "simple_feature")
 })
-
-test_that("coerceType works in sfc", {
-  m = matrix(1:6,,2)
-  sfc = st_sfc(st_linestring(m), st_multilinestring(list(m)))
-  expect_true(all(class(sfc) == c("sfc_MULTILINESTRING", "sfc")))
-  sfc = st_sfc(st_point(1:2), st_multilinestring(list(m)))
-  expect_true(all(class(sfc) == c("sfc_GEOMETRYCOLLECTION", "sfc")))
-})

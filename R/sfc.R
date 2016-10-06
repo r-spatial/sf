@@ -31,11 +31,8 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
 	if (length(lst) == 0) # empty set: no geometries read
-		class(lst) = "sfc"
+		class(lst) = c("sfc_GEOMETRY", "sfc")
 	else {
-		if (is.null(attr(lst, "single_type")) || ! attr(lst, "single_type"))
-			lst = coerce_types(lst)
-		attr(lst, "single_type") = NULL # removes attr
 		if (is.null(attr(lst, "non_empty"))) {
 			l = sapply(lst, function(x) length(x) > 0)
 			if (any(l))
@@ -47,9 +44,13 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 			non_empty = attr(lst, "non_empty")
 			attr(lst, "non_empty") = NULL
 		}
-		class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
-		# FIXME: deal with attr(lst, "n_empty"), # of empty geoms?
-		#attr(lst, "n_empty") = NULL # remove
+		# get type:
+		is_single = function(x) length(unique(sapply(x, function(y) class(y)[2]))) == 1
+		if ((!is.null(attr(lst, "single_type")) && attr(lst, "single_type")) || is_single(lst))
+			class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
+		else
+			class(lst) = c("sfc_GEOMETRY", "sfc") # a mix
+		attr(lst, "single_type") = NULL # remove attr
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)

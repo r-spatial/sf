@@ -290,7 +290,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) {
 	Rcpp::List output(wkb_list.size());
 
-	int type = 0, last_type = 0, n_types = 0, n_empty = 0, non_empty = 0;
+	int type = 0, last_type = 0, n_types = 0, n_empty = 0, non_empty = -1;
 
 	uint32_t srid = 0;
 	for (int i = 0; i < wkb_list.size(); i++) {
@@ -309,7 +309,7 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 	output.attr("single_type") = n_types <= 1; // if 1, we can skip coerceTypes() later on
 	                                           // if 0, we have only empty geometrycollections
 	output.attr("n_empty") = (int) n_empty;
-	output.attr("non_empty") = (int) non_empty + 1; // 1-based index
+	output.attr("non_empty") = (int) non_empty + 1; // 1-based index -- 0 if all empty
 	output.attr("epsg") = (int) srid;
 	return output;
 }

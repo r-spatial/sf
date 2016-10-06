@@ -50,9 +50,31 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 	return(out);
 }
 
+int to_multi_what(std::vector<OGRGeometry *> gv) {
+	OGRwkbGeometryType tp;
+	bool lines = false, multilines = false, polygons = false, multipolygons = false;
+
+	for (int i = 0; i < gv.size(); i++) {
+		switch(gv[i]->getGeometryType()) {
+			case wkbLineString: lines = true; break;
+			case wkbMultiLineString: multilines = true; break;
+			case wkbPolygon: polygons = true; break;
+			case wkbMultiPolygon: multipolygons = true; break;
+			default: return(0);
+		}
+	}
+	if (lines && multilines && !polygons && !multipolygons)
+		return(wkbMultiLineString);
+	if (!lines && !multilines && polygons && multipolygons)
+		return(wkbMultiPolygon);
+	// mix of (multi)lines & (multi)polygons, or single types:
+	return 0;
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
-		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0) {
+		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
+		bool promote_to_multi = true) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
     GDALDataset *poDS;
@@ -91,7 +113,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	// read all features:
     poLayer->ResetReading();
-	int i = 0, lastType = 0, toType = 0;
+	int i = 0;
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false;
     OGRFeature *poFeature;
@@ -158,43 +180,22 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					break;
 			}
         }
-
-		// deal with feature geometry
 		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
-		if (toTypeUser == 0) { // do something auto clever; check for a mix of types:
-			if (lastType == 0)
-				lastType = poGeometryV[i]->getGeometryType(); // init at feature 0.
-			else {
-				if (lastType != poGeometryV[i]->getGeometryType()) { // a mix:
-					if (lastType > poGeometryV[i]->getGeometryType())
-						toType = lastType;
-					else
-						toType = poGeometryV[i]->getGeometryType();
-					lastType = toType;
-				}
-			}
-		}
-		// poGeometryV[i] = poFeature->StealGeometry();
-		poFeatureV[i] = poFeature; // so we can delete once converted
+		poFeatureV[i] = poFeature;
 		i++;
     }
-	// TRY to deal with mixed types -- this does not always work, and there seems no way to catch failure:
-	if (toTypeUser || toType) {
-		if (toTypeUser)
-			toType = toTypeUser;
+	if (promote_to_multi && toTypeUser == 0)
+		toTypeUser = to_multi_what(poGeometryV);
+	if (toTypeUser != 0) { 
 		for (i = 0; i < poFeatureV.size(); i++) {
 			poFeatureV[i]->SetGeometryDirectly(
 				OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
-				(OGRwkbGeometryType) toType, NULL) );
+				(OGRwkbGeometryType) toTypeUser, NULL) );
 			poGeometryV[i] = poFeatureV[i]->GetGeomFieldRef(iGeomField);
 		}
-	}
-	if (! quiet) {
-		if (toType)
-			Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
-		else
-			Rcpp::Rcout << "geometry type:  " << poGeometryV[0]->getGeometryName() << std::endl;
-	}
+	} 
+	if (! quiet && toTypeUser)
+		Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
 	// convert to R:
 	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
 	OGRSpatialReference *ref = poLayer->GetSpatialRef();	
