@@ -2,7 +2,7 @@
 #' 
 #' coordinate transformation or conversion
 #' 
-#' @param x object of class sf, sfc or sfi
+#' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
 #' 
@@ -40,10 +40,10 @@ st_transform.sf = function(x, crs, ...) {
 
 #' @name st_transform
 #' @export
-#' @details the st_transform method for sfi objects assumes that the crs of the object is available as an attribute of that name.
+#' @details the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
 #' @examples 
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_transform.sfi = function(x, crs , ...) {
+st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")

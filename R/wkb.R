@@ -162,7 +162,7 @@ readData = function(rc, EWKB = FALSE) {
 		TIN = lapply(readGC(rc, pt$dims, endian, EWKB), unclass),
 		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
 		stop(paste("type", pt$tp, "unsupported")))
-	class(ret) <- c(pt$zm, pt$tp, "sfi")
+	class(ret) <- c(pt$zm, pt$tp, "sfg")
 	if (!is.na(srid))
 		attr(ret, "epsg") <- srid
 	ret
@@ -245,7 +245,7 @@ createType = function(x, endian, EWKB = FALSE) {
 
 #' @name st_as_binary
 #' @export
-st_as_binary.sfi = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
+st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)

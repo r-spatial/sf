@@ -30,7 +30,7 @@ prnt.GEOMETRYCOLLECTION = function(x, ...)
 #' Return Well-known Text representation of simple feature item
 #'
 #' Return Well-known Text representation of simple feature item
-#' @param x object of class sfi or sfc
+#' @param x object of class sfg or sfc
 #' @param ... passed on to WKT_name
 #' @name st_as_text
 #' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
@@ -41,7 +41,7 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 #' @export
 #' @examples
 #' st_as_text(st_point(1:2))
-st_as_text.sfi = function(x, ...) {
+st_as_text.sfg = function(x, ...) {
 	if (inherits(x, "POINT")) return(prnt.POINT(x, ...))
 	if (inherits(x, "MULTIPOINT")) return(prnt.MULTIPOINT(x, ...))
 	if (inherits(x, "LINESTRING")) return(prnt.LINESTRING(x, ...))
@@ -59,7 +59,7 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 	if (EWKT) {
 		epsg = attr(x, "epsg")
 		if (!is.na(epsg) && epsg != 0)
-			x = lapply(x, function(sfi) structure(sfi, epsg = epsg))
+			x = lapply(x, function(sfg) structure(sfg, epsg = epsg))
 	}
 	sapply(x, st_as_text, ..., EWKT = EWKT)
 }

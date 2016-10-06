@@ -166,7 +166,7 @@ geom_op2 = function(op, x, y) {
 
 #' @name geos
 #' @export
-#' @param y0 object of class \code{sfc} which is merged, using \code{c.sfi} (\link{st}), before intersection etc. with it is computed 
+#' @param y0 object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed 
 st_intersection = function(x, y0)   geom_op2("intersection", st_geometry(x), st_merge(y0))
 
 #' @name geos

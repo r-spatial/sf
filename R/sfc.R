@@ -12,7 +12,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
 #' 
-#' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfi}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
+#' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfg}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
 #' @details in case \code{epsg} is given but \code{proj4string} is not and packages \code{sp} and \code{rgdal} can be loaded, the \code{proj4string} is expanded using the PROJ.4 epsg database.
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -23,11 +23,11 @@ format.sfc = function(x, ..., digits = 30) {
 #' @export
 st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	lst = list(...)
-	# if we have only one arg, which is already a list with sfi's, but NOT a geometrycollection:
+	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
-	# already contains a zillion sfi objects, than do.call(st_sfc, lst) ...
-	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfi") 
-			&& inherits(lst[[1]][[1]], "sfi"))
+	# already contains a zillion sfg objects, than do.call(st_sfc, lst) ...
+	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfg") 
+			&& inherits(lst[[1]][[1]], "sfg"))
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
 	if (length(lst) == 0) # empty set: no geometries read
@@ -63,8 +63,8 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 
 # coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:
 coerce_types = function(lst) {
-	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfi"))
-		stop("list item(s) not of class sfi") # sanity check
+	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfg"))
+		stop("list item(s) not of class sfg") # sanity check
 	cls = unique(sapply(lst, function(x) class(x)[2L]))
 	if (length(cls) > 1) {
 		if (all(cls %in% c("POINT", "MULTIPOINT")))
@@ -178,5 +178,5 @@ type_sum.sfc <- function(x, ...) {
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {
-	sapply(x, function(sfi) format(sfi, digits = 15L))
+	sapply(x, function(sfg) format(sfg, digits = 15L))
 }

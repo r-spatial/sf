@@ -213,64 +213,64 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 	switch(sf_type) {
 		case SF_Point: 
 			output[0] = read_numeric_vector(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "POINT", "sfi") : "");
+				Rcpp::CharacterVector::create(dim_str, "POINT", "sfg") : "");
 			break;
 		case SF_LineString:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfi") : ""); 
+				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfg") : ""); 
 			break;
 		case SF_Polygon: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfi") : "");
+				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfg") : "");
 			break;
 		case SF_MultiPoint: 
 			output[0] = read_multipoint(pt, n_dims, EWKB, endian, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfi") : ""); 
+				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfg") : ""); 
 			break;
 		case SF_MultiLineString:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTILINESTRING", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTILINESTRING", "sfg"), false);
 			break;
 		case SF_MultiPolygon:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfg"), false);
 			break;
 		case SF_GeometryCollection: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfi"), true,
+				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfg"), true,
 				&gcEmpty);
 			break;
 		case SF_CircularString:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfi") : ""); 
+				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfg") : ""); 
 			break;
 		case SF_MultiCurve:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfg"), false);
 			break;
 		case SF_MultiSurface:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfg"), false);
 			break;
 		case SF_Curve:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfi") : ""); 
+				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : ""); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfi") : "");
+				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfg") : "");
 			break;
 		case SF_PolyhedralSurface: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfg"), false);
 			break;
 		case SF_TIN: 
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "TIN", "sfi"), false);
+				Rcpp::CharacterVector::create(dim_str, "TIN", "sfg"), false);
 			break;
 		case SF_Triangle:
 			output[0] = read_matrix_list(pt, n_dims,
-				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfi"));
+				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfg"));
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << std::endl;

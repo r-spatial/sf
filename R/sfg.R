@@ -3,12 +3,12 @@ getClassDim = function(x, d, third = "XYZ", type) {
 	stopifnot(d > 1)
 	type = toupper(type)
 	if (d == 2)
-		c("XY", type, "sfi")
+		c("XY", type, "sfg")
 	else if (d == 3) {
 		stopifnot(third %in% c("XYZ", "XYM"))
-		c(third, type, "sfi")
+		c(third, type, "sfg")
 	} else if (d == 4)
-		c("XYZM", type, "sfi")
+		c("XYZM", type, "sfg")
 	else stop(paste(d, "is an illegal number of columns for a", type))
 }
 
@@ -39,7 +39,7 @@ MtrxSetSet = function(x, third = "XYZ", type, needClosed = FALSE) {
 
 #return "XY", "XYZ", "XYM", or "XYZM"
 Dimension = function(x) { 
-	stopifnot(inherits(x, "sfi"))
+	stopifnot(inherits(x, "sfg"))
 	class(x)[1]
 }
 
@@ -134,7 +134,7 @@ st_geometrycollection = function(x = list(), dims = "XY") {
 	if (length(cls)) {
 		if (!is.matrix(cls) || !is.character(cls) || nrow(cls) != 3)
 			stop("st_geometrycollection parameter x error: list elements should be simple features")
-		stopifnot(all(cls[3,] == "sfi"))
+		stopifnot(all(cls[3,] == "sfg"))
 		stopifnot(all(cls[2,] != "GEOMETRYCOLLECTION")) # can't recurse!
 		# check all dimensions are equal:
 		dims = unique(cls[1,])
@@ -142,7 +142,7 @@ st_geometrycollection = function(x = list(), dims = "XY") {
 			stop(paste("multiple dimensions found:", paste(dims, collapse = ", ")))
 	} else
 		dims = "XY"
-	structure(x, class = c(dims, "GEOMETRYCOLLECTION", "sfi")) # TODO: no Z/M/ZM modifier here??
+	structure(x, class = c(dims, "GEOMETRYCOLLECTION", "sfg")) # TODO: no Z/M/ZM modifier here??
 }
 
 POINT2MULTIPOINT = function(x, third = "XYZ") {
@@ -164,7 +164,7 @@ POLYGON2MULTIPOLYGON = function(x, third = "XYZ") {
 #' @name st
 #' @param digits integer; number of characters to be printed (max 30; 0 means print everything)
 #' @export
-print.sfi = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
+print.sfg = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
 	f = format(x, ..., digits = digits)
 	cat(f, "\n")
 	invisible(f)
@@ -173,13 +173,13 @@ print.sfi = function(x, ..., digits = 0) { # avoids having to write print method
 #' @name st
 #' @param n integer; number of elements to be selected
 #' @export
-head.sfi = function(x, n = 10L, ...) {
+head.sfg = function(x, n = 10L, ...) {
 	structure(head(unclass(x), n = n, ...), class = class(x))
 }
 
 #' @name st
 #' @export
-format.sfi = function(x, ..., digits = 30) {
+format.sfg = function(x, ..., digits = 30) {
 	if (is.null(digits)) 
 		digits = 30
 	if (object.size(x) > 1000)
@@ -212,7 +212,7 @@ format.sfi = function(x, ..., digits = 30) {
 #'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
 #'   st_geometrycollection(list(st_point(10:11))))
 #' @details when \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup. 
-c.sfi = function(..., recursive = FALSE, flatten = TRUE) {
+c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 
 	stopifnot(! recursive)
 	Paste0 = function(lst) lapply(lst, unclass)

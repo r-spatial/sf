@@ -20,7 +20,7 @@ test_that("st_transform works", {
   expect_equal(s1.tr, s2.tr)
 
   sf.tr = st_transform(st_sf(a=1:3, s), toCrs) # for sf
-  sfi.tr = st_transform(structure(s[[1]], proj4string="+proj=longlat +datum=WGS84 +no_defs"), toCrs) # sfi
+  sfg.tr = st_transform(structure(s[[1]], proj4string="+proj=longlat +datum=WGS84 +no_defs"), toCrs) # sfg
 })
 
 test_that("gdal can be loaded, unloaded, and loaded", {
