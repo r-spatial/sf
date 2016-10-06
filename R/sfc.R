@@ -42,15 +42,21 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 			attr(lst, "n_empty") = sum(! l)
 		} else {
 			non_empty = attr(lst, "non_empty")
-			attr(lst, "non_empty") = NULL
+			if (non_empty == 0)
+				non_empty = 1 # FIXME: rethink
+			attr(lst, "non_empty") = NULL # clean up
 		}
-		# get type:
+		# do we have a mix of geometry types?
 		is_single = function(x) length(unique(sapply(x, function(y) class(y)[2]))) == 1
-		if ((!is.null(attr(lst, "single_type")) && attr(lst, "single_type")) || is_single(lst))
+		single = if (!is.null(attr(lst, "single_type"))) # we're back from CPL_read_gdal:
+				attr(lst, "single_type")
+			else
+				is_single(lst)
+		if (single)
 			class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
 		else
 			class(lst) = c("sfc_GEOMETRY", "sfc") # a mix
-		attr(lst, "single_type") = NULL # remove attr
+		attr(lst, "single_type") = NULL # clean up
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)

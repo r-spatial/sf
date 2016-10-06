@@ -213,6 +213,7 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 			MULTILINESTRING = plot.sfc_MULTILINESTRING,
 			POLYGON = plot.sfc_POLYGON,
 			MULTIPOLYGON = plot.sfc_MULTIPOLYGON,
+			GEOMETRYCOLLECTION = plot_gc,
 			stop(paste("plotting of", class(x)[2], "not yet supported: please file an issue"))
 		)
 		do.call(fn, args)
@@ -237,6 +238,22 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 	lapply(seq_along(x), function(i) plot_gc(x[[i]], 
 			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
 			lwd = lwd[i], col = col[i]))
+	invisible(NULL)
+}
+
+plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
+	col = 1, border = 1, add = FALSE) {
+	stopifnot(missing(y))
+	if (! add)
+		plot_sf(x, ...)
+	cex = rep(cex, length.out = length(x))
+	pch = rep(pch, length.out = length(x))
+	lty = rep(lty, length.out = length(x))
+	lwd = rep(lwd, length.out = length(x))
+	col = rep(col, length.out = length(x))
+	border = rep(border, length.out = length(x))
+	plot_gc(x, pch = pch, cex = cex, bg = bg, border = border, lty = lty, 
+			lwd = lwd, col = col)
 	invisible(NULL)
 }
 
