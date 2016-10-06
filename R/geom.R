@@ -121,13 +121,13 @@ st_unioncascaded = function(x) st_sfc(CPL_geom_op("unioncascaded", st_geometry(x
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
-	st_sfc(CPL_geom_op("simplify", st_geometry(x)), preserveTopology = preserveTopology, dTolerance = dTolerance)
+	st_sfc(CPL_geom_op("simplify", st_geometry(x), preserveTopology = preserveTopology, dTolerance = dTolerance))
 
 #' @name geos
 #' @export
 #' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
-	st_sfc(CPL_geom_op("triangulate", st_geometry(x)), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges)
+	st_sfc(CPL_geom_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 
 #' @name geos
 #' @export
@@ -144,7 +144,7 @@ st_centroid = function(x) st_sfc(CPL_geom_op("centroid", st_geometry(x)))
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
 st_segmentize  = function(x, dfMaxLength) 
-	st_sfc(CPL_geom_op("segmentize", st_geometry(x)), dfMaxLength = dfMaxLength)
+	st_sfc(CPL_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
 
 #' @name geos
 #' @export
