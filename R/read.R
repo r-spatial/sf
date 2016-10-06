@@ -4,7 +4,7 @@
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param ... parameter(s) passed on to \link{st_as_sf}
-#' @param options character; driver dependent layer reading options; multiple options supported.
+#' @param options character; driver dependent dataset open options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
@@ -50,7 +50,8 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' @param layer layer name (varies by driver, may be a file name without extension)
 #' @param driver character; OGR driver name to be used
 #' @param ... ignored
-#' @param options character; driver dependent layer creation options; multiple options supported.
+#' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
+#' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
 #' @details columns (variables) of a class not supported are dropped with a warning.
@@ -59,15 +60,16 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL",
-#'    options = c("OVERWRITE=yes", "LAUNDER=true"))
+#'    layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 #'  demo(nc, ask = FALSE)
-#'  st_write(nc, "PG:dbname=postgis", "sids", driver = "PostgreSQL", options = "OVERWRITE=true")
+#'  st_write(nc, "PG:dbname=postgis", "sids", driver = "PostgreSQL", 
+#'    layer_options = "OVERWRITE=true")
 #' }
 #' demo(nc, ask = FALSE)
 #' st_write(nc, ".", "nc")
 #' @export
-st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = NULL, quiet = FALSE,
-		factorsAsCharacter = TRUE) {
+st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., dataset_options = NULL,
+		layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
 
 	if (inherits(obj, "sfc"))
 		obj = st_sf(id = 1:length(obj), geom = obj)
@@ -87,7 +89,9 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., options = N
 	}
 	attr(obj, "colclasses") = sapply(obj, function(x) class(x)[1])
 	dim = class(geom[[1]])[1]
-	CPL_write_ogr(obj, dsn, layer, driver, as.character(options), geom, dim, quiet)
+	CPL_write_ogr(obj, dsn, layer, driver, 
+		as.character(dataset_options), as.character(layer_options), 
+		geom, dim, quiet)
 }
 
 #' read PostGIS table directly, using DBI and binary conversion

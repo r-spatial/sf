@@ -113,7 +113,7 @@ OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
 
 // [[Rcpp::export]]
 void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
-	Rcpp::CharacterVector driver, Rcpp::CharacterVector lco,
+	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false) {
 
 	// init:
@@ -133,7 +133,8 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			" using driver " << driver << std::endl;
 
 	// open data set:
-    GDALDataset *poDS = poDriver->Create( dsn[0], 0, 0, 0, GDT_Unknown, NULL );
+	std::vector <char *> options = create_options(dco, quiet);
+    GDALDataset *poDS = poDriver->Create( dsn[0], 0, 0, 0, GDT_Unknown, options.data() );
     if (poDS == NULL) {
         Rcpp::Rcout << "Creation of dataset " <<  dsn[0] << " failed." << std::endl;
 		throw std::invalid_argument("Creation failed.\n");
@@ -142,9 +143,9 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 
 	// create layer:
-	std::vector <char *> papszOptions = layer_options(lco, quiet);
+	options = create_options(lco, quiet);
 	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
-    OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, papszOptions.data() );
+    OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, options.data() );
     if (poLayer == NULL)  {
 		sref->Release();
         Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;

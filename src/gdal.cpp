@@ -98,7 +98,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference *sre
 	return(g);
 }
 
-std::vector<char *> layer_options(Rcpp::CharacterVector lco, bool quiet = false) {
+std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false) {
 	if (lco.size() == 0)
 		quiet = true; // nothing to report
 	if (! quiet)

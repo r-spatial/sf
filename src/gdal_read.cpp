@@ -54,16 +54,15 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0) {
 	// adapted from the OGR tutorial @ www.gdal.org
-	std::vector <char *> papszOptions = layer_options(options, quiet);
+	std::vector <char *> open_options = create_options(options, quiet);
     GDALDataset *poDS;
 	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
-		papszOptions.data(), NULL );
+		open_options.data(), NULL );
     if( poDS == NULL ) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
 		throw std::invalid_argument("Open failed.\n");
 	}
-    OGRLayer *poLayer;
-	poLayer = poDS->GetLayerByName( layer[0] );
+    OGRLayer *poLayer = poDS->GetLayerByName( layer[0] );
 	if (poLayer == NULL) {
 		Rcpp::Rcout << "Cannot get layer " << layer[0] << std::endl;
 		throw std::invalid_argument("Getting layer failed.\n");
