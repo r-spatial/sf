@@ -38,11 +38,12 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 	do.call(st_sf, c(as.list(x), list(...), relation_to_geometry = relation_to_geometry))
 }
 
-#' get geometry from sf object
+#' get geometry or geometrytype from sf object
 #' 
-#' get geometry from sf object
+#' get geometry or geometrytype from sf object
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
+#' @return st_geometry returns an object of class \link{sfc}, a list column with geometries
 #' @export
 st_geometry = function(obj, ...) UseMethod("st_geometry")
 

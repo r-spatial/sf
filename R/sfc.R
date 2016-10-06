@@ -161,6 +161,35 @@ summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 #' @export
 st_geometry.sfc = function(obj, ...) obj
 
+#' return geometry type of an object
+#' 
+#' return geometry type of an object, as a factor
+#' @param x object of class \link{sf} or \link{sfc}
+#' @return st_geometrytype returns a factor with the geometry type of each simple feature in x
+#' @export
+st_geometrytype = function(x) {
+	x = st_geometry(x)
+	factor(sapply(x, function(y) class(y)[2]), levels =
+		c("GEOMETRY",
+		"POINT",
+		"LINESTRING",
+		"POLYGON",
+		"MULTIPOINT",
+		"MULTILINESTRING",
+		"MULTIPOLYGON",
+		"GEOMETRYCOLLECTION",
+		"CIRCULARSTRING",
+		"COMPOUNDCURVE",
+		"CURVEPOLYGON",
+		"MULTICURVE",
+		"MULTISURFACE",
+		"CURVE",
+		"SURFACE",
+		"POLYHEDRALSURFACE",
+		"TIN",
+		"TRIANGLE"))
+}
+
 #' summarize simple feature type for tibble
 #'
 #' summarize simple feature type for tibble
