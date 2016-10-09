@@ -113,6 +113,7 @@ st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., dataset_opt
 #'   dbDisconnect(conn)
 #' }
 #' @name st_read
+#' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
 #' @export
 st_read_db = function(conn = NULL, table, query = paste("select * from ", table, ";"),
 		geom_column = NULL, EWKB, ...) {
@@ -120,8 +121,13 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 		stop("no connection provided")
   	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
-	if (is.null(geom_column)) # find the geometry column - guess it's the last character column:
-		geom_column = tail(which(sapply(tbl, is.character)), 1)
+	if (is.null(geom_column)) { # try find the geometry column:
+		gc = try(dbReadTable(conn, "geometry_columns"))
+		geom_column = if (class(gc) == "try-error" || missing(table))
+				tail(which(sapply(tbl, is.character)), 1) # guess it's the last character column
+			else
+				gc [ gc$f_table_name == table, "f_geometry_column"]
+	}
 	if (missing(EWKB))
 		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB)
