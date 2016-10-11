@@ -69,7 +69,11 @@ st_geometry.sfc = function(obj, ...) obj
 #' st_geometry(df)
 `st_geometry<-` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
-	st_sf(x, value)
+	if (inherits(x, "sf")) {
+		x[[attr(x, "sf_column")]] <- value
+		x
+	} else
+		st_sf(x, value)
 }
 
 #' create sf object
