@@ -43,4 +43,4 @@ The sf package
 
 This project is being realized with financial [support](https://www.r-consortium.org/projects) from the
 
-![https://www.r-consortium.org/](https://www.r-consortium.org/wp-content/uploads/2016/09/RConsortium_Horizontal_Pantone.png)
+![https://www.r-consortium.org/](https://www.r-consortium.org/wp-content/uploads/2016/09/RConsortium_Horizontal_Pantone.png =400x)
