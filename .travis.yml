@@ -35,6 +35,7 @@ warnings_are_errors: true
 r_packages:
   - rgdal
   - roxygen2
+  - rmarkdown
 
 r_github_packages: 
   - jimhester/covr
