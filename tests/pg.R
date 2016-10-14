@@ -1,16 +1,13 @@
-#if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-if (Sys.getenv("USER") %in% c("edzer")) {
+options(warn = 2) # turn into error
+if (Sys.getenv("USER") %in% c("edzer", "travis")) {
+# if (Sys.getenv("USER") %in% c("edzer")) {
   library(RPostgreSQL)
   library(sf)
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
   round_trip = function(cn, wkt) {
   	query = paste0("SELECT '", wkt, "'::geometry;")
-  	w = options("warn")[[1]]
-  	options(warn = -1)
-	returnstr = dbGetQuery(cn, query)$geometry
+	returnstr = suppressWarnings(dbGetQuery(cn, query)$geometry)
 	# print(returnstr)
-  	options(warn = w)
-  	options(warn = 2)
   	n = nchar(returnstr)/2
     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
