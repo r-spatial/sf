@@ -192,3 +192,24 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 		}
 	}
 }
+
+
+#' get GDAL drivers
+#' 
+#' get a list of the available GDAL drivers
+#' @param what character: "vector" or "raster", anything else will return all drivers.
+#' @details The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{st_drivers()} function shows which are available, and which may be written (but all are assumed to be readable). Note that stray files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.
+#' @return a \code{data.frame} with driver metadata
+#' @export
+#' @examples
+#' st_drivers()
+st_drivers = function(what = "vector") {
+	ret = as.data.frame(CPL_get_rgdal_drivers(0))
+	names(ret) = c("name", "long_name", "write", "copy", "is_raster", "is_vector")
+	if (what == "vector")
+		ret[ret$is_vector,]
+	else if (what == "raster")
+		ret[ret$is_raster,]
+	else
+		ret
+}

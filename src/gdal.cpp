@@ -1,5 +1,6 @@
 #include <gdal.h>
 #include <gdal_alg.h>
+#include <gdal_priv.h> // GDALDriver
 #include <ogr_api.h>
 #include <ogr_geometry.h>
 #include <ogr_srs_api.h>
@@ -170,4 +171,33 @@ Rcpp::CharacterVector CPL_proj4string_from_epsg(int epsg) {
 	OGRSpatialReference ref;
 	ref.importFromEPSG(epsg);
 	return(p4s_from_spatial_reference(&ref));
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_get_rgdal_drivers(int dummy) {
+
+	int ndr = GetGDALDriverManager()->GetDriverCount();
+	Rcpp::CharacterVector name(ndr);
+	Rcpp::CharacterVector long_name(ndr);
+	Rcpp::LogicalVector create(ndr);
+	Rcpp::LogicalVector copy(ndr);
+	Rcpp::LogicalVector vattr(ndr);
+	Rcpp::LogicalVector rattr(ndr);
+	for (int i = 0; i < ndr; i++) {
+		GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
+		name(i) = GDALGetDriverShortName( pDriver );
+		long_name(i) = GDALGetDriverLongName( pDriver );
+		create(i) = (pDriver->GetMetadataItem(GDAL_DCAP_CREATE) != NULL);
+		copy(i) =   (pDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL);
+		vattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL);
+		rattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL);
+	}
+	Rcpp::List ret(6);
+	ret(0) = name;
+	ret(1) = long_name;
+	ret(2) = create;
+	ret(3) = copy;
+	ret(4) = rattr;
+	ret(5) = vattr;
+	return(ret);
 }

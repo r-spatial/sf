@@ -241,6 +241,8 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 	invisible(NULL)
 }
 
+#' @name plot
+#' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
 	stopifnot(missing(y))
@@ -255,6 +257,12 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 	plot_gc(x, pch = pch, cex = cex, bg = bg, border = border, lty = lty, 
 			lwd = lwd, col = col)
 	invisible(NULL)
+}
+
+#' @name plot
+#' @export
+plot.sfg = function(x, ...) {
+	plot(st_sfc(x), ...)
 }
 
 # set up plotting area & axes; reuses sp:::plot.Spatial

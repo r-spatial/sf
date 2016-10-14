@@ -37,7 +37,7 @@ st_distance = function(x, y = x) CPL_geos_dist(st_geometry(x), st_geometry(y))
 #' @name geos
 #' @return st_relate returns a dense \code{character} matrix
 #' @export
-st_relate           = function(x, y) st_geos_binop("relate", x, y)
+st_relate           = function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 
 #' @name geos
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
@@ -155,7 +155,8 @@ st_segmentize  = function(x, dfMaxLength)
 #' plot(st_convexhull(nc))
 #' plot(nc, border = grey(.5))
 st_merge = function(x, union = FALSE) {
-	x = st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x))
+	x = st_geometry(x)
+	x = st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
 	if (union)
 		st_unioncascaded(x)
 	else
