@@ -218,12 +218,7 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 		structure(lapply(x, st_as_binary, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		cls = if (inherits(x, "sfc_GEOMETRY")) # a mix of geometries
-			sapply(x, class)[2,]
-		else
-			""
-		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision, cls), 
-			class = "WKB")
+		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), class = "WKB")
 	}
 }
 
@@ -253,7 +248,7 @@ st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pur
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)
-		return(CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), FALSE)[[1]])
+		return(CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), 0.0)[[1]])
 	}
 	rc <- rawConnection(raw(0), "r+")
 	on.exit(close(rc))

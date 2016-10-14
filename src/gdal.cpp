@@ -77,7 +77,7 @@ void handle_error(OGRErr err) {
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference *sref) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision, "");
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	int release_sref = 0;
 	OGRGeometryFactory f;

@@ -28,6 +28,8 @@ before_install:
 
 language: r
 
+cache: packages
+
 sudo: required
 
 warnings_are_errors: true

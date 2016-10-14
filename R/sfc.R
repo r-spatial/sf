@@ -57,8 +57,10 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 				is_single(lst)
 		if (single)
 			class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
-		else
-			class(lst) = c("sfc_GEOMETRY", "sfc") # a mix
+		else {
+			class(lst) = c("sfc_GEOMETRY", "sfc")         # the mix
+			attr(lst, "classes") = sapply(lst, class)[2,] # Rcpp forces me to do this. Or is it me, allowing a mix?
+		}
 		attr(lst, "single_type") = NULL # clean up
 	}
 	attr(lst, "precision") = precision

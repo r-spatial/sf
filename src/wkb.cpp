@@ -529,11 +529,22 @@ int native_endian(void) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
-		Rcpp::CharacterVector dim = "XY", double precision = 0.0, Rcpp::CharacterVector classes = "") {
+		Rcpp::CharacterVector dim = "XY", double precision = 0.0) {
 
 	Rcpp::List output(sfc.size()); // with raw vectors
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
 	const char *cls = cls_attr[0], *dm = dim[0];
+
+	// got the following from:
+	// http://stackoverflow.com/questions/24744802/rcpp-how-to-check-if-any-attribute-is-null
+	Rcpp::CharacterVector classes;
+	SEXP sxp = sfc.attr("classes"); // how to check whether an attribute is present w/o using SEXP?
+	if (! Rf_isNull(sxp)) {         // only sfc_GEOMETRY, the mixed bag, sets this
+		classes = sfc.attr("classes");
+		if (classes.size() != sfc.size())
+			throw std::range_error("classes has wrong size; please file an issue");
+	}
+
 	int srid = sfc.attr("epsg"); 
 	if (srid == NA_INTEGER)
 		srid = 0; // non-zero now means: we have an srid
@@ -541,15 +552,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();
 		std::ostringstream os;
-
-		/*
-		Rcpp::List dummy = sfc(i);
-		cls_attr = dummy.attr("class");
-		cls = cls_attr[1];
-		*/
-		if (classes.size() == sfc.size() && classes(0) != "")
+		if (! Rf_isNull(sxp))
 			cls = classes[i];
-
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();

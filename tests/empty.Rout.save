@@ -316,6 +316,20 @@ LINESTRING()
 MULTILINESTRING() 
 POLYGON() 
 > 
+> # sfc_GEOMETRY:
+> x = st_sfc(st_point(0:1), st_linestring(matrix(1:4,2,2)))
+> st_intersects(x, x, sparse = FALSE)
+      [,1]  [,2]
+[1,]  TRUE FALSE
+[2,] FALSE  TRUE
+> 
+> # two empty geoms:
+> x = st_sfc(st_multipoint(), st_linestring())
+> st_intersects(x, x, sparse = FALSE)
+      [,1]  [,2]
+[1,] FALSE FALSE
+[2,] FALSE FALSE
+> 
 > proc.time()
    user  system elapsed 
-  0.428   0.268   0.408 
+  0.372   0.308   0.377 

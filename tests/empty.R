@@ -83,3 +83,11 @@ st_as_binary(e2, pureR = FALSE)
 st_as_binary(e3, pureR = FALSE)
 st_as_binary(e4, pureR = FALSE)
 st_as_sfc(st_as_binary(e1, pureR = FALSE))
+
+# sfc_GEOMETRY:
+x = st_sfc(st_point(0:1), st_linestring(matrix(1:4,2,2)))
+st_intersects(x, x, sparse = FALSE)
+
+# two empty geoms:
+x = st_sfc(st_multipoint(), st_linestring())
+st_intersects(x, x, sparse = FALSE)

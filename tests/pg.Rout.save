@@ -15,19 +15,16 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> #if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-> if (Sys.getenv("USER") %in% c("edzer")) {
+> options(warn = 2) # turn into error
+> if (Sys.getenv("USER") %in% c("edzer", "travis")) {
++ # if (Sys.getenv("USER") %in% c("edzer")) {
 +   library(RPostgreSQL)
 +   library(sf)
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")
 +   round_trip = function(cn, wkt) {
 +   	query = paste0("SELECT '", wkt, "'::geometry;")
-+   	w = options("warn")[[1]]
-+   	options(warn = -1)
-+ 	returnstr = dbGetQuery(cn, query)$geometry
++ 	returnstr = suppressWarnings(dbGetQuery(cn, query)$geometry)
 + 	# print(returnstr)
-+   	options(warn = w)
-+   	options(warn = 2)
 +   	n = nchar(returnstr)/2
 +     wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
 +   	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
@@ -83,4 +80,4 @@ MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))
 > 
 > proc.time()
    user  system elapsed 
-  0.440   0.288   0.437 
+  0.436   0.260   0.449 
