@@ -26,9 +26,9 @@ st_transform.sfc = function(x, crs, ...) {
 		stop("argument crs cannot be missing")
 	if (is.numeric(crs)) { # keep epsg:
 		proj4string = CPL_proj4string_from_epsg(crs)
-		st_sfc(CPL_transform(x, proj4string), crs = crs)
+		suppressWarnings(st_sfc(CPL_transform(x, proj4string), crs = crs))
 	} else
-		st_sfc(CPL_transform(x, crs), crs = crs)
+		suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
 }
 
 #' @name st_transform

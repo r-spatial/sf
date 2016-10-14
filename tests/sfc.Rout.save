@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > p = st_point(c(1/3,1/6))
 > st_sfc(p, precision = 1000)
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.3333333 ymin: 0.1666667 xmax: 0.3333333 ymax: 0.1666667
@@ -28,51 +28,46 @@ proj4string:    NA
 precision:      1000 
 POINT(0.333333333333333 0.166666666666667) 
 > st_as_sfc(st_as_binary(st_sfc(p, precision = 0L)))
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.3333333 ymin: 0.1666667 xmax: 0.3333333 ymax: 0.1666667
 epsg (SRID):    NA
 proj4string:    NA
-precision:      double (default; no precision model)
 POINT(0.333333333333333 0.166666666666667) 
 > st_as_sfc(st_as_binary(st_sfc(p, precision = 1000)))
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167
 epsg (SRID):    NA
 proj4string:    NA
-precision:      double (default; no precision model)
 POINT(0.333 0.167) 
 > st_as_sfc(st_as_binary(st_sfc(p, precision = 1000000)))
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.333333 ymin: 0.166667 xmax: 0.333333 ymax: 0.166667
 epsg (SRID):    NA
 proj4string:    NA
-precision:      double (default; no precision model)
 POINT(0.333333 0.166667) 
 > st_as_sfc(st_as_binary(st_sfc(p, precision = 10L)))
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.3 ymin: 0.2 xmax: 0.3 ymax: 0.2
 epsg (SRID):    NA
 proj4string:    NA
-precision:      double (default; no precision model)
 POINT(0.3 0.2) 
 > st_as_sfc(st_as_binary(st_sfc(p, precision = -1)))
-Geometry set for 1 feature
+Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.3333333 ymin: 0.1666667 xmax: 0.3333333 ymax: 0.1666667
 epsg (SRID):    NA
 proj4string:    NA
-precision:      double (default; no precision model)
 POINT(0.333333343267441 0.16666667163372) 
 > 
 > proc.time()
    user  system elapsed 
-  0.408   0.252   0.352 
+  0.332   0.320   0.351 

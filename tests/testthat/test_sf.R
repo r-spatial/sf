@@ -17,7 +17,7 @@ test_that("we can subset sf objects", {
 
 test_that("we can create points sf from data.frame", {
   data(meuse, package = "sp") # load data.frame from sp
-  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   meuse_sf[1:5,]
   summary(meuse_sf[1:5,])
   expect_identical(class(meuse_sf), c("sf", "data.frame"))

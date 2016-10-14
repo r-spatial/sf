@@ -534,6 +534,13 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();
 		std::ostringstream os;
+
+		/*
+		Rcpp::List dummy = sfc(i);
+		cls_attr = dummy.attr("class");
+		cls = cls_attr[1];
+		*/
+
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
 		std::string str = os.str();

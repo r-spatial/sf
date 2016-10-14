@@ -119,6 +119,8 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
 	OGRGeometryFactory f;
 	for (size_t i = 0; i < g.size(); i++) {
+		if (g[i] == NULL)
+			throw std::range_error("sfc_from_ogr: NULL error");
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;

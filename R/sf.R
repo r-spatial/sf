@@ -23,7 +23,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' d$geom2 = st_sfc(pt1, pt2)
 #' st_as_sf(d) # should warn
 #' data(meuse, package = "sp")
-#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), epsg = 28992)
+#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
 #' @export
@@ -35,7 +35,8 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 		if (remove_coordinates)
 			x[coords] = NULL
 	}
-	do.call(st_sf, c(as.list(x), list(...), relation_to_geometry = relation_to_geometry))
+	#do.call(st_sf, c(as.list(x), list(...), relation_to_geometry = relation_to_geometry))
+	st_sf(x, ..., relation_to_geometry = relation_to_geometry)
 }
 
 #' get geometry or geometrytype from sf object
@@ -43,7 +44,7 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 #' get geometry or geometrytype from sf object
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
-#' @return st_geometry returns an object of class \link{sfc}, a list column with geometries
+#' @return st_geometry returns an object of class \link{sfc}, a list-column with geometries
 #' @export
 st_geometry = function(obj, ...) UseMethod("st_geometry")
 
@@ -56,10 +57,14 @@ st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
 st_geometry.sfc = function(obj, ...) obj
 
 #' @name st_geometry
+#' @export
+st_geometry.sfg = function(obj, ...) st_sfc(obj)
+
+#' @name st_geometry
 #' @param x object of class \code{data.frame}
 #' @param value object of class \code{sfc}
 #' @export
-#' @return object of class \link{sfc}; assigning geometry to a data.frame creates an \link{sf} object
+#' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
 #' @examples 
 #' df = data.frame(a = 1:2)
 #' sfc = st_sfc(st_point(c(3,4)), st_point(c(10,11)))
@@ -67,13 +72,20 @@ st_geometry.sfc = function(obj, ...) obj
 #' st_geometry(df) <- sfc
 #' class(df)
 #' st_geometry(df)
-`st_geometry<-` = function(x, value) {
+#' st_geometry(df) <- sfc # replaces
+`st_geometry<-` = function(x, value) UseMethod("st_geometry<-")
+
+#' @export
+`st_geometry<-.data.frame` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
-	if (inherits(x, "sf")) {
-		x[[attr(x, "sf_column")]] <- value
-		x
-	} else
-		st_sf(x, value)
+	st_sf(x, value)
+}
+
+#' @export
+`st_geometry<-.sf` = function(x, value) {
+	stopifnot(inherits(value, "sfc"))
+	x[[attr(x, "sf_column")]] <- value
+	x
 }
 
 #' create sf object
@@ -85,6 +97,7 @@ st_geometry.sfc = function(obj, ...) obj
 #' @param relation_to_geometry character vector; see details below.
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; see \link{data.frame}
+#' @param precision numeric; see \link{st_as_binary}
 #' @details \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
 #' g = st_sfc(st_point(1:2))
@@ -93,8 +106,10 @@ st_geometry.sfc = function(obj, ...) obj
 #' st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
 #' @export
 st_sf = function(..., relation_to_geometry = NA_character_, row.names, 
-		stringsAsFactors = default.stringsAsFactors(), crs) {
+		stringsAsFactors = default.stringsAsFactors(), crs, precision) {
 	x = list(...)
+	if (length(x) == 1 && inherits(x[[1]], "data.frame"))
+		x = x[[1]]
 	# find & remove the sfc column:
 	sf = sapply(x, function(x) inherits(x, "sfc"))
 	if (!any(sf))
@@ -121,6 +136,8 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		make.names(arg_nm[sf_column])
 	}
 	df[[sfc_name]] = x[[sf_column]]
+	if (!missing(precision))
+		attr(df[[sfc_name]], "precision") = precision
 
 	# add attributes:
 	attr(df, "sf_column") = sfc_name
@@ -128,7 +145,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		levels = c("field", "lattice", "entity"))
 	names(f) = names(df)[-sf_column]
 	attr(df, "relation_to_geometry") = f
-	# TODO: check that if one of them is lattice, geom cannot be POINT
+	# FIXME: check that if one of them is lattice, geom cannot be POINT
 	class(df) = c("sf", class(df))
 	if (! missing(crs))
 		st_crs(df) = crs

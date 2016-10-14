@@ -42,10 +42,10 @@ st_as_sf.Spatial = function(x, ...) {
 	else 
 		df = data.frame(row.names = row.names(x)) # empty
 	if ("geometry" %in% names(df))
-		warning("column geometry will be overwritten by geometry column")
+		warning("column \"geometry\" will be overwritten by geometry column")
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	df$geometry = st_as_sfc(sp::geometry(x))
+	df$geometry = st_as_sfc(sp::geometry(x), ...)
 	st_as_sf(df)
 }
 

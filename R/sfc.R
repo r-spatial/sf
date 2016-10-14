@@ -127,13 +127,13 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	# attributes: epsg, proj4string, precision
 	cat(paste0("epsg (SRID):    ", attr(x, "epsg"), "\n"))
 	cat(paste0("proj4string:    ", attr(x, "proj4string"), "\n"))
-	cat(paste0("precision:      "))
-	if (attr(x, "precision") == 0.0)
-		cat("double (default; no precision model)\n")
-	else if (attr(x, "precision") < 0.0)
-		cat("float (single precision)\n")
-	else
-		cat(paste(attr(x, "precision"), "\n"))
+	if (attr(x, "precision") != 0.0) {
+		cat(paste0("precision:      "))
+		if (attr(x, "precision") < 0.0)
+			cat("float (single precision)\n")
+		else
+			cat(paste(attr(x, "precision"), "\n"))
+	} # else cat("double (default; no precision model)\n")
 	if (length(x) > n && n > 0)
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
@@ -215,3 +215,43 @@ type_sum.sfc <- function(x, ...) {
 obj_sum.sfc <- function(x) {
 	sapply(x, function(sfg) format(sfg, digits = 15L))
 }
+
+#' drop Z and/or M dimensions from feature geometries
+#'
+#' drop Z and/or M dimensions from feature geometries, resetting classes appropriately
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
+#' @param ... ignored
+#' @examples
+#' st_dropzm(st_linestring(matrix(1:32,8)))
+#' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
+#' st_dropzm(x)
+#' a = st_sf(a = 1:2, geom=x)
+#' st_dropzm(a)
+#' @export
+st_dropzm <- function(x, ...) UseMethod("st_dropzm")
+
+#' @export
+st_dropzm.sf <- function(x, ...) {
+	st_geometry(x) = st_dropzm(st_geometry(x))
+	return(x)
+}
+
+#' @export
+st_dropzm.sfc <- function(x, ...) {
+	st_sfc(lapply(x, st_dropzm))
+}
+
+#' @export
+st_dropzm.sfg <- function(x, ...) {
+	ret = if (is.list(x))
+		lapply(x, st_dropzm)
+	else if (is.matrix(x))
+		x[,1:2]
+	else
+		x[1:2]
+	structure(ret, class = c("XY", class(x)[2:3]))
+}
+
+st_dropzm.list <- function(x, ...) lapply(x, st_dropzm)
+
+st_dropzm.matrix <- function(x, ...) x[,1:2]
