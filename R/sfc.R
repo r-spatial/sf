@@ -33,13 +33,16 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	if (length(lst) == 0) # empty set: no geometries read
 		class(lst) = c("sfc_GEOMETRY", "sfc")
 	else {
-		if (is.null(attr(lst, "non_empty"))) {
+		if (is.null(attr(lst, "non_empty"))) { # we're not comming from CPL_read_gdal
 			l = sapply(lst, function(x) length(x) > 0)
 			if (any(l))
 				non_empty = l[1] # 0-based
 			else
 				non_empty = 1
 			attr(lst, "n_empty") = sum(! l)
+			u = unique(sapply(lst, class)[1,])
+			if (length(u) > 1)
+				stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 		} else {
 			non_empty = attr(lst, "non_empty")
 			if (non_empty == 0)

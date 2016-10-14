@@ -218,7 +218,11 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 		structure(lapply(x, st_as_binary, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), 
+		cls = if (inherits(x, "sfc_GEOMETRY")) # a mix of geometries
+			sapply(x, class)[2,]
+		else
+			""
+		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision, cls), 
 			class = "WKB")
 	}
 }
@@ -305,5 +309,6 @@ writeMatrixList = function(x, rc, endian) {
 }
 writeMPoints = function(x, rc, endian, EWKB) {
 	writeBin(as.integer(nrow(x)), rc, size = 4L, endian = endian)
-	apply(x, 1, function(y) writeData(st_point(y, class(x)[1]), rc, endian, EWKB))
+	if (nrow(x))
+		apply(x, 1, function(y) writeData(st_point(y, class(x)[1]), rc, endian, EWKB))
 }

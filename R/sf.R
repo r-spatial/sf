@@ -9,7 +9,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #'
 #' @param relation_to_geometry character vector; see details section of \link{st_sf}
 #' @param coords in case of point data: coordinate names or numbers
-#' @param third passed on to \link{st_point} (only when coords is given)
+#' @param dim passed on to \link{st_point} (only when argument coords is given)
 #' @param remove_coordinates logical; when coords is given, remove coordinate columns from data.frame?
 #' @param ... passed on to \link{st_sf}, might included crs
 #' 
@@ -27,11 +27,11 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
 #' @export
-st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, third = "XYZ", 
+st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, dim = "XYZ", 
 		remove_coordinates = TRUE) {
 	if (! missing(coords)) {
 		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
-				function(i) st_point(unlist(x[i, coords]), third = third))))
+				function(i) st_point(unlist(x[i, coords]), dim = dim))))
 		if (remove_coordinates)
 			x[coords] = NULL
 	}

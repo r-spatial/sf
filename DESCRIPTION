@@ -16,7 +16,7 @@ LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, roxygen2
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
-SystemRequirements: GEOS++
+SystemRequirements: GDAL, GEOS++
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1

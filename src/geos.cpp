@@ -25,7 +25,7 @@ GeomPtr geometry_from_raw(Rcpp::RawVector wkb) {
 
 std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision, "");
 	std::vector<GeomPtr> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = geometry_from_raw(wkblst[i]);

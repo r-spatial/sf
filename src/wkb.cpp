@@ -1,3 +1,8 @@
+/*
+ everything with "write" is meant as "write form R into foreign (wkb)",
+ "read" as "read from foreign (wkb) into R".
+*/
+
 #include <iostream>
 #include <iomanip>
 #include <cstdint>
@@ -355,8 +360,10 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_TIN;
 	else if (strcmp(cls, "TRIANGLE") == 0)
 		type = SF_Triangle;
-	else
+	else {
+		Rcpp::Rcout << cls << " :";
 		throw std::range_error("unknown type!");
+	}
 	if (tp != NULL)
 		*tp = type;
 	if (EWKB) {
@@ -522,7 +529,7 @@ int native_endian(void) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
-		Rcpp::CharacterVector dim = "XY", double precision = 0.0) {
+		Rcpp::CharacterVector dim = "XY", double precision = 0.0, Rcpp::CharacterVector classes = "") {
 
 	Rcpp::List output(sfc.size()); // with raw vectors
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
@@ -540,6 +547,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 		cls_attr = dummy.attr("class");
 		cls = cls_attr[1];
 		*/
+		if (classes.size() == sfc.size() && classes(0) != "")
+			cls = classes[i];
 
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:

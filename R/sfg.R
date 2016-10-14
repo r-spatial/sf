@@ -1,40 +1,48 @@
-# third: what does the third dimension, if present, refer to? (XYZ or XYM)
-getClassDim = function(x, d, third = "XYZ", type) {
+# dim: what does the third dimension, if present, refer to? (XYZ or XYM)
+getClassDim = function(x, d, dim = "XYZ", type) {
 	stopifnot(d > 1)
 	type = toupper(type)
 	if (d == 2)
 		c("XY", type, "sfg")
 	else if (d == 3) {
-		stopifnot(third %in% c("XYZ", "XYM"))
-		c(third, type, "sfg")
+		stopifnot(dim %in% c("XYZ", "XYM"))
+		c(dim, type, "sfg")
 	} else if (d == 4)
 		c("XYZM", type, "sfg")
 	else stop(paste(d, "is an illegal number of columns for a", type))
 }
 
-Mtrx = function(x, third = "XYZ", type) {
+Mtrx = function(x, dim = "XYZ", type) {
 	stopifnot(is.matrix(x) && is.numeric(x))
-	structure(x, class = getClassDim(x, ncol(x), third, type))
+	structure(x, class = getClassDim(x, ncol(x), dim, type))
 }
-MtrxSet = function(x, third = "XYZ", type, needClosed = FALSE) {
+
+MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x))
-	nc = unique(sapply(x, ncol))
-	if (length(nc) != 1)
-		stop("matrices having unequal number of columns")
-	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-	if (needClosed && any(sapply(x, NotClosed)))
-		stop("polygons not (all) closed")
-	structure(x, class = getClassDim(x, ncol(x[[1]]), third, type))
+	if (length(x) > 0) { # list()
+		nc = unique(sapply(x, ncol))
+		if (length(nc) != 1)
+			stop("matrices having unequal number of columns")
+		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
+		if (needClosed && any(sapply(x, NotClosed)))
+			stop("polygons not (all) closed")
+		structure(x, class = getClassDim(x, ncol(x[[1]]), dim, type))
+	} else
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
-MtrxSetSet = function(x, third = "XYZ", type, needClosed = FALSE) {
+
+MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x) && all(sapply(x, is.list)))
-	nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
-	if (length(nc) != 1)
-		stop("matrices having unequal number of columns")
-	NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-	if (needClosed && any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
-		stop("polygons not (all) closed")
-	structure(x, class = getClassDim(x, ncol(x[[1]][[1]]), third, type))
+	if (length(x)) {
+		nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
+		if (length(nc) != 1)
+			stop("matrices having unequal number of columns")
+		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
+		if (needClosed && any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
+			stop("polygons not (all) closed")
+		structure(x, class = getClassDim(x, ncol(x[[1]][[1]]), dim, type))
+	} else
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
 #return "XY", "XYZ", "XYM", or "XYZM"
@@ -47,7 +55,7 @@ Dimension = function(x) {
 #' 
 #' Create simple feature from a numeric vector, matrix or list
 #' @param x for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects
-#' @param third character, indicating what a 3-dimensional point is ("XYZ" or "XYM"); see details
+#' @param dim character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details
 #' @name st
 #' @details "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
 #' @return object of the same nature as \code{x}, but with appropriate class attribute set
@@ -105,27 +113,27 @@ Dimension = function(x) {
 #' (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
 #' st_geometrycollection() # empty geometry
 #' @export
-st_point = function(x, third = "XYZ") {
+st_point = function(x = rep(NA_real_,2), dim = "XYZ") {
 	stopifnot(is.numeric(x))
 	if (is.matrix(x))
 		stopifnot(nrow(x) == 1) # because we want to be able to call rbind on points
-	structure(x, class = getClassDim(x, length(x), third, "POINT"))
+	structure(x, class = getClassDim(x, length(x), dim, "POINT"))
 }
 #' @name st
 #' @export
-st_multipoint = function(x, third = "XYZ") Mtrx(x, third, type = "MULTIPOINT")
+st_multipoint = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim, type = "MULTIPOINT")
 #' @name st
 #' @export
-st_linestring = function(x, third = "XYZ") Mtrx(x, third, type = "LINESTRING")
+st_linestring = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim, type = "LINESTRING")
 #' @name st
 #' @export
-st_polygon = function(x, third = "XYZ") MtrxSet(x, third, type = "POLYGON", needClosed = TRUE)
+st_polygon = function(x = list(), dim = "XYZ") MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
 #' @name st
 #' @export
-st_multilinestring = function(x, third = "XYZ") MtrxSet(x, third, type = "MULTILINESTRING", needClosed = FALSE)
+st_multilinestring = function(x = list(), dim = "XYZ") MtrxSet(x, dim, type = "MULTILINESTRING", needClosed = FALSE)
 #' @name st
 #' @export
-st_multipolygon = function(x, third = "XYZ") MtrxSetSet(x, third, type = "MULTIPOLYGON", needClosed = TRUE)
+st_multipolygon = function(x = list(), dim = "XYZ") MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = TRUE)
 #' @name st
 #' @param dims character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case \code{x} is the empty \code{list()}.
 #' @export
@@ -140,25 +148,24 @@ st_geometrycollection = function(x = list(), dims = "XY") {
 		dims = unique(cls[1,])
 		if (length(dims) > 1)
 			stop(paste("multiple dimensions found:", paste(dims, collapse = ", ")))
-	} else
-		dims = "XY"
+	} 
 	structure(x, class = c(dims, "GEOMETRYCOLLECTION", "sfg")) # TODO: no Z/M/ZM modifier here??
 }
 
-POINT2MULTIPOINT = function(x, third = "XYZ") {
+POINT2MULTIPOINT = function(x, dim = "XYZ") {
 	if (length(x) == 3) # disambiguate Z/M:
-		third = class(x)[1]
-	st_multipoint(matrix(unclass(x), 1), third = third)
+		dim = class(x)[1]
+	st_multipoint(matrix(unclass(x), 1), dim = dim)
 }
-LINESTRING2MULTILINESTRING = function(x, third = "XYZ") {
+LINESTRING2MULTILINESTRING = function(x, dim = "XYZ") {
 	if (ncol(x) == 3) # disambiguate Z/M:
-		third = class(x)[1]
-	st_multilinestring(list(unclass(x)), third = third)
+		dim = class(x)[1]
+	st_multilinestring(list(unclass(x)), dim = dim)
 }
-POLYGON2MULTIPOLYGON = function(x, third = "XYZ") {
+POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
 	if (ncol(x[[1]]) == 3) # disambiguate Z/M:
-		third = class(x)[1]
-	st_multipolygon(list(unclass(x)), third = third)
+		dim = class(x)[1]
+	st_multipolygon(list(unclass(x)), dim = dim)
 }
 
 #' @name st
