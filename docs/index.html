@@ -136,7 +136,7 @@ $(document).ready(function () {
 <li><a href="#reading-and-writing">Reading and writing</a></li>
 <li><a href="#crs">Coordinate reference systems and transformations</a></li>
 <li><a href="#conversion-including-to-and-from-sp">Conversion, including to and from sp</a></li>
-<li><a href="#geometrical-operations">Geometrical operations</a></li>
+<li><a href="#geometrycollection">Geometrical operations</a></li>
 </ul></li>
 <li><a href="#how-attributes-relate-to-geometries">How attributes relate to geometries</a></li>
 </ul>
@@ -414,7 +414,8 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 </div>
 <div id="mixed-geometry-types" class="section level2">
 <h2>mixed geometry types</h2>
-<p>which is <code>sfc</code> for all types, and <code>sft_TYPE</code> with <code>TYPE</code> indicating the type of each of the geometries. There are two “special” types: <code>GEOMETRYCOLLECTION</code>, indicating that each of the geometries may contain a mix of geometry types,</p>
+<p>The class of <code>nc.geom</code> is <code>c(&quot;sfc_MULTIPOLYGON&quot;, &quot;sfc&quot;)</code>: <code>sfc</code> is shared with all geometry types, and <code>sft_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
+<p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indices that each of the geometries may contain a mix of geometry types, as in</p>
 <pre class="r"><code>(mix = st_sfc(st_geometrycollection(list(st_point(1:2))), 
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))</code></pre>
 <pre><code>## Geometry set for 2 features 
@@ -427,7 +428,8 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 ## GEOMETRYCOLLECTION(LINESTRING(1 3, 2 4))</code></pre>
 <pre class="r"><code>class(mix)</code></pre>
 <pre><code>## [1] &quot;sfc_GEOMETRYCOLLECTION&quot; &quot;sfc&quot;</code></pre>
-<p>and <code>GEOMETRY</code>, indicating that the geometries in the geometry list-column are of mixed type:</p>
+<p>Still, the geometries are here of a single type.</p>
+<p>The second <code>GEOMETRY</code>, indicates that the geometries in the geometry list-column are of varying type:</p>
 <pre class="r"><code>(mix = st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))</code></pre>
 <pre><code>## Geometry set for 2 features 
 ## geometry type:  GEOMETRY
@@ -439,7 +441,7 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 ## LINESTRING(1 3, 2 4)</code></pre>
 <pre class="r"><code>class(mix)</code></pre>
 <pre><code>## [1] &quot;sfc_GEOMETRY&quot; &quot;sfc&quot;</code></pre>
-<p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons.</p>
+<p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example <a href="#geometrycollection">below</a>.</p>
 </div>
 <div id="sfg-simple-feature-geometry" class="section level2">
 <h2>sfg: simple feature geometry</h2>
@@ -555,7 +557,7 @@ identical(nc, nc2) # roundtrip -- FIXME: should do better</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p>As the <code>Spatial*</code> objects only support <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code>, <code>LINESTRING</code> and <code>POLYGON</code> geometries are automatically coerced into their <code>MULTI</code> form. When converting <code>Spatial*</code> into <code>sf</code>, if all geometries consist of a single <code>POLYGON</code> (possibly with holes), a <code>POLYGON</code> and otherwise all geometries are returned as <code>MULTIPOLYGON</code>: a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> (such as common in shapefiles) is not created. Argument <code>forceMulti=TRUE</code> will override this, and create <code>MULTIPOLYGON</code>s in all cases. For <code>LINES</code> the situation is identical.</p>
 </div>
-<div id="geometrical-operations" class="section level2">
+<div id="geometrycollection" class="section level2">
 <h2>Geometrical operations</h2>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>

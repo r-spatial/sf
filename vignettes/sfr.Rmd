@@ -291,20 +291,28 @@ attributes(nc.geom)
 
 ## mixed geometry types
 
-which is `sfc` for all types, and `sft_TYPE` with `TYPE` indicating the type of each of the geometries. There are two "special" types: `GEOMETRYCOLLECTION`, indicating that each of the geometries may contain a mix of geometry types, 
+The class of `nc.geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
+is shared with all geometry types, and `sft_TYPE` with `TYPE`
+indicating the type of the particular geometry at hand.
+
+There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`. 
+`GEOMETRYCOLLECTION` indices that each of the geometries may contain 
+a mix of geometry types, as in
 ```{r}
 (mix = st_sfc(st_geometrycollection(list(st_point(1:2))), 
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))
 class(mix)
 ```
+Still, the geometries are here of a single type.
 
-and `GEOMETRY`, indicating that the geometries in the geometry list-column are of mixed type:
+The second `GEOMETRY`, indicates that the geometries in the geometry 
+list-column are of varying type:
 ```{r}
 (mix = st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))
 class(mix)
 ```
 
-These two are fundamentally different: `GEOMETRY` is a superclass without instances, `GEOMETRYCOLLECTION` is a geometry instance. `GEOMETRY` list-columns occur when we read in a data source with a mix of geometry types. `GEOMETRYCOLLECTION` *is* a single feature's geometry: the intersection of two feature polygons may consist of points, lines and polygons.
+These two are fundamentally different: `GEOMETRY` is a superclass without instances, `GEOMETRYCOLLECTION` is a geometry instance. `GEOMETRY` list-columns occur when we read in a data source with a mix of geometry types. `GEOMETRYCOLLECTION` *is* a single feature's geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example [below](#geometrycollection).
 
 ## sfg: simple feature geometry
 
@@ -433,7 +441,7 @@ are automatically coerced into their `MULTI` form. When converting `Spatial*` in
 mix of `POLYGON` and `MULTIPOLYGON` (such as common in shapefiles) is not created. Argument `forceMulti=TRUE`
 will override this, and create `MULTIPOLYGON`s in all cases. For `LINES` the situation is identical.
 
-## Geometrical operations
+## Geometrical operations {#geometrycollection}
 
 The standard for simple feature access defines a number of geometrical operations.
 
