@@ -64,13 +64,13 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (int j = 0; j < sfc1.length(); j++) {
 				static geos::geom::IntersectionMatrix* im;
 				im = geos::operation::relate::RelateOp::relate(gmv0[i].get(), gmv1[j].get());
-				out[j * sfc0.length() + i] = im->toString(); // TODO: does this copy the string?
+				out[j * sfc0.length() + i] = im->toString();
 			}
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		return(Rcpp::List::create(out));
 	} 
-	if (op == "distance") { // double return matrix:
+	if (op == "distance") { // return double matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++)
 			for (int j = 0; j < sfc1.length(); j++)
