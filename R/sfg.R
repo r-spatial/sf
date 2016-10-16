@@ -113,7 +113,7 @@ Dimension = function(x) {
 #' (gc = st_geometrycollection(list(p1, ls1, pl1, mp1)))
 #' st_geometrycollection() # empty geometry
 #' @export
-st_point = function(x = rep(NA_real_,2), dim = "XYZ") {
+st_point = function(x = c(NA_real_, NA_real_), dim = "XYZ") {
 	stopifnot(is.numeric(x))
 	if (is.matrix(x))
 		stopifnot(nrow(x) == 1) # because we want to be able to call rbind on points

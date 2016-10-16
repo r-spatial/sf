@@ -18,37 +18,36 @@ Type 'q()' to quit R.
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > 
+> # create empty geometries:
 > st_point(rep(NA_real_,2))
 POINT(NA NA) 
-> st_point(rep(NA_real_,3), "XYZ")
+> st_point(rep(NA_real_,3), dim = "XYZ")
 POINTZ(NA NA NA) 
-> st_point(rep(NA_real_,3), "XYM")
+> st_point(rep(NA_real_,3), dim = "XYM")
 POINTM(NA NA NA) 
-> st_point(rep(NA_real_,4))
+> st_point(rep(NA_real_,4), dim = "XYZM")
 POINTZM(NA NA NA NA) 
 > 
 > st_multipoint()
 MULTIPOINT() 
-> st_multipoint(dim = "XYZ")
-MULTIPOINT() 
-> st_multipoint(dim = "XYM")
-MULTIPOINT() 
-> st_multipoint(matrix(numeric(0), 0, 4))
+> st_multipoint(matrix(numeric(0), 0, 3), dim = "XYZ")
+MULTIPOINTZ() 
+> st_multipoint(matrix(numeric(0), 0, 3), dim = "XYM")
+MULTIPOINTM() 
+> st_multipoint(matrix(numeric(0), 0, 4), dim = "XYZM")
 MULTIPOINTZM() 
-> st_multipoint(dim = "XYZM")
-MULTIPOINT() 
 > 
-> st_linestring(matrix(numeric(0), 0, 2))
+> st_linestring(matrix(numeric(0), 0, 2), "XY")
 LINESTRING() 
-> st_linestring(matrix(numeric(0), 0, 3))
+> st_linestring(matrix(numeric(0), 0, 3), "XYZ")
 LINESTRINGZ() 
 > st_linestring(matrix(numeric(0), 0, 3), "XYM")
 LINESTRINGM() 
-> st_linestring(matrix(numeric(0), 0, 4))
+> st_linestring(matrix(numeric(0), 0, 4), "XYZM")
 LINESTRINGZM() 
 > 
-> st_multilinestring(list())
-MULTILINESTRINGZ() 
+> st_multilinestring(list(), "XY")
+MULTILINESTRING() 
 > st_multilinestring(list(), "XYZ")
 MULTILINESTRINGZ() 
 > st_multilinestring(list(), "XYM")
@@ -56,8 +55,8 @@ MULTILINESTRINGM()
 > st_multilinestring(list(), "XYZM")
 MULTILINESTRINGZM() 
 > 
-> st_polygon(list())
-POLYGONZ() 
+> st_polygon(list(), "XY")
+POLYGON() 
 > st_polygon(list(), "XYZ")
 POLYGONZ() 
 > st_polygon(list(), "XYM")
@@ -65,8 +64,8 @@ POLYGONM()
 > st_polygon(list(), "XYZM")
 POLYGONZM() 
 > 
-> st_multipolygon(list())
-MULTIPOLYGONZ() 
+> st_multipolygon(list(), "XY")
+MULTIPOLYGON() 
 > st_multipolygon(list(), "XYZ")
 MULTIPOLYGONZ() 
 > st_multipolygon(list(), "XYM")
@@ -179,129 +178,71 @@ LINESTRINGZM()
 MULTILINESTRINGZM() 
 POLYGONZM() 
 > 
-> st_as_binary(e1, pureR = TRUE)
-[[1]]
- [1] 01 01 00 00 00 a2 07 00 00 00 00 f0 7f a2 07 00 00 00 00 f0 7f
-
-[[2]]
-[1] 01 04 00 00 00 00 00 00 00
-
-[[3]]
-[1] 01 02 00 00 00 00 00 00 00
-
-[[4]]
-[1] 01 05 00 00 00 00 00 00 00
-
-[[5]]
-[1] 01 03 00 00 00 00 00 00 00
-
-[[6]]
-[1] 01 06 00 00 00 00 00 00 00
-
-[[7]]
-[1] 01 07 00 00 00 00 00 00 00
-
-attr(,"class")
-[1] "WKB"
-> st_as_binary(e1, pureR = FALSE)
-[[1]]
- [1] 01 01 00 00 00 a2 07 00 00 00 00 f0 7f a2 07 00 00 00 00 f0 7f
-
-[[2]]
-[1] 01 04 00 00 00 00 00 00 00
-
-[[3]]
-[1] 01 02 00 00 00 00 00 00 00
-
-[[4]]
-[1] 01 05 00 00 00 00 00 00 00
-
-[[5]]
-[1] 01 03 00 00 00 00 00 00 00
-
-[[6]]
-[1] 01 06 00 00 00 00 00 00 00
-
-[[7]]
-[1] 01 07 00 00 00 00 00 00 00
-
-attr(,"class")
-[1] "WKB"
-> st_as_binary(e2, pureR = FALSE)
-[[1]]
- [1] 01 e9 03 00 00 a2 07 00 00 00 00 f0 7f a2 07 00 00 00 00 f0 7f a2 07 00 00
-[26] 00 00 f0 7f
-
-[[2]]
-[1] 01 ec 03 00 00 00 00 00 00
-
-[[3]]
-[1] 01 ea 03 00 00 00 00 00 00
-
-[[4]]
-[1] 01 ed 03 00 00 00 00 00 00
-
-[[5]]
-[1] 01 eb 03 00 00 00 00 00 00
-
-[[6]]
-[1] 01 ee 03 00 00 00 00 00 00
-
-[[7]]
-[1] 01 ef 03 00 00 00 00 00 00
-
-attr(,"class")
-[1] "WKB"
-> st_as_binary(e3, pureR = FALSE)
-[[1]]
- [1] 01 d1 07 00 00 a2 07 00 00 00 00 f0 7f a2 07 00 00 00 00 f0 7f a2 07 00 00
-[26] 00 00 f0 7f
-
-[[2]]
-[1] 01 d4 07 00 00 00 00 00 00
-
-[[3]]
-[1] 01 d2 07 00 00 00 00 00 00
-
-[[4]]
-[1] 01 d5 07 00 00 00 00 00 00
-
-[[5]]
-[1] 01 d3 07 00 00 00 00 00 00
-
-[[6]]
-[1] 01 d6 07 00 00 00 00 00 00
-
-[[7]]
-[1] 01 d7 07 00 00 00 00 00 00
-
-attr(,"class")
-[1] "WKB"
-> st_as_binary(e4, pureR = FALSE)
-[[1]]
- [1] 01 b9 0b 00 00 a2 07 00 00 00 00 f0 7f a2 07 00 00 00 00 f0 7f a2 07 00 00
-[26] 00 00 f0 7f a2 07 00 00 00 00 f0 7f
-
-[[2]]
-[1] 01 bc 0b 00 00 00 00 00 00
-
-[[3]]
-[1] 01 ba 0b 00 00 00 00 00 00
-
-[[4]]
-[1] 01 bd 0b 00 00 00 00 00 00
-
-[[5]]
-[1] 01 bb 0b 00 00 00 00 00 00
-
-[[6]]
-[1] 01 be 0b 00 00 00 00 00 00
-
-[[7]]
-[1] 01 bf 0b 00 00 00 00 00 00
-
-attr(,"class")
-[1] "WKB"
+> st_as_sfc(st_as_binary(e1, pureR = TRUE))
+Geometry set for 7 features (of which 6 are empty)
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT(NA NA) 
+MULTIPOINT() 
+LINESTRING() 
+MULTILINESTRING() 
+POLYGON() 
+> st_as_sfc(st_as_binary(e1, pureR = FALSE))
+Geometry set for 7 features (of which 6 are empty)
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT(NA NA) 
+MULTIPOINT() 
+LINESTRING() 
+MULTILINESTRING() 
+POLYGON() 
+> st_as_sfc(st_as_binary(e2, pureR = FALSE))
+Geometry set for 7 features (of which 6 are empty)
+geometry type:  GEOMETRY
+dimension:      XYZ
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINTZ(NA NA NA) 
+MULTIPOINTZ() 
+LINESTRINGZ() 
+MULTILINESTRINGZ() 
+POLYGONZ() 
+> st_as_sfc(st_as_binary(e3, pureR = FALSE))
+Geometry set for 7 features (of which 6 are empty)
+geometry type:  GEOMETRY
+dimension:      XYM
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINTM(NA NA NA) 
+MULTIPOINTM() 
+LINESTRINGM() 
+MULTILINESTRINGM() 
+POLYGONM() 
+> st_as_sfc(st_as_binary(e4, pureR = FALSE))
+Geometry set for 7 features (of which 6 are empty)
+geometry type:  GEOMETRY
+dimension:      XYZM
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINTZM(NA NA NA NA) 
+MULTIPOINTZM() 
+LINESTRINGZM() 
+MULTILINESTRINGZM() 
+POLYGONZM() 
 > st_as_sfc(st_as_binary(e1, pureR = FALSE))
 Geometry set for 7 features (of which 6 are empty)
 geometry type:  GEOMETRY
@@ -332,4 +273,4 @@ POLYGON()
 > 
 > proc.time()
    user  system elapsed 
-  0.372   0.308   0.377 
+  0.376   0.296   0.364 

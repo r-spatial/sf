@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a [formal standard](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
+[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a [formal standard](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them. 
 
 The standard is widely implemented in spatial
 databases (such as PostGIS), commercial GIS (e.g., [ESRI
@@ -55,16 +55,28 @@ its crown, of its stem, or the point indicating its centre. Other
 properties may include its height, color, diameter at breast height
 at a particular date, and so on.
 
+The standard sais: "_A simple feature is defined by the OpenGIS
+Abstract specification to have both spatial and non-spatial
+attributes. Spatial attributes are geometry valued, and simple
+features are based on 2D geometry with linear interpolation between
+vertices._"  We will see soon that the same standard will extend
+its coverage beyond 2D and beyond linear interpolation. Here, we
+take simple features as the data structures and operations described
+in the [standard](http://www.opengeospatial.org/standards/sfa).
+
 ## What makes a feature simple?
 
-There is no inherent property of features that makes them simple,
-but _simple features_ refers to a standard to describe them, that
-necesarily has to put some constraints. The constraints refer to
+As any standard does, it is necesarily to put constraints on what
+features are. The constraints refer to
 
 * geometry dimensions
 * simple feature geometry types
-* excluded (non-simple) geometries
-* a coordinate reference system
+* excluded (non-valid) geometries
+* the presence of a coordinate reference system
+
+There are many further constraints; for instance, section 6.1.11.1
+of the standard (part I) describes the rules that define _valid_
+polygons, we will not repeat those here.
 
 ## Dimensions
 
@@ -236,13 +248,15 @@ The way this is printed is called _well-known text_, and is part of the standard
 
 We can see there is a single polygon with no rings:
 
-```{r}
+```{r fig.height=3}
+par(mar = rep(0,4))
 plot(nc)
 plot(nc[1,], col = 'red', add = TRUE)
 ```
 
 but some of the polygons in this dataset have multiple exterior rings; they can be identified by
-```{r}
+```{r fig.height=3.5}
+par(mar = rep(0,4))
 (w = which(sapply(nc.geom, length) > 1))
 plot(nc[w,], col = 2:7)
 ```
@@ -453,33 +467,36 @@ st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 `st_simplify`, `st_triangulate`, `st_polygonize`, `st_centroid`,
 `st_segmentize`, and `st_merge` return new geometries
 
-```{r}
+```{r fig.height=3}
 sel = c(1,5,14)
 buf = st_buffer(nc.web_mercator[sel,], 30000)
-plot(nc.web_mercator[sel,])
-plot(buf, add = TRUE, border = 'red')
+plot(buf, border = 'red')
+plot(nc.web_mercator[sel,], add = TRUE)
 plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
 ```
 
 `st_intersection`, `st_union`, `st_difference`, `st_sym_difference`
 return new geometries that are a function of pairs of geometries.
 
-```{r}
+```{r fig.height=3}
 # u = st_union(nc[1,], nc)
+par(mar = rep(0,4))
 u = st_merge(nc, union = TRUE)
 plot(u)
 ```
 
-```{r}
+```{r fig.height=3, fig.width=7}
 opar = par(mfrow = c(1, 2))
 a = st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
 b = st_polygon(list(cbind(c(0,1,2,3,4,5,6,7,7,0),c(1,0,.5,0,0,0.5,-0.5,-0.5,1,1))))
-plot(a)
+plot(a, ylim = c(-1,1))
+title("intersecing two polygons:")
 plot(b, add = TRUE, border = 'red')
 (i = st_intersection(a,b)[[1]])
-plot(a)
+plot(a, ylim = c(-1,1))
+title("GEOMETRYCOLLECTION")
 plot(b, add = TRUE, border = 'red')
-plot(st_sfc(i), add = TRUE, col = 'green', lwd = 2)
+plot(i, add = TRUE, col = 'green', lwd = 2)
 par(opar)
 ```
 

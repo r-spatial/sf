@@ -97,7 +97,7 @@ st_as_sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 #' @export
 st_as_sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
-		if (comment(x) == "FALSE") {
+		if (is.null(comment(x)) || comment(x) == "FALSE") {
 			if (!requireNamespace("rgeos", quietly = TRUE))
 				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 			x = rgeos::createSPComment(x)

@@ -277,3 +277,4 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
     	xaxs = xaxs, yaxs = yaxs, lab = lab, setParUsrBB = setParUsrBB, bgMap = bgMap, 
 		expandBB = expandBB)
 }
+
