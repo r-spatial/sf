@@ -11,7 +11,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb")
 	)
 Depends: R (>= 3.0.0)
-Imports: utils, stats, graphics, methods, Rcpp, DBI
+Imports: utils, stats, graphics, grid, methods, Rcpp, DBI
 LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, roxygen2
 VignetteBuilder: knitr
@@ -21,4 +21,4 @@ License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 RoxygenNote: 5.0.1
 Collate: RcppExports.R init.R bbox.R read.R sfc.R sfg.R sf.R wkb.R wkt.R
-	plot.R geom.R transform.R sp.R crs.R
+	plot.R geom.R transform.R sp.R crs.R grid.R

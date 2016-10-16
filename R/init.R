@@ -1,6 +1,7 @@
 #' @importFrom utils head tail object.size
 #' @importFrom stats na.omit
 #' @importFrom methods as slotNames new
+#' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable

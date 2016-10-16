@@ -257,6 +257,8 @@ st_dropzm.sfg <- function(x, ...) {
 	structure(ret, class = c("XY", class(x)[2:3]))
 }
 
+#' @export
 st_dropzm.list <- function(x, ...) lapply(x, st_dropzm)
 
-st_dropzm.matrix <- function(x, ...) x[,1:2]
+#' @export
+st_dropzm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]
