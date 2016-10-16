@@ -415,7 +415,7 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 <div id="mixed-geometry-types" class="section level2">
 <h2>mixed geometry types</h2>
 <p>The class of <code>nc.geom</code> is <code>c(&quot;sfc_MULTIPOLYGON&quot;, &quot;sfc&quot;)</code>: <code>sfc</code> is shared with all geometry types, and <code>sft_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
-<p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indices that each of the geometries may contain a mix of geometry types, as in</p>
+<p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indicates that each of the geometries may contain a mix of geometry types, as in</p>
 <pre class="r"><code>(mix = st_sfc(st_geometrycollection(list(st_point(1:2))), 
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))</code></pre>
 <pre><code>## Geometry set for 2 features 

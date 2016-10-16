@@ -296,7 +296,7 @@ is shared with all geometry types, and `sft_TYPE` with `TYPE`
 indicating the type of the particular geometry at hand.
 
 There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`. 
-`GEOMETRYCOLLECTION` indices that each of the geometries may contain 
+`GEOMETRYCOLLECTION` indicates that each of the geometries may contain 
 a mix of geometry types, as in
 ```{r}
 (mix = st_sfc(st_geometrycollection(list(st_point(1:2))), 
