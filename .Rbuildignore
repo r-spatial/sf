@@ -1,5 +1,6 @@
 .travis.yml
 attic
+docs
 PROPOSAL.md
 cov
 config.log
