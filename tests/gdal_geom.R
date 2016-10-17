@@ -35,8 +35,13 @@ b = nc[4:10,]
 
 x = st_intersection(a[1,] ,b)
 
+try(x <- st_intersection(a ,b)) # FIXME
+
 x = st_union(a[1,], b)
 
 x = st_difference(a[1,], b)
 
 x = st_sym_difference(a[1,], b)
+
+x = st_drivers()
+cat(paste("GDAL has", nrow(x), "drivers\n"))

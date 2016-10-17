@@ -74,12 +74,24 @@ Error in eval(substitute(expr), envir, enclos) :
 > 
 > x = st_intersection(a[1,] ,b)
 > 
+> try(x <- st_intersection(a ,b)) # FIXME
+Error in eval(substitute(expr), envir, enclos) : sfc_from_ogr: NULL error
+In addition: Warning messages:
+1: In CPL_geom_op2(op, x, y) :
+  GDAL Error 1: TopologyException: Input geom 1 is invalid: Self-intersection at or near point -77.901206970214844 36.5098876953125 at -77.901206970214844 36.5098876953125
+2: In CPL_geom_op2(op, x, y) :
+  GDAL Error 1: TopologyException: Input geom 1 is invalid: Self-intersection at or near point -77.901206970214844 36.5098876953125 at -77.901206970214844 36.5098876953125
+> 
 > x = st_union(a[1,], b)
 > 
 > x = st_difference(a[1,], b)
 > 
 > x = st_sym_difference(a[1,], b)
 > 
+> x = st_drivers()
+> cat(paste("GDAL has", nrow(x), "drivers\n"))
+GDAL has 76 drivers
+> 
 > proc.time()
    user  system elapsed 
-  0.516   0.256   0.511 
+  0.528   0.252   0.471 
