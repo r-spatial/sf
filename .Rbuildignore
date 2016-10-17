@@ -8,3 +8,5 @@ TODO
 README.md
 ^windows
 ^appveyor\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
