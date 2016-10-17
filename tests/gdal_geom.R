@@ -7,9 +7,13 @@ nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
 
 st_is_valid(nc)
 
+st_is_simple(nc)
+
 x = st_buffer(nc, 1)
 
 x = st_boundary(nc)
+
+x = st_convexhull(nc)
 
 x = st_unioncascaded(nc)
 
@@ -17,10 +21,12 @@ x = st_simplify(nc, 0.1)
 
 # x = st_triangulate(nc)
 
-mls = st_multilinestring(list(matrix(0:1,2,2), matrix(c(1,2,0,1), 2, 2)))
+mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 x = st_polygonize(mls)
 
 x = st_segmentize(nc, 0.1)
+
+try(x <- st_segmentize(nc, -0.1))
 
 x = st_centroid(nc)
 

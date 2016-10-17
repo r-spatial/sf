@@ -132,8 +132,12 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 	st_sfc(CPL_geom_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 
 #' @name geos
+#' @param mlst object of class \code{MULTILINESTRING} or geometry list-column containing these
 #' @export
-st_polygonize = function(x) st_sfc(CPL_geom_op("polygonize", st_geometry(x)))
+#' @examples 
+#' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
+#' x = st_polygonize(mls)
+st_polygonize = function(mlst) st_sfc(CPL_geom_op("polygonize", st_geometry(mlst)))
 
 #' @name geos
 #' @export

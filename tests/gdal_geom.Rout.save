@@ -36,20 +36,36 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
  [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
+> st_is_simple(nc)
+  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [16] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [31] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [46] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [61] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+> 
 > x = st_buffer(nc, 1)
 > 
 > x = st_boundary(nc)
+> 
+> x = st_convexhull(nc)
 > 
 > x = st_unioncascaded(nc)
 > 
 > x = st_simplify(nc, 0.1)
 > 
-> x = st_triangulate(nc)
+> # x = st_triangulate(nc)
 > 
-> mls = st_multilinestring(list(matrix(0:1,2,2), matrix(c(1,2,0,1), 2, 2)))
+> mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 > x = st_polygonize(mls)
 > 
 > x = st_segmentize(nc, 0.1)
+> 
+> try(x <- st_segmentize(nc, -0.1))
+Error in eval(substitute(expr), envir, enclos) : 
+  argument dfMaxLength should be positive
+
 > 
 > x = st_centroid(nc)
 > 
@@ -66,4 +82,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.564   0.316   0.572 
+  0.516   0.256   0.511 
