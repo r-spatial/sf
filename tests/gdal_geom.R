@@ -15,7 +15,7 @@ x = st_unioncascaded(nc)
 
 x = st_simplify(nc, 0.1)
 
-x = st_triangulate(nc)
+# x = st_triangulate(nc)
 
 mls = st_multilinestring(list(matrix(0:1,2,2), matrix(c(1,2,0,1), 2, 2)))
 x = st_polygonize(mls)
