@@ -15,11 +15,42 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+> library(RPostgreSQL)
+Loading required package: DBI
+> library(sf)
+Linking to GEOS 3.5.0, GDAL 2.1.0
+> if (Sys.getenv("USER") %in% c("travis", "edzer")) {
++   library(sp)
++   data(meuse)
++   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
++   library(RPostgreSQL)
++   conn = dbConnect(PostgreSQL(), dbname = "postgis")
++   st_read_db(conn, query = "select * from meuse limit 3;")
++   st_write_db(conn, sf, "meuse_tbl")
++   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
++   dbDisconnect(conn)
++ }
+Error in postgresqlExecStatement(conn, statement, ...) : 
+  RS-DBI driver: (could not Retrieve the result : ERROR:  column "wkb_geometry" of relation "meuse_tbl" already exists
+CONTEXT:  SQL statement "ALTER TABLE public.meuse_tbl ADD COLUMN wkb_geometry geometry(Point, 0)"
+PL/pgSQL function addgeometrycolumn(character varying,character varying,character varying,character varying,integer,character varying,integer,boolean) line 110 at EXECUTE statement
+SQL statement "SELECT AddGeometryColumn('',$1,$2,$3,$4,$5,$6,$7)"
+PL/pgSQL function addgeometrycolumn(character varying,character varying,character varying,integer,character varying,integer,boolean) line 5 at SQL statement
+)
+In addition: Warning messages:
+1: In CPL_proj4string_from_epsg(value) :
+  GDAL Error 6: EPSG PCS/GCS code 900914 not found in EPSG support files.  Is this a valid
+EPSG coordinate system?
+2: In postgresqlWriteTable(conn, name, value, ...) :
+  table meuse_tbl exists in database: aborting assignTable
+[1] TRUE
+Warning message:
+In postgresqlQuickSQL(conn, statement, ...) :
+  Could not create executeSELECT AddGeometryColumn('','meuse_tbl','wkb_geometry','0','POINT',2);
+> 
 > options(warn = 2) # turn into error
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 + # if (Sys.getenv("USER") %in% c("edzer")) {
-+   library(RPostgreSQL)
-+   library(sf)
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")
 +   round_trip = function(cn, wkt) {
 +   	query = paste0("SELECT '", wkt, "'::geometry;")
@@ -54,9 +85,8 @@ Type 'q()' to quit R.
 +   #ret 
 + 
 +   #m = st_read_db(cn, query = "select * from meuse;")
++   dbDisconnect(cn)
 + }
-Loading required package: DBI
-Linking to GEOS 3.5.0, GDAL 2.1.0
 0101000060E6100000000000000000000000000000000000000000000000000000 
 SRID=4326;POINTM(0 0 0) <--> SRID=4326;POINTM(0 0 0) 
 0101000080000000000000000000000000000000000000000000000000 
@@ -77,7 +107,8 @@ MULTIPOLYGON(((0 0,1 0,1 1,0 0)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1
 MULTIPOLYGON(((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2)),((2 2,3 2,3 3,2 2))) <--> MULTIPOLYGON(((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2)), ((2 2, 3 2, 3 3, 2 2))) 
 01050000000300000001020000000400000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F000000000000000000000000000000000102000000040000009A9999999999C93F9A9999999999C93F9A9999999999E93F9A9999999999C93F9A9999999999E93F9A9999999999E93F9A9999999999C93F9A9999999999C93F01020000000400000000000000000000400000000000000040000000000000084000000000000000400000000000000840000000000000084000000000000000400000000000000040 
 MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2)) <--> MULTILINESTRING((0 0, 1 0, 1 1, 0 0), (0.2 0.2, 0.8 0.2, 0.8 0.8, 0.2 0.2), (2 2, 3 2, 3 3, 2 2)) 
+[1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  0.436   0.260   0.449 
+  1.036   0.304   2.162 
