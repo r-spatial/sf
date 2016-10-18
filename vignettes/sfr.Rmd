@@ -392,7 +392,37 @@ by the user. See also the section on [crs][crs].
 
 Two further functions, `st_read_db` and `st_write_db` attempt to read and write directly from spatial databases, using WKB. The advantage over `st_read` may be that instead of a complete table, the result of a (spatial) query may be fetched, limiting the amount of data that is read into R.
 
-`st_drivers()` returns a `data.frame` listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read.
+`st_drivers()` returns a `data.frame` listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read. Reading of some common data formats is illustrated below:
+
+```{r, eval=FALSE}
+# Download .shp data
+u_shp = "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
+download.file(u_shp, "biketrails.zip")
+unzip("biketrails.zip")
+u_kmz = "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
+download.file(u_kmz, "BikePaths.kmz")
+
+# Read file formats
+biketrails_shp = st_read(dsn = ".", layer = "biketrails")
+ogr_layers = rgdal::ogrListLayers(dsn = "BikePaths.kmz")
+biketrails_kmz = st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+
+# Tidy up
+files_to_remove = list.files(pattern = "[B-b]ike")
+file.remove(files_to_remove)
+```
+Benchmarks demonstrate that `st_read()` is much faster than `rgdal::readOGR()`.
+
+```{r, echo=FALSE, eval=FALSE}
+shp_read_sp = function() rgdal::readOGR(dsn = ".", layer = "biketrails")
+shp_read_sf = function() st_read(dsn = ".", layer = "biketrails")
+kmz_read_sp = function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+kmz_read_sf = function() st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+microbenchmark::microbenchmark(sp_shp_read(), sf_shp_read(),
+                               kmz_read_sp(), kmz_read_sf(), times = 1)
+```
+
+
 
 ## Coordinate reference systems and transformations {#crs}
 
