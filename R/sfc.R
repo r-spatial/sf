@@ -73,26 +73,26 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 }
 
 # coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:
-coerce_types = function(lst) {
-	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfg"))
-		stop("list item(s) not of class sfg") # sanity check
-	cls = unique(sapply(lst, function(x) class(x)[2L]))
-	if (length(cls) > 1) {
-		if (all(cls %in% c("POINT", "MULTIPOINT")))
-			lapply(lst, 
-				function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
-		else if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
-			lapply(lst, 
-				function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
-		else if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
-			lapply(lst, 
-				function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
-		else lapply(lst, 
-			function(x) if (inherits(x, "GEOMETRYCOLLECTION")) x 
-				else st_geometrycollection(list(x)))
-	} else
-		lst
-}
+#coerce_types = function(lst) {
+#	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfg"))
+#		stop("list item(s) not of class sfg") # sanity check
+#	cls = unique(sapply(lst, function(x) class(x)[2L]))
+#	if (length(cls) > 1) {
+#		if (all(cls %in% c("POINT", "MULTIPOINT")))
+#			lapply(lst, 
+#				function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
+#		else if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
+#			lapply(lst, 
+#				function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
+#		else if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
+#			lapply(lst, 
+#				function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
+#		else lapply(lst, 
+#			function(x) if (inherits(x, "GEOMETRYCOLLECTION")) x 
+#				else st_geometrycollection(list(x)))
+#	} else
+#		lst
+#}
 
 #' @export
 "[.sfc" = function(x, i, j, ...) {
