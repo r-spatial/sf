@@ -1,8 +1,19 @@
+library(RPostgreSQL)
+library(sf)
+if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+  library(sp)
+  data(meuse)
+  sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+  library(RPostgreSQL)
+  conn = dbConnect(PostgreSQL(), dbname = "postgis")
+  st_read_db(conn, query = "select * from meuse limit 3;")
+  st_write_db(conn, sf, "meuse_tbl", dropTable = FALSE)
+  dbDisconnect(conn)
+}
+
 options(warn = 2) # turn into error
 if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 # if (Sys.getenv("USER") %in% c("edzer")) {
-  library(RPostgreSQL)
-  library(sf)
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
   round_trip = function(cn, wkt) {
   	query = paste0("SELECT '", wkt, "'::geometry;")
@@ -37,14 +48,5 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   #ret 
 
   #m = st_read_db(cn, query = "select * from meuse;")
-}
-
-if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-  library(sp)
-  data(meuse)
-  sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-  library(RPostgreSQL)
-  conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  st_read_db(conn, query = "select * from meuse limit 3;")
-  st_write_db(conn, sf, "meuse_tbl", dropTable = FALSE)
+  dbDisconnect(cn)
 }
