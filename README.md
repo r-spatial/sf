@@ -19,7 +19,7 @@ This currently works directly under windows with R 3.3 or newer when [Rtools](ht
 
 To install these libraries on Ubuntu, for example, either:
 
-* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories, and then `sudo apt-get install libgdal-dev libgeos++-dev`, or
+* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories (e.g. with [` sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable`](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable)) and then `sudo apt-get install libgdal-dev libgeos++-dev`, or
 * install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints.
 
 See also:
