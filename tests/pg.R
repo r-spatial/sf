@@ -7,7 +7,8 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   st_read_db(conn, query = "select * from meuse limit 3;")
-  st_write_db(conn, sf, "meuse_tbl", dropTable = FALSE)
+  st_write_db(conn, sf, "meuse_tbl")
+  st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
   dbDisconnect(conn)
 }
 

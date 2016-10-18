@@ -45,3 +45,27 @@ x = st_sym_difference(a[1,], b)
 
 x = st_drivers()
 cat(paste("GDAL has", nrow(x), "drivers\n"))
+
+# GEOS ops:
+
+st_relate(a, b)
+
+st_disjoint(a, b)
+
+st_touches(a, b)
+
+st_crosses(a, b)
+
+st_within(a, b)
+
+st_contains(a, b)
+
+st_overlaps(a, b)
+
+st_equals(a, b)
+
+st_covers(a, b)
+
+st_equals_exact(a, b, 0.01)
+
+st_is_within_distance(a, b, 2)
