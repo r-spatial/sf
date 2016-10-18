@@ -66,6 +66,8 @@ st_equals(a, b)
 
 st_covers(a, b)
 
+st_covered_by(a, b)
+
 st_equals_exact(a, b, 0.01)
 
 st_is_within_distance(a, b, 2)

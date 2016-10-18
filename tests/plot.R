@@ -54,3 +54,7 @@ gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
 gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
 gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
+
+plot(gc1)
+
+plot(st_sfc(mp1, mpo1))

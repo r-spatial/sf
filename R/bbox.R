@@ -84,6 +84,6 @@ st_bbox.sfc_GEOMETRYCOLLECTION = st_bbox.GEOMETRYCOLLECTION
 #' @export
 st_bbox.sfc_GEOMETRY = st_bbox.GEOMETRYCOLLECTION
 #' @export
-st_bbox.sfc = function(obj) structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+st_bbox.sfc = function(obj) structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax"))  # nocov
 #' @export
 st_bbox.sf = function(obj) st_bbox(st_geometry(obj))
