@@ -51,7 +51,6 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 }
 
 int to_multi_what(std::vector<OGRGeometry *> gv) {
-	OGRwkbGeometryType tp;
 	bool lines = false, multilines = false, polygons = false, multipolygons = false;
 
 	for (int i = 0; i < gv.size(); i++) {
