@@ -131,9 +131,6 @@ Geometry set for 0 features
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-Warning message:
-In check_replace(x, value) :
-  st_crs: replacing crs does not reproject data; use st_transform for that
 > try(st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON(0 0,1 1,0 1,0 0)")))
 OGR: Corrupt data
 Error in eval(substitute(expr), envir, enclos) : OGR error
@@ -148,10 +145,30 @@ proj4string:    +proj=longlat +datum=wgs84
 POINT(0 0) 
 POINT(1 1) 
 POLYGON((0 0, 1 1, 0 1, 0 0)) 
-Warning message:
-In check_replace(x, value) :
-  st_crs: replacing crs does not reproject data; use st_transform for that
+> dg = st_as_sf(d, wkt = "geom")
+> print(dg, n = 1)
+Simple feature collection with 2 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+First 1 features:
+  a       geom
+1 1 POINT(0 0)
+> 
+> st_geometry(d) = st_as_sfc(d$geom)
+> d
+Simple feature collection with 2 features and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a       geom   geometry
+1 1 POINT(0 0) POINT(0 0)
+2 2 POINT(1 1) POINT(1 1)
 > 
 > proc.time()
    user  system elapsed 
-  0.396   0.296   0.379 
+  0.396   0.284   0.375 

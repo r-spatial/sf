@@ -87,7 +87,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @export
 `st_geometry<-.data.frame` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
-	st_sf(x, value)
+	st_sf(x, geometry = value)
 }
 
 #' @export

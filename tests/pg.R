@@ -1,14 +1,14 @@
 library(RPostgreSQL)
 library(sf)
+library(sp)
 if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-  library(sp)
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-  library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  st_read_db(conn, query = "select * from meuse limit 3;")
   st_write_db(conn, sf, "meuse_tbl")
   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
+  x = st_read_db(conn, query = "select * from meuse_tbl limit 30;")
+  y = st_read_db(conn, "meuse_tbl2") 
   dbDisconnect(conn)
 }
 

@@ -19,15 +19,15 @@ Type 'q()' to quit R.
 Loading required package: DBI
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
+> library(sp)
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-+   library(sp)
 +   data(meuse)
 +   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-+   library(RPostgreSQL)
 +   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-+   st_read_db(conn, query = "select * from meuse limit 3;")
 +   st_write_db(conn, sf, "meuse_tbl")
 +   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
++   x = st_read_db(conn, query = "select * from meuse_tbl limit 30;")
++   y = st_read_db(conn, "meuse_tbl2") 
 +   dbDisconnect(conn)
 + }
 Error in postgresqlExecStatement(conn, statement, ...) : 
@@ -37,11 +37,8 @@ PL/pgSQL function addgeometrycolumn(character varying,character varying,characte
 SQL statement "SELECT AddGeometryColumn('',$1,$2,$3,$4,$5,$6,$7)"
 PL/pgSQL function addgeometrycolumn(character varying,character varying,character varying,integer,character varying,integer,boolean) line 5 at SQL statement
 )
-In addition: Warning messages:
-1: In CPL_proj4string_from_epsg(value) :
-  GDAL Error 6: EPSG PCS/GCS code 900914 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?
-2: In postgresqlWriteTable(conn, name, value, ...) :
+In addition: Warning message:
+In postgresqlWriteTable(conn, name, value, ...) :
   table meuse_tbl exists in database: aborting assignTable
 [1] TRUE
 Warning message:
@@ -111,4 +108,4 @@ MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))
 > 
 > proc.time()
    user  system elapsed 
-  1.036   0.304   2.162 
+  1.060   0.292   2.186 
