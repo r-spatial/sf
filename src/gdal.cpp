@@ -70,7 +70,14 @@ const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
 
 void handle_error(OGRErr err) {
 	if (err != 0) {
-		Rcpp::Rcout << "Error code: " << err << std::endl;
+		if (err == OGRERR_NOT_ENOUGH_DATA)
+			Rcpp::Rcout << "OGR: Not enough data " << std::endl;
+		else if (err == OGRERR_UNSUPPORTED_GEOMETRY_TYPE)
+			Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
+		else if (err == OGRERR_CORRUPT_DATA)
+			Rcpp::Rcout << "OGR: Corrupt data" << std::endl;
+		else 
+			Rcpp::Rcout << "Error code: " << err << std::endl;
 		throw std::range_error("OGR error");
 	}
 }
@@ -200,4 +207,15 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 	ret(4) = rattr;
 	ret(5) = vattr;
 	return(ret);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
+	std::vector<OGRGeometry *> g(wkt.size());
+	OGRGeometryFactory f;
+	for (int i = 0; i < wkt.size(); i++) {
+		char *wkt_str = wkt(i);
+		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
+	}
+	return(sfc_from_ogr(g, true));
 }

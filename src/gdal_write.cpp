@@ -27,10 +27,10 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			throw std::invalid_argument("Layer creation failed.\n");
 		}
     	OGRFieldDefn oField(nm[i], ret[i]);
-    	if( poLayer->CreateField( &oField ) != OGRERR_NONE ) {
-        	Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
+		if( poLayer->CreateField( &oField ) != OGRERR_NONE ) {
+			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
-    	}
+		}
 	}
 	return(ret);
 }

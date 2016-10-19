@@ -63,3 +63,14 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 	}
 	sapply(x, st_as_text, ..., EWKT = EWKT)
 }
+
+#' @name st_as_sfc
+#' @details if \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element
+#' @param crs integer or character; coordinate reference system for the geometry, see \link{st_crs}
+#' @export
+st_as_sfc.character = function(x, crs, ...) {
+	if (missing(crs))
+		st_sfc(CPL_sfc_from_wkt(x))
+	else
+		st_sfc(CPL_sfc_from_wkt(x), crs = crs)
+}

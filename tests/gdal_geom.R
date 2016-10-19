@@ -19,7 +19,9 @@ x = st_unioncascaded(nc)
 
 x = st_simplify(nc, 0.1)
 
-# x = st_triangulate(nc)
+if (sf:::CPL_geos_version() >= "3.4.0") {
+	x = st_triangulate(nc)
+}
 
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 x = st_polygonize(mls)

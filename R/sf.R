@@ -8,10 +8,12 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @name st_as_sf
 #'
 #' @param relation_to_geometry character vector; see details section of \link{st_sf}
-#' @param coords in case of point data: coordinate names or numbers
+#' @param coords in case of point data: names or numbers of the numeric columns holding coordinates
+#' @param wkt name or number of the character column that holds WKT encoded geometries
 #' @param dim passed on to \link{st_point} (only when argument coords is given)
-#' @param remove_coordinates logical; when coords is given, remove coordinate columns from data.frame?
+#' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
 #' @param ... passed on to \link{st_sf}, might included crs
+#' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #' 
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -20,6 +22,8 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' d = data.frame(a = 1:2)
 #' d$geom = st_sfc(pt1, pt2)
 #' df = st_as_sf(d)
+#' d$geom = c("POINT(0 0)", "POINT(0 1)")
+#' df = st_as_sf(d, wkt = "geom")
 #' d$geom2 = st_sfc(pt1, pt2)
 #' st_as_sf(d) # should warn
 #' data(meuse, package = "sp")
@@ -27,12 +31,17 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
 #' @export
-st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, dim = "XYZ", 
-		remove_coordinates = TRUE) {
-	if (! missing(coords)) {
+st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coords, wkt, 
+		dim = "XYZ", remove = TRUE) {
+	if (! missing(wkt)) {
+		if (remove) 
+			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
+		else
+			x$geometry = st_as_sfc(as.character(x[[wkt]]))
+	} else if (! missing(coords)) {
 		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
 				function(i) st_point(unlist(x[i, coords]), dim = dim))))
-		if (remove_coordinates)
+		if (remove)
 			x[coords] = NULL
 	}
 	#do.call(st_sf, c(as.list(x), list(...), relation_to_geometry = relation_to_geometry))

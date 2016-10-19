@@ -55,7 +55,9 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > x = st_simplify(nc, 0.1)
 > 
-> # x = st_triangulate(nc)
+> if (sf:::CPL_geos_version() >= "3.4.0") {
++ 	x = st_triangulate(nc)
++ }
 > 
 > mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 > x = st_polygonize(mls)
@@ -244,6 +246,23 @@ integer(0)
 [1] 2
 
 > 
+> st_covered_by(a, b)
+[[1]]
+integer(0)
+
+[[2]]
+integer(0)
+
+[[3]]
+integer(0)
+
+[[4]]
+[1] 1
+
+[[5]]
+[1] 2
+
+> 
 > st_equals_exact(a, b, 0.01)
 [[1]]
 integer(0)
@@ -292,4 +311,4 @@ LINESTRING(1 3, 2 4)
 > 
 > proc.time()
    user  system elapsed 
-  0.504   0.296   0.489 
+  0.596   0.320   0.606 

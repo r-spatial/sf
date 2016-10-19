@@ -27,7 +27,7 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
 	# already contains a zillion sfg objects, than do.call(st_sfc, lst) ...
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfg") 
-			&& inherits(lst[[1]][[1]], "sfg"))
+			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg")))
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
 	if (length(lst) == 0) # empty set: no geometries read

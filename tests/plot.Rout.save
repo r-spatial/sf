@@ -73,6 +73,10 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 > plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 > 
+> plot(gc1)
+> 
+> plot(st_sfc(mp1, mpo1))
+> 
 > proc.time()
    user  system elapsed 
-  0.516   0.296   0.500 
+  0.580   0.304   0.576 
