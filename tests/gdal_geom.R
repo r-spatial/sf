@@ -1,3 +1,4 @@
+options(warn = 2)
 library(sf)
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
@@ -37,13 +38,19 @@ b = nc[4:10,]
 
 x = st_intersection(a[1,] ,b)
 
-try(x <- st_intersection(a ,b)) # FIXME
+x <- st_intersection(a ,st_merge(b, TRUE)) # FIXME
 
 x = st_union(a[1,], b)
 
+x = st_union(a, st_merge(b, TRUE))
+
 x = st_difference(a[1,], b)
 
+x = st_difference(a, st_merge(b, TRUE))
+
 x = st_sym_difference(a[1,], b)
+
+x = st_sym_difference(a, st_merge(b, TRUE))
 
 x = st_drivers()
 cat(paste("GDAL has", nrow(x), "drivers\n"))

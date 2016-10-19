@@ -65,6 +65,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				static geos::geom::IntersectionMatrix* im;
 				im = geos::operation::relate::RelateOp::relate(gmv0[i].get(), gmv1[j].get());
 				out[j * sfc0.length() + i] = im->toString();
+				delete im;
 			}
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());

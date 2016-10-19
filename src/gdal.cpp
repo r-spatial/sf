@@ -125,15 +125,14 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false
 
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
-	OGRGeometryFactory f;
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
-			throw std::range_error("sfc_from_ogr: NULL error");
+			throw std::range_error("NULL error in sfc_from_ogr");
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
 		if (destroy)
-			f.destroyGeometry(g[i]);
+			delete g[i];
 	}
 	return(CPL_read_wkb(lst, false, native_endian()));
 }
