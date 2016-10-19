@@ -22,6 +22,9 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 		double dTolerance = 0.0, bool preserveTopology = false, 
 		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
 
+	if (op == "segmentize" && dfMaxLength <= 0.0)
+		throw std::invalid_argument("argument dfMaxLength should be positive\n");
+
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
 	if (op == "buffer") {
@@ -46,8 +49,6 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->Polygonize();
 	} else if (op == "segmentize") {
-		if (dfMaxLength <= 0.0)
-			throw std::invalid_argument("argument dfMaxLength should be positive\n");
 		for (size_t i = 0; i < g.size(); i++) {
 			g[i]->segmentize(dfMaxLength);
 			out[i] = g[i];
