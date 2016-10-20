@@ -129,7 +129,8 @@ library(sf)
 x1 = st_linestring(cbind(c(0,1,0,1),c(0,1,1,0)))
 x2 = st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))
 x3 = st_polygon(list(cbind(c(0,1,0,1,0),c(0,1,1,0,0))))
-# st_is_valid(st_sfc(x1,x2,x3)) # FIXME
+st_is_simple(st_sfc(x1))
+st_is_valid(st_sfc(x2,x3))
 ```
 
 ```{r echo=FALSE,fig=TRUE,fig.height=3}

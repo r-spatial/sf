@@ -1,0 +1,68 @@
+body {
+  position: relative;
+}
+
+.icon img {
+  float: right;
+  border: 1px solid #ccc;
+}
+.index .internal {display: none;}
+ul.index li {margin-bottom: 0.5em; clear: both;}
+
+footer {
+  margin-top: 45px;
+  padding: 35px 0 36px;
+  border-top: 1px solid #e5e5e5;
+}
+footer p {
+  margin-bottom: 0;
+  color: #555;
+}
+
+/* Fixes for fixed navbar --------------------------*/
+
+body {
+  position: relative;
+  padding-top: 60px;
+}
+
+.section h1, .section h2, .section h3, .section h4 {
+  padding-top: 60px;
+  margin-top: -60px;
+}
+
+/* Table of contents --------------------------*/
+
+#sidebar {
+  margin-top: 40px;
+}
+#sidebar.affix {
+  margin-top: 5px;
+}
+
+#sidebar h2 {
+  font-size: 1.5em;
+}
+
+#sidebar h2:first-child {
+  margin-top: 0;
+}
+
+/* Syntax highlighting ---------------------------------------------------- */
+
+.fl,.number {color:rgb(21,20,181);}
+.fu,.functioncall {color:#264D66 ;}
+.ch,.st,.string {color:#375D81 ;}
+.kw,.keyword {color:black;}
+.argument {color:#264D66 ;}
+.co,.comment {color: #777;}
+.formalargs {color: #264D66;}
+.eqformalargs {color:#264D66;}
+.slot {font-style:italic;}
+.symbol {color:black ;}
+.prompt {color:black ;}
+
+pre img {
+  background-color: #fff;
+  display: block;
+}
