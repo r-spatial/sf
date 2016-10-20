@@ -176,9 +176,9 @@ st_geometry.sfc = function(obj, ...) obj
 #' 
 #' return geometry type of an object, as a factor
 #' @param x object of class \link{sf} or \link{sfc}
-#' @return st_geometrytype returns a factor with the geometry type of each simple feature in x
+#' @return returns a factor with the geometry type of each simple feature in x
 #' @export
-st_geometrytype = function(x) {
+st_geometry_type = function(x) {
 	x = st_geometry(x)
 	factor(sapply(x, function(y) class(y)[2]), levels =
 		c("GEOMETRY",
@@ -227,29 +227,29 @@ obj_sum.sfc <- function(x) {
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param ... ignored
 #' @examples
-#' st_dropzm(st_linestring(matrix(1:32,8)))
+#' st_drop_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
-#' st_dropzm(x)
+#' st_drop_zm(x)
 #' a = st_sf(a = 1:2, geom=x)
-#' st_dropzm(a)
+#' st_drop_zm(a)
 #' @export
-st_dropzm <- function(x, ...) UseMethod("st_dropzm")
+st_drop_zm <- function(x, ...) UseMethod("st_drop_zm")
 
 #' @export
-st_dropzm.sf <- function(x, ...) {
-	st_geometry(x) = st_dropzm(st_geometry(x))
+st_drop_zm.sf <- function(x, ...) {
+	st_geometry(x) = st_drop_zm(st_geometry(x))
 	return(x)
 }
 
 #' @export
-st_dropzm.sfc <- function(x, ...) {
-	st_sfc(lapply(x, st_dropzm))
+st_drop_zm.sfc <- function(x, ...) {
+	st_sfc(lapply(x, st_drop_zm))
 }
 
 #' @export
-st_dropzm.sfg <- function(x, ...) {
+st_drop_zm.sfg <- function(x, ...) {
 	ret = if (is.list(x))
-		lapply(x, st_dropzm)
+		lapply(x, st_drop_zm)
 	else if (is.matrix(x))
 		x[,1:2]
 	else
@@ -258,7 +258,7 @@ st_dropzm.sfg <- function(x, ...) {
 }
 
 #' @export
-st_dropzm.list <- function(x, ...) lapply(x, st_dropzm)
+st_drop_zm.list <- function(x, ...) lapply(x, st_drop_zm)
 
 #' @export
-st_dropzm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]
+st_drop_zm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]

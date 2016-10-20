@@ -33,10 +33,10 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->Boundary();
-	} else if (op == "convexhull") {
+	} else if (op == "convex_hull") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->ConvexHull();
-	} else if (op == "unioncascaded") {
+	} else if (op == "union_cascaded") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->UnionCascaded();
 	} else if (op == "simplify") {
@@ -60,7 +60,7 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 			out[i] = gm;
 		}
 	} else
-		throw std::invalid_argument("invalid operation");
+		throw std::invalid_argument("invalid operation"); // would leak g
 
 	if (op != "segmentize")
 		for (int i = 0; i < g.size(); i++)
@@ -91,7 +91,7 @@ Rcpp::List CPL_geom_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0) {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->SymDifference(g0[0]);
 	} else 
-		throw std::invalid_argument("invalid operation");
+		throw std::invalid_argument("invalid operation"); // would leak g and g0
 	// clean up:
 	for (int i = 0; i < g.size(); i++)
 		delete g[i];

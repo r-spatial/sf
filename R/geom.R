@@ -79,19 +79,18 @@ st_covers           = function(x, y, sparse = TRUE) st_geos_binop("covers", x, y
 
 #' @name geos
 #' @export
-st_covered_by       = function(x, y, sparse = TRUE) st_geos_binop("coveredBy", x, y, sparse = sparse)
+st_covered_by       = function(x, y, sparse = TRUE) st_geos_binop("covered_by", x, y, sparse = sparse)
 
 #' @name geos
 #' @export
-#' @param par numeric; parameter used for "equalsExact" (margin) and "isWithinDistance"
+#' @param par numeric; parameter used for "equals_exact" (margin) and "is_within_distance"
 st_equals_exact     = function(x, y, par, sparse = TRUE) 
-	st_geos_binop("equalsExact", x, y, par = par, sparse = sparse)
+	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
 
 #' @name geos
 #' @export
 st_is_within_distance = function(x, y, par, sparse = TRUE) 
-	st_geos_binop("isWithinDistance", x, y, par = par, sparse = sparse)
-
+	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
 
 # unary, returning geometries -- GEOS interfaced through GDAL:
 
@@ -109,14 +108,14 @@ st_boundary = function(x) st_sfc(CPL_geom_op("boundary", st_geometry(x)))
 
 #' @name geos
 #' @export
-st_convexhull = function(x) st_sfc(CPL_geom_op("convexhull", st_geometry(x)))
+st_convex_hull = function(x) st_sfc(CPL_geom_op("convex_hull", st_geometry(x)))
 
 #' @name geos
 #' @export
 #' @examples 
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
-#' plot(st_unioncascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
-st_unioncascaded = function(x) st_sfc(CPL_geom_op("unioncascaded", st_geometry(x)))
+#' plot(st_union_cascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
+st_union_cascaded = function(x) st_sfc(CPL_geom_op("union_cascaded", st_geometry(x)))
 
 #' @name geos
 #' @export
@@ -157,7 +156,7 @@ st_segmentize  = function(x, dfMaxLength)
 
 #' @name geos
 #' @export
-#' @param union logical; apply \code{st_unioncascaded} to the merged geometry set?
+#' @param union logical; apply \code{st_union_cascaded} to the merged geometry set?
 #' m = st_merge(nc)
 #' plot(st_convexhull(nc))
 #' plot(nc, border = grey(.5))
@@ -165,7 +164,7 @@ st_merge = function(x, union = FALSE) {
 	x = st_geometry(x)
 	x = st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
 	if (union)
-		st_unioncascaded(x)
+		st_union_cascaded(x)
 	else
 		x
 }
@@ -190,4 +189,3 @@ st_difference = function(x, y0)     geom_op2("difference", st_geometry(x), st_me
 #' @name geos
 #' @export
 st_sym_difference = function(x, y0) geom_op2("sym_difference", st_geometry(x), st_merge(y0))
-

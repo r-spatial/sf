@@ -113,13 +113,13 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		else if (op == "covers")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->covers(gmv1[j].get());
-		else if (op == "coveredBy")
+		else if (op == "covered_by")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->coveredBy(gmv1[j].get());
-		else if (op == "equalsExact")
+		else if (op == "equals_exact")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->equalsExact(gmv1[j].get(), par);
-		else if (op == "isWithinDistance")
+		else if (op == "is_within_distance")
 			for (int j = 0; j < sfc1.length(); j++) 
 				rowi(j) = gmv0[i]->isWithinDistance(gmv1[j].get(), par);
 		else

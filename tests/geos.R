@@ -6,7 +6,7 @@ st_distance(nc[1:10,], nc[1:10,])
 st_is_valid(nc)
 
 ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
-"covers", "coveredBy", "equalsExact", "isWithinDistance")
+"covers", "covered_by", "equals_exact", "is_within_distance")
 for (op in ops) {
 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)

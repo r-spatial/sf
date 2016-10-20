@@ -334,7 +334,7 @@ str(x)
 str(x)
 (x = st_point(c(1,2,3,4)))
 str(x)
-st_dropzm(x)
+st_drop_zm(x)
 ```
 which illustrates that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from `sfg` (simple feature geometry), but also have a type (e.g. `POINT`), and a dimension (e.g. `XYM`) class name. Geometries can also be empty, as in
 
@@ -501,7 +501,7 @@ st_intersects(nc[1:5,], nc[1:4,])
 st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 ```
     
-`st_buffer`, `st_boundary`, `st_convexhull`, `st_unioncascaded`,
+`st_buffer`, `st_boundary`, `st_convexhull`, `st_union_cascaded`,
 `st_simplify`, `st_triangulate`, `st_polygonize`, `st_centroid`,
 `st_segmentize`, and `st_merge` return new geometries
 

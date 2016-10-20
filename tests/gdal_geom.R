@@ -14,9 +14,9 @@ x = st_buffer(nc, 1)
 
 x = st_boundary(nc)
 
-x = st_convexhull(nc)
+x = st_convex_hull(nc)
 
-x = st_unioncascaded(nc)
+x = st_union_cascaded(nc)
 
 x = st_simplify(nc, 0.1)
 
@@ -81,6 +81,6 @@ st_equals_exact(a, b, 0.01)
 
 st_is_within_distance(a, b, 2)
 
-st_geometrytype(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
+st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 
-st_dropzm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
+st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
