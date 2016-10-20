@@ -330,7 +330,7 @@ nc = st_read(filename, &quot;nc.gpkg&quot;, crs = 4267)</code></pre>
 <pre class="r"><code>methods(class = &quot;sf&quot;)</code></pre>
 <pre><code>##  [1] coerce        initialize    plot          print         [            
 ##  [6] show          slotsFromS3   st_bbox       st_crs&lt;-      st_crs       
-## [11] st_dropzm     st_geometry&lt;- st_geometry   st_transform 
+## [11] st_drop_zm    st_geometry&lt;- st_geometry   st_transform 
 ## see '?methods' for accessing help and source code</code></pre>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <pre class="r"><code>nc.no_sf = as.data.frame(nc)
@@ -387,7 +387,7 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 <pre class="r"><code>methods(class = 'sfc')</code></pre>
 <pre><code>##  [1] coerce       format       initialize   print        [           
 ##  [6] show         slotsFromS3  st_as_binary st_as_text   st_bbox     
-## [11] st_crs&lt;-     st_crs       st_dropzm    st_geometry  st_transform
+## [11] st_crs&lt;-     st_crs       st_drop_zm   st_geometry  st_transform
 ## [16] summary     
 ## see '?methods' for accessing help and source code</code></pre>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
@@ -468,7 +468,7 @@ plot(nc[1,], col = 'red', add = TRUE)</code></pre>
 <pre><code>## POINTZM(1 2 3 4)</code></pre>
 <pre class="r"><code>str(x)</code></pre>
 <pre><code>## Classes 'XYZM', 'POINT', 'sfg'  num [1:4] 1 2 3 4</code></pre>
-<pre class="r"><code>st_dropzm(x)</code></pre>
+<pre class="r"><code>st_drop_zm(x)</code></pre>
 <pre><code>## POINT(1 2)</code></pre>
 <p>which illustrates that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from <code>sfg</code> (simple feature geometry), but also have a type (e.g. <code>POINT</code>), and a dimension (e.g. <code>XYM</code>) class name. Geometries can also be empty, as in</p>
 <pre class="r"><code>(x = st_geometrycollection())</code></pre>
@@ -518,7 +518,23 @@ For instance, a PostGIS table in database <code>postgis</code> might be read by<
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials.</p>
 <p><code>st_read</code> typically reads the coordinate reference system as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot retrieve SRID (EPSG code) from <code>proj4string</code> strings, and, when needed, it has to be set by the user. See also the section on [crs][crs].</p>
 <p>Two further functions, <code>st_read_db</code> and <code>st_write_db</code> attempt to read and write directly from spatial databases, using WKB. The advantage over <code>st_read</code> may be that instead of a complete table, the result of a (spatial) query may be fetched, limiting the amount of data that is read into R.</p>
-<p><code>st_drivers()</code> returns a <code>data.frame</code> listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read.</p>
+<p><code>st_drivers()</code> returns a <code>data.frame</code> listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read. Reading of some common data formats is illustrated below:</p>
+<pre class="r"><code># Download .shp data
+u_shp = &quot;http://coagisweb.cabq.gov/datadownload/biketrails.zip&quot;
+download.file(u_shp, &quot;biketrails.zip&quot;)
+unzip(&quot;biketrails.zip&quot;)
+u_kmz = &quot;http://coagisweb.cabq.gov/datadownload/BikePaths.kmz&quot;
+download.file(u_kmz, &quot;BikePaths.kmz&quot;)
+
+# Read file formats
+biketrails_shp = st_read(dsn = &quot;.&quot;, layer = &quot;biketrails&quot;)
+ogr_layers = rgdal::ogrListLayers(dsn = &quot;BikePaths.kmz&quot;)
+biketrails_kmz = st_read(dsn = &quot;BikePaths.kmz&quot;, layer = ogr_layers[1])
+
+# Tidy up
+files_to_remove = list.files(pattern = &quot;[B-b]ike&quot;)
+file.remove(files_to_remove)</code></pre>
+<p>Benchmarks demonstrate that <code>st_read()</code> is much faster than <code>rgdal::readOGR()</code>.</p>
 </div>
 <div id="crs" class="section level2">
 <h2>Coordinate reference systems and transformations</h2>
@@ -543,9 +559,10 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]</code></pre>
 <pre><code>## [1] st_as_sf.data.frame* st_as_sf.Spatial*   
 ## see '?methods' for accessing help and source code</code></pre>
 <pre class="r"><code>methods(st_as_sfc)</code></pre>
-<pre><code>## [1] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
-## [3] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
-## [5] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
+<pre><code>## [1] st_as_sfc.character*          st_as_sfc.SpatialLines*      
+## [3] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     
+## [5] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   
+## [7] st_as_sfc.WKB*               
 ## see '?methods' for accessing help and source code</code></pre>
 <pre class="r"><code>nc.sp = as(nc, &quot;Spatial&quot;)
 class(nc.sp)</code></pre>
@@ -599,7 +616,7 @@ identical(nc, nc2) # roundtrip -- FIXME: should do better</code></pre>
 ## [3,] FALSE  TRUE  TRUE FALSE
 ## [4,] FALSE FALSE FALSE  TRUE
 ## [5,] FALSE FALSE FALSE FALSE</code></pre>
-<p><code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_unioncascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_merge</code> return new geometries</p>
+<p><code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_merge</code> return new geometries</p>
 <pre class="r"><code>sel = c(1,5,14)
 buf = st_buffer(nc.web_mercator[sel,], 30000)
 plot(buf, border = 'red')
