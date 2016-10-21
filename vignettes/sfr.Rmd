@@ -29,7 +29,7 @@ at times convoluted, inefficient or incomplete. The package
 at succeeding [sp](http://cran.r-project.org/package=sp) in the
 long term.
 
-This vignette
+This vignette:
 
 * explains what is meant by features, and by simple features
 * shows how they are implemented in R
@@ -55,7 +55,7 @@ its crown, of its stem, or the point indicating its centre. Other
 properties may include its height, color, diameter at breast height
 at a particular date, and so on.
 
-The standard sais: "_A simple feature is defined by the OpenGIS
+The standard says: "_A simple feature is defined by the OpenGIS
 Abstract specification to have both spatial and non-spatial
 attributes. Spatial attributes are geometry valued, and simple
 features are based on 2D geometry with linear interpolation between
@@ -222,7 +222,8 @@ It is also possible to create `data.frame` objects with geometry list-columns th
 nc.no_sf = as.data.frame(nc)
 class(nc.no_sf)
 ```
-however such objects
+
+However, such objects:
 
 * no longer register which column is the geometry list-column
 * no longer have a plot method, and
