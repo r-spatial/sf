@@ -83,7 +83,7 @@
     <p>set up viewport from sf, sfc or sfg object</p>
     
 
-    <pre><span class='fu'>st_viewport</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>), <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre><span class='fu'>st_viewport</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>), <span class='no'>asp</span>)</pre>
     
     <h2>Arguments</h2>
     <dl class="dl-horizontal">
@@ -94,7 +94,7 @@
       <dt>bbox</dt>
       <dd>the bounding box used for aspect ratio</dd>
       <dt>asp</dt>
-      <dd>aspect ratio wanted (FIXME: NOT USED YET)</dd>
+      <dd>numeric; target aspect ratio (y/x), see Details</dd>
     </dl>
     
     <div class="Value">
@@ -107,6 +107,7 @@
       <h2>Details</h2>
 
       <p>parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...</p>
+      <p>if <code>asp</code> is missing, it is taken as 1, except when <code>isTRUE(st_is_longlat(x))</code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
     </div>
       </div>
   <div class="col-md-3">
