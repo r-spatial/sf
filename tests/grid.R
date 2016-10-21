@@ -39,3 +39,17 @@ ls = st_multilinestring(list(cbind(1:10, 5+rnorm(10)), cbind(1:10, rnorm(10)), c
 grid.newpage()
 pushViewport(st_viewport(ls))
 grid.draw(st_as_grob(ls, gp = gpar(fill = 'red')))
+
+# POINTS, right aspect in Long/Lat:
+meuse_ll = st_transform(meuse_sf, 4326)
+grid.newpage()
+pushViewport(st_viewport(meuse_ll))
+invisible(lapply(st_geometry(meuse_ll), 
+	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
+
+# WRONG aspect:
+st_crs(meuse_ll) = NA
+grid.newpage()
+pushViewport(st_viewport(meuse_ll))
+invisible(lapply(st_geometry(meuse_ll), 
+	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))

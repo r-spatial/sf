@@ -50,9 +50,9 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > x = st_boundary(nc)
 > 
-> x = st_convexhull(nc)
+> x = st_convex_hull(nc)
 > 
-> x = st_unioncascaded(nc)
+> x = st_union_cascaded(nc)
 > 
 > x = st_simplify(nc, 0.1)
 > 
@@ -298,11 +298,11 @@ integer(0)
 [1] 1 2 3 4 5 6
 
 > 
-> st_geometrytype(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
+> st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 [1] POINT      LINESTRING
 18 Levels: GEOMETRY POINT LINESTRING POLYGON MULTIPOINT ... TRIANGLE
 > 
-> st_dropzm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
+> st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
 [[1]]
 POINT(1 2) 
 
@@ -312,4 +312,4 @@ LINESTRING(1 3, 2 4)
 > 
 > proc.time()
    user  system elapsed 
-  0.660   0.236   0.647 
+  0.656   0.292   0.642 

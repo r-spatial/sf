@@ -30,8 +30,6 @@ st_as_grob.MULTILINESTRING = function(x, ..., default.units = "native") {
 	get_y = function(x) unlist(sapply(x, function(y) y[,2]))
 	polylineGrob(get_x(x), get_y(x), id.lengths = sapply(x, nrow), ..., 
 		default.units = default.units)
-	polylineGrob(get_x(x), get_y(x), id.lengths = sapply(x, nrow), ..., 
-		default.units = default.units)
 }
 
 #' @export
@@ -54,12 +52,13 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 #' set up viewport from sf, sfc or sfg object
 #' @param x object of class sf, sfc or sfg object
 #' @param bbox the bounding box used for aspect ratio
-#' @param asp aspect ratio wanted (FIXME: NOT USED YET)
+#' @param asp numeric; target aspect ratio (y/x), see Details
 #' @param ... parameters passed on to \link[grid]{viewport}
 #' @details parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...
 #' @return the output of the call to \link[grid]{viewport}
+#' @details if \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longlat(x))}, in which case it is set to \code{1.0 /cos(y)}, with \code{y} the middle of the latitude bounding box.
 #' @export
-st_viewport = function(x, ..., bbox = st_bbox(x), asp = 1) { # FIXME: deal with asp
+st_viewport = function(x, ..., bbox = st_bbox(x), asp) { # FIXME: deal with asp
 	xscale = bbox[c(1,3)]
 	yscale = bbox[c(2,4)]
 
@@ -75,10 +74,15 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp = 1) { # FIXME: deal with 
     	unclass(sz[2]) / unclass(sz[1])
 	}
 	vp.asp = current.viewport.aspect()
+	if (missing(asp)) {
+		asp = 1.0
+		if (isTRUE(st_is_longlat(x)))
+			asp = 1.0 /cos((mean(yscale) * pi)/180)
+	}
 	
-   	width = 1
-   	obj.asp = diff(yscale) / diff(xscale)
+   	obj.asp = asp * diff(yscale) / diff(xscale)
 	height = obj.asp / vp.asp
+   	width = 1
    	width = width / max(width, height)
    	height = height / max(width, height)
 	viewport(width = unit(width, "npc"), height = unit(height, "npc"),

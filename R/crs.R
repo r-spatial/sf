@@ -17,6 +17,10 @@ st_crs.sfc = function(x, ...)
 	structure(list(epsg = attr(x, "epsg"), proj4string = attr(x, "proj4string")), class = "crs")
 
 #' @export
+st_crs.default = function(x, ...) 
+	structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
+
+#' @export
 #' @method is.na crs
 is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 
@@ -55,7 +59,7 @@ is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 `st_crs<-.sfc` = function(x, value) {
 	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 	# init:
-	if (!(is.numeric(value) || is.character(value) || is.list(value)))
+	if (!is.na(value) && !(is.numeric(value) || is.character(value) || is.list(value)))
 		stop("crs should be either numeric (epsg), character (proj4string), or list")
 	check_replace(x, value)
 	attr(x, "proj4string") = NA_character_
@@ -117,4 +121,18 @@ epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue abou
 		else
 			NA_integer_
 	}
+}
+
+#' assert whether simple feature coordinates are longlat degrees
+#' 
+#' assert whether simple feature coordinates are longlat degrees
+#' @param x object of class \link{sf} or \link{sfc}
+#' @return TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
+#' @export
+st_is_longlat = function(x) {
+	crs = st_crs(x)
+	if (is.na(crs))
+		NA
+	else
+		length(grep("+proj=longlat", crs$proj4string)) > 0
 }
