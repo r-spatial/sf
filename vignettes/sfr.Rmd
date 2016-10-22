@@ -326,54 +326,63 @@ str(x)
 str(x)
 st_drop_zm(x)
 ```
-which illustrates that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from `sfg` (simple feature geometry), but also have a type (e.g. `POINT`), and a dimension (e.g. `XYM`) class name. A figure illustrates the seven most common types:
+This means that we can represent 2-, 3- or 4-dimensional
+coordinates. All geometry objects inherit from `sfg` (simple feature
+geometry), but also have a type (e.g. `POINT`), and a dimension
+(e.g. `XYM`) class name. A figure illustrates the seven most
+common types:
 
 With the exception of the `POINT` which has a single point as
 geometry, the remaining six common single simple feature geometry
 types that correspond to single features (single records, or rows
-in a `data.frame`) are shown here:
+in a `data.frame`) are created like this
 
-```{r echo=FALSE}
-set.seed(1333)
-par(mar = c(0.1,0.1,1.3,0.1), mfrow = c(2, 3))
+```{r}
+p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
+(mp <- st_multipoint(p))
+s1 <- rbind(c(0,3),c(0,4),c(1,5),c(2,5))
+(ls <- st_linestring(s1))
+s2 <- rbind(c(0.2,3), c(0.2,4), c(1,4.8), c(2,4.8))
+s3 <- rbind(c(0,4.4), c(0.6,5))
+(mls <- st_multilinestring(list(s1,s2,s3)))
+p1 <- rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+p2 <- rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+pol <-st_polygon(list(p1,p2))
+p3 <- rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
+p4 <- rbind(c(3.3,0.3), c(3.8,0.3), c(3.8,0.8), c(3.3,0.8), c(3.3,0.3))[5:1,]
+p5 <- rbind(c(3,3), c(4,2), c(4,3), c(3,3))
+(mpol <- st_multipolygon(list(list(p1,p2), list(p3,p4), list(p5))))
+(gc <- st_geometrycollection(list(mp, mpol, ls)))
+```
 
-plot(st_multipoint(matrix(rnorm(12),,2)), col = 'red')
+The objects created are shown here:
+
+```{r, echo=FALSE}
+par(mar = c(0.1, 0.1, 1.3, 0.1), mfrow = c(2, 3))
+plot(mp, col = 'red')
 box()
 title("MULTIPOINT")
 
-s1 = rbind(c(0,2), c(2,2), c(3,3), c(4,2), c(3,1), c(3,2))
-plot(st_linestring(s1), col = 'red')
+plot(ls, col = 'red')
 box()
 title("LINESTRING")
 
-s2 = rbind(c(0,1), c(1,1), c(3,0), c(4,0), c(4,1))
-s3 = rbind(c(0,3), c(2,3))
-plot(st_multilinestring(list(s1,s2,s3)), col = 'red')
+plot(mls, col = 'red')
 box()
 title("MULTILINESTRING")
 
-x1 = rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
-x2 = rbind(c(1,1), c(1,2), c(2,2), c(1,1))
-plot(st_polygon(list(x1,x2)), border = 'red', col = 'grey', xlim = c(0,4))
+plot(pol, border = 'red', col = 'grey', xlim = c(0,4))
 box()
 title("POLYGON")
 
-x3 = rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
-x3a = rbind(c(3.3,0.3), c(3.8,0.3), c(3.8,0.8), c(3.3,0.8), c(3.3,0.3))[5:1,]
-x4 = rbind(c(3,3), c(4,2), c(4,3), c(3,3))
-plot(st_multipolygon(list(list(x1,x2), list(x3,x3a), list(x4))), border = 'red', col = 'grey')
+plot(mpol, border = 'red', col = 'grey')
 box()
 title("MULTIPOLYGON")
 
-gc1 = st_multipolygon(list(list(x1,x2), list(x3,x3a), list(x4)))
-gc2 = st_point(c(2,0))
-gc4 = st_multipoint(rbind(c(3,4), c(3.3, 4), c(3.1, 4.4), c(3.3, 4.2)))
-gc3 = st_linestring(rbind(c(0,3),c(0,4),c(1,5),c(2,5)))
-plot(st_geometrycollection(list(gc1,gc2,gc3,gc4)), border = 'grey', col = 'grey')
+plot(gc, border = 'grey', col = 'grey')
 box()
 title("GEOMETRYCOLLECTION")
 ```
-
 
 Geometries can also be empty, as in
 
@@ -384,25 +393,55 @@ length(x)
 
 ## Well-known text, well-known binary, precision {#wkb}
 
-Well-known text and well-known binary are two encodings for simple feature geometries. Well-known text, e.g. seen in
+### WKT and WKB
+
+Well-known text (WKT) and well-known binary (WKB) are two encodings
+for simple feature geometries. Well-known text, e.g. seen in
 ```{r}
 x <- st_linestring(matrix(10:1,5))
 st_as_text(x)
 ```
-(but without the leading `#` symbols), is human-readable. Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. For that, we use well-known binary (WKB) encoding
+(but without the leading `## [1]` and quotes), is
+human-readable. Coordinates are usually floating point numbers,
+and moving large amounts of information as text is slow and
+imprecise. For that, we use well-known binary (WKB) encoding
 
 ```{r}
 st_as_binary(x)
 ```
-which is fast (written in C++) and precise. GDAL, GEOS, spatial databases and GIS read and write WKB, making this a reusable, fast route for I/O of simple feature geometries in R.
+WKT and WKB can both be transformed back into R native objects by
 
-One of the attributes of a geometry list-column (`sfc`) is the `precision`: a double number that, when non-zero, causes some rounding during conversion to WKB, which might help certain geometrical operations succeed that would otherwise fail due to floating point representation. The model is that of GEOS, which copies from JTS, and works like this:
+```{r}
+st_as_sfc("LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)")[[1]]
+st_as_sfc(structure(list(st_as_binary(x)), class = "WKB"))[[1]]
+```
+
+GDAL, GEOS, spatial databases and GIS read and write WKB which
+is fast and precise. Conversion between R native objects and WKB
+is done by package sf in compiled (C++/Rcpp) code, making this a
+reusable and fast route for I/O of simple feature geometries in R.
+
+### Precision
+
+One of the attributes of a geometry list-column (`sfc`) is the
+`precision`: a double number that, when non-zero, causes some
+rounding during conversion to WKB, which might help certain
+geometrical operations succeed that would otherwise fail due to
+floating point representation. The model is that of GEOS, which
+copies from JTS, and works like this:
 
 * if precision is zero (default, unspecified), nothing is modified
 * negative values convert to float (4-byte real) precision
 * positive values convert to `round(x*precision)/precision`. 
 
-For the precion model, see also [here](http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html), where it is written that: "... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001." Note that all coordinates, so also `Z` or `M` values (if present) are affected. Choosing values for `precision` may require some experimenting.
+For the precion model, see also
+[here](http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html),
+where it is written that: "... to specify 3 decimal places of
+precision, use a scale factor of 1000. To specify -3 decimal places
+of precision (i.e. rounding to the nearest 1000), use a scale
+factor of 0.001." Note that all coordinates, so also `Z` or `M`
+values (if present) are affected. Choosing values for `precision`
+may require some experimenting.
 
 ## Reading and writing 
 
@@ -415,23 +454,33 @@ and writing takes place in the same fashion, using `st_write`:
 ```{r}
 st_write(nc, "nc.gpkg", "nc.gpkg", "GPKG")
 ```
-The `dsn` and `layer` arguments to `st_read` and `st_write` denote a data source name and a layer. 
-Their exact interpretation as well as the options they support vary per driver, the [GDAL driver 
-documentation](http://www.gdal.org/ogr_formats.html) is best consulted for this.  
-For instance, a PostGIS table in database `postgis` might be read by
+The `dsn` and `layer` arguments to `st_read` and `st_write` denote a
+data source name and a layer.  Their exact interpretation as well
+as the options they support vary per driver, the [GDAL driver
+documentation](http://www.gdal.org/ogr_formats.html) is best
+consulted for this.  For instance, a PostGIS table in database
+`postgis` might be read by
 ```{r eval=FALSE}
 meuse <- st_read("PG:dbname=postgis", "meuse")
 ```
-where the `PG:` string indicates this concerns the PostGIS driver, followed by database name, and
-possibly port and user credentials. 
+where the `PG:` string indicates this concerns the PostGIS driver,
+followed by database name, and possibly port and user credentials.
 
-`st_read` typically reads the coordinate reference system as `proj4string`, but not the EPSG (SRID).
-GDAL cannot retrieve SRID (EPSG code) from `proj4string` strings, and, when needed, it has to be set
-by the user. See also the section on [crs][crs].
+`st_read` typically reads the coordinate reference system as
+`proj4string`, but not the EPSG (SRID).  GDAL cannot retrieve SRID
+(EPSG code) from `proj4string` strings, and, when needed, it has
+to be set by the user. See also the section on [crs][crs].
 
-Two further functions, `st_read_db` and `st_write_db` attempt to read and write directly from spatial databases, using WKB. The advantage over `st_read` may be that instead of a complete table, the result of a (spatial) query may be fetched, limiting the amount of data that is read into R.
+Two further functions, `st_read_db` and `st_write_db` attempt to
+read and write directly from spatial databases, using WKB. The
+advantage over `st_read` may be that instead of a complete table,
+the result of a (spatial) query may be fetched, limiting the amount
+of data that is read into R.
 
-`st_drivers()` returns a `data.frame` listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read. Reading of some common data formats is illustrated below:
+`st_drivers()` returns a `data.frame` listing available drivers,
+and their metadata: names, whether a driver can write, and whether
+it is a raster and/or vector driver. All drivers can read. Reading
+of some common data formats is illustrated below:
 
 ```{r, eval=FALSE}
 # Download .shp data
@@ -440,51 +489,65 @@ download.file(u_shp, "biketrails.zip")
 unzip("biketrails.zip")
 u_kmz <- "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
 download.file(u_kmz, "BikePaths.kmz")
-
 # Read file formats
 biketrails_shp <- st_read(dsn = ".", layer = "biketrails")
 ogr_layers <- rgdal::ogrListLayers(dsn = "BikePaths.kmz")
 biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-
 # Tidy up
 files_to_remove <- list.files(pattern = "[B-b]ike")
 file.remove(files_to_remove)
 ```
-Benchmarks demonstrate that `st_read()` is much faster than `rgdal::readOGR()`.
+Benchmarks show that `st_read()` is often faster than `rgdal::readOGR()`:
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, echo=TRUE, eval=FALSE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
 shp_read_sf <- function() st_read(dsn = ".", layer = "biketrails")
 kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 kmz_read_sf <- function() st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-microbenchmark::microbenchmark(sp_shp_read(), sf_shp_read(),
+microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
                                kmz_read_sp(), kmz_read_sf(), times = 1)
 ```
 
-
+This might give a table like this:
+```
+Unit: milliseconds
+          expr      mean
+ shp_read_sp() 4645.4947 
+ shp_read_sf()  501.0872
+ kmz_read_sp() 6256.2638
+ kmz_read_sf() 2169.9361
+```
 
 ## Coordinate reference systems and transformations {#crs}
 
-Coordinate reference systems (CRS) are like measurement units for coordinates: they specify which location on Earth a 
-particular coordinate pair refers to. We saw above that `sfc` objects (geometry list-columns) have two attributes
-to store a CRS, `epsg` and `proj4string`.  This implies that all geometries in a geometry list-column must have the 
-same CRS. Both may be `NA`, e.g. in case the CRS is unknown, or when we work with local
-coordinate systems (e.g. inside a building, a body, or an abstract space). 
+Coordinate reference systems (CRS) are like measurement units for
+coordinates: they specify which location on Earth a particular
+coordinate pair refers to. We saw above that `sfc` objects
+(geometry list-columns) have two attributes to store a CRS, `epsg`
+and `proj4string`.  This implies that all geometries in a geometry
+list-column must have the same CRS. Both may be `NA`, e.g. in case
+the CRS is unknown, or when we work with local coordinate systems
+(e.g. inside a building, a body, or an abstract space).
 
-`proj4string` is a generic, string-based description of a CRS, understood by the [PROJ.4](http://proj4.org/) 
-library. It defines projection types and (often) defines parameter values for particular projections, and hence can 
-cover an infinite amount of different projections.
-This library (also used by GDAL) provides functions to convert or transform between different CRS.
-`epsg` is the integer ID for a particular, known CRS that can be resolved into a `proj4string`. There is no
-(known, simple and general) way to resolve `proj4string` values into `epsg` IDs.
+`proj4string` is a generic, string-based description of a CRS,
+understood by the [PROJ.4](http://proj4.org/) library. It defines
+projection types and (often) defines parameter values for particular
+projections, and hence can cover an infinite amount of different
+projections.  This library (also used by GDAL) provides functions
+to convert or transform between different CRS.  `epsg` is the
+integer ID for a particular, known CRS that can be resolved into a
+`proj4string`. There is no (known, simple and general) way to resolve
+`proj4string` values into `epsg` IDs.
 
-The importance of having `epsg` values stored with data besides `proj4string` values 
-is that the `epsg` refers to particular, well-known CRS,
-whose parameters may change (improve) over time; fixing only the `proj4string` may remove the possibility to
-benefit from such improvements, and limit the provenance of datasets.
+The importance of having `epsg` values stored with data besides
+`proj4string` values is that the `epsg` refers to particular,
+well-known CRS, whose parameters may change (improve) over time;
+fixing only the `proj4string` may remove the possibility to benefit
+from such improvements, and limit the provenance of datasets.
 
-Coordinate reference system transformations can be carried out using `st_transform`, e.g. converting 
-longitudes/latitudes in NAD27 to web mercator (EPSG:3875) can be done by
+Coordinate reference system transformations can be carried out using
+`st_transform`, e.g. converting longitudes/latitudes in NAD27 to
+web mercator (EPSG:3875) can be done by
 
 ```{r}
 nc.web_mercator <- st_transform(nc, 3857)
@@ -498,10 +561,16 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 showMethods("coerce", classes = "sf")
 methods(st_as_sf)
 methods(st_as_sfc)
+# anticipate that sp::CRS will expand proj4strings:
+p4s <- "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
+st_crs(nc) <- p4s
+# anticipate geometry column name changes:
+names(nc)[15] = "geometry"
+attr(nc, "sf_column") = "geometry"
 nc.sp <- as(nc, "Spatial")
 class(nc.sp)
-nc2 <- st_as_sf(nc.sp) # FIXME: converts back to POLYGON
-identical(nc, nc2) # roundtrip -- FIXME: should do better
+nc2 <- st_as_sf(nc.sp)
+all.equal(nc, nc2)
 ```
 
 As the `Spatial*` objects only support `MULTILINESTRING` and `MULTIPOLYGON`, `LINESTRING` and `POLYGON` geometries
