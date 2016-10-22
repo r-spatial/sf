@@ -144,6 +144,19 @@ In data.row.names(row.names, rowsi, i) :
                      
                      
 > 
+> # roundtrip nc: sf -> sp -> sf
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+features:       100
+fields:         14
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+> p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
+> suppressWarnings(st_crs(nc) <- p4s)
+> names(nc)[15] = "geometry"
+> attr(nc, "sf_column") = "geometry"
+> all.equal(nc, st_as_sf(as(nc, "Spatial")))
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  3.248   0.316   3.252 
+  3.084   0.264   3.067 

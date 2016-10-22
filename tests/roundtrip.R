@@ -33,3 +33,11 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+
+# roundtrip nc: sf -> sp -> sf
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
+suppressWarnings(st_crs(nc) <- p4s)
+names(nc)[15] = "geometry"
+attr(nc, "sf_column") = "geometry"
+all.equal(nc, st_as_sf(as(nc, "Spatial")))

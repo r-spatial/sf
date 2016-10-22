@@ -10,6 +10,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a [formal standard](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them. 
 
 The standard is widely implemented in spatial
@@ -64,20 +68,6 @@ its coverage beyond 2D and beyond linear interpolation. Here, we
 take simple features as the data structures and operations described
 in the [standard](http://www.opengeospatial.org/standards/sfa).
 
-## What makes a feature simple?
-
-As any standard does, it is necesarily to put constraints on what
-features are. The constraints refer to
-
-* geometry dimensions
-* simple feature geometry types
-* excluded (non-valid) geometries
-* the presence of a coordinate reference system
-
-There are many further constraints; for instance, section 6.1.11.1
-of the standard (part I) describes the rules that define _valid_
-polygons, we will not repeat those here.
-
 ## Dimensions
 
 All geometries are composed of points. Points are coordinates in a
@@ -86,9 +76,9 @@ same dimensionality. In addition to X and Y coordinates, there are
 two optional additional dimensions:
 
 * a Z coordinate, denoting altitude
-* an M coordinate, denoting some _measure_ that is associated with the point, rather than with the feature as a whole (in which case it would be a feature attribute); examples could be time of measurement, or measurement error of the coordinates
+* an M coordinate (rarely used), denoting some _measure_ that is associated with the point, rather than with the feature as a whole (in which case it would be a feature attribute); examples could be time of measurement, or measurement error of the coordinates
 
-The possible cases are:
+The four possible cases then are:
 
 1. two-dimensional points refer to x and y, easting and northing, or longitude and latitude, we refer to them as XY
 2. three-dimensional points as XYZ
@@ -96,6 +86,8 @@ The possible cases are:
 4. four-dimensional points as XYZM (the third axis is Z, fourth M)
 
 ## Simple feature geometry types
+
+The following seven simple feature types are the most common, and are for instance the only ones used for [GeoJSON](https://tools.ietf.org/html/rfc7946):
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
@@ -106,6 +98,13 @@ The possible cases are:
 | `MULTILINESTRING` | set of linestrings |
 | `MULTIPOLYGON` | set of polygons |
 | `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION |
+
+Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes, NULL values or empty lists.
+
+The remaining geometries 10 are more rare, but are increasingly find implementations:
+
+| type | description                                        |
+| ---- | -------------------------------------------------- |
 | `CIRCULARSTRING` |  |
 | `COMPOUNDCURVE` |  |
 | `CURVEPOLYGON` |  |
@@ -117,33 +116,8 @@ The possible cases are:
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-(`CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the standard.)
-The first 7 geometry types are most common; the remaining 10 are found rarely, but are part of the standard and software support is increasing for them. Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes.
+Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the standard.
 
-## Non-valid geometries
-
-Invalid geometries are for instance self-intersecting lines (left) or polygons with slivers (middle) or self-intersections (right).
-
-```{r}
-library(sf)
-x1 = st_linestring(cbind(c(0,1,0,1),c(0,1,1,0)))
-x2 = st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))
-x3 = st_polygon(list(cbind(c(0,1,0,1,0),c(0,1,1,0,0))))
-st_is_simple(st_sfc(x1))
-st_is_valid(st_sfc(x2,x3))
-```
-
-```{r echo=FALSE,fig=TRUE,fig.height=3}
-opar = par(mfrow = c(1,3))
-par(mar=c(1,1,4,1))
-plot(st_sfc(x1), type = 'b', axes=F, xlab=NULL,ylab=NULL);
-title(st_as_text(x1))
-plot(st_sfc(st_linestring((cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))), type='b', axes = FALSE)
-title(st_as_text(x2))
-plot(st_sfc(st_linestring(cbind(c(0,1,0,1,0),c(0,1,1,0,0)))), type = 'b', axes=F, xlab=NULL,ylab=NULL)
-title(st_as_text(x3))
-par(opar)
-```
 
 ## Coordinate reference system
 
@@ -155,14 +129,21 @@ system, e.g. a [measurement unit](http://cran.r-project.org/package=units).
 
 # How simple features in R are organized
 
-All functions and methods in `sf` are prefixed by `st_`, so that they are easily found by command-line completion.  
-Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector).
-Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.
+Package `sf` represents simple features as native R objects.
+All functions and methods in `sf` are prefixed by `st_`, so that
+they are easily found by command-line completion.  Simple features
+are implemented as R native data, using simple data structures (S3
+classes, lists, matrix, vector).  Typical use involves reading,
+manipulating and writing of sets of features, with attributes
+and geometries.
 
-As attributes are typically stored in `data.frame` objects (or the very similar `tbl_df`), we will also store
-feature geometries in in a `data.frame` column. Since geometries are not single-valued, they are put a list-column,
-a list of length equal to the number of records in the `data.frame`, with each list element the simple feature geometry
-of that feature.  The three classes used to represent simple features are:
+As attributes are typically stored in `data.frame` objects (or the
+very similar `tbl_df`), we will also store feature geometries in
+in a `data.frame` column. Since geometries are not single-valued,
+they are put a list-column, a list of length equal to the number
+of records in the `data.frame`, with each list element the simple
+feature geometry of that feature.  The three classes used to
+represent simple features are:
 
 * `sf`, the table (`data.frame`) with feature attributes and feature geometries, which contains
 * `sfc`, the list-column with the geometries for each feature (record), which is composed of
@@ -172,13 +153,16 @@ We will now discuss each of these three classes.
 
 ## sf: objects with simple features
 
-As we usually do not work with geometries of single simple features, but with
-datasets consisting of sets of features with attributes, the two are put together in `sf` (simple feature) objects.
-The following command reads the `nc` dataset from a file that is contained in the `sf` package:
+As we usually do not work with geometries of single simple features,
+but with datasets consisting of sets of features with attributes, the
+two are put together in `sf` (simple feature) objects.  The following
+command reads the `nc` dataset from a file that is contained in the
+`sf` package:
 
 ```{r}
-filename = system.file("gpkg/nc.gpkg", package="sf")
-nc = st_read(filename, "nc.gpkg", crs = 4267)
+library(sf)
+filename <- system.file("gpkg/nc.gpkg", package="sf")
+nc <- st_read(filename, "nc.gpkg", crs = 4267)
 ```
 
 The short report printed gives the file name, the driver (GPKG:
@@ -199,18 +183,19 @@ attr(nc, "sf_column")
 If we print the first three features, we see their attribute values
 and an abridged version of the geometry
 
-```{r,echo=TRUE,eval=FALSE}
+```{r, echo=TRUE, eval=FALSE}
 print(nc[9:15], n = 3)
 ```
 which would give the following output:
 
 ![](sf_xfig.png)
 
-In the output we see 
+In the output we see:
 
 * in green a simple feature: a single record, or `data.frame` row, consisting of attributes and geometry
 * in blue a single simple feature geometry (an object of class `sfg`)
 * in red a simple feature list-column (an object of class `sfc`, which is a column in the `data.frame`)
+* that although geometries are native R objects, they are printed as [well-known text](#wkb)
 
 Methods for `sf` objects are
 ```{r}
@@ -219,7 +204,7 @@ methods(class = "sf")
 
 It is also possible to create `data.frame` objects with geometry list-columns that are not of class `sf`, e.g. by
 ```{r}
-nc.no_sf = as.data.frame(nc)
+nc.no_sf <- as.data.frame(nc)
 class(nc.no_sf)
 ```
 
@@ -229,14 +214,14 @@ However, such objects:
 * no longer have a plot method, and
 * lack all of the other dedicated methods listed above for class `sf`
 
-## sfc: simple feature geometry column
+## sfc: simple feature geometry list-column
 
-The column in the `sf` data.frame that contains the geometries is of class `sfc`.
-We can retrieve the geometry list column in this case by `nc$geom` or `nc[[15]]`, but the
+The column in the `sf` data.frame that contains the geometries is a list, of class `sfc`.
+We can retrieve the geometry list-column in this case by `nc$geom` or `nc[[15]]`, but the
 more general way uses `st_geometry`:
 
 ```{r}
-(nc.geom = st_geometry(nc))
+(nc.geom <- st_geometry(nc))
 ```
 
 Geometries are printed in abbreviated form, but we can
@@ -259,7 +244,7 @@ plot(nc[1,], col = 'red', add = TRUE)
 but some of the polygons in this dataset have multiple exterior rings; they can be identified by
 ```{r fig.height=3.5}
 par(mar = rep(0,4))
-(w = which(sapply(nc.geom, length) > 1))
+(w <- which(sapply(nc.geom, length) > 1))
 plot(nc[w,], col = 2:7)
 ```
 
@@ -301,7 +286,7 @@ There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`.
 `GEOMETRYCOLLECTION` indicates that each of the geometries may contain 
 a mix of geometry types, as in
 ```{r}
-(mix = st_sfc(st_geometrycollection(list(st_point(1:2))), 
+(mix <- st_sfc(st_geometrycollection(list(st_point(1:2))), 
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))
 class(mix)
 ```
@@ -310,7 +295,7 @@ Still, the geometries are here of a single type.
 The second `GEOMETRY`, indicates that the geometries in the geometry 
 list-column are of varying type:
 ```{r}
-(mix = st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))
+(mix <- st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))
 class(mix)
 ```
 
@@ -318,30 +303,82 @@ These two are fundamentally different: `GEOMETRY` is a superclass without instan
 
 ## sfg: simple feature geometry
 
-Simple features are implemented as R native data, using the following rules
+Simple feature geometry (`sfg`) objects carry the geometry for a
+single feature, e.g. a point, linestring or polygon.
+
+Simple feature geometries are implemented as R native data, using the following rules
 
 1. a single POINT is a numeric vector
-2. a set of points, e.g. in a LINESTRING or ring of a POLYGON is a `matrix`, rows denoting points
+2. a set of points, e.g. in a LINESTRING or ring of a POLYGON is a `matrix`, each row containing a point
 3. any other set is a `list`
 
 Creator functions are rarely used in practice, since we typically
 bulk read and write spatial data. They are useful for illustration:
 
 ```{r}
-(x = st_point(c(1,2)))
+(x <- st_point(c(1,2)))
 str(x)
-(x = st_point(c(1,2,3)))
+(x <- st_point(c(1,2,3)))
 str(x)
-(x = st_point(c(1,2,3), "XYM"))
+(x <- st_point(c(1,2,3), "XYM"))
 str(x)
-(x = st_point(c(1,2,3,4)))
+(x <- st_point(c(1,2,3,4)))
 str(x)
 st_drop_zm(x)
 ```
-which illustrates that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from `sfg` (simple feature geometry), but also have a type (e.g. `POINT`), and a dimension (e.g. `XYM`) class name. Geometries can also be empty, as in
+which illustrates that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from `sfg` (simple feature geometry), but also have a type (e.g. `POINT`), and a dimension (e.g. `XYM`) class name. A figure illustrates the seven most common types:
+
+With the exception of the `POINT` which has a single point as
+geometry, the remaining six common single simple feature geometry
+types that correspond to single features (single records, or rows
+in a `data.frame`) are shown here:
+
+```{r echo=FALSE}
+set.seed(1333)
+par(mar = c(0.1,0.1,1.3,0.1), mfrow = c(2, 3))
+
+plot(st_multipoint(matrix(rnorm(12),,2)), col = 'red')
+box()
+title("MULTIPOINT")
+
+s1 = rbind(c(0,2), c(2,2), c(3,3), c(4,2), c(3,1), c(3,2))
+plot(st_linestring(s1), col = 'red')
+box()
+title("LINESTRING")
+
+s2 = rbind(c(0,1), c(1,1), c(3,0), c(4,0), c(4,1))
+s3 = rbind(c(0,3), c(2,3))
+plot(st_multilinestring(list(s1,s2,s3)), col = 'red')
+box()
+title("MULTILINESTRING")
+
+x1 = rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0))
+x2 = rbind(c(1,1), c(1,2), c(2,2), c(1,1))
+plot(st_polygon(list(x1,x2)), border = 'red', col = 'grey', xlim = c(0,4))
+box()
+title("POLYGON")
+
+x3 = rbind(c(3,0), c(4,0), c(4,1), c(3,1), c(3,0))
+x3a = rbind(c(3.3,0.3), c(3.8,0.3), c(3.8,0.8), c(3.3,0.8), c(3.3,0.3))[5:1,]
+x4 = rbind(c(3,3), c(4,2), c(4,3), c(3,3))
+plot(st_multipolygon(list(list(x1,x2), list(x3,x3a), list(x4))), border = 'red', col = 'grey')
+box()
+title("MULTIPOLYGON")
+
+gc1 = st_multipolygon(list(list(x1,x2), list(x3,x3a), list(x4)))
+gc2 = st_point(c(2,0))
+gc4 = st_multipoint(rbind(c(3,4), c(3.3, 4), c(3.1, 4.4), c(3.3, 4.2)))
+gc3 = st_linestring(rbind(c(0,3),c(0,4),c(1,5),c(2,5)))
+plot(st_geometrycollection(list(gc1,gc2,gc3,gc4)), border = 'grey', col = 'grey')
+box()
+title("GEOMETRYCOLLECTION")
+```
+
+
+Geometries can also be empty, as in
 
 ```{r}
-(x = st_geometrycollection())
+(x <- st_geometrycollection())
 length(x)
 ```
 
@@ -349,7 +386,7 @@ length(x)
 
 Well-known text and well-known binary are two encodings for simple feature geometries. Well-known text, e.g. seen in
 ```{r}
-x = st_linestring(matrix(10:1,5))
+x <- st_linestring(matrix(10:1,5))
 st_as_text(x)
 ```
 (but without the leading `#` symbols), is human-readable. Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. For that, we use well-known binary (WKB) encoding
@@ -371,8 +408,8 @@ For the precion model, see also [here](http://tsusiatsoftware.net/jts/javadoc/co
 
 As we've seen above, reading spatial data from an external file can be done by
 ```{r}
-filename = system.file("gpkg/nc.gpkg", package="sf")
-nc = st_read(filename, "nc.gpkg", crs = 4267)
+filename <- system.file("gpkg/nc.gpkg", package="sf")
+nc <- st_read(filename, "nc.gpkg", crs = 4267)
 ```
 and writing takes place in the same fashion, using `st_write`:
 ```{r}
@@ -383,7 +420,7 @@ Their exact interpretation as well as the options they support vary per driver, 
 documentation](http://www.gdal.org/ogr_formats.html) is best consulted for this.  
 For instance, a PostGIS table in database `postgis` might be read by
 ```{r eval=FALSE}
-meuse = st_read("PG:dbname=postgis", "meuse")
+meuse <- st_read("PG:dbname=postgis", "meuse")
 ```
 where the `PG:` string indicates this concerns the PostGIS driver, followed by database name, and
 possibly port and user credentials. 
@@ -398,28 +435,28 @@ Two further functions, `st_read_db` and `st_write_db` attempt to read and write 
 
 ```{r, eval=FALSE}
 # Download .shp data
-u_shp = "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
+u_shp <- "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
 download.file(u_shp, "biketrails.zip")
 unzip("biketrails.zip")
-u_kmz = "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
+u_kmz <- "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
 download.file(u_kmz, "BikePaths.kmz")
 
 # Read file formats
-biketrails_shp = st_read(dsn = ".", layer = "biketrails")
-ogr_layers = rgdal::ogrListLayers(dsn = "BikePaths.kmz")
-biketrails_kmz = st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+biketrails_shp <- st_read(dsn = ".", layer = "biketrails")
+ogr_layers <- rgdal::ogrListLayers(dsn = "BikePaths.kmz")
+biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 
 # Tidy up
-files_to_remove = list.files(pattern = "[B-b]ike")
+files_to_remove <- list.files(pattern = "[B-b]ike")
 file.remove(files_to_remove)
 ```
 Benchmarks demonstrate that `st_read()` is much faster than `rgdal::readOGR()`.
 
 ```{r, echo=FALSE, eval=FALSE}
-shp_read_sp = function() rgdal::readOGR(dsn = ".", layer = "biketrails")
-shp_read_sf = function() st_read(dsn = ".", layer = "biketrails")
-kmz_read_sp = function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-kmz_read_sf = function() st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
+shp_read_sf <- function() st_read(dsn = ".", layer = "biketrails")
+kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+kmz_read_sf <- function() st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 microbenchmark::microbenchmark(sp_shp_read(), sf_shp_read(),
                                kmz_read_sp(), kmz_read_sf(), times = 1)
 ```
@@ -450,7 +487,7 @@ Coordinate reference system transformations can be carried out using `st_transfo
 longitudes/latitudes in NAD27 to web mercator (EPSG:3875) can be done by
 
 ```{r}
-nc.web_mercator = st_transform(nc, 3857)
+nc.web_mercator <- st_transform(nc, 3857)
 st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 ```
 
@@ -461,9 +498,9 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 showMethods("coerce", classes = "sf")
 methods(st_as_sf)
 methods(st_as_sfc)
-nc.sp = as(nc, "Spatial")
+nc.sp <- as(nc, "Spatial")
 class(nc.sp)
-nc2 = st_as_sf(nc.sp) # FIXME: converts back to POLYGON
+nc2 <- st_as_sf(nc.sp) # FIXME: converts back to POLYGON
 identical(nc, nc2) # roundtrip -- FIXME: should do better
 ```
 
@@ -508,8 +545,8 @@ st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 `st_segmentize`, and `st_merge` return new geometries
 
 ```{r fig.height=3}
-sel = c(1,5,14)
-buf = st_buffer(nc.web_mercator[sel,], 30000)
+sel <- c(1,5,14)
+buf <- st_buffer(nc.web_mercator[sel,], 30000)
 plot(buf, border = 'red')
 plot(nc.web_mercator[sel,], add = TRUE)
 plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
@@ -519,24 +556,49 @@ plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
 return new geometries that are a function of pairs of geometries.
 
 ```{r fig.height=3}
-# u = st_union(nc[1,], nc)
+# u <- st_union(nc[1,], nc)
 par(mar = rep(0,4))
-u = st_merge(nc, union = TRUE)
+u <- st_merge(nc, union = TRUE)
 plot(u)
 ```
 
 ```{r fig.height=3, fig.width=7}
-opar = par(mfrow = c(1, 2))
-a = st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
-b = st_polygon(list(cbind(c(0,1,2,3,4,5,6,7,7,0),c(1,0,.5,0,0,0.5,-0.5,-0.5,1,1))))
+opar <- par(mfrow = c(1, 2))
+a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
+b <- st_polygon(list(cbind(c(0,1,2,3,4,5,6,7,7,0),c(1,0,.5,0,0,0.5,-0.5,-0.5,1,1))))
 plot(a, ylim = c(-1,1))
 title("intersecting two polygons:")
 plot(b, add = TRUE, border = 'red')
-(i = st_intersection(a,b)[[1]])
+(i <- st_intersection(a,b)[[1]])
 plot(a, ylim = c(-1,1))
 title("GEOMETRYCOLLECTION")
 plot(b, add = TRUE, border = 'red')
 plot(i, add = TRUE, col = 'green', lwd = 2)
+par(opar)
+```
+
+## Non-valid geometries
+
+Invalid geometries are for instance self-intersecting lines (left) or polygons with slivers (middle) or self-intersections (right).
+
+```{r}
+library(sf)
+x1 <- st_linestring(cbind(c(0,1,0,1),c(0,1,1,0)))
+x2 <- st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))
+x3 <- st_polygon(list(cbind(c(0,1,0,1,0),c(0,1,1,0,0))))
+st_is_simple(st_sfc(x1))
+st_is_valid(st_sfc(x2,x3))
+```
+
+```{r echo=FALSE,fig=TRUE,fig.height=3}
+opar <- par(mfrow = c(1,3))
+par(mar=c(1,1,4,1))
+plot(st_sfc(x1), type = 'b', axes=F, xlab=NULL,ylab=NULL);
+title(st_as_text(x1))
+plot(st_sfc(st_linestring((cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))), type='b', axes = FALSE)
+title(st_as_text(x2))
+plot(st_sfc(st_linestring(cbind(c(0,1,0,1,0),c(0,1,1,0,0)))), type = 'b', axes=F, xlab=NULL,ylab=NULL)
+title(st_as_text(x3))
 par(opar)
 ```
 
@@ -551,14 +613,14 @@ Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensiv
 Simple feature objects of class `sf` have an attribute that points out how attributes relate to their geometry,
 which can be defined at creation time:
 ```{r}
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
+nc <- st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
     relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
         CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
         CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-        BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"))
+        BIR79 = "lattice", SID79 = "lattice", NWBIR79 = "lattice"))
 attr(nc, "relation_to_geometry")
 data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
+meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
 attr(meuse_sf, "relation_to_geometry")
 ```
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one

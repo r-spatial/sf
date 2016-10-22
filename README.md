@@ -27,11 +27,11 @@ See also:
 * the original R Consortium ISC [proposal](PROPOSAL.md),
 * UseR! 2016 [slides presentations](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf),
 * Blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html).
-* The package [vignette](http://edzer.github.io/sfr/)
+* The first [package vignette](https://edzer.github.io/sfr/articles/sfr.html)
 
 ### What it does
 
-The sf package
+The sf package:
 
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
 * uses S3 classes: simple features are `data.frame` objects (or similar) with a geometry list column
@@ -45,5 +45,5 @@ The sf package
 This project is being realized with financial [support](https://www.r-consortium.org/projects) from the
 
 <a href="https://www.r-consortium.org/projects/awarded-projects">
-<img src="https://www.r-consortium.org/wp-content/uploads/2016/09/RConsortium_Horizontal_Pantone.png" width="480">
+<img src="https://www.r-consortium.org/wp-content/uploads/2016/09/RConsortium_Horizontal_Pantone.png" width="400">
 </a>

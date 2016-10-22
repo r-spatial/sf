@@ -124,7 +124,7 @@ Polygons2MULTIPOLYGON = function(PolygonsLst, cmt) {
 
 Polygons2POLYGON = function(PolygonsLst) {
 	# here we have one outer ring, followed by (0+) holes inside this ring
-	lapply(PolygonsLst, function(x) x@coords[rev(1:nrow(x@coords)),])
+	lapply(PolygonsLst, function(x) x@coords)
 }
 
 setAs("sf", "Spatial", function(from) {
@@ -181,10 +181,10 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 	l = if (class(from)[1] == "sfc_MULTIPOLYGON")
 		lapply(from, function(x)  # for each sfc item, return a Polygons
 				sp::Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
-					lapply(y, function(z) sp::Polygon(z[rev(1:nrow(z)),]))), 
+					lapply(seq_along(y), function(i) sp::Polygon(y[[i]], i > 1))), 
 						recursive = FALSE), "ID"))
 	else lapply(from, function(x) 
-		sp::Polygons(lapply(x, function(y) sp::Polygon(y[rev(1:nrow(y)),])), "ID"))
+		sp::Polygons(lapply(seq_along(x), function(i) sp::Polygon(x[[i]], i > 1)), "ID"))
 	for (i in 1:length(from)) {
 		l[[i]]@ID = IDs[i]
 		if (class(from)[1] == "sfc_MULTIPOLYGON")
