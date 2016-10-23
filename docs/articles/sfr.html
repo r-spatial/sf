@@ -455,7 +455,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_is_valid</a></span>(nc[<span class="dv">1</span>:<span class="dv">2</span>,])
 ## [1] TRUE TRUE</code></pre></div>
-<p><code>st_distance</code> returns a dense numeric matrix with distances between geometries <code>st_relate</code> returns a character matrix with the DE9-IM values for pairs of geometries</p>
+<p><code>st_distance</code> returns a dense numeric matrix with distances between geometries <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_distance</a></span>(nc[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">22</span>),], nc[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">33</span>,<span class="dv">55</span>,<span class="dv">56</span>),])
 ##           [,1]     [,2]      [,3]     [,4]
 ## [1,] 0.0000000 3.447803 1.3176060 5.264924
@@ -468,7 +468,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [3,] "FF2FF1212" "FF2F11212" "2FFF1FFF2" "FF2FF1212"
 ## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"
 ## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</code></pre></div>
-<p><code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix</p>
+<p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
 ## [[1]]
 ## [1] 1 2
@@ -491,19 +491,20 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [3,] FALSE  TRUE  TRUE FALSE
 ## [4,] FALSE FALSE FALSE  TRUE
 ## [5,] FALSE FALSE FALSE FALSE</code></pre></div>
-<p><code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_merge</code> return new geometries</p>
+<p>The commands <code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_merge</code> return new geometries, e.g.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sel &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">14</span>)
 buf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_buffer</a></span>(nc.web_mercator[sel,], <span class="dv">30000</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(buf, <span class="dt">border =</span> <span class="st">'red'</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(nc.web_mercator[sel,], <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos.html">st_buffer</a></span>(nc.web_mercator[sel,], -<span class="dv">5000</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'blue'</span>)</code></pre></div>
 <p><img src="sfr_files/figure-html/unnamed-chunk-35-1.png" width="672"></p>
-<p><code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries.</p>
+<p>Commands <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># u &lt;- st_union(nc[1,], nc)</span>
 <span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
 u &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_merge</a></span>(nc, <span class="dt">union =</span> <span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(u)</code></pre></div>
 <p><img src="sfr_files/figure-html/unnamed-chunk-36-1.png" width="672"></p>
+<p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,-<span class="dv">1</span>,-<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))))
 b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,.<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.5</span>,-<span class="fl">0.5</span>,-<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="dv">1</span>))))

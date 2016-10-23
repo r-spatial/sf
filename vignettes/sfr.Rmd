@@ -589,29 +589,31 @@ a geometry is valid or simple.
 st_is_valid(nc[1:2,])
 ```
 
-`st_distance` returns a dense numeric matrix with distances between
-geometries `st_relate` returns a character matrix with the DE9-IM
-values for pairs of geometries
+`st_distance` returns a dense numeric matrix with distances
+between geometries `st_relate` returns a character matrix with the
+[DE9-IM](https://en.wikipedia.org/wiki/DE-9IM#Illustration) values
+for each pair of geometries:
 
 ```{r}
 st_distance(nc[c(1,4,22),], nc[c(1, 33,55,56),])
 st_relate(nc[1:5,], nc[1:4,])
 ```
 
-`st_intersects`, `st_disjoint`, `st_touches`, `st_crosses`,
-`st_within`, `st_contains`, `st_overlaps`, `st_equals`, `st_covers`,
-`st_covered_by`, `st_equals_exact` and `st_is_within_distance`
-return a sparse matrix with matching (TRUE) indexes, or a full
-logical matrix
+The commands `st_intersects`, `st_disjoint`, `st_touches`,
+`st_crosses`, `st_within`, `st_contains`, `st_overlaps`,
+`st_equals`, `st_covers`, `st_covered_by`, `st_equals_exact` and
+`st_is_within_distance` return a sparse matrix with matching (TRUE)
+indexes, or a full logical matrix:
 
 ```{r}
 st_intersects(nc[1:5,], nc[1:4,])
 st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 ```
-    
-`st_buffer`, `st_boundary`, `st_convexhull`, `st_union_cascaded`,
-`st_simplify`, `st_triangulate`, `st_polygonize`, `st_centroid`,
-`st_segmentize`, and `st_merge` return new geometries
+
+The commands `st_buffer`, `st_boundary`, `st_convexhull`,
+`st_union_cascaded`, `st_simplify`, `st_triangulate`,
+`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_merge`
+return new geometries, e.g.:
 
 ```{r fig.height=3}
 sel <- c(1,5,14)
@@ -621,8 +623,9 @@ plot(nc.web_mercator[sel,], add = TRUE)
 plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
 ```
 
-`st_intersection`, `st_union`, `st_difference`, `st_sym_difference`
-return new geometries that are a function of pairs of geometries.
+Commands `st_intersection`, `st_union`, `st_difference`,
+`st_sym_difference` return new geometries that are a function of
+pairs of geometries:
 
 ```{r fig.height=3}
 # u <- st_union(nc[1,], nc)
@@ -631,6 +634,8 @@ u <- st_merge(nc, union = TRUE)
 plot(u)
 ```
 
+The following code shows how computing an intersection between two polygons
+may yield a `GEOMETRYCOLLECTION` with a point, line and polygon:
 ```{r fig.height=3, fig.width=7}
 opar <- par(mfrow = c(1, 2))
 a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
@@ -670,7 +675,6 @@ plot(st_sfc(st_linestring(cbind(c(0,1,0,1,0),c(0,1,1,0,0)))), type = 'b', axes=F
 title(st_as_text(x3))
 par(opar)
 ```
-
 
 # How attributes relate to geometries 
 
