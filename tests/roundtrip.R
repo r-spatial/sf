@@ -41,3 +41,7 @@ suppressWarnings(st_crs(nc) <- p4s)
 names(nc)[15] = "geometry"
 attr(nc, "sf_column") = "geometry"
 all.equal(nc, st_as_sf(as(nc, "Spatial")))
+
+sp = as(nc, "Spatial")
+comment(sp) = "FALSE"
+all.equal(nc, st_as_sf(sp))

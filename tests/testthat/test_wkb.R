@@ -13,7 +13,7 @@ test_that("well-known binary is read correctly", {
 
 test_that("Char -> Raw conversion in R and C++ gives identical results", {
   expect_identical(
-    sf:::hex_to_raw(      "0x01010000204071000000000000801A064100000000AC5C1441"),
+    sf:::hex_to_raw(           "0x01010000204071000000000000801A064100000000AC5C1441"),
 	sf:::CPL_hex_to_raw(skip0x("0x01010000204071000000000000801A064100000000AC5C1441"))[[1]]
   )
   expect_identical(

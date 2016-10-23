@@ -29,10 +29,12 @@ test_that("st_crs returns NA for sfg objects", {
 test_that("st_as_binary can read big endian", {
   gc = st_geometrycollection()
   r = st_as_binary(gc)
-  r[1] = if (r[1] == 1) 
+  r[1] = if (r[1] == 1) {
   	as.raw(0)
-  else
+  } else {
   	as.raw(1)
+  }
   r[2:5] = rev(r[2:5]) # swap bytes
   expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = T)[[1]])
+  expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = T, EWKB = TRUE)[[1]])
 })
