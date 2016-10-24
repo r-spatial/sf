@@ -19,14 +19,10 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   round_trip = function(cn, wkt) {
   	query = paste0("SELECT '", wkt, "'::geometry;")
 	returnstr = suppressWarnings(dbGetQuery(cn, query)$geometry)
-	# print(returnstr)
-  	n = nchar(returnstr)/2
-    wkb = lapply(returnstr, function(y) as.raw(as.numeric(paste0("0x", 
-  	  sapply(1:n, function(x) substr(y, (x-1)*2+1, x*2))))))
-  	class(wkb) = "WKB"
+  	wkb = structure(returnstr, class = "WKB")
     ret = st_as_sfc(wkb, EWKB = TRUE)
-	cat(returnstr, "\n")
-    cat(paste(wkt, "<-->", st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
+    cat(paste("IN:  ", wkt, "\n"))
+	cat(paste("OUT: ", st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
 	invisible(ret)
   }
   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
@@ -39,6 +35,21 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   round_trip(cn, "MULTIPOLYGON(((0 0,1 0,1 1,0 0)),((2 2,3 2,3 3,2 2)))")
   round_trip(cn, "MULTIPOLYGON(((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2)),((2 2,3 2,3 3,2 2)))")
   round_trip(cn, "MULTILINESTRING((0 0,1 0,1 1,0 0),(.2 .2,.8 .2, .8 .8, .2 .2),(2 2,3 2,3 3,2 2))")
+
+# other types; examples taken from the PostGIS manuals (ch 4):
+
+  round_trip(cn, "CIRCULARSTRING(0 0, 1 1, 1 0)")
+  round_trip(cn, "CIRCULARSTRING(0 0, 4 0, 4 4, 0 4, 0 0)")
+  round_trip(cn, "CURVEPOLYGON(CIRCULARSTRING(0 0, 4 0, 4 4, 0 4, 0 0),(1 1, 3 3, 3 1, 1 1))")
+  round_trip(cn, "COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 1 0),(1 0, 0 1))")
+  round_trip(cn, "CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1))")
+  round_trip(cn, "MULTICURVE((0 0, 5 5),CIRCULARSTRING(4 0, 4 4, 8 4))")
+  round_trip(cn, "MULTISURFACE(CURVEPOLYGON(CIRCULARSTRING(0 0, 4 0, 4 4, 0 4, 0 0),(1 1, 3 3, 3 1, 1 1)),((10 10, 14 12, 11 10, 10 10),(11 11, 11.5 11, 11 11.5, 11 11)))")
+
+  round_trip(cn, "MULTICURVE( (0 0, 5 5), CIRCULARSTRING(4 0, 4 4, 8 4) )")
+  round_trip(cn, "POLYHEDRALSURFACE( ((0 0 0, 0 0 1, 0 1 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)), ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)), ((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)), ((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)), ((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)) )")
+  round_trip(cn, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))")
+  round_trip(cn, "TIN( ((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)) )")
 
 
   #options(warn = -1)

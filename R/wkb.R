@@ -161,6 +161,7 @@ readData = function(rc, EWKB = FALSE) {
 		POLYHEDRALSURFACE = , 
 		TIN = lapply(readGC(rc, pt$dims, endian, EWKB), unclass),
 		GEOMETRYCOLLECTION = readGC(rc, pt$dims, endian, EWKB),
+		CURVEPOLYGON = readGC(rc, pt$dims, endian, EWKB),
 		stop(paste("type", pt$tp, "unsupported")))
 	class(ret) <- c(pt$zm, pt$tp, "sfg")
 	if (!is.na(srid))

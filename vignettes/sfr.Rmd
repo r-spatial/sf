@@ -23,14 +23,14 @@ libraries such as [GDAL](http://www.gdal.org/), and a subset of
 simple features forms the [GeoJSON](http://geojson.org/) standard.
 
 R has well-supported classes for storing spatial
-data ([sp](http://cran.r-project.org/package=sp))
+data ([sp](https://CRAN.R-project.org/package=sp))
 and interfacing to the above mentioned environments
-([rgdal](http://cran.r-project.org/package=rgdal),
-[rgeos](http://cran.r-project.org/package=rgeos)), but so far lacked a
+([rgdal](https://CRAN.R-project.org/package=rgdal),
+[rgeos](https://CRAN.R-project.org/package=rgeos)), but so far lacked a
 complete implementation of simple features, making conversions
 at times convoluted, inefficient or incomplete. The package
 [sf](http://github.com/edzer/sfr) tries to fill this gap, and aims
-at succeeding [sp](http://cran.r-project.org/package=sp) in the
+at succeeding [sp](https://CRAN.R-project.org/package=sp) in the
 long term.
 
 This vignette:
@@ -105,10 +105,10 @@ The remaining geometries 10 are more rare, but are increasingly find implementat
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
-| `CIRCULARSTRING` |  |
-| `COMPOUNDCURVE` |  |
-| `CURVEPOLYGON` |  |
-| `MULTICURVE` |  A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves |
+| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment required three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1. |
+| `COMPOUNDCURVE` | A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component. |
+| `CURVEPOLYGON` | Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) ) |
+| `MULTICURVE` |  A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.  |
 | `MULTISURFACE` | A MultiSurface is a 2-dimensional GeometryCollection whose elements are Surfaces, all using coordinates from the same coordinate reference system. |
 | `CURVE` | A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve specifying the form of the interpolation between Points |
 | `SURFACE` | A Surface is a 2-dimensional geometric object |
@@ -116,7 +116,7 @@ The remaining geometries 10 are more rare, but are increasingly find implementat
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the standard.
+Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard,but in the SQL-MM part 3 standard. The descriptions above were copied from the [postgis](http://postgis.net/docs/using_postgis_dbmanagement.html) docs.
 
 
 ## Coordinate reference system
@@ -125,7 +125,7 @@ Numbers of coordinates only have a meaning as places on the Earth when their coo
 reference system is known; this may be an ellipsoidal reference system such as WGS84, a
 flat, two-dimensional coordinate reference system such as a UTM zone or Web Mercator, or
 a three-dimensional reference system. Similarly, M-coordinates need an attribute reference
-system, e.g. a [measurement unit](http://cran.r-project.org/package=units).
+system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
 # How simple features in R are organized
 
@@ -680,7 +680,7 @@ par(opar)
 
 (this will eventually be the topic of a new vignette; now here to explain the last attribute of `sf` objects)
 
-The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their [units of measurement](https://cran.r-project.org/web/packages/units/vignettes/measurement_units_in_R.pdf)). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
+The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their [units of measurement](https://CRAN.R-project.org/web/packages/units/vignettes/measurement_units_in_R.pdf)). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
 Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties), meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.
 
 Simple feature objects of class `sf` have an attribute that points out how attributes relate to their geometry,

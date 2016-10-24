@@ -157,6 +157,11 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
 [1] TRUE
 > 
+> sp = as(nc, "Spatial")
+> comment(sp) = "FALSE"
+> all.equal(nc, st_as_sf(sp))
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  3.084   0.264   3.067 
+  3.156   0.312   3.156 

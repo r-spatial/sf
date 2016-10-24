@@ -49,6 +49,15 @@ st_as_text.sfg = function(x, ...) {
 	if (inherits(x, "MULTILINESTRING")) return(prnt.MULTILINESTRING(x, ...))
 	if (inherits(x, "MULTIPOLYGON")) return(prnt.MULTIPOLYGON(x, ...))
 	if (inherits(x, "GEOMETRYCOLLECTION")) return(prnt.GEOMETRYCOLLECTION(x, ...))
+	if (inherits(x, "CIRCULARSTRING")) return(prnt.MULTIPOINT(x, ...))
+	if (inherits(x, "COMPOUNDCURVE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
+	if (inherits(x, "CURVE")) return(prnt.MULTIPOINT(x, ...))
+	if (inherits(x, "CURVEPOLYGON")) return(prnt.GEOMETRYCOLLECTION(x, ...))
+	if (inherits(x, "MULTICURVE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
+	if (inherits(x, "MULTISURFACE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
+	if (inherits(x, "POLYHEDRALSURFACE")) return(prnt.MULTIPOLYGON(x, ...))
+	if (inherits(x, "TRIANGLE")) return(prnt.POLYGON(x, ...))
+	if (inherits(x, "TIN")) return(prnt.MULTIPOLYGON(x, ...))
 	stop(paste("no print method available for object of class", class(x)[1])) # nocov
 }
 

@@ -176,8 +176,10 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 
 	Rcpp::List output(1); // to make result type opaque
 	// do endian check, only support native endian WKB:
-	if ((int) (**pt) != (int) endian)
+	if ((int) (**pt) != (int) endian) {
+		// Rcpp::Rcout << "endian: " << (int) (**pt) << std::endl;
 		throw std::range_error("non native endian: use pureR = TRUE"); // life is too short
+	}
 	(*pt)++;
 	// read type:
 	uint32_t wkbType = *(uint32_t *) (*pt); // uint32_t requires -std=c++11
@@ -251,15 +253,23 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 			break;
 		case SF_MultiCurve:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfg"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfg"), true, &gcEmpty);
 			break;
 		case SF_MultiSurface:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfg"), false);
+				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfg"), true, &gcEmpty);
 			break;
 		case SF_Curve:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : ""); 
+			break;
+		case SF_CompoundCurve:
+			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "COMPOUNDCURVE", "sfg"), true, &gcEmpty); 
+			break;
+		case SF_CurvePolygon:
+			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "CURVEPOLYGON", "sfg"), true, &gcEmpty); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
