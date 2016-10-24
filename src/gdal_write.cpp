@@ -13,7 +13,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	for (int i = 0; i < obj.size(); i++) {
 		if (strcmp(cls[i], "character") == 0)
 			ret[i] = OFTString;
-    		// oField.SetWidth(32); // FIXME: should this be known here???
+			// oField.SetWidth(32); // FIXME: should this be known here???
 		else if (strcmp(cls[i], "integer") == 0)
 			ret[i] = OFTInteger;
 		else if (strcmp(cls[i], "numeric") == 0)
@@ -23,11 +23,11 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 		else if (strcmp(cls[i], "POSIXct") == 0)
 			ret[i] = OFTDateTime;
 		else {
-        	Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
+			Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
 		}
-    	OGRFieldDefn oField(nm[i], ret[i]);
-		if( poLayer->CreateField( &oField ) != OGRERR_NONE ) {
+		OGRFieldDefn oField(nm[i], ret[i]);
+		if (poLayer->CreateField(&oField) != OGRERR_NONE) {
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
 		}
@@ -54,17 +54,17 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTString: {
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
-				poFeature->SetField( j, (const char *) cv[i] );
+				poFeature->SetField(j, (const char *) cv[i]);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
-				poFeature->SetField( j, (int) iv[i] );
+				poFeature->SetField(j, (int) iv[i]);
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				poFeature->SetField( j, (double) nv[i] );
+				poFeature->SetField(j, (double) nv[i]);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
@@ -75,7 +75,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
 				Rcpp::Function unlist("unlist");
 				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
-				poFeature->SetField( j, 1900 + (int) ret[5], (int) ret[4], (int) ret[3]);
+				poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4], (int) ret[3]);
 				} break;
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
@@ -122,36 +122,36 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		throw std::invalid_argument("Driver unspecified.\n");
 	}
 
-    /* GDALAllRegister(); -- has been done during .onLoad() */
+	/* GDALAllRegister(); -- has been done during .onLoad() */
 	// get driver:
-    GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(driver[0]);
-    if (poDriver == NULL) {
+	GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(driver[0]);
+	if (poDriver == NULL) {
 		Rcpp::Rcout << driver[0] << " driver not available." << std::endl;
 		throw std::invalid_argument("Driver not available.\n");
-    }  else if (! quiet)
+	}  else if (! quiet)
 		Rcpp::Rcout << "Writing layer " << layer[0] << " to data source " << dsn[0] <<
 			" using driver " << driver << std::endl;
 
 	// open data set:
 	std::vector <char *> options = create_options(dco, quiet);
-    GDALDataset *poDS = poDriver->Create( dsn[0], 0, 0, 0, GDT_Unknown, options.data() );
-    if (poDS == NULL) {
-        Rcpp::Rcout << "Creation of dataset " <<  dsn[0] << " failed." << std::endl;
+	GDALDataset *poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data());
+	if (poDS == NULL) {
+		Rcpp::Rcout << "Creation of dataset " <<  dsn[0] << " failed." << std::endl;
 		throw std::invalid_argument("Creation failed.\n");
-    }
+	}
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 
 	// create layer:
 	options = create_options(lco, quiet);
 	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
-    OGRLayer *poLayer = poDS->CreateLayer( layer[0], sref, wkbType, options.data() );
-    if (poLayer == NULL)  {
+	OGRLayer *poLayer = poDS->CreateLayer(layer[0], sref, wkbType, options.data());
+	if (poLayer == NULL)  {
 		sref->Release();
-        Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
-    	GDALClose( poDS );
+		Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
+		GDALClose(poDS);
 		throw std::invalid_argument("Layer creation failed.\n");
-    }
+	}
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj);
@@ -163,15 +163,15 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		Rcpp::Rcout << "geometry type:  " << geomv[0]->getGeometryName() << std::endl;
 	}
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
-        OGRFeature *poFeature = OGRFeature::CreateFeature( poLayer->GetLayerDefn() );
+		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
 		SetFields(poFeature, fieldTypes, obj, i);
 		poFeature->SetGeometryDirectly(geomv[i]);
-        if( poLayer->CreateFeature( poFeature ) != OGRERR_NONE ) {
-            Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
-    		GDALClose( poDS );
+		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
+			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
+			GDALClose(poDS);
 			throw std::invalid_argument("Layer creation failed.\n");
-        }
-        OGRFeature::DestroyFeature( poFeature ); // deletes geom[i] as well
-    }
-    GDALClose( poDS );
+		}
+		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
+	}
+	GDALClose(poDS);
 }
