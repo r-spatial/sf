@@ -251,6 +251,14 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CIRCULARSTRING", "sfg") : ""); 
 			break;
+		case SF_CompoundCurve:
+			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "COMPOUNDCURVE", "sfg"), true, &gcEmpty); 
+			break;
+		case SF_CurvePolygon:
+			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
+				Rcpp::CharacterVector::create(dim_str, "CURVEPOLYGON", "sfg"), true, &gcEmpty); 
+			break;
 		case SF_MultiCurve:
 			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTICURVE", "sfg"), true, &gcEmpty);
@@ -262,14 +270,6 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 		case SF_Curve:
 			output[0] = read_numeric_matrix(pt, n_dims, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : ""); 
-			break;
-		case SF_CompoundCurve:
-			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "COMPOUNDCURVE", "sfg"), true, &gcEmpty); 
-			break;
-		case SF_CurvePolygon:
-			output[0] = read_geometrycollection(pt, n_dims, EWKB, endian,
-				Rcpp::CharacterVector::create(dim_str, "CURVEPOLYGON", "sfg"), true, &gcEmpty); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(pt, n_dims, addclass ?
@@ -357,7 +357,9 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 	else if (strcmp(cls, "COMPOUNDCURVE") == 0)
 		type = SF_CompoundCurve;
 	else if (strcmp(cls, "CURVEPOLYGON") == 0)
-		type = SF_CurvePolygon;
+		type = SF_CurvePolygon; 
+	else if (strcmp(cls, "MULTICURVE") == 0)
+		type = SF_MultiCurve; 
 	else if (strcmp(cls, "MULTISURFACE") == 0)
 		type = SF_MultiSurface;
 	else if (strcmp(cls, "CURVE") == 0)
@@ -458,6 +460,15 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
 }
 
+void write_triangles(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+		int endian = 0, double prec = 0.0) {
+	Rcpp::CharacterVector cl_attr = lst.attr("class");
+	const char *dim = cl_attr[0];
+	add_int(os, lst.length());
+	for (int i = 0; i < lst.length(); i++)
+		write_data(os, lst, i, EWKB, endian, "TRIANGLE", dim, prec, 0);
+}
+
 void write_geometrycollection(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
 		int endian = 0, double prec = 0.0) {
 	add_int(os, lst.length());
@@ -510,8 +521,12 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 			break;
 		case SF_CircularString: write_matrix(os, sfc[i], prec);
 			break;
-		case SF_MultiCurve: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
+		case SF_CompoundCurve: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
 			break;
+		case SF_CurvePolygon: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
+			break;
+		case SF_MultiCurve: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
+			break; 
 		case SF_MultiSurface: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
 			break;
 		case SF_Curve: write_matrix(os, sfc[i], prec);
@@ -520,7 +535,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 			break;
 		case SF_PolyhedralSurface: write_multipolygon(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_TIN: write_multipolygon(os, sfc[i], EWKB, endian, prec);
+		case SF_TIN: write_triangles(os, sfc[i], EWKB, endian, prec);
 			break;
 		case SF_Triangle: write_matrix_list(os, sfc[i], prec);
 			break;

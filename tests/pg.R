@@ -22,7 +22,14 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   	wkb = structure(returnstr, class = "WKB")
     ret = st_as_sfc(wkb, EWKB = TRUE)
     cat(paste("IN:  ", wkt, "\n"))
-	cat(paste("OUT: ", st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
+	# OUT contains WKB created in PostGIS from wkt, interpreted to R by sf, printed as WKT by sf
+	cat(paste("OUT: ", txt <- st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
+	if (length(grep("SRID", txt)) == 0) {
+	  query = paste0("SELECT ST_AsText('",sf:::CPL_raw_to_hex(st_as_binary(ret[[1]])),"');")
+	  str = suppressWarnings(dbGetQuery(cn, query)$st_astext)
+	  # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
+	  cat(paste("PG:  ", str, "\n"))
+	}
 	invisible(ret)
   }
   round_trip(cn, "SRID=4326;POINTM(0 0 0)")
