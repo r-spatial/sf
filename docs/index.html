@@ -100,13 +100,13 @@
 <p>The sf package:</p>
 <ul>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>uses S3 classes: simple features are <code>data.frame</code> objects (or similar) with a geometry list column</li>
+<li>uses S3 classes: simple features are <code>data.frame</code> objects (or similar) that have a geometry list-column</li>
 <li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
 </li>
-<li>interfaces to <a href="http://www.gdal.org/">GDAL</a> with driver dependent layer creation options, Date and DateTime (<code>POSIXct</code>) columns, and coordinate reference system transformations through <a href="http://proj4.org/">PROJ.4</a>
+<li>interfaces to <a href="http://www.gdal.org/">GDAL</a> with driver dependent dataset or layer creation options, Date and DateTime (<code>POSIXct</code>) columns, and coordinate reference system transformations through <a href="http://proj4.org/">PROJ.4</a>
 </li>
 <li>provides fast I/O with GDAL and GEOS using <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">well-known-binary</a> written in C++ and Rcpp</li>
-<li>reads and writes from and to spatial databases such as <a href="http://postgis.net/">PostGIS</a>, using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
+<li>reads and writes directly from and to spatial databases such as <a href="http://postgis.net/">PostGIS</a>, using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
 </li>
 </ul>
 <h3 id="acknowledgment">Acknowledgment</h3>

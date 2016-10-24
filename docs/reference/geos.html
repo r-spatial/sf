@@ -168,10 +168,7 @@
       <dt>dfMaxLength</dt>
       <dd>numeric; max length of a line segment</dd>
       <dt>union</dt>
-      <dd>logical; apply <code>st_union_cascaded</code> to the merged geometry set?
-m = st_merge(nc)
-plot(st_convexhull(nc))
-plot(nc, border = grey(.5))</dd>
+      <dd>logical; apply <code>st_union_cascaded</code> to the merged geometry set?</dd>
       <dt>y0</dt>
       <dd>object of class <code>sfc</code> which is merged, using <code>c.sfg</code> (<a href='st.html'>st</a>), before intersection etc. with it is computed</dd>
     </dl>
@@ -200,7 +197,8 @@ plot(nc, border = grey(.5))</dd>
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union_cascaded</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>do.call</span>(<span class='no'>c</span>, <span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>)))),<span class='kw'>col</span><span class='kw'>=</span><span class='fl'>0</span>)</div><img src='geos-4.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_polygonize</span>(<span class='no'>mls</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><img src='geos-7.png' alt='' width='540' height='400' /></pre>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><img src='geos-7.png' alt='' width='540' height='400' /><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>st_merge</span>(<span class='no'>nc</span>)
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-9.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><img src='geos-11.png' alt='' width='540' height='400' /></pre>
   </div>
   <div class="col-md-3">
   </div>
