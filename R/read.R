@@ -45,9 +45,9 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	st_as_sf(x, ...)
 }
 
-#' write simple features from file or database
+#' write simple features object to file or database
 #'
-#' write simple features from file or database
+#' write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)

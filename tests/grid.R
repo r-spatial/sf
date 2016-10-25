@@ -1,7 +1,7 @@
 # MULTIPOLYGONS
 library(sf)
 library(grid)
-demo(nc, ask =F)
+demo(nc, ask = FALSE)
 grid.newpage()
 # pushViewport(viewport(width = 0.8, height = 0.8))
 pushViewport(st_viewport(nc))

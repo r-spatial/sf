@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > library(grid)
-> demo(nc, ask =F)
+> demo(nc, ask = FALSE)
 
 
 	demo(nc)
@@ -100,4 +100,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.824   0.264   0.781 
+  0.792   0.296   0.797 

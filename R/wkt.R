@@ -27,9 +27,9 @@ prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListLis
 prnt.GEOMETRYCOLLECTION = function(x, ...) 
 	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_text), collapse=", "), ")")
 
-#' Return Well-known Text representation of simple feature item
+#' Return Well-known Text representation of simple feature geometry
 #'
-#' Return Well-known Text representation of simple feature item
+#' Return Well-known Text representation of simple feature geometry
 #' @param x object of class sfg or sfc
 #' @param ... passed on to WKT_name
 #' @name st_as_text

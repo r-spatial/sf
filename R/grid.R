@@ -47,9 +47,9 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 	pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
 }
 
-#' set up viewport from sf, sfc or sfg object
+#' create viewport from sf, sfc or sfg object
 #' 
-#' set up viewport from sf, sfc or sfg object
+#' create viewport from sf, sfc or sfg object
 #' @param x object of class sf, sfc or sfg object
 #' @param bbox the bounding box used for aspect ratio
 #' @param asp numeric; target aspect ratio (y/x), see Details
@@ -57,6 +57,13 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 #' @details parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...
 #' @return the output of the call to \link[grid]{viewport}
 #' @details if \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longlat(x))}, in which case it is set to \code{1.0 /cos(y)}, with \code{y} the middle of the latitude bounding box.
+#' @examples
+#' library(grid)
+#' demo(nc, ask = FALSE)
+#' grid.newpage()
+#' pushViewport(viewport(width = 0.8, height = 0.8))
+#' pushViewport(st_viewport(nc))
+#' invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 #' @export
 st_viewport = function(x, ..., bbox = st_bbox(x), asp) { # FIXME: deal with asp
 	xscale = bbox[c(1,3)]
