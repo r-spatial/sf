@@ -33,6 +33,8 @@ Ops.sfg <- function(e1, e2) {
 			Vec = rep(e2, length.out = dims)
 		else
 			Vec = e2
+		if (.Generic == "=")
+			Vec = -Vec
 	} else if (prd) {
 		if (length(e2) == 1)
 			diag(Mat) = e2
@@ -40,9 +42,19 @@ Ops.sfg <- function(e1, e2) {
 			Mat = e2
 	} 
 	cls = class(e1)
-	e1 = if (is.numeric(e1))
-		structure(e1 %*% Mat + Vec, class = cls)
-	else
+	e1 = if (is.numeric(e1)) {
+		if (prd) {
+			if (inherits(e1, "POINT"))
+				structure(as.vector(e1 %*% Mat), class = cls)
+			else
+				structure(e1 %*% Mat, class = cls)
+		} else { # pm:
+			if (is.matrix(e1))
+				structure(t(t(unclass(e1)) + Vec), class = cls)
+			else
+				structure(unclass(e1) + Vec, class = cls)
+		}
+	} else # recurse:
 		structure(lapply(e1, function(x) { 
 			structure(
 			if (is.list(x)) 
@@ -57,4 +69,11 @@ Ops.sfg <- function(e1, e2) {
 			, class = class(x))
 		}),
 			class = cls)
+}
+
+#' @export
+Ops.sfc <- function(e1, e2) {
+	ret = st_sfc(lapply(e1, function(x) NextMethod(.Generic, x, e2)))
+	st_crs(ret) = NA_integer_
+	ret
 }
