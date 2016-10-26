@@ -35,7 +35,8 @@ summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 
 # roundtrip nc: sf -> sp -> sf
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
 p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 suppressWarnings(st_crs(nc) <- p4s)
 names(nc)[15] = "geometry"

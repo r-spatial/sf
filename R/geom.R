@@ -113,7 +113,8 @@ st_convex_hull = function(x) st_sfc(CPL_geom_op("convex_hull", st_geometry(x)))
 #' @name geos
 #' @export
 #' @examples 
-#' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+#' # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+#' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 #' plot(st_union_cascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
 st_union_cascaded = function(x) st_sfc(CPL_geom_op("union_cascaded", st_geometry(x)))
 

@@ -145,10 +145,12 @@ In data.row.names(row.names, rowsi, i) :
                      
 > 
 > # roundtrip nc: sf -> sp -> sf
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
+Reading layer nc from data source /home/edzer/git/sf.Rcheck/sf/shape/nc.shp using driver "ESRI Shapefile"
 features:       100
 fields:         14
+converted into: MULTIPOLYGON
 proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 > p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 > suppressWarnings(st_crs(nc) <- p4s)
@@ -164,4 +166,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.156   0.312   3.156 
+  3.236   0.284   3.218 

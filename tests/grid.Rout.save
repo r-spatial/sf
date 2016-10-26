@@ -19,27 +19,11 @@ Type 'q()' to quit R.
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > library(grid)
-> demo(nc, ask = FALSE)
-
-
-	demo(nc)
-	---- ~~
-
-> ## this object was created as follows:
-> # library(sf)
-> # nc = st_read(system.file("shapes/", package="maptools"), "sids")
-> # st_crs(nc) = 4267 # "+proj=longlat +ellps=clrk66" or "+proj=longlat +datum=NAD27"
-> # print(nc, n = 3)
-> # st_write(nc, "nc.gpkg", "nc.gpkg", driver = "GPKG")
-> 
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
-+ 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
-+ 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
-+ 		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-+ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"))
-Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+Reading layer nc from data source /home/edzer/git/sf.Rcheck/sf/shape/nc.shp using driver "ESRI Shapefile"
 features:       100
 fields:         14
+converted into: MULTIPOLYGON
 proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 > grid.newpage()
 > # pushViewport(viewport(width = 0.8, height = 0.8))
@@ -47,8 +31,9 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
 > # POLYGONS
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, type = 3)
-Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, type = 3)
+> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, type = 3)
+Reading layer nc from data source /home/edzer/git/sf.Rcheck/sf/shape/nc.shp using driver "ESRI Shapefile"
 features:       100
 fields:         14
 converted into: POLYGON
@@ -100,4 +85,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.792   0.296   0.797 
+  0.804   0.292   0.786 
