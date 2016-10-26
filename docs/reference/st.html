@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,15 +67,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Create simple feature from a numeric vector, matrix or list</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Create simple feature from a numeric vector, matrix or list</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Create simple feature from a numeric vector, matrix or list</p>
     
@@ -109,7 +107,7 @@
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>c</span>(<span class='no'>...</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>for <code>st_point</code>, numeric vector (or one-row-matrix) of length 2, 3 or 4; for <code>st_linestring</code> and <code>st_multipoint</code>, numeric matrix with points in rows; for <code>st_polygon</code> and <code>st_multilinestring</code>, list with numeric matrices with points in rows; for <code>st_multipolygon</code>, list of lists with numeric matrices; for <code>st_geometrycollection</code> list with (non-geometrycollection) simple feature objects</dd>
@@ -129,20 +127,20 @@
       <dd>logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>object of the same nature as <code>x</code>, but with appropriate class attribute set</p>
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>&quot;XYZ&quot; refers to coordinates where the third dimension represents altitude, &quot;XYM&quot; refers to three-dimensional coordinates where the third dimension refers to something else (&quot;M&quot; for measure); checking of the sanity of <code>x</code> may be only partial.</p>
-      <p>when <code>flatten=TRUE</code>, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.</p>
-    </div>
+    <p>object of the same nature as <code>x</code>, but with appropriate class attribute set</p>
     
-    <h2 id="examples">Examples</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>&quot;XYZ&quot; refers to coordinates where the third dimension represents altitude, &quot;XYM&quot; refers to three-dimensional coordinates where the third dimension refers to something else (&quot;M&quot; for measure); checking of the sanity of <code>x</code> may be only partial.</p>
+    <p>when <code>flatten=TRUE</code>, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.</p>
+    
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'>(<span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)))</div><div class='output co'>#&gt; POINT(1 2) 
 #&gt; </div><div class='input'><span class='fu'>class</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; [1] &quot;XY&quot;    &quot;POINT&quot; &quot;sfg&quot;  
 #&gt; </div><div class='input'><span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; xmin ymin xmax ymax 
@@ -212,12 +210,32 @@
   <span class='fu'>st_geometrycollection</span>(<span class='fu'>list</span>(<span class='fu'>st_point</span>(<span class='fl'>10</span>:<span class='fl'>11</span>))))</div><div class='output co'>#&gt; GEOMETRYCOLLECTION(MULTILINESTRING((11 14, 12 15, 13 16)), POINT(5 6), POINT(1 2), LINESTRING(1 4, 2 5, 3 6), POINT(10 11)) 
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

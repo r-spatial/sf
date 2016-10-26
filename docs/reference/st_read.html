@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,15 +67,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>read simple features from file or database</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>read simple features from file or database</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>read simple features from file or database</p>
 
@@ -91,7 +89,7 @@
 <span class='fu'>st_read_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>table</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'>paste</span>(<span class='st'>"select * from "</span>, <span class='no'>table</span>, <span class='st'>";"</span>),
   <span class='kw'>geom_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>EWKB</span>, <span class='no'>...</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>dsn</dt>
       <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)</dd>
@@ -121,20 +119,20 @@
       <dd>logical; is the WKB is of type EWKB? defaults to TRUE if <code>conn</code> is of class codePostgreSQLConnection or <code>PqConnection</code></dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>object of class <a href='sf.html'>sf</a></p>
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>for iGeomField, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code> values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.</p>
-      <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.</p>
-    </div>
+    <p>object of class <a href='sf.html'>sf</a></p>
     
-    <h2 id="examples">Examples</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>for iGeomField, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code> values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.</p>
+    <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.</p>
+    
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"edzer"</span>, <span class='st'>"travis"</span>)) { <span class='co'># load meuse to postgis</span>
  <span class='fu'>library</span>(<span class='no'>sp</span>)
  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -147,9 +145,11 @@
 GDAL Error 1: Layer meuse already exists, CreateLayer failed.
 Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div class='output co'>#&gt; Creating layer meuse failed.
 #&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
-</strong><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc.gpkg"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc.gpkg from data source /home/edzer/git/sfr/inst/gpkg/nc.gpkg using driver &quot;GPKG&quot;
+</strong><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
 #&gt; features:       100
 #&gt; fields:         14
+#&gt; converted into: MULTIPOLYGON
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Alamance : 1  
@@ -175,7 +175,7 @@ Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div cl
 #&gt;  3rd Qu.:1168.5   3rd Qu.: 4889   3rd Qu.:10.25   3rd Qu.: 1406.8  
 #&gt;  Max.   :8027.0   Max.   :30757   Max.   :57.00   Max.   :11631.0  
 #&gt;                                                                    
-#&gt;             geom    
+#&gt;           geometry  
 #&gt;  MULTIPOLYGON :100  
 #&gt;  epsg:4267    :  0  
 #&gt;  +proj=long...:  0  
@@ -193,12 +193,32 @@ GDAL Error 6: EPSG PCS/GCS code 900914 not found in EPSG support files.  Is this
 EPSG coordinate system?</strong></div><div class='output co'>#&gt; [1] TRUE
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

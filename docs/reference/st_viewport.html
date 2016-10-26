@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>set up viewport from sf, sfc or sfg object — st_viewport • sf</title>
+<title>create viewport from sf, sfc or sfg object — st_viewport • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,22 +67,23 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>set up viewport from sf, sfc or sfg object</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>create viewport from sf, sfc or sfg object</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
-    <p>set up viewport from sf, sfc or sfg object</p>
+    <p>create viewport from sf, sfc or sfg object</p>
     
 
     <pre><span class='fu'>st_viewport</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>), <span class='no'>asp</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>object of class sf, sfc or sfg object</dd>
@@ -97,25 +95,71 @@
       <dd>numeric; target aspect ratio (y/x), see Details</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>the output of the call to <a href='http://www.rdocumentation.org/packages/viewport/topics/grid'>viewport</a></p>
+    <p>the output of the call to <a href='http://www.rdocumentation.org/packages/viewport/topics/grid'>viewport</a></p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...</p>
+    <p>if <code>asp</code> is missing, it is taken as 1, except when <code>isTRUE(st_is_longlat(x))</code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
+    
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>grid</span>)
+<span class='fu'>demo</span>(<span class='no'>nc</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; 
+#&gt; 
+#&gt; 	demo(nc)
+#&gt; 	---- ~~
+#&gt; 
+#&gt; &gt; ## this object was created as follows:
+#&gt; &gt; # library(sf)
+#&gt; &gt; # nc = st_read(system.file(&quot;shapes/&quot;, package=&quot;maptools&quot;), &quot;sids&quot;)
+#&gt; &gt; # st_crs(nc) = 4267 # &quot;+proj=longlat +ellps=clrk66&quot; or &quot;+proj=longlat +datum=NAD27&quot;
+#&gt; &gt; # print(nc, n = 3)
+#&gt; &gt; # st_write(nc, &quot;nc.gpkg&quot;, &quot;nc.gpkg&quot;, driver = &quot;GPKG&quot;)
+#&gt; &gt; 
+#&gt; &gt; nc = st_read(system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;), &quot;nc.gpkg&quot;, crs = 4267,
+#&gt; + 	relation_to_geometry = c(AREA = &quot;lattice&quot;, PERIMETER = &quot;lattice&quot;, CNTY_ = &quot;entity&quot;,
+#&gt; + 		CNTY_ID = &quot;entity&quot;, NAME = &quot;entity&quot;, FIPS = &quot;entity&quot;, FIPSNO = &quot;entity&quot;,
+#&gt; + 		CRESS_ID = &quot;entity&quot;, BIR74 = &quot;lattice&quot;, SID74 = &quot;lattice&quot;, NWBIR74 = &quot;lattice&quot;,
+#&gt; + 		BIR79 = &quot;lattice&quot;, SID79 = &quot;lattice&quot;, NWBIR79  = &quot;lattice&quot;))
+#&gt; Reading layer nc.gpkg from data source /home/edzer/git/sfr/inst/gpkg/nc.gpkg using driver &quot;GPKG&quot;
+#&gt; features:       100
+#&gt; fields:         14
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; </div><div class='input'><span class='fu'>grid.newpage</span>()
+<span class='fu'>pushViewport</span>(<span class='fu'>viewport</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.8</span>))</div><div class='input'><span class='fu'>pushViewport</span>(<span class='fu'>st_viewport</span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'>invisible</span>(<span class='fu'>lapply</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>grid.draw</span>(<span class='fu'><a href='st_as_grob.html'>st_as_grob</a></span>(<span class='no'>x</span>, <span class='kw'>gp</span> <span class='kw'>=</span> <span class='fu'>gpar</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>'red'</span>)))))</div><img src='st_viewport-6.png' alt='' width='540' height='400' /></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
     </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...</p>
-      <p>if <code>asp</code> is missing, it is taken as 1, except when <code>isTRUE(st_is_longlat(x))</code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
-    </div>
-      </div>
-  <div class="col-md-3">
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get geometry from an sf object — st_geometry • sf</title>
+<title>get, set, or replace geometry from an sf object — st_geometry • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,17 +67,18 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>get geometry from an sf object</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>get, set, or replace geometry from an sf object</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
-    <p>get geometry from an sf object</p>
+    <p>get, set, or replace geometry from an sf object</p>
     
 
     <pre><span class='co'># S3 method for sfc</span>
@@ -99,7 +97,7 @@
 
 <span class='fu'>st_geometry</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>obj</dt>
       <dd>object of class <code>sf</code> or <code>sfc</code></dd>
@@ -111,14 +109,16 @@
       <dd>object of class <code>sfc</code></dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>st_geometry returns an object of class <a href='sfc.html'>sfc</a>, a list-column with geometries</p>
-      <p><code>st_geometry</code> returns an object of class <a href='sfc.html'>sfc</a>. Assigning geometry to a <code>data.frame</code> creates an <a href='sf.html'>sf</a> object, assigning it to an <a href='sf.html'>sf</a> object replaces the geometry list-column.</p>
-    </div>
+    <p>st_geometry returns an object of class <a href='sfc.html'>sfc</a>, a list-column with geometries</p>
+    <p><code>st_geometry</code> returns an object of class <a href='sfc.html'>sfc</a>. Assigning geometry to a <code>data.frame</code> creates an <a href='sf.html'>sf</a> object, assigning it to an <a href='sf.html'>sf</a> object replaces the geometry list-column.</p>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
 <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>3</span>,<span class='fl'>4</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>10</span>,<span class='fl'>11</span>)))
 <span class='fu'>st_geometry</span>(<span class='no'>sfc</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
@@ -141,12 +141,30 @@
 #&gt; POINT(10 11) 
 #&gt; </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='co'># replaces</span></div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

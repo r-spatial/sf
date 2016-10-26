@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,15 +67,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>Geometric operations on (pairs of) simple feature geometries</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Geometric operations on (pairs of) simple feature geometries</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>Geometric operations on (pairs of) simple feature geometries</p>
     
@@ -143,7 +141,7 @@
 
 <span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y0</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>first simple feature (sf) or simple feature geometry (sfc) collection</dd>
@@ -173,39 +171,61 @@
       <dd>object of class <code>sfc</code> which is merged, using <code>c.sfg</code> (<a href='st.html'>st</a>), before intersection etc. with it is computed</dd>
     </dl>
     
-    <div class="Value">
-      <h2>Value</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-      <p>matrix (sparse or dense); if dense: of type <code>character</code> for <code>relate</code>, <code>numeric</code> for <code>distance</code>, and <code>logical</code> for all others; matrix has dimension <code>x</code> by <code>y</code>; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching <code>y</code>.</p>
-      <p>st_is_simple and st_is_valid return a logical vector</p>
-      <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
-      <p>st_relate returns a dense <code>character</code> matrix</p>
-      <p>st_intersects ...  st_is_within_distance return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively</p>
-      <p>st_buffer ... st_segmentize return an <a href='sfc.html'>sfc</a> object with the same number of geometries as in <code>x</code></p>
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>requires GEOS version 3.4 or above</p>
-    </div>
+    <p>matrix (sparse or dense); if dense: of type <code>character</code> for <code>relate</code>, <code>numeric</code> for <code>distance</code>, and <code>logical</code> for all others; matrix has dimension <code>x</code> by <code>y</code>; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching <code>y</code>.</p>
+    <p>st_is_simple and st_is_valid return a logical vector</p>
+    <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
+    <p>st_relate returns a dense <code>character</code> matrix</p>
+    <p>st_intersects ...  st_is_within_distance return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively</p>
+    <p>st_buffer ... st_segmentize return an <a href='sfc.html'>sfc</a> object with the same number of geometries as in <code>x</code></p>
     
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc.gpkg"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc.gpkg from data source /home/edzer/git/sfr/inst/gpkg/nc.gpkg using driver &quot;GPKG&quot;
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>requires GEOS version 3.4 or above</p>
+    
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
+    <pre class="examples"><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
 #&gt; features:       100
 #&gt; fields:         14
+#&gt; converted into: MULTIPOLYGON
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union_cascaded</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>do.call</span>(<span class='no'>c</span>, <span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>)))),<span class='kw'>col</span><span class='kw'>=</span><span class='fl'>0</span>)</div><img src='geos-4.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_polygonize</span>(<span class='no'>mls</span>)
 <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><img src='geos-7.png' alt='' width='540' height='400' /><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>st_merge</span>(<span class='no'>nc</span>)
 <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-9.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><img src='geos-11.png' alt='' width='540' height='400' /></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

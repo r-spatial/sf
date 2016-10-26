@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,15 +67,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>convert foreign geometry object to an sfc object</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>convert foreign geometry object to an sfc object</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>convert foreign geometry object to an sfc object</p>
     
@@ -106,7 +104,7 @@
 <span class='co'># S3 method for SpatialPolygons</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>object to convert</dd>
@@ -122,14 +120,16 @@
       <dd>logical; if <code>TRUE</code>, force coercion into <code>MULTIPOLYGON</code> or <code>MULTILINE</code> objects, else autodetect</dd>
     </dl>
     
-    <div class="Details">
-      <h2>Details</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-      <p>when converting from WKB, the object <code>x</code> is either a character vector such as typically obtained from PostGIS (either with leading &quot;0x&quot; or without), or a list with raw vectors representing the features in binary (raw) form.</p>
-      <p>if <code>x</code> is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element</p>
-    </div>
+    <p>when converting from WKB, the object <code>x</code> is either a character vector such as typically obtained from PostGIS (either with leading &quot;0x&quot; or without), or a list with raw vectors representing the features in binary (raw) form.</p>
+    <p>if <code>x</code> is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element</p>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'><span class='no'>wkb</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>list</span>(<span class='st'>"01010000204071000000000000801A064100000000AC5C1441"</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"WKB"</span>)
 <span class='fu'>st_as_sfc</span>(<span class='no'>wkb</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
@@ -148,12 +148,30 @@
 #&gt; POINT(181072 333611) 
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

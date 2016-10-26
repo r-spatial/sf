@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,30 +67,35 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>drop Z and/or M dimensions from feature geometries</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>drop Z and/or M dimensions from feature geometries</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>drop Z and/or M dimensions from feature geometries, resetting classes appropriately</p>
     
 
     <pre><span class='fu'>st_drop_zm</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
       <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></dd>
       <dt>...</dt>
       <dd>ignored</dd>
     </dl>
-        
-    <h2 id="examples">Examples</h2>
+    
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'><span class='fu'>st_drop_zm</span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)))</div><div class='output co'>#&gt; LINESTRING(1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7 15, 8 16) 
 #&gt; </div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)), <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>8</span>,<span class='fl'>2</span>)))
 <span class='fu'>st_drop_zm</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
@@ -116,12 +118,28 @@
 #&gt; 2 2           LINESTRING(1 3, 2 4)
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

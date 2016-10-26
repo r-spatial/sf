@@ -34,10 +34,9 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container template-reference-topic">
       <header>
-      
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -50,15 +49,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/edzer/sfr/">
@@ -70,15 +67,16 @@
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
       
       </header>
 
-      <div class="page-header">
-  <h1>create sf object</h1>
-</div>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>create sf object</h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-9">
     
     <p>create sf, which extends data.frame-like objects with a simple feature list column</p>
     
@@ -89,7 +87,7 @@
 # S3 method for sf
 [(x, i, j, ..., drop)</pre>
     
-    <h2>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>...</dt>
       <dd>column elements to be binded into an <code>sf</code> object, one of them being of class <code>sfc</code></dd>
@@ -113,14 +111,16 @@
       <dd>whether to drop to simpler (e.g. vector) representation, see [.data.frame</dd>
     </dl>
     
-    <div class="Details">
-      <h2>Details</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-      <p><code>relation_to_geometry</code> specified for each non-geometry column how it relates to the geometry, and can have one of following values: &quot;field&quot;, &quot;lattice&quot;, &quot;entity&quot;. &quot;field&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;lattice&quot; where the attribute is an aggregate value over the geometry (e.g. population density), &quot;entity&quot; when the attributes identifies the geometry of particular &quot;thing&quot;, such as a building or a city. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
-      <p>&quot;[.sf&quot; will return a <code>data.frame</code> if the geometry column (of class <code>sfc</code>) is dropped, an <code>sfc</code> object if only the geometry column is selected, otherwise the behavior depending on <code>drop</code> is identical to that of [.data.frame.</p>
-    </div>
+    <p><code>relation_to_geometry</code> specified for each non-geometry column how it relates to the geometry, and can have one of following values: &quot;field&quot;, &quot;lattice&quot;, &quot;entity&quot;. &quot;field&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;lattice&quot; where the attribute is an aggregate value over the geometry (e.g. population density), &quot;entity&quot; when the attributes identifies the geometry of particular &quot;thing&quot;, such as a building or a city. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
+    <p>&quot;[.sf&quot; will return a <code>data.frame</code> if the geometry column (of class <code>sfc</code>) is dropped, an <code>sfc</code> object if only the geometry column is selected, otherwise the behavior depending on <code>drop</code> is identical to that of [.data.frame.</p>
     
-    <h2 id="examples">Examples</h2>
+
+    <h2 class="hasAnchor" id="examples">
+      <a class="anchor" href="#examples"></a>
+      Examples
+    </h2>
     <pre class="examples"><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='no'>g</span>)</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
@@ -191,12 +191,30 @@
 #&gt; 1 5 POLYGON((0 0, 3 0, 3 3, 0 3...
 #&gt; </div></pre>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-3 hidden-xs hidden-sm">
+    <div id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    </div>
   </div>
 </div>
 
       <footer>
-      <p>Built by <a href="http://hadley.github.io/pkgdown/">pkgdown</a>. Styled with <a href="http://getbootstrap.com">Bootstrap 3</a>.</p>
+      <div class="copyright">
+  <p>Developed by Edzer Pebesma.</p>
+</div>
+
+<div class="pkgdown">
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+</div>
+
       </footer>
    </div>
 

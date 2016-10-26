@@ -1,41 +1,115 @@
-body {
-  position: relative;
+/* Sticker footer */
+body > .container {
+  display: flex;
+  padding-top: 60px;
+  min-height: calc(100vh);
+  flex-direction: column;
 }
 
-.icon img {
-  float: right;
-  border: 1px solid #ccc;
+body > .container .row {
+  flex: 1;
 }
-.index .internal {display: none;}
-ul.index li {margin-bottom: 0.5em; clear: both;}
 
 footer {
   margin-top: 45px;
   padding: 35px 0 36px;
   border-top: 1px solid #e5e5e5;
+  color: #666;
+  display: flex;
 }
 footer p {
   margin-bottom: 0;
-  color: #555;
+}
+footer div {
+  flex: 1;
+}
+footer .pkgdown {
+  text-align: right;
+}
+footer p {
+  margin-bottom: 0;
+}
+
+code {
+  background-color: #f7f7f7;
+  color: #333;
+}
+code a {
+  color: #375f84;
+}
+
+@media screen and (min-width: 1024px) {
+  .side-by-side {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .side-by-side .section {
+    width: 45%;
+  }
+}
+
+/* Section anchors ---------------------------------*/
+
+.hasAnchor {
+  margin-left: -30px;
+}
+
+a.anchor {
+  display:inline-block;
+  width: 30px;
+  height: 30px;
+  visibility: hidden;
+
+  background-image: url(./link.svg);
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: center center;
+}
+
+.hasAnchor:hover a.anchor {
+  visibility: visible;
 }
 
 /* Fixes for fixed navbar --------------------------*/
 
-body {
-  position: relative;
-  padding-top: 60px;
-}
-
-.section h1, .section h2, .section h3, .section h4 {
+.contents h1, .contents h2, .contents h3, .contents h4 {
   padding-top: 60px;
   margin-top: -60px;
 }
 
-/* Table of contents --------------------------*/
+/* Sidebar --------------------------*/
 
-#tocnav h2 {
-  margin-top: 0;
+#sidebar {
+  margin-top: 30px;
+  word-wrap: break-word;
+
+  hyphens: auto;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+}
+#sidebar.affix {
+  margin-top: 5px;
+}
+
+#sidebar h2 {
   font-size: 1.5em;
+  margin-top: 1em;
+}
+
+#sidebar h2:first-child {
+  margin-top: 0;
+}
+
+#sidebar .list-unstyled li {
+  margin-bottom: 0.5em;
+}
+
+@media screen and (min-width: 970px) {
+  #sidebar {
+    width: 243px;
+  }
 }
 
 
