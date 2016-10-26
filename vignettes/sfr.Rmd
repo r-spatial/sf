@@ -161,8 +161,8 @@ command reads the `nc` dataset from a file that is contained in the
 
 ```{r}
 library(sf)
-filename <- system.file("gpkg/nc.gpkg", package="sf")
-nc <- st_read(filename, "nc.gpkg", crs = 4267)
+filename <- system.file("shape/nc.shp", package="sf")
+nc <- st_read(filename, "nc", crs = 4267)
 ```
 
 The short report printed gives the file name, the driver (GPKG:
@@ -447,12 +447,12 @@ may require some experimenting.
 
 As we've seen above, reading spatial data from an external file can be done by
 ```{r}
-filename <- system.file("gpkg/nc.gpkg", package="sf")
-nc <- st_read(filename, "nc.gpkg", crs = 4267)
+filename <- system.file("shape/nc.shp", package="sf")
+nc <- st_read(filename, "nc", crs = 4267)
 ```
 and writing takes place in the same fashion, using `st_write`:
 ```{r}
-st_write(nc, "nc.gpkg", "nc.gpkg", "GPKG")
+st_write(nc, "nc.shp", "nc", "ESRI Shapefile")
 ```
 The `dsn` and `layer` arguments to `st_read` and `st_write` denote a
 data source name and a layer.  Their exact interpretation as well

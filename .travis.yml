@@ -1,3 +1,24 @@
+language: r
+cache: packages
+
+matrix:
+  include:
+    - os: linux
+      dist: precise
+      sudo: true
+    - os: linux
+      dist: trusty
+      env: R_CODECOV=true
+      r_check_args: '--use-valgrind'
+    - os: osx
+      osx_image: xcode8
+      brew_packages: gdal2
+      latex: false
+    - os: osx
+      osx_image: beta-xcode6.1
+      brew_packages: gdal2
+      latex: false
+
 addons:
   postgresql: "9.4"
 
@@ -26,10 +47,6 @@ before_install:
   - sudo ldconfig
   - cd $CURWD
 
-language: r
-
-cache: packages
-
 sudo: required
 
 warnings_are_errors: true
@@ -43,4 +60,4 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
