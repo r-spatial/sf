@@ -26,7 +26,7 @@ R has well-supported classes for storing spatial
 data ([sp](https://CRAN.R-project.org/package=sp))
 and interfacing to the above mentioned environments
 ([rgdal](https://CRAN.R-project.org/package=rgdal),
-[rgeos](https://CRAN.R-project.org/package=rgeos)), but so far lacked a
+[rgeos](https://CRAN.R-project.org/package=rgeos)), but has so far lacked a
 complete implementation of simple features, making conversions
 at times convoluted, inefficient or incomplete. The package
 [sf](http://github.com/edzer/sfr) tries to fill this gap, and aims
@@ -46,7 +46,7 @@ This vignette:
 
 A feature is thought of as a thing, or an object in the real world,
 examples would be a building or a tree. As is the case with objects,
-they often consist of other objects this is the case with features
+they often consist of other objects. This is the case with features
 too: a set of features can form a single feature. A forest stand can
 be a feature, a forest can be a feature, a city can be a feature.
 A satellite image pixel can be a feature, a complete image can be
@@ -101,11 +101,11 @@ The following seven simple feature types are the most common, and are for instan
 
 Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes, NULL values or empty lists.
 
-The remaining geometries 10 are more rare, but are increasingly find implementations:
+The remaining geometries 10 are more rare, but increasingly find implementations:
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
-| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment required three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1. |
+| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1. |
 | `COMPOUNDCURVE` | A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component. |
 | `CURVEPOLYGON` | Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) ) |
 | `MULTICURVE` |  A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.  |
@@ -116,7 +116,7 @@ The remaining geometries 10 are more rare, but are increasingly find implementat
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard,but in the SQL-MM part 3 standard. The descriptions above were copied from the [postgis](http://postgis.net/docs/using_postgis_dbmanagement.html) docs.
+Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the SQL-MM part 3 standard. The descriptions above were copied from the [postgis](http://postgis.net/docs/using_postgis_dbmanagement.html) docs.
 
 
 ## Coordinate reference system
@@ -140,8 +140,8 @@ and geometries.
 As attributes are typically stored in `data.frame` objects (or the
 very similar `tbl_df`), we will also store feature geometries in
 in a `data.frame` column. Since geometries are not single-valued,
-they are put a list-column, a list of length equal to the number
-of records in the `data.frame`, with each list element the simple
+they are put in a list-column, a list of length equal to the number
+of records in the `data.frame`, with each list element holding the simple
 feature geometry of that feature.  The three classes used to
 represent simple features are:
 
@@ -271,12 +271,12 @@ Coordinate reference systems (`st_crs` and `st_transform`) are discussed in the 
 `st_as_wkb` and `st_as_text` convert geometry list-columns into well-known-binary or well-known-text, explained [below](#wkb).
 `st_bbox` retrieves the coordinate bounding box.
 
-attributes include 
+Attributes include 
 ```{r}
 attributes(nc.geom)
 ```
 
-## mixed geometry types
+## Mixed geometry types
 
 The class of `nc.geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
 is shared with all geometry types, and `sft_TYPE` with `TYPE`
@@ -329,8 +329,8 @@ st_drop_zm(x)
 This means that we can represent 2-, 3- or 4-dimensional
 coordinates. All geometry objects inherit from `sfg` (simple feature
 geometry), but also have a type (e.g. `POINT`), and a dimension
-(e.g. `XYM`) class name. A figure illustrates the seven most
-common types:
+(e.g. `XYM`) class name. A figure illustrates six of the seven most
+common types.
 
 With the exception of the `POINT` which has a single point as
 geometry, the remaining six common single simple feature geometry
@@ -418,7 +418,7 @@ st_as_sfc(structure(list(st_as_binary(x)), class = "WKB"))[[1]]
 
 GDAL, GEOS, spatial databases and GIS read and write WKB which
 is fast and precise. Conversion between R native objects and WKB
-is done by package sf in compiled (C++/Rcpp) code, making this a
+is done by package `sf` in compiled (C++/Rcpp) code, making this a
 reusable and fast route for I/O of simple feature geometries in R.
 
 ### Precision
@@ -469,7 +469,7 @@ followed by database name, and possibly port and user credentials.
 `st_read` typically reads the coordinate reference system as
 `proj4string`, but not the EPSG (SRID).  GDAL cannot retrieve SRID
 (EPSG code) from `proj4string` strings, and, when needed, it has
-to be set by the user. See also the section on [crs][crs].
+to be set by the user. See also the section on [crs](crs).
 
 Two further functions, `st_read_db` and `st_write_db` attempt to
 read and write directly from spatial databases, using WKB. The
@@ -523,7 +523,7 @@ Unit: milliseconds
 Coordinate reference systems (CRS) are like measurement units for
 coordinates: they specify which location on Earth a particular
 coordinate pair refers to. We saw above that `sfc` objects
-(geometry list-columns) have two attributes to store a CRS, `epsg`
+(geometry list-columns) have two attributes to store a CRS: `epsg`
 and `proj4string`.  This implies that all geometries in a geometry
 list-column must have the same CRS. Both may be `NA`, e.g. in case
 the CRS is unknown, or when we work with local coordinate systems
@@ -590,7 +590,7 @@ st_is_valid(nc[1:2,])
 ```
 
 `st_distance` returns a dense numeric matrix with distances
-between geometries `st_relate` returns a character matrix with the
+between geometries. `st_relate` returns a character matrix with the
 [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM#Illustration) values
 for each pair of geometries:
 
@@ -678,7 +678,7 @@ par(opar)
 
 # How attributes relate to geometries 
 
-(this will eventually be the topic of a new vignette; now here to explain the last attribute of `sf` objects)
+(This will eventually be the topic of a new vignette; now here to explain the last attribute of `sf` objects)
 
 The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their [units of measurement](https://CRAN.R-project.org/package=units)). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
 Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties), meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.
