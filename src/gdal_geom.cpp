@@ -44,9 +44,6 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = preserveTopology ?  g[i]->SimplifyPreserveTopology(dTolerance) : 
 					g[i]->Simplify(dTolerance);
-	} else if (op == "triangulate") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = g[i]->DelaunayTriangulation(dTolerance, bOnlyEdges);
 	} else if (op == "polygonize") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = g[i]->Polygonize();
@@ -62,6 +59,12 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 			out[i] = gm;
 		}
 	} else
+#if GDAL_VERSION_MAJOR >= 2 && GDAL_VERSION_MINOR >= 1
+	if (op == "triangulate") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = g[i]->DelaunayTriangulation(dTolerance, bOnlyEdges);
+	} else
+#endif
 		throw std::invalid_argument("invalid operation"); // would leak g and out
 
 	if (op != "segmentize")
