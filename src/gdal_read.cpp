@@ -53,7 +53,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool lines = false, multilines = false, polygons = false, multipolygons = false;
 
-	for (int i = 0; i < gv.size(); i++) {
+	for (unsigned int i = 0; i < gv.size(); i++) {
 		switch(gv[i]->getGeometryType()) {
 			case wkbLineString: lines = true; break;
 			case wkbMultiLineString: multilines = true; break;
@@ -112,7 +112,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	// read all features:
     poLayer->ResetReading();
-	int i = 0;
+	unsigned int i = 0;
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false;
     OGRFeature *poFeature;

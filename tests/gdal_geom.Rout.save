@@ -56,7 +56,7 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > x = st_simplify(nc, 0.1)
 > 
-> if (sf:::CPL_geos_version() >= "3.4.0") {
+> if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
 + 	x = st_triangulate(nc)
 + }
 > 
@@ -312,4 +312,4 @@ LINESTRING(1 3, 2 4)
 > 
 > proc.time()
    user  system elapsed 
-  0.656   0.292   0.642 
+  0.656   0.272   0.621 

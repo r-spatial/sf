@@ -48,7 +48,7 @@ Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
 	for (size_t j = 0; j < tp.size(); j++) {
-		if (j == poFeature->GetFieldCount())
+		if (j == (size_t) poFeature->GetFieldCount())
 			throw std::invalid_argument("Impossible: field count reached\n");
 		switch (tp[j]) {
 			case OFTString: {

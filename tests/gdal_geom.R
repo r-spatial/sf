@@ -20,7 +20,7 @@ x = st_union_cascaded(nc)
 
 x = st_simplify(nc, 0.1)
 
-if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version >= "2.1.0") {
+if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
 	x = st_triangulate(nc)
 }
 
