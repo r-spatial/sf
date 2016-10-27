@@ -2,8 +2,10 @@ context("sf: st_crs tests")
 
 test_that("st_crs works", {
   library(sf)
-  nc1 = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
-  nc2 = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+  # nc1 = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+  nc1 = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+  # nc2 = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+  nc2 = st_read(system.file("shape/nc.shp", package="sf"), "nc")
   st_crs(nc2) <- 4267
   expect_equal(nc1, nc2)
 
