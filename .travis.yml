@@ -1,36 +1,15 @@
 language: r
 cache: packages
 
-matrix:
-  include:
-    - os: linux
-      dist: precise
-      sudo: true
-    - os: linux
-      dist: trusty
-      env: R_CODECOV=true
-      r_check_args: '--use-valgrind'
-    - os: osx
-      osx_image: xcode8
-      brew_packages: gdal2
-      latex: false
-    - os: osx
-      osx_image: beta-xcode6.1
-      brew_packages: gdal2
-      latex: false
-
 addons:
   postgresql: "9.4"
-  apt:
-    packages:
-      - valgrind
 
 before_script:
   - psql -U postgres -c "create extension postgis"
 
 before_install:
-  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then createdb postgis; fi
-  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then psql -d postgis -c "CREATE EXTENSION postgis;"; fi
+  - createdb postgis
+  - psql -d postgis -c "CREATE EXTENSION postgis;"
   - export CURWD=`pwd`
   - sudo apt-get install libproj-dev libgeos++-dev
   - cd
@@ -63,4 +42,4 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
-  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+  - R -e 'covr::codecov()'
