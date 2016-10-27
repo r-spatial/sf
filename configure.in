@@ -33,13 +33,11 @@ fi
 
 if test `gdal-config --version`
 then
-  GDAL_VERSION=`gdal-config --version`
-  GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
-  if test ${GDAL_VER_DOT} -lt 200 ; then
+  if test `pkg-config --atleast-version=2.0.0 gdal`; then
     echo 'Upgrade GDAL to version 2.0.0 or later'
     exit 1
   fi
-  echo "linking against gdal version ${GDAL_VERSION}"
+  echo "linking against gdal version `gdal-config --version`"
   GDAL_CPPFLAGS=`gdal-config --cflags`
   GDAL_LIBS=`gdal-config --libs`
 else
