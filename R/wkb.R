@@ -38,14 +38,22 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
 	} else # direct call with raw:
 		stopifnot(inherits(x, "WKB") && all(sapply(x, is.raw))) # WKB as raw
 	ret = if (pureR)
-			lapply(x, readWKB, EWKB = EWKB)
+			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
-			CPL_read_wkb(x, EWKB = EWKB, endian = .Platform$endian == "little")
+			CPL_read_wkb(x, EWKB = EWKB, endian = as.integer(.Platform$endian == "little"))
 	crs = if (EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
 			attr(ret, "epsg")
 		else
 			NA_integer_
 	do.call(st_sfc, c(ret, crs = crs))
+}
+
+R_read_wkb = function(x, readWKB, EWKB = EWKB) {
+	ret = lapply(x, readWKB, EWKB = EWKB)
+	epsg = attr(ret[[1]], "epsg")
+	ret = lapply(ret, function(x) { attr(x, "epsg") = NULL; x })
+	attr(ret, "epsg") = epsg
+	ret
 }
 
 sf.tp = toupper(c(

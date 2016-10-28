@@ -22,9 +22,11 @@ test_that("Char -> Raw conversion in R and C++ gives identical results", {
   )
 })
 
-test_that("C++ reading of big-endian and little-endian gives the same result", {
+test_that("Reading of big-endian and little-endian gives the same result", {
   x = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
   y = structure(list("0x00200000010000714041061A800000000041145CAC00000000"), class = "WKB")
   expect_identical(st_as_sfc(x, EWKB = TRUE), st_as_sfc(y, EWKB = TRUE))
+  expect_identical(st_as_sfc(x, EWKB = TRUE, pureR = TRUE), st_as_sfc(y, EWKB = TRUE, pureR = TRUE))
+  expect_identical(st_as_sfc(x, EWKB = TRUE), st_as_sfc(y, EWKB = TRUE, pureR = TRUE))
 })
 
