@@ -7,56 +7,105 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 
-# compile Rcpp stuff:
-${R_HOME}/bin/Rscript -e "Rcpp:::compileAttributes()"
+#GDAL
+GDAL_CONFIG="gdal-config"
 
-if test ! -e src/RcppExports.cpp
-then
-  echo ''
-  echo 'For some reason Rcpp is not working.'
-  echo 'Is it installed?'
-  echo ''
-  exit 1
+GDAL_CONFIG_SET="no"
+
+AC_ARG_WITH([gdal-config],
+    AC_HELP_STRING([--with-gdal-config=GDAL_CONFIG],
+           [the location of gdal-config]),
+           [gdal_config=$withval])
+if test [ -n "$gdal_config" ] ; then
+    GDAL_CONFIG_SET="yes"
+    AC_SUBST([GDAL_CONFIG],["${gdal_config}"])
+    AC_MSG_NOTICE(gdal-config set to $GDAL_CONFIG)
 fi
 
-# generate docs & NAMESPACE:
-${R_HOME}/bin/Rscript -e 'roxygen2::roxygenise(roclets = c("namespace", "rd"))'
-
-if test ! -e man/sf.Rd
-then
-  echo ''
-  echo 'For some reason roxygen2 is not working.'
-  echo 'Is it installed?'
-  echo ''
-  exit 1
-fi
-
-if test `gdal-config --version`
-then
-  if test `pkg-config --atleast-version=2.0.0 gdal`; then
-    echo 'Upgrade GDAL to version 2.0.0 or later'
-    exit 1
+if test ["$GDAL_CONFIG_SET" = "no"] ; then
+  AC_PATH_PROG([GDAL_CONFIG], ["$GDAL_CONFIG"],["no"])
+  if test ["$GDAL_CONFIG" = "no"] ; then
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([gdal-config not found or not executable.])
   fi
-  echo "linking against gdal version `gdal-config --version`"
-  GDAL_CPPFLAGS=`gdal-config --cflags`
-  GDAL_LIBS=`gdal-config --libs`
 else
-    echo 'Unable to find gdal-dev'
-    exit 1
+  AC_MSG_CHECKING(gdal-config exists)
+  if test -r "${GDAL_CONFIG}"; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([gdal-config not found - configure argument error.])
+  fi
+  AC_MSG_CHECKING(gdal-config executable)
+  if test -x "${GDAL_CONFIG}"; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([gdal-config not executable.])
+  fi
 fi
 
+
+AC_MSG_CHECKING(gdal-config usability)
+if test `${GDAL_CONFIG} --version`;
+then
+	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
+	GDAL_LIBS=`${GDAL_CONFIG} --libs`
+        GDAL_VERSION=`${GDAL_CONFIG} --version`
+        GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
+        GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+        AC_MSG_RESULT(yes)
+else
+        AC_MSG_RESULT(no)
+	echo "Error: gdal-config not found"
+	echo "The gdal-config script distributed with GDAL could not be found."
+	echo "If you have not installed the GDAL libraries, you can"
+	echo "download the source from  http://www.gdal.org/"
+	echo "If you have installed the GDAL libraries, then make sure that"
+	echo "gdal-config is in your path. Try typing gdal-config at a"
+	echo "shell prompt and see if it runs. If not, use:"
+	echo " --configure-args='--with-gdal-config=/usr/local/bin/gdal-config'"
+	echo "with appropriate values for your installation."
+	echo ""
+
+	exit 1
+fi
+
+AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
+AC_MSG_CHECKING([GDAL version >= 2.0.0])
+GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
+if test ${GDAL_VER_DOT} -lt 200 ; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade GDAL to 2.0.0 or later])
+else
+  AC_MSG_RESULT(yes)
+fi
+
+# GEOS:
+
+AC_MSG_CHECKING(geos-config usability)
 GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
-  echo "linking against geos version" `geos-config --version`
   GEOS_LIBS=`geos-config --libs`
   GEOS_CPPFLAGS=`geos-config --cflags`
+  AC_MSG_RESULT(yes)
 else
-  echo "no geos support: geos++-dev not installed"
+  AC_MSG_RESULT(no)
+  echo "no geos support: geos-dev and/or geos++-dev not installed?"
   exit 1
 fi
-#AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-#AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS}"])
+
+GEOS_VERSION=`geos-config --version`
+AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
+AC_MSG_CHECKING([GEOS version >= 3.3.0])
+GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
+if test ${GEOS_VER_DOT} -lt 330 ; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
+else
+  AC_MSG_RESULT(yes)
+fi
 
 AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
 AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
