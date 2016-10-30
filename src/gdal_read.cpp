@@ -70,6 +70,18 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 	return 0;
 }
 
+size_t count_features(OGRLayer *poLayer) {
+	size_t n = 0;
+    OGRFeature *poFeature;
+    while((poFeature = poLayer->GetNextFeature()) != NULL) {
+		n++;
+		delete poFeature;
+		if (n == INT_MAX)
+			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
+	}
+	return(n);
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
@@ -89,10 +101,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		throw std::invalid_argument("Getting layer failed.\n");
 	}
 	double n_d = (double) poLayer->GetFeatureCount();
-	if (n_d < 0)
-		throw std::out_of_range("Cannot read layer with unknown number of features");
 	if (n_d > INT_MAX)
 		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
+	if (n_d < 0)
+		n_d = (double) count_features(poLayer);
 	size_t n = (size_t) n_d; // what is List's max length?
 	std::vector<OGRGeometry *> poGeometryV(n); // full archive
 	std::vector<OGRFeature *> poFeatureV(n); // full archive

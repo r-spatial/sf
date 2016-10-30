@@ -1,6 +1,12 @@
 options(warn = 2)
 library(sf)
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
+if ("GPKG" %in% st_drivers()$name) {
+	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
+	tst = st_read(system.file("gpkg/nc.gpkg", package="sf")) # default layer name
+}
+
+tst = st_read(system.file("shape/nc.shp", package="sf")) # no layer specified
+
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",

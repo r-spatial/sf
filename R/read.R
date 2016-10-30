@@ -229,5 +229,5 @@ default_layer = function(dsn) {
 		shp = nm, # shapefile: skip path and extension
 		gpkg = bn, # geopackage: use basename (incl. extension)
 		geojson = "OGRGeoJSON", # fixed layer name
-		default = bn) # guess, or error!?
+		{ warning(paste("Unknown extension! Guessing", bn, "as layer name...")); bn })
 }
