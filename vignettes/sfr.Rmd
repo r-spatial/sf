@@ -426,7 +426,8 @@ One of the attributes of a geometry list-column (`sfc`) is the
 rounding during conversion to WKB, which might help certain
 geometrical operations succeed that would otherwise fail due to
 floating point representation. The model is that of GEOS, which
-copies from JTS, and works like this:
+copies from the Java Topology Suite
+([JTS](http://tsusiatsoftware.net/jts/main.html)), and works like this:
 
 * if precision is zero (default, unspecified), nothing is modified
 * negative values convert to float (4-byte real) precision
