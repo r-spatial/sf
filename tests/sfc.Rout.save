@@ -131,7 +131,7 @@ Geometry set for 0 features
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-> try(st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON(0 0,1 1,0 1,0 0)")))
+> try(st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON(0 0,1 1,0 1,0 0)"))) # causes small memory leak
 OGR: Corrupt data
 Error in eval(substitute(expr), envir, enclos) : OGR error
 > st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
@@ -171,4 +171,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.396   0.284   0.375 
+  0.436   0.264   0.402 

@@ -2,7 +2,7 @@
 #'
 #' read simple features from file or database
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
-#' @param layer layer name (varies by driver, may be a file name without extension)
+#' @param layer layer name (varies by driver, may be a file name without extension); see details
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param options character; driver dependent dataset open options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
@@ -10,6 +10,7 @@
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
 #' @param promote_to_multi logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. 
+#' @details layer name may be guessed in some cases e.g. when \code{dsn} contains the full path of a geopackage or a shapefile (with extension .shp), and it will try to do so; this may fail in other cases, though; it is often a good idea to specify both basename and layer name.
 #' @return object of class \link{sf}
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
@@ -25,7 +26,8 @@
 #' summary(nc)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
+st_read = function(dsn, layer = default_layer(dsn), ..., 
+		options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
 		promote_to_multi = TRUE) {
 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
@@ -215,4 +217,17 @@ st_drivers = function(what = "vector") {
 		ret[ret$is_raster,]
 	else
 		ret
+}
+
+default_layer = function(dsn) {
+	bn = basename(dsn)
+	ext = tools::file_ext(bn)
+	nm = tools::file_path_sans_ext(bn)
+	if (bn == "." || ext == "" || nm == "")
+		stop("cannot guess layer name from this datasource")
+	switch(ext, 
+		shp = nm, # shapefile: skip path and extension
+		gpkg = bn, # geopackage: use basename (incl. extension)
+		geojson = "OGRGeoJSON", # fixed layer name
+		default = bn) # guess, or error!?
 }

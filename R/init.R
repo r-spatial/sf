@@ -1,5 +1,6 @@
 #' @importFrom utils head tail object.size
 #' @importFrom stats na.omit
+#' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as slotNames new
 #' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
