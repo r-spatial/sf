@@ -18,8 +18,8 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 The standard is widely implemented in spatial
 databases (such as PostGIS), commercial GIS (e.g., [ESRI
-ArcGIS](http://www.esri.com/)), forms the vector data basis for
-libraries such as [GDAL](http://www.gdal.org/), and a subset of
+ArcGIS](http://www.esri.com/)) and forms the vector data basis for
+libraries such as [GDAL](http://www.gdal.org/). A subset of
 simple features forms the [GeoJSON](http://geojson.org/) standard.
 
 R has well-supported classes for storing spatial
@@ -37,7 +37,7 @@ This vignette:
 
 * explains what is meant by features, and by simple features
 * shows how they are implemented in R
-* shows examples how you can work with them
+* provides examples of how you can work with them
 * shows how they can be read from and written to external files or resources
 * discusses how they can be converted to and from sp objects
 * shows how they can be used for meaningful spatial analysis
@@ -45,7 +45,7 @@ This vignette:
 # What is a feature?
 
 A feature is thought of as a thing, or an object in the real world,
-examples would be a building or a tree. As is the case with objects,
+such as a building or a tree. As is the case with objects,
 they often consist of other objects. This is the case with features
 too: a set of features can form a single feature. A forest stand can
 be a feature, a forest can be a feature, a city can be a feature.
@@ -116,15 +116,14 @@ The remaining geometries 10 are more rare, but increasingly find implementations
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the SQL-MM part 3 standard. The descriptions above were copied from the [postgis](http://postgis.net/docs/using_postgis_dbmanagement.html) docs.
+Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the SQL-MM part 3 standard. The descriptions above were copied from the [PostGIS manual](http://postgis.net/docs/using_postgis_dbmanagement.html).
 
 
 ## Coordinate reference system
 
-Numbers of coordinates only have a meaning as places on the Earth when their coordinate
-reference system is known; this may be an ellipsoidal reference system such as WGS84, a
-flat, two-dimensional coordinate reference system such as a UTM zone or Web Mercator, or
-a three-dimensional reference system. Similarly, M-coordinates need an attribute reference
+Coordinates can only be placed on the Earth's surface when their coordinate
+reference system (CRS) is known; this may be an elipsoidal CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
+in three-dimensions or [including time](http://www.faculty.jacobs-university.de/pbaumann/iu-bremen.de_pbaumann/Papers/acmgis-2012_crs-nts.pdf). Similarly, M-coordinates need an attribute reference
 system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
 # How simple features in R are organized
@@ -139,7 +138,7 @@ and geometries.
 
 As attributes are typically stored in `data.frame` objects (or the
 very similar `tbl_df`), we will also store feature geometries in
-in a `data.frame` column. Since geometries are not single-valued,
+a `data.frame` column. Since geometries are not single-valued,
 they are put in a list-column, a list of length equal to the number
 of records in the `data.frame`, with each list element holding the simple
 feature geometry of that feature.  The three classes used to
@@ -165,9 +164,8 @@ filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename, "nc", crs = 4267)
 ```
 
-The short report printed gives the file name, the driver (GPKG:
-GeoPackage), mentions that there are 100 features (records) and 14
-fields (attributes). This object is of class
+The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14
+fields (attributes, represented as columns). This object is of class
 
 ```{r}
 class(nc)
@@ -382,6 +380,7 @@ title("MULTIPOLYGON")
 plot(gc, border = 'grey', col = 'grey')
 box()
 title("GEOMETRYCOLLECTION")
+par(mfrow = c(1, 1))
 ```
 
 Geometries can also be empty, as in
@@ -404,11 +403,12 @@ st_as_text(x)
 (but without the leading `## [1]` and quotes), is
 human-readable. Coordinates are usually floating point numbers,
 and moving large amounts of information as text is slow and
-imprecise. For that, we use well-known binary (WKB) encoding
+imprecise. For that reason, we use well-known binary (WKB) encoding
 
 ```{r}
 st_as_binary(x)
 ```
+
 WKT and WKB can both be transformed back into R native objects by
 
 ```{r}
@@ -428,7 +428,8 @@ One of the attributes of a geometry list-column (`sfc`) is the
 rounding during conversion to WKB, which might help certain
 geometrical operations succeed that would otherwise fail due to
 floating point representation. The model is that of GEOS, which
-copies from JTS, and works like this:
+copies from the Java Topology Suite
+([JTS](http://tsusiatsoftware.net/jts/main.html)), and works like this:
 
 * if precision is zero (default, unspecified), nothing is modified
 * negative values convert to float (4-byte real) precision
@@ -446,23 +447,29 @@ may require some experimenting.
 ## Reading and writing 
 
 As we've seen above, reading spatial data from an external file can be done by
+
 ```{r}
 filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename, "nc", crs = 4267)
 ```
+
 and writing takes place in the same fashion, using `st_write`:
+
 ```{r}
 st_write(nc, "nc.shp", "nc", "ESRI Shapefile")
 ```
+
 The `dsn` and `layer` arguments to `st_read` and `st_write` denote a
 data source name and a layer.  Their exact interpretation as well
 as the options they support vary per driver, the [GDAL driver
 documentation](http://www.gdal.org/ogr_formats.html) is best
 consulted for this.  For instance, a PostGIS table in database
 `postgis` might be read by
+
 ```{r eval=FALSE}
 meuse <- st_read("PG:dbname=postgis", "meuse")
 ```
+
 where the `PG:` string indicates this concerns the PostGIS driver,
 followed by database name, and possibly port and user credentials.
 
@@ -493,11 +500,11 @@ download.file(u_kmz, "BikePaths.kmz")
 biketrails_shp <- st_read(dsn = ".", layer = "biketrails")
 ogr_layers <- rgdal::ogrListLayers(dsn = "BikePaths.kmz")
 biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-# Tidy up
-files_to_remove <- list.files(pattern = "[B-b]ike")
-file.remove(files_to_remove)
 ```
-Benchmarks show that `st_read()` is often faster than `rgdal::readOGR()`:
+
+### Benchmarks
+
+Benchmarks show that `st_read()` is faster than `rgdal::readOGR()`, for example:
 
 ```{r, echo=TRUE, eval=FALSE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
@@ -508,15 +515,25 @@ microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
                                kmz_read_sp(), kmz_read_sf(), times = 1)
 ```
 
-This might give a table like this:
+```{r, echo=FALSE}
+# Tidy up
+files_to_remove <- list.files(pattern = "[B-b]ike")
+if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
-Unit: milliseconds
-          expr      mean
- shp_read_sp() 4645.4947 
- shp_read_sf()  501.0872
- kmz_read_sp() 6256.2638
- kmz_read_sf() 2169.9361
+
+On a modern laptop (with an Intel i5-2520M processor) the results were as follows:
+
 ```
+## Unit: milliseconds
+##           expr       min        lq      mean    median        uq       max
+##  shp_read_sp() 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876
+##  shp_read_sf()  655.0139  655.0139  655.0139  655.0139  655.0139  655.0139
+##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
+##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094
+```
+
+This shows that `sf::st_read()` is substantially faster than `rgdal::readOGR()`:
+by a factor of 3 and 10 for the Shapefile and KML file used in this benchmark, respectively.
 
 ## Coordinate reference systems and transformations {#crs}
 
@@ -557,6 +574,7 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 ## Conversion, including to and from sp
 
 `sf` objects and objects deriving from `Spatial` (package `sp`) can be coerced both ways:
+
 ```{r}
 showMethods("coerce", classes = "sf")
 methods(st_as_sf)
@@ -585,6 +603,7 @@ The standard for simple feature access defines a number of geometrical operation
 
 `st_is_valid` and `st_is_simple` return a boolean indicating whether
 a geometry is valid or simple.
+
 ```{r}
 st_is_valid(nc[1:2,])
 ```
@@ -617,7 +636,7 @@ return new geometries, e.g.:
 
 ```{r fig.height=3}
 sel <- c(1,5,14)
-buf <- st_buffer(nc.web_mercator[sel,], 30000)
+buf <- st_buffer(nc.web_mercator[sel,], dist = 30000)
 plot(buf, border = 'red')
 plot(nc.web_mercator[sel,], add = TRUE)
 plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
@@ -636,6 +655,7 @@ plot(u)
 
 The following code shows how computing an intersection between two polygons
 may yield a `GEOMETRYCOLLECTION` with a point, line and polygon:
+
 ```{r fig.height=3, fig.width=7}
 opar <- par(mfrow = c(1, 2))
 a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
@@ -685,6 +705,7 @@ Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensiv
 
 Simple feature objects of class `sf` have an attribute that points out how attributes relate to their geometry,
 which can be defined at creation time:
+
 ```{r}
 nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
     relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
@@ -696,6 +717,7 @@ data(meuse, package = "sp")
 meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
 attr(meuse_sf, "relation_to_geometry")
 ```
+
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one
 of three possibilities 
 
