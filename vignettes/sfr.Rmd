@@ -481,7 +481,7 @@ and their metadata: names, whether a driver can write, and whether
 it is a raster and/or vector driver. All drivers can read. Reading
 of some common data formats is illustrated below:
 
-```{r}
+```{r, eval=FALSE}
 # Download .shp data
 u_shp <- "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
 download.file(u_shp, "biketrails.zip")
@@ -493,9 +493,9 @@ biketrails_shp <- st_read(dsn = ".", layer = "biketrails")
 ogr_layers <- rgdal::ogrListLayers(dsn = "BikePaths.kmz")
 biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 ```
-Benchmarks show that `st_read()` is often faster than `rgdal::readOGR()`:
+Benchmarks show that `st_read()` is faster than `rgdal::readOGR()`, for example:
 
-```{r, echo=TRUE, eval=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
 shp_read_sf <- function() st_read(dsn = ".", layer = "biketrails")
 kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
@@ -510,8 +510,7 @@ files_to_remove <- list.files(pattern = "[B-b]ike")
 if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
 
-
-One a modern laptop (with and Intel i5-2520M processor) the results were as follows:
+On a modern laptop (with an Intel i5-2520M processor) the results were as follows:
 ```
 ## Unit: milliseconds
 ##           expr       min        lq      mean    median        uq       max
@@ -520,6 +519,9 @@ One a modern laptop (with and Intel i5-2520M processor) the results were as foll
 ##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
 ##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094
 ```
+
+This shows that `sf::st_read()` is substantially faster than `rgdal::readOGR()`:
+by a factor of 3 and 10 for the Shapefile and KML file used in this benchmark, respectively
 
 ## Coordinate reference systems and transformations {#crs}
 
