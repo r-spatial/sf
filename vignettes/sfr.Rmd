@@ -408,6 +408,7 @@ imprecise. For that reason, we use well-known binary (WKB) encoding
 ```{r}
 st_as_binary(x)
 ```
+
 WKT and WKB can both be transformed back into R native objects by
 
 ```{r}
@@ -446,23 +447,29 @@ may require some experimenting.
 ## Reading and writing 
 
 As we've seen above, reading spatial data from an external file can be done by
+
 ```{r}
 filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename, "nc", crs = 4267)
 ```
+
 and writing takes place in the same fashion, using `st_write`:
+
 ```{r}
 st_write(nc, "nc.shp", "nc", "ESRI Shapefile")
 ```
+
 The `dsn` and `layer` arguments to `st_read` and `st_write` denote a
 data source name and a layer.  Their exact interpretation as well
 as the options they support vary per driver, the [GDAL driver
 documentation](http://www.gdal.org/ogr_formats.html) is best
 consulted for this.  For instance, a PostGIS table in database
 `postgis` might be read by
+
 ```{r eval=FALSE}
 meuse <- st_read("PG:dbname=postgis", "meuse")
 ```
+
 where the `PG:` string indicates this concerns the PostGIS driver,
 followed by database name, and possibly port and user credentials.
 
@@ -515,6 +522,7 @@ if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
 
 On a modern laptop (with an Intel i5-2520M processor) the results were as follows:
+
 ```
 ## Unit: milliseconds
 ##           expr       min        lq      mean    median        uq       max
@@ -566,6 +574,7 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 ## Conversion, including to and from sp
 
 `sf` objects and objects deriving from `Spatial` (package `sp`) can be coerced both ways:
+
 ```{r}
 showMethods("coerce", classes = "sf")
 methods(st_as_sf)
@@ -594,6 +603,7 @@ The standard for simple feature access defines a number of geometrical operation
 
 `st_is_valid` and `st_is_simple` return a boolean indicating whether
 a geometry is valid or simple.
+
 ```{r}
 st_is_valid(nc[1:2,])
 ```
@@ -645,6 +655,7 @@ plot(u)
 
 The following code shows how computing an intersection between two polygons
 may yield a `GEOMETRYCOLLECTION` with a point, line and polygon:
+
 ```{r fig.height=3, fig.width=7}
 opar <- par(mfrow = c(1, 2))
 a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
@@ -694,6 +705,7 @@ Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensiv
 
 Simple feature objects of class `sf` have an attribute that points out how attributes relate to their geometry,
 which can be defined at creation time:
+
 ```{r}
 nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
     relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
@@ -705,6 +717,7 @@ data(meuse, package = "sp")
 meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
 attr(meuse_sf, "relation_to_geometry")
 ```
+
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one
 of three possibilities 
 
