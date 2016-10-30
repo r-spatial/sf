@@ -18,8 +18,8 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 The standard is widely implemented in spatial
 databases (such as PostGIS), commercial GIS (e.g., [ESRI
-ArcGIS](http://www.esri.com/)), forms the vector data basis for
-libraries such as [GDAL](http://www.gdal.org/), and a subset of
+ArcGIS](http://www.esri.com/)) and forms the vector data basis for
+libraries such as [GDAL](http://www.gdal.org/). A subset of
 simple features forms the [GeoJSON](http://geojson.org/) standard.
 
 R has well-supported classes for storing spatial
