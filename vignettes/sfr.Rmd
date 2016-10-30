@@ -481,7 +481,7 @@ and their metadata: names, whether a driver can write, and whether
 it is a raster and/or vector driver. All drivers can read. Reading
 of some common data formats is illustrated below:
 
-```{r, eval=FALSE}
+```{r}
 # Download .shp data
 u_shp <- "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
 download.file(u_shp, "biketrails.zip")
@@ -492,9 +492,6 @@ download.file(u_kmz, "BikePaths.kmz")
 biketrails_shp <- st_read(dsn = ".", layer = "biketrails")
 ogr_layers <- rgdal::ogrListLayers(dsn = "BikePaths.kmz")
 biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-# Tidy up
-files_to_remove <- list.files(pattern = "[B-b]ike")
-file.remove(files_to_remove)
 ```
 Benchmarks show that `st_read()` is often faster than `rgdal::readOGR()`:
 
@@ -506,6 +503,13 @@ kmz_read_sf <- function() st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
                                kmz_read_sp(), kmz_read_sf(), times = 1)
 ```
+
+```{r, echo=FALSE}
+# Tidy up
+files_to_remove <- list.files(pattern = "[B-b]ike")
+file.remove(files_to_remove)
+```
+
 
 This might give a table like this:
 ```
