@@ -507,18 +507,18 @@ microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
 ```{r, echo=FALSE}
 # Tidy up
 files_to_remove <- list.files(pattern = "[B-b]ike")
-file.remove(files_to_remove)
+if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
 
 
-This might give a table like this:
+One a modern laptop (with and Intel i5-2520M processor) the results were as follows:
 ```
-Unit: milliseconds
-          expr      mean
- shp_read_sp() 4645.4947 
- shp_read_sf()  501.0872
- kmz_read_sp() 6256.2638
- kmz_read_sf() 2169.9361
+## Unit: milliseconds
+##           expr       min        lq      mean    median        uq       max
+##  shp_read_sp() 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876
+##  shp_read_sf()  655.0139  655.0139  655.0139  655.0139  655.0139  655.0139
+##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
+##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094
 ```
 
 ## Coordinate reference systems and transformations {#crs}
