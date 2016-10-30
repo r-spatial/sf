@@ -121,9 +121,9 @@ Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described 
 
 ## Coordinate reference system
 
-Numbers of coordinates only have a meaning as places on the Earth when their coordinate
-reference system is known; this may be an ellipsoidal reference system such as WGS84, a
-flat, two-dimensional coordinate reference system such as a UTM zone or Web Mercator, or
+Coordinates can only be placed on the Earth's surface when their coordinate
+reference system (CRS) is known; this may be a geographic reference system such as WGS84, a
+flat, projected, two-dimensional, Cartesian coordinate reference system such as a UTM zone or Web Mercator, or
 a three-dimensional reference system. Similarly, M-coordinates need an attribute reference
 system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
