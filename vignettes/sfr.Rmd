@@ -37,7 +37,7 @@ This vignette:
 
 * explains what is meant by features, and by simple features
 * shows how they are implemented in R
-* shows examples how you can work with them
+* provides examples of how you can work with them
 * shows how they can be read from and written to external files or resources
 * discusses how they can be converted to and from sp objects
 * shows how they can be used for meaningful spatial analysis
