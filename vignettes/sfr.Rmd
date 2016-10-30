@@ -45,7 +45,7 @@ This vignette:
 # What is a feature?
 
 A feature is thought of as a thing, or an object in the real world,
-examples would be a building or a tree. As is the case with objects,
+such as a building or a tree. As is the case with objects,
 they often consist of other objects. This is the case with features
 too: a set of features can form a single feature. A forest stand can
 be a feature, a forest can be a feature, a city can be a feature.
