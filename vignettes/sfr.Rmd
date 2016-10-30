@@ -495,7 +495,7 @@ biketrails_kmz <- st_read(dsn = "BikePaths.kmz", layer = ogr_layers[1])
 ```
 Benchmarks show that `st_read()` is often faster than `rgdal::readOGR()`:
 
-```{r, echo=TRUE, eval=FALSE}
+```{r, echo=TRUE, eval=TRUE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
 shp_read_sf <- function() st_read(dsn = ".", layer = "biketrails")
 kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
