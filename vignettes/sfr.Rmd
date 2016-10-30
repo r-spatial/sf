@@ -138,7 +138,7 @@ and geometries.
 
 As attributes are typically stored in `data.frame` objects (or the
 very similar `tbl_df`), we will also store feature geometries in
-in a `data.frame` column. Since geometries are not single-valued,
+a `data.frame` column. Since geometries are not single-valued,
 they are put in a list-column, a list of length equal to the number
 of records in the `data.frame`, with each list element holding the simple
 feature geometry of that feature.  The three classes used to
