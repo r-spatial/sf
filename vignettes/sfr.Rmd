@@ -164,9 +164,8 @@ filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename, "nc", crs = 4267)
 ```
 
-The short report printed gives the file name, the driver (GPKG:
-GeoPackage), mentions that there are 100 features (records) and 14
-fields (attributes). This object is of class
+The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14
+fields (attributes, represented as columns). This object is of class
 
 ```{r}
 class(nc)
