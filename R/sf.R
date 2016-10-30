@@ -130,7 +130,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		sf_column = sf_column[1]
 	}
 	if (missing(row.names))
-		row.names = seq(length(x[[sf_column]]))
+		row.names = seq_along(x[[sf_column]])
 	df = if (length(x) == 1) # ONLY sfc
 			data.frame(row.names = row.names)
 		else 

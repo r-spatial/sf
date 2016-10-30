@@ -18,7 +18,26 @@ Type 'q()' to quit R.
 > options(warn = 2)
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
-> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267,
+> if ("GPKG" %in% st_drivers()$name) {
++ 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
++ 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf")) # default layer name
++ }
+Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+features:       100
+fields:         14
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Reading layer nc.gpkg from data source /home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg using driver "GPKG"
+features:       100
+fields:         14
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+> 
+> tst = st_read(system.file("shape/nc.shp", package="sf")) # no layer specified
+Reading layer nc from data source /home/edzer/git/sf.Rcheck/sf/shape/nc.shp using driver "ESRI Shapefile"
+features:       100
+fields:         14
+converted into: MULTIPOLYGON
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+> 
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
 + 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
 + 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
@@ -314,4 +333,4 @@ LINESTRING(1 3, 2 4)
 > 
 > proc.time()
    user  system elapsed 
-  0.648   0.280   0.622 
+  0.844   0.300   0.854 
