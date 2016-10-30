@@ -402,7 +402,7 @@ st_as_text(x)
 (but without the leading `## [1]` and quotes), is
 human-readable. Coordinates are usually floating point numbers,
 and moving large amounts of information as text is slow and
-imprecise. For that, we use well-known binary (WKB) encoding
+imprecise. For that reason, we use well-known binary (WKB) encoding
 
 ```{r}
 st_as_binary(x)
