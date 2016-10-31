@@ -69,3 +69,10 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   #m = st_read_db(cn, query = "select * from meuse;")
   dbDisconnect(cn)
 }
+
+if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+  x = st_read("PG:dbname=postgis")
+  print(x)
+  x = st_read("PG:dbname=empty")
+  print(x)
+}

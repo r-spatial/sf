@@ -10,6 +10,8 @@ before_script:
 before_install:
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
+  - createdb empty
+  - psql -d empty -c "CREATE EXTENSION postgis;"
   - export CURWD=`pwd`
   - sudo apt-get install libproj-dev libgeos++-dev
   - cd

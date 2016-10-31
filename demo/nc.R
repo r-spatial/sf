@@ -8,7 +8,7 @@ library(sf)
 datasource = { if ("GPKG" %in% st_drivers()$name)
 	system.file("gpkg/nc.gpkg", package="sf")
 else
-	system.file("shapes/nc.shp", package="sf")
+	system.file("shape/nc.shp", package="sf")
 }
 
 nc = st_read(datasource, crs = 4267,
