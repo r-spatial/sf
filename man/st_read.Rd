@@ -5,8 +5,8 @@
 \alias{st_read_db}
 \title{read simple features from file or database}
 \usage{
-st_read(dsn, layer = default_layer(dsn), ..., options = NULL,
-  quiet = FALSE, iGeomField = 1L, type = 0, promote_to_multi = TRUE)
+st_read(dsn, layer = character(0), ..., options = NULL, quiet = FALSE,
+  iGeomField = 1L, type = 0, promote_to_multi = TRUE)
 
 st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
   geom_column = NULL, EWKB, ...)

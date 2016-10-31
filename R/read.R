@@ -26,12 +26,14 @@
 #' summary(nc)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer = default_layer(dsn), ..., 
+st_read = function(dsn, layer = character(0), ..., 
 		options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
 		promote_to_multi = TRUE) {
 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
 		promote_to_multi)
+	if (inherits(x, "sf_layers"))
+		return(x) # don't know: return/print layers -- there's more than one!
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
@@ -217,17 +219,4 @@ st_drivers = function(what = "vector") {
 		ret[ret$is_raster,]
 	else
 		ret
-}
-
-default_layer = function(dsn) {
-	bn = basename(dsn)
-	ext = tools::file_ext(bn)
-	nm = tools::file_path_sans_ext(bn)
-	if (bn == "." || ext == "" || nm == "")
-		stop("cannot guess layer name from this datasource")
-	switch(ext, 
-		shp = nm, # shapefile: skip path and extension
-		gpkg = bn, # geopackage: use basename (incl. extension)
-		geojson = "OGRGeoJSON", # fixed layer name
-		{ warning(paste("Unknown extension! Guessing", bn, "as layer name...")); bn })
 }

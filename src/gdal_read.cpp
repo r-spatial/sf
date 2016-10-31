@@ -82,6 +82,33 @@ size_t count_features(OGRLayer *poLayer) {
 	return(n);
 }
 
+Rcpp::List CPL_get_layers(GDALDataset *poDS) {
+	// template from ogrinfo.cpp:
+	Rcpp::CharacterVector names(poDS->GetLayerCount());
+	Rcpp::List geomtype(poDS->GetLayerCount());
+	for(int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
+		OGRLayer *poLayer = poDS->GetLayer(iLayer);
+		names(iLayer) = poLayer->GetName();
+		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
+		Rcpp::CharacterVector fieldtp(nGeomFieldCount);
+		if( nGeomFieldCount > 1 ) {
+			for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
+				OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
+				fieldtp(iGeom) = OGRGeometryTypeToName(poGFldDefn->GetType());
+			}
+		} else if (poLayer->GetGeomType() != wkbUnknown)
+			fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
+		geomtype(iLayer) = fieldtp;
+	}
+	Rcpp::List out(3);
+	out(0) = names;
+	out(1) = geomtype;
+	out(2) = poDS->GetDriverName();
+	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver");
+	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
+	return(out);
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
@@ -95,11 +122,22 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
 		throw std::invalid_argument("Open failed.\n");
 	}
-    OGRLayer *poLayer = poDS->GetLayerByName( layer[0] );
-	if (poLayer == NULL) {
-		Rcpp::Rcout << "Cannot get layer " << layer[0] << std::endl;
-		throw std::invalid_argument("Getting layer failed.\n");
+
+	if (layer.size() == 0) { // no layer specified
+		Rcpp::List l = CPL_get_layers(poDS);
+		Rcpp::CharacterVector n = l(0);
+		if (n.size() == 1)
+			layer = n;
+		else
+			return(l);
 	}
+
+    OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
+	if (poLayer == NULL) {
+		Rcpp::Rcout << "Cannot open layer" << layer[0] << std::endl;
+		throw std::invalid_argument("Opening layer failed.\n");
+	}
+
 	double n_d = (double) poLayer->GetFeatureCount();
 	if (n_d > INT_MAX)
 		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
@@ -231,3 +269,4 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	return(out);
 }
+
