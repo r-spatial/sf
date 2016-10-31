@@ -10,7 +10,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Hadley", "Wickham", role = "ctb"),
 	person("Jeroen", "Ooms", role = "ctb")
 	)
-Depends: R (>= 3.0.0)
+Depends: R (>= 3.3.0)
 Imports: utils, stats, tools, graphics, grid, methods, Rcpp, DBI
 LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, roxygen2
