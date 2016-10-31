@@ -212,14 +212,3 @@ print.sf = function(x, ..., n =
 	print.data.frame(y, ...)
 	invisible(x)
 }
-
-#' @export
-print.sf_layers = function(x, ...) {
-	x$geomtype = sapply(x$geomtype, function(x) paste(x, collapse = ", "))
-	cat(paste("Driver:", x$driver, "\n")) 
-	x$driver = NULL
-	df = data.frame(unclass(x))
-	names(df) = c("layer_name", "geometry_type")
-	print(df)
-	invisible(df)
-}

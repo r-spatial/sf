@@ -1,17 +1,16 @@
-#' read simple features from file or database
+#' read simple features or layers from file or database
 #'
-#' read simple features from file or database
-#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
-#' @param layer layer name (varies by driver, may be a file name without extension); see details
+#' read simple features from file or database, or retrieve layer names and their geometry type(s)
+#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
+#' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param options character; driver dependent dataset open options; multiple options supported.
-#' @param quiet logical; suppress info on name, driver, size and spatial reference
+#' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
 #' @param promote_to_multi logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. 
-#' @details layer name may be guessed in some cases e.g. when \code{dsn} contains the full path of a geopackage or a shapefile (with extension .shp), and it will try to do so; this may fail in other cases, though; it is often a good idea to specify both basename and layer name.
-#' @return object of class \link{sf}
+#' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
@@ -26,10 +25,11 @@
 #' summary(nc)
 #' @name st_read
 #' @export
-st_read = function(dsn, layer = character(0), ..., 
-		options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
+st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
 		promote_to_multi = TRUE) {
 
+	if (missing(layer))
+		layer = character(0)
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
 		promote_to_multi)
 	if (inherits(x, "sf_layers"))
@@ -219,4 +219,21 @@ st_drivers = function(what = "vector") {
 		ret[ret$is_raster,]
 	else
 		ret
+}
+
+#' @export
+print.sf_layers = function(x, ...) {
+	x$geomtype = sapply(x$geomtype, function(x) paste(x, collapse = ", "))
+	cat(paste("Driver:", x$driver, "\n")) 
+	x$driver = NULL
+	cat("Available layers:\n")
+	if (length(x$name) == 0) {
+		cat("<none>\n")
+		invisible(x)
+	} else {
+		df = data.frame(unclass(x))
+		names(df) = c("layer_name", "geometry_type")
+		print(df)
+		invisible(df)
+	}
 }

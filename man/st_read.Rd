@@ -3,24 +3,24 @@
 \name{st_read}
 \alias{st_read}
 \alias{st_read_db}
-\title{read simple features from file or database}
+\title{read simple features or layers from file or database}
 \usage{
-st_read(dsn, layer = character(0), ..., options = NULL, quiet = FALSE,
-  iGeomField = 1L, type = 0, promote_to_multi = TRUE)
+st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
+  type = 0, promote_to_multi = TRUE)
 
 st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
   geom_column = NULL, EWKB, ...)
 }
 \arguments{
-\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)}
+\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)}
 
-\item{layer}{layer name (varies by driver, may be a file name without extension); see details}
+\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 
 \item{options}{character; driver dependent dataset open options; multiple options supported.}
 
-\item{quiet}{logical; suppress info on name, driver, size and spatial reference}
+\item{quiet}{logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers}
 
 \item{iGeomField}{integer; in case of multiple geometry fields, which one to take?}
 
@@ -39,17 +39,15 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 \item{EWKB}{logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}}
 }
 \value{
-object of class \link{sf}
+object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 }
 \description{
-read simple features from file or database
+read simple features from file or database, or retrieve layer names and their geometry type(s)
 
 read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 }
 \details{
 for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
-
-layer name may be guessed in some cases e.g. when \code{dsn} contains the full path of a geopackage or a shapefile (with extension .shp), and it will try to do so; this may fail in other cases, though; it is often a good idea to specify both basename and layer name.
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
 }

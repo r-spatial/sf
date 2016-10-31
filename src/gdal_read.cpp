@@ -86,6 +86,7 @@ Rcpp::List CPL_get_layers(GDALDataset *poDS) {
 	// template from ogrinfo.cpp:
 	Rcpp::CharacterVector names(poDS->GetLayerCount());
 	Rcpp::List geomtype(poDS->GetLayerCount());
+
 	for(int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
 		OGRLayer *poLayer = poDS->GetLayer(iLayer);
 		names(iLayer) = poLayer->GetName();
@@ -100,6 +101,7 @@ Rcpp::List CPL_get_layers(GDALDataset *poDS) {
 			fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
 		geomtype(iLayer) = fieldtp;
 	}
+
 	Rcpp::List out(3);
 	out(0) = names;
 	out(1) = geomtype;
@@ -128,8 +130,20 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::CharacterVector n = l(0);
 		if (n.size() == 1)
 			layer = n;
-		else
+		else {
+			if (!quiet) {
+				if (n.size() == 0)
+					Rcpp::Rcout << "No ";
+				else
+					Rcpp::Rcout << "Multiple ";
+				Rcpp::Rcout << "layers are present in data source " << datasource[0] 
+					<< "." << std::endl;
+				Rcpp::Rcout << "Returning a list of layer names and their type;" << std::endl;
+				Rcpp::Rcout << "set the `layer' argument in `st_read' to read a particular layer." 
+					<< std::endl;
+			}
 			return(l);
+		}
 	}
 
     OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
