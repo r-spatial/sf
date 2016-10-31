@@ -135,13 +135,20 @@
 #&gt; 	---- ~~
 #&gt; 
 #&gt; &gt; ## this object was created as follows:
-#&gt; &gt; # library(sf)
+#&gt; &gt; library(sf)
+#&gt; 
 #&gt; &gt; # nc = st_read(system.file(&quot;shapes/&quot;, package=&quot;maptools&quot;), &quot;sids&quot;)
 #&gt; &gt; # st_crs(nc) = 4267 # &quot;+proj=longlat +ellps=clrk66&quot; or &quot;+proj=longlat +datum=NAD27&quot;
 #&gt; &gt; # print(nc, n = 3)
 #&gt; &gt; # st_write(nc, &quot;nc.gpkg&quot;, &quot;nc.gpkg&quot;, driver = &quot;GPKG&quot;)
 #&gt; &gt; 
-#&gt; &gt; nc = st_read(system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;), &quot;nc.gpkg&quot;, crs = 4267,
+#&gt; &gt; datasource = { if (&quot;GPKG&quot; %in% st_drivers()$name)
+#&gt; + 	system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;)
+#&gt; + else
+#&gt; + 	system.file(&quot;shapes/nc.shp&quot;, package=&quot;sf&quot;)
+#&gt; + }
+#&gt; 
+#&gt; &gt; nc = st_read(datasource, crs = 4267,
 #&gt; + 	relation_to_geometry = c(AREA = &quot;lattice&quot;, PERIMETER = &quot;lattice&quot;, CNTY_ = &quot;entity&quot;,
 #&gt; + 		CNTY_ID = &quot;entity&quot;, NAME = &quot;entity&quot;, FIPS = &quot;entity&quot;, FIPSNO = &quot;entity&quot;,
 #&gt; + 		CRESS_ID = &quot;entity&quot;, BIR74 = &quot;lattice&quot;, SID74 = &quot;lattice&quot;, NWBIR74 = &quot;lattice&quot;,
@@ -150,31 +157,17 @@
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; 
+#&gt; &gt; rm(datasource)
 #&gt; Writing layer sids to data source PG:dbname=postgis using driver &quot;PostgreSQL&quot;
 #&gt; options:        OVERWRITE=true 
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; geometry type:  MULTIPOLYGON
-#&gt; </div><div class='input'><span class='fu'>demo</span>(<span class='no'>nc</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; 	demo(nc)
-#&gt; 	---- ~~
-#&gt; 
-#&gt; &gt; ## this object was created as follows:
-#&gt; &gt; # library(sf)
-#&gt; &gt; # nc = st_read(system.file(&quot;shapes/&quot;, package=&quot;maptools&quot;), &quot;sids&quot;)
-#&gt; &gt; # st_crs(nc) = 4267 # &quot;+proj=longlat +ellps=clrk66&quot; or &quot;+proj=longlat +datum=NAD27&quot;
-#&gt; &gt; # print(nc, n = 3)
-#&gt; &gt; # st_write(nc, &quot;nc.gpkg&quot;, &quot;nc.gpkg&quot;, driver = &quot;GPKG&quot;)
-#&gt; &gt; 
-#&gt; &gt; nc = st_read(system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;), &quot;nc.gpkg&quot;, crs = 4267,
-#&gt; + 	relation_to_geometry = c(AREA = &quot;lattice&quot;, PERIMETER = &quot;lattice&quot;, CNTY_ = &quot;entity&quot;,
-#&gt; + 		CNTY_ID = &quot;entity&quot;, NAME = &quot;entity&quot;, FIPS = &quot;entity&quot;, FIPSNO = &quot;entity&quot;,
-#&gt; + 		CRESS_ID = &quot;entity&quot;, BIR74 = &quot;lattice&quot;, SID74 = &quot;lattice&quot;, NWBIR74 = &quot;lattice&quot;,
-#&gt; + 		BIR79 = &quot;lattice&quot;, SID79 = &quot;lattice&quot;, NWBIR79  = &quot;lattice&quot;))
-#&gt; Reading layer nc.gpkg from data source /home/edzer/git/sfr/inst/gpkg/nc.gpkg using driver &quot;GPKG&quot;
+#&gt; </div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
 #&gt; features:       100
 #&gt; fields:         14
+#&gt; converted into: MULTIPOLYGON
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"."</span>, <span class='st'>"nc"</span>)</div><div class='output co'>#&gt; Writing layer nc to data source . using driver &quot;ESRI Shapefile&quot;
 #&gt; </div><div class='output'><strong class='text-warning'>Warning message:
