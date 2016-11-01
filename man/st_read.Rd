@@ -18,7 +18,7 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 
-\item{options}{character; driver dependent dataset open options; multiple options supported.}
+\item{options}{character; driver dependent dataset open options, multiple options supported.}
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers}
 

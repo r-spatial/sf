@@ -133,6 +133,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_get_layers
+Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options);
+RcppExport SEXP sf_CPL_get_layers(SEXP datasourceSEXP, SEXP optionsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type datasource(datasourceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_layers(datasource, options));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_read_ogr
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector options, bool quiet, int iGeomField, int toTypeUser, bool promote_to_multi);
 RcppExport SEXP sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP iGeomFieldSEXP, SEXP toTypeUserSEXP, SEXP promote_to_multiSEXP) {

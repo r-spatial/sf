@@ -71,8 +71,7 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 }
 
 if (Sys.getenv("USER") %in% c("travis", "edzer")) {
-  x = st_read("PG:dbname=postgis")
-  print(x)
-  x = st_read("PG:dbname=empty")
-  print(x)
+  suppressWarnings(x <- st_read("PG:dbname=postgis"))
+  try(x <- st_read("PG:dbname=empty")) # error
+  st_list("PG:dbname=postgis")
 }

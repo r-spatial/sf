@@ -4,7 +4,7 @@
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
 #' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
-#' @param options character; driver dependent dataset open options; multiple options supported.
+#' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
 #' @param iGeomField integer; in case of multiple geometry fields, which one to take?
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
@@ -236,4 +236,14 @@ print.sf_layers = function(x, ...) {
 		print(df)
 		invisible(df)
 	}
+}
+
+#' list layers in a datasource
+#'
+#' list layers in a datasource
+#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
+#' @param options character; driver dependent dataset open options, multiple options supported.
+#' @export
+st_list = function(dsn, options = character(0)) {
+	CPL_get_layers(dsn, options)
 }

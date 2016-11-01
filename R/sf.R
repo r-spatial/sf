@@ -121,7 +121,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		x = x[[1]]
 	# find & remove the sfc column:
 	sf = sapply(x, function(x) inherits(x, "sfc"))
-	if (!any(sf))
+	if (! any(sf))
 		stop("no simple features geometry column present")
 	sf_column = which(sf)
 	if (length(sf_column) > 1) {
@@ -133,8 +133,13 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		row.names = seq_along(x[[sf_column]])
 	df = if (length(x) == 1) # ONLY sfc
 			data.frame(row.names = row.names)
-		else 
-			data.frame(x[-sf_column], row.names = row.names, stringsAsFactors = stringsAsFactors)
+		else {
+			if (inherits(x, "data.frame"))
+				x[-sf_column]
+			else # create a data.frame from list:
+				data.frame(x[-sf_column], row.names = row.names, 
+					stringsAsFactors = stringsAsFactors)
+		}
 
 	# add sfc column, with right name:
 	sfc_name = if (!is.null(names(x)) && nzchar(names(x)[sf_column]))
@@ -145,7 +150,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		make.names(arg_nm[sf_column])
 	}
 	df[[sfc_name]] = x[[sf_column]]
-	if (!missing(precision))
+	if (! missing(precision))
 		attr(df[[sfc_name]], "precision") = precision
 
 	# add attributes:

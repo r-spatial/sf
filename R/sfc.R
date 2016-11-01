@@ -201,26 +201,6 @@ st_geometry_type = function(x) {
 		"TRIANGLE"))
 }
 
-#' summarize simple feature type for tibble
-#'
-#' summarize simple feature type for tibble
-#' @param x object of class sfc
-#' @param ... ignored
-#' @name tibble
-#' @export
-type_sum.sfc <- function(x, ...) {
-   "simple_feature"
-}
-
-#' summarize simple feature item for tibble
-#'
-#' summarize simple feature item for tibble
-#' @name tibble
-#' @export
-obj_sum.sfc <- function(x) {
-	sapply(x, function(sfg) format(sfg, digits = 15L))
-}
-
 #' drop Z and/or M dimensions from feature geometries
 #'
 #' drop Z and/or M dimensions from feature geometries, resetting classes appropriately
