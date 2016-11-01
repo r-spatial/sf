@@ -138,8 +138,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					Rcpp::Rcout << "Multiple ";
 				Rcpp::Rcout << "layers are present in data source " << datasource[0] 
 					<< "." << std::endl;
-				Rcpp::Rcout << "Returning a list of layer names and their type;" << std::endl;
-				Rcpp::Rcout << "set the `layer' argument in `st_read' to read a particular layer." 
+				Rcpp::Rcout << "Returning a list of layer names and their type." << std::endl;
+				Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." 
 					<< std::endl;
 			}
 			return(l);
