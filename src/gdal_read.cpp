@@ -149,19 +149,17 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				layer = Rcpp::CharacterVector::create(poLayer->GetName());
 				break;
 			}
-			default: {
+			default: { // select first layer: message + warning:
 				OGRLayer *poLayer = poDS->GetLayer(0);
 				layer = Rcpp::CharacterVector::create(poLayer->GetName());
 				if (! quiet) {
-				Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] 
-					<< "." << std::endl;
-				Rcpp::Rcout << "Reading layer `" << layer[0] << "'." << std::endl;
-				Rcpp::Rcout << "Use `st_list' to list all layer names and their type." << std::endl;
-				Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." 
-					<< std::endl;
+					Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] << ", ";
+					Rcpp::Rcout << "reading layer `" << layer[0] << "'." << std::endl;
+					Rcpp::Rcout << "Use `st_list' to list all layer names and their type in a data source." << std::endl;
+					Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." << std::endl;
 				}
 				Rcpp::Function warning("warning");
-				warning("automatically selected the first layer in a data source containing more than one");
+				warning("automatically selected the first layer in a data source containing more than one.");
 			}
 		}
 	}
