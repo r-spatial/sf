@@ -3,14 +3,15 @@
 \name{dplyr}
 \alias{arrange_.sf}
 \alias{distinct_.sf}
-\alias{do_.sf}
 \alias{dplyr}
 \alias{filter_.sf}
+\alias{gather_.sf}
 \alias{group_by_.sf}
 \alias{mutate_.sf}
 \alias{rename_.sf}
 \alias{select_.sf}
 \alias{slice_.sf}
+\alias{spread_.sf}
 \alias{transmute_.sf}
 \title{dplyr verb methods for sf objects}
 \usage{
@@ -19,8 +20,6 @@ filter_.sf(.data, ..., .dots)
 arrange_.sf(.data, ..., .dots)
 
 distinct_.sf(.data, ..., .dots, .keep_all = FALSE)
-
-do_.sf(.data, ..., .dots, .chunk_size = 10000L)
 
 group_by_.sf(.data, ..., .dots, add = FALSE)
 
@@ -33,6 +32,12 @@ select_.sf(.data, ..., .dots)
 rename_.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
+
+spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
+  drop = TRUE, sep = NULL)
+
+gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
+  convert = FALSE, factor_key = FALSE)
 }
 \arguments{
 \item{.data}{data object of class \link{sf}}
@@ -43,11 +48,38 @@ slice_.sf(.data, ..., .dots)
 
 \item{.keep_all}{see corresponding function in dplyr}
 
-\item{.chunk_size}{see corresponding function in dplyr}
-
 \item{add}{see corresponding function in dplyr}
+
+\item{data}{see original function docs}
+
+\item{key_col}{see original function docs}
+
+\item{value_col}{see original function docs}
+
+\item{fill}{see original function docs}
+
+\item{convert}{see original function docs}
+
+\item{drop}{see original function docs}
+
+\item{sep}{see original function docs}
+
+\item{gather_cols}{see original function docs}
+
+\item{na.rm}{see original function docs}
+
+\item{factor_key}{see original function docs}
 }
 \description{
 dplyr verb methods for sf objects
+}
+\examples{
+library(dplyr)
+nc = st_read(system.file("shape/nc.shp", package="sf"), crs = 4267)
+nc \%>\% filter(AREA > .1) \%>\% plot()
+# plot 10 smallest counties in grey:
+nc \%>\% plot()
+nc \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+nc \%>\% distinct() \%>\% class()
 }
 

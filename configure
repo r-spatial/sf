@@ -1799,15 +1799,17 @@ fi
 $as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL version >= 2.0.0" >&5
 $as_echo_n "checking GDAL version >= 2.0.0... " >&6; }
-GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
-if test ${GDAL_VER_DOT} -lt 200 ; then
+
+GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
+if test ${GDAL_MAJ_VER} -lt 2 ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "upgrade GDAL to 2.0.0 or later" "$LINENO" 5
+  as_fn_error $? "sf is not compatible with GDAL versions below 2.0.0" "$LINENO" 5
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 fi
+
 
 # GEOS:
 
