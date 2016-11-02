@@ -148,21 +148,21 @@ Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.g
 features:       100
 fields:         14
 proj4string:    +proj=longlat +datum=NAD27 +no_defs 
-> nc.ea <- st_transform(nc, 7314) # Lambert equal area
-> nc.ea <- nc.ea %>% mutate(area = st_area(nc.ea), dens = BIR74/area)
-> summary(nc.ea$dens)
+> nc.merc <- st_transform(nc, 3857) # web mercator - not so good!
+> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74/area)
+> summary(nc.merc$dens)
      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-1.834e-08 8.762e-08 1.485e-07 2.386e-07 2.770e-07 1.377e-06 
-> nc.ea$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-> nc.grp <- nc.ea %>% group_by(area_cl)
+1.331e-07 6.159e-07 1.043e-06 1.713e-06 1.971e-06 9.922e-06 
+> nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+> nc.grp <- nc.merc %>% group_by(area_cl)
 > out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), new_dens = pop/A) 
 > out %>% summarise(sum(A * new_dens))
   sum(A * new_dens)
 1            329962
-> nc.ea %>% summarise(sum(area * dens))
+> nc.merc %>% summarise(sum(area * dens))
   sum(area * dens)
 1           329962
 > 
 > proc.time()
    user  system elapsed 
-  1.024   0.280   1.011 
+  0.944   0.312   0.947 
