@@ -181,8 +181,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 	if (! quiet) {
-		Rcpp::Rcout << "Reading layer " << layer[0] << " from data source " << datasource[0] <<
-			" using driver \"" << poDS->GetDriverName() << "\"" << std::endl;
+		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] <<
+			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;
 		Rcpp::Rcout << "features:       " << n << std::endl;
 		Rcpp::Rcout << "fields:         " << poFDefn->GetFieldCount() << std::endl;
 	}

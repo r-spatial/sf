@@ -1,5 +1,5 @@
 
-R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -89,6 +89,12 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 +   dbDisconnect(cn)
 + }
 > 
+> if (Sys.getenv("USER") %in% c("travis", "edzer")) {
++   suppressWarnings(x <- st_read("PG:dbname=postgis"))
++   try(x <- st_read("PG:dbname=empty")) # error
++   st_list("PG:dbname=postgis")
++ }
+> 
 > proc.time()
    user  system elapsed 
-  0.540   0.260   0.498 
+  0.556   0.288   0.532 

@@ -1,5 +1,5 @@
 
-R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -147,7 +147,7 @@ In data.row.names(row.names, rowsi, i) :
 > # roundtrip nc: sf -> sp -> sf
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
-Reading layer nc from data source /home/edzer/git/sf.Rcheck/sf/shape/nc.shp using driver "ESRI Shapefile"
+Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 features:       100
 fields:         14
 converted into: MULTIPOLYGON
@@ -166,4 +166,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.236   0.284   3.218 
+  3.188   0.272   3.167 
