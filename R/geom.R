@@ -10,6 +10,15 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 
 #' @name geos
 #' @export
+#' @return st_area returns the area of a geometry, in the coordinate reference system used
+st_area = function(x) { 
+	if (st_is_longlat(x))
+		warning("st_area does not give a meaningful area measure for long/lat data.")
+	CPL_area(st_geometry(x))
+}
+
+#' @name geos
+#' @export
 #' @return st_is_simple and st_is_valid return a logical vector
 st_is_simple = function(x) CPL_is_simple(st_geometry(x))
 

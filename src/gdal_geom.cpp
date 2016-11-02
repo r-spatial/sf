@@ -17,6 +17,21 @@ Rcpp::LogicalVector CPL_is_simple(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	Rcpp::NumericVector out(sfc.length());
+	for (size_t i = 0; i < g.size(); i++) {
+		if (g[i]->getDimension() == 2) {
+			OGRSurface *a = (OGRSurface *) g[i];
+			out[i] = a->get_Area();
+		} else
+			out[i] = 0.0;
+		delete g[i];
+	}
+	return(out);
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc, 
 		double bufferDist = 0.0, int nQuadSegs = 30,
 		double dTolerance = 0.0, bool preserveTopology = false, 

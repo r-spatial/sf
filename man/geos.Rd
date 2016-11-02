@@ -2,6 +2,7 @@
 % Please edit documentation in R/geom.R
 \name{geos}
 \alias{geos}
+\alias{st_area}
 \alias{st_boundary}
 \alias{st_buffer}
 \alias{st_centroid}
@@ -35,6 +36,8 @@
 \title{Geometric operations on (pairs of) simple feature geometries}
 \usage{
 st_is_valid(x)
+
+st_area(x)
 
 st_is_simple(x)
 
@@ -123,6 +126,8 @@ st_sym_difference(x, y0)
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
+
+st_area returns the area of a geometry, in the coordinate reference system used
 
 st_is_simple and st_is_valid return a logical vector
 
