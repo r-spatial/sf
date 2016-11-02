@@ -52,3 +52,16 @@ nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
 nc.g %>% tail()
 nc.g %>% spread(VAR, SID) %>% head()
 nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
+
+
+library(dplyr)
+library(sf)
+demo(nc, ask = FALSE, echo = FALSE)
+nc.ea <- st_transform(nc, 7314) # Lambert equal area
+nc.ea <- nc.ea %>% mutate(area = st_area(nc.ea), dens = BIR74/area)
+summary(nc.ea$dens)
+nc.ea$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc.grp <- nc.ea %>% group_by(area_cl)
+out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), new_dens = pop/A) 
+out %>% summarise(sum(A * new_dens))
+nc.ea %>% summarise(sum(area * dens))

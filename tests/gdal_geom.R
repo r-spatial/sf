@@ -85,3 +85,5 @@ st_is_within_distance(a, b, 2)
 st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 
 st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
+
+cbind(suppressWarnings(st_area(a)), a$AREA)

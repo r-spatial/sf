@@ -118,7 +118,7 @@ summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
 		ret[[sf_column]] = do.call(st_sfc, geoms)
 		st_as_sf(ret)
 	} else
-		NextMethod()
+		as.data.frame(NextMethod())
 }
 
 ## summarize_ not needed
