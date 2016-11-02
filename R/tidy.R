@@ -106,6 +106,7 @@ slice_.sf <- function(.data, ..., .dots) {
 #' nc.g <- nc %>% group_by(area_cl)
 #' nc.g %>% summarise(mean(AREA))
 #' nc.g %>% summarize(mean(AREA))
+#' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
 summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
 	if (inherits(.data, "grouped_df")) {
 		geom = st_geometry(.data)
