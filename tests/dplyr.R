@@ -1,0 +1,28 @@
+library(sf)
+library(dplyr)
+nc = st_read(system.file("shape/nc.shp", package="sf"), crs = 4267)
+nc %>% filter(AREA > .1) %>% plot()
+
+# plot 10 smallest counties in grey:
+nc %>% plot()
+nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+
+# select: check both when geometry is part of the selection, and when not:
+nc %>% select(SID74, SID79) %>% names()
+nc %>% select(SID74, SID79, geometry) %>% names()
+nc %>% select(SID74, SID79) %>% class()
+nc %>% select(SID74, SID79, geometry) %>% class()
+
+library(tidyr)
+
+# time-wide to long table, using tidyr::gather
+# stack the two SID columns for the July 1, 1974 - June 30, 1978 and July 1, 1979 - June 30, 1984 periods
+# (see https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
+nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
+
+# spread:
+nc$row = 1:100
+nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
+nc.g %>% tail()
+nc.g %>% spread(VAR, SID)
+nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()

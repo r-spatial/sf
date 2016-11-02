@@ -93,6 +93,7 @@ slice_.sf <- function(.data, ..., .dots) {
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples 
+#' library(tidyr)
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
 gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
 		convert = FALSE, factor_key = FALSE) {
@@ -106,7 +107,9 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #' @param sep see original function docs
 #' @export
 #' @examples
-#' nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID)
+#' library(tidyr)
+#' nc$row = 1:100 # needed for spread to work
+#' nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
 	sf_column = attr(data, "sf_column")

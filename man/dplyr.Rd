@@ -81,7 +81,10 @@ nc \%>\% filter(AREA > .1) \%>\% plot()
 nc \%>\% plot()
 nc \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
 nc \%>\% distinct() \%>\% class()
+library(tidyr)
 nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
-nc \%>\% select(SID74, SID79, geometry, row) \%>\% gather(VAR, SID, -geometry, -row) \%>\% spread(VAR, SID)
+library(tidyr)
+nc$row = 1:100 # needed for spread to work
+nc \%>\% select(SID74, SID79, geometry, row) \%>\% gather(VAR, SID, -geometry, -row) \%>\% spread(VAR, SID) \%>\% head()
 }
 
