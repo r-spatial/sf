@@ -83,6 +83,8 @@
 
     <pre><span class='fu'>st_is_valid</span>(<span class='no'>x</span>)
 
+<span class='fu'>st_area</span>(<span class='no'>x</span>)
+
 <span class='fu'>st_is_simple</span>(<span class='no'>x</span>)
 
 <span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>x</span>)
@@ -174,6 +176,7 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>matrix (sparse or dense); if dense: of type <code>character</code> for <code>relate</code>, <code>numeric</code> for <code>distance</code>, and <code>logical</code> for all others; matrix has dimension <code>x</code> by <code>y</code>; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching <code>y</code>.</p>
+    <p>st_area returns the area of a geometry, in the coordinate reference system used</p>
     <p>st_is_simple and st_is_valid return a logical vector</p>
     <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     <p>st_relate returns a dense <code>character</code> matrix</p>
@@ -190,7 +193,7 @@
       Examples
     </h2>
     <pre class="examples"><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON

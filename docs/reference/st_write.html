@@ -142,10 +142,13 @@
 #&gt; &gt; # print(nc, n = 3)
 #&gt; &gt; # st_write(nc, &quot;nc.gpkg&quot;, &quot;nc.gpkg&quot;, driver = &quot;GPKG&quot;)
 #&gt; &gt; 
+#&gt; &gt; # description of the dataset, see vignette in package spdep:
+#&gt; &gt; # https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf
+#&gt; &gt; 
 #&gt; &gt; datasource = { if (&quot;GPKG&quot; %in% st_drivers()$name)
 #&gt; + 	system.file(&quot;gpkg/nc.gpkg&quot;, package=&quot;sf&quot;)
 #&gt; + else
-#&gt; + 	system.file(&quot;shapes/nc.shp&quot;, package=&quot;sf&quot;)
+#&gt; + 	system.file(&quot;shape/nc.shp&quot;, package=&quot;sf&quot;)
 #&gt; + }
 #&gt; 
 #&gt; &gt; nc = st_read(datasource, crs = 4267,
@@ -153,7 +156,7 @@
 #&gt; + 		CNTY_ID = &quot;entity&quot;, NAME = &quot;entity&quot;, FIPS = &quot;entity&quot;, FIPSNO = &quot;entity&quot;,
 #&gt; + 		CRESS_ID = &quot;entity&quot;, BIR74 = &quot;lattice&quot;, SID74 = &quot;lattice&quot;, NWBIR74 = &quot;lattice&quot;,
 #&gt; + 		BIR79 = &quot;lattice&quot;, SID79 = &quot;lattice&quot;, NWBIR79  = &quot;lattice&quot;))
-#&gt; Reading layer nc.gpkg from data source /home/edzer/git/sfr/inst/gpkg/nc.gpkg using driver &quot;GPKG&quot;
+#&gt; Reading layer `nc.gpkg&#39; from data source `/home/edzer/git/sfr/inst/gpkg/nc.gpkg&#39; using driver `GPKG&#39;
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
@@ -164,7 +167,7 @@
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; geometry type:  MULTIPOLYGON
-#&gt; </div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
+#&gt; </div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON

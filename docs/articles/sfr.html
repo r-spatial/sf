@@ -132,7 +132,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="st">"nc"</span>, <span class="dt">crs =</span> <span class="dv">4267</span>)
-## Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver "ESRI Shapefile"
+## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## converted into: MULTIPOLYGON
@@ -155,9 +155,12 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 <li>that although geometries are native R objects, they are printed as <a href="#wkb">well-known text</a></li>
 </ul><p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
-##  [1] coerce        initialize    plot          print         [            
-##  [6] show          slotsFromS3   st_bbox       st_crs&lt;-      st_crs       
-## [11] st_drop_zm    st_geometry&lt;- st_geometry   st_transform 
+##  [1] arrange_      coerce        distinct_     filter_       gather_      
+##  [6] group_by_     initialize    mutate_       plot          print        
+## [11] rename_       select_       [             show          slice_       
+## [16] slotsFromS3   spread_       st_bbox       st_crs&lt;-      st_crs       
+## [21] st_drop_zm    st_geometry&lt;- st_geometry   st_transform  summarise_   
+## [26] transmute_   
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g.&nbsp;by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -213,7 +216,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ##  [1] coerce       format       initialize   Ops          print       
 ##  [6] [            show         slotsFromS3  st_as_binary st_as_text  
 ## [11] st_bbox      st_crs&lt;-     st_crs       st_drop_zm   st_geometry 
-## [16] st_transform summary     
+## [16] st_transform summary      type_sum    
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -359,7 +362,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 <p>As we&rsquo;ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="st">"nc"</span>, <span class="dt">crs =</span> <span class="dv">4267</span>)
-## Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver "ESRI Shapefile"
+## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## converted into: MULTIPOLYGON
@@ -546,7 +549,7 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
         <span class="dt">CNTY_ID =</span> <span class="st">"entity"</span>, <span class="dt">NAME =</span> <span class="st">"entity"</span>, <span class="dt">FIPS =</span> <span class="st">"entity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"entity"</span>,
         <span class="dt">CRESS_ID =</span> <span class="st">"entity"</span>, <span class="dt">BIR74 =</span> <span class="st">"lattice"</span>, <span class="dt">SID74 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"lattice"</span>,
         <span class="dt">BIR79 =</span> <span class="st">"lattice"</span>, <span class="dt">SID79 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"lattice"</span>))
-## Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver "ESRI Shapefile"
+## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## converted into: MULTIPOLYGON

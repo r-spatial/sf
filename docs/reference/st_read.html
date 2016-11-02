@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>read simple features from file or database — st_read • sf</title>
+<title>read simple features or layers from file or database — st_read • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,17 +74,17 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>read simple features from file or database</h1>
+    <h1>read simple features or layers from file or database</h1>
     </div>
 
     
-    <p>read simple features from file or database</p>
+    <p>read simple features from file or database, or retrieve layer names and their geometry type(s)</p>
 
     <p>read PostGIS table directly through DBI and RPostgreSQL interface, converting binary</p>
     
 
-    <pre><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>default_layer</span>(<span class='no'>dsn</span>), <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>iGeomField</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>iGeomField</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>st_read_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>table</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'>paste</span>(<span class='st'>"select * from "</span>, <span class='no'>table</span>, <span class='st'>";"</span>),
   <span class='kw'>geom_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>EWKB</span>, <span class='no'>...</span>)</pre>
@@ -92,15 +92,15 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>dsn</dt>
-      <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)</dd>
+      <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)</dd>
       <dt>layer</dt>
-      <dd>layer name (varies by driver, may be a file name without extension); see details</dd>
+      <dd>layer name (varies by driver, may be a file name without extension); in case <code>layer</code> is missing, <code>st_read</code> will read layer <code>dsn</code> when it contains a single layer, but will return an object of class <code>sf_layers</code> listing the avaible layers in all other cases (including zero layers), and print a message signaling this.</dd>
       <dt>...</dt>
       <dd>parameter(s) passed on to <a href='st_as_sf.html'>st_as_sf</a></dd>
       <dt>options</dt>
-      <dd>character; driver dependent dataset open options; multiple options supported.</dd>
+      <dd>character; driver dependent dataset open options, multiple options supported.</dd>
       <dt>quiet</dt>
-      <dd>logical; suppress info on name, driver, size and spatial reference</dd>
+      <dd>logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers</dd>
       <dt>iGeomField</dt>
       <dd>integer; in case of multiple geometry fields, which one to take?</dd>
       <dt>type</dt>
@@ -121,12 +121,11 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of class <a href='sf.html'>sf</a></p>
+    <p>object of class <a href='sf.html'>sf</a> when a layer was succesfully read; in case argument <code>layer</code> is missing and data source <code>dsn</code> does not contain a single layer, an object of class <code>sf_layers</code> is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>for iGeomField, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code> values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.</p>
-    <p>layer name may be guessed in some cases e.g. when <code>dsn</code> contains the full path of a geopackage or a shapefile (with extension .shp), and it will try to do so; this may fail in other cases, though; it is often a good idea to specify both basename and layer name.</p>
     <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.</p>
     
 
@@ -147,7 +146,7 @@ GDAL Error 1: Layer meuse already exists, CreateLayer failed.
 Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div class='output co'>#&gt; Creating layer meuse failed.
 #&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
 </strong><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer nc from data source /home/edzer/git/sfr/inst/shape/nc.shp using driver &quot;ESRI Shapefile&quot;
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON

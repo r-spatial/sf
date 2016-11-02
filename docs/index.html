@@ -41,28 +41,31 @@
 <p>Install with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
-<p>This currently works directly under windows with R 3.3 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11) and GDAL (&gt;= 2.0.0) and GEOS (&gt;= 3.1.0) are needed.</p>
-<p>To install these libraries on Ubuntu, for example, either:</p>
+<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.3.0) are needed.</p>
+<p>For example, to install these libraries on Ubuntu, either:</p>
 <ul><li>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories (e.g.&nbsp;with <code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable</code> and then <code>sudo apt-get install libgdal-dev libgeos++-dev</code>), or</li>
-<li>install from source; see the <a href="https://github.com/edzer/sfr/blob/master/.travis.yml">travis</a> config file for hints.</li>
+<li>install from source; see the <a href="https://github.com/edzer/sfr/blob/master/.travis.yml">travis</a> config file for hints</li>
 </ul><p>See also:</p>
-<ul><li>the original R Consortium ISC <a href="PROPOSAL.md">proposal</a>,</li>
-<li>UseR! 2016 <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">slides presentations</a>,</li>
-<li>Blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>.</li>
-<li>The first <a href="https://edzer.github.io/sfr/articles/sfr.html">package vignette</a>
+<ul><li>the original R Consortium ISC <a href="PROPOSAL.md">proposal</a>
+</li>
+<li>UseR! 2016 <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">slides presentations</a>
+</li>
+<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>
+</li>
+<li>the first <a href="https://edzer.github.io/sfr/articles/sfr.html">package vignette</a>
 </li>
 </ul><div id="what-it-does" class="section level3">
 <h3 class="hasAnchor">
 <a href="#what-it-does" class="anchor"></a>What it does</h3>
 <p>The sf package:</p>
 <ul><li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>uses S3 classes: simple features are <code>data.frame</code> objects (or similar) that have a geometry list-column</li>
+<li>uses S3 classes: simple features are <code>data.frame</code> objects (or similar) that have a list-column geometry</li>
 <li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
 </li>
 <li>interfaces to <a href="http://www.gdal.org/">GDAL</a> with driver dependent dataset or layer creation options, Date and DateTime (<code>POSIXct</code>) columns, and coordinate reference system transformations through <a href="http://proj4.org/">PROJ.4</a>
 </li>
 <li>provides fast I/O with GDAL and GEOS using <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">well-known-binary</a> written in C++ and Rcpp</li>
-<li>reads and writes directly from and to spatial databases such as <a href="http://postgis.net/">PostGIS</a>, using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
+<li>directly reads from and writes to spatial databases such as <a href="http://postgis.net/">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
 </li>
 </ul></div>
 <div id="acknowledgment" class="section level3">
