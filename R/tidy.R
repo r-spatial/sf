@@ -85,27 +85,32 @@ slice_.sf <- function(.data, ..., .dots) {
 ## tidyr methods:
 
 #' @name dplyr
+#' @export
 #' @param data see original function docs
 #' @param key_col see original function docs
 #' @param value_col see original function docs
+#' @param gather_cols see original function docs
+#' @param na.rm see original function docs
+#' @param factor_key see original function docs
+#' @examples 
+#' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
+gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
+		convert = FALSE, factor_key = FALSE) {
+	st_as_sf(NextMethod())
+}
+
+#' @name dplyr
 #' @param fill see original function docs
 #' @param convert see original function docs
 #' @param drop see original function docs
 #' @param sep see original function docs
 #' @export
+#' @examples
+#' nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID)
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
-	st_as_sf(NextMethod())
-}
-
-#' @name dplyr
-#' @export
-#' @param gather_cols see original function docs
-#' @param na.rm see original function docs
-#' @param factor_key see original function docs
-gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
-		convert = FALSE, factor_key = FALSE) {
-	st_as_sf(NextMethod())
+	sf_column = attr(data, "sf_column")
+	structure(NextMethod(), sf_column = sf_column)
 }
 
 ## tibble methods:

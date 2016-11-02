@@ -33,11 +33,11 @@ rename_.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
 
-spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
-  drop = TRUE, sep = NULL)
-
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
+
+spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
+  drop = TRUE, sep = NULL)
 }
 \arguments{
 \item{.data}{data object of class \link{sf}}
@@ -56,19 +56,19 @@ gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
 
 \item{value_col}{see original function docs}
 
-\item{fill}{see original function docs}
-
-\item{convert}{see original function docs}
-
-\item{drop}{see original function docs}
-
-\item{sep}{see original function docs}
-
 \item{gather_cols}{see original function docs}
 
 \item{na.rm}{see original function docs}
 
+\item{convert}{see original function docs}
+
 \item{factor_key}{see original function docs}
+
+\item{fill}{see original function docs}
+
+\item{drop}{see original function docs}
+
+\item{sep}{see original function docs}
 }
 \description{
 dplyr verb methods for sf objects
@@ -81,5 +81,7 @@ nc \%>\% filter(AREA > .1) \%>\% plot()
 nc \%>\% plot()
 nc \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
 nc \%>\% distinct() \%>\% class()
+nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
+nc \%>\% select(SID74, SID79, geometry, row) \%>\% gather(VAR, SID, -geometry, -row) \%>\% spread(VAR, SID)
 }
 

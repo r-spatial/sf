@@ -5,6 +5,9 @@ library(sf)
 # print(nc, n = 3)
 # st_write(nc, "nc.gpkg", "nc.gpkg", driver = "GPKG")
 
+# description of the dataset, see vignette in package spdep:
+# https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf
+
 datasource = { if ("GPKG" %in% st_drivers()$name)
 	system.file("gpkg/nc.gpkg", package="sf")
 else
