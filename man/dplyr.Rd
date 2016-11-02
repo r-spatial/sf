@@ -12,6 +12,7 @@
 \alias{select_.sf}
 \alias{slice_.sf}
 \alias{spread_.sf}
+\alias{summarise_.sf}
 \alias{transmute_.sf}
 \title{dplyr verb methods for sf objects}
 \usage{
@@ -33,6 +34,8 @@ rename_.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
 
+summarise_.sf(.data, ..., .dots, union = TRUE)
+
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
 
@@ -49,6 +52,8 @@ spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
 \item{.keep_all}{see corresponding function in dplyr}
 
 \item{add}{see corresponding function in dplyr}
+
+\item{union}{boolean; see \link{st_merge}}
 
 \item{data}{see original function docs}
 
@@ -80,7 +85,23 @@ nc \%>\% filter(AREA > .1) \%>\% plot()
 # plot 10 smallest counties in grey:
 nc \%>\% plot()
 nc \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
-nc \%>\% distinct() \%>\% class()
+title("the ten counties with smallest area")
+nc[c(1:100,1:10),] \%>\% distinct() \%>\% nrow()
+nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc \%>\% group_by(area_cl) \%>\% class()
+nc2 <- nc \%>\% mutate(area10 = AREA/10)
+nc \%>\% transmute(AREA = AREA/10, geometry = geometry) \%>\% class()
+nc \%>\% transmute(AREA = AREA/10) \%>\% class()
+nc \%>\% select(SID74, SID79) \%>\% names()
+nc \%>\% select(SID74, SID79, geometry) \%>\% names()
+nc \%>\% select(SID74, SID79) \%>\% class()
+nc \%>\% select(SID74, SID79, geometry) \%>\% class()
+nc2 <- nc \%>\% rename(area = AREA)
+nc \%>\% slice(1:2)
+nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc.g <- nc \%>\% group_by(area_cl)
+nc.g \%>\% summarise(mean(AREA))
+nc.g \%>\% summarize(mean(AREA))
 library(tidyr)
 nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
 library(tidyr)

@@ -22,6 +22,7 @@ filter_.sf <- function(.data, ..., .dots) {
 #' # plot 10 smallest counties in grey:
 #' nc %>% plot()
 #' nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#' title("the ten counties with smallest area")
 arrange_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
@@ -30,7 +31,7 @@ arrange_.sf <- function(.data, ..., .dots) {
 #' @param .keep_all see corresponding function in dplyr
 #' @export
 #' @examples
-#' nc %>% distinct() %>% class()
+#' nc[c(1:100,1:10),] %>% distinct() %>% nrow()
 distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 	st_as_sf(NextMethod())
 }
@@ -38,24 +39,41 @@ distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 #' @name dplyr
 #' @param add see corresponding function in dplyr
 #' @export
+#' @examples
+#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+#' nc %>% group_by(area_cl) %>% class()
 group_by_.sf <- function(.data, ..., .dots, add = FALSE) {
 	st_as_sf(NextMethod())
 }
 
 #' @name dplyr
 #' @export
+#' @examples
+#' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
 #' @name dplyr
 #' @export
+#' @examples
+#' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
+#' nc %>% transmute(AREA = AREA/10) %>% class()
 transmute_.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod())
+	ret = NextMethod()
+	if (attr(ret, "sf_column") %in% names(ret))
+		st_as_sf(NextMethod())
+	else
+		ret
 }
 
 #' @name dplyr
 #' @export
+#' @examples
+#' nc %>% select(SID74, SID79) %>% names()
+#' nc %>% select(SID74, SID79, geometry) %>% names()
+#' nc %>% select(SID74, SID79) %>% class()
+#' nc %>% select(SID74, SID79, geometry) %>% class()
 select_.sf <- function(.data, ..., .dots) {
 	ret = NextMethod()
 	if (any(sapply(ret, function(x) inherits(x, "sfc"))))
@@ -66,21 +84,43 @@ select_.sf <- function(.data, ..., .dots) {
 
 #' @name dplyr
 #' @export
+#' @examples
+#' nc2 <- nc %>% rename(area = AREA)
 rename_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
 #' @name dplyr
 #' @export
+#' @examples
+#' nc %>% slice(1:2)
 slice_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
-## needs work: modifies geometry --
-#summarise_ <- function(.data, ..., .dots) {
-#}
-#summarize_ <- function(.data, ..., .dots) {
-#}
+#' @name dplyr
+#' @param union boolean; see \link{st_merge}
+#' @export
+#' @examples
+#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+#' nc.g <- nc %>% group_by(area_cl)
+#' nc.g %>% summarise(mean(AREA))
+#' nc.g %>% summarize(mean(AREA))
+summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
+	if (inherits(.data, "grouped_df")) {
+		geom = st_geometry(.data)
+		i = attr(.data, "indices")
+		sf_column = attr(.data, "sf_column")
+		ret = NextMethod()
+		# merge geometry:
+		geoms = unlist(lapply(i, function(x) st_merge(geom[x], union = union)), recursive = FALSE)
+		ret[[sf_column]] = do.call(st_sfc, geoms)
+		st_as_sf(ret)
+	} else
+		NextMethod()
+}
+
+## summarize_ not needed
 
 ## tidyr methods:
 

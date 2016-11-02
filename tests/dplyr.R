@@ -13,6 +13,32 @@ nc %>% select(SID74, SID79, geometry) %>% names()
 nc %>% select(SID74, SID79) %>% class()
 nc %>% select(SID74, SID79, geometry) %>% class()
 
+# arrange: ten smallest counties
+nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+
+# group_by:
+nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc %>% group_by(area_cl) %>% class()
+
+# mutate:
+nc2 <- nc %>% mutate(area10 = AREA/10)
+
+# transmute:
+nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
+nc %>% transmute(AREA = AREA/10) %>% class()
+
+# rename:
+nc2 <- nc %>% rename(area = AREA)
+
+# distinct:
+nc[c(1:100,1:10),] %>% distinct() %>% nrow()
+
+# summarize:
+nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc.g <- nc %>% group_by(area_cl)
+nc.g %>% summarise(mean(AREA))
+nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
+
 library(tidyr)
 
 # time-wide to long table, using tidyr::gather
@@ -24,5 +50,5 @@ nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summar
 nc$row = 1:100
 nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
 nc.g %>% tail()
-nc.g %>% spread(VAR, SID)
+nc.g %>% spread(VAR, SID) %>% head()
 nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
