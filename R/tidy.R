@@ -108,7 +108,7 @@ slice_.sf <- function(.data, ..., .dots) {
 #' nc.g %>% summarize(mean(AREA))
 #' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
 summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
-	if (inherits(.data, "grouped_df")) {
+	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
 		geom = st_geometry(.data)
 		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
 		sf_column = attr(.data, "sf_column")
