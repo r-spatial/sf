@@ -79,6 +79,7 @@ size_t count_features(OGRLayer *poLayer) {
 		if (n == INT_MAX)
 			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	}
+    poLayer->ResetReading ();
 	return(n);
 }
 
@@ -96,22 +97,28 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		throw std::invalid_argument("Open failed.\n");
 	}
 	// template from ogrinfo.cpp:
-	Rcpp::CharacterVector names(poDS->GetLayerCount());
-	Rcpp::List geomtype(poDS->GetLayerCount());
+	Rcpp::CharacterVector names;
+	Rcpp::List geomtype;
 
 	for(int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
 		OGRLayer *poLayer = poDS->GetLayer(iLayer);
-		names(iLayer) = poLayer->GetName();
-		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
-		Rcpp::CharacterVector fieldtp(nGeomFieldCount);
-		if( nGeomFieldCount > 1 ) {
-			for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
-				OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
-				fieldtp(iGeom) = OGRGeometryTypeToName(poGFldDefn->GetType());
-			}
-		} else if (poLayer->GetGeomType() != wkbUnknown)
-			fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
-		geomtype(iLayer) = fieldtp;
+        OGRFeature *poFeature = poLayer->GetNextFeature (); // NULL if no features
+        poLayer->ResetReading ();
+        if (poFeature != NULL)
+        {
+            names.push_back (poLayer->GetName());
+            int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
+            Rcpp::CharacterVector fieldtp(nGeomFieldCount);
+            if( nGeomFieldCount > 1 ) {
+                for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
+                    OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
+                    fieldtp(iGeom) = OGRGeometryTypeToName(poGFldDefn->GetType());
+                }
+            } else if (poLayer->GetGeomType() != wkbUnknown)
+                fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
+            geomtype.push_back (fieldtp);
+        }
+        delete poFeature;
 	}
 
 	Rcpp::List out(3);
@@ -166,7 +173,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
     OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
-		Rcpp::Rcout << "Cannot open layer" << layer[0] << std::endl;
+		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
 		throw std::invalid_argument("Opening layer failed.\n");
 	}
 
