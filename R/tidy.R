@@ -110,13 +110,13 @@ slice_.sf <- function(.data, ..., .dots) {
 summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
 	if (inherits(.data, "grouped_df")) {
 		geom = st_geometry(.data)
-		i = attr(.data, "indices")
+		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
 		sf_column = attr(.data, "sf_column")
 		ret = NextMethod()
 		# merge geometry:
 		geoms = unlist(lapply(i, function(x) st_merge(geom[x], union = union)), recursive = FALSE)
 		ret[[sf_column]] = do.call(st_sfc, geoms)
-		st_as_sf(ret)
+		st_as_sf(ret, crs = st_crs(.data))
 	} else
 		as.data.frame(NextMethod())
 }

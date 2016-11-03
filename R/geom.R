@@ -13,7 +13,7 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 #' @return st_area returns the area of a geometry, in the coordinate reference system used
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
-		warning("st_area does not give a meaningful area measure for long/lat data.")
+		warning("st_area does not give a meaningful area measure for longitude/latitude data.")
 	CPL_area(st_geometry(x))
 }
 

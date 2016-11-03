@@ -82,14 +82,14 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 Simple feature collection with 4 features and 2 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.94867 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    NA
-proj4string:    NA
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
       area_cl mean(AREA)                       geometry
-1     (0,0.1] 0.07602857 MULTIPOLYGON(((-78.65571594...
-2  (0.1,0.12] 0.11206667 MULTIPOLYGON(((-76.94324493...
-3 (0.12,0.15] 0.13422727 MULTIPOLYGON(((-77.68983459...
-4 (0.15,0.25] 0.19039286 MULTIPOLYGON(((-76.01700592...
+1     (0,0.1] 0.07602857 MULTIPOLYGON(((-77.96073150...
+2  (0.1,0.12] 0.11206667 MULTIPOLYGON(((-84.29103851...
+3 (0.12,0.15] 0.13422727 MULTIPOLYGON(((-76.54427337...
+4 (0.15,0.25] 0.19039286 MULTIPOLYGON(((-76.64704895...
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -165,4 +165,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.944   0.312   0.947 
+  1.008   0.268   0.971 
