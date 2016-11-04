@@ -131,7 +131,7 @@
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
-nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="st">"nc"</span>, <span class="dt">crs =</span> <span class="dv">4267</span>)
+nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="dt">crs =</span> <span class="dv">4267</span>)
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
@@ -361,7 +361,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 <h2 class="hasAnchor"><html><body><a href="#reading-and-writing" class="anchor"></a></body></html>Reading and writing</h2>
 <p>As we&rsquo;ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
-nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="st">"nc"</span>, <span class="dt">crs =</span> <span class="dv">4267</span>)
+nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="dt">crs =</span> <span class="dv">4267</span>)
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
@@ -373,7 +373,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## features:       100
 ## fields:         14
 ## geometry type:  MULTIPOLYGON</code></pre></div>
-<p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and a layer. Their exact interpretation as well as the options they support vary per driver, the <a href="http://www.gdal.org/ogr_formats.html">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
+<p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and optionally a layer name. Their exact interpretation as well as the options they support vary per driver, the <a href="http://www.gdal.org/ogr_formats.html">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meuse &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>)</code></pre></div>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials.</p>
 <p><code>st_read</code> typically reads the coordinate reference system as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot retrieve SRID (EPSG code) from <code>proj4string</code> strings, and, when needed, it has to be set by the user. See also the section on <a href="crs" class="uri">crs</a>.</p>
@@ -386,16 +386,15 @@ u_shp &lt;-<span class="st"> "http://coagisweb.cabq.gov/datadownload/biketrails.
 u_kmz &lt;-<span class="st"> "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"</span>
 <span class="kw">download.file</span>(u_kmz, <span class="st">"BikePaths.kmz"</span>)
 <span class="co"># Read file formats</span>
-biketrails_shp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
-ogr_layers &lt;-<span class="st"> </span>rgdal::<span class="kw">ogrListLayers</span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>)
-biketrails_kmz &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>, <span class="dt">layer =</span> ogr_layers[<span class="dv">1</span>])</code></pre></div>
+biketrails_shp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"biketrails.shp"</span>)
+biketrails_kmz &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)</code></pre></div>
 <div id="benchmarks" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#benchmarks" class="anchor"></a></body></html>Benchmarks</h3>
 <p>Benchmarks show that <code><a href="../reference/st_read.html">st_read()</a></code> is faster than <code>rgdal::readOGR()</code>, for example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
-shp_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
+shp_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"biketrails.shp"</span>)
 kmz_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>, <span class="dt">layer =</span> ogr_layers[<span class="dv">1</span>])
-kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>, <span class="dt">layer =</span> ogr_layers[<span class="dv">1</span>])
+kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)
 microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read_sp</span>(), <span class="kw">shp_read_sf</span>(),
                                <span class="kw">kmz_read_sp</span>(), <span class="kw">kmz_read_sf</span>(), <span class="dt">times =</span> <span class="dv">1</span>)</code></pre></div>
 <p>On a modern laptop (with an Intel i5-2520M processor) the results were as follows:</p>
@@ -405,7 +404,7 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 ##  shp_read_sf()  655.0139  655.0139  655.0139  655.0139  655.0139  655.0139
 ##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
 ##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094</code></pre>
-<p>This shows that <code>sf::st_read()</code> is substantially faster than <code>rgdal::readOGR()</code>: by a factor of 3 and 10 for the Shapefile and KML file used in this benchmark, respectively.</p>
+<p>This shows that <code>sf::st_read()</code> is not only simpler to use but also substantially faster than <code>rgdal::readOGR()</code>: by a factor of 3 and 10 for the Shapefile and KML file used in this benchmark, respectively.</p>
 </div>
 </div>
 <div id="crs" class="section level2">
@@ -544,7 +543,7 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <p>(This will eventually be the topic of a new vignette; now here to explain the last attribute of <code>sf</code> objects)</p>
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their <a href="https://CRAN.R-project.org/package=units">units of measurement</a>). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn&rsquo;t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn&rsquo;t extend beyond the body &ndash; in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state&rsquo;s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an attribute that points out how attributes relate to their geometry, which can be defined at creation time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="st">"nc"</span>, <span class="dt">crs =</span> <span class="dv">4267</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">crs =</span> <span class="dv">4267</span>,
     <span class="dt">relation_to_geometry =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"lattice"</span>, <span class="dt">PERIMETER =</span> <span class="st">"lattice"</span>, <span class="dt">CNTY_ =</span> <span class="st">"entity"</span>,
         <span class="dt">CNTY_ID =</span> <span class="st">"entity"</span>, <span class="dt">NAME =</span> <span class="st">"entity"</span>, <span class="dt">FIPS =</span> <span class="st">"entity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"entity"</span>,
         <span class="dt">CRESS_ID =</span> <span class="st">"entity"</span>, <span class="dt">BIR74 =</span> <span class="st">"lattice"</span>, <span class="dt">SID74 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"lattice"</span>,

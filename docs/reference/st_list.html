@@ -81,7 +81,7 @@
     <p>list layers in a datasource</p>
     
 
-    <pre><span class='fu'>st_list</span>(<span class='no'>dsn</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0</span>))</pre>
+    <pre><span class='fu'>st_list</span>(<span class='no'>dsn</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>character</span>(<span class='fl'>0</span>), <span class='kw'>do_count</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -89,6 +89,8 @@
       <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)</dd>
       <dt>options</dt>
       <dd>character; driver dependent dataset open options, multiple options supported.</dd>
+      <dt>do_count</dt>
+      <dd>logical; if TRUE, count the features by reading them, even if their count is not reported by the driver</dd>
     </dl>
     
 

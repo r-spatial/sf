@@ -41,7 +41,7 @@
 <p>Install with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
-<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.3.0) are needed.</p>
+<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.1.0) are needed.</p>
 <p>For example, to install these libraries on Ubuntu, either:</p>
 <ul><li>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories (e.g.&nbsp;with <code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable</code> and then <code>sudo apt-get install libgdal-dev libgeos++-dev</code>), or</li>
 <li>install from source; see the <a href="https://github.com/edzer/sfr/blob/master/.travis.yml">travis</a> config file for hints</li>
