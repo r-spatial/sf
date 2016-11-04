@@ -79,6 +79,7 @@ size_t count_features(OGRLayer *poLayer) {
 		if (n == INT_MAX)
 			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	}
+    poLayer->ResetReading ();
 	return(n);
 }
 
@@ -175,7 +176,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
     OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
-		Rcpp::Rcout << "Cannot open layer" << layer[0] << std::endl;
+		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
 		throw std::invalid_argument("Opening layer failed.\n");
 	}
 
