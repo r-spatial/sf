@@ -145,14 +145,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_get_layers
-Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options);
-RcppExport SEXP sf_CPL_get_layers(SEXP datasourceSEXP, SEXP optionsSEXP) {
+Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options, bool do_count);
+RcppExport SEXP sf_CPL_get_layers(SEXP datasourceSEXP, SEXP optionsSEXP, SEXP do_countSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type datasource(datasourceSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_layers(datasource, options));
+    Rcpp::traits::input_parameter< bool >::type do_count(do_countSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_layers(datasource, options, do_count));
     return rcpp_result_gen;
 END_RCPP
 }

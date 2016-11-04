@@ -49,8 +49,8 @@ CPL_geom_op2 <- function(op, sfc, sf0) {
     .Call('sf_CPL_geom_op2', PACKAGE = 'sf', op, sfc, sf0)
 }
 
-CPL_get_layers <- function(datasource, options) {
-    .Call('sf_CPL_get_layers', PACKAGE = 'sf', datasource, options)
+CPL_get_layers <- function(datasource, options, do_count = FALSE) {
+    .Call('sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
 CPL_read_ogr <- function(datasource, layer, options, quiet = FALSE, iGeomField = 0L, toTypeUser = 0L, promote_to_multi = TRUE) {
