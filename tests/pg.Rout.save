@@ -92,9 +92,10 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   suppressWarnings(x <- st_read("PG:dbname=postgis"))
 +   try(x <- st_read("PG:dbname=empty")) # error
-+   st_list("PG:dbname=postgis")
++   print(st_list("PG:dbname=postgis"))
++   print(st_list("PG:dbname=empty"))
 + }
 > 
 > proc.time()
    user  system elapsed 
-  0.556   0.288   0.532 
+  0.500   0.184   0.476 

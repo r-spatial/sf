@@ -1,0 +1,64 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+Linking to GEOS 3.5.0, GDAL 2.1.0
+> if ("GPKG" %in% st_drivers()$name) {
++ 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
++ 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf")) # default layer name
++ }
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+features:       100
+fields:         14
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+features:       100
+fields:         14
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+> 
+> tst = st_read(system.file("shape/nc.shp", package="sf")) # no layer specified
+Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
+features:       100
+fields:         14
+converted into: MULTIPOLYGON
+proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+> 
+> # data from https://github.com/edzer/sfr/issues/6
+> tst = st_read(system.file("shape/storms_xyz.shp", package="sf"), quiet = TRUE)
+> class(st_geometry(tst))
+[1] "sfc_LINESTRING" "sfc"           
+> class(st_geometry(tst)[[1]])
+[1] "XYZ"        "LINESTRING" "sfg"       
+> tst = st_read(system.file("shape/storms_xyzm.shp", package="sf"), quiet = TRUE)
+> class(st_geometry(tst))
+[1] "sfc_LINESTRING" "sfc"           
+> class(st_geometry(tst)[[1]])
+[1] "XYM"        "LINESTRING" "sfg"       
+> tst = st_read(system.file("shape/storms_xyz_feature.shp", package="sf"), quiet = TRUE)
+> class(st_geometry(tst))
+[1] "sfc_LINESTRING" "sfc"           
+> class(st_geometry(tst)[[1]])
+[1] "XYZ"        "LINESTRING" "sfg"       
+> tst = st_read(system.file("shape/storms_xyzm_feature.shp", package="sf"), quiet = TRUE)
+> class(st_geometry(tst))
+[1] "sfc_LINESTRING" "sfc"           
+> class(st_geometry(tst)[[1]])
+[1] "XYM"        "LINESTRING" "sfg"       
+> 
+> proc.time()
+   user  system elapsed 
+  0.448   0.264   0.404 

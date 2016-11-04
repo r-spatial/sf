@@ -150,7 +150,9 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #' @examples
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
-#' nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
+#' nc %>% select(SID74, SID79, geometry, row) %>% 
+#'      gather(VAR, SID, -geometry, -row) %>% 
+#'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
 	sf_column = attr(data, "sf_column")

@@ -4,12 +4,14 @@
 \alias{st_list}
 \title{list layers in a datasource}
 \usage{
-st_list(dsn, options = character(0))
+st_list(dsn, options = character(0), do_count = FALSE)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)}
 
 \item{options}{character; driver dependent dataset open options, multiple options supported.}
+
+\item{do_count}{logical; if TRUE, count the features by reading them, even if their count is not reported by the driver}
 }
 \description{
 list layers in a datasource
