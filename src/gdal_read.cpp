@@ -83,7 +83,7 @@ size_t count_features(OGRLayer *poLayer) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options) {
+Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options, bool do_count = false) {
 
 	if (datasource.size() != 1)
 		throw std::invalid_argument("argument datasource should have length 1.\n");
@@ -98,6 +98,8 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	// template from ogrinfo.cpp:
 	Rcpp::CharacterVector names(poDS->GetLayerCount());
 	Rcpp::List geomtype(poDS->GetLayerCount());
+	Rcpp::NumericVector field_count(poDS->GetLayerCount());
+	Rcpp::NumericVector feature_count(poDS->GetLayerCount());
 
 	for(int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
 		OGRLayer *poLayer = poDS->GetLayer(iLayer);
@@ -112,14 +114,21 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		} else if (poLayer->GetGeomType() != wkbUnknown)
 			fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
 		geomtype(iLayer) = fieldtp;
+		OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+		field_count(iLayer) = poFDefn->GetFieldCount();
+		feature_count(iLayer) = poLayer->GetFeatureCount();
+		if (feature_count(iLayer) < 0 && do_count)
+			feature_count(iLayer) = count_features(poLayer);
 	}
 
-	Rcpp::List out(3);
+	Rcpp::List out(5);
 	out(0) = names;
 	out(1) = geomtype;
 	out(2) = poDS->GetDriverName();
+	out(3) = feature_count;
+	out(4) = field_count;
     GDALClose(poDS); // close & destroys data source
-	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver");
+	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields");
 	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
 	return(out);
 }

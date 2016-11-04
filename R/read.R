@@ -226,13 +226,14 @@ print.sf_layers = function(x, ...) {
 	x$geomtype = sapply(x$geomtype, function(x) paste(x, collapse = ", "))
 	cat(paste("Driver:", x$driver, "\n")) 
 	x$driver = NULL
+	x$features[x$features < 0] = NA
 	cat("Available layers:\n")
 	if (length(x$name) == 0) {
 		cat("<none>\n")
 		invisible(x)
 	} else {
 		df = data.frame(unclass(x))
-		names(df) = c("layer_name", "geometry_type")
+		names(df) = c("layer_name", "geometry_type", "features", "fields")
 		print(df)
 		invisible(df)
 	}
@@ -243,7 +244,8 @@ print.sf_layers = function(x, ...) {
 #' list layers in a datasource
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
 #' @param options character; driver dependent dataset open options, multiple options supported.
+#' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
 #' @export
-st_list = function(dsn, options = character(0)) {
-	CPL_get_layers(dsn, options)
+st_list = function(dsn, options = character(0), do_count = FALSE) {
+	CPL_get_layers(dsn, options, do_count)
 }
