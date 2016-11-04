@@ -16,7 +16,7 @@ LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, in R.
-SystemRequirements: GDAL (>= 2.0.0), GEOS++ (>= 3.3.0)
+SystemRequirements: GDAL (>= 2.0.0), GEOS++ (>= 3.1.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 BugReports: https://github.com/edzer/sfr/issues/
