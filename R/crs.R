@@ -95,7 +95,11 @@ check_replace = function(x, value) {
 		return()
 	epsg = attr(x, "epsg")
 	proj4string = attr(x, "proj4string")
-	if (is.null(epsg) && is.null(proj4string))
+	if (is.null(epsg) && is.null(proj4string)) # first time it's set
+		return()
+	if (!is.null(epsg) && isTRUE(epsg == value)) # replacing epsg with identical value
+		return()
+	if (!is.null(proj4string) && isTRUE(proj4string == value)) # replacing proj4string with identical value
 		return()
 	if (!is.null(epsg) && is.na(epsg) && is.numeric(value) && !is.na(proj4string)
 			&& proj4string ==  trim(CPL_proj4string_from_epsg(value)))

@@ -26,3 +26,10 @@ print(dg, n = 1)
 
 st_geometry(d) = st_as_sfc(d$geom)
 d
+
+x = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326)
+# don't warn when replacing crs with identical value:
+st_sfc(x, crs = 4326)
+st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
+# but do when it changes:
+st_sfc(x, crs = 3857)
