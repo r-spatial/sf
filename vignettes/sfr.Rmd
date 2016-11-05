@@ -631,7 +631,7 @@ st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 
 The commands `st_buffer`, `st_boundary`, `st_convexhull`,
 `st_union_cascaded`, `st_simplify`, `st_triangulate`,
-`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_merge`
+`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_union`
 return new geometries, e.g.:
 
 ```{r fig.height=3}
@@ -647,9 +647,8 @@ Commands `st_intersection`, `st_union`, `st_difference`,
 pairs of geometries:
 
 ```{r fig.height=3}
-# u <- st_union(nc[1,], nc)
 par(mar = rep(0,4))
-u <- st_merge(nc, union = TRUE)
+u <- st_union(nc)
 plot(u)
 ```
 

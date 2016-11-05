@@ -73,6 +73,10 @@ CPL_geos_is_valid <- function(sfc) {
     .Call('sf_CPL_geos_is_valid', PACKAGE = 'sf', sfc)
 }
 
+CPL_geos_union <- function(sfc) {
+    .Call('sf_CPL_geos_union', PACKAGE = 'sf', sfc)
+}
+
 CPL_geos_version <- function(b = FALSE) {
     .Call('sf_CPL_geos_version', PACKAGE = 'sf', b)
 }

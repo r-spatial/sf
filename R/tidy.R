@@ -99,7 +99,6 @@ slice_.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @param union boolean; see \link{st_merge}
 #' @export
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -107,14 +106,14 @@ slice_.sf <- function(.data, ..., .dots) {
 #' nc.g %>% summarise(mean(AREA))
 #' nc.g %>% summarize(mean(AREA))
 #' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
-summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
+summarise_.sf <- function(.data, ..., .dots) {
 	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
 		geom = st_geometry(.data)
 		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
 		sf_column = attr(.data, "sf_column")
 		ret = NextMethod()
 		# merge geometry:
-		geoms = unlist(lapply(i, function(x) st_merge(geom[x], union = union)), recursive = FALSE)
+		geoms = unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
 		ret[[sf_column]] = do.call(st_sfc, geoms)
 		st_as_sf(ret, crs = st_crs(.data))
 	} else

@@ -1,20 +1,27 @@
 #include <iostream>
 #include <sstream>
 
+#include <string.h> // memcpy
+
 #include <Rcpp.h>
 
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 
 #include "wkb.h"
 
 typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+typedef geos::operation::geounion::UnaryUnionOp UnaryUnionOp;
+typedef geos::geom::Geometry Geom;
+
 
 GeomPtr geometry_from_raw(Rcpp::RawVector wkb) {
 	std::string str( (char *) &(wkb[0]), wkb.size() );
@@ -30,6 +37,17 @@ std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = geometry_from_raw(wkblst[i]);
 	return(g);
+}
+
+Rcpp::List sfc_from_geometry(Geom* geom) {
+	Rcpp::List rawlist(1);
+	std::ostringstream os;
+	geos::io::WKBWriter w;
+	w.write(*geom, os);
+	Rcpp::RawVector raw(os.str().size());
+	memcpy(&(raw(0)), os.str().c_str(), os.str().size());
+	rawlist(0) = raw;
+	return(CPL_read_wkb(rawlist, false, native_endian()));
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {
@@ -142,6 +160,16 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) {
 	for (int i = 0; i < out.length(); i++)
 		out[i] = geos::operation::valid::IsValidOp::isValid(*gmv[i]);
 	return(out);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_union(Rcpp::List sfc) { 
+	std::vector<GeomPtr> gmv = geometries_from_sfc(sfc);
+	std::vector<Geom *> geoms(gmv.size());
+	for (int i = 0; i < gmv.size(); i++)
+		geoms[i] = gmv[i].get();
+	Rcpp::List out(1);
+	return(sfc_from_geometry(UnaryUnionOp::Union(geoms).get()));
 }
 
 // [[Rcpp::export]]

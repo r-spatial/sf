@@ -34,7 +34,7 @@ rename_.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
 
-summarise_.sf(.data, ..., .dots, union = TRUE)
+summarise_.sf(.data, ..., .dots)
 
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
@@ -52,8 +52,6 @@ spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
 \item{.keep_all}{see corresponding function in dplyr}
 
 \item{add}{see corresponding function in dplyr}
-
-\item{union}{boolean; see \link{st_merge}}
 
 \item{data}{see original function docs}
 

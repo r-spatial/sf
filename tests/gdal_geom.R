@@ -39,19 +39,19 @@ b = nc[4:10,]
 
 x = st_intersection(a[1,] ,b)
 
-x <- st_intersection(a ,st_merge(b, TRUE)) # FIXME
+x <- st_intersection(a, st_union(b)) # FIXME
 
 x = st_union(a[1,], b)
 
-x = st_union(a, st_merge(b, TRUE))
+x = st_union(a, st_union(b))
 
 x = st_difference(a[1,], b)
 
-x = st_difference(a, st_merge(b, TRUE))
+x = st_difference(a, st_union(b))
 
 x = st_sym_difference(a[1,], b)
 
-x = st_sym_difference(a, st_merge(b, TRUE))
+x = st_sym_difference(a, st_union(b))
 
 x = st_drivers()
 cat(paste("GDAL has", nrow(x), "drivers\n"))
@@ -89,5 +89,11 @@ st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
 cbind(suppressWarnings(st_area(a)), a$AREA)
 
 st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
+
 st_length(st_linestring(rbind(c(0,0),c(0,1))))
+
 st_length(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
+
+st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
+
+st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
