@@ -87,3 +87,7 @@ st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
 
 cbind(suppressWarnings(st_area(a)), a$AREA)
+
+st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
+st_length(st_linestring(rbind(c(0,0),c(0,1))))
+st_length(st_multilinestring(list(rbind(c(0,0),c(0,1)))))

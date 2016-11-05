@@ -32,6 +32,24 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector CPL_length(Rcpp::List sfc) { 
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	Rcpp::NumericVector out(sfc.length());
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRwkbGeometryType gt = OGR_GT_Flatten(g[i]->getGeometryType());
+		if (gt == wkbLineString || gt == wkbCircularString || gt == wkbCompoundCurve || gt == wkbCurve) {
+			OGRCurve *a = (OGRCurve *) g[i];
+			out[i] = a->get_Length();
+		} else {
+			OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
+			out[i] = a->get_Length();
+		}
+		delete g[i];
+	}
+	return(out);
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc, 
 		double bufferDist = 0.0, int nQuadSegs = 30,
 		double dTolerance = 0.0, bool preserveTopology = false, 

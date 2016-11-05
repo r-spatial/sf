@@ -113,6 +113,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_length
+Rcpp::NumericVector CPL_length(Rcpp::List sfc);
+RcppExport SEXP sf_CPL_length(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_length(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geom_op
 Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc, double bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
 RcppExport SEXP sf_CPL_geom_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {

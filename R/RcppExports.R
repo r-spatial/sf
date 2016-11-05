@@ -41,6 +41,10 @@ CPL_area <- function(sfc) {
     .Call('sf_CPL_area', PACKAGE = 'sf', sfc)
 }
 
+CPL_length <- function(sfc) {
+    .Call('sf_CPL_length', PACKAGE = 'sf', sfc)
+}
+
 CPL_geom_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance = 0.0, preserveTopology = FALSE, bOnlyEdges = 1L, dfMaxLength = 0.0) {
     .Call('sf_CPL_geom_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
 }

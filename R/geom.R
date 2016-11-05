@@ -19,6 +19,15 @@ st_area = function(x) {
 
 #' @name geos
 #' @export
+#' @return st_length returns the length of a geometry, in the coordinate reference system used
+st_length = function(x) { 
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_length does not give a meaningful length measure for longitude/latitude data.")
+	CPL_length(st_geometry(x))
+}
+
+#' @name geos
+#' @export
 #' @return st_is_simple and st_is_valid return a logical vector
 st_is_simple = function(x) CPL_is_simple(st_geometry(x))
 

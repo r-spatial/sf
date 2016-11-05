@@ -320,6 +320,13 @@ LINESTRING(1 3, 2 4)
 [4,] 0.06977098 0.070
 [5,] 0.15275930 0.153
 > 
+> st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
+[1] 1
+> st_length(st_linestring(rbind(c(0,0),c(0,1))))
+[1] 1
+> st_length(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
+[1] 1
+> 
 > proc.time()
    user  system elapsed 
-  0.664   0.312   0.666 
+  0.700   0.260   0.685 
