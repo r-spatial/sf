@@ -23,7 +23,9 @@ st_area = function(x) {
 st_length = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_length does not give a meaningful length measure for longitude/latitude data.")
-	CPL_length(st_geometry(x))
+	x = CPL_length(st_geometry(x))
+	x[is.nan(x)] = NA
+	x
 }
 
 #' @name geos
