@@ -10,6 +10,7 @@
 #' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.
 #' @param promote_to_multi logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. 
+#' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
 #' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
@@ -26,7 +27,7 @@
 #' @name st_read
 #' @export
 st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
-		promote_to_multi = TRUE) {
+		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors()) {
 
 	if (missing(layer))
 		layer = character(0)
@@ -47,7 +48,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		else
 			attr(geom, "proj4string")
 	x[[nm]] = st_sfc(geom, crs = crs)
-	st_as_sf(x, ...)
+	st_as_sf(x, ..., stringsAsFactors = stringsAsFactors)
 }
 
 #' write simple features object to file or database

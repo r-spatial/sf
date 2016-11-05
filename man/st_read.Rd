@@ -6,7 +6,8 @@
 \title{read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
-  type = 0, promote_to_multi = TRUE)
+  type = 0, promote_to_multi = TRUE,
+  stringsAsFactors = default.stringsAsFactors())
 
 st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
   geom_column = NULL, EWKB, ...)
@@ -27,6 +28,8 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 \item{type}{integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.}
 
 \item{promote_to_multi}{logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
+
+\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
 
 \item{conn}{open database connection}
 

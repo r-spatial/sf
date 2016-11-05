@@ -18,7 +18,7 @@ st_sf(..., relation_to_geometry = NA_character_, row.names,
 
 \item{row.names}{row.names for the created \code{sf} object}
 
-\item{stringsAsFactors}{logical; see \link{data.frame}}
+\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
 
 \item{crs}{coordinate reference system: integer with the epsg code, or character with proj4string}
 
