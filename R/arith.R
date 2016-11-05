@@ -17,7 +17,7 @@
 #' st_point(c(1,2)) * m + c(2,5)
 Ops.sfg <- function(e1, e2) {
 	if (nargs() == 1)
-		stop(paste("unary", .Generic, "not defined for \"units\" objects"))
+		stop(paste("unary", .Generic, "not defined for \"sfg\" objects"))
 
 	prd <- switch(.Generic, "*" = TRUE, FALSE)
 	pm  <- switch(.Generic, "+" = , "-" = TRUE, FALSE)
@@ -33,7 +33,7 @@ Ops.sfg <- function(e1, e2) {
 			Vec = rep(e2, length.out = dims)
 		else
 			Vec = e2
-		if (.Generic == "=")
+		if (.Generic == "-")
 			Vec = -Vec
 	} else if (prd) {
 		if (length(e2) == 1)
@@ -42,33 +42,43 @@ Ops.sfg <- function(e1, e2) {
 			Mat = e2
 	} 
 	cls = class(e1)
-	e1 = if (is.numeric(e1)) {
+	if (is.numeric(e1)) {
 		if (prd) {
 			if (inherits(e1, "POINT"))
 				structure(as.vector(e1 %*% Mat), class = cls)
 			else
 				structure(e1 %*% Mat, class = cls)
 		} else { # pm:
-			if (is.matrix(e1))
-				structure(t(t(unclass(e1)) + Vec), class = cls)
-			else
+			if (inherits(e1, "POINT"))
 				structure(unclass(e1) + Vec, class = cls)
+			else { 
+				# cat("here!\n")
+				structure(t(t(unclass(e1)) + Vec), class = cls)
+			}
 		}
-	} else # recurse:
+	} else  { # recurse:
 		structure(lapply(e1, function(x) { 
 			structure(
 			if (is.list(x)) 
 				lapply(x, function(y) {
 					if (is.list(y))
-						lapply(y, function(z) { z %*% Mat + Vec })
+						lapply(y, function(z) { z %*% Mat + conform(Vec, z) })
 					else
-						y %*% Mat + Vec
+						y %*% Mat + conform(Vec, y)
 				})
 			else
-				x %*% Mat + Vec 
+				x %*% Mat + conform(Vec , x)
 			, class = class(x))
 		}),
 			class = cls)
+	}
+}
+
+conform = function(vec, m) { 
+	if (is.matrix(m))
+		t(matrix(vec, ncol(m), nrow(m)))
+	else
+		vec
 }
 
 #' @export
