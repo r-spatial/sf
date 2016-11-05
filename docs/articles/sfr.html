@@ -495,7 +495,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [3,] FALSE  TRUE  TRUE FALSE
 ## [4,] FALSE FALSE FALSE  TRUE
 ## [5,] FALSE FALSE FALSE FALSE</code></pre></div>
-<p>The commands <code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_merge</code> return new geometries, e.g.:</p>
+<p>The commands <code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_union</code> return new geometries, e.g.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sel &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">14</span>)
 buf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_buffer</a></span>(nc.web_mercator[sel,], <span class="dt">dist =</span> <span class="dv">30000</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(buf, <span class="dt">border =</span> <span class="st">'red'</span>)
@@ -503,9 +503,8 @@ buf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.ht
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos.html">st_buffer</a></span>(nc.web_mercator[sel,], -<span class="dv">5000</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'blue'</span>)</code></pre></div>
 <p><img src="sfr_files/figure-html/unnamed-chunk-36-1.png" width="672"></p>
 <p>Commands <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># u &lt;- st_union(nc[1,], nc)</span>
-<span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
-u &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_merge</a></span>(nc, <span class="dt">union =</span> <span class="ot">TRUE</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
+u &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_union</a></span>(nc)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(u)</code></pre></div>
 <p><img src="sfr_files/figure-html/unnamed-chunk-37-1.png" width="672"></p>
 <p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
