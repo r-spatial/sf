@@ -14,10 +14,6 @@ cbind.sf(..., deparse.level = 1)
 \item{...}{objects to bind}
 
 \item{deparse.level}{integer; see \link[base]{rbind}}
-
-\item{...}{objects to bind}
-
-\item{deparse.level}{integer; see \link[base]{cbind}}
 }
 \value{
 if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.

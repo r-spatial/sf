@@ -234,8 +234,6 @@ rbind.sf = function(..., deparse.level = 1) {
 #' bind columns (variables) of sf objects
 #'
 #' bind columns (variables) of sf objects
-#' @param ... objects to bind
-#' @param deparse.level integer; see \link[base]{cbind}
 #' @name bind
 #' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
