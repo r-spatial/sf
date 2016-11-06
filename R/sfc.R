@@ -3,12 +3,12 @@ format.sfc = function(x, ..., digits = 30) {
 	sapply(x, format, ..., digits = digits)
 }
 
-#' create simple feature collection object of class sfc from list
+#' Create simple feature collection object of class sfc from list
 #' 
-#' create simple feature list column, set class, and add coordinate reference system
+#' Create simple feature list column, set class, and add coordinate reference system
 #' 
 #' @name sfc
-#' @param ... one or more simple feature objects
+#' @param ... one or more simple feature geometries
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
 #' 
@@ -146,9 +146,9 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	invisible(x)
 }
 
-#' summarize simple feature column
+#' Summarize simple feature column
 #'
-#' summarize simple feature column
+#' Summarize simple feature column
 #' @param object object of class \code{sfc}
 #' @param ... ignored
 #' @param maxsum maximum number of classes to summarize the simple feature column to
@@ -172,9 +172,9 @@ summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 #' @export
 st_geometry.sfc = function(obj, ...) obj
 
-#' return geometry type of an object
+#' Return geometry type of an object
 #' 
-#' return geometry type of an object, as a factor
+#' Return geometry type of an object, as a factor
 #' @param x object of class \link{sf} or \link{sfc}
 #' @return returns a factor with the geometry type of each simple feature in x
 #' @export
@@ -201,9 +201,9 @@ st_geometry_type = function(x) {
 		"TRIANGLE"))
 }
 
-#' drop Z and/or M dimensions from feature geometries
+#' Drop Z and/or M dimensions from feature geometries
 #'
-#' drop Z and/or M dimensions from feature geometries, resetting classes appropriately
+#' Drop Z and/or M dimensions from feature geometries, resetting classes appropriately
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param ... ignored
 #' @examples

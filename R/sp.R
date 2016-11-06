@@ -50,9 +50,9 @@ st_as_sf.Spatial = function(x, ...) {
 }
 
 
-#' convert foreign geometry object to an sfc object
+#' Convert foreign geometry object to an sfc object
 #'
-#' convert foreign geometry object to an sfc object
+#' Convert foreign geometry object to an sfc object
 #' @param x object to convert
 #' @param ... further arguments
 #' @param forceMulti logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect

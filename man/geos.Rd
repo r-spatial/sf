@@ -6,6 +6,7 @@
 \alias{st_boundary}
 \alias{st_buffer}
 \alias{st_centroid}
+\alias{st_combine}
 \alias{st_contains}
 \alias{st_convex_hull}
 \alias{st_covered_by}
@@ -22,7 +23,6 @@
 \alias{st_is_valid}
 \alias{st_is_within_distance}
 \alias{st_length}
-\alias{st_merge}
 \alias{st_overlaps}
 \alias{st_polygonize}
 \alias{st_relate}
@@ -76,9 +76,9 @@ st_buffer(x, dist, nQuadSegs = 30)
 
 st_boundary(x)
 
-st_convex_hull(x)
-
 st_union_cascaded(x)
+
+st_convex_hull(x)
 
 st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
 
@@ -90,7 +90,7 @@ st_centroid(x)
 
 st_segmentize(x, dfMaxLength)
 
-st_merge(x, union = FALSE)
+st_combine(x)
 
 st_intersection(x, y0)
 
@@ -123,8 +123,6 @@ st_sym_difference(x, y0)
 
 \item{dfMaxLength}{numeric; max length of a line segment}
 
-\item{union}{logical; apply \code{st_union_cascaded} to the merged geometry set?}
-
 \item{y0}{object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed}
 }
 \value{
@@ -143,23 +141,27 @@ st_relate returns a dense \code{character} matrix
 st_intersects ...  st_is_within_distance return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
 st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
+
+\code{st_union(x)} unions geometries.  Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.  Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
 }
 \description{
 Geometric operations on (pairs of) simple feature geometries
 }
 \details{
 requires GEOS version 3.4 or above
+
+\code{st_combine} combines geometries without resolving borders. 
+st_combine(nc)
 }
 \examples{
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 plot(st_union_cascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
+plot(st_convex_hull(nc))
+plot(nc, border = grey(.5))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 x = st_polygonize(mls)
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
-m = st_merge(nc)
-plot(st_convex_hull(nc))
-plot(nc, border = grey(.5))
+plot(st_union(nc))
 }
 

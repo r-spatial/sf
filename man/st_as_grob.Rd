@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid.R
 \name{st_as_grob}
 \alias{st_as_grob}
-\title{convert sf* object to a grob}
+\title{Convert sf* object to a grob}
 \usage{
 st_as_grob(x, ..., units = "native")
 }
@@ -14,6 +14,6 @@ st_as_grob(x, ..., units = "native")
 \item{units}{units; see \link[grid]{unit}}
 }
 \description{
-convert sf* object to an grid graphics object (grob)
+Convert sf* object to an grid graphics object (grob)
 }
 

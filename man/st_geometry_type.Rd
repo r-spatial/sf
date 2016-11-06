@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfc.R
 \name{st_geometry_type}
 \alias{st_geometry_type}
-\title{return geometry type of an object}
+\title{Return geometry type of an object}
 \usage{
 st_geometry_type(x)
 }
@@ -13,6 +13,6 @@ st_geometry_type(x)
 returns a factor with the geometry type of each simple feature in x
 }
 \description{
-return geometry type of an object, as a factor
+Return geometry type of an object, as a factor
 }
 

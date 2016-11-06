@@ -1,6 +1,6 @@
-#' transform or convert coordinates of simple feature
+#' Transform or convert coordinates of simple feature
 #' 
-#' transform or convert coordinates of simple feature
+#' Transform or convert coordinates of simple feature
 #' 
 #' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string

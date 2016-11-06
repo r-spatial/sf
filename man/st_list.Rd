@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{st_list}
 \alias{st_list}
-\title{list layers in a datasource}
+\title{List layers in a datasource}
 \usage{
 st_list(dsn, options = character(0), do_count = FALSE)
 }
@@ -14,6 +14,6 @@ st_list(dsn, options = character(0), do_count = FALSE)
 \item{do_count}{logical; if TRUE, count the features by reading them, even if their count is not reported by the driver}
 }
 \description{
-list layers in a datasource
+List layers in a datasource
 }
 

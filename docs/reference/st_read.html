@@ -84,7 +84,8 @@
     
 
     <pre><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>iGeomField</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>())
 
 <span class='fu'>st_read_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>table</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'>paste</span>(<span class='st'>"select * from "</span>, <span class='no'>table</span>, <span class='st'>";"</span>),
   <span class='kw'>geom_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>EWKB</span>, <span class='no'>...</span>)</pre>
@@ -107,6 +108,8 @@
       <dd>integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.</dd>
       <dt>promote_to_multi</dt>
       <dd>logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to <code>TRUE</code></dd>
+      <dt>stringsAsFactors</dt>
+      <dd>logical; logical: should character vectors be converted to factors?  The `factory-fresh&#39; default is <code>TRUE</code>, but this can be changed by setting <code>options(stringsAsFactors = FALSE)</code>.</dd>
       <dt>conn</dt>
       <dd>open database connection</dd>
       <dt>table</dt>
@@ -141,38 +144,11 @@
  (<span class='no'>s</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
  <span class='fu'>summary</span>(<span class='no'>s</span>)
 }</div><div class='output co'>#&gt; Writing layer meuse to data source PG:dbname=postgis using driver &quot;PostgreSQL&quot;
-#&gt; features:       155
-#&gt; fields:         12
-#&gt; geometry type:  POINT
-#&gt; Reading layer `meuse&#39; from data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
-#&gt; features:       155
-#&gt; fields:         12
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs 
-#&gt; </div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
-#&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
-#&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
-#&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
-#&gt;  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  
-#&gt;  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  
-#&gt;  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  
-#&gt;                                                                    
-#&gt;       elev             dist               om         ffreq  soil   lime   
-#&gt;  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  
-#&gt;  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  
-#&gt;  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          
-#&gt;  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
-#&gt;  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
-#&gt;  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
-#&gt;                                     NA&#39;s   :2                             
-#&gt;     landuse       dist.m              wkb_geometry
-#&gt;  W      :50   Min.   :  10.0   POINT        :155  
-#&gt;  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
-#&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
-#&gt;  Fw     :10   Mean   : 290.3                      
-#&gt;  Ab     : 8   3rd Qu.: 450.0                      
-#&gt;  Bw     : 6   Max.   :1000.0                      
-#&gt;  (Other):20                                       
-#&gt; </div><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
+#&gt; </div><div class='output'><strong class='text-warning'>Warning message:
+GDAL Error 1: Layer meuse already exists, CreateLayer failed.
+Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div class='output co'>#&gt; Creating layer meuse failed.
+#&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
+</strong><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
 <span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; features:       100
 #&gt; fields:         14

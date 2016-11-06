@@ -229,6 +229,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_union
+Rcpp::List CPL_geos_union(Rcpp::List sfc);
+RcppExport SEXP sf_CPL_geos_union(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_union(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_version
 std::string CPL_geos_version(bool b);
 RcppExport SEXP sf_CPL_geos_version(SEXP bSEXP) {

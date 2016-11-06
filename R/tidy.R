@@ -1,8 +1,8 @@
 ## dplyr methods:
 
-#' dplyr verb methods for sf objects
+#' Dplyr verb methods for sf objects
 #' 
-#' dplyr verb methods for sf objects
+#' Dplyr verb methods for sf objects
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -99,7 +99,6 @@ slice_.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @param union boolean; see \link{st_merge}
 #' @export
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -107,14 +106,14 @@ slice_.sf <- function(.data, ..., .dots) {
 #' nc.g %>% summarise(mean(AREA))
 #' nc.g %>% summarize(mean(AREA))
 #' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
-summarise_.sf <- function(.data, ..., .dots, union = TRUE) {
+summarise_.sf <- function(.data, ..., .dots) {
 	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
 		geom = st_geometry(.data)
 		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
 		sf_column = attr(.data, "sf_column")
 		ret = NextMethod()
 		# merge geometry:
-		geoms = unlist(lapply(i, function(x) st_merge(geom[x], union = union)), recursive = FALSE)
+		geoms = unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
 		ret[[sf_column]] = do.call(st_sfc, geoms)
 		st_as_sf(ret, crs = st_crs(.data))
 	} else
@@ -161,9 +160,9 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 
 ## tibble methods:
 
-#' summarize simple feature type for tibble
+#' Summarize simple feature type for tibble
 #'
-#' summarize simple feature type for tibble
+#' Summarize simple feature type for tibble
 #' @param x object of class sfc
 #' @param ... ignored
 #' @name tibble
@@ -172,9 +171,9 @@ type_sum.sfc <- function(x, ...) {
    "simple_feature"
 }
 
-#' summarize simple feature item for tibble
+#' Summarize simple feature item for tibble
 #'
-#' summarize simple feature item for tibble
+#' Summarize simple feature item for tibble
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {

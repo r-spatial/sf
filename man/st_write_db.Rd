@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{st_write_db}
 \alias{st_write_db}
-\title{write simple feature table to a spatial database}
+\title{Write simple feature table to a spatial database}
 \usage{
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., dropTable = FALSE, binary = TRUE)
@@ -23,7 +23,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 \item{binary}{logical; use well-known-binary for transfer?}
 }
 \description{
-write simple feature table to a spatial database
+Write simple feature table to a spatial database
 }
 \examples{
 if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {

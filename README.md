@@ -2,9 +2,10 @@
 
 [![Build Status](https://travis-ci.org/edzer/sfr.png?branch=master)](https://travis-ci.org/edzer/sfr)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/edzer/sfr?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/sfr)
-[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![Coverage Status](https://img.shields.io/codecov/c/github/edzer/sfr/master.svg)](https://codecov.io/github/edzer/sfr?branch=master)
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](http://cran.rstudio.com/package=sf) 
+[![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
 
@@ -15,7 +16,7 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-This currently works directly under windows with R 3.3.0 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, a recent C++ compiler (c++11), GDAL (>= 2.0.0), and GEOS (>= 3.1.0) are needed.
+This currently works directly under windows with R 3.3.0 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, a recent C++ compiler (c++11), GDAL (>= 2.0.0), and GEOS (>= 3.3.0) are needed.
 
 For example, to install these libraries on Ubuntu, either:
 

@@ -164,6 +164,7 @@ filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename, crs = 4267)
 ```
 
+(Note that users will not use \code{system.file} but give a \code{filename} directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
 The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14
 fields (attributes, represented as columns). This object is of class
 
@@ -631,7 +632,7 @@ st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 
 The commands `st_buffer`, `st_boundary`, `st_convexhull`,
 `st_union_cascaded`, `st_simplify`, `st_triangulate`,
-`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_merge`
+`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_union`
 return new geometries, e.g.:
 
 ```{r fig.height=3}
@@ -647,9 +648,8 @@ Commands `st_intersection`, `st_union`, `st_difference`,
 pairs of geometries:
 
 ```{r fig.height=3}
-# u <- st_union(nc[1,], nc)
 par(mar = rep(0,4))
-u <- st_merge(nc, union = TRUE)
+u <- st_union(nc)
 plot(u)
 ```
 

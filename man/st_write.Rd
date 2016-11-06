@@ -2,9 +2,9 @@
 % Please edit documentation in R/read.R
 \name{st_write}
 \alias{st_write}
-\title{write simple features object to file or database}
+\title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer, driver = "ESRI Shapefile", ...,
+st_write(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", ...,
   dataset_options = NULL, layer_options = NULL, quiet = FALSE,
   factorsAsCharacter = TRUE)
 }
@@ -28,7 +28,7 @@ st_write(obj, dsn, layer, driver = "ESRI Shapefile", ...,
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.}
 }
 \description{
-write simple features object to file or database
+Write simple features object to file or database
 }
 \details{
 columns (variables) of a class not supported are dropped with a warning.

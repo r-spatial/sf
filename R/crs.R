@@ -1,6 +1,6 @@
-#' retrieve coordinate reference system from object
+#' Retrieve coordinate reference system from object
 #'
-#' retrieve coordinate reference system from sf or sfc object.
+#' Retrieve coordinate reference system from sf or sfc object
 #' @name crs
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param ... ignored
@@ -24,9 +24,9 @@ st_crs.default = function(x, ...)
 #' @method is.na crs
 is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 
-#' set or replace coordinate reference system from object
+#' Set or replace coordinate reference system from object
 #'
-#' set or replace retrieve coordinate reference system from object
+#' Set or replace retrieve coordinate reference system from object
 #' @name crs
 #' @param value one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).
 #' @details in case a coordinate reference system is replaced, no transformation takes
@@ -127,9 +127,9 @@ epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue abou
 	}
 }
 
-#' assert whether simple feature coordinates are longlat degrees
+#' Assert whether simple feature coordinates are longlat degrees
 #' 
-#' assert whether simple feature coordinates are longlat degrees
+#' Assert whether simple feature coordinates are longlat degrees
 #' @param x object of class \link{sf} or \link{sfc}
 #' @return TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
 #' @export

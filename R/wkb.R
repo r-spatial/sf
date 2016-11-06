@@ -202,9 +202,9 @@ readGC = function(rc, dims, endian, EWKB) {
 	lapply(seq_len(ngc), function(x) readData(rc, EWKB))
 }
 
-#' convert sfc object to an WKB object
+#' Convert sfc object to an WKB object
 #'
-#' convert sfc object to an WKB object
+#' Convert sfc object to an WKB object
 #' @param x object to convert
 #' @param ... ignored
 #' @name st_as_binary

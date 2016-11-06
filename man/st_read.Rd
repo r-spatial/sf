@@ -3,7 +3,7 @@
 \name{st_read}
 \alias{st_read}
 \alias{st_read_db}
-\title{read simple features or layers from file or database}
+\title{Read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
   type = 0, promote_to_multi = TRUE,
@@ -45,14 +45,17 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 }
 \description{
-read simple features from file or database, or retrieve layer names and their geometry type(s)
+Read simple features from file or database, or retrieve layer names and their geometry type(s)
 
-read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 }
 \details{
 for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
+}
+\note{
+The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}.
 }
 \examples{
 if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis

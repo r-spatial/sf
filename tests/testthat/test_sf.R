@@ -43,3 +43,11 @@ test_that("drop_zm works", {
   expect_identical(st_sfc(pt,pl), st_drop_zm(st_sfc(ptzm,plzm)))
   expect_identical(st_sf(a = 1:2, geom = st_sfc(pt,pl)), st_drop_zm(st_sf(a = 1:2, geom = st_sfc(ptzm,plzm))))
 })
+
+test_that("rbind/cbind work", {
+  # cbind/rbind:
+  x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
+  # don't warn when replacing crs with identical value:
+  expect_warning(cbind(x, x, x))
+  rbind(x, x, x)
+})

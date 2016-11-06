@@ -4,7 +4,7 @@
 \alias{st_as_sf}
 \alias{st_as_sf.Spatial}
 \alias{st_as_sf.data.frame}
-\title{convert foreign object to an sf object}
+\title{Convert foreign object to an sf object}
 \usage{
 st_as_sf(x, ...)
 
@@ -29,7 +29,7 @@ st_as_sf(x, ...)
 \item{remove}{logical; when coords or wkt is given, remove these columns from data.frame?}
 }
 \description{
-convert foreign object to an sf object
+Convert foreign object to an sf object
 }
 \details{
 setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
