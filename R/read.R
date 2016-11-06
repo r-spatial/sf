@@ -78,7 +78,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 #' st_write(nc, ".", "nc")
 #' @export
-st_write = function(obj, dsn, layer, driver = "ESRI Shapefile", ..., dataset_options = NULL,
+st_write = function(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", ..., dataset_options = NULL,
 		layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
 
 	if (inherits(obj, "sfc"))

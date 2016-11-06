@@ -4,7 +4,7 @@
 \alias{st_write}
 \title{write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer, driver = "ESRI Shapefile", ...,
+st_write(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", ...,
   dataset_options = NULL, layer_options = NULL, quiet = FALSE,
   factorsAsCharacter = TRUE)
 }
