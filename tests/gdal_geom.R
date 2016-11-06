@@ -97,3 +97,7 @@ st_length(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 
 st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
+
+# adds the (0.5 0.5) node:
+st_union(st_multilinestring(list(rbind(c(0,0),c(1,1)), rbind(c(0,1), c(1,0)))))
+
