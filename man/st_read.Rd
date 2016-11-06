@@ -54,6 +54,9 @@ for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_ge
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
 }
+\note{
+The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}.
+}
 \examples{
 if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  library(sp)

@@ -25,6 +25,7 @@
 #' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 #' summary(nc)
 #' @name st_read
+#' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}. 
 #' @export
 st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors()) {

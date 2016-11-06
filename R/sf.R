@@ -223,6 +223,7 @@ print.sf = function(x, ..., n =
 #' bind rows (features) of sf objects
 #' @param ... objects to bind
 #' @param deparse.level integer; see \link[base]{rbind}
+#' @name bind
 #' @export
 rbind.sf = function(..., deparse.level = 1) {
 	ret = base::rbind.data.frame(...)
@@ -235,6 +236,8 @@ rbind.sf = function(..., deparse.level = 1) {
 #' bind columns (variables) of sf objects
 #' @param ... objects to bind
 #' @param deparse.level integer; see \link[base]{cbind}
+#' @name bind
+#' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
 cbind.sf = function(..., deparse.level = 1) {
 	st_sf(base::cbind.data.frame(...))
