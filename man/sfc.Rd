@@ -8,7 +8,7 @@
 st_sfc(..., crs = NA_integer_, precision = 0)
 }
 \arguments{
-\item{...}{one or more simple feature objects}
+\item{...}{one or more simple feature geometries}
 
 \item{crs}{coordinate reference system: integer with the epsg code, or character with proj4string}
 

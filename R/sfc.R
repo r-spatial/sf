@@ -8,7 +8,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' create simple feature list column, set class, and add coordinate reference system
 #' 
 #' @name sfc
-#' @param ... one or more simple feature objects
+#' @param ... one or more simple feature geometries
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
 #' 

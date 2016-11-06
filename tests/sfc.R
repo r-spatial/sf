@@ -33,3 +33,7 @@ st_sfc(x, crs = 4326)
 st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
 # but do when it changes:
 st_sfc(x, crs = 3857)
+
+# rbind:
+x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
+rbind(x, x, x)

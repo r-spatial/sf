@@ -217,3 +217,25 @@ print.sf = function(x, ..., n =
 	print.data.frame(y, ...)
 	invisible(x)
 }
+
+#' bind rows (features) of sf objects
+#'
+#' bind rows (features) of sf objects
+#' @param ... objects to bind
+#' @param deparse.level integer; see \link[base]{rbind}
+#' @export
+rbind.sf = function(..., deparse.level = 1) {
+	ret = base::rbind.data.frame(...)
+	st_geometry(ret) = do.call(st_sfc, st_geometry(ret))
+	ret
+}
+
+#' bind columns (variables) of sf objects
+#'
+#' bind columns (variables) of sf objects
+#' @param ... objects to bind
+#' @param deparse.level integer; see \link[base]{cbind}
+#' @export
+cbind.sf = function(..., deparse.level = 1) {
+	st_sf(base::cbind.data.frame(...))
+}
