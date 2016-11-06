@@ -1,3 +1,4 @@
+affine		demo script for affine transformations
 basic		simple feature test script
 bm_wkb		benchmark for reading larg(ish) well-known-binary data, comparing sf and wkb
 meuse_sf	create meuse simple feature table from data.frame
