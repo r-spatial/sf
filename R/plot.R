@@ -9,7 +9,7 @@
 #		length(grep("longlat", p4str, fixed = TRUE)) == 0
 #}
 
-#' plot sf object
+#' Plot sf object
 #'
 #' @param x object of class sf
 #' @param y ignored

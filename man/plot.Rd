@@ -12,7 +12,7 @@
 \alias{plot.sfc_POINT}
 \alias{plot.sfc_POLYGON}
 \alias{plot.sfg}
-\title{plot sf object}
+\title{Plot sf object}
 \usage{
 \method{plot}{sf}(x, y, ...)
 
@@ -68,7 +68,7 @@
 \item{border}{color of polygon border}
 }
 \description{
-plot sf object
+Plot sf object
 }
 \examples{
 # plot linestrings:

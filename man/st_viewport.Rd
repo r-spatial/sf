@@ -2,7 +2,7 @@
 % Please edit documentation in R/grid.R
 \name{st_viewport}
 \alias{st_viewport}
-\title{create viewport from sf, sfc or sfg object}
+\title{Create viewport from sf, sfc or sfg object}
 \usage{
 st_viewport(x, ..., bbox = st_bbox(x), asp)
 }
@@ -19,7 +19,7 @@ st_viewport(x, ..., bbox = st_bbox(x), asp)
 the output of the call to \link[grid]{viewport}
 }
 \description{
-create viewport from sf, sfc or sfg object
+Create viewport from sf, sfc or sfg object
 }
 \details{
 parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...

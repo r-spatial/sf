@@ -1,8 +1,8 @@
 ## dplyr methods:
 
-#' dplyr verb methods for sf objects
+#' Dplyr verb methods for sf objects
 #' 
-#' dplyr verb methods for sf objects
+#' Dplyr verb methods for sf objects
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -160,9 +160,9 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 
 ## tibble methods:
 
-#' summarize simple feature type for tibble
+#' Summarize simple feature type for tibble
 #'
-#' summarize simple feature type for tibble
+#' Summarize simple feature type for tibble
 #' @param x object of class sfc
 #' @param ... ignored
 #' @name tibble
@@ -171,9 +171,9 @@ type_sum.sfc <- function(x, ...) {
    "simple_feature"
 }
 
-#' summarize simple feature item for tibble
+#' Summarize simple feature item for tibble
 #'
-#' summarize simple feature item for tibble
+#' Summarize simple feature item for tibble
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {

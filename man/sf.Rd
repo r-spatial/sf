@@ -4,7 +4,7 @@
 \alias{[.sf}
 \alias{sf}
 \alias{st_sf}
-\title{create sf object}
+\title{Create sf object}
 \usage{
 st_sf(..., relation_to_geometry = NA_character_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision)
@@ -33,7 +33,7 @@ st_sf(..., relation_to_geometry = NA_character_, row.names,
 \item{drop}{whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}}
 }
 \description{
-create sf, which extends data.frame-like objects with a simple feature list column
+Create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
 \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.

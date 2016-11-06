@@ -8,7 +8,7 @@
 \alias{st_crs<-}
 \alias{st_crs<-.sf}
 \alias{st_crs<-.sfc}
-\title{retrieve coordinate reference system from object}
+\title{Retrieve coordinate reference system from object}
 \usage{
 st_crs(x, ...)
 
@@ -30,9 +30,9 @@ st_crs(x) <- value
 \item{value}{one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).}
 }
 \description{
-retrieve coordinate reference system from sf or sfc object.
+Retrieve coordinate reference system from sf or sfc object
 
-set or replace retrieve coordinate reference system from object
+Set or replace retrieve coordinate reference system from object
 }
 \details{
 in case a coordinate reference system is replaced, no transformation takes

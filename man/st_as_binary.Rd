@@ -4,7 +4,7 @@
 \alias{st_as_binary}
 \alias{st_as_binary.sfc}
 \alias{st_as_binary.sfg}
-\title{convert sfc object to an WKB object}
+\title{Convert sfc object to an WKB object}
 \usage{
 st_as_binary(x, ...)
 
@@ -28,7 +28,7 @@ st_as_binary(x, ...)
 \item{precision}{numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.}
 }
 \description{
-convert sfc object to an WKB object
+Convert sfc object to an WKB object
 }
 \details{
 for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.

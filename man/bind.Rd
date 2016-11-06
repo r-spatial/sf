@@ -4,7 +4,7 @@
 \alias{bind}
 \alias{cbind.sf}
 \alias{rbind.sf}
-\title{bind rows (features) of sf objects}
+\title{Bind rows (features) of sf objects}
 \usage{
 rbind.sf(..., deparse.level = 1)
 
@@ -19,8 +19,8 @@ cbind.sf(..., deparse.level = 1)
 if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 }
 \description{
-bind rows (features) of sf objects
+Bind rows (features) of sf objects
 
-bind columns (variables) of sf objects
+Bind columns (variables) of sf objects
 }
 

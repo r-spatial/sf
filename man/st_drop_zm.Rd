@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfc.R
 \name{st_drop_zm}
 \alias{st_drop_zm}
-\title{drop Z and/or M dimensions from feature geometries}
+\title{Drop Z and/or M dimensions from feature geometries}
 \usage{
 st_drop_zm(x, ...)
 }
@@ -12,7 +12,7 @@ st_drop_zm(x, ...)
 \item{...}{ignored}
 }
 \description{
-drop Z and/or M dimensions from feature geometries, resetting classes appropriately
+Drop Z and/or M dimensions from feature geometries, resetting classes appropriately
 }
 \examples{
 st_drop_zm(st_linestring(matrix(1:32,8)))

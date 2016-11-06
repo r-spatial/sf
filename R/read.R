@@ -1,6 +1,6 @@
-#' read simple features or layers from file or database
+#' Read simple features or layers from file or database
 #'
-#' read simple features from file or database, or retrieve layer names and their geometry type(s)
+#' Read simple features from file or database, or retrieve layer names and their geometry type(s)
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
 #' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
@@ -52,9 +52,9 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	st_as_sf(x, ..., stringsAsFactors = stringsAsFactors)
 }
 
-#' write simple features object to file or database
+#' Write simple features object to file or database
 #'
-#' write simple features object to file or database
+#' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
 #' @param layer layer name (varies by driver, may be a file name without extension)
@@ -106,9 +106,9 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", 
 		geom, dim, quiet)
 }
 
-#' read PostGIS table directly, using DBI and binary conversion
+#' Read PostGIS table directly, using DBI and binary conversion
 #' 
-#' read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+#' Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 #' @param conn open database connection
 #' @param table table name
 #' @param query SQL query to select records
@@ -143,9 +143,9 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 	st_as_sf(tbl, ...)
 }
 
-#' write simple feature table to a spatial database
+#' Write simple feature table to a spatial database
 #' 
-#' write simple feature table to a spatial database
+#' Write simple feature table to a spatial database
 #' @param conn open database connection
 #' @param obj object of class \code{sf}
 #' @param table name for the table in the database
@@ -203,9 +203,9 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 }
 
 
-#' get GDAL drivers
+#' Get GDAL drivers
 #' 
-#' get a list of the available GDAL drivers
+#' Get a list of the available GDAL drivers
 #' @param what character: "vector" or "raster", anything else will return all drivers.
 #' @details The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{st_drivers()} function shows which are available, and which may be written (but all are assumed to be readable). Note that stray files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.
 #' @return a \code{data.frame} with driver metadata
@@ -241,9 +241,9 @@ print.sf_layers = function(x, ...) {
 	}
 }
 
-#' list layers in a datasource
+#' List layers in a datasource
 #'
-#' list layers in a datasource
+#' List layers in a datasource
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver

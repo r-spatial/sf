@@ -14,7 +14,7 @@
 \alias{spread_.sf}
 \alias{summarise_.sf}
 \alias{transmute_.sf}
-\title{dplyr verb methods for sf objects}
+\title{Dplyr verb methods for sf objects}
 \usage{
 filter_.sf(.data, ..., .dots)
 
@@ -74,7 +74,7 @@ spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
 \item{sep}{see original function docs}
 }
 \description{
-dplyr verb methods for sf objects
+Dplyr verb methods for sf objects
 }
 \examples{
 library(dplyr)

@@ -5,7 +5,7 @@
 \alias{st_transform.sf}
 \alias{st_transform.sfc}
 \alias{st_transform.sfg}
-\title{transform or convert coordinates of simple feature}
+\title{Transform or convert coordinates of simple feature}
 \usage{
 st_transform(x, crs)
 
@@ -23,7 +23,7 @@ st_transform(x, crs)
 \item{...}{ignored}
 }
 \description{
-transform or convert coordinates of simple feature
+Transform or convert coordinates of simple feature
 }
 \details{
 transforms coordinates of object to new projection
