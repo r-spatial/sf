@@ -16,7 +16,7 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-This currently works directly under windows with R 3.3.0 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, a recent C++ compiler (c++11), GDAL (>= 2.0.0), and GEOS (>= 3.1.0) are needed.
+This currently works directly under windows with R 3.3.0 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, a recent C++ compiler (c++11), GDAL (>= 2.0.0), and GEOS (>= 3.3.0) are needed.
 
 For example, to install these libraries on Ubuntu, either:
 
