@@ -2,7 +2,7 @@
 % Please edit documentation in R/sfc.R
 \name{summary.sfc}
 \alias{summary.sfc}
-\title{summarize simple feature column}
+\title{Summarize simple feature column}
 \usage{
 \method{summary}{sfc}(object, ..., maxsum = 7L, maxp4s = 10L)
 }
@@ -16,6 +16,6 @@
 \item{maxp4s}{maximum number of characters to print from the PROJ.4 string}
 }
 \description{
-summarize simple feature column
+Summarize simple feature column
 }
 

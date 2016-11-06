@@ -1,6 +1,6 @@
-#' convert foreign object to an sf object
+#' Convert foreign object to an sf object
 #'
-#' convert foreign object to an sf object
+#' Convert foreign object to an sf object
 #' @param x object to be converted into an object class \code{sf}
 #' @export
 st_as_sf = function(x, ...) UseMethod("st_as_sf")
@@ -48,9 +48,9 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 	st_sf(x, ..., relation_to_geometry = relation_to_geometry)
 }
 
-#' get, set, or replace geometry from an sf object
+#' Get, set, or replace geometry from an sf object
 #' 
-#' get, set, or replace geometry from an sf object
+#' Get, set, or replace geometry from an sf object
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
 #' @return st_geometry returns an object of class \link{sfc}, a list-column with geometries
@@ -97,9 +97,9 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 	x
 }
 
-#' create sf object
+#' Create sf object
 #' 
-#' create sf, which extends data.frame-like objects with a simple feature list column
+#' Create sf, which extends data.frame-like objects with a simple feature list column
 #' @name sf
 #' @param ... column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
@@ -218,9 +218,9 @@ print.sf = function(x, ..., n =
 	invisible(x)
 }
 
-#' bind rows (features) of sf objects
+#' Bind rows (features) of sf objects
 #'
-#' bind rows (features) of sf objects
+#' Bind rows (features) of sf objects
 #' @param ... objects to bind
 #' @param deparse.level integer; see \link[base]{rbind}
 #' @name bind
@@ -231,9 +231,9 @@ rbind.sf = function(..., deparse.level = 1) {
 	ret
 }
 
-#' bind columns (variables) of sf objects
+#' Bind columns (variables) of sf objects
 #'
-#' bind columns (variables) of sf objects
+#' Bind columns (variables) of sf objects
 #' @name bind
 #' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export

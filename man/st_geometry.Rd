@@ -6,7 +6,7 @@
 \alias{st_geometry.sfc}
 \alias{st_geometry.sfg}
 \alias{st_geometry<-}
-\title{get, set, or replace geometry from an sf object}
+\title{Get, set, or replace geometry from an sf object}
 \usage{
 \method{st_geometry}{sfc}(obj, ...)
 
@@ -35,7 +35,7 @@ st_geometry returns an object of class \link{sfc}, a list-column with geometries
 \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
 }
 \description{
-get, set, or replace geometry from an sf object
+Get, set, or replace geometry from an sf object
 }
 \examples{
 df = data.frame(a = 1:2)

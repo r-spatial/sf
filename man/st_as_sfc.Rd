@@ -9,7 +9,7 @@
 \alias{st_as_sfc.SpatialPolygons}
 \alias{st_as_sfc.WKB}
 \alias{st_as_sfc.character}
-\title{convert foreign geometry object to an sfc object}
+\title{Convert foreign geometry object to an sfc object}
 \usage{
 \method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, pureR = FALSE)
 
@@ -41,7 +41,7 @@ st_as_sfc(x, ...)
 \item{forceMulti}{logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect}
 }
 \description{
-convert foreign geometry object to an sfc object
+Convert foreign geometry object to an sfc object
 }
 \details{
 when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.

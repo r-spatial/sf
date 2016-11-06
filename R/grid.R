@@ -1,8 +1,8 @@
 # grid graphics utilities
 
-#' convert sf* object to a grob
+#' Convert sf* object to a grob
 #'
-#' convert sf* object to an grid graphics object (grob)
+#' Convert sf* object to an grid graphics object (grob)
 #' @param x object to be converted into an object class \code{grob}
 #' @param units units; see \link[grid]{unit}
 #' @param ... passed on to the xxxGrob function, e.g. \code{gp = gpar(col = 'red')}
@@ -47,9 +47,9 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 	pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
 }
 
-#' create viewport from sf, sfc or sfg object
+#' Create viewport from sf, sfc or sfg object
 #' 
-#' create viewport from sf, sfc or sfg object
+#' Create viewport from sf, sfc or sfg object
 #' @param x object of class sf, sfc or sfg object
 #' @param bbox the bounding box used for aspect ratio
 #' @param asp numeric; target aspect ratio (y/x), see Details

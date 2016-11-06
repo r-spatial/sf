@@ -3,7 +3,7 @@
 \name{sfc}
 \alias{sfc}
 \alias{st_sfc}
-\title{create simple feature collection object of class sfc from list}
+\title{Create simple feature collection object of class sfc from list}
 \usage{
 st_sfc(..., crs = NA_integer_, precision = 0)
 }
@@ -15,7 +15,7 @@ st_sfc(..., crs = NA_integer_, precision = 0)
 \item{precision}{numeric; see \link{st_as_binary}}
 }
 \description{
-create simple feature list column, set class, and add coordinate reference system
+Create simple feature list column, set class, and add coordinate reference system
 }
 \details{
 a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfg}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION.

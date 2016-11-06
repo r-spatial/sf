@@ -2,7 +2,7 @@
 % Please edit documentation in R/crs.R
 \name{st_is_longlat}
 \alias{st_is_longlat}
-\title{assert whether simple feature coordinates are longlat degrees}
+\title{Assert whether simple feature coordinates are longlat degrees}
 \usage{
 st_is_longlat(x)
 }
@@ -13,6 +13,6 @@ st_is_longlat(x)
 TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
 }
 \description{
-assert whether simple feature coordinates are longlat degrees
+Assert whether simple feature coordinates are longlat degrees
 }
 

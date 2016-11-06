@@ -4,7 +4,7 @@
 \alias{obj_sum.sfc}
 \alias{tibble}
 \alias{type_sum.sfc}
-\title{summarize simple feature type for tibble}
+\title{Summarize simple feature type for tibble}
 \usage{
 type_sum.sfc(x, ...)
 
@@ -16,8 +16,8 @@ obj_sum.sfc(x)
 \item{...}{ignored}
 }
 \description{
-summarize simple feature type for tibble
+Summarize simple feature type for tibble
 
-summarize simple feature item for tibble
+Summarize simple feature item for tibble
 }
 
