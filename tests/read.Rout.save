@@ -59,49 +59,6 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > class(st_geometry(tst)[[1]])
 [1] "XYM"        "LINESTRING" "sfg"       
 > 
-> sf:::guess_driver("nc.e00")
-     e00 
-"AVCE00" 
-Warning message:
-In sf:::guess_driver("nc.e00") :
-  guess_driver AVCE00 is available but reports it will not allow writing
-> sf:::guess_driver("nc.shp")
-             shp 
-"ESRI Shapefile" 
-> sf:::guess_driver("nc.gxt")
-         gxt 
-"Geoconcept" 
-> sf:::guess_driver("nc.gps")
-       gps 
-"GPSBabel" 
-> sf:::guess_driver("nc.gtm")
-            gtm 
-"GPSTrackMaker" 
-> sf:::guess_driver("nc.nc")
-      nc 
-"netCDF" 
-> sf:::guess_driver("nc.map")
-   map 
-"WAsP" 
-> try(sf:::guess_driver("nc.sh"))
-Error in sf:::guess_driver("nc.sh") : 
-  no driver specified, cannot guess driver from dsn extension
-> try(sf:::guess_driver("nc.osm"))
-  osm 
-"OSM" 
-Warning message:
-In sf:::guess_driver("nc.osm") :
-  guess_driver OSM is available but reports it will not allow writing
-> try(sf:::guess_driver("nc.pbf"))
-  pbf 
-"OSM" 
-Warning message:
-In sf:::guess_driver("nc.pbf") :
-  guess_driver OSM is available but reports it will not allow writing
-> try(sf:::guess_driver("nc"))
-Error in sf:::guess_driver("nc") : 
-  no driver specified, cannot guess driver from dsn extension
-> 
 > proc.time()
    user  system elapsed 
-  0.424   0.260   0.402 
+  0.408   0.292   0.389 

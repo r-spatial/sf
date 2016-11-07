@@ -17,3 +17,20 @@ test_that("stringsAsFactors = TRUE produces a data.frame with factors", {
                  stringsAsFactors = TRUE)
   expect_true(any(sapply(nc, class) == "factor"))
 })
+
+test_that("guess_driver works", {
+  # hard to predict what these will do:
+  drv = "ESRI Shapefile"
+  names(drv) = "shp"
+  expect_equal(sf:::guess_driver("nc.shp"), drv)
+  try(sf:::guess_driver("nc.e00"))
+  try(sf:::guess_driver("nc.gxt"))
+  try(sf:::guess_driver("nc.gps"))
+  try(sf:::guess_driver("nc.gtm"))
+  try(sf:::guess_driver("nc.nc"))
+  try(sf:::guess_driver("nc.map"))
+  try(sf:::guess_driver("nc.sh"))
+  try(sf:::guess_driver("nc.osm"))
+  try(sf:::guess_driver("nc.pbf"))
+  try(sf:::guess_driver("nc"))
+})
