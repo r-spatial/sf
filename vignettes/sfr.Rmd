@@ -457,7 +457,7 @@ nc <- st_read(filename, crs = 4267)
 and writing takes place in the same fashion, using `st_write`:
 
 ```{r}
-st_write(nc, "nc.shp", "nc", "ESRI Shapefile")
+st_write(nc, "nc.shp")
 ```
 
 The `dsn` and `layer` arguments to `st_read` and `st_write`
