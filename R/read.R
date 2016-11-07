@@ -266,7 +266,14 @@ guess_driver = function(dsn) {
                        "nc",     "netCDF",
                        "osm",    "OSM",  # NO WRITE
                        "pbf",    "OSM",  # NO WRITE
-                       "shp",    "ESRI Shapefile"
+                       "shp",    "ESRI Shapefile",
+                       "bna",    "BNA",
+                       "csv",    "CSV",
+                       "gml",    "GML",
+                       "jml",    "JML",
+                       "ods",    "ODS",
+                       "xlsx",   "XLSX",
+                       "vdv",    "VDV"
 					   ),
                        ncol = 2, byrow = TRUE)
 	drv = ext_map[,2]
