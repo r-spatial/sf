@@ -43,13 +43,13 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	if (length(x) == 0)
 		x = data.frame(row.names = seq_along(geom))
 	else
-		x = as.data.frame(x)
+		x = as.data.frame(x, stringsAsFactors = stringsAsFactors)
 	crs = if (is.null(attr(geom, "proj4string")))
 			NA_integer_
 		else
 			attr(geom, "proj4string")
 	x[[nm]] = st_sfc(geom, crs = crs)
-	st_as_sf(x, ..., stringsAsFactors = stringsAsFactors)
+	st_as_sf(x, ...)
 }
 
 #' Write simple features object to file or database
