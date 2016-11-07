@@ -104,14 +104,14 @@ crs_from_list = function(x) {
 
 	if (is.null(x$proj4string) && is.null(x$epgs)) {
 		structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
-	} else if ( is.null(x$proj4string) && !is.null(x$epgs)) {
-		proj4string = trim(as.character(x$proj4string))
-		epsg = epsg_from_proj4string(proj4string)
-		structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
-	} else if (!is.null(x$proj4string) &&  is.null(x$epgs)) {
-		epsg = as.integer(x$epsg)
-		proj4string = trim(CPL_proj4string_from_epsg(epsg))
-		structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+	} else if (is.null(x$proj4string) && !is.null(x$epgs)) {
+	  epsg = as.integer(x$epsg)
+	  proj4string = trim(CPL_proj4string_from_epsg(epsg))
+	  structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+	} else if (!is.null(x$proj4string) && is.null(x$epgs)) {
+	  proj4string = trim(as.character(x$proj4string))
+	  epsg = epsg_from_proj4string(proj4string)
+	  structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
 	} else if (!is.null(x$proj4string) && !is.null(x$epgs)) {
 		proj4string = trim(as.character(x$proj4string))
 		epsg = as.integer(x$epsg)
