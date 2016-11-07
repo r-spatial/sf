@@ -259,9 +259,9 @@ guess_driver = function(dsn) {
                        "bna",    "BNA",
                        "csv",    "CSV",
                        "e00",    "AVCE00",
-					   "geojson","GeoJSON",
+		       "geojson","GeoJSON",
                        "gml",    "GML",
-					   "gpkg",   "GPKG",
+		       "gpkg",   "GPKG",
                        "gps",    "GPSBabel",
                        "gtm",    "GPSTrackMaker",   
                        "gxt",    "Geoconcept",
@@ -273,8 +273,9 @@ guess_driver = function(dsn) {
                        "pbf",    "OSM",
                        "shp",    "ESRI Shapefile",
                        "vdv",    "VDV",
+	    	       "xls",    "xls",
                        "xlsx",   "XLSX"
-					   ),
+                                             ),
                        ncol = 2, byrow = TRUE)
 	drv = ext_map[,2]
 	names(drv) = ext_map[,1]
