@@ -48,6 +48,10 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 			NA_integer_
 		else
 			attr(geom, "proj4string")
+	
+	if (attr(geom, "epsg") == 0)
+		attr(geom, "epsg") = NA_integer_
+
 	x[[nm]] = st_sfc(geom, crs = crs)
 	st_as_sf(x, ..., stringsAsFactors = stringsAsFactors)
 }
