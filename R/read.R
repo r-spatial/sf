@@ -256,24 +256,24 @@ st_list = function(dsn, options = character(0), do_count = FALSE) {
 
 guess_driver = function(dsn) {
     ext_map <- matrix (c(
+                       "bna",    "BNA",
+                       "csv",    "CSV",
                        "e00",    "AVCE00",
 					   "geojson","GeoJSON",
+                       "gml",    "GML",
 					   "gpkg",   "GPKG",
                        "gps",    "GPSBabel",
                        "gtm",    "GPSTrackMaker",   
                        "gxt",    "Geoconcept",
+                       "jml",    "JML",
                        "map",    "WAsP",
                        "nc",     "netCDF",
-                       "osm",    "OSM",  # NO WRITE
-                       "pbf",    "OSM",  # NO WRITE
-                       "shp",    "ESRI Shapefile",
-                       "bna",    "BNA",
-                       "csv",    "CSV",
-                       "gml",    "GML",
-                       "jml",    "JML",
                        "ods",    "ODS",
-                       "xlsx",   "XLSX",
-                       "vdv",    "VDV"
+                       "osm",    "OSM",
+                       "pbf",    "OSM",
+                       "shp",    "ESRI Shapefile",
+                       "vdv",    "VDV",
+                       "xlsx",   "XLSX"
 					   ),
                        ncol = 2, byrow = TRUE)
 	drv = ext_map[,2]
@@ -286,6 +286,6 @@ guess_driver = function(dsn) {
 	if (is.na(i))
 		stop(paste("guess_driver:", drv, "not available in supported drivers, see `st_drivers()'"))
 	if (! drivers[i, "write"])
-		warning(paste("guess_driver", drv, "is available but reports it will not allow writing"))
+		stop(paste("Driver", drv, "has no write capability, see `st_drivers()'"))
 	drv
 }
