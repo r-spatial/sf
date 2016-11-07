@@ -57,73 +57,77 @@ is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 #'  sfc
 #' @export
 `st_crs<-.sfc` = function(x, value) {
-	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
-	# init:
-	if (!is.na(value) && !(is.numeric(value) || is.character(value) || is.list(value)))
-		stop("crs should be either numeric (epsg), character (proj4string), or list")
-	check_replace(x, value)
-	attr(x, "proj4string") = NA_character_
-	attr(x, "epsg") = NA_integer_
-	if (is.list(value)) { # try to get value from the attribute list:
-		if (!is.null(value$epsg) && !is.na(value$epsg))
-			value = value$epsg
-		else if (!is.null(value$proj4string) && !is.na(value$proj4string))
-			value = value$proj4string
-		else 
-			value = NA_integer_
-	}
-	if (! is.na(value)) {
-		if (is.numeric(value)) {
-			value = as.integer(value)
-			if (value == 0) {
-				attr(x, "epsg") = NA_integer_
-				value = NA_character_
-			} else {
-				attr(x, "epsg") = value
-				value = CPL_proj4string_from_epsg(value)
-			}
-		} else 
-			attr(x, "epsg") = epsgFromProj4(value)
+	trim = function(x) gsub("^\\s+|\\s+$", "", x)
+	
+	# Make sure crs exists
+	if (is.null(attr(x, "proj4string")))
+		attr(x, "proj4string") = NA_character_
+	if (is.null(attr(x, "epsg")))
+		attr(x, "epsg") = NA_integer_
+
+	attr(x, "proj4string") = trim(attr(x, "proj4string"))
+	start_crs = st_crs(x)
+	
+	if (is.na(value)) {
+		# Do nothing
+	} else if (is.numeric(value) && value != 0) { # epsg
+		attr(x, "proj4string") = trim(CPL_proj4string_from_epsg(value))
+		attr(x, "epsg") = as.integer(value)
+	} else if (is.character(value)) { # proj4string
 		attr(x, "proj4string") = trim(value)
+		attr(x, "epsg") = epsg_from_proj4string(value)
+	} else if (class(value) == "crs") { # crs
+		attr(x, "proj4string") = trim(value$proj4string)
+		attr(x, "epsg") = value$epsg
+	} else {
+		stop("crs should be either integer (epsg), character (proj4string), or crs object")
 	}
+
+	end_crs = st_crs(x)
+
+	# Warn on replacement
+	if ( (!is.na(start_crs$epsg) && start_crs$epsg != end_crs$epsg) ||
+		 (!is.na(start_crs$proj4string) && start_crs$proj4string != end_crs$proj4string) )
+	{
+		warning("st_crs: replacing crs does not reproject data; use st_transform for that")
+	}
+
 	x
 }
 
-check_replace = function(x, value) {
-	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
-	if (is.na(value) || is.list(value))
-		return()
-	epsg = attr(x, "epsg")
-	proj4string = attr(x, "proj4string")
-	if (is.null(epsg) && is.null(proj4string)) # first time it's set
-		return()
-	if (!is.null(epsg) && isTRUE(epsg == value)) # replacing epsg with identical value
-		return()
-	if (!is.null(proj4string) && isTRUE(proj4string == value)) # replacing proj4string with identical value
-		return()
-	if (!is.null(epsg) && is.na(epsg) && is.numeric(value) && !is.na(proj4string)
-			&& proj4string ==  trim(CPL_proj4string_from_epsg(value)))
-		return() # the epsg is "additional" info, but matches the already present proj4string
-	if (!is.null(value) && !is.na(value) && is.character(value) 
-		&& !is.null(proj4string) && !is.na(proj4string) && trim(value) == trim(proj4string))
-		return() # trying to replace proj4string with identical value
-	if (!is.na(epsg) || !is.na(proj4string))  # possibly warn:
-		warning("st_crs: replacing crs does not reproject data; use st_transform for that")
+
+crs_from_list = function(x) {
+	trim = function(x) gsub("^\\s+|\\s+$", "", x)
+
+	if (is.null(x$proj4string) && is.null(x$epgs)) {
+		structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
+	} else if ( is.null(x$proj4string) && !is.null(x$epgs)) {
+		proj4string = trim(as.character(x$proj4string))
+		epsg = epsg_from_proj4string(proj4string)
+		structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+	} else if (!is.null(x$proj4string) &&  is.null(x$epgs)) {
+		epsg = as.integer(x$epsg)
+		proj4string = trim(CPL_proj4string_from_epsg(epsg))
+		structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+	} else if (!is.null(x$proj4string) && !is.null(x$epgs)) {
+		proj4string = trim(as.character(x$proj4string))
+		epsg = as.integer(x$epsg)
+		structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+	}
 }
 
-epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue about it:
+
+epsg_from_proj4string = function(x) { # grep EPSG code out of proj4string, or argue about it:
 	if (is.null(x) || !is.character(x))
 		return(NA_integer_)
-	spl = strsplit(x, " ")[[1]]
-	w = grep("+init=epsg:", spl)
-	if (length(w) == 1)
-		as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
-	else {
-		if (length(grep("+proj=longlat", x)) == 1 && 
-			length(grep("+datum=WGS84",  x)) == 1)
-			4326
-		else
-			NA_integer_
+	
+	epsg = sub(".*\\+init=epsg:([0-9]+).*","\\1",x)
+	if (epsg != x) {
+		as.numeric(epsg)
+	} else if (grepl("+proj=longlat", x) && grepl("+datum=WGS84",  x)) {
+		4326
+	} else {
+	 	NA_integer_
 	}
 }
 
