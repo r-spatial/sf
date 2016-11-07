@@ -65,6 +65,9 @@ is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
 	if (is.null(attr(x, "epsg")))
 		attr(x, "epsg") = NA_integer_
 
+	if (attr(x,"epsg") == 0)
+		attr(x, "epsg") = NA_integer_
+
 	attr(x, "proj4string") = trim(attr(x, "proj4string"))
 	start_crs = st_crs(x)
 	
