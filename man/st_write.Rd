@@ -4,7 +4,7 @@
 \alias{st_write}
 \title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", ...,
+st_write(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ...,
   dataset_options = NULL, layer_options = NULL, quiet = FALSE,
   factorsAsCharacter = TRUE)
 }
@@ -44,6 +44,6 @@ if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
    layer_options = "OVERWRITE=true")
 }
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
-st_write(nc, ".", "nc")
+st_write(nc, "nc.shp")
 }
 

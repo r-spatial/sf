@@ -76,14 +76,16 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #'    layer_options = "OVERWRITE=true")
 #' }
 #' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
-#' st_write(nc, ".", "nc")
+#' st_write(nc, "nc.shp")
 #' @export
-st_write = function(obj, dsn, layer = basename(dsn), driver = "ESRI Shapefile", ..., dataset_options = NULL,
-		layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
+st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ..., 
+		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
 
 	if (inherits(obj, "sfc"))
 		obj = st_sf(id = 1:length(obj), geom = obj)
 	stopifnot(inherits(obj, "sf"))
+	if (missing(dsn))
+		stop("dsn should specify a data source or filename")
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 	if (factorsAsCharacter)
@@ -250,4 +252,33 @@ print.sf_layers = function(x, ...) {
 #' @export
 st_list = function(dsn, options = character(0), do_count = FALSE) {
 	CPL_get_layers(dsn, options, do_count)
+}
+
+guess_driver = function(dsn) {
+    ext_map <- matrix (c(
+                       "e00",    "AVCE00",
+					   "geojson","GeoJSON",
+					   "gpkg",   "GPKG",
+                       "gps",    "GPSBabel",
+                       "gtm",    "GPSTrackMaker",   
+                       "gxt",    "Geoconcept",
+                       "map",    "WAsP",
+                       "nc",     "netCDF",
+                       "osm",    "OSM",  # NO WRITE
+                       "pbf",    "OSM",  # NO WRITE
+                       "shp",    "ESRI Shapefile"
+					   ),
+                       ncol = 2, byrow = TRUE)
+	drv = ext_map[,2]
+	names(drv) = ext_map[,1]
+	drv = drv[tolower(tools::file_ext(dsn))]
+	if (is.na(drv))
+		stop("no driver specified, cannot guess driver from dsn extension")
+	drivers = st_drivers()
+	i = match(drv, drivers$name)
+	if (is.na(i))
+		stop(paste("guess_driver:", drv, "not available in supported drivers, see `st_drivers()'"))
+	if (! drivers[i, "write"])
+		warning(paste("guess_driver", drv, "is available but reports it will not allow writing"))
+	drv
 }

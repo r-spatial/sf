@@ -1,5 +1,5 @@
 
-R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -21,8 +21,8 @@ Type 'q()' to quit R.
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > meuse = st_as_sf(meuse)
 > # write shapefile:
-> st_write(meuse, ".", "meuse")
-Writing layer meuse to data source . using driver "ESRI Shapefile"
+> st_write(meuse, "meuse.shp")
+Writing layer `meuse.shp' to data source `meuse.shp' using driver `ESRI Shapefile'
 features:       155
 fields:         12
 geometry type:  POINT
@@ -36,4 +36,4 @@ Loading required package: DBI
 > 
 > proc.time()
    user  system elapsed 
-  0.636   0.304   0.633 
+  0.648   0.312   0.645 

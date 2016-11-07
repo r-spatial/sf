@@ -3,7 +3,7 @@ demo(meuse, ask = FALSE, echo = FALSE)
 library(sf)
 meuse = st_as_sf(meuse)
 # write shapefile:
-st_write(meuse, ".", "meuse")
+st_write(meuse, "meuse.shp")
 library(RPostgreSQL)
 # -- doesn't work on appveyor:
 #cn = dbConnect(PostgreSQL(), dbname = "postgis")

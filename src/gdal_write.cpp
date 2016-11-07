@@ -129,8 +129,8 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		Rcpp::Rcout << driver[0] << " driver not available." << std::endl;
 		throw std::invalid_argument("Driver not available.\n");
 	}  else if (! quiet)
-		Rcpp::Rcout << "Writing layer " << layer[0] << " to data source " << dsn[0] <<
-			" using driver " << driver << std::endl;
+		Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
+			"' using driver `" << driver[0] << "'" << std::endl;
 
 	// open data set:
 	std::vector <char *> options = create_options(dco, quiet);
