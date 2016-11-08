@@ -66,7 +66,7 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
 	if (is.na(crs))
-		st_crs(lst) = attributes(lst) # they might be in there, returned from a CPL_*
+		st_crs(lst) = crs_from_list(attributes(lst)) # they might be in there, returned from a CPL_*
 	else
 		st_crs(lst) = crs
 	lst
