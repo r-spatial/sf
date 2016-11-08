@@ -1,5 +1,5 @@
 /*
- everything with "write" is meant as "write form R into foreign (wkb)",
+ everything with "write" is meant as "write from R into foreign (wkb)",
  "read" as "read from foreign (wkb) into R".
 */
 
