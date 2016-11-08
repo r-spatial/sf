@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Assert whether simple feature coordinates are longlat degrees — st_is_longlat • sf</title>
+<title>Bind rows (features) of sf objects — bind • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,24 +74,30 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Assert whether simple feature coordinates are longlat degrees</h1>
+    <h1>Bind rows (features) of sf objects</h1>
     </div>
 
     
-    <p>Assert whether simple feature coordinates are longlat degrees</p>
+    <p>Bind rows (features) of sf objects</p>
+
+    <p>Bind columns (variables) of sf objects</p>
     
 
-    <pre><span class='fu'>st_is_longlat</span>(<span class='no'>x</span>)</pre>
+    <pre><span class='fu'>rbind.sf</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='fu'>cbind.sf</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
+      <dt>...</dt>
+      <dd>objects to bind</dd>
+      <dt>deparse.level</dt>
+      <dd>integer; see <a href='http://www.rdocumentation.org/packages/cbind/topics/base'>rbind</a></dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TRUE if <code>+proj=longlat</code> is part of the proj4string, NA if this string is missing, FALSE otherwise</p>
+    <p>if <code>cbind</code> is called with multiple <code>sf</code> objects, it warns and removes all but the first geometry column from the input objects.</p>
     
 
   </div>

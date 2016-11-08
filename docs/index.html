@@ -41,7 +41,7 @@
 <p>Install with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
-<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.1.0) are needed.</p>
+<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.3.0) are needed.</p>
 <p>For example, to install these libraries on Ubuntu, either:</p>
 <ul><li>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories (e.g.&nbsp;with <code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable</code> and then <code>sudo apt-get install libgdal-dev libgeos++-dev</code>), or</li>
 <li>install from source; see the <a href="https://github.com/edzer/sfr/blob/master/.travis.yml">travis</a> config file for hints</li>
@@ -50,7 +50,7 @@
 </li>
 <li>UseR! 2016 <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">slides presentations</a>
 </li>
-<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>
+<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>
 </li>
 <li>the first <a href="https://edzer.github.io/sfr/articles/sfr.html">package vignette</a>
 </li>
@@ -97,12 +97,14 @@
   <img src="https://travis-ci.org/edzer/sfr.png?branch=master" alt="Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/edzer/sfr">
   <img src="https://ci.appveyor.com/api/projects/status/github/edzer/sfr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="http://www.gnu.org/licenses/gpl-2.0.html">
-  <img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="https://codecov.io/github/edzer/sfr?branch=master">
   <img src="https://img.shields.io/codecov/c/github/edzer/sfr/master.svg" alt="Coverage Status"></a></li>
+<li><a href="http://www.gnu.org/licenses/gpl-2.0.html">
+  <img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="http://cran.rstudio.com/package=sf">
   <img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
+<li><a href="http://www.r-pkg.org/pkg/sf">
+  <img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a></li>
 </ul></body></html></div>
   </div>
 </div>

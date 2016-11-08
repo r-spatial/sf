@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>write simple features object to file or database — st_write • sf</title>
+<title>Write simple features object to file or database — st_write • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,14 +74,14 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>write simple features object to file or database</h1>
+    <h1>Write simple features object to file or database</h1>
     </div>
 
     
-    <p>write simple features object to file or database</p>
+    <p>Write simple features object to file or database</p>
     
 
-    <pre><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='kw'>driver</span> <span class='kw'>=</span> <span class='st'>"ESRI Shapefile"</span>, <span class='no'>...</span>,
+    <pre><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>basename</span>(<span class='no'>dsn</span>), <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver</span>(<span class='no'>dsn</span>), <span class='no'>...</span>,
   <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
@@ -90,11 +90,11 @@
       <dt>obj</dt>
       <dd>object of class <code>sf</code> or <code>sfc</code></dd>
       <dt>dsn</dt>
-      <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)</dd>
+      <dd>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder or contain a database name)</dd>
       <dt>layer</dt>
-      <dd>layer name (varies by driver, may be a file name without extension)</dd>
+      <dd>layer name (varies by driver, may be a file name without extension); if layer is missing, the basename of <code>dsn</code> is taken.</dd>
       <dt>driver</dt>
-      <dd>character; OGR driver name to be used</dd>
+      <dd>character; OGR driver name to be used, if missing, a driver name is guessed from <code>dsn</code>.</dd>
       <dt>...</dt>
       <dd>ignored</dd>
       <dt>dataset_options</dt>
@@ -119,12 +119,11 @@
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"edzer"</span>, <span class='st'>"travis"</span>)) { <span class='co'># load meuse to postgis</span>
  <span class='fu'>library</span>(<span class='no'>sp</span>)
  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
- <span class='fu'>st_write</span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse_sf"</span>, <span class='kw'>driver</span> <span class='kw'>=</span> <span class='st'>"PostgreSQL"</span>,
+ <span class='fu'>st_write</span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse_sf"</span>,
    <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"OVERWRITE=yes"</span>, <span class='st'>"LAUNDER=true"</span>))
  <span class='fu'>demo</span>(<span class='no'>nc</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
- <span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"sids"</span>, <span class='kw'>driver</span> <span class='kw'>=</span> <span class='st'>"PostgreSQL"</span>,
-   <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
-}</div><div class='output co'>#&gt; Writing layer meuse_sf to data source PG:dbname=postgis using driver &quot;PostgreSQL&quot;
+ <span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"sids"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
+}</div><div class='output co'>#&gt; Writing layer `meuse_sf&#39; to data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
 #&gt; options:        OVERWRITE=yes LAUNDER=true 
 #&gt; features:       155
 #&gt; fields:         12
@@ -162,7 +161,7 @@
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
 #&gt; 
 #&gt; &gt; rm(datasource)
-#&gt; Writing layer sids to data source PG:dbname=postgis using driver &quot;PostgreSQL&quot;
+#&gt; Writing layer `sids&#39; to data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
 #&gt; options:        OVERWRITE=true 
 #&gt; features:       100
 #&gt; fields:         14
@@ -172,11 +171,11 @@
 #&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
-#&gt; </div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"."</span>, <span class='st'>"nc"</span>)</div><div class='output co'>#&gt; Writing layer nc to data source . using driver &quot;ESRI Shapefile&quot;
-#&gt; </div><div class='output'><strong class='text-warning'>Warning message:
-GDAL Error 1: Layer &#39;nc&#39; already exists</strong></div><div class='output co'>#&gt; Creating layer nc failed.
-#&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
-</strong></pre>
+#&gt; </div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>)</div><div class='output co'>#&gt; Writing layer `nc.shp&#39; to data source `nc.shp&#39; using driver `ESRI Shapefile&#39;
+#&gt; features:       100
+#&gt; fields:         14
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm">
     <div id="sidebar">
