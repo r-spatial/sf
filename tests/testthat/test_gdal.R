@@ -10,13 +10,13 @@ test_that("st_transform works", {
   sp = as(s, "Spatial")
   sp.tr = spTransform(sp, CRS(toCrs))
   (s2.tr = st_as_sfc(sp.tr))
-  attr(s2.tr, "proj4string") = NULL # they take different tours to fill proj4string from epsg
-  attr(s1.tr, "proj4string") = NULL
+  attr(s2.tr, "crs")$proj4string = "" # they take different tours to fill proj4string from epsg
+  attr(s1.tr, "crs")$proj4string = ""
   expect_equal(s1.tr, s2.tr)
 
   toCrs = 3857
   (s1.tr = st_transform(s, toCrs))
-  attr(s1.tr, "proj4string") = NULL
+  attr(s1.tr, "crs")$proj4string = ""
   expect_equal(s1.tr, s2.tr)
 
   sf.tr = st_transform(st_sf(a=1:3, s), toCrs) # for sf

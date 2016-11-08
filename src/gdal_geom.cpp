@@ -104,8 +104,7 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			delete g[i];
 	Rcpp::List ret = sfc_from_ogr(out, true);
-	ret.attr("epsg") = sfc.attr("epsg");
-	ret.attr("proj4string") = sfc.attr("proj4string");
+	ret.attr("crs") = sfc.attr("crs");
 	return(ret);
 }
 
@@ -141,8 +140,6 @@ Rcpp::List CPL_geom_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0) {
 		if (out[i] == NULL)
 			out[i] = f.createGeometry(wkbGeometryCollection);
 	Rcpp::List ret = sfc_from_ogr(out, true);
-	ret.attr("epsg") = sfc.attr("epsg");
-	ret.attr("proj4string") = sfc.attr("proj4string");
-
+	ret.attr("crs") = sfc.attr("crs");
 	return(ret);
 }

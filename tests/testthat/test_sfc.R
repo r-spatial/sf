@@ -39,7 +39,7 @@ test_that("st_as_binary can read big endian", {
   expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = T, EWKB = TRUE)[[1]])
 })
 
-test_that("st_crs<- gives warnings on different crs", {
+test_that("st_crs<- gives warnings on changing crs", {
 	x = st_sfc(list(st_point(0:1), st_point(0:1)))
 	y = x
 	expect_silent(st_crs(y) <- 4326)

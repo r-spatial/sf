@@ -98,10 +98,11 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 }
 
 OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
-	Rcpp::String p4s = sfc.attr("proj4string");
+	Rcpp::List crs = sfc.attr("crs");
+	Rcpp::String p4s = crs(1);
 	OGRSpatialReference *sref = new OGRSpatialReference;
 	if (p4s != NA_STRING) {
-		Rcpp::CharacterVector p4s_cv = sfc.attr("proj4string");
+		Rcpp::CharacterVector p4s_cv = crs["proj4string"];
 		char *cp = p4s_cv[0];
 		if (sref->importFromProj4(cp) != OGRERR_NONE || *cp == '\0') {
 			sref->Release();

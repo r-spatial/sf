@@ -79,7 +79,7 @@ s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
 plot(s, col = s$a, axes = FALSE)
 plot(s, col = s$a)
 ll = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-attr(s$b, "proj4string") = ll
+st_crs(s) = ll
 plot(s, col = s$a, axes = TRUE)
 plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 l4 = st_linestring(matrix(runif(6),,2))

@@ -24,11 +24,9 @@ st_transform.sfc = function(x, crs, ...) {
 		stop("sfc object should have crs set")
 	if (missing(crs))
 		stop("argument crs cannot be missing")
-	if (is.numeric(crs)) { # keep epsg:
-		proj4string = CPL_proj4string_from_epsg(crs)
-		suppressWarnings(st_sfc(CPL_transform(x, proj4string), crs = crs))
-	} else
-		suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
+	#suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
+	crs = make_crs(crs)
+	st_sfc(CPL_transform(x, crs$proj4string), crs = crs)
 }
 
 #' @name st_transform
@@ -42,12 +40,11 @@ st_transform.sf = function(x, crs, ...) {
 #' @export
 #' @details the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
 #' @examples 
+#' # FIXME: do we really want this?
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")
-	if (is.numeric(crs)) # epsg
-		crs = CPL_proj4string_from_epsg(crs)
-	CPL_transform(x, crs)[[1]]
+	CPL_transform(x, make_crs(crs)$proj4string)[[1]]
 }

@@ -66,7 +66,7 @@ st_as_text.sfg = function(x, ...) {
 #' @export
 st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 	if (EWKT) {
-		epsg = attr(x, "epsg")
+		epsg = attr(x, "crs")$epsg
 		if (!is.na(epsg) && epsg != 0)
 			x = lapply(x, function(sfg) structure(sfg, epsg = epsg))
 	}

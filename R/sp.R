@@ -154,13 +154,14 @@ as_Spatial = function(from) {
 sfc2SpatialPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "proj4string")))
+	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "crs")$proj4string))
 }
 
 sfc2SpatialMultiPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialMultiPoints(lapply(from, unclass), proj4string = sp::CRS(attr(from, "proj4string")))
+	sp::SpatialMultiPoints(lapply(from, unclass), proj4string = 
+		sp::CRS(attr(from, "crs")$proj4string))
 }
 
 sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -172,7 +173,7 @@ sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
-	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "proj4string")))
+	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
 }
 
 sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -196,7 +197,7 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 	# TODO: add comments()
 	# ?Polygons: "Exterior rings are coded zero, while interior rings are coded with the 
 	# 1-based index of the exterior ring to which they belong."
-	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "proj4string")))
+	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
 }
 
 get_comment = function(mp) { # for MULTIPOLYGON

@@ -89,11 +89,12 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference *sre
 	int release_sref = 0;
 	OGRGeometryFactory f;
 	if (sref == NULL) {
-		Rcpp::String p4s = sfc.attr("proj4string");
+		Rcpp::List crs = sfc.attr("crs");
+		Rcpp::String p4s = crs["proj4string"];
 		if (p4s != NA_STRING) {
 			sref = new OGRSpatialReference;
 			release_sref = 1;
-			Rcpp::CharacterVector cv = sfc.attr("proj4string");
+			Rcpp::CharacterVector cv = crs["proj4string"];
 			handle_error(sref->importFromProj4(cv[0]));
 		}
 	}
@@ -167,9 +168,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 
 	ct->DestroyCT(ct);
 	dest->Release();
-	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
-	ret.attr("proj4string") = proj4string;
-	return(ret);
+	return(sfc_from_ogr(g, true)); // destroys g;
 }
 
 // [[Rcpp::export]]

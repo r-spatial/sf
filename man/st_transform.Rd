@@ -36,6 +36,7 @@ p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = "+init=epsg:4326")
 st_transform(sfc, "+init=epsg:3857")
 st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
+# FIXME: do we really want this?
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 }
 

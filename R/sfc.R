@@ -21,7 +21,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' d = data.frame(a = 1:2)
 #" d$geom = sfc
 #' @export
-st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
+st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -29,7 +29,7 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfg") 
 			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg")))
 		lst = lst[[1]]
-	stopifnot(is.numeric(crs) || is.character(crs) || is.list(crs))
+	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
 	if (length(lst) == 0) # empty set: no geometries read
 		class(lst) = c("sfc_GEOMETRY", "sfc")
 	else {
@@ -65,10 +65,11 @@ st_sfc = function(..., crs = NA_integer_, precision = 0.0) {
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
-	if (is.na(crs))
-		st_crs(lst) = attributes(lst) # they might be in there, returned from a CPL_*
-	else
-		st_crs(lst) = crs
+	# FIXME: get crs from CPL_* returned attributes
+	#if (!is.na(crs))
+		#st_crs(lst) = attributes(lst) # they might be in there, returned from a CPL_*
+		#else
+	st_crs(lst) = crs
 	lst
 }
 
@@ -130,8 +131,8 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	# attributes: epsg, proj4string, precision
-	cat(paste0("epsg (SRID):    ", attr(x, "epsg"), "\n"))
-	cat(paste0("proj4string:    ", attr(x, "proj4string"), "\n"))
+	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
+	cat(paste0("proj4string:    ", attr(x, "crs")$proj4string, "\n"))
 	if (attr(x, "precision") != 0.0) {
 		cat(paste0("precision:      "))
 		if (attr(x, "precision") < 0.0)
@@ -157,9 +158,9 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 #' @export
 summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 	u = factor(sapply(object, function(x) WKT_name(x, FALSE)))
-    epsg = paste0("epsg:", attr(object, "epsg"))
+    epsg = paste0("epsg:", attr(object, "crs")$epsg)
 	levels(u) = c(levels(u), epsg)
-    p4s = attr(object, "proj4string")
+    p4s = attr(object, "crs")$proj4string
 	if (!is.na(p4s)) { 
 		if (nchar(p4s) > maxp4s)
 			p4s = paste0(substr(p4s, 1L, maxp4s), "...")

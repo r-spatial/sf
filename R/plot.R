@@ -34,7 +34,7 @@
 #' plot(s, col = s$a, axes = FALSE)
 #' plot(s, col = s$a)
 #' ll = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-#' attr(s$b, "proj4string") = ll
+#' st_crs(s) = ll
 #' plot(s, col = s$a, axes = TRUE)
 #' plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 #' l4 = st_linestring(matrix(runif(6),,2))
@@ -272,7 +272,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 	bb = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp = new("Spatial", bbox = bb, proj4string = sp::CRS(attr(x, "proj4string")))
+	sp = new("Spatial", bbox = bb, proj4string = sp::CRS(attr(x, "crs")$proj4string))
 	sp::plot(sp, ..., xlim = xlim, ylim = ylim, asp = asp, axes = axes, bg = bg, 
     	xaxs = xaxs, yaxs = yaxs, lab = lab, setParUsrBB = setParUsrBB, bgMap = bgMap, 
 		expandBB = expandBB)

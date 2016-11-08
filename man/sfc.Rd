@@ -5,7 +5,7 @@
 \alias{st_sfc}
 \title{Create simple feature collection object of class sfc from list}
 \usage{
-st_sfc(..., crs = NA_integer_, precision = 0)
+st_sfc(..., crs = NA_crs_, precision = 0)
 }
 \arguments{
 \item{...}{one or more simple feature geometries}

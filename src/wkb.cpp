@@ -366,7 +366,8 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 	                                           // if 0, we have only empty geometrycollections
 	output.attr("n_empty") = (int) n_empty;
 	output.attr("non_empty") = (int) non_empty + 1; // 1-based index -- 0 if all empty
-	output.attr("epsg") = (int) srid;
+	if (EWKB == true)
+		output.attr("epsg") = (int) srid;
 	return output;
 }
 
@@ -611,7 +612,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 			throw std::range_error("classes has wrong size; please file an issue");
 	}
 
-	int srid = sfc.attr("epsg"); 
+	Rcpp::List crs = sfc.attr("crs"); 
+	int srid = crs(0);
 	if (srid == NA_INTEGER)
 		srid = 0; // non-zero now means: we have an srid
 

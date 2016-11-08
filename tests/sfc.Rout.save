@@ -200,8 +200,8 @@ proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
 POINT(0 1) 
 POINT(0 1) 
 Warning message:
-In check_replace(x, value) :
-  st_crs: replacing crs does not reproject data; use st_transform for that
+In `st_crs<-.sfc`(`*tmp*`, value = 3857) :
+  st_crs<- : replacing crs does not reproject data; use st_transform for that
 > 
 > # rbind:
 > x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
@@ -222,4 +222,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.416   0.296   0.409 
+  0.356   0.204   0.354 
