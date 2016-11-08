@@ -15,7 +15,7 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)}
 
-\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.}
+\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a message when there are multiple layers, or give an error if there are no layers in \code{dsn}.}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 

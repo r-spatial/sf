@@ -11,11 +11,11 @@ st_write(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ...,
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
 
-\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)}
+\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder or contain a database name)}
 
-\item{layer}{layer name (varies by driver, may be a file name without extension)}
+\item{layer}{layer name (varies by driver, may be a file name without extension); if layer is missing, the \link{basename} of \code{dsn} is taken.}
 
-\item{driver}{character; OGR driver name to be used}
+\item{driver}{character; OGR driver name to be used, if missing, a driver name is guessed from \code{dsn}.}
 
 \item{...}{ignored}
 
@@ -37,11 +37,10 @@ columns (variables) of a class not supported are dropped with a warning.
 if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  library(sp)
  example(meuse, ask = FALSE, echo = FALSE)
- st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL",
+ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
    layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
  demo(nc, ask = FALSE)
- st_write(nc, "PG:dbname=postgis", "sids", driver = "PostgreSQL", 
-   layer_options = "OVERWRITE=true")
+ st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
 }
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 st_write(nc, "nc.shp")

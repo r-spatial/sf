@@ -2,7 +2,7 @@
 #'
 #' Read simple features from file or database, or retrieve layer names and their geometry type(s)
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
-#' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read layer \code{dsn} when it contains a single layer, but will return an object of class \code{sf_layers} listing the avaible layers in all other cases (including zero layers), and print a message signaling this.
+#' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a message when there are multiple layers, or give an error if there are no layers in \code{dsn}.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
@@ -56,9 +56,9 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #'
 #' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
-#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder)
-#' @param layer layer name (varies by driver, may be a file name without extension)
-#' @param driver character; OGR driver name to be used
+#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder or contain a database name)
+#' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the \link{basename} of \code{dsn} is taken.
+#' @param driver character; OGR driver name to be used, if missing, a driver name is guessed from \code{dsn}.
 #' @param ... ignored
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
@@ -69,11 +69,10 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf", driver = "PostgreSQL",
+#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
 #'    layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 #'  demo(nc, ask = FALSE)
-#'  st_write(nc, "PG:dbname=postgis", "sids", driver = "PostgreSQL", 
-#'    layer_options = "OVERWRITE=true")
+#'  st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
 #' }
 #' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 #' st_write(nc, "nc.shp")
@@ -259,28 +258,52 @@ guess_driver = function(dsn) {
                        "bna",    "BNA",
                        "csv",    "CSV",
                        "e00",    "AVCE00",
+                       "gdb",    "FileGDB",
                        "geojson","GeoJSON",
                        "gml",    "GML",
+                       "gmt",    "GMT",
                        "gpkg",   "GPKG",
                        "gps",    "GPSBabel",
                        "gtm",    "GPSTrackMaker",   
                        "gxt",    "Geoconcept",
                        "jml",    "JML",
                        "map",    "WAsP",
+                       "mdb",    "Geomedia",
                        "nc",     "netCDF",
                        "ods",    "ODS",
                        "osm",    "OSM",
                        "pbf",    "OSM",
                        "shp",    "ESRI Shapefile",
+                       "sqlite", "SQLite",
                        "vdv",    "VDV",
                        "xls",    "xls",
                        "xlsx",   "XLSX"
                      ), ncol = 2, byrow = TRUE)
+	prefix_map = matrix(c(
+                       "couchdb", "CouchDB",
+                       "DB2ODBC", "DB2ODBC",
+                       "DODS",    "DODS",
+                       "GFT",     "GFT",
+                       "MSSQL",   "MSSQLSpatial",
+                       "MySQL",   "MySQL",
+                       "OCI",     "OCI",
+                       "ODBC",    "ODBC",
+                       "PG",      "PostgreSQL",
+                       "SDE",     "SDE"
+                     ), ncol = 2, byrow = TRUE)
 	drv = ext_map[,2]
 	names(drv) = ext_map[,1]
+	prfx = prefix_map[,2]
+	names(prfx) = tolower(prefix_map[,1])
+
+	# find match: try extension first
 	drv = drv[tolower(tools::file_ext(dsn))]
-	if (is.na(drv))
-		stop("no driver specified, cannot guess driver from dsn extension")
+	if (is.na(drv)) { # try prefix, like "PG:dbname=sth"
+		if (length(grep(":", dsn)))
+			drv = prfx[tolower(strsplit(dsn, ":")[[1]][1])]
+		if (is.na(drv)) # no match
+			stop("no driver specified, cannot guess driver from dsn")
+	}
 	drivers = st_drivers()
 	i = match(drv, drivers$name)
 	if (is.na(i))
