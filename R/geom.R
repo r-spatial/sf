@@ -183,7 +183,6 @@ st_segmentize  = function(x, dfMaxLength)
 
 #' @name geos
 #' @export
-#' @examples
 #' @details \code{st_combine} combines geometries without resolving borders. 
 #' st_combine(nc)
 st_combine = function(x) {
