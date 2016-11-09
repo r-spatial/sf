@@ -1,11 +1,18 @@
 #' @name crs
+#' @details
+#' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
 #' @export
 NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
 
 #' @export
 #' @method is.na crs
-is.na.crs = function(x) { is.na(x$epsg) && is.na(x$proj4string) }
+is.na.crs = function(x) {
+	is.na(x$epsg) && is.na(x$proj4string) 
+}
 
+# this function establishes whether two crs objects are semantically identical. This is
+# the case when: (1) they are completely identical, or (2) they have identical proj4string
+# but one of them has a missing epsg ID.
 #' @export
 Ops.crs <- function(e1, e2) {
 	if (nargs() == 1)
@@ -35,6 +42,16 @@ Ops.crs <- function(e1, e2) {
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param ... ignored
 #' @export
+#' @details the *crs functions get, set or replace the \code{crs} attribute of a simple feature geometry
+#' list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
+#' code) and proj4string (character). 
+#' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or 
+#' (2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent 
+#' but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
+#' are considered different.
+#' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
+#' @return object of class \code{crs}, which is a list with elements epsg (length-1 integer) and 
+#' proj4string (length-1 character).
 st_crs = function(x, ...) UseMethod("st_crs")
 
 #' @name crs
@@ -81,13 +98,13 @@ make_crs = function(x) {
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
-	else if (is.numeric(x))
+	else if (is.numeric(x)) {
 		structure(list(epsg = as.integer(x), proj4string = 
 			trim(CPL_proj4string_from_epsg(as.integer(x)))), class = "crs")
-	else if (is.character(x))
+	} else if (is.character(x))
 		structure(list(epsg = epsgFromProj4(x), proj4string = trim(x)), class = "crs")
 	else
-		stop(paste("cannot create crs from", x))
+		stop(paste("cannot create a crs from an object of class", class(x)))
 }
 
 #' @name crs
@@ -112,17 +129,28 @@ make_crs = function(x) {
 	x
 }
 
+#' @name crs
+#' @examples
+#' sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
+#' library(dplyr)
+#' x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
+#' x
+#' @export
+st_set_crs = function(x, value) {
+	st_crs(x) = value
+	x
+}
+
 epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue about it:
 	if (is.null(x) || !is.character(x))
 		return(NA_integer_)
 	spl = strsplit(x, " ")[[1]]
 	w = grep("+init=epsg:", spl)
 	if (length(w) == 1)
-		as.numeric(strsplit(spl[w], "+init=epsg:")[[1]][2])
+		as.integer(strsplit(spl[w], "+init=epsg:")[[1]][2])
 	else {
-		if (length(grep("+proj=longlat", x)) == 1 && 
-			length(grep("+datum=WGS84",  x)) == 1)
-			4326
+		if (length(grep("+proj=longlat", x)) == 1 && length(grep("+datum=WGS84",  x)) == 1)
+			as.integer(4326)
 		else
 			NA_integer_
 	}

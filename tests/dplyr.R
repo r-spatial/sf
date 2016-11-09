@@ -65,3 +65,8 @@ nc.grp <- nc.merc %>% group_by(area_cl)
 out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), new_dens = pop/A) 
 out %>% summarise(sum(A * new_dens))
 nc.merc %>% summarise(sum(area * dens))
+
+sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
+x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
+x
+
