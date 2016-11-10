@@ -57,6 +57,7 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 
 	if (op == "segmentize" && dfMaxLength <= 0.0)
 		throw std::invalid_argument("argument dfMaxLength should be positive\n");
+		// breaks, strangely!
 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());

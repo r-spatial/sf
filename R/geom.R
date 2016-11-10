@@ -178,8 +178,9 @@ st_centroid = function(x) st_sfc(CPL_geom_op("centroid", st_geometry(x)))
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
-st_segmentize  = function(x, dfMaxLength) 
+st_segmentize  = function(x, dfMaxLength) {
 	st_sfc(CPL_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
+}
 
 #' @name geos
 #' @export
