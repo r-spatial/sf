@@ -214,6 +214,7 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 st_drivers = function(what = "vector") {
 	ret = as.data.frame(CPL_get_rgdal_drivers(0))
 	names(ret) = c("name", "long_name", "write", "copy", "is_raster", "is_vector")
+	row.names(ret) = ret$name
 	if (what == "vector")
 		ret[ret$is_vector,]
 	else if (what == "raster")

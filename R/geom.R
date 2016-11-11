@@ -37,9 +37,7 @@ st_is_simple = function(x) CPL_is_simple(st_geometry(x))
 
 # returning matrix, distance or relation string -- the work horse is:
 
-st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
-	if (missing(y))
-		y = x
+st_geos_binop = function(op = "intersects", x, y = x, par = 0.0, sparse = TRUE) {
 	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
 	if (sparse)
 		ret
