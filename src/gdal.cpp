@@ -8,6 +8,7 @@
 #include <cpl_conv.h>
 #include <cpl_string.h>
 
+#include <stdlib.h> // atoi
 #include <string.h>
 
 #include <Rcpp.h>
@@ -82,28 +83,27 @@ void handle_error(OGRErr err) {
 	}
 }
 
-std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference *sref) {
+std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
 	std::vector<OGRGeometry *> g(sfc.length());
-	int release_sref = 0;
 	OGRGeometryFactory f;
-	if (sref == NULL) {
-		Rcpp::List crs = sfc.attr("crs");
-		Rcpp::String p4s = crs["proj4string"];
-		if (p4s != NA_STRING) {
-			sref = new OGRSpatialReference;
-			release_sref = 1;
-			Rcpp::CharacterVector cv = crs["proj4string"];
-			handle_error(sref->importFromProj4(cv[0]));
-		}
+	OGRSpatialReference *local_srs = NULL;
+	Rcpp::List crs = sfc.attr("crs");
+	Rcpp::String p4s = crs["proj4string"];
+	if (p4s != NA_STRING) {
+		Rcpp::CharacterVector cv = crs["proj4string"];
+		local_srs = new OGRSpatialReference;
+		handle_error(local_srs->importFromProj4(cv[0]));
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		handle_error(f.createFromWkb(&(r[0]), sref, &(g[i]), -1, wkbVariantIso));
+		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), -1, wkbVariantIso));
 	}
-	if (release_sref)
-		sref->Release();
+	if (sref != NULL)
+		*sref = local_srs; // return, release downstream
+	else if (local_srs != NULL)
+		local_srs->Release();
 	return(g);
 }
 
@@ -124,8 +124,47 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false
 	return(ret);
 }
 
+Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
+	Rcpp::CharacterVector proj4string(1);
+	char *cp;
+	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
+	(void) ref->exportToProj4(&cp);
+	char *cpws = cp; // eliminate trailing white space:
+	while (*cpws != '\0')
+		cpws++;
+	while (*(--cpws) == ' ' && cpws != cp)
+		*cpws = '\0';
+	proj4string[0] = cp;
+	CPLFree(cp);
+	CPLPopErrorHandler();
+	return(proj4string);
+}
+
+Rcpp::List get_crs(OGRSpatialReference *ref) {
+	Rcpp::List crs(2);
+	if (ref == NULL) {
+		crs(0) = NA_INTEGER;
+		crs(1) = Rcpp::CharacterVector::create(NA_STRING);
+	} else {
+		const char *cp;
+		if (ref->AutoIdentifyEPSG() == OGRERR_NONE &&
+				(cp = ref->GetAuthorityCode(NULL)) != NULL)
+			crs(0) = atoi(cp);
+		else
+			crs(0) = NA_INTEGER;
+		crs(1) = p4s_from_spatial_reference(ref);
+	}
+	Rcpp::CharacterVector nms(2);
+	nms(0) = "epsg";
+	nms(1) = "proj4string";
+	crs.attr("names") = nms;
+	crs.attr("class") = "crs";
+	return(crs);
+}
+
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
+	Rcpp::List crs = get_crs(g[0]->getSpatialReference());
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
 			throw std::range_error("NULL error in sfc_from_ogr");
@@ -135,18 +174,10 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		if (destroy)
 			delete g[i];
 	}
-	return(CPL_read_wkb(lst, false, native_endian()));
-}
-
-Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
-	Rcpp::CharacterVector proj4string(1);
-	char *cp;
-	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
-	(void) ref->exportToProj4(&cp);
-	proj4string[0] = cp;
-	CPLFree(cp);
-	CPLPopErrorHandler();
-	return(proj4string);
+	Rcpp::List ret = CPL_read_wkb(lst, false, native_endian());
+	ret.attr("crs") = crs;
+	ret.attr("class") = "sfc";
+	return(ret);
 }
 
 // [[Rcpp::export]]
@@ -156,9 +187,6 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	OGRSpatialReference *dest = new OGRSpatialReference;
 	handle_error(dest->importFromProj4((const char *) (proj4[0])));
 
-	// get the proj4string as OGR thinks it is (e.g., resolve epsg)
-	Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(dest);
-
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	OGRCoordinateTransformation *ct = 
@@ -166,9 +194,10 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	for (size_t i = 0; i < g.size(); i++)
 		handle_error(g[i]->transform(ct));
 
+	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
 	dest->Release();
-	return(sfc_from_ogr(g, true)); // destroys g;
+	return(ret); 
 }
 
 // [[Rcpp::export]]

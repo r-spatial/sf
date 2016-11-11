@@ -150,27 +150,32 @@
 #&gt; + 	system.file(&quot;shape/nc.shp&quot;, package=&quot;sf&quot;)
 #&gt; + }
 #&gt; 
-#&gt; &gt; nc = st_read(datasource, crs = 4267,
-#&gt; + 	relation_to_geometry = c(AREA = &quot;lattice&quot;, PERIMETER = &quot;lattice&quot;, CNTY_ = &quot;entity&quot;,
+#&gt; &gt; rtg = c(AREA = &quot;lattice&quot;, PERIMETER = &quot;lattice&quot;, CNTY_ = &quot;entity&quot;,
 #&gt; + 		CNTY_ID = &quot;entity&quot;, NAME = &quot;entity&quot;, FIPS = &quot;entity&quot;, FIPSNO = &quot;entity&quot;,
 #&gt; + 		CRESS_ID = &quot;entity&quot;, BIR74 = &quot;lattice&quot;, SID74 = &quot;lattice&quot;, NWBIR74 = &quot;lattice&quot;,
-#&gt; + 		BIR79 = &quot;lattice&quot;, SID79 = &quot;lattice&quot;, NWBIR79  = &quot;lattice&quot;))
-#&gt; Reading layer `nc.gpkg&#39; from data source `/home/edzer/git/sfr/inst/gpkg/nc.gpkg&#39; using driver `GPKG&#39;
-#&gt; features:       100
-#&gt; fields:         14
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; + 		BIR79 = &quot;lattice&quot;, SID79 = &quot;lattice&quot;, NWBIR79  = &quot;lattice&quot;)
 #&gt; 
-#&gt; &gt; rm(datasource)
+#&gt; &gt; nc = st_read(datasource, relation_to_geometry = rtg)
+#&gt; Reading layer `nc.gpkg&#39; from data source `/home/edzer/git/sfr/inst/gpkg/nc.gpkg&#39; using driver `GPKG&#39;
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; Writing layer `sids&#39; to data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
 #&gt; options:        OVERWRITE=true 
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; </div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; features:       100
-#&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; </div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>)</div><div class='output co'>#&gt; Writing layer `nc.shp&#39; to data source `nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; features:       100
 #&gt; fields:         14

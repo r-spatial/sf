@@ -130,12 +130,14 @@
 <h2 class="hasAnchor"><html><body><a href="#sf-objects-with-simple-features" class="anchor"></a></body></html>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
-nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="dt">crs =</span> <span class="dv">4267</span>)
+nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
-## features:       100
-## fields:         14
 ## converted into: MULTIPOLYGON
+## Simple feature collection with 100 features and 14 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
 <p>(Note that users will not use  but give a  directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.) The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14 fields (attributes, represented as columns). This object is of class</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(nc)
@@ -224,11 +226,15 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## $n_empty
 ## [1] 0
 ## 
+## $crs
 ## $epsg
 ## [1] 4267
 ## 
 ## $proj4string
 ## [1] "+proj=longlat +datum=NAD27 +no_defs"
+## 
+## attr(,"class")
+## [1] "crs"
 ## 
 ## $class
 ## [1] "sfc_MULTIPOLYGON" "sfc"             
@@ -361,11 +367,14 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 <h2 class="hasAnchor"><html><body><a href="#reading-and-writing" class="anchor"></a></body></html>Reading and writing</h2>
 <p>As we&rsquo;ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
-nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename, <span class="dt">crs =</span> <span class="dv">4267</span>)
+nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename)
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
-## features:       100
-## fields:         14
 ## converted into: MULTIPOLYGON
+## Simple feature collection with 100 features and 14 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
 <p>and writing takes place in the same fashion, using <code>st_write</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc.shp"</span>)
@@ -416,9 +425,9 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.web_mercator &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_transform.html">st_transform</a></span>(nc, <span class="dv">3857</span>)
 <span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc.web_mercator)[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span>:<span class="dv">3</span>,]
 ##          [,1]    [,2]
-## [1,] -8463306 4377498
-## [2,] -8460133 4377489
-## [3,] -8450476 4375532</code></pre></div>
+## [1,] -8463267 4377519
+## [2,] -8460094 4377510
+## [3,] -8450437 4375553</code></pre></div>
 </div>
 <div id="conversion-including-to-and-from-sp" class="section level2">
 <h2 class="hasAnchor"><html><body><a href="#conversion-including-to-and-from-sp" class="anchor"></a></body></html>Conversion, including to and from sp</h2>
@@ -438,8 +447,8 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
 <span class="kw"><a href="../reference/crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s
-## Warning in check_replace(x, value): st_crs: replacing crs does not
-## reproject data; use st_transform for that
+## Warning in `st_crs&lt;-.sfc`(`*tmp*`, value = structure(list(structure(list(:
+## st_crs&lt;- : replacing crs does not reproject data; use st_transform for that
 <span class="co"># anticipate geometry column name changes:</span>
 <span class="kw">names</span>(nc)[<span class="dv">15</span>] =<span class="st"> "geometry"</span>
 <span class="kw">attr</span>(nc, <span class="st">"sf_column"</span>) =<span class="st"> "geometry"</span>
@@ -542,15 +551,18 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <p>(This will eventually be the topic of a new vignette; now here to explain the last attribute of <code>sf</code> objects)</p>
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their <a href="https://CRAN.R-project.org/package=units">units of measurement</a>). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn&rsquo;t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn&rsquo;t extend beyond the body &ndash; in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state&rsquo;s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an attribute that points out how attributes relate to their geometry, which can be defined at creation time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">crs =</span> <span class="dv">4267</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>),
     <span class="dt">relation_to_geometry =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"lattice"</span>, <span class="dt">PERIMETER =</span> <span class="st">"lattice"</span>, <span class="dt">CNTY_ =</span> <span class="st">"entity"</span>,
         <span class="dt">CNTY_ID =</span> <span class="st">"entity"</span>, <span class="dt">NAME =</span> <span class="st">"entity"</span>, <span class="dt">FIPS =</span> <span class="st">"entity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"entity"</span>,
         <span class="dt">CRESS_ID =</span> <span class="st">"entity"</span>, <span class="dt">BIR74 =</span> <span class="st">"lattice"</span>, <span class="dt">SID74 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"lattice"</span>,
         <span class="dt">BIR79 =</span> <span class="st">"lattice"</span>, <span class="dt">SID79 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"lattice"</span>))
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
-## features:       100
-## fields:         14
 ## converted into: MULTIPOLYGON
+## Simple feature collection with 100 features and 14 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
 <span class="kw">attr</span>(nc, <span class="st">"relation_to_geometry"</span>)
 ##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO 

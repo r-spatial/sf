@@ -34,8 +34,6 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		layer = character(0)
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
 		promote_to_multi)
-	if (inherits(x, "sf_layers"))
-		return(x) # don't know: return/print layers -- there's more than one!
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
 	geom = x[[which.geom]]
@@ -44,15 +42,12 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		x = data.frame(row.names = seq_along(geom))
 	else
 		x = as.data.frame(x, stringsAsFactors = stringsAsFactors)
-	crs = if (is.null(attr(geom, "proj4string")))
-			NA_integer_
-		else {
-			p4s = attr(geom, "proj4string")
-			attr(geom, "proj4string") = NULL
-			p4s
-		}
-	x[[nm]] = st_sfc(geom, crs = crs)
-	st_as_sf(x, ...)
+	x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
+	x = st_as_sf(x, ...)
+	if (! quiet)
+		print(x, n = 0)
+	else 
+		x
 }
 
 #' Write simple features object to file or database

@@ -97,21 +97,6 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 	}
 }
 
-OGRSpatialReference *ref_from_sfc(Rcpp::List sfc) {
-	Rcpp::List crs = sfc.attr("crs");
-	Rcpp::String p4s = crs(1);
-	OGRSpatialReference *sref = new OGRSpatialReference;
-	if (p4s != NA_STRING) {
-		Rcpp::CharacterVector p4s_cv = crs["proj4string"];
-		char *cp = p4s_cv[0];
-		if (sref->importFromProj4(cp) != OGRERR_NONE || *cp == '\0') {
-			sref->Release();
-			throw std::invalid_argument("Object with invalid proj4string.\n");
-		}
-	}
-	return(sref);
-}
-
 // [[Rcpp::export]]
 void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
@@ -142,13 +127,16 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	}
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
+	// read geometries:
+	OGRSpatialReference *sref;
+	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, &sref);
 
 	// create layer:
 	options = create_options(lco, quiet);
-	OGRSpatialReference *sref = ref_from_sfc(geom); // breaks on errror
 	OGRLayer *poLayer = poDS->CreateLayer(layer[0], sref, wkbType, options.data());
-	if (poLayer == NULL)  {
+	if (sref != NULL)
 		sref->Release();
+	if (poLayer == NULL)  {
 		Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
 		GDALClose(poDS);
 		throw std::invalid_argument("Layer creation failed.\n");
@@ -156,8 +144,6 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj);
-	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, sref);
-	sref->Release();
 	if (! quiet) {
 		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
 		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;

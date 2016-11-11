@@ -31,10 +31,13 @@ The following objects are masked from 'package:base':
 
 > nc = st_read(system.file("shape/nc.shp", package="sf"), crs = 4267)
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-features:       100
-fields:         14
 converted into: MULTIPOLYGON
-proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > nc %>% filter(AREA > .1) %>% plot()
 > 
 > # plot 10 smallest counties in grey:
@@ -145,9 +148,12 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > library(sf)
 > demo(nc, ask = FALSE, echo = FALSE)
 Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-features:       100
-fields:         14
-proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > nc.merc <- st_transform(nc, 3857) # web mercator - not so good!
 > nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74/area)
 > summary(nc.merc$dens)
@@ -178,4 +184,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.916   0.276   0.887 
+  0.884   0.016   0.898 

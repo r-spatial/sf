@@ -83,21 +83,21 @@
     <p>Set or replace retrieve coordinate reference system from object</p>
     
 
-    <pre><span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre>NA_crs_
 
-<span class='co'># S3 method for sf</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+st_crs(x, ...)
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+\method{st_crs}{sf}(x, ...)
 
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+\method{st_crs}{sfc}(x, ...)
 
-<span class='co'># S3 method for sf</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+st_crs(x) <- value
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+\method{st_crs}{sf}(x) <- value
+
+\method{st_crs}{sfc}(x) <- value
+
+st_set_crs(x, value)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -109,8 +109,26 @@
       <dd>one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).</dd>
     </dl>
     
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>crs</code> of length 2.</p>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>object of class <code>crs</code>, which is a list with elements epsg (length-1 integer) and 
+proj4string (length-1 character).</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for epsg and proj4string.</p>
+    <p>the *crs functions get, set or replace the <code>crs</code> attribute of a simple feature geometry
+list-column. This attribute is of class <code>crs</code>, and is a list consisting of epsg (integer epsg
+code) and proj4string (character). 
+Two objects of class <code>crs</code> are semantically identical when: (1) they are completely identical, or 
+(2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent 
+but different proj4strings, e.g. <code> &quot;+proj=longlat +datum=WGS84&quot; </code> and <code> &quot;+datum=WGS84 +proj=longlat&quot; </code>,
+are considered different.
+The operators <code>==</code> and <code>!=</code> are overloaded for <code>crs</code> objects to establish semantical identity.</p>
     <p>in case a coordinate reference system is replaced, no transformation takes
 place and a warning is raised to stress this. epsg values are either read from proj4strings
 that contain <code>+init=epsg:...</code> or set to 4326 in case the proj4string contains +proj=longlat
@@ -143,6 +161,24 @@ and +datum=WGS84, literally</p>
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
 #&gt; POINT(0 0) 
 #&gt; POINT(1 1) 
+#&gt; </div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output'><strong class='text-info'>
+Attaching package: ‘dplyr’
+</strong></div><div class='output'><strong class='text-info'>The following objects are masked from ‘package:stats’:
+
+    filter, lag
+</strong></div><div class='output'><strong class='text-info'>The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+</strong></div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
+<span class='no'>x</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
+#&gt; epsg (SRID):    3857
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+#&gt; POINT(0 -7.08115455161362e-10) 
+#&gt; POINT(111319.490793274 111325.142866385) 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm">
@@ -151,6 +187,10 @@ and +datum=WGS84, literally</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

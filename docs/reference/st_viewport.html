@@ -111,10 +111,13 @@
     </h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>grid</span>)
 <span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; features:       100
-#&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; </div><div class='input'><span class='fu'>grid.newpage</span>()
 <span class='fu'>pushViewport</span>(<span class='fu'>viewport</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.8</span>))</div><div class='input'><span class='fu'>pushViewport</span>(<span class='fu'>st_viewport</span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'>invisible</span>(<span class='fu'>lapply</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>grid.draw</span>(<span class='fu'><a href='st_as_grob.html'>st_as_grob</a></span>(<span class='no'>x</span>, <span class='kw'>gp</span> <span class='kw'>=</span> <span class='fu'>gpar</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>'red'</span>)))))</div><img src='st_viewport-6.png' alt='' width='540' height='400' /></pre>
   </div>

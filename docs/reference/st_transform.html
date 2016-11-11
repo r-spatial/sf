@@ -115,7 +115,8 @@
     <pre class="examples"><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>7</span>,<span class='fl'>52</span>))
 <span class='no'>p2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>30</span>,<span class='fl'>20</span>))
 <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>)
-<span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='st'>"+init=epsg:3857"</span>)</div><div class='output'><strong class='text-warning'>Warning message:
+st_crs&lt;- : replacing crs does not reproject data; use st_transform for that</strong></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
@@ -123,7 +124,8 @@
 #&gt; proj4string:    +init=epsg:3857
 #&gt; POINT(779236.435552915 6800125.45439731) 
 #&gt; POINT(-3339584.72379821 2273030.92698769) 
-#&gt; </div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; </div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output'><strong class='text-warning'>Warning message:
+st_crs&lt;- : replacing crs does not reproject data; use st_transform for that</strong></div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
@@ -132,7 +134,8 @@
 #&gt;   a                           geom
 #&gt; 1 2 POINT(779236.435552915 6800...
 #&gt; 2 1 POINT(-3339584.72379821 227...
-#&gt; </div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; POINT(779236.435552915 6800125.45439731) 
+#&gt; </div><div class='input'><span class='co'># FIXME: do we really want this?</span>
+<span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; POINT(779236.435552915 6800125.45439731) 
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm">

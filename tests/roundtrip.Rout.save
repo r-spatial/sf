@@ -148,10 +148,13 @@ In data.row.names(row.names, rowsi, i) :
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-features:       100
-fields:         14
 converted into: MULTIPOLYGON
-proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 > suppressWarnings(st_crs(nc) <- p4s)
 > names(nc)[15] = "geometry"
@@ -166,4 +169,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.188   0.272   3.167 
+  3.080   0.032   3.111 

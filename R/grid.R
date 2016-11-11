@@ -65,7 +65,7 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 #' pushViewport(st_viewport(nc))
 #' invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 #' @export
-st_viewport = function(x, ..., bbox = st_bbox(x), asp) { # FIXME: deal with asp
+st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 	xscale = bbox[c(1,3)]
 	yscale = bbox[c(2,4)]
 
@@ -81,11 +81,11 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) { # FIXME: deal with asp
     	unclass(sz[2]) / unclass(sz[1])
 	}
 	vp.asp = current.viewport.aspect()
-	if (missing(asp)) {
-		asp = 1.0
-		if (isTRUE(st_is_longlat(x)))
-			asp = 1.0 /cos((mean(yscale) * pi)/180)
-	}
+	if (missing(asp))
+		asp = if (isTRUE(st_is_longlat(x)))
+			1.0 / cos((mean(yscale) * pi)/180)
+		else
+			1.0
 	
    	obj.asp = asp * diff(yscale) / diff(xscale)
 	height = obj.asp / vp.asp

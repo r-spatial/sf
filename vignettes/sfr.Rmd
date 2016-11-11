@@ -160,8 +160,7 @@ command reads the `nc` dataset from a file that is contained in the
 
 ```{r}
 library(sf)
-filename <- system.file("shape/nc.shp", package="sf")
-nc <- st_read(filename, crs = 4267)
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
 (Note that users will not use \code{system.file} but give a \code{filename} directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
@@ -451,7 +450,7 @@ As we've seen above, reading spatial data from an external file can be done by
 
 ```{r}
 filename <- system.file("shape/nc.shp", package="sf")
-nc <- st_read(filename, crs = 4267)
+nc <- st_read(filename)
 ```
 
 and writing takes place in the same fashion, using `st_write`:
@@ -707,7 +706,7 @@ Simple feature objects of class `sf` have an attribute that points out how attri
 which can be defined at creation time:
 
 ```{r}
-nc <- st_read(system.file("shape/nc.shp", package="sf"), crs = 4267,
+nc <- st_read(system.file("shape/nc.shp", package="sf"),
     relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
         CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
         CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",

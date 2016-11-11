@@ -20,10 +20,13 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-features:       100
-fields:         14
 converted into: MULTIPOLYGON
-proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > st_distance(nc[1:10,], nc[1:10,])
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
@@ -70,4 +73,4 @@ Error in st_geometry(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.484   0.288   0.464 
+  0.408   0.012   0.418 

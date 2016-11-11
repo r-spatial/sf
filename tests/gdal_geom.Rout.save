@@ -25,10 +25,13 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 + 		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
 + 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"))
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-features:       100
-fields:         14
 converted into: MULTIPOLYGON
-proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > st_is_valid(nc)
   [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
@@ -95,7 +98,7 @@ Error in eval(substitute(expr), envir, enclos) :
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 76 drivers
+GDAL has 77 drivers
 > 
 > # GEOS ops:
 > 
@@ -348,4 +351,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.700   0.248   0.657 
+  0.684   0.016   0.699 

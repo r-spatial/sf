@@ -190,12 +190,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-	if (! quiet) {
+	if (! quiet)
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] <<
 			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;
-		Rcpp::Rcout << "features:       " << n << std::endl;
-		Rcpp::Rcout << "fields:         " << poFDefn->GetFieldCount() << std::endl;
-	}
 	// get the geometry field:
 	OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(iGeomField);
 	if (poGFDefn == NULL)
@@ -289,26 +286,14 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
 	// convert to R:
 	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
-	OGRSpatialReference *ref = poLayer->GetSpatialRef();	
-	if (ref == NULL) // try from Geometry
-		ref = poGeometryV[0]->getSpatialReference();
-	if (ref != NULL) {
-		Rcpp::CharacterVector proj4string = p4s_from_spatial_reference(ref);
-		sfc.attr("proj4string") = proj4string;
-		if (! quiet)
-			Rcpp::Rcout << "proj4string:    " << proj4string[0] << std::endl;
-	} 
 	if (warn_int64)
 		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
 			" lost significance after conversion to double" << std::endl;
-	sfc.attr("class") = "sfc";
-	out[ poFDefn->GetFieldCount() ] = sfc;
-
+	out[poFDefn->GetFieldCount()] = sfc;
 	// clean up:
     for (size_t i = 0; i < n; i++)
-		OGRFeature::DestroyFeature( poFeatureV[i] );
-    GDALClose( poDS ); // close & destroys data source
+		OGRFeature::DestroyFeature(poFeatureV[i]);
+    GDALClose(poDS);
 
 	return(out);
 }
-

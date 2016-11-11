@@ -154,10 +154,13 @@ Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div cl
 #&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
 </strong><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
 <span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; features:       100
-#&gt; fields:         14
 #&gt; converted into: MULTIPOLYGON
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs 
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Alamance : 1  
 #&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   Alexander: 1  
