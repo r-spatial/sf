@@ -30,8 +30,15 @@
 st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors()) {
 
+  if (missing(dsn))
+    stop("dsn should specify a data source or filename")
+  
 	if (missing(layer))
 		layer = character(0)
+	
+  if (file.exists(dsn))
+    dsn = normalizePath(dsn)
+
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
 		promote_to_multi)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
@@ -81,8 +88,13 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn),
 	if (inherits(obj, "sfc"))
 		obj = st_sf(id = 1:length(obj), geom = obj)
 	stopifnot(inherits(obj, "sf"))
+	
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
+	
+	if (file.exists(dsn))
+	  dsn = normalizePath(dsn)
+	
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 	if (factorsAsCharacter)
@@ -249,6 +261,13 @@ print.sf_layers = function(x, ...) {
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
 #' @export
 st_list = function(dsn, options = character(0), do_count = FALSE) {
+  
+  if (missing(dsn))
+    stop("dsn should specify a data source or filename")
+  
+  if (file.exists(dsn))
+    dsn = normalizePath(dsn)
+  
 	CPL_get_layers(dsn, options, do_count)
 }
 
