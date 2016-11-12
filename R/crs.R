@@ -1,4 +1,4 @@
-#' @name crs
+#' @name st_crs
 #' @details
 #' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
 #' @export
@@ -38,7 +38,7 @@ Ops.crs <- function(e1, e2) {
 #' Retrieve coordinate reference system from object
 #'
 #' Retrieve coordinate reference system from sf or sfc object
-#' @name crs
+#' @name st_crs
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param ... ignored
 #' @export
@@ -54,11 +54,19 @@ Ops.crs <- function(e1, e2) {
 #' proj4string (length-1 character).
 st_crs = function(x, ...) UseMethod("st_crs")
 
-#' @name crs
+#' @name st_crs
 #' @export
 st_crs.sf = function(x, ...) st_crs(st_geometry(x, ...))
 
-#' @name crs
+#' @name st_crs
+#' @export
+st_crs.numeric = function(x, ...) make_crs(x)
+
+#' @name st_crs
+#' @export
+st_crs.character = function(x, ...) make_crs(x)
+
+#' @name st_crs
 #' @export
 st_crs.sfc = function(x, ...) attr(x, "crs")
 
@@ -68,7 +76,7 @@ st_crs.default = function(x, ...) NA_crs_
 #' Set or replace coordinate reference system from object
 #'
 #' Set or replace retrieve coordinate reference system from object
-#' @name crs
+#' @name st_crs
 #' @param value one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).
 #' @details in case a coordinate reference system is replaced, no transformation takes
 #' place and a warning is raised to stress this. epsg values are either read from proj4strings
@@ -79,7 +87,7 @@ st_crs.default = function(x, ...) NA_crs_
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
-#' @name crs
+#' @name st_crs
 #' @examples
 #'  sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 #'  sf = st_sf(a = 1:2, geom = sfc)
@@ -107,7 +115,7 @@ make_crs = function(x) {
 		stop(paste("cannot create a crs from an object of class", class(x)))
 }
 
-#' @name crs
+#' @name st_crs
 #' @examples
 #'  sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 #'  st_crs(sfc) = 4326
@@ -129,7 +137,7 @@ make_crs = function(x) {
 	x
 }
 
-#' @name crs
+#' @name st_crs
 #' @examples
 #' sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 #' library(dplyr)
