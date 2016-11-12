@@ -22,8 +22,8 @@ formats (text, [sp](https://cran.r-project.org/package=sp))
 
 The Geospatial Data Abstraction Library
 ([GDAL](http://www.gdal.org/)) is the swiss army knife for spatial
-data: it reads and writes vector and raster data from practically
-every file format, or database, of significance. Package sf reads
+data: it reads and writes vector and raster data from and to practically
+every file format, or database, of significance. Package `sf` reads
 and writes using GDAL by the functions `st_read` and `st_write`.
 
 The data model GDAL uses needs
@@ -34,14 +34,14 @@ The data model GDAL uses needs
 * driver-specific reading or writing data sources, or layers
 
 This may sound complex, but it is needed to map to over 200 data
-formats! Package sf tries hard to simplify this where possible
-(e.g.  a file contains a single layer), but this vignette will try
+formats! Package `sf` tries hard to simplify this where possible
+(e.g. a file contains a single layer), but this vignette will try
 to point you to the options.
 
 ### Using st_read
 
 As an example, we read the North Carolina counties SIDS dataset,
-which comes shipped with the sf package by:
+which comes shipped with the `sf` package by:
 
 ```{r}
 library(sf)
@@ -57,8 +57,8 @@ without path.
 We see here that a single argument is used to find both the
 datasource and the layer. This works when the datasource contains a
 single layer. In case the number of layers is zero (e.g. a database
-with no tables), an error message is given. In case there are more
-than one layers, the first layer is returned, but a message and a
+with no tables), an error message is given. In case there are more layers
+than one, the first layer is returned, but a message and a
 warning are given:
 
 ```{r eval=FALSE}
@@ -105,12 +105,11 @@ report the number of features, but need to be completely read for
 this. GDAL allows for more than one geometry column for a feature
 layer; these are reported by `st_list`.
 
-In case a layer contains geometries only but no attributes (fields),
+In case a layer contains only geometries but no attributes (fields),
 `st_read` still returns an `sf` object, with a geometry column only.
 
 We see that GDAL automatically detects the driver (file format)
 of the datasource, by trying them all in turn.
-
 
 `st_read` follows the conventions of base R, similar to how it
 reads tabular data into `data.frame`s. This means that character
@@ -121,7 +120,9 @@ on retrieving character data as character vectors, the argument
 ```{r eval=FALSE}
 st_read(fname, stringsAsFactors = FALSE)
 ```
+
 Alternatively, a user can set the global option `stringsAsFactors`, and this will have the same effect:
+
 ```{r}
 options(stringsAsFactors = FALSE)
 st_read(fname)
@@ -136,10 +137,10 @@ two arguments, the object and a filename:
 st_write(nc, "nc.shp")
 ```
 
-The file name is taken as the data source name.  The default for
+The file name is taken as the data source name. The default for
 the layer name is the basename (filename without path) of the the
-data source name For this, `st_write` needs to guess the driver. The
-above command is for instance equivalent to:
+data source name. For this, `st_write` needs to guess the driver. The
+above command is, for instance, equivalent to:
 
 ```{r}
 st_write(nc, dsn = "nc.shp", layer = "nc.shp", driver = "ESRI Shapefile")
@@ -200,16 +201,17 @@ The list with prefixes is:
 
 Various GDAL drivers have options that influences the reading
 or writing process, for example what the driver should do when a
-table already exists in a database: append records to the table,
+table already exists in a database: append records to the table
 or overwrite it:
 
 ```{r eval=FALSE}
 st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
     layer_options = "OVERWRITE=true")
 ```
+
 In case the table exists and the option is not specified, the driver
 will give an error. Driver-specific options are documented in the
-driver manual of [gdal](FIXME:append_link). Multiple options can be
+driver manual of [gdal](http://www.gdal.org/ogr_formats.html). Multiple options can be
 given by multiple strings in `options`.
 
 For `st_read`, there is only `options`; for `st_write`, one needs
@@ -220,7 +222,7 @@ in the dataset.
 ## Reading and writing directly to and from spatial databases
 
 Package `sf` has experimental support for directly reading and
-writing from and to spatial databases, using the `DBI` interface.
+writing from and to spatial databases using the `DBI` interface.
 So far, testing has mainly be done with `PostGIS`, other databases
 might work but may also need more work. An example of reading is:
 
@@ -254,32 +256,38 @@ use well-known binary or well-known text when writing the geometry
 ## Conversion to other formats: WKT, WKB, sp
 
 ### Conversion to and from well-known text
+
 The usual form in which we see simple features printed is well-known text:
+
 ```{r}
 st_point(c(0,1))
 st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 ```
 
 We can create these well-known text strings explicitly using `st_as_wkt`:
+
 ```{r}
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 str = st_as_text(x)
 x
 ```
 
-We can convert back from WKT by using st_as_sfc:
+We can convert back from WKT by using `st_as_sfc`:
+
 ```{r}
 st_as_sfc(str)
 ```
 
-### Conversion to and from Well-known binary
+### Conversion to and from well-known binary
 
 Well-known binary is created from simple features by `st_as_binary`:
+
 ```{r}
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 (x = st_as_binary(x))
 class(x)
 ```
+
 The object returned by `st_as_binary` is of class `WKB` and is
 either a list with raw vectors, or a single raw vector. These
 can be converted into a hexadecimal character vector using `rawToHex`:
@@ -287,7 +295,9 @@ can be converted into a hexadecimal character vector using `rawToHex`:
 ```{r}
 rawToHex(x)
 ```
-converting back to `sf` uses `st_as_sfc`
+
+Converting back to `sf` uses `st_as_sfc`:
+
 ```{r}
 x = st_as_binary(st_sfc(st_point(0:1), st_point(5:6)))
 st_as_sfc(x)
@@ -298,13 +308,14 @@ st_as_sfc(x)
 Spatial objects as maintained by package `sp` can be converted into
 simple feature objects or geometries by `st_as_sf` and `st_as_sfc`,
 respectively:
-`
+
 ```{r}
 methods(st_as_sf)
 methods(st_as_sfc)
 ```
 
-An example would be
+An example would be:
+
 ```{r}
 library(sp)
 data(meuse)
