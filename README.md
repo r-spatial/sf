@@ -28,7 +28,7 @@ See also:
 * the original R Consortium ISC [proposal](PROPOSAL.md)
 * UseR! 2016 [slides presentations](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html)
-* the first [package vignette](https://edzer.github.io/sfr/articles/sfr.html)
+* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html)
 
 ### What it does
 
