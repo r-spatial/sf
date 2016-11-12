@@ -162,15 +162,8 @@ and +datum=WGS84, literally</p>
 #&gt; POINT(0 0) 
 #&gt; POINT(1 1) 
 #&gt; </div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
-<span class='fu'>library</span>(<span class='no'>dplyr</span>)</div><div class='output'><strong class='text-info'>
-Attaching package: ‘dplyr’
-</strong></div><div class='output'><strong class='text-info'>The following objects are masked from ‘package:stats’:
-
-    filter, lag
-</strong></div><div class='output'><strong class='text-info'>The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-</strong></div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY

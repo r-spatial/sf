@@ -26,7 +26,7 @@ test_that("st_crs returns NA for sfg objects", {
   expect_true(is.na(st_crs(pt1)))
 })
 
-test_that("st_as_binary can read big endian", {
+test_that("st_as_binary can non-native big endian", {
   gc = st_geometrycollection()
   r = st_as_binary(gc)
   r[1] = if (r[1] == 1) {

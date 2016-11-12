@@ -21,5 +21,5 @@ License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 BugReports: https://github.com/edzer/sfr/issues/
 RoxygenNote: 5.0.1
-Collate: RcppExports.R init.R bbox.R read.R sfc.R sfg.R sf.R wkb.R wkt.R
+Collate: RcppExports.R init.R bbox.R read.R db.R sfc.R sfg.R sf.R wkb.R wkt.R
 	plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R

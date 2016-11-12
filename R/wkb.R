@@ -216,10 +216,11 @@ st_as_binary = function(x, ...) UseMethod("st_as_binary")
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
 #' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.
+#' @param hex logical; return hexadecimal encoded (character)?
 #' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.
 #' @export
 st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
-		precision = attr(x, "precision")) {
+		precision = attr(x, "precision"), hex = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (pureR && precision != 0.0)
 		stop("for non-zero precision values, use pureR = FALSE")
@@ -227,7 +228,8 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 		structure(lapply(x, st_as_binary, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), class = "WKB")
+		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), 
+				class = "WKB")
 	}
 }
 
@@ -253,16 +255,32 @@ createType = function(x, endian, EWKB = FALSE) {
 
 #' @name st_as_binary
 #' @export
-st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE) {
+st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE, 
+		hex = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (! pureR) {
 		stopifnot(endian == .Platform$endian)
-		return(CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), 0.0)[[1]])
+		CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), 0.0)[[1]]
+	} else {
+		rc <- rawConnection(raw(0), "r+")
+		on.exit(close(rc))
+		writeData(x, rc, endian, EWKB)
+		rawConnectionValue(rc)
 	}
-	rc <- rawConnection(raw(0), "r+")
-	on.exit(close(rc))
-	writeData(x, rc, endian, EWKB)
-	rawConnectionValue(rc)
+}
+
+#' convert raw vector(s) into hexadecimal character string(s)
+#'
+#' convert raw vector(s) into hexadecimal character string(s)
+#' @param x raw vector, or list with raw vectors 
+#' @export
+rawToHex = function(x) {
+	if (is.raw(x))
+		CPL_raw_to_hex(x)
+	else if (is.list(x) && all(sapply(x, is.raw)))
+		sapply(x, function(rw) CPL_raw_to_hex(rw))
+	else
+		stop(paste("not implemented for objects of class", class(x)))
 }
 
 writeData = function(x, rc, endian, EWKB = FALSE) {

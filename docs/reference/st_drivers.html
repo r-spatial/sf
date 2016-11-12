@@ -102,162 +102,240 @@
       <a class="anchor" href="#examples"></a>
       Examples
     </h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_drivers</span>()</div><div class='output co'>#&gt;               name                                            long_name write
-#&gt; 32          PCIDSK                                 PCIDSK Database File  TRUE
-#&gt; 40          netCDF                           Network Common Data Format  TRUE
-#&gt; 49     JP2OpenJPEG           JPEG-2000 driver based on OpenJPEG library FALSE
-#&gt; 69             PDF                                       Geospatial PDF  TRUE
-#&gt; 130 ESRI Shapefile                                       ESRI Shapefile  TRUE
-#&gt; 131   MapInfo File                                         MapInfo File  TRUE
-#&gt; 132        UK .NTF                                              UK .NTF FALSE
-#&gt; 133       OGR_SDTS                                                 SDTS FALSE
-#&gt; 134            S57                                       IHO S-57 (ENC)  TRUE
-#&gt; 135            DGN                                     Microstation DGN  TRUE
-#&gt; 136        OGR_VRT                             VRT - Virtual Datasource FALSE
-#&gt; 137            REC                                        EPIInfo .REC  FALSE
-#&gt; 138         Memory                                               Memory  TRUE
-#&gt; 139            BNA                                            Atlas BNA  TRUE
-#&gt; 140            CSV                         Comma Separated Value (.csv)  TRUE
-#&gt; 141            NAS                                          NAS - ALKIS FALSE
-#&gt; 142            GML                      Geography Markup Language (GML)  TRUE
-#&gt; 143            GPX                                                  GPX  TRUE
-#&gt; 144         LIBKML                     Keyhole Markup Language (LIBKML)  TRUE
-#&gt; 145            KML                        Keyhole Markup Language (KML)  TRUE
-#&gt; 146        GeoJSON                                              GeoJSON  TRUE
-#&gt; 147     Interlis 1                                           Interlis 1  TRUE
-#&gt; 148     Interlis 2                                           Interlis 2  TRUE
-#&gt; 149        OGR_GMT                             GMT ASCII Vectors (.gmt)  TRUE
-#&gt; 150           GPKG                                           GeoPackage  TRUE
-#&gt; 151         SQLite                                  SQLite / Spatialite  TRUE
-#&gt; 152       OGR_DODS                                             OGR_DODS FALSE
-#&gt; 153           ODBC                                                 ODBC  TRUE
-#&gt; 154           WAsP                                     WAsP .map format  TRUE
-#&gt; 155           PGeo                            ESRI Personal GeoDatabase FALSE
-#&gt; 156   MSSQLSpatial                Microsoft SQL Server Spatial Database  TRUE
-#&gt; 157       OGR_OGDI                        OGDI Vectors (VPF, VMAP, DCW) FALSE
-#&gt; 158     PostgreSQL                                   PostgreSQL/PostGIS  TRUE
-#&gt; 159          MySQL                                                MySQL  TRUE
-#&gt; 160    OpenFileGDB                                         ESRI FileGDB FALSE
-#&gt; 161         XPlane                 X-Plane/Flightgear aeronautical data FALSE
-#&gt; 162            DXF                                          AutoCAD DXF  TRUE
-#&gt; 163     Geoconcept                                           Geoconcept  TRUE
-#&gt; 164         GeoRSS                                               GeoRSS  TRUE
-#&gt; 165  GPSTrackMaker                                        GPSTrackMaker  TRUE
-#&gt; 166            VFK                 Czech Cadastral Exchange Data Format FALSE
-#&gt; 167         PGDUMP                                  PostgreSQL SQL dump  TRUE
-#&gt; 168            OSM                            OpenStreetMap XML and PBF FALSE
-#&gt; 169       GPSBabel                                             GPSBabel  TRUE
-#&gt; 170            SUA      Tim Newport-Peace&#39;s Special Use Airspace Format FALSE
-#&gt; 171        OpenAir                                              OpenAir FALSE
-#&gt; 172        OGR_PDS                         Planetary Data Systems TABLE FALSE
-#&gt; 173            WFS                        OGC WFS (Web Feature Service) FALSE
-#&gt; 174            HTF                         Hydrographic Transfer Vector FALSE
-#&gt; 175     AeronavFAA                                          Aeronav FAA FALSE
-#&gt; 176       Geomedia                                        Geomedia .mdb FALSE
-#&gt; 177         EDIGEO                        French EDIGEO exchange format FALSE
-#&gt; 178            GFT                                 Google Fusion Tables  TRUE
-#&gt; 179            SVG                             Scalable Vector Graphics FALSE
-#&gt; 180        CouchDB                                   CouchDB / GeoCouch  TRUE
-#&gt; 181       Cloudant                                   Cloudant / CouchDB  TRUE
-#&gt; 182         Idrisi                                 Idrisi Vector (.vct) FALSE
-#&gt; 183         ARCGEN                                    Arc/Info Generate FALSE
-#&gt; 184       SEGUKOOA                                 SEG-P1 / UKOOA P1/90 FALSE
-#&gt; 185           SEGY                                                SEG-Y FALSE
-#&gt; 186            XLS                                      MS Excel format FALSE
-#&gt; 187            ODS Open Document/ LibreOffice / OpenOffice Spreadsheet   TRUE
-#&gt; 188           XLSX                       MS Office Open XML spreadsheet  TRUE
-#&gt; 189  ElasticSearch                                       Elastic Search  TRUE
-#&gt; 190           Walk                                                 Walk FALSE
-#&gt; 191        CartoDB                                              CartoDB  TRUE
-#&gt; 192     AmigoCloud                                           AmigoCloud  TRUE
-#&gt; 193            SXF                          Storage and eXchange Format FALSE
-#&gt; 194        Selafin                                              Selafin  TRUE
-#&gt; 195            JML                                         OpenJUMP JML  TRUE
-#&gt; 196       PLSCENES                               Planet Labs Scenes API FALSE
-#&gt; 197            CSW               OGC CSW (Catalog  Service for the Web) FALSE
-#&gt; 198            VDV                  VDV-451/VDV-452/INTREST Data Format  TRUE
-#&gt; 199          TIGER                               U.S. Census TIGER/Line  TRUE
-#&gt; 200         AVCBin                             Arc/Info Binary Coverage FALSE
-#&gt; 201         AVCE00                        Arc/Info E00 (ASCII) Coverage FALSE
-#&gt; 202           HTTP                                HTTP Fetching Wrapper FALSE
-#&gt;      copy is_raster is_vector
-#&gt; 32  FALSE      TRUE      TRUE
-#&gt; 40   TRUE      TRUE      TRUE
-#&gt; 49   TRUE      TRUE      TRUE
-#&gt; 69   TRUE      TRUE      TRUE
-#&gt; 130 FALSE     FALSE      TRUE
-#&gt; 131 FALSE     FALSE      TRUE
-#&gt; 132 FALSE     FALSE      TRUE
-#&gt; 133 FALSE     FALSE      TRUE
-#&gt; 134 FALSE     FALSE      TRUE
-#&gt; 135 FALSE     FALSE      TRUE
-#&gt; 136 FALSE     FALSE      TRUE
-#&gt; 137 FALSE     FALSE      TRUE
-#&gt; 138 FALSE     FALSE      TRUE
-#&gt; 139 FALSE     FALSE      TRUE
-#&gt; 140 FALSE     FALSE      TRUE
-#&gt; 141 FALSE     FALSE      TRUE
-#&gt; 142 FALSE     FALSE      TRUE
-#&gt; 143 FALSE     FALSE      TRUE
-#&gt; 144 FALSE     FALSE      TRUE
-#&gt; 145 FALSE     FALSE      TRUE
-#&gt; 146 FALSE     FALSE      TRUE
-#&gt; 147 FALSE     FALSE      TRUE
-#&gt; 148 FALSE     FALSE      TRUE
-#&gt; 149 FALSE     FALSE      TRUE
-#&gt; 150  TRUE      TRUE      TRUE
-#&gt; 151 FALSE     FALSE      TRUE
-#&gt; 152 FALSE     FALSE      TRUE
-#&gt; 153 FALSE     FALSE      TRUE
-#&gt; 154 FALSE     FALSE      TRUE
-#&gt; 155 FALSE     FALSE      TRUE
-#&gt; 156 FALSE     FALSE      TRUE
-#&gt; 157 FALSE     FALSE      TRUE
-#&gt; 158 FALSE     FALSE      TRUE
-#&gt; 159 FALSE     FALSE      TRUE
-#&gt; 160 FALSE     FALSE      TRUE
-#&gt; 161 FALSE     FALSE      TRUE
-#&gt; 162 FALSE     FALSE      TRUE
-#&gt; 163 FALSE     FALSE      TRUE
-#&gt; 164 FALSE     FALSE      TRUE
-#&gt; 165 FALSE     FALSE      TRUE
-#&gt; 166 FALSE     FALSE      TRUE
-#&gt; 167 FALSE     FALSE      TRUE
-#&gt; 168 FALSE     FALSE      TRUE
-#&gt; 169 FALSE     FALSE      TRUE
-#&gt; 170 FALSE     FALSE      TRUE
-#&gt; 171 FALSE     FALSE      TRUE
-#&gt; 172 FALSE     FALSE      TRUE
-#&gt; 173 FALSE     FALSE      TRUE
-#&gt; 174 FALSE     FALSE      TRUE
-#&gt; 175 FALSE     FALSE      TRUE
-#&gt; 176 FALSE     FALSE      TRUE
-#&gt; 177 FALSE     FALSE      TRUE
-#&gt; 178 FALSE     FALSE      TRUE
-#&gt; 179 FALSE     FALSE      TRUE
-#&gt; 180 FALSE     FALSE      TRUE
-#&gt; 181 FALSE     FALSE      TRUE
-#&gt; 182 FALSE     FALSE      TRUE
-#&gt; 183 FALSE     FALSE      TRUE
-#&gt; 184 FALSE     FALSE      TRUE
-#&gt; 185 FALSE     FALSE      TRUE
-#&gt; 186 FALSE     FALSE      TRUE
-#&gt; 187 FALSE     FALSE      TRUE
-#&gt; 188 FALSE     FALSE      TRUE
-#&gt; 189 FALSE     FALSE      TRUE
-#&gt; 190 FALSE     FALSE      TRUE
-#&gt; 191 FALSE     FALSE      TRUE
-#&gt; 192 FALSE     FALSE      TRUE
-#&gt; 193 FALSE     FALSE      TRUE
-#&gt; 194 FALSE     FALSE      TRUE
-#&gt; 195 FALSE     FALSE      TRUE
-#&gt; 196 FALSE      TRUE      TRUE
-#&gt; 197 FALSE     FALSE      TRUE
-#&gt; 198 FALSE     FALSE      TRUE
-#&gt; 199 FALSE     FALSE      TRUE
-#&gt; 200 FALSE     FALSE      TRUE
-#&gt; 201 FALSE     FALSE      TRUE
-#&gt; 202 FALSE      TRUE      TRUE
+    <pre class="examples"><div class='input'><span class='fu'>st_drivers</span>()</div><div class='output co'>#&gt;                          name
+#&gt; PCIDSK                 PCIDSK
+#&gt; netCDF                 netCDF
+#&gt; JP2OpenJPEG       JP2OpenJPEG
+#&gt; PDF                       PDF
+#&gt; ESRI Shapefile ESRI Shapefile
+#&gt; MapInfo File     MapInfo File
+#&gt; UK .NTF               UK .NTF
+#&gt; OGR_SDTS             OGR_SDTS
+#&gt; S57                       S57
+#&gt; DGN                       DGN
+#&gt; OGR_VRT               OGR_VRT
+#&gt; REC                       REC
+#&gt; Memory                 Memory
+#&gt; BNA                       BNA
+#&gt; CSV                       CSV
+#&gt; NAS                       NAS
+#&gt; GML                       GML
+#&gt; GPX                       GPX
+#&gt; LIBKML                 LIBKML
+#&gt; KML                       KML
+#&gt; GeoJSON               GeoJSON
+#&gt; Interlis 1         Interlis 1
+#&gt; Interlis 2         Interlis 2
+#&gt; OGR_GMT               OGR_GMT
+#&gt; GPKG                     GPKG
+#&gt; SQLite                 SQLite
+#&gt; OGR_DODS             OGR_DODS
+#&gt; ODBC                     ODBC
+#&gt; WAsP                     WAsP
+#&gt; PGeo                     PGeo
+#&gt; MSSQLSpatial     MSSQLSpatial
+#&gt; OGR_OGDI             OGR_OGDI
+#&gt; PostgreSQL         PostgreSQL
+#&gt; MySQL                   MySQL
+#&gt; OpenFileGDB       OpenFileGDB
+#&gt; XPlane                 XPlane
+#&gt; DXF                       DXF
+#&gt; Geoconcept         Geoconcept
+#&gt; GeoRSS                 GeoRSS
+#&gt; GPSTrackMaker   GPSTrackMaker
+#&gt; VFK                       VFK
+#&gt; PGDUMP                 PGDUMP
+#&gt; OSM                       OSM
+#&gt; GPSBabel             GPSBabel
+#&gt; SUA                       SUA
+#&gt; OpenAir               OpenAir
+#&gt; OGR_PDS               OGR_PDS
+#&gt; WFS                       WFS
+#&gt; HTF                       HTF
+#&gt; AeronavFAA         AeronavFAA
+#&gt; Geomedia             Geomedia
+#&gt; EDIGEO                 EDIGEO
+#&gt; GFT                       GFT
+#&gt; SVG                       SVG
+#&gt; CouchDB               CouchDB
+#&gt; Cloudant             Cloudant
+#&gt; Idrisi                 Idrisi
+#&gt; ARCGEN                 ARCGEN
+#&gt; SEGUKOOA             SEGUKOOA
+#&gt; SEGY                     SEGY
+#&gt; XLS                       XLS
+#&gt; ODS                       ODS
+#&gt; XLSX                     XLSX
+#&gt; ElasticSearch   ElasticSearch
+#&gt; Walk                     Walk
+#&gt; CartoDB               CartoDB
+#&gt; AmigoCloud         AmigoCloud
+#&gt; SXF                       SXF
+#&gt; Selafin               Selafin
+#&gt; JML                       JML
+#&gt; PLSCENES             PLSCENES
+#&gt; CSW                       CSW
+#&gt; VDV                       VDV
+#&gt; TIGER                   TIGER
+#&gt; AVCBin                 AVCBin
+#&gt; AVCE00                 AVCE00
+#&gt; HTTP                     HTTP
+#&gt;                                                           long_name write  copy
+#&gt; PCIDSK                                         PCIDSK Database File  TRUE FALSE
+#&gt; netCDF                                   Network Common Data Format  TRUE  TRUE
+#&gt; JP2OpenJPEG              JPEG-2000 driver based on OpenJPEG library FALSE  TRUE
+#&gt; PDF                                                  Geospatial PDF  TRUE  TRUE
+#&gt; ESRI Shapefile                                       ESRI Shapefile  TRUE FALSE
+#&gt; MapInfo File                                           MapInfo File  TRUE FALSE
+#&gt; UK .NTF                                                     UK .NTF FALSE FALSE
+#&gt; OGR_SDTS                                                       SDTS FALSE FALSE
+#&gt; S57                                                  IHO S-57 (ENC)  TRUE FALSE
+#&gt; DGN                                                Microstation DGN  TRUE FALSE
+#&gt; OGR_VRT                                    VRT - Virtual Datasource FALSE FALSE
+#&gt; REC                                                   EPIInfo .REC  FALSE FALSE
+#&gt; Memory                                                       Memory  TRUE FALSE
+#&gt; BNA                                                       Atlas BNA  TRUE FALSE
+#&gt; CSV                                    Comma Separated Value (.csv)  TRUE FALSE
+#&gt; NAS                                                     NAS - ALKIS FALSE FALSE
+#&gt; GML                                 Geography Markup Language (GML)  TRUE FALSE
+#&gt; GPX                                                             GPX  TRUE FALSE
+#&gt; LIBKML                             Keyhole Markup Language (LIBKML)  TRUE FALSE
+#&gt; KML                                   Keyhole Markup Language (KML)  TRUE FALSE
+#&gt; GeoJSON                                                     GeoJSON  TRUE FALSE
+#&gt; Interlis 1                                               Interlis 1  TRUE FALSE
+#&gt; Interlis 2                                               Interlis 2  TRUE FALSE
+#&gt; OGR_GMT                                    GMT ASCII Vectors (.gmt)  TRUE FALSE
+#&gt; GPKG                                                     GeoPackage  TRUE  TRUE
+#&gt; SQLite                                          SQLite / Spatialite  TRUE FALSE
+#&gt; OGR_DODS                                                   OGR_DODS FALSE FALSE
+#&gt; ODBC                                                           ODBC  TRUE FALSE
+#&gt; WAsP                                               WAsP .map format  TRUE FALSE
+#&gt; PGeo                                      ESRI Personal GeoDatabase FALSE FALSE
+#&gt; MSSQLSpatial                  Microsoft SQL Server Spatial Database  TRUE FALSE
+#&gt; OGR_OGDI                              OGDI Vectors (VPF, VMAP, DCW) FALSE FALSE
+#&gt; PostgreSQL                                       PostgreSQL/PostGIS  TRUE FALSE
+#&gt; MySQL                                                         MySQL  TRUE FALSE
+#&gt; OpenFileGDB                                            ESRI FileGDB FALSE FALSE
+#&gt; XPlane                         X-Plane/Flightgear aeronautical data FALSE FALSE
+#&gt; DXF                                                     AutoCAD DXF  TRUE FALSE
+#&gt; Geoconcept                                               Geoconcept  TRUE FALSE
+#&gt; GeoRSS                                                       GeoRSS  TRUE FALSE
+#&gt; GPSTrackMaker                                         GPSTrackMaker  TRUE FALSE
+#&gt; VFK                            Czech Cadastral Exchange Data Format FALSE FALSE
+#&gt; PGDUMP                                          PostgreSQL SQL dump  TRUE FALSE
+#&gt; OSM                                       OpenStreetMap XML and PBF FALSE FALSE
+#&gt; GPSBabel                                                   GPSBabel  TRUE FALSE
+#&gt; SUA                 Tim Newport-Peace&#39;s Special Use Airspace Format FALSE FALSE
+#&gt; OpenAir                                                     OpenAir FALSE FALSE
+#&gt; OGR_PDS                                Planetary Data Systems TABLE FALSE FALSE
+#&gt; WFS                                   OGC WFS (Web Feature Service) FALSE FALSE
+#&gt; HTF                                    Hydrographic Transfer Vector FALSE FALSE
+#&gt; AeronavFAA                                              Aeronav FAA FALSE FALSE
+#&gt; Geomedia                                              Geomedia .mdb FALSE FALSE
+#&gt; EDIGEO                                French EDIGEO exchange format FALSE FALSE
+#&gt; GFT                                            Google Fusion Tables  TRUE FALSE
+#&gt; SVG                                        Scalable Vector Graphics FALSE FALSE
+#&gt; CouchDB                                          CouchDB / GeoCouch  TRUE FALSE
+#&gt; Cloudant                                         Cloudant / CouchDB  TRUE FALSE
+#&gt; Idrisi                                         Idrisi Vector (.vct) FALSE FALSE
+#&gt; ARCGEN                                            Arc/Info Generate FALSE FALSE
+#&gt; SEGUKOOA                                       SEG-P1 / UKOOA P1/90 FALSE FALSE
+#&gt; SEGY                                                          SEG-Y FALSE FALSE
+#&gt; XLS                                                 MS Excel format FALSE FALSE
+#&gt; ODS            Open Document/ LibreOffice / OpenOffice Spreadsheet   TRUE FALSE
+#&gt; XLSX                                 MS Office Open XML spreadsheet  TRUE FALSE
+#&gt; ElasticSearch                                        Elastic Search  TRUE FALSE
+#&gt; Walk                                                           Walk FALSE FALSE
+#&gt; CartoDB                                                     CartoDB  TRUE FALSE
+#&gt; AmigoCloud                                               AmigoCloud  TRUE FALSE
+#&gt; SXF                                     Storage and eXchange Format FALSE FALSE
+#&gt; Selafin                                                     Selafin  TRUE FALSE
+#&gt; JML                                                    OpenJUMP JML  TRUE FALSE
+#&gt; PLSCENES                                     Planet Labs Scenes API FALSE FALSE
+#&gt; CSW                          OGC CSW (Catalog  Service for the Web) FALSE FALSE
+#&gt; VDV                             VDV-451/VDV-452/INTREST Data Format  TRUE FALSE
+#&gt; TIGER                                        U.S. Census TIGER/Line  TRUE FALSE
+#&gt; AVCBin                                     Arc/Info Binary Coverage FALSE FALSE
+#&gt; AVCE00                                Arc/Info E00 (ASCII) Coverage FALSE FALSE
+#&gt; HTTP                                          HTTP Fetching Wrapper FALSE FALSE
+#&gt;                is_raster is_vector
+#&gt; PCIDSK              TRUE      TRUE
+#&gt; netCDF              TRUE      TRUE
+#&gt; JP2OpenJPEG         TRUE      TRUE
+#&gt; PDF                 TRUE      TRUE
+#&gt; ESRI Shapefile     FALSE      TRUE
+#&gt; MapInfo File       FALSE      TRUE
+#&gt; UK .NTF            FALSE      TRUE
+#&gt; OGR_SDTS           FALSE      TRUE
+#&gt; S57                FALSE      TRUE
+#&gt; DGN                FALSE      TRUE
+#&gt; OGR_VRT            FALSE      TRUE
+#&gt; REC                FALSE      TRUE
+#&gt; Memory             FALSE      TRUE
+#&gt; BNA                FALSE      TRUE
+#&gt; CSV                FALSE      TRUE
+#&gt; NAS                FALSE      TRUE
+#&gt; GML                FALSE      TRUE
+#&gt; GPX                FALSE      TRUE
+#&gt; LIBKML             FALSE      TRUE
+#&gt; KML                FALSE      TRUE
+#&gt; GeoJSON            FALSE      TRUE
+#&gt; Interlis 1         FALSE      TRUE
+#&gt; Interlis 2         FALSE      TRUE
+#&gt; OGR_GMT            FALSE      TRUE
+#&gt; GPKG                TRUE      TRUE
+#&gt; SQLite             FALSE      TRUE
+#&gt; OGR_DODS           FALSE      TRUE
+#&gt; ODBC               FALSE      TRUE
+#&gt; WAsP               FALSE      TRUE
+#&gt; PGeo               FALSE      TRUE
+#&gt; MSSQLSpatial       FALSE      TRUE
+#&gt; OGR_OGDI           FALSE      TRUE
+#&gt; PostgreSQL         FALSE      TRUE
+#&gt; MySQL              FALSE      TRUE
+#&gt; OpenFileGDB        FALSE      TRUE
+#&gt; XPlane             FALSE      TRUE
+#&gt; DXF                FALSE      TRUE
+#&gt; Geoconcept         FALSE      TRUE
+#&gt; GeoRSS             FALSE      TRUE
+#&gt; GPSTrackMaker      FALSE      TRUE
+#&gt; VFK                FALSE      TRUE
+#&gt; PGDUMP             FALSE      TRUE
+#&gt; OSM                FALSE      TRUE
+#&gt; GPSBabel           FALSE      TRUE
+#&gt; SUA                FALSE      TRUE
+#&gt; OpenAir            FALSE      TRUE
+#&gt; OGR_PDS            FALSE      TRUE
+#&gt; WFS                FALSE      TRUE
+#&gt; HTF                FALSE      TRUE
+#&gt; AeronavFAA         FALSE      TRUE
+#&gt; Geomedia           FALSE      TRUE
+#&gt; EDIGEO             FALSE      TRUE
+#&gt; GFT                FALSE      TRUE
+#&gt; SVG                FALSE      TRUE
+#&gt; CouchDB            FALSE      TRUE
+#&gt; Cloudant           FALSE      TRUE
+#&gt; Idrisi             FALSE      TRUE
+#&gt; ARCGEN             FALSE      TRUE
+#&gt; SEGUKOOA           FALSE      TRUE
+#&gt; SEGY               FALSE      TRUE
+#&gt; XLS                FALSE      TRUE
+#&gt; ODS                FALSE      TRUE
+#&gt; XLSX               FALSE      TRUE
+#&gt; ElasticSearch      FALSE      TRUE
+#&gt; Walk               FALSE      TRUE
+#&gt; CartoDB            FALSE      TRUE
+#&gt; AmigoCloud         FALSE      TRUE
+#&gt; SXF                FALSE      TRUE
+#&gt; Selafin            FALSE      TRUE
+#&gt; JML                FALSE      TRUE
+#&gt; PLSCENES            TRUE      TRUE
+#&gt; CSW                FALSE      TRUE
+#&gt; VDV                FALSE      TRUE
+#&gt; TIGER              FALSE      TRUE
+#&gt; AVCBin             FALSE      TRUE
+#&gt; AVCE00             FALSE      TRUE
+#&gt; HTTP                TRUE      TRUE
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm">

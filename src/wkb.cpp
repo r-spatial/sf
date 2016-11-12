@@ -212,9 +212,8 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
  srid: IF NOT NULL: output the srid read
  */
 
-	Rcpp::List output(1); // to make result type opaque
-	// do endian check, only support native endian WKB:
-	bool swap = ((int) (**pt) != (int) endian);
+	Rcpp::List output(1); // to deal with varying result type
+	bool swap = ((int) (**pt) != (int) endian); // endian check
 	(*pt)++;
 	// read type:
 	uint32_t wkbType;
