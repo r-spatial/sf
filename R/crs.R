@@ -101,16 +101,14 @@ st_crs.default = function(x, ...) NA_crs_
 
 # return crs object from crs, integer, or character string
 make_crs = function(x) {
-	trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 	if (is.na(x))
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
-	else if (is.numeric(x)) {
-		structure(list(epsg = as.integer(x), proj4string = 
-			trim(CPL_proj4string_from_epsg(as.integer(x)))), class = "crs")
-	} else if (is.character(x))
-		structure(list(epsg = epsgFromProj4(x), proj4string = trim(x)), class = "crs")
+	else if (is.numeric(x)) 
+		CPL_crs_from_epsg(as.integer(x))
+	else if (is.character(x))
+		CPL_crs_from_proj4string(x)
 	else
 		stop(paste("cannot create a crs from an object of class", class(x)))
 }
@@ -147,21 +145,6 @@ make_crs = function(x) {
 st_set_crs = function(x, value) {
 	st_crs(x) = value
 	x
-}
-
-epsgFromProj4 = function(x) { # grep EPSG code out of proj4string, or argue about it:
-	if (is.null(x) || !is.character(x))
-		return(NA_integer_)
-	spl = strsplit(x, " ")[[1]]
-	w = grep("+init=epsg:", spl)
-	if (length(w) == 1)
-		as.integer(strsplit(spl[w], "+init=epsg:")[[1]][2])
-	else {
-		if (length(grep("+proj=longlat", x)) == 1 && length(grep("+datum=WGS84",  x)) == 1)
-			as.integer(4326)
-		else
-			NA_integer_
-	}
 }
 
 #' Assert whether simple feature coordinates are longlat degrees

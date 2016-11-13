@@ -58,14 +58,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_proj4string_from_epsg
-Rcpp::CharacterVector CPL_proj4string_from_epsg(int epsg);
-RcppExport SEXP sf_CPL_proj4string_from_epsg(SEXP epsgSEXP) {
+// CPL_crs_from_epsg
+Rcpp::List CPL_crs_from_epsg(int epsg);
+RcppExport SEXP sf_CPL_crs_from_epsg(SEXP epsgSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type epsg(epsgSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj4string_from_epsg(epsg));
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_epsg(epsg));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_from_proj4string
+Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s);
+RcppExport SEXP sf_CPL_crs_from_proj4string(SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_proj4string(p4s));
     return rcpp_result_gen;
 END_RCPP
 }

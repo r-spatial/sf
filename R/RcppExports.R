@@ -21,8 +21,12 @@ CPL_transform <- function(sfc, proj4) {
     .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
 }
 
-CPL_proj4string_from_epsg <- function(epsg) {
-    .Call('sf_CPL_proj4string_from_epsg', PACKAGE = 'sf', epsg)
+CPL_crs_from_epsg <- function(epsg) {
+    .Call('sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
+}
+
+CPL_crs_from_proj4string <- function(p4s) {
+    .Call('sf_CPL_crs_from_proj4string', PACKAGE = 'sf', p4s)
 }
 
 CPL_get_rgdal_drivers <- function(dummy) {

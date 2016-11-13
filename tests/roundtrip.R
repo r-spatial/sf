@@ -41,6 +41,7 @@ p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alask
 suppressWarnings(st_crs(nc) <- p4s)
 names(nc)[15] = "geometry"
 attr(nc, "sf_column") = "geometry"
+attr(nc$geometry, "crs")$epsg = NA_integer_
 all.equal(nc, st_as_sf(as(nc, "Spatial")))
 
 sp = as(nc, "Spatial")

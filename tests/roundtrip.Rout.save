@@ -77,7 +77,7 @@ In data.row.names(row.names, rowsi, i) :
     landuse       dist.m                geometry  
  W      :50   Min.   :  10.0   POINT        :155  
  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
- Am     :22   Median : 270.0   +init=epsg...:  0  
+ Am     :22   Median : 270.0   +proj=ster...:  0  
  Fw     :10   Mean   : 290.3                      
  Ab     : 8   3rd Qu.: 450.0                      
  (Other):25   Max.   :1000.0                      
@@ -93,7 +93,7 @@ In data.row.names(row.names, rowsi, i) :
           geometry   
  POINT        :3103  
  epsg:28992   :   0  
- +init=epsg...:   0  
+ +proj=ster...:   0  
                      
                      
                      
@@ -101,17 +101,17 @@ In data.row.names(row.names, rowsi, i) :
           geometry
  POLYGON      :1  
  epsg:28992   :0  
- +init=epsg...:0  
+ +proj=ster...:0  
 > summary(st_as_sf(meuse.riv))
           geometry
  POLYGON      :1  
  epsg:28992   :0  
- +init=epsg...:0  
+ +proj=ster...:0  
 > summary(st_as_sf(as(meuse.riv, "SpatialLines")))
           geometry
  LINESTRING   :1  
  epsg:28992   :0  
- +init=epsg...:0  
+ +proj=ster...:0  
 > pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 > summary(st_as_sf(pol.grd))
      part.a           part.b            dist        soil     ffreq   
@@ -124,7 +124,7 @@ In data.row.names(row.names, rowsi, i) :
           geometry   
  POLYGON      :3103  
  epsg:28992   :   0  
- +init=epsg...:   0  
+ +proj=ster...:   0  
                      
                      
                      
@@ -139,7 +139,7 @@ In data.row.names(row.names, rowsi, i) :
           geometry   
  LINESTRING   :3103  
  epsg:28992   :   0  
- +init=epsg...:   0  
+ +proj=ster...:   0  
                      
                      
                      
@@ -159,6 +159,7 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > suppressWarnings(st_crs(nc) <- p4s)
 > names(nc)[15] = "geometry"
 > attr(nc, "sf_column") = "geometry"
+> attr(nc$geometry, "crs")$epsg = NA_integer_
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
 [1] TRUE
 > 
@@ -169,4 +170,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.080   0.032   3.111 
+  3.056   0.020   3.076 

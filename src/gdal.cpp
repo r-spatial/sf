@@ -129,11 +129,12 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	char *cp;
 	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
 	(void) ref->exportToProj4(&cp);
-	char *cpws = cp; // eliminate trailing white space:
-	while (*cpws != '\0')
-		cpws++;
-	while (*(--cpws) == ' ' && cpws != cp)
-		*cpws = '\0';
+
+	// eliminate trailing white space:
+	if (strlen(cp) > 0)
+		for (char *cpws = cp + strlen(cp) - 1; cpws != cp && *cpws == ' '; cpws--)
+			*cpws = '\0';
+
 	proj4string[0] = cp;
 	CPLFree(cp);
 	CPLPopErrorHandler();
@@ -201,10 +202,17 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_proj4string_from_epsg(int epsg) {
+Rcpp::List CPL_crs_from_epsg(int epsg) {
 	OGRSpatialReference ref;
-	ref.importFromEPSG(epsg);
-	return(p4s_from_spatial_reference(&ref));
+	handle_error(ref.importFromEPSG(epsg));
+	return(get_crs(&ref));
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
+	OGRSpatialReference ref;
+	handle_error(ref.importFromProj4(p4s[0]));
+	return(get_crs(&ref));
 }
 
 // [[Rcpp::export]]

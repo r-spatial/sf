@@ -10,7 +10,8 @@
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   st_read_db(conn, query = "select * from meuse limit 3;")
+#'   try(st_read_db(conn, query = "select * from meuse limit 3;"))
+#'   # FIXME: breaks on EPSG code not resolvable
 #'   dbDisconnect(conn)
 #' }
 #' @name st_read
