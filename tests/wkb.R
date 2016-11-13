@@ -42,3 +42,7 @@ sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALS
 sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = FALSE, pureR = TRUE)
 sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE)
 sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE, pureR = TRUE)
+
+rawToHex(st_as_binary(st_multipoint(matrix(1:6,3))))
+rawToHex(st_as_binary(st_sfc(st_point(c(0,1)), st_multipoint(matrix(1:6,3)))))
+try(rawToHex("error"))

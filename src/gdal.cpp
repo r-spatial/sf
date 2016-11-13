@@ -204,15 +204,22 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_from_epsg(int epsg) {
 	OGRSpatialReference ref;
-	handle_error(ref.importFromEPSG(epsg));
-	return(get_crs(&ref));
+	if (ref.importFromEPSG(epsg) == OGRERR_NONE)
+		return(get_crs(&ref));
+	else
+		return(get_crs(NULL));
 }
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 	OGRSpatialReference ref;
-	handle_error(ref.importFromProj4(p4s[0]));
-	return(get_crs(&ref));
+	if (ref.importFromProj4(p4s[0]) == OGRERR_NONE)
+		return(get_crs(&ref));
+	else {
+		const char *cp = p4s[0];
+		Rf_warning("Cannot import crs from PROJ.4 string `%s', missing crs returned\n", cp);
+		return(get_crs(NULL));
+	}
 }
 
 // [[Rcpp::export]]

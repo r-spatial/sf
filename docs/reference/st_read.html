@@ -129,7 +129,7 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>for iGeomField, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code> values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.</p>
-    <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.</p>
+    <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -143,15 +143,47 @@
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"edzer"</span>, <span class='st'>"travis"</span>)) { <span class='co'># load meuse to postgis</span>
  <span class='fu'>library</span>(<span class='no'>sp</span>)
  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
- <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
+ <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+     <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
  (<span class='no'>s</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
  <span class='fu'>summary</span>(<span class='no'>s</span>)
 }</div><div class='output co'>#&gt; Writing layer `meuse&#39; to data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
-#&gt; </div><div class='output'><strong class='text-warning'>Warning message:
-GDAL Error 1: Layer meuse already exists, CreateLayer failed.
-Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div class='output co'>#&gt; Creating layer meuse failed.
-#&gt; </div><strong class='error'>Error in eval(substitute(expr), envir, enclos): Layer creation failed.
-</strong><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
+#&gt; options:        OVERWRITE=true 
+#&gt; features:       155
+#&gt; fields:         12
+#&gt; geometry type:  POINT
+#&gt; Reading layer `meuse&#39; from data source `PG:dbname=postgis&#39; using driver `PostgreSQL&#39;
+#&gt; Simple feature collection with 155 features and 12 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs
+#&gt; </div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
+#&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
+#&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
+#&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
+#&gt;  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  
+#&gt;  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  
+#&gt;  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  
+#&gt;                                                                    
+#&gt;       elev             dist               om         ffreq  soil   lime   
+#&gt;  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  
+#&gt;  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  
+#&gt;  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          
+#&gt;  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
+#&gt;  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
+#&gt;  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
+#&gt;                                     NA&#39;s   :2                             
+#&gt;     landuse       dist.m              wkb_geometry
+#&gt;  W      :50   Min.   :  10.0   POINT        :155  
+#&gt;  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
+#&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
+#&gt;  Fw     :10   Mean   : 290.3                      
+#&gt;  Ab     : 8   3rd Qu.: 450.0                      
+#&gt;  Bw     : 6   Max.   :1000.0                      
+#&gt;  (Other):20                                       
+#&gt; </div><div class='input'><span class='co'># nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)</span>
 <span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='st'>"nc"</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4267</span>)</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; converted into: MULTIPOLYGON
 #&gt; Simple feature collection with 100 features and 14 fields
@@ -160,42 +192,53 @@ Use the layer creation option OVERWRITE=YES to replace it.</strong></div><div cl
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID    
-#&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  
-#&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  
-#&gt;  Median :0.1205   Median :1.609   Median :1982   Median :1982  
-#&gt;  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986  
-#&gt;  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067  
-#&gt;  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241  
-#&gt;      NAME               FIPS               FIPSNO         CRESS_ID     
-#&gt;  Length:100         Length:100         Min.   :37001   Min.   :  1.00  
-#&gt;  Class :character   Class :character   1st Qu.:37050   1st Qu.: 25.75  
-#&gt;  Mode  :character   Mode  :character   Median :37100   Median : 50.50  
-#&gt;                                        Mean   :37100   Mean   : 50.50  
-#&gt;                                        3rd Qu.:37150   3rd Qu.: 75.25  
-#&gt;                                        Max.   :37199   Max.   :100.00  
-#&gt;      BIR74           SID74          NWBIR74           BIR79      
-#&gt;  Min.   :  248   Min.   : 0.00   Min.   :   1.0   Min.   :  319  
-#&gt;  1st Qu.: 1077   1st Qu.: 2.00   1st Qu.: 190.0   1st Qu.: 1336  
-#&gt;  Median : 2180   Median : 4.00   Median : 697.5   Median : 2636  
-#&gt;  Mean   : 3300   Mean   : 6.67   Mean   :1050.8   Mean   : 4224  
-#&gt;  3rd Qu.: 3936   3rd Qu.: 8.25   3rd Qu.:1168.5   3rd Qu.: 4889  
-#&gt;  Max.   :21588   Max.   :44.00   Max.   :8027.0   Max.   :30757  
-#&gt;      SID79          NWBIR79                 geometry  
-#&gt;  Min.   : 0.00   Min.   :    3.0   MULTIPOLYGON :100  
-#&gt;  1st Qu.: 2.00   1st Qu.:  250.5   epsg:4267    :  0  
-#&gt;  Median : 5.00   Median :  874.5   +proj=long...:  0  
-#&gt;  Mean   : 8.36   Mean   : 1352.8                      
-#&gt;  3rd Qu.:10.25   3rd Qu.: 1406.8                      
-#&gt;  Max.   :57.00   Max.   :11631.0                      
+#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
+#&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Alamance : 1  
+#&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   Alexander: 1  
+#&gt;  Median :0.1205   Median :1.609   Median :1982   Median :1982   Alleghany: 1  
+#&gt;  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986   Anson    : 1  
+#&gt;  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067   Ashe     : 1  
+#&gt;  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241   Avery    : 1  
+#&gt;                                                                 (Other)  :94  
+#&gt;       FIPS        FIPSNO         CRESS_ID          BIR74           SID74      
+#&gt;  37001  : 1   Min.   :37001   Min.   :  1.00   Min.   :  248   Min.   : 0.00  
+#&gt;  37003  : 1   1st Qu.:37050   1st Qu.: 25.75   1st Qu.: 1077   1st Qu.: 2.00  
+#&gt;  37005  : 1   Median :37100   Median : 50.50   Median : 2180   Median : 4.00  
+#&gt;  37007  : 1   Mean   :37100   Mean   : 50.50   Mean   : 3300   Mean   : 6.67  
+#&gt;  37009  : 1   3rd Qu.:37150   3rd Qu.: 75.25   3rd Qu.: 3936   3rd Qu.: 8.25  
+#&gt;  37011  : 1   Max.   :37199   Max.   :100.00   Max.   :21588   Max.   :44.00  
+#&gt;  (Other):94                                                                   
+#&gt;     NWBIR74           BIR79           SID79          NWBIR79       
+#&gt;  Min.   :   1.0   Min.   :  319   Min.   : 0.00   Min.   :    3.0  
+#&gt;  1st Qu.: 190.0   1st Qu.: 1336   1st Qu.: 2.00   1st Qu.:  250.5  
+#&gt;  Median : 697.5   Median : 2636   Median : 5.00   Median :  874.5  
+#&gt;  Mean   :1050.8   Mean   : 4224   Mean   : 8.36   Mean   : 1352.8  
+#&gt;  3rd Qu.:1168.5   3rd Qu.: 4889   3rd Qu.:10.25   3rd Qu.: 1406.8  
+#&gt;  Max.   :8027.0   Max.   :30757   Max.   :57.00   Max.   :11631.0  
+#&gt;                                                                    
+#&gt;           geometry  
+#&gt;  MULTIPOLYGON :100  
+#&gt;  epsg:4267    :  0  
+#&gt;  +proj=long...:  0  
+#&gt;                     
+#&gt;                     
+#&gt;                     
+#&gt;                     
 #&gt; </div><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"travis"</span>, <span class='st'>"edzer"</span>)) {
   <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
   <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
-  <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='fu'>print</span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
   <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
-}</div><div class='output'><strong class='text-warning'>Warning message:
-GDAL Error 6: EPSG PCS/GCS code 900914 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?</strong></div><div class='output co'>#&gt; [1] TRUE
+}</div><div class='output'><strong class='text-info'>Loading required package: DBI</strong></div><div class='output co'>#&gt; $epsg
+#&gt; [1] NA
+#&gt; 
+#&gt; $proj4string
+#&gt; [1] &quot;+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs&quot;
+#&gt; 
+#&gt; attr(,&quot;class&quot;)
+#&gt; [1] &quot;crs&quot;
+#&gt; </div><div class='output co'>#&gt; [1] TRUE
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm">

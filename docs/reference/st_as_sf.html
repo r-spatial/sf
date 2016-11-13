@@ -207,7 +207,11 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output co'>#&gt;          geometry
+}</div><div class='output'><strong class='text-info'>Loading required package: rgeos</strong></div><div class='output'><strong class='text-info'>rgeos version: 0.3-21, (SVN revision 540)
+ GEOS runtime version: 3.5.0-CAPI-1.9.0 r4084 
+ Linking to sp version: 1.2-3 
+ Polygon checking: TRUE 
+</strong></div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
 #&gt;  epsg:NA     :0  
 #&gt; </div><div class='input'><span class='fu'>demo</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -230,7 +234,7 @@
 #&gt;     landuse       dist.m                geometry  
 #&gt;  W      :50   Min.   :  10.0   POINT        :155  
 #&gt;  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
-#&gt;  Am     :22   Median : 270.0   +init=epsg...:  0  
+#&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
@@ -245,22 +249,22 @@
 #&gt;           geometry   
 #&gt;  POINT        :3103  
 #&gt;  epsg:28992   :   0  
-#&gt;  +init=epsg...:   0  
+#&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
 #&gt;                      
 #&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.area</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +init=epsg...:0  
+#&gt;  +proj=ster...:0  
 #&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.riv</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +init=epsg...:0  
+#&gt;  +proj=ster...:0  
 #&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))</div><div class='output co'>#&gt;           geometry
 #&gt;  LINESTRING   :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +init=epsg...:0  
+#&gt;  +proj=ster...:0  
 #&gt; </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'>as</span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>pol.grd</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
@@ -272,7 +276,7 @@
 #&gt;           geometry   
 #&gt;  POLYGON      :3103  
 #&gt;  epsg:28992   :   0  
-#&gt;  +init=epsg...:   0  
+#&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
 #&gt;                      
@@ -286,7 +290,7 @@
 #&gt;           geometry   
 #&gt;  LINESTRING   :3103  
 #&gt;  epsg:28992   :   0  
-#&gt;  +init=epsg...:   0  
+#&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
 #&gt;                      

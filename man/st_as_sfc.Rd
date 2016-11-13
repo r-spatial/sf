@@ -11,7 +11,8 @@
 \alias{st_as_sfc.character}
 \title{Convert foreign geometry object to an sfc object}
 \usage{
-\method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, pureR = FALSE)
+\method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, pureR = FALSE,
+  crs = NA_crs_)
 
 \method{st_as_sfc}{character}(x, crs = NA_integer_, ...)
 

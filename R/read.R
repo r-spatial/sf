@@ -16,7 +16,8 @@
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", options = "OVERWRITE=true")
+#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+#'      layer_options = "OVERWRITE=true")
 #'  (s = st_read("PG:dbname=postgis", "meuse"))
 #'  summary(s)
 #' }

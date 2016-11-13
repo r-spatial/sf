@@ -448,7 +448,7 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 ## see '?methods' for accessing help and source code
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
-<span class="kw"><a href="../reference/crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s
+<span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s
 ## Warning in `st_crs&lt;-.sfc`(`*tmp*`, value = structure(list(structure(list(:
 ## st_crs&lt;- : replacing crs does not reproject data; use st_transform for that
 <span class="co"># anticipate geometry column name changes:</span>
@@ -461,7 +461,7 @@ nc.sp &lt;-<span class="st"> </span><span class="kw">as</span>(nc, <span class="
 ## [1] "sp"
 nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(nc.sp)
 <span class="kw">all.equal</span>(nc, nc2)
-## [1] TRUE</code></pre></div>
+## [1] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"epsg\": 'is.NA' value mismatch: 1 in current 0 in target &gt;"</code></pre></div>
 <p>As the <code>Spatial*</code> objects only support <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code>, <code>LINESTRING</code> and <code>POLYGON</code> geometries are automatically coerced into their <code>MULTI</code> form. When converting <code>Spatial*</code> into <code>sf</code>, if all geometries consist of a single <code>POLYGON</code> (possibly with holes), a <code>POLYGON</code> and otherwise all geometries are returned as <code>MULTIPOLYGON</code>: a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> (such as common in shapefiles) is not created. Argument <code>forceMulti=TRUE</code> will override this, and create <code>MULTIPOLYGON</code>s in all cases. For <code>LINES</code> the situation is identical.</p>
 </div>
 <div id="geometrycollection" class="section level2">

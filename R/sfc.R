@@ -13,7 +13,6 @@ format.sfc = function(x, ..., digits = 30) {
 #' @param precision numeric; see \link{st_as_binary}
 #' 
 #' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfg}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
-#' @details in case \code{epsg} is given but \code{proj4string} is not and packages \code{sp} and \code{rgdal} can be loaded, the \code{proj4string} is expanded using the PROJ.4 epsg database.
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
@@ -33,44 +32,30 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	if (length(lst) == 0) # empty set: no geometries read
 		class(lst) = c("sfc_GEOMETRY", "sfc")
 	else {
-		if (is.null(attr(lst, "non_empty"))) { # we're not comming from CPL_read_gdal
-			l = sapply(lst, function(x) length(x) > 0)
-			if (any(l))
-				non_empty = l[1] # 0-based
-			else
-				non_empty = 1
-			attr(lst, "n_empty") = sum(! l)
+		# n_empty:
+		if (is.null(attr(lst, "n_empty"))) { # we're NOT comming from CPL_read_wkb:
+			attr(lst, "n_empty") = sum(sapply(lst, function(x) length(x) == 0))
 			u = unique(sapply(lst, class)[1,])
 			if (length(u) > 1)
 				stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
-		} else {
-			non_empty = attr(lst, "non_empty")
-			if (non_empty == 0)
-				non_empty = 1 # FIXME: rethink
-			attr(lst, "non_empty") = NULL # clean up
-		}
-		# do we have a mix of geometry types?
-		is_single = function(x) length(unique(sapply(x, function(y) class(y)[2]))) == 1
-		single = if (!is.null(attr(lst, "single_type"))) # we're back from CPL_read_gdal:
+		} 
+
+		# class: do we have a mix of geometry types?
+		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
 				attr(lst, "single_type")
 			else
-				is_single(lst)
+				length(unique(sapply(lst, function(y) class(y)[2]))) == 1L
 		if (single)
-			class(lst) = c(paste0("sfc_", class(lst[[non_empty]])[2L]), "sfc")
+			class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 		else {
 			class(lst) = c("sfc_GEOMETRY", "sfc")         # the mix
-			attr(lst, "classes") = sapply(lst, class)[2,] # Rcpp forces me to do this. Or is it me, allowing a mix?
+			attr(lst, "classes") = sapply(lst, class)[2L,] # Rcpp forces me to do this. Or is it me, allowing a mix?
 		}
 		attr(lst, "single_type") = NULL # clean up
 	}
 	attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
-	# FIXME: get crs from CPL_* returned attributes
-	#if (!is.na(crs))
-		#st_crs(lst) = attributes(lst) # they might be in there, returned from a CPL_*
-		#else
-	st_crs(lst) = crs
-	lst
+	st_set_crs(lst, crs)
 }
 
 # coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:

@@ -29,7 +29,7 @@ skip0x = function(x) {
 #' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
-st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
     if (all(sapply(x, is.character))) {
 		x <- if (pureR)
 				structure(lapply(x, hex_to_raw), class = "WKB")
@@ -43,11 +43,10 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE) {
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
 			CPL_read_wkb(x, EWKB = EWKB, endian = as.integer(.Platform$endian == "little"))
-	crs = if (EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
-			attr(ret, "epsg")
-		else
-			NA_integer_
-	do.call(st_sfc, c(ret, crs = crs))
+	if (is.na(crs) && EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
+		crs = attr(ret, "epsg")
+	attr(ret, "epsg") = NULL
+	st_sfc(ret, crs = crs)
 }
 
 R_read_wkb = function(x, readWKB, EWKB = EWKB) {

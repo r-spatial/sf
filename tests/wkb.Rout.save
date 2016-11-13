@@ -1,5 +1,5 @@
 
-R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -65,6 +65,15 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE, pureR = TRUE)
  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
+> rawToHex(st_as_binary(st_multipoint(matrix(1:6,3))))
+[1] "0104000000030000000101000000000000000000f03f0000000000001040010100000000000000000000400000000000001440010100000000000000000008400000000000001840"
+> rawToHex(st_as_binary(st_sfc(st_point(c(0,1)), st_multipoint(matrix(1:6,3)))))
+[1] "01010000000000000000000000000000000000f03f"                                                                                                      
+[2] "0104000000030000000101000000000000000000f03f0000000000001040010100000000000000000000400000000000001440010100000000000000000008400000000000001840"
+> try(rawToHex("error"))
+Error in rawToHex("error") : 
+  not implemented for objects of class character
+> 
 > proc.time()
    user  system elapsed 
-  0.440   0.268   0.409 
+  0.404   0.020   0.420 

@@ -52,7 +52,7 @@ Read PostGIS table directly through DBI and RPostgreSQL interface, converting bi
 \details{
 for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
 
-in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
+in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 }
 \note{
 The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}.
@@ -61,7 +61,8 @@ The use of \code{system.file} in examples make sure that examples run regardless
 if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  library(sp)
  example(meuse, ask = FALSE, echo = FALSE)
- st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", options = "OVERWRITE=true")
+ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+     layer_options = "OVERWRITE=true")
  (s = st_read("PG:dbname=postgis", "meuse"))
  summary(s)
 }
@@ -71,8 +72,8 @@ summary(nc)
 if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  try(st_read_db(conn, query = "select * from meuse limit 3;"))
-  # FIXME: breaks on EPSG code not resolvable
+  x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+  print(st_crs(x)) # SRID resolved by the database, not by GDAL!
   dbDisconnect(conn)
 }
 }
