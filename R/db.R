@@ -10,12 +10,12 @@
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   try(st_read_db(conn, query = "select * from meuse limit 3;"))
-#'   # FIXME: breaks on EPSG code not resolvable
+#'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+#'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
 #'   dbDisconnect(conn)
 #' }
 #' @name st_read
-#' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character.
+#' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
 st_read_db = function(conn = NULL, table, query = paste("select * from ", table, ";"),
 		geom_column = NULL, EWKB, ...) {
@@ -30,9 +30,20 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 			else
 				gc [ gc$f_table_name == table, "f_geometry_column"]
 	}
+	crs = if (missing(table)) {
+			warning("argument table missing: returning object without crs")
+			NA_crs_
+		} else {
+			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '", table, "';"))[[1]]
+			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
+			if (nrow(ret))
+				ret[[1]]
+			else
+				NA_crs_
+		}
 	if (missing(EWKB))
 		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
-    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB)
+    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = crs)
 	st_as_sf(tbl, ...)
 }
 
