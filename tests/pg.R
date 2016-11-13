@@ -13,8 +13,8 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 }
 
 options(warn = 2) # turn into error
-#if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-if (Sys.getenv("USER") %in% c("edzer")) {
+if (Sys.getenv("USER") %in% c("edzer", "travis")) {
+#if (Sys.getenv("USER") %in% c("edzer")) {
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
   round_trip = function(cn, wkt) {
   	query = paste0("SELECT '", wkt, "'::geometry;")
