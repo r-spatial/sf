@@ -1,0 +1,31 @@
+---
+title: "3. Manipulating Simple Features"
+output:
+  html_document:
+    toc: true
+    theme: united
+vignette: >
+  %\VignetteIndexEntry{3. Manipulating Simple Features}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+This vignetted describes how simple features can be manipulated,
+where manipulations include
+
+* type transformations (e.g., `POLYGON` to `MULTIPOLYGON`)
+* affine transformation (shift, scale, rotate)
+* transformation into a different coordinate reference system 
+* geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of features intersect, or find the union (overlap) of two polygons.
+
+## Type transformations
+
+## Affine transformations
+
+## Coordinate reference systems conversion and transformation
+
+## Geometrical operations

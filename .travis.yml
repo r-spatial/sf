@@ -5,7 +5,7 @@ addons:
   postgresql: "9.4"
 
 before_script:
-  - psql -U postgres -c "create extension postgis"
+  - psql -U postgres -c "create extension postgis;"
 
 before_install:
   - createdb postgis
