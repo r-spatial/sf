@@ -13,7 +13,7 @@ Rcpp::LogicalVector CPL_is_simple(Rcpp::List sfc) {
 		out[i] = g[i]->IsSimple();
 		delete g[i];
 	}
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
@@ -28,7 +28,7 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 			out[i] = 0.0;
 		delete g[i];
 	}
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
@@ -46,7 +46,7 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 		}
 		delete g[i];
 	}
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
@@ -106,7 +106,7 @@ Rcpp::List CPL_geom_op(std::string op, Rcpp::List sfc,
 			delete g[i];
 	Rcpp::List ret = sfc_from_ogr(out, true);
 	ret.attr("crs") = sfc.attr("crs");
-	return(ret);
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -142,5 +142,5 @@ Rcpp::List CPL_geom_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0) {
 			out[i] = f.createGeometry(wkbGeometryCollection);
 	Rcpp::List ret = sfc_from_ogr(out, true);
 	ret.attr("crs") = sfc.attr("crs");
-	return(ret);
+	return ret;
 }

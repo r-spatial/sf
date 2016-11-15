@@ -104,7 +104,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 		*sref = local_srs; // return, release downstream
 	else if (local_srs != NULL)
 		local_srs->Release();
-	return(g);
+	return g;
 }
 
 std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false) {
@@ -121,7 +121,7 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false
 	ret[lco.size()] = NULL;
 	if (! quiet)
 		Rcpp::Rcout << std::endl;
-	return(ret);
+	return ret;
 }
 
 Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
@@ -138,7 +138,7 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	proj4string[0] = cp;
 	CPLFree(cp);
 	CPLPopErrorHandler();
-	return(proj4string);
+	return proj4string;
 }
 
 Rcpp::List get_crs(OGRSpatialReference *ref) {
@@ -160,7 +160,7 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 	nms(1) = "proj4string";
 	crs.attr("names") = nms;
 	crs.attr("class") = "crs";
-	return(crs);
+	return crs;
 }
 
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
@@ -178,7 +178,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List ret = CPL_read_wkb(lst, false, native_endian());
 	ret.attr("crs") = crs;
 	ret.attr("class") = "sfc";
-	return(ret);
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -198,27 +198,27 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
 	dest->Release();
-	return(ret); 
+	return ret; 
 }
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_from_epsg(int epsg) {
 	OGRSpatialReference ref;
 	if (ref.importFromEPSG(epsg) == OGRERR_NONE)
-		return(get_crs(&ref));
+		return get_crs(&ref);
 	else
-		return(get_crs(NULL));
+		return get_crs(NULL);
 }
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 	OGRSpatialReference ref;
 	if (ref.importFromProj4(p4s[0]) == OGRERR_NONE)
-		return(get_crs(&ref));
+		return get_crs(&ref);
 	else {
 		const char *cp = p4s[0];
 		Rf_warning("Cannot import crs from PROJ.4 string `%s', missing crs returned\n", cp);
-		return(get_crs(NULL));
+		return get_crs(NULL);
 	}
 }
 
@@ -248,7 +248,7 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 	ret(3) = copy;
 	ret(4) = rattr;
 	ret(5) = vattr;
-	return(ret);
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -259,5 +259,5 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 		char *wkt_str = wkt(i);
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
 	}
-	return(sfc_from_ogr(g, true));
+	return sfc_from_ogr(g, true);
 }

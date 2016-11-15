@@ -27,7 +27,7 @@ GeomPtr geometry_from_raw(Rcpp::RawVector wkb) {
 	std::string str( (char *) &(wkb[0]), wkb.size() );
 	std::stringstream strm(str);
 	geos::io::WKBReader r;
-	return(GeomPtr(r.read(strm)));
+	return GeomPtr(r.read(strm));
 }
 
 std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
@@ -36,7 +36,7 @@ std::vector<GeomPtr> geometries_from_sfc(Rcpp::List sfc) {
 	std::vector<GeomPtr> g(sfc.length());
 	for (int i = 0; i < wkblst.length(); i++)
 		g[i] = geometry_from_raw(wkblst[i]);
-	return(g);
+	return g;
 }
 
 Rcpp::List sfc_from_geometry(Geom* geom) {
@@ -47,14 +47,14 @@ Rcpp::List sfc_from_geometry(Geom* geom) {
 	Rcpp::RawVector raw(os.str().size());
 	memcpy(&(raw(0)), os.str().c_str(), os.str().size());
 	rawlist(0) = raw;
-	return(CPL_read_wkb(rawlist, false, native_endian()));
+	return CPL_read_wkb(rawlist, false, native_endian());
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {
 	Rcpp::NumericVector dim(2);
 	dim(0) = dim0;
 	dim(1) = dim1;
-	return(dim);
+	return dim;
 }
 
 Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
@@ -66,7 +66,7 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 	for (int i = 0, j = 0; i < row.length(); i++)
 		if (row(i))
 			ret(j++) = i + 1; // R is 1-based
-	return(ret);
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -87,14 +87,14 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
-		return(Rcpp::List::create(out));
+		return Rcpp::List::create(out);
 	} 
 	if (op == "distance") { // return double matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++)
 			for (int j = 0; j < sfc1.length(); j++)
 				out(i,j) = gmv0[i]->distance(gmv1[j].get());
-		return(Rcpp::List::create(out));
+		return Rcpp::List::create(out);
 	}
 	// other cases: boolean return matrix, either dense or sparse
 	Rcpp::LogicalMatrix densemat;
@@ -148,9 +148,9 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			sparsemat[i] = get_which(rowi);
 	}
 	if (sparse)
-		return(sparsemat);
+		return sparsemat;
 	else
-		return(Rcpp::List::create(densemat));
+		return Rcpp::List::create(densemat);
 }
 
 // [[Rcpp::export]]
@@ -159,7 +159,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) {
 	Rcpp::LogicalVector out(sfc.length());
 	for (int i = 0; i < out.length(); i++)
 		out[i] = geos::operation::valid::IsValidOp::isValid(*gmv[i]);
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
@@ -169,22 +169,22 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc) {
 	for (int i = 0; i < gmv.size(); i++)
 		geoms[i] = gmv[i].get();
 	Rcpp::List out(1);
-	return(sfc_from_geometry(UnaryUnionOp::Union(geoms).get()));
+	return sfc_from_geometry(UnaryUnionOp::Union(geoms).get());
 }
 
 // [[Rcpp::export]]
 std::string CPL_geos_version(bool b = false) {
-	return(geos::geom::geosversion());
+	return geos::geom::geosversion();
 }
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, false)[0];
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, false)[0];
-	return(out);	
+	return out;	
 }

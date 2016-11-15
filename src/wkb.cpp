@@ -62,11 +62,11 @@ T swap_endian(T u) {
 
 inline unsigned char char2int(char c) {
 	if (c >= '0' && c <= '9')
-		return(c - '0');
+		return c - '0';
 	if (c >= 'a' && c <= 'f')
-		return(c - 'a' + 10);
+		return c - 'a' + 10;
 	if (c >= 'A' && c <= 'F')
-		return(c - 'A' + 10);
+		return c - 'A' + 10;
 	throw std::range_error("char2int: false character in hex string");
 }
 
@@ -93,7 +93,7 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 		if (j % 1000 == 0)
 			Rcpp::checkUserInterrupt();
 	}
-	return(output);
+	return output;
 }
 
 // [[Rcpp::export]]
@@ -108,7 +108,7 @@ Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
   		os.write(&hex[high], sizeof(char));
   		os.write(&hex[low], sizeof(char));
 	}
-	return(Rcpp::CharacterVector::create(os.str()));
+	return Rcpp::CharacterVector::create(os.str());
 }
 
 Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool swap, 
@@ -129,7 +129,7 @@ Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool s
 		ret.attr("class") = cls;
 	if (empty != NULL)
 		*empty = npts == 0;
-	return(ret);
+	return ret;
 }
 
 Rcpp::List read_geometrycollection(const unsigned char **pt, int n_dims, bool swap, bool EWKB = 0, 
@@ -146,7 +146,7 @@ Rcpp::List read_geometrycollection(const unsigned char **pt, int n_dims, bool sw
 		ret.attr("class") = cls;
 	if (empty != NULL)
 		*empty = nlst == 0;
-	return(ret);
+	return ret;
 }
 
 Rcpp::NumericVector read_numeric_vector(const unsigned char **pt, int n, bool swap,
@@ -205,7 +205,7 @@ Rcpp::List read_matrix_list(const unsigned char **pt, int n_dims, bool swap,
 		ret.attr("class") = cls;
 	if (empty != NULL)
 		*empty = nlst == 0;
-	return(ret);
+	return ret;
 }
 
 Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0, 
@@ -345,7 +345,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 		else
 			*type = sf_type;
 	}
-	return(output);
+	return output;
 }
 
 // [[Rcpp::export]]
@@ -440,7 +440,7 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		else if (strcmp(dim, "XYZM") == 0)
 			type += 3000;
 	}
-	return(type);
+	return type;
 }
 
 void add_byte(std::ostringstream& os, char c) {
@@ -454,12 +454,12 @@ void add_int(std::ostringstream& os, unsigned int i) {
 
 double make_precise(double d, double precision) {
 	if (precision == 0.0)
-		return(d);
+		return d;
 	if (precision < 0.0) { // float, 4-byte precision
 		float f = d;
-		return((double) f);
+		return (double) f;
 	}
-	return(round(d * precision) / precision);
+	return round(d * precision) / precision;
 }
 
 void add_double(std::ostringstream& os, double d, double prec = 0.0) {
@@ -594,7 +594,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 int native_endian(void) {
 	const int one = 1;
 	unsigned char *cp = (unsigned char *) &one;
-	return((int) *cp);
+	return (int) *cp;
 }
 
 // [[Rcpp::export]]

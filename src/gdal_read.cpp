@@ -47,7 +47,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 	else
 		names[poFDefn->GetFieldCount()] = geom_name;
 	out.attr("names") = names;
-	return(out);
+	return out;
 }
 
 int to_multi_what(std::vector<OGRGeometry *> gv) {
@@ -59,13 +59,13 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			case wkbMultiLineString: multilines = true; break;
 			case wkbPolygon: polygons = true; break;
 			case wkbMultiPolygon: multipolygons = true; break;
-			default: return(0);
+			default: return 0;
 		}
 	}
 	if (lines && multilines && !polygons && !multipolygons)
-		return(wkbMultiLineString);
+		return wkbMultiLineString;
 	if (!lines && !multilines && polygons && multipolygons)
-		return(wkbMultiPolygon);
+		return wkbMultiPolygon;
 	// mix of (multi)lines & (multi)polygons, or single types:
 	return 0;
 }
@@ -80,7 +80,7 @@ size_t count_features(OGRLayer *poLayer) {
 			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	}
     poLayer->ResetReading ();
-	return(n);
+	return n;
 }
 
 // [[Rcpp::export]]
@@ -131,7 +131,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
     GDALClose(poDS); // close & destroys data source
 	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields");
 	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
-	return(out);
+	return out;
 }
 
 // [[Rcpp::export]]
@@ -295,5 +295,5 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		OGRFeature::DestroyFeature(poFeatureV[i]);
     GDALClose(poDS);
 
-	return(out);
+	return out;
 }

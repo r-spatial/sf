@@ -107,7 +107,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
 #' @param precision numeric; see \link{st_as_binary}
-#' @details \code{relation_to_geometry} specified for each non-geometry column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density), "entity" when the attributes identifies the geometry of particular "thing", such as a building or a city. The default value, \code{NA_character_}, implies we don't know.  
+#' @details \code{relation_to_geometry} specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "entity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
 #' g = st_sfc(st_point(1:2))
 #' st_sf(a=3,g)

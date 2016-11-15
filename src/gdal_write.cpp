@@ -32,7 +32,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			throw std::invalid_argument("Layer creation failed.\n");
 		}
 	}
-	return(ret);
+	return ret;
 }
 
 // this is like an unlist -> dbl, but only does the first 6; if we'd do unlist on the POSIXlt
@@ -43,7 +43,7 @@ Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 		Rcpp::NumericVector x = in(i);
 		ret(i) = x(0);
 	}
-	return(ret);
+	return ret;
 }
 
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
