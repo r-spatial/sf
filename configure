@@ -677,6 +677,8 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 with_gdal_config
+with_data_copy
+with_proj_data
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1306,6 +1308,9 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-gdal-config=GDAL_CONFIG
                           the location of gdal-config
+  --with-data-copy=yes/no local copy of data directories in package, default
+                          no
+  --with-proj-data=DIR    location of PROJ.4 data directory
 
 Some influential environment variables:
   CC          C compiler command
@@ -3465,6 +3470,52 @@ else
 $as_echo "yes" >&6; }
 fi
 
+# Optional local copy of GDAL datadir and PROJ_LIB
+
+data_copy=no
+
+# Check whether --with-data-copy was given.
+if test "${with_data_copy+set}" = set; then :
+  withval=$with_data_copy; data_copy=$withval
+fi
+
+if test "${data_copy}" = "yes" ; then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Copy data for:" >&5
+$as_echo "$as_me: Copy data for:" >&6;}
+  proj_lib0="${PROJ_LIB}"
+
+# Check whether --with-proj-data was given.
+if test "${with_proj_data+set}" = set; then :
+  withval=$with_proj_data; proj_lib1=$withval
+fi
+
+  if test -n "${proj_lib0}" ; then
+    proj_lib="${proj_lib0}"
+  else
+    proj_lib="${proj_lib1}"
+  fi
+  if test -n "${proj_lib}" ; then
+    if test -d "${proj_lib}" ; then
+      cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
+      { $as_echo "$as_me:${as_lineno-$LINENO}:   PROJ.4: ${proj_lib}" >&5
+$as_echo "$as_me:   PROJ.4: ${proj_lib}" >&6;}
+    else
+      as_fn_error $? "PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
+    fi
+  else
+      as_fn_error $? "PROJ.4 data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
+  fi
+
+  if test -d "${GDAL_DATADIR}" ; then
+    cp -r "${GDAL_DATADIR}" "${R_PACKAGE_DIR}"
+    { $as_echo "$as_me:${as_lineno-$LINENO}:   GDAL: ${GDAL_DATADIR}" >&5
+$as_echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
+  else
+    as_fn_error $? "GDAL data files not found." "$LINENO" 5
+  fi
+fi
+
+
 # concluding substitution
 PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
 
@@ -4637,4 +4688,6 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
+
 
