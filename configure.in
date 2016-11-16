@@ -1,4 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
+dnl GDAL stuff largely copied from rgdal, (c) Roger Bivand
 AC_INIT(src/wkb.cpp)
 
 : ${R_HOME=`R RHOME`}
@@ -6,6 +7,22 @@ if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
 fi
+
+RBIN="${R_HOME}/bin/R"
+
+# pick all flags for testing from R
+: ${CC=`"${RBIN}" CMD config CC`}
+: ${CXX=`"${RBIN}" CMD config CXX`}
+: ${CPP=`"${RBIN}" CMD config CPP`}
+: ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
+: ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
+: ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
+# AC_SUBST([CC],["clang"])
+# AC_SUBST([CXX],["clang++"])
+AC_MSG_NOTICE([CC: ${CC}])
+AC_MSG_NOTICE([CXX: ${CXX}])
+
+AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
 #GDAL
 GDAL_CONFIG="gdal-config"
@@ -50,13 +67,13 @@ AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
 	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
+	GDAL_VERSION=`${GDAL_CONFIG} --version`
 	GDAL_LIBS=`${GDAL_CONFIG} --libs`
-        GDAL_VERSION=`${GDAL_CONFIG} --version`
-        GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
-        GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-        AC_MSG_RESULT(yes)
+	GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
+	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+	AC_MSG_RESULT(yes)
 else
-        AC_MSG_RESULT(no)
+	AC_MSG_RESULT(no)
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
 	echo "If you have not installed the GDAL libraries, you can"
@@ -80,6 +97,83 @@ if test ${GDAL_MAJ_VER} -lt 2 ; then
   AC_MSG_ERROR([sf is not compatible with GDAL versions below 2.0.0])
 else
    AC_MSG_RESULT(yes)
+fi
+
+INLIBS="${LIBS}"
+INCPPFLAGS="${CPPFLAGS}"
+INPKG_CPPFLAGS="${PKG_CPPFLAGS}"
+INPKG_LIBS="${PKG_LIBS}"
+
+AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS}"])
+AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+
+gdalok=yes
+AC_CHECK_HEADERS(gdal.h,,gdalok=no)
+if test "${gdalok}" = no; then
+   AC_MSG_ERROR([gdal.h not found in given locations.])
+fi
+
+NEED_DEPS=no
+LIBS="${INLIBS} ${PKG_LIBS}"
+[cat > gdal_test.cc <<_EOCONF
+#include <gdal.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+int main() {
+GDALAllRegister();
+}
+#ifdef __cplusplus
+}
+#endif
+_EOCONF]
+
+AC_MSG_CHECKING(gdal: linking with --libs only)
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdalok=no
+AC_MSG_RESULT(no)
+else
+AC_MSG_RESULT(yes)
+fi
+
+if test "${gdalok}" = no; then
+AC_MSG_CHECKING(gdal: linking with --libs and --dep-libs)
+LIBS="${LIBS} ${GDAL_DEP_LIBS}"
+gdalok=yes
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2>> errors.txt
+if test `echo $?` -ne 0 ; then
+gdalok=no
+fi
+if test "${gdalok}" = yes; then
+    NEED_DEPS=yes
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+fi
+fi
+
+if test "${gdalok}" = no; then
+   cat errors.txt
+   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+   AC_MSG_ERROR([GDALAllRegister not found in libgdal.])
+fi
+
+rm -f gdal_test errors.txt gdal_test.cc
+
+
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
+AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/pcs.csv readable)
+if test -r "${GDAL_DATA_TEST_FILE}" ; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([pcs.csv not found in GDAL data directory.])
 fi
 
 
@@ -109,8 +203,16 @@ else
   AC_MSG_RESULT(yes)
 fi
 
-AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
+# concluding substitution
+AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
+
+AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
+if test "${NEED_DEPS}" = yes; then
+   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_LIBS}"])
+fi
+
+AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
+AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
