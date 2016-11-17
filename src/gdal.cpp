@@ -101,9 +101,9 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), -1, wkbVariantIso));
 	}
 	if (sref != NULL)
-		*sref = local_srs; // return, release downstream
+		*sref = local_srs; // return and release later, or
 	else if (local_srs != NULL)
-		local_srs->Release();
+		local_srs->Release(); // release now
 	return g;
 }
 
@@ -130,7 +130,7 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
 	(void) ref->exportToProj4(&cp);
 
-	// eliminate trailing white space:
+	// eliminate trailing white space, the C-way:
 	if (strlen(cp) > 0)
 		for (char *cpws = cp + strlen(cp) - 1; cpws != cp && *cpws == ' '; cpws--)
 			*cpws = '\0';
