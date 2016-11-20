@@ -71,7 +71,7 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > x = st_segmentize(nc, 0.1)
 > 
 > try(x <- st_segmentize(nc, -0.1))
-Error in eval(substitute(expr), envir, enclos) : 
+Error in CPL_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength) : 
   argument dfMaxLength should be positive
 
 > 
@@ -351,4 +351,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.684   0.016   0.699 
+  0.580   0.004   0.582 

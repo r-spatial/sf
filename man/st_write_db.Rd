@@ -5,7 +5,8 @@
 \title{Write simple feature table to a spatial database}
 \usage{
 st_write_db(conn = NULL, obj, table = substitute(obj),
-  geom_name = "wkb_geometry", ..., dropTable = FALSE, binary = TRUE)
+  geom_name = "wkb_geometry", ..., drop_table = FALSE, try_drop = FALSE,
+  append = FALSE, binary = TRUE, debug = FALSE)
 }
 \arguments{
 \item{conn}{open database connection}
@@ -18,9 +19,15 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{...}{arguments passed on to \code{dbWriteTable}}
 
-\item{dropTable}{logical; should \code{table} be dropped first?}
+\item{drop_table}{logical; should \code{table} be dropped first?}
+
+\item{try_drop}{logical; should we try() to drop \code{table} first?}
+
+\item{append}{logical; append to table? (NOTE: experimental, might not work)}
 
 \item{binary}{logical; use well-known-binary for transfer?}
+
+\item{debug}{logical; print SQL statements to screen before executing them.}
 }
 \description{
 Write simple feature table to a spatial database

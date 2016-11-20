@@ -1,5 +1,4 @@
 #' @name st_crs
-#' @alias crs
 #' @details
 #' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
 #' @export

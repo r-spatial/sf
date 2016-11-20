@@ -55,8 +55,11 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param table name for the table in the database
 #' @param geom_name name of the geometry column in the database
 #' @param ... arguments passed on to \code{dbWriteTable}
-#' @param dropTable logical; should \code{table} be dropped first?
+#' @param drop_table logical; should \code{table} be dropped first?
+#' @param try_drop logical; should we try() to drop \code{table} first?
+#' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
+#' @param debug logical; print SQL statements to screen before executing them.
 #' @export
 #' @examples
 #' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
@@ -68,16 +71,24 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #'   st_write_db(conn, sf, "meuse_tbl", dropTable = FALSE)
 #' }
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
-		..., dropTable = FALSE, binary = TRUE) {
+		..., drop_table = FALSE, try_drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
+	DEBUG = function(x) { if (debug) print(x); x }
 	if (is.null(conn))
 		stop("if no provided")
-	if (dropTable)
-		dbGetQuery(conn, paste("drop table", table, ";"))
+	if (length(table) > 1) {
+		schema = table[1]
+		table = table[2]
+	} else
+		schema = ""
+	if (drop_table)
+		dbGetQuery(conn, DEBUG(paste("drop table", table, ";")))
+	if (try_drop)
+		try(dbGetQuery(conn, DEBUG(paste("drop table", table, ";"))))
 	df = obj
 	df[[attr(df, "sf_column")]] = NULL
 	class(df) = "data.frame"
-	if (dropTable)
-		dbSendQuery(conn, paste("drop table ", table, ";"))
+	#if (drop_table)
+	#	dbSendQuery(conn, paste("drop table ", table, ";"))
 	dbWriteTable(conn, table, df, ...)
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
@@ -85,22 +96,26 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 	if (is.null(SRID) || is.na(SRID))
 		SRID = 0
 	TYPE = class(geom[[1]])[2]
-	query = paste0("SELECT AddGeometryColumn('','", table, "','", geom_name, 
-			"','", SRID, "','", TYPE, "',", DIM, ");")
-	dbGetQuery(conn, query)
+	if (! append) {
+		query = DEBUG(paste0("SELECT AddGeometryColumn('",schema,"','", table, "','", geom_name, 
+			"','", SRID, "','", TYPE, "',", DIM, ");"))
+		dbGetQuery(conn, query)
+	}
 	rn = row.names(obj)
+	if (schema != "")
+		table = paste0(c(schema, table), collapse = ".")
 	if (! binary) {
 		wkt = st_as_text(geom)
 		for (r in seq_along(rn)) {
-			cmd = paste0("UPDATE ", table, " SET ", geom_name, 
-				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';")
+			cmd = DEBUG(paste0("UPDATE ", table, " SET ", geom_name, 
+				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';"))
 			dbGetQuery(conn, cmd)
 		}
 	} else {
 		wkb = st_as_binary(geom)
 		for (r in seq_along(rn)) {
-			cmd = paste0("UPDATE ", table, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
-				"' WHERE \"row.names\" = '", rn[r], "';")
+			cmd = DEBUG(paste0("UPDATE ", table, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
+				"' WHERE \"row.names\" = '", rn[r], "';"))
 			dbGetQuery(conn, cmd)
 		}
 	}
