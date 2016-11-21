@@ -68,7 +68,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   st_write_db(conn, sf, "meuse_tbl", dropTable = FALSE)
+#'   st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)
 #' }
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
 		..., drop_table = FALSE, try_drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {

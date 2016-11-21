@@ -120,7 +120,7 @@ fi
 
 NEED_DEPS=no
 LIBS="${INLIBS} ${PKG_LIBS}"
-[cat > gdal_test.cc <<_EOCONF
+[cat > gdal_test.cpp <<_EOCONF
 #include <gdal.h>
 #ifdef __cplusplus
 extern "C" {
@@ -134,7 +134,7 @@ GDALAllRegister();
 _EOCONF]
 
 AC_MSG_CHECKING(gdal: linking with --libs only)
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 AC_MSG_RESULT(no)
@@ -146,7 +146,7 @@ if test "${gdalok}" = no; then
 AC_MSG_CHECKING(gdal: linking with --libs and --dep-libs)
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2>> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 fi
@@ -164,7 +164,7 @@ if test "${gdalok}" = no; then
    AC_MSG_ERROR([GDALAllRegister not found in libgdal.])
 fi
 
-rm -f gdal_test errors.txt gdal_test.cc
+rm -f gdal_test errors.txt gdal_test.cpp
 
 
 GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
@@ -270,7 +270,7 @@ if test "${geosok}" = no; then
    AC_MSG_ERROR([GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?])
 fi
 
-rm -f geos_test errors.txt geos_test.cc
+rm -f geos_test errors.txt geos_test.cpp
 
 
 # concluding substitution

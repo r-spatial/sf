@@ -5,7 +5,7 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  st_write_db(conn, sf, "meuse_tbl")
+  st_write_db(conn, sf, "meuse_tbl", try_drop = TRUE)
   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
   x = st_read_db(conn, query = "select * from meuse_tbl limit 30;")
   y = st_read_db(conn, "meuse_tbl2") 
