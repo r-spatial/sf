@@ -3436,40 +3436,6 @@ $as_echo "no" >&6; }
   as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
 fi
 
-
-# GEOS:
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos-config usability" >&5
-$as_echo_n "checking geos-config usability... " >&6; }
-GEOS_CONFIG=`which geos-config`
-if test `geos-config --version`
-then
-  GEOS_LIBS=`geos-config --libs`
-  GEOS_CPPFLAGS=`geos-config --cflags`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  echo "no geos support: geos-dev and/or geos++-dev not installed?"
-  exit 1
-fi
-
-GEOS_VERSION=`geos-config --version`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: GEOS: ${GEOS_VERSION}" >&5
-$as_echo "$as_me: GEOS: ${GEOS_VERSION}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GEOS version >= 3.3.0" >&5
-$as_echo_n "checking GEOS version >= 3.3.0... " >&6; } # GDAL 2.0.1 requires GEOS 3.1.0
-GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  as_fn_error $? "upgrade GEOS to 3.3.0 or later" "$LINENO" 5
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-fi
-
 # Optional local copy of GDAL datadir and PROJ_LIB
 
 data_copy=no
@@ -3514,6 +3480,75 @@ $as_echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
     as_fn_error $? "GDAL data files not found." "$LINENO" 5
   fi
 fi
+
+
+# GEOS:
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos-config usability" >&5
+$as_echo_n "checking geos-config usability... " >&6; }
+GEOS_CONFIG=`which geos-config`
+if test `geos-config --version`
+then
+  GEOS_LIBS=`geos-config --libs`
+  GEOS_CPPFLAGS=`geos-config --cflags`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  echo "no geos support: geos-dev and/or geos++-dev not installed?"
+  exit 1
+fi
+
+GEOS_VERSION=`geos-config --version`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: GEOS: ${GEOS_VERSION}" >&5
+$as_echo "$as_me: GEOS: ${GEOS_VERSION}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GEOS version >= 3.3.0" >&5
+$as_echo_n "checking GEOS version >= 3.3.0... " >&6; } # GDAL 2.0.1 requires GEOS 3.1.0
+GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
+if test ${GEOS_VER_DOT} -lt 330 ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "upgrade GEOS to 3.3.0 or later" "$LINENO" 5
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+##
+## cheking for geos++ headers
+##
+
+LIBS="${GEOS_LIBS}"
+cat > geos_test.cpp <<_EOCONF
+#include <geos/geom/Geometry.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
+int main() {
+  geos::geom::Geometry *g = NULL;
+  return(0);
+}
+_EOCONF
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with geos++ header files" >&5
+$as_echo_n "checking geos: linking with geos++ header files... " >&6; }
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+geosok=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+if test "${geosok}" = no; then
+   cat errors.txt
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
+   as_fn_error $? "GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?" "$LINENO" 5
+fi
+
+rm -f geos_test errors.txt geos_test.cc
 
 
 # concluding substitution
@@ -4688,6 +4723,5 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
 
 

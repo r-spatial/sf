@@ -176,33 +176,6 @@ else
   AC_MSG_ERROR([pcs.csv not found in GDAL data directory.])
 fi
 
-
-# GEOS:
-
-AC_MSG_CHECKING(geos-config usability)
-GEOS_CONFIG=`which geos-config`
-if test `geos-config --version`
-then
-  GEOS_LIBS=`geos-config --libs`
-  GEOS_CPPFLAGS=`geos-config --cflags`
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
-  echo "no geos support: geos-dev and/or geos++-dev not installed?"
-  exit 1
-fi
-
-GEOS_VERSION=`geos-config --version`
-AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
-AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
-GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
-  AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
-else
-  AC_MSG_RESULT(yes)
-fi
-
 # Optional local copy of GDAL datadir and PROJ_LIB
 
 data_copy=no
@@ -242,6 +215,64 @@ AC_MSG_NOTICE([Copy data for:])
 fi
 
 
+# GEOS:
+
+AC_MSG_CHECKING(geos-config usability)
+GEOS_CONFIG=`which geos-config`
+if test `geos-config --version`
+then
+  GEOS_LIBS=`geos-config --libs`
+  GEOS_CPPFLAGS=`geos-config --cflags`
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  echo "no geos support: geos-dev and/or geos++-dev not installed?"
+  exit 1
+fi
+
+GEOS_VERSION=`geos-config --version`
+AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
+AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
+GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
+if test ${GEOS_VER_DOT} -lt 330 ; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
+else
+  AC_MSG_RESULT(yes)
+fi
+
+##
+## cheking for geos++ headers
+##
+
+LIBS="${GEOS_LIBS}"
+[cat > geos_test.cpp <<_EOCONF
+#include <geos/geom/Geometry.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
+int main() {
+  geos::geom::Geometry *g = NULL;
+  return(0);
+}
+_EOCONF]
+
+AC_MSG_CHECKING(geos: linking with geos++ header files)
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+geosok=no
+AC_MSG_RESULT(no)
+else
+AC_MSG_RESULT(yes)
+fi
+
+if test "${geosok}" = no; then
+   cat errors.txt
+   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+   AC_MSG_ERROR([GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?])
+fi
+
+rm -f geos_test errors.txt geos_test.cc
+
+
 # concluding substitution
 AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
 
@@ -255,5 +286,4 @@ AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
-
 
