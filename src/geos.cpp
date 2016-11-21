@@ -1,6 +1,6 @@
 #include <ogr_geometry.h>
 
-#define GEOS_USE_ONLY_R_API // avoid using non GEOSxx functions without _r extension.
+#define GEOS_USE_ONLY_R_API // avoid using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
 #include <Rcpp.h>
@@ -55,7 +55,7 @@ bool chk_(char value) {
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
 		bool sparse = true) {
 
-    GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
 
 	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0);
 	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1);
@@ -141,26 +141,26 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
 	for (int i = 0; i < gmv1.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
-    OGRGeometry::freeGEOSContext(hGEOSCtxt);
+	OGRGeometry::freeGEOSContext(hGEOSCtxt);
 	return ret_list;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) { 
-    GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc);
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
 		out[i] = chk_(GEOSisValid_r(hGEOSCtxt, gmv[i]));
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
-    OGRGeometry::freeGEOSContext(hGEOSCtxt);
+	OGRGeometry::freeGEOSContext(hGEOSCtxt);
 	return out;
 }
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc) { 
-    GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc);
 	std::vector<GEOSGeom> gmv_out(gmv.size());
 	for (int i = 0; i < gmv.size(); i++) {
@@ -168,7 +168,7 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc) {
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv
-    OGRGeometry::freeGEOSContext(hGEOSCtxt);
+	OGRGeometry::freeGEOSContext(hGEOSCtxt);
 	return out;
 }
 
