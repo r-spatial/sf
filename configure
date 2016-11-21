@@ -3370,7 +3370,7 @@ fi
 
 NEED_DEPS=no
 LIBS="${INLIBS} ${PKG_LIBS}"
-cat > gdal_test.cc <<_EOCONF
+cat > gdal_test.cpp <<_EOCONF
 #include <gdal.h>
 #ifdef __cplusplus
 extern "C" {
@@ -3385,7 +3385,7 @@ _EOCONF
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking gdal: linking with --libs only" >&5
 $as_echo_n "checking gdal: linking with --libs only... " >&6; }
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3400,7 +3400,7 @@ if test "${gdalok}" = no; then
 $as_echo_n "checking gdal: linking with --libs and --dep-libs... " >&6; }
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2>> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 fi
@@ -3421,7 +3421,7 @@ $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
    as_fn_error $? "GDALAllRegister not found in libgdal." "$LINENO" 5
 fi
 
-rm -f gdal_test errors.txt gdal_test.cc
+rm -f gdal_test errors.txt gdal_test.cpp
 
 
 GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
@@ -3548,7 +3548,7 @@ $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
    as_fn_error $? "GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?" "$LINENO" 5
 fi
 
-rm -f geos_test errors.txt geos_test.cc
+rm -f geos_test errors.txt geos_test.cpp
 
 
 # concluding substitution
