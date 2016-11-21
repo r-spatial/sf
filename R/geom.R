@@ -61,7 +61,7 @@ st_relate           = function(x, y) st_geos_binop("relate", x, y, sparse = FALS
 
 #' @name geos
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return st_intersects ...  st_is_within_distance return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+#' @return st_intersects ...  st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 #' @export
 st_intersects       = function(x, y, sparse = TRUE) st_geos_binop("intersects", x, y, sparse = sparse)
 
@@ -107,10 +107,10 @@ st_covered_by       = function(x, y, sparse = TRUE) st_geos_binop("covered_by", 
 st_equals_exact     = function(x, y, par, sparse = TRUE) 
 	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
 
-#' @name geos
-#' @export
-st_is_within_distance = function(x, y, par, sparse = TRUE) 
-	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
+##' @name geos
+##' @export
+#st_is_within_distance = function(x, y, par, sparse = TRUE) 
+#	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
 
 # unary, returning geometries -- GEOS interfaced through GDAL:
 
@@ -202,14 +202,17 @@ st_intersection = function(x, y0)   geom_op2("intersection", st_geometry(x), st_
 
 #' @name geos
 #' @export
+#' @param byid logical; union each geometry (TRUE) or union their combination (FALSE)?
 #' @return \code{st_union(x)} unions geometries.  Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.  Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
 #' @examples
 #' plot(st_union(nc))
-st_union = function(x, y0) {
-	if (missing(y0))
-		st_sfc(CPL_geos_union(st_geometry(x)), crs = st_crs(st_geometry(x)))
-	else
+st_union = function(x, y0, byid = FALSE) {
+	if (! missing(y0))
 		geom_op2("union", st_geometry(x), st_combine(y0))
+	else if (byid == FALSE)
+		st_sfc(CPL_geos_union(st_combine(x)), crs = st_crs(st_geometry(x)))
+	else
+		st_sfc(CPL_geos_union(st_geometry(x)), crs = st_crs(st_geometry(x)))
 }
 
 #' @name geos

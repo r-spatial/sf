@@ -3489,7 +3489,8 @@ $as_echo_n "checking geos-config usability... " >&6; }
 GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
-  GEOS_LIBS=`geos-config --libs`
+  GEOS_CLIBS=`geos-config --clibs`
+  GEOS_DEP_CLIBS=`geos-config --static-clibs`
   GEOS_CPPFLAGS=`geos-config --cflags`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3515,22 +3516,65 @@ else
 $as_echo "yes" >&6; }
 fi
 
-##
-## cheking for geos++ headers
-##
+geosok=yes
+for ac_header in geos_c.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "geos_c.h" "ac_cv_header_geos_c_h" "$ac_includes_default"
+if test "x$ac_cv_header_geos_c_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_GEOS_C_H 1
+_ACEOF
 
-LIBS="${GEOS_LIBS}"
+else
+  geosok=no
+fi
+
+done
+
+if test "${geosok}" = no; then
+   as_fn_error $? "geos_c.h not found in given locations." "$LINENO" 5
+fi
+
 cat > geos_test.cpp <<_EOCONF
-#include <geos/geom/Geometry.h>
-#include <geos/geom/prep/PreparedGeometryFactory.h>
-int main() {
-  geos::geom::Geometry *g = NULL;
-  return(0);
+#include <geos_c.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+static void __errorHandler(const char *fmt, ...) {
+    return;
 }
+static void __warningHandler(const char *fmt, ...) {
+    return;
+}
+int main() {
+    GEOSContextHandle_t r = initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
+    finishGEOS_r(r);
+}
+#ifdef __cplusplus
+}
+#endif
 _EOCONF
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with geos++ header files" >&5
-$as_echo_n "checking geos: linking with geos++ header files... " >&6; }
+
+PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
+
+PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_CLIBS}"
+
+if test "${NEED_DEPS}" = yes; then
+   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"
+
+fi
+
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
+LIBS="${LIBS} ${PKG_LIBS}"
+
+#echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with libgeos_c" >&5
+$as_echo_n "checking geos: linking with libgeos_c... " >&6; }
 ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 geosok=no
@@ -3545,23 +3589,19 @@ if test "${geosok}" = no; then
    cat errors.txt
    { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
 $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-   as_fn_error $? "GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?" "$LINENO" 5
+   as_fn_error $? "initGEOS_r not found in libgeos_c." "$LINENO" 5
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
 
-
-# concluding substitution
-PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
-
-
-PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"
-
-if test "${NEED_DEPS}" = yes; then
-   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_LIBS}"
-
+if test "${geosok}" = no; then
+   as_fn_error $? "libgeos_c not found in given locations." "$LINENO" 5
 fi
 
+
+#
+# concluding substitution
+#
 { $as_echo "$as_me:${as_lineno-$LINENO}: Package CPP flags: ${PKG_CPPFLAGS}" >&5
 $as_echo "$as_me: Package CPP flags: ${PKG_CPPFLAGS}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: Package LIBS: ${PKG_LIBS}" >&5
@@ -4723,5 +4763,4 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
 

@@ -221,7 +221,8 @@ AC_MSG_CHECKING(geos-config usability)
 GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
-  GEOS_LIBS=`geos-config --libs`
+  GEOS_CLIBS=`geos-config --clibs`
+  GEOS_DEP_CLIBS=`geos-config --static-clibs`
   GEOS_CPPFLAGS=`geos-config --cflags`
   AC_MSG_RESULT(yes)
 else
@@ -241,21 +242,48 @@ else
   AC_MSG_RESULT(yes)
 fi
 
-##
-## cheking for geos++ headers
-##
+geosok=yes
+AC_CHECK_HEADERS(geos_c.h,,geosok=no)
+if test "${geosok}" = no; then
+   AC_MSG_ERROR([geos_c.h not found in given locations.])
+fi
 
-LIBS="${GEOS_LIBS}"
 [cat > geos_test.cpp <<_EOCONF
-#include <geos/geom/Geometry.h>
-#include <geos/geom/prep/PreparedGeometryFactory.h>
-int main() {
-  geos::geom::Geometry *g = NULL;
-  return(0);
+#include <geos_c.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+static void __errorHandler(const char *fmt, ...) {
+    return;
 }
+static void __warningHandler(const char *fmt, ...) {
+    return;
+}
+int main() {
+    GEOSContextHandle_t r = initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
+    finishGEOS_r(r);
+}
+#ifdef __cplusplus
+}
+#endif
 _EOCONF]
 
-AC_MSG_CHECKING(geos: linking with geos++ header files)
+
+AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
+AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_CLIBS}"])
+if test "${NEED_DEPS}" = yes; then
+   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"])
+fi
+
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
+LIBS="${LIBS} ${PKG_LIBS}"
+
+#echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
+AC_MSG_CHECKING(geos: linking with libgeos_c)
 ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 geosok=no
@@ -267,23 +295,21 @@ fi
 if test "${geosok}" = no; then
    cat errors.txt
    AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-   AC_MSG_ERROR([GEOS++ header files not installed: try sudo apt-get install libgeos++-dev ?])
+   AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
 
-
-# concluding substitution
-AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-
-AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_LIBS}"])
-if test "${NEED_DEPS}" = yes; then
-   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_LIBS}"])
+if test "${geosok}" = no; then
+   AC_MSG_ERROR([libgeos_c not found in given locations.])
 fi
 
+
+#
+# concluding substitution
+#
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
 AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
 AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
-

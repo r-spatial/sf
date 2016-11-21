@@ -21,7 +21,6 @@
 \alias{st_intersects}
 \alias{st_is_simple}
 \alias{st_is_valid}
-\alias{st_is_within_distance}
 \alias{st_length}
 \alias{st_overlaps}
 \alias{st_polygonize}
@@ -70,8 +69,6 @@ st_covered_by(x, y, sparse = TRUE)
 
 st_equals_exact(x, y, par, sparse = TRUE)
 
-st_is_within_distance(x, y, par, sparse = TRUE)
-
 st_buffer(x, dist, nQuadSegs = 30)
 
 st_boundary(x)
@@ -94,7 +91,7 @@ st_combine(x)
 
 st_intersection(x, y0)
 
-st_union(x, y0)
+st_union(x, y0, byid = FALSE)
 
 st_difference(x, y0)
 
@@ -124,6 +121,8 @@ st_sym_difference(x, y0)
 \item{dfMaxLength}{numeric; max length of a line segment}
 
 \item{y0}{object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed}
+
+\item{byid}{logical; union each geometry (TRUE) or union their combination (FALSE)?}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
@@ -138,7 +137,7 @@ st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 
 st_relate returns a dense \code{character} matrix
 
-st_intersects ...  st_is_within_distance return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+st_intersects ...  st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
 st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
 

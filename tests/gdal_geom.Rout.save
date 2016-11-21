@@ -286,22 +286,7 @@ integer(0)
 [1] 2
 
 > 
-> st_is_within_distance(a, b, 2)
-[[1]]
-[1] 7
-
-[[2]]
-[1] 7
-
-[[3]]
-[1] 7
-
-[[4]]
-[1] 1 2 3 4 5 6
-
-[[5]]
-[1] 1 2 3 4 5 6
-
+> # st_is_within_distance(a, b, 2)
 > 
 > st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 [1] POINT      LINESTRING
@@ -351,4 +336,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.580   0.004   0.582 
+  0.580   0.016   0.594 

@@ -62,7 +62,7 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
 > ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
-+ "covers", "covered_by", "equals_exact", "is_within_distance")
++ "covers", "covered_by", "equals_exact")
 > for (op in ops) {
 + 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
 + 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
@@ -73,4 +73,4 @@ Error in st_geometry(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.408   0.012   0.418 
+  0.388   0.024   0.412 
