@@ -5,7 +5,6 @@ PROPOSAL.md
 cov
 config.log
 TODO
-README.md
 ^windows
 ^appveyor\.yml$
 ^.*\.Rproj$
