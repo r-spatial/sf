@@ -66,16 +66,22 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 	if (op == "relate") { // character return matrix:
 		Rcpp::CharacterVector out(sfc0.length() * sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++)
-			for (int j = 0; j < sfc1.length(); j++)
-				out[j * sfc0.length() + i] = GEOSRelate_r(hGEOSCtxt, gmv0[i], gmv1[j]);
+			for (int j = 0; j < sfc1.length(); j++) {
+				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i], gmv1[j]);
+				if (cp == NULL)
+					throw std::range_error("GEOS error in GEOSRelate_r");
+				out[j * sfc0.length() + i] = cp;
+				GEOSFree_r(hGEOSCtxt, cp);
+			}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "distance") { // return double matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		for (int i = 0; i < gmv0.size(); i++)
 			for (int j = 0; j < gmv1.size(); j++) {
-				double dist;
-				GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist);
+				double dist = -1.0;
+				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
+					throw std::range_error("GEOS error in GEOSDistance_r");
 				out(i,j) = dist;
 			}
 		ret_list = Rcpp::List::create(out);

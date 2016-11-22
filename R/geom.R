@@ -55,8 +55,15 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 st_distance = function(x, y = x) CPL_geos_dist(st_geometry(x), st_geometry(y))
 
 #' @name geos
-#' @return st_relate returns a dense \code{character} matrix
+#' @return st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
 #' @export
+#' @examples
+#' p1 = st_point(c(0,0))
+#' p2 = st_point(c(2,2))
+#' pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
+#' pol2 = po1 + 1
+#' pol3 = po1 + 2
+#' st_relate(st_sfc(p1,p2), st_sfc(pol1, pol2, pol3))
 st_relate           = function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 
 #' @name geos
