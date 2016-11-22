@@ -156,8 +156,8 @@ st_combine(nc)
 p1 = st_point(c(0,0))
 p2 = st_point(c(2,2))
 pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
-pol2 = po1 + 1
-pol3 = po1 + 2
+pol2 = pol1 + 1
+pol3 = pol1 + 2
 st_relate(st_sfc(p1,p2), st_sfc(pol1, pol2, pol3))
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
 plot(st_union_cascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
