@@ -222,7 +222,8 @@ GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
   GEOS_CLIBS=`geos-config --clibs`
-  GEOS_DEP_CLIBS=`geos-config --static-clibs`
+  #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
+  GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
   GEOS_CPPFLAGS=`geos-config --cflags`
   AC_MSG_RESULT(yes)
 else
@@ -283,7 +284,7 @@ CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
-AC_MSG_CHECKING(geos: linking with libgeos_c)
+AC_MSG_CHECKING(geos: linking with -lgeos_c)
 ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 geosok=no
@@ -303,7 +304,6 @@ rm -f geos_test errors.txt geos_test.cpp
 if test "${geosok}" = no; then
    AC_MSG_ERROR([libgeos_c not found in given locations.])
 fi
-
 
 #
 # concluding substitution

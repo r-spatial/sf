@@ -24,7 +24,7 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 +   data(meuse)
 +   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 +   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-+   st_write_db(conn, sf, "meuse_tbl")
++   st_write_db(conn, sf, "meuse_tbl", try_drop = TRUE)
 +   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
 +   x = st_read_db(conn, query = "select * from meuse_tbl limit 30;")
 +   y = st_read_db(conn, "meuse_tbl2") 
@@ -33,7 +33,7 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > 
 > options(warn = 2) # turn into error
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-+ # if (Sys.getenv("USER") %in% c("edzer")) {
++ #if (Sys.getenv("USER") %in% c("edzer")) {
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")
 +   round_trip = function(cn, wkt) {
 +   	query = paste0("SELECT '", wkt, "'::geometry;")
@@ -98,4 +98,4 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > 
 > proc.time()
    user  system elapsed 
-  0.500   0.184   0.476 
+  0.512   0.016   0.526 

@@ -9,3 +9,5 @@ TODO
 ^appveyor\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+blog
+README.md

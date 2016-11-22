@@ -3490,7 +3490,8 @@ GEOS_CONFIG=`which geos-config`
 if test `geos-config --version`
 then
   GEOS_CLIBS=`geos-config --clibs`
-  GEOS_DEP_CLIBS=`geos-config --static-clibs`
+  #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
+  GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
   GEOS_CPPFLAGS=`geos-config --cflags`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3573,8 +3574,8 @@ CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with libgeos_c" >&5
-$as_echo_n "checking geos: linking with libgeos_c... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with -lgeos_c" >&5
+$as_echo_n "checking geos: linking with -lgeos_c... " >&6; }
 ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 geosok=no
@@ -3597,7 +3598,6 @@ rm -f geos_test errors.txt geos_test.cpp
 if test "${geosok}" = no; then
    as_fn_error $? "libgeos_c not found in given locations." "$LINENO" 5
 fi
-
 
 #
 # concluding substitution

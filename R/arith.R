@@ -83,7 +83,12 @@ conform = function(vec, m) {
 
 #' @export
 Ops.sfc <- function(e1, e2) {
-	ret = st_sfc(lapply(e1, function(x) NextMethod(.Generic, x, e2)))
-	st_crs(ret) = NA_integer_
-	ret
+	if (.Generic == "*")
+		ret = lapply(e1, function(x) x * e2)
+	else if (.Generic == "+")
+		ret = lapply(e1, function(x) x + e2)
+	else if (.Generic == "-")
+		ret = lapply(e1, function(x) x - e2)
+	else stop(paste("Operation", .Generic, "not supported"))
+	st_sfc(ret, crs = NA_integer_)
 }
