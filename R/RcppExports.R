@@ -93,6 +93,14 @@ CPL_geos_relate <- function(sfc0, sfc1) {
     .Call('sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
 }
 
+CPL_geos_init <- function() {
+    invisible(.Call('sf_CPL_geos_init', PACKAGE = 'sf'))
+}
+
+CPL_geos_finish <- function() {
+    invisible(.Call('sf_CPL_geos_finish', PACKAGE = 'sf'))
+}
+
 CPL_hex_to_raw <- function(cx) {
     .Call('sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }

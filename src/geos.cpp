@@ -168,12 +168,11 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) {
 Rcpp::List CPL_geos_union(Rcpp::List sfc) { 
 	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc);
-	std::vector<GEOSGeom> gmv_out(gmv.size());
-	for (int i = 0; i < gmv.size(); i++) {
-		gmv_out[i] = GEOSUnaryUnion_r(hGEOSCtxt, gmv[i]);
-		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
-	}
-	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv
+	GEOSGeom gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, gmv.data(), gmv.size());
+	std::vector<GEOSGeom> gmv_out(1);
+	gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
+	GEOSGeom_destroy_r(hGEOSCtxt, gc);
+	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv_out
 	OGRGeometry::freeGEOSContext(hGEOSCtxt);
 	return out;
 }
@@ -193,4 +192,16 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
 Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, false)[0];
 	return out;	
+}
+
+GEOSContextHandle_t geos_ctxt_ptr; 
+
+// [[Rcpp::export]]
+void CPL_geos_init() {
+	geos_ctxt_ptr = GEOS_init_r();
+}
+
+// [[Rcpp::export]]
+void CPL_geos_finish() {
+	GEOS_finish_r(geos_ctxt_ptr); // needs context handler, we don't have one
 }

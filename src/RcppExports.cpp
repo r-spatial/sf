@@ -286,6 +286,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_init
+void CPL_geos_init();
+RcppExport SEXP sf_CPL_geos_init() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    CPL_geos_init();
+    return R_NilValue;
+END_RCPP
+}
+// CPL_geos_finish
+void CPL_geos_finish();
+RcppExport SEXP sf_CPL_geos_finish() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    CPL_geos_finish();
+    return R_NilValue;
+END_RCPP
+}
 // CPL_hex_to_raw
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 RcppExport SEXP sf_CPL_hex_to_raw(SEXP cxSEXP) {

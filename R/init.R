@@ -32,10 +32,12 @@ setOldClass("sfg")
 		# nocov end
 	}
 	CPL_gdal_init()
+	CPL_geos_init()
 }
 
 .onUnload = function(libname, pkgname) {
 	CPL_gdal_cleanup_all()
+	CPL_geos_finish()
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
 		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))

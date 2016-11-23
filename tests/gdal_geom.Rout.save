@@ -57,8 +57,6 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > x = st_convex_hull(nc)
 > 
-> x = st_union_cascaded(nc)
-> 
 > x = st_simplify(nc, 0.1)
 > 
 > if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
@@ -336,4 +334,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.580   0.016   0.594 
+  0.616   0.004   0.616 

@@ -31,7 +31,6 @@
 \alias{st_touches}
 \alias{st_triangulate}
 \alias{st_union}
-\alias{st_union_cascaded}
 \alias{st_within}
 \title{Geometric operations on (pairs of) simple feature geometries}
 \usage{
@@ -73,8 +72,6 @@ st_buffer(x, dist, nQuadSegs = 30)
 
 st_boundary(x)
 
-st_union_cascaded(x)
-
 st_convex_hull(x)
 
 st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
@@ -91,7 +88,7 @@ st_combine(x)
 
 st_intersection(x, y0)
 
-st_union(x, y0, byid = FALSE)
+st_union(x, y0)
 
 st_difference(x, y0)
 
@@ -121,8 +118,6 @@ st_sym_difference(x, y0)
 \item{dfMaxLength}{numeric; max length of a line segment}
 
 \item{y0}{object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed}
-
-\item{byid}{logical; union each geometry (TRUE) or union their combination (FALSE)?}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
@@ -160,7 +155,6 @@ pol2 = pol1 + 1
 pol3 = pol1 + 2
 st_relate(st_sfc(p1,p2), st_sfc(pol1, pol2, pol3))
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
-plot(st_union_cascaded(st_sfc(do.call(c, st_geometry(nc)))),col=0)
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
