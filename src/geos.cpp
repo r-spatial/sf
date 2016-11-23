@@ -194,14 +194,49 @@ Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 	return out;	
 }
 
-GEOSContextHandle_t geos_ctxt_ptr; 
+static void __errorHandler(const char *fmt, ...) {
+
+    char buf[BUFSIZ], *p;
+    va_list(ap);
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    va_end(ap);
+    p = buf + strlen(buf) - 1;
+    if(strlen(buf) > 0 && *p == '\n') *p = '\0';
+
+	Rcpp::Function error("error");
+    error(buf);
+
+    return;
+}
+
+static void __warningHandler(const char *fmt, ...) {
+
+    char buf[BUFSIZ], *p;
+    va_list(ap);
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    va_end(ap);
+    p = buf + strlen(buf) - 1;
+    if(strlen(buf) > 0 && *p == '\n') *p = '\0';
+
+	Rcpp::Function warning("warning");
+	warning(buf);
+    
+    return;
+}
+
+GEOSContextHandle_t geos_ctxt_ptr;  // global variable -- can it do any harm?
 
 // [[Rcpp::export]]
 void CPL_geos_init() {
-	geos_ctxt_ptr = GEOS_init_r();
+	// geos_ctxt_ptr = GEOS_init_r();
+	geos_ctxt_ptr =
+    	initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
 }
 
 // [[Rcpp::export]]
 void CPL_geos_finish() {
-	GEOS_finish_r(geos_ctxt_ptr); // needs context handler, we don't have one
+	// GEOS_finish_r(geos_ctxt_ptr); // needs context handler, we don't have one
+	finishGEOS_r(geos_ctxt_ptr);
 }
