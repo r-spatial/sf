@@ -39,6 +39,14 @@ attr(,"package")
 > all.equal(a, a2) # round-trip
 [1] TRUE
 > 
+> b1 = as(a, "sf")
+> all.equal(b, b1)
+[1] TRUE
+> b = st_as_sfc(a)
+> b1 = as(a, "sfc")
+> all.equal(b, b1)
+[1] TRUE
+> 
 > # SpatialMultiPoints
 > library(sp)
 > set.seed(1331)
@@ -170,4 +178,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.056   0.020   3.076 
+  3.060   0.040   3.097 

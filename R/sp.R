@@ -127,6 +127,10 @@ Polygons2POLYGON = function(PolygonsLst) {
 	lapply(PolygonsLst, function(x) x@coords)
 }
 
+setAs("Spatial", "sf", function(from) st_as_sf(from))
+
+setAs("Spatial", "sfc", function(from) st_as_sfc(from))
+
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")

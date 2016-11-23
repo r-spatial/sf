@@ -17,6 +17,12 @@ b = st_as_sf(a)
 a2 = as(a, "SpatialPolygonsDataFrame")
 all.equal(a, a2) # round-trip
 
+b1 = as(a, "sf")
+all.equal(b, b1)
+b = st_as_sfc(a)
+b1 = as(a, "sfc")
+all.equal(b, b1)
+
 # SpatialMultiPoints
 library(sp)
 set.seed(1331)
