@@ -3491,6 +3491,7 @@ if test `geos-config --version`
 then
   GEOS_CLIBS=`geos-config --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
+  # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
   GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
   GEOS_CPPFLAGS=`geos-config --cflags`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
