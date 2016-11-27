@@ -28,4 +28,242 @@ where manipulations include
 
 ## Coordinate reference systems conversion and transformation
 
+### Getting and setting coordinate reference systems of sf objects
+
+The coordinate reference system of objects of class `sf` or `sfc` is
+obtained by `st_crs`, and replaced by `st_crs<-`:
+```{r}
+library(sf)
+geom = st_sfc(st_point(c(0,1)), st_point(c(11,12)))
+s = st_sf(a = 15:16, geometry = geom)
+st_crs(s)
+s1 = s
+st_crs(s1) <- 4326
+st_crs(s1)
+s2 = s
+st_crs(s2) <- "+proj=longlat +datum=WGS84"
+all.equal(s1, s2)
+```
+an alternative, more pipe-friendly version of `st_crs<-` is 
+```{r}
+suppressPackageStartupMessages(library(dplyr))
+s1 %>% st_set_crs(4326)
+```
+
+### Coordinate reference system transformations
+
+If we change the coordinate reference system from one non-missing
+value into another non-missing value, the crs is is changed without
+modifying any coordinates, but a warning is issued that this
+did not reproject values:
+```{r}
+s3 <- s1 %>% st_set_crs(4326) %>% st_set_crs(3857)
+```
+A cleaner way to do this that better expresses intention and does
+not generate this warning is to first wipe the CRS by assigning it 
+a missing value, and then setting it to the intended value.
+```{r}
+s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
+```
+To carry out a coordinate conversion or transformation, we use
+`st_transform`
+```{r}
+s3 <- s1 %>% st_transform(3857)
+s3
+```
+for which we see that coordinates are actually modified (projected).
+
+
+### GDAL is forgiving on wrong PROJ.4 strings
+
+It should be noted that PROJ.4 strings are interpreted by the GDAL
+library, and that GDAL does not raise errors on wrong strings, but
+rather tries to "correct" them, e.g.
+```{r}
+st_crs("+proj=longlat +datum=idontknow")
+```
+Hence, it is always important to check the PROJ.4 string of the
+returned object, as it contains the PROJ.4 string as GDAL has understood,
+or interpreted it:
+```{r}
+s3 %>% st_transform("+proj=longlat +datum=idontknow") %>% st_crs()
+```
+
 ## Geometrical operations
+
+All geometrical operations `st_op(x)` or or `st_op2(x,y)` work
+both for `sf` objects as well as `sfc` objects `x` and `y`; since
+the operations work on the geometries, the non-geometries parts of
+an `sf` object are simply discarded. Also, all binary operations
+`st_op2(x,y)` called with a single argument, as `st_op2(x)`, are
+handled as `st_op2(x,x)`.
+
+We will illustrate the geometrical operations on a very simple dataset:
+
+```{r figure=TRUE}
+b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
+b1 = b0 + 2
+b2 = b0 + c(-0.2, 2)
+x = st_sfc(b0, b1, b2)
+a0 = b0 * 0.8
+a1 = a0 * 0.5 + c(2, 0.7)
+a2 = a0 + 1
+a3 = b0 * 0.5 + c(2, -0.5)
+y = st_sfc(a0,a1,a2,a3)
+plot(x, border = 'red')
+plot(y, border = 'green', add = TRUE)
+```
+
+### Unary operations
+
+`st_is_valid` returns whether polygon geometries are topologically valid:
+```{r}
+b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
+b1 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(0,-1), c(-1,-1))))
+st_is_valid(st_sfc(b0,b1))
+```
+and `st_is_simple` whether line geometries are simple:
+```{r}
+s = st_sfc(st_linestring(rbind(c(0,0), c(1,1))), 
+	st_linestring(rbind(c(0,0), c(1,1),c(0,1),c(1,0))))
+st_is_simple(s)
+```
+
+`st_area` returns the area of polygon geometries, `st_length` the
+length of line geometries:
+```{r}
+st_area(x)
+st_area(st_sfc(st_point(c(0,0))))
+# st_length(st_sfc(st_point(c(0,0)))) # breaks
+st_length(st_sfc(st_linestring(rbind(c(0,0),c(1,1),c(1,2)))))
+```
+
+### Binary operations: distance and relate
+`st_distance` computes the shortest distance matrix between geometries; this is
+a dense matrix:
+```{r}
+st_distance(x,y)
+```
+`st_relate` returns a dense character matrix with the DE9-IM relationships
+between each pair of geometries:
+```{r}
+st_relate(x,y)
+```
+element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as $I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y$ where $I$ refers to interior, $B$ to boundary, and $B$ to exterior, and e.g. $B_xI_y$ the dimensionality of the intersection of the the boundary $B_x$ of x[i] and the interior $I_y$ of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.
+
+### Binary logical operations: 
+Binary logical operations return either a sparse matrix
+```{r}
+st_intersects(x,y)
+```
+or a dense matrix
+```{r}
+st_intersects(x, x, sparse = FALSE)
+st_intersects(x, y, sparse = FALSE)
+```
+where list element `i` of a sparse matrix contains the indices of
+the `TRUE` elements in row `i` of the the dense matrix. For large
+geometry sets, dense matrices take up a lot of memory and are
+mostly filled with `FALSE` values, hence the default is to return
+a sparse matrix.
+
+`st_intersects` returns for every geometry pair whether they
+intersect (dense matrix), or which elements intersect (sparse).
+
+Other binary predicates include (using sparse for readability):
+
+```{r}
+st_disjoint(x, y, sparse = FALSE)
+st_touches(x, y, sparse = FALSE)
+st_crosses(s, s, sparse = FALSE)
+st_within(x, y, sparse = FALSE)
+st_contains(x, y, sparse = FALSE)
+st_overlaps(x, y, sparse = FALSE)
+st_equals(x, y, sparse = FALSE)
+st_covers(x, y, sparse = FALSE)
+st_covered_by(x, y, sparse = FALSE)
+st_covered_by(y, y, sparse = FALSE)
+st_equals_exact(x, y,0.001, sparse = FALSE)
+```
+
+### Operations returning a geometry
+
+```{r, fig=TRUE}
+u = st_union(x)
+plot(u)
+```
+
+```{r, fig=TRUE}
+par(mfrow=c(1,2), mar = rep(0,4))
+plot(st_buffer(u, 0.2))
+plot(u, border = 'red', add = TRUE)
+plot(st_buffer(u, 0.2), border = 'grey')
+plot(u, border = 'red', add = TRUE)
+plot(st_buffer(u, -0.2), add = TRUE)
+```
+
+```{r}
+plot(st_boundary(x))
+```
+
+```{r}
+par(mfrow = c(1:2))
+plot(st_convex_hull(x))
+plot(st_convex_hull(u))
+par(mfrow = c(1,1))
+```
+
+```{r, fig=TRUE}
+par(mfrow=c(1,2))
+plot(x)
+plot(st_centroid(x), add = TRUE, col = 'red')
+plot(x)
+plot(st_centroid(u), add = TRUE, col = 'red')
+```
+
+```{r, fig=TRUE}
+plot(x)
+plot(y, add = TRUE)
+plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
+```
+```{r,fig=TRUE}
+par(mfrow=c(2,2), mar = c(0,0,1,0))
+plot(x, col = '#ff333388'); 
+plot(y, add=TRUE, col='#33ff3388')
+title("x: red, y: green")
+plot(x, border = 'grey')
+plot(st_difference(st_union(x),st_union(y)), col = 'lightblue', add = TRUE)
+title("difference(x,y)")
+plot(x, border = 'grey')
+plot(st_difference(st_union(y),st_union(x)), col = 'lightblue', add = TRUE)
+title("difference(y,x)")
+plot(x, border = 'grey')
+plot(st_sym_difference(st_union(y),st_union(x)), col = 'lightblue', add = TRUE)
+title("sym_difference(x,y)")
+```
+
+```{r,fig=TRUE}
+par(mfrow=c(1,2),mar=c(1,0,0,0))
+pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
+ls = st_linestring(pts)
+plot(ls)
+points(pts)
+ls.seg = st_segmentize(ls, 0.3)
+plot(ls.seg)
+pts = ls.seg[[1]] # matrix
+points(pts)
+```
+Function `st_polygonize` polygonizes a multilinestring, as far as the points form a closed polygon:
+```{r,fig=TRUE}
+par(mfrow=c(1,2),mar=c(0,0,1,0))
+mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
+x = st_polygonize(mls)
+plot(mls, col = 'grey')
+title("multilinestring")
+plot(x, col = 'grey')
+title("polygon")
+#p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
+#pol = st_polygon(list(p))
+#plot(pol)
+#plot(st_polygonize(pol)) --> breaks
+```
