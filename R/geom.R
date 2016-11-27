@@ -23,9 +23,11 @@ st_area = function(x) {
 st_length = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_length does not give a meaningful length measure for longitude/latitude data.")
-	x = CPL_length(st_geometry(x))
-	x[is.nan(x)] = NA
-	x
+	x = st_geometry(x)
+	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
+	ret = CPL_length(x)
+	ret[is.nan(ret)] = NA
+	ret
 }
 
 #' @name geos
@@ -167,7 +169,11 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @examples 
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 #' x = st_polygonize(mls)
-st_polygonize = function(mlst) st_sfc(CPL_geom_op("polygonize", st_geometry(mlst)))
+st_polygonize = function(mlst) {
+	x = st_geometry(mlst)
+	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
+	st_sfc(CPL_geom_op("polygonize", x))
+}
 
 #' @name geos
 #' @export

@@ -134,8 +134,9 @@ length of line geometries:
 ```{r}
 st_area(x)
 st_area(st_sfc(st_point(c(0,0))))
-# st_length(st_sfc(st_point(c(0,0)))) # breaks
-st_length(st_sfc(st_linestring(rbind(c(0,0),c(1,1),c(1,2)))))
+st_length(st_sfc(st_linestring(rbind(c(0,0),c(1,1),c(1,2))), st_linestring(rbind(c(0,0),c(1,0)))))
+st_length(st_sfc(st_multilinestring(list(rbind(c(0,0),c(1,1),c(1,2))),rbind(c(0,0),c(1,0))))) # ignores 2nd part!
+try(st_length(st_sfc(st_point(c(0,0))))) # breaks
 ```
 
 ### Binary operations: distance and relate
@@ -262,8 +263,8 @@ plot(mls, col = 'grey')
 title("multilinestring")
 plot(x, col = 'grey')
 title("polygon")
-#p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
-#pol = st_polygon(list(p))
-#plot(pol)
-#plot(st_polygonize(pol)) --> breaks
+p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
+pol = st_polygon(list(p))
+# plot(pol)
+try(plot(st_polygonize(pol))) # --> breaks
 ```
