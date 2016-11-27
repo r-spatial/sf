@@ -315,8 +315,8 @@ LINESTRING(1 3, 2 4)
 > st_length(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 [1] 1
 > 
-> st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
-[1] 0
+> try(st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
+Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
 > 
 > st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 [1] 0
@@ -334,4 +334,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.616   0.004   0.616 
+  0.568   0.012   0.578 
