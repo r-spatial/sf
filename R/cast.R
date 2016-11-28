@@ -45,7 +45,6 @@ st_cast.sfc <- function(x, to, ...) {
 #' @export
 st_cast.sf <- function(x, to, ...) {
 	g = st_cast(st_geometry(x), to, ...)
-	print(class(g))
 	x[[attr(x, "sf_column")]] = g
 	x
 }
