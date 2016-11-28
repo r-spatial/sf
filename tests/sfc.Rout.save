@@ -228,7 +228,7 @@ MULTIPOINT(0 1)
 > st_cast(mp, "POINT")
 POINT(0 1) 
 Warning message:
-In chkOne(x) :
+In chk(x, "MULTIPOINT") :
   object does not have length one: casting causes information loss
 > st_cast(mp, "MULTIPOINT")
 MULTIPOINT(0 1, 2 2) 
@@ -237,14 +237,14 @@ MULTIPOINT(0 1, 2 2)
 > st_cast(st_geometrycollection(list(mp)), "POINT")
 POINT(0 1) 
 Warning message:
-In chkOne(x) :
+In chk(x, "MULTIPOINT") :
   object does not have length one: casting causes information loss
 > st_cast(st_geometrycollection(list(mp)), "MULTIPOINT")
 MULTIPOINT(0 1, 2 2) 
 > st_cast(st_geometrycollection(list(p,mp)), "MULTIPOINT")
 MULTIPOINT(0 1) 
 Warning message:
-In chkOne(x) :
+In chk(x, "GEOMETRYCOLLECTION") :
   object does not have length one: casting causes information loss
 > 
 > mp = st_multipoint(rbind(c(0,1)))
@@ -270,7 +270,6 @@ POINT(0 1)
 > 
 > sf = st_sf(a = 3:2, geom = x)
 > st_cast(sf, "POINT")
-[1] "sfc_POINT" "sfc"      
 Simple feature collection with 2 features and 1 field
 geometry type:  POINT
 dimension:      XY
@@ -389,6 +388,14 @@ proj4string:    NA
 POINT(0 1) 
 POINT(0 1) 
 > 
+> p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
+> pol = st_polygon(list(p))
+> # plot(pol)
+> try(plot(st_polygonize(pol))) # --> breaks
+Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
+> try(st_length(st_sfc(st_point(c(0,0))))) # breaks
+Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
+> 
 > proc.time()
    user  system elapsed 
-  0.524   0.028   0.550 
+  0.556   0.288   0.558 

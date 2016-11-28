@@ -82,3 +82,9 @@ st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_c
 st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
 	st_cast() %>% 
 	st_cast("POINT")
+
+p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
+pol = st_polygon(list(p))
+# plot(pol)
+try(plot(st_polygonize(pol))) # --> breaks
+try(st_length(st_sfc(st_point(c(0,0))))) # breaks

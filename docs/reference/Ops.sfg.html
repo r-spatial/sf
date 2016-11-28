@@ -10,7 +10,6 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -97,20 +97,13 @@
     <p>object of class <code>sfg</code></p>
     
 
-    <h2 class="hasAnchor" id="examples">
-      <a class="anchor" href="#examples"></a>
-      Examples
-    </h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) + <span class='fl'>4</span></div><div class='output co'>#&gt; POINTZ(5 6 7) 
-#&gt; </div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) * <span class='fl'>3</span> + <span class='fl'>4</span></div><div class='output co'>#&gt; POINTZ(7 10 13) 
-#&gt; </div><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) + <span class='fl'>4</span></div><div class='output co'>#&gt; POINTZ(5 6 7) </div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) * <span class='fl'>3</span> + <span class='fl'>4</span></div><div class='output co'>#&gt; POINTZ(7 10 13) </div><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
 <span class='fu'>diag</span>(<span class='no'>m</span>) <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
 <span class='co'># affine:</span>
-<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)) * <span class='no'>m</span> + <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>5</span>)</div><div class='output co'>#&gt; POINT(3 11) 
-#&gt; </div></pre>
+<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)) * <span class='no'>m</span> + <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>5</span>)</div><div class='output co'>#&gt; POINT(3 11) </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm">
-    <div id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -120,7 +113,6 @@
       <li><a href="#examples">Examples</a></li>
     </ul>
 
-    </div>
   </div>
 </div>
 

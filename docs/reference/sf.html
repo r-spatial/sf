@@ -10,7 +10,6 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -113,14 +113,11 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>relation_to_geometry</code> specified for each non-geometry column how it relates to the geometry, and can have one of following values: &quot;field&quot;, &quot;lattice&quot;, &quot;entity&quot;. &quot;field&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;lattice&quot; where the attribute is an aggregate value over the geometry (e.g. population density), &quot;entity&quot; when the attributes identifies the geometry of particular &quot;thing&quot;, such as a building or a city. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
+    <p><code>relation_to_geometry</code> specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: &quot;field&quot;, &quot;lattice&quot;, &quot;entity&quot;. &quot;field&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;lattice&quot; where the attribute is an aggregate value over the geometry (e.g. population density or population count), &quot;entity&quot; when the attributes uniquely identifies the geometry of particular &quot;thing&quot;, such as a building ID or a city name. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
     <p>&quot;[.sf&quot; will return a <code>data.frame</code> if the geometry column (of class <code>sfc</code>) is dropped, an <code>sfc</code> object if only the geometry column is selected, otherwise the behavior depending on <code>drop</code> is identical to that of [.data.frame.</p>
     
 
-    <h2 class="hasAnchor" id="examples">
-      <a class="anchor" href="#examples"></a>
-      Examples
-    </h2>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))
 <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='no'>g</span>)</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
@@ -129,24 +126,21 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a          g
-#&gt; 1 3 POINT(1 2)
-#&gt; </div><div class='input'><span class='fu'>st_sf</span>(<span class='no'>g</span>, <span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
+#&gt; 1 3 POINT(1 2)</div><div class='input'><span class='fu'>st_sf</span>(<span class='no'>g</span>, <span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 1 ymax: 2
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a          g
-#&gt; 1 3 POINT(1 2)
-#&gt; </div><div class='input'><span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))) <span class='co'># better to name it!</span></div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
+#&gt; 1 3 POINT(1 2)</div><div class='input'><span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))) <span class='co'># better to name it!</span></div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 1 ymax: 2
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a st_sfc.st_point.1.2..
-#&gt; 1 3            POINT(1 2)
-#&gt; </div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>3</span>:<span class='fl'>4</span>))
+#&gt; 1 3            POINT(1 2)</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>3</span>:<span class='fl'>4</span>))
 <span class='no'>s</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>:<span class='fl'>4</span>, <span class='no'>g</span>)
 <span class='no'>s</span>[<span class='fl'>1</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
@@ -155,22 +149,16 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a          g
-#&gt; 1 3 POINT(1 2)
-#&gt; </div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;
-#&gt; </div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt;   x
+#&gt; 1 3 POINT(1 2)</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt;   x
 #&gt; 1 3
-#&gt; 2 4
-#&gt; </div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] &quot;data.frame&quot;
-#&gt; </div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; 2 4</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 3 ymax: 4
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; POINT(1 2) 
-#&gt; POINT(3 4) 
-#&gt; </div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] &quot;sfc_POINT&quot; &quot;sfc&quot;      
-#&gt; </div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
+#&gt; POINT(3 4) </div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] &quot;sfc_POINT&quot; &quot;sfc&quot;      </div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
 <span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>cbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>)))))
 <span class='no'>h</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='no'>pol</span>)
 <span class='no'>g</span>[<span class='no'>h</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
@@ -180,19 +168,16 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a          g
-#&gt; 1 2 POINT(1 2)
-#&gt; </div><div class='input'><span class='no'>h</span>[<span class='no'>g</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
+#&gt; 1 2 POINT(1 2)</div><div class='input'><span class='no'>h</span>[<span class='no'>g</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   r                            pol
-#&gt; 1 5 POLYGON((0 0, 3 0, 3 3, 0 3...
-#&gt; </div></pre>
+#&gt; 1 5 POLYGON((0 0, 3 0, 3 3, 0 3...</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm">
-    <div id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -202,7 +187,6 @@
       <li><a href="#examples">Examples</a></li>
     </ul>
 
-    </div>
   </div>
 </div>
 

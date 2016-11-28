@@ -10,7 +10,6 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -82,7 +82,8 @@
     
 
     <pre><span class='fu'>st_write_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>obj</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='fu'>substitute</span>(<span class='no'>obj</span>),
-  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>dropTable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>drop_table</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>try_drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -96,30 +97,30 @@
       <dd>name of the geometry column in the database</dd>
       <dt>...</dt>
       <dd>arguments passed on to <code>dbWriteTable</code></dd>
-      <dt>dropTable</dt>
+      <dt>drop_table</dt>
       <dd>logical; should <code>table</code> be dropped first?</dd>
+      <dt>try_drop</dt>
+      <dd>logical; should we try() to drop <code>table</code> first?</dd>
+      <dt>append</dt>
+      <dd>logical; append to table? (NOTE: experimental, might not work)</dd>
       <dt>binary</dt>
       <dd>logical; use well-known-binary for transfer?</dd>
+      <dt>debug</dt>
+      <dd>logical; print SQL statements to screen before executing them.</dd>
     </dl>
     
 
-    <h2 class="hasAnchor" id="examples">
-      <a class="anchor" href="#examples"></a>
-      Examples
-    </h2>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"travis"</span>, <span class='st'>"edzer"</span>)) {
   <span class='fu'>library</span>(<span class='no'>sp</span>)
   <span class='fu'>data</span>(<span class='no'>meuse</span>)
   <span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>)
   <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
   <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
-  <span class='fu'>st_write_db</span>(<span class='no'>conn</span>, <span class='no'>sf</span>, <span class='st'>"meuse_tbl"</span>, <span class='kw'>dropTable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}</div><div class='output'><strong class='text-warning'>Warning message:
-table meuse_tbl exists in database: aborting assignTable</strong></div><div class='output'><strong class='text-warning'>Warning message:
-Could not create executeSELECT AddGeometryColumn(&#39;&#39;,&#39;meuse_tbl&#39;,&#39;wkb_geometry&#39;,&#39;0&#39;,&#39;POINT&#39;,2);</strong></div></pre>
+  <span class='fu'>st_write_db</span>(<span class='no'>conn</span>, <span class='no'>sf</span>, <span class='st'>"meuse_tbl"</span>, <span class='kw'>drop_table</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+}</div><div class='output co'>#&gt; <span class='warning'>Warning: table meuse_tbl exists in database: aborting assignTable</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Could not create executeSELECT AddGeometryColumn(&#39;&#39;,&#39;meuse_tbl&#39;,&#39;wkb_geometry&#39;,&#39;0&#39;,&#39;POINT&#39;,2);</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm">
-    <div id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -127,7 +128,6 @@ Could not create executeSELECT AddGeometryColumn(&#39;&#39;,&#39;meuse_tbl&#39;,
       <li><a href="#examples">Examples</a></li>
     </ul>
 
-    </div>
   </div>
 </div>
 

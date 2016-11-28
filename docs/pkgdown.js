@@ -1,10 +1,5 @@
 $(function() {
-
-  $('#sidebar').affix({
-    offset: {
-      top: $('#sidebar').offset().top - 60
-    }
-  });
+  $("#sidebar").stick_in_parent({offset_top: 40});
   $('body').scrollspy({
     target: '#sidebar',
     offset: 60

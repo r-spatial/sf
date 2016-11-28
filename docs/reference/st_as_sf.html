@@ -10,7 +10,6 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -113,10 +113,7 @@
     <p>setting argument <code>wkt</code> annihilates the use of argument <code>coords</code>. If <code>x</code> contains a column called &quot;geometry&quot;, <code>coords</code> will result in overwriting of this column by the <a href='sfc.html'>sfc</a> geometry list-column.  Setting <code>wkt</code> will replace this column with the geometry list-column, unless <code>remove_coordinates</code> is <code>FALSE</code>.</p>
     
 
-    <h2 class="hasAnchor" id="examples">
-      <a class="anchor" href="#examples"></a>
-      Examples
-    </h2>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>pt1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))
 <span class='no'>pt2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
 <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pt1</span>, <span class='no'>pt2</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
@@ -126,8 +123,7 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; POINT(0 1) 
-#&gt; POINT(1 1) 
-#&gt; </div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
+#&gt; POINT(1 1) </div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
 <span class='no'>d</span>$<span class='no'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pt1</span>, <span class='no'>pt2</span>)
 <span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>d</span>)
 <span class='no'>d</span>$<span class='no'>geom</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span>)
@@ -141,8 +137,7 @@
 #&gt; proj4string:    NA
 #&gt;   a       geom      geom2
 #&gt; 1 1 POINT(0 0) POINT(0 1)
-#&gt; 2 2 POINT(0 1) POINT(1 1)
-#&gt; </div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>)
+#&gt; 2 2 POINT(0 1) POINT(1 1)</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>)
 <span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>, <span class='kw'>relation_to_geometry</span> <span class='kw'>=</span> <span class='st'>"field"</span>)
 <span class='no'>meuse_sf</span>[<span class='fl'>1</span>:<span class='fl'>3</span>,]</div><div class='output co'>#&gt; Simple feature collection with 3 features and 12 fields
 #&gt; geometry type:  POINT
@@ -157,8 +152,7 @@
 #&gt;               geometry
 #&gt; 1 POINT(181072 333611)
 #&gt; 2 POINT(181025 333558)
-#&gt; 3 POINT(181165 333537)
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='no'>meuse_sf</span>)</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
+#&gt; 3 POINT(181165 333537)</div><div class='input'><span class='fu'>summary</span>(<span class='no'>meuse_sf</span>)</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
 #&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
@@ -181,8 +175,7 @@
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA&#39;s   : 1                                       
-#&gt; </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)
+#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
 <span class='no'>x1</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.1</span>
 <span class='no'>x2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.4</span>
@@ -207,14 +200,9 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output'><strong class='text-info'>Loading required package: rgeos</strong></div><div class='output'><strong class='text-info'>rgeos version: 0.3-21, (SVN revision 540)
- GEOS runtime version: 3.5.0-CAPI-1.9.0 r4084 
- Linking to sp version: 1.2-3 
- Polygon checking: TRUE 
-</strong></div><div class='output co'>#&gt;          geometry
+}</div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
-#&gt;  epsg:NA     :0  
-#&gt; </div><div class='input'><span class='fu'>demo</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'>demo</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>))</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
@@ -238,8 +226,7 @@
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA&#39;s   : 1                                       
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.grid</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
+#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.grid</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
 #&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
 #&gt;  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
@@ -252,20 +239,16 @@
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
-#&gt;                      
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.area</span>))</div><div class='output co'>#&gt;           geometry
+#&gt;                      </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.area</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +proj=ster...:0  
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.riv</span>))</div><div class='output co'>#&gt;           geometry
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.riv</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +proj=ster...:0  
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))</div><div class='output co'>#&gt;           geometry
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))</div><div class='output co'>#&gt;           geometry
 #&gt;  LINESTRING   :1  
 #&gt;  epsg:28992   :0  
-#&gt;  +proj=ster...:0  
-#&gt; </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'>as</span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'>as</span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>pol.grd</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
 #&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
@@ -279,8 +262,7 @@
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
-#&gt;                      
-#&gt; </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>pol.grd</span>, <span class='st'>"SpatialLinesDataFrame"</span>)))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
+#&gt;                      </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>pol.grd</span>, <span class='st'>"SpatialLinesDataFrame"</span>)))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
 #&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
 #&gt;  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
@@ -293,11 +275,9 @@
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
-#&gt;                      
-#&gt; </div></pre>
+#&gt;                      </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm">
-    <div id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -307,7 +287,6 @@
       <li><a href="#examples">Examples</a></li>
     </ul>
 
-    </div>
   </div>
 </div>
 

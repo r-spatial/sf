@@ -1,11 +1,11 @@
 ---
-title: "3. Manipulating Simple Features"
+title: "3. Manipulating Simple Feature Geometries"
 output:
   html_document:
     toc: true
     theme: united
 vignette: >
-  %\VignetteIndexEntry{3. Manipulating Simple Features}
+  %\VignetteIndexEntry{3. Manipulating Simple Feature Geometries}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +24,90 @@ where manipulations include
 
 ## Type transformations
 
+This sections discusses how simple feature geometries of one type can be converted to another. For converting lines to polygons, see also `st_polygonize` below.
+
+### For single geometries
+
+
+For single geometries, `st_cast` will
+
+1. convert from XX to MULTIXX, e.g. `LINESTRING` to `MULTILINESTRING`
+2. convert from MULTIXX to XX if MULTIXX has length one (else, it will still convert but warn about loss of information)
+3. convert from MULTIXX to XX if MULTIXX does not have length one, but it will warn about the loss of information
+4. convert GEOMETRYCOLLECTION of length one to its component if 
+
+Examples of the first three types are
+```{r}
+library(sf)
+suppressPackageStartupMessages(library(dplyr))
+st_point(c(1,1)) %>% st_cast("MULTIPOINT")
+st_multipoint(rbind(c(1,1))) %>% st_cast("POINT")
+st_multipoint(rbind(c(1,1),c(2,2))) %>% st_cast("POINT")
+```
+Examples of the fourth type are
+```{r}
+st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
+```
+
+### For collections of geometry (sfc) and simple feature collections (sf)
+
+There are cases where functions return objects with mixed geometry types, and downstream functions have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+
+```{r}
+ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
+mls <- st_multilinestring(list(rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))
+(sfc <- st_sfc(ls,mls))
+st_cast(sfc, "MULTILINESTRING")
+sf <- st_sf(a = 5:4, geom = sfc)
+st_cast(sf, "MULTILINESTRING")
+```
+When no target type is given, `st_cast` tries to be smart for two cases:
+
+1. if the class of the object is `GEOMETRY`, and all elements are of identical type, and
+2. if all elements are length-one `GEOMETRYCOLLECTION` objects, in which case `GEOMETRYCOLLECTION` objects are replaced by their content (which may be a `GEOMETRY` mix again)
+
+Examples are:
+
+```{r}
+ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
+mls1 <- st_multilinestring(list(rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))
+mls2 <- st_multilinestring(list(rbind(c(4,4),c(4,3)), rbind(c(2,2),c(2,1),c(3,1))))
+(sfc <- st_sfc(ls,mls1,mls2))
+class(sfc[2:3])
+class(st_cast(sfc[2:3]))
+
+gc1 <- st_geometrycollection(list(st_linestring(rbind(c(0,0),c(1,1),c(2,1)))))
+gc2 <- st_geometrycollection(list(st_multilinestring(list(rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))))
+gc3 <- st_geometrycollection(list(st_multilinestring(list(rbind(c(4,4),c(4,3)), rbind(c(2,2),c(2,1),c(3,1))))))
+(sfc <- st_sfc(gc1,gc2,gc3))
+class(st_cast(sfc))
+class(st_cast(st_cast(sfc), "MULTILINESTRING"))
+```
+
 ## Affine transformations
+
+Affine transformations are transformations of the type $f(x) = xA + b$, where matrix $A$ is used to flatten, scale and/or rotate, and $b$ to translate $x$. Low-level examples are:
+```{r}
+(p = st_point(c(0,2)))
+p + 1
+p + c(1,2)
+p + p
+p * p
+rot = function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
+p * rot(pi/4)
+p * rot(pi/2)
+p * rot(pi)
+```
+
+We can for instance rotate the counties of North Carolina 90 degrees around their centroid, and shrink them with 60%:
+```{r,fig=TRUE}
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+cntrd = st_centroid(nc)
+nc2 = (st_geometry(nc) - cntrd) * rot(pi/2) * .75 + cntrd
+plot(nc2)
+plot(cntrd, col = 'red', add = TRUE)
+```
+
 
 ## Coordinate reference systems conversion and transformation
 
@@ -46,7 +129,6 @@ all.equal(s1, s2)
 ```
 an alternative, more pipe-friendly version of `st_crs<-` is 
 ```{r}
-suppressPackageStartupMessages(library(dplyr))
 s1 %>% st_set_crs(4326)
 ```
 
@@ -136,7 +218,6 @@ st_area(x)
 st_area(st_sfc(st_point(c(0,0))))
 st_length(st_sfc(st_linestring(rbind(c(0,0),c(1,1),c(1,2))), st_linestring(rbind(c(0,0),c(1,0)))))
 st_length(st_sfc(st_multilinestring(list(rbind(c(0,0),c(1,1),c(1,2))),rbind(c(0,0),c(1,0))))) # ignores 2nd part!
-try(st_length(st_sfc(st_point(c(0,0))))) # breaks
 ```
 
 ### Binary operations: distance and relate
@@ -265,8 +346,4 @@ plot(mls, col = 'grey')
 title("multilinestring")
 plot(x, col = 'grey')
 title("polygon")
-p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
-pol = st_polygon(list(p))
-# plot(pol)
-try(plot(st_polygonize(pol))) # --> breaks
 ```

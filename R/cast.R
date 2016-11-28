@@ -53,6 +53,7 @@ st_cast.sf <- function(x, to, ...) {
 st_cast.sfg <- function(x, to, ...) {
 	if (missing(to))
 		stop("to argument is needed to cast single geometry")
+
 	lengthOne = function(x) { 
 		if (is.list(x))
 			length(x) == 1
@@ -61,20 +62,27 @@ st_cast.sfg <- function(x, to, ...) {
 		else # POINT
 			TRUE
 	}
-	chkOne = function(x)
-		if (!lengthOne(x))
+	chkTp = function(y, cls)
+		if (class(y)[2] != cls)
+			stop(paste("cannot cast object of class", class(y)[2], "into", to))
+	chk = function(y, cls) {
+		chkTp(y, cls)
+		if (!lengthOne(y))
 			warning("object does not have length one: casting causes information loss")
-	if (class(x)[2] == "GEOMETRYCOLLECTION") {
-		chkOne(x)
+	}
+	if (class(x)[2] == to)
+		x
+	else if (class(x)[2] == "GEOMETRYCOLLECTION") {
+		chk(x, "GEOMETRYCOLLECTION")
 		st_cast(x[[1]], to, ...)
 	} else { 
 		switch(to,
-		POINT = { chkOne(x); st_point(x[1,]) },
-		LINESTRING = { chkOne(x); st_linestring(x[[1]]) },
-		POLYGON = { chkOne(x); st_polygon(x[[1]]) },
-		MULTIPOINT = st_multipoint(rbind(unclass(x))),
-		MULTILINESTRING = st_multilinestring(list(unclass(x))),
-		MULTIPOLYGON = st_multipolygon(list(unclass(x))),
+		POINT = { chk(x, "MULTIPOINT"); st_point(x[1,]) },
+		LINESTRING = { chk(x, "MULTILINESTRING"); st_linestring(x[[1]]) },
+		POLYGON = { chk(x, "MULTIPOLYGON"); st_polygon(x[[1]]) },
+		MULTIPOINT = { chkTp(x, "POINT"); st_multipoint(rbind(unclass(x))) },
+		MULTILINESTRING = { chkTp(x, "LINESTRING"); st_multilinestring(list(unclass(x))) },
+		MULTIPOLYGON = { chkTp(x, "POLYGON"); st_multipolygon(list(unclass(x))) },
 		GEOMETRYCOLLECTION = st_geometrycollection(list(x)),
 		stop(paste("cannot cast object of class", class(x)[2], "into", to)))
 	}

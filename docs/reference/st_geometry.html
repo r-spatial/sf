@@ -10,7 +10,6 @@
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
-
 <!-- Bootstrap -->
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -22,6 +21,7 @@
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
@@ -115,10 +115,7 @@
     <p><code>st_geometry</code> returns an object of class <a href='sfc.html'>sfc</a>. Assigning geometry to a <code>data.frame</code> creates an <a href='sf.html'>sf</a> object, assigning it to an <a href='sf.html'>sf</a> object replaces the geometry list-column.</p>
     
 
-    <h2 class="hasAnchor" id="examples">
-      <a class="anchor" href="#examples"></a>
-      Examples
-    </h2>
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
 <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>3</span>,<span class='fl'>4</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>10</span>,<span class='fl'>11</span>)))
 <span class='fu'>st_geometry</span>(<span class='no'>sfc</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
@@ -128,21 +125,17 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; POINT(3 4) 
-#&gt; POINT(10 11) 
-#&gt; </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='no'>sfc</span>
-<span class='fu'>class</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;
-#&gt; </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; POINT(10 11) </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='no'>sfc</span>
+<span class='fu'>class</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 4 xmax: 10 ymax: 11
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; POINT(3 4) 
-#&gt; POINT(10 11) 
-#&gt; </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='co'># replaces</span></div></pre>
+#&gt; POINT(10 11) </div><div class='input'><span class='fu'>st_geometry</span>(<span class='no'>df</span>) <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='co'># replaces</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm">
-    <div id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
@@ -152,7 +145,6 @@
       <li><a href="#examples">Examples</a></li>
     </ul>
 
-    </div>
   </div>
 </div>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarize simple feature type for tibble — tibble • sf</title>
+<title>Cast geometry to another type: either simplify, or cast explicitly — st_cast • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,34 +74,37 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarize simple feature type for tibble</h1>
+    <h1>Cast geometry to another type: either simplify, or cast explicitly</h1>
     </div>
 
     
-    <p>Summarize simple feature type for tibble</p>
-
-    <p>Summarize simple feature item for tibble</p>
+    <p>Cast geometry to another type: either simplify, or cast explicitly</p>
     
 
-    <pre><span class='fu'>type_sum.sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='fu'>obj_sum.sfc</span>(<span class='no'>x</span>)</pre>
+    <pre><span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
-      <dd>object of class sfc</dd>
+      <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></dd>
+      <dt>to</dt>
+      <dd>character; target type, if missing, simplification is tried; when <code>x</code> is of type <code>sfg</code> (i.e., a single geometry) then <code>to</code> needs to be specified.</dd>
       <dt>...</dt>
       <dd>ignored</dd>
     </dl>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>)))
+<span class='fu'>st_cast</span>(<span class='no'>s</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; POINT(1 0) </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
