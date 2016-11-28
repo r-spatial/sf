@@ -37,3 +37,48 @@ st_sfc(x, crs = 3857)
 # rbind:
 x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
 rbind(x, x, x)
+
+
+p = st_point(0:1)
+st_cast(p, "MULTIPOINT")
+mp = st_multipoint(rbind(c(0,1), c(2,2)))
+st_cast(mp, "POINT")
+st_cast(mp, "MULTIPOINT")
+
+# geometry collection to its elements:
+st_cast(st_geometrycollection(list(mp)), "POINT")
+st_cast(st_geometrycollection(list(mp)), "MULTIPOINT")
+st_cast(st_geometrycollection(list(p,mp)), "MULTIPOINT")
+
+mp = st_multipoint(rbind(c(0,1)))
+x = st_sfc(p, mp)
+st_cast(x) # doesn't work simplify
+st_cast(x, "POINT")
+
+sf = st_sf(a = 3:2, geom = x)
+st_cast(sf, "POINT")
+
+library(dplyr)
+
+x %>% st_cast("POINT")
+
+# points:
+mp = st_multipoint(rbind(c(0,1))) # single-point multipoint
+st_sfc(p,mp) %>% st_cast("POINT")
+st_sfc(p,mp) %>% st_cast("MULTIPOINT")
+
+# lines:
+pts = rbind(c(0,0), c(1,1), c(2,1))
+st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("LINESTRING")
+st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("MULTILINESTRING")
+
+# polygons:
+pts = rbind(c(0,0), c(1,1), c(0,1), c(0,0))
+st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POLYGON")
+st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
+
+
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast() 
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
+	st_cast() %>% 
+	st_cast("POINT")

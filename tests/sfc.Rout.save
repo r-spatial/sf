@@ -220,6 +220,175 @@ proj4string:    NA
 5 1 POINT(0 1)
 6 2 POINT(0 1)
 > 
+> 
+> p = st_point(0:1)
+> st_cast(p, "MULTIPOINT")
+MULTIPOINT(0 1) 
+> mp = st_multipoint(rbind(c(0,1), c(2,2)))
+> st_cast(mp, "POINT")
+POINT(0 1) 
+Warning message:
+In chkOne(x) :
+  object does not have length one: casting causes information loss
+> st_cast(mp, "MULTIPOINT")
+MULTIPOINT(0 1, 2 2) 
+> 
+> # geometry collection to its elements:
+> st_cast(st_geometrycollection(list(mp)), "POINT")
+POINT(0 1) 
+Warning message:
+In chkOne(x) :
+  object does not have length one: casting causes information loss
+> st_cast(st_geometrycollection(list(mp)), "MULTIPOINT")
+MULTIPOINT(0 1, 2 2) 
+> st_cast(st_geometrycollection(list(p,mp)), "MULTIPOINT")
+MULTIPOINT(0 1) 
+Warning message:
+In chkOne(x) :
+  object does not have length one: casting causes information loss
+> 
+> mp = st_multipoint(rbind(c(0,1)))
+> x = st_sfc(p, mp)
+> st_cast(x) # doesn't work simplify
+Geometry set for 2 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+MULTIPOINT(0 1) 
+> st_cast(x, "POINT")
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+POINT(0 1) 
+> 
+> sf = st_sf(a = 3:2, geom = x)
+> st_cast(sf, "POINT")
+[1] "sfc_POINT" "sfc"      
+Simple feature collection with 2 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a       geom
+1 3 POINT(0 1)
+2 2 POINT(0 1)
+> 
+> library(dplyr)
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+> 
+> x %>% st_cast("POINT")
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+POINT(0 1) 
+> 
+> # points:
+> mp = st_multipoint(rbind(c(0,1))) # single-point multipoint
+> st_sfc(p,mp) %>% st_cast("POINT")
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+POINT(0 1) 
+> st_sfc(p,mp) %>% st_cast("MULTIPOINT")
+Geometry set for 2 features 
+geometry type:  MULTIPOINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOINT(0 1) 
+MULTIPOINT(0 1) 
+> 
+> # lines:
+> pts = rbind(c(0,0), c(1,1), c(2,1))
+> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("LINESTRING")
+Geometry set for 2 features 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 0, 1 1, 2 1) 
+LINESTRING(0 0, 1 1, 2 1) 
+> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("MULTILINESTRING")
+Geometry set for 2 features 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING((0 0, 1 1, 2 1)) 
+MULTILINESTRING((0 0, 1 1, 2 1)) 
+> 
+> # polygons:
+> pts = rbind(c(0,0), c(1,1), c(0,1), c(0,0))
+> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POLYGON")
+Geometry set for 2 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON((0 0, 1 1, 0 1, 0 0)) 
+POLYGON((0 0, 1 1, 0 1, 0 0)) 
+> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
+Geometry set for 2 features 
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOLYGON(((0 0, 1 1, 0 1, 0 0))) 
+MULTIPOLYGON(((0 0, 1 1, 0 1, 0 0))) 
+> 
+> 
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast() 
+Geometry set for 2 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+MULTIPOINT(0 1) 
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
++ 	st_cast() %>% 
++ 	st_cast("POINT")
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 1) 
+POINT(0 1) 
+> 
 > proc.time()
    user  system elapsed 
-  0.324   0.020   0.343 
+  0.524   0.028   0.550 
