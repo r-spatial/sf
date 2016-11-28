@@ -222,11 +222,13 @@ plot(x)
 plot(st_centroid(u), add = TRUE, col = 'red')
 ```
 
+The intersection of two geometries is the geometry covered by both; it is obtained by `st_intersection`:
 ```{r, fig=TRUE}
 plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
+To get _everything but_ the intersection, use `st_difference` or st_sym_difference`:
 ```{r,fig=TRUE}
 par(mfrow=c(2,2), mar = c(0,0,1,0))
 plot(x, col = '#ff333388'); 
