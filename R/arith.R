@@ -23,6 +23,9 @@ Ops.sfg <- function(e1, e2) {
 	pm  <- switch(.Generic, "+" = , "-" = TRUE, FALSE)
 	if (!(prd || pm))
 		stop("operation not supported for sfg objects")
+	
+	if (inherits(e2, "sfg"))
+		e2 = unclass(e2)
 
 	dims = nchar(class(e1)[1])
 	Vec = rep(0, dims)
@@ -36,7 +39,7 @@ Ops.sfg <- function(e1, e2) {
 		if (.Generic == "-")
 			Vec = -Vec
 	} else if (prd) {
-		if (length(e2) == 1)
+		if (length(e2) == 1 || length(e2) == dims)
 			diag(Mat) = e2
 		else
 			Mat = e2
@@ -83,12 +86,14 @@ conform = function(vec, m) {
 
 #' @export
 Ops.sfc <- function(e1, e2) {
+	if (!is.list(e2))
+		e2 = list(e2)
 	if (.Generic == "*")
-		ret = lapply(e1, function(x) x * e2)
+		ret = mapply(function(x, y) { x * unclass(y) }, e1, e2, SIMPLIFY = FALSE)
 	else if (.Generic == "+")
-		ret = lapply(e1, function(x) x + e2)
+		ret = mapply(function(x, y) { x + unclass(y) }, e1, e2, SIMPLIFY = FALSE)
 	else if (.Generic == "-")
-		ret = lapply(e1, function(x) x - e2)
+		ret = mapply(function(x, y) { x - unclass(y) }, e1, e2, SIMPLIFY = FALSE)
 	else stop(paste("Operation", .Generic, "not supported"))
 	st_sfc(ret, crs = NA_integer_)
 }
