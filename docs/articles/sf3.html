@@ -450,7 +450,7 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos.html">st_sym_difference</a></span>(<span class="kw"><a href="../reference/geos.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">title</span>(<span class="st">"sym_difference(x,y)"</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 pts =<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
 ls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(pts)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(ls)
@@ -458,8 +458,13 @@ ls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 ls.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_segmentize</a></span>(ls, <span class="fl">0.3</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(ls.seg)
 pts =<span class="st"> </span>ls.seg[[<span class="dv">1</span>]] <span class="co"># matrix</span>
-<span class="kw">points</span>(pts)</code></pre></div>
-<p><img src="sf3_files/figure-html/unnamed-chunk-31-1.png" width="672"> Function <code>st_polygonize</code> polygonizes a multilinestring, as far as the points form a closed polygon:</p>
+<span class="kw">points</span>(pts)
+pol =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))))
+pol.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_segmentize</a></span>(pol, <span class="fl">0.3</span>)
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(pol.seg, <span class="dt">col =</span> <span class="st">'grey'</span>)
+<span class="kw">points</span>(pol.seg[[<span class="dv">1</span>]][[<span class="dv">1</span>]])</code></pre></div>
+<p><img src="sf3_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
+<p>Function <code>st_polygonize</code> polygonizes a multilinestring, as far as the points form a closed polygon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
 mls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="kw">list</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),,<span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>)))
 x =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_polygonize</a></span>(mls)

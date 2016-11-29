@@ -328,7 +328,7 @@ title("sym_difference(x,y)")
 ```
 
 ```{r,fig=TRUE}
-par(mfrow=c(1,2),mar=c(1,0,0,0))
+par(mfrow=c(1,3),mar=c(1,1,0,0))
 pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
 ls = st_linestring(pts)
 plot(ls)
@@ -337,7 +337,12 @@ ls.seg = st_segmentize(ls, 0.3)
 plot(ls.seg)
 pts = ls.seg[[1]] # matrix
 points(pts)
+pol = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+pol.seg = st_segmentize(pol, 0.3)
+plot(pol.seg, col = 'grey')
+points(pol.seg[[1]][[1]])
 ```
+
 Function `st_polygonize` polygonizes a multilinestring, as far as the points form a closed polygon:
 ```{r,fig=TRUE}
 par(mfrow=c(1,2),mar=c(0,0,1,0))
