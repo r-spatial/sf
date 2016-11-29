@@ -29,7 +29,7 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
-> nc = st_read(system.file("shape/nc.shp", package="sf"), crs = 4267)
+> nc = st_read(system.file("shape/nc.shp", package="sf"))
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 converted into: MULTIPOLYGON
 Simple feature collection with 100 features and 14 fields
@@ -184,4 +184,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.884   0.016   0.898 
+  0.828   0.012   0.837 

@@ -17,8 +17,8 @@ Type 'q()' to quit R.
 
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
-> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
-> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
+> nc = st_read(system.file("shape/nc.shp", package="sf"))
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 converted into: MULTIPOLYGON
 Simple feature collection with 100 features and 14 fields
@@ -73,4 +73,4 @@ Error in st_geometry(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.388   0.024   0.412 
+  0.480   0.032   0.513 

@@ -154,7 +154,7 @@ pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
 pol2 = pol1 + 1
 pol3 = pol1 + 2
 st_relate(st_sfc(p1,p2), st_sfc(pol1, pol2, pol3))
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))

@@ -42,7 +42,7 @@ if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  demo(nc, ask = FALSE)
  st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
 }
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, "nc.shp")
 }
 

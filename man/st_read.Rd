@@ -66,8 +66,8 @@ if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  (s = st_read("PG:dbname=postgis", "meuse"))
  summary(s)
 }
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267)
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc)
 if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
   library(RPostgreSQL)

@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' library(dplyr)
-#' nc = st_read(system.file("shape/nc.shp", package="sf"), crs = 4267)
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc %>% filter(AREA > .1) %>% plot()
 filter_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())

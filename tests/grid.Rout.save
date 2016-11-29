@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > library(sf)
 Linking to GEOS 3.5.0, GDAL 2.1.0
 > library(grid)
-> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+> nc = st_read(system.file("shape/nc.shp", package="sf"))
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 converted into: MULTIPOLYGON
 Simple feature collection with 100 features and 14 fields
@@ -34,8 +34,8 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
 > # POLYGONS
-> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, type = 3)
-> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, type = 3)
+> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", type = 3)
+> nc = st_read(system.file("shape/nc.shp", package="sf"), type = 3)
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 converted into: POLYGON
 Simple feature collection with 100 features and 14 fields
@@ -91,4 +91,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.688   0.052   0.738 
+  0.760   0.016   0.774 

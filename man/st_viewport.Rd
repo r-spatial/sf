@@ -28,7 +28,7 @@ if \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longl
 }
 \examples{
 library(grid)
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 grid.newpage()
 pushViewport(viewport(width = 0.8, height = 0.8))
 pushViewport(st_viewport(nc))

@@ -138,7 +138,7 @@ st_boundary = function(x) st_sfc(CPL_geom_op("boundary", st_geometry(x)))
 #' @name geos
 #' @export
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' plot(st_convex_hull(nc))
 #' plot(nc, border = grey(.5))
 st_convex_hull = function(x) st_sfc(CPL_geom_op("convex_hull", st_geometry(x)))

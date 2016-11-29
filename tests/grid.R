@@ -1,15 +1,15 @@
 # MULTIPOLYGONS
 library(sf)
 library(grid)
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267)
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 grid.newpage()
 # pushViewport(viewport(width = 0.8, height = 0.8))
 pushViewport(st_viewport(nc))
 invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 
 # POLYGONS
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, type = 3)
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, type = 3)
+# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", type = 3)
+nc = st_read(system.file("shape/nc.shp", package="sf"), type = 3)
 grid.newpage()
 pushViewport(st_viewport(nc))
 invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
