@@ -169,20 +169,13 @@ p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</s
 ## POINT(2 1.22464679914735e-16)
 p *<span class="st"> </span><span class="kw">rot</span>(pi)
 ## POINT(2.44929359829471e-16 -2)</code></pre></div>
-<p>We can for instance rotate the counties of North Carolina 90 degrees around their centroid, and shrink them with 60%:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
-## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
-## converted into: MULTIPOLYGON
-## Simple feature collection with 100 features and 14 fields
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-## epsg (SRID):    4267
-## proj4string:    +proj=longlat +datum=NAD27 +no_defs
+<p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
 cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_centroid</a></span>(nc)
 nc2 =<span class="st"> </span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc) -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc2)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 </div>
 <div id="coordinate-reference-systems-conversion-and-transformation" class="section level2">
