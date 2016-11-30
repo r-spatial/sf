@@ -28,7 +28,6 @@ This sections discusses how simple feature geometries of one type can be convert
 
 ### For single geometries
 
-
 For single geometries, `st_cast` will
 
 1. convert from XX to MULTIXX, e.g. `LINESTRING` to `MULTILINESTRING`
@@ -51,7 +50,17 @@ st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
 
 ### For collections of geometry (sfc) and simple feature collections (sf)
 
-There are cases where functions return objects with mixed geometry types, and downstream functions have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+It should be noted here that when reading geometries using `st_read`, the `type` argument can be used to control the class of the returned geometry:
+```{r}
+shp = system.file("shape/nc.shp", package="sf")
+class(st_geometry(st_read(shp, quiet = TRUE)))
+class(st_geometry(st_read(shp, quiet = TRUE, type = 3)))
+class(st_geometry(st_read(shp, quiet = TRUE, type = 1)))
+```
+
+This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` class. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost. 
+
+When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
 
 ```{r}
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
