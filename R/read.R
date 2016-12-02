@@ -43,17 +43,24 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		promote_to_multi)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
 	nm = names(x)[which.geom]
-	geom = x[[which.geom]]
-	x[[which.geom]] = NULL
+    if (length (which.geom) > 0) {
+        geom = x[[which.geom]]
+        x[[which.geom]] = NULL
+    }
 	if (length(x) == 0)
 		x = data.frame(row.names = seq_along(geom))
 	else
 		x = as.data.frame(x, stringsAsFactors = stringsAsFactors)
-	x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
-	x = st_as_sf(x, ...)
-	if (! quiet)
-		print(x, n = 0)
-	else 
+    if (length (which.geom) > 0) {
+        x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
+        x = st_as_sf(x, ...)
+    }
+    if (! quiet) {
+        if (nrow (x) == 0)
+            message ("Layer has no data")
+        else
+            print(x, n = 0)
+    } else 
 		x
 }
 
