@@ -240,5 +240,6 @@ rbind.sf = function(..., deparse.level = 1) {
 #' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
 cbind.sf = function(..., deparse.level = 1) {
-	st_sf(base::cbind.data.frame(...))
+	# st_sf(base::cbind.data.frame(...))
+	do.call(st_sf, list(...))
 }
