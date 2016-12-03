@@ -316,7 +316,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 			break;
 		case SF_Curve:
 			output[0] = read_numeric_matrix(pt, n_dims, swap, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : ""), &empty; 
+				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : "", &empty); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(pt, n_dims, swap, addclass ?
@@ -352,7 +352,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) {
 	Rcpp::List output(wkb_list.size());
 
-	int type = 0, last_type = 0, n_types = 0, n_empty = 0, non_empty = -1;
+	int type = 0, last_type = 0, n_types = 0, n_empty = 0;
 
 	uint32_t srid = 0;
 	for (int i = 0; i < wkb_list.size(); i++) {
