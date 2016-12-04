@@ -396,6 +396,9 @@ Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is n
 > try(st_length(st_sfc(st_point(c(0,0))))) # breaks
 Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
 > 
+> try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
+Error in StopZ(zm) : Z not supported: try st_drop_zm first?
+> 
 > proc.time()
    user  system elapsed 
-  0.556   0.288   0.558 
+  0.480   0.008   0.486 
