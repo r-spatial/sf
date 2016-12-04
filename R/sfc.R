@@ -87,7 +87,10 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
 		i = sapply(st_geos_binop("intersects", x, i, ...), length) != 0
     x = NextMethod("[")
-    attributes(x) = attributes(old)
+	a = attributes(old)
+	if (!is.null(names(x)))
+		a$names = names(x)[i]
+    attributes(x) = a
 	if (recompute_bb)
 		attr(x, "bbox") = st_bbox(x)
     structure(x, class = class(old))
