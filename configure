@@ -3539,6 +3539,68 @@ fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
 
 #
+# test whether gdal has GEOS support:
+#
+
+gdal_has_geos=no
+LIBS="${INLIBS} ${PKG_LIBS}"
+cat > gdal_geos.cpp <<_EOCONF
+#include <gdal.h>
+#include <ogr_api.h>
+#include <ogr_geometry.h>
+int main(int argc, char *argv[]) {
+   const char* wkt1 = "POINT(0 0)";
+   char* pszWkt1 = (char*) wkt1;
+   OGRSpatialReferenceH ref = OSRNewSpatialReference(NULL);
+   OGRGeometryH new_geom1;
+   OGRErr err = OGR_G_CreateFromWkt(&pszWkt1, ref, &new_geom1);
+   const char* wkt2 = "POINT(1 1)";
+   char* pszWkt2 = (char*) wkt2;
+   OGRGeometryH new_geom2;
+   err = OGR_G_CreateFromWkt(&pszWkt2, ref, &new_geom2);
+   return OGR_G_Union(new_geom1, new_geom2) == NULL;
+}
+_EOCONF
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking geos support linking:" >&5
+$as_echo_n "checking GDAL: checking geos support linking:... " >&6; }
+${CXX} ${CPPFLAGS} -o gdal_geos gdal_geos.cpp ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdal_has_geos=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_geos=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+if test "${gdal_has_geos}" = no; then
+   cat errors.txt
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
+   as_fn_error $? "GDAL was configured without GEOS support: install GEOS first?" "$LINENO" 5
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking geos support run-time:" >&5
+$as_echo_n "checking GDAL: checking geos support run-time:... " >&6; }
+./gdal_geos
+if test `echo $?` -ne 0 ; then
+gdal_has_geos=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_geos=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+if test "${gdal_has_geos}" = no; then
+   as_fn_error $? "Union() returns NULL: GDAL was configured without GEOS" "$LINENO" 5
+fi
+rm -fr errors.txt geos.cpp gdal_geos
+
+
+#
 # GEOS:
 #
 
