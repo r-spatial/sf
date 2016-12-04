@@ -284,6 +284,7 @@ int main(int argc, char *argv[]) {
    char* pszWkt2 = (char*) wkt2;
    OGRGeometryH new_geom2;
    err = OGR_G_CreateFromWkt(&pszWkt2, ref, &new_geom2);
+   CPLPushErrorHandler(CPLQuietErrorHandler);
    return OGR_G_Union(new_geom1, new_geom2) == NULL;
 }
 _EOCONF]
