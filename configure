@@ -3542,7 +3542,6 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 #
 
 gdal_has_geos=no
-LIBS="${INLIBS} ${PKG_LIBS}"
 cat > gdal_geos.cpp <<_EOCONF
 #include <gdal.h>
 #include <ogr_api.h>
@@ -3582,8 +3581,8 @@ $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
    as_fn_error $? "GDAL was configured without GEOS support: install GEOS first?" "$LINENO" 5
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking geos support run-time:" >&5
-$as_echo_n "checking GDAL: checking geos support run-time:... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking geos support runtime:" >&5
+$as_echo_n "checking GDAL: checking geos support runtime:... " >&6; }
 ./gdal_geos
 if test `echo $?` -ne 0 ; then
 gdal_has_geos=no

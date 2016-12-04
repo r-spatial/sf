@@ -268,7 +268,6 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 #
 
 gdal_has_geos=no
-LIBS="${INLIBS} ${PKG_LIBS}"
 [cat > gdal_geos.cpp <<_EOCONF
 #include <gdal.h>
 #include <ogr_api.h>
@@ -304,7 +303,7 @@ if test "${gdal_has_geos}" = no; then
    AC_MSG_ERROR([GDAL was configured without GEOS support: install GEOS first?])
 fi
 
-AC_MSG_CHECKING(GDAL: checking geos support run-time:)
+AC_MSG_CHECKING(GDAL: checking geos support runtime:)
 ./gdal_geos
 if test `echo $?` -ne 0 ; then
 gdal_has_geos=no
