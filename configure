@@ -3486,7 +3486,6 @@ fi
 #
 
 gdal_has_proj=no
-LIBS="${INLIBS} ${PKG_LIBS}"
 cat > gdal_proj.cpp <<_EOCONF
 #include <gdal.h>
 #include <ogr_srs_api.h>
@@ -3596,7 +3595,7 @@ gdal_has_geos=yes
 $as_echo "yes" >&6; }
 fi
 if test "${gdal_has_geos}" = no; then
-   as_fn_error $? "Union() returns NULL: GDAL was configured without GEOS" "$LINENO" 5
+   as_fn_error $? "Union() returns NULL: GDAL was configured without GEOS: install GEOS first?" "$LINENO" 5
 fi
 rm -fr errors.txt geos.cpp gdal_geos
 
