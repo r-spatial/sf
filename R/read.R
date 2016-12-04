@@ -58,8 +58,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
     if (! quiet) {
         if (nrow (x) == 0)
             message ("Layer has no features")
-        else
-            print(x, n = 0)
+        print(x, n = 0)
     } else 
 		x
 }
