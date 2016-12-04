@@ -88,3 +88,5 @@ pol = st_polygon(list(p))
 # plot(pol)
 try(plot(st_polygonize(pol))) # --> breaks
 try(st_length(st_sfc(st_point(c(0,0))))) # breaks
+
+try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))

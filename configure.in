@@ -133,7 +133,7 @@ GDALAllRegister();
 #endif
 _EOCONF]
 
-AC_MSG_CHECKING(gdal: linking with --libs only)
+AC_MSG_CHECKING(GDAL: linking with --libs only)
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
@@ -143,7 +143,7 @@ AC_MSG_RESULT(yes)
 fi
 
 if test "${gdalok}" = no; then
-AC_MSG_CHECKING(gdal: linking with --libs and --dep-libs)
+AC_MSG_CHECKING(GDAL: linking with --libs and --dep-libs)
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
@@ -214,8 +214,59 @@ AC_MSG_NOTICE([Copy data for:])
   fi
 fi
 
+#
+# test whether PROJ.4 is available to gdal:
+#
 
+gdal_has_proj=no
+LIBS="${INLIBS} ${PKG_LIBS}"
+[cat > gdal_proj.cpp <<_EOCONF
+#include <gdal.h>
+#include <ogr_srs_api.h>
+#include <ogr_spatialref.h>
+int main(int argc, char *argv[]) {
+	OGRSpatialReference *dest = new OGRSpatialReference;
+	OGRSpatialReference *src = new OGRSpatialReference;
+    src->importFromEPSG(4326);
+    dest->importFromEPSG(3857);
+	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(src, dest);
+	return(ct == NULL); // signals PROJ.4 is not available through gdal
+}
+_EOCONF]
+
+AC_MSG_CHECKING(GDAL: checking whether PROJ.4 is available for linking:)
+${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+AC_MSG_RESULT(no)
+else
+gdal_has_proj=yes
+AC_MSG_RESULT(yes)
+fi
+
+if test "${gdal_has_proj}" = no; then
+   cat errors.txt
+   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+   AC_MSG_ERROR([cannot link projection code])
+fi
+
+AC_MSG_CHECKING(GDAL: checking whether PROJ.4 is available fur running:)
+./gdal_proj
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+AC_MSG_RESULT(no)
+else
+gdal_has_proj=yes
+AC_MSG_RESULT(yes)
+fi
+if test "${gdal_has_proj}" = no; then
+   AC_MSG_ERROR([OGRCoordinateTransformation() does not return a coord.trans: PROJ.4 not available?])
+fi
+rm -fr errors.txt gdal_proj.cpp gdal_proj
+
+#
 # GEOS:
+#
 
 AC_MSG_CHECKING(geos-config usability)
 GEOS_CONFIG=`which geos-config`

@@ -3383,8 +3383,8 @@ GDALAllRegister();
 #endif
 _EOCONF
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking gdal: linking with --libs only" >&5
-$as_echo_n "checking gdal: linking with --libs only... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: linking with --libs only" >&5
+$as_echo_n "checking GDAL: linking with --libs only... " >&6; }
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
@@ -3396,8 +3396,8 @@ $as_echo "yes" >&6; }
 fi
 
 if test "${gdalok}" = no; then
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking gdal: linking with --libs and --dep-libs" >&5
-$as_echo_n "checking gdal: linking with --libs and --dep-libs... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: linking with --libs and --dep-libs" >&5
+$as_echo_n "checking GDAL: linking with --libs and --dep-libs... " >&6; }
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
 ${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
@@ -3481,8 +3481,66 @@ $as_echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
   fi
 fi
 
+#
+# test whether PROJ.4 is available to gdal:
+#
 
+gdal_has_proj=no
+LIBS="${INLIBS} ${PKG_LIBS}"
+cat > gdal_proj.cpp <<_EOCONF
+#include <gdal.h>
+#include <ogr_srs_api.h>
+#include <ogr_spatialref.h>
+int main(int argc, char *argv[]) {
+	OGRSpatialReference *dest = new OGRSpatialReference;
+	OGRSpatialReference *src = new OGRSpatialReference;
+    src->importFromEPSG(4326);
+    dest->importFromEPSG(3857);
+	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(src, dest);
+	return(ct == NULL); // signals PROJ.4 is not available through gdal
+}
+_EOCONF
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ.4 is available for linking:" >&5
+$as_echo_n "checking GDAL: checking whether PROJ.4 is available for linking:... " >&6; }
+${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_proj=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+if test "${gdal_has_proj}" = no; then
+   cat errors.txt
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
+   as_fn_error $? "cannot link projection code" "$LINENO" 5
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ.4 is available fur running:" >&5
+$as_echo_n "checking GDAL: checking whether PROJ.4 is available fur running:... " >&6; }
+./gdal_proj
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_proj=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+if test "${gdal_has_proj}" = no; then
+   as_fn_error $? "OGRCoordinateTransformation() does not return a coord.trans: PROJ.4 not available?" "$LINENO" 5
+fi
+rm -fr errors.txt gdal_proj.cpp gdal_proj
+
+#
 # GEOS:
+#
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos-config usability" >&5
 $as_echo_n "checking geos-config usability... " >&6; }

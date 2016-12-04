@@ -241,4 +241,5 @@ rbind.sf = function(..., deparse.level = 1) {
 #' @export
 cbind.sf = function(..., deparse.level = 1) {
 	st_sf(base::cbind.data.frame(...))
+	# do.call(st_sf, list(...))
 }
