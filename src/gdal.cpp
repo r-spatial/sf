@@ -192,6 +192,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
+	if (ct == NULL)
+		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
 	for (size_t i = 0; i < g.size(); i++)
 		handle_error(g[i]->transform(ct));
 
