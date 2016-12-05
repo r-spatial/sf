@@ -7,8 +7,7 @@
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param to character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.
 #' @param ... ignored
-#' @returns object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
-#' @details 
+#' @return object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
 #' @examples
 #' s = st_multipoint(rbind(c(1,0)))
 #' st_cast(s, "POINT")
