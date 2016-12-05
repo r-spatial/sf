@@ -165,6 +165,18 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) { 
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	Rcpp::LogicalVector out(sfc.length());
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
+	for (size_t i = 0; i < g.size(); i++) {
+		out[i] = chk_(GEOSisSimple_r(hGEOSCtxt, g[i]));
+		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+	}
+	return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc) { 
 	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc);
@@ -179,6 +191,118 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc) {
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv_out
 	OGRGeometry::freeGEOSContext(hGEOSCtxt);
 	return out;
+}
+
+
+GEOSGeometry *chkNULL(GEOSGeometry *value) {
+	if (value == NULL)
+		throw std::range_error("GEOS exception");
+	return value;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, 
+		double bufferDist = 0.0, int nQuadSegs = 30,
+		double dTolerance = 0.0, bool preserveTopology = false, 
+		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
+
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
+	std::vector<GEOSGeom> out(sfc.length());
+
+	// std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	// std::vector<OGRGeometry *> out(g.size());
+
+	if (op == "buffer") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->Buffer(bufferDist, nQuadSegs);
+			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist, nQuadSegs));
+	} else if (op == "boundary") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->Boundary();
+			out[i] = chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i]));
+	} else if (op == "convex_hull") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->ConvexHull();
+			out[i] = chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i]));
+	} else if (op == "union_cascaded") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->UnionCascaded();
+			out[i] = chkNULL(GEOSUnionCascaded_r(hGEOSCtxt, g[i]));
+	} else if (op == "simplify") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = preserveTopology ?  g[i]->SimplifyPreserveTopology(dTolerance) : 
+			//		g[i]->Simplify(dTolerance);
+			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :
+					chkNULL(GEOSSimplify_r(hGEOSCtxt, g[i], dTolerance));
+	} else if (op == "polygonize") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->Polygonize();
+			out[i] = chkNULL(GEOSPolygonize_r(hGEOSCtxt, &(g[i]), 1)); // xxx
+	} else if (op == "centroid") {
+		for (size_t i = 0; i < g.size(); i++) {
+			// OGRPoint *gm = new OGRPoint;
+			// g[i]->Centroid(gm);
+			// out[i] = gm;
+			out[i] = chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i]));
+		}
+	} else
+#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 1
+	if (op == "triangulate") {
+		for (size_t i = 0; i < g.size(); i++)
+			// out[i] = g[i]->DelaunayTriangulation(dTolerance, bOnlyEdges);
+			out[i] = chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i], dTolerance, bOnlyEdges));
+	} else
+#endif
+		throw std::invalid_argument("invalid operation"); // would leak g and out
+
+	for (size_t i = 0; i < g.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
+	OGRGeometry::freeGEOSContext(hGEOSCtxt);
+	ret.attr("crs") = sfc.attr("crs");
+	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0) {
+
+	GEOSContextHandle_t hGEOSCtxt = OGRGeometry::createGEOSContext();
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
+	std::vector<GEOSGeom> g0 = geometries_from_sfc(hGEOSCtxt, sf0);
+	std::vector<GEOSGeom> out(sfc.length());
+
+	if (op == "intersection") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSIntersection_r(hGEOSCtxt, g[i], g0[0]));
+	} else if (op == "union") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSUnion_r(hGEOSCtxt, g[i], g0[0]));
+	} else if (op == "difference") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSDifference_r(hGEOSCtxt, g[i], g0[0]));
+	} else if (op == "sym_difference") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSSymDifference_r(hGEOSCtxt, g[i], g0[0]));
+	} else 
+		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out
+	// clean up:
+	for (size_t i = 0; i < g.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+	for (size_t i = 0; i < g0.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, g0[i]);
+
+	/* old GDAL impl:
+	OGRGeometryFactory f;
+	for (size_t i = 0; i < out.size(); i++)
+		if (out[i] == NULL)
+			out[i] = f.createGeometry(wkbGeometryCollection);
+	*/
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
+	OGRGeometry::freeGEOSContext(hGEOSCtxt);
+	ret.attr("crs") = sfc.attr("crs");
+	return ret;
 }
 
 // [[Rcpp::export]]

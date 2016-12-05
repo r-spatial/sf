@@ -3574,12 +3574,11 @@ gdal_has_geos=yes
 $as_echo "yes" >&6; }
 fi
 
-if test "${gdal_has_geos}" = no; then
-   cat errors.txt
-   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
-$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-   as_fn_error $? "GDAL was configured without GEOS support: install GEOS first?" "$LINENO" 5
-fi
+#if test "${gdal_has_geos}" = no; then
+#   cat errors.txt
+#   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+#   AC_MSG_ERROR([GDAL was configured without GEOS support: install GEOS first?])
+#fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking geos support runtime:" >&5
 $as_echo_n "checking GDAL: checking geos support runtime:... " >&6; }
@@ -3593,11 +3592,10 @@ gdal_has_geos=yes
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 fi
-if test "${gdal_has_geos}" = no; then
-   as_fn_error $? "Union() returns NULL: GDAL was configured without GEOS: install GEOS first?" "$LINENO" 5
-fi
-rm -fr errors.txt geos.cpp gdal_geos
-
+#if test "${gdal_has_geos}" = no; then
+#   AC_MSG_ERROR([Union() returns NULL: GDAL was configured without GEOS: install GEOS first?])
+#fi
+rm -fr errors.txt gdal_geos.cpp gdal_geos
 
 #
 # GEOS:
