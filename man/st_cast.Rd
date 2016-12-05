@@ -13,6 +13,9 @@ st_cast(x, to, ...)
 
 \item{...}{ignored}
 }
+\value{
+object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
+}
 \description{
 Cast geometry to another type: either simplify, or cast explicitly
 }
