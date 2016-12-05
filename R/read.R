@@ -44,6 +44,8 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
     if (length (which.geom) == 0) 
         which.geom = grep ("geom", names (x))
+    if (length (which.geom) == 0) 
+        stop ("No geometry found")
     nm = names(x)[which.geom]
     geom = x[[which.geom]]
     x[[which.geom]] = NULL
