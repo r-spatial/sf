@@ -33,7 +33,7 @@ st_length = function(x) {
 #' @name geos
 #' @export
 #' @return st_is_simple and st_is_valid return a logical vector
-st_is_simple = function(x) CPL_is_simple(st_geometry(x))
+st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 # binary, interfaced through GEOS:
 
@@ -129,11 +129,11 @@ st_equals_exact     = function(x, y, par, sparse = TRUE)
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30)
-	st_sfc(CPL_geom_op("buffer", st_geometry(x), dist, nQuadSegs))
+	st_sfc(CPL_geos_op("buffer", st_geometry(x), dist, nQuadSegs))
 
 #' @name geos
 #' @export
-st_boundary = function(x) st_sfc(CPL_geom_op("boundary", st_geometry(x)))
+st_boundary = function(x) st_sfc(CPL_geos_op("boundary", st_geometry(x)))
 
 #' @name geos
 #' @export
@@ -141,14 +141,14 @@ st_boundary = function(x) st_sfc(CPL_geom_op("boundary", st_geometry(x)))
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' plot(st_convex_hull(nc))
 #' plot(nc, border = grey(.5))
-st_convex_hull = function(x) st_sfc(CPL_geom_op("convex_hull", st_geometry(x)))
+st_convex_hull = function(x) st_sfc(CPL_geos_op("convex_hull", st_geometry(x)))
 
 #' @name geos
 #' @export
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
-	st_sfc(CPL_geom_op("simplify", st_geometry(x), preserveTopology = preserveTopology, dTolerance = dTolerance))
+	st_sfc(CPL_geos_op("simplify", st_geometry(x), preserveTopology = preserveTopology, dTolerance = dTolerance))
 
 #' @name geos
 #' @export
@@ -157,7 +157,7 @@ st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 # nocov start
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (CPL_gdal_version() >= "2.1.0")
-		st_sfc(CPL_geom_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	else
 		stop("for triangulate, GDAL version 2.1.0 is required")
 }
@@ -172,7 +172,7 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 st_polygonize = function(mlst) {
 	x = st_geometry(mlst)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geom_op("polygonize", x))
+	st_sfc(CPL_geos_op("polygonize", x))
 }
 
 #' @name geos
@@ -180,13 +180,13 @@ st_polygonize = function(mlst) {
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
-st_centroid = function(x) st_sfc(CPL_geom_op("centroid", st_geometry(x)))
+st_centroid = function(x) st_sfc(CPL_geos_op("centroid", st_geometry(x)))
 
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
 st_segmentize  = function(x, dfMaxLength) {
-	st_sfc(CPL_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
+	st_sfc(CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
 }
 
 #' @name geos
@@ -198,14 +198,14 @@ st_combine = function(x) {
 	st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
 }
 
-geom_op2 = function(op, x, y) {
-	st_sfc(CPL_geom_op2(op, x, y), crs = st_crs(x))
+geos_op2 = function(op, x, y) {
+	st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
 }
 
 #' @name geos
 #' @export
 #' @param y0 object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed 
-st_intersection = function(x, y0)   geom_op2("intersection", st_geometry(x), st_combine(y0))
+st_intersection = function(x, y0)   geos_op2("intersection", st_geometry(x), st_combine(y0))
 
 #' @name geos
 #' @export
@@ -214,15 +214,15 @@ st_intersection = function(x, y0)   geom_op2("intersection", st_geometry(x), st_
 #' plot(st_union(nc))
 st_union = function(x, y0) {
 	if (! missing(y0))
-		geom_op2("union", st_geometry(x), st_combine(y0))
+		geos_op2("union", st_geometry(x), st_combine(y0))
 	else
 		st_sfc(CPL_geos_union(st_geometry(x)), crs = st_crs(x))
 }
 
 #' @name geos
 #' @export
-st_difference = function(x, y0)     geom_op2("difference", st_geometry(x), st_combine(y0))
+st_difference = function(x, y0)     geos_op2("difference", st_geometry(x), st_combine(y0))
 
 #' @name geos
 #' @export
-st_sym_difference = function(x, y0) geom_op2("sym_difference", st_geometry(x), st_combine(y0))
+st_sym_difference = function(x, y0) geos_op2("sym_difference", st_geometry(x), st_combine(y0))
