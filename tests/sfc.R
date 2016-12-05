@@ -90,3 +90,8 @@ try(plot(st_polygonize(pol))) # --> breaks
 try(st_length(st_sfc(st_point(c(0,0))))) # breaks
 
 try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
+
+# check conus is present:
+x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
+	crs = "+proj=longlat +datum=NAD27")
+st_transform(x, 3857)

@@ -399,6 +399,19 @@ Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is n
 > try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 Error in StopZ(zm) : Z not supported: try st_drop_zm first?
 > 
+> # check conus is present:
+> x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
++ 	crs = "+proj=longlat +datum=NAD27")
+> st_transform(x, 3857)
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -10018760 ymin: 4163894 xmax: -8905533 ymax: 4300640
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+POINT(-10018764.3099097 4163893.70169306) 
+POINT(-8905532.70139521 4300640.2154045) 
+> 
 > proc.time()
    user  system elapsed 
-  0.480   0.008   0.486 
+  0.468   0.020   0.485 
