@@ -16,22 +16,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > options(warn = 2)
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > 
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
 + 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
 + 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
 + 		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-+ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"))
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
++ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"), quiet = TRUE)
 > 
 > st_is_valid(nc)
   [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
@@ -334,4 +325,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.556   0.020   0.573 
+  0.568   0.016   0.583 

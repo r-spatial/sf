@@ -15,18 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
-> nc = st_read(system.file("shape/nc.shp", package="sf"))
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > 
 > st_distance(nc[1:10,], nc[1:10,])
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
@@ -73,4 +64,4 @@ Error in st_geometry(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.480   0.032   0.513 
+  0.392   0.024   0.413 

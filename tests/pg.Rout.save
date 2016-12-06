@@ -17,8 +17,7 @@ Type 'q()' to quit R.
 
 > library(RPostgreSQL)
 Loading required package: DBI
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > library(sp)
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   data(meuse)
@@ -100,4 +99,4 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > 
 > proc.time()
    user  system elapsed 
-  0.436   0.028   0.462 
+  0.444   0.016   0.460 

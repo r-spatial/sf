@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 + 	if (inherits(x, "sfg"))
 + 		x = st_sfc(x)
@@ -76,4 +75,4 @@ Error in rawToHex("error") :
 > 
 > proc.time()
    user  system elapsed 
-  0.404   0.020   0.420 
+  0.416   0.004   0.418 

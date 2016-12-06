@@ -1,4 +1,4 @@
 library(testthat)
-library(sf)
+suppressPackageStartupMessages(library(sf))
 
 test_check("sf")

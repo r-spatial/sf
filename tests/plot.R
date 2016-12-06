@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 # plot linestrings:
 l1 = st_linestring(matrix(runif(6)-0.5,,2))
 l2 = st_linestring(matrix(runif(6)-0.5,,2))

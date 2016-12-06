@@ -18,8 +18,7 @@ Type 'q()' to quit R.
 > #library(rgdal2)
 > #openOGRLayer("PG:dbname=postgis" , "meuse2")
 > 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 > hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 > hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
@@ -154,15 +153,7 @@ In data.row.names(row.names, rowsi, i) :
 > 
 > # roundtrip nc: sf -> sp -> sf
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
 > p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 > suppressWarnings(st_crs(nc) <- p4s)
 > names(nc)[15] = "geometry"
@@ -178,4 +169,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  3.060   0.040   3.097 
+  3.100   0.008   3.106 

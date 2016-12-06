@@ -1,6 +1,6 @@
 library(sp)
 demo(meuse, ask = FALSE, echo = FALSE)
-library(sf)
+suppressPackageStartupMessages(library(sf))
 meuse = st_as_sf(meuse)
 # write shapefile:
 st_write(meuse, "meuse.shp")

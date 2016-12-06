@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 
 # create empty geometries:
 st_point(rep(NA_real_,2))

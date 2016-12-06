@@ -1,5 +1,5 @@
 library(RPostgreSQL)
-library(sf)
+suppressPackageStartupMessages(library(sf))
 library(sp)
 if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   data(meuse)

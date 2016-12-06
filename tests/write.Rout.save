@@ -17,8 +17,7 @@ Type 'q()' to quit R.
 
 > library(sp)
 > demo(meuse, ask = FALSE, echo = FALSE)
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > meuse = st_as_sf(meuse)
 > # write shapefile:
 > st_write(meuse, "meuse.shp")
@@ -36,4 +35,4 @@ Loading required package: DBI
 > 
 > proc.time()
    user  system elapsed 
-  0.648   0.312   0.645 
+  0.612   0.016   0.625 

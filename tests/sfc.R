@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 p = st_point(c(1/3,1/6))
 st_sfc(p, precision = 1000)
 st_as_sfc(st_as_binary(st_sfc(p, precision = 0L)))
