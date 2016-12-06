@@ -162,13 +162,19 @@ print.sf_layers = function(x, ...) {
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
+#' @name st_layers
 #' @export
-st_list = function(dsn, options = character(0), do_count = FALSE) {
+st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	if (file.exists(dsn))
 		dsn = normalizePath(dsn)
 	CPL_get_layers(dsn, options, do_count)
+}
+#' @name st_layers
+#' @export
+st_list = function(dsn, options = character(0), do_count = FALSE) {
+	.Deprecated("st_layers")
 }
 
 guess_driver = function(dsn) {

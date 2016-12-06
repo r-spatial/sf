@@ -257,15 +257,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op2
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0);
-RcppExport SEXP sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcSEXP, SEXP sf0SEXP) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy);
+RcppExport SEXP sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sf0(sf0SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfc, sf0));
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcx(sfcxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcy(sfcySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy));
     return rcpp_result_gen;
 END_RCPP
 }

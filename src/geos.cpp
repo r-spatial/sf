@@ -15,7 +15,7 @@ static void __errorHandler(const char *fmt, ...) {
     p = buf + strlen(buf) - 1;
     if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
-	Rcpp::Function error("error");
+	Rcpp::Function error("stop");
     error(buf);
 
     return;
@@ -64,6 +64,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 		Rcpp::RawVector raw(size);
 		memcpy(&(raw[0]), buf, size);
 		out[i] = raw;
+		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
 	return CPL_read_wkb(out, false, native_endian());
 }
@@ -90,7 +91,7 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 bool chk_(char value) {
 	if (value == 2)
 		throw std::range_error("GEOS exception");
-	return value == 1;
+	return value; // 1: true, 0: false
 }
 
 // [[Rcpp::export]]
@@ -295,37 +296,66 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	return ret;
 }
 
+GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, size_t *n) {
+	if (value == NULL)
+		throw std::range_error("GEOS exception");
+	if (!chk_(GEOSisEmpty_r(hGEOSCtxt, value)))
+		*n = *n + 1;
+	return value;
+}
+
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
-	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
-	std::vector<GEOSGeom> g0 = geometries_from_sfc(hGEOSCtxt, sf0);
-	std::vector<GEOSGeom> out(sfc.length());
+	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfcx);
+	std::vector<GEOSGeom> y = geometries_from_sfc(hGEOSCtxt, sfcy);
+	std::vector<GEOSGeom> out(x.size() * y.size());
 
+	size_t n = 0;
 	if (op == "intersection") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSIntersection_r(hGEOSCtxt, g[i], g0[0]));
+		for (size_t i = 0; i < y.size(); i++)
+			for (size_t j = 0; j < x.size(); j++)
+				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSIntersection_r(hGEOSCtxt, x[j], y[i]), &n);
 	} else if (op == "union") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSUnion_r(hGEOSCtxt, g[i], g0[0]));
+		for (size_t i = 0; i < y.size(); i++)
+			for (size_t j = 0; j < x.size(); j++)
+				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSUnion_r(hGEOSCtxt, x[j], y[i]), &n);
 	} else if (op == "difference") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSDifference_r(hGEOSCtxt, g[i], g0[0]));
+		for (size_t i = 0; i < y.size(); i++)
+			for (size_t j = 0; j < x.size(); j++)
+				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSDifference_r(hGEOSCtxt, x[j], y[i]), &n);
 	} else if (op == "sym_difference") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSSymDifference_r(hGEOSCtxt, g[i], g0[0]));
+		for (size_t i = 0; i < y.size(); i++)
+			for (size_t j = 0; j < x.size(); j++)
+				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSSymDifference_r(hGEOSCtxt, x[j], y[i]), &n);
 	} else 
 		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out
-	// clean up:
-	for (size_t i = 0; i < g.size(); i++)
-		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
-	for (size_t i = 0; i < g0.size(); i++)
-		GEOSGeom_destroy_r(hGEOSCtxt, g0[i]);
+	// clean up x and y:
+	for (size_t i = 0; i < x.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, x[i]);
+	for (size_t i = 0; i < y.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, y[i]);
+	// trim:
+	std::vector<GEOSGeom> out2(n);
+	Rcpp::NumericMatrix m(n, 2);
+	for (size_t i = 0, k = 0, l = 0; i < y.size(); i++) {
+		for (size_t j = 0; j < x.size(); j++) {
+			l = i * x.size() + j;
+			if (!chk_(GEOSisEmpty_r(hGEOSCtxt, out[l]))) {
+				out2[k] = out[l];
+				m(k, 1) = j + 1;
+				m(k, 2) = i + 1;
+				k++;
+			} else
+				GEOSGeom_destroy_r(hGEOSCtxt, out[l]);
+		}
+	}
 
-	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out2)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);
-	ret.attr("crs") = sfc.attr("crs");
+	ret.attr("crs") = sfcx.attr("crs");
+	ret.attr("idx") = m;
 	return ret;
 }
 

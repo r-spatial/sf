@@ -64,7 +64,7 @@ warning are given:
 ```{r eval=FALSE}
 > st_read("PG:dbname=postgis")
 Multiple layers are present in data source PG:dbname=postgis, reading layer `meuse'.
-Use `st_list' to list all layer names and their type in a data source.
+Use `st_layers' to list all layer names and their type in a data source.
 Set the `layer' argument in `st_read' to read a particular layer.
 Reading layer `meuse' from data source `PG:dbname=postgis' using driver `PostgreSQL'
 Simple feature collection with 155 features and 12 fields
@@ -78,11 +78,11 @@ In eval(substitute(expr), envir, enclos) :
   automatically selected the first layer in a data source containing more than one.
 ```
 
-The message points to the `st_list` command, which lists the driver
+The message points to the `st_layers` command, which lists the driver
 and layers in a datasource, e.g.
 
 ```{r eval=FALSE}
-> st_list("PG:dbname=postgis")
+> st_layers("PG:dbname=postgis")
 Driver: PostgreSQL 
 Available layers:
   layer_name geometry_type features fields
@@ -99,11 +99,11 @@ A particular layer can now be read by e.g.
 st_read("PG:dbname=postgis", "sids")
 ```
 
-`st_list` has the option to count the number of features in case
+`st_layers` has the option to count the number of features in case
 these are missing: some datasources (e.g. OSM xml files) do not
 report the number of features, but need to be completely read for
 this. GDAL allows for more than one geometry column for a feature
-layer; these are reported by `st_list`.
+layer; these are reported by `st_layers`.
 
 In case a layer contains only geometries but no attributes (fields),
 `st_read` still returns an `sf` object, with a geometry column only.

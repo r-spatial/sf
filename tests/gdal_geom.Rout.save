@@ -93,7 +93,7 @@ GDAL has 77 drivers
 > # GEOS ops:
 > 
 > st_relate(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
      [,1]        [,2]        [,3]        [,4]        [,5]        [,6]       
 [1,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
 [2,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
@@ -108,7 +108,7 @@ although coordinates are longitude/latitude, we assume they are planar
 [5,] "FF2FF1212"
 > 
 > st_disjoint(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 [1] 1 2 3 4 5 6 7
 
@@ -126,7 +126,7 @@ although coordinates are longitude/latitude, we assume they are planar
 
 > 
 > st_touches(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -144,7 +144,7 @@ integer(0)
 
 > 
 > st_crosses(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -162,7 +162,7 @@ integer(0)
 
 > 
 > st_within(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -180,7 +180,7 @@ integer(0)
 
 > 
 > st_contains(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -198,7 +198,7 @@ integer(0)
 
 > 
 > st_overlaps(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -233,7 +233,7 @@ integer(0)
 
 > 
 > st_covers(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -251,7 +251,7 @@ integer(0)
 
 > 
 > st_covered_by(a, b)
-although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -335,4 +335,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.548   0.016   0.562 
+  0.560   0.024   0.580 
