@@ -223,6 +223,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					Rcpp::NumericVector nv;
 					nv = out[iField];
 					nv[i] = (double) poFeature->GetFieldAsInteger64(iField);
+					// OR: poFeature->GetFieldAsString(iField);
 					if (nv[i] > dbl_max_int64)
 						warn_int64 = true;
 					}

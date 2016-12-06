@@ -478,6 +478,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [2,] 4.9133394 1.201811 6.5138172 0.000000
 ## [3,] 0.1970395 3.907450 0.8242571 5.724318
 <span class="kw"><a href="../reference/geos.html">st_relate</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
+## although coordinates are longitude/latitude, we assume they are planar
 ##      [,1]        [,2]        [,3]        [,4]       
 ## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"
 ## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"
@@ -486,6 +487,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
+## although coordinates are longitude/latitude, we assume they are planar
 ## [[1]]
 ## [1] 1 2
 ## 
@@ -501,6 +503,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [[5]]
 ## integer(0)
 <span class="kw"><a href="../reference/geos.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,], <span class="dt">sparse =</span> <span class="ot">FALSE</span>)
+## although coordinates are longitude/latitude, we assume they are planar
 ##       [,1]  [,2]  [,3]  [,4]
 ## [1,]  TRUE  TRUE FALSE FALSE
 ## [2,]  TRUE  TRUE  TRUE FALSE
@@ -545,10 +548,10 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <span class="kw"><a href="../reference/geos.html">st_is_simple</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x1))
 ## [1] FALSE
 <span class="kw"><a href="../reference/geos.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x2,x3))
-## Warning in CPL_geos_is_valid(st_geometry(x)): GDAL Message 1: Self-
-## intersection at or near point 1 0.59999999999999998
-## Warning in CPL_geos_is_valid(st_geometry(x)): GDAL Message 1: Self-
-## intersection at or near point 0.5 0.5
+## Warning in eval(substitute(expr), envir, enclos): Self-intersection at or
+## near point 1 0.59999999999999998
+## Warning in eval(substitute(expr), envir, enclos): Self-intersection at or
+## near point 0.5 0.5
 ## [1] FALSE FALSE</code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-40-1.png" width="672"></p>
 </div>
@@ -599,7 +602,7 @@ meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st
 <li>list the implicit assumptions made when retrieving attribute values at points inside a polygon when <code>relation_to_geometry</code> is missing.</li>
 </ul><p>Further reading:</p>
 <ol style="list-style-type: decimal"><li>S. Scheider, B. Gr&auml;ler, E. Pebesma, C. Stasch, 2016. Modelling spatio-temporal information generation. Int J of Geographic Information Science, 30 (10), 1980-2008. (<a href="http://pebesma.staff.ifgi.de/generativealgebra.pdf">pdf</a>)</li>
-<li>Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling &amp; Software, 51, (149&ndash;165, <a href="http://www.sciencedirect.com/science/article/pii/S1364815213001977">open access</a>).</li>
+<li>Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling &amp; Software, 51, (149&ndash;165, <a href="http://dx.doi.org/10.1016/j.envsoft.2013.09.006">open access</a>).</li>
 </ol></div>
 </div>
   </div>
