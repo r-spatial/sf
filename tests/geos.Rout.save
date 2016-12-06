@@ -58,10 +58,28 @@ Type 'q()' to quit R.
 + 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
 + 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
 + }
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
+although coordinates are longitude/latitude, we assume they are planar
 > 
 > try(x <- sf:::st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))
-Error in st_geometry(x) : object 's' not found
+Error in st_crs(x) : object 's' not found
 > 
 > proc.time()
    user  system elapsed 
-  0.392   0.024   0.413 
+  0.396   0.020   0.412 

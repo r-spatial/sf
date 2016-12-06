@@ -11,26 +11,27 @@ st_is_valid(nc)
 
 st_is_simple(nc)
 
-x = st_buffer(nc, 1)
+nc_tr = st_transform(nc, 3857)
+
+x = st_buffer(nc_tr, 1000)
 
 x = st_boundary(nc)
 
 x = st_convex_hull(nc)
 
-x = st_simplify(nc, 0.1)
+x = st_simplify(nc_tr, 1e4)
 
-if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
-	x = st_triangulate(nc)
-}
+if (sf:::CPL_geos_version() >= "3.4.0")
+	x = st_triangulate(nc_tr)
 
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 x = st_polygonize(mls)
 
-x = st_segmentize(nc, 0.1)
+x = st_segmentize(nc_tr, 5e4)
 
-try(x <- st_segmentize(nc, -0.1))
+try(x <- st_segmentize(nc_tr, -0.1))
 
-x = st_centroid(nc)
+x = st_centroid(nc_tr)
 
 a = nc[1:5,]
 b = nc[4:10,]
@@ -84,7 +85,7 @@ st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 
 st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
 
-cbind(suppressWarnings(st_area(a)), a$AREA)
+cbind(st_area(nc_tr[1:5,]), a$AREA)
 
 st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 

@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.2-6
+Version: 0.2-7
 Title: Simple Features for R
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"),
 	person("Roger", "Bivand", role = "ctb"),

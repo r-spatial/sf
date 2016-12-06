@@ -13,7 +13,7 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 #' @return st_area returns the area of a geometry, in the coordinate reference system used
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
-		warning("st_area does not give a meaningful area measure for longitude/latitude data.")
+		stop("st_area does not give a meaningful area measure for longitude/latitude data.")
 	CPL_area(st_geometry(x))
 }
 
@@ -22,7 +22,7 @@ st_area = function(x) {
 #' @return st_length returns the length of a geometry, in the coordinate reference system used
 st_length = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
-		warning("st_length does not give a meaningful length measure for longitude/latitude data.")
+		stop("st_length does not give a meaningful length measures for longitude/latitude data.")
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	ret = CPL_length(x)
@@ -42,6 +42,14 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 	if (missing(y))
 		y = x
+	else 
+		stopifnot(st_crs(x) == st_crs(y))
+	if (isTRUE(st_is_longlat(x))) {
+		if (op %in% "distance")
+			stop("st_distance does not give a meaningful length measure for longitude/latitude data.")
+		if (!(op %in% c("equals", "equals_exact", "polygonize"))) 
+			message("although coordinates are longitude/latitude, we assume they are planar")
+	}
 	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
 	if (sparse)
 		ret
@@ -128,8 +136,11 @@ st_equals_exact     = function(x, y, par, sparse = TRUE)
 #' @param dist buffer distance
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
-st_buffer = function(x, dist, nQuadSegs = 30)
+st_buffer = function(x, dist, nQuadSegs = 30) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_buffer does not correctly buffer for longitude/latitude data, dist needs to be in decimal degrees.")
 	st_sfc(CPL_geos_op("buffer", st_geometry(x), dist, nQuadSegs))
+}
 
 #' @name geos
 #' @export
@@ -147,8 +158,11 @@ st_convex_hull = function(x) st_sfc(CPL_geos_op("convex_hull", st_geometry(x)))
 #' @export
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
-st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_simplify does not properly simplify for longitude/latitude data, dTolerance should be in decimal degrees.")
 	st_sfc(CPL_geos_op("simplify", st_geometry(x), preserveTopology = preserveTopology, dTolerance = dTolerance))
+}
 
 #' @name geos
 #' @export
@@ -156,6 +170,8 @@ st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 #' @details requires GEOS version 3.4 or above
 # nocov start
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
+	if (isTRUE(st_is_longlat(x)))
+		stop("st_triangulate does not give a meaningful triangulations for longitude/latitude data.")
 	if (CPL_gdal_version() >= "2.1.0")
 		st_sfc(CPL_geos_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	else
@@ -180,12 +196,18 @@ st_polygonize = function(mlst) {
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
-st_centroid = function(x) st_sfc(CPL_geos_op("centroid", st_geometry(x)))
+st_centroid = function(x) { 
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_centroid does not give proper centroids for longitude/latitude data.")
+	st_sfc(CPL_geos_op("centroid", st_geometry(x)))
+}
 
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
 st_segmentize  = function(x, dfMaxLength) {
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_segmentize does not properly segmentize longitude/latitude data.")
 	st_sfc(CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
 }
 
@@ -199,6 +221,7 @@ st_combine = function(x) {
 }
 
 geos_op2 = function(op, x, y) {
+	stopifnot(st_crs(x) == st_crs(y))
 	st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
 }
 

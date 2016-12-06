@@ -42,29 +42,30 @@ Type 'q()' to quit R.
  [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
-> x = st_buffer(nc, 1)
+> nc_tr = st_transform(nc, 3857)
+> 
+> x = st_buffer(nc_tr, 1000)
 > 
 > x = st_boundary(nc)
 > 
 > x = st_convex_hull(nc)
 > 
-> x = st_simplify(nc, 0.1)
+> x = st_simplify(nc_tr, 1e4)
 > 
-> if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
-+ 	x = st_triangulate(nc)
-+ }
+> if (sf:::CPL_geos_version() >= "3.4.0")
++ 	x = st_triangulate(nc_tr)
 > 
 > mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 > x = st_polygonize(mls)
 > 
-> x = st_segmentize(nc, 0.1)
+> x = st_segmentize(nc_tr, 5e4)
 > 
-> try(x <- st_segmentize(nc, -0.1))
+> try(x <- st_segmentize(nc_tr, -0.1))
 Error in CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength) : 
   argument dfMaxLength should be positive
 
 > 
-> x = st_centroid(nc)
+> x = st_centroid(nc_tr)
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
@@ -92,6 +93,7 @@ GDAL has 77 drivers
 > # GEOS ops:
 > 
 > st_relate(a, b)
+although coordinates are longitude/latitude, we assume they are planar
      [,1]        [,2]        [,3]        [,4]        [,5]        [,6]       
 [1,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
 [2,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
@@ -106,6 +108,7 @@ GDAL has 77 drivers
 [5,] "FF2FF1212"
 > 
 > st_disjoint(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 [1] 1 2 3 4 5 6 7
 
@@ -123,6 +126,7 @@ GDAL has 77 drivers
 
 > 
 > st_touches(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -140,6 +144,7 @@ integer(0)
 
 > 
 > st_crosses(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -157,6 +162,7 @@ integer(0)
 
 > 
 > st_within(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -174,6 +180,7 @@ integer(0)
 
 > 
 > st_contains(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -191,6 +198,7 @@ integer(0)
 
 > 
 > st_overlaps(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -225,6 +233,7 @@ integer(0)
 
 > 
 > st_covers(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -242,6 +251,7 @@ integer(0)
 
 > 
 > st_covered_by(a, b)
+although coordinates are longitude/latitude, we assume they are planar
 [[1]]
 integer(0)
 
@@ -289,13 +299,13 @@ POINT(1 2)
 LINESTRING(1 3, 2 4) 
 
 > 
-> cbind(suppressWarnings(st_area(a)), a$AREA)
+> cbind(st_area(nc_tr[1:5,]), a$AREA)
            [,1]  [,2]
-[1,] 0.11428350 0.114
-[2,] 0.06139976 0.061
-[3,] 0.14301628 0.143
-[4,] 0.06977098 0.070
-[5,] 0.15275930 0.153
+[1,] 1760244757 0.114
+[2,]  946435667 0.061
+[3,] 2202248253 0.143
+[4,] 1074351919 0.070
+[5,] 2352539533 0.153
 > 
 > st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 [1] 1
@@ -325,4 +335,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.568   0.016   0.583 
+  0.548   0.016   0.562 
