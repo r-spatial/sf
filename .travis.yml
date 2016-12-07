@@ -1,6 +1,9 @@
 language: r
 cache: packages
 
+apt_packages:
+  - libudunits2-dev
+
 addons:
   postgresql: "9.4"
 
