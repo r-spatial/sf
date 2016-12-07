@@ -168,3 +168,15 @@ st_is_longlat = function(x) {
 	else
 		length(grep("+proj=longlat", crs$proj4string)) > 0
 }
+
+crs_pars = function(x) {
+	ret = CPL_crs_pars(x$proj4string)
+	ret[[4]] = switch(ret[[3]], 
+		Meter = make_unit("m"),
+		Foot_US = make_unit("US_survey_foot"),
+		"Foot (International)" = make_unit("ft"),
+		degree = make_unit("arc_degree"),
+		"unknown")
+	ret[[1]] = ret[[1]] * make_unit("m")
+	structure(ret, names = c("SemiMajor", "InvFlattening", "units_gdal", "ud_unit"))
+}

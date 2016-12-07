@@ -411,6 +411,10 @@ proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
 POINT(-10018764.3099097 4163893.70169306) 
 POINT(-8905532.70139521 4300640.2154045) 
 > 
+> sf_extSoftVersion()
+   GEOS    GDAL  proj.4 
+"3.5.0" "2.1.0" "4.9.2" 
+> 
 > proc.time()
    user  system elapsed 
-  0.480   0.028   0.505 
+  0.612   0.024   0.635 

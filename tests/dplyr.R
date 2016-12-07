@@ -57,7 +57,7 @@ nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row)
 library(dplyr)
 library(sf)
 demo(nc, ask = FALSE, echo = FALSE)
-nc.merc <- st_transform(nc, 3857) # web mercator - not so good!
+nc.merc <- st_transform(nc, 32119) # NC State Plane
 nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74/area)
 summary(nc.merc$dens)
 nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))

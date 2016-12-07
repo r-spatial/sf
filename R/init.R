@@ -6,8 +6,8 @@
 #' @import graphics
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable
-#' @import units
-#' @import geosphere
+#' @importFrom units make_unit
+#' @importFrom geosphere distGeo
 #' @useDynLib sf
 NULL
 

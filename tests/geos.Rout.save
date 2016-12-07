@@ -21,6 +21,7 @@ Type 'q()' to quit R.
 > 
 > x = st_transform(nc[1:10,], 32119)
 > st_distance(x)
+Units: m
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]     [,7]
  [1,]      0.00      0.00  25652.53 440561.15 299772.18 361529.53 419671.2
  [2,]      0.00      0.00      0.00 409428.54 268944.31 332589.77 388544.5
@@ -83,6 +84,15 @@ although coordinates are longitude/latitude, it is assumed that they are planar
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse) : 
   wrong value for op
 > 
+> st_combine(nc)
+Geometry set for 1 feature 
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+MULTIPOLYGON(((-81.4727554321289 36.23435592651... 
+> 
 > proc.time()
    user  system elapsed 
-  0.416   0.016   0.428 
+  0.552   0.024   0.573 

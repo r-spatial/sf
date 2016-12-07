@@ -14,7 +14,11 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_area does not give area measures for longitude/latitude data.")
-	CPL_area(st_geometry(x))
+	a = CPL_area(st_geometry(x))
+	if (!is.na(st_crs(x)))
+		a * crs_pars(st_crs(x))$ud_unit^2
+	else
+		a
 }
 
 #' @name geos
@@ -27,7 +31,10 @@ st_length = function(x) {
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	ret = CPL_length(x)
 	ret[is.nan(ret)] = NA
-	ret
+	if (!is.na(st_crs(x)))
+		ret * crs_pars(st_crs(x))$ud_unit
+	else
+		ret
 }
 
 #' @name geos
@@ -55,17 +62,33 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 
 #' @param x first simple feature (sf) or simple feature geometry (sfc) collection
 #' @param y second simple feature (sf) or simple feature geometry (sfc) collection
+#' @param dist_fun function to be used for great circle distances (POINT geometry only)
 #' @name geos
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
+#' @details function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
 #' @export
-st_distance = function(x, y) {
+st_distance = function(x, y, dist_fun = geosphere::distGeo) {
 	if (missing(y))
 		y = x
 	else 
 		stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		stop("st_distance does not give distance measures for longitude/latitude data.")
-	CPL_geos_dist(st_geometry(x), st_geometry(y))
+	x = st_geometry(x)
+	y = st_geometry(y)
+	if (isTRUE(st_is_longlat(x))) {
+		if (class(x[[1]])[2] != "POINT")
+			stop("st_distance for longitude/latitude data only available for POINT geometries.")
+		p = crs_pars(st_crs(x))
+		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
+		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
+		u = p$SemiMajor / unclass(p$SemiMajor) # 1 unit of radius (m)
+		u * matrix(dist_fun(xp, yp, p$SemiMajor, 1./p$InfFlattening), length(x), length(y))
+	} else {
+		d = CPL_geos_dist(st_geometry(x), st_geometry(y))
+		if (!is.na(st_crs(x)))
+			d * crs_pars(st_crs(x))$ud_unit
+		else
+			d
+	}
 }
 
 #' @name geos

@@ -46,6 +46,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_crs_pars
+Rcpp::List CPL_crs_pars(std::string p4s);
+RcppExport SEXP sf_CPL_crs_pars(SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_pars(p4s));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
 RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {

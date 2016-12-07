@@ -42,7 +42,7 @@ st_length(x)
 
 st_is_simple(x)
 
-st_distance(x, y)
+st_distance(x, y, dist_fun = geosphere::distGeo)
 
 st_relate(x, y)
 
@@ -99,6 +99,8 @@ st_sym_difference(x, y)
 
 \item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
 
+\item{dist_fun}{function to be used for great circle distances (POINT geometry only)}
+
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin) and "is_within_distance"}
@@ -140,6 +142,8 @@ st_buffer ... st_segmentize return an \link{sfc} object with the same number of 
 Geometric operations on (pairs of) simple feature geometries
 }
 \details{
+function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+
 requires GEOS version 3.4 or above
 
 \code{st_combine} combines geometries without resolving borders. 

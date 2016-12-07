@@ -66,7 +66,7 @@ void CPL_gdal_cleanup_all()
 // [[Rcpp::export]]
 const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
 {
-  return GDALVersionInfo(what);
+	return GDALVersionInfo(what);
 }
 
 void handle_error(OGRErr err) {
@@ -81,6 +81,17 @@ void handle_error(OGRErr err) {
 			Rcpp::Rcout << "Error code: " << err << std::endl;
 		throw std::range_error("OGR error");
 	}
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_crs_pars(std::string p4s) {
+	Rcpp::List out(3);
+	OGRSpatialReference *srs = new OGRSpatialReference;
+	handle_error(srs->importFromProj4(p4s.c_str()));
+	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
+	out(1) = Rcpp::NumericVector::create(srs->GetInvFlattening());
+	out(2) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	return out;
 }
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {

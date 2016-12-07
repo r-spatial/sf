@@ -11,7 +11,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb")
 	)
 Depends: R (>= 3.3.0)
-Imports: utils, stats, tools, graphics, grid, methods, Rcpp, DBI, units (>= 0.4), geosphere (>= 1.5-5)
+Imports: utils, stats, tools, graphics, grid, methods, Rcpp, DBI, geosphere (>= 1.5-5), units (>= 0.4)
 LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr
 VignetteBuilder: knitr
