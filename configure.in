@@ -263,6 +263,161 @@ if test "${gdal_has_proj}" = no; then
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
 
+
+#
+# PROJ.4
+#
+
+AC_ARG_WITH([proj-include],
+    AC_HELP_STRING([--with-proj-include=DIR],
+                   [location of proj header files]),
+    [proj_include_path=$withval])
+if test [ -n "$proj_include_path" ] ; then
+   AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${INPKG_CPPFLAGS}"])
+fi
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+
+
+proj4ok=yes
+AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
+if test "${proj4ok}" = no; then
+   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
+fi
+
+# dnl ditto for a library path
+AC_ARG_WITH([proj-lib],
+    AC_HELP_STRING([--with-proj-lib=LIB_PATH],
+               [the location of proj libraries]),
+               [proj_lib_path=$withval])
+if test [ -n "$proj_lib_path" ] ; then
+    AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
+fi
+
+LIBS="${INLIBS} ${PKG_LIBS}"
+
+proj4ok=yes
+AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
+if test "${proj4ok}" = no; then
+   AC_MSG_ERROR([libproj not found in standard or given locations.])
+fi
+
+PKG_LIBS="${PKG_LIBS} -lproj"
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    printf("%d\n", PJ_VERSION);
+    exit(0);
+}
+_EOCONF]
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+
+proj_version=`./proj_conf_test`
+
+AC_ARG_WITH([proj-share],
+    AC_HELP_STRING([--with-proj-share=SHARE_PATH],
+               [the location of proj metadata files]),
+               [proj_share_path=$withval])
+if test [ -n "$proj_share_path" ] ; then
+    AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
+fi
+
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    PAFile fp;
+    projCtx ctx;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "epsg", "rb");
+    if (fp == NULL) exit(1);
+    pj_ctx_fclose(ctx, fp);
+    exit(0);
+}
+_EOCONF]
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+if test [ -n "$proj_share_path" ] ; then
+  PROJ_LIB="${proj_share_path}" ./proj_conf_test
+  proj_share=`echo $?`
+else
+  ./proj_conf_test
+  proj_share=`echo $?`
+fi
+
+AC_MSG_CHECKING(PROJ.4: epsg found and readable)
+if test ${proj_share} -eq 1 ; then
+    AC_MSG_RESULT(no)
+    STOP="stop"
+else
+    AC_MSG_RESULT(yes)
+fi
+
+rm -f proj_conf_test.c proj_conf_test
+
+if test "$STOP" = "stop" ; then
+    echo "Error: proj/epsg not found"
+    echo "Either install missing proj support files, for example"
+    echo "the proj-nad and proj-epsg RPMs on systems using RPMs,"
+    echo "or if installed but not autodetected, set PROJ_LIB to the"
+    echo "correct path, and if need be use the --with-proj-share="
+    echo "configure argument."
+    exit 1
+fi
+
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    PAFile fp;
+    projCtx ctx;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "conus", "rb");
+    if (fp == NULL) exit(1);
+    pj_ctx_fclose(ctx, fp);
+    exit(0);
+}
+_EOCONF]
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+if test [ -n "$proj_share_path" ] ; then
+  PROJ_LIB="${proj_share_path}" ./proj_conf_test
+  proj_share=`echo $?`
+else
+  ./proj_conf_test
+  proj_share=`echo $?`
+fi
+
+AC_MSG_CHECKING(PROJ.4: conus found and readable)
+if test ${proj_share} -eq 1 ; then
+    WARN="warn"
+    AC_MSG_RESULT(no)
+else
+    AC_MSG_RESULT(yes)
+fi
+
+rm -f proj_conf_test.c proj_conf_test
+
+if test "$WARN" = "warn" ; then
+    echo "Note: proj/conus not found"
+    echo "No support available in PROJ4 for NAD grid datum transformations"
+    echo "If required, consider re-installing from source with the contents"
+    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
+fi
+
+
+
 #
 # test whether gdal has GEOS support:
 #
@@ -380,6 +535,7 @@ AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_CLIBS}"])
 if test "${NEED_DEPS}" = yes; then
    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"])
 fi
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
 
 
 # honor PKG_xx overrides
