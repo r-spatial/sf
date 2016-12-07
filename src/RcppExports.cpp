@@ -304,6 +304,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_proj_version
+std::string CPL_proj_version(bool b);
+RcppExport SEXP sf_CPL_proj_version(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_version(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_proj_is_valid
+Rcpp::List CPL_proj_is_valid(std::string proj4string);
+RcppExport SEXP sf_CPL_proj_is_valid(SEXP proj4stringSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type proj4string(proj4stringSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_is_valid(proj4string));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_hex_to_raw
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 RcppExport SEXP sf_CPL_hex_to_raw(SEXP cxSEXP) {

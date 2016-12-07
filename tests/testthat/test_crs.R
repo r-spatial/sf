@@ -11,4 +11,9 @@ test_that("st_crs works", {
 
   expect_warning(st_crs(nc2) <- 3857)
   expect_silent(st_crs(nc1) <- st_crs(nc1))
+
+  expect_error(st_crs("+proj=ll"))
+  expect_error(st_crs("+proj=longlat +datum=NAD26"))
+  expect_silent(st_crs("+proj=longlat"))
+  expect_silent(st_crs("+proj=longlat +datum=NAD27"))
 })

@@ -20,7 +20,7 @@ st_as_sfc(character(0))
 st_as_sfc(character(0), 4326)
 try(st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON(0 0,1 1,0 1,0 0)"))) # causes small memory leak
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
-	"+proj=longlat +datum=wgs84")
+	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
 

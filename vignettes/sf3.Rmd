@@ -165,22 +165,6 @@ s3
 ```
 for which we see that coordinates are actually modified (projected).
 
-
-### GDAL is forgiving on wrong PROJ.4 strings
-
-It should be noted that PROJ.4 strings are interpreted by the GDAL
-library, and that GDAL does not raise errors on wrong strings, but
-rather tries to "correct" them, e.g.
-```{r}
-st_crs("+proj=longlat +datum=idontknow")
-```
-Hence, it is always important to check the PROJ.4 string of the
-returned object, as it contains the PROJ.4 string as GDAL has understood,
-or interpreted it:
-```{r}
-s3 %>% st_transform("+proj=longlat +datum=idontknow") %>% st_crs()
-```
-
 ## Geometrical operations
 
 All geometrical operations `st_op(x)` or or `st_op2(x,y)` work

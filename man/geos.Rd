@@ -42,7 +42,7 @@ st_length(x)
 
 st_is_simple(x)
 
-st_distance(x, y = x)
+st_distance(x, y)
 
 st_relate(x, y)
 

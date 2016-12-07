@@ -614,7 +614,8 @@ between geometries. `st_relate` returns a character matrix with the
 for each pair of geometries:
 
 ```{r}
-st_distance(nc[c(1,4,22),], nc[c(1, 33,55,56),])
+x = st_transform(nc, 32119)
+st_distance(x[c(1,4,22),], x[c(1, 33,55,56),])
 st_relate(nc[1:5,], nc[1:4,])
 ```
 

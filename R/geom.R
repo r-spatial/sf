@@ -44,12 +44,8 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 		y = x
 	else 
 		stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x))) {
-		if (op %in% "distance")
-			stop("st_distance does not give distance measures for longitude/latitude data.")
-		if (!(op %in% c("equals", "equals_exact", "polygonize"))) 
-			message("although coordinates are longitude/latitude, it is assumed that they are planar")
-	}
+	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) 
+		message("although coordinates are longitude/latitude, it is assumed that they are planar")
 	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
 	if (sparse)
 		ret
@@ -62,7 +58,15 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 #' @name geos
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @export
-st_distance = function(x, y = x) CPL_geos_dist(st_geometry(x), st_geometry(y))
+st_distance = function(x, y) {
+	if (missing(y))
+		y = x
+	else 
+		stopifnot(st_crs(x) == st_crs(y))
+	if (isTRUE(st_is_longlat(x)))
+		stop("st_distance does not give distance measures for longitude/latitude data.")
+	CPL_geos_dist(st_geometry(x), st_geometry(y))
+}
 
 #' @name geos
 #' @return st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
@@ -172,10 +176,10 @@ st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_triangulate does not correctly triangulate longitude/latitude data.")
-	if (CPL_gdal_version() >= "2.1.0")
+	if (CPL_geos_version() >= "3.4.0")
 		st_sfc(CPL_geos_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	else
-		stop("for triangulate, GDAL version 2.1.0 is required")
+		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
 # nocov end
 

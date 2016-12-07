@@ -134,7 +134,7 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 OGR: Corrupt data
 Error in CPL_sfc_from_wkt(x) : OGR error
 > st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
-+ 	"+proj=longlat +datum=wgs84")
++ 	"+proj=longlat +datum=WGS84")
 Geometry set for 3 features 
 geometry type:  GEOMETRY
 dimension:      XY
@@ -413,4 +413,4 @@ POINT(-8905532.70139521 4300640.2154045)
 > 
 > proc.time()
    user  system elapsed 
-  0.500   0.012   0.509 
+  0.480   0.028   0.505 

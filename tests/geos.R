@@ -2,7 +2,8 @@ suppressPackageStartupMessages(library(sf))
 # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
-st_distance(nc[1:10,], nc[1:10,])
+x = st_transform(nc[1:10,], 32119)
+st_distance(x)
 
 st_is_valid(nc)
 
@@ -13,4 +14,4 @@ for (op in ops) {
 	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
 }
 
-try(x <- sf:::st_geos_binop("ErrorOperation", s[1:50,], s[51:100,], 0, TRUE))
+try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))

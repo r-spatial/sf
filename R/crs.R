@@ -99,6 +99,11 @@ st_crs.default = function(x, ...) NA_crs_
 	x
 }
 
+valid_proj4string = function(p4s) {
+	stopifnot(is.character(p4s))
+	structure(CPL_proj_is_valid(p4s), names = c("valid", "result"))
+}
+
 # return crs object from crs, integer, or character string
 make_crs = function(x) {
 	if (is.na(x))
@@ -107,9 +112,12 @@ make_crs = function(x) {
 		x
 	else if (is.numeric(x)) 
 		CPL_crs_from_epsg(as.integer(x))
-	else if (is.character(x))
+	else if (is.character(x)) {
+		is_valid = valid_proj4string(x) 
+		if (! is_valid$valid)
+			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result))
 		CPL_crs_from_proj4string(x)
-	else
+	} else
 		stop(paste("cannot create a crs from an object of class", class(x)))
 }
 

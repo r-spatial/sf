@@ -58,7 +58,7 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 
 Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom> geom) {
 	Rcpp::List out(geom.size());
-	for (int i = 0; i < geom.size(); i++) {
+	for (size_t i = 0; i < geom.size(); i++) {
 		size_t size;
 		unsigned char *buf = GEOSGeomToWKB_buf_r(hGEOSCtxt, geom[i], &size);
 		Rcpp::RawVector raw(size);
@@ -121,8 +121,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "distance") { // return double matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
-		for (int i = 0; i < gmv0.size(); i++)
-			for (int j = 0; j < gmv1.size(); j++) {
+		for (size_t i = 0; i < gmv0.size(); i++)
+			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
 					throw std::range_error("GEOS error in GEOSDistance_r");
@@ -187,9 +187,9 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		else
 			ret_list = Rcpp::List::create(densemat);
 	}
-	for (int i = 0; i < gmv0.size(); i++)
+	for (size_t i = 0; i < gmv0.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
-	for (int i = 0; i < gmv1.size(); i++)
+	for (size_t i = 0; i < gmv1.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
 	CPL_geos_finish(hGEOSCtxt);
 	return ret_list;
