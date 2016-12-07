@@ -86,13 +86,13 @@ st_segmentize(x, dfMaxLength)
 
 st_combine(x)
 
-st_intersection(x, y0)
+st_intersection(x, y)
 
-st_union(x, y0)
+st_union(x, y)
 
-st_difference(x, y0)
+st_difference(x, y)
 
-st_sym_difference(x, y0)
+st_sym_difference(x, y)
 }
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
@@ -116,8 +116,6 @@ st_sym_difference(x, y0)
 \item{mlst}{object of class \code{MULTILINESTRING} or geometry list-column containing these}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
-
-\item{y0}{object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.

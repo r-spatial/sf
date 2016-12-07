@@ -63,6 +63,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 		unsigned char *buf = GEOSGeomToWKB_buf_r(hGEOSCtxt, geom[i], &size);
 		Rcpp::RawVector raw(size);
 		memcpy(&(raw[0]), buf, size);
+		free(buf);
 		out[i] = raw;
 		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
@@ -336,21 +337,26 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		GEOSGeom_destroy_r(hGEOSCtxt, x[i]);
 	for (size_t i = 0; i < y.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, y[i]);
-	// trim:
+	// trim results back to non-empty geometries:
 	std::vector<GEOSGeom> out2(n);
-	Rcpp::NumericMatrix m(n, 2);
-	for (size_t i = 0, k = 0, l = 0; i < y.size(); i++) {
+	Rcpp::NumericMatrix m(n, 2); // and a set of 1-based indices to x and y
+	size_t k = 0, l = 0;
+	for (size_t i = 0; i < y.size(); i++) {
 		for (size_t j = 0; j < x.size(); j++) {
 			l = i * x.size() + j;
-			if (!chk_(GEOSisEmpty_r(hGEOSCtxt, out[l]))) {
+			if (!chk_(GEOSisEmpty_r(hGEOSCtxt, out[l]))) { // keep:
 				out2[k] = out[l];
-				m(k, 1) = j + 1;
-				m(k, 2) = i + 1;
+				m(k, 0) = j + 1;
+				m(k, 1) = i + 1;
 				k++;
-			} else
+				if (k > n)
+					throw std::range_error("invalid k");
+			} else // discard:
 				GEOSGeom_destroy_r(hGEOSCtxt, out[l]);
 		}
 	}
+	if (k != n)
+		throw std::range_error("invalid k (2)");
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out2)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);

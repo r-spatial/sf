@@ -38,7 +38,9 @@ b = nc[4:10,]
 
 x = st_intersection(a[1,] ,b)
 
-x <- st_intersection(a, st_union(b)) # FIXME
+u = st_union(b) 
+
+x <- st_intersection(a, u) # FIXME
 
 x = st_union(a[1,], b)
 
