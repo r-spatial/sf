@@ -93,10 +93,10 @@ Loading required package: DBI
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   suppressWarnings(x <- st_read("PG:dbname=postgis"))
 +   try(x <- st_read("PG:dbname=empty")) # error
-+   print(st_list("PG:dbname=postgis"))
-+   print(st_list("PG:dbname=empty"))
++   print(st_layers("PG:dbname=postgis"))
++   print(st_layers("PG:dbname=empty"))
 + }
 > 
 > proc.time()
    user  system elapsed 
-  0.444   0.016   0.460 
+  0.456   0.020   0.474 

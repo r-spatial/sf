@@ -216,13 +216,19 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTInteger: {
 					Rcpp::IntegerVector iv;
 					iv = out[iField];
-					iv[i] = poFeature->GetFieldAsInteger(iField);
+					if (poFeature->IsFieldSet(iField))
+						iv[i] = poFeature->GetFieldAsInteger(iField);
+					else
+						iv[i] = NA_INTEGER;
 					}
 					break;
 				case OFTInteger64: {
 					Rcpp::NumericVector nv;
 					nv = out[iField];
-					nv[i] = (double) poFeature->GetFieldAsInteger64(iField);
+					if (poFeature->IsFieldSet(iField))
+						nv[i] = (double) poFeature->GetFieldAsInteger64(iField);
+					else
+						nv[i] = NA_REAL;
 					// OR: poFeature->GetFieldAsString(iField);
 					if (nv[i] > dbl_max_int64)
 						warn_int64 = true;
@@ -242,6 +248,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					dtlst.attr("class") = "POSIXlt";
 					Rcpp::NumericVector nv;
 					nv = out[iField];
+					if (! poFeature->IsFieldSet(iField)) {
+						nv[i] = NA_REAL;
+						break;
+					}
 					if (poFieldDefn->GetType() == OFTDateTime) {
 						Rcpp::Function as_POSIXct_POSIXlt("as.POSIXct.POSIXlt");
 						Rcpp::NumericVector ret = as_POSIXct_POSIXlt(dtlst); // R help me!
@@ -257,14 +267,20 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTReal: {
 					Rcpp::NumericVector nv;
 					nv = out[iField];
-					nv[i] = (double) poFeature->GetFieldAsDouble(iField);
+					if (poFeature->IsFieldSet(iField))
+						nv[i] = (double) poFeature->GetFieldAsDouble(iField);
+					else
+						nv[i] = NA_REAL;
 					}
 					break;
 				default: // break through:
 				case OFTString: {
 					Rcpp::CharacterVector cv;
 					cv = out[iField];
-					cv[i] = poFeature->GetFieldAsString(iField);
+					if (poFeature->IsFieldSet(iField))
+						cv[i] = poFeature->GetFieldAsString(iField);
+					else
+						cv[i] = NA_STRING;
 					}
 					break;
 			}

@@ -54,21 +54,26 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTString: {
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
-				poFeature->SetField(j, (const char *) cv[i]);
+				if (cv[i] != NA_STRING)
+					poFeature->SetField(j, (const char *) cv[i]);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
-				poFeature->SetField(j, (int) iv[i]);
+				if (iv[i] != NA_INTEGER)
+					poFeature->SetField(j, (int) iv[i]);
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				poFeature->SetField(j, (double) nv[i]);
+				if (nv[i] != NA_REAL)
+					poFeature->SetField(j, (double) nv[i]);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
+				if (nv[i] == NA_REAL)
+					break;
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
 				nv0.attr("class") = "Date";
@@ -80,6 +85,8 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
+				if (nv[i] == NA_REAL)
+					break;
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
