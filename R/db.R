@@ -37,13 +37,13 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '", table, "';"))[[1]]
 			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
 			if (nrow(ret))
-				SRID
+				structure(list(epsg=SRID, proj4string=ret[[1]]), class = "crs")
 			else
 				NA_crs_
 		}
 	if (missing(EWKB))
 		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
-    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = SRID)
+    tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = crs)
 	st_as_sf(tbl, ...)
 }
 
