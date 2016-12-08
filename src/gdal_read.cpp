@@ -185,6 +185,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	if (n_d < 0)
 		n_d = (double) count_features(poLayer);
+    //if (n_d == 0)
+    //    throw std::runtime_error("Layer has no features");
 	size_t n = (size_t) n_d; // what is List's max length?
 	std::vector<OGRGeometry *> poGeometryV(n); // full archive
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
@@ -302,14 +304,17 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (! quiet && toTypeUser)
 		Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
 	// convert to R:
-	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
-	if (warn_int64)
-		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
-			" lost significance after conversion to double" << std::endl;
-	out[poFDefn->GetFieldCount()] = sfc;
-	// clean up:
-    for (size_t i = 0; i < n; i++)
-		OGRFeature::DestroyFeature(poFeatureV[i]);
+    if (n > 0)
+    {
+        Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
+        if (warn_int64)
+            Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
+                " lost significance after conversion to double" << std::endl;
+        out[poFDefn->GetFieldCount()] = sfc;
+        // clean up:
+        for (size_t i = 0; i < n; i++)
+            OGRFeature::DestroyFeature(poFeatureV[i]);
+    }
     GDALClose(poDS);
 
 	return out;
