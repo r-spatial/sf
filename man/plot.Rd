@@ -29,10 +29,10 @@
   pch = 1, type = "l", add = FALSE)
 
 \method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  border = 1, add = FALSE)
+  border = 1, add = FALSE, rule = "winding")
 
 \method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  border = 1, add = FALSE)
+  border = 1, add = FALSE, rule = "winding")
 
 \method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1, bg = 0,
   lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
