@@ -66,6 +66,8 @@
 \item{add}{logical; add to current plot?}
 
 \item{border}{color of polygon border}
+
+\item{rule}{see \link[graphics]{polypath}}
 }
 \description{
 Plot sf object

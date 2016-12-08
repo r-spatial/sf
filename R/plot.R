@@ -173,6 +173,7 @@ p_bind = function(lst) {
 }
 
 #' @name plot
+#' @param rule see \link[graphics]{polypath}
 #' @method plot sfc_POLYGON
 #' @export
 plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
