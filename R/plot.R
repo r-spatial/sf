@@ -175,7 +175,7 @@ p_bind = function(lst) {
 #' @name plot
 #' @method plot sfc_POLYGON
 #' @export
-plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -185,14 +185,14 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
 	lapply(seq_along(x), function(i)
-		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
+		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule))
 	invisible(NULL)
 }
 
 #' @name plot
 #' @method plot sfc_MULTIPOLYGON
 #' @export
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -203,7 +203,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border =
 	border = rep(border, length.out = length(x))
 	lapply(seq_along(x), function(i)
 		lapply(x[[i]], function(L)
-			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i])))
+			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule)))
 	invisible(NULL)
 }
 
