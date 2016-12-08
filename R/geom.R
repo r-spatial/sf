@@ -81,7 +81,9 @@ st_distance = function(x, y, dist_fun = geosphere::distGeo) {
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
 		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
 		u = p$SemiMajor / unclass(p$SemiMajor) # 1 unit of radius (m)
-		u * matrix(dist_fun(xp, yp, p$SemiMajor, 1./p$InfFlattening), length(x), length(y))
+		u * matrix(
+			dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening), 
+			length(x), length(y))
 	} else {
 		d = CPL_geos_dist(st_geometry(x), st_geometry(y))
 		if (!is.na(st_crs(x)))

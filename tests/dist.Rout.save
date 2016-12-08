@@ -1,0 +1,73 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
+> library(sp)
+> library(units)
+> 
+> x = st_sfc(
++ st_point(c(0,0)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ crs = 4326
++ )
+> 
+> y = st_sfc(
++ st_point(c(0,10)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ st_point(c(4,0)),
++ crs = 4326
++ )
+> 
+> st_distance(x, y)
+Units: m
+        [,1]     [,2]     [,3]     [,4]     [,5]
+[1,] 1105855 111319.5 222639.0 333958.5 445278.0
+[2,] 1111387      0.0 111319.5 222639.0 333958.5
+[3,] 1127822 111319.5      0.0 111319.5 222639.0
+[4,] 1154693 222639.0 111319.5      0.0 111319.5
+> 
+> d.sf = st_distance(x, y, geosphere::distMeeus)
+> d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
+> units(d.sp) = make_unit("km")
+> d.sf - d.sp
+Units: m
+              [,1]         [,2]         [,3]         [,4] [,5]
+[1,] -2.328306e-10 0.000000e+00 0.000000e+00 0.000000e+00    0
+[2,]  2.328306e-10 0.000000e+00 0.000000e+00 2.910383e-11    0
+[3,]  0.000000e+00 0.000000e+00 0.000000e+00 1.455192e-11    0
+[4,]  0.000000e+00 2.910383e-11 1.455192e-11 0.000000e+00    0
+> 
+> #summary(unclass(d.sf) - d.sp)
+> 
+> st_crs(x) = st_crs(y) = NA
+> d.sf = st_distance(x, y)
+> d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
+> d.sf - d.sp
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+> 
+> proc.time()
+   user  system elapsed 
+  0.484   0.016   0.497 
