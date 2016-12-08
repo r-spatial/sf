@@ -20,8 +20,10 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 		out(1) = Rcpp::CharacterVector::create(pj_strerrno(*pj_get_errno_ref()));
 	} else {
 		out(0) = Rcpp::LogicalVector::create(true);
-		out(1) = Rcpp::CharacterVector::create(pj_get_def(pj, 0));
+		char *def = pj_get_def(pj, 0);
+		out(1) = Rcpp::CharacterVector::create(def);
 		pj_free(pj);
+		free(def);
 	}
 	return out;
 }
