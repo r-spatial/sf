@@ -16,31 +16,31 @@
 \usage{
 \method{plot}{sf}(x, y, ...)
 
-plot.sfc_POINT(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
-  lty = 1, type = "p", add = FALSE)
-
-plot.sfc_MULTIPOINT(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
+\method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
 
-plot.sfc_LINESTRING(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1,
-  type = "l", add = FALSE)
+\method{plot}{sfc_MULTIPOINT}(x, y, ..., pch = 1, cex = 1, col = 1,
+  bg = 0, lwd = 1, lty = 1, type = "p", add = FALSE)
 
-plot.sfc_MULTILINESTRING(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1,
-  type = "l", add = FALSE)
+\method{plot}{sfc_LINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
+  pch = 1, type = "l", add = FALSE)
 
-plot.sfc_POLYGON(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1,
-  add = FALSE)
+\method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
+  pch = 1, type = "l", add = FALSE)
 
-plot.sfc_MULTIPOLYGON(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1,
-  add = FALSE)
+\method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
+  border = 1, add = FALSE)
 
-plot.sfc_GEOMETRYCOLLECTION(x, y, ..., pch = 1, cex = 1, bg = 0,
+\method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
+  border = 1, add = FALSE)
+
+\method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1, bg = 0,
   lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
 
-plot.sfc_GEOMETRY(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1,
-  lwd = 1, col = 1, border = 1, add = FALSE)
+\method{plot}{sfc_GEOMETRY}(x, y, ..., pch = 1, cex = 1, bg = 0,
+  lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
 
-plot.sfg(x, ...)
+\method{plot}{sfg}(x, ...)
 }
 \arguments{
 \item{x}{object of class sf}

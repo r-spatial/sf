@@ -89,6 +89,7 @@ plot.sf <- function(x, y, ...) {
 }
 
 #' @name plot
+#' @method plot sfc_POINT
 #' @export
 plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
@@ -105,6 +106,7 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 }
 
 #' @name plot
+#' @method plot sfc_MULTIPOINT
 #' @export
 plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
@@ -124,6 +126,7 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 }
 
 #' @name plot
+#' @method plot sfc_LINESTRING
 #' @export
 plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l', 
 		add = FALSE) {
@@ -141,6 +144,7 @@ plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, ty
 }
 
 #' @name plot
+#' @method plot sfc_MULTILINESTRING
 #' @export
 plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l',
 		add = FALSE) {
@@ -169,6 +173,7 @@ p_bind = function(lst) {
 }
 
 #' @name plot
+#' @method plot sfc_POLYGON
 #' @export
 plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
@@ -185,6 +190,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 }
 
 #' @name plot
+#' @method plot sfc_MULTIPOLYGON
 #' @export
 plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
@@ -222,6 +228,7 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 }
 
 #' @name plot
+#' @method plot sfc_GEOMETRYCOLLECTION
 #' @export
 plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
@@ -242,6 +249,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 }
 
 #' @name plot
+#' @method plot sfc_GEOMETRY
 #' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
@@ -260,6 +268,7 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 }
 
 #' @name plot
+#' @method plot sfg
 #' @export
 plot.sfg = function(x, ...) {
 	plot(st_sfc(x), ...)
