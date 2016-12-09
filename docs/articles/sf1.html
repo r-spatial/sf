@@ -472,13 +472,15 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_is_valid</a></span>(nc[<span class="dv">1</span>:<span class="dv">2</span>,])
 ## [1] TRUE TRUE</code></pre></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_distance</a></span>(nc[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">22</span>),], nc[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">33</span>,<span class="dv">55</span>,<span class="dv">56</span>),])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st_transform.html">st_transform</a></span>(nc, <span class="dv">32119</span>)
+<span class="kw"><a href="../reference/geos.html">st_distance</a></span>(x[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">22</span>),], x[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">33</span>,<span class="dv">55</span>,<span class="dv">56</span>),])
+## Units: m
 ##           [,1]     [,2]      [,3]     [,4]
-## [1,] 0.0000000 3.447803 1.3176060 5.264924
-## [2,] 4.9133394 1.201811 6.5138172 0.000000
-## [3,] 0.1970395 3.907450 0.8242571 5.724318
+## [1,]      0.00 312184.9 128341.85 475623.3
+## [2,] 440561.15 114939.7 590434.80      0.0
+## [3,]  18944.03 352719.1  78756.89 517527.8
 <span class="kw"><a href="../reference/geos.html">st_relate</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
-## although coordinates are longitude/latitude, we assume they are planar
+## although coordinates are longitude/latitude, it is assumed that they are planar
 ##      [,1]        [,2]        [,3]        [,4]       
 ## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"
 ## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"
@@ -487,7 +489,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
-## although coordinates are longitude/latitude, we assume they are planar
+## although coordinates are longitude/latitude, it is assumed that they are planar
 ## [[1]]
 ## [1] 1 2
 ## 
@@ -503,7 +505,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 ## [[5]]
 ## integer(0)
 <span class="kw"><a href="../reference/geos.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,], <span class="dt">sparse =</span> <span class="ot">FALSE</span>)
-## although coordinates are longitude/latitude, we assume they are planar
+## although coordinates are longitude/latitude, it is assumed that they are planar
 ##       [,1]  [,2]  [,3]  [,4]
 ## [1,]  TRUE  TRUE FALSE FALSE
 ## [2,]  TRUE  TRUE  TRUE FALSE
