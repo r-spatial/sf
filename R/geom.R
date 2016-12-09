@@ -307,6 +307,7 @@ st_sym_difference = function(x, y) {
 
 #' @name geos
 #' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
+#' @param type character; indicate the sampling type, either "regular" or "random"
 #' @export
 #' @examples
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
