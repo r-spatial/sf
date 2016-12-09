@@ -60,6 +60,8 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool lines = false, multilines = false, polygons = false, multipolygons = false;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
+		if (gv[i] == NULL)
+			throw std::invalid_argument("NULL pointer in to_multi_what: invalid input?");
 		switch(gv[i]->getGeometryType()) {
 			case wkbLineString: lines = true; break;
 			case wkbMultiLineString: multilines = true; break;
