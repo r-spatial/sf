@@ -22,6 +22,7 @@
 \alias{st_is_simple}
 \alias{st_is_valid}
 \alias{st_length}
+\alias{st_line_sample}
 \alias{st_overlaps}
 \alias{st_polygonize}
 \alias{st_relate}
@@ -38,7 +39,7 @@ st_is_valid(x)
 
 st_area(x)
 
-st_length(x)
+st_length(x, dist_fun = geosphere::distGeo)
 
 st_is_simple(x)
 
@@ -93,13 +94,15 @@ st_union(x, y)
 st_difference(x, y)
 
 st_sym_difference(x, y)
+
+st_line_sample(x, density)
 }
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
 
-\item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
+\item{dist_fun}{function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.}
 
-\item{dist_fun}{function to be used for great circle distances (POINT geometry only)}
+\item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
 
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 
@@ -118,13 +121,15 @@ st_sym_difference(x, y)
 \item{mlst}{object of class \code{MULTILINESTRING} or geometry list-column containing these}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
+
+\item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 
-st_area returns the area of a geometry, in the coordinate reference system used
+st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
-st_length returns the length of a geometry, in the coordinate reference system used
+st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.
 
 st_is_simple and st_is_valid return a logical vector
 
@@ -164,5 +169,13 @@ x = st_polygonize(mls)
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
 plot(st_union(nc))
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+	st_linestring(rbind(c(0,0),c(10,0))))
+st_line_sample(ls, density = 1)
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+  st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+try(st_line_sample(ls, density = 1/1000)) # error
+st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
+st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
 }
 

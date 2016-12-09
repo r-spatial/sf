@@ -61,7 +61,7 @@ Type 'q()' to quit R.
 > x = st_segmentize(nc_tr, 5e4)
 > 
 > try(x <- st_segmentize(nc_tr, -0.1))
-Error in CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength) : 
+Error in CPL_gdal_segmentize(st_geometry(x), dfMaxLength) : 
   argument dfMaxLength should be positive
 
 > 
@@ -337,4 +337,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.540   0.012   0.548 
+  0.716   0.016   0.731 

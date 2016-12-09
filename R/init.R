@@ -1,5 +1,5 @@
 #' @importFrom utils head tail object.size
-#' @importFrom stats na.omit
+#' @importFrom stats runif
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as slotNames new
 #' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport
@@ -7,7 +7,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable
 #' @importFrom units make_unit
-#' @importFrom geosphere distGeo
+#' @importFrom geosphere distGeo areaPolygon bearing
 #' @useDynLib sf
 NULL
 

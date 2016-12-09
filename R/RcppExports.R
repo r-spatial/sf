@@ -49,8 +49,12 @@ CPL_length <- function(sfc) {
     .Call('sf_CPL_length', PACKAGE = 'sf', sfc)
 }
 
-CPL_gdal_geom_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance = 0.0, preserveTopology = FALSE, bOnlyEdges = 1L, dfMaxLength = 0.0) {
-    .Call('sf_CPL_gdal_geom_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
+CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
+    .Call('sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+}
+
+CPL_gdal_linestring_sample <- function(sfc, distLst) {
+    .Call('sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
 }
 
 CPL_get_layers <- function(datasource, options, do_count = FALSE) {

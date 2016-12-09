@@ -135,21 +135,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_gdal_geom_op
-Rcpp::List CPL_gdal_geom_op(std::string op, Rcpp::List sfc, double bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
-RcppExport SEXP sf_CPL_gdal_geom_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
+// CPL_gdal_segmentize
+Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength);
+RcppExport SEXP sf_CPL_gdal_segmentize(SEXP sfcSEXP, SEXP dfMaxLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< double >::type bufferDist(bufferDistSEXP);
-    Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
-    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
-    Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
-    Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
     Rcpp::traits::input_parameter< double >::type dfMaxLength(dfMaxLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_gdal_geom_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength));
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_segmentize(sfc, dfMaxLength));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdal_linestring_sample
+Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst);
+RcppExport SEXP sf_CPL_gdal_linestring_sample(SEXP sfcSEXP, SEXP distLstSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type distLst(distLstSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_linestring_sample(sfc, distLst));
     return rcpp_result_gen;
 END_RCPP
 }

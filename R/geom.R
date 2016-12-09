@@ -10,31 +10,52 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 
 #' @name geos
 #' @export
-#' @return st_area returns the area of a geometry, in the coordinate reference system used
+#' @return st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 st_area = function(x) { 
-	if (isTRUE(st_is_longlat(x)))
-		stop("st_area does not give area measures for longitude/latitude data.")
-	a = CPL_area(st_geometry(x))
-	if (!is.na(st_crs(x)))
-		a * crs_pars(st_crs(x))$ud_unit^2
-	else
-		a
+	if (isTRUE(st_is_longlat(x))) {
+		p = crs_pars(st_crs(x))
+		a = areaPolygon(as(st_geometry(x), "Spatial"), as.numeric(p$SemiMajor), 1./p$InvFlattening)
+		u = 1
+		units(u) = units(p$SemiMajor)
+		a * u^2
+	} else {
+		a = CPL_area(st_geometry(x))
+		if (!is.na(st_crs(x)))
+			a * crs_pars(st_crs(x))$ud_unit^2
+		else
+			a
+	}
+}
+
+ll_length = function(x, fn, p) {
+	if (is.list(x)) # sfc_MULTILINESTRING
+		sum(sapply(x, ll_length, fn = fn, p = p))
+	else {
+		pts = unclass(x) # matrix
+		sum(fn(head(pts, -1), tail(pts, -1), as.numeric(p$SemiMajor), 1./p$InvFlattening))
+	}
 }
 
 #' @name geos
+#' @param dist_fun function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.
 #' @export
-#' @return st_length returns the length of a geometry, in the coordinate reference system used
-st_length = function(x) { 
-	if (isTRUE(st_is_longlat(x)))
-		stop("st_length does not give length measures for longitude/latitude data.")
+#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.
+st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
-	ret = CPL_length(x)
-	ret[is.nan(ret)] = NA
-	if (!is.na(st_crs(x)))
-		ret * crs_pars(st_crs(x))$ud_unit
-	else
+	if (isTRUE(st_is_longlat(x))) {
+		p = crs_pars(st_crs(x))
+		ret = sapply(x, ll_length, fn = dist_fun, p = p)
+		units(ret) = units(p$SemiMajor)
 		ret
+	} else {
+		ret = CPL_length(x)
+		ret[is.nan(ret)] = NA
+		if (!is.na(st_crs(x)))
+			ret * crs_pars(st_crs(x))$ud_unit
+		else
+			ret
+	}
 }
 
 #' @name geos
@@ -62,7 +83,6 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 
 #' @param x first simple feature (sf) or simple feature geometry (sfc) collection
 #' @param y second simple feature (sf) or simple feature geometry (sfc) collection
-#' @param dist_fun function to be used for great circle distances (POINT geometry only)
 #' @name geos
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @details function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
@@ -238,7 +258,7 @@ st_centroid = function(x) {
 st_segmentize  = function(x, dfMaxLength) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
-	st_sfc(CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength))
+	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength))
 }
 
 #' @name geos
@@ -283,4 +303,25 @@ st_difference = function(x, y) {
 #' @export
 st_sym_difference = function(x, y) {
 	geos_op2("sym_difference", st_geometry(x), st_geometry(y))
+}
+
+#' @name geos
+#' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
+#' @export
+#' @examples
+#' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+#' 	st_linestring(rbind(c(0,0),c(10,0))))
+#' st_line_sample(ls, density = 1)
+#' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+#'   st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+#' try(st_line_sample(ls, density = 1/1000)) # error
+#' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
+#' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
+st_line_sample = function(x, density) {
+	if (isTRUE(st_is_longlat(x)))
+		stop("st_line_sample for longitude/latitude not supported")
+	l = st_length(x)
+	n = round(rep(density, length.out = length(l)) * l)
+	distList = lapply(seq_along(n), function(i) sort(runif(n[i]) * l[i]))
+	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
 }
