@@ -30,6 +30,8 @@ st_dimension = function(x, NA_if_empty = TRUE) CPL_gdal_dimension(st_geometry(x)
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x))) {
 		p = crs_pars(st_crs(x))
+		if (!requireNamespace("sp", quietly = TRUE))
+			stop("package sp required, please install it first")
 		a = areaPolygon(as(st_geometry(x), "Spatial"), as.numeric(p$SemiMajor), 1./p$InvFlattening)
 		u = 1
 		units(u) = units(p$SemiMajor)
@@ -294,7 +296,29 @@ geos_op2 = function(op, x, y) {
 #' @name geos
 #' @export
 st_intersection = function(x, y) {
-	geos_op2("intersection", st_geometry(x), st_geometry(y))
+	ret = geos_op2("intersection", st_geometry(x), st_geometry(y))
+	if (length(ret) == 0 || !(inherits(x, "sf") || inherits(y, "sf"))) # no attributes
+		ret
+	else { # at least one of them is sf:
+		idx = attr(ret, "idx")
+		attr(ret, "idx") = NULL
+		df = NULL
+		if (inherits(x, "sf")) {
+			df = x[idx[,1],]
+			st_geometry(df) = NULL
+		}
+		if (inherits(y, "sf")) {
+			st_geometry(y) = NULL
+			if (is.null(df))
+				df = y[idx[,2],]
+			else
+				df = cbind(df, y[idx[,2],])
+		}
+		st_geometry(df) = ret
+		if (! all_fields(df))
+			warning("attribute variables are assumed to be spatially constant throughout all geometries")
+		df
+	}
 }
 
 #' @name geos
@@ -347,4 +371,28 @@ st_line_sample = function(x, density, type = "regular") {
 		stop("unknown type"))
 	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
 	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
+}
+
+st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
+		offset = st_bbox(x)[1:2], n = 10) {
+	bb = st_bbox(x)
+	cellsize = rep(cellsize, length.out = 2)
+	nx = ceiling((bb[3] - offset[1])/cellsize[1])
+	ny = ceiling((bb[4] - offset[2])/cellsize[2])
+	ret = vector("list", nx * ny)
+	square = function(pt, sz) st_polygon(list(rbind(pt,pt+c(1,0)*sz,pt+sz,pt+c(0,1)*sz,pt)))
+	for (i in 1:nx)
+		for (j in 1:ny)
+			ret[[(j - 1) * nx + i]] = square(offset + (c(i, j) - 1) * cellsize, cellsize)
+	st_sfc(ret, crs = st_crs(x))
+}
+
+#' @export
+aggregate.sf = function(x, by, FUN, ...) {
+	i = st_intersection(st_geometry(x), st_geometry(by))
+	idx = attr(i, "idx")
+	st_geometry(x) = NULL # sets back to data.frame
+	df = aggregate(x[idx[,1],], list(idx[,2]), FUN, ...)
+	st_geometry(df) = st_geometry(by)[df$Group.1]
+	df
 }

@@ -74,7 +74,7 @@ Error in CPL_gdal_segmentize(st_geometry(x), dfMaxLength) :
 > 
 > u = st_union(b) 
 > 
-> x <- st_intersection(a, u) # FIXME
+> x <- st_intersection(st_geometry(a), st_geometry(u))
 > 
 > x = st_union(a[1,], b)
 > 
@@ -337,4 +337,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.716   0.016   0.731 
+  0.772   0.020   0.788 

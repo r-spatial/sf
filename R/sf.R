@@ -92,9 +92,12 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 
 #' @export
 `st_geometry<-.sf` = function(x, value) {
-	stopifnot(inherits(value, "sfc"))
+	stopifnot(is.null(value) || inherits(value, "sfc"))
 	x[[attr(x, "sf_column")]] <- value
-	x
+	if (is.null(value))
+		data.frame(x)
+	else
+		x
 }
 
 #' Create sf object
@@ -242,4 +245,9 @@ rbind.sf = function(..., deparse.level = 1) {
 cbind.sf = function(..., deparse.level = 1) {
 	st_sf(base::cbind.data.frame(...))
 	# do.call(st_sf, list(...))
+}
+
+all_fields = function(x) {
+	x = attr(x, "relation_to_geometry")
+	!(any(is.na(x)) || any(x != "field"))
 }

@@ -40,7 +40,7 @@ x = st_intersection(a[1,] ,b)
 
 u = st_union(b) 
 
-x <- st_intersection(a, u) # FIXME
+x <- st_intersection(st_geometry(a), st_geometry(u))
 
 x = st_union(a[1,], b)
 

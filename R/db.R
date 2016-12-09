@@ -11,6 +11,7 @@
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+#'   x = st_read_db(conn, table = "public.meuse")
 #'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
 #'   dbDisconnect(conn)
 #' }
@@ -27,14 +28,18 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 		gc = try(dbReadTable(conn, "geometry_columns"))
 		geom_column = if (class(gc) == "try-error" || missing(table))
 				tail(which(sapply(tbl, is.character)), 1) # guess it's the last character column
-			else
-				gc [ gc$f_table_name == table, "f_geometry_column"]
+			else {
+				tbl_name = tail(strsplit(table, ".", fixed = TRUE)[[1]], 1)
+				gc [ gc$f_table_name == tbl_name, "f_geometry_column"]
+			}
 	}
 	crs = if (missing(table)) {
 			warning("argument table missing: returning object without crs")
 			NA_crs_
 		} else {
-			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '", table, "';"))[[1]]
+			tbl_name = tail(strsplit(table, ".", fixed = TRUE)[[1]], 1)
+			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '",
+				tbl_name, "';"))[[1]]
 			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
 			if (nrow(ret))
 				make_crs(ret[[1]])

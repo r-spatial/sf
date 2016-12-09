@@ -75,6 +75,7 @@ if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+  x = st_read_db(conn, table = "public.meuse")
   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
   dbDisconnect(conn)
 }
