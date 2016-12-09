@@ -95,7 +95,7 @@ st_difference(x, y)
 
 st_sym_difference(x, y)
 
-st_line_sample(x, density)
+st_line_sample(x, density, type = "regular")
 }
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}

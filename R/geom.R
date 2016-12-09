@@ -317,11 +317,17 @@ st_sym_difference = function(x, y) {
 #' try(st_line_sample(ls, density = 1/1000)) # error
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
-st_line_sample = function(x, density) {
+st_line_sample = function(x, density, type = "regular") {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
 	l = st_length(x)
 	n = round(rep(density, length.out = length(l)) * l)
-	distList = lapply(seq_along(n), function(i) sort(runif(n[i]) * l[i]))
+	regular = function(n) { (1:n - 0.5)/n }
+	random = function(n) { sort(runif(n)) }
+	fn = switch(type,
+		regular = regular,
+		random = random,
+		stop("unknown type"))
+	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
 	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
 }
