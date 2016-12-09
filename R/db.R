@@ -37,7 +37,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '", table, "';"))[[1]]
 			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
 			if (nrow(ret))
-				structure(list(epsg=SRID, proj4string=ret[[1]]), class = "crs")
+				make_crs(ret[[1]])
 			else
 				NA_crs_
 		}
