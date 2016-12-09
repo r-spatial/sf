@@ -170,13 +170,14 @@ st_is_longlat = function(x) {
 }
 
 crs_pars = function(x) {
-	ret = CPL_crs_pars(x$proj4string)
-	ret[[4]] = switch(ret[[3]], 
-		Meter = make_unit("m"),
-		Foot_US = make_unit("US_survey_foot"),
+	ret = structure(CPL_crs_pars(x$proj4string), 
+		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical"))
+	ret$SemiMajor = ret$SemiMajor * make_unit("m")
+	ret$ud_unit = switch(ret$units_gdal,
+		"Meter"                = make_unit("m"),
+		"Foot_US"              = make_unit("US_survey_foot"),
 		"Foot (International)" = make_unit("ft"),
-		degree = make_unit("arc_degree"),
-		"unknown")
-	ret[[1]] = ret[[1]] * make_unit("m")
-	structure(ret, names = c("SemiMajor", "InvFlattening", "units_gdal", "ud_unit"))
+		"degree"               = make_unit("arc_degree"),
+		stop("unknown unit: please file an issue at http://github.com/edzer/sfr/"))
+	ret
 }

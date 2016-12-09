@@ -134,7 +134,7 @@ st_line_sample(x, density, type = "regular")
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 
-st_dimension returns 0 for points, 1 for lines and 2 for surfaces.
+st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 

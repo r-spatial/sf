@@ -85,12 +85,13 @@ void handle_error(OGRErr err) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_pars(std::string p4s) {
-	Rcpp::List out(3);
+	Rcpp::List out(4);
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	out(1) = Rcpp::NumericVector::create(srs->GetInvFlattening());
 	out(2) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	out(3) = Rcpp::LogicalVector::create(srs->IsVertical());
 	return out;
 }
 

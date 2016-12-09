@@ -10,7 +10,7 @@ st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 
 #' @name geos
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
-#' @return st_dimension returns 0 for points, 1 for lines and 2 for surfaces.
+#' @return st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.
 #' @export
 #' @examples
 #' x = st_sfc(
