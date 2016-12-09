@@ -45,6 +45,10 @@ CPL_area <- function(sfc) {
     .Call('sf_CPL_area', PACKAGE = 'sf', sfc)
 }
 
+CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
+    .Call('sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+}
+
 CPL_length <- function(sfc) {
     .Call('sf_CPL_length', PACKAGE = 'sf', sfc)
 }

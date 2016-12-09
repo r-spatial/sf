@@ -9,6 +9,22 @@
 st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
 
 #' @name geos
+#' @param NA_if_empty logical; if TRUE, return NA for empty geometries
+#' @return st_dimension returns 0 for points, 1 for lines and 2 for surfaces.
+#' @export
+#' @examples
+#' x = st_sfc(
+#' 	st_point(0:1), 
+#' 	st_linestring(rbind(c(0,0),c(1,1))), 
+#' 	st_polygon(list(rbind(c(0,0),c(1,0),c(0,1),c(0,0)))),
+#' 	st_multipoint(),
+#' 	st_linestring(),
+#' 	st_geometrycollection())
+#' st_dimension(x)
+#' st_dimension(x, FALSE)
+st_dimension = function(x, NA_if_empty = TRUE) CPL_gdal_dimension(st_geometry(x), NA_if_empty)
+
+#' @name geos
 #' @export
 #' @return st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 st_area = function(x) { 

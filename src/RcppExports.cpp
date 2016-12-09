@@ -124,6 +124,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdal_dimension
+Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty);
+RcppExport SEXP sf_CPL_gdal_dimension(SEXP sfcSEXP, SEXP NA_if_emptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< bool >::type NA_if_empty(NA_if_emptySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_dimension(sfc, NA_if_empty));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_length
 Rcpp::NumericVector CPL_length(Rcpp::List sfc);
 RcppExport SEXP sf_CPL_length(SEXP sfcSEXP) {

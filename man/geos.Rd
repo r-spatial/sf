@@ -13,6 +13,7 @@
 \alias{st_covers}
 \alias{st_crosses}
 \alias{st_difference}
+\alias{st_dimension}
 \alias{st_disjoint}
 \alias{st_distance}
 \alias{st_equals}
@@ -36,6 +37,8 @@
 \title{Geometric operations on (pairs of) simple feature geometries}
 \usage{
 st_is_valid(x)
+
+st_dimension(x, NA_if_empty = TRUE)
 
 st_area(x)
 
@@ -100,6 +103,8 @@ st_line_sample(x, density, type = "regular")
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
 
+\item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
+
 \item{dist_fun}{function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.}
 
 \item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
@@ -129,6 +134,8 @@ st_line_sample(x, density, type = "regular")
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 
+st_dimension returns 0 for points, 1 for lines and 2 for surfaces.
+
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
 st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.
@@ -157,6 +164,15 @@ requires GEOS version 3.4 or above
 st_combine(nc)
 }
 \examples{
+x = st_sfc(
+	st_point(0:1), 
+	st_linestring(rbind(c(0,0),c(1,1))), 
+	st_polygon(list(rbind(c(0,0),c(1,0),c(0,1),c(0,0)))),
+	st_multipoint(),
+	st_linestring(),
+	st_geometrycollection())
+st_dimension(x)
+st_dimension(x, FALSE)
 p1 = st_point(c(0,0))
 p2 = st_point(c(2,2))
 pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
