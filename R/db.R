@@ -37,7 +37,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '", table, "';"))[[1]]
 			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
 			if (nrow(ret))
-				ret[[1]]
+				make_crs(ret[[1]])
 			else
 				NA_crs_
 		}
@@ -92,7 +92,7 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 	dbWriteTable(conn, table, df, ...)
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-	SRID = attr(obj, "epsg")
+	SRID = st_crs(geom)$epsg
 	if (is.null(SRID) || is.na(SRID))
 		SRID = 0
 	TYPE = class(geom[[1]])[2]
@@ -108,14 +108,15 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 		wkt = st_as_text(geom)
 		for (r in seq_along(rn)) {
 			cmd = DEBUG(paste0("UPDATE ", table, " SET ", geom_name, 
-				" = ST_GeomFromText('", wkt[r], "') WHERE \"row.names\" = '", rn[r], "';"))
+				" = ST_GeomFromText('", wkt[r], "',",SRID,") WHERE \"row.names\" = '", rn[r], "';"))
 			dbGetQuery(conn, cmd)
 		}
 	} else {
-		wkb = st_as_binary(geom)
+		wkb = st_as_binary(geom, EWKB = TRUE)
 		for (r in seq_along(rn)) {
-			cmd = DEBUG(paste0("UPDATE ", table, " SET ", geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
-				"' WHERE \"row.names\" = '", rn[r], "';"))
+			cmd = DEBUG(paste0("UPDATE ", table, " SET ",
+                            geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
+                            "' WHERE \"row.names\" = '", rn[r], "';"))
 			dbGetQuery(conn, cmd)
 		}
 	}
