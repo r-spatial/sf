@@ -123,6 +123,8 @@ st_line_sample(x, density, type = "regular")
 \item{dfMaxLength}{numeric; max length of a line segment}
 
 \item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
+
+\item{type}{character; indicate the sampling type, either "regular" or "random"}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
