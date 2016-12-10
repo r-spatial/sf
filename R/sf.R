@@ -174,6 +174,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' @param i record selection, see \link{[.data.frame}
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}
+#' @param op character; geometrical operation to apply when \code{i} is a simple feature object
 #' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped, an \code{sfc} object if only the geometry column is selected, otherwise the behavior depending on \code{drop} is identical to that of \link{[.data.frame}.
 #' @examples
 #' g = st_sfc(st_point(1:2), st_point(3:4))
@@ -190,16 +191,23 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 #' g[h,]
 #' h[g,]
 #' @export
-"[.sf" = function(x, i, j, ..., drop) {
+"[.sf" = function(x, i, j, ..., drop = FALSE, op = "intersects") {
+	nargs = nargs()
 	rtg = attr(x, "relation_to_geometry")
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
-		i = sapply(st_geos_binop("intersects", x, i, ...), length) != 0
+		i = sapply(st_geos_binop(op, x, i, ...), length) != 0
 	sf_column = attr(x, "sf_column")
-	x = NextMethod("[")
+	geom = st_geometry(x)
+	if (!missing(i) && nargs > 2) # e.g. a[3:4,] not a[3:4]
+		geom = geom[i]
+	if (missing(j))
+		x = NextMethod("[") # specifying drop would trigger a warning
+	else
+		x = NextMethod("[", drop = drop)
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
 		return(x)
-	if (!(sf_column %in% names(x))) # geom was deselected
-		return(as.data.frame(x))
+	if (!(sf_column %in% names(x))) # geom was deselected: make it sticky
+		x[[sf_column]] = geom
 	attr(x, "sf_column") = sf_column
 	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]
 	x

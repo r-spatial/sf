@@ -9,7 +9,7 @@
 st_sf(..., relation_to_geometry = NA_character_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision)
 
-\method{[}{sf}(x, i, j, ..., drop)
+\method{[}{sf}(x, i, j, ..., drop = FALSE, op = "intersects")
 }
 \arguments{
 \item{...}{column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}}
@@ -31,6 +31,8 @@ st_sf(..., relation_to_geometry = NA_character_, row.names,
 \item{j}{variable selection, see \link{[.data.frame}}
 
 \item{drop}{whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}}
+
+\item{op}{character; geometrical operation to apply when \code{i} is a simple feature object}
 }
 \description{
 Create sf, which extends data.frame-like objects with a simple feature list column
