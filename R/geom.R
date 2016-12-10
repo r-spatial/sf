@@ -346,6 +346,7 @@ st_sym_difference = function(x, y) {
 }
 
 #' @name geos
+#' @param n integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.
 #' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
 #' @param type character; indicate the sampling type, either "regular" or "random"
 #' @export
@@ -358,11 +359,14 @@ st_sym_difference = function(x, y) {
 #' try(st_line_sample(ls, density = 1/1000)) # error
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
-st_line_sample = function(x, density, type = "regular") {
+st_line_sample = function(x, n, density, type = "regular") {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
 	l = st_length(x)
-	n = round(rep(density, length.out = length(l)) * l)
+	if (missing(n))
+		n = round(rep(density, length.out = length(l)) * l)
+	else
+		n = rep(n, length.out = length(l))
 	regular = function(n) { (1:n - 0.5)/n }
 	random = function(n) { sort(runif(n)) }
 	fn = switch(type,

@@ -98,7 +98,7 @@ st_difference(x, y)
 
 st_sym_difference(x, y)
 
-st_line_sample(x, density, type = "regular")
+st_line_sample(x, n, density, type = "regular")
 }
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
@@ -126,6 +126,8 @@ st_line_sample(x, density, type = "regular")
 \item{mlst}{object of class \code{MULTILINESTRING} or geometry list-column containing these}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
+
+\item{n}{integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.}
 
 \item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
 
