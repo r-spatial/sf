@@ -363,7 +363,7 @@ st_sym_difference = function(x, y) {
 st_line_sample = function(x, density = NA, type = "regular", n_points = NA) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
-  invalid_args = !is.na(n_points) & !length(density) > 1
+  invalid_args = !is.na(n_points) & length(density) > 1
   if(invalid_args)
     stop("Error: provide either density or n_points arguments but not both")
   l = st_length(x)
