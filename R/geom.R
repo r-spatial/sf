@@ -348,6 +348,7 @@ st_sym_difference = function(x, y) {
 #' @name geos
 #' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
 #' @param type character; indicate the sampling type, either "regular" or "random"
+#' @param n_points numeric; optional total number of points to sample, analogouse to \code{size} in \code{\link{sample}}
 #' @export
 #' @examples
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
@@ -358,11 +359,17 @@ st_sym_difference = function(x, y) {
 #' try(st_line_sample(ls, density = 1/1000)) # error
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
-st_line_sample = function(x, density, type = "regular") {
+#' st_line_sample(st_transform(ls, 3857), n_points = 5) # one per km, one per 10 km
+st_line_sample = function(x, density = NA, type = "regular", n_points = NA) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
-	l = st_length(x)
-	n = round(rep(density, length.out = length(l)) * l)
+  invalid_args = !is.na(n_points) & !length(density) > 1
+  if(invalid_args)
+    stop("Error: provide either density or n_points arguments but not both")
+  l = st_length(x)
+  if(!is.na(n_points))
+    n = n_points else
+      n = round(rep(density, length.out = length(l)) * l)
 	regular = function(n) { (1:n - 0.5)/n }
 	random = function(n) { sort(runif(n)) }
 	fn = switch(type,
