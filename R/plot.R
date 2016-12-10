@@ -92,7 +92,7 @@ plot.sf <- function(x, y, ..., ncol = 10) {
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
 		lapply(cols, function(cc) {
 			col = if (is.null(dots$col))
-					col = sf.colors(x[[cc]], ncol)
+					col = sf.colors(ncol, xc = x[[cc]])
 				else
 					dots$col
 			plot(x[, cc], col = col)
@@ -307,21 +307,18 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' blue-pink-yellow color scale
 #'
 #' blue-pink-yellow color scale
-#' @param xc factor or numeric vector, or length-one integer.
 #' @param n integer; number of colors
 #' @param cutoff.tails numeric, in [0,0.5] start and end values
 #' @param alpha numeric, in [0,1], transparency
 #' @param categorical logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.
+#' @param xc factor or numeric vector, for which colors need to be returned
 #' @name plot
 #' @export
 #' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
-    if (n <= 0)
-        return(character(0))
-	if (length(xc) == 1 && missing(n) && !is.factor(xc)) {
-		n = xc
+sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE, xc) {
+	if (missing(xc)) {
 		if (categorical) {
 			cb = if (n <= 8)
 			# 8-class Set2:

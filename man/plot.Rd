@@ -43,8 +43,8 @@
 
 \method{plot}{sfg}(x, ...)
 
-sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
-  categorical = FALSE)
+sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
+  categorical = FALSE, xc)
 }
 \arguments{
 \item{x}{object of class sf}
@@ -75,8 +75,6 @@ sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{rule}{see \link[graphics]{polypath}}
 
-\item{xc}{factor or numeric vector, or length-one integer.}
-
 \item{n}{integer; number of colors}
 
 \item{cutoff.tails}{numeric, in [0,0.5] start and end values}
@@ -84,6 +82,8 @@ sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{alpha}{numeric, in [0,1], transparency}
 
 \item{categorical}{logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.}
+
+\item{xc}{factor or numeric vector, for which colors need to be returned}
 }
 \description{
 Plot sf object
