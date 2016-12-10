@@ -184,7 +184,7 @@ cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos.html
 ## Warning in st_centroid(nc): st_centroid does not give correct centroids for
 ## longitude/latitude data.
 nc2 =<span class="st"> </span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc) -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc[<span class="dv">1</span>], <span class="dt">border =</span> <span class="st">'grey'</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(nc2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>

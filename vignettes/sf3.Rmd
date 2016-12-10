@@ -113,7 +113,7 @@ Just to make the point, we can for instance rotate the counties of North Carolin
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 cntrd = st_centroid(nc)
 nc2 = (st_geometry(nc) - cntrd) * rot(pi/2) * .75 + cntrd
-plot(nc, border = 'grey')
+plot(nc[1], border = 'grey')
 plot(nc2, add = TRUE)
 plot(cntrd, col = 'red', add = TRUE, cex = .5)
 ```

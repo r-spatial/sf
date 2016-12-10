@@ -206,11 +206,17 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 		x = NextMethod("[", drop = drop)
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
 		return(x)
-	if (!(sf_column %in% names(x))) # geom was deselected: make it sticky
-		x[[sf_column]] = geom
-	attr(x, "sf_column") = sf_column
-	attr(x, "relation_to_geometry") = rtg[names(rtg) %in% names(x)]
-	x
+	if (! drop) {
+		if (!(sf_column %in% names(x))) { # geom was deselected: make it sticky
+			if (inherits(x, "sf"))
+				x[[sf_column]] = geom
+			else
+				st_geometry(x) = geom
+		}
+		structure(x, "sf_column" = sf_column,
+			"relation_to_geometry" = rtg[names(rtg) %in% names(x)])
+	} else
+		as.data.frame(x)
 }
 
 #' @export

@@ -12,9 +12,10 @@
 \alias{plot.sfc_POINT}
 \alias{plot.sfc_POLYGON}
 \alias{plot.sfg}
+\alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ...)
+\method{plot}{sf}(x, y, ..., ncol = 10)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -41,6 +42,9 @@
   lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
 
 \method{plot}{sfg}(x, ...)
+
+sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
+  categorical = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}
@@ -48,6 +52,8 @@
 \item{y}{ignored}
 
 \item{...}{further specifications, see \link{plot}}
+
+\item{ncol}{integer; default number of colors to be used.}
 
 \item{pch}{plotting symbol}
 
@@ -68,9 +74,24 @@
 \item{border}{color of polygon border}
 
 \item{rule}{see \link[graphics]{polypath}}
+
+\item{xc}{factor or numeric vector, or length-one integer.}
+
+\item{n}{integer; number of colors}
+
+\item{cutoff.tails}{numeric, in [0,0.5] start and end values}
+
+\item{alpha}{numeric, in [0,1], transparency}
+
+\item{categorical}{logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.}
 }
 \description{
 Plot sf object
+
+blue-pink-yellow color scale
+}
+\details{
+\code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 }
 \examples{
 # plot linestrings:
@@ -129,5 +150,6 @@ gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
 gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
 gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
+sf.colors(10)
 }
 

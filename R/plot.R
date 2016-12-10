@@ -14,6 +14,7 @@
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot}
+#' @param ncol integer; default number of colors to be used.
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -83,9 +84,23 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ...) {
+plot.sf <- function(x, y, ..., ncol = 10) {
 	stopifnot(missing(y))
-	plot(st_geometry(x), ...)
+	dots = list(...)
+	if (ncol(x) > 2) {
+		cols = names(x)[names(x) != attr(x, "sf_column")]
+		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
+		lapply(cols, function(cc) {
+			col = if (is.null(dots$col))
+					col = sf.colors(x[[cc]], ncol)
+				else
+					dots$col
+			plot(x[, cc], col = col)
+			title(cc)
+		})
+		par(opar)
+	} else
+		plot(st_geometry(x), ...)
 }
 
 #' @name plot
@@ -292,19 +307,65 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' blue-pink-yellow color scale
 #'
 #' blue-pink-yellow color scale
+#' @param xc factor or numeric vector, or length-one integer.
 #' @param n integer; number of colors
 #' @param cutoff.tails numeric, in [0,0.5] start and end values
 #' @param alpha numeric, in [0,1], transparency
+#' @param categorical logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.
+#' @name plot
 #' @export
+#' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (n = 100, cutoff.tails = c(0.35, 0.2), alpha = 1) {
+sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
     if (n <= 0)
         return(character(0))
-	i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
-    r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
-    g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
-    b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
-        ifelse(i < .92, -2 * i + 1.84, i / .08 - 11.5)))
-    rgb(r, g, b, alpha)
+	if (length(xc) == 1 && missing(n) && !is.factor(xc)) {
+		n = xc
+		if (categorical) {
+			cb = if (n <= 8)
+			# 8-class Set2:
+			c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3')
+			# 12-class Set3:
+			else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
+			rep(cb, length.out = n)
+		} else {
+			i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
+    		r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
+    		g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
+    		b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
+        		ifelse(i < .92, -2 * i + 1.84, i / .08 - 11.5)))
+    		rgb(r, g, b, alpha)
+		}
+	} else {
+		if (is.factor(xc))
+			sf.colors(nlevels(xc), categorical = TRUE)[as.numeric(xc)]
+		else {
+			safe_cut = function(x,n) { 
+				if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
+					rep(1, length(x))
+				else
+					cut(x, n)
+			}
+			sf.colors(n)[safe_cut(xc, n)]
+		}
+	}
+}
+
+get_mfrow = function(bb, n, total_size = c(1,1)) {
+	asp = diff(bb[c(1,3)])/diff(bb[c(2,4)])
+	size = function(nrow, n, asp) {
+		ncol = ceiling(n / nrow)
+		xsize = total_size[1] / ncol
+		ysize = xsize  / asp
+		if (xsize * ysize * n > prod(total_size)) {
+			ysize = total_size[2] / nrow
+			xsize = ysize * asp
+		}
+		xsize * ysize
+	}
+	sz = sapply(1:n, function(x) size(x, n, asp))
+	nrow = which.max(sz)
+	ncol = ceiling(n / nrow)
+	structure(c(nrow, ncol), names = c("nrow", "ncol"))
 }

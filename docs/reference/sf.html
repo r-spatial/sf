@@ -85,7 +85,7 @@
   stringsAsFactors = default.stringsAsFactors(), crs, precision)
 
 # S3 method for sf
-[(x, i, j, ..., drop)</pre>
+[(x, i, j, ..., drop = FALSE, op = "intersects")</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -109,6 +109,8 @@
       <dd>variable selection, see [.data.frame</dd>
       <dt>drop</dt>
       <dd>whether to drop to simpler (e.g. vector) representation, see [.data.frame</dd>
+      <dt>op</dt>
+      <dd>character; geometrical operation to apply when <code>i</code> is a simple feature object</dd>
     </dl>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -149,16 +151,23 @@
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a          g
-#&gt; 1 3 POINT(1 2)</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt;   x
-#&gt; 1 3
-#&gt; 2 4</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; 1 3 POINT(1 2)</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 3 ymax: 4
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt; POINT(1 2) 
-#&gt; POINT(3 4) </div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] &quot;sfc_POINT&quot; &quot;sfc&quot;      </div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
+#&gt;   a          g
+#&gt; 1 3 POINT(1 2)
+#&gt; 2 4 POINT(3 4)</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 0 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 1 ymin: 2 xmax: 3 ymax: 4
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;            g
+#&gt; 1 POINT(1 2)
+#&gt; 2 POINT(3 4)</div><div class='input'><span class='fu'>class</span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
 <span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>cbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>)))))
 <span class='no'>h</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='no'>pol</span>)
 <span class='no'>g</span>[<span class='no'>h</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
