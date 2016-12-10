@@ -177,7 +177,7 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
-	Rcpp::List crs = get_crs(g[0]->getSpatialReference());
+	Rcpp::List crs = get_crs(g.size() ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
 			throw std::range_error("NULL error in sfc_from_ogr");
