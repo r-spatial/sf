@@ -252,11 +252,22 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @export
 #' @examples 
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
-#' x = st_polygonize(mls)
+#' st_polygonize(mls)
 st_polygonize = function(mlst) {
 	x = st_geometry(mlst)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	st_sfc(CPL_geos_op("polygonize", x))
+}
+
+#' @name geos
+#' @export
+#' @examples 
+#' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
+#' st_linemerge(mls)
+st_linemerge = function(mlst) {
+	x = st_geometry(mlst)
+	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
+	st_sfc(CPL_geos_op("linemerge", x))
 }
 
 #' @name geos

@@ -24,6 +24,7 @@
 \alias{st_is_valid}
 \alias{st_length}
 \alias{st_line_sample}
+\alias{st_linemerge}
 \alias{st_overlaps}
 \alias{st_polygonize}
 \alias{st_relate}
@@ -83,6 +84,8 @@ st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
 st_polygonize(mlst)
+
+st_linemerge(mlst)
 
 st_centroid(x)
 
@@ -185,7 +188,9 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
-x = st_polygonize(mls)
+st_polygonize(mls)
+mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
+st_linemerge(mls)
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
 plot(st_union(nc))

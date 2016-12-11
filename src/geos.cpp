@@ -272,6 +272,9 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :
 					chkNULL(GEOSSimplify_r(hGEOSCtxt, g[i], dTolerance));
+	} else if (op == "linemerge") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSLineMerge_r(hGEOSCtxt, g[i]));
 	} else if (op == "polygonize") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSPolygonize_r(hGEOSCtxt, &(g[i]), 1)); // xxx
