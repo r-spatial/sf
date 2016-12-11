@@ -87,16 +87,12 @@
 plot.sf <- function(x, y, ..., ncol = 10) {
 	stopifnot(missing(y))
 	dots = list(...)
-	if (ncol(x) > 2) {
+	if (ncol(x) > 2 && is.null(dots$col)) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		lapply(cols, function(cc) {
-			col = if (is.null(dots$col))
-					col = sf.colors(ncol, xc = x[[cc]])
-				else
-					dots$col
-			plot(x[, cc], col = col)
-			title(cc)
+		lapply(cols, function(cname) {
+			plot(x[, cname], col = sf.colors(ncol, xc = x[[cname]]))
+			title(cname)
 		})
 		par(opar)
 	} else
@@ -317,8 +313,10 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE, xc) {
-	if (missing(xc)) {
+sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+	if (missing(xc) || length(xc) == 1) {
+		if (missing(n))
+			n = xc
 		if (categorical) {
 			cb = if (n <= 8)
 			# 8-class Set2:

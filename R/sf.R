@@ -48,6 +48,9 @@ st_as_sf.data.frame = function(x, ..., relation_to_geometry = NA_character_, coo
 	st_sf(x, ..., relation_to_geometry = relation_to_geometry)
 }
 
+#' @export
+st_as_sf.sf = function(x, ...) x
+
 #' Get, set, or replace geometry from an sf object
 #' 
 #' Get, set, or replace geometry from an sf object
