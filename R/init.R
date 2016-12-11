@@ -1,4 +1,4 @@
-#' @importFrom utils head tail object.size str.default
+#' @importFrom utils head tail object.size str
 #' @importFrom stats runif aggregate
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as slotNames new

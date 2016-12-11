@@ -1,14 +1,12 @@
 #' @export
-str.sfc <- function(object,...)
-{
-  n <- length(object)
-  if (n == 0L)
-    utils:::str.default(object)
-  else
-  {
-    cat(" List of ",n,", printing ")
-    utils:::str.default(object[[1]],...)
-  }
+str.sfc <- function(object,...) {
+	n <- length(object)
+	if (n == 0L)
+		str(object)
+	else {
+		cat(" List of ",n,", printing ")
+		str(object[[1]],...)
+	}
 }
 
 #' @export
