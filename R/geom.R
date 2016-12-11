@@ -113,7 +113,7 @@ st_distance = function(x, y, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	y = st_geometry(y)
 	if (isTRUE(st_is_longlat(x))) {
-		if (class(x[[1]])[2] != "POINT")
+		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 			stop("st_distance for longitude/latitude data only available for POINT geometries.")
 		p = crs_pars(st_crs(x))
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
