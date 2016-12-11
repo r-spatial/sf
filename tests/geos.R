@@ -17,3 +17,21 @@ for (op in ops) {
 try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
 
 st_combine(nc)
+
+st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
+	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
+
+g = st_makegrid(nc)
+x = st_intersection(nc, g)
+x = st_intersection(g, nc)
+
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+st_linestring(rbind(c(0,0),c(10,0))))
+st_line_sample(ls, density = 1, type = "random")
+
+g = st_makegrid(nc, n = c(20,10))
+
+a1 = aggregate(nc["BIR74"], g)
+sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
+a2 = aggregate(nc["BIR74"], g, extensive = TRUE)
+sum(a2$BIR74) / sum(nc$BIR74)
