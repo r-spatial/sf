@@ -1,4 +1,17 @@
 #' @export
+str.sfc <- function(object,...)
+{
+  n <- length(object)
+  if (n == 0L)
+    utils:::str.default(object)
+  else
+  {
+    cat(" List of ",n,", printing ")
+    utils:::str.default(object[[1]],...)
+  }
+}
+
+#' @export
 format.sfc = function(x, ..., digits = 30) {
 	sapply(x, format, ..., digits = digits)
 }
