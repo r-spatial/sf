@@ -44,10 +44,6 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type, 
 		promote_to_multi, int64_as_string)
 	which.geom = which(sapply(x, function(f) inherits(f, "sfc")))
-    if (length (which.geom) == 0) 
-        which.geom = grep ("geom", names (x))
-    if (length (which.geom) == 0) 
-        stop ("No geometry found")
     nm = names(x)[which.geom]
     geom = x[[which.geom]]
     x[[which.geom]] = NULL
@@ -55,16 +51,11 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		x = data.frame(row.names = seq_along(geom))
 	else
 		x = as.data.frame(x, stringsAsFactors = stringsAsFactors)
-    if (!is.null (geom))
-        x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
-    else
-        x[[nm]] = st_sfc ()
+    x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
     x = st_as_sf(x, ...)
-    if (! quiet) {
-        if (nrow (x) == 0)
-            message ("Layer has no features")
+    if (! quiet) 
         print(x, n = 0)
-    } else 
+    else 
 		x
 }
 

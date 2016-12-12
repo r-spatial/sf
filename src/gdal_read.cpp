@@ -193,8 +193,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	if (n_d < 0)
 		n_d = (double) count_features(poLayer);
-    //if (n_d == 0)
-    //    throw std::runtime_error("Layer has no features");
 	size_t n = (size_t) n_d; // what is List's max length?
 	std::vector<OGRGeometry *> poGeometryV(n); // full archive
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
