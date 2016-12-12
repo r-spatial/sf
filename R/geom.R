@@ -113,7 +113,7 @@ st_distance = function(x, y, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	y = st_geometry(y)
 	if (isTRUE(st_is_longlat(x))) {
-		if (class(x[[1]])[2] != "POINT")
+		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 			stop("st_distance for longitude/latitude data only available for POINT geometries.")
 		p = crs_pars(st_crs(x))
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
@@ -422,11 +422,18 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 	yc = seq(offset[2], bb[4], length.out = ny + 1)
 
 	ret = vector("list", nx * ny)
-	square = function(x1,y1,x2,y2) st_polygon(list(rbind(c(x1,y1),c(x2,y1),c(x2,y2),c(x1,y2),c(x1,y1))))
+	square = function(x1, y1, x2, y2)  {
+		st_polygon(list(rbind(c(x1, y1), c(x2, y1), c(x2, y2), c(x1, y2), c(x1, y1))))
+	}
+
 	for (i in 1:nx)
 		for (j in 1:ny)
 			ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
-	st_sfc(ret, crs = st_crs(x))
+
+	if (missing(x))
+		st_sfc(ret)
+	else
+		st_sfc(ret, crs = st_crs(x))
 }
 
 #' aggregate sf objects over a spatial region

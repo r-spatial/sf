@@ -97,3 +97,12 @@ x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 st_transform(x, 3857)
 
 sf_extSoftVersion()
+
+# Ops.sfc:
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
+ls * 2
+ls - 2
+
+str(x)
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+str(nc)
