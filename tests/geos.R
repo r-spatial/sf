@@ -38,3 +38,6 @@ sum(a2$BIR74) / sum(nc$BIR74)
 
 # missing x:
 g = st_makegrid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
+
+mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
+st_linemerge(mls)
