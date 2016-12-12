@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 p = st_point(c(1/3,1/6))
 st_sfc(p, precision = 1000)
 st_as_sfc(st_as_binary(st_sfc(p, precision = 0L)))
@@ -20,7 +20,7 @@ st_as_sfc(character(0))
 st_as_sfc(character(0), 4326)
 try(st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON(0 0,1 1,0 1,0 0)"))) # causes small memory leak
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
-	"+proj=longlat +datum=wgs84")
+	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
 
@@ -95,3 +95,14 @@ try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
 	crs = "+proj=longlat +datum=NAD27")
 st_transform(x, 3857)
+
+sf_extSoftVersion()
+
+# Ops.sfc:
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
+ls * 2
+ls - 2
+
+str(x)
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+str(nc)

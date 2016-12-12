@@ -74,7 +74,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g.&nbsp;a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>)
 Multiple layers are present in data source PG:dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span>
-<span class="dt">Use </span><span class="st">`</span>st_list<span class="st">' to list all layer names and their type in a data source.</span>
+<span class="dt">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span>
 <span class="st">Set the `layer'</span> argument in <span class="st">`</span><span class="dt">st_read' to read a particular layer.</span>
 <span class="dt">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="dt">PostgreSQL'</span>
 <span class="dt">Simple feature collection with 155 features and 12 fields</span>
@@ -86,8 +86,8 @@ Multiple layers are present in data source PG:dbname=postgis, reading layer <spa
 <span class="dt">Warning message:</span>
 <span class="dt">In eval(substitute(expr), envir, enclos) :</span>
 <span class="dt">  automatically selected the first layer in a data source containing more than one.</span></code></pre></div>
-<p>The message points to the <code>st_list</code> command, which lists the driver and layers in a datasource, e.g.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw"><a href="../reference/st_list.html">st_list</a></span>(<span class="st">"PG:dbname=postgis"</span>)
+<p>The message points to the <code>st_layers</code> command, which lists the driver and layers in a datasource, e.g.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw"><a href="../reference/st_layers.html">st_layers</a></span>(<span class="st">"PG:dbname=postgis"</span>)
 Driver:<span class="st"> </span>PostgreSQL 
 Available layers:
 <span class="st">  </span>layer_name geometry_type features fields
@@ -99,7 +99,7 @@ Available layers:
 &gt;<span class="st"> </span></code></pre></div>
 <p>A particular layer can now be read by e.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span>)</code></pre></div>
-<p><code>st_list</code> has the option to count the number of features in case these are missing: some datasources (e.g.&nbsp;OSM xml files) do not report the number of features, but need to be completely read for this. GDAL allows for more than one geometry column for a feature layer; these are reported by <code>st_list</code>.</p>
+<p><code>st_layers</code> has the option to count the number of features in case these are missing: some datasources (e.g.&nbsp;OSM xml files) do not report the number of features, but need to be completely read for this. GDAL allows for more than one geometry column for a feature layer; these are reported by <code>st_layers</code>.</p>
 <p>In case a layer contains only geometries but no attributes (fields), <code>st_read</code> still returns an <code>sf</code> object, with a geometry column only.</p>
 <p>We see that GDAL automatically detects the driver (file format) of the datasource, by trying them all in turn.</p>
 <p><code>st_read</code> follows the conventions of base R, similar to how it reads tabular data into <code>data.frame</code>s. This means that character data are read, by default as <code>factor</code>s. For those who insist on retrieving character data as character vectors, the argument <code>stringsAsFactors</code> can be set to <code>FALSE</code>:</p>

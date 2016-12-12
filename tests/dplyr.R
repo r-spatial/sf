@@ -1,6 +1,6 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 library(dplyr)
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
@@ -53,20 +53,29 @@ nc.g %>% tail()
 nc.g %>% spread(VAR, SID) %>% head()
 nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
 
-
-library(dplyr)
-library(sf)
-demo(nc, ask = FALSE, echo = FALSE)
-nc.merc <- st_transform(nc, 3857) # web mercator - not so good!
-nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74/area)
-summary(nc.merc$dens)
-nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-nc.grp <- nc.merc %>% group_by(area_cl)
-out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), new_dens = pop/A) 
-out %>% summarise(sum(A * new_dens))
-nc.merc %>% summarise(sum(area * dens))
-
+# test st_set_crs in pipe:
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
 x
 
+library(units)
+person = make_unit("person")
+nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+nc.merc <- st_transform(nc, 32119) # NC State Plane
+
+nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person /area)
+
+# summary(nc.merc$dens) # requires units 0.4-2
+nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+nc.grp <- nc.merc %>% group_by(area_cl)
+
+out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), 
+	new_dens = sum(dens * area)/sum(area)) 
+
+# mean densities depend on grouping:
+nc.merc %>% summarize(mean(dens))
+out %>% summarise(mean(new_dens))
+
+# total densities don't:
+nc.merc %>% summarise(sum(area * dens))
+out %>% summarise(sum(A * new_dens))

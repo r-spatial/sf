@@ -118,7 +118,7 @@
   <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
   <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
   <span class='fu'>st_write_db</span>(<span class='no'>conn</span>, <span class='no'>sf</span>, <span class='st'>"meuse_tbl"</span>, <span class='kw'>drop_table</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: table meuse_tbl exists in database: aborting assignTable</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Could not create executeSELECT AddGeometryColumn(&#39;&#39;,&#39;meuse_tbl&#39;,&#39;wkb_geometry&#39;,&#39;0&#39;,&#39;POINT&#39;,2);</span></div></pre>
+}</div><div class='output co'>#&gt; <span class='warning'>Warning: table meuse_tbl exists in database: aborting assignTable</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Could not create executeSELECT AddGeometryColumn(&#39;&#39;,&#39;meuse_tbl&#39;,&#39;wkb_geometry&#39;,&#39;28992&#39;,&#39;POINT&#39;,2);</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

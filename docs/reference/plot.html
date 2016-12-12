@@ -79,10 +79,12 @@
 
     
     <p>Plot sf object</p>
+
+    <p>blue-pink-yellow color scale</p>
     
 
     <pre><span class='co'># S3 method for sf</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>)
 
 <span class='co'># S3 method for sfc_POINT</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -102,11 +104,11 @@
 
 <span class='co'># S3 method for sfc_POLYGON</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"winding"</span>)
 
 <span class='co'># S3 method for sfc_MULTIPOLYGON</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"winding"</span>)
 
 <span class='co'># S3 method for sfc_GEOMETRYCOLLECTION</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -117,7 +119,10 @@
   <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='fu'>sf.colors</span>(<span class='no'>xc</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -127,6 +132,8 @@
       <dd>ignored</dd>
       <dt>...</dt>
       <dd>further specifications, see plot</dd>
+      <dt>ncol</dt>
+      <dd>integer; default number of colors to be used.</dd>
       <dt>pch</dt>
       <dd>plotting symbol</dd>
       <dt>cex</dt>
@@ -145,7 +152,23 @@
       <dd>logical; add to current plot?</dd>
       <dt>border</dt>
       <dd>color of polygon border</dd>
+      <dt>rule</dt>
+      <dd>see <a href='http://www.rdocumentation.org/packages/graphics/topics/polypath'>polypath</a></dd>
+      <dt>xc</dt>
+      <dd>factor or numeric vector, or length-one integer.</dd>
+      <dt>n</dt>
+      <dd>integer; number of colors</dd>
+      <dt>cutoff.tails</dt>
+      <dd>numeric, in [0,0.5] start and end values</dd>
+      <dt>alpha</dt>
+      <dd>numeric, in [0,1], transparency</dd>
+      <dt>categorical</dt>
+      <dd>logical; should a categorical color ramp be returned? if <code>x</code> is a factor, yes.</dd>
     </dl>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <code>http://www.colorbrewer2.org/</code> (if n &lt; 9, Set2, else Set3).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -190,13 +213,16 @@
 <span class='no'>gc1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo1</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>21</span>,<span class='fl'>21</span>)), <span class='no'>l1</span> * <span class='fl'>2</span> + <span class='fl'>21</span>))
 <span class='no'>gc2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo2</span>, <span class='no'>l2</span> - <span class='fl'>2</span>, <span class='no'>l3</span> - <span class='fl'>2</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))))
 <span class='no'>gc</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>gc1</span>,<span class='no'>gc2</span>))
-<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><img src='plot-27.png' alt='' width='540' height='400' /></pre>
+<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><img src='plot-27.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] &quot;#0000B3FF&quot; &quot;#0400FFFF&quot; &quot;#4500FFFF&quot; &quot;#8500FFFF&quot; &quot;#C527D8FF&quot; &quot;#FF50AFFF&quot;
+#&gt;  [7] &quot;#FF7A85FF&quot; &quot;#FFA35CFF&quot; &quot;#FFCC33FF&quot; &quot;#FFF50AFF&quot;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -155,7 +155,9 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
 	sf_column = attr(data, "sf_column")
-	structure(NextMethod(), sf_column = sf_column)
+	st_geometry(data) = NULL # drop
+	#structure(NextMethod(), sf_column = sf_column)
+	NextMethod()
 }
 
 ## tibble methods:

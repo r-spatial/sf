@@ -3,7 +3,8 @@ RWINLIB = lib${subst gcc,,${COMPILED_BY}}${R_ARCH}
 
 PKG_CPPFLAGS =\
 	-I../windows/gdal2-2.1.1/include/gdal \
-	-I../windows/gdal2-2.1.1/include/geos
+	-I../windows/gdal2-2.1.1/include/geos \
+	-I../windows/gdal2-2.1.1/include/proj
 
 PKG_LIBS = \
 	-L../windows/gdal2-2.1.1/${RWINLIB} \

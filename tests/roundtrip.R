@@ -1,7 +1,7 @@
 #library(rgdal2)
 #openOGRLayer("PG:dbname=postgis" , "meuse2")
 
-library(sf)
+suppressPackageStartupMessages(library(sf))
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
@@ -42,7 +42,7 @@ summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 
 # roundtrip nc: sf -> sp -> sf
 # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc")
+nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
 p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 suppressWarnings(st_crs(nc) <- p4s)
 names(nc)[15] = "geometry"

@@ -46,6 +46,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_crs_pars
+Rcpp::List CPL_crs_pars(std::string p4s);
+RcppExport SEXP sf_CPL_crs_pars(SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_pars(p4s));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
 RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {
@@ -113,6 +124,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdal_dimension
+Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty);
+RcppExport SEXP sf_CPL_gdal_dimension(SEXP sfcSEXP, SEXP NA_if_emptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< bool >::type NA_if_empty(NA_if_emptySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_dimension(sfc, NA_if_empty));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_length
 Rcpp::NumericVector CPL_length(Rcpp::List sfc);
 RcppExport SEXP sf_CPL_length(SEXP sfcSEXP) {
@@ -124,21 +147,27 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_gdal_geom_op
-Rcpp::List CPL_gdal_geom_op(std::string op, Rcpp::List sfc, double bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
-RcppExport SEXP sf_CPL_gdal_geom_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
+// CPL_gdal_segmentize
+Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength);
+RcppExport SEXP sf_CPL_gdal_segmentize(SEXP sfcSEXP, SEXP dfMaxLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< double >::type bufferDist(bufferDistSEXP);
-    Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
-    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
-    Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
-    Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
     Rcpp::traits::input_parameter< double >::type dfMaxLength(dfMaxLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_gdal_geom_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength));
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_segmentize(sfc, dfMaxLength));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdal_linestring_sample
+Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst);
+RcppExport SEXP sf_CPL_gdal_linestring_sample(SEXP sfcSEXP, SEXP distLstSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type distLst(distLstSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_linestring_sample(sfc, distLst));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -156,8 +185,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_ogr
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector options, bool quiet, int iGeomField, int toTypeUser, bool promote_to_multi);
-RcppExport SEXP sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP iGeomFieldSEXP, SEXP toTypeUserSEXP, SEXP promote_to_multiSEXP) {
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector options, bool quiet, int iGeomField, int toTypeUser, bool promote_to_multi, bool int64_as_string);
+RcppExport SEXP sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP iGeomFieldSEXP, SEXP toTypeUserSEXP, SEXP promote_to_multiSEXP, SEXP int64_as_stringSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -168,7 +197,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type iGeomField(iGeomFieldSEXP);
     Rcpp::traits::input_parameter< int >::type toTypeUser(toTypeUserSEXP);
     Rcpp::traits::input_parameter< bool >::type promote_to_multi(promote_to_multiSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, options, quiet, iGeomField, toTypeUser, promote_to_multi));
+    Rcpp::traits::input_parameter< bool >::type int64_as_string(int64_as_stringSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, options, quiet, iGeomField, toTypeUser, promote_to_multi, int64_as_string));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -257,15 +287,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op2
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfc, Rcpp::List sf0);
-RcppExport SEXP sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcSEXP, SEXP sf0SEXP) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy);
+RcppExport SEXP sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sf0(sf0SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfc, sf0));
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcx(sfcxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcy(sfcySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -304,22 +334,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_geos_init
-void CPL_geos_init();
-RcppExport SEXP sf_CPL_geos_init() {
+// CPL_proj_version
+std::string CPL_proj_version(bool b);
+RcppExport SEXP sf_CPL_proj_version(SEXP bSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    CPL_geos_init();
-    return R_NilValue;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_version(b));
+    return rcpp_result_gen;
 END_RCPP
 }
-// CPL_geos_finish
-void CPL_geos_finish();
-RcppExport SEXP sf_CPL_geos_finish() {
+// CPL_proj_is_valid
+Rcpp::List CPL_proj_is_valid(std::string proj4string);
+RcppExport SEXP sf_CPL_proj_is_valid(SEXP proj4stringSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    CPL_geos_finish();
-    return R_NilValue;
+    Rcpp::traits::input_parameter< std::string >::type proj4string(proj4stringSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_is_valid(proj4string));
+    return rcpp_result_gen;
 END_RCPP
 }
 // CPL_hex_to_raw

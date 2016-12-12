@@ -16,22 +16,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > options(warn = 2)
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > 
 > nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
 + 	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
 + 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
 + 		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-+ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"))
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
++ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"), quiet = TRUE)
 > 
 > st_is_valid(nc)
   [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
@@ -51,36 +42,39 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
  [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
-> x = st_buffer(nc, 1)
+> nc_tr = st_transform(nc, 3857)
+> 
+> x = st_buffer(nc_tr, 1000)
 > 
 > x = st_boundary(nc)
 > 
 > x = st_convex_hull(nc)
 > 
-> x = st_simplify(nc, 0.1)
+> x = st_simplify(nc_tr, 1e4)
 > 
-> if (sf:::CPL_geos_version() >= "3.4.0" && sf:::CPL_gdal_version() >= "2.1.0") {
-+ 	x = st_triangulate(nc)
-+ }
+> if (sf:::CPL_geos_version() >= "3.4.0")
++ 	x = st_triangulate(nc_tr)
 > 
 > mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 > x = st_polygonize(mls)
 > 
-> x = st_segmentize(nc, 0.1)
+> x = st_segmentize(nc_tr, 5e4)
 > 
-> try(x <- st_segmentize(nc, -0.1))
-Error in CPL_gdal_geom_op("segmentize", st_geometry(x), dfMaxLength = dfMaxLength) : 
+> try(x <- st_segmentize(nc_tr, -0.1))
+Error in CPL_gdal_segmentize(st_geometry(x), dfMaxLength) : 
   argument dfMaxLength should be positive
 
 > 
-> x = st_centroid(nc)
+> x = st_centroid(nc_tr)
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
 > 
 > x = st_intersection(a[1,] ,b)
 > 
-> x <- st_intersection(a, st_union(b)) # FIXME
+> u = st_union(b) 
+> 
+> x <- st_intersection(st_geometry(a), st_geometry(u))
 > 
 > x = st_union(a[1,], b)
 > 
@@ -101,6 +95,7 @@ GDAL has 77 drivers
 > # GEOS ops:
 > 
 > st_relate(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
      [,1]        [,2]        [,3]        [,4]        [,5]        [,6]       
 [1,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
 [2,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
@@ -115,6 +110,7 @@ GDAL has 77 drivers
 [5,] "FF2FF1212"
 > 
 > st_disjoint(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 [1] 1 2 3 4 5 6 7
 
@@ -132,6 +128,7 @@ GDAL has 77 drivers
 
 > 
 > st_touches(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -149,6 +146,7 @@ integer(0)
 
 > 
 > st_crosses(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -166,6 +164,7 @@ integer(0)
 
 > 
 > st_within(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -183,6 +182,7 @@ integer(0)
 
 > 
 > st_contains(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -200,6 +200,7 @@ integer(0)
 
 > 
 > st_overlaps(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -234,6 +235,7 @@ integer(0)
 
 > 
 > st_covers(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -251,6 +253,7 @@ integer(0)
 
 > 
 > st_covered_by(a, b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 [[1]]
 integer(0)
 
@@ -298,13 +301,13 @@ POINT(1 2)
 LINESTRING(1 3, 2 4) 
 
 > 
-> cbind(suppressWarnings(st_area(a)), a$AREA)
+> cbind(st_area(nc_tr[1:5,]), a$AREA)
            [,1]  [,2]
-[1,] 0.11428350 0.114
-[2,] 0.06139976 0.061
-[3,] 0.14301628 0.143
-[4,] 0.06977098 0.070
-[5,] 0.15275930 0.153
+[1,] 1760244757 0.114
+[2,]  946435667 0.061
+[3,] 2202248253 0.143
+[4,] 1074351919 0.070
+[5,] 2352539533 0.153
 > 
 > st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 [1] 1
@@ -334,4 +337,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1),...
 > 
 > proc.time()
    user  system elapsed 
-  0.556   0.020   0.573 
+  0.772   0.020   0.788 

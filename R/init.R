@@ -1,11 +1,14 @@
-#' @importFrom utils head tail object.size
-#' @importFrom stats na.omit
+#' @importFrom utils head tail object.size str
+#' @importFrom stats runif aggregate
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as slotNames new
 #' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable
+#' @importFrom units make_unit
+#' @importFrom geosphere distGeo areaPolygon bearing
+#' @importFrom grDevices rgb
 #' @useDynLib sf
 NULL
 
@@ -32,12 +35,10 @@ setOldClass("sfg")
 		# nocov end
 	}
 	CPL_gdal_init()
-	CPL_geos_init()
 }
 
 .onUnload = function(libname, pkgname) {
 	CPL_gdal_cleanup_all()
-	CPL_geos_finish()
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
 		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
@@ -48,5 +49,14 @@ setOldClass("sfg")
 
 .onAttach = function(libname, pkgname) {
 	packageStartupMessage(paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", 
-		CPL_gdal_version()))
+		CPL_gdal_version(), ", proj.4 ", CPL_proj_version()))
+}
+
+#' provide the external dependencies versions of the libraries linked to sf
+#' 
+#' provide the external dependencies versions of the libraries linked to sf
+#' @export
+sf_extSoftVersion = function() {
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version()),
+		names = c("GEOS", "GDAL", "proj.4"))
 }

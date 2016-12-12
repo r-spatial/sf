@@ -13,6 +13,7 @@
 \alias{st_covers}
 \alias{st_crosses}
 \alias{st_difference}
+\alias{st_dimension}
 \alias{st_disjoint}
 \alias{st_distance}
 \alias{st_equals}
@@ -22,6 +23,8 @@
 \alias{st_is_simple}
 \alias{st_is_valid}
 \alias{st_length}
+\alias{st_line_sample}
+\alias{st_linemerge}
 \alias{st_overlaps}
 \alias{st_polygonize}
 \alias{st_relate}
@@ -36,13 +39,15 @@
 \usage{
 st_is_valid(x)
 
+st_dimension(x, NA_if_empty = TRUE)
+
 st_area(x)
 
-st_length(x)
+st_length(x, dist_fun = geosphere::distGeo)
 
 st_is_simple(x)
 
-st_distance(x, y = x)
+st_distance(x, y, dist_fun = geosphere::distGeo)
 
 st_relate(x, y)
 
@@ -80,22 +85,30 @@ st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
 st_polygonize(mlst)
 
+st_linemerge(mlst)
+
 st_centroid(x)
 
 st_segmentize(x, dfMaxLength)
 
 st_combine(x)
 
-st_intersection(x, y0)
+st_intersection(x, y)
 
-st_union(x, y0)
+st_union(x, y)
 
-st_difference(x, y0)
+st_difference(x, y)
 
-st_sym_difference(x, y0)
+st_sym_difference(x, y)
+
+st_line_sample(x, n, density, type = "regular")
 }
 \arguments{
 \item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
+
+\item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
+
+\item{dist_fun}{function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.}
 
 \item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
 
@@ -117,14 +130,20 @@ st_sym_difference(x, y0)
 
 \item{dfMaxLength}{numeric; max length of a line segment}
 
-\item{y0}{object of class \code{sfc} which is merged, using \code{c.sfg} (\link{st}), before intersection etc. with it is computed}
+\item{n}{integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.}
+
+\item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
+
+\item{type}{character; indicate the sampling type, either "regular" or "random"}
 }
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 
-st_area returns the area of a geometry, in the coordinate reference system used
+st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.
 
-st_length returns the length of a geometry, in the coordinate reference system used
+st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
+
+st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.
 
 st_is_simple and st_is_valid return a logical vector
 
@@ -142,12 +161,23 @@ st_buffer ... st_segmentize return an \link{sfc} object with the same number of 
 Geometric operations on (pairs of) simple feature geometries
 }
 \details{
+function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+
 requires GEOS version 3.4 or above
 
 \code{st_combine} combines geometries without resolving borders. 
 st_combine(nc)
 }
 \examples{
+x = st_sfc(
+	st_point(0:1), 
+	st_linestring(rbind(c(0,0),c(1,1))), 
+	st_polygon(list(rbind(c(0,0),c(1,0),c(0,1),c(0,0)))),
+	st_multipoint(),
+	st_linestring(),
+	st_geometrycollection())
+st_dimension(x)
+st_dimension(x, FALSE)
 p1 = st_point(c(0,0))
 p2 = st_point(c(2,2))
 pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
@@ -158,9 +188,19 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
-x = st_polygonize(mls)
+st_polygonize(mls)
+mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
+st_linemerge(mls)
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
 plot(st_union(nc))
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+	st_linestring(rbind(c(0,0),c(10,0))))
+st_line_sample(ls, density = 1)
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+  st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+try(st_line_sample(ls, density = 1/1000)) # error
+st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
+st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
 }
 

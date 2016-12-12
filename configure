@@ -679,6 +679,9 @@ enable_option_checking
 with_gdal_config
 with_data_copy
 with_proj_data
+with_proj_include
+with_proj_lib
+with_proj_share
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1311,6 +1314,11 @@ Optional Packages:
   --with-data-copy=yes/no local copy of data directories in package, default
                           no
   --with-proj-data=DIR    location of PROJ.4 data directory
+  --with-proj-include=DIR location of proj header files
+  --with-proj-lib=LIB_PATH
+                          the location of proj libraries
+  --with-proj-share=SHARE_PATH
+                          the location of proj metadata files
 
 Some influential environment variables:
   CC          C compiler command
@@ -1636,6 +1644,52 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_c_check_header_compile
+
+# ac_fn_c_try_link LINENO
+# -----------------------
+# Try to link conftest.$ac_ext, and return whether this succeeded.
+ac_fn_c_try_link ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  rm -f conftest.$ac_objext conftest$ac_exeext
+  if { { ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_link") 2>conftest.err
+  ac_status=$?
+  if test -s conftest.err; then
+    grep -v '^ *+' conftest.err >conftest.er1
+    cat conftest.er1 >&5
+    mv -f conftest.er1 conftest.err
+  fi
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 test -x conftest$ac_exeext
+       }; then :
+  ac_retval=0
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_retval=1
+fi
+  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+  # interfere with the next link command; also delete a directory that is
+  # left behind by Apple's compiler.  We do this before executing the actions.
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+  as_fn_set_status $ac_retval
+
+} # ac_fn_c_try_link
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -3537,6 +3591,235 @@ if test "${gdal_has_proj}" = no; then
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
 
+
+#
+# PROJ.4
+#
+
+
+# Check whether --with-proj-include was given.
+if test "${with_proj_include+set}" = set; then :
+  withval=$with_proj_include; proj_include_path=$withval
+fi
+
+if test  -n "$proj_include_path"  ; then
+   PKG_CPPFLAGS="-I${proj_include_path} ${INPKG_CPPFLAGS}"
+
+fi
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+
+
+proj4ok=yes
+for ac_header in proj_api.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "proj_api.h" "ac_cv_header_proj_api_h" "$ac_includes_default"
+if test "x$ac_cv_header_proj_api_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PROJ_API_H 1
+_ACEOF
+
+else
+  proj4ok=no
+fi
+
+done
+
+if test "${proj4ok}" = no; then
+   as_fn_error $? "proj_api.h not found in standard or given locations." "$LINENO" 5
+fi
+
+# dnl ditto for a library path
+
+# Check whether --with-proj-lib was given.
+if test "${with_proj_lib+set}" = set; then :
+  withval=$with_proj_lib; proj_lib_path=$withval
+fi
+
+if test  -n "$proj_lib_path"  ; then
+    PKG_LIBS="-L${proj_lib_path} ${INPKG_LIBS}"
+
+fi
+
+LIBS="${INLIBS} ${PKG_LIBS}"
+
+proj4ok=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
+$as_echo_n "checking for pj_init_plus in -lproj... " >&6; }
+if ${ac_cv_lib_proj_pj_init_plus+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lproj  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pj_init_plus ();
+int
+main ()
+{
+return pj_init_plus ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_proj_pj_init_plus=yes
+else
+  ac_cv_lib_proj_pj_init_plus=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_proj_pj_init_plus" >&5
+$as_echo "$ac_cv_lib_proj_pj_init_plus" >&6; }
+if test "x$ac_cv_lib_proj_pj_init_plus" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPROJ 1
+_ACEOF
+
+  LIBS="-lproj $LIBS"
+
+else
+  proj4ok=no
+fi
+
+if test "${proj4ok}" = no; then
+   as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
+fi
+
+PKG_LIBS="${PKG_LIBS} -lproj"
+
+cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    printf("%d\n", PJ_VERSION);
+    exit(0);
+}
+_EOCONF
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+
+proj_version=`./proj_conf_test`
+
+
+# Check whether --with-proj-share was given.
+if test "${with_proj_share+set}" = set; then :
+  withval=$with_proj_share; proj_share_path=$withval
+fi
+
+if test  -n "$proj_share_path"  ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ_LIB: ${proj_share_path}" >&5
+$as_echo "$as_me: PROJ_LIB: ${proj_share_path}" >&6;}
+fi
+
+
+cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    PAFile fp;
+    projCtx ctx;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "epsg", "rb");
+    if (fp == NULL) exit(1);
+    pj_ctx_fclose(ctx, fp);
+    exit(0);
+}
+_EOCONF
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+if test  -n "$proj_share_path"  ; then
+  PROJ_LIB="${proj_share_path}" ./proj_conf_test
+  proj_share=`echo $?`
+else
+  ./proj_conf_test
+  proj_share=`echo $?`
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ.4: epsg found and readable" >&5
+$as_echo_n "checking PROJ.4: epsg found and readable... " >&6; }
+if test ${proj_share} -eq 1 ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    STOP="stop"
+else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+rm -f proj_conf_test.c proj_conf_test
+
+if test "$STOP" = "stop" ; then
+    echo "Error: proj/epsg not found"
+    echo "Either install missing proj support files, for example"
+    echo "the proj-nad and proj-epsg RPMs on systems using RPMs,"
+    echo "or if installed but not autodetected, set PROJ_LIB to the"
+    echo "correct path, and if need be use the --with-proj-share="
+    echo "configure argument."
+    exit 1
+fi
+
+
+cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    PAFile fp;
+    projCtx ctx;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "conus", "rb");
+    if (fp == NULL) exit(1);
+    pj_ctx_fclose(ctx, fp);
+    exit(0);
+}
+_EOCONF
+
+${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+if test  -n "$proj_share_path"  ; then
+  PROJ_LIB="${proj_share_path}" ./proj_conf_test
+  proj_share=`echo $?`
+else
+  ./proj_conf_test
+  proj_share=`echo $?`
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ.4: conus found and readable" >&5
+$as_echo_n "checking PROJ.4: conus found and readable... " >&6; }
+if test ${proj_share} -eq 1 ; then
+    WARN="warn"
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+rm -f proj_conf_test.c proj_conf_test
+
+if test "$WARN" = "warn" ; then
+    echo "Note: proj/conus not found"
+    echo "No support available in PROJ4 for NAD grid datum transformations"
+    echo "If required, consider re-installing from source with the contents"
+    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
+fi
+
+
+
 #
 # test whether gdal has GEOS support:
 #
@@ -3683,6 +3966,8 @@ if test "${NEED_DEPS}" = yes; then
    PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"
 
 fi
+PKG_LIBS="${PKG_LIBS} -lproj"
+
 
 
 # honor PKG_xx overrides

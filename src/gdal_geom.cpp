@@ -5,19 +5,6 @@
 
 #include "gdal.h"
 
-/*
-// [[Rcpp::export]]
-Rcpp::LogicalVector CPL_is_simple(Rcpp::List sfc) { 
-	Rcpp::LogicalVector out(sfc.length());
-	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	for (size_t i = 0; i < g.size(); i++) {
-		out[i] = g[i]->IsSimple();
-		delete g[i];
-	}
-	return out;
-}
-*/
-
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
@@ -28,6 +15,19 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 			out[i] = a->get_Area();
 		} else
 			out[i] = 0.0;
+		delete g[i];
+	}
+	return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) {
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	Rcpp::IntegerVector out(sfc.length());
+	for (size_t i = 0; i < g.size(); i++) {
+		out[i] = g[i]->getDimension();
+		if (NA_if_empty && g[i]->IsEmpty())
+			out[i] = NA_INTEGER;
 		delete g[i];
 	}
 	return out;
@@ -52,29 +52,35 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_gdal_geom_op(std::string op, Rcpp::List sfc, 
-		double bufferDist = 0.0, int nQuadSegs = 30,
-		double dTolerance = 0.0, bool preserveTopology = false, 
-		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
+Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength = 0.0) {
 
-	if (op == "segmentize" && dfMaxLength <= 0.0)
+	if (dfMaxLength <= 0.0)
 		throw std::invalid_argument("argument dfMaxLength should be positive\n");
-		// breaks, strangely!
 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	for (size_t i = 0; i < g.size(); i++)
+		g[i]->segmentize(dfMaxLength);
+	Rcpp::List ret = sfc_from_ogr(g, true);
+	ret.attr("crs") = sfc.attr("crs");
+	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
+	if (sfc.size() != distLst.size())
+		throw std::invalid_argument("sfc and dist should have equal length");
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
-
-	if (op == "segmentize") {
-		for (size_t i = 0; i < g.size(); i++) {
-			g[i]->segmentize(dfMaxLength);
-			out[i] = g[i];
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRGeometryCollection *gc = new OGRGeometryCollection;
+		Rcpp::NumericVector dists = distLst[i];
+		for (size_t j = 0; j < dists.size(); j++) {
+			OGRPoint *poPoint  = new OGRPoint;
+			((OGRLineString *) g[i])->Value(dists[j], poPoint);
+			gc->addGeometry(poPoint);
 		}
-	} else
-		throw std::invalid_argument("invalid operation"); // would leak g and out
-
-	if (op != "segmentize")
-		for (size_t i = 0; i < g.size(); i++)
-			delete g[i];
+		out[i] = OGRGeometryFactory::forceToMultiPoint(gc);
+	}
 	Rcpp::List ret = sfc_from_ogr(out, true);
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;

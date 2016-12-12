@@ -235,15 +235,15 @@ We can see there is a single polygon with no rings:
 
 ```{r fig.height=3}
 par(mar = rep(0,4))
-plot(nc)
-plot(nc[1,], col = 'red', add = TRUE)
+plot(nc[1])
+plot(nc[1,1], col = 'red', add = TRUE)
 ```
 
 but some of the polygons in this dataset have multiple exterior rings; they can be identified by
 ```{r fig.height=3.5}
 par(mar = rep(0,4))
 (w <- which(sapply(nc.geom, length) > 1))
-plot(nc[w,], col = 2:7)
+plot(nc[w,1], col = 2:7)
 ```
 
 Following the `MULTIPOLYGON` datastructure, in R we have a list of lists of lists of matrices. For instance,
@@ -614,7 +614,8 @@ between geometries. `st_relate` returns a character matrix with the
 for each pair of geometries:
 
 ```{r}
-st_distance(nc[c(1,4,22),], nc[c(1, 33,55,56),])
+x = st_transform(nc, 32119)
+st_distance(x[c(1,4,22),], x[c(1, 33,55,56),])
 st_relate(nc[1:5,], nc[1:4,])
 ```
 
@@ -638,8 +639,8 @@ return new geometries, e.g.:
 sel <- c(1,5,14)
 buf <- st_buffer(nc.web_mercator[sel,], dist = 30000)
 plot(buf, border = 'red')
-plot(nc.web_mercator[sel,], add = TRUE)
-plot(st_buffer(nc.web_mercator[sel,], -5000), add = TRUE, border = 'blue')
+plot(nc.web_mercator[sel,1], add = TRUE)
+plot(st_buffer(nc.web_mercator[sel,1], -5000), add = TRUE, border = 'blue')
 ```
 
 Commands `st_intersection`, `st_union`, `st_difference`,

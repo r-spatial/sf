@@ -14,6 +14,7 @@
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot}
+#' @param ncol integer; default number of colors to be used.
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -83,12 +84,23 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ...) {
+plot.sf <- function(x, y, ..., ncol = 10) {
 	stopifnot(missing(y))
-	plot(st_geometry(x), ...)
+	dots = list(...)
+	if (ncol(x) > 2 && is.null(dots$col)) {
+		cols = names(x)[names(x) != attr(x, "sf_column")]
+		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
+		lapply(cols, function(cname) {
+			plot(x[, cname], col = sf.colors(ncol, xc = x[[cname]]))
+			title(cname)
+		})
+		par(opar)
+	} else
+		plot(st_geometry(x), ...)
 }
 
 #' @name plot
+#' @method plot sfc_POINT
 #' @export
 plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
@@ -105,6 +117,7 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 }
 
 #' @name plot
+#' @method plot sfc_MULTIPOINT
 #' @export
 plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1, lty = 1,
 		type = 'p', add = FALSE) {
@@ -124,6 +137,7 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 }
 
 #' @name plot
+#' @method plot sfc_LINESTRING
 #' @export
 plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l', 
 		add = FALSE) {
@@ -141,6 +155,7 @@ plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, ty
 }
 
 #' @name plot
+#' @method plot sfc_MULTILINESTRING
 #' @export
 plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l',
 		add = FALSE) {
@@ -169,8 +184,10 @@ p_bind = function(lst) {
 }
 
 #' @name plot
+#' @param rule see \link[graphics]{polypath}
+#' @method plot sfc_POLYGON
 #' @export
-plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -180,13 +197,14 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
 	lapply(seq_along(x), function(i)
-		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i]))
+		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule))
 	invisible(NULL)
 }
 
 #' @name plot
+#' @method plot sfc_MULTIPOLYGON
 #' @export
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE) {
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -197,7 +215,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border =
 	border = rep(border, length.out = length(x))
 	lapply(seq_along(x), function(i)
 		lapply(x[[i]], function(L)
-			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i])))
+			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule)))
 	invisible(NULL)
 }
 
@@ -222,6 +240,7 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 }
 
 #' @name plot
+#' @method plot sfc_GEOMETRYCOLLECTION
 #' @export
 plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
@@ -242,6 +261,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 }
 
 #' @name plot
+#' @method plot sfc_GEOMETRY
 #' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
 	col = 1, border = 1, add = FALSE) {
@@ -260,6 +280,7 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 }
 
 #' @name plot
+#' @method plot sfg
 #' @export
 plot.sfg = function(x, ...) {
 	plot(st_sfc(x), ...)
@@ -278,3 +299,68 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 		expandBB = expandBB)
 }
 
+
+#' blue-pink-yellow color scale
+#'
+#' blue-pink-yellow color scale
+#' @param n integer; number of colors
+#' @param cutoff.tails numeric, in [0,0.5] start and end values
+#' @param alpha numeric, in [0,1], transparency
+#' @param categorical logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.
+#' @param xc factor or numeric vector, for which colors need to be returned
+#' @name plot
+#' @export
+#' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
+#' @examples
+#' sf.colors(10)
+sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+	if (missing(xc) || length(xc) == 1) {
+		if (missing(n))
+			n = xc
+		if (categorical) {
+			cb = if (n <= 8)
+			# 8-class Set2:
+			c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3')
+			# 12-class Set3:
+			else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
+			rep(cb, length.out = n)
+		} else {
+			i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
+    		r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
+    		g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
+    		b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
+        		ifelse(i < .92, -2 * i + 1.84, i / .08 - 11.5)))
+    		rgb(r, g, b, alpha)
+		}
+	} else {
+		if (is.factor(xc))
+			sf.colors(nlevels(xc), categorical = TRUE)[as.numeric(xc)]
+		else {
+			safe_cut = function(x,n) { 
+				if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
+					rep(1, length(x))
+				else
+					cut(x, n)
+			}
+			sf.colors(n)[safe_cut(xc, n)]
+		}
+	}
+}
+
+get_mfrow = function(bb, n, total_size = c(1,1)) {
+	asp = diff(bb[c(1,3)])/diff(bb[c(2,4)])
+	size = function(nrow, n, asp) {
+		ncol = ceiling(n / nrow)
+		xsize = total_size[1] / ncol
+		ysize = xsize  / asp
+		if (xsize * ysize * n > prod(total_size)) {
+			ysize = total_size[2] / nrow
+			xsize = ysize * asp
+		}
+		xsize * ysize
+	}
+	sz = sapply(1:n, function(x) size(x, n, asp))
+	nrow = which.max(sz)
+	ncol = ceiling(n / nrow)
+	structure(c(nrow, ncol), names = c("nrow", "ncol"))
+}

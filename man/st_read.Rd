@@ -7,7 +7,7 @@
 \usage{
 st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
   type = 0, promote_to_multi = TRUE,
-  stringsAsFactors = default.stringsAsFactors())
+  stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
 
 st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
   geom_column = NULL, EWKB, ...)
@@ -30,6 +30,8 @@ st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
 \item{promote_to_multi}{logical; in case of a mix of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
+
+\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double and a warning is given when precision is lost (i.e., values are larger than 2^53).}
 
 \item{conn}{open database connection}
 
@@ -73,6 +75,7 @@ if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+  x = st_read_db(conn, table = "public.meuse")
   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
   dbDisconnect(conn)
 }

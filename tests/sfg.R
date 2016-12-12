@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 c(st_point(1:2), st_point(5:6))
 c(st_point(1:2), st_multipoint(matrix(5:8,2)))
 c(st_multipoint(matrix(1:4,2)), st_multipoint(matrix(5:8,2)))

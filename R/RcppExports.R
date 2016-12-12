@@ -17,6 +17,10 @@ CPL_gdal_version <- function(what = "RELEASE_NAME") {
     .Call('sf_CPL_gdal_version', PACKAGE = 'sf', what)
 }
 
+CPL_crs_pars <- function(p4s) {
+    .Call('sf_CPL_crs_pars', PACKAGE = 'sf', p4s)
+}
+
 CPL_transform <- function(sfc, proj4) {
     .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
 }
@@ -41,20 +45,28 @@ CPL_area <- function(sfc) {
     .Call('sf_CPL_area', PACKAGE = 'sf', sfc)
 }
 
+CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
+    .Call('sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+}
+
 CPL_length <- function(sfc) {
     .Call('sf_CPL_length', PACKAGE = 'sf', sfc)
 }
 
-CPL_gdal_geom_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance = 0.0, preserveTopology = FALSE, bOnlyEdges = 1L, dfMaxLength = 0.0) {
-    .Call('sf_CPL_gdal_geom_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
+CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
+    .Call('sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+}
+
+CPL_gdal_linestring_sample <- function(sfc, distLst) {
+    .Call('sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
 }
 
 CPL_get_layers <- function(datasource, options, do_count = FALSE) {
     .Call('sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
-CPL_read_ogr <- function(datasource, layer, options, quiet = FALSE, iGeomField = 0L, toTypeUser = 0L, promote_to_multi = TRUE) {
-    .Call('sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, iGeomField, toTypeUser, promote_to_multi)
+CPL_read_ogr <- function(datasource, layer, options, quiet = FALSE, iGeomField = 0L, toTypeUser = 0L, promote_to_multi = TRUE, int64_as_string = FALSE) {
+    .Call('sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, iGeomField, toTypeUser, promote_to_multi, int64_as_string)
 }
 
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE) {
@@ -81,8 +93,8 @@ CPL_geos_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance =
     .Call('sf_CPL_geos_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
 }
 
-CPL_geos_op2 <- function(op, sfc, sf0) {
-    .Call('sf_CPL_geos_op2', PACKAGE = 'sf', op, sfc, sf0)
+CPL_geos_op2 <- function(op, sfcx, sfcy) {
+    .Call('sf_CPL_geos_op2', PACKAGE = 'sf', op, sfcx, sfcy)
 }
 
 CPL_geos_version <- function(b = FALSE) {
@@ -97,12 +109,12 @@ CPL_geos_relate <- function(sfc0, sfc1) {
     .Call('sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
 }
 
-CPL_geos_init <- function() {
-    invisible(.Call('sf_CPL_geos_init', PACKAGE = 'sf'))
+CPL_proj_version <- function(b = FALSE) {
+    .Call('sf_CPL_proj_version', PACKAGE = 'sf', b)
 }
 
-CPL_geos_finish <- function() {
-    invisible(.Call('sf_CPL_geos_finish', PACKAGE = 'sf'))
+CPL_proj_is_valid <- function(proj4string) {
+    .Call('sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
 }
 
 CPL_hex_to_raw <- function(cx) {

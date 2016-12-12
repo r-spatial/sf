@@ -17,8 +17,7 @@ Type 'q()' to quit R.
 
 > library(RPostgreSQL)
 Loading required package: DBI
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > library(sp)
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   data(meuse)
@@ -94,10 +93,10 @@ Linking to GEOS 3.5.0, GDAL 2.1.0
 > if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 +   suppressWarnings(x <- st_read("PG:dbname=postgis"))
 +   try(x <- st_read("PG:dbname=empty")) # error
-+   print(st_list("PG:dbname=postgis"))
-+   print(st_list("PG:dbname=empty"))
++   print(st_layers("PG:dbname=postgis"))
++   print(st_layers("PG:dbname=empty"))
 + }
 > 
 > proc.time()
    user  system elapsed 
-  0.436   0.028   0.462 
+  0.456   0.020   0.474 

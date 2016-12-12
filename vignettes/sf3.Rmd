@@ -113,7 +113,7 @@ Just to make the point, we can for instance rotate the counties of North Carolin
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 cntrd = st_centroid(nc)
 nc2 = (st_geometry(nc) - cntrd) * rot(pi/2) * .75 + cntrd
-plot(nc, border = 'grey')
+plot(nc[1], border = 'grey')
 plot(nc2, add = TRUE)
 plot(cntrd, col = 'red', add = TRUE, cex = .5)
 ```
@@ -164,22 +164,6 @@ s3 <- s1 %>% st_transform(3857)
 s3
 ```
 for which we see that coordinates are actually modified (projected).
-
-
-### GDAL is forgiving on wrong PROJ.4 strings
-
-It should be noted that PROJ.4 strings are interpreted by the GDAL
-library, and that GDAL does not raise errors on wrong strings, but
-rather tries to "correct" them, e.g.
-```{r}
-st_crs("+proj=longlat +datum=idontknow")
-```
-Hence, it is always important to check the PROJ.4 string of the
-returned object, as it contains the PROJ.4 string as GDAL has understood,
-or interpreted it:
-```{r}
-s3 %>% st_transform("+proj=longlat +datum=idontknow") %>% st_crs()
-```
 
 ## Geometrical operations
 

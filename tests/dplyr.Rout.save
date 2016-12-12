@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > library(dplyr)
 
 Attaching package: 'dplyr'
@@ -29,15 +28,7 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
-> nc = st_read(system.file("shape/nc.shp", package="sf"))
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > nc %>% filter(AREA > .1) %>% plot()
 > 
 > # plot 10 smallest counties in grey:
@@ -184,4 +175,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.828   0.012   0.837 
+  0.812   0.052   0.864 

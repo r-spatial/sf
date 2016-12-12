@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.2-6
+Version: 0.2-8
 Title: Simple Features for R
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"),
 	person("Roger", "Bivand", role = "ctb"),
@@ -11,11 +11,11 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb")
 	)
 Depends: R (>= 3.3.0)
-Imports: utils, stats, tools, graphics, grid, methods, Rcpp, DBI
+Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, geosphere (>= 1.5-5), units (>= 0.4)
 LinkingTo: Rcpp
 Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr
 VignetteBuilder: knitr
-Description: Support for simple features, a standardized way to encode spatial data, in R.
+Description: Support for simple features, a standardized way to encode spatial data, with bindings to GDAL, GEOS and Proj.4.
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/

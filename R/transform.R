@@ -31,6 +31,13 @@ st_transform.sfc = function(x, crs, ...) {
 
 #' @name st_transform
 #' @export
+#' @examples
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' st_area(nc[1,]) # area, using geosphere::areaPolygon
+#' st_area(st_transform(nc[1,], 32119)) # NC state plane, m
+#' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
+#' library(units)
+#' as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
 st_transform.sf = function(x, crs, ...) {
 	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs)
 	x
@@ -40,7 +47,6 @@ st_transform.sf = function(x, crs, ...) {
 #' @export
 #' @details the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
 #' @examples 
-#' # FIXME: do we really want this?
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))

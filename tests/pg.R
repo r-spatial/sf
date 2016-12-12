@@ -1,5 +1,5 @@
 library(RPostgreSQL)
-library(sf)
+suppressPackageStartupMessages(library(sf))
 library(sp)
 if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   data(meuse)
@@ -75,6 +75,6 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 if (Sys.getenv("USER") %in% c("travis", "edzer")) {
   suppressWarnings(x <- st_read("PG:dbname=postgis"))
   try(x <- st_read("PG:dbname=empty")) # error
-  print(st_list("PG:dbname=postgis"))
-  print(st_list("PG:dbname=empty"))
+  print(st_layers("PG:dbname=postgis"))
+  print(st_layers("PG:dbname=empty"))
 }

@@ -16,18 +16,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > # MULTIPOLYGONS
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0
+> suppressPackageStartupMessages(library(sf))
 > library(grid)
-> nc = st_read(system.file("shape/nc.shp", package="sf"))
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > grid.newpage()
 > # pushViewport(viewport(width = 0.8, height = 0.8))
 > pushViewport(st_viewport(nc))
@@ -35,15 +26,7 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > # POLYGONS
 > # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", type = 3)
-> nc = st_read(system.file("shape/nc.shp", package="sf"), type = 3)
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: POLYGON
-Simple feature collection with 100 features and 14 fields
-geometry type:  POLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+> nc = st_read(system.file("shape/nc.shp", package="sf"), type = 3, quiet = TRUE)
 > grid.newpage()
 > pushViewport(st_viewport(nc))
 > invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
@@ -91,4 +74,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.760   0.016   0.774 
+  0.676   0.056   0.732 
