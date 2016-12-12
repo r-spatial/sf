@@ -35,3 +35,6 @@ a1 = aggregate(nc["BIR74"], g)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 a2 = aggregate(nc["BIR74"], g, extensive = TRUE)
 sum(a2$BIR74) / sum(nc$BIR74)
+
+# missing x:
+g = st_makegrid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
