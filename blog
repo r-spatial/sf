@@ -65,7 +65,7 @@ and support for using functions of package geosphere to compute
 distances or areas for longitude/latitude data, using datum-dependent
 values for the Earth's radius and flattening.
 
-The sf package is now available from CRAN [6], both in source for
+The sf package is now available from CRAN [6], both in source form
 as in binary form for Windows and MacOSX platforms. The authors are
 greatful to the CRAN team for their strong support in getting the
 sf package compiled on all platforms. Support from the R Consortium
