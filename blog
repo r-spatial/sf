@@ -8,7 +8,7 @@ rgeos. It offers simple classes for points, lines, polygons and
 grids, possibly associated with further properties (attributes),
 and takes care of coordinate reference systems.  The sp package has
 helped many, and has made it attractive to develop new packages
-that shares this understanding by reusing these classes. Today,
+that share this understanding by reusing these classes. Today,
 around 350 packages directly depend on sp, many more indirectly.
 
 After 2003, the rest of the world has broadly settled on adopting
@@ -21,14 +21,14 @@ and exchanging spatial data (points, lines, polygons) as well as for
 operations defined on them that has been adopted widely over the
 past ten years, e.g. by spatial databases such as PostGIS [3] but
 also more recent standards such as GeoJSON [4]. The sp package and
-supporting packages such as rgdal and rgeos predates this standard,
+supporting packages such as rgdal and rgeos predate this standard,
 which complicates exchange and handling of simple feature data.
 
 The "Simple Features for R" project [5], one of the projects
 supported by the R consortium in its first funding round, addresses
 these problems by implementing simple features as native R data. The
 resulting package, called "sf" [6] provides functionality similar
-to the sp, rgdal and rgeos packages together, but for simple
+to the sp, rgdal for vector data, and rgeos packages together, but for simple
 features. Instead of S4 classes used by the sp family, it extends R's
 data.frame directly, adding a list-column for geometries. This makes
 it easier to manipulate them with other tools that assume all data
@@ -68,7 +68,7 @@ values for the Earth's radius and flattening.
 The sf package is now available from CRAN [6], both in source for
 as in binary form for Windows and MacOSX platforms. The authors are
 greatful to the CRAN team for their strong support in getting the
-sf package compiled on all platforms. Support from the R foundation
+sf package compiled on all platforms. Support from the R Consortium
 has helped greatly to give this project priority, draw attention
 in a wider community, and facilitate travel and communication events.
 
