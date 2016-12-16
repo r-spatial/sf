@@ -203,13 +203,13 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	geom = st_geometry(x)
 	if (!missing(i) && nargs > 2) # e.g. a[3:4,] not a[3:4]
 		geom = geom[i]
-	if (missing(j))
-		x = NextMethod("[") # specifying drop would trigger a warning
+	x = if (missing(j))
+		NextMethod("[") # specifying drop would trigger a warning
 	else
-		x = NextMethod("[", drop = drop)
+		NextMethod("[", drop = drop)
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
-		return(x)
-	if (! drop) {
+		x
+	else if (! drop) {
 		if (!(sf_column %in% names(x))) { # geom was deselected: make it sticky
 			if (inherits(x, "sf"))
 				x[[sf_column]] = geom

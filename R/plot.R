@@ -176,11 +176,13 @@ plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 
 # sf (list) -> polypath (mtrx) : rbind polygon rings with NA rows inbetween
 p_bind = function(lst) {
 	if (length(lst) == 1)
-		return(lst[[1]])
-	ret = vector("list", length(lst) * 2 - 1)
-	ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
-	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
-	do.call(rbind, ret) # replicates the NA to form an NA row
+		lst[[1]]
+	else {
+		ret = vector("list", length(lst) * 2 - 1)
+		ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
+		ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
+		do.call(rbind, ret) # replicates the NA to form an NA row
+	}
 }
 
 #' @name plot

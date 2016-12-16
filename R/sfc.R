@@ -220,7 +220,7 @@ st_drop_zm <- function(x, ...) UseMethod("st_drop_zm")
 #' @export
 st_drop_zm.sf <- function(x, ...) {
 	st_geometry(x) = st_drop_zm(st_geometry(x))
-	return(x)
+	x
 }
 
 #' @export

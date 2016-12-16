@@ -11,7 +11,7 @@
 
 \item{by}{object of class \code{sf} or \code{sfc}, with the target geometries}
 
-\item{FUN}{aggregation function, ignored.}
+\item{FUN}{aggregation function, should not be set}
 
 \item{...}{arguments, passed on to FUN}
 

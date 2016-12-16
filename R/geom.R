@@ -441,7 +441,7 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 #' aggregate sf objects over a spatial region
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param by object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param FUN aggregation function, ignored.
+#' @param FUN aggregation function, should not be set
 #' @param ... arguments, passed on to FUN
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive.
 #' @examples
@@ -456,6 +456,8 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 #' plot(a1[c("intensive", "extensive")])
 #' @export
 aggregate.sf = function(x, by, FUN, ..., extensive) {
+	if (!missing(FUN))
+		stop("FUN can not be supplied; always using sum")
 	if (!inherits(by, "sf") && !inherits(by, "sfc"))
 		stop("aggregate.sf requires geometries in argument by")
 	i = st_cast(st_intersection(st_geometry(x), st_geometry(by)), "MULTIPOLYGON")
@@ -465,17 +467,14 @@ aggregate.sf = function(x, by, FUN, ..., extensive) {
 	x = x[idx[,1], ]      # create st table
 	x$...area_st = unclass(st_area(i))
 	x$...area_t = unclass(st_area(by)[idx[,2]])
-	df = if (!missing(extensive) && extensive) {
-		x = lapply(x, function(v) v * x$...area_st / x$...area_s)
-		if (missing(FUN))
-			FUN = sum
-		aggregate(x, list(idx[,2]), FUN, ...)
-	} else {
-		x = lapply(x, function(v) v * x$...area_st / x$...area_t)
-		if (missing(FUN))
-			FUN = sum
-		aggregate(x, list(idx[,2]), FUN, ...)
-	}
-	df = st_sf(df, geometry = st_geometry(by)[df$Group.1])
+	x = if (!missing(extensive) && extensive)
+			lapply(x, function(v) v * x$...area_st / x$...area_s)
+		else
+			lapply(x, function(v) v * x$...area_st / x$...area_t)
+	x = aggregate(x, list(idx[,2]), sum, ...)
+	df = st_sf(x, geometry = st_geometry(by)[x$Group.1])
+	# take care of relation_to_geometry here...
+	# clean up:
+	df$...area_t = df$...area_st = df$...area_s = NULL 
 	df
 }
