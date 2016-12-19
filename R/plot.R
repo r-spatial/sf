@@ -278,8 +278,9 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	plot_gc(x, pch = pch, cex = cex, bg = bg, border = border, lty = lty, 
-			lwd = lwd, col = col)
+	lapply(seq_along(x), function(i) plot_gc(st_sfc(x[[i]]), 
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
 
