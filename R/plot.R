@@ -84,19 +84,21 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10) {
+plot.sf <- function(x, y, ..., ncol = 10, col = sf.colors(ncol, x[[1]])) {
 	stopifnot(missing(y))
 	dots = list(...)
-	if (ncol(x) > 2 && is.null(dots$col)) {
+	#if (ncol(x) > 2 && is.null(dots$col)) {
+	if (ncol(x) > 2) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
-		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		lapply(cols, function(cname) {
-			plot(x[, cname], col = sf.colors(ncol, xc = x[[cname]]))
-			title(cname)
-		})
+		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), 
+			mar = c(0,0,1,0))
+		lapply(cols, function(cname) plot(x[, cname], main = cname))
 		par(opar)
-	} else
-		plot(st_geometry(x), ...)
+	} else {
+		plot(st_geometry(x), col = col, ...)
+		if (is.null(dots$main))
+			title(names(x)[names(x) != attr(x, "sf_column")])
+	}
 }
 
 #' @name plot
@@ -315,7 +317,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
 	if (missing(xc) || length(xc) == 1) {
 		if (missing(n))
 			n = xc
