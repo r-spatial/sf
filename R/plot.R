@@ -94,12 +94,15 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...))
 		par(opar)
 	} else {
-		if (is.null(col))
+		if (is.null(col) && ncol(x) == 2)
 			col = sf.colors(ncol, x[[1]])
-		plot(st_geometry(x), col = col, ...)
+		if (is.null(col))
+			plot(st_geometry(x), ...)
+		else 
+			plot(st_geometry(x), col = col, ...)
 		if (is.null(dots$main) && !isTRUE(dots$add))
 			title(names(x)[names(x) != attr(x, "sf_column")])
-	}
+	} 
 }
 
 #' @name plot
