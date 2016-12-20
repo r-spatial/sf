@@ -4,8 +4,15 @@ nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
-nc["BIR74"] %>% plot()
-nc["AREA"] %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+nc %>% 
+  select(BIR74, geometry) %>% 
+  plot()
+
+nc %>% 
+  select(AREA, geometry) %>% 
+  arrange(AREA) %>% 
+  slice(1:10) %>% 
+  plot(add = TRUE, col = 'grey', main ="")
 
 # select: check both when geometry is part of the selection, and when not:
 nc %>% select(SID74, SID79) %>% names()
