@@ -31,9 +31,9 @@ st_line_sample(ls, density = 1, type = "random")
 
 g = st_makegrid(nc, n = c(20,10))
 
-a1 = aggregate(nc["BIR74"], g)
+a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
-a2 = aggregate(nc["BIR74"], g, extensive = TRUE)
+a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 sum(a2$BIR74) / sum(nc$BIR74)
 
 # missing x:

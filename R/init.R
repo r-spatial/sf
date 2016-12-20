@@ -7,7 +7,6 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable
 #' @importFrom units make_unit
-#' @importFrom geosphere distGeo areaPolygon bearing
 #' @importFrom grDevices rgb
 #' @useDynLib sf
 NULL
