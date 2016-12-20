@@ -58,3 +58,8 @@ plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 plot(gc1)
 
 plot(st_sfc(mp1, mpo1))
+
+# color ramp
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+plot(nc)
+plot(nc, col="lightgrey") 

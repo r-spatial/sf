@@ -84,17 +84,20 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = sf.colors(ncol, x[[1]])) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 	stopifnot(missing(y))
 	dots = list(...)
-	#if (ncol(x) > 2 && is.null(dots$col)) {
+
 	if (ncol(x) > 2) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), 
 			mar = c(0,0,1,0))
-		lapply(cols, function(cname) plot(x[, cname], main = cname))
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col=col, ...))
 		par(opar)
 	} else {
+	  if (is.null(col)) {
+	    col = sf.colors(ncol, x[[1]])
+	  }
 		plot(st_geometry(x), col = col, ...)
 		if (is.null(dots$main))
 			title(names(x)[names(x) != attr(x, "sf_column")])
