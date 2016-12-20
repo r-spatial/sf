@@ -90,16 +90,14 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 
 	if (ncol(x) > 2) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
-		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), 
-			mar = c(0,0,1,0))
-		lapply(cols, function(cname) plot(x[, cname], main = cname, col=col, ...))
+		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...))
 		par(opar)
 	} else {
-	  if (is.null(col)) {
-	    col = sf.colors(ncol, x[[1]])
-	  }
+		if (is.null(col))
+			col = sf.colors(ncol, x[[1]])
 		plot(st_geometry(x), col = col, ...)
-		if (is.null(dots$main))
+		if (is.null(dots$main) && !isTRUE(dots$add))
 			title(names(x)[names(x) != attr(x, "sf_column")])
 	}
 }
