@@ -119,6 +119,7 @@ test_that("guess_driver_can_write", {
   expect_error(guess_driver_can_write("x.e00", NA), "Could not guess")
   expect_error(guess_driver_can_write("x.not", c("nothing" = "nothing")), "not available")
   expect_equal(guess_driver_can_write("x.csv"), c("csv" = "CSV"))
+  expect_equal(guess_driver_can_write("c:/x.csv"), c("csv" = "CSV"))
   
   expect_error(guess_driver_can_write("x.unsuported"), "Could not guess driver")
   expect_error(guess_driver_can_write("unsuported:x"), "Could not guess driver")
