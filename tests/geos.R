@@ -27,6 +27,9 @@ x = st_intersection(g, nc)
 
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 st_linestring(rbind(c(0,0),c(10,0))))
+
+set.seed(13531) # make reproducible
+
 st_line_sample(ls, density = 1, type = "random")
 
 g = st_makegrid(nc, n = c(20,10))

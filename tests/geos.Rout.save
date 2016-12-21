@@ -91,7 +91,7 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-MULTIPOLYGON(((-81.4727554321289 36.23435592651... 
+MULTIPOLYGON(((-81.4727554321289 36.23435592651...
 > 
 > st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
 + 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
@@ -109,25 +109,41 @@ In st_intersection(g, nc) :
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + st_linestring(rbind(c(0,0),c(10,0))))
+> 
+> set.seed(13531) # make reproducible
+> 
 > st_line_sample(ls, density = 1, type = "random")
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 9.577755 ymax: 0.2166905
+bbox:           xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT(0 0.216690524015576) 
-MULTIPOINT(1.20207097148523 0, 3.51761956000701... 
+MULTIPOINT(0 0.887836897512898)
+MULTIPOINT(0.298648830503225 0, 2.4841704731807...
 > 
 > g = st_makegrid(nc, n = c(20,10))
 > 
-> a1 = aggregate(nc["BIR74"], g)
+> a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 [1] 1.20742
-> a2 = aggregate(nc["BIR74"], g, extensive = TRUE)
+> a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 > sum(a2$BIR74) / sum(nc$BIR74)
 [1] 1.000013
 > 
+> # missing x:
+> g = st_makegrid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
+> 
+> mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
+> st_linemerge(mls)
+Geometry set for 1 feature 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 0, 1 1, 2 0)
+> 
 > proc.time()
    user  system elapsed 
-  1.916   0.016   1.928 
+  1.912   0.024   1.936 

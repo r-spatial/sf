@@ -77,7 +77,7 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 10
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-LINESTRING(0 10, 1 0, 2 0, 3 0, 4 0) 
+LINESTRING(0 10, 1 0, 2 0, 3 0, 4 0)
 > (d = st_distance(y, y))
 Units: m
         [,1]      [,2]      [,3]      [,4]      [,5]
@@ -99,11 +99,11 @@ Units: m
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 9.204841 ymax: 0.3281343
+bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT(0 0.328134304611012) 
-MULTIPOINT(0.352458769921213 0, 0.9407246508635... 
+MULTIPOINT(0 0.5)
+MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5...
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + 	st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
@@ -118,12 +118,12 @@ Error in st_line_sample(ls, density = 1/1000) :
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 9757.739 ymax: 103095.7
+bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-MULTIPOINT(0 2365.15708672024, 0 3065.740850503... 
-MULTIPOINT(245.70649462802 -7.08115455161362e-1... 
+MULTIPOINT(0 501.464607505533, 0 1504.393822518...
+MULTIPOINT(505.997685423971 -7.08115455161362e-...
 > 
 > proc.time()
    user  system elapsed 
-  0.540   0.032   0.571 
+  0.508   0.012   0.518 
