@@ -1,4 +1,6 @@
 suppressPackageStartupMessages(library(sf))
+library(dplyr)
+
 # plot linestrings:
 l1 = st_linestring(matrix(runif(6)-0.5,,2))
 l2 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -63,3 +65,6 @@ plot(st_sfc(mp1, mpo1))
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 plot(nc)
 plot(nc, col="lightgrey") 
+nc %>% 
+  select(geometry) %>% 
+  plot()
