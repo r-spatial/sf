@@ -52,7 +52,7 @@ nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summar
 
 # spread:
 nc$row = 1:100
-nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
+nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row, -geometry)
 nc.g %>% tail()
 nc.g %>% spread(VAR, SID) %>% head()
 nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
