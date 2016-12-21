@@ -173,7 +173,7 @@ POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
 #' @export
 print.sfg = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
 	f = format(x, ..., digits = digits)
-	cat(f, "\n")
+	message(f)
 	invisible(f)
 }
 

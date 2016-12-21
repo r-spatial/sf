@@ -1,6 +1,6 @@
 context("sf: dplyr syntax")
 
-library(dplyr)
+suppressMessages(library(dplyr))
 nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
 test_that("select ", {
