@@ -19,7 +19,7 @@ all: clean winlibs
 
 winlibs:
 	mkdir -p ../inst
-	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" "../tools/winlibs.R"
+	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" --vanilla "../tools/winlibs.R"
 	cp -r ../windows/gdal2-2.1.1/share/gdal ../inst/
 	cp -r ../windows/gdal2-2.1.1/share/proj ../inst/
 
