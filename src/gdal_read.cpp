@@ -142,6 +142,210 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	return out;
 }
 
+
+
+// variant of CPL_read_ogr to read just one nominated feature (by count ID from 0)
+// [[Rcpp::export]]
+Rcpp::List CPL_read_ogr1(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+                        Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
+                        bool promote_to_multi = true, bool int64_as_string = false, int iFeature = 0) {
+  // adapted from the OGR tutorial @ www.gdal.org
+  std::vector <char *> open_options = create_options(options, quiet);
+  GDALDataset *poDS;
+  poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+          open_options.data(), NULL );
+  if( poDS == NULL ) {
+    Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
+    throw std::invalid_argument("Open failed.\n");
+  }
+  
+  if (layer.size() == 0) { // no layer specified
+    switch (poDS->GetLayerCount()) {
+    case 0: { // error:
+    Rcpp::Rcout << "Data source " << datasource[0] << " contains no layers" << std::endl;
+    throw std::invalid_argument("Error: no layers in datasource.\n");
+  }
+    case 1: { // silent:
+      OGRLayer *poLayer = poDS->GetLayer(0);
+      layer = Rcpp::CharacterVector::create(poLayer->GetName());
+      break;
+    }
+    default: { // select first layer: message + warning:
+      OGRLayer *poLayer = poDS->GetLayer(0);
+      layer = Rcpp::CharacterVector::create(poLayer->GetName());
+      if (! quiet) {
+        Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] << ", ";
+        Rcpp::Rcout << "reading layer `" << layer[0] << "'." << std::endl;
+        Rcpp::Rcout << "Use `st_layers' to list all layer names and their type in a data source." << std::endl;
+        Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." << std::endl;
+      }
+      Rcpp::Function warning("warning");
+      warning("automatically selected the first layer in a data source containing more than one.");
+    }
+    }
+  }
+  
+  OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
+  if (poLayer == NULL) {
+    Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
+    throw std::invalid_argument("Opening layer failed.\n");
+  }
+  
+  double n_d = (double) poLayer->GetFeatureCount();
+  if (n_d > INT_MAX)
+    throw std::out_of_range("Cannot read layer with more than MAX_INT features");
+  if (n_d < 0)
+    n_d = (double) count_features(poLayer);
+  if (iFeature > (n_d - 1)) {
+    throw std::invalid_argument("iFeature larger than number of available features.\n");
+  }
+  n_d = 1.0; 
+  size_t n = (size_t) n_d; // what is List's max length?
+  std::vector<OGRGeometry *> poGeometryV(n); // full archive
+  std::vector<OGRFeature *> poFeatureV(n); // full archive
+  
+  OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+  if (! quiet)
+    Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] <<
+      "' using driver `" << poDS->GetDriverName() << "'" << std::endl;
+  // get the geometry field:
+  OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(iGeomField);
+  if (poGFDefn == NULL)
+    throw std::range_error("wrong value for iGeomField");
+  Rcpp::List out = allocate_out_list(poFDefn, 1, poGFDefn->GetNameRef(), int64_as_string);
+  
+  // read all features:
+  poLayer->ResetReading();
+  unsigned int i = 0;
+  double dbl_max_int64 = pow(2.0, 53);
+  bool warn_int64 = false;
+  OGRFeature *poFeature;
+  while( (poFeature = poLayer->GetNextFeature()) != NULL )
+  {
+    if (i == iFeature){
+    // deal with feature attribute fields:
+    int iField;
+    for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
+      OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
+      switch(poFieldDefn->GetType()) {
+      case OFTInteger: {
+        Rcpp::IntegerVector iv;
+        iv = out[iField];
+        if (poFeature->IsFieldSet(iField))
+          iv[0] = poFeature->GetFieldAsInteger(iField);
+        else
+          iv[0] = NA_INTEGER;
+      }
+        break;
+      case OFTInteger64: {
+        if (int64_as_string) {
+        Rcpp::CharacterVector cv;
+        cv = out[iField];
+        if (poFeature->IsFieldSet(iField))
+          cv[0] = poFeature->GetFieldAsString(iField);
+        else
+          cv[0] = NA_STRING;
+      } else {
+        Rcpp::NumericVector nv;
+        nv = out[iField];
+        if (poFeature->IsFieldSet(iField))
+          nv[0] = (double) poFeature->GetFieldAsInteger64(iField);
+        else
+          nv[0] = NA_REAL;
+        // OR: poFeature->GetFieldAsString(iField);
+        if (nv[0] > dbl_max_int64)
+          warn_int64 = true;
+      }
+      }
+        break;
+      case OFTDateTime:
+      case OFTDate: {
+        int Year, Month, Day, Hour, Minute, TZFlag;
+        float Second;
+        poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
+                                      &Second, &TZFlag);
+        //  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
+        Rcpp::List dtlst = 
+        Rcpp::List::create((double) Second, (double) Minute, 
+                           (double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
+                           0.0, 0.0, 0.0);
+        dtlst.attr("class") = "POSIXlt";
+        Rcpp::NumericVector nv;
+        nv = out[iField];
+        if (! poFeature->IsFieldSet(iField)) {
+          nv[0] = NA_REAL;
+          break;
+        }
+        if (poFieldDefn->GetType() == OFTDateTime) {
+          Rcpp::Function as_POSIXct_POSIXlt("as.POSIXct.POSIXlt");
+          Rcpp::NumericVector ret = as_POSIXct_POSIXlt(dtlst); // R help me!
+          nv[0] = ret[0];
+        } else {
+          Rcpp::Function as_Date_POSIXlt("as.Date.POSIXlt");
+          Rcpp::NumericVector ret = as_Date_POSIXlt(dtlst); // R help me!
+          nv[0] = ret[0];
+        }
+        break;
+      }
+        break;
+      case OFTReal: {
+        Rcpp::NumericVector nv;
+        nv = out[iField];
+        if (poFeature->IsFieldSet(iField))
+          nv[0] = (double) poFeature->GetFieldAsDouble(iField);
+        else
+          nv[0] = NA_REAL;
+      }
+        break;
+      default: // break through:
+      case OFTString: {
+        Rcpp::CharacterVector cv;
+        cv = out[iField];
+        if (poFeature->IsFieldSet(iField))
+          cv[0] = poFeature->GetFieldAsString(iField);
+        else
+          cv[0] = NA_STRING;
+      }
+        break;
+      }
+    }
+ 
+    poGeometryV[0] = poFeature->GetGeomFieldRef(iGeomField);
+    poFeatureV[0] = poFeature;
+    }
+    i++;
+  }
+  if (promote_to_multi && toTypeUser == 0)
+    toTypeUser = to_multi_what(poGeometryV);
+  if (toTypeUser != 0) { 
+    for (i = 0; i < poFeatureV.size(); i++) {
+      poFeatureV[i]->SetGeometryDirectly(
+          OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
+                                      (OGRwkbGeometryType) toTypeUser, NULL) );
+      poGeometryV[i] = poFeatureV[i]->GetGeomFieldRef(iGeomField);
+    }
+  } 
+  if (! quiet && toTypeUser)
+    Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
+  // convert to R:
+  Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
+  if (warn_int64)
+    Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
+      " lost significance after conversion to double;" << std::endl <<
+        "use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
+  out[poFDefn->GetFieldCount()] = sfc;
+  // clean up:
+  for (size_t i = 0; i < n; i++)
+    OGRFeature::DestroyFeature(poFeatureV[i]);
+  GDALClose(poDS);
+  
+  return out;
+}
+
+
+
+
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
