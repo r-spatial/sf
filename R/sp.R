@@ -1,3 +1,26 @@
+## Method coordinates
+## @name coordinates
+## @exportMethod coordinates
+#if (!isGeneric("coordinates"))
+#    setGeneric("coordinates", function(obj, ...)
+#		standardGeneric("coordinates"))
+#
+#setMethod("coordinates", "sfc_POINT",
+#	function(obj, ...)
+#		do.call(rbind, obj)
+#)
+#
+#setMethod("coordinates", "sfc",
+#	function(obj, ...)
+#		stop("coordinates for this object type not implemented")
+#)
+#
+#setMethod("coordinates", "sf",
+#	function(obj, ...)
+#		coordinates(st_geometry(obj), ...)
+#)
+
+
 #' @name st_as_sf
 #' @examples
 #' library(sp)

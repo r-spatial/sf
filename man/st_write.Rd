@@ -4,9 +4,9 @@
 \alias{st_write}
 \title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ...,
-  dataset_options = NULL, layer_options = NULL, quiet = FALSE,
-  factorsAsCharacter = TRUE)
+st_write(obj, dsn, layer = basename(dsn),
+  driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
+  layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}

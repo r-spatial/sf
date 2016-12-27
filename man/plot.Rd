@@ -15,7 +15,7 @@
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., ncol = 10)
+\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -43,7 +43,7 @@
 
 \method{plot}{sfg}(x, ...)
 
-sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
+sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
   categorical = FALSE)
 }
 \arguments{
@@ -55,11 +55,11 @@ sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{ncol}{integer; default number of colors to be used.}
 
+\item{col}{color}
+
 \item{pch}{plotting symbol}
 
 \item{cex}{symbol size}
-
-\item{col}{color}
 
 \item{bg}{symbol background color}
 
@@ -75,9 +75,9 @@ sf.colors(xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{rule}{see \link[graphics]{polypath}}
 
-\item{xc}{factor or numeric vector, for which colors need to be returned}
-
 \item{n}{integer; number of colors}
+
+\item{xc}{factor or numeric vector, for which colors need to be returned}
 
 \item{cutoff.tails}{numeric, in [0,0.5] start and end values}
 

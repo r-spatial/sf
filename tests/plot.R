@@ -1,4 +1,6 @@
 suppressPackageStartupMessages(library(sf))
+library(dplyr)
+
 # plot linestrings:
 l1 = st_linestring(matrix(runif(6)-0.5,,2))
 l2 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -58,3 +60,11 @@ plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 plot(gc1)
 
 plot(st_sfc(mp1, mpo1))
+
+# color ramp
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+plot(nc)
+plot(nc, col="lightgrey") 
+nc %>% 
+  select(geometry) %>% 
+  plot()

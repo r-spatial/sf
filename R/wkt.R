@@ -42,23 +42,23 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 #' @examples
 #' st_as_text(st_point(1:2))
 st_as_text.sfg = function(x, ...) {
-	if (inherits(x, "POINT")) return(prnt.POINT(x, ...))
-	if (inherits(x, "MULTIPOINT")) return(prnt.MULTIPOINT(x, ...))
-	if (inherits(x, "LINESTRING")) return(prnt.LINESTRING(x, ...))
-	if (inherits(x, "POLYGON")) return(prnt.POLYGON(x, ...))
-	if (inherits(x, "MULTILINESTRING")) return(prnt.MULTILINESTRING(x, ...))
-	if (inherits(x, "MULTIPOLYGON")) return(prnt.MULTIPOLYGON(x, ...))
-	if (inherits(x, "GEOMETRYCOLLECTION")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	if (inherits(x, "CIRCULARSTRING")) return(prnt.MULTIPOINT(x, ...))
-	if (inherits(x, "COMPOUNDCURVE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	if (inherits(x, "CURVE")) return(prnt.MULTIPOINT(x, ...))
-	if (inherits(x, "CURVEPOLYGON")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	if (inherits(x, "MULTICURVE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	if (inherits(x, "MULTISURFACE")) return(prnt.GEOMETRYCOLLECTION(x, ...))
-	if (inherits(x, "POLYHEDRALSURFACE")) return(prnt.MULTIPOLYGON(x, ...))
-	if (inherits(x, "TRIANGLE")) return(prnt.POLYGON(x, ...))
-	if (inherits(x, "TIN")) return(prnt.MULTIPOLYGON(x, ...))
-	stop(paste("no print method available for object of class", class(x)[1])) # nocov
+	if (inherits(x, "POINT")) prnt.POINT(x, ...)
+	else if (inherits(x, "MULTIPOINT"))         prnt.MULTIPOINT(x, ...)
+	else if (inherits(x, "LINESTRING"))         prnt.LINESTRING(x, ...)
+	else if (inherits(x, "POLYGON"))            prnt.POLYGON(x, ...)
+	else if (inherits(x, "MULTILINESTRING"))    prnt.MULTILINESTRING(x, ...)
+	else if (inherits(x, "MULTIPOLYGON"))       prnt.MULTIPOLYGON(x, ...)
+	else if (inherits(x, "GEOMETRYCOLLECTION")) prnt.GEOMETRYCOLLECTION(x, ...)
+	else if (inherits(x, "CIRCULARSTRING"))     prnt.MULTIPOINT(x, ...)
+	else if (inherits(x, "COMPOUNDCURVE"))      prnt.GEOMETRYCOLLECTION(x, ...)
+	else if (inherits(x, "CURVE"))              prnt.MULTIPOINT(x, ...)
+	else if (inherits(x, "CURVEPOLYGON"))       prnt.GEOMETRYCOLLECTION(x, ...)
+	else if (inherits(x, "MULTICURVE"))         prnt.GEOMETRYCOLLECTION(x, ...)
+	else if (inherits(x, "MULTISURFACE"))       prnt.GEOMETRYCOLLECTION(x, ...)
+	else if (inherits(x, "POLYHEDRALSURFACE"))  prnt.MULTIPOLYGON(x, ...)
+	else if (inherits(x, "TRIANGLE"))           prnt.POLYGON(x, ...)
+	else if (inherits(x, "TIN"))                prnt.MULTIPOLYGON(x, ...)
+	else stop(paste("no print method available for object of class", class(x)[1])) # nocov
 }
 
 #' @name st_as_text
@@ -79,8 +79,10 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 #' @export
 st_as_sfc.character = function(x, crs = NA_integer_, ...) {
 	if (length(x) == 0)
-		return(st_sfc(crs = crs))
-	ret = st_sfc(CPL_sfc_from_wkt(x))
-	st_crs(ret) = crs
-	ret
+		st_sfc(crs = crs)
+	else {
+		ret = st_sfc(CPL_sfc_from_wkt(x))
+		st_crs(ret) = crs
+		ret
+	}
 }

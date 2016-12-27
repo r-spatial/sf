@@ -14,17 +14,19 @@ test_that("CPL_goes_relate works", {
 test_that("CPL_geos_is_valid works", {
   expect_true( sf:::CPL_geos_is_valid(
   	st_sfc(st_polygon(list(cbind(c(0,1,1,0,0), c(0,0,1, 1,0)))))))
-  expect_false(sf:::CPL_geos_is_valid(
+  expect_warning(
+    expect_false(sf:::CPL_geos_is_valid(
   	st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0)))))))
+    )
 })
 
 test_that("geos ops give warnings and errors on longlat", {
-	nc = st_read(system.file("shape/nc.shp", package="sf"))
+	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 	x = nc[1:2,]
 	y = nc[2:3,]
 	expect_silent(st_equals(x, y))
 	expect_silent(st_equals_exact(x, y, 0.01))
-	l = st_sfc(st_linestring(matrix(1:10,,2)), crs = st_crs(nc))
+	l = st_sfc(st_linestring(matrix(1:10, ncol=2)), crs = st_crs(nc))
 	expect_silent(st_polygonize(l))
 
 	expect_message(st_intersects(x,y))
@@ -48,5 +50,4 @@ test_that("geos ops give warnings and errors on longlat", {
 	# errors:
 	expect_error(st_distance(x, y))
 	expect_error(st_triangulate(x))
-
 })

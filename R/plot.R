@@ -84,19 +84,25 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 	stopifnot(missing(y))
 	dots = list(...)
-	if (ncol(x) > 2 && is.null(dots$col)) {
+
+	if (ncol(x) > 2) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		lapply(cols, function(cname) {
-			plot(x[, cname], col = sf.colors(ncol, xc = x[[cname]]))
-			title(cname)
-		})
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...))
 		par(opar)
-	} else
-		plot(st_geometry(x), ...)
+	} else {
+		if (is.null(col) && ncol(x) == 2)
+			col = sf.colors(ncol, x[[1]])
+		if (is.null(col))
+			plot(st_geometry(x), ...)
+		else 
+			plot(st_geometry(x), col = col, ...)
+		if (is.null(dots$main) && !isTRUE(dots$add))
+			title(names(x)[names(x) != attr(x, "sf_column")])
+	} 
 }
 
 #' @name plot
@@ -176,11 +182,13 @@ plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 
 # sf (list) -> polypath (mtrx) : rbind polygon rings with NA rows inbetween
 p_bind = function(lst) {
 	if (length(lst) == 1)
-		return(lst[[1]])
-	ret = vector("list", length(lst) * 2 - 1)
-	ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
-	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
-	do.call(rbind, ret) # replicates the NA to form an NA row
+		lst[[1]]
+	else {
+		ret = vector("list", length(lst) * 2 - 1)
+		ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
+		ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
+		do.call(rbind, ret) # replicates the NA to form an NA row
+	}
 }
 
 #' @name plot
@@ -274,8 +282,9 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	plot_gc(x, pch = pch, cex = cex, bg = bg, border = border, lty = lty, 
-			lwd = lwd, col = col)
+	lapply(seq_along(x), function(i) plot_gc(st_sfc(x[[i]]), 
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
 
@@ -313,7 +322,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
 	if (missing(xc) || length(xc) == 1) {
 		if (missing(n))
 			n = xc
