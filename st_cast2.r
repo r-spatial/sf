@@ -175,43 +175,27 @@ pl_to_mls <- repl_g(mpl_to_pl, lapply(gmpl, function(x) st_multilinestring(relis
 pl_to_mp <- repl_g(mpl_to_pl, lapply(gmpl, function(x) st_multipoint(relist_n(x, 0)[[1]])))
 pl_to_ls <- repl_g(mpl_to_pl, lapply(gmpl, function(x) st_linestring(relist_n(x, 0)[[1]])))
 pl_to_pt <- repl_g(mpl_to_pl, lapply(gmpl, function(x) st_point(relist_0(x, 0)[[1L]][1L, ])))
-  #       LINESTRING    MULTIPOLYGON
-  #       LINESTRING MULTILINESTRING
-  #       LINESTRING      MULTIPOINT
-  #       LINESTRING         POLYGON
-  #       LINESTRING           POINT
+
+gls <- st_geometry(mpl_to_ls)
+#       LINESTRING    MULTIPOLYGON
+#       LINESTRING MULTILINESTRING
+#       LINESTRING      MULTIPOINT
+#       LINESTRING         POLYGON
+#       LINESTRING           POINT
+
+ls_to_mpl <- repl_g(mpl_to_ls, lapply(gls, function(x) st_multipolygon_close(Paste0(relist_n(x, 2L)))))
+ls_to_mls <- repl_g(mpl_to_ls, lapply(gls, function(x) st_multilinestring(Paste0(relist_n(x, 1L)))))
+ls_to_mp <-  repl_g(mpl_to_ls, lapply(gls, function(x) st_multipoint(x)))
+ls_to_pl <-  repl_g(mpl_to_ls, lapply(gls, function(x) st_polygon_close(Paste0(relist_n(x, 1L)))))
+ls_to_pt <-  repl_g(mpl_to_ls, lapply(gls, function(x) st_point(x[1,])))
+
+## only multipoint makes sense
+gpt <- st_geometry(mls_to_pt)
+pt_to_mp <- repl_g(mpl_to_pt, lapply(gpt, function(x) st_multipoint(matrix(x, nrow = 1L))))
   #            POINT    MULTIPOLYGON
   #            POINT MULTILINESTRING
   #            POINT      MULTIPOINT
   #            POINT         POLYGON
   #            POINT      LINESTRING
 
-             
-# mk_level <- function(maxdepth = 2) {
-#   force(maxdepth)
-#   depth <- 0L
-#   thefun <- function(x) {
-#     depth <<- depth + 1L
-#     if (depth == maxdepth | !is.recursive(x)) return(unlist(x, recursive  = FALSE)); 
-#     lapply(x, thefun)
-#  }
-#   thefun
-# }
-# ifun <- mk_level2(2)
-# ifun(st_geometry(nc[1, ]))
-# 
-# 
-# ## multipolygon to multilinestring
-# mk_level2(maxdepth = 2)(st_geometry(nc[57, ]))
-# 
-# as_list <- function(x, ...) {
-#   UseMethod("as_list")
-# }
-# as_list.MULTIPOLYGON <- function(x, ...) {
-#   ifun <- mk_level(maxdepth = 1L)
-#   ifun(x)
-# }
-# as_list.sfc <- function(x, ...) {
-#   lapply(x, as_list)
-# }
-
+      
