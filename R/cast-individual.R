@@ -6,7 +6,7 @@ Paste1 <- function(lst) do.call(c, lapply(lst, unclass))
 Paste0 <- function(lst) lapply(lst, unclass)
 ## drop the tail coordinate of a polygon ring
 Tail1 <- function(lst) lapply(lst, head, -1)
-## multi-polygon and polygon constructor with auto-closing
+## multi-polygon and polygon constructor, allow unclosed (but don't apply auto-closing)
 ## note use of local constructor below, not the sf-API one
 st_multipolygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = FALSE)
 st_polygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSet(x, dim, type = "POLYGON", needClosed = FALSE)
