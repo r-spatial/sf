@@ -38,13 +38,17 @@ st_polygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSet(x, dim, type 
 #' ## number of duplicated coordinates in the linestrings should equal the number of polygon rings 
 #' ## (... in this case, won't always be true)
 #' sum(duplicated(do.call(rbind, unclass(st_cast(mpl, "MULTILINESTRING"))))) == sum(unlist(lapply(mpl, length)))  ## should be TRUE
+#' 
+#' p1 <- structure(c(0, 1, 3, 2, 1, 0, 0, 0, 2, 4, 4, 0), .Dim = c(6L, 2L))
+#' p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), .Dim = c(4L, 2L))
+#' st_polygon(list(p1, p2))
 st_cast.MULTIPOLYGON <- function(x, to) {
   switch(to, 
          MULTIPOLYGON = x, 
          MULTILINESTRING = st_multilinestring(     unlist(Paste0(x), recursive = FALSE, use.names = FALSE)), 
          MULTIPOINT = st_multipoint(do.call(rbind, Tail1(unlist(Paste0(x), recursive = FALSE, use.names = FALSE)))), 
-         ## loss, drop to first ring of first part
-         POLYGON = {warning("polygon from first ring only"); st_polygon(x[[1L]])}, 
+         ## loss, drop to first part
+         POLYGON = {warning("polygon from first part only"); st_polygon(x[[1L]])}, 
          LINESTRING = {warning("line from first ring only"); st_linestring(x[[1L]][[1L]])}, 
          ## loss, drop to first coordinate of first ring of first part
          POINT = {warning("point from first coordinate only"); st_point(x[[1L]][[1L]][1L, , drop = TRUE])}
