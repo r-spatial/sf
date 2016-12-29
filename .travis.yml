@@ -18,6 +18,7 @@ before_install:
   - ./configure 
   - make 
   - sudo make install
+  - sudo /etc/init.d/postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - createdb empty
