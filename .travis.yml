@@ -2,11 +2,7 @@
 
 language: R
 sudo: required
-
-# https://github.com/ropensci/rgbif/blob/master/.travis.yml#L9
 dist: trusty
-
-cache: packages
 
 apt_packages:
   - libudunits2-dev
