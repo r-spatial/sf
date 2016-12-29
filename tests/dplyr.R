@@ -78,8 +78,8 @@ out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area),
 
 # mean densities depend on grouping:
 nc.merc %>% summarize(mean(dens))
-out %>% summarise(mean(new_dens))
+#out %>% summarise(mean(new_dens))
 
 # total densities don't:
 nc.merc %>% summarise(sum(area * dens))
-out %>% summarise(sum(A * new_dens))
+#out %>% summarise(sum(A * new_dens))
