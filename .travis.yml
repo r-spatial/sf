@@ -10,6 +10,7 @@ cache: packages
 
 apt_packages:
   - libudunits2-dev
+  - postgis
 
 addons:
   postgresql: "9.3"
