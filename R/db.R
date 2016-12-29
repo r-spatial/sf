@@ -7,7 +7,7 @@
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @param EWKB logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}
 #' @examples 
-#' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#' if (Sys.getenv("USER") %in% c("edzer")) {
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
@@ -67,7 +67,7 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param debug logical; print SQL statements to screen before executing them.
 #' @export
 #' @examples
-#' if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+#' if (Sys.getenv("USER") %in% c("edzer")) {
 #'   library(sp)
 #'   data(meuse)
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
