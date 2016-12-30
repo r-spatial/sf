@@ -48,17 +48,3 @@ r_github_packages:
 
 after_success:
   - R -e 'covr::codecov()'
-
-
-  - libjson-c-dev libpq-dev postgresql-server-dev-9.3
-  - wget http://download.osgeo.org/postgis/source/postgis-2.3.1.tar.gz
-  - tar xvzf postgis-2.3.1.tar.gz 
-  - cd postgis-2.3.1 
-  - ./configure 
-  - make 
-  - sudo make install
-  - sudo /etc/init.d/postgresql restart
-  - createdb postgis
-  - psql -d postgis -c "CREATE EXTENSION postgis;"
-  - createdb empty
-  - psql -d empty -c "CREATE EXTENSION postgis;"
