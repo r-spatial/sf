@@ -1,9 +1,11 @@
-## utility functions, patterns that are either used elsewhere or can be replaced by 
-## other changes (e.g. closing polygon coordinate policy)
-## unclass the underlying coordinates
+## utility functions, patterns that are either used elsewhere or can be 
+##  replaced by other changes 
+## 
 ## worker functions from the internals of c.sfg
+##  to unclass the underlying coordinates
 Paste1 <- function(lst) do.call(c, lapply(lst, unclass))
 Paste0 <- function(lst) lapply(lst, unclass)
+##
 ## drop the tail coordinate of a polygon ring
 Tail1 <- function(lst) lapply(lst, head, -1)
 ## multi-polygon and polygon constructor, allow unclosed (but don't apply auto-closing)
