@@ -14,7 +14,7 @@
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. 
 #' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
+#' if (Sys.getenv("USER") %in% c("edzer")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
@@ -73,7 +73,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @examples
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
+#' if (Sys.getenv("USER") %in% c("edzer")) { # load meuse to postgis
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
 #'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",

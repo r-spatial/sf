@@ -271,3 +271,21 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 	} else # !flatten:
 		st_geometrycollection(lst) # breaks if one of them is a GC
 }
+
+#' @name st
+#' @method unlist sfg
+#' @export
+#' @param use.names ignored
+#' @value unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
+unlist.sfg = function(x, recursive = TRUE, use.names = TRUE) {
+	switch(class(x)[2],
+		POINT = matrix(x, 1),
+		MULTIPOINT = unclass(x),
+		LINESTRING = unclass(x),
+		POLYGON = do.call(rbind, x),
+		MULTILINESTRING = do.call(rbind, x),
+		MULTIPOLYGON = do.call(rbind, lapply(x, function(y) do.call(rbind, y))),
+		GEOMETRYCOLLECTION = do.call(rbind, lapply(x, unlist)),
+		stop(paste("unlist not implemented for class", class(x)[2]))
+	)
+}

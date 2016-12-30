@@ -1,40 +1,17 @@
-language: r
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+
 cache: packages
 
-apt_packages:
-  - libudunits2-dev
+sudo: required
 
-addons:
-  postgresql: "9.4"
-
-before_script:
-  - psql -U postgres -c "create extension postgis;"
+dist: trusty
 
 before_install:
-  - createdb postgis
-  - psql -d postgis -c "CREATE EXTENSION postgis;"
-  - createdb empty
-  - psql -d empty -c "CREATE EXTENSION postgis;"
-  - export CURWD=`pwd`
-  - sudo apt-get install libproj-dev libgeos++-dev
-  - cd
-  - wget http://download.osgeo.org/gdal/2.1.0/gdal-2.1.0.tar.gz
-  - tar zxf gdal-2.1.0.tar.gz
-  - cd gdal-2.1.0
-  - ./configure
-  - make
-  - sudo make install
-  - cd
-  - wget http://download.osgeo.org/proj/proj-4.9.3.tar.gz
-  - tar zxvf proj-4.9.3.tar.gz
-  - cd proj-4.9.3
-  - ./configure
-  - make
-  - sudo make install
-  - sudo ldconfig
-  - cd $CURWD
-
-sudo: required
+  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev 
 
 warnings_are_errors: true
 
@@ -47,4 +24,4 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
-  - R -e 'covr::codecov()'
+  - Rscript -e 'covr::codecov()'
