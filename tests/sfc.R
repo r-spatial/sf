@@ -52,7 +52,6 @@ st_cast(st_geometrycollection(list(p,mp)), "MULTIPOINT")
 
 mp = st_multipoint(rbind(c(0,1)))
 x = st_sfc(p, mp)
-st_cast(x) # doesn't work simplify
 st_cast(x, "POINT")
 
 sf = st_sf(a = 3:2, geom = x)

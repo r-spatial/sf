@@ -10,9 +10,8 @@ Paste0 <- function(lst) lapply(lst, unclass)
 Tail1 <- function(lst) lapply(lst, head, -1)
 ## multi-polygon and polygon constructor, allow unclosed (but don't apply auto-closing)
 ## note use of local constructor below, not the sf-API one
-st_multipolygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = FALSE)
-st_polygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSet(x, dim, type = "POLYGON", needClosed = FALSE)
-
+st_multipolygon_close <- function(x = list(), dim = "XYZ") MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = FALSE)
+st_polygon_close <- function(x = list(), dim = "XYZ")      MtrxSet(x, dim, type = "POLYGON", needClosed = FALSE)
 
 # TODO
 # no checks done for polygon closing, or general sense
@@ -32,19 +31,21 @@ st_polygon_close <- function(x = list(), dim = "XYZ") sf:::MtrxSet(x, dim, type 
 #' mpl <- nc$geometry[[4]]
 #' #st_cast(x) ## error 'argument "to" is missing, with no default'
 #' cast_all <- function(xg) {
-#'   lapply(c("MULTIPOLYGON", "MULTILINESTRING", "MULTIPOINT", "POLYGON", "LINESTRING", "POINT"), function(x) st_cast(xg, x))
+#'   lapply(c("MULTIPOLYGON", "MULTILINESTRING", "MULTIPOINT", "POLYGON", "LINESTRING", "POINT"), 
+#'       function(x) st_cast(xg, x))
 #' }
 #' st_sfc(cast_all(mpl))
 #' ## no closing coordinates should remain for multipoint
 #' any(duplicated(unclass(st_cast(mpl, "MULTIPOINT"))))  ## should be FALSE
 #' ## number of duplicated coordinates in the linestrings should equal the number of polygon rings 
 #' ## (... in this case, won't always be true)
-#' sum(duplicated(do.call(rbind, unclass(st_cast(mpl, "MULTILINESTRING"))))) == sum(unlist(lapply(mpl, length)))  ## should be TRUE
+#' sum(duplicated(do.call(rbind, unclass(st_cast(mpl, "MULTILINESTRING"))))
+#'      ) == sum(unlist(lapply(mpl, length)))  ## should be TRUE
 #' 
 #' p1 <- structure(c(0, 1, 3, 2, 1, 0, 0, 0, 2, 4, 4, 0), .Dim = c(6L, 2L))
 #' p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), .Dim = c(4L, 2L))
 #' st_polygon(list(p1, p2))
-st_cast.MULTIPOLYGON <- function(x, to) {
+st_cast.MULTIPOLYGON <- function(x, to, ...) {
   switch(to, 
          MULTIPOLYGON = x, 
          MULTILINESTRING = st_multilinestring(     unlist(Paste0(x), recursive = FALSE, use.names = FALSE)), 
@@ -62,7 +63,7 @@ st_cast.MULTIPOLYGON <- function(x, to) {
 #' @examples 
 #' mls <- st_cast(nc$geometry[[4]], "MULTILINESTRING")
 #' st_sfc(cast_all(mls))
-st_cast.MULTILINESTRING <- function(x, to) {
+st_cast.MULTILINESTRING <- function(x, to, ...) {
   switch(to, 
          MULTIPOLYGON = st_multipolygon(list(x)), 
          MULTILINESTRING = x, 
@@ -80,7 +81,7 @@ st_cast.MULTILINESTRING <- function(x, to) {
 #' @examples
 #' mpt <- st_cast(nc$geometry[[4]], "MULTIPOINT")
 #' st_sfc(cast_all(mpt))
-st_cast.MULTIPOINT <- function(x, to) {
+st_cast.MULTIPOINT <- function(x, to, ...) {
   switch(to, 
          ## DANGER: polygon, linestring forms unlikely to be valid
          MULTIPOLYGON = st_multipolygon_close(list(list(unclass(x)))), 
@@ -98,7 +99,7 @@ st_cast.MULTIPOINT <- function(x, to) {
 #' @examples
 #' pl <- st_cast(nc$geometry[[4]], "POLYGON")
 #' st_sfc(cast_all(pl))
-st_cast.POLYGON <- function(x, to) {
+st_cast.POLYGON <- function(x, to, ...) {
   switch(to, 
          MULTIPOLYGON = st_multipolygon(list(Paste0(x))), 
          MULTILINESTRING = st_multilinestring(unclass(x)), 
@@ -114,7 +115,7 @@ st_cast.POLYGON <- function(x, to) {
 #' @examples
 #' ls <- st_cast(nc$geometry[[4]], "LINESTRING")
 #' st_sfc(cast_all(ls))
-st_cast.LINESTRING <- function(x, to) {
+st_cast.LINESTRING <- function(x, to, ...) {
   switch(to, 
          MULTIPOLYGON = st_multipolygon_close(list(list(unclass(x)))), 
          MULTILINESTRING = st_multilinestring(list(unclass(x))), 
@@ -131,7 +132,7 @@ st_cast.LINESTRING <- function(x, to) {
 #' pt <- st_cast(nc$geometry[[4]], "POINT")
 #' ## st_sfc(cast_all(pt))  ## Error: cannot create MULTIPOLYGON from POINT 
 #' st_sfc(lapply(c("POINT", "MULTIPOINT"), function(x) st_cast(pt, x)))
-st_cast.POINT <- function(x, to) {
+st_cast.POINT <- function(x, to, ...) {
   switch(to, 
          MULTIPOLYGON = stop("cannot create MULTIPOLYGON from POINT"), 
          MULTILINESTRING = stop("cannot create MULTILINESTRING from POINT"), 
@@ -142,6 +143,11 @@ st_cast.POINT <- function(x, to) {
   )
 }
 
+#' @name st_cast
+#' @export
+st_cast.GEOMETRYCOLLECTION <- function(x, to, ...) {
+  st_cast(x[[1]], to, ...)
+}
 
 
 # st_cast.class <- function(x, to) {

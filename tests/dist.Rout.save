@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
+> suppressPackageStartupMessages(library(sf))
 > library(sp)
 > library(units)
 > 
@@ -50,11 +49,11 @@ Units: m
 > units(d.sp) = make_unit("km")
 > d.sf - d.sp
 Units: m
-         [,1]         [,2]         [,3]         [,4] [,5]
-[1,] 1851.990 0.000000e+00 0.000000e+00 0.000000e+00    0
-[2,] 1842.938 0.000000e+00 0.000000e+00 2.910383e-11    0
-[3,] 1816.564 0.000000e+00 0.000000e+00 1.455192e-11    0
-[4,] 1775.032 2.910383e-11 1.455192e-11 0.000000e+00    0
+              [,1]         [,2]         [,3]         [,4] [,5]
+[1,] -2.328306e-10 0.000000e+00 0.000000e+00 0.000000e+00    0
+[2,]  2.328306e-10 0.000000e+00 0.000000e+00 2.910383e-11    0
+[3,]  0.000000e+00 0.000000e+00 0.000000e+00 1.455192e-11    0
+[4,]  0.000000e+00 2.910383e-11 1.455192e-11 0.000000e+00    0
 > 
 > #summary(unclass(d.sf) - d.sp)
 > 
@@ -126,4 +125,4 @@ MULTIPOINT(505.997685423971 -7.08115455161362e-...
 > 
 > proc.time()
    user  system elapsed 
-  0.508   0.012   0.518 
+  0.500   0.012   0.511 

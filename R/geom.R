@@ -470,8 +470,9 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 st_interpolate_aw = function(x, to, extensive) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
 		stop("aggregate.sf requires geometries in argument to")
-	i = st_cast(st_intersection(st_geometry(x), st_geometry(to)), "MULTIPOLYGON")
+	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
+	i = st_cast(i, "MULTIPOLYGON")
 	x$...area_s = unclass(st_area(x))
 	st_geometry(x) = NULL # sets back to data.frame
 	x = x[idx[,1], ]      # create st table
