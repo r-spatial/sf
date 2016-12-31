@@ -152,7 +152,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
 #' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries
 #' @export
 st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
-	geom = st_cast(st_geometry(x), to, ids)
+	geom = st_cast(st_geometry(x), to, ids = ids)
 	st_geometry(x) = NULL
 	#x = as.data.frame(x)
 	if (!is.null(attr(geom, "ids"))) {

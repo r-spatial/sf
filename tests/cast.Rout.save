@@ -177,19 +177,19 @@ LINESTRING(0 2, 1 3)
 LINESTRING(10 13, 11 14, 12 15)
 > 
 > s = st_sf(a = 1:2, geom = st_sfc(st_point(1:2), st_point(2:3)))
-> x = st_cast(s, "MULTIPOINT", c(1,1), FUN = mean)
+> x = st_cast(s, "MULTIPOINT", ids = c(1,1), FUN = mean)
 > st_cast(x, "POINT", warn = FALSE)
-Simple feature collection with 2 features and 1 field
+Simple feature collection with 2 features and 2 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 3
 epsg (SRID):    NA
 proj4string:    NA
-  X1.2       geom
-1    1 POINT(1 2)
-2    2 POINT(2 3)
+  ids.group   a       geom
+1         1 1.5 POINT(1 2)
+2         1 1.5 POINT(2 3)
 > expect_warning(st_cast(x, "POINT"))
-> expect_warning(st_cast(x, "POINT", c(1,1)))
+> expect_warning(st_cast(x, "POINT", ids = c(1,1)))
 > 
 > gc = st_sfc(st_geometrycollection(
 +   list(
@@ -233,7 +233,24 @@ MULTIPOINT(0 0, 1 0, 1 1, 0 1)
 > s = st_sfc(mp1)
 > x = st_cast(s, "MULTIPOINT")
 > x = st_cast(s, "POINT")
+> expect_warning(st_cast(mp1, "LINESTRING"))
+> expect_warning(st_cast(mp1, "POINT"))
+> mls = mls[[1]]
+> class(mls)
+[1] "XY"              "MULTILINESTRING" "sfg"            
+> expect_error(st_cast(mls, "POLYGON"))
+> 
+> expect_warning(st_cast(mls, "POINT"))
+> p1 = st_polygon(pol1)
+> expect_warning(st_cast(p1, "POINT"))
+> ls = ls[[1]]
+> class(ls)
+[1] "XY"         "LINESTRING" "sfg"       
+> expect_warning(st_cast(ls, "POINT"))
+> 
+> mls = st_cast(p1, "MULTILINESTRING")
+> p2 = st_cast(mls, "POLYGON")
 > 
 > proc.time()
    user  system elapsed 
-  0.352   0.032   0.383 
+  0.392   0.016   0.407 

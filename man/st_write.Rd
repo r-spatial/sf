@@ -34,7 +34,7 @@ Write simple features object to file or database
 columns (variables) of a class not supported are dropped with a warning.
 }
 \examples{
-if (Sys.getenv("USER") \%in\% c("edzer")) { # load meuse to postgis
+if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
  library(sp)
  example(meuse, ask = FALSE, echo = FALSE)
  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",

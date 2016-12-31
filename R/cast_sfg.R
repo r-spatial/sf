@@ -3,15 +3,19 @@
 ## 
 ## worker functions from the internals of c.sfg
 ##  to unclass the underlying coordinates
-Paste1 <- function(lst) do.call(c, lapply(lst, unclass))
 Paste0 <- function(lst) lapply(lst, unclass)
 ##
 ## drop the tail coordinate of a polygon ring
 Tail1 <- function(lst) lapply(lst, head, -1)
 ## multi-polygon and polygon constructor, allow unclosed (but don't apply auto-closing)
 ## note use of local constructor below, not the sf-API one
-st_multipolygon_close <- function(x = list(), dim = "XYZ") MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = FALSE)
-st_polygon_close <- function(x = list(), dim = "XYZ")      MtrxSet(x, dim, type = "POLYGON", needClosed = FALSE)
+st_multipolygon_close <- function(x = list(), dim = "XYZ") {
+	MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = FALSE)
+}
+
+st_polygon_close <- function(x = list(), dim = "XYZ") {
+	MtrxSet(x, dim, type = "POLYGON", needClosed = FALSE)
+}
 
 # TODO
 # no checks done for polygon closing, or general sense
@@ -69,7 +73,8 @@ st_cast.MULTILINESTRING <- function(x, to, ...) {
          MULTILINESTRING = x, 
          MULTIPOINT = st_multipoint(do.call(rbind, Paste0(x))), 
          ## loss, drop to first line
-         POLYGON = {warning("keeping first linestring only"); st_polygon(x[1L])}, 
+         #POLYGON = {warning("keeping first linestring only"); st_polygon(x[1L])}, 
+         POLYGON = st_polygon(x), 
          LINESTRING = {warning("keeping first linestring only"); st_linestring(x[[1L]])},
          ## loss, drop to first coordinate of first line 
          POINT = {warning("keeping first coordinate only"); st_point(x[[1L]][1L, , drop = TRUE])}
