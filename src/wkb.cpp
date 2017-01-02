@@ -368,7 +368,8 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 		}
 	}
 	output.attr("single_type") = n_types <= 1; // if 0, we have only empty geometrycollections
-	output.attr("n_empty") = (int) n_empty;
+	if (n_empty > 0)
+	  output.attr("n_empty") = (int) n_empty;
 	if (EWKB == true)
 		output.attr("epsg") = (int) srid;
 	return output;

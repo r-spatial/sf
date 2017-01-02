@@ -162,7 +162,6 @@ MULTILINESTRING((0 0, 10 0, 10 10, 0 10), (5 5,...
 MULTILINESTRING((0 0, 1 0, 1 1, 0 1))
 MULTILINESTRING((0 2, 1 3))
 MULTILINESTRING((10 13, 11 14, 12 15))
-> expect_warning(st_cast(g, "LINESTRING"))
 > st_cast(st_cast(g, "MULTILINESTRING"), "LINESTRING") # will not loose
 Geometry set for 5 features 
 geometry type:  LINESTRING

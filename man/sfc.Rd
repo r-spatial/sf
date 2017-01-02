@@ -10,7 +10,8 @@ st_sfc(..., crs = NA_crs_, precision = 0)
 \arguments{
 \item{...}{one or more simple feature geometries}
 
-\item{crs}{coordinate reference system: integer with the epsg code, or character with proj4string}
+\item{crs}{coordinate reference system: integer with the epsg code, or 
+character with proj4string}
 
 \item{precision}{numeric; see \link{st_as_binary}}
 }
@@ -18,7 +19,12 @@ st_sfc(..., crs = NA_crs_, precision = 0)
 Create simple feature list column, set class, and add coordinate reference system
 }
 \details{
-a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfg}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION.
+a simple feature collection object is a list of class 
+\code{c("stc_TYPE", "sfc")} which contains objects of identical type. This 
+function creates such an object from a list of simple feature objects (of 
+class \code{sfg}), and coerces their type if necessary: collections of XX and 
+MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other 
+sets are coerced to GEOMETRYCOLLECTION.
 }
 \examples{
 pt1 = st_point(c(0,1))

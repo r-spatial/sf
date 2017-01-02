@@ -20,10 +20,16 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' @name sfc
 #' @param ... one or more simple feature geometries
-#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
+#' @param crs coordinate reference system: integer with the epsg code, or 
+#' character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
 #' 
-#' @details a simple feature collection object is a list of class \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This function creates such an object from a list of simple feature objects (of class \code{sfg}), and coerces their type if necessary: collections of XX and MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other sets are coerced to GEOMETRYCOLLECTION. 
+#' @details a simple feature collection object is a list of class 
+#' \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This 
+#' function creates such an object from a list of simple feature objects (of 
+#' class \code{sfg}), and coerces their type if necessary: collections of XX and 
+#' MULTIXX are coerced to MULTIXX (with XX: POINT, LINESTRING or POLYGON), other 
+#' sets are coerced to GEOMETRYCOLLECTION. 
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
@@ -46,6 +52,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		# n_empty:
 		if (is.null(attr(lst, "n_empty"))) { # we're NOT comming from CPL_read_wkb:
 			attr(lst, "n_empty") = sum(sapply(lst, function(x) length(x) == 0))
+			if (attr(lst, "n_empty") == 0) attr(lst, "n_empty") = NULL
 			u = unique(sapply(lst, class)[1,])
 			if (length(u) > 1)
 				stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
@@ -59,8 +66,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		if (single)
 			class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 		else {
-			class(lst) = c("sfc_GEOMETRY", "sfc")         # the mix
-			attr(lst, "classes") = sapply(lst, class)[2L,] # Rcpp forces me to do this. Or is it me, allowing a mix?
+		  # Contains multiple geometries
+		  lst <- st_multi(lst)
 		}
 		attr(lst, "single_type") = NULL # clean up
 		if (is.na(crs) && !is.null(attr(lst, "crs")))
@@ -71,27 +78,42 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	st_set_crs(lst, crs)
 }
 
-# coerce XX and MULTIXX mixes to MULTIXX, other mixes to GeometryCollection:
-#coerce_types = function(lst) {
-#	if (!identical(unique(sapply(lst, function(x) class(x)[3L])), "sfg"))
-#		stop("list item(s) not of class sfg") # sanity check
-#	cls = unique(sapply(lst, function(x) class(x)[2L]))
-#	if (length(cls) > 1) {
-#		if (all(cls %in% c("POINT", "MULTIPOINT")))
-#			lapply(lst, 
-#				function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
-#		else if (all(cls %in% c("POLYGON", "MULTIPOLYGON")))
-#			lapply(lst, 
-#				function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
-#		else if (all(cls %in% c("LINESTRING", "MULTILINESTRING")))
-#			lapply(lst, 
-#				function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
-#		else lapply(lst, 
-#			function(x) if (inherits(x, "GEOMETRYCOLLECTION")) x 
-#				else st_geometrycollection(list(x)))
-#	} else
-#		lst
-#}
+#' Coerce geometry to MULTI* geometry
+#' 
+#' POINTS, LINES, POLYGONS are returned as MULTIPOINTS, MULTILINES and MULTIPOLYGONS
+#' @param x list of geometries or simple features
+#' @details Geometries that are already MULTI* are left unchanged. 
+#' Features that can't be cast to a single  MULTI* geometry are return as a 
+#' GEOMETRYCOLLECTION
+st_multi = function(x) {
+  if (!identical(unique(sapply(x, function(w) class(w)[3L])), "sfg"))
+    stop("list item(s) not of class sfg") # sanity check
+  cls = unique(sapply(x, function(x) class(x)[2L]))
+  if (length(cls) > 1) {
+    if (all(cls %in% c("POINT", "MULTIPOINT"))) {
+      x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
+      class(x) = c("sfc_MULTIPOINT", "sfc") 
+      
+    } else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
+      x <- lapply(x,
+             function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
+      class(x) = c("sfc_MULTILINESTRING", "sfc")
+      
+    } else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
+      x <- lapply(x,
+             function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
+      class(x) = c("sfc_MULTIPOLYGON", "sfc")
+    } else {
+      x <- lapply(x,
+             function(x) if (inherits(x, "GEOMETRYCOLLECTION")) x
+             else st_geometrycollection(list(x)))
+      class(x) = c("sfc_GEOMETRYCOLLECTION", "sfc") 
+    }
+  } else if (cls == "GEOMETRYCOLLECTION") {
+    class(x) = c("sfc_GEOMETRYCOLLECTION", "sfc") 
+  }
+  x
+}
 
 #' @export
 "[.sfc" = function(x, i, j, ...) {
