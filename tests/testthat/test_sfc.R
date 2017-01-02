@@ -51,3 +51,88 @@ test_that("st_crs<- gives warnings on changing crs", {
 	# but do when it changes:
 	expect_warning(st_sfc(x, crs = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
 })
+
+test_that("st_sfc and st_multi coerce to MULTI* or GEOMETRY", {
+  m <- rbind(c(0,0),c(1,0),c(1, 1),c(0,1),c(0,0))
+  s <- matrix(c(2, 0), 5, 2, byrow = TRUE)
+  cc <- list(
+    points = list(
+      single = m[1, ] %>% st_point(),
+      multi = m %>% st_multipoint()
+    ),
+    lines = list(
+      single = m %>% st_linestring(), 
+      multi = list(m, m + s) %>% st_multilinestring()
+    ),
+    polygons = list(
+      single = list(m + s)  %>% st_polygon(), 
+      multi = list(list(m), list(m + s)) %>% st_multipolygon()
+    )
+  )
+
+  # st_sfc
+  # ======
+  # points
+  expect_is(st_sfc(cc$points$single, 
+                     cc$points$multi), c("sfc_MULTIPOINT", "sfc"))
+  
+  # lines
+  expect_is(st_sfc(cc$lines$single, 
+                     cc$lines$multi) , c("sfc_MULTILINESTRING", "sfc"))
+  
+  # polygons
+  expect_is(st_sfc(cc$polygons$single, 
+                     cc$polygons$multi), c("sfc_MULTIPOLYGON", "sfc"))
+  
+  # mixed
+  expect_is(st_sfc(cc$points$single, cc$lines$multi), 
+            c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_sfc(cc$lines$multi, cc$polygons$multi), 
+            c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  
+  expect_is(st_sfc(cc$lines$multi, cc$polygons$multi), c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_sfc(cc$points$multi, cc$polygons$multi) , 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_sfc(cc$points$multi, cc$lines$multi, cc$polygons$multi), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_sfc(list(cc$points$multi, cc$lines$multi, cc$polygons$multi)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+
+  # st_multi
+  # ========
+  # points
+  expect_is(st_multi(cc$points), c("sfc_MULTIPOINT", "sfc"))
+  expect_is(sapply(cc$points, st_sfc) %>% st_multi(), 
+                c("sfc_MULTIPOINT", "sfc"))
+  # lines
+  expect_is(st_multi(cc$lines), c("sfc_MULTILINESTRING", "sfc"))
+  expect_is(sapply(cc$lines, st_sfc) %>% st_multi(), 
+                c("sfc_MULTILINESTRING", "sfc"))
+  
+  # polygons
+  expect_is(st_multi(cc$polygons), c("sfc_MULTIPOLYGON", "sfc"))
+  expect_is(sapply(cc$polygons, st_sfc) %>% st_multi(), 
+                c("sfc_MULTILINESTRING", "sfc"))
+  
+  # mixed
+  expect_is(st_multi(c(cc$points, cc$lines)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(sapply(c(cc$points, cc$lines), st_sfc) %>% st_multi(), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_multi(c(cc$lines, cc$polygons)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(sapply(c(cc$lines, cc$polygons), st_sfc) %>% st_multi(), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_multi(c(cc$points, cc$polygons)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(sapply(c(cc$points, cc$polygons), st_sfc) %>% st_multi(), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_multi(c(cc$points, cc$lines, cc$polygons)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(sapply(c(cc$points, cc$lines), st_sfc) %>% st_multi(), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(st_multi(c(cc$points, cc$lines, cc$polygons)), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+  expect_is(sapply(c(cc$points, cc$lines, cc$polygons), st_sfc) %>% st_multi(), 
+                c("sfc_GEOMETRYCOLLECTION", "sfc"))
+})

@@ -27,7 +27,6 @@ st_cast(mls, "LINESTRING")
 
 (g = st_sfc(c(mls, ls)))
 st_cast(g, "MULTILINESTRING")
-expect_warning(st_cast(g, "LINESTRING"))
 st_cast(st_cast(g, "MULTILINESTRING"), "LINESTRING") # will not loose
 
 s = st_sf(a = 1:2, geom = st_sfc(st_point(1:2), st_point(2:3)))
