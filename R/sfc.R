@@ -67,7 +67,17 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 			class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
 		else {
 		  # Contains multiple geometries
+		  a <- attributes(lst)
 		  lst <- st_multi(lst)
+		  if("idx" %in% names(a)) {
+		    attr(lst, "idx") <- a[["idx"]]
+		  }
+		  if("crs" %in% names(a)) {
+		    attr(lst, "crs") <- a[["crs"]]
+		  }
+		  if("n_empty" %in% names(a)) {
+		    attr(lst, "n_empty") <- a[["n_empty"]]
+		  }
 		}
 		attr(lst, "single_type") = NULL # clean up
 		if (is.na(crs) && !is.null(attr(lst, "crs")))
