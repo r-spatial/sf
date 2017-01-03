@@ -109,7 +109,8 @@ graticule_attributes = function(df) {
 	df$y_end   = xy[,4]
 	dxdy = do.call(rbind, lapply(object, function(x) { y = x[[1]]; apply(y[1:2,], 2, diff) } ))
 	df$angle_start = apply(dxdy, 1, function(x) atan2(x[2], x[1])*180/pi)
-	dxdy = do.call(rbind, lapply(object, function(x) { y = x[[length(x)]]; apply(tail(y,2), 2, diff) } ))
+	dxdy = do.call(rbind, lapply(object, 
+		function(x) { y = x[[length(x)]]; n = nrow(y); apply(y[(n-1):n,], 2, diff) } ))
 	df$angle_end = apply(dxdy, 1, function(x) atan2(x[2], x[1])*180/pi)
 	df
 }
