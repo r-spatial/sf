@@ -20,7 +20,7 @@ Create simple feature list column, set class, and add coordinate reference syste
 \details{
 a simple feature collection object is a list of class 
 \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This 
-function creates such an object from a list of simple feature objects (of 
+function creates such an object from a list of simple feature geometries (of 
 class \code{sfg}).
 }
 \examples{

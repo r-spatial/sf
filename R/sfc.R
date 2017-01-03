@@ -25,7 +25,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' 
 #' @details a simple feature collection object is a list of class 
 #' \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This 
-#' function creates such an object from a list of simple feature objects (of 
+#' function creates such an object from a list of simple feature geometries (of 
 #' class \code{sfg}). 
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -84,6 +84,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	a = attributes(old)
 	if (!is.null(names(x)))
 		a$names = names(x)[i]
+	if (!is.null(a$classes))
+		a$classes = a$classes[i]
     attributes(x) = a
 	if (recompute_bb)
 		attr(x, "bbox") = st_bbox(x)

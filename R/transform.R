@@ -26,7 +26,10 @@ st_transform.sfc = function(x, crs, ...) {
 		stop("argument crs cannot be missing")
 	#suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
 	crs = make_crs(crs)
-	st_sfc(CPL_transform(x, crs$proj4string), crs = crs)
+	if (crs != st_crs(x))
+		st_sfc(CPL_transform(x, crs$proj4string), crs = crs)
+	else
+		x
 }
 
 #' @name st_transform

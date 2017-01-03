@@ -299,7 +299,7 @@ st_centroid = function(x) {
 st_segmentize  = function(x, dfMaxLength) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
-	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength))
+	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength), crs = st_crs(x))
 }
 
 #' @name geos
@@ -327,15 +327,15 @@ st_intersection = function(x, y) {
 		attr(ret, "idx") = NULL
 		df = NULL
 		if (inherits(x, "sf")) {
-			df = x[idx[,1],]
+			df = x[idx[,1],,drop=FALSE]
 			st_geometry(df) = NULL
 		}
 		if (inherits(y, "sf")) {
 			st_geometry(y) = NULL
 			if (is.null(df))
-				df = y[idx[,2],]
+				df = y[idx[,2],,drop=FALSE]
 			else
-				df = cbind(df, y[idx[,2],])
+				df = cbind(df, y[idx[,2],,drop=FALSE])
 		}
 		st_geometry(df) = ret
 		if (! all_fields(df))
