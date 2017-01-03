@@ -50,6 +50,7 @@
 #'		text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
 #'			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 #' }))
+#' plot(m, graticule = st_crs(4326))
 st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
 	easts = pretty(st_bbox(box)[c(1,3)]),
 	norths = pretty(st_bbox(box)[c(2,4)]), ndiscr = 100)
