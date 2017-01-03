@@ -276,7 +276,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 #' @method unlist sfg
 #' @export
 #' @param use.names ignored
-#' @value unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
+#' @return unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
 unlist.sfg = function(x, recursive = TRUE, use.names = TRUE) {
 	switch(class(x)[2],
 		POINT = matrix(x, 1),
