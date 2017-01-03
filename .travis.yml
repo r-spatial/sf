@@ -21,7 +21,6 @@ before_install:
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - sudo ldconfig
 
 r_github_packages:
   - jimhester/covr
