@@ -89,7 +89,7 @@ st_linemerge(mlst)
 
 st_centroid(x)
 
-st_segmentize(x, dfMaxLength)
+st_segmentize(x, dfMaxLength, ..., warn = TRUE)
 
 st_combine(x)
 
@@ -129,6 +129,10 @@ st_line_sample(x, n, density, type = "regular")
 \item{mlst}{object of class \code{MULTILINESTRING} or geometry list-column containing these}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
+
+\item{...}{ignored}
+
+\item{warn}{logical; generate a warning in case of long/lat data}
 
 \item{n}{integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.}
 

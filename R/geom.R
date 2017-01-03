@@ -296,8 +296,10 @@ st_centroid = function(x) {
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
-st_segmentize  = function(x, dfMaxLength) {
-	if (isTRUE(st_is_longlat(x)))
+#' @param ... ignored
+#' @param warn logical; generate a warning in case of long/lat data
+st_segmentize  = function(x, dfMaxLength, ..., warn = TRUE) {
+	if (warn && isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
 	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength), crs = st_crs(x))
 }
@@ -325,12 +327,16 @@ st_intersection = function(x, y) {
 	else { # at least one of them is sf:
 		idx = attr(ret, "idx")
 		attr(ret, "idx") = NULL
+		all_fields_x = all_fields_y = TRUE
 		df = NULL
 		if (inherits(x, "sf")) {
+			all_fields_x = all_fields(x)
 			df = x[idx[,1],,drop=FALSE]
 			st_geometry(df) = NULL
+			all_fields(x)
 		}
 		if (inherits(y, "sf")) {
+			all_fields_y = all_fields(y)
 			st_geometry(y) = NULL
 			if (is.null(df))
 				df = y[idx[,2],,drop=FALSE]
@@ -338,7 +344,7 @@ st_intersection = function(x, y) {
 				df = cbind(df, y[idx[,2],,drop=FALSE])
 		}
 		st_geometry(df) = ret
-		if (! all_fields(df))
+		if (! (all_fields_x && all_fields_y))
 			warning("attribute variables are assumed to be spatially constant throughout all geometries")
 		df
 	}

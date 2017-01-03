@@ -54,6 +54,7 @@ st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
 	easts = pretty(st_bbox(box)[c(1,3)]),
 	norths = pretty(st_bbox(box)[c(2,4)]), ndiscr = 100)
 {
+	# Get the bounding box of the plotting space, in crs
 	bb = if (inherits(x, "sf") || inherits(x, "sfc") || inherits(x, "sfg"))
 		st_bbox(x)
 	else
@@ -64,13 +65,14 @@ st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
 		c(bb[1],bb[4]), c(bb[1],bb[2])))
 	box = st_sfc(ls, crs = crs)
 
-	box = st_segmentize(box, st_length(ls) / 400)
+	box = st_segmentize(box, st_length(ls) / 400, warn = FALSE)
 
+	# Now we're moving to long/lat:
 	if (!is.na(crs))
 		box = st_transform(box, datum)
 
-	bb = st_bbox(box) # in the longlat CRS
-	# FIXME: need to widen? pretty() might take values outside range
+	bb = st_bbox(box)
+	# widen bb if pretty() created values outside the box:
 	bb = c(min(bb[1], min(easts)), min(bb[2],min(norths)), max(bb[3], max(easts)), max(bb[4], max(norths)))
 
 	eastlist <- vector(mode="list", length=length(easts))
@@ -86,11 +88,14 @@ st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
 	df$degree_label = c(degreeLabelsEW(easts), degreeLabelsNS(norths)) 
 
 	geom = st_sfc(c(eastlist, northlist, box), crs = datum)
+
+	# Now we're moving the straight lines back to curves in crs:
 	if (!is.na(crs))
 		geom = st_transform(geom, crs)
 	box = geom[length(geom)]
 	geom = geom[-length(geom)]
 	st_geometry(df) = geom
+	attr(df, "relation_to_geometry") = "field"
 
 	df = st_cast(st_intersection(df, st_polygonize(box)), "MULTILINESTRING")
 	graticule_attributes(df)
