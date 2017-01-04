@@ -249,7 +249,7 @@ print.sf = function(x, ..., n =
 #' @export
 rbind.sf = function(..., deparse.level = 1) {
 	ret = base::rbind.data.frame(...)
-	st_geometry(ret) = do.call(st_sfc, st_geometry(ret))
+	st_geometry(ret) = do.call(st_sfc, c(st_geometry(ret),crs=st_crs(st_geometry(ret))$epsg))
 	ret
 }
 
