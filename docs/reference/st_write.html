@@ -81,9 +81,9 @@
     <p>Write simple features object to file or database</p>
     
 
-    <pre><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>basename</span>(<span class='no'>dsn</span>), <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver</span>(<span class='no'>dsn</span>), <span class='no'>...</span>,
-  <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>basename</span>(<span class='no'>dsn</span>),
+  <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='no'>...</span>, <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -94,7 +94,7 @@
       <dt>layer</dt>
       <dd>layer name (varies by driver, may be a file name without extension); if layer is missing, the basename of <code>dsn</code> is taken.</dd>
       <dt>driver</dt>
-      <dd>character; OGR driver name to be used, if missing, a driver name is guessed from <code>dsn</code>.</dd>
+      <dd>character; driver name to be used, if missing, a driver name is guessed from <code>dsn</code>; <code>st_drivers()</code> returns the drivers that are available with their properties; links to full driver documentation are found at <a href = 'http://www.gdal.org/ogr_formats.html'>http://www.gdal.org/ogr_formats.html</a>.</dd>
       <dt>...</dt>
       <dd>ignored</dd>
       <dt>dataset_options</dt>
@@ -110,6 +110,10 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>columns (variables) of a class not supported are dropped with a warning.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><a href='st_drivers.html'>st_drivers</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -182,6 +186,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

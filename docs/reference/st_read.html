@@ -223,7 +223,7 @@
 #&gt;  Median : 5.00   Median :  874.5   +proj=long...:  0  
 #&gt;  Mean   : 8.36   Mean   : 1352.8                      
 #&gt;  3rd Qu.:10.25   3rd Qu.: 1406.8                      
-#&gt;  Max.   :57.00   Max.   :11631.0                      </div><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"travis"</span>, <span class='st'>"edzer"</span>)) {
+#&gt;  Max.   :57.00   Max.   :11631.0                      </div><div class='input'><span class='kw'>if</span> (<span class='fu'>Sys.getenv</span>(<span class='st'>"USER"</span>) <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"edzer"</span>, <span class='st'>"travis"</span>)) {
   <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
   <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
   <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)

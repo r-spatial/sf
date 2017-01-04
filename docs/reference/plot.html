@@ -84,7 +84,7 @@
     
 
     <pre><span class='co'># S3 method for sf</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for sfc_POINT</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -121,7 +121,7 @@
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>sf.colors</span>(<span class='no'>xc</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='fu'>sf.colors</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>xc</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -134,12 +134,12 @@
       <dd>further specifications, see plot</dd>
       <dt>ncol</dt>
       <dd>integer; default number of colors to be used.</dd>
+      <dt>col</dt>
+      <dd>color</dd>
       <dt>pch</dt>
       <dd>plotting symbol</dd>
       <dt>cex</dt>
       <dd>symbol size</dd>
-      <dt>col</dt>
-      <dd>color</dd>
       <dt>bg</dt>
       <dd>symbol background color</dd>
       <dt>lwd</dt>
@@ -154,10 +154,10 @@
       <dd>color of polygon border</dd>
       <dt>rule</dt>
       <dd>see <a href='http://www.rdocumentation.org/packages/graphics/topics/polypath'>polypath</a></dd>
-      <dt>xc</dt>
-      <dd>factor or numeric vector, or length-one integer.</dd>
       <dt>n</dt>
       <dd>integer; number of colors</dd>
+      <dt>xc</dt>
+      <dd>factor or numeric vector, for which colors need to be returned</dd>
       <dt>cutoff.tails</dt>
       <dd>numeric, in [0,0.5] start and end values</dd>
       <dt>alpha</dt>

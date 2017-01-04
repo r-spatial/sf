@@ -4,9 +4,9 @@
 \alias{st_graticule}
 \title{compute graticules and their parameters}
 \usage{
-st_graticule(x, crs = st_crs(x), datum = st_crs(4326),
-  easts = pretty(st_bbox(box)[c(1, 3)]), norths = pretty(st_bbox(box)[c(2,
-  4)]), ndiscr = 100)
+st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
+  datum = st_crs(4326), ..., lon = pretty(st_bbox(box)[c(1, 3)]),
+  lat = pretty(st_bbox(box)[c(2, 4)]), ndiscr = 100)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).}
@@ -15,11 +15,18 @@ st_graticule(x, crs = st_crs(x), datum = st_crs(4326),
 
 \item{datum}{object of class \code{crs}, with the coordinate reference system for the graticules}
 
-\item{easts}{numeric; degrees east for the meridians}
+\item{...}{ignored}
 
-\item{norths}{numeric; degrees north for the parallels}
+\item{lon}{numeric; degrees east for the meridians}
+
+\item{lat}{numeric; degrees north for the parallels}
 
 \item{ndiscr}{integer; number of points to discretize a parallel or meridian}
+}
+\value{
+an object of class \code{sf} with additional attributes describing the type 
+(E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
+see example.
 }
 \description{
 compute graticules and their parameters
@@ -40,7 +47,8 @@ laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
 m <- st_transform(st_as_sf(m), laea)
 
 bb = st_bbox(m)
-bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
+bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),
+   c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
 
 g = st_graticule(m)
 plot(m, xlim = 1.2 * c(-2450853.4, 2186391.9))
@@ -63,5 +71,6 @@ if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
 	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
 		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 }))
+plot(m, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
 }
 
