@@ -153,6 +153,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
 #' @export
 st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 	geom = st_cast(st_geometry(x), to, ids = ids)
+	crs = st_crs(x)
 	st_geometry(x) = NULL
 	#x = as.data.frame(x)
 	if (!is.null(attr(geom, "ids"))) {
@@ -162,13 +163,13 @@ st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 			warning("repeating attributes for all sub-geometries for which they may not be valid")
 		ids = attr(geom, "ids")          # e.g. 3 2 4
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
-		st_sf(x[reps, ], geom, crs = st_crs(x))
+		st_sf(x[reps, ], geom, crs = crs)
 	} else { 
 		if (length(unique(ids)) < nrow(x)) {
 			if (missing(FUN))
 				stop("aggregation function missing; pls specify argument FUN")
 			x = aggregate(x, list(ids.group = ids), FUN, simplify = FALSE)
 		}
-		st_sf(x, geom, crs = st_crs(x))
+		st_sf(x, geom, crs = crs)
 	}
 }

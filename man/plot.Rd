@@ -12,6 +12,7 @@
 \alias{plot.sfc_POINT}
 \alias{plot.sfc_POLYGON}
 \alias{plot.sfg}
+\alias{plot_sf}
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
@@ -43,6 +44,11 @@
 
 \method{plot}{sfg}(x, ...)
 
+plot_sf(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE,
+  bgc = par("bg"), ..., xaxs, yaxs, lab, setParUsrBB = FALSE,
+  bgMap = NULL, expandBB = c(0, 0, 0, 0), graticule = NA_crs_,
+  col_graticule = "grey")
+
 sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
   categorical = FALSE)
 }
@@ -51,7 +57,7 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{y}{ignored}
 
-\item{...}{further specifications, see \link{plot}}
+\item{...}{further specifications, see \link{plot_sf} and \link{plot}}
 
 \item{ncol}{integer; default number of colors to be used.}
 
@@ -75,6 +81,33 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{rule}{see \link[graphics]{polypath}}
 
+\item{xlim}{see \link{par}}
+
+\item{ylim}{see \link{par}}
+
+\item{asp}{see below, and see \link{par}}
+
+\item{axes}{logical; should axes be plotted? (default FALSE)}
+
+\item{bgc}{background color}
+
+\item{xaxs}{see \link{par}}
+
+\item{yaxs}{see \link{par}}
+
+\item{lab}{see \link{par}}
+
+\item{setParUsrBB}{default FALSE; set the \code{par} \dQuote{usr} bounding box; see below}
+
+\item{bgMap}{object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}}
+
+\item{expandBB}{numeric; fractional values to expand the bounding box with, 
+in each direction (bottom, left, top, right)}
+
+\item{graticule}{object of class \code{crs}, or object returned by \link{st_graticule}}
+
+\item{col_graticule}{color to used for the graticule (if present)}
+
 \item{n}{integer; number of colors}
 
 \item{xc}{factor or numeric vector, for which colors need to be returned}
@@ -91,6 +124,23 @@ Plot sf object
 blue-pink-yellow color scale
 }
 \details{
+\code{plot.sf} plots maps with colors following from attribute columns, 
+one map per attribute. It uses \code{sf.colors} for default colors.
+
+\code{plot.sfc} plots the geometry, additional parameters can be passed on
+to control color, lines or symbols.
+
+\code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
+is called by all \code{plot} methods before anything is drawn.
+
+The argument \code{setParUsrBB} may be used to pass the logical value \code{TRUE} to functions within \code{plot.Spatial}. When set to \code{TRUE}, par(\dQuote{usr}) will be overwritten with \code{c(xlim, ylim)}, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(\dQuote{xaxs}) and par(\dQuote{yaxs}) in addition to \code{par(mar=c(0,0,0,0))}.
+
+The default aspect for map plots is 1; if however data are not
+projected (coordinates are long/lat), the aspect is by default set to
+1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+(the mean of ylim, which defaults to the y range of bounding box). This
+implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
+
 \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 }
 \examples{

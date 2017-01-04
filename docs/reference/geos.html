@@ -91,7 +91,7 @@
 
 <span class='fu'>st_is_simple</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='kw'>geosphere</span><span class='kw'>::</span><span class='no'>distGeo</span>)
+<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist_fun</span>)
 
 <span class='fu'>st_relate</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
@@ -129,9 +129,11 @@
 
 <span class='fu'>st_polygonize</span>(<span class='no'>mlst</span>)
 
+<span class='fu'>st_linemerge</span>(<span class='no'>mlst</span>)
+
 <span class='fu'>st_centroid</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_segmentize</span>(<span class='no'>x</span>, <span class='no'>dfMaxLength</span>)
+<span class='fu'>st_segmentize</span>(<span class='no'>x</span>, <span class='no'>dfMaxLength</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>st_combine</span>(<span class='no'>x</span>)
 
@@ -143,7 +145,7 @@
 
 <span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
-<span class='fu'>st_line_sample</span>(<span class='no'>x</span>, <span class='no'>density</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"regular"</span>)</pre>
+<span class='fu'>st_line_sample</span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>density</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"regular"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -152,7 +154,7 @@
       <dt>NA_if_empty</dt>
       <dd>logical; if TRUE, return NA for empty geometries</dd>
       <dt>dist_fun</dt>
-      <dd>function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.</dd>
+      <dd>function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a> in that case; for other data metric lengths are computed.</dd>
       <dt>y</dt>
       <dd>second simple feature (sf) or simple feature geometry (sfc) collection</dd>
       <dt>sparse</dt>
@@ -173,6 +175,12 @@
       <dd>object of class <code>MULTILINESTRING</code> or geometry list-column containing these</dd>
       <dt>dfMaxLength</dt>
       <dd>numeric; max length of a line segment</dd>
+      <dt>...</dt>
+      <dd>ignored</dd>
+      <dt>warn</dt>
+      <dd>logical; generate a warning in case of long/lat data</dd>
+      <dt>n</dt>
+      <dd>integer; number of points to choose per geometry; if missing, n will be computed as <code>round(density * st_length(geom))</code>.</dd>
       <dt>density</dt>
       <dd>numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).</dd>
       <dt>type</dt>
@@ -184,7 +192,7 @@
     <p>matrix (sparse or dense); if dense: of type <code>character</code> for <code>relate</code>, <code>numeric</code> for <code>distance</code>, and <code>logical</code> for all others; matrix has dimension <code>x</code> by <code>y</code>; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching <code>y</code>.</p>
     <p>st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.</p>
     <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
-    <p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.</p>
+    <p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of <code>x</code> was set, the returned value has a unit of measurement.</p>
     <p>st_is_simple and st_is_valid return a logical vector</p>
     <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     <p>st_relate returns a dense <code>character</code> matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of 0,1,2,F, digits denoting dimensionality, F denoting not intersecting.</p>
@@ -223,8 +231,18 @@ st_combine(nc)</p>
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-10.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><div class='output co'>#&gt; <span class='error'>Error in cut.default(x, n): &#39;x&#39; must be numeric</span></div><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_polygonize</span>(<span class='no'>mls</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='geos-14.png' alt='' width='540' height='400' /><div class='output co'>#&gt; <span class='error'>Error in cut.default(x, n): &#39;x&#39; must be numeric</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data.</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))
+<span class='fu'>st_polygonize</span>(<span class='no'>mls</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  GEOMETRYCOLLECTION
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>GEOMETRYCOLLECTION(POLYGON((0 0, 0 1, 1 1, 0 0)))</span></div><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>))))
+<span class='fu'>st_linemerge</span>(<span class='no'>mls</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='geos-20.png' alt='' width='540' height='400' /><div class='output co'>#&gt; <span class='error'>Error in cut.default(x, n): &#39;x&#39; must be numeric</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data.</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))
 <span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
         <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>10</span>,<span class='fl'>0</span>))))
 <span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
@@ -232,26 +250,30 @@ st_combine(nc)</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
-#&gt; MULTIPOINT(0 0.5) 
-#&gt; MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5... </div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 0.5)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5...</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
   <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='fu'>try</span>(<span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>)) <span class='co'># error</span>
-<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='co'># five points for each line</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  MULTIPOINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10018.75 ymax: 100192.6
+#&gt; epsg (SRID):    3857
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 11132.5142866379, 0 33397.54285991...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1113.19490793274 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)) <span class='co'># one and three points</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  MULTIPOINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 9276.624 ymax: 55662.57
+#&gt; epsg (SRID):    3857
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 55662.5714331921)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1855.32484655456 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-#&gt; MULTIPOINT(0 501.464607505533, 0 1504.393822518... 
-#&gt; MULTIPOINT(505.997685423971 -7.08115455161362e-... </div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>1000</span>, <span class='fl'>1</span>/<span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(505.997685423971 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>1000</span>, <span class='fl'>1</span>/<span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 5565.975 ymax: 110823.7
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-#&gt; MULTIPOINT(0 501.464607505533, 0 1504.393822518... 
-#&gt; MULTIPOINT(5565.97453966368 -7.08115455161362e-10) </div><img src='geos-24.png' alt='' width='540' height='400' /></pre>
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(5565.97453966368 -7.08115455161362e-10)</span></div><img src='geos-44.png' alt='' width='540' height='400' /></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

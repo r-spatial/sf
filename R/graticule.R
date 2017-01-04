@@ -5,10 +5,11 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system
 #' @param datum object of class \code{crs}, with the coordinate reference system for the graticules
-#' @param easts numeric; degrees east for the meridians
-#' @param norths numeric; degrees north for the parallels
+#' @param lon numeric; degrees east for the meridians
+#' @param lat numeric; degrees north for the parallels
 #' @param ndiscr integer; number of points to discretize a parallel or meridian
-#' @value an object of class \code{sf} with additional attributes describing the type 
+#' @param ... ignored
+#' @return an object of class \code{sf} with additional attributes describing the type 
 #' (E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
 #' see example.
 #' @examples 
@@ -27,7 +28,8 @@
 #' m <- st_transform(st_as_sf(m), laea)
 #' 
 #' bb = st_bbox(m)
-#' bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
+#' bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),
+#'    c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
 #' 
 #' g = st_graticule(m)
 #' plot(m, xlim = 1.2 * c(-2450853.4, 2186391.9))
@@ -50,11 +52,19 @@
 #'		text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
 #'			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 #' }))
-#' plot(m, graticule = st_crs(4326))
-st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
-	easts = pretty(st_bbox(box)[c(1,3)]),
-	norths = pretty(st_bbox(box)[c(2,4)]), ndiscr = 100)
+#' plot(m, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
+st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(4326), ...,
+	lon = pretty(st_bbox(box)[c(1,3)]),
+	lat = pretty(st_bbox(box)[c(2,4)]), ndiscr = 100)
 {
+	if (missing(x)) {
+		crs = datum
+		if (missing(lon))
+			lon = seq(-180, 180, by = 20)
+		if (missing(lat))
+			lat = seq(-80, 80, by = 20)
+	}
+
 	# Get the bounding box of the plotting space, in crs
 	bb = if (inherits(x, "sf") || inherits(x, "sfc") || inherits(x, "sfg"))
 		st_bbox(x)
@@ -72,34 +82,41 @@ st_graticule = function(x, crs = st_crs(x), datum = st_crs(4326),
 	if (!is.na(crs))
 		box = st_transform(box, datum)
 
+	# sanity:
+	lon = lon[lon >= -180 & lon <= 180]
+	lat = lat[lat > -90 & lat < 90]
+
 	bb = st_bbox(box)
 	# widen bb if pretty() created values outside the box:
-	bb = c(min(bb[1], min(easts)), min(bb[2],min(norths)), max(bb[3], max(easts)), max(bb[4], max(norths)))
+	bb = c(min(bb[1], min(lon)), min(bb[2],min(lat)), max(bb[3], max(lon)), max(bb[4], max(lat)))
 
-	eastlist <- vector(mode="list", length=length(easts))
-	for (i in seq_along(eastlist))
-		eastlist[[i]] <- st_linestring(cbind(rep(easts[i], ndiscr), seq(bb[2], bb[4], length.out=ndiscr)))
+	long_list <- vector(mode="list", length=length(lon))
+	for (i in seq_along(long_list))
+		long_list[[i]] <- st_linestring(cbind(rep(lon[i], ndiscr), seq(bb[2], bb[4], length.out=ndiscr)))
 
-	northlist <- vector(mode="list", length=length(norths))
-	for (i in seq_along(northlist))
-		northlist[[i]] <- st_linestring(cbind(seq(bb[1], bb[3], length.out=ndiscr), rep(norths[i], ndiscr)))
+	lat_list <- vector(mode="list", length=length(lat))
+	for (i in seq_along(lat_list))
+		lat_list[[i]] <- st_linestring(cbind(seq(bb[1], bb[3], length.out=ndiscr), rep(lat[i], ndiscr)))
 	
-	df = data.frame(degree = c(easts, norths))
-	df$type = c(rep("E", length(easts)), rep("N", length(norths)))
-	df$degree_label = c(degreeLabelsEW(easts), degreeLabelsNS(norths)) 
+	df = data.frame(degree = c(lon, lat))
+	df$type = c(rep("E", length(lon)), rep("N", length(lat)))
+	df$degree_label = c(degreeLabelsEW(lon), degreeLabelsNS(lat)) 
 
-	geom = st_sfc(c(eastlist, northlist, box), crs = datum)
+	geom = st_sfc(c(long_list, lat_list), crs = datum)
 
 	# Now we're moving the straight lines back to curves in crs:
 	if (!is.na(crs))
 		geom = st_transform(geom, crs)
-	box = geom[length(geom)]
-	geom = geom[-length(geom)]
 	st_geometry(df) = geom
 	attr(df, "relation_to_geometry") = "field"
 
-	df = st_cast(st_intersection(df, st_polygonize(box)), "MULTILINESTRING")
-	graticule_attributes(df)
+	if (!missing(x)) { # cut out box:
+		box = st_sfc(box, crs = datum)
+		if (!is.na(crs))
+			box = st_transform(box, crs)
+		df = st_intersection(df, st_polygonize(box))
+	}
+	graticule_attributes(st_cast(df, "MULTILINESTRING"))
 }
 
 graticule_attributes = function(df) {
@@ -108,7 +125,6 @@ graticule_attributes = function(df) {
 		do.call(rbind, lapply(object, function(x) { y = x[[1]]; y[1,] } )),
 		do.call(rbind, lapply(object, function(x) { y = x[[length(x)]]; y[nrow(y),] } ))
 	)
-	names(xy) = c("x_start", "y_start", "x_end", "y_end")
 	df$x_start = xy[,1]
 	df$y_start = xy[,2]
 	df$x_end   = xy[,3]

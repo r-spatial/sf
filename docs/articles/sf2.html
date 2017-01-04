@@ -278,14 +278,14 @@ x
 ## bbox:           xmin: 0 ymin: 1 xmax: 5 ymax: 6
 ## epsg (SRID):    NA
 ## proj4string:    NA
-## POINT(0 1) 
+## POINT(0 1)
 ## POINT(5 6)</code></pre></div>
 </div>
 <div id="conversion-to-and-from-sp" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#conversion-to-and-from-sp" class="anchor"> </a></body></html>Conversion to and from sp</h3>
 <p>Spatial objects as maintained by package <code>sp</code> can be converted into simple feature objects or geometries by <code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(st_as_sf)
-## [1] st_as_sf.data.frame st_as_sf.Spatial   
+## [1] st_as_sf.data.frame st_as_sf.sf         st_as_sf.Spatial   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
 ## [1] st_as_sfc.character          st_as_sfc.SpatialLines      

@@ -81,7 +81,34 @@
     <p>Cast geometry to another type: either simplify, or cast explicitly</p>
     
 
-    <pre><span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)</pre>
+    <pre><span class='co'># S3 method for MULTIPOLYGON</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTILINESTRING</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTIPOINT</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for POLYGON</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for LINESTRING</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for POINT</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for GEOMETRYCOLLECTION</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'>seq_along</span>(<span class='no'>x</span>))
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'>seq_len</span>(<span class='fu'>nrow</span>(<span class='no'>x</span>)), <span class='no'>FUN</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -91,6 +118,12 @@
       <dd>character; target type, if missing, simplification is tried; when <code>x</code> is of type <code>sfg</code> (i.e., a single geometry) then <code>to</code> needs to be specified.</dd>
       <dt>...</dt>
       <dd>ignored</dd>
+      <dt>ids</dt>
+      <dd>integer vector, denoting how geometries should be grouped (default: no grouping)</dd>
+      <dt>FUN</dt>
+      <dd>function passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</dd>
+      <dt>warn</dt>
+      <dd>logical; if <code>TRUE</code>, warn if attributes are assigned to sub-geometries</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -99,8 +132,22 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>)))
-<span class='fu'>st_cast</span>(<span class='no'>s</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; POINT(1 0) </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>example</span>(<span class='no'>st_read</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: no help found for ‘st_read’</span></div><div class='input'><span class='no'>mpl</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]]
+<span class='co'>#st_cast(x) ## error 'argument "to" is missing, with no default'</span>
+<span class='no'>cast_all</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>xg</span>) {
+  <span class='fu'>lapply</span>(<span class='fu'>c</span>(<span class='st'>"MULTIPOLYGON"</span>, <span class='st'>"MULTILINESTRING"</span>, <span class='st'>"MULTIPOINT"</span>, <span class='st'>"POLYGON"</span>, <span class='st'>"LINESTRING"</span>, <span class='st'>"POINT"</span>),
+      <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>st_cast</span>(<span class='no'>xg</span>, <span class='no'>x</span>))
+}
+<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>mpl</span>))</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='co'>## no closing coordinates should remain for multipoint</span>
+<span class='fu'>any</span>(<span class='fu'>duplicated</span>(<span class='fu'>unclass</span>(<span class='fu'>st_cast</span>(<span class='no'>mpl</span>, <span class='st'>"MULTIPOINT"</span>))))  <span class='co'>## should be FALSE</span></div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='co'>## number of duplicated coordinates in the linestrings should equal the number of polygon rings </span>
+<span class='co'>## (... in this case, won't always be true)</span>
+<span class='fu'>sum</span>(<span class='fu'>duplicated</span>(<span class='fu'>do.call</span>(<span class='no'>rbind</span>, <span class='fu'>unclass</span>(<span class='fu'>st_cast</span>(<span class='no'>mpl</span>, <span class='st'>"MULTILINESTRING"</span>))))
+     ) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='fu'>unlist</span>(<span class='fu'>lapply</span>(<span class='no'>mpl</span>, <span class='no'>length</span>)))  <span class='co'>## should be TRUE</span></div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'>
+<span class='no'>p1</span> <span class='kw'>&lt;-</span> <span class='fu'>structure</span>(<span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>0</span>), <span class='kw'>.Dim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>6L</span>, <span class='fl'>2L</span>))
+<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='fu'>structure</span>(<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>1</span>), <span class='kw'>.Dim</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>4L</span>, <span class='fl'>2L</span>))
+<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>p1</span>, <span class='no'>p2</span>))</div><div class='output co'>#&gt; <span class='message'>POLYGON((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1))</span></div><div class='input'><span class='no'>mls</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"MULTILINESTRING"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>mls</span>))</div><div class='output co'>#&gt; <span class='error'>Error in st_cast(xg, x): object &#39;mls&#39; not found</span></div><div class='input'><span class='no'>mpt</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"MULTIPOINT"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>mpt</span>))</div><div class='output co'>#&gt; <span class='error'>Error in st_cast(xg, x): object &#39;mpt&#39; not found</span></div><div class='input'><span class='no'>pl</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"POLYGON"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>pl</span>))</div><div class='output co'>#&gt; <span class='error'>Error in st_cast(xg, x): object &#39;pl&#39; not found</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>ls</span>))</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;function&quot;</span></div><div class='input'><span class='no'>pt</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;NULL&quot;</span></div><div class='input'><span class='co'>## st_sfc(cast_all(pt))  ## Error: cannot create MULTIPOLYGON from POINT </span>
+<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>lapply</span>(<span class='fu'>c</span>(<span class='st'>"POINT"</span>, <span class='st'>"MULTIPOINT"</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>st_cast</span>(<span class='no'>pt</span>, <span class='no'>x</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod(&quot;st_cast&quot;): no applicable method for &#39;st_cast&#39; applied to an object of class &quot;function&quot;</span></div><div class='input'><span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>)))
+<span class='fu'>st_cast</span>(<span class='no'>s</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 0)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

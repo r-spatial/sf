@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Drop Z and/or M dimensions from feature geometries — st_drop_zm • sf</title>
+<title>Map prefix to driver — prefix_map • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,49 +74,27 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Drop Z and/or M dimensions from feature geometries</h1>
+    <h1>Map prefix to driver</h1>
     </div>
 
     
-    <p>Drop Z and/or M dimensions from feature geometries, resetting classes appropriately</p>
+    <p>Map prefix to driver</p>
     
 
-    <pre><span class='fu'>st_drop_zm</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></dd>
-      <dt>...</dt>
-      <dd>ignored</dd>
-    </dl>
+    <pre><span class='no'>prefix_map</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>list</code> of length 10.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_drop_zm</span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)))</div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7 15, 8 16)</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)), <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>8</span>,<span class='fl'>2</span>)))
-<span class='fu'>st_drop_zm</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 1 ymin: 3 xmax: 8 ymax: 16
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 3, 2 4)</span></div><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>x</span>)
-<span class='fu'>st_drop_zm</span>(<span class='no'>a</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; geometry type:  LINESTRING
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 1 ymin: 3 xmax: 8 ymax: 16
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
-#&gt;   a                           geom
-#&gt; 1 1 LINESTRING(1 9, 2 10, 3 11,...
-#&gt; 2 2           LINESTRING(1 3, 2 4)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      
+      <li><a href="#format">Format</a></li>
+          </ul>
 
   </div>
 </div>

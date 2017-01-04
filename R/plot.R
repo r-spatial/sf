@@ -2,7 +2,7 @@
 #'
 #' @param x object of class sf
 #' @param y ignored
-#' @param ... further specifications, see \link{plot}
+#' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used.
 #' @param pch plotting symbol
 #' @param cex symbol size
@@ -15,6 +15,11 @@
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @method plot sf
 #' @name plot
+#' @details \code{plot.sf} plots maps with colors following from attribute columns, 
+#' one map per attribute. It uses \code{sf.colors} for default colors.
+#' 
+#' \code{plot.sfc} plots the geometry, additional parameters can be passed on
+#' to control color, lines or symbols.
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -285,8 +290,36 @@ plot.sfg = function(x, ...) {
 }
 
 # set up plotting area & axes; reuses sp:::plot.Spatial
-plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par("bg"), ..., 
-    xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_) {
+#' @name plot
+#' @param xlim see \link{par}
+#' @param ylim see \link{par}
+#' @param asp see below, and see \link{par}
+#' @param axes logical; should axes be plotted? (default FALSE)
+#' @param bgc background color
+#' @param xaxs see \link{par}
+#' @param yaxs see \link{par}
+#' @param lab see \link{par}
+#' @param setParUsrBB default FALSE; set the \code{par} \dQuote{usr} bounding box; see below
+#' @param bgMap object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}
+#' @param expandBB numeric; fractional values to expand the bounding box with, 
+#' in each direction (bottom, left, top, right)
+#' @param graticule object of class \code{crs}, or object returned by \link{st_graticule}
+#' @param col_graticule color to used for the graticule (if present)
+#' @export
+#' @details \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
+#' is called by all \code{plot} methods before anything is drawn.
+#' 
+#' The argument \code{setParUsrBB} may be used to pass the logical value \code{TRUE} to functions within \code{plot.Spatial}. When set to \code{TRUE}, par(\dQuote{usr}) will be overwritten with \code{c(xlim, ylim)}, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(\dQuote{xaxs}) and par(\dQuote{yaxs}) in addition to \code{par(mar=c(0,0,0,0))}.
+#' 
+#' The default aspect for map plots is 1; if however data are not
+#' projected (coordinates are long/lat), the aspect is by default set to
+#' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+#' (the mean of ylim, which defaults to the y range of bounding box). This
+#' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
+#'
+plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ..., 
+    xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_,
+	col_graticule = 'grey') {
 
 # sp's bbox: matrix
 #   min max
@@ -314,26 +347,32 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 		par(usr=c(xlim, ylim))
 	pl_reg <- par("usr")
 	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2], 
-		ytop = pl_reg[4], col = bg, border = FALSE)
-	if (axes) { # set up default axes system & box:
+		ytop = pl_reg[4], col = bgc, border = FALSE)
+	linAxis = function(side, ..., lon, lat, ndiscr) axis(side = side, ...)
+	if (! missing(graticule)) {
+		g = if (inherits(graticule, "crs") && !is.na(graticule))
+				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), graticule, ...)
+			else
+				graticule
+		plot(st_geometry(g), col = col_graticule, add = TRUE)
+		box()
+		if (axes) {
+			sel = g$type == "E" & g$y_start < min(g$y_start) + 0.01 * diff(pl_reg[3:4])
+			linAxis(1L, g$x_start[sel], parse(text = g$degree_label[sel]), ...)
+			sel = g$type == "N" & g$x_start < min(g$x_start) + 0.01 * diff(pl_reg[1:2])
+			linAxis(2L, g$y_start[sel], parse(text = g$degree_label[sel]), ...)
+		}
+	} else if (axes) {
 		box()
 		if (isTRUE(st_is_longlat(x))) {
 			degAxis(1, ...)
 			degAxis(2, ...)
 		} else {
-			axis(1, ...)
-			axis(2, ...)
+			linAxis(1, ...)
+			linAxis(2, ...)
 		}
-	} else if (!is.na(graticule)) {
-		g = st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), graticule)
-		plot(st_geometry(g), col = 'grey', add = TRUE)
-		box()
-		sel = g$type == "E" & g$y_start < min(g$y_start) + 0.01 * diff(pl_reg[3:4])
-		axis(1L, g$x_start[sel], parse(text = g$degree_label[sel]), ...)
-		sel = g$type == "N" & g$x_start < min(g$x_start) + 0.01 * diff(pl_reg[1:2])
-		axis(2L, g$y_start[sel], parse(text = g$degree_label[sel]), ...)
 	}
-	localTitle <- function(..., col, bg, pch, cex, lty, lwd) title(...)
+	localTitle <- function(..., col, bgc, pch, cex, lty, lwd, lon, lat, ndiscr, at, labels) title(...)
 	localTitle(...)
 	if (!is.null(bgMap)) {
 		mercator = FALSE
@@ -433,7 +472,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	st_bbox(st_transform(pts, merc))
 }
 
-degAxis = function (side, at, labels, ...) {
+degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 	if (missing(at))
        	at = axTicks(side)
 	if (missing(labels)) {
