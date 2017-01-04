@@ -11,9 +11,9 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb")
 	)
 Depends: R (>= 3.3.0)
-Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, geosphere (>= 1.5-5), units (>= 0.4)
+Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, units (>= 0.4)
 LinkingTo: Rcpp
-Suggests: sp, rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr
+Suggests: sp (>= 1.2-4), rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr, geosphere (>= 1.5-5), maptools, maps
 VignetteBuilder: knitr
 Description: Support for simple features, a standardized way to encode spatial data, with bindings to GDAL, GEOS and Proj.4.
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
@@ -22,4 +22,5 @@ URL: https://github.com/edzer/sfr/
 BugReports: https://github.com/edzer/sfr/issues/
 RoxygenNote: 5.0.1
 Collate: RcppExports.R init.R bbox.R read.R db.R sfc.R sfg.R sf.R wkb.R wkt.R
-	plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R cast.R
+	plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R cast_sfg.R cast_sfc.R
+	graticule.R

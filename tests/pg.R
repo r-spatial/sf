@@ -1,7 +1,7 @@
 library(RPostgreSQL)
 suppressPackageStartupMessages(library(sf))
 library(sp)
-if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
@@ -16,7 +16,6 @@ if (Sys.getenv("USER") %in% c("travis", "edzer")) {
 
 options(warn = 2) # turn into error
 if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-#if (Sys.getenv("USER") %in% c("edzer")) {
   cn = dbConnect(PostgreSQL(), dbname = "postgis")
   round_trip = function(cn, wkt) {
   	query = paste0("SELECT '", wkt, "'::geometry;")
@@ -72,7 +71,7 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   dbDisconnect(cn)
 }
 
-if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   suppressWarnings(x <- st_read("PG:dbname=postgis"))
   try(x <- st_read("PG:dbname=empty")) # error
   print(st_layers("PG:dbname=postgis"))

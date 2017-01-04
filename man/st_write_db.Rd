@@ -33,7 +33,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 Write simple feature table to a spatial database
 }
 \examples{
-if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
+if (Sys.getenv("USER") \%in\% c("edzer", "travis")) {
   library(sp)
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)

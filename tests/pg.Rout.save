@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 Loading required package: DBI
 > suppressPackageStartupMessages(library(sf))
 > library(sp)
-> if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+> if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 +   data(meuse)
 +   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 +   conn = dbConnect(PostgreSQL(), dbname = "postgis")
@@ -34,7 +34,6 @@ Loading required package: DBI
 > 
 > options(warn = 2) # turn into error
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-+ #if (Sys.getenv("USER") %in% c("edzer")) {
 +   cn = dbConnect(PostgreSQL(), dbname = "postgis")
 +   round_trip = function(cn, wkt) {
 +   	query = paste0("SELECT '", wkt, "'::geometry;")
@@ -90,7 +89,7 @@ Loading required package: DBI
 +   dbDisconnect(cn)
 + }
 > 
-> if (Sys.getenv("USER") %in% c("travis", "edzer")) {
+> if (Sys.getenv("USER") %in% c("edzer", "travis")) {
 +   suppressWarnings(x <- st_read("PG:dbname=postgis"))
 +   try(x <- st_read("PG:dbname=empty")) # error
 +   print(st_layers("PG:dbname=postgis"))
@@ -99,4 +98,4 @@ Loading required package: DBI
 > 
 > proc.time()
    user  system elapsed 
-  0.456   0.020   0.474 
+  0.476   0.020   0.494 

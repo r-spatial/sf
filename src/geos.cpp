@@ -38,7 +38,7 @@ static void __warningHandler(const char *fmt, ...) {
 }
 
 GEOSContextHandle_t CPL_geos_init(void) {
-    return(initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler));
+    return initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
 }
 
 void CPL_geos_finish(GEOSContextHandle_t ctxt) {

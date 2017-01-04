@@ -4,17 +4,21 @@ nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
-nc %>% plot()
-nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+nc %>% 
+  select(BIR74, geometry) %>% 
+  plot()
+
+nc %>% 
+  select(AREA, geometry) %>% 
+  arrange(AREA) %>% 
+  slice(1:10) %>% 
+  plot(add = TRUE, col = 'grey', main ="")
 
 # select: check both when geometry is part of the selection, and when not:
 nc %>% select(SID74, SID79) %>% names()
 nc %>% select(SID74, SID79, geometry) %>% names()
 nc %>% select(SID74, SID79) %>% class()
 nc %>% select(SID74, SID79, geometry) %>% class()
-
-# arrange: ten smallest counties
-nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 
 # group_by:
 nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -48,7 +52,7 @@ nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summar
 
 # spread:
 nc$row = 1:100
-nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
+nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row, -geometry)
 nc.g %>% tail()
 nc.g %>% spread(VAR, SID) %>% head()
 nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()

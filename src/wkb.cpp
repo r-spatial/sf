@@ -612,7 +612,7 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	if (! Rf_isNull(sxp)) {         // only sfc_GEOMETRY, the mixed bag, sets this
 		classes = sfc.attr("classes");
 		if (classes.size() != sfc.size())
-			throw std::range_error("classes has wrong size; please file an issue");
+			throw std::range_error("attr classes has wrong size: please file an issue");
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 

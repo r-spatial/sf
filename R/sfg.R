@@ -173,7 +173,7 @@ POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
 #' @export
 print.sfg = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
 	f = format(x, ..., digits = digits)
-	cat(f, "\n")
+	message(f)
 	invisible(f)
 }
 
@@ -225,51 +225,67 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 	Paste0 = function(lst) lapply(lst, unclass)
 	Paste1 = function(lst) do.call(c, lapply(lst, unclass))
 	lst = list(...)
-	if (!flatten)
-		return(st_geometrycollection(lst)) # breaks if one of them is a GC
-
-	cls = sapply(lst, function(x) class(x)[2])
-	ucls = unique(cls)
-	if (length(ucls) == 1) {
-		return(switch(ucls, 
-			POINT = st_multipoint(do.call(rbind, lst)),
-			# CURVE = st_multicurve(Paste0(lst))
-			# CIRCULARSTRING = st_geometrycollection(lst), # FIXME??
-			LINESTRING = st_multilinestring(Paste0(lst)),
-			# SURFACE = st_multisurface(Paste0(lst)),
-			POLYGON = st_multipolygon(Paste0(lst)),
-			# TRIANGLE = st_geometrycollection(lst),
-			MULTIPOINT = st_multipoint(do.call(rbind, lst)),
-			MULTILINESTRING = st_multilinestring(Paste1(lst)),
-			# MULTICURVE = st_multicurve(Paste1(lst)),
-			MULTIPOLYGON = st_multipolygon(Paste1(lst)),
-			# MULTISURFACE = st_multisurface(Paste1(lst)),
-			# POLYHEDRALSURFACE = st_polyhedralsurface(Paste1(lst)),
-			# TIN = st_tin(Paste1(lst)),
-			GEOMETRYCOLLECTION = st_geometrycollection(Paste1(lst)),
-			stop(paste("type", cls, "not supported"))
-		))
-	} else if (length(ucls) == 2) {
-		if (all(ucls %in% c("POINT", "MULTIPOINT")))
-			return(st_multipoint(do.call(rbind, lst)))
+	if (flatten) {
+		cls = sapply(lst, function(x) class(x)[2])
+		ucls = unique(cls)
+		if (length(ucls) == 1) {
+			switch(ucls, 
+				POINT = st_multipoint(do.call(rbind, lst)),
+				# CURVE = st_multicurve(Paste0(lst))
+				# CIRCULARSTRING = st_geometrycollection(lst), # FIXME??
+				LINESTRING = st_multilinestring(Paste0(lst)),
+				# SURFACE = st_multisurface(Paste0(lst)),
+				POLYGON = st_multipolygon(Paste0(lst)),
+				# TRIANGLE = st_geometrycollection(lst),
+				MULTIPOINT = st_multipoint(do.call(rbind, lst)),
+				MULTILINESTRING = st_multilinestring(Paste1(lst)),
+				# MULTICURVE = st_multicurve(Paste1(lst)),
+				MULTIPOLYGON = st_multipolygon(Paste1(lst)),
+				# MULTISURFACE = st_multisurface(Paste1(lst)),
+				# POLYHEDRALSURFACE = st_polyhedralsurface(Paste1(lst)),
+				# TIN = st_tin(Paste1(lst)),
+				GEOMETRYCOLLECTION = st_geometrycollection(Paste1(lst)),
+				stop(paste("type", cls, "not supported"))
+			)
+		} else if (all(ucls %in% c("POINT", "MULTIPOINT")))
+			st_multipoint(do.call(rbind, lst))
 		else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
 			ls = which(cls == "LINESTRING")
 			mls = st_multilinestring(lst[ls])
-			return(st_multilinestring(c(unlist(lst[-ls], FALSE), unclass(mls))))
+			st_multilinestring(c(unlist(lst[-ls], FALSE), unclass(mls)))
 		} else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
 			po = which(cls == "POLYGON")
 			mpo = st_multipolygon(lst[po])
-			return(st_multipolygon(c(unlist(lst[-po], FALSE), unclass(mpo))))
-		}
-		# else: fall through:
-	} 
-	# unfold GC objects first, then
-	gc = (cls == "GEOMETRYCOLLECTION")
-	ret = lst[!gc]
-	if (any(gc)) { # append the _contents_ of GC's to the non-GC elements:
-		wgc = which(gc)
-		for (i in seq_len(length(wgc)))
-			ret = append(ret, lst[[wgc[i]]])
-	}
-	st_geometrycollection(ret)
+			st_multipolygon(c(unlist(lst[-po], FALSE), unclass(mpo)))
+		} else {
+			# unfold GC objects first, then
+			gc = (cls == "GEOMETRYCOLLECTION")
+			ret = lst[!gc]
+			if (any(gc)) { # append the _contents_ of GC's to the non-GC elements:
+				wgc = which(gc)
+				for (i in seq_len(length(wgc)))
+					ret = append(ret, lst[[wgc[i]]])
+			}
+			st_geometrycollection(ret)
+		} 
+	} else # !flatten:
+		st_geometrycollection(lst) # breaks if one of them is a GC
+}
+
+#' @name st
+#' @method unlist sfg
+#' @export
+#' @param use.names ignored
+#' @return unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
+unlist.sfg = function(x, recursive = TRUE, use.names = TRUE) {
+	switch(class(x)[2],
+		POINT = matrix(x, 1),
+		MULTIPOINT = unclass(x),
+		LINESTRING = unclass(x),
+		POLYGON = do.call(rbind, x),
+		MULTILINESTRING = do.call(rbind, x),
+		MULTIPOLYGON = do.call(rbind, lapply(x, function(y) do.call(rbind, y))),
+		GEOMETRYCOLLECTION = do.call(rbind, lapply(x, unlist)),
+		stop(paste("unlist not implemented for class", class(x)[2]))
+	)
 }

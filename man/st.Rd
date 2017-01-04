@@ -13,6 +13,7 @@
 \alias{st_multipolygon}
 \alias{st_point}
 \alias{st_polygon}
+\alias{unlist.sfg}
 \title{Create simple feature from a numeric vector, matrix or list}
 \usage{
 st_point(x = c(NA_real_, NA_real_), dim = "XYZ")
@@ -36,6 +37,8 @@ st_geometrycollection(x = list(), dims = "XY")
 \method{format}{sfg}(x, ..., digits = 30)
 
 \method{c}{sfg}(..., recursive = FALSE, flatten = TRUE)
+
+\method{unlist}{sfg}(x, recursive = TRUE, use.names = TRUE)
 }
 \arguments{
 \item{x}{for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects}
@@ -53,9 +56,13 @@ st_geometrycollection(x = list(), dims = "XY")
 \item{recursive}{logical; ignored}
 
 \item{flatten}{logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects}
+
+\item{use.names}{ignored}
 }
 \value{
 object of the same nature as \code{x}, but with appropriate class attribute set
+
+unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
 }
 \description{
 Create simple feature from a numeric vector, matrix or list

@@ -1,0 +1,256 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(sf)
+Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
+> library(testthat)
+> # "vertical" conversions:
+> # column 1:
+> mp = st_sfc(st_multipoint(matrix(0:3,,2)), st_multipoint(matrix(10:15,,2)))
+> (ls = st_cast(mp, "LINESTRING"))
+Geometry set for 2 features 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 2, 1 3)
+LINESTRING(10 13, 11 14, 12 15)
+> st_cast(ls, "MULTIPOINT")
+Geometry set for 2 features 
+geometry type:  MULTIPOINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOINT(0 2, 1 3)
+MULTIPOINT(10 13, 11 14, 12 15)
+> 
+> # column 2:
+> mls = st_sfc(st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)), 
++ 	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))), 
++ 	st_multilinestring(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1)))))
+> (pol = st_cast(mls, "POLYGON"))
+Geometry set for 2 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 ...
+POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))
+> st_cast(pol, "MULTILINESTRING")
+Geometry set for 2 features 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING((0 0, 10 0, 10 10, 0 10, 0 0), ...
+MULTILINESTRING((0 0, 1 0, 1 1, 0 1, 0 0))
+> 
+> # "horizontal" conversions:
+> 
+> (pt = st_cast(mp, "POINT"))
+Geometry set for 5 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+POINT(0 2)
+POINT(1 3)
+POINT(10 13)
+POINT(11 14)
+POINT(12 15)
+> (i = attr(pt, "ids"))
+[1] 2 3
+> (xx = st_cast(pt, "MULTIPOINT", rep(seq_along(i), i)))
+Geometry set for 5 features 
+geometry type:  MULTIPOINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOINT(0 2)
+MULTIPOINT(1 3)
+MULTIPOINT(10 13)
+MULTIPOINT(11 14)
+MULTIPOINT(12 15)
+> (yy = st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
+Geometry set for 5 features 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 2)
+LINESTRING(1 3)
+LINESTRING(10 13)
+LINESTRING(11 14)
+LINESTRING(12 15)
+> 
+> (zz = st_cast(yy, "MULTILINESTRING"))
+Geometry set for 5 features 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING((0 2))
+MULTILINESTRING((1 3))
+MULTILINESTRING((10 13))
+MULTILINESTRING((11 14))
+MULTILINESTRING((12 15))
+> (zz = st_cast(yy, "POLYGON"))
+Geometry set for 5 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON((0 2))
+POLYGON((1 3))
+POLYGON((10 13))
+POLYGON((11 14))
+POLYGON((12 15))
+> 
+> st_cast(mls, "LINESTRING")
+Geometry set for 3 features 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 0, 10 0, 10 10, 0 10)
+LINESTRING(5 5, 5 6, 6 6, 6 5)
+LINESTRING(0 0, 1 0, 1 1, 0 1)
+> 
+> (g = st_sfc(c(mls, ls)))
+Geometry set for 4 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING((0 0, 10 0, 10 10, 0 10), (5 5,...
+MULTILINESTRING((0 0, 1 0, 1 1, 0 1))
+LINESTRING(0 2, 1 3)
+LINESTRING(10 13, 11 14, 12 15)
+> st_cast(g, "MULTILINESTRING")
+Geometry set for 4 features 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING((0 0, 10 0, 10 10, 0 10), (5 5,...
+MULTILINESTRING((0 0, 1 0, 1 1, 0 1))
+MULTILINESTRING((0 2, 1 3))
+MULTILINESTRING((10 13, 11 14, 12 15))
+> expect_warning(st_cast(g, "LINESTRING"))
+> st_cast(st_cast(g, "MULTILINESTRING"), "LINESTRING") # will not loose
+Geometry set for 5 features 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(0 0, 10 0, 10 10, 0 10)
+LINESTRING(5 5, 5 6, 6 6, 6 5)
+LINESTRING(0 0, 1 0, 1 1, 0 1)
+LINESTRING(0 2, 1 3)
+LINESTRING(10 13, 11 14, 12 15)
+> 
+> s = st_sf(a = 1:2, geom = st_sfc(st_point(1:2), st_point(2:3)))
+> x = st_cast(s, "MULTIPOINT", ids = c(1,1), FUN = mean)
+> st_cast(x, "POINT", warn = FALSE)
+Simple feature collection with 2 features and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 3
+epsg (SRID):    NA
+proj4string:    NA
+  ids.group   a       geom
+1         1 1.5 POINT(1 2)
+2         1 1.5 POINT(2 3)
+> expect_warning(st_cast(x, "POINT"))
+> expect_warning(st_cast(x, "POINT", ids = c(1,1)))
+> 
+> gc = st_sfc(st_geometrycollection(
++   list(
++     st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)), 
++ 	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))), 
++ 	st_multilinestring(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1)))),
++ 	st_point(0:1)
++   )))
+> try(st_cast(mls, "POINT"))
+Geometry set for 12 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT(0 0)
+POINT(10 0)
+POINT(10 10)
+POINT(0 10)
+POINT(5 5)
+> try(st_cast(mls, "MULTIPOINT"))
+Geometry set for 3 features 
+geometry type:  MULTIPOINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOINT(0 0, 10 0, 10 10, 0 10)
+MULTIPOINT(5 5, 5 6, 6 6, 6 5)
+MULTIPOINT(0 0, 1 0, 1 1, 0 1)
+> 
+> outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+> hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+> hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+> pol1 = list(outer, hole1, hole2)
+> pol2 = list(outer + 12, hole1 + 12)
+> pol3 = list(outer + 24)
+> mp = list(pol1,pol2,pol3)
+> mp1 = st_multipolygon(mp)
+> s = st_sfc(mp1)
+> x = st_cast(s, "MULTIPOINT")
+> x = st_cast(s, "POINT")
+> expect_warning(st_cast(mp1, "LINESTRING"))
+> expect_warning(st_cast(mp1, "POINT"))
+> mls = mls[[1]]
+> class(mls)
+[1] "XY"              "MULTILINESTRING" "sfg"            
+> expect_error(st_cast(mls, "POLYGON"))
+> 
+> expect_warning(st_cast(mls, "POINT"))
+> p1 = st_polygon(pol1)
+> expect_warning(st_cast(p1, "POINT"))
+> ls = ls[[1]]
+> class(ls)
+[1] "XY"         "LINESTRING" "sfg"       
+> expect_warning(st_cast(ls, "POINT"))
+> 
+> mls = st_cast(p1, "MULTILINESTRING")
+> p2 = st_cast(mls, "POLYGON")
+> 
+> proc.time()
+   user  system elapsed 
+  0.392   0.016   0.407 

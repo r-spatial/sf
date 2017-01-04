@@ -28,7 +28,7 @@ mutate_.sf(.data, ..., .dots)
 
 transmute_.sf(.data, ..., .dots)
 
-select_.sf(.data, ..., .dots)
+select_.sf(.data, ..., .dots = NULL)
 
 rename_.sf(.data, ..., .dots)
 

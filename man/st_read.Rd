@@ -71,7 +71,7 @@ if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
 # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc)
-if (Sys.getenv("USER") \%in\% c("travis", "edzer")) {
+if (Sys.getenv("USER") \%in\% c("edzer", "travis")) {
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")

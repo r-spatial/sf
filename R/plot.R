@@ -1,14 +1,3 @@
-## projected: now handled by sp in plot.Spatial
-#projected = function(x) {
-#	if (inherits(x, "sf"))
-#		x = st_geometry(x)
-#	p4str = attr(x, "proj4string")
-#	if (is.na(p4str))
-#		NA
-#	else
-#		length(grep("longlat", p4str, fixed = TRUE)) == 0
-#}
-
 #' Plot sf object
 #'
 #' @param x object of class sf
@@ -84,19 +73,25 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 	stopifnot(missing(y))
 	dots = list(...)
-	if (ncol(x) > 2 && is.null(dots$col)) {
+
+	if (ncol(x) > 2) {
 		cols = names(x)[names(x) != attr(x, "sf_column")]
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		lapply(cols, function(cname) {
-			plot(x[, cname], col = sf.colors(ncol, xc = x[[cname]]))
-			title(cname)
-		})
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...))
 		par(opar)
-	} else
-		plot(st_geometry(x), ...)
+	} else {
+		if (is.null(col) && ncol(x) == 2)
+			col = sf.colors(ncol, x[[1]])
+		if (is.null(col))
+			plot(st_geometry(x), ...)
+		else 
+			plot(st_geometry(x), col = col, ...)
+		if (is.null(dots$main) && !isTRUE(dots$add))
+			title(names(x)[names(x) != attr(x, "sf_column")])
+	}
 }
 
 #' @name plot
@@ -176,11 +171,13 @@ plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 
 # sf (list) -> polypath (mtrx) : rbind polygon rings with NA rows inbetween
 p_bind = function(lst) {
 	if (length(lst) == 1)
-		return(lst[[1]])
-	ret = vector("list", length(lst) * 2 - 1)
-	ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
-	ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
-	do.call(rbind, ret) # replicates the NA to form an NA row
+		lst[[1]]
+	else {
+		ret = vector("list", length(lst) * 2 - 1)
+		ret[seq(1, length(lst) * 2 - 1, by = 2)] = lst # odd elements
+		ret[seq(2, length(lst) * 2 - 1, by = 2)] = NA  # even elements
+		do.call(rbind, ret) # replicates the NA to form an NA row
+	}
 }
 
 #' @name plot
@@ -274,8 +271,9 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	plot_gc(x, pch = pch, cex = cex, bg = bg, border = border, lty = lty, 
-			lwd = lwd, col = col)
+	lapply(seq_along(x), function(i) plot_gc(st_sfc(x[[i]]), 
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
 
@@ -288,15 +286,71 @@ plot.sfg = function(x, ...) {
 
 # set up plotting area & axes; reuses sp:::plot.Spatial
 plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par("bg"), ..., 
-    xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0)) {
+    xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_) {
 
-	bb = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
-	if (!requireNamespace("sp", quietly = TRUE))
-		stop("package sp required, please install it first")
-	sp = new("Spatial", bbox = bb, proj4string = sp::CRS(attr(x, "crs")$proj4string))
-	sp::plot(sp, ..., xlim = xlim, ylim = ylim, asp = asp, axes = axes, bg = bg, 
-    	xaxs = xaxs, yaxs = yaxs, lab = lab, setParUsrBB = setParUsrBB, bgMap = bgMap, 
-		expandBB = expandBB)
+# sp's bbox: matrix
+#   min max
+# x
+# y
+	bbox = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
+	# expandBB: 1=below, 2=left, 3=above and 4=right.
+	expBB = function(lim, expand) c(lim[1] - expand[1] * diff(lim), lim[2] + expand[2] * diff(lim))
+	if (is.null(xlim)) 
+		xlim <- expBB(bbox[1,], expandBB[c(2,4)])
+	if (is.null(ylim)) 
+		ylim <- expBB(bbox[2,], expandBB[c(1,3)])
+	if (is.na(asp))
+		asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(ylim) * pi)/180), 1.0)
+
+	plot.new()
+
+	args = list(xlim = xlim, ylim = ylim, asp = asp)
+	if (!missing(xaxs)) args$xaxs = xaxs
+	if (!missing(yaxs)) args$yaxs = yaxs
+	if (!missing(lab)) args$lab = lab
+	do.call(plot.window, args)
+
+	if (setParUsrBB) 
+		par(usr=c(xlim, ylim))
+	pl_reg <- par("usr")
+	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2], 
+		ytop = pl_reg[4], col = bg, border = FALSE)
+	if (axes) { # set up default axes system & box:
+		box()
+		if (isTRUE(st_is_longlat(x))) {
+			degAxis(1, ...)
+			degAxis(2, ...)
+		} else {
+			axis(1, ...)
+			axis(2, ...)
+		}
+	} else if (!is.na(graticule)) {
+		g = st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), graticule)
+		plot(st_geometry(g), col = 'grey', add = TRUE)
+		box()
+		sel = g$type == "E" & g$y_start < min(g$y_start) + 0.01 * diff(pl_reg[3:4])
+		axis(1L, g$x_start[sel], parse(text = g$degree_label[sel]), ...)
+		sel = g$type == "N" & g$x_start < min(g$x_start) + 0.01 * diff(pl_reg[1:2])
+		axis(2L, g$y_start[sel], parse(text = g$degree_label[sel]), ...)
+	}
+	localTitle <- function(..., col, bg, pch, cex, lty, lwd) title(...)
+	localTitle(...)
+	if (!is.null(bgMap)) {
+		mercator = FALSE
+		if (inherits(bgMap, "ggmap")) {
+			bb = bb2merc(bgMap, "ggmap")
+			mercator = TRUE
+		} else if (all(c("lat.center","lon.center","zoom","myTile","BBOX") %in% names(bgMap))) {
+			# an object returned by RgoogleMaps::GetMap
+			bb = bb2merc(bgMap, "RgoogleMaps")
+			bgMap = bgMap$myTile
+			mercator = TRUE
+		} else
+			bb = c(xlim[1], ylim[1], xlim[2], ylim[2]) # can be any crs!
+		if (mercator &&  st_crs(x) != st_crs(3875))
+			warning("crs of plotting object differs from that of bgMap, which is assumed to be st_crs(3857)")
+		rasterImage(bgMap, bb[1], bb[2], bb[3], bb[4], interpolate = FALSE)
+	}
 }
 
 
@@ -313,7 +367,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bg = par
 #' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (xc, n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
 	if (missing(xc) || length(xc) == 1) {
 		if (missing(n))
 			n = xc
@@ -363,4 +417,31 @@ get_mfrow = function(bb, n, total_size = c(1,1)) {
 	nrow = which.max(sz)
 	ncol = ceiling(n / nrow)
 	structure(c(nrow, ncol), names = c("nrow", "ncol"))
+}
+
+
+bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mercator" CRS
+	wgs84 = st_crs(4326)
+	merc =  st_crs(3857) # http://wiki.openstreetmap.org/wiki/EPSG:3857
+	pts = if (cls == "ggmap") {
+		b = sapply(attr(x, "bb"), c)
+		st_sfc(st_point(c(b[2:1])), st_point(c(b[4:3])), crs = wgs84)
+	} else if (cls == "RgoogleMaps")
+		st_sfc(st_point(rev(x$BBOX$ll)), st_point(rev(x$BBOX$ur)), crs = wgs84)
+	else
+		stop("unknown cls")
+	st_bbox(st_transform(pts, merc))
+}
+
+degAxis = function (side, at, labels, ...) {
+	if (missing(at))
+       	at = axTicks(side)
+	if (missing(labels)) {
+		labels = FALSE
+		if (side == 1 || side == 3)
+			labels = parse(text = degreeLabelsEW(at))
+		else if (side == 2 || side == 4)
+			labels = parse(text = degreeLabelsNS(at))
+	} 
+	axis(side, at = at, labels = labels, ...)
 }

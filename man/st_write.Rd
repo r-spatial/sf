@@ -4,9 +4,9 @@
 \alias{st_write}
 \title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ...,
-  dataset_options = NULL, layer_options = NULL, quiet = FALSE,
-  factorsAsCharacter = TRUE)
+st_write(obj, dsn, layer = basename(dsn),
+  driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
+  layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -15,7 +15,7 @@ st_write(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ...,
 
 \item{layer}{layer name (varies by driver, may be a file name without extension); if layer is missing, the \link{basename} of \code{dsn} is taken.}
 
-\item{driver}{character; OGR driver name to be used, if missing, a driver name is guessed from \code{dsn}.}
+\item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
 \item{...}{ignored}
 
@@ -44,5 +44,8 @@ if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
 }
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, "nc.shp")
+}
+\seealso{
+\link{st_drivers}
 }
 

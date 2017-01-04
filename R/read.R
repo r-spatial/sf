@@ -65,13 +65,14 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder or contain a database name)
 #' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the \link{basename} of \code{dsn} is taken.
-#' @param driver character; OGR driver name to be used, if missing, a driver name is guessed from \code{dsn}.
+#' @param driver character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.
 #' @param ... ignored
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
 #' @details columns (variables) of a class not supported are dropped with a warning.
+#' @seealso \link{st_drivers}
 #' @examples
 #' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
 #'  library(sp)
@@ -84,7 +85,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
 #' @export
-st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver(dsn), ..., 
+st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ..., 
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
 
 	if (inherits(obj, "sfc"))
@@ -180,61 +181,104 @@ st_list = function(dsn, options = character(0), do_count = FALSE) {
 }
 
 guess_driver = function(dsn) {
-    ext_map <- matrix (c(
-                       "bna",    "BNA",
-                       "csv",    "CSV",
-                       "e00",    "AVCE00",
-                       "gdb",    "FileGDB",
-                       "geojson","GeoJSON",
-                       "gml",    "GML",
-                       "gmt",    "GMT",
-                       "gpkg",   "GPKG",
-                       "gps",    "GPSBabel",
-                       "gtm",    "GPSTrackMaker",   
-                       "gxt",    "Geoconcept",
-                       "jml",    "JML",
-                       "map",    "WAsP",
-                       "mdb",    "Geomedia",
-                       "nc",     "netCDF",
-                       "ods",    "ODS",
-                       "osm",    "OSM",
-                       "pbf",    "OSM",
-                       "shp",    "ESRI Shapefile",
-                       "sqlite", "SQLite",
-                       "vdv",    "VDV",
-                       "xls",    "xls",
-                       "xlsx",   "XLSX"
-                     ), ncol = 2, byrow = TRUE)
-	prefix_map = matrix(c(
-                       "couchdb", "CouchDB",
-                       "DB2ODBC", "DB2ODBC",
-                       "DODS",    "DODS",
-                       "GFT",     "GFT",
-                       "MSSQL",   "MSSQLSpatial",
-                       "MySQL",   "MySQL",
-                       "OCI",     "OCI",
-                       "ODBC",    "ODBC",
-                       "PG",      "PostgreSQL",
-                       "SDE",     "SDE"
-                     ), ncol = 2, byrow = TRUE)
-	drv = ext_map[,2]
-	names(drv) = ext_map[,1]
-	prfx = prefix_map[,2]
-	names(prfx) = tolower(prefix_map[,1])
-
+  stopifnot(is.character(dsn))
+  stopifnot(length(dsn) == 1)
+  
 	# find match: try extension first
-	drv = drv[tolower(tools::file_ext(dsn))]
-	if (is.na(drv)) { # try prefix, like "PG:dbname=sth"
-		if (length(grep(":", dsn)))
-			drv = prfx[tolower(strsplit(dsn, ":")[[1]][1])]
-		if (is.na(drv)) # no match
-			stop("no driver specified, cannot guess driver from dsn")
+	drv = extension_map[tolower(tools::file_ext(dsn))]
+	if (any(grep(":", gsub(":/", "/", dsn)))) {
+			drv = prefix_map[tolower(strsplit(dsn, ":")[[1]][1])]
 	}
-	drivers = st_drivers()
-	i = match(drv, drivers$name)
-	if (is.na(i))
-		stop(paste("guess_driver:", drv, "not available in supported drivers, see `st_drivers()'"))
-	if (! drivers[i, "write"])
-		stop(paste("Driver", drv, "has no write capability, see `st_drivers()'"))
+	drv <- unlist(drv)
+	
+	if (is.null(drv)) {
+	  # no match
+	  return(NA)
+	}
 	drv
 }
+
+guess_driver_can_write = function(dns, drv = guess_driver(dns)) {
+  if(is.na(drv)) {
+    stop("Could not guess driver for ", dns, call. = FALSE)
+  }
+  if(!is_driver_available(drv)) {
+    stop(unlist(drv), " driver not available in supported drivers, see `st_drivers()'", call. = FALSE)
+  }
+  if(!is_driver_can(drv, operation = "write")) {
+    stop("Driver ", drv, " cannot write. see `st_drivers()'", call. = FALSE)
+  }
+  return(drv)
+}
+
+#' Check if driver is available
+#' 
+#' Search through the driver table if driver is listed
+#' @param drv character. Name of driver
+#' @param drivers data.frame. Table containing driver names and support. Default
+#' is from \code{\link{st_drivers}}
+is_driver_available = function(drv, drivers = st_drivers()) {
+  i = match(drv, drivers$name)
+  if (is.na(i))
+    return(FALSE)
+  
+  return(TRUE)
+}
+
+#' Check if a driver can perform an action
+#' 
+#' Search through the driver table to match a driver name with 
+#' an action (e.g. \code{"write"}) and check if the action is supported.
+#' @param drv character. Name of driver
+#' @param drivers data.frame. Table containing driver names and support. Default
+#' is from \code{\link{st_drivers}}
+#' @param operation character. What action to check
+is_driver_can = function(drv, drivers = st_drivers(), operation = "write") {
+  stopifnot(operation %in% names(drivers))
+  i = match(drv, drivers$name)
+  if (!drivers[i, operation])
+    return(FALSE)
+  
+  return(TRUE)
+}
+
+#' Map extension to driver
+#' @docType data
+extension_map <- list(
+     "bna" = "BNA",
+     "csv" = "CSV",
+     "e00" = "AVCE00",
+     "gdb" = "OpenFileGDB",
+     "geojson" = "GeoJSON",
+     "gml" = "GML",
+     "gmt" = "GMT",
+     "gpkg" = "GPKG",
+     "gps" = "GPSBabel",
+     "gtm" = "GPSTrackMaker",   
+     "gxt" = "Geoconcept",
+     "jml" = "JML",
+     "map" = "WAsP",
+     "mdb" = "Geomedia",
+     "nc" = "netCDF",
+     "ods" = "ODS",
+     "osm" = "OSM",
+     "pbf" = "OSM",
+     "shp" = "ESRI Shapefile",
+     "sqlite" = "SQLite",
+     "vdv" = "VDV",
+     "xls" = "xls",
+     "xlsx" = "XLSX")
+
+#' Map prefix to driver
+#' @docType data
+prefix_map <- list(
+  "couchdb" = "CouchDB",
+  "db2odbc" = "DB2ODBC",
+  "dods" = "DODS",
+  "gft" = "GFT",
+  "mssql" = "MSSQLSpatial",
+  "mysql" = "MySQL",
+  "oci" = "OCI",
+  "odbc" = "ODBC",
+  "pg" = "PostgreSQL",
+  "sde" = "SDE") 

@@ -32,21 +32,25 @@ The following objects are masked from 'package:base':
 > nc %>% filter(AREA > .1) %>% plot()
 > 
 > # plot 10 smallest counties in grey:
-> nc %>% plot()
-> nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+> nc %>% 
++   select(BIR74, geometry) %>% 
++   plot()
+> 
+> nc %>% 
++   select(AREA, geometry) %>% 
++   arrange(AREA) %>% 
++   slice(1:10) %>% 
++   plot(add = TRUE, col = 'grey', main ="")
 > 
 > # select: check both when geometry is part of the selection, and when not:
 > nc %>% select(SID74, SID79) %>% names()
-[1] "SID74" "SID79"
+[1] "SID74"    "SID79"    "geometry"
 > nc %>% select(SID74, SID79, geometry) %>% names()
 [1] "SID74"    "SID79"    "geometry"
 > nc %>% select(SID74, SID79) %>% class()
-[1] "data.frame"
+[1] "sf"         "data.frame"
 > nc %>% select(SID74, SID79, geometry) %>% class()
 [1] "sf"         "data.frame"
-> 
-> # arrange: ten smallest counties
-> nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 > 
 > # group_by:
 > nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -60,7 +64,7 @@ The following objects are masked from 'package:base':
 > nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 [1] "sf"         "data.frame"
 > nc %>% transmute(AREA = AREA/10) %>% class()
-[1] "data.frame"
+[1] "sf"         "data.frame"
 > 
 > # rename:
 > nc2 <- nc %>% rename(area = AREA)
@@ -102,15 +106,21 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > # spread:
 > nc$row = 1:100
-> nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row)
+> nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row, -geometry)
 > nc.g %>% tail()
-    row   VAR SID
-195  95 SID79   4
-196  96 SID79   5
-197  97 SID79   3
-198  98 SID79  17
-199  99 SID79   9
-200 100 SID79   6
+Simple feature collection with 6 features and 3 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -79.0745 ymin: 33.88199 xmax: -76.2877 ymax: 35.01666
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+    row   VAR SID                       geometry
+195  95 SID79   4 MULTIPOLYGON(((-77.14895629...
+196  96 SID79   5 MULTIPOLYGON(((-78.26149749...
+197  97 SID79   3 MULTIPOLYGON(((-78.02592468...
+198  98 SID79  17 MULTIPOLYGON(((-78.65571594...
+199  99 SID79   9 MULTIPOLYGON(((-77.96073150...
+200 100 SID79   6 MULTIPOLYGON(((-78.65571594...
 > nc.g %>% spread(VAR, SID) %>% head()
   row SID74 SID79
 1   1     1     0
@@ -120,46 +130,15 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 5   5     9     3
 6   6     7     5
 > nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
-Simple feature collection with 6 features and 3 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
-  row                       geometry SID74 SID79
-1   1 MULTIPOLYGON(((-81.47275543...     1     0
-2   2 MULTIPOLYGON(((-81.23989105...     0     3
-3   3 MULTIPOLYGON(((-80.45634460...     5     6
-4   4 MULTIPOLYGON(((-76.00897216...     1     2
-5   5 MULTIPOLYGON(((-77.21766662...     9     3
-6   6 MULTIPOLYGON(((-76.74506378...     7     5
+  row SID74 SID79
+1   1     1     0
+2   2     0     3
+3   3     5     6
+4   4     1     2
+5   5     9     3
+6   6     7     5
 > 
-> 
-> library(dplyr)
-> library(sf)
-> demo(nc, ask = FALSE, echo = FALSE)
-Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
-> nc.merc <- st_transform(nc, 3857) # web mercator - not so good!
-> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74/area)
-> summary(nc.merc$dens)
-     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-1.331e-07 6.159e-07 1.043e-06 1.713e-06 1.971e-06 9.922e-06 
-> nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-> nc.grp <- nc.merc %>% group_by(area_cl)
-> out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), new_dens = pop/A) 
-> out %>% summarise(sum(A * new_dens))
-  sum(A * new_dens)
-1            329962
-> nc.merc %>% summarise(sum(area * dens))
-  sum(area * dens)
-1           329962
-> 
+> # test st_set_crs in pipe:
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 > x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
 > x
@@ -169,10 +148,39 @@ dimension:      XY
 bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-POINT(0 -7.08115455161362e-10) 
-POINT(111319.490793274 111325.142866385) 
+POINT(0 -7.08115455161362e-10)
+POINT(111319.490793274 111325.142866385)
 > 
+> library(units)
+> person = make_unit("person")
+> nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+> nc.merc <- st_transform(nc, 32119) # NC State Plane
+> 
+> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person /area)
+> 
+> # summary(nc.merc$dens) # requires units 0.4-2
+> nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+> nc.grp <- nc.merc %>% group_by(area_cl)
+> 
+> out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), 
++ 	new_dens = sum(dens * area)/sum(area)) 
+> 
+> # mean densities depend on grouping:
+> nc.merc %>% summarize(mean(dens))
+               mean(dens)
+1 2.593234e-06 person/m^2
+> out %>% summarise(mean(new_dens))
+           mean(new_dens)
+1 2.589362e-06 person/m^2
+> 
+> # total densities don't:
+> nc.merc %>% summarise(sum(area * dens))
+  sum(area * dens)
+1    329962 person
+> out %>% summarise(sum(A * new_dens))
+  sum(A * new_dens)
+1     329962 person
 > 
 > proc.time()
    user  system elapsed 
-  0.812   0.052   0.864 
+  0.928   0.012   0.939 

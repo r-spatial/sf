@@ -1,0 +1,81 @@
+Simple Features: Spatial Data in R the Modern Way
+
+Support for handling and analyzing spatial data in R goes back a long
+way. In 2003 a group of package developers sat together and decided
+to adopt a shared understanding of how spatial data are organized
+in R, which led to the package sp, and helper packages rgdal and
+rgeos. It offers simple classes for points, lines, polygons and
+grids, possibly associated with further properties (attributes),
+and takes care of coordinate reference systems.  The sp package has
+helped many, and has made it attractive to develop new packages
+that share this understanding by reusing these classes. Today,
+around 350 packages directly depend on sp, many more indirectly.
+
+After 2003, the rest of the world has broadly settled on adopting
+a standard for so-called "features", which can be thought of
+"things" in the real world that have a geometry along with other
+properties. A feature geometry is called simple when it consists
+of points connected by straight line pieces, and does not intersect
+itself. Simple feature access [1] is a standard [2] for accessing
+and exchanging spatial data (points, lines, polygons) as well as for
+operations defined on them that has been adopted widely over the
+past ten years, e.g. by spatial databases such as PostGIS [3] but
+also more recent standards such as GeoJSON [4]. The sp package and
+supporting packages such as rgdal and rgeos predate this standard,
+which complicates exchange and handling of simple feature data.
+
+The "Simple Features for R" project [5], one of the projects
+supported by the R consortium in its first funding round, addresses
+these problems by implementing simple features as native R data. The
+resulting package, called "sf" [6] provides functionality similar
+to the sp, rgdal for vector data, and rgeos packages together, but for simple
+features. Instead of S4 classes used by the sp family, it extends R's
+data.frame directly, adding a list-column for geometries. This makes
+it easier to manipulate them with other tools that assume all data
+objects are data.frames, such as dplyr and tidyverse.  Package sf
+links to the GDAL, PROJ and GEOS libraries, three major swiss army
+knifes of open source geospatial, for respectively input/output,
+cartographic (re)projections, and geometric operations (e.g. unions,
+buffers, intersections and topological relations). As such, it can
+be seen as a successor to sp, rgdal for vector data, and rgeos.
+
+The simple feature standard describes two encodings: well-known
+text, a human readable form that looks like "POINT(10 12)" or
+"LINESTRING(4 0,3 2,5 1)", and well-known binary, a simple binary
+serialization. The sf package can read and write both.  Exchange
+routines for binary encodings were written in Rcpp, to allow for
+very fast exchange of data with the linked GDAL and GEOS libraries,
+but also with other data formats or spatial databases.
+
+The sf project on github [5] has received a lot of attention,
+over 100 issues were raised, many of which received dozens of
+valuable contributions, and several projects currently under
+development (mapview, tmap, stplanr) are experimenting with
+the new data classes. Several authors have provided useful pull
+requests. Spatial analysis in pipe-based workflows, support for
+dplyr-style verbs as well as integration with ggplot has started,
+and is a continuing effort.
+
+Besides using data.frames and considerably simpler data structures
+for spatial geometries, advantages of sf over the sp family include
+a simpler handling of coordinate reference systems (using either
+EPSG code or PROJ.4 string), the ability to return distance or area
+values with proper units (which can be meter, feet or US feet),
+and support for using functions of package geosphere to compute
+distances or areas for longitude/latitude data, using datum-dependent
+values for the Earth's radius and flattening.
+
+The sf package is now available from CRAN [6], both in source form
+as in binary form for Windows and MacOSX platforms. The authors are
+greatful to the CRAN team for their strong support in getting the
+sf package compiled on all platforms. Support from the R Consortium
+has helped greatly to give this project priority, draw attention
+in a wider community, and facilitate travel and communication events.
+
+[1] https://en.wikipedia.org/wiki/Simple_Features
+[2] http://www.opengeospatial.org/standards/sfa
+[3] http://postgis.net/
+[4] http://geojson.org/
+[5] http://github.com/edzer/sfr
+[6] https://cran.r-project.org/package=sf
+

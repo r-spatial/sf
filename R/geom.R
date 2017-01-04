@@ -32,7 +32,10 @@ st_area = function(x) {
 		p = crs_pars(st_crs(x))
 		if (!requireNamespace("sp", quietly = TRUE))
 			stop("package sp required, please install it first")
-		a = areaPolygon(as(st_geometry(x), "Spatial"), as.numeric(p$SemiMajor), 1./p$InvFlattening)
+		if (!requireNamespace("geosphere", quietly = TRUE))
+			stop("package sp required, please install it first")
+		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"), 
+			as.numeric(p$SemiMajor), 1./p$InvFlattening)
 		u = 1
 		units(u) = units(p$SemiMajor)
 		a * u^2
@@ -55,14 +58,19 @@ ll_length = function(x, fn, p) {
 }
 
 #' @name geos
-#' @param dist_fun function to be used for great circle distances; should be a distance function of package geosphere, or compatible to that.
+#' @param dist_fun function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @export
-#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used.
+#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement.
 st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	if (isTRUE(st_is_longlat(x))) {
 		p = crs_pars(st_crs(x))
+		if (missing(dist_fun)) {
+			if (!requireNamespace("geosphere", quietly = TRUE))
+				stop("package sp required, please install it first")
+			dist_fun = geosphere::distGeo
+		}
 		ret = sapply(x, ll_length, fn = dist_fun, p = p)
 		units(ret) = units(p$SemiMajor)
 		ret
@@ -105,7 +113,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @details function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
 #' @export
-st_distance = function(x, y, dist_fun = geosphere::distGeo) {
+st_distance = function(x, y, dist_fun) {
 	if (missing(y))
 		y = x
 	else 
@@ -115,6 +123,10 @@ st_distance = function(x, y, dist_fun = geosphere::distGeo) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 			stop("st_distance for longitude/latitude data only available for POINT geometries.")
+		if (!requireNamespace("geosphere", quietly = TRUE))
+			stop("package sp required, please install it first")
+		if (missing(dist_fun))
+			dist_fun = geosphere::distGeo
 		p = crs_pars(st_crs(x))
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
 		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
@@ -284,10 +296,12 @@ st_centroid = function(x) {
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
-st_segmentize  = function(x, dfMaxLength) {
-	if (isTRUE(st_is_longlat(x)))
+#' @param ... ignored
+#' @param warn logical; generate a warning in case of long/lat data
+st_segmentize  = function(x, dfMaxLength, ..., warn = TRUE) {
+	if (warn && isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
-	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength))
+	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength), crs = st_crs(x))
 }
 
 #' @name geos
@@ -313,20 +327,24 @@ st_intersection = function(x, y) {
 	else { # at least one of them is sf:
 		idx = attr(ret, "idx")
 		attr(ret, "idx") = NULL
+		all_fields_x = all_fields_y = TRUE
 		df = NULL
 		if (inherits(x, "sf")) {
-			df = x[idx[,1],]
+			all_fields_x = all_fields(x)
+			df = x[idx[,1],,drop=FALSE]
 			st_geometry(df) = NULL
+			all_fields(x)
 		}
 		if (inherits(y, "sf")) {
+			all_fields_y = all_fields(y)
 			st_geometry(y) = NULL
 			if (is.null(df))
-				df = y[idx[,2],]
+				df = y[idx[,2],,drop=FALSE]
 			else
-				df = cbind(df, y[idx[,2],])
+				df = cbind(df, y[idx[,2],,drop=FALSE])
 		}
 		st_geometry(df) = ret
-		if (! all_fields(df))
+		if (! (all_fields_x && all_fields_y))
 			warning("attribute variables are assumed to be spatially constant throughout all geometries")
 		df
 	}
@@ -368,6 +386,8 @@ st_sym_difference = function(x, y) {
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 #'   st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
 #' try(st_line_sample(ls, density = 1/1000)) # error
+#' st_line_sample(st_transform(ls, 3857), n = 5) # five points for each line
+#' st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
 st_line_sample = function(x, n, density, type = "regular") {
@@ -436,46 +456,42 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 		st_sfc(ret, crs = st_crs(x))
 }
 
-#' aggregate sf objects over a spatial region
+#' areal-weighted interpolation of polygon data
 #' 
-#' aggregate sf objects over a spatial region
+#' areal-weighted interpolation of polygon data
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
-#' @param by object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param FUN aggregation function, ignored.
-#' @param ... arguments, passed on to FUN
-#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive.
+#' @param to object of class \code{sf} or \code{sfc}, with the target geometries
+#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population), otherwise, spatially intensive (like population density).
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = sf:::st_makegrid(nc, n = c(20,10))
-#' a1 = aggregate(nc["BIR74"], g)
+#' a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 #' sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
-#' a2 = aggregate(nc["BIR74"], g, extensive = TRUE)
+#' a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 #' sum(a2$BIR74) / sum(nc$BIR74)
 #' a1$intensive = a1$BIR74
 #' a1$extensive = a2$BIR74
 #' plot(a1[c("intensive", "extensive")])
 #' @export
-aggregate.sf = function(x, by, FUN, ..., extensive) {
-	if (!inherits(by, "sf") && !inherits(by, "sfc"))
-		stop("aggregate.sf requires geometries in argument by")
-	i = st_cast(st_intersection(st_geometry(x), st_geometry(by)), "MULTIPOLYGON")
+st_interpolate_aw = function(x, to, extensive) {
+	if (!inherits(to, "sf") && !inherits(to, "sfc"))
+		stop("aggregate.sf requires geometries in argument to")
+	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
+	i = st_cast(i, "MULTIPOLYGON")
 	x$...area_s = unclass(st_area(x))
 	st_geometry(x) = NULL # sets back to data.frame
 	x = x[idx[,1], ]      # create st table
 	x$...area_st = unclass(st_area(i))
-	x$...area_t = unclass(st_area(by)[idx[,2]])
-	df = if (!missing(extensive) && extensive) {
-		x = lapply(x, function(v) v * x$...area_st / x$...area_s)
-		if (missing(FUN))
-			FUN = sum
-		aggregate(x, list(idx[,2]), FUN, ...)
-	} else {
-		x = lapply(x, function(v) v * x$...area_st / x$...area_t)
-		if (missing(FUN))
-			FUN = sum
-		aggregate(x, list(idx[,2]), FUN, ...)
-	}
-	df = st_sf(df, geometry = st_geometry(by)[df$Group.1])
+	x$...area_t = unclass(st_area(to)[idx[,2]])
+	x = if (extensive)
+			lapply(x, function(v) v * x$...area_st / x$...area_s)
+		else
+			lapply(x, function(v) v * x$...area_st / x$...area_t)
+	x = aggregate(x, list(idx[,2]), sum)
+	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
+	# FIXME: need to take care of relation_to_geometry here...
+	# clean up:
+	df$...area_t = df$...area_st = df$...area_s = NULL 
 	df
 }
