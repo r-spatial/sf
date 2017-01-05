@@ -17,16 +17,16 @@ CPL_gdal_version <- function(what = "RELEASE_NAME") {
     .Call('sf_CPL_gdal_version', PACKAGE = 'sf', what)
 }
 
-CPL_crs_pars <- function(p4s) {
-    .Call('sf_CPL_crs_pars', PACKAGE = 'sf', p4s)
-}
-
-CPL_transform <- function(sfc, proj4) {
-    .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
+CPL_crs_parameters <- function(p4s) {
+    .Call('sf_CPL_crs_parameters', PACKAGE = 'sf', p4s)
 }
 
 CPL_crs_from_epsg <- function(epsg) {
     .Call('sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
+}
+
+CPL_transform <- function(sfc, proj4, epsg) {
+    .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4, epsg)
 }
 
 CPL_crs_from_proj4string <- function(p4s) {

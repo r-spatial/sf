@@ -27,7 +27,7 @@ st_transform.sfc = function(x, crs, ...) {
 	#suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
 	crs = make_crs(crs)
 	if (crs != st_crs(x))
-		st_sfc(CPL_transform(x, crs$proj4string), crs = crs)
+		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
 	else
 		x
 }
@@ -55,5 +55,6 @@ st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")
-	CPL_transform(x, make_crs(crs)$proj4string)[[1]]
+	crs = make_crs(crs)
+	CPL_transform(x, crs$proj4string, crs$epsg)[[1]]
 }

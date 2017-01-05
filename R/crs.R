@@ -169,8 +169,8 @@ st_is_longlat = function(x) {
 		length(grep("+proj=longlat", crs$proj4string)) > 0
 }
 
-crs_pars = function(x) {
-	ret = structure(CPL_crs_pars(x$proj4string), 
+crs_parameters = function(x) {
+	ret = structure(CPL_crs_parameters(x$proj4string), 
 		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical"))
 	ret$SemiMajor = ret$SemiMajor * make_unit("m")
 	ret$ud_unit = switch(ret$units_gdal,

@@ -84,7 +84,7 @@ void handle_error(OGRErr err) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_crs_pars(std::string p4s) {
+Rcpp::List CPL_crs_parameters(std::string p4s) {
 	Rcpp::List out(4);
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
@@ -194,7 +194,17 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
+Rcpp::List CPL_crs_from_epsg(int epsg) {
+	OGRSpatialReference ref;
+	if (ref.importFromEPSG(epsg) == OGRERR_NONE)
+		return get_crs(&ref);
+	else
+		return get_crs(NULL);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg) {
+	// the hard assumption here is that proj4 and epsg correspond, and point to the same SRS.
 
 	// import proj4string:
 	OGRSpatialReference *dest = new OGRSpatialReference;
@@ -210,18 +220,14 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		handle_error(g[i]->transform(ct));
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
+	if (epsg[0] != NA_INTEGER) {
+		Rcpp::List crs = ret.attr("crs");
+		crs(0) = epsg;
+		ret.attr("crs") = crs;
+	}
 	ct->DestroyCT(ct);
 	dest->Release();
 	return ret; 
-}
-
-// [[Rcpp::export]]
-Rcpp::List CPL_crs_from_epsg(int epsg) {
-	OGRSpatialReference ref;
-	if (ref.importFromEPSG(epsg) == OGRERR_NONE)
-		return get_crs(&ref);
-	else
-		return get_crs(NULL);
 }
 
 // [[Rcpp::export]]

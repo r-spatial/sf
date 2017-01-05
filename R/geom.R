@@ -29,7 +29,7 @@ st_dimension = function(x, NA_if_empty = TRUE) CPL_gdal_dimension(st_geometry(x)
 #' @return st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x))) {
-		p = crs_pars(st_crs(x))
+		p = crs_parameters(st_crs(x))
 		if (!requireNamespace("sp", quietly = TRUE))
 			stop("package sp required, please install it first")
 		if (!requireNamespace("geosphere", quietly = TRUE))
@@ -42,7 +42,7 @@ st_area = function(x) {
 	} else {
 		a = CPL_area(st_geometry(x))
 		if (!is.na(st_crs(x)))
-			a * crs_pars(st_crs(x))$ud_unit^2
+			a * crs_parameters(st_crs(x))$ud_unit^2
 		else
 			a
 	}
@@ -65,7 +65,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	if (isTRUE(st_is_longlat(x))) {
-		p = crs_pars(st_crs(x))
+		p = crs_parameters(st_crs(x))
 		if (missing(dist_fun)) {
 			if (!requireNamespace("geosphere", quietly = TRUE))
 				stop("package sp required, please install it first")
@@ -78,7 +78,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
 		if (!is.na(st_crs(x)))
-			ret * crs_pars(st_crs(x))$ud_unit
+			ret * crs_parameters(st_crs(x))$ud_unit
 		else
 			ret
 	}
@@ -127,7 +127,7 @@ st_distance = function(x, y, dist_fun) {
 			stop("package sp required, please install it first")
 		if (missing(dist_fun))
 			dist_fun = geosphere::distGeo
-		p = crs_pars(st_crs(x))
+		p = crs_parameters(st_crs(x))
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
 		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
 		m = matrix(
@@ -138,7 +138,7 @@ st_distance = function(x, y, dist_fun) {
 	} else {
 		d = CPL_geos_dist(st_geometry(x), st_geometry(y))
 		if (!is.na(st_crs(x)))
-			d * crs_pars(st_crs(x))$ud_unit
+			d * crs_parameters(st_crs(x))$ud_unit
 		else
 			d
 	}
