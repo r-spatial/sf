@@ -43,7 +43,11 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_warning(st_simplify(x, .1))
 	expect_warning(st_centroid(x))
 	expect_warning(st_segmentize(l, 0.1))
-	expect_warning(st_triangulate(x))
+
+	if (CPL_geos_version() >= "3.4.0")
+		expect_warning(st_triangulate(x))
+	else
+		expect_error(st_triangulate(x))
 
 	expect_silent(st_area(x))
 	expect_silent(st_length(l))
