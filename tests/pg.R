@@ -8,9 +8,14 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) {
   st_write_db(conn, sf, "meuse_tbl", try_drop = TRUE)
   # try with schema:
   st_write_db(conn, sf, c("public", "meuse_tbl"), try_drop = TRUE)
+  st_write_db(conn, sf, "public.meuse_tbl", try_drop = TRUE)
   st_write_db(conn, sf, "meuse_tbl2", binary = FALSE)
   x = st_read_db(conn, query = "select * from meuse_tbl limit 30;")
   y = st_read_db(conn, "meuse_tbl2") 
+  
+  # db write loses proj4 when epsg missing (#102)
+  expect_warning(st_write_db(conn, z, "meuse_tbl_z",  binary = TRUE), "proj4")
+  
   dbDisconnect(conn)
 }
 
