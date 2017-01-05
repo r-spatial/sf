@@ -39,7 +39,7 @@ invisible(lapply(seq_len(nrow(g)), function(i) {
 
 plot(m, graticule = st_crs(4326))
 library(sf)
-demo(nc)
+demo(nc, echo = FALSE)
 # options(warn=2)
 g = st_graticule(nc, datum = st_crs(nc))
 #g = st_graticule(nc)

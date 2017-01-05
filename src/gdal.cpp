@@ -204,7 +204,8 @@ Rcpp::List CPL_crs_from_epsg(int epsg) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg) {
-	// the hard assumption here is that proj4 and epsg correspond, and point to the same SRS.
+	// a hard (but quite sane) assumption here is that in case epsg[0] != NA_INTEGER,
+	// proj4 and epsg correspond, and point to the same SRS.
 
 	// import proj4string:
 	OGRSpatialReference *dest = new OGRSpatialReference;

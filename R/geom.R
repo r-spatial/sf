@@ -327,16 +327,16 @@ st_intersection = function(x, y) {
 	else { # at least one of them is sf:
 		idx = attr(ret, "idx")
 		attr(ret, "idx") = NULL
-		all_fields_x = all_fields_y = TRUE
+		all_constant_x = all_constant_y = TRUE
 		df = NULL
 		if (inherits(x, "sf")) {
-			all_fields_x = all_fields(x)
+			all_constant_x = all_constant(x)
 			df = x[idx[,1],,drop=FALSE]
 			st_geometry(df) = NULL
-			all_fields(x)
+			all_constant(x)
 		}
 		if (inherits(y, "sf")) {
-			all_fields_y = all_fields(y)
+			all_constant_y = all_constant(y)
 			st_geometry(y) = NULL
 			if (is.null(df))
 				df = y[idx[,2],,drop=FALSE]
@@ -344,7 +344,7 @@ st_intersection = function(x, y) {
 				df = cbind(df, y[idx[,2],,drop=FALSE])
 		}
 		st_geometry(df) = ret
-		if (! (all_fields_x && all_fields_y))
+		if (! (all_constant_x && all_constant_y))
 			warning("attribute variables are assumed to be spatially constant throughout all geometries")
 		df
 	}

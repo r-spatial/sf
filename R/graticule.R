@@ -108,7 +108,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(
 	if (!is.na(crs))
 		geom = st_transform(geom, crs)
 	st_geometry(df) = geom
-	attr(df, "relation_to_geometry") = "field"
+	attr(df, "relation_to_geometry") = "constant"
 
 	if (!missing(x)) { # cut out box:
 		box = st_sfc(box, crs = datum)

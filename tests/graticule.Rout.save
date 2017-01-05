@@ -58,35 +58,7 @@ Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
 > 
 > plot(m, graticule = st_crs(4326))
 > library(sf)
-> demo(nc)
-
-
-	demo(nc)
-	---- ~~
-
-> ## this object was created as follows:
-> library(sf)
-
-> # nc = st_read(system.file("shapes/", package="maptools"), "sids")
-> # st_crs(nc) = 4267 # "+proj=longlat +ellps=clrk66" or "+proj=longlat +datum=NAD27"
-> # print(nc, n = 3)
-> # st_write(nc, "nc.gpkg", "nc.gpkg", driver = "GPKG")
-> 
-> # description of the dataset, see vignette in package spdep:
-> # https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf
-> 
-> datasource = { if ("GPKG" %in% st_drivers()$name)
-+ 	system.file("gpkg/nc.gpkg", package="sf")
-+ else
-+ 	system.file("shape/nc.shp", package="sf")
-+ }
-
-> rtg = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
-+ 		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
-+ 		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-+ 		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice")
-
-> nc = st_read(datasource, relation_to_geometry = rtg)
+> demo(nc, echo = FALSE)
 Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
@@ -102,4 +74,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.768   0.016   0.783 
+  0.872   0.028   0.899 

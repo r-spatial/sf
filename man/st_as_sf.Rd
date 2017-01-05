@@ -46,7 +46,7 @@ df = st_as_sf(d, wkt = "geom")
 d$geom2 = st_sfc(pt1, pt2)
 st_as_sf(d) # should warn
 data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
+meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "constant")
 meuse_sf[1:3,]
 summary(meuse_sf)
 library(sp)

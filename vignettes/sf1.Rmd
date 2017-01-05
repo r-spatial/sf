@@ -709,10 +709,10 @@ which can be defined at creation time:
 
 ```{r}
 nc <- st_read(system.file("shape/nc.shp", package="sf"),
-    relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
-        CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
-        CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-        BIR79 = "lattice", SID79 = "lattice", NWBIR79 = "lattice"))
+    relation_to_geometry = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
+        CNTY_ID = "identity", NAME = "identity", FIPS = "identity", FIPSNO = "identity",
+        CRESS_ID = "identity", BIR74 = "aggregate", SID74 = "aggregate", NWBIR74 = "aggregate",
+        BIR79 = "aggregate", SID79 = "aggregate", NWBIR79 = "aggregate"))
 attr(nc, "relation_to_geometry")
 data(meuse, package = "sp")
 meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
@@ -724,13 +724,13 @@ of three possibilities
 
 | value | meaning                           |
 |-------| ----------------------------------|
-| field | a variable that has a value at every location over a spatial extent; examples: elevation, temperature, land use |
-| lattice | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use | 
-| entity | values identify the geometry, and refer to (the whole of) this geometry and to no other geometry |
+| constant | a variable that has a constant value at every location over a spatial extent; examples: elevation, temperature, land use |
+| aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use | 
+| identity | values identify the geometry, and refer to (the whole of) this geometry and to no other geometry |
 
 With this information (still to be done) we can for instance 
 
-* either return missing values or generate warnings when a lattice value at a point location inside a polygon is retrieved, or 
+* either return missing values or generate warnings when a _aggregate_ value at a point location inside a polygon is retrieved, or 
 * list the implicit assumptions made when retrieving attribute values at points inside a polygon when `relation_to_geometry` is missing.
 
 Further reading:

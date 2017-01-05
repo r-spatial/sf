@@ -27,7 +27,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' d$geom2 = st_sfc(pt1, pt2)
 #' st_as_sf(d) # should warn
 #' data(meuse, package = "sp")
-#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
+#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "constant")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
 #' @export
@@ -113,7 +113,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
 #' @param precision numeric; see \link{st_as_binary}
-#' @details \code{relation_to_geometry} specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "field", "lattice", "entity". "field" is used for attributes that are constant throughout the geometry (e.g. land use), "lattice" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "entity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_character_}, implies we don't know.  
+#' @details \code{relation_to_geometry} specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_character_}, implies we don't know.  
 #' @examples
 #' g = st_sfc(st_point(1:2))
 #' st_sf(a=3,g)
@@ -162,10 +162,10 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	# add attributes:
 	attr(df, "sf_column") = sfc_name
 	f = factor(rep(relation_to_geometry, length.out = ncol(df) - 1), 
-		levels = c("field", "lattice", "entity"))
+		levels = c("constant", "aggregate", "identity"))
 	names(f) = names(df)[-ncol(df)]
 	attr(df, "relation_to_geometry") = f
-	# FIXME: check that if one of them is lattice, geom cannot be POINT
+	# FIXME: check that if one of them is aggregate, geom cannot be POINT
 	class(df) = c("sf", class(df))
 	if (! missing(crs))
 		st_crs(df) = crs
@@ -264,7 +264,7 @@ cbind.sf = function(..., deparse.level = 1) {
 	# do.call(st_sf, list(...))
 }
 
-all_fields = function(x) {
+all_constant = function(x) {
 	x = attr(x, "relation_to_geometry")
-	!(any(is.na(x)) || any(x != "field"))
+	!(any(is.na(x)) || any(x != "constant"))
 }
