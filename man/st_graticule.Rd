@@ -5,8 +5,7 @@
 \title{compute graticules and their parameters}
 \usage{
 st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
-  datum = st_crs(4326), ..., lon = pretty(st_bbox(box)[c(1, 3)]),
-  lat = pretty(st_bbox(box)[c(2, 4)]), ndiscr = 100)
+  datum = st_crs(4326), ..., lon, lat, ndiscr = 100)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).}

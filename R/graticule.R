@@ -54,8 +54,7 @@
 #' }))
 #' plot(m, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
 st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(4326), ...,
-	lon = pretty(st_bbox(box)[c(1,3)]),
-	lat = pretty(st_bbox(box)[c(2,4)]), ndiscr = 100)
+	lon, lat, ndiscr = 100)
 {
 	if (missing(x)) {
 		crs = datum
@@ -82,6 +81,10 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(
 	if (!is.na(crs))
 		box = st_transform(box, datum)
 
+	if (missing(lon))
+		lon = pretty(st_bbox(box)[c(1,3)])
+	if (missing(lat))
+		lat = pretty(st_bbox(box)[c(2,4)])
 	# sanity:
 	lon = lon[lon >= -180 & lon <= 180]
 	lat = lat[lat > -90 & lat < 90]

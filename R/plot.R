@@ -303,7 +303,8 @@ plot.sfg = function(x, ...) {
 #' @param bgMap object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}
 #' @param expandBB numeric; fractional values to expand the bounding box with, 
 #' in each direction (bottom, left, top, right)
-#' @param graticule object of class \code{crs}, or object returned by \link{st_graticule}
+#' @param graticule object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), 
+#' or object returned by \link{st_graticule}
 #' @param col_graticule color to used for the graticule (if present)
 #' @export
 #' @details \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it

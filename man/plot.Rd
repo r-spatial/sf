@@ -104,7 +104,8 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{expandBB}{numeric; fractional values to expand the bounding box with, 
 in each direction (bottom, left, top, right)}
 
-\item{graticule}{object of class \code{crs}, or object returned by \link{st_graticule}}
+\item{graticule}{object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), 
+or object returned by \link{st_graticule}}
 
 \item{col_graticule}{color to used for the graticule (if present)}
 
