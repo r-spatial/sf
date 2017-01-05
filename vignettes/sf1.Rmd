@@ -724,14 +724,15 @@ of three possibilities
 
 | value | meaning                           |
 |-------| ----------------------------------|
-| constant | a variable that has a constant value at every location over a spatial extent; examples: elevation, temperature, land use |
+| constant | a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use |
 | aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use | 
-| identity | values identify the geometry, and refer to (the whole of) this geometry and to no other geometry |
+| identity | values identify the geometry: they refer to (the whole of) this and only this geometry |
 
 With this information (still to be done) we can for instance 
 
 * either return missing values or generate warnings when a _aggregate_ value at a point location inside a polygon is retrieved, or 
 * list the implicit assumptions made when retrieving attribute values at points inside a polygon when `relation_to_geometry` is missing.
+* decide what to do with attributes when a geometry is split: do nothing in case the attribute is constant, give an error or warning in case it is an aggregate, change the `relation_to_geometry` to _constant_ in case it was _identity_.
 
 Further reading:
 
