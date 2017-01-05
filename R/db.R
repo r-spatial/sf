@@ -101,9 +101,13 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 	dbWriteTable(conn, table, df, ...)
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-	SRID = st_crs(geom)$epsg
-	if (is.null(SRID) || is.na(SRID))
-		SRID = 0
+	crs = st_crs(geom)
+	SRID = crs$epsg
+	if (is.null(SRID) || is.na(SRID)) {
+	  if (!is.na(crs)) warning("Postgis does not support proj4string, the SRID is set to missing")
+	  SRID = 0
+	}
+		
 	TYPE = class(geom[[1]])[2]
 	if (! append) {
 		query = DEBUG(paste0("SELECT AddGeometryColumn('",schema,"','", table, "','", geom_name, 
