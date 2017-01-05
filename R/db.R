@@ -24,6 +24,10 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 		stop("no connection provided")
   	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
+    if("row.names" %in% colnames(tbl)){
+        row.names(tbl) = tbl[["row.names"]]
+        tbl = tbl[,setdiff(colnames(tbl), "row.names")]
+    }
 	if (is.null(geom_column)) { # try find the geometry column:
 		gc = try(dbReadTable(conn, "geometry_columns"))
 		geom_column = if (class(gc) == "try-error" || missing(table))
