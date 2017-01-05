@@ -250,11 +250,11 @@ st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 #' @details requires GEOS version 3.4 or above
 # nocov start
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (isTRUE(st_is_longlat(x)))
-		stop("st_triangulate does not correctly triangulate longitude/latitude data.")
-	if (CPL_geos_version() >= "3.4.0")
+	if (CPL_geos_version() >= "3.4.0") {
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_triangulate does not correctly triangulate longitude/latitude data.")
 		st_sfc(CPL_geos_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
-	else
+	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
 # nocov end
