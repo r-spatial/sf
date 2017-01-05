@@ -163,7 +163,7 @@ st_sf = function(..., relation_to_geometry = NA_character_, row.names,
 	attr(df, "sf_column") = sfc_name
 	f = factor(rep(relation_to_geometry, length.out = ncol(df) - 1), 
 		levels = c("field", "lattice", "entity"))
-	names(f) = names(df)[-sf_column]
+	names(f) = names(df)[-ncol(df)]
 	attr(df, "relation_to_geometry") = f
 	# FIXME: check that if one of them is lattice, geom cannot be POINT
 	class(df) = c("sf", class(df))
