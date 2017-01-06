@@ -103,6 +103,45 @@ st_cast_default = function(x) {
 		x
 }
 
+#' Coerce geometry to MULTI* geometry
+#' 
+#' POINTS, LINES, POLYGONS are returned as MULTIPOINTS, MULTILINES and MULTIPOLYGONS
+#' @param x list of geometries or simple features
+#' @details Geometries that are already MULTI* are left unchanged. 
+#' Features that can't be cast to a single  MULTI* geometry are return as a 
+#' GEOMETRYCOLLECTION
+st_cast_default = function(x) {
+  if (!identical(unique(sapply(x, function(w) class(w)[3L])), "sfg"))
+    stop("list item(s) not of class sfg") # sanity check
+  
+  .x <- x
+  cls = unique(sapply(x, function(x) class(x)[2L]))
+  if (length(cls) > 1) {
+    if (all(cls %in% c("POINT", "MULTIPOINT"))) {
+      x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTIPOINT", "sfc") 
+      
+    } else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
+      x <- lapply(x,
+                  function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTILINESTRING", "sfc")
+      
+    } else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
+      x <- lapply(x,
+                  function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTIPOLYGON", "sfc")
+    } else {
+      class(x) <- c("sfc_GEOMETRY", "sfc") 
+    }
+  } else if (cls == "GEOMETRY") {
+    class(x) <- c("sfc_GEOMETRY", "sfc") 
+  }
+  st_sfc(x)
+}
+
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
 #' @export
