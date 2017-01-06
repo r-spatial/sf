@@ -51,3 +51,16 @@ test_that("st_crs<- gives warnings on changing crs", {
 	# but do when it changes:
 	expect_warning(st_sfc(x, crs = "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
 })
+
+test_that("st_precision()", {
+  x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4)
+  expect_equal(st_precision(x), 1e-4)
+  expect_error(st_set_precision(x, NULL))
+  expect_error(st_set_precision(x, NA), "numeric")
+  expect_error(st_set_precision(x, list()), "length")
+  expect_error(st_set_precision(x, list(x = 1)), "numeric")
+  expect_error(st_set_precision(x, 1:4), "length")
+  expect_error(st_set_precision(x, NA_real_), "numeric")
+  st_precision(x) <- 1e-2
+  expect_identical(st_set_precision(x, 1e-2), x)
+})
