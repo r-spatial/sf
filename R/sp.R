@@ -164,7 +164,14 @@ setAs("sf", "Spatial", function(from) {
 
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
-as_Spatial = function(from) {
+#' Convert to sp object
+#' 
+#' @param from sfc to convert
+#' @param cast logical. Coerce GEOMETRIES to a type using `st_cast` (default TRUE)
+as_Spatial = function(from, cast = TRUE) {
+  if (cast) {
+    from <- st_cast(from)
+  }
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
