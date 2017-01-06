@@ -96,7 +96,12 @@ st_cast_default = function(x) {
 		if (utp != gtp) # simple: they're all identical, but e.g. held in a GEOMETRY
 			structure(x, class = c(paste0("sfc_", utp), "sfc"))
 		else if (utp == "GEOMETRYCOLLECTION") # unwrap geometrycollection:
-			structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
+			#structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
+		{
+		  y <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
+		  st_crs(y) <- st_crs(x)
+		  y
+		}
 		else 
 			x
 	} else
