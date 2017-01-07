@@ -58,8 +58,9 @@ st_cast.MULTIPOLYGON <- function(x, to, ...) {
          POLYGON = {warning("polygon from first part only"); st_polygon(x[[1L]])}, 
          LINESTRING = {warning("line from first ring only"); st_linestring(x[[1L]][[1L]])}, 
          ## loss, drop to first coordinate of first ring of first part
-         POINT = {warning("point from first coordinate only"); st_point(x[[1L]][[1L]][1L, , drop = TRUE])}
-         )
+         POINT = {warning("point from first coordinate only"); st_point(x[[1L]][[1L]][1L, , drop = TRUE])},
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
+  )
 }
 
 #' @name st_cast
@@ -77,7 +78,8 @@ st_cast.MULTILINESTRING <- function(x, to, ...) {
          POLYGON = st_polygon(x), 
          LINESTRING = {warning("keeping first linestring only"); st_linestring(x[[1L]])},
          ## loss, drop to first coordinate of first line 
-         POINT = {warning("keeping first coordinate only"); st_point(x[[1L]][1L, , drop = TRUE])}
+         POINT = {warning("keeping first coordinate only"); st_point(x[[1L]][1L, , drop = TRUE])},
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }
 
@@ -95,7 +97,8 @@ st_cast.MULTIPOINT <- function(x, to, ...) {
          POLYGON = st_polygon_close(list(unclass(x))), 
          LINESTRING = st_linestring(unclass(x)),
          ## loss, drop to first coordinate
-         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[1L, , drop = TRUE])}
+         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[1L, , drop = TRUE])},
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }
 
@@ -111,7 +114,8 @@ st_cast.POLYGON <- function(x, to, ...) {
          MULTIPOINT = st_multipoint(Tail1(unclass(x))[[1L]]), 
          POLYGON = x, 
          LINESTRING = st_linestring(unclass(x)[[1L]]),
-         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[[1L]][1L, , drop = TRUE])}
+         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[[1L]][1L, , drop = TRUE])},
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }
 
@@ -127,7 +131,8 @@ st_cast.LINESTRING <- function(x, to, ...) {
          MULTIPOINT = st_multipoint(unclass(x)), 
          POLYGON = st_polygon_close(list(unclass(x))), 
          LINESTRING = x,
-         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[1L, , drop = TRUE])}
+         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[1L, , drop = TRUE])},
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }
 
@@ -144,14 +149,22 @@ st_cast.POINT <- function(x, to, ...) {
          MULTIPOINT = st_multipoint(matrix(unclass(x), nrow = 1L)), 
          POLYGON = stop("cannot create POLYGON from POINT"), 
          LINESTRING = stop("cannot create LINESTRING from POINT"),
-         POINT = x
+         POINT = x,
+		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }
 
 #' @name st_cast
 #' @export
 st_cast.GEOMETRYCOLLECTION <- function(x, to, ...) {
-  st_cast(x[[1]], to, ...)
+  switch(to, 
+  	GEOMETRYCOLLECTION = x,
+  	{
+		if (length(x) > 1)
+			warning("only first part of geometrycollection is retained")
+		st_cast(x[[1]], to, ...)
+	}
+  )
 }
 
 

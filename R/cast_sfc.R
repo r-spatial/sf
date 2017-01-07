@@ -90,42 +90,34 @@ get_lengths = function(x) {
 
 #' Coerce geometry to MULTI* geometry
 #' 
-#' POINTS, LINES, POLYGONS are returned as MULTIPOINTS, MULTILINES and MULTIPOLYGONS
+#' mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
+#' POLYGON and MULTIPOLYGON are returned as MULTIPOINTS, MULTILINESTRING and MULTIPOLYGONS respectively
 #' @param x list of geometries or simple features
 #' @details Geometries that are already MULTI* are left unchanged. 
 #' Features that can't be cast to a single  MULTI* geometry are return as a 
 #' GEOMETRYCOLLECTION
-st_cast_default = function(x) {
+st_cast_sfc_default = function(x) {
   if (!identical(unique(sapply(x, function(w) class(w)[3L])), "sfg"))
     stop("list item(s) not of class sfg") # sanity check
   
-  .x <- x
+  a <- attributes(x)
   cls = unique(sapply(x, function(x) class(x)[2L]))
   if (length(cls) > 1) {
     if (all(cls %in% c("POINT", "MULTIPOINT"))) {
       x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
-      attributes(x) <- attributes(.x)
       class(x) <- c("sfc_MULTIPOINT", "sfc") 
-      
     } else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
-      x <- lapply(x,
-                  function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
-      attributes(x) <- attributes(.x)
+      x <- lapply(x, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
       class(x) <- c("sfc_MULTILINESTRING", "sfc")
-      
     } else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
-      x <- lapply(x,
-                  function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
-      attributes(x) <- attributes(.x)
+      x <- lapply(x, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
       class(x) <- c("sfc_MULTIPOLYGON", "sfc")
-    } else {
-      class(x) <- c("sfc_GEOMETRY", "sfc") 
-    }
-  } else if (cls %in% c("GEOMETRY", "GEOMETRYCOLLECTION") ) {
+    } 
+  } else if (cls == "GEOMETRYCOLLECTION") {
     x <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
-    attributes(x) <- attributes(.x)
     class(x) <- c("sfc_GEOMETRY", "sfc") 
   }
+  attributes(x) <- a
   st_sfc(x)
 }
 
@@ -133,8 +125,10 @@ st_cast_default = function(x) {
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
 #' @export
 st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
-	if (missing(to))
-		return(st_cast_default(x))
+	if (missing(to)) {
+		stopifnot(missing(ids))
+		return(st_cast_sfc_default(x))
+	}
 
 	from_cls = substr(class(x)[1], 5, 100)
 	from_col = which_sfc_col(from_cls)
@@ -185,12 +179,14 @@ st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 	if (!is.null(attr(geom, "ids"))) {
 		if (!missing(ids))
 			warning("argument ids is ignored, and taken from the geometry splitting")
-		if (warn)
-			warning("repeating attributes for all sub-geometries for which they may not be valid")
+		if (warn && !all_constant(x))
+			warning("repeating attributes for all sub-geometries for which they may not be constant")
 		ids = attr(geom, "ids")          # e.g. 3 2 4
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
+		# FIXME: deal with identity -> constant
 		st_sf(x[reps, ], geom, crs = crs)
 	} else { 
+		# FIXME: warn on const -> aggregation; carry out area-weighted aggregation?
 		if (length(unique(ids)) < nrow(x)) {
 			if (missing(FUN))
 				stop("aggregation function missing; pls specify argument FUN")

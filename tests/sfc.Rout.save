@@ -240,6 +240,9 @@ In st_cast.MULTIPOINT(x[[1]], to, ...) : point from first coordinate only
 MULTIPOINT(0 1, 2 2)
 > st_cast(st_geometrycollection(list(p,mp)), "MULTIPOINT")
 MULTIPOINT(0 1)
+Warning message:
+In st_cast.GEOMETRYCOLLECTION(st_geometrycollection(list(p, mp)),  :
+  only first part of geometrycollection is retained
 > 
 > mp = st_multipoint(rbind(c(0,1)))
 > x = st_sfc(p, mp)
@@ -463,4 +466,4 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
 > 
 > proc.time()
    user  system elapsed 
-  0.560   0.032   0.590 
+  0.536   0.016   0.550 
