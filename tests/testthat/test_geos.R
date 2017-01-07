@@ -65,3 +65,27 @@ test_that("st_area() works on GEOMETRY in longlat (#131)", {
   expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(), 
                c(12308778361, 24570125261))
 })
+
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+pnc <- st_transform(nc[4:6, ], "+proj=laea +lon_0=-90")
+
+test_that("geom operations work on sfc or sf", {
+  expect_silent(st_buffer(pnc, 1000))
+  expect_silent(st_buffer(st_geometry(pnc), 1000))
+  expect_silent(st_boundary(pnc))
+  expect_that(st_boundary(st_geometry(pnc)), is_a("sfc_MULTILINESTRING"))
+  expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
+  expect_true(inherits(st_convex_hull(pnc$geometry), "sfc_POLYGON"))
+  expect_silent(st_simplify(pnc))
+  expect_silent(st_simplify(pnc$geometry))
+  expect_silent(st_triangulate(st_cast(pnc)))
+  expect_that(st_triangulate(st_cast(pnc$geometry)), is_a("sfc_GEOMETRYCOLLECTION"))
+  suppressWarnings(lnc <- st_cast(pnc, "MULTILINESTRING"))
+  expect_silent(st_polygonize(lnc))
+  expect_silent(st_polygonize(lnc$geom))  ## st_cast using name "geom" not "geometry"
+  expect_that(st_linemerge(lnc), is_a("sf"))
+  expect_that(st_linemerge(lnc$geom), is_a("sfc"))
+  expect_silent(st_centroid(lnc))
+  expect_that(st_centroid(lnc)$geom, is_a("sfc_POINT"))
+  expect_silent(st_segmentize(lnc, 10000))
+})

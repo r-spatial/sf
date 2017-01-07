@@ -217,48 +217,92 @@ st_equals_exact     = function(x, y, par, sparse = TRUE)
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30) {
+  UseMethod("st_buffer")
+}
+#' @export
+st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.")
-	st_sfc(CPL_geos_op("buffer", st_geometry(x), dist, nQuadSegs))
+	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
 }
-
+#' @export
+st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
+  st_geometry(x) <- st_buffer(st_geometry(x), dist, nQuadSegs)
+  x
+}
 #' @name geos
 #' @export
-st_boundary = function(x) st_sfc(CPL_geos_op("boundary", st_geometry(x)))
-
+st_boundary = function(x) {
+  UseMethod("st_boundary")
+}
+#' @export
+st_boundary.sfc = function(x) {
+  st_sfc(CPL_geos_op("boundary", x))
+}
+#' @export
+st_boundary.sf = function(x) {
+  st_geometry(x) <- st_boundary(st_geometry(x))
+  x
+}
 #' @name geos
 #' @export
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' plot(st_convex_hull(nc))
 #' plot(nc, border = grey(.5))
-st_convex_hull = function(x) st_sfc(CPL_geos_op("convex_hull", st_geometry(x)))
-
+st_convex_hull = function(x) {
+  UseMethod("st_convex_hull")
+}
+#' @export
+st_convex_hull.sfc = function(x) {
+  st_sfc(CPL_geos_op("convex_hull", x))
+}
+#' @export
+st_convex_hull.sf = function(x) {
+  st_geometry(x) <- st_convex_hull(st_geometry(x))
+  x
+}
 #' @name geos
 #' @export
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+  UseMethod("st_simplify")
+}
+#' @export
+st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees.")
-	st_sfc(CPL_geos_op("simplify", st_geometry(x), preserveTopology = preserveTopology, dTolerance = dTolerance))
+	st_sfc(CPL_geos_op("simplify", x, preserveTopology = preserveTopology, dTolerance = dTolerance))
 }
-
+#' @export
+st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+  st_geometry(x) <- st_simplify(st_geometry(x), preserveTopology, dTolerance)
+  x
+}
 #' @name geos
 #' @export
 #' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
 #' @details requires GEOS version 3.4 or above
 # nocov start
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
+  UseMethod("st_triangulate")
+}
+#' @export
+st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (CPL_geos_version() >= "3.4.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data.")
-		st_sfc(CPL_geos_op("triangulate", st_geometry(x), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_op("triangulate", x, dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
 # nocov end
-
+#' @export
+st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
+  st_geometry(x) <- st_triangulate(st_geometry(x, dTolerance, bOnlyEdges))
+  x
+}
 #' @name geos
 #' @param mlst object of class \code{MULTILINESTRING} or geometry list-column containing these
 #' @export
@@ -266,42 +310,76 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 #' st_polygonize(mls)
 st_polygonize = function(mlst) {
+  UseMethod("st_polygonize")
+}
+#' @export
+st_polygonize.sfc = function(mlst) {
 	x = st_geometry(mlst)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	st_sfc(CPL_geos_op("polygonize", x))
 }
-
+#' @export
+st_polygonize.sf = function(mlst) {
+  x <- mlst
+  st_geometry(x) <- st_polygonize(st_geometry(mlst))
+  x
+}
 #' @name geos
 #' @export
 #' @examples 
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_linemerge(mls)
 st_linemerge = function(mlst) {
-	x = st_geometry(mlst)
+  UseMethod("st_linemerge")
+}
+#' @export
+st_linemerge.sfc = function(mlst) {
+	x = mlst
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
 	st_sfc(CPL_geos_op("linemerge", x))
 }
-
+#' @export
+st_linemerge.sf = function(mlst) {
+  st_geometry(mlst) <- st_linemerge(st_geometry(mlst))
+  mlst
+}
 #' @name geos
 #' @export
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
 st_centroid = function(x) { 
+  UseMethod("st_centroid")
+}
+#' @export
+st_centroid.sfc = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data.")
-	st_sfc(CPL_geos_op("centroid", st_geometry(x)))
+	st_sfc(CPL_geos_op("centroid", x))
 }
-
+#' @export
+st_centroid.sf = function(x) {
+  st_geometry(x) <- st_centroid(st_geometry(x))
+  x
+}
 #' @name geos
 #' @export
 #' @param dfMaxLength numeric; max length of a line segment
 #' @param ... ignored
 #' @param warn logical; generate a warning in case of long/lat data
 st_segmentize  = function(x, dfMaxLength, ..., warn = TRUE) {
+  UseMethod("st_segmentize")
+}
+#' @export 
+st_segmentize.sfc  = function(x, dfMaxLength, ..., warn = TRUE) {
 	if (warn && isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
-	st_sfc(CPL_gdal_segmentize(st_geometry(x), dfMaxLength), crs = st_crs(x))
+	st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
+}
+#' @export
+st_segmentize.sf = function(x, dfMaxLength, ..., warn = TRUE) {
+  st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ..., warn = warn)
+  x
 }
 
 #' @name geos
