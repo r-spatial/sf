@@ -18,6 +18,7 @@ setOldClass(c("sfc_LINESTRING", "sfc"))
 setOldClass(c("sfc_MULTILINESTRING", "sfc"))
 setOldClass(c("sfc_POLYGON", "sfc"))
 setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
+setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass("sfg")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())

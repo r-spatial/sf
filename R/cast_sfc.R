@@ -88,24 +88,45 @@ get_lengths = function(x) {
 	)
 }
 
+#' Coerce geometry to MULTI* geometry
+#' 
+#' POINTS, LINES, POLYGONS are returned as MULTIPOINTS, MULTILINES and MULTIPOLYGONS
+#' @param x list of geometries or simple features
+#' @details Geometries that are already MULTI* are left unchanged. 
+#' Features that can't be cast to a single  MULTI* geometry are return as a 
+#' GEOMETRYCOLLECTION
 st_cast_default = function(x) {
-	gtp = substr(class(x)[1], 5, 100)
-	tp = st_geometry_type(x)
-	utp = unique(tp)
-	if (length(utp) == 1) {
-		if (utp != gtp) # simple: they're all identical, but e.g. held in a GEOMETRY
-			structure(x, class = c(paste0("sfc_", utp), "sfc"))
-		else if (utp == "GEOMETRYCOLLECTION") # unwrap geometrycollection:
-			#structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
-		{
-		  y <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
-		  st_crs(y) <- st_crs(x)
-		  y
-		}
-		else 
-			x
-	} else
-		x
+  if (!identical(unique(sapply(x, function(w) class(w)[3L])), "sfg"))
+    stop("list item(s) not of class sfg") # sanity check
+  
+  .x <- x
+  cls = unique(sapply(x, function(x) class(x)[2L]))
+  if (length(cls) > 1) {
+    if (all(cls %in% c("POINT", "MULTIPOINT"))) {
+      x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTIPOINT", "sfc") 
+      
+    } else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
+      x <- lapply(x,
+                  function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTILINESTRING", "sfc")
+      
+    } else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
+      x <- lapply(x,
+                  function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
+      attributes(x) <- attributes(.x)
+      class(x) <- c("sfc_MULTIPOLYGON", "sfc")
+    } else {
+      class(x) <- c("sfc_GEOMETRY", "sfc") 
+    }
+  } else if (cls %in% c("GEOMETRY", "GEOMETRYCOLLECTION") ) {
+    x <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
+    attributes(x) <- attributes(.x)
+    class(x) <- c("sfc_GEOMETRY", "sfc") 
+  }
+  st_sfc(x)
 }
 
 #' @name st_cast
