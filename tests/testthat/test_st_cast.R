@@ -78,3 +78,24 @@ test_that("st_cast preserves crs (#154)", {
   expect_identical(st_cast(st_sfc(cc$points$single, cc$lines$multi, crs = 4326)) %>% st_crs(), 
               st_sfc(cc$points$single, cc$lines$multi, crs = 4326) %>% st_crs())
 })
+
+test_that("st_cast can crack GEOMETRYCOLLECTION", {
+  gc1 <- st_geometrycollection(list(st_linestring(rbind(c(0,0),c(1,1),c(2,1)))))
+  gc2 <- st_geometrycollection(list(st_multilinestring(list(
+    rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))))
+  gc3 <- st_geometrycollection(list(st_multilinestring(list(
+    rbind(c(4,4),c(4,3)), rbind(c(2,2),c(2,1),c(3,1))))))
+  gc4 <- st_geometrycollection(list(st_multipoint(rbind(c(1,5), c(4,3)))))
+  
+  sfc <- st_sfc(gc1, gc2, gc3)
+  expect_is(st_cast(sfc), "sfc_GEOMETRY")  # first, it cracks the collection
+  expect_is(st_cast(st_cast(sfc)), "sfc_MULTILINESTRING")  # then cast to multi*
+  expect_warning(expect_is(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
+  expect_equal(st_cast(sfc, "POINT") %>% length, sfc %>% length)
+  expect_is(st_cast(sfc, "MULTIPOINT"), "sfc_MULTIPOINT")
+  expect_is(st_cast(sfc, "LINESTRING"), "sfc_LINESTRING")
+  
+  sfc2 <- st_sfc(gc1, gc2, gc4) 
+  expect_is(sfc2 %>% st_cast, "sfc_GEOMETRY")
+  expect_equal(sapply(sfc2 %>% st_cast, class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
+})
