@@ -230,7 +230,7 @@ st_drop_zm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]
 
 #' Get precision
 #' 
-#' @param x sfc
+#' @param x object of class \code{sfc}
 #' @export
 st_precision <- function(x) {
   stopifnot(inherits(x, "sfc"))
@@ -240,13 +240,7 @@ st_precision <- function(x) {
 #' Set precision
 #' 
 #' @name st_precision
-#' @param x sfc
-#' @param precision numeric. See details
-#' @details Precision is a decimal number that sets the number of decimals to 
-#' use in geometric operations. Default uses all decimals (0). To specify 3 
-#' decimals, use 0.0001. It applies to all dimensions (x, y, z, m). Setting 
-#' precision has no impact on the stored 
-#' values. 
+#' @param precision numeric; see \link{st_as_binary}
 #' @examples 
 #' x <- st_sfc(st_point(c(pi, pi)))
 #' st_precision(x)
@@ -265,6 +259,7 @@ st_set_precision <- function(x, precision) {
 }
 
 #' @name st_precision
+#' @param value precision value
 #' @export
 "st_precision<-" <- function(x, value) {
   st_set_precision(x, value)

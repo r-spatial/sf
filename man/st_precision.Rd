@@ -13,23 +13,16 @@ st_set_precision(x, precision)
 st_precision(x) <- value
 }
 \arguments{
-\item{x}{sfc}
+\item{x}{object of class \code{sfc}}
 
-\item{precision}{numeric. See details}
+\item{precision}{numeric; see \link{st_as_binary}}
 
-\item{x}{sfc}
+\item{value}{precision value}
 }
 \description{
 Get precision
 
 Set precision
-}
-\details{
-Precision is a decimal number that sets the number of decimals to 
-use in geometric operations. Default uses all decimals (0). To specify 3 
-decimals, use 0.0001. It applies to all dimensions (x, y, z, m). Setting 
-precision has no impact on the stored 
-values.
 }
 \examples{
 x <- st_sfc(st_point(c(pi, pi)))

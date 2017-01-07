@@ -90,8 +90,9 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   sfc <- st_sfc(gc1, gc2, gc3)
   expect_is(st_cast(sfc), "sfc_GEOMETRY")  # first, it cracks the collection
   expect_is(st_cast(st_cast(sfc)), "sfc_MULTILINESTRING")  # then cast to multi*
-  expect_warning(expect_is(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
-  expect_equal(st_cast(sfc, "POINT") %>% length, sfc %>% length)
+#  expect_warning(expect_is(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
+#  expect_equal(st_cast(sfc, "POINT") %>% length, sfc %>% length)
+# @etienne: I think this is more useful; attr(x, "ids") contains the original lengths
   expect_is(st_cast(sfc, "MULTIPOINT"), "sfc_MULTIPOINT")
   expect_is(st_cast(sfc, "LINESTRING"), "sfc_LINESTRING")
   

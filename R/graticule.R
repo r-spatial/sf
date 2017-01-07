@@ -110,12 +110,12 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(
 	# Now we're moving the straight lines back to curves in crs:
 	if (!is.na(crs))
 		geom = st_transform(geom, crs)
+
 	st_geometry(df) = geom
-	attr(df, "relation_to_geometry") = "constant"
+	attr(df, "relation_to_geometry") = "constant" # FIXME: should be factor, and for every attr
 
 	if (!missing(x)) { # cut out box:
-		box = st_sfc(box, crs = datum)
-		if (!is.na(crs))
+		if (! is.na(crs))
 			box = st_transform(box, crs)
 		df = st_intersection(df, st_polygonize(box))
 	}
