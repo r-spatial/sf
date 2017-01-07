@@ -1,23 +1,23 @@
 context("sf: st_cast")
 
-test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
-  m <- rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))
-  s <- matrix(c(2, 0), 5, 2, byrow = TRUE)
-  cc <- list(
-    points = list(
-      single = m[1, ] %>% st_point(),
-      multi = m %>% st_multipoint()
-    ),
-    lines = list(
-      single = m %>% st_linestring(), 
-      multi = list(m, m + s) %>% st_multilinestring()
-    ),
-    polygons = list(
-      single = list(m + s)  %>% st_polygon(), 
-      multi = list(list(m), list(m + s)) %>% st_multipolygon()
-    )
+m <- rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))
+s <- matrix(c(2, 0), 5, 2, byrow = TRUE)
+cc <- list(
+  points = list(
+    single = m[1, ] %>% st_point(),
+    multi = m %>% st_multipoint()
+  ),
+  lines = list(
+    single = m %>% st_linestring(), 
+    multi = list(m, m + s) %>% st_multilinestring()
+  ),
+  polygons = list(
+    single = list(m + s)  %>% st_polygon(), 
+    multi = list(list(m), list(m + s)) %>% st_multipolygon()
   )
-  
+)
+
+test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
   # st_cast
   # ======
   # points
@@ -72,4 +72,9 @@ test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
             "sfc_GEOMETRY")
   expect_is(st_cast(st_sfc(list(cc$points$multi, cc$lines$multi, cc$polygons$multi))), 
             "sfc_GEOMETRY")
+})
+
+test_that("st_cast preserves crs (#154)", {
+  expect_identical(st_cast(st_sfc(cc$points$single, cc$lines$multi, crs = 4326)) %>% st_crs(), 
+              st_sfc(cc$points$single, cc$lines$multi, crs = 4326) %>% st_crs())
 })
