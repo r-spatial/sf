@@ -64,7 +64,26 @@ plot(st_sfc(mp1, mpo1))
 # color ramp
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 plot(nc)
+plot(nc, axes = TRUE)
 plot(nc, col="lightgrey") 
 nc %>% 
   select(geometry) %>% 
   plot()
+
+# test background map plotting:
+data(bgmap)
+demo(nc, ask=FALSE, echo = FALSE)
+merc = st_crs(3857)
+WGS84 = st_crs(4326)
+nc = st_transform(nc, WGS84)
+## ggmap:
+#library(ggmap)
+#bgMap = get_map(unname(st_bbox(nc)), source = "google", zoom = 8) 
+plot(st_transform(nc[1], merc), bgMap = bgMap)
+
+# RgoogleMaps:
+#library(RgoogleMaps)
+#center = c(mean(st_bbox(nc)[c(2,4)]), mean(st_bbox(nc)[c(1,3)]))
+#g = GetMap(center=center, zoom=6) # google
+par(mar = c(0,0,1,0))
+plot(st_transform(nc, merc), bgMap = g)

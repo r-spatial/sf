@@ -387,8 +387,8 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 			mercator = TRUE
 		} else
 			bb = c(xlim[1], ylim[1], xlim[2], ylim[2]) # can be any crs!
-		if (mercator &&  st_crs(x) != st_crs(3875))
-			warning("crs of plotting object differs from that of bgMap, which is assumed to be st_crs(3857)")
+		if (mercator &&  st_crs(x) != st_crs(3857))
+			warning("crs of plotting object differs from that of bgMap, which is assumed to be st_crs(3857)") # nocov
 		rasterImage(bgMap, bb[1], bb[2], bb[3], bb[4], interpolate = FALSE)
 	}
 }

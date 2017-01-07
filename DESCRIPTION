@@ -23,4 +23,4 @@ BugReports: https://github.com/edzer/sfr/issues/
 RoxygenNote: 5.0.1
 Collate: RcppExports.R init.R bbox.R read.R db.R sfc.R sfg.R sf.R wkb.R wkt.R
 	plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R cast_sfg.R cast_sfc.R
-	graticule.R
+	graticule.R datasets.R
