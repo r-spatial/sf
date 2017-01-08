@@ -2,7 +2,7 @@
 % Please edit documentation in R/wkb.R
 \name{rawToHex}
 \alias{rawToHex}
-\title{convert raw vector(s) into hexadecimal character string(s)}
+\title{Convert raw vector(s) into hexadecimal character string(s)}
 \usage{
 rawToHex(x)
 }
@@ -10,6 +10,6 @@ rawToHex(x)
 \item{x}{raw vector, or list with raw vectors}
 }
 \description{
-convert raw vector(s) into hexadecimal character string(s)
+Convert raw vector(s) into hexadecimal character string(s)
 }
 

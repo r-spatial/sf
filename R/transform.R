@@ -11,6 +11,7 @@
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
 #' sfc = st_sfc(p1, p2, crs = "+init=epsg:4326")
+#' sfc
 #' st_transform(sfc, "+init=epsg:3857")
 #' @export
 st_transform = function(x, crs) UseMethod("st_transform")

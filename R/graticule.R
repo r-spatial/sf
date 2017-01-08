@@ -1,6 +1,6 @@
-#' compute graticules and their parameters
+#' Compute graticules and their parameters
 #' 
-#' compute graticules and their parameters
+#' Compute graticules and their parameters
 #' @export
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system

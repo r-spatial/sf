@@ -244,7 +244,7 @@ print.sf = function(x, ..., n =
 #'
 #' Bind rows (features) of sf objects
 #' @param ... objects to bind
-#' @param deparse.level integer; see \link[base]{rbind}
+#' @param deparse.level integer; see \link[base]{cbind}
 #' @name bind
 #' @export
 rbind.sf = function(..., deparse.level = 1) {

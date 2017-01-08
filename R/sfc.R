@@ -250,7 +250,7 @@ st_precision <- function(x) {
 st_set_precision <- function(x, precision) {
   stopifnot(inherits(x, "sfc"))
   if (length(precision) != 1) {
-    stop("Precision applies to all dimensions and must be of length 1.", call. = FALSE)
+    stop("Precision applies to all dimensions and must be of length 1", call. = FALSE)
   }
   if (is.na(precision) || !is.numeric(precision)) {
     stop("Precision must be numeric", call. = FALSE)

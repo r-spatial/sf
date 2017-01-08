@@ -94,6 +94,6 @@ Ops.sfc <- function(e1, e2) {
 		ret = mapply(function(x, y) { x + unclass(y) }, e1, e2, SIMPLIFY = FALSE)
 	else if (.Generic == "-")
 		ret = mapply(function(x, y) { x - unclass(y) }, e1, e2, SIMPLIFY = FALSE)
-	else stop(paste("Operation", .Generic, "not supported"))
+	else stop(paste("operation", .Generic, "not supported"))
 	st_sfc(ret, crs = NA_integer_)
 }

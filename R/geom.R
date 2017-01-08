@@ -122,7 +122,7 @@ st_distance = function(x, y, dist_fun) {
 	y = st_geometry(y)
 	if (isTRUE(st_is_longlat(x))) {
 		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
-			stop("st_distance for longitude/latitude data only available for POINT geometries.")
+			stop("st_distance for longitude/latitude data only available for POINT geometries")
 		if (!requireNamespace("geosphere", quietly = TRUE))
 			stop("package sp required, please install it first")
 		if (missing(dist_fun))
@@ -296,7 +296,7 @@ st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 #' @export
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
-		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees.")
+		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
 	st_sfc(CPL_geos_op("simplify", x, preserveTopology = preserveTopology, dTolerance = dTolerance))
 }
 
@@ -324,7 +324,7 @@ st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (CPL_geos_version() >= "3.4.0") {
 		if (isTRUE(st_is_longlat(x)))
-			warning("st_triangulate does not correctly triangulate longitude/latitude data.")
+			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
@@ -409,7 +409,7 @@ st_centroid = function(x) {
 #' @export
 st_centroid.sfc = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
-		warning("st_centroid does not give correct centroids for longitude/latitude data.")
+		warning("st_centroid does not give correct centroids for longitude/latitude data")
 	st_sfc(CPL_geos_op("centroid", x))
 }
 
@@ -436,7 +436,7 @@ st_segmentize	= function(x, dfMaxLength, ..., warn = TRUE) {
 #' @export 
 st_segmentize.sfc	= function(x, dfMaxLength, ..., warn = TRUE) {
 	if (warn && isTRUE(st_is_longlat(x)))
-		warning("st_segmentize does not correctly segmentize longitude/latitude data.")
+		warning("st_segmentize does not correctly segmentize longitude/latitude data")
 	st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
 }
 
@@ -555,9 +555,9 @@ st_line_sample = function(x, n, density, type = "regular") {
 	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
 }
 
-#' make a rectangular grid of polygons over the bounding box of a sf or sfc object
+#' Make a rectangular grid of polygons over the bounding box of a sf or sfc object
 #' 
-#' make a rectangular grid of polygons over the bounding box of a sf or sfc object
+#' Make a rectangular grid of polygons over the bounding box of a sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
@@ -604,9 +604,9 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 		st_sfc(ret, crs = st_crs(x))
 }
 
-#' areal-weighted interpolation of polygon data
+#' Areal-weighted interpolation of polygon data
 #' 
-#' areal-weighted interpolation of polygon data
+#' Areal-weighted interpolation of polygon data
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population), otherwise, spatially intensive (like population density).

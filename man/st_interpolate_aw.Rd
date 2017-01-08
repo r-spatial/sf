@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom.R
 \name{st_interpolate_aw}
 \alias{st_interpolate_aw}
-\title{areal-weighted interpolation of polygon data}
+\title{Areal-weighted interpolation of polygon data}
 \usage{
 st_interpolate_aw(x, to, extensive)
 }
@@ -14,7 +14,7 @@ st_interpolate_aw(x, to, extensive)
 \item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population), otherwise, spatially intensive (like population density).}
 }
 \description{
-areal-weighted interpolation of polygon data
+Areal-weighted interpolation of polygon data
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

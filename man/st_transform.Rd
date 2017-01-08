@@ -34,6 +34,7 @@ the st_transform method for sfg objects assumes that the crs of the object is av
 p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = "+init=epsg:4326")
+sfc
 st_transform(sfc, "+init=epsg:3857")
 st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
 nc = st_read(system.file("shape/nc.shp", package="sf"))
