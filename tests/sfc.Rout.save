@@ -354,8 +354,6 @@ epsg (SRID):    NA
 proj4string:    NA
 POLYGON((0 0, 1 1, 0 1, 0 0))
 POLYGON((0 0, 1 1, 0 1, 0 0))
-Warning message:
-In st_cast.MULTIPOLYGON(X[[i]], ...) : polygon from first part only
 > st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
 Geometry set for 2 features 
 geometry type:  MULTIPOLYGON
@@ -466,4 +464,4 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
 > 
 > proc.time()
    user  system elapsed 
-  0.536   0.016   0.550 
+  0.504   0.028   0.531 

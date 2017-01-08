@@ -9,8 +9,9 @@ Paste0 <- function(lst) lapply(lst, unclass)
 Tail1 <- function(lst) lapply(lst, head, -1)
 
 ClosePol <- function(mtrx) { 
+	stopifnot(is.matrix(mtrx))
 	if (!all(mtrx[1,] == mtrx[nrow(mtrx),])) 
-		rbind(mtrx,mtrx[1,]) 
+		rbind(mtrx, mtrx[1,]) 
 	else 
 		mtrx
 }
@@ -26,6 +27,7 @@ ClosePol <- function(mtrx) {
 #}
 
 # TODO
+# FIXME: warn on multi-part loss only if there are multiple parts
 # disallow auto-polygon-closure for two-point inputs:  st_cast(st_linestring(cbind(0, 1:2)), "POLYGON")
 # -> that should give an error
 # check discussions, holes become lines, those lines become overlapping islands, or does polygonize auto-detect nesting
@@ -77,7 +79,7 @@ st_cast.MULTIPOLYGON <- function(x, to, ...) {
 #' st_sfc(cast_all(mls))
 st_cast.MULTILINESTRING <- function(x, to, ...) {
   switch(to, 
-         MULTIPOLYGON = st_multipolygon(lapply(x, ClosePol)), 
+         MULTIPOLYGON = st_multipolygon(list(lapply(x, ClosePol))), 
          MULTILINESTRING = x, 
          MULTIPOINT = st_multipoint(do.call(rbind, Paste0(x))), 
          ## loss, drop to first line
@@ -116,7 +118,7 @@ st_cast.MULTIPOINT <- function(x, to, ...) {
 #' st_sfc(cast_all(pl))
 st_cast.POLYGON <- function(x, to, ...) {
   switch(to, 
-         MULTIPOLYGON = st_multipolygon(list(ClosePol(Paste0(x)))),
+         MULTIPOLYGON = st_multipolygon(list(lapply(Paste0(x), ClosePol))),
          MULTILINESTRING = st_multilinestring(unclass(x)), 
          MULTIPOINT = st_multipoint(Tail1(unclass(x))[[1L]]), 
          POLYGON = x, 
