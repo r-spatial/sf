@@ -111,7 +111,7 @@ p * rot(pi)
 Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:
 ```{r,fig=TRUE}
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
-cntrd = st_centroid(nc)
+cntrd = st_geometry(st_centroid(nc))
 nc2 = (st_geometry(nc) - cntrd) * rot(pi/2) * .75 + cntrd
 plot(nc[1], border = 'grey')
 plot(nc2, add = TRUE)
@@ -326,12 +326,12 @@ pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
 ls = st_linestring(pts)
 plot(ls)
 points(pts)
-ls.seg = st_segmentize(ls, 0.3)
+ls.seg = st_segmentize(st_sfc(ls), 0.3)
 plot(ls.seg)
 pts = ls.seg[[1]] # matrix
 points(pts)
 pol = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-pol.seg = st_segmentize(pol, 0.3)
+pol.seg = st_segmentize(st_sfc(pol), 0.3)
 plot(pol.seg, col = 'grey')
 points(pol.seg[[1]][[1]])
 ```
@@ -340,7 +340,7 @@ Function `st_polygonize` polygonizes a multilinestring, as far as the points for
 ```{r,fig=TRUE}
 par(mfrow=c(1,2),mar=c(0,0,1,0))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
-x = st_polygonize(mls)
+x = st_polygonize(st_sfc(mls))
 plot(mls, col = 'grey')
 title("multilinestring")
 plot(x, col = 'grey')
