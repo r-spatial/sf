@@ -531,12 +531,13 @@ st_line_sample = function(x, n, density, type = "regular") {
 #' @export
 st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
                        offset = st_bbox(x)[1:2], n = c(10, 10)) {
-  if (!missing(n) && !missing(offset) && !missing(cellsize)) {
+
+  bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
     cellsize = rep(cellsize, length.out = 2)
-    bb = c(xmin = offset[1], ymin = offset[2], 
-           xmax = offset[1] + n[1] * cellsize[1], ymax = offset[2] + n[2] * cellsize[2])
+    n = rep(n, length.out = 2)
+	structure(c(offset, offset + n * cellsize), names = c("xmin", "ymin", "xmax", "ymax"))
   } else
-    bb = st_bbox(x)
+    st_bbox(x)
   
   if (! missing(cellsize))
     cellsize = rep(cellsize, length.out = 2)

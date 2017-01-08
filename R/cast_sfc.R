@@ -125,10 +125,8 @@ st_cast_sfc_default = function(x) {
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
 #' @export
 st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
-	if (missing(to)) {
-		stopifnot(missing(ids))
+	if (missing(to))
 		return(st_cast_sfc_default(x))
-	}
 
 	from_cls = substr(class(x)[1], 5, 100)
 	from_col = which_sfc_col(from_cls)
