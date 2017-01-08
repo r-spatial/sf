@@ -92,11 +92,12 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_silent(st_simplify(pnc, FALSE, 1e4))
   expect_silent(st_simplify(gpnc, FALSE, 1e4))
   expect_silent(st_simplify(gpnc[[1L]], FALSE, 1e4))
-  
-  expect_silent(st_triangulate(pnc))
-  expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
-  expect_that(st_triangulate(gpnc[[1]]), is_a("sfc_GEOMETRYCOLLECTION"))
-  
+
+  if (sf:::CPL_geos_version() >= "3.4.0") {  
+   expect_silent(st_triangulate(pnc))
+   expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
+   expect_that(st_triangulate(gpnc[[1]]), is_a("sfc_GEOMETRYCOLLECTION"))
+  }
   
   expect_silent(st_polygonize(lnc))
   expect_silent(st_polygonize(glnc)) 
