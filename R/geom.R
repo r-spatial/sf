@@ -33,7 +33,7 @@ st_area = function(x) {
 		if (!requireNamespace("sp", quietly = TRUE))
 			stop("package sp required, please install it first")
 		if (!requireNamespace("geosphere", quietly = TRUE))
-			stop("package sp required, please install it first")
+			stop("package geosphere required, please install it first")
 		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"), 
 			as.numeric(p$SemiMajor), 1./p$InvFlattening)
 		u = 1

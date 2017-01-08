@@ -72,6 +72,10 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > plot(nc[1], graticule = st_crs(nc))
 > 
+> plot(nc[1], graticule = st_crs(nc), axes = TRUE)
+> 
+> g = st_graticule()
+> 
 > proc.time()
    user  system elapsed 
-  0.872   0.028   0.899 
+  0.848   0.020   0.865 

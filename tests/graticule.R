@@ -45,3 +45,7 @@ g = st_graticule(nc, datum = st_crs(nc))
 #g = st_graticule(nc)
 
 plot(nc[1], graticule = st_crs(nc))
+
+plot(nc[1], graticule = st_crs(nc), axes = TRUE)
+
+g = st_graticule()

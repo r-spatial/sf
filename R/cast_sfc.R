@@ -115,7 +115,7 @@ st_cast_sfc_default = function(x) {
     } 
   } else if (cls == "GEOMETRYCOLLECTION") {
     x <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
-    class(x) <- c("sfc_GEOMETRY", "sfc") 
+    # class(x) <- c("sfc_GEOMETRY", "sfc") 
   }
   attributes(x) <- a
   st_sfc(x)

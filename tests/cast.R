@@ -61,7 +61,8 @@ expect_warning(st_cast(mp1, "LINESTRING"))
 expect_warning(st_cast(mp1, "POINT"))
 mls = mls[[1]]
 class(mls)
-expect_error(st_cast(mls, "POLYGON"))
+#expect_error(st_cast(mls, "POLYGON"))
+st_cast(mls, "POLYGON")
 
 expect_warning(st_cast(mls, "POINT"))
 p1 = st_polygon(pol1)
