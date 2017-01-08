@@ -25,8 +25,7 @@ Type 'q()' to quit R.
 Checking rgeos availability: TRUE
 > m <- map2SpatialPolygons(m, IDs=ID0, proj4string = CRS("+init=epsg:4326"))
 > 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
+> suppressPackageStartupMessages(library(sf))
 > 
 > laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
 > m <- st_transform(st_as_sf(m), laea)
@@ -78,4 +77,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.848   0.020   0.865 
+  0.788   0.016   0.802 

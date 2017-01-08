@@ -155,11 +155,11 @@ st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 
 st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
 
-st_intersects ...  st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+st_intersects ...	st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
-st_buffer ... st_segmentize return an \link{sfc} object with the same number of geometries as in \code{x}
+st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
 
-\code{st_union(x)} unions geometries.  Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.  Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
+\code{st_union(x)} unions geometries.	Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
 }
 \description{
 Geometric operations on (pairs of) simple feature geometries
@@ -202,7 +202,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 	st_linestring(rbind(c(0,0),c(10,0))))
 st_line_sample(ls, density = 1)
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
-  st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+ st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
 try(st_line_sample(ls, density = 1/1000)) # error
 st_line_sample(st_transform(ls, 3857), n = 5) # five points for each line
 st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points

@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 st_crs(-1)
 st_crs(999999)
 try(st_crs("error"))

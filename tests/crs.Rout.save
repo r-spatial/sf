@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.0, GDAL 2.1.0, proj.4 4.9.2
+> suppressPackageStartupMessages(library(sf))
 > st_crs(-1)
 $epsg
 [1] NA
@@ -87,4 +86,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  0.320   0.020   0.339 
+  0.332   0.020   0.349 
