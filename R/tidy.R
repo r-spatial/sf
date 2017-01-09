@@ -20,8 +20,8 @@ filter_.sf <- function(.data, ..., .dots) {
 #' @export
 #' @examples
 #' # plot 10 smallest counties in grey:
-#' nc %>% plot()
-#' nc %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#' st_geometry(nc) %>% plot()
+#' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 #' title("the ten counties with smallest area")
 arrange_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
