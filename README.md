@@ -41,6 +41,12 @@ The sf package:
 * provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++/Rcpp
 * directly reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
 
+### Contributing
+
+* Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them. 
+* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 ### Acknowledgment
 
 This project is being realized with financial [support](https://www.r-consortium.org/projects) from the
