@@ -545,9 +545,10 @@ kml_read_sp()  156.82933  156.82933  156.82933  156.82933  156.82933  156.82933 
 kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719     1
 ```
 
-This shows that `sf::st_read()` is not only simpler to use but also
-substantially faster than `rgdal::readOGR()`: by a factor of 3 and 10
-for the Shapefile and KML file used in this benchmark, respectively.
+This shows that `sf::st_read()` is
+substantially faster than `rgdal::readOGR()`: by more than a factor of 10
+for the Shapefile and KML files, and more than a factor of 3 for the KMZ file
+used in this benchmark, respectively.
 
 ## Coordinate reference systems and transformations {#crs}
 
