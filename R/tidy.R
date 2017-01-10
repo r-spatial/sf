@@ -31,7 +31,7 @@ arrange_.sf <- function(.data, ..., .dots) {
 #' @param .keep_all see corresponding function in dplyr
 #' @export
 #' @examples
-#' nc[c(1:100,1:10),] %>% distinct() %>% nrow()
+#' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 	st_as_sf(NextMethod())
 }

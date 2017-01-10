@@ -7,14 +7,13 @@
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @param EWKB logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}
 #' @examples 
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-#'   library(RPostgreSQL)
-#'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-#'   x = st_read_db(conn, table = "public.meuse")
-#'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-#'   dbDisconnect(conn)
-#' }
+#' \dontrun{
+#' library(RPostgreSQL)
+#' conn = dbConnect(PostgreSQL(), dbname = "postgis")
+#' x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+#' x = st_read_db(conn, table = "public.meuse")
+#' print(st_crs(x)) # SRID resolved by the database, not by GDAL!
+#' dbDisconnect(conn)}
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
@@ -69,16 +68,17 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
 #' @param debug logical; print SQL statements to screen before executing them.
+#' @name st_write
 #' @export
 #' @examples
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) {
-#'   library(sp)
-#'   data(meuse)
-#'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#'   library(RPostgreSQL)
-#'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)
-#' }
+#' \dontrun{
+#' library(sp)
+#' data(meuse)
+#' sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+#' library(RPostgreSQL)
+#' conn = dbConnect(PostgreSQL(), dbname = "postgis")
+#' st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
+#'   
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
 		..., drop_table = FALSE, try_drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
 	DEBUG = function(x) { if (debug) print(x); x }

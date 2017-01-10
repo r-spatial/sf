@@ -2,11 +2,11 @@
 % Please edit documentation in R/init.R
 \name{sf_extSoftVersion}
 \alias{sf_extSoftVersion}
-\title{provide the external dependencies versions of the libraries linked to sf}
+\title{Provide the external dependencies versions of the libraries linked to sf}
 \usage{
 sf_extSoftVersion()
 }
 \description{
-provide the external dependencies versions of the libraries linked to sf
+Provide the external dependencies versions of the libraries linked to sf
 }
 

@@ -52,9 +52,9 @@ setOldClass("sfg")
 		CPL_gdal_version(), ", proj.4 ", CPL_proj_version()))
 }
 
-#' provide the external dependencies versions of the libraries linked to sf
+#' Provide the external dependencies versions of the libraries linked to sf
 #' 
-#' provide the external dependencies versions of the libraries linked to sf
+#' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
 	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version()),

@@ -14,17 +14,17 @@
 #' @details for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. 
 #' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
-#'  library(sp)
-#'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
-#'      layer_options = "OVERWRITE=true")
-#'  (s = st_read("PG:dbname=postgis", "meuse"))
-#'  summary(s)
-#' }
-#' # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' summary(nc)
+#' 
+#' \dontrun{  
+#' library(sp)
+#' example(meuse, ask = FALSE, echo = FALSE)
+#' st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+#'      layer_options = "OVERWRITE=true")
+#' st_meuse = st_read("PG:dbname=postgis", "meuse")
+#' summary(st_meuse)}
+
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}. 
 #' @export
@@ -74,16 +74,17 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
-#' if (Sys.getenv("USER") %in% c("edzer", "travis")) { # load meuse to postgis
-#'  library(sp)
-#'  example(meuse, ask = FALSE, echo = FALSE)
-#'  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
-#'    layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
-#'  demo(nc, ask = FALSE)
-#'  st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
-#' }
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
+#' 
+#' \dontrun{
+#' library(sp)
+#' example(meuse, ask = FALSE, echo = FALSE)
+#' st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
+#'     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
+#' demo(nc, ask = FALSE)
+#' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
+
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ..., 
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
@@ -245,40 +246,40 @@ is_driver_can = function(drv, drivers = st_drivers(), operation = "write") {
 #' Map extension to driver
 #' @docType data
 extension_map <- list(
-     "bna" = "BNA",
-     "csv" = "CSV",
-     "e00" = "AVCE00",
-     "gdb" = "OpenFileGDB",
-     "geojson" = "GeoJSON",
-     "gml" = "GML",
-     "gmt" = "GMT",
-     "gpkg" = "GPKG",
-     "gps" = "GPSBabel",
-     "gtm" = "GPSTrackMaker",   
-     "gxt" = "Geoconcept",
-     "jml" = "JML",
-     "map" = "WAsP",
-     "mdb" = "Geomedia",
-     "nc" = "netCDF",
-     "ods" = "ODS",
-     "osm" = "OSM",
-     "pbf" = "OSM",
-     "shp" = "ESRI Shapefile",
-     "sqlite" = "SQLite",
-     "vdv" = "VDV",
-     "xls" = "xls",
-     "xlsx" = "XLSX")
+        "bna" = "BNA",
+        "csv" = "CSV",
+        "e00" = "AVCE00",
+        "gdb" = "OpenFileGDB",
+        "geojson" = "GeoJSON",
+        "gml" = "GML",
+        "gmt" = "GMT",
+        "gpkg" = "GPKG",
+        "gps" = "GPSBabel",
+        "gtm" = "GPSTrackMaker",   
+        "gxt" = "Geoconcept",
+        "jml" = "JML",
+        "map" = "WAsP",
+        "mdb" = "Geomedia",
+        "nc" = "netCDF",
+        "ods" = "ODS",
+        "osm" = "OSM",
+        "pbf" = "OSM",
+        "shp" = "ESRI Shapefile",
+        "sqlite" = "SQLite",
+        "vdv" = "VDV",
+        "xls" = "xls",
+        "xlsx" = "XLSX")
 
 #' Map prefix to driver
 #' @docType data
 prefix_map <- list(
-  "couchdb" = "CouchDB",
-  "db2odbc" = "DB2ODBC",
-  "dods" = "DODS",
-  "gft" = "GFT",
-  "mssql" = "MSSQLSpatial",
-  "mysql" = "MySQL",
-  "oci" = "OCI",
-  "odbc" = "ODBC",
-  "pg" = "PostgreSQL",
-  "sde" = "SDE") 
+        "couchdb" = "CouchDB",
+        "db2odbc" = "DB2ODBC",
+        "dods" = "DODS",
+        "gft" = "GFT",
+        "mssql" = "MSSQLSpatial",
+        "mysql" = "MySQL",
+        "oci" = "OCI",
+        "odbc" = "ODBC",
+        "pg" = "PostgreSQL",
+        "sde" = "SDE") 

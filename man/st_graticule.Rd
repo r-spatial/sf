@@ -2,7 +2,7 @@
 % Please edit documentation in R/graticule.R
 \name{st_graticule}
 \alias{st_graticule}
-\title{compute graticules and their parameters}
+\title{Compute graticules and their parameters}
 \usage{
 st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
   datum = st_crs(4326), ..., lon, lat, ndiscr = 100)
@@ -28,7 +28,7 @@ an object of class \code{sf} with additional attributes describing the type
 see example.
 }
 \description{
-compute graticules and their parameters
+Compute graticules and their parameters
 }
 \examples{
 library(sp)

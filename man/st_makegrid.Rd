@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom.R
 \name{st_makegrid}
 \alias{st_makegrid}
-\title{make a rectangular grid of polygons over the bounding box of a sf or sfc object}
+\title{Make a rectangular grid of polygons over the bounding box of a sf or sfc object}
 \usage{
 st_makegrid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
   4)]))/n, offset = st_bbox(x)[1:2], n = c(10, 10))
@@ -17,6 +17,6 @@ st_makegrid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
 }
 \description{
-make a rectangular grid of polygons over the bounding box of a sf or sfc object
+Make a rectangular grid of polygons over the bounding box of a sf or sfc object
 }
 

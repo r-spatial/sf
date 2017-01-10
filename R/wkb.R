@@ -270,9 +270,9 @@ st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pur
 	}
 }
 
-#' convert raw vector(s) into hexadecimal character string(s)
+#' Convert raw vector(s) into hexadecimal character string(s)
 #'
-#' convert raw vector(s) into hexadecimal character string(s)
+#' Convert raw vector(s) into hexadecimal character string(s)
 #' @param x raw vector, or list with raw vectors 
 #' @export
 rawToHex = function(x) {

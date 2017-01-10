@@ -10,7 +10,7 @@ st_cast_sfc_default(x)
 \item{x}{list of geometries or simple features}
 }
 \description{
-mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
+Mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
 POLYGON and MULTIPOLYGON are returned as MULTIPOINTS, MULTILINESTRING and MULTIPOLYGONS respectively
 }
 \details{

@@ -60,24 +60,22 @@ in case geom_column is missing: if table is missing, this function will try to r
 The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}.
 }
 \examples{
-if (Sys.getenv("USER") \%in\% c("edzer", "travis")) { # load meuse to postgis
- library(sp)
- example(meuse, ask = FALSE, echo = FALSE)
- st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
-     layer_options = "OVERWRITE=true")
- (s = st_read("PG:dbname=postgis", "meuse"))
- summary(s)
-}
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc)
-if (Sys.getenv("USER") \%in\% c("edzer", "travis")) {
-  library(RPostgreSQL)
-  conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-  x = st_read_db(conn, table = "public.meuse")
-  print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-  dbDisconnect(conn)
-}
+
+\dontrun{  
+library(sp)
+example(meuse, ask = FALSE, echo = FALSE)
+st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+     layer_options = "OVERWRITE=true")
+st_meuse = st_read("PG:dbname=postgis", "meuse")
+summary(st_meuse)}
+\dontrun{
+library(RPostgreSQL)
+conn = dbConnect(PostgreSQL(), dbname = "postgis")
+x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+x = st_read_db(conn, table = "public.meuse")
+print(st_crs(x)) # SRID resolved by the database, not by GDAL!
+dbDisconnect(conn)}
 }
 

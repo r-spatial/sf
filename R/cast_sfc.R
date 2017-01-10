@@ -90,7 +90,7 @@ get_lengths = function(x) {
 
 #' Coerce geometry to MULTI* geometry
 #' 
-#' mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
+#' Mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
 #' POLYGON and MULTIPOLYGON are returned as MULTIPOINTS, MULTILINESTRING and MULTIPOLYGONS respectively
 #' @param x list of geometries or simple features
 #' @details Geometries that are already MULTI* are left unchanged. 
