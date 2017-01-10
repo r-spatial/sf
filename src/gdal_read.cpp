@@ -211,12 +211,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false;
     OGRFeature *poFeature;
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
-    {
+    while((poFeature = poLayer->GetNextFeature()) != NULL) {
 
-		// deal with feature attribute fields:
-        int iField;
-        for( iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
+		// feature attribute fields:
+        for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
             OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
 			switch(poFieldDefn->GetType()) {
 				case OFTInteger: {
@@ -300,10 +298,12 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					break;
 			}
         }
+		poFeatureV[i] = poFeature;
+
+		// feature geometry:
 		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
 		if (poGeometryV[i] == NULL)
 			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef");
-		poFeatureV[i] = poFeature;
 		i++;
     }
 	if (promote_to_multi && toTypeUser == 0)

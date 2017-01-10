@@ -9,6 +9,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Robin", "Lovelace", role = "ctb"),
 	person("Hadley", "Wickham", role = "ctb"),
 	person("Jeroen", "Ooms", role = "ctb")
+	person("Etienne", "Racine", role = "ctb")
 	)
 Depends: R (>= 3.3.0)
 Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, units (>= 0.4)
