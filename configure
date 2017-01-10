@@ -2073,8 +2073,6 @@ GDAL_CONFIG="gdal-config"
 
 GDAL_CONFIG_SET="no"
 
-PROJ_CONFIG="pkg-config  proj"
-
 
 # Check whether --with-gdal-config was given.
 if test "${with_gdal_config+set}" = set; then :
@@ -3598,6 +3596,16 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 # PROJ.4
 #
 
+PROJ_CONFIG="pkg-config proj"
+
+if `$PROJ_CONFIG --exists` ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: pkg-config proj exists, will use it" >&5
+$as_echo "$as_me: pkg-config proj exists, will use it" >&6;}
+  proj_config_ok=yes
+else
+  proj_config_ok=no
+fi
+
 
 # Check whether --with-proj-include was given.
 if test "${with_proj_include+set}" = set; then :
@@ -3608,16 +3616,17 @@ if test  -n "$proj_include_path"  ; then
    PKG_CPPFLAGS="-I${proj_include_path} ${INPKG_CPPFLAGS}"
 
 else
-   PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
-   PKG_CPPFLAGS="${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"
+  if test "${proj_config_ok}" = yes; then
+    PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
+    PKG_CPPFLAGS="${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"
 
+  fi
 fi
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
-
 
 proj4ok=yes
 for ac_header in proj_api.h
@@ -3649,9 +3658,16 @@ if test  -n "$proj_lib_path"  ; then
     PKG_LIBS="-L${proj_lib_path} ${INPKG_LIBS}"
 
 else
-   PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-   PKG_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
+  if test "${proj_config_ok}" = yes; then
+    PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+    PKG_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
 
+	proj_version=`${PROJ_CONFIG} --modversion`
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: PROJ: ${proj_version}" >&5
+$as_echo "$as_me: PROJ: ${proj_version}" >&6;}
+  else
+    PKG_LIBS="${PKG_LIBS} -lproj"
+  fi
 fi
 
 LIBS="${INLIBS} ${PKG_LIBS}"
@@ -3707,8 +3723,6 @@ fi
 if test "${proj4ok}" = no; then
    as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
 fi
-
-# PKG_LIBS="${PKG_LIBS} -lproj"
 
 cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>

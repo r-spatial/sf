@@ -29,8 +29,6 @@ GDAL_CONFIG="gdal-config"
 
 GDAL_CONFIG_SET="no"
 
-PROJ_CONFIG="pkg-config  proj"
-
 AC_ARG_WITH([gdal-config],
     AC_HELP_STRING([--with-gdal-config=GDAL_CONFIG],
            [the location of gdal-config]),
@@ -270,6 +268,15 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 # PROJ.4
 #
 
+PROJ_CONFIG="pkg-config proj"
+
+if `$PROJ_CONFIG --exists` ; then
+  AC_MSG_NOTICE([pkg-config proj exists, will use it])
+  proj_config_ok=yes
+else
+  proj_config_ok=no
+fi
+
 AC_ARG_WITH([proj-include],
     AC_HELP_STRING([--with-proj-include=DIR],
                    [location of proj header files]),
@@ -277,15 +284,16 @@ AC_ARG_WITH([proj-include],
 if test [ -n "$proj_include_path" ] ; then
    AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${INPKG_CPPFLAGS}"])
 else
-   PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
-   AC_SUBST([PKG_CPPFLAGS],["${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"])
+  if test "${proj_config_ok}" = yes; then
+    PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
+    AC_SUBST([PKG_CPPFLAGS],["${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"])
+  fi
 fi
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
-
 
 proj4ok=yes
 AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
@@ -301,8 +309,14 @@ AC_ARG_WITH([proj-lib],
 if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
 else
-   PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-   AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
+  if test "${proj_config_ok}" = yes; then
+    PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+    AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
+	proj_version=`${PROJ_CONFIG} --modversion`
+	AC_MSG_NOTICE([PROJ: ${proj_version}])
+  else
+    PKG_LIBS="${PKG_LIBS} -lproj"
+  fi
 fi
 
 LIBS="${INLIBS} ${PKG_LIBS}"
@@ -312,8 +326,6 @@ AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
 if test "${proj4ok}" = no; then
    AC_MSG_ERROR([libproj not found in standard or given locations.])
 fi
-
-# PKG_LIBS="${PKG_LIBS} -lproj"
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
