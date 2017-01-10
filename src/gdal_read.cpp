@@ -60,8 +60,6 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool lines = false, multilines = false, polygons = false, multipolygons = false;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
-		if (gv[i] == NULL)
-			throw std::invalid_argument("NULL pointer in to_multi_what: invalid input?");
 		switch(gv[i]->getGeometryType()) {
 			case wkbLineString: lines = true; break;
 			case wkbMultiLineString: multilines = true; break;
@@ -303,6 +301,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			}
         }
 		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
+		if (poGeometryV[i] == NULL)
+			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef");
 		poFeatureV[i] = poFeature;
 		i++;
     }
