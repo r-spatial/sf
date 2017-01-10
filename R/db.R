@@ -59,10 +59,9 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' 
 #' Write simple feature table to a spatial database
 #' @param conn open database connection
-#' @param obj object of class \code{sf}
 #' @param table name for the table in the database
 #' @param geom_name name of the geometry column in the database
-#' @param ... arguments passed on to \code{dbWriteTable}
+#' @param ... (for st_write_db only:) arguments passed on to \code{dbWriteTable}
 #' @param drop_table logical; should \code{table} be dropped first?
 #' @param try_drop logical; should we try() to drop \code{table} first?
 #' @param append logical; append to table? (NOTE: experimental, might not work)
@@ -83,7 +82,9 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 		..., drop_table = FALSE, try_drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
 	DEBUG = function(x) { if (debug) print(x); x }
 	if (is.null(conn))
-		stop("if no provided")
+		stop("no connection (conn) provided")
+	if (inherits(obj, "sfc"))
+		obj = st_sf(id = 1:length(obj), geom = obj)
 	if (length(table) > 1) {
 		schema = table[1]
 		table = table[2]

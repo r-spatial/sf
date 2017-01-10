@@ -22,7 +22,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
-\item{...}{ignored}
+\item{...}{(for st_write_db only:) arguments passed on to \code{dbWriteTable}}
 
 \item{dataset_options}{character; driver dependent dataset creation options; multiple options supported.}
 
@@ -47,10 +47,6 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 \item{binary}{logical; use well-known-binary for transfer?}
 
 \item{debug}{logical; print SQL statements to screen before executing them.}
-
-\item{obj}{object of class \code{sf}}
-
-\item{...}{arguments passed on to \code{dbWriteTable}}
 }
 \description{
 Write simple features object to file or database

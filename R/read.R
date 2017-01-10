@@ -66,7 +66,6 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder or contain a database name)
 #' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the \link{basename} of \code{dsn} is taken.
 #' @param driver character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.
-#' @param ... ignored
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
@@ -84,7 +83,6 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 #'     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 #' demo(nc, ask = FALSE)
 #' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
-
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ..., 
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
