@@ -186,7 +186,7 @@ guess_driver = function(dsn) {
   
 	# find match: try extension first
 	drv = extension_map[tolower(tools::file_ext(dsn))]
-	if (any(grep(":", gsub(":/", "/", dsn)))) {
+	if (any(grep(":", gsub(":[/\\]", "/", dsn)))) {
 			drv = prefix_map[tolower(strsplit(dsn, ":")[[1]][1])]
 	}
 	drv <- unlist(drv)
