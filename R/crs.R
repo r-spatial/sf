@@ -39,10 +39,11 @@ Ops.crs <- function(e1, e2) {
 #'
 #' Retrieve coordinate reference system from sf or sfc object
 #' @name st_crs
-#' @param x object of class \link{sf} or \link{sfc}
+#' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
 #' @export
-#' @details the *crs functions get, set or replace the \code{crs} attribute of a simple feature geometry
+#' @return if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+#' @details the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 #' list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
 #' code) and proj4string (character). 
 #' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or 
@@ -64,7 +65,13 @@ st_crs.numeric = function(x, ...) make_crs(x)
 
 #' @name st_crs
 #' @export
-st_crs.character = function(x, ...) make_crs(x)
+#' @param wkt character well-known-text representation of the crs
+st_crs.character = function(x, ..., wkt) {
+	if (missing(wkt))
+		make_crs(x)
+	else
+		make_crs(wkt, wkt = TRUE)
+}
 
 #' @name st_crs
 #' @export
@@ -105,8 +112,10 @@ valid_proj4string = function(p4s) {
 }
 
 # return crs object from crs, integer, or character string
-make_crs = function(x) {
-	if (is.na(x))
+make_crs = function(x, wkt = FALSE) {
+	if (wkt)
+		CPL_crs_from_wkt(x)
+	else if (is.na(x))
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
@@ -171,7 +180,7 @@ st_is_longlat = function(x) {
 
 crs_parameters = function(x) {
 	ret = structure(CPL_crs_parameters(x$proj4string), 
-		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical"))
+		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
 	ret$SemiMajor = ret$SemiMajor * make_unit("m")
 	ret$ud_unit = switch(ret$units_gdal,
 		"Meter"                = make_unit("m"),
@@ -180,4 +189,12 @@ crs_parameters = function(x) {
 		"degree"               = make_unit("arc_degree"),
 		stop("unknown unit: please file an issue at http://github.com/edzer/sfr/"))
 	ret
+}
+
+#' @export
+st_as_text.crs = function(x, ..., pretty = FALSE) {
+	if (pretty)
+		crs_parameters(x)$WktPretty
+	else
+		crs_parameters(x)$Wkt
 }

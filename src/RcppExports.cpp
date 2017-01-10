@@ -68,6 +68,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_crs_from_wkt
+Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt);
+RcppExport SEXP sf_CPL_crs_from_wkt(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_wkt(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg);
 RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP, SEXP epsgSEXP) {

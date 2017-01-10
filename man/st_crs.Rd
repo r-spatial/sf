@@ -23,7 +23,7 @@ st_crs(x, ...)
 
 \\method{st_crs}{numeric}(x, ...)
 
-\\method{st_crs}{character}(x, ...)
+\\method{st_crs}{character}(x, ..., wkt)
 
 \\method{st_crs}{sfc}(x, ...)
 
@@ -36,13 +36,17 @@ st_crs(x) <- value
 st_set_crs(x, value)
 }
 \arguments{
-\item{x}{object of class \link{sf} or \link{sfc}}
+\item{x}{numeric, character, or object of class \link{sf} or \link{sfc}}
 
 \item{...}{ignored}
+
+\item{wkt}{character well-known-text representation of the crs}
 
 \item{value}{one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).}
 }
 \value{
+if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+
 object of class \code{crs}, which is a list with elements epsg (length-1 integer) and 
 proj4string (length-1 character).
 }
@@ -54,7 +58,7 @@ Set or replace retrieve coordinate reference system from object
 \details{
 \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
 
-the *crs functions get, set or replace the \code{crs} attribute of a simple feature geometry
+the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
 code) and proj4string (character). 
 Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or 

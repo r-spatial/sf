@@ -85,13 +85,20 @@ void handle_error(OGRErr err) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_parameters(std::string p4s) {
-	Rcpp::List out(4);
+	Rcpp::List out(6);
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	out(1) = Rcpp::NumericVector::create(srs->GetInvFlattening());
 	out(2) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
 	out(3) = Rcpp::LogicalVector::create(srs->IsVertical());
+	char *cp;
+	srs->exportToPrettyWkt(&cp);
+	out(4) = Rcpp::CharacterVector::create(cp);
+	CPLFree(cp);
+	srs->exportToWkt(&cp);
+	out(5) = Rcpp::CharacterVector::create(cp);
+	CPLFree(cp);
 	return out;
 }
 
@@ -177,7 +184,7 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List lst(g.size());
-	Rcpp::List crs = get_crs(g.size() ? g[0]->getSpatialReference() : NULL);
+	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
 			throw std::range_error("NULL error in sfc_from_ogr");
@@ -200,6 +207,14 @@ Rcpp::List CPL_crs_from_epsg(int epsg) {
 		return get_crs(&ref);
 	else
 		return get_crs(NULL);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt) {
+	char *cp = wkt[0];
+	OGRSpatialReference ref;
+	handle_error(ref.importFromWkt(&cp));
+	return get_crs(&ref);
 }
 
 // [[Rcpp::export]]
