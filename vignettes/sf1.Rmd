@@ -498,7 +498,8 @@ u_kmz <- "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
 download.file(u_kmz, "BikePaths.kmz")
 # Read file formats
 biketrails_shp <- st_read("biketrails.shp")
-biketrails_kmz <- st_read("BikePaths.kmz")
+if(Sys.info()[1] == "Linux") # may not work if not Linux
+  biketrails_kmz <- st_read("BikePaths.kmz")
 ```
 
 ### Benchmarks
@@ -508,8 +509,13 @@ Benchmarks show that `st_read()` is faster than `rgdal::readOGR()`, for example:
 ```{r, echo=TRUE, eval=FALSE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
 shp_read_sf <- function() st_read("biketrails.shp")
-kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-kmz_read_sf <- function() st_read("BikePaths.kmz")
+if(Sys.info()[1] == "Linux") {
+  kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
+  kmz_read_sf <- function() st_read("BikePaths.kmz")
+} else {
+    kmz_read_sp <- function() message("NA")
+    kmz_read_sf <- function() message("NA")
+}
 microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
                                kmz_read_sp(), kmz_read_sf(), times = 1)
 ```
