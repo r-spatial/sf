@@ -29,6 +29,8 @@ GDAL_CONFIG="gdal-config"
 
 GDAL_CONFIG_SET="no"
 
+PROJ_CONFIG="pkg-config  proj"
+
 AC_ARG_WITH([gdal-config],
     AC_HELP_STRING([--with-gdal-config=GDAL_CONFIG],
            [the location of gdal-config]),
@@ -274,6 +276,9 @@ AC_ARG_WITH([proj-include],
     [proj_include_path=$withval])
 if test [ -n "$proj_include_path" ] ; then
    AC_SUBST([PKG_CPPFLAGS],["-I${proj_include_path} ${INPKG_CPPFLAGS}"])
+else
+   PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
+   AC_SUBST([PKG_CPPFLAGS],["${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"])
 fi
 
 # honor PKG_xx overrides
@@ -295,6 +300,9 @@ AC_ARG_WITH([proj-lib],
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
+else
+   PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
+   AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
 fi
 
 LIBS="${INLIBS} ${PKG_LIBS}"
@@ -305,7 +313,7 @@ if test "${proj4ok}" = no; then
    AC_MSG_ERROR([libproj not found in standard or given locations.])
 fi
 
-PKG_LIBS="${PKG_LIBS} -lproj"
+# PKG_LIBS="${PKG_LIBS} -lproj"
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -415,62 +423,6 @@ if test "$WARN" = "warn" ; then
     echo "If required, consider re-installing from source with the contents"
     echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
 fi
-
-
-
-#
-# test whether gdal has GEOS support:
-#
-
-gdal_has_geos=no
-[cat > gdal_geos.cpp <<_EOCONF
-#include <gdal.h>
-#include <ogr_api.h>
-#include <ogr_geometry.h>
-int main(int argc, char *argv[]) {
-   const char* wkt1 = "POINT(0 0)";
-   char* pszWkt1 = (char*) wkt1;
-   OGRSpatialReferenceH ref = OSRNewSpatialReference(NULL);
-   OGRGeometryH new_geom1;
-   OGRErr err = OGR_G_CreateFromWkt(&pszWkt1, ref, &new_geom1);
-   const char* wkt2 = "POINT(1 1)";
-   char* pszWkt2 = (char*) wkt2;
-   OGRGeometryH new_geom2;
-   err = OGR_G_CreateFromWkt(&pszWkt2, ref, &new_geom2);
-   CPLPushErrorHandler(CPLQuietErrorHandler);
-   return OGR_G_Union(new_geom1, new_geom2) == NULL;
-}
-_EOCONF]
-
-AC_MSG_CHECKING(GDAL: checking geos support linking:)
-${CXX} ${CPPFLAGS} -o gdal_geos gdal_geos.cpp ${LIBS} 2> errors.txt
-if test `echo $?` -ne 0 ; then
-gdal_has_geos=no
-AC_MSG_RESULT(no)
-else
-gdal_has_geos=yes
-AC_MSG_RESULT(yes)
-fi
-
-#if test "${gdal_has_geos}" = no; then
-#   cat errors.txt
-#   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-#   AC_MSG_ERROR([GDAL was configured without GEOS support: install GEOS first?])
-#fi
-
-AC_MSG_CHECKING(GDAL: checking geos support runtime:)
-./gdal_geos
-if test `echo $?` -ne 0 ; then
-gdal_has_geos=no
-AC_MSG_RESULT(no)
-else
-gdal_has_geos=yes
-AC_MSG_RESULT(yes)
-fi
-#if test "${gdal_has_geos}" = no; then
-#   AC_MSG_ERROR([Union() returns NULL: GDAL was configured without GEOS: install GEOS first?])
-#fi
-rm -fr errors.txt gdal_geos.cpp gdal_geos
 
 #
 # GEOS:
