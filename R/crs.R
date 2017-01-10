@@ -191,6 +191,8 @@ crs_parameters = function(x) {
 	ret
 }
 
+#' @name st_as_text
+#' @param pretty logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system
 #' @export
 st_as_text.crs = function(x, ..., pretty = FALSE) {
 	if (pretty)

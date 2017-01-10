@@ -27,10 +27,10 @@ prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListLis
 prnt.GEOMETRYCOLLECTION = function(x, ...) 
 	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_text), collapse=", "), ")")
 
-#' Return Well-known Text representation of simple feature geometry
+#' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #'
-#' Return Well-known Text representation of simple feature geometry
-#' @param x object of class sfg or sfc
+#' Return Well-known Text representation of simple feature geometry or coordinate reference system
+#' @param x object of class \code{sfg}, \code{sfc} or \code{crs}
 #' @param ... passed on to WKT_name
 #' @name st_as_text
 #' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
