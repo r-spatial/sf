@@ -134,3 +134,8 @@ test_that("driver operations", {
   expect_equal(guess_driver_can_write("x.csv"), c("csv" = "CSV"))
   expect_equal(guess_driver_can_write("x.gml"), c("gml" = "GML"))
 })
+
+test_that("guess driver on windows with backslashes (#127)", {
+    expect_identical(guess_driver("c:\\Temp\\this.shp"), 
+                     guess_driver("c:/Temp/this.shp"))
+})
