@@ -1,44 +1,7 @@
-# ## find a vertical crs
-# library(sf)
-# i <- 5498
-# 
-# test <- FALSE
-# 
-# while(!test) {
-#   i <- i + 1
-#   a <- try(sf:::crs_parameters(st_crs(i)), silent = TRUE)
-#   if (inherits(a, "try-error")) next;
-#   if (a$IsVertical) {
-##    stop()
-#     #b <- try(st_transform(st_sfc(pz, crs = 4326), crs = i), silent = TRUE)
-#     #if (!inherits(b, "try-error")) stop()
-#   }
-# 
-# }
 
-# ## 5498, needs grid files
-# sf:::crs_parameters(st_crs(5498))
-# $SemiMajor
-# 6378137 m
-# 
-# $InvFlattening
-# [1] 298.2572
-# 
-# $units_gdal
-# [1] "degree"
-# 
-# $IsVertical
-# [1] TRUE
-# 
-# $WktPretty
-# [1] "COMPD_CS[\"GRS 1980(IUGG, 1980) + Unnamed Vertical Datum\",\n    GEOGCS[\"GRS 1980(IUGG, 1980)\",\n        DATUM[\"unknown\",\n            SPHEROID[\"GRS80\",6378137,298.257222101],\n            TOWGS84[0,0,0,0,0,0,0]],\n        PRIMEM[\"Greenwich\",0],\n        UNIT[\"degree\",0.0174532925199433]],\n    VERT_CS[\"Unnamed\",\n        VERT_DATUM[\"Unnamed\",2005,\n            EXTENSION[\"PROJ4_GRIDS\",\"g2012a_conus.gtx,g2012a_alaska.gtx,g2012a_guam.gtx,g2012a_hawaii.gtx,g2012a_puertorico.gtx,g2012a_samoa.gtx\"]],\n        UNIT[\"Meter\",1.0],\n        AXIS[\"Up\",UP]]]"
-# 
-# $Wkt
-# [1] "COMPD_CS[\"GRS 1980(IUGG, 1980) + Unnamed Vertical Datum\",GEOGCS[\"GRS 1980(IUGG, 1980)\",DATUM[\"unknown\",SPHEROID[\"GRS80\",6378137,298.257222101],TOWGS84[0,0,0,0,0,0,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]],VERT_CS[\"Unnamed\",VERT_DATUM[\"Unnamed\",2005,EXTENSION[\"PROJ4_GRIDS\",\"g2012a_conus.gtx,g2012a_alaska.gtx,g2012a_guam.gtx,g2012a_hawaii.gtx,g2012a_puertorico.gtx,g2012a_samoa.gtx\"]],UNIT[\"Meter\",1.0],AXIS[\"Up\",UP]]]"
-# 
-# $ud_unit
-# 1 arc_degree
-# 
+## create a set of geometries
+## p, mp, ml, pol, mpol 
+## pz, mpz, mlz, polz, mpolz
 
 p <- st_point(c(0, 0))
 pz <- st_point(c(0, 0, 0))
@@ -66,14 +29,14 @@ polz <- st_polygon(pol1z)
 mpol <- st_multipolygon(list(pol1, pol1))
 mpolz <- st_multipolygon(list(pol1z, pol1z))
 
-## https://github.com/edzer/sfr/issues/103#issuecomment-266014403
-#do_vertical <- function(x) st_transform(st_sfc(x, crs = 7421), crs = 4326)
-#do_vertical <- function(x) st_transform(st_sfc(x, crs = 5498), crs = 4326)
-## do we need to test inverse versions of these as well?
+## worker functions to apply transformations
+## do we need to test inverse versions of these as well? vertical? (see below)
 do_planar <- function(x) st_transform(st_sfc(x, crs = 4326), crs = "+proj=laea")
 do_geo <- function(x) st_transform(st_sfc(x, crs = 4326), crs = "+proj=geocent")
+
+## is this XYZ?
 hasz <- function(x) UseMethod("hasz")  
-hasz.sfg <- function(x) grepl("Z", rev(class(x))[3L])
+hasz.sfg <- function(x) grepl("XYZ", rev(class(x))[3L])
 ## only for single length columns
 hasz.sfc <- function(x) hasz(x[[1]])
 
@@ -153,3 +116,52 @@ test_that("geocentric transformations ADD Z", {
 #   expect_true(hasz(do_vertical(mpol)))
 # }
 # )
+
+
+## these need GRID FILE installations that I don't have
+## 
+## https://github.com/edzer/sfr/issues/103#issuecomment-266014403
+#do_vertical <- function(x) st_transform(st_sfc(x, crs = 7421), crs = 4326)
+#do_vertical <- function(x) st_transform(st_sfc(x, crs = 5498), crs = 4326)
+
+# ## find a vertical crs
+# library(sf)
+# i <- 5498
+# 
+# test <- FALSE
+# 
+# while(!test) {
+#   i <- i + 1
+#   a <- try(sf:::crs_parameters(st_crs(i)), silent = TRUE)
+#   if (inherits(a, "try-error")) next;
+#   if (a$IsVertical) {
+##    stop()
+#     #b <- try(st_transform(st_sfc(pz, crs = 4326), crs = i), silent = TRUE)
+#     #if (!inherits(b, "try-error")) stop()
+#   }
+# 
+# }
+
+# ## 5498, needs grid files
+# sf:::crs_parameters(st_crs(5498))
+# $SemiMajor
+# 6378137 m
+# 
+# $InvFlattening
+# [1] 298.2572
+# 
+# $units_gdal
+# [1] "degree"
+# 
+# $IsVertical
+# [1] TRUE
+# 
+# $WktPretty
+# [1] "COMPD_CS[\"GRS 1980(IUGG, 1980) + Unnamed Vertical Datum\",\n    GEOGCS[\"GRS 1980(IUGG, 1980)\",\n        DATUM[\"unknown\",\n            SPHEROID[\"GRS80\",6378137,298.257222101],\n            TOWGS84[0,0,0,0,0,0,0]],\n        PRIMEM[\"Greenwich\",0],\n        UNIT[\"degree\",0.0174532925199433]],\n    VERT_CS[\"Unnamed\",\n        VERT_DATUM[\"Unnamed\",2005,\n            EXTENSION[\"PROJ4_GRIDS\",\"g2012a_conus.gtx,g2012a_alaska.gtx,g2012a_guam.gtx,g2012a_hawaii.gtx,g2012a_puertorico.gtx,g2012a_samoa.gtx\"]],\n        UNIT[\"Meter\",1.0],\n        AXIS[\"Up\",UP]]]"
+# 
+# $Wkt
+# [1] "COMPD_CS[\"GRS 1980(IUGG, 1980) + Unnamed Vertical Datum\",GEOGCS[\"GRS 1980(IUGG, 1980)\",DATUM[\"unknown\",SPHEROID[\"GRS80\",6378137,298.257222101],TOWGS84[0,0,0,0,0,0,0]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]],VERT_CS[\"Unnamed\",VERT_DATUM[\"Unnamed\",2005,EXTENSION[\"PROJ4_GRIDS\",\"g2012a_conus.gtx,g2012a_alaska.gtx,g2012a_guam.gtx,g2012a_hawaii.gtx,g2012a_puertorico.gtx,g2012a_samoa.gtx\"]],UNIT[\"Meter\",1.0],AXIS[\"Up\",UP]]]"
+# 
+# $ud_unit
+# 1 arc_degree
+# 
