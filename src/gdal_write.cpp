@@ -154,7 +154,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	if (! quiet) {
 		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
 		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
-		Rcpp::Rcout << "geometry type:  " << geomv[0]->getGeometryName() << std::endl;
+		Rcpp::Rcout << "geometry type:  " << OGRGeometryTypeToName(wkbType) << std::endl;
 	}
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());

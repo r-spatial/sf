@@ -159,6 +159,8 @@ st_intersects ...	st_equals_exact return a sparse or dense logical matrix with r
 
 st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
 
+st_intersection, st_union, st_difference and st_symdifference return the non-empty geometries resulting from the operation, either as an \code{sfc} object or as an \code{sf} object, augmented with the matching attributes of the original object(s). The geometry column returned (or the geometry column of the returned \code{sf} object) carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
+
 \code{st_union(x)} unions geometries.	Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
 }
 \description{

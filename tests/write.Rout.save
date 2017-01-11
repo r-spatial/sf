@@ -24,7 +24,7 @@ Type 'q()' to quit R.
 Writing layer `meuse.shp' to data source `meuse.shp' using driver `ESRI Shapefile'
 features:       155
 fields:         12
-geometry type:  POINT
+geometry type:  Point
 > library(RPostgreSQL)
 Loading required package: DBI
 > # -- doesn't work on appveyor:
@@ -35,4 +35,4 @@ Loading required package: DBI
 > 
 > proc.time()
    user  system elapsed 
-  0.612   0.016   0.625 
+  0.604   0.020   0.620 

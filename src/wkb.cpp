@@ -19,6 +19,7 @@
 #include "wkb.h"
 
 /*      NULL/EMPTY             0 */
+#define SF_Unknown             0 /* sfc_GEOMETRY */
 #define SF_Point               1
 #define SF_LineString          2
 #define SF_Polygon             3
@@ -417,9 +418,10 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_TIN;
 	else if (strcmp(cls, "TRIANGLE") == 0)
 		type = SF_Triangle;
-	else {
-		Rcpp::Rcout << cls << " :";
-		throw std::range_error("unknown type!");
+	else  {
+		type = SF_Unknown;
+		Rcpp::Rcout << cls << ": returning class wkbUnknown (0)" << std::endl;
+//		throw std::range_error("unknown type!");
 	}
 	if (tp != NULL)
 		*tp = type;
