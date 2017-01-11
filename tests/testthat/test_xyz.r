@@ -1,3 +1,32 @@
+# PR to add a test suite for XYZ transformations, with two items . 
+# 
+# Currently these tests are failing: 
+#   
+#   ## Bug ?
+#   
+#   * planar transformations preserve Z
+# * geocentric transformations preserve Z
+# 
+# Expectation:  XYZ geometries should preserve the Z dimension for planar  (4326 to laea) or geocentric (4326 to geocent)
+# 
+# Result:   Z is dropped for  the non-MULTI geometries. 
+# 
+# ## New feature needed? 
+# 
+# This was mentioned in #103 as a possible improvement. 
+# 
+# * geocentric transformations ADD Z
+# 
+# Expectation: transformation to geocent should convert XY to XYZ
+# 
+# Result:  XY geometries stay as XY. 
+# 
+# 
+# 
+# See also discussion here
+# 
+# https://github.com/edzer/sfr/issues/103
+# 
 
 ## create a set of geometries
 ## p, mp, ml, pol, mpol 
