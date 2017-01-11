@@ -498,7 +498,11 @@ u_kmz <- "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
 download.file(u_kmz, "BikePaths.kmz")
 # Read file formats
 biketrails_shp <- st_read("biketrails.shp")
-biketrails_kmz <- st_read("BikePaths.kmz")
+if(Sys.info()[1] == "Linux") # may not work if not Linux
+  biketrails_kmz <- st_read("BikePaths.kmz")
+u_kml = "http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"
+download.file(u_kml, "bikeraces.kml")
+bikraces <- st_read("bikeraces.kml")
 ```
 
 ### Benchmarks
@@ -508,10 +512,18 @@ Benchmarks show that `st_read()` is faster than `rgdal::readOGR()`, for example:
 ```{r, echo=TRUE, eval=FALSE}
 shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
 shp_read_sf <- function() st_read("biketrails.shp")
-kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz", layer = ogr_layers[1])
-kmz_read_sf <- function() st_read("BikePaths.kmz")
+if(Sys.info()[1] == "Linux") {
+  kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz")
+  kmz_read_sf <- function() st_read("BikePaths.kmz")
+} else {
+    kmz_read_sp <- function() message("NA")
+    kmz_read_sf <- function() message("NA")
+}
+kml_read_sp <- function() rgdal::readOGR("bikeraces.kml")
+kml_read_sf <- function() st_read("bikeraces.kml")
 microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
-                               kmz_read_sp(), kmz_read_sf(), times = 1)
+                               kmz_read_sp(), kmz_read_sf(),
+                               kml_read_sp(), kml_read_sf(), times = 1)
 ```
 
 ```{r, echo=FALSE}
@@ -520,20 +532,23 @@ files_to_remove <- list.files(pattern = "[B-b]ike")
 if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
 
-On a modern laptop (with an Intel i5-2520M processor) the results were as follows:
+On a modern laptop (with an Intel i7-7500U CPU @ 2.70GHz processor) the results were as follows:
 
 ```
-## Unit: milliseconds
-##           expr       min        lq      mean    median        uq       max
-##  shp_read_sp() 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876
-##  shp_read_sf()  655.0139  655.0139  655.0139  655.0139  655.0139  655.0139
-##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
-##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094
+Unit: milliseconds
+          expr        min         lq       mean     median         uq        max neval
+shp_read_sp() 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699     1
+shp_read_sf()  398.64002  398.64002  398.64002  398.64002  398.64002  398.64002     1
+kmz_read_sp() 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189     1
+kmz_read_sf() 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294     1
+kml_read_sp()  156.82933  156.82933  156.82933  156.82933  156.82933  156.82933     1
+kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719     1
 ```
 
-This shows that `sf::st_read()` is not only simpler to use but also
-substantially faster than `rgdal::readOGR()`: by a factor of 3 and 10
-for the Shapefile and KML file used in this benchmark, respectively.
+This shows that `sf::st_read()` is
+substantially faster than `rgdal::readOGR()`: by more than a factor of 10
+for the Shapefile and KML files, and more than a factor of 3 for the KMZ file
+used in this benchmark, respectively.
 
 ## Coordinate reference systems and transformations {#crs}
 
