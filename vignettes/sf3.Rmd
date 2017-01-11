@@ -303,6 +303,7 @@ plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
+
 To get _everything but_ the intersection, use `st_difference` or st_sym_difference`:
 ```{r,fig=TRUE}
 par(mfrow=c(2,2), mar = c(0,0,1,0))
@@ -320,6 +321,7 @@ plot(st_sym_difference(st_union(y),st_union(x)), col = 'lightblue', add = TRUE)
 title("sym_difference(x,y)")
 ```
 
+Function `st_segmentize` adds points to straight line sections of a lines or polygon object:
 ```{r,fig=TRUE}
 par(mfrow=c(1,3),mar=c(1,1,0,0))
 pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
