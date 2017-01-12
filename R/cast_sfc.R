@@ -196,3 +196,31 @@ st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 		st_sf(x, geom, crs = crs)
 	}
 }
+
+#' test equality between the geometry type and a class or set of classes
+#'
+#' test equality between the geometry type and a class or set of classes
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param type character; class, or set of classes, to test against
+#' @examples
+#' st_is(st_point(0:1), "POINT")
+#' sfc = st_sfc(st_point(0:1), st_linestring(matrix(1:6,,2)))
+#' st_is(sfc, "POINT")
+#' st_is(sfc, "POLYGON")
+#' st_is(sfc, "LINESTRING")
+#' st_is(st_sf(a = 1:2, sfc), "LINESTRING")
+#' st_is(sfc, c("POINT", "LINESTRING"))
+#' @export
+st_is = function(x, type) UseMethod("st_is")
+
+#' @export
+st_is.sf = function(x, type)
+	st_is(st_geometry(x), type)
+
+#' @export
+st_is.sfc = function(x, type)
+	vapply(x, st_is.sfg, type, FUN.VALUE = logical(1))
+
+#' @export
+st_is.sfg = function(x, type)
+	class(x)[2L] %in% type

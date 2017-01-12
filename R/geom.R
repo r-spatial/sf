@@ -153,7 +153,7 @@ st_distance = function(x, y, dist_fun) {
 #' pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
 #' pol2 = pol1 + 1
 #' pol3 = pol1 + 2
-#' st_relate(st_sfc(p1,p2), st_sfc(pol1, pol2, pol3))
+#' st_relate(st_sfc(p1, p2), st_sfc(pol1, pol2, pol3))
 st_relate	= function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 
 #' @name geos

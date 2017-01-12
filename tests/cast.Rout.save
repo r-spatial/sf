@@ -253,6 +253,21 @@ POLYGON((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > mls = st_cast(p1, "MULTILINESTRING")
 > p2 = st_cast(mls, "POLYGON")
 > 
+> # st_is:
+> st_is(st_point(0:1), "POINT")
+[1] TRUE
+> sfc = st_sfc(st_point(0:1), st_linestring(matrix(1:6,,2)))
+> st_is(sfc, "POINT")
+[1]  TRUE FALSE
+> st_is(sfc, "POLYGON")
+[1] FALSE FALSE
+> st_is(sfc, "LINESTRING")
+[1] FALSE  TRUE
+> st_is(st_sf(a = 1:2, sfc), "LINESTRING")
+[1] FALSE  TRUE
+> st_is(sfc, c("POINT", "LINESTRING"))
+[1] TRUE TRUE
+> 
 > proc.time()
    user  system elapsed 
-  0.384   0.008   0.391 
+  0.416   0.024   0.439 

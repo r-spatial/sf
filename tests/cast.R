@@ -73,3 +73,12 @@ expect_warning(st_cast(ls, "POINT"))
 
 mls = st_cast(p1, "MULTILINESTRING")
 p2 = st_cast(mls, "POLYGON")
+
+# st_is:
+st_is(st_point(0:1), "POINT")
+sfc = st_sfc(st_point(0:1), st_linestring(matrix(1:6,,2)))
+st_is(sfc, "POINT")
+st_is(sfc, "POLYGON")
+st_is(sfc, "LINESTRING")
+st_is(st_sf(a = 1:2, sfc), "LINESTRING")
+st_is(sfc, c("POINT", "LINESTRING"))
