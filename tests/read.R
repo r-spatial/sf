@@ -24,3 +24,10 @@ if ("GPKG" %in% st_drivers()$name) { # read Int64
     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE)$AWATER)
     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), , quiet = TRUE, int64_as_string = TRUE)$AWATER)
 }
+
+# see https://github.com/edzer/sfr/issues/45 :
+if ("OSM" %in% st_drivers()$name) {
+	osm = system.file("osm/overpass.osm", package="sf")
+	st_layers(osm, do_count = TRUE)
+	suppressWarnings(st_read(osm, "multipolygons", quiet = TRUE))
+}
