@@ -45,6 +45,14 @@ Type 'q()' to quit R.
 > class(st_geometry(tst)[[1]])
 [1] "XYM"        "LINESTRING" "sfg"       
 > 
+> if ("GPKG" %in% st_drivers()$name) { # read Int64
++     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE)$AWATER)
++     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), , quiet = TRUE, int64_as_string = TRUE)$AWATER)
++ }
+[1] 1028678842
+[1] 1028678842
+Levels: 1028678842
+> 
 > proc.time()
    user  system elapsed 
-  0.336   0.020   0.353 
+  0.376   0.012   0.386 

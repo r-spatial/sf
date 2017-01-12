@@ -19,3 +19,8 @@ class(st_geometry(tst)[[1]])
 tst = st_read(system.file("shape/storms_xyzm_feature.shp", package="sf"), quiet = TRUE)
 class(st_geometry(tst))
 class(st_geometry(tst)[[1]])
+
+if ("GPKG" %in% st_drivers()$name) { # read Int64
+    print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE)$AWATER)
+    print(st_read(system.file("gpkg/tl.gpkg", package="sf"), , quiet = TRUE, int64_as_string = TRUE)$AWATER)
+}

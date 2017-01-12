@@ -4,7 +4,6 @@
 #'
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param to character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.
-#' @param ... ignored
 #' @return object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
 #' @examples
 #' s = st_multipoint(rbind(c(1,0)))
@@ -124,8 +123,12 @@ st_cast_sfc_default = function(x) {
 
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
+#' @param group_or_split logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.
 #' @export
-st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
+#' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
+#' 
+#' In case of \code{st_cast.sf}, grouping will call \link[stats]{aggregate} and the aggregation function \code{FUN} needs to be set; in case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries.
+st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))
 		return(st_cast_sfc_default(x))
 
@@ -134,8 +137,10 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
 	to_col = which_sfc_col(to)
 	if (from_cls == to)
 		x # returns x: do nothing
-	else if (from_cls == "GEOMETRY")
-		st_sfc(lapply(x, st_cast, to = to), crs = st_crs(x))
+	else if (to == "GEOMETRY") # we can always do that:
+		structure(x, class = c("sfc_GEOMETRY", "sfc"))
+	else if (from_cls == "GEOMETRY" || !group_or_split)
+		st_sfc(lapply(x, st_cast, to = to), crs = st_crs(x), precision = st_precision(x))
 	else if (from_col == to_col) # "vertical" conversion: only reclass, possibly close polygons
 		reclass(x, to, need_close(to))
 	else if (abs(from_col - to_col) > 1) {
@@ -169,14 +174,15 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
 #' @name st_cast
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries
+#' @param ... in case of \code{st_cast.sf}: passed on to \link[stats]{aggregate}
 #' @export
-st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
-	geom = st_cast(st_geometry(x), to, ids = ids)
+st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE, group_or_split = TRUE) {
+	geom = st_cast(st_geometry(x), to, ids = ids, group_or_split = group_or_split)
 	crs = st_crs(x)
 	all_const = all_constant(x)
-	st_geometry(x) = NULL
-	#x = as.data.frame(x)
-	if (!is.null(attr(geom, "ids"))) {
+	st_geometry(x) = NULL # set back to data.frame; FIXME: inherit relation_to_geometry?
+	# handle x: split or group?
+	if (!is.null(attr(geom, "ids"))) { # split:
 		if (!missing(ids))
 			warning("argument ids is ignored, and taken from the geometry splitting")
 		if (warn && !all_const)
@@ -185,16 +191,13 @@ st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
 		# FIXME: deal with identity -> constant
 		x = x[reps,]
-		st_sf(x, geom, crs = crs)
-	} else { 
-		# FIXME: warn on const -> aggregation; carry out area-weighted aggregation?
-		if (length(unique(ids)) < nrow(x)) {
-			if (missing(FUN))
-				stop("aggregation function missing; pls specify argument FUN")
-			x = aggregate(x, list(ids.group = ids), FUN, simplify = FALSE)
-		}
-		st_sf(x, geom, crs = crs)
+	} else if (length(unique(ids)) < nrow(x)) { # group:
+		# FIXME: warn on const -> aggregation; suggest area-weighted aggregation?
+		if (missing(FUN))
+			stop("aggregation function missing; pls specify argument FUN")
+		x = aggregate(x, list(ids.group = ids), FUN, ..., simplify = FALSE)
 	}
+	st_sf(x, geom, crs = crs)
 }
 
 #' test equality between the geometry type and a class or set of classes
@@ -219,8 +222,8 @@ st_is.sf = function(x, type)
 
 #' @export
 st_is.sfc = function(x, type)
-	vapply(x, st_is.sfg, type, FUN.VALUE = logical(1))
+	vapply(x, inherits, type, FUN.VALUE = logical(1))
 
 #' @export
 st_is.sfg = function(x, type)
-	class(x)[2L] %in% type
+	inherits(x, type)

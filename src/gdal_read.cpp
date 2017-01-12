@@ -12,7 +12,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 	Rcpp::CharacterVector names(poFDefn->GetFieldCount() + 1);
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
 		OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn(i);
-        switch (poFieldDefn->GetType()) {
+		switch (poFieldDefn->GetType()) {
 			case OFTInteger:
 				out[i] = Rcpp::IntegerVector(n_features);
 				break;
@@ -29,13 +29,13 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 				ret.attr("class") = cls;
 				out[i] = ret;
 				} break;
-            case OFTInteger64: // fall through: converts Int64 -> double
+			case OFTInteger64: // fall through: converts Int64 -> double
 				if (int64_as_string)
 					out[i] = Rcpp::CharacterVector(n_features);
 				else
 					out[i] = Rcpp::NumericVector(n_features);
 				break;
-            case OFTReal:
+			case OFTReal:
 				out[i] = Rcpp::NumericVector(n_features);
 				break;
 			case OFTString:
@@ -78,14 +78,14 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 
 size_t count_features(OGRLayer *poLayer) {
 	size_t n = 0;
-    OGRFeature *poFeature;
-    while((poFeature = poLayer->GetNextFeature()) != NULL) {
+	OGRFeature *poFeature;
+	while((poFeature = poLayer->GetNextFeature()) != NULL) {
 		n++;
 		delete poFeature;
 		if (n == INT_MAX)
 			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
 	}
-    poLayer->ResetReading ();
+	poLayer->ResetReading ();
 	return n;
 }
 
@@ -98,7 +98,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	GDALDataset *poDS;
 	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
 		open_options.data(), NULL);
-    if (poDS == NULL) {
+	if (poDS == NULL) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
 		throw std::invalid_argument("Open failed.\n");
 	}
@@ -134,7 +134,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	out(2) = poDS->GetDriverName();
 	out(3) = feature_count;
 	out(4) = field_count;
-    GDALClose(poDS); // close & destroys data source
+	GDALClose(poDS); // close & destroys data source
 	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields");
 	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
 	return out;
@@ -146,10 +146,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
-    GDALDataset *poDS;
+	GDALDataset *poDS;
 	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
 		open_options.data(), NULL );
-    if( poDS == NULL ) {
+	if( poDS == NULL ) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
 		throw std::invalid_argument("Open failed.\n");
 	}
@@ -180,7 +180,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		}
 	}
 
-    OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
+	OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
 		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
 		throw std::invalid_argument("Opening layer failed.\n");
@@ -206,16 +206,16 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	Rcpp::List out = allocate_out_list(poFDefn, n, poGFDefn->GetNameRef(), int64_as_string);
 
 	// read all features:
-    poLayer->ResetReading();
+	poLayer->ResetReading();
 	unsigned int i = 0;
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false;
-    OGRFeature *poFeature;
-    while((poFeature = poLayer->GetNextFeature()) != NULL) {
+	OGRFeature *poFeature;
+	while((poFeature = poLayer->GetNextFeature()) != NULL) {
 
 		// feature attribute fields:
-        for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
-            OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
+		for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
+			OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
 			switch(poFieldDefn->GetType()) {
 				case OFTInteger: {
 					Rcpp::IntegerVector iv;
@@ -297,7 +297,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					}
 					break;
 			}
-        }
+		}
 		poFeatureV[i] = poFeature;
 
 		// feature geometry:
@@ -305,7 +305,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		if (poGeometryV[i] == NULL)
 			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef");
 		i++;
-    }
+	}
 	if (promote_to_multi && toTypeUser == 0)
 		toTypeUser = to_multi_what(poGeometryV);
 	if (toTypeUser != 0) { 
@@ -315,7 +315,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				(OGRwkbGeometryType) toTypeUser, NULL) );
 			poGeometryV[i] = poFeatureV[i]->GetGeomFieldRef(iGeomField);
 		}
-	} 
+	}
 	if (! quiet && toTypeUser)
 		Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
 	// convert to R:
@@ -326,9 +326,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
 	out[poFDefn->GetFieldCount()] = sfc;
 	// clean up:
-    for (size_t i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++)
 		OGRFeature::DestroyFeature(poFeatureV[i]);
-    GDALClose(poDS);
+	GDALClose(poDS);
 
 	return out;
 }

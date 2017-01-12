@@ -29,18 +29,21 @@
 
 st_cast(x, to, ...)
 
-\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x))
+\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x), group_or_split = TRUE)
 
-\method{st_cast}{sf}(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE)
+\method{st_cast}{sf}(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE,
+  group_or_split = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
 \item{to}{character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.}
 
-\item{...}{ignored}
+\item{...}{in case of \code{st_cast.sf}: passed on to \link[stats]{aggregate}}
 
 \item{ids}{integer vector, denoting how geometries should be grouped (default: no grouping)}
+
+\item{group_or_split}{logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.}
 
 \item{FUN}{function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped}
 
@@ -48,6 +51,10 @@ st_cast(x, to, ...)
 }
 \value{
 object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
+
+In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
+
+In case of \code{st_cast.sf}, grouping will call \link[stats]{aggregate} and the aggregation function \code{FUN} needs to be set; in case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries.
 }
 \description{
 Cast geometry to another type: either simplify, or cast explicitly
