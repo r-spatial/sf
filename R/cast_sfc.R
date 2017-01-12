@@ -101,6 +101,7 @@ st_cast_sfc_default = function(x) {
     stop("list item(s) not of class sfg") # sanity check
   
   a <- attributes(x)
+  ids = NULL
   cls = unique(sapply(x, function(x) class(x)[2L]))
   if (length(cls) > 1) {
     if (all(cls %in% c("POINT", "MULTIPOINT"))) {
@@ -112,13 +113,13 @@ st_cast_sfc_default = function(x) {
     } else if (all(cls %in% c("POLYGON", "MULTIPOLYGON"))) {
       x <- lapply(x, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
       class(x) <- c("sfc_MULTIPOLYGON", "sfc")
-    } 
+    }
   } else if (cls == "GEOMETRYCOLLECTION") {
-    x <- structure(do.call(st_sfc, unlist(x, recursive = FALSE)), ids = get_lengths(x))
-    # class(x) <- c("sfc_GEOMETRY", "sfc") 
+    ids = get_lengths(x)
+    x <- do.call(st_sfc, unlist(x, recursive = FALSE))
   }
   attributes(x) <- a
-  st_sfc(x)
+  structure(st_sfc(x), ids = ids)
 }
 
 #' @name st_cast
@@ -172,17 +173,19 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x)) {
 st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE) {
 	geom = st_cast(st_geometry(x), to, ids = ids)
 	crs = st_crs(x)
+	all_const = all_constant(x)
 	st_geometry(x) = NULL
 	#x = as.data.frame(x)
 	if (!is.null(attr(geom, "ids"))) {
 		if (!missing(ids))
 			warning("argument ids is ignored, and taken from the geometry splitting")
-		if (warn && !all_constant(x))
+		if (warn && !all_const)
 			warning("repeating attributes for all sub-geometries for which they may not be constant")
 		ids = attr(geom, "ids")          # e.g. 3 2 4
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
 		# FIXME: deal with identity -> constant
-		st_sf(x[reps, ], geom, crs = crs)
+		x = x[reps,]
+		st_sf(x, geom, crs = crs)
 	} else { 
 		# FIXME: warn on const -> aggregation; carry out area-weighted aggregation?
 		if (length(unique(ids)) < nrow(x)) {

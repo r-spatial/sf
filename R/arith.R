@@ -95,5 +95,5 @@ Ops.sfc <- function(e1, e2) {
 	else if (.Generic == "-")
 		ret = mapply(function(x, y) { x - unclass(y) }, e1, e2, SIMPLIFY = FALSE)
 	else stop(paste("operation", .Generic, "not supported"))
-	st_sfc(ret, crs = NA_integer_)
+	st_sfc(ret, crs = NA_integer_, precision = attr(e1, "precision"))
 }

@@ -296,6 +296,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
 	CPL_geos_finish(hGEOSCtxt);
+	ret.attr("precision") = sfc.attr("precision");
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;
 }

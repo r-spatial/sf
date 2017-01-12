@@ -66,10 +66,11 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 			attr(lst, "classes") = sapply(lst, class)[2L,] # Rcpp forces me to do this. Or is it me, allowing a mix?
 		}
 		attr(lst, "single_type") = NULL # clean up
-		if (is.na(crs) && !is.null(attr(lst, "crs")))
-			crs = attr(lst, "crs")
 	}
-	attr(lst, "precision") = precision
+	if (is.na(crs) && !is.null(attr(lst, "crs")))
+		crs = attr(lst, "crs")
+	if (! missing(precision) || is.null(attr(lst, "precision")))
+		attr(lst, "precision") = precision
 	attr(lst, "bbox") = st_bbox(lst)
 	st_set_crs(lst, crs)
 }
