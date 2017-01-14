@@ -26,7 +26,7 @@ test_that("st_crs returns NA for sfg objects", {
   expect_true(is.na(st_crs(pt1)))
 })
 
-test_that("st_as_binary can non-native big endian", {
+test_that("st_as_binary handles non-native big endian", {
   gc = st_geometrycollection()
   r = st_as_binary(gc)
   r[1] = if (r[1] == 1) {
@@ -63,4 +63,8 @@ test_that("st_precision()", {
   expect_error(st_set_precision(x, NA_real_), "numeric")
   st_precision(x) <- 1e-2
   expect_identical(st_set_precision(x, 1e-2), x)
+})
+
+test_that("st_as_sfc breaks on wrong input", {
+  expect_error(st_as_sfc("foo"))
 })

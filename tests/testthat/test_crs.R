@@ -30,4 +30,5 @@ test_that("st_crs works", {
   expect_silent(wkt <- st_as_text(a))
   expect_silent(b <- st_crs(wkt = wkt))
   expect_equal(a, b)
+  expect_warning(sf:::CPL_crs_from_proj4string("foo"))
 })

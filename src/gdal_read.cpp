@@ -57,10 +57,14 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 }
 
 int to_multi_what(std::vector<OGRGeometry *> gv) {
-	bool lines = false, multilines = false, polygons = false, multipolygons = false;
+	bool points = false, multipoints = false,
+		lines = false, multilines = false, 
+		polygons = false, multipolygons = false;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
 		switch(gv[i]->getGeometryType()) {
+			case wkbPoint: points = true; break;
+			case wkbMultiPoint: multipoints = true; break;
 			case wkbLineString: lines = true; break;
 			case wkbMultiLineString: multilines = true; break;
 			case wkbPolygon: polygons = true; break;
@@ -68,11 +72,16 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			default: return 0;
 		}
 	}
-	if (lines && multilines && !polygons && !multipolygons)
-		return wkbMultiLineString;
-	if (!lines && !multilines && polygons && multipolygons)
-		return wkbMultiPolygon;
-	// mix of (multi)lines & (multi)polygons, or single types:
+	int sum = points + multipoints + lines + multilines + polygons + multipolygons;
+	if (sum == 2) {
+		if (points && multipoints)
+			return wkbMultiPoint;
+		if (lines && multilines)
+			return wkbMultiLineString;
+		if (!lines && !multilines)
+			return wkbMultiPolygon;
+	}
+	// another mix or single type:
 	return 0;
 }
 

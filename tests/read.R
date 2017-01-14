@@ -31,3 +31,27 @@ if ("OSM" %in% st_drivers()$name) {
 	st_layers(osm, do_count = TRUE)
 	suppressWarnings(st_read(osm, "multipolygons", quiet = TRUE))
 }
+
+# layer opening option:
+st_read(system.file("shape/nc.shp", package="sf"), 
+	options = c("ADJUST_TYPE=YES", "ENCODING=CPL_ENC_UTF8"))
+
+if ("GPKG" %in% st_drivers()$name) { # shapefiles can't write point+multipoint mix:
+  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
+  st_write(x, "x.gpkg")
+  x <- st_read("x.gpkg")
+  print(x)
+}
+x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)), 
+	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
+st_write(x, "x.shp")
+x <- st_read("x.shp")
+x
+
+try(st_layers("foo")) # cannot open datasource
+try(st_read("foo")) # cannot open datasource
+try(st_read("x.gpkg", "foo")) # cannot open layer
+try(st_write(c("foo", "bar")))
+try(st_write(x, c("foo", "bar")))
+try(st_write(x, "foo", driver = "foo"))
+try(st_write(x, "/x", driver = "ESRI Shapefile"))

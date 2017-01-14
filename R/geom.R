@@ -549,9 +549,9 @@ st_line_sample = function(x, n, density, type = "regular") {
 	regular = function(n) { (1:n - 0.5)/n }
 	random = function(n) { sort(runif(n)) }
 	fn = switch(type,
-							regular = regular,
-							random = random,
-							stop("unknown type"))
+		regular = regular,
+		random = random,
+		stop("unknown type"))
 	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
 	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
 }

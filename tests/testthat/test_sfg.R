@@ -71,3 +71,7 @@ test_that("Ops work for sfg", {
 	y = st_sfc(st_point(2:3), st_point(3:4))
 	expect_equal(x + 2, y)
 })
+
+test_that("st_dimension returns NA", {
+	expect_equal(st_dimension(st_point()), NA_integer_)
+})

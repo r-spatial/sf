@@ -418,11 +418,8 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_TIN;
 	else if (strcmp(cls, "TRIANGLE") == 0)
 		type = SF_Triangle;
-	else  {
-		type = SF_Unknown;
-		Rcpp::Rcout << cls << ": returning class wkbUnknown (0)" << std::endl;
-//		throw std::range_error("unknown type!");
-	}
+	else 
+		type = SF_Unknown; // a mix: GEOMETRY
 	if (tp != NULL)
 		*tp = type;
 	if (EWKB) {
@@ -610,11 +607,12 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	// got the following from:
 	// http://stackoverflow.com/questions/24744802/rcpp-how-to-check-if-any-attribute-is-null
 	Rcpp::CharacterVector classes;
-	SEXP sxp = sfc.attr("classes"); // how to check whether an attribute is present w/o using SEXP?
-	if (! Rf_isNull(sxp)) {         // only sfc_GEOMETRY, the mixed bag, sets this
+	bool have_classes = false;
+	if (! Rf_isNull(sfc.attr("classes"))) {         // only sfc_GEOMETRY, the mixed bag, sets this
 		classes = sfc.attr("classes");
 		if (classes.size() != sfc.size())
 			throw std::range_error("attr classes has wrong size: please file an issue");
+		have_classes = true;
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 
@@ -625,7 +623,7 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();
 		std::ostringstream os;
-		if (! Rf_isNull(sxp))
+		if (have_classes)
 			cls = classes[i];
 		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
 		Rcpp::RawVector raw(os.str().size()); // os -> raw:
