@@ -7,7 +7,6 @@ addons:
   postgresql: "9.3"
 
 before_install:
-  - sudo apt-get remove libgeos-c1 # conflicts with ppa
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
