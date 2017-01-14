@@ -15,13 +15,12 @@ before_install:
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libproj-dev libgdal-dev
-  - # install postgis:
-  - wget https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa/+files/libsfcgal1_1.2.2-1~trusty2_amd64.deb
-  - sudo dpkg -i libsfcgal*deb
-  - wget https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa/+files/liblwgeom-2.2-5_2.2.2+dfsg-2~trusty0_amd64.deb
-  - sudo dpkg -i liblw*deb
-  - wget https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa/+files/postgis_2.2.2+dfsg-2~trusty0_amd64.deb
-  - sudo dpkg -i postgis*deb
+  - # install postgis from source:
+  - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.3
+  - wget http://download.osgeo.org/postgis/source/postgis-2.3.1.tar.gz
+  - tar xzf postgis-2.3.1.tar.gz
+  - (cd postgis-2.3.1 ; ./configure; make; sudo make install)
+  - # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
