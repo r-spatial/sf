@@ -1,25 +1,21 @@
 language: r
-
 cache: packages
-
 sudo: required
-
 dist: trusty
 
 addons:
   postgresql: "9.3"
 
 before_install:
-  - sudo apt-get install libudunits2-dev aptitude
-  - sudo apt-get remove libgeos-c1
+  - sudo apt-get remove libgeos-c1 # conflicts with ppa
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libproj-dev libgdal-dev
+  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
   - # install postgis from source:
   - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.3
   - wget http://download.osgeo.org/postgis/source/postgis-2.3.1.tar.gz
-  - tar xzf postgis-2.3.1.tar.gz
-  - (cd postgis-2.3.1 ; ./configure; make; sudo make install)
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.1.tar.gz)
+  - (cd /tmp/postgis-2.3.1 ; ./configure; make; sudo make install)
   - # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis
