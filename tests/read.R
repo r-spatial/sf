@@ -33,19 +33,19 @@ if ("OSM" %in% st_drivers()$name) {
 }
 
 # layer opening option:
-st_read(system.file("shape/nc.shp", package="sf"), 
+st_read(system.file("shape/nc.shp", package="sf"),  quiet = TRUE,
 	options = c("ADJUST_TYPE=YES", "ENCODING=CPL_ENC_UTF8"))
 
 if ("GPKG" %in% st_drivers()$name) { # shapefiles can't write point+multipoint mix:
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   st_write(x, "x.gpkg")
-  x <- st_read("x.gpkg")
+  x <- st_read("x.gpkg", quiet = TRUE)
   print(x)
 }
 x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)), 
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
 st_write(x, "x.shp")
-x <- st_read("x.shp")
+x <- st_read("x.shp", quiet = TRUE)
 x
 
 try(st_layers("foo")) # cannot open datasource

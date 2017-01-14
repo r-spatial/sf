@@ -72,7 +72,6 @@ nc %>%
 
 # test background map plotting:
 data(bgmap)
-demo(nc, ask=FALSE, echo = FALSE)
 merc = st_crs(3857)
 WGS84 = st_crs(4326)
 nc = st_transform(nc, WGS84)

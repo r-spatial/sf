@@ -38,8 +38,7 @@ invisible(lapply(seq_len(nrow(g)), function(i) {
 }))
 
 plot(m, graticule = st_crs(4326))
-library(sf)
-demo(nc, echo = FALSE)
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 # options(warn=2)
 g = st_graticule(nc, datum = st_crs(nc))
 #g = st_graticule(nc)
