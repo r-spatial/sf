@@ -15,8 +15,11 @@ before_install:
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libproj-dev libgdal-dev
+  - # install postgis:
+  - wget https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa/+files/liblwgeom-2.2-5_2.2.2+dfsg-2~trusty0_amd64.deb
+  - sudo dpkg -i liblw*deb
   - wget https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa/+files/postgis_2.2.2+dfsg-2~trusty0_amd64.deb
-  - sudo dpkg -i *deb
+  - sudo dpkg -i postgis*deb
   - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
