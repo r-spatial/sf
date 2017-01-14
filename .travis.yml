@@ -10,7 +10,7 @@ addons:
   postgresql: "9.5"
   apt:
     packages:
-	  - postgresql-9.5-postgis-2.3
+      - postgresql-9.5-postgis-2.3
 
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
