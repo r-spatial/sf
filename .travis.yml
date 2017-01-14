@@ -6,15 +6,11 @@ sudo: required
 
 dist: trusty
 
-apt_packages:
-  - libudunits2-dev
-  - postgis
-  - aptitude
-
 addons:
   postgresql: "9.6"
 
 before_install:
+  - sudo apt-get install libudunits2-dev postgis aptitude
   - sudo apt-get remove libgeos-c1
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
