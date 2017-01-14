@@ -14,9 +14,10 @@ before_install:
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libproj-dev
   - sudo apt-get install --yes libudunits2-dev 
-  - sudo apt-get install --yes libgdal-dev
-  - sudo apt-get install --yes libgeos-dev
-  - sudo apt-get install --yes --nodeps postgresql-9.3-postgis-2.2
+  - sudo apt-get install --yes libgdal-dev libgeos-dev
+  - sudo apt-get install --yes liblwgeom-dev
+  - sudo apt-get install --yes postgis
+  - sudo apt-get install --yes postgresql-9.3-postgis-2.2
   - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
