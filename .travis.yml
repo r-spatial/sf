@@ -8,8 +8,7 @@ dist: trusty
 
 before_install:
   - sudo apt-get install --yes libudunits2-dev aptitude
-  - sudo cat /etc/apt/sources.list
-  - sudo cat /etc/apt/sources.list.d/*
+  - sudo apt-get remove libgeos-c1
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo aptitude install -y libproj-dev libgdal-dev
