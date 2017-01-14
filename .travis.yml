@@ -7,15 +7,15 @@ sudo: required
 dist: trusty
 
 addons:
-  postgresql: "9.6"
+  postgresql: "9.3"
 
 before_install:
-  - sudo apt-get install libudunits2-dev postgis aptitude
+  - sudo apt-get install libudunits2-dev aptitude
   - sudo apt-get remove libgeos-c1
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
-  - sudo aptitude install -y libproj-dev libgdal-dev
-  - sudo aptitude install -y postgis
+  - sudo apt-get install --yes libproj-dev libgdal-dev
+  - sudo apt-get install --yes postgresql-9.3-postgis-2.2
   - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
