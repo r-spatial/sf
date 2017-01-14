@@ -12,7 +12,7 @@ before_install:
   - sudo cat /etc/apt/sources.list.d/*
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
   - sudo apt-get --yes --force-yes update -qq
-  - sudo aptitude install -y libproj-dev libgdal-dev libgeos-dev 
+  - sudo aptitude install -y libproj-dev libgdal-dev
   - sudo aptitude install -y postgis
   - sudo service postgresql restart
   - createdb postgis
