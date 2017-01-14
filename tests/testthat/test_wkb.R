@@ -24,7 +24,7 @@ test_that("Char -> Raw conversion in R and C++ gives identical results", {
     sf:::CPL_hex_to_raw("01010000204071000000000000801A064100000000AC5C1441"),
 	sf:::CPL_hex_to_raw("01010000204071000000000000801a064100000000ac5c1441")
   )
-  expect_error(sf:::CPL_hex_to_raw("0x01010000204071000000000000801A064100000000AC5C144z")) # note the z
+  expect_error(sf:::CPL_hex_to_raw("01010000204071000000000000801A064100000000AC5C144z")) # note the z
 })
 
 test_that("Reading of big-endian and little-endian gives the same result", {
