@@ -7,8 +7,8 @@ sudo: required
 dist: trusty
 
 apt_packages:
-￼ - libudunits2-dev
-￼ - postgis
+  - libudunits2-dev
+  - postgis
   - aptitude
 
 addons:
