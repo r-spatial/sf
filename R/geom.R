@@ -467,7 +467,7 @@ geos_op2 = function(op, x, y) {
 
 #' @name geos
 #' @export
-#' @return st_intersection, st_union, st_difference and st_symdifference return the non-empty geometries resulting from the operation, either as an \code{sfc} object or as an \code{sf} object, augmented with the matching attributes of the original object(s). The geometry column returned (or the geometry column of the returned \code{sf} object) carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. 
+#' @return \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_symdifference} return the non-empty geometries resulting from the operation, either as an \code{sfc} object or as an \code{sf} object, augmented with the matching attributes of the original object(s). The geometry column returned (or the geometry column of the returned \code{sf} object) carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. 
 st_intersection = function(x, y) {
 	ret = geos_op2("intersection", st_geometry(x), st_geometry(y))
 	if (length(ret) == 0 || !(inherits(x, "sf") || inherits(y, "sf"))) # no attributes
