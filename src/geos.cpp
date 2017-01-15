@@ -222,17 +222,26 @@ Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_union(Rcpp::List sfc) { 
+Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) { 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc);
-	GEOSGeom gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, gmv.data(), gmv.size());
-	std::vector<GEOSGeom> gmv_out(1);
+	std::vector<GEOSGeom> gmv_out(by_feature ? sfc.size() : 1);
+	if (by_feature) {
+		for (int i = 0; i < sfc.size(); i++)
 #if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3
-	gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
+			gmv_out[i] = GEOSUnaryUnion_r(hGEOSCtxt, gmv[i]);
 #else
-	gmv_out[0] = GEOSUnionCascaded_r(hGEOSCtxt, gc);
+			gmv_out[i] = GEOSUnionCascaded_r(hGEOSCtxt, gmv[i]);
 #endif
-	GEOSGeom_destroy_r(hGEOSCtxt, gc);
+	} else {
+		GEOSGeom gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, gmv.data(), gmv.size());
+#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3
+		gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
+#else
+		gmv_out[0] = GEOSUnionCascaded_r(hGEOSCtxt, gc);
+#endif
+		GEOSGeom_destroy_r(hGEOSCtxt, gc);
+	}
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv_out
 	CPL_geos_finish(hGEOSCtxt);
 	return out;

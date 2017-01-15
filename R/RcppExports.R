@@ -89,8 +89,8 @@ CPL_geos_is_simple <- function(sfc) {
     .Call('sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc)
 }
 
-CPL_geos_union <- function(sfc) {
-    .Call('sf_CPL_geos_union', PACKAGE = 'sf', sfc)
+CPL_geos_union <- function(sfc, by_feature = FALSE) {
+    .Call('sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
 }
 
 CPL_geos_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance = 0.0, preserveTopology = FALSE, bOnlyEdges = 1L, dfMaxLength = 0.0) {

@@ -270,13 +270,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_union
-Rcpp::List CPL_geos_union(Rcpp::List sfc);
-RcppExport SEXP sf_CPL_geos_union(SEXP sfcSEXP) {
+Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature);
+RcppExport SEXP sf_CPL_geos_union(SEXP sfcSEXP, SEXP by_featureSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_union(sfc));
+    Rcpp::traits::input_parameter< bool >::type by_feature(by_featureSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_union(sfc, by_feature));
     return rcpp_result_gen;
 END_RCPP
 }
