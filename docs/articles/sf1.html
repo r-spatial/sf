@@ -159,12 +159,21 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 <li>that although geometries are native R objects, they are printed as <a href="#wkb">well-known text</a></li>
 </ul><p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
-##  [1] arrange_      cbind         coerce        distinct_     filter_      
-##  [6] gather_       group_by_     initialize    mutate_       plot         
-## [11] print         rbind         rename_       select_       [            
-## [16] show          slice_        slotsFromS3   spread_       st_as_sf     
-## [21] st_bbox       st_cast       st_crs&lt;-      st_crs        st_drop_zm   
-## [26] st_geometry&lt;- st_geometry   st_transform  summarise_    transmute_   
+##  [1] arrange_          cbind             coerce           
+##  [4] distinct_         filter_           gather_          
+##  [7] group_by_         initialize        mutate_          
+## [10] plot              print             rbind            
+## [13] rename_           select_           [                
+## [16] show              slice_            slotsFromS3      
+## [19] spread_           st_as_sf          st_bbox          
+## [22] st_boundary       st_buffer         st_cast          
+## [25] st_centroid       st_convex_hull    st_crs&lt;-         
+## [28] st_crs            st_difference     st_drop_zm       
+## [31] st_geometry&lt;-     st_geometry       st_intersection  
+## [34] st_is             st_linemerge      st_polygonize    
+## [37] st_segmentize     st_simplify       st_sym_difference
+## [40] st_transform      st_triangulate    st_union         
+## [43] summarise_        transmute_       
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g.&nbsp;by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -217,10 +226,18 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [1] "sfc_MULTIPOLYGON" "sfc"</code></pre></div>
 <p>Methods for geometry list-columns include</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">'sfc'</span>)
-##  [1] coerce       format       initialize   Ops          print       
-##  [6] [            show         slotsFromS3  st_as_binary st_as_text  
-## [11] st_bbox      st_cast      st_crs&lt;-     st_crs       st_drop_zm  
-## [16] st_geometry  str          st_transform summary      type_sum    
+##  [1] coerce            format            initialize       
+##  [4] Ops               print             [                
+##  [7] show              slotsFromS3       st_as_binary     
+## [10] st_as_text        st_bbox           st_boundary      
+## [13] st_buffer         st_cast           st_centroid      
+## [16] st_convex_hull    st_crs&lt;-          st_crs           
+## [19] st_difference     st_drop_zm        st_geometry      
+## [22] st_intersection   st_is             st_linemerge     
+## [25] st_polygonize     str               st_segmentize    
+## [28] st_simplify       st_sym_difference st_transform     
+## [31] st_triangulate    st_union          summary          
+## [34] type_sum         
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -383,7 +400,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
-## geometry type:  MULTIPOLYGON</code></pre></div>
+## geometry type:  Multi Polygon</code></pre></div>
 <p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and optionally a layer name. Their exact interpretation as well as the options they support vary per driver, the <a href="http://www.gdal.org/ogr_formats.html">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meuse &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>)</code></pre></div>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials.</p>
@@ -398,24 +415,38 @@ u_kmz &lt;-<span class="st"> "http://coagisweb.cabq.gov/datadownload/BikePaths.k
 <span class="kw">download.file</span>(u_kmz, <span class="st">"BikePaths.kmz"</span>)
 <span class="co"># Read file formats</span>
 biketrails_shp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"biketrails.shp"</span>)
-biketrails_kmz &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)</code></pre></div>
+if(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] ==<span class="st"> "Linux"</span>) <span class="co"># may not work if not Linux</span>
+  biketrails_kmz &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)
+u_kml =<span class="st"> "http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"</span>
+<span class="kw">download.file</span>(u_kml, <span class="st">"bikeraces.kml"</span>)
+bikraces &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"bikeraces.kml"</span>)</code></pre></div>
 <div id="benchmarks" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#benchmarks" class="anchor"> </a></body></html>Benchmarks</h3>
 <p>Benchmarks show that <code><a href="../reference/st_read.html">st_read()</a></code> is faster than <code>rgdal::readOGR()</code>, for example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
 shp_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"biketrails.shp"</span>)
-kmz_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>, <span class="dt">layer =</span> ogr_layers[<span class="dv">1</span>])
-kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)
+if(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] ==<span class="st"> "Linux"</span>) {
+  kmz_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>)
+  kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"BikePaths.kmz"</span>)
+} else {
+    kmz_read_sp &lt;-<span class="st"> </span>function() <span class="kw">message</span>(<span class="st">"NA"</span>)
+    kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw">message</span>(<span class="st">"NA"</span>)
+}
+kml_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="st">"bikeraces.kml"</span>)
+kml_read_sf &lt;-<span class="st"> </span>function() <span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"bikeraces.kml"</span>)
 microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read_sp</span>(), <span class="kw">shp_read_sf</span>(),
-                               <span class="kw">kmz_read_sp</span>(), <span class="kw">kmz_read_sf</span>(), <span class="dt">times =</span> <span class="dv">1</span>)</code></pre></div>
-<p>On a modern laptop (with an Intel i5-2520M processor) the results were as follows:</p>
-<pre><code>## Unit: milliseconds
-##           expr       min        lq      mean    median        uq       max
-##  shp_read_sp() 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876 6555.4876
-##  shp_read_sf()  655.0139  655.0139  655.0139  655.0139  655.0139  655.0139
-##  kmz_read_sp() 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893 6211.8893
-##  kmz_read_sf() 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094 2096.9094</code></pre>
-<p>This shows that <code>sf::st_read()</code> is not only simpler to use but also substantially faster than <code>rgdal::readOGR()</code>: by a factor of 3 and 10 for the Shapefile and KML file used in this benchmark, respectively.</p>
+                               <span class="kw">kmz_read_sp</span>(), <span class="kw">kmz_read_sf</span>(),
+                               <span class="kw">kml_read_sp</span>(), <span class="kw">kml_read_sf</span>(), <span class="dt">times =</span> <span class="dv">1</span>)</code></pre></div>
+<p>On a modern laptop (with an Intel i7-7500U CPU @ 2.70GHz processor) the results were as follows:</p>
+<pre><code>Unit: milliseconds
+          expr        min         lq       mean     median         uq        max neval
+shp_read_sp() 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699     1
+shp_read_sf()  398.64002  398.64002  398.64002  398.64002  398.64002  398.64002     1
+kmz_read_sp() 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189     1
+kmz_read_sf() 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294     1
+kml_read_sp()  156.82933  156.82933  156.82933  156.82933  156.82933  156.82933     1
+kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719     1</code></pre>
+<p>This shows that <code>sf::st_read()</code> is substantially faster than <code>rgdal::readOGR()</code>: by more than a factor of 10 for the Shapefile and KML files, and more than a factor of 3 for the KMZ file used in this benchmark, respectively.</p>
 </div>
 </div>
 <div id="crs" class="section level2">
@@ -533,7 +564,7 @@ b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">
 <span class="kw">title</span>(<span class="st">"intersecting two polygons:"</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
 (i &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_intersection</a></span>(a,b)[[<span class="dv">1</span>]])
-## GEOMETRYCOLLECTION(POINT(1 0), LINESTRING(4 0, 3 0), POLYGON((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))
+## POINT(1 0)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"GEOMETRYCOLLECTION"</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
@@ -565,10 +596,10 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their <a href="https://CRAN.R-project.org/package=units">units of measurement</a>). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn&rsquo;t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn&rsquo;t extend beyond the body &ndash; in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state&rsquo;s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an attribute that points out how attributes relate to their geometry, which can be defined at creation time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>),
-    <span class="dt">relation_to_geometry =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"lattice"</span>, <span class="dt">PERIMETER =</span> <span class="st">"lattice"</span>, <span class="dt">CNTY_ =</span> <span class="st">"entity"</span>,
-        <span class="dt">CNTY_ID =</span> <span class="st">"entity"</span>, <span class="dt">NAME =</span> <span class="st">"entity"</span>, <span class="dt">FIPS =</span> <span class="st">"entity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"entity"</span>,
-        <span class="dt">CRESS_ID =</span> <span class="st">"entity"</span>, <span class="dt">BIR74 =</span> <span class="st">"lattice"</span>, <span class="dt">SID74 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"lattice"</span>,
-        <span class="dt">BIR79 =</span> <span class="st">"lattice"</span>, <span class="dt">SID79 =</span> <span class="st">"lattice"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"lattice"</span>))
+    <span class="dt">relation_to_geometry =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"aggregate"</span>, <span class="dt">PERIMETER =</span> <span class="st">"aggregate"</span>, <span class="dt">CNTY_ =</span> <span class="st">"identity"</span>,
+        <span class="dt">CNTY_ID =</span> <span class="st">"identity"</span>, <span class="dt">NAME =</span> <span class="st">"identity"</span>, <span class="dt">FIPS =</span> <span class="st">"identity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"identity"</span>,
+        <span class="dt">CRESS_ID =</span> <span class="st">"identity"</span>, <span class="dt">BIR74 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID74 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"aggregate"</span>,
+        <span class="dt">BIR79 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID79 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"aggregate"</span>))
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## converted into: MULTIPOLYGON
 ## Simple feature collection with 100 features and 14 fields
@@ -579,30 +610,31 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
 <span class="kw">attr</span>(nc, <span class="st">"relation_to_geometry"</span>)
 ##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO 
-##   lattice   lattice    entity    entity    entity    entity    entity 
+## aggregate aggregate  identity  identity  identity  identity  identity 
 ##  CRESS_ID     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 
-##    entity   lattice   lattice   lattice   lattice   lattice   lattice 
-## Levels: field lattice entity
+##  identity aggregate aggregate aggregate aggregate aggregate aggregate 
+## Levels: constant aggregate identity
 <span class="kw">data</span>(meuse, <span class="dt">package =</span> <span class="st">"sp"</span>)
 meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="dt">crs =</span> <span class="dv">28992</span>, <span class="dt">relation_to_geometry =</span> <span class="st">"field"</span>)
 <span class="kw">attr</span>(meuse_sf, <span class="st">"relation_to_geometry"</span>)
 ## cadmium  copper    lead    zinc    elev    dist      om   ffreq    soil 
-##   field   field   field   field   field   field   field   field   field 
+##    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt; 
 ##    lime landuse  dist.m 
-##   field   field   field 
-## Levels: field lattice entity</code></pre></div>
+##    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt; 
+## Levels: constant aggregate identity</code></pre></div>
 <p>When not specified, this field is filled with <code>NA</code> values, but if non-<code>NA</code>, it has one of three possibilities</p>
 <table style="width:60%;" class="table"><colgroup><col width="11%"><col width="48%"></colgroup><thead><tr class="header"><th align="left">value</th>
 <th align="left">meaning</th>
-</tr></thead><tbody><tr class="odd"><td align="left">field</td>
-<td align="left">a variable that has a value at every location over a spatial extent; examples: elevation, temperature, land use</td>
-</tr><tr class="even"><td align="left">lattice</td>
+</tr></thead><tbody><tr class="odd"><td align="left">constant</td>
+<td align="left">a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use</td>
+</tr><tr class="even"><td align="left">aggregate</td>
 <td align="left">values are summary values (aggregates) over the geometry, e.g.&nbsp;population density, dominant land use</td>
-</tr><tr class="odd"><td align="left">entity</td>
-<td align="left">values identify the geometry, and refer to (the whole of) this geometry and to no other geometry</td>
+</tr><tr class="odd"><td align="left">identity</td>
+<td align="left">values identify the geometry: they refer to (the whole of) this and only this geometry</td>
 </tr></tbody></table><p>With this information (still to be done) we can for instance</p>
-<ul><li>either return missing values or generate warnings when a lattice value at a point location inside a polygon is retrieved, or</li>
+<ul><li>either return missing values or generate warnings when a <em>aggregate</em> value at a point location inside a polygon is retrieved, or</li>
 <li>list the implicit assumptions made when retrieving attribute values at points inside a polygon when <code>relation_to_geometry</code> is missing.</li>
+<li>decide what to do with attributes when a geometry is split: do nothing in case the attribute is constant, give an error or warning in case it is an aggregate, change the <code>relation_to_geometry</code> to <em>constant</em> in case it was <em>identity</em>.</li>
 </ul><p>Further reading:</p>
 <ol style="list-style-type: decimal"><li>S. Scheider, B. Gr&auml;ler, E. Pebesma, C. Stasch, 2016. Modelling spatio-temporal information generation. Int J of Geographic Information Science, 30 (10), 1980-2008. (<a href="http://pebesma.staff.ifgi.de/generativealgebra.pdf">pdf</a>)</li>
 <li>Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling &amp; Software, 51, (149&ndash;165, <a href="http://dx.doi.org/10.1016/j.envsoft.2013.09.006">open access</a>).</li>

@@ -180,9 +180,9 @@ p *<span class="st"> </span><span class="kw">rot</span>(pi)
 ## POINT(2.44929359829471e-16 -2)</code></pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
-cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_centroid</a></span>(nc)
-## Warning in st_centroid(nc): st_centroid does not give correct centroids for
-## longitude/latitude data.
+cntrd =<span class="st"> </span><span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw"><a href="../reference/geos.html">st_centroid</a></span>(nc))
+## Warning in st_centroid.sfc(st_geometry(x)): st_centroid does not give
+## correct centroids for longitude/latitude data
 nc2 =<span class="st"> </span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc) -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(nc[<span class="dv">1</span>], <span class="dt">border =</span> <span class="st">'grey'</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(nc2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
@@ -423,7 +423,8 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot.html">plot</a></span>(x)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(y, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos.html">st_intersection</a></span>(<span class="kw"><a href="../reference/geos.html">st_union</a></span>(x),<span class="kw"><a href="../reference/geos.html">st_union</a></span>(y)), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)</code></pre></div>
-<p><img src="sf3_files/figure-html/unnamed-chunk-28-1.png" width="672"> To get <em>everything but</em> the intersection, use <code>st_difference</code> or st_sym_difference`:</p>
+<p><img src="sf3_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
+<p>To get <em>everything but</em> the intersection, use <code>st_difference</code> or st_sym_difference`:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">col =</span> <span class="st">'#ff333388'</span>); 
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(y, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'#33ff3388'</span>)
@@ -438,6 +439,7 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos.html">st_sym_difference</a></span>(<span class="kw"><a href="../reference/geos.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">title</span>(<span class="st">"sym_difference(x,y)"</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+<p>Function <code>st_segmentize</code> adds points to straight line sections of a lines or polygon object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 pts =<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
 ls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(pts)

@@ -244,6 +244,8 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	}
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv_out
 	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc.attr("precision");
+	out.attr("crs") = sfc.attr("crs");
 	return out;
 }
 
@@ -369,7 +371,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		}
 	}
 	if (k != n)
-		throw std::range_error("invalid k (2)");
+		throw std::range_error("invalid k, check 2");
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out2)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);

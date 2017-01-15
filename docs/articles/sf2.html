@@ -123,13 +123,13 @@ Available layers:
 ## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
-## geometry type:  MULTIPOLYGON</code></pre></div>
+## geometry type:  Multi Polygon</code></pre></div>
 <p>The file name is taken as the data source name. The default for the layer name is the basename (filename without path) of the the data source name. For this, <code>st_write</code> needs to guess the driver. The above command is, for instance, equivalent to:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="dt">dsn =</span> <span class="st">"nc.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)
 ## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
-## geometry type:  MULTIPOLYGON</code></pre></div>
+## geometry type:  Multi Polygon</code></pre></div>
 <p>How the guessing of drivers works is explained in the next section.</p>
 </div>
 <div id="guessing-a-driver-for-output" class="section level3">
@@ -227,7 +227,7 @@ meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_re
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw">PostgreSQL</span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)
-<span class="kw"><a href="../reference/st_write_db.html">st_write_db</a></span>(conn, meuse, <span class="dt">dropTable =</span> <span class="ot">TRUE</span>)
+<span class="kw"><a href="../reference/st_write.html">st_write_db</a></span>(conn, meuse, <span class="dt">dropTable =</span> <span class="ot">TRUE</span>)
 <span class="kw">dbDisconnect</span>(conn)</code></pre></div>
 <p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>dropTable</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
 </div>

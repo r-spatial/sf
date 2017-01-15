@@ -100,12 +100,8 @@ MULTIPOLYGON(((-81.4727554321289 36.23435592651...
 > g = st_makegrid(nc)
 > x = st_intersection(nc, g)
 Warning message:
-In st_intersection(nc, g) :
-  attribute variables are assumed to be spatially constant throughout all geometries
+attribute variables are assumed to be spatially constant throughout all geometries 
 > x = st_intersection(g, nc)
-Warning message:
-In st_intersection(g, nc) :
-  attribute variables are assumed to be spatially constant throughout all geometries
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + st_linestring(rbind(c(0,0),c(10,0))))
@@ -136,14 +132,8 @@ MULTIPOINT(0.298648830503225 0, 2.4841704731807...
 > 
 > mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 > st_linemerge(mls)
-Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
 LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  1.912   0.024   1.936 
+  1.936   0.016   1.951 

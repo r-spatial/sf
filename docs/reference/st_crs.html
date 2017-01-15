@@ -91,7 +91,7 @@ st_crs(x, ...)
 
 \method{st_crs}{numeric}(x, ...)
 
-\method{st_crs}{character}(x, ...)
+\method{st_crs}{character}(x, ..., wkt)
 
 \method{st_crs}{sfc}(x, ...)
 
@@ -106,9 +106,11 @@ st_set_crs(x, value)</pre>
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
-      <dd>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
+      <dd>numeric, character, or object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
       <dt>...</dt>
       <dd>ignored</dd>
+      <dt>wkt</dt>
+      <dd>character well-known-text representation of the crs</dd>
       <dt>value</dt>
       <dd>one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).</dd>
     </dl>
@@ -119,13 +121,14 @@ st_set_crs(x, value)</pre>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>if <code>x</code> is numeric, return <code>crs</code> object for SRID <code>x</code>; if <code>x</code> is character, return <code>crs</code> object for proj4string <code>x</code>; if <code>wkt</code> is given, return <code>crs</code> object for well-known-text representation <code>wkt</code>; if <code>x</code> is of class <code>sf</code> or <code>sfc</code>, return its <code>crs</code> object.</p>
     <p>object of class <code>crs</code>, which is a list with elements epsg (length-1 integer) and 
 proj4string (length-1 character).</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for epsg and proj4string.</p>
-    <p>the *crs functions get, set or replace the <code>crs</code> attribute of a simple feature geometry
+    <p>the *crs functions create, get, set or replace the <code>crs</code> attribute of a simple feature geometry
 list-column. This attribute is of class <code>crs</code>, and is a list consisting of epsg (integer epsg
 code) and proj4string (character). 
 Two objects of class <code>crs</code> are semantically identical when: (1) they are completely identical, or 
@@ -149,16 +152,16 @@ and +datum=WGS84, literally</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'> <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
- <span class='fu'>st_crs</span>(<span class='no'>sfc</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
- <span class='no'>sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
+<span class='fu'>st_crs</span>(<span class='no'>sfc</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
+<span class='no'>sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
 <span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY

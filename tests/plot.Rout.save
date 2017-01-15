@@ -100,14 +100,6 @@ The following objects are masked from 'package:base':
 > 
 > # test background map plotting:
 > data(bgmap)
-> demo(nc, ask=FALSE, echo = FALSE)
-Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > merc = st_crs(3857)
 > WGS84 = st_crs(4326)
 > nc = st_transform(nc, WGS84)
@@ -125,4 +117,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  4.192   0.056   4.252 
+  4.624   0.064   4.688 

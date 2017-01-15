@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • sf</title>
+<title>Get precision — st_precision • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -34,7 +34,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -71,22 +71,48 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Vignette reference <small>version&nbsp;0.2-9</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-md-9">
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="sf1.html">1. Simple Features for R</a></li>
-        <li><a href="sf2.html">2. Reading, Writing and Converting Simple Features</a></li>
-        <li><a href="sf3.html">3. Manipulating Simple Feature Geometries</a></li>
-      </ul>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Get precision</h1>
     </div>
+
+    
+    <p>Get precision</p>
+
+    <p>Set precision</p>
+    
+
+    <pre><span class='fu'>st_precision</span>(<span class='no'>x</span>)
+
+<span class='fu'>st_set_precision</span>(<span class='no'>x</span>, <span class='no'>precision</span>)
+
+<span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <dl class="dl-horizontal">
+      <dt>x</dt>
+      <dd>object of class <code>sfc</code></dd>
+      <dt>precision</dt>
+      <dd>numeric; see <a href='st_as_binary.html'>st_as_binary</a></dd>
+      <dt>value</dt>
+      <dd>precision value</dd>
+    </dl>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='no'>pi</span>, <span class='no'>pi</span>)))
+<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='fl'>0.01</span>
+<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0.01</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

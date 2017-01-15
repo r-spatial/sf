@@ -1,4 +1,3 @@
-options(warn = 2)
 suppressPackageStartupMessages(library(sf))
 
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
@@ -36,7 +35,7 @@ x = st_centroid(nc_tr)
 a = nc[1:5,]
 b = nc[4:10,]
 
-x = st_intersection(a[1,] ,b)
+x <- st_intersection(a[1,] ,b)
 
 u = st_union(b) 
 

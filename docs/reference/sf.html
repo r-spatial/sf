@@ -115,7 +115,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>relation_to_geometry</code> specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: &quot;field&quot;, &quot;lattice&quot;, &quot;entity&quot;. &quot;field&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;lattice&quot; where the attribute is an aggregate value over the geometry (e.g. population density or population count), &quot;entity&quot; when the attributes uniquely identifies the geometry of particular &quot;thing&quot;, such as a building ID or a city name. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
+    <p><code>relation_to_geometry</code> specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: &quot;constant&quot;, &quot;aggregate&quot;, &quot;identity&quot;. &quot;constant&quot; is used for attributes that are constant throughout the geometry (e.g. land use), &quot;aggregate&quot; where the attribute is an aggregate value over the geometry (e.g. population density or population count), &quot;identity&quot; when the attributes uniquely identifies the geometry of particular &quot;thing&quot;, such as a building ID or a city name. The default value, <code>NA_character_</code>, implies we don&#39;t know.</p>
     <p>&quot;[.sf&quot; will return a <code>data.frame</code> if the geometry column (of class <code>sfc</code>) is dropped, an <code>sfc</code> object if only the geometry column is selected, otherwise the behavior depending on <code>drop</code> is identical to that of [.data.frame.</p>
     
 

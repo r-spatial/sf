@@ -83,11 +83,11 @@ test_that("geom operations work on sfg or sfc or sf", {
   
   expect_silent(st_boundary(pnc))
   expect_that(st_boundary(gpnc), is_a("sfc_MULTILINESTRING"))
-  expect_that(st_boundary(gpnc[[1L]]), is_a("sfc_MULTILINESTRING"))
+  expect_that(st_boundary(gpnc[[1L]]), is_a("MULTILINESTRING"))
   
   expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
   expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
-  expect_true(inherits(st_convex_hull(gpnc[[1L]]), "sfc_POLYGON"))
+  expect_true(inherits(st_convex_hull(gpnc[[1L]]), "POLYGON"))
   
   expect_silent(st_simplify(pnc, FALSE, 1e4))
   expect_silent(st_simplify(gpnc, FALSE, 1e4))
@@ -96,7 +96,7 @@ test_that("geom operations work on sfg or sfc or sf", {
   if (sf:::CPL_geos_version() >= "3.4.0") {  
    expect_silent(st_triangulate(pnc))
    expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
-   expect_that(st_triangulate(gpnc[[1]]), is_a("sfc_GEOMETRYCOLLECTION"))
+   expect_that(st_triangulate(gpnc[[1]]), is_a("GEOMETRYCOLLECTION"))
   }
   
   expect_silent(st_polygonize(lnc))
@@ -105,13 +105,50 @@ test_that("geom operations work on sfg or sfc or sf", {
   
   expect_that(st_linemerge(lnc), is_a("sf"))
   expect_that(st_linemerge(glnc), is_a("sfc"))
-  expect_that(st_linemerge(glnc[[4]]), is_a("sfc"))
+  expect_that(st_linemerge(glnc[[4]]), is_a("sfg"))
   
   expect_silent(st_centroid(lnc))
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
-  expect_that(st_centroid(glnc[[1]]),  is_a("sfc_POINT"))
+  expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
   
   expect_silent(st_segmentize(lnc, 10000))
   expect_silent(st_segmentize(glnc, 10000))
   expect_silent(st_segmentize(glnc[[1]], 10000))
+})
+
+test_that("st_union/difference/sym_difference/intersection work, for all types", {
+  p = st_point(0:1)
+  l = st_linestring(matrix(1:10,,2))
+  pl = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+  x = list(
+  	pl,
+	st_sfc(pl,l,pl),
+	st_sf(a=5:7, st_sfc(pl,l,pl), relation_to_geometry = "constant")
+  )
+  y = x
+  for (f in list(st_union, st_difference, st_sym_difference, st_intersection)) {
+  	for (xx in x)
+	  for (yy in y)
+	  	expect_silent(f(xx,yy))
+  }
+  for (f in list(st_difference, st_sym_difference, st_intersection)) {
+  	for (xx in x)
+	  for (yy in y)
+	  	expect_equal(tail(class(f(xx,yy)),1), tail(class(xx),1))
+  }
+})
+
+
+test_that("st_union works with by_feature", {
+  p = st_point(0:1)
+  l = st_linestring(matrix(1:10,,2))
+  pl = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+  x = list(
+  	pl,
+	st_sfc(pl,l,pl),
+	st_sf(a=5:7, st_sfc(pl,l,pl), relation_to_geometry = "constant")
+  )
+  expect_silent(z <- st_union(x[[1]], by_feature = TRUE))
+  expect_silent(z <- st_union(x[[2]], by_feature = TRUE))
+  expect_silent(z <- st_union(x[[3]], by_feature = TRUE))
 })

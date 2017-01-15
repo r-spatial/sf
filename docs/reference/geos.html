@@ -127,9 +127,9 @@
 
 <span class='fu'>st_triangulate</span>(<span class='no'>x</span>, <span class='kw'>dTolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>bOnlyEdges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>st_polygonize</span>(<span class='no'>mlst</span>)
+<span class='fu'>st_polygonize</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_linemerge</span>(<span class='no'>mlst</span>)
+<span class='fu'>st_linemerge</span>(<span class='no'>x</span>)
 
 <span class='fu'>st_centroid</span>(<span class='no'>x</span>)
 
@@ -139,11 +139,11 @@
 
 <span class='fu'>st_intersection</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
-<span class='fu'>st_union</span>(<span class='no'>x</span>, <span class='no'>y</span>)
-
 <span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
 <span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='fu'>st_union</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>by_feature</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>st_line_sample</span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>density</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"regular"</span>)</pre>
     
@@ -171,14 +171,14 @@
       <dd>numeric; tolerance parameter</dd>
       <dt>bOnlyEdges</dt>
       <dd>logical; if TRUE, return lines, else return polygons</dd>
-      <dt>mlst</dt>
-      <dd>object of class <code>MULTILINESTRING</code> or geometry list-column containing these</dd>
       <dt>dfMaxLength</dt>
       <dd>numeric; max length of a line segment</dd>
       <dt>...</dt>
       <dd>ignored</dd>
       <dt>warn</dt>
       <dd>logical; generate a warning in case of long/lat data</dd>
+      <dt>by_feature</dt>
+      <dd>logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features</dd>
       <dt>n</dt>
       <dd>integer; number of points to choose per geometry; if missing, n will be computed as <code>round(density * st_length(geom))</code>.</dd>
       <dt>density</dt>
@@ -196,16 +196,18 @@
     <p>st_is_simple and st_is_valid return a logical vector</p>
     <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     <p>st_relate returns a dense <code>character</code> matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of 0,1,2,F, digits denoting dimensionality, F denoting not intersecting.</p>
-    <p>st_intersects ...  st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively</p>
-    <p>st_buffer ... st_segmentize return an <a href='sfc.html'>sfc</a> object with the same number of geometries as in <code>x</code></p>
-    <p><code>st_union(x)</code> unions geometries.  Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context &quot;fully noded&quot; means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. &quot;Dissolved&quot; means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.  Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If <code>y0</code> in a call to <code>st_union</code> is not missing, each of the geometries in <code>x</code> are unioned to the combination of <code>y0</code>.</p>
+    <p>st_intersects ...	st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively</p>
+    <p>st_buffer ... st_segmentize return an <a href='sfc.html'>sfc</a> or an <a href='sf.html'>sf</a> object with the same number of geometries as in <code>x</code></p>
+    <p>All functions (or methods) returning a geometry return an object of the same class as that of the first argument (<code>x</code>).  <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> return the non-empty geometries resulting from applying the operation to all geometry pairs in <code>x</code> and <code>y</code>, and return an object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code>, where in the latter case the matching attributes of the original object(s) are added. The <code>sfc</code> geometry list-column returned carries an attribute <code>idx</code>, which is an <code>n x 2</code> matrix with every row the index of the corresponding entries of <code>x</code> and <code>y</code>, respectively. <code>st_union</code> has in addition the ability to work on a single argument <code>x</code> (<code>y</code> missing): in this case, if <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned, if <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>.</p>
+    <p><code>st_union(x)</code> unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context &quot;fully noded&quot; means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. &quot;Dissolved&quot; means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>function <code>dist_fun</code> should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
-    <p>requires GEOS version 3.4 or above</p>
-    <p><code>st_combine</code> combines geometries without resolving borders. 
-st_combine(nc)</p>
+    <p>function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
+    <p><code>st_triangulate</code> requires GEOS version 3.4 or above</p>
+    <p>in case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
+    <p>in case of <code>st_linemerge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
+    <p><code>st_combine</code> combines geometries without resolving borders.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -221,7 +223,7 @@ st_combine(nc)</p>
 <span class='no'>pol1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))) - <span class='fl'>0.5</span>
 <span class='no'>pol2</span> <span class='kw'>=</span> <span class='no'>pol1</span> + <span class='fl'>1</span>
 <span class='no'>pol3</span> <span class='kw'>=</span> <span class='no'>pol1</span> + <span class='fl'>2</span>
-<span class='fu'>st_relate</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>p1</span>,<span class='no'>p2</span>), <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pol1</span>, <span class='no'>pol2</span>, <span class='no'>pol3</span>))</div><div class='output co'>#&gt;      [,1]        [,2]        [,3]       
+<span class='fu'>st_relate</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>), <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pol1</span>, <span class='no'>pol2</span>, <span class='no'>pol3</span>))</div><div class='output co'>#&gt;      [,1]        [,2]        [,3]       
 #&gt; [1,] &quot;0FFFFF212&quot; &quot;FF0FFF212&quot; &quot;FF0FFF212&quot;
 #&gt; [2,] &quot;FF0FFF212&quot; &quot;FF0FFF212&quot; &quot;0FFFFF212&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; converted into: MULTIPOLYGON
@@ -230,20 +232,24 @@ st_combine(nc)</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-10.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><div class='output co'>#&gt; <span class='error'>Error in cut.default(x, n): &#39;x&#39; must be numeric</span></div><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
-<span class='fu'>st_polygonize</span>(<span class='no'>mls</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-10.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><img src='geos-12.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
+<span class='fu'>st_polygonize</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mls</span>))</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  GEOMETRYCOLLECTION
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>GEOMETRYCOLLECTION(POLYGON((0 0, 0 1, 1 1, 0 0)))</span></div><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>))))
-<span class='fu'>st_linemerge</span>(<span class='no'>mls</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+<span class='fu'>st_linemerge</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mls</span>))</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='geos-20.png' alt='' width='540' height='400' /><div class='output co'>#&gt; <span class='error'>Error in cut.default(x, n): &#39;x&#39; must be numeric</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data.</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))
-<span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><img src='geos-22.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>st_combine</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON(((-81.4727554321289 36.23435592651...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))</div><img src='geos-27.png' alt='' width='540' height='400' /><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
         <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>10</span>,<span class='fl'>0</span>))))
 <span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
@@ -251,7 +257,7 @@ st_combine(nc)</p>
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 0.5)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5...</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
-  <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+ <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='fu'>try</span>(<span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>)) <span class='co'># error</span>
 <span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='co'># five points for each line</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
@@ -273,7 +279,7 @@ st_combine(nc)</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 5565.975 ymax: 110823.7
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(5565.97453966368 -7.08115455161362e-10)</span></div><img src='geos-44.png' alt='' width='540' height='400' /></pre>
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(5565.97453966368 -7.08115455161362e-10)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

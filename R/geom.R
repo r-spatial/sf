@@ -111,7 +111,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 #' @param y second simple feature (sf) or simple feature geometry (sfc) collection
 #' @name geos
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
-#' @details function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
+#' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
 #' @export
 st_distance = function(x, y, dist_fun) {
 	if (missing(y))
@@ -216,20 +216,18 @@ st_equals_exact = function(x, y, par, sparse = TRUE)
 #' @param dist buffer distance
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
-st_buffer = function(x, dist, nQuadSegs = 30) {
+st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
-}
+
+#' @export
+st_buffer.sfg = function(x, dist, nQuadSegs = 30)
+	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs))
 
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.")
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
-}
-
-#' @export
-st_buffer.sfg = function(x, dist, nQuadSegs = 30) {
- st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs) 
 }
 
 #' @export
@@ -240,18 +238,16 @@ st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
 
 #' @name geos
 #' @export
-st_boundary = function(x) {
+st_boundary = function(x)
 	UseMethod("st_boundary")
-}
 
 #' @export
-st_boundary.sfc = function(x) {
-	st_sfc(CPL_geos_op("boundary", x))
-}
+st_boundary.sfg = function(x)
+	get_first_sfg(st_boundary(st_sfc(x)))
+
 #' @export
-st_boundary.sfg = function(x) {
-	st_boundary(st_sfc(x))
-}
+st_boundary.sfc = function(x)
+	st_sfc(CPL_geos_op("boundary", x))
 
 #' @export
 st_boundary.sf = function(x) {
@@ -265,19 +261,16 @@ st_boundary.sf = function(x) {
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' plot(st_convex_hull(nc))
 #' plot(nc, border = grey(.5))
-st_convex_hull = function(x) {
+st_convex_hull = function(x)
 	UseMethod("st_convex_hull")
-}
 
 #' @export
-st_convex_hull.sfc = function(x) {
+st_convex_hull.sfg = function(x)
+	get_first_sfg(st_convex_hull(st_sfc(x)))
+
+#' @export
+st_convex_hull.sfc = function(x)
 	st_sfc(CPL_geos_op("convex_hull", x))
-}
-
-#' @export
-st_convex_hull.sfg = function(x) {
-	st_convex_hull(st_sfc(x))
-}
 
 #' @export
 st_convex_hull.sf = function(x) {
@@ -289,20 +282,18 @@ st_convex_hull.sf = function(x) {
 #' @export
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
-st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0) 
 	UseMethod("st_simplify")
-}
+
+#' @export
+st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+	get_first_sfg(st_simplify(st_sfc(x), preserveTopology, dTolerance = dTolerance))
 
 #' @export
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
 	st_sfc(CPL_geos_op("simplify", x, preserveTopology = preserveTopology, dTolerance = dTolerance))
-}
-
-#' @export
-st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
-	st_simplify(st_sfc(x), preserveTopology, dTolerance = dTolerance)
 }
 
 #' @export
@@ -314,11 +305,13 @@ st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 #' @name geos
 #' @export
 #' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
-#' @details requires GEOS version 3.4 or above
-# nocov start
-st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
+#' @details \code{st_triangulate} requires GEOS version 3.4 or above
+st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_triangulate")
-}
+
+#' @export
+st_triangulate.sfg = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
+	get_first_sfg(st_triangulate(st_sfc(x), dTolerance, bOnlyEdges = bOnlyEdges))
 
 #' @export
 st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
@@ -331,70 +324,59 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 }
 
 #' @export
-st_triangulate.sfg = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_triangulate(st_sfc(x), dTolerance, bOnlyEdges = bOnlyEdges)
-}
-
-# nocov end
-#' @export
 st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	st_geometry(x) <- st_triangulate(st_geometry(x, dTolerance, bOnlyEdges))
 	x
 }
 
 #' @name geos
-#' @param mlst object of class \code{MULTILINESTRING} or geometry list-column containing these
+#' @details in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @export
 #' @examples 
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 #' st_polygonize(st_sfc(mls))
-st_polygonize = function(mlst) {
+st_polygonize = function(x)
 	UseMethod("st_polygonize")
-}
 
 #' @export
-st_polygonize.sfc = function(mlst) {
-	x = st_geometry(mlst)
+st_polygonize.sfg = function(x)
+	get_first_sfg(st_polygonize(st_sfc(x)))
+
+#' @export
+st_polygonize.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	st_sfc(CPL_geos_op("polygonize", x))
 }
 
 #' @export
-st_polygonize.sfg = function(mlst) {
-	st_polygonize(st_sfc(mlst))
-}
-
-#' @export
-st_polygonize.sf = function(mlst) {
-	x <- mlst
-	st_geometry(x) <- st_polygonize(st_geometry(mlst))
+st_polygonize.sf = function(x) {
+	st_geometry(x) <- st_polygonize(st_geometry(x))
 	x
 }
 
 #' @name geos
 #' @export
+#' @details in case of \code{st_linemerge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples 
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_linemerge(st_sfc(mls))
-st_linemerge = function(mlst) {
+st_linemerge = function(x)
 	UseMethod("st_linemerge")
+
+#' @export
+st_linemerge.sfg = function(x)
+	get_first_sfg(st_linemerge(st_sfc(x)))
+
+#' @export
+st_linemerge.sfc = function(x) {
+	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
+	st_sfc(CPL_geos_op("linemerge", x))
 }
 
 #' @export
-st_linemerge.sfc = function(mlst) {
-	stopifnot(inherits(mlst, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("linemerge", mlst))
-}
-
-#' @export
-st_linemerge.sfg = function(mlst) {
-	st_linemerge(st_sfc(mlst))
-}
-
-#' @export
-st_linemerge.sf = function(mlst) {
-	st_geometry(mlst) <- st_linemerge(st_geometry(mlst))
-	mlst
+st_linemerge.sf = function(x) {
+	st_geometry(x) <- st_linemerge(st_geometry(x))
+	x
 }
 
 #' @name geos
@@ -402,20 +384,18 @@ st_linemerge.sf = function(mlst) {
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
-st_centroid = function(x) { 
+st_centroid = function(x)
 	UseMethod("st_centroid")
-}
+
+#' @export
+st_centroid.sfg = function(x)
+	get_first_sfg(st_centroid(st_sfc(x)))
 
 #' @export
 st_centroid.sfc = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
 	st_sfc(CPL_geos_op("centroid", x))
-}
-
-#' @export
-st_centroid.sfg = function(x) {
-	st_centroid(st_sfc(x))
 }
 
 #' @export
@@ -429,20 +409,18 @@ st_centroid.sf = function(x) {
 #' @param dfMaxLength numeric; max length of a line segment
 #' @param ... ignored
 #' @param warn logical; generate a warning in case of long/lat data
-st_segmentize	= function(x, dfMaxLength, ..., warn = TRUE) {
+st_segmentize	= function(x, dfMaxLength, ..., warn = TRUE)
 	UseMethod("st_segmentize")
-}
+
+#' @export 
+st_segmentize.sfg = function(x, dfMaxLength, ..., warn = TRUE)
+	get_first_sfg(st_segmentize(st_sfc(x), dfMaxLength, ..., warn = warn))
 
 #' @export 
 st_segmentize.sfc	= function(x, dfMaxLength, ..., warn = TRUE) {
 	if (warn && isTRUE(st_is_longlat(x)))
 		warning("st_segmentize does not correctly segmentize longitude/latitude data")
 	st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
-}
-
-#' @export 
-st_segmentize.sfg = function(x, dfMaxLength, ..., warn = TRUE) {
-	st_segmentize(st_sfc(x), dfMaxLength, ..., warn = warn)
 }
 
 #' @export
@@ -454,73 +432,135 @@ st_segmentize.sf = function(x, dfMaxLength, ..., warn = TRUE) {
 #' @name geos
 #' @export
 #' @details \code{st_combine} combines geometries without resolving borders. 
+#' @examples
 #' st_combine(nc)
-st_combine = function(x) {
-	x = st_geometry(x)
-	st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
+st_combine = function(x)
+	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge
+
+# x: object of class sf
+# y: object of calss sf or sfc
+# geoms: result from geos_op2: list of non-empty geometries with the intersection/union/difference/sym_difference
+# which has an idx attribute pointing to what is x, what is y
+geos_op2_df = function(x, y, geoms) {
+	idx = attr(geoms, "idx")
+	attr(geoms, "idx") = NULL
+	all_constant_x = all_constant_y = TRUE
+	all_constant_x = all_constant(x)
+	df = x[idx[,1],,drop = FALSE]
+	st_geometry(df) = NULL
+	if (inherits(y, "sf")) {
+		all_constant_y = all_constant(y)
+		st_geometry(y) = NULL
+		df = cbind(df, y[idx[,2], , drop = FALSE])
+	}
+	if (! (all_constant_x && all_constant_y))
+		warning("attribute variables are assumed to be spatially constant throughout all geometries", 
+			call. = FALSE)
+	# FIXME: take care of relation_to_geometry
+	st_sf(df, geoms)
 }
 
-geos_op2 = function(op, x, y) {
+# after checking identical crs,
+# call geos_op2 function op on x and y:
+geos_op2_geom = function(op, x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
-	st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+	st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
+}
+
+# return first sfg, or empty geometry in case of zero features
+get_first_sfg = function(x) {
+	if (length(x) == 0)
+		st_geometrycollection()
+	else
+		x[[1]]
 }
 
 #' @name geos
 #' @export
-#' @return \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_symdifference} return the non-empty geometries resulting from the operation, either as an \code{sfc} object or as an \code{sf} object, augmented with the matching attributes of the original object(s). The geometry column returned (or the geometry column of the returned \code{sf} object) carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. 
-st_intersection = function(x, y) {
-	ret = geos_op2("intersection", st_geometry(x), st_geometry(y))
-	if (length(ret) == 0 || !(inherits(x, "sf") || inherits(y, "sf"))) # no attributes
-		ret
-	else { # at least one of them is sf:
-		idx = attr(ret, "idx")
-		attr(ret, "idx") = NULL
-		all_constant_x = all_constant_y = TRUE
-		df = NULL
-		if (inherits(x, "sf")) {
-			all_constant_x = all_constant(x)
-			df = x[idx[,1],,drop=FALSE]
-			st_geometry(df) = NULL
-			all_constant(x)
-		}
-		if (inherits(y, "sf")) {
-			all_constant_y = all_constant(y)
-			st_geometry(y) = NULL
-			if (is.null(df))
-				df = y[idx[,2],,drop=FALSE]
-			else
-				df = cbind(df, y[idx[,2],,drop=FALSE])
-		}
-		st_geometry(df) = ret
-		if (! (all_constant_x && all_constant_y))
-			warning("attribute variables are assumed to be spatially constant throughout all geometries")
-		df
-	}
-}
+#' @return All functions (or methods) returning a geometry return an object of the same class as that of the first argument (\code{x}).  \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_sym_difference} return the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}, and return an object of class \code{sfg}, \code{sfc} or \code{sf}, where in the latter case the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. \code{st_union} has in addition the ability to work on a single argument \code{x} (\code{y} missing): in this case, if \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned, if \code{by_feature} is \code{TRUE} each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}.
+#' @export
+st_intersection = function(x, y) UseMethod("st_intersection")
+
+#' @export
+st_intersection.sfg = function(x, y)
+	get_first_sfg(geos_op2_geom("intersection", x, y))
+
+#' @export
+st_intersection.sfc = function(x, y)
+	geos_op2_geom("intersection", x, y)
+
+#' @export
+st_intersection.sf = function(x, y)
+	geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
+
+#' @name geos
+#' @export
+st_difference = function(x, y) UseMethod("st_difference")
+
+#' @export
+st_difference.sfg = function(x, y)
+	get_first_sfg(geos_op2_geom("difference", x, y))
+
+#' @export
+st_difference.sfc = function(x, y)
+	geos_op2_geom("difference", x, y)
+
+#' @export
+st_difference.sf = function(x, y)
+	geos_op2_df(x, y, geos_op2_geom("difference", x, y))
+
+#' @name geos
+#' @export
+st_sym_difference = function(x, y) UseMethod("st_sym_difference")
+
+#' @export
+st_sym_difference.sfg = function(x, y)
+	get_first_sfg(geos_op2_geom("sym_difference", x, y))
+
+#' @export
+st_sym_difference.sfc = function(x, y)
+	geos_op2_geom("sym_difference", x, y)
+
+#' @export
+st_sym_difference.sf = function(x, y)
+	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y))
 
 #' @name geos
 #' @export
 #' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features
-#' @return \code{st_union(x)} unions geometries.	Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
+#' @return \code{st_union(x)} unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
-st_union = function(x, y, by_feature = FALSE) {
-	if (! missing(y))
-		geos_op2("union", st_geometry(x), st_geometry(y))
+st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
+
+#' @export
+st_union.sfg = function(x, y, ..., by_feature = FALSE) {
+	out = if (missing(y)) # unary union, possibly by_feature:
+		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
 	else
-		st_sfc(CPL_geos_union(st_geometry(x), by_feature), crs = st_crs(x))
+		st_union(st_geometry(x), st_geometry(y))
+	get_first_sfg(out)
 }
 
-#' @name geos
 #' @export
-st_difference = function(x, y) {
-	geos_op2("difference", st_geometry(x), st_geometry(y))
+st_union.sfc = function(x, y, ..., by_feature = FALSE) {
+	if (missing(y)) # unary union, possibly by_feature:
+		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
+	else
+		geos_op2_geom("union", x, y)
 }
 
-#' @name geos
 #' @export
-st_sym_difference = function(x, y) {
-	geos_op2("sym_difference", st_geometry(x), st_geometry(y))
+st_union.sf = function(x, y, ..., by_feature = FALSE) {
+	if (missing(y)) { # unary union, possibly by_feature:
+		geom = st_sfc(CPL_geos_union(st_geometry(x), by_feature))
+		if (by_feature) {
+			st_geometry(x) = geom
+			x
+		} else
+			geom
+	} else
+		geos_op2_df(x, y, geos_op2_geom("union", x, y))
 }
 
 #' @name geos
@@ -611,7 +651,7 @@ st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)
 #' Areal-weighted interpolation of polygon data
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population), otherwise, spatially intensive (like population density).
+#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = sf:::st_makegrid(nc, n = c(20,10))

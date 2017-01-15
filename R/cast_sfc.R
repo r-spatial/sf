@@ -196,7 +196,9 @@ st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE, grou
 		if (missing(FUN))
 			stop("aggregation function missing; pls specify argument FUN")
 		x = aggregate(x, list(ids.group = ids), FUN, ..., simplify = FALSE)
+		geom = st_cast(geom, ids = ids)
 	}
+	stopifnot(nrow(x) == length(geom))
 	st_sf(x, geom, crs = crs)
 }
 

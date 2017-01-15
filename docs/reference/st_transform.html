@@ -112,7 +112,12 @@
     <pre class="examples"><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>7</span>,<span class='fl'>52</span>))
 <span class='no'>p2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>30</span>,<span class='fl'>20</span>))
 <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>)
-<span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='no'>sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -30 ymin: 20 xmax: 7 ymax: 52
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT(-30 20)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125

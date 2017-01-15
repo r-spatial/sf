@@ -83,9 +83,9 @@ st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
 
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
-st_polygonize(mlst)
+st_polygonize(x)
 
-st_linemerge(mlst)
+st_linemerge(x)
 
 st_centroid(x)
 
@@ -95,11 +95,11 @@ st_combine(x)
 
 st_intersection(x, y)
 
-st_union(x, y, by_feature = FALSE)
-
 st_difference(x, y)
 
 st_sym_difference(x, y)
+
+st_union(x, y, ..., by_feature = FALSE)
 
 st_line_sample(x, n, density, type = "regular")
 }
@@ -125,8 +125,6 @@ st_line_sample(x, n, density, type = "regular")
 \item{dTolerance}{numeric; tolerance parameter}
 
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
-
-\item{mlst}{object of class \code{MULTILINESTRING} or geometry list-column containing these}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
 
@@ -161,20 +159,23 @@ st_intersects ...	st_equals_exact return a sparse or dense logical matrix with r
 
 st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
 
-\code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_symdifference} return the non-empty geometries resulting from the operation, either as an \code{sfc} object or as an \code{sf} object, augmented with the matching attributes of the original object(s). The geometry column returned (or the geometry column of the returned \code{sf} object) carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
+All functions (or methods) returning a geometry return an object of the same class as that of the first argument (\code{x}).  \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_sym_difference} return the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}, and return an object of class \code{sfg}, \code{sfc} or \code{sf}, where in the latter case the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. \code{st_union} has in addition the ability to work on a single argument \code{x} (\code{y} missing): in this case, if \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned, if \code{by_feature} is \code{TRUE} each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}.
 
-\code{st_union(x)} unions geometries.	Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates). If \code{y0} in a call to \code{st_union} is not missing, each of the geometries in \code{x} are unioned to the combination of \code{y0}.
+\code{st_union(x)} unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
 }
 \description{
 Geometric operations on (pairs of) simple feature geometries
 }
 \details{
-function \code{dist_fun} should follow the pattern of the distance functions in package geosphere: the first two arguments should be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 
-requires GEOS version 3.4 or above
+\code{st_triangulate} requires GEOS version 3.4 or above
 
-\code{st_combine} combines geometries without resolving borders. 
-st_combine(nc)
+in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+
+in case of \code{st_linemerge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+
+\code{st_combine} combines geometries without resolving borders.
 }
 \examples{
 x = st_sfc(
@@ -201,6 +202,7 @@ mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_linemerge(st_sfc(mls))
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
+st_combine(nc)
 plot(st_union(nc))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 	st_linestring(rbind(c(0,0),c(10,0))))

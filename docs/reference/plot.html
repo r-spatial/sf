@@ -121,6 +121,11 @@
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='fu'>plot_sf</span>(<span class='no'>x</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>bgc</span> <span class='kw'>=</span> <span class='fu'>par</span>(<span class='st'>"bg"</span>), <span class='no'>...</span>, <span class='no'>xaxs</span>, <span class='no'>yaxs</span>, <span class='no'>lab</span>, <span class='kw'>setParUsrBB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>bgMap</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>expandBB</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='kw'>graticule</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>,
+  <span class='kw'>col_graticule</span> <span class='kw'>=</span> <span class='st'>"grey"</span>)
+
 <span class='fu'>sf.colors</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>xc</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
@@ -131,7 +136,7 @@
       <dt>y</dt>
       <dd>ignored</dd>
       <dt>...</dt>
-      <dd>further specifications, see plot</dd>
+      <dd>further specifications, see plot_sf and plot</dd>
       <dt>ncol</dt>
       <dd>integer; default number of colors to be used.</dd>
       <dt>col</dt>
@@ -154,6 +159,34 @@
       <dd>color of polygon border</dd>
       <dt>rule</dt>
       <dd>see <a href='http://www.rdocumentation.org/packages/graphics/topics/polypath'>polypath</a></dd>
+      <dt>xlim</dt>
+      <dd>see par</dd>
+      <dt>ylim</dt>
+      <dd>see par</dd>
+      <dt>asp</dt>
+      <dd>see below, and see par</dd>
+      <dt>axes</dt>
+      <dd>logical; should axes be plotted? (default FALSE)</dd>
+      <dt>bgc</dt>
+      <dd>background color</dd>
+      <dt>xaxs</dt>
+      <dd>see par</dd>
+      <dt>yaxs</dt>
+      <dd>see par</dd>
+      <dt>lab</dt>
+      <dd>see par</dd>
+      <dt>setParUsrBB</dt>
+      <dd>default FALSE; set the <code>par</code> &#8220;usr&#8221; bounding box; see below</dd>
+      <dt>bgMap</dt>
+      <dd>object of class <code>ggmap</code>, or returned by function <code>RgoogleMaps::GetMap</code></dd>
+      <dt>expandBB</dt>
+      <dd>numeric; fractional values to expand the bounding box with, 
+in each direction (bottom, left, top, right)</dd>
+      <dt>graticule</dt>
+      <dd>object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), 
+or object returned by <a href='st_graticule.html'>st_graticule</a></dd>
+      <dt>col_graticule</dt>
+      <dd>color to used for the graticule (if present)</dd>
       <dt>n</dt>
       <dd>integer; number of colors</dd>
       <dt>xc</dt>
@@ -168,6 +201,18 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p><code>plot.sf</code> plots maps with colors following from attribute columns, 
+one map per attribute. It uses <code>sf.colors</code> for default colors.</p>
+    <p><code>plot.sfc</code> plots the geometry, additional parameters can be passed on
+to control color, lines or symbols.</p>
+    <p><code>plot_sf</code> sets up the plotting area, axes, graticule, or webmap background; it
+is called by all <code>plot</code> methods before anything is drawn.</p>
+    <p>The argument <code>setParUsrBB</code> may be used to pass the logical value <code>TRUE</code> to functions within <code>plot.Spatial</code>. When set to <code>TRUE</code>, par(&#8220;usr&#8221;) will be overwritten with <code>c(xlim, ylim)</code>, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(&#8220;xaxs&#8221;) and par(&#8220;yaxs&#8221;) in addition to <code>par(mar=c(0,0,0,0))</code>.</p>
+    <p>The default aspect for map plots is 1; if however data are not
+projected (coordinates are long/lat), the aspect is by default set to
+1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+(the mean of ylim, which defaults to the y range of bounding box). This
+implies an <a href = 'Equirectangular projection'>https://en.wikipedia.org/wiki/Equirectangular_projection</a>.</p>
     <p><code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <code>http://www.colorbrewer2.org/</code> (if n &lt; 9, Set2, else Set3).</p>
     
 
