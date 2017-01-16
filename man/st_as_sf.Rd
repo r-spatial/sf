@@ -8,8 +8,8 @@
 \usage{
 st_as_sf(x, ...)
 
-\method{st_as_sf}{data.frame}(x, ..., relation_to_geometry = NA_character_,
-  coords, wkt, dim = "XYZ", remove = TRUE)
+\method{st_as_sf}{data.frame}(x, ..., agr = NA_agr_, coords, wkt,
+  dim = "XYZ", remove = TRUE)
 
 \method{st_as_sf}{Spatial}(x, ...)
 }
@@ -18,7 +18,7 @@ st_as_sf(x, ...)
 
 \item{...}{passed on to \link{st_sf}, might included crs}
 
-\item{relation_to_geometry}{character vector; see details section of \link{st_sf}}
+\item{agr}{character vector; see details section of \link{st_sf}}
 
 \item{coords}{in case of point data: names or numbers of the numeric columns holding coordinates}
 
@@ -46,7 +46,7 @@ df = st_as_sf(d, wkt = "geom")
 d$geom2 = st_sfc(pt1, pt2)
 st_as_sf(d) # should warn
 data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "constant")
+meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 meuse_sf[1:3,]
 summary(meuse_sf)
 library(sp)

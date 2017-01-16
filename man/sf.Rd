@@ -6,15 +6,15 @@
 \alias{st_sf}
 \title{Create sf object}
 \usage{
-st_sf(..., relation_to_geometry = NA_character_, row.names,
+st_sf(..., agr = NA_agr_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision)
 
-\method{[}{sf}(x, i, j, ..., drop = FALSE, op = "intersects")
+\method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
 }
 \arguments{
 \item{...}{column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}}
 
-\item{relation_to_geometry}{character vector; see details below.}
+\item{agr}{character vector; see details below.}
 
 \item{row.names}{row.names for the created \code{sf} object}
 
@@ -32,13 +32,13 @@ st_sf(..., relation_to_geometry = NA_character_, row.names,
 
 \item{drop}{whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}}
 
-\item{op}{character; geometrical operation to apply when \code{i} is a simple feature object}
+\item{op}{function; geometrical binary predicate function to apply when \code{i} is a simple feature object}
 }
 \description{
 Create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
-\code{relation_to_geometry} specified for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_character_}, implies we don't know.
+\code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 
 "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped, an \code{sfc} object if only the geometry column is selected, otherwise the behavior depending on \code{drop} is identical to that of \link{[.data.frame}.
 }

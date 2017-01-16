@@ -1,10 +1,10 @@
 suppressPackageStartupMessages(library(sf))
 
 nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
-	relation_to_geometry = c(AREA = "lattice", PERIMETER = "lattice", CNTY_ = "entity",
-		CNTY_ID = "entity", NAME = "entity", FIPS = "entity", FIPSNO = "entity",
-		CRESS_ID = "entity", BIR74 = "lattice", SID74 = "lattice", NWBIR74 = "lattice",
-		BIR79 = "lattice", SID79 = "lattice", NWBIR79  = "lattice"), quiet = TRUE)
+	agr = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
+		CNTY_ID = "identity", NAME = "identity", FIPS = "identity", FIPSNO = "identity",
+		CRESS_ID = "identity", BIR74 = "aggregate", SID74 = "aggregate", NWBIR74 = "aggregate",
+		BIR79 = "aggregate", SID79 = "aggregate", NWBIR79  = "aggregate"), quiet = TRUE)
 
 st_is_valid(nc)
 

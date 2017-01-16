@@ -16,7 +16,7 @@ invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(
 
 # POINTS:
 data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
+meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 grid.newpage()
 pushViewport(st_viewport(meuse_sf))
 invisible(lapply(st_geometry(meuse_sf), 

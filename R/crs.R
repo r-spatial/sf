@@ -179,6 +179,7 @@ st_is_longlat = function(x) {
 }
 
 crs_parameters = function(x) {
+	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string), 
 		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
 	ret$SemiMajor = ret$SemiMajor * make_unit("m")

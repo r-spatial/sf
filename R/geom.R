@@ -1,8 +1,8 @@
 # unary, interfaced through GEOS:
 
-#' Geometric operations on (pairs of) simple feature geometries
+#' Geometric operations on (pairs of) simple feature geometry sets
 #' 
-#' Geometric operations on (pairs of) simple feature geometries
+#' Geometric operations on (pairs of) simple feature geometry sets
 #' @name geos
 #' @export
 #' @return matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
@@ -107,8 +107,8 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 		ret[[1]]
 }
 
-#' @param x first simple feature (sf) or simple feature geometry (sfc) collection
-#' @param y second simple feature (sf) or simple feature geometry (sfc) collection
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @name geos
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
@@ -116,10 +116,12 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
 st_distance = function(x, y, dist_fun) {
 	if (missing(y))
 		y = x
-	else 
+	else
 		stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
+	if (!is.na(st_crs(x)))
+		p = crs_parameters(st_crs(x))
 	if (isTRUE(st_is_longlat(x))) {
 		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 			stop("st_distance for longitude/latitude data only available for POINT geometries")
@@ -127,7 +129,6 @@ st_distance = function(x, y, dist_fun) {
 			stop("package sp required, please install it first")
 		if (missing(dist_fun))
 			dist_fun = geosphere::distGeo
-		p = crs_parameters(st_crs(x))
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
 		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
 		m = matrix(
@@ -136,9 +137,9 @@ st_distance = function(x, y, dist_fun) {
 		units(m) = units(p$SemiMajor)
 		m
 	} else {
-		d = CPL_geos_dist(st_geometry(x), st_geometry(y))
-		if (!is.na(st_crs(x)))
-			d * crs_parameters(st_crs(x))$ud_unit
+		d = CPL_geos_dist(x, y)
+		if (! is.na(st_crs(x)))
+			d * p$ud_unit
 		else
 			d
 	}

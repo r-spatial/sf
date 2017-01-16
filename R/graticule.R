@@ -112,7 +112,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(
 		geom = st_transform(geom, crs)
 
 	st_geometry(df) = geom
-	attr(df, "relation_to_geometry") = "constant" # FIXME: should be factor, and for every attr
+	st_agr(df) = "constant"
 
 	if (!missing(x)) { # cut out box:
 		if (! is.na(crs))

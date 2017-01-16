@@ -35,7 +35,7 @@
 \alias{st_triangulate}
 \alias{st_union}
 \alias{st_within}
-\title{Geometric operations on (pairs of) simple feature geometries}
+\title{Geometric operations on (pairs of) simple feature geometry sets}
 \usage{
 st_is_valid(x)
 
@@ -104,13 +104,13 @@ st_union(x, y, ..., by_feature = FALSE)
 st_line_sample(x, n, density, type = "regular")
 }
 \arguments{
-\item{x}{first simple feature (sf) or simple feature geometry (sfc) collection}
+\item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
 
 \item{dist_fun}{function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
 
-\item{y}{second simple feature (sf) or simple feature geometry (sfc) collection}
+\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 
@@ -164,7 +164,7 @@ All functions (or methods) returning a geometry return an object of the same cla
 \code{st_union(x)} unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
 }
 \description{
-Geometric operations on (pairs of) simple feature geometries
+Geometric operations on (pairs of) simple feature geometry sets
 }
 \details{
 function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.

@@ -719,19 +719,18 @@ par(opar)
 The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their [units of measurement](https://CRAN.R-project.org/package=units)). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
 Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties), meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.
 
-Simple feature objects of class `sf` have an attribute that points out how attributes relate to their geometry,
-which can be defined at creation time:
+Simple feature objects of class `sf` have an _agr_ attribute that points to the _attribute-geometry-relationship_, how attributes relate to their geometry. It can be defined at creation time:
 
 ```{r}
 nc <- st_read(system.file("shape/nc.shp", package="sf"),
-    relation_to_geometry = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
+    agr = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
         CNTY_ID = "identity", NAME = "identity", FIPS = "identity", FIPSNO = "identity",
         CRESS_ID = "identity", BIR74 = "aggregate", SID74 = "aggregate", NWBIR74 = "aggregate",
         BIR79 = "aggregate", SID79 = "aggregate", NWBIR79 = "aggregate"))
-attr(nc, "relation_to_geometry")
+st_agr(nc)
 data(meuse, package = "sp")
-meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
-attr(meuse_sf, "relation_to_geometry")
+meuse_sf <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
+st_agr(meuse_sf)
 ```
 
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one

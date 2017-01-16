@@ -123,7 +123,7 @@ test_that("st_union/difference/sym_difference/intersection work, for all types",
   x = list(
   	pl,
 	st_sfc(pl,l,pl),
-	st_sf(a=5:7, st_sfc(pl,l,pl), relation_to_geometry = "constant")
+	st_sf(a=5:7, st_sfc(pl,l,pl), agr = "constant")
   )
   y = x
   for (f in list(st_union, st_difference, st_sym_difference, st_intersection)) {
@@ -146,7 +146,7 @@ test_that("st_union works with by_feature", {
   x = list(
   	pl,
 	st_sfc(pl,l,pl),
-	st_sf(a=5:7, st_sfc(pl,l,pl), relation_to_geometry = "constant")
+	st_sf(a=5:7, st_sfc(pl,l,pl), agr = "constant")
   )
   expect_silent(z <- st_union(x[[1]], by_feature = TRUE))
   expect_silent(z <- st_union(x[[2]], by_feature = TRUE))

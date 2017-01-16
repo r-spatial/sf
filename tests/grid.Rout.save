@@ -33,7 +33,7 @@ Type 'q()' to quit R.
 > 
 > # POINTS:
 > data(meuse, package = "sp")
-> meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, relation_to_geometry = "field")
+> meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 > grid.newpage()
 > pushViewport(st_viewport(meuse_sf))
 > invisible(lapply(st_geometry(meuse_sf), 
@@ -74,4 +74,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  0.676   0.056   0.732 
+  0.744   0.008   0.749 
