@@ -462,6 +462,24 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
   ..- attr(*, "names")= chr  "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...
 > 
+> st_agr("constant")
+[1] constant
+Levels: constant aggregate identity
+> st_agr()
+[1] <NA>
+Levels: constant aggregate identity
+> st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
+Simple feature collection with 2 features and 2 fields
+Attribute-geometry relationsips: 1 constant, 1 aggregate, 0 identity
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -90 ymin: 35 xmax: -80 ymax: 36
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+  a b          geom
+1 1 3 POINT(-90 35)
+2 2 4 POINT(-80 36)
+> 
 > proc.time()
    user  system elapsed 
-  0.544   0.012   0.555 
+  0.504   0.044   0.545 

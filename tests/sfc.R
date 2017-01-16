@@ -105,3 +105,7 @@ ls - 2
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 str(nc)
+
+st_agr("constant")
+st_agr()
+st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
