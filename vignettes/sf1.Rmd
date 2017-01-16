@@ -163,7 +163,7 @@ library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
-(Note that users will not use \code{system.file} but give a \code{filename} directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
+(Note that users will not use `system.file` but give a `filename` directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
 The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14
 fields (attributes, represented as columns). This object is of class
 
