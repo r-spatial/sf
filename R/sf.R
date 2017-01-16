@@ -90,12 +90,16 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @export
 `st_geometry<-.data.frame` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
+	stopifnot(nrow(x) == length(value))
 	st_sf(x, geometry = value)
 }
 
 #' @export
 `st_geometry<-.sf` = function(x, value) {
-	stopifnot(is.null(value) || inherits(value, "sfc"))
+	if (! is.null(value)) {
+		stopifnot(inherits(value, "sfc"))
+		stopifnot(nrow(x) == length(value))
+	}
 	x[[attr(x, "sf_column")]] <- value
 	if (is.null(value))
 		data.frame(x)

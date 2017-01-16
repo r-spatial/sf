@@ -124,6 +124,7 @@ st_cast_sfc_default = function(x) {
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
 #' @param group_or_split logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.
+#' @param ... ignored
 #' @export
 #' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
 #' 
@@ -172,34 +173,25 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 }
 
 #' @name st_cast
-#' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries
-#' @param ... in case of \code{st_cast.sf}: passed on to \link[stats]{aggregate}
 #' @export
-st_cast.sf = function(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE, group_or_split = TRUE) {
-	geom = st_cast(st_geometry(x), to, ids = ids, group_or_split = group_or_split)
+st_cast.sf = function(x, to, ..., warn = TRUE, group_or_split = TRUE) {
+	geom = st_cast(st_geometry(x), to, group_or_split = group_or_split)
 	crs = st_crs(x)
 	all_const = all_constant(x)
 	st_geometry(x) = NULL # set back to data.frame; FIXME: inherit relation_to_geometry?
-	# handle x: split or group?
-	if (!is.null(attr(geom, "ids"))) { # split:
-		if (!missing(ids))
-			warning("argument ids is ignored, and taken from the geometry splitting")
+	# split x?
+	ids = attr(geom, "ids")          # e.g. 3 2 4
+	if (!is.null(ids)) { # split:
 		if (warn && !all_const)
 			warning("repeating attributes for all sub-geometries for which they may not be constant")
-		ids = attr(geom, "ids")          # e.g. 3 2 4
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
 		# FIXME: deal with identity -> constant
 		x = x[reps,]
-	} else if (length(unique(ids)) < nrow(x)) { # group:
-		# FIXME: warn on const -> aggregation; suggest area-weighted aggregation?
-		if (missing(FUN))
-			stop("aggregation function missing; pls specify argument FUN")
-		x = aggregate(x, list(ids.group = ids), FUN, ..., simplify = FALSE)
-		geom = st_cast(geom, ids = ids)
 	}
 	stopifnot(nrow(x) == length(geom))
-	st_sf(x, geom, crs = crs)
+	st_geometry(x) = geom
+	x
 }
 
 #' test equality between the geometry type and a class or set of classes

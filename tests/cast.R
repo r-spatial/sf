@@ -30,12 +30,6 @@ st_cast(g, "MULTILINESTRING")
 expect_warning(st_cast(g, "LINESTRING"))
 st_cast(st_cast(g, "MULTILINESTRING"), "LINESTRING") # will not loose
 
-s = st_sf(a = 1:2, geom = st_sfc(st_point(1:2), st_point(2:3)))
-x = st_cast(s, "MULTIPOINT", ids = c(1,1), FUN = mean)
-st_cast(x, "POINT", warn = FALSE)
-expect_warning(st_cast(x, "POINT"))
-expect_warning(st_cast(x, "POINT", ids = c(1,1)))
-
 gc = st_sfc(st_geometrycollection(
   list(
     st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)), 
@@ -82,3 +76,11 @@ st_is(sfc, "POLYGON")
 st_is(sfc, "LINESTRING")
 st_is(st_sf(a = 1:2, sfc), "LINESTRING")
 st_is(sfc, c("POINT", "LINESTRING"))
+
+# aggregate
+pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
+pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
+s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
+(a = aggregate(s, c(1,1), mean))
+(a = aggregate(s, c(1,1), mean, union = TRUE))
+# expect_warning(st_cast(a, "POINT"))

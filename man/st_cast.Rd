@@ -31,21 +31,18 @@ st_cast(x, to, ...)
 
 \method{st_cast}{sfc}(x, to, ..., ids = seq_along(x), group_or_split = TRUE)
 
-\method{st_cast}{sf}(x, to, ..., ids = seq_len(nrow(x)), FUN, warn = TRUE,
-  group_or_split = TRUE)
+\method{st_cast}{sf}(x, to, ..., warn = TRUE, group_or_split = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
 \item{to}{character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.}
 
-\item{...}{in case of \code{st_cast.sf}: passed on to \link[stats]{aggregate}}
+\item{...}{ignored}
 
 \item{ids}{integer vector, denoting how geometries should be grouped (default: no grouping)}
 
 \item{group_or_split}{logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.}
-
-\item{FUN}{function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped}
 
 \item{warn}{logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries}
 }
