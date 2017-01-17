@@ -457,7 +457,6 @@ geos_op2_df = function(x, y, geoms) {
 	if (! (all_constant_x && all_constant_y))
 		warning("attribute variables are assumed to be spatially constant throughout all geometries", 
 			call. = FALSE)
-	# FIXME: take care of relation_to_geometry
 	st_sf(df, geoms)
 }
 

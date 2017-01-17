@@ -121,9 +121,15 @@ MULTIPOINT(0.298648830503225 0, 2.4841704731807...
 > g = st_makegrid(nc, n = c(20,10))
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
+Warning message:
+In st_interpolate_aw(nc["BIR74"], g, FALSE) :
+  st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 [1] 1.20742
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
+Warning message:
+In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
+  st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a2$BIR74) / sum(nc$BIR74)
 [1] 1.000013
 > 
@@ -136,4 +142,4 @@ LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  1.936   0.016   1.951 
+  2.008   0.004   2.012 

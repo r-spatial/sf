@@ -178,19 +178,20 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 st_cast.sf = function(x, to, ..., warn = TRUE, group_or_split = TRUE) {
 	geom = st_cast(st_geometry(x), to, group_or_split = group_or_split)
 	crs = st_crs(x)
+	agr = st_agr(x)
 	all_const = all_constant(x)
-	st_geometry(x) = NULL # set back to data.frame; FIXME: inherit relation_to_geometry?
-	# split x?
+	st_geometry(x) = NULL
 	ids = attr(geom, "ids")          # e.g. 3 2 4
 	if (!is.null(ids)) { # split:
 		if (warn && !all_const)
 			warning("repeating attributes for all sub-geometries for which they may not be constant")
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
-		# FIXME: deal with identity -> constant
+		agr[agr == "identity"] = "constant" # since we splitted
 		x = x[reps,]
+		stopifnot(nrow(x) == length(geom))
 	}
-	stopifnot(nrow(x) == length(geom))
 	st_geometry(x) = geom
+	st_agr(x) = agr
 	x
 }
 

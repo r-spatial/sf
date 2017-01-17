@@ -31,15 +31,21 @@ st_agr.default = function(x, ...) NA_agr_
 
 #' @export
 `st_agr<-.sf` = function(x, value) {
-	n = ncol(x) - length(attr(x, "sf_column"))
-	value = rep(factor(value, levels = agr_levels), length.out = n)
-	nv = setdiff(names(x), attr(x, "sf_column"))
-	if (! is.null(names(value))) {
-		stopifnot(length(setdiff(names(value), nv)) == 0)
-		value = value[match(nv, names(value))]
-	} else
-		names(value) = nv
-	attr(x, "agr") <- value
+	stopifnot(is.character(value) || is.factor(value))
+	if (! is.null(names(value)) && length(value) == 1) { 
+		# as in: st_agr(x) = c(Group.1 = "identity"): replace one particular
+		attr(x, "agr")[names(value)] = st_agr(value)
+	} else {
+		n = ncol(x) - length(attr(x, "sf_column"))
+		value = rep(st_agr(value), length.out = n)
+		nv = setdiff(names(x), attr(x, "sf_column"))
+		if (! is.null(names(value))) {
+			stopifnot(length(setdiff(names(value), nv)) == 0)
+			value = value[match(nv, names(value))]
+		} else
+			names(value) = nv
+		attr(x, "agr") <- value
+	}
 	x
 }
 

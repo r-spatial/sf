@@ -164,7 +164,6 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 	# add attributes:
 	attr(df, "sf_column") = sfc_name
-	# FIXME: check that if one of them is aggregate, geom cannot be POINT
 	class(df) = c("sf", class(df))
 	st_agr(df) = agr
 	if (! missing(crs))
