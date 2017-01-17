@@ -17,42 +17,57 @@
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
-st_read_db = function(conn = NULL, table, query = paste("select * from ", table, ";"),
-		geom_column = NULL, EWKB, ...) {
-	if (is.null(conn))
-		stop("no connection provided")
-  	# suppress warning about unknown type "geometry":
-	suppressWarnings(tbl <- dbGetQuery(conn, query))
+st_read_db = function(conn = NULL, table = NULL, query = NULL,
+                      geom_column = NULL, EWKB, ...) {
+    if (is.null(conn))
+        stop("no connection provided")
+    
+    if (!is.null(table)) {
+        table <- schema_table(table)
+        if (!DBI::dbExistsTable(conn, table)) {
+            stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
+        }
+        if (!is.null(query)) warning("Ignoring query argument, only using table")
+        query <- paste("SELECT * FROM", paste0(table, collapse = "."), ";")
+    } else if(is.null(query)) {
+        stop("Provide either a table name or a query", call. = FALSE)
+    }
+    
+    # suppress warning about unknown type "geometry":
+    suppressWarnings(tbl <- dbGetQuery(conn, query))
+    if (is.null(tbl)) {
+        stop("`", query, "` returned no results.", call. = FALSE)
+    }
+    
     if("row.names" %in% colnames(tbl)){
         row.names(tbl) = tbl[["row.names"]]
         tbl = tbl[,setdiff(colnames(tbl), "row.names")]
     }
-	if (is.null(geom_column)) { # try find the geometry column:
-		gc = try(dbReadTable(conn, "geometry_columns"))
-		geom_column = if (class(gc) == "try-error" || missing(table))
-				tail(which(sapply(tbl, is.character)), 1) # guess it's the last character column
-			else {
-				tbl_name = tail(strsplit(table, ".", fixed = TRUE)[[1]], 1)
-				gc [ gc$f_table_name == tbl_name, "f_geometry_column"]
-			}
-	}
-	crs = if (missing(table)) {
-			warning("argument table missing: returning object without crs")
-			NA_crs_
-		} else {
-			tbl_name = tail(strsplit(table, ".", fixed = TRUE)[[1]], 1)
-			SRID = dbGetQuery(conn, paste0("select srid from geometry_columns where f_table_name = '",
-				tbl_name, "';"))[[1]]
-			ret = dbGetQuery(conn, paste("select proj4text from spatial_ref_sys where srid =", SRID, ";"))
-			if (nrow(ret))
-				make_crs(ret[[1]])
-			else
-				NA_crs_
-		}
-	if (missing(EWKB))
-		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
+    gc = try(dbReadTable(conn, "geometry_columns"))
+    
+    if (is.null(geom_column)) { # try find the geometry column:
+        geom_column = if (class(gc) == "try-error" | is.null(table))
+            tail(which(sapply(tbl, is.character)), 1) # guess it's the last character column
+        else {
+            gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
+        }
+    }
+    crs = if (class(gc) == "try-error" | is.null(table)) {
+        warning("argument table missing: returning object without crs")
+        NA_crs_
+    } else {
+        srid = gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "srid"]
+        if (srid != 0) {
+            # srid 0 is used for missing in postgis
+            make_crs(srid)
+        } else {
+            NA_crs_
+        }
+    }
+    if (missing(EWKB))
+        EWKB = inherits(conn, "PostgreSQLConnection") | inherits(conn, "PqConnection")
     tbl[[geom_column]] = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = crs)
-	st_as_sf(tbl, ...)
+    st_as_sf(tbl, ...)
 }
 
 #' Write simple feature table to a spatial database
@@ -61,9 +76,8 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' @param conn open database connection
 #' @param table name for the table in the database
 #' @param geom_name name of the geometry column in the database
-#' @param ... (for st_write_db only:) arguments passed on to \code{dbWriteTable}
-#' @param drop_table logical; should \code{table} be dropped first?
-#' @param try_drop logical; should we try() to drop \code{table} first?
+#' @param ... arguments passed on to \code{dbWriteTable}
+#' @param overwrite logical; should \code{table} be dropped first?
 #' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
 #' @param debug logical; print SQL statements to screen before executing them.
@@ -79,59 +93,71 @@ st_read_db = function(conn = NULL, table, query = paste("select * from ", table,
 #' st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
 #'   
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
-		..., drop_table = FALSE, try_drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
-	DEBUG = function(x) { if (debug) print(x); x }
-	if (is.null(conn))
-		stop("no connection (conn) provided")
-	if (inherits(obj, "sfc"))
-		obj = st_sf(id = 1:length(obj), geom = obj)
-	if (length(table) > 1) {
-		schema = table[1]
-		table = table[2]
-	} else
-		schema = ""
-	if (drop_table)
-		dbGetQuery(conn, DEBUG(paste("drop table", table, ";")))
-	if (try_drop)
-		try(dbGetQuery(conn, DEBUG(paste("drop table", table, ";"))))
-	df = obj
-	df[[attr(df, "sf_column")]] = NULL
-	class(df) = "data.frame"
-	#if (drop_table)
-	#	dbSendQuery(conn, paste("drop table ", table, ";"))
-	dbWriteTable(conn, table, df, ...)
-	geom = st_geometry(obj)
-	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-	crs = st_crs(geom)
-	SRID = crs$epsg
-	if (is.null(SRID) || is.na(SRID)) {
-	  if (!is.na(crs)) warning("Postgis does not support proj4string, the SRID is set to missing")
-	  SRID = 0
-	}
-		
-	TYPE = class(geom[[1]])[2]
-	if (! append) {
-		query = DEBUG(paste0("SELECT AddGeometryColumn('",schema,"','", table, "','", geom_name, 
-			"','", SRID, "','", TYPE, "',", DIM, ");"))
-		dbGetQuery(conn, query)
-	}
-	rn = row.names(obj)
-	if (schema != "")
-		table = paste0(c(schema, table), collapse = ".")
-	if (! binary) {
-		wkt = st_as_text(geom)
-		for (r in seq_along(rn)) {
-			cmd = DEBUG(paste0("UPDATE ", table, " SET ", geom_name, 
-				" = ST_GeomFromText('", wkt[r], "',",SRID,") WHERE \"row.names\" = '", rn[r], "';"))
-			dbGetQuery(conn, cmd)
-		}
-	} else {
-		wkb = st_as_binary(geom, EWKB = TRUE)
-		for (r in seq_along(rn)) {
-			cmd = DEBUG(paste0("UPDATE ", table, " SET ",
-                            geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
-                            "' WHERE \"row.names\" = '", rn[r], "';"))
-			dbGetQuery(conn, cmd)
-		}
-	}
+                       ..., overwrite = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
+    DEBUG = function(x) { if (debug) print(x); x }
+    if (is.null(conn))
+        stop("No connection provided")
+    table <- schema_table(table)
+    
+    if (DBI::dbExistsTable(conn, table)) {
+        if (overwrite) {
+            DBI::dbGetQuery(conn, DEBUG(paste("drop table", paste(table, collapse = "."), ";")))
+        } else {
+            stop("Table ", paste(table, collapse = "."), " exists already, use overwrite = TRUE", call. = FALSE)
+        }
+    }
+    df = obj
+    df[[attr(df, "sf_column")]] = NULL
+    class(df) = "data.frame"
+    dbWriteTable(conn, table, df, ...)
+    geom = st_geometry(obj)
+    DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
+    crs = st_crs(geom)
+    SRID = crs$epsg
+    if (is.null(SRID) || is.na(SRID)) {
+        if (!is.na(crs)) {
+            warning("Postgis does not support proj4string, the SRID is set to missing (0)")
+        }
+        SRID = 0
+    }
+    
+    TYPE = class(geom[[1]])[2]
+    if (! append) {
+        query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name, 
+                             "','", SRID, "','", TYPE, "',", DIM, ");"))
+        dbSendQuery(conn, query)
+    }
+    rn = row.names(obj)
+    if (! binary) {
+        wkt = st_as_text(geom)
+        for (r in seq_along(rn)) {
+            cmd = DEBUG(paste0("UPDATE ", paste0(table, collapse = "."), " SET ", geom_name, 
+                               " = ST_GeomFromText('", wkt[r], "',",SRID,") WHERE \"row.names\" = '", rn[r], "';"))
+            dbGetQuery(conn, cmd)
+        }
+    } else {
+        wkb = st_as_binary(geom, EWKB = TRUE)
+        for (r in seq_along(rn)) {
+            cmd = DEBUG(paste0("UPDATE ", paste0(table, collapse = "."), " SET ",
+                               geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
+                               "' WHERE \"row.names\" = '", rn[r], "';"))
+            dbGetQuery(conn, cmd)
+        }
+    }
+}
+
+
+schema_table <- function(table, public = "public") {
+    if (!is.character(table)) {
+        stop("table must be a character vector", call. = FALSE)
+    }
+    if (length(table) == 1) {
+        table = c(public, table[1])
+    } else if (length(table) > 2){
+        stop("table cannot be longer than 2 (schema, table)", call. = FALSE)
+    }
+    if (any(is.na(table))) {
+        stop("table and schema cannot be NA", call. = FALSE)
+    }
+    return(table)
 }

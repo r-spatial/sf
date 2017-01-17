@@ -10,8 +10,8 @@ st_write(obj, dsn, layer = basename(dsn),
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
-  geom_name = "wkb_geometry", ..., drop_table = FALSE, try_drop = FALSE,
-  append = FALSE, binary = TRUE, debug = FALSE)
+  geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
+  binary = TRUE, debug = FALSE)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -22,7 +22,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
-\item{...}{(for st_write_db only:) arguments passed on to \code{dbWriteTable}}
+\item{...}{arguments passed on to \code{dbWriteTable}}
 
 \item{dataset_options}{character; driver dependent dataset creation options; multiple options supported.}
 
@@ -38,9 +38,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{geom_name}{name of the geometry column in the database}
 
-\item{drop_table}{logical; should \code{table} be dropped first?}
-
-\item{try_drop}{logical; should we try() to drop \code{table} first?}
+\item{overwrite}{logical; should \code{table} be dropped first?}
 
 \item{append}{logical; append to table? (NOTE: experimental, might not work)}
 

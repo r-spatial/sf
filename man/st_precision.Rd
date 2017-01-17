@@ -13,7 +13,7 @@ st_set_precision(x, precision)
 st_precision(x) <- value
 }
 \arguments{
-\item{x}{object of class \code{sfc}}
+\item{x}{object of class \code{sfc} or \code{sf}}
 
 \item{precision}{numeric; see \link{st_as_binary}}
 
