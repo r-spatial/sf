@@ -1,6 +1,8 @@
 Package: sf
 Version: 0.3-0
 Title: Simple Features for R
+Description: Support for simple features, a standardized way to encode spatial data, with bindings 
+    to GDAL, GEOS and Proj.4.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"),
 	person("Roger", "Bivand", role = "ctb"),
 	person("Ian", "Cook", role = "ctb"),
@@ -11,17 +13,63 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Etienne", "Racine", role = "ctb")
 	)
-Depends: R (>= 3.3.0)
-Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, units (>= 0.4)
+Depends: 
+    R (>= 3.3.0)
+Imports: 
+    utils, 
+    stats, 
+    tools, 
+    graphics, 
+    grDevices, 
+    grid, 
+    methods, 
+    Rcpp, 
+    DBI, 
+    units (>= 0.4)
+Suggests: 
+    sp (>= 1.2-4), 
+    rgeos, 
+    rgdal, 
+    RPostgreSQL, 
+    testthat, 
+    knitr, 
+    tibble, 
+    dplyr, 
+    tidyr, 
+    geosphere (>= 1.5-5), 
+    maptools, 
+    maps,
+    microbenchmark,
+    testthat
 LinkingTo: Rcpp
-Suggests: sp (>= 1.2-4), rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr, geosphere (>= 1.5-5), maptools, maps
 VignetteBuilder: knitr
-Description: Support for simple features, a standardized way to encode spatial data, with bindings to GDAL, GEOS and Proj.4.
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 BugReports: https://github.com/edzer/sfr/issues/
 RoxygenNote: 5.0.1
-Collate: RcppExports.R init.R bbox.R read.R db.R sfc.R sfg.R sf.R wkb.R wkt.R
-	plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R cast_sfg.R cast_sfc.R
-	graticule.R datasets.R aggregate.R agr.R
+Collate:
+	RcppExports.R
+	init.R
+	bbox.R
+	read.R
+	db.R
+	sfc.R
+	sfg.R
+	sf.R
+	wkb.R
+	wkt.R
+	plot.R
+	geom.R
+	transform.R
+	sp.R
+	crs.R
+	grid.R
+	arith.R
+	tidy.R
+	cast_sfg.R
+	cast_sfc.R
+	graticule.R
+	datasets.R
+	aggregate.R 
+	agr.R
