@@ -166,8 +166,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (layer.size() == 0) { // no layer specified
 		switch (poDS->GetLayerCount()) {
 			case 0: { // error:
-				Rcpp::Rcout << "Data source " << datasource[0] << " contains no layers" << std::endl;
-				throw std::invalid_argument("Error: no layers in datasource.\n");
+				throw std::invalid_argument("No layers in datasource.");
 			}
 			case 1: { // silent:
 				OGRLayer *poLayer = poDS->GetLayer(0);

@@ -9,8 +9,8 @@ st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
   type = 0, promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
 
-st_read_db(conn = NULL, table, query = paste("select * from ", table, ";"),
-  geom_column = NULL, EWKB, ...)
+st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
+  EWKB, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)}
