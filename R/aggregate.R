@@ -6,7 +6,7 @@
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param union logical; should grouped geometries be unioned using \link{st_union}? 
-#' @returns an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
+#' @return an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
 #' @export
 aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
 	geom = do.call(st_sfc, lapply(split(st_geometry(x), by), 
