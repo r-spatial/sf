@@ -2,9 +2,17 @@
 .Rhistory
 .RData
 .Ruserdata
+*.Rproj
+
 src/*.o
 src/*.so
 src/*.dll
-sfr.Rproj
+src/Makevars
+config.log
+config.status
+
+windows/
+inst/gdal/
+inst/proj/
 
 nc*
