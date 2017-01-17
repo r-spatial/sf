@@ -231,10 +231,20 @@ st_drop_zm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]
 
 #' Get precision
 #' 
-#' @param x object of class \code{sfc}
+#' @param x object of class \code{sfc} or \code{sf}
 #' @export
 st_precision <- function(x) {
-  stopifnot(inherits(x, "sfc"))
+  UseMethod("st_precision")
+}
+
+#' @export
+st_precision.sf <- function(x) {
+  x <- st_geometry(x)
+  st_precision(x)
+}
+
+#' @export
+st_precision.sfc <- function(x) {
   attr(x, "precision")
 }
 
@@ -249,19 +259,27 @@ st_precision <- function(x) {
 #' st_precision(x)
 #' @export
 st_set_precision <- function(x, precision) {
-  stopifnot(inherits(x, "sfc"))
-  if (length(precision) != 1) {
-    stop("Precision applies to all dimensions and must be of length 1", call. = FALSE)
-  }
-  if (is.na(precision) || !is.numeric(precision)) {
-    stop("Precision must be numeric", call. = FALSE)
-  }
-  structure(x, precision = precision)
+    UseMethod("st_set_precision")
+}
+
+st_set_precision.sfc <- function(x, precision) {
+    if (length(precision) != 1) {
+        stop("Precision applies to all dimensions and must be of length 1.", call. = FALSE)
+    }
+    if (is.na(precision) || !is.numeric(precision)) {
+        stop("Precision must be numeric", call. = FALSE)
+    }
+    structure(x, precision = precision)
+}
+
+st_set_precision.sf <- function(x, precision) {
+    st_geometry(x) <- st_set_precision(st_geometry(x), precision)
+    return(x)
 }
 
 #' @name st_precision
 #' @param value precision value
 #' @export
 "st_precision<-" <- function(x, value) {
-  st_set_precision(x, value)
+    st_set_precision(x, value)
 }
