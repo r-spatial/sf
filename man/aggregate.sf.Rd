@@ -17,6 +17,9 @@
 
 \item{union}{logical; should grouped geometries be unioned using \link{st_union}?}
 }
+\value{
+an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
+}
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
 }
