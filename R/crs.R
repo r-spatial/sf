@@ -1,15 +1,3 @@
-#' @name st_crs
-#' @details
-#' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
-#' @export
-NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
-
-#' @export
-#' @method is.na crs
-is.na.crs = function(x) {
-	is.na(x$epsg) && is.na(x$proj4string) 
-}
-
 # this function establishes whether two crs objects are semantically identical. This is
 # the case when: (1) they are completely identical, or (2) they have identical proj4string
 # but one of them has a missing epsg ID.
@@ -201,3 +189,18 @@ st_as_text.crs = function(x, ..., pretty = FALSE) {
 	else
 		crs_parameters(x)$Wkt
 }
+
+
+#' @name st_crs
+#' @details
+#' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
+#' @export
+NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
+
+#' @name st_crs
+#' @export
+#' @method is.na crs
+is.na.crs = function(x) {
+  is.na(x$epsg) && is.na(x$proj4string) 
+}
+
