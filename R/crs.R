@@ -84,10 +84,10 @@ st_crs.default = function(x, ...) NA_crs_
 
 #' @name st_crs
 #' @examples
-#'  sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
-#'  sf = st_sf(a = 1:2, geom = sfc)
-#'  st_crs(sf) = 4326
-#'  st_geometry(sf)
+#' sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
+#' sf = st_sf(a = 1:2, geom = sfc)
+#' st_crs(sf) = 4326
+#' st_geometry(sf)
 #' @export
 `st_crs<-.sf` = function(x, value) {
 	st_crs(x[[ attr(x, "sf_column") ]]) = value

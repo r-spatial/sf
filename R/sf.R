@@ -270,7 +270,7 @@ print.sf = function(x, ..., n =
 	nf = length(x) - 1
 	app = paste("and", nf, ifelse(nf == 1, "field", "fields"))
 	if (any(!is.na(st_agr(x))))
-		app = paste0(app, "\n", "Attribute-geometry relationsips: ", summarize_agr(x))
+		app = paste0(app, "\n", "Attribute-geometry relationship: ", summarize_agr(x))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
 		y <- x
