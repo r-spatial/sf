@@ -187,6 +187,10 @@ x = st_sfc(
 	st_geometrycollection())
 st_dimension(x)
 st_dimension(x, FALSE)
+dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
+line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
+st_length(line)
+st_length(line, dist_fun = dist_vincenty)
 p1 = st_point(c(0,0))
 p2 = st_point(c(2,2))
 pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5

@@ -5,6 +5,7 @@
 \alias{NA_agr_}
 \alias{st_agr}
 \alias{st_agr<-}
+\alias{st_set_agr}
 \title{get or set relation_to_geometry attribute of an \code{sf} object}
 \format{An object of class \code{factor} of length 1.}
 \usage{
@@ -13,6 +14,8 @@ NA_agr_
 st_agr(x, ...)
 
 st_agr(x) <- value
+
+st_set_agr(x, value)
 }
 \arguments{
 \item{x}{object of class \code{sf}}

@@ -61,6 +61,11 @@ ll_length = function(x, fn, p) {
 #' @param dist_fun function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @export
 #' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement.
+#' @examples
+#' dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
+#' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
+#' st_length(line)
+#' st_length(line, dist_fun = dist_vincenty)
 st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
@@ -68,7 +73,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 		p = crs_parameters(st_crs(x))
 		if (missing(dist_fun)) {
 			if (!requireNamespace("geosphere", quietly = TRUE))
-				stop("package sp required, please install it first")
+				stop("package geosphere required, please install it first")
 			dist_fun = geosphere::distGeo
 		}
 		ret = sapply(x, ll_length, fn = dist_fun, p = p)
@@ -126,7 +131,7 @@ st_distance = function(x, y, dist_fun) {
 		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 			stop("st_distance for longitude/latitude data only available for POINT geometries")
 		if (!requireNamespace("geosphere", quietly = TRUE))
-			stop("package sp required, please install it first")
+			stop("package geosphere required, please install it first")
 		if (missing(dist_fun))
 			dist_fun = geosphere::distGeo
 		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]

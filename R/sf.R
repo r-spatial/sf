@@ -202,23 +202,65 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	geom = st_geometry(x)
 	if (!missing(i) && nargs > 2) # e.g. a[3:4,] not a[3:4]
 		geom = geom[i]
+
 	x = if (missing(j))
 		NextMethod("[") # specifying drop would trigger a warning
 	else
 		NextMethod("[", drop = drop)
+
+	if (!missing(j))
+		agr = agr[j]
+	else if (!missing(i) && nargs <= 2)
+		agr = agr[i] # e.g., obj["name"]
+
 	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
 		x
 	else if (! drop) {
-		if (!(sf_column %in% names(x))) { # geom was deselected: make it sticky
-			if (inherits(x, "sf"))
-				x[[sf_column]] = geom
-			else
-				st_geometry(x) = geom
+#		st_agr(x) = agr
+#		if (!(sf_column %in% names(x))) { # geom was deselected: make it sticky
+#			if (inherits(x, "sf"))
+#				x[[sf_column]] = geom
+#			else
+#				st_geometry(x) = geom
+#		}
+#		structure(x, "sf_column" = sf_column, 
+#			"agr" = agr[match(setdiff(names(x), sf_column), names(agr))])
+		if (inherits(x, "sf")) {
+			st_agr(x) = agr
+			attr(x, "sf_column") = sf_column
 		}
-		structure(x, "sf_column" = sf_column, 
-			"agr" = agr[match(setdiff(names(x), sf_column), names(agr))])
+		st_geometry(x) = geom
+		st_agr(x) = agr[match(setdiff(names(x), sf_column), names(agr))]
+		x
 	} else
 		as.data.frame(x)
+}
+
+#' @export
+"$<-.sf" = function(x, i, value) { x[[i]] = value; x }
+
+#' @export
+"[[<-.sf" = function(x, i, value) {
+	agr = st_agr(x)
+	setting_geom = (i == attr(x, "sf_column")) || inherits(value, "sfc")
+	if (! setting_geom) { # need to handle agr:
+		ix = if (is.character(i))
+				which(i == names(x))
+			else
+				i
+		if (is.null(value)) # remove
+			agr = agr[-ix]
+		else {
+			if (length(ix) == 0 || ix > length(names(x))) # add:
+				agr = st_agr(c(as.character(agr), NA_character_))
+			else # replace:
+				agr[ix] = NA
+		}
+	}
+	x = NextMethod()
+	if (! setting_geom)
+		st_agr(x) = agr
+	x
 }
 
 #' @export
