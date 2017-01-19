@@ -59,6 +59,15 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 		x
 }
 
+#' @name st_read
+#' @export
+#' @details \code{read_st} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively.
+read_sf <- function(...) st_read(...)
+
+#' @name st_read
+#' @export
+write_sf <- function(...) st_write(...)
+
 #' Write simple features object to file or database
 #'
 #' Write simple features object to file or database
