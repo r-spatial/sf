@@ -56,9 +56,26 @@ Levels: 1028678842
 > # see https://github.com/edzer/sfr/issues/45 :
 > if ("OSM" %in% st_drivers()$name) {
 + 	osm = system.file("osm/overpass.osm", package="sf")
-+ 	st_layers(osm, do_count = TRUE)
-+ 	suppressWarnings(st_read(osm, "multipolygons", quiet = TRUE))
++ 	print(st_layers(osm))
++ 	suppressWarnings(print(st_layers(osm, do_count = TRUE)))
++ 	suppressWarnings(print(st_read(osm, "multipolygons", quiet = TRUE)))
 + }
+Driver: OSM 
+Available layers:
+        layer_name       geometry_type features fields
+1           points               Point       NA     10
+2            lines         Line String       NA      9
+3 multilinestrings   Multi Line String       NA      4
+4    multipolygons       Multi Polygon       NA     25
+5  other_relations Geometry Collection       NA      4
+Driver: OSM 
+Available layers:
+        layer_name       geometry_type features fields
+1           points               Point        0     10
+2            lines         Line String        0      9
+3 multilinestrings   Multi Line String        0      4
+4    multipolygons       Multi Polygon        3     25
+5  other_relations Geometry Collection        0      4
 Simple feature collection with 3 features and 25 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
@@ -81,7 +98,6 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 1 MULTIPOLYGON(((-1.5507185 5...
 2 MULTIPOLYGON(((-1.5557631 5...
 3 MULTIPOLYGON(((-1.551502 53...
-There were 50 or more warnings (use warnings() to see the first 50)
 > 
 > # layer opening option:
 > st_read(system.file("shape/nc.shp", package="sf"),  quiet = TRUE,
@@ -214,4 +230,4 @@ for shapefile datastore.
 > 
 > proc.time()
    user  system elapsed 
-  0.476   0.040   0.512 
+  0.544   0.032   0.573 

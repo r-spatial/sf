@@ -469,7 +469,7 @@ Levels: constant aggregate identity
 [1] <NA>
 Levels: constant aggregate identity
 > x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
-> library(magrittr)
+> suppressPackageStartupMessages(library(dplyr))
 > y <- x %>% st_set_agr("constant")
 > y
 Simple feature collection with 2 features and 2 fields
@@ -485,4 +485,4 @@ proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb
 > 
 > proc.time()
    user  system elapsed 
-  0.536   0.024   0.556 
+  0.556   0.024   0.577 
