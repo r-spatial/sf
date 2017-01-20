@@ -54,25 +54,25 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTString: {
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
-				if (cv[i] != NA_STRING)
+				if (! Rcpp::CharacterVector::is_na(cv[i]))
 					poFeature->SetField(j, (const char *) cv[i]);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
-				if (iv[i] != NA_INTEGER)
+				if (! Rcpp::IntegerVector::is_na(iv[i]))
 					poFeature->SetField(j, (int) iv[i]);
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (nv[i] != NA_REAL)
+				if (! Rcpp::NumericVector::is_na(nv[i]))
 					poFeature->SetField(j, (double) nv[i]);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (nv[i] == NA_REAL)
+				if (Rcpp::NumericVector::is_na(nv[i]))
 					break;
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
@@ -85,7 +85,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (nv[i] == NA_REAL)
+				if (Rcpp::NumericVector::is_na(nv[i]))
 					break;
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
