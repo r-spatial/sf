@@ -102,9 +102,55 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 	return out;
 }
 
+Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
+
+	if (sfc.length() == 0)
+		return "XY";
+
+	// we have data:
+	Rcpp::CharacterVector cls = sfc.attr("class");
+	unsigned int tp = make_type(cls[0], "", false, NULL, 0);
+	if (tp == SF_Unknown) {
+		cls = sfc.attr("classes");
+		tp = make_type(cls[0], "", false, NULL, 0);
+	}
+	switch (tp) {
+		case SF_Unknown: { // further check:
+			throw std::range_error("impossible classs in get_dim()");
+		} break;
+		case SF_Point: { // numeric:
+			Rcpp::NumericVector v = sfc[0];
+			cls = v.attr("class");
+		} break;
+		case SF_LineString:  // matrix:
+		case SF_MultiPoint:
+		case SF_CircularString:
+		case SF_Curve: {
+			Rcpp::NumericMatrix m = sfc[0];
+			cls = m.attr("class");
+		} break;
+		case SF_Polygon: // list:
+		case SF_MultiLineString:
+		case SF_MultiPolygon:
+		case SF_GeometryCollection:
+		case SF_CompoundCurve:
+		case SF_CurvePolygon:
+		case SF_MultiCurve:
+		case SF_MultiSurface:
+		case SF_Surface:
+		case SF_PolyhedralSurface:
+		case SF_TIN:
+		case SF_Triangle: {
+			Rcpp::List l = sfc[0];
+			cls = l.attr("class");
+		} break;
+	}
+	return cls;
+}
+
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim(sfc), precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
@@ -117,7 +163,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), -1, wkbVariantIso));
+		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso));
 	}
 	if (sref != NULL)
 		*sref = local_srs; // return and release later, or
@@ -215,6 +261,18 @@ Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt) {
 	OGRSpatialReference ref;
 	handle_error(ref.importFromWkt(&cp));
 	return get_crs(&ref);
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	for (int i; i < g.size(); i++) {
+		char *out;
+		g[i]->exportToWkt(&out);
+		Rcpp::Rcout << out << std::endl;
+		CPLFree(out);
+	}
+	return sfc_from_ogr(g, true); // destroys g;
 }
 
 // [[Rcpp::export]]

@@ -46,3 +46,11 @@ sapply(list(p3, p3m, p4, p2, ls, mp, pl1, mp1, ml1, gc), round_trip, EWKB = TRUE
 rawToHex(st_as_binary(st_multipoint(matrix(1:6,3))))
 rawToHex(st_as_binary(st_sfc(st_point(c(0,1)), st_multipoint(matrix(1:6,3)))))
 try(rawToHex("error"))
+
+# debug roundtrips sf -> GDAL -> sf; the first WKT is from GDAL, and lacks M
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYZ")))))
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYM")))))
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYZ")))))
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYM")))))
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYZ")))))
+st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYM")))))

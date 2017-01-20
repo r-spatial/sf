@@ -84,7 +84,11 @@ st_equals_exact(a, b, 0.01)
 
 st_geometry_type(st_sfc(st_point(1:2), st_linestring(matrix(1:4,2,2))))
 
-st_drop_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
+st_zm(list(st_point(1:3), st_linestring(matrix(1:6,2,3))))
+
+st_zm(list(st_point(1:2), st_linestring(matrix(1:6,3,2))), add = TRUE, "Z")
+
+st_transform(st_sfc(st_point(c(0,0)), crs=4326), st_crs("+proj=geocent"))
 
 cbind(st_area(nc_tr[1:5,]), a$AREA)
 

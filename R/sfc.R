@@ -187,47 +187,69 @@ st_geometry_type = function(x) {
 		"TRIANGLE"))
 }
 
-#' Drop Z and/or M dimensions from feature geometries
+#' Drop or add Z and/or M dimensions from feature geometries
 #'
 #' Drop Z and/or M dimensions from feature geometries, resetting classes appropriately
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param ... ignored
+#' @param drop logical; drop, or (FALSE) add?
+#' @param what character which dimensions to drop or add
+#' @details only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far. In case \code{add=TRUE}, zero values are added.
 #' @examples
-#' st_drop_zm(st_linestring(matrix(1:32,8)))
+#' st_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
-#' st_drop_zm(x)
+#' st_zm(x)
 #' a = st_sf(a = 1:2, geom=x)
-#' st_drop_zm(a)
+#' st_zm(a)
 #' @export
-st_drop_zm <- function(x, ...) UseMethod("st_drop_zm")
+st_zm <- function(x, ..., drop = TRUE, what = "ZM") UseMethod("st_zm")
 
 #' @export
-st_drop_zm.sf <- function(x, ...) {
-	st_geometry(x) = st_drop_zm(st_geometry(x))
+st_zm.sf <- function(x, ..., drop = TRUE, what = "ZM") {
+	st_geometry(x) = st_zm(st_geometry(x), drop = drop, what = what)
 	x
 }
 
 #' @export
-st_drop_zm.sfc <- function(x, ...) {
-	st_sfc(lapply(x, st_drop_zm))
+st_zm.sfc <- function(x, ..., drop = TRUE, what = "ZM") {
+	st_sfc(lapply(x, st_zm, drop = drop, what = what), crs = st_crs(x))
 }
 
 #' @export
-st_drop_zm.sfg <- function(x, ...) {
-	ret = if (is.list(x))
-		lapply(x, st_drop_zm)
-	else if (is.matrix(x))
+st_zm.sfg <- function(x, ..., drop = TRUE, what = "ZM") {
+	if (drop && what == "ZM") {
+		ret = if (is.list(x))
+			lapply(x, st_zm, drop = drop, what = what)
+		else if (is.matrix(x))
+			x[,1:2]
+		else
+			x[1:2]
+		structure(ret, class = c("XY", class(x)[2:3]))
+	} else if (!drop && what == "Z") {
+		ret = if (is.list(x))
+			lapply(x, st_zm, drop = drop, what = what)
+		else if (is.matrix(x))
+			cbind(unclass(x), 0)
+		else
+			c(unclass(x), 0)
+		structure(ret, class = c("XYZ", class(x)[2:3]))
+	} else 
+		stop("this combination of drop and what is not implemented")
+}
+
+#' @export
+st_zm.list <- function(x, ..., drop = TRUE, what = "ZM") 
+	lapply(x, st_zm, drop = drop, what = what)
+
+#' @export
+st_zm.matrix <- function(x, ..., drop = TRUE, what = "ZM")  {
+	if (drop && what == "ZM") {
 		x[,1:2]
-	else
-		x[1:2]
-	structure(ret, class = c("XY", class(x)[2:3]))
+	} else if (!drop && what == "Z") {
+		cbind(unclass(x), 0)
+	} else 
+		stop("this combination of drop and what is not implemented")
 }
-
-#' @export
-st_drop_zm.list <- function(x, ...) lapply(x, st_drop_zm)
-
-#' @export
-st_drop_zm.matrix <- function(x, ...) x[, 1:2, drop = FALSE]
 
 #' Get precision
 #' 

@@ -25,8 +25,11 @@ st_transform.sfc = function(x, crs, ...) {
 		stop("sfc object should have crs set")
 	if (missing(crs))
 		stop("argument crs cannot be missing")
-	#suppressWarnings(st_sfc(CPL_transform(x, crs), crs = crs))
 	crs = make_crs(crs)
+
+	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
+		x = st_zm(x, drop = FALSE, what = "Z")
+
 	if (crs != st_crs(x))
 		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
 	else

@@ -29,6 +29,10 @@ CPL_crs_from_wkt <- function(wkt) {
     .Call('sf_CPL_crs_from_wkt', PACKAGE = 'sf', wkt)
 }
 
+CPL_roundtrip <- function(sfc) {
+    .Call('sf_CPL_roundtrip', PACKAGE = 'sf', sfc)
+}
+
 CPL_transform <- function(sfc, proj4, epsg) {
     .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4, epsg)
 }

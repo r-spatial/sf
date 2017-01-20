@@ -322,7 +322,7 @@ str(x)
 str(x)
 (x <- st_point(c(1,2,3,4)))
 str(x)
-st_drop_zm(x)
+st_zm(x, drop = TRUE, what = "ZM")
 ```
 This means that we can represent 2-, 3- or 4-dimensional
 coordinates. All geometry objects inherit from `sfg` (simple feature

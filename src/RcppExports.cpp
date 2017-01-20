@@ -79,6 +79,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_roundtrip
+Rcpp::List CPL_roundtrip(Rcpp::List sfc);
+RcppExport SEXP sf_CPL_roundtrip(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_roundtrip(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg);
 RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP, SEXP epsgSEXP) {
