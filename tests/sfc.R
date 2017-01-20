@@ -112,3 +112,6 @@ x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
 suppressPackageStartupMessages(library(dplyr))
 y <- x %>% st_set_agr("constant")
 y
+
+sf1 <- st_sf(a = c("x", "y"), geom = st_sfc(st_point(3:4), st_point(3:4)))
+sf1[names(sf1)]

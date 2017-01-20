@@ -16,7 +16,9 @@ NA_agr_ = factor(NA, levels = agr_levels)
 st_agr = function(x, ...) UseMethod("st_agr")
 
 #' @export
-st_agr.sf = function(x, ...) attr(x, "agr")
+st_agr.sf = function(x, ...) {
+	attr(x, "agr")[setdiff(names(x), attr(x, "sf_column"))]
+}
 
 #' @export
 st_agr.character = function(x, ...) {
@@ -44,8 +46,10 @@ st_agr.default = function(x = NA_character_, ...) {
 `st_agr<-.sf` = function(x, value) {
 	stopifnot(!is.null(value))
 	stopifnot(is.character(value) || is.factor(value))
-	if (! is.null(names(value)) && length(value) == 1) { 
-		# as in: st_agr(x) = c(Group.1 = "identity"): replace one particular
+	if (length(value) == 0)
+		attr(x, "agr") = NA_agr_[0]
+	else if (! is.null(names(value)) && length(value) == 1) { 
+		# as in: st_agr(x) = c(Group.1 = "identity"): replace one particular named
 		if (!is.null(attr(x, "agr")))
 			attr(x, "agr")[names(value)] = st_agr(value)
 		else

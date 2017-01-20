@@ -483,6 +483,18 @@ proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb
 1 1 3 POINT(-90 35)
 2 2 4 POINT(-80 36)
 > 
+> sf1 <- st_sf(a = c("x", "y"), geom = st_sfc(st_point(3:4), st_point(3:4)))
+> sf1[names(sf1)]
+Simple feature collection with 2 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 3 ymin: 4 xmax: 3 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+  a       geom
+1 x POINT(3 4)
+2 y POINT(3 4)
+> 
 > proc.time()
    user  system elapsed 
-  0.556   0.024   0.577 
+  0.560   0.020   0.576 

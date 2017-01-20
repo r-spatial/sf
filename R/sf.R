@@ -226,7 +226,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 #		structure(x, "sf_column" = sf_column, 
 #			"agr" = agr[match(setdiff(names(x), sf_column), names(agr))])
 		if (inherits(x, "sf")) {
-			st_agr(x) = agr
+			st_agr(x) = agr[!is.na(names(agr))]
 			attr(x, "sf_column") = sf_column
 		}
 		st_geometry(x) = geom
