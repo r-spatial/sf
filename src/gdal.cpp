@@ -27,23 +27,23 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
     switch ( eErrClass )
     {
         case 0:
-            break;
+            break; // #nocov
         case 1:
         case 2:
-            Rf_warning("GDAL Message %d: %s\n", err_no, msg);
-            break;
+            Rf_warning("GDAL Message %d: %s\n", err_no, msg); // #nocov
+            break; // #nocov
         case 3:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg);
             break;
         case 4:
-            Rf_warning("GDAL Error %d: %s\n", err_no, msg);
+            Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
             #ifndef CONTINUE_ON_ERROR
-            Rcpp::stop("Unrecoverable GDAL error\n");
+            Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
             #endif
             break;        
         default:
-            Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg);
-            break;
+            Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
+            break; // #nocov
     }
     return;
 }
@@ -72,13 +72,13 @@ const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
 void handle_error(OGRErr err) {
 	if (err != 0) {
 		if (err == OGRERR_NOT_ENOUGH_DATA)
-			Rcpp::Rcout << "OGR: Not enough data " << std::endl;
+			Rcpp::Rcout << "OGR: Not enough data " << std::endl; // #nocov
 		else if (err == OGRERR_UNSUPPORTED_GEOMETRY_TYPE)
 			Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
 		else if (err == OGRERR_CORRUPT_DATA)
 			Rcpp::Rcout << "OGR: Corrupt data" << std::endl;
 		else 
-			Rcpp::Rcout << "Error code: " << err << std::endl;
+			Rcpp::Rcout << "Error code: " << err << std::endl; // #nocov
 		throw std::range_error("OGR error");
 	}
 }
@@ -116,7 +116,7 @@ Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
 	}
 	switch (tp) {
 		case SF_Unknown: { // further check:
-			throw std::range_error("impossible classs in get_dim()");
+			throw std::range_error("impossible classs in get_dim()"); // #nocov
 		} break;
 		case SF_Point: { // numeric:
 			Rcpp::NumericVector v = sfc[0];
@@ -233,7 +233,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
-			throw std::range_error("NULL error in sfc_from_ogr");
+			throw std::range_error("NULL error in sfc_from_ogr"); // #nocov
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;

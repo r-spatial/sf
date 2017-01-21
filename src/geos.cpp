@@ -5,7 +5,7 @@
 
 #include "wkb.h"
 
-static void __errorHandler(const char *fmt, ...) {
+static void __errorHandler(const char *fmt, ...) { // #nocov start
 
     char buf[BUFSIZ], *p;
     va_list(ap);
@@ -18,7 +18,7 @@ static void __errorHandler(const char *fmt, ...) {
 	Rcpp::Function error("stop");
     error(buf);
 
-    return;
+    return; // #nocov end
 }
 
 static void __warningHandler(const char *fmt, ...) {
@@ -91,7 +91,7 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 
 bool chk_(char value) {
 	if (value == 2)
-		throw std::range_error("GEOS exception");
+		throw std::range_error("GEOS exception"); // #nocov
 	return value; // 1: true, 0: false
 }
 
@@ -113,7 +113,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (int j = 0; j < sfc1.length(); j++) {
 				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i], gmv1[j]);
 				if (cp == NULL)
-					throw std::range_error("GEOS error in GEOSRelate_r");
+					throw std::range_error("GEOS error in GEOSRelate_r"); // #nocov
 				out[j * sfc0.length() + i] = cp;
 				GEOSFree_r(hGEOSCtxt, cp);
 			}
@@ -125,7 +125,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
-					throw std::range_error("GEOS error in GEOSDistance_r");
+					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
 				out(i,j) = dist;
 			}
 		ret_list = Rcpp::List::create(out);
@@ -252,7 +252,7 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
-		throw std::range_error("GEOS exception");
+		throw std::range_error("GEOS exception"); // #nocov
 	return value;
 }
 
@@ -277,8 +277,8 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i]));
 	} else if (op == "union_cascaded") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSUnionCascaded_r(hGEOSCtxt, g[i]));
+		for (size_t i = 0; i < g.size(); i++) // #nocov
+			out[i] = chkNULL(GEOSUnionCascaded_r(hGEOSCtxt, g[i])); // #nocov
 	} else if (op == "simplify") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :
@@ -300,7 +300,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i], dTolerance, bOnlyEdges));
 	} else
 #endif
-		throw std::invalid_argument("invalid operation"); // would leak g and out
+		throw std::invalid_argument("invalid operation"); // would leak g and out // #nocov
 
 	for (size_t i = 0; i < g.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
@@ -314,7 +314,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 
 GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, size_t *n) {
 	if (value == NULL)
-		throw std::range_error("GEOS exception");
+		throw std::range_error("GEOS exception"); // #nocov
 	if (!chk_(GEOSisEmpty_r(hGEOSCtxt, value)))
 		*n = *n + 1;
 	return value;
@@ -346,7 +346,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			for (size_t j = 0; j < x.size(); j++)
 				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSSymDifference_r(hGEOSCtxt, x[j], y[i]), &n);
 	} else 
-		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out
+		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out // #nocov
 	// clean up x and y:
 	for (size_t i = 0; i < x.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, x[i]);
@@ -371,7 +371,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		}
 	}
 	if (k != n)
-		throw std::range_error("invalid k, check 2");
+		throw std::range_error("invalid k, check 2"); // #nocov
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out2)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);
