@@ -43,7 +43,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 				break;
 			// perhaps FIXME: Time, Binary?
 			default:
-				throw std::invalid_argument("Unrecognized field type\n");
+				throw std::invalid_argument("Unrecognized field type\n"); // #nocov
 				break;
 		}
 		names[i] = poFieldDefn->GetNameRef();
@@ -92,7 +92,7 @@ size_t count_features(OGRLayer *poLayer) {
 		n++;
 		delete poFeature;
 		if (n == INT_MAX)
-			throw std::out_of_range("Cannot read layer with more than MAX_INT features");
+			throw std::out_of_range("Cannot read layer with more than MAX_INT features"); // #nocov
 	}
 	poLayer->ResetReading ();
 	return n;
@@ -102,7 +102,7 @@ size_t count_features(OGRLayer *poLayer) {
 Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options, bool do_count = false) {
 
 	if (datasource.size() != 1)
-		throw std::invalid_argument("argument datasource should have length 1.\n");
+		throw std::invalid_argument("argument datasource should have length 1.\n"); // #nocov
 	std::vector <char *> open_options = create_options(options, false);
 	GDALDataset *poDS;
 	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
@@ -196,7 +196,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	double n_d = (double) poLayer->GetFeatureCount();
 	if (n_d > INT_MAX)
-		throw std::out_of_range("Cannot read layer with more than MAX_INT features");
+		throw std::out_of_range("Cannot read layer with more than MAX_INT features"); // #nocov
 	if (n_d < 0)
 		n_d = (double) count_features(poLayer);
 	size_t n = (size_t) n_d; // what is List's max length?
@@ -210,7 +210,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	// get the geometry field:
 	OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(iGeomField);
 	if (poGFDefn == NULL)
-		throw std::range_error("wrong value for iGeomField");
+		throw std::range_error("wrong value for iGeomField"); // #nocov
 	Rcpp::List out = allocate_out_list(poFDefn, n, poGFDefn->GetNameRef(), int64_as_string);
 
 	// read all features:
@@ -311,7 +311,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		// feature geometry:
 		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
 		if (poGeometryV[i] == NULL)
-			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef");
+			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef"); // #nocov
 		i++;
 	}
 	if (promote_to_multi && toTypeUser == 0)

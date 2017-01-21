@@ -22,15 +22,15 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			ret[i] = OFTDate;
 		else if (strcmp(cls[i], "POSIXct") == 0)
 			ret[i] = OFTDateTime;
-		else {
+		else { // #nocov start
 			Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
-		}
+		}      // #nocov end
 		OGRFieldDefn oField(nm[i], ret[i]);
-		if (poLayer->CreateField(&oField) != OGRERR_NONE) {
+		if (poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			throw std::invalid_argument("Layer creation failed.\n");
-		}
+		} // #nocov end
 	}
 	return ret;
 }
@@ -96,10 +96,10 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 					(float) rd[0], 100); // nTZFlag 100: GMT
 				} break;
 			default:
-				// we should never get here!
+				// we should never get here! // #nocov start
 				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
 				throw std::invalid_argument("Layer creation failed.\n");
-				break;
+				break; // #nocov end
 		}
 	}
 }
