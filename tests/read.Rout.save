@@ -248,8 +248,8 @@ for shapefile datastore.
 > x  = st_as_sf(df, coords = c("x", "y"))
 > 
 > if ("GPKG" %in% st_drivers()$name) {
-+  st_write(x, "x.gpkg", quiet = TRUE)
-+  y = st_read("x.gpkg", quiet = TRUE)
++  st_write(x, "x2.gpkg", quiet = TRUE)
++  y = st_read("x2.gpkg", quiet = TRUE)
 +  print(y)
 + }
 Simple feature collection with 5 features and 4 fields
@@ -273,4 +273,4 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > proc.time()
    user  system elapsed 
-  0.528   0.036   0.561 
+  0.568   0.040   0.610 

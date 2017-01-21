@@ -73,8 +73,8 @@ df <- data.frame(
 x  = st_as_sf(df, coords = c("x", "y"))
 
 if ("GPKG" %in% st_drivers()$name) {
- st_write(x, "x.gpkg", quiet = TRUE)
- y = st_read("x.gpkg", quiet = TRUE)
+ st_write(x, "x2.gpkg", quiet = TRUE)
+ y = st_read("x2.gpkg", quiet = TRUE)
  print(y)
 }
 
