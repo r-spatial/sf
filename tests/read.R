@@ -58,3 +58,24 @@ try(st_write(c("foo", "bar")))
 try(st_write(x, c("foo", "bar")))
 try(st_write(x, "foo", driver = "foo"))
 try(st_write(x, "/x", driver = "ESRI Shapefile"))
+
+library(sf)
+#> Linking to GEOS 3.5.0, GDAL 2.1.1, proj.4 4.9.3
+
+df <- data.frame(
+    a = c(0, 1, NA, -Inf, Inf),
+    b = c("a", "b", NA, "c", ""),
+    c = c(as.Date("2001-01-01"), NA, -99, 0, 1),
+    d = c(as.POSIXct("2001-01-01"), NA, -99, 0, 1),
+    x = 1:5,
+    y = 1:5)
+
+x  = st_as_sf(df, coords = c("x", "y"))
+
+if ("GPKG" %in% st_drivers()$name) {
+ st_write(x, "x.gpkg", quiet = TRUE)
+ y = st_read("x.gpkg", quiet = TRUE)
+ print(y)
+}
+
+try(st_write(x, "x.shp", driver = character(0))) # err
