@@ -74,7 +74,7 @@ Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 	for (size_t i = 0; i < g.size(); i++) {
 		OGRGeometryCollection *gc = new OGRGeometryCollection;
 		Rcpp::NumericVector dists = distLst[i];
-		for (size_t j = 0; j < dists.size(); j++) {
+		for (int j = 0; j < dists.size(); j++) {
 			OGRPoint *poPoint  = new OGRPoint;
 			((OGRLineString *) g[i])->Value(dists[j], poPoint);
 			gc->addGeometry(poPoint);
