@@ -13,7 +13,6 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	for (int i = 0; i < obj.size(); i++) {
 		if (strcmp(cls[i], "character") == 0)
 			ret[i] = OFTString;
-			// oField.SetWidth(32); // FIXME: should this be known here???
 		else if (strcmp(cls[i], "integer") == 0)
 			ret[i] = OFTInteger;
 		else if (strcmp(cls[i], "numeric") == 0)

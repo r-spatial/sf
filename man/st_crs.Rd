@@ -5,6 +5,7 @@
 \alias{NA_crs_}
 \alias{is.na.crs}
 \alias{st_crs}
+\alias{st_crs.bbox}
 \alias{st_crs.character}
 \alias{st_crs.numeric}
 \alias{st_crs.sf}
@@ -25,6 +26,8 @@ st_crs(x, ...)
 \method{st_crs}{character}(x, ..., wkt)
 
 \method{st_crs}{sfc}(x, ...)
+
+\method{st_crs}{bbox}(x, ...)
 
 st_crs(x) <- value
 

@@ -60,30 +60,46 @@ st_bbox.GEOMETRYCOLLECTION = function(obj) {
 		  xmax = max(s[3L,], na.rm = TRUE), ymax = max(s[4L,], na.rm = TRUE))
 }
 
-#' @export
-st_bbox.sfc_POINT = function(obj) {
-	sel = sapply(obj, function(x) length(x) > 0) 
-	if (! any(sel))
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
-	else
-		structure(CPL_get_bbox(unclass(obj)[sel], 0), names = c("xmin", "ymin", "xmax", "ymax")) 
+bb_wrap = function(bb, x) {
+	structure(bb, class = "bbox", crs = st_crs(x))
+}
+
+bb_wrap_na = function(x) {
+	structure(x, class = "bbox", crs = NA_crs_)
 }
 
 #' @export
-st_bbox.sfc_MULTIPOINT = bbox.MtrxSet
+print.bbox = function(x, ...) {
+	attr(x, "crs") = NULL
+	x = unclass(x)
+	NextMethod()
+}
+
 #' @export
-st_bbox.sfc_LINESTRING = bbox.MtrxSet
+st_bbox.sfc_POINT = function(obj) {
+	sel = sapply(obj, function(x) length(x) > 0) 
+	ret = if (! any(sel))
+		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+	else
+		structure(CPL_get_bbox(unclass(obj)[sel], 0), names = c("xmin", "ymin", "xmax", "ymax")) 
+	bb_wrap(ret, obj)
+}
+
 #' @export
-st_bbox.sfc_POLYGON = bbox.MtrxSetSet
+st_bbox.sfc_MULTIPOINT = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
 #' @export
-st_bbox.sfc_MULTILINESTRING = bbox.MtrxSetSet
+st_bbox.sfc_LINESTRING = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
 #' @export
-st_bbox.sfc_MULTIPOLYGON = bbox.MtrxSetSetSet
+st_bbox.sfc_POLYGON = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
 #' @export
-st_bbox.sfc_GEOMETRYCOLLECTION = st_bbox.GEOMETRYCOLLECTION
+st_bbox.sfc_MULTILINESTRING = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
 #' @export
-st_bbox.sfc_GEOMETRY = st_bbox.GEOMETRYCOLLECTION
+st_bbox.sfc_MULTIPOLYGON = function(obj) bb_wrap(bbox.MtrxSetSetSet(obj), obj)
 #' @export
-st_bbox.sfc = function(obj) structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax"))  # nocov
+st_bbox.sfc_GEOMETRYCOLLECTION = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
+#' @export
+st_bbox.sfc_GEOMETRY = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
+#' @export
+st_bbox.sfc = function(obj) bb_wrap(structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")), obj)  # nocov
 #' @export
 st_bbox.sf = function(obj) st_bbox(st_geometry(obj))

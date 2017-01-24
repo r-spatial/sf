@@ -8,7 +8,7 @@ test_that("we can subset sf objects", {
   expect_equal(s1[,1], s1) #data.frame(x = c("x", "y")))
 
   expect_equal(nrow(s1[1,]), 1)
-  expect_equal(st_bbox(s1[1,]), c(xmin=1,ymin=2,xmax=1,ymax=2))
+  expect_equal(c(st_bbox(s1[1,])), c(xmin=1,ymin=2,xmax=1,ymax=2))
 
   a = c("x", "y")
   g = st_sfc(pt1, pt2)

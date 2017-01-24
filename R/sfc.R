@@ -71,8 +71,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		crs = attr(lst, "crs")
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
-	attr(lst, "bbox") = st_bbox(lst)
-	st_set_crs(lst, crs)
+	st_crs(lst) = crs
+	structure(lst, "bbox" = c(st_bbox(lst)))
 }
 
 #' @export

@@ -41,7 +41,6 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 			case OFTString:
 				out[i] = Rcpp::CharacterVector(n_features);
 				break;
-			// perhaps FIXME: Time, Binary?
 			default:
 				throw std::invalid_argument("Unrecognized field type\n"); // #nocov
 				break;

@@ -53,14 +53,14 @@
 #'			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 #' }))
 #' plot(m, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
-st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(4326), ...,
-	lon, lat, ndiscr = 100)
+st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), 
+	datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100)
 {
 	if (missing(x)) {
 		crs = datum
-		if (missing(lon))
+		if (is.null(lon))
 			lon = seq(-180, 180, by = 20)
-		if (missing(lat))
+		if (is.null(lat))
 			lat = seq(-80, 80, by = 20)
 	}
 
@@ -81,9 +81,9 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), datum = st_crs(
 	if (!is.na(crs))
 		box = st_transform(box, datum)
 
-	if (missing(lon))
+	if (is.null(lon))
 		lon = pretty(st_bbox(box)[c(1,3)])
-	if (missing(lat))
+	if (is.null(lat))
 		lat = pretty(st_bbox(box)[c(2,4)])
 	# sanity:
 	lon = lon[lon >= -180 & lon <= 180]
