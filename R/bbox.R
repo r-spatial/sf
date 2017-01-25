@@ -41,21 +41,29 @@ bbox.MtrxSetSetSet = function(obj) {
 #' returned has a class \code{bbox}, an attribute \code{crs} and a method to print the
 #' bbox and an \code{st_crs} method to retrieve the coordinate reference system 
 #' corresponding to \code{obj} (and hence the bounding box).
+#' @name st_bbox
 st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
+#' @name st_bbox
 st_bbox.POINT = function(obj) c(xmin = obj[1L], ymin = obj[2L], xmax = obj[1L], ymax = obj[2L])
 #' @export
+#' @name st_bbox
 st_bbox.MULTIPOINT = bbox.Mtrx
 #' @export
+#' @name st_bbox
 st_bbox.LINESTRING = bbox.Mtrx
 #' @export
+#' @name st_bbox
 st_bbox.POLYGON = bbox.MtrxSet
 #' @export
+#' @name st_bbox
 st_bbox.MULTILINESTRING = bbox.MtrxSet
 #' @export
+#' @name st_bbox
 st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
 #' @export
+#' @name st_bbox
 st_bbox.GEOMETRYCOLLECTION = function(obj) {
 	s = sapply(obj, st_bbox) # dispatch on class
 	if (length(s) == 0 || all(is.na(s[1L,])))
@@ -77,6 +85,7 @@ print.bbox = function(x, ...) {
 }
 
 #' @export
+#' @name st_bbox
 st_bbox.sfc_POINT = function(obj) {
 	sel = sapply(obj, function(x) length(x) > 0) 
 	ret = if (! any(sel))
@@ -87,20 +96,29 @@ st_bbox.sfc_POINT = function(obj) {
 }
 
 #' @export
+#' @name st_bbox
 st_bbox.sfc_MULTIPOINT = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_LINESTRING = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_POLYGON = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_MULTILINESTRING = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_MULTIPOLYGON = function(obj) bb_wrap(bbox.MtrxSetSetSet(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_GEOMETRYCOLLECTION = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc_GEOMETRY = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
 #' @export
+#' @name st_bbox
 st_bbox.sfc = function(obj) bb_wrap(structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")), obj)  # nocov
 #' @export
+#' @name st_bbox
 st_bbox.sf = function(obj) st_bbox(st_geometry(obj))

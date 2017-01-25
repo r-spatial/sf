@@ -47,6 +47,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 	st_sf(x, ..., agr = agr)
 }
 
+#' @name st_as_sf
 #' @export
 st_as_sf.sf = function(x, ...) x
 

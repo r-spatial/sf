@@ -15,17 +15,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sp)
 > library(maps)
-> 
 > m = map('usa', plot = FALSE, fill = TRUE)
-> ID0 <- sapply(strsplit(m$names, ":"), function(x) x[1])
-> 
-> library(maptools)
-Checking rgeos availability: TRUE
-> m <- map2SpatialPolygons(m, IDs=ID0, proj4string = CRS("+init=epsg:4326"))
-> 
 > suppressPackageStartupMessages(library(sf))
+> m0 <- st_as_sfc(m)
+> m <- st_as_sf(m)
 > 
 > laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
 > m <- st_transform(st_as_sf(m), laea)
@@ -69,4 +63,4 @@ Checking rgeos availability: TRUE
 > 
 > proc.time()
    user  system elapsed 
-  0.844   0.036   0.878 
+  0.972   0.024   0.994 

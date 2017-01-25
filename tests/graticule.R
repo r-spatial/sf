@@ -1,13 +1,8 @@
-library(sp)
 library(maps)
-
 m = map('usa', plot = FALSE, fill = TRUE)
-ID0 <- sapply(strsplit(m$names, ":"), function(x) x[1])
-
-library(maptools)
-m <- map2SpatialPolygons(m, IDs=ID0, proj4string = CRS("+init=epsg:4326"))
-
 suppressPackageStartupMessages(library(sf))
+m0 <- st_as_sfc(m)
+m <- st_as_sf(m)
 
 laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
 m <- st_transform(st_as_sf(m), laea)

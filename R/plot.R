@@ -89,7 +89,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
 		par(opar)
 	} else {
 		if (is.null(col) && ncol(x) == 2)
-			col = sf.colors(ncol, x[[1]])
+			col = sf.colors(ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
 		if (is.null(col))
 			plot(st_geometry(x), ...)
 		else 
