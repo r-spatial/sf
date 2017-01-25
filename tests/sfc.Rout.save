@@ -495,6 +495,23 @@ proj4string:    NA
 1 x POINT(3 4)
 2 y POINT(3 4)
 > 
+> st_bbox(sf1)
+xmin ymin xmax ymax 
+   3    4    3    4 
+> bb = st_bbox(nc)
+> bb
+     xmin      ymin      xmax      ymax 
+-84.32385  33.88199 -75.45698  36.58965 
+> st_crs(bb)
+$epsg
+[1] 4267
+
+$proj4string
+[1] "+proj=longlat +datum=NAD27 +no_defs"
+
+attr(,"class")
+[1] "crs"
+> 
 > proc.time()
    user  system elapsed 
-  0.560   0.020   0.576 
+  0.536   0.012   0.547 
