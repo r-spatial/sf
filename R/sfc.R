@@ -162,7 +162,7 @@ st_geometry.sfc = function(obj, ...) obj
 #' 
 #' Return geometry type of an object, as a factor
 #' @param x object of class \link{sf} or \link{sfc}
-#' @return returns a factor with the geometry type of each simple feature in x
+#' @return a factor with the geometry type of each simple feature in x
 #' @export
 st_geometry_type = function(x) {
 	x = st_geometry(x)

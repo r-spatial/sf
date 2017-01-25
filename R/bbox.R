@@ -31,11 +31,16 @@ bbox.MtrxSetSetSet = function(obj) {
 		structure(CPL_get_bbox(obj, 3), names = c("xmin", "ymin", "xmax", "ymax"))
 }
 
-##' Return bounding of a simple feature or simple feature set
-##'
-##' Return bounding of a simple feature or simple feature set
-##' @param obj object to compute the bounding box from
-##' @export
+#' Return bounding of a simple feature or simple feature set
+#'
+#' Return bounding of a simple feature or simple feature set
+#' @param obj object to compute the bounding box from
+#' @export
+#' @return a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
+#' and \code{ymax} values; if \code{obj} is of class \code{sf} or \code{sfc}, the object
+#' returned has a class \code{bbox}, an attribute \code{crs} and a method to print the
+#' bbox and an \code{st_crs} method to retrieve the coordinate reference system 
+#' corresponding to \code{obj} (and hence the bounding box).
 st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
@@ -62,10 +67,6 @@ st_bbox.GEOMETRYCOLLECTION = function(obj) {
 
 bb_wrap = function(bb, x) {
 	structure(bb, class = "bbox", crs = st_crs(x))
-}
-
-bb_wrap_na = function(x) {
-	structure(x, class = "bbox", crs = NA_crs_)
 }
 
 #' @export
