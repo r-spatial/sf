@@ -13,3 +13,4 @@ blog
 README.md
 CONDUCT.md
 rdev
+^codecov\.yml$
