@@ -69,6 +69,10 @@ st_crs.sfc = function(x, ...) attr(x, "crs")
 #' @export
 st_crs.bbox = function(x, ...) attr(x, "crs")
 
+#' @name st_crs
+#' @export
+st_crs.crs = function(x, ...) x
+
 #' @export
 st_crs.default = function(x, ...) NA_crs_
 
