@@ -1,6 +1,18 @@
 #' Compute graticules and their parameters
 #' 
 #' Compute graticules and their parameters
+#'
+#' @section Use of graticules
+#'  
+#'  In cartographic visualization, the use of graticules is not advised, unless
+#'  the graphical output will be used for measurement or navigation, or the
+#'  direction of North is important for the interpretation of the content, or
+#'  the content is intended to display distortions and artefacts created by 
+#'  projection. Unnecessary use of graticules only adds visual clutter but 
+#'  little relevant information. Use of coastlines, administrative boundaries
+#'  or place names permits most viewers of the output to orient themselves
+#'  better than a graticule.
+#'
 #' @export
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system
