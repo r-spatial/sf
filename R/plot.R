@@ -427,9 +427,9 @@ sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, catego
     		rgb(r, g, b, alpha)
 		}
 	} else {
-	  if (is.character(xc)) {
-	    xc <- as.factor(xc)
-	  }
+		if (is.character(xc))
+			xc <- as.factor(xc)
+
 		if (is.factor(xc))
 			sf.colors(nlevels(xc), categorical = TRUE)[as.numeric(xc)]
 		else {
