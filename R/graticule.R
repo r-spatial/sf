@@ -2,8 +2,7 @@
 #' 
 #' Compute graticules and their parameters
 #'
-#' @section Use of graticules
-#'  
+#' @section Use of graticules:
 #'  In cartographic visualization, the use of graticules is not advised, unless
 #'  the graphical output will be used for measurement or navigation, or the
 #'  direction of North is important for the interpretation of the content, or
