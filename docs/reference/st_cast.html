@@ -108,8 +108,7 @@
 <span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'>seq_along</span>(<span class='no'>x</span>), <span class='kw'>group_or_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'>seq_len</span>(<span class='fu'>nrow</span>(<span class='no'>x</span>)), <span class='no'>FUN</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>group_or_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>group_or_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -118,13 +117,11 @@
       <dt>to</dt>
       <dd>character; target type, if missing, simplification is tried; when <code>x</code> is of type <code>sfg</code> (i.e., a single geometry) then <code>to</code> needs to be specified.</dd>
       <dt>...</dt>
-      <dd>in case of <code>st_cast.sf</code>: passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></dd>
+      <dd>ignored</dd>
       <dt>ids</dt>
       <dd>integer vector, denoting how geometries should be grouped (default: no grouping)</dd>
       <dt>group_or_split</dt>
       <dd>logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.</dd>
-      <dt>FUN</dt>
-      <dd>function passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</dd>
       <dt>warn</dt>
       <dd>logical; if <code>TRUE</code>, warn if attributes are assigned to sub-geometries</dd>
     </dl>

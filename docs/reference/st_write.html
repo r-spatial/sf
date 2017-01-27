@@ -88,8 +88,8 @@
   <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>st_write_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>obj</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='fu'>substitute</span>(<span class='no'>obj</span>),
-  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>drop_table</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>try_drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -102,7 +102,7 @@
       <dt>driver</dt>
       <dd>character; driver name to be used, if missing, a driver name is guessed from <code>dsn</code>; <code>st_drivers()</code> returns the drivers that are available with their properties; links to full driver documentation are found at <a href = 'http://www.gdal.org/ogr_formats.html'>http://www.gdal.org/ogr_formats.html</a>.</dd>
       <dt>...</dt>
-      <dd>(for st_write_db only:) arguments passed on to <code>dbWriteTable</code></dd>
+      <dd>arguments passed on to <code>dbWriteTable</code></dd>
       <dt>dataset_options</dt>
       <dd>character; driver dependent dataset creation options; multiple options supported.</dd>
       <dt>layer_options</dt>
@@ -117,10 +117,8 @@
       <dd>name for the table in the database</dd>
       <dt>geom_name</dt>
       <dd>name of the geometry column in the database</dd>
-      <dt>drop_table</dt>
+      <dt>overwrite</dt>
       <dd>logical; should <code>table</code> be dropped first?</dd>
-      <dt>try_drop</dt>
-      <dd>logical; should we try() to drop <code>table</code> first?</dd>
       <dt>append</dt>
       <dd>logical; append to table? (NOTE: experimental, might not work)</dd>
       <dt>binary</dt>

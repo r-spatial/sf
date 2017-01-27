@@ -81,7 +81,58 @@
     <p>Return bounding of a simple feature or simple feature set</p>
     
 
-    <pre><span class='fu'>st_bbox</span>(<span class='no'>obj</span>)</pre>
+    <pre><span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for POINT</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for MULTIPOINT</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for LINESTRING</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for POLYGON</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for MULTILINESTRING</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for MULTIPOLYGON</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for GEOMETRYCOLLECTION</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_POINT</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_MULTIPOINT</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_LINESTRING</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_POLYGON</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_MULTILINESTRING</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_MULTIPOLYGON</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_GEOMETRYCOLLECTION</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc_GEOMETRY</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -89,13 +140,23 @@
       <dd>object to compute the bounding box from</dd>
     </dl>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a numeric vector of length four, with <code>xmin</code>, <code>ymin</code>, <code>xmax</code>
+and <code>ymax</code> values; if <code>obj</code> is of class <code>sf</code> or <code>sfc</code>, the object
+returned has a class <code>bbox</code>, an attribute <code>crs</code> and a method to print the
+bbox and an <code>st_crs</code> method to retrieve the coordinate reference system 
+corresponding to <code>obj</code> (and hence the bounding box).</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

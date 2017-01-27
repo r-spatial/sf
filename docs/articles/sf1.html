@@ -141,7 +141,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 ## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
-<p>(Note that users will not use  but give a  directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.) The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14 fields (attributes, represented as columns). This object is of class</p>
+<p>(Note that users will not use <code>system.file</code> but give a <code>filename</code> directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.) The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14 fields (attributes, represented as columns). This object is of class</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(nc)
 ## [1] "sf"         "data.frame"</code></pre></div>
 <p>meaning it extends (and &ldquo;is&rdquo; a) <code>data.frame</code>, but with a single list-column with geometries, which is held in the column with name</p>
@@ -159,21 +159,23 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 <li>that although geometries are native R objects, they are printed as <a href="#wkb">well-known text</a></li>
 </ul><p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
-##  [1] arrange_          cbind             coerce           
-##  [4] distinct_         filter_           gather_          
-##  [7] group_by_         initialize        mutate_          
-## [10] plot              print             rbind            
-## [13] rename_           select_           [                
-## [16] show              slice_            slotsFromS3      
-## [19] spread_           st_as_sf          st_bbox          
-## [22] st_boundary       st_buffer         st_cast          
-## [25] st_centroid       st_convex_hull    st_crs&lt;-         
-## [28] st_crs            st_difference     st_drop_zm       
-## [31] st_geometry&lt;-     st_geometry       st_intersection  
-## [34] st_is             st_linemerge      st_polygonize    
-## [37] st_segmentize     st_simplify       st_sym_difference
-## [40] st_transform      st_triangulate    st_union         
-## [43] summarise_        transmute_       
+##  [1] aggregate         arrange_          cbind            
+##  [4] coerce            distinct_         filter_          
+##  [7] gather_           group_by_         initialize       
+## [10] mutate_           plot              print            
+## [13] rbind             rename_           select_          
+## [16] [                 [[&lt;-              $&lt;-              
+## [19] show              slice_            slotsFromS3      
+## [22] spread_           st_agr&lt;-          st_agr           
+## [25] st_as_sf          st_bbox           st_boundary      
+## [28] st_buffer         st_cast           st_centroid      
+## [31] st_convex_hull    st_crs&lt;-          st_crs           
+## [34] st_difference     st_geometry&lt;-     st_geometry      
+## [37] st_intersection   st_is             st_linemerge     
+## [40] st_polygonize     st_precision      st_segmentize    
+## [43] st_set_precision  st_simplify       st_sym_difference
+## [46] st_transform      st_triangulate    st_union         
+## [49] st_zm             summarise_        transmute_       
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g.&nbsp;by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -232,12 +234,12 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [10] st_as_text        st_bbox           st_boundary      
 ## [13] st_buffer         st_cast           st_centroid      
 ## [16] st_convex_hull    st_crs&lt;-          st_crs           
-## [19] st_difference     st_drop_zm        st_geometry      
-## [22] st_intersection   st_is             st_linemerge     
-## [25] st_polygonize     str               st_segmentize    
-## [28] st_simplify       st_sym_difference st_transform     
-## [31] st_triangulate    st_union          summary          
-## [34] type_sum         
+## [19] st_difference     st_geometry       st_intersection  
+## [22] st_is             st_linemerge      st_polygonize    
+## [25] st_precision      str               st_segmentize    
+## [28] st_set_precision  st_simplify       st_sym_difference
+## [31] st_transform      st_triangulate    st_union         
+## [34] st_zm             summary           type_sum         
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -320,7 +322,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## POINTZM(1 2 3 4)
 <span class="kw">str</span>(x)
 ## Classes 'XYZM', 'POINT', 'sfg'  num [1:4] 1 2 3 4
-<span class="kw"><a href="../reference/st_drop_zm.html">st_drop_zm</a></span>(x)
+<span class="kw"><a href="../reference/st_zm.html">st_zm</a></span>(x, <span class="dt">drop =</span> <span class="ot">TRUE</span>, <span class="dt">what =</span> <span class="st">"ZM"</span>)
 ## POINT(1 2)</code></pre></div>
 <p>This means that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from <code>sfg</code> (simple feature geometry), but also have a type (e.g. <code>POINT</code>), and a dimension (e.g. <code>XYM</code>) class name. A figure illustrates six of the seven most common types.</p>
 <p>With the exception of the <code>POINT</code> which has a single point as geometry, the remaining six common single simple feature geometry types that correspond to single features (single records, or rows in a <code>data.frame</code>) are created like this</p>
@@ -470,13 +472,14 @@ kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719 
 ## from="sf", to="Spatial"
 ## from="Spatial", to="sf"
 <span class="kw">methods</span>(st_as_sf)
-## [1] st_as_sf.data.frame st_as_sf.sf         st_as_sf.Spatial   
+## [1] st_as_sf.data.frame st_as_sf.map        st_as_sf.sf        
+## [4] st_as_sf.Spatial   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
-## [1] st_as_sfc.character          st_as_sfc.SpatialLines      
-## [3] st_as_sfc.SpatialMultiPoints st_as_sfc.SpatialPixels     
-## [5] st_as_sfc.SpatialPoints      st_as_sfc.SpatialPolygons   
-## [7] st_as_sfc.WKB               
+## [1] st_as_sfc.character          st_as_sfc.map               
+## [3] st_as_sfc.SpatialLines       st_as_sfc.SpatialMultiPoints
+## [5] st_as_sfc.SpatialPixels      st_as_sfc.SpatialPoints     
+## [7] st_as_sfc.SpatialPolygons    st_as_sfc.WKB               
 ## see '?methods' for accessing help and source code
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
@@ -563,8 +566,8 @@ b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"intersecting two polygons:"</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
-(i &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_intersection</a></span>(a,b)[[<span class="dv">1</span>]])
-## POINT(1 0)
+(i &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_intersection</a></span>(a,b))
+## GEOMETRYCOLLECTION(POINT(1 0), LINESTRING(4 0, 3 0), POLYGON((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"GEOMETRYCOLLECTION"</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
@@ -594,33 +597,34 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <h1 class="hasAnchor"><html><body><a href="#how-attributes-relate-to-geometries" class="anchor"> </a></body></html>How attributes relate to geometries</h1>
 <p>(This will eventually be the topic of a new vignette; now here to explain the last attribute of <code>sf</code> objects)</p>
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their <a href="https://CRAN.R-project.org/package=units">units of measurement</a>). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn&rsquo;t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn&rsquo;t extend beyond the body &ndash; in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state&rsquo;s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
-<p>Simple feature objects of class <code>sf</code> have an attribute that points out how attributes relate to their geometry, which can be defined at creation time:</p>
+<p>Simple feature objects of class <code>sf</code> have an <em>agr</em> attribute that points to the <em>attribute-geometry-relationship</em>, how attributes relate to their geometry. It can be defined at creation time:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>),
-    <span class="dt">relation_to_geometry =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"aggregate"</span>, <span class="dt">PERIMETER =</span> <span class="st">"aggregate"</span>, <span class="dt">CNTY_ =</span> <span class="st">"identity"</span>,
+    <span class="dt">agr =</span> <span class="kw">c</span>(<span class="dt">AREA =</span> <span class="st">"aggregate"</span>, <span class="dt">PERIMETER =</span> <span class="st">"aggregate"</span>, <span class="dt">CNTY_ =</span> <span class="st">"identity"</span>,
         <span class="dt">CNTY_ID =</span> <span class="st">"identity"</span>, <span class="dt">NAME =</span> <span class="st">"identity"</span>, <span class="dt">FIPS =</span> <span class="st">"identity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"identity"</span>,
         <span class="dt">CRESS_ID =</span> <span class="st">"identity"</span>, <span class="dt">BIR74 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID74 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"aggregate"</span>,
         <span class="dt">BIR79 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID79 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"aggregate"</span>))
 ## Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 ## converted into: MULTIPOLYGON
 ## Simple feature collection with 100 features and 14 fields
+## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
 ## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 ## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
-<span class="kw">attr</span>(nc, <span class="st">"relation_to_geometry"</span>)
+<span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(nc)
 ##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO 
 ## aggregate aggregate  identity  identity  identity  identity  identity 
 ##  CRESS_ID     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 
 ##  identity aggregate aggregate aggregate aggregate aggregate aggregate 
 ## Levels: constant aggregate identity
 <span class="kw">data</span>(meuse, <span class="dt">package =</span> <span class="st">"sp"</span>)
-meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="dt">crs =</span> <span class="dv">28992</span>, <span class="dt">relation_to_geometry =</span> <span class="st">"field"</span>)
-<span class="kw">attr</span>(meuse_sf, <span class="st">"relation_to_geometry"</span>)
-## cadmium  copper    lead    zinc    elev    dist      om   ffreq    soil 
-##    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt; 
-##    lime landuse  dist.m 
-##    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt; 
+meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse, <span class="dt">coords =</span> <span class="kw">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="dt">crs =</span> <span class="dv">28992</span>, <span class="dt">agr =</span> <span class="st">"constant"</span>)
+<span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(meuse_sf)
+##  cadmium   copper     lead     zinc     elev     dist       om    ffreq 
+## constant constant constant constant constant constant constant constant 
+##     soil     lime  landuse   dist.m 
+## constant constant constant constant 
 ## Levels: constant aggregate identity</code></pre></div>
 <p>When not specified, this field is filled with <code>NA</code> values, but if non-<code>NA</code>, it has one of three possibilities</p>
 <table style="width:60%;" class="table"><colgroup><col width="11%"><col width="48%"></colgroup><thead><tr class="header"><th align="left">value</th>

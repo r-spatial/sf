@@ -114,7 +114,7 @@ sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sf.html"
 ## bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 3
 ## epsg (SRID):    NA
 ## proj4string:    NA
-##   a                           geom
+##   a                       geometry
 ## 1 5 MULTILINESTRING((0 0, 1 1, ...
 ## 2 4 MULTILINESTRING((2 2, 1 3),...</code></pre></div>
 <p>When no target type is given, <code>st_cast</code> tries to be smart for two cases:</p>
@@ -180,12 +180,13 @@ p *<span class="st"> </span><span class="kw">rot</span>(pi)
 ## POINT(2.44929359829471e-16 -2)</code></pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
-cntrd =<span class="st"> </span><span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw"><a href="../reference/geos.html">st_centroid</a></span>(nc))
-## Warning in st_centroid.sfc(st_geometry(x)): st_centroid does not give
-## correct centroids for longitude/latitude data
-nc2 =<span class="st"> </span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc) -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc[<span class="dv">1</span>], <span class="dt">border =</span> <span class="st">'grey'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(nc2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+ncg =<span class="st"> </span><span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc)
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg, <span class="dt">border =</span> <span class="st">'grey'</span>)
+cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_centroid</a></span>(ncg)
+## Warning in st_centroid.sfc(ncg): st_centroid does not give correct
+## centroids for longitude/latitude data
+ncg2 =<span class="st"> </span>(ncg -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>

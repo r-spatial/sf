@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return geometry type of an object — st_geometry_type • sf</title>
+<title>get or set relation_to_geometry attribute of an  — st_agr • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,24 +74,38 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return geometry type of an object</h1>
+    <h1>get or set relation_to_geometry attribute of an </h1>
     </div>
 
     
-    <p>Return geometry type of an object, as a factor</p>
+    <p>get or set relation_to_geometry attribute of an <code>sf</code> object</p>
     
 
-    <pre><span class='fu'>st_geometry_type</span>(<span class='no'>x</span>)</pre>
+    <pre><span class='no'>NA_agr_</span>
+
+<span class='fu'>st_agr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='fu'>st_agr</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+
+<span class='fu'>st_set_agr</span>(<span class='no'>x</span>, <span class='no'>value</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
-      <dd>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
+      <dd>object of class <code>sf</code></dd>
+      <dt>...</dt>
+      <dd>ignored</dd>
+      <dt>value</dt>
+      <dd>character, or factor with appropriate levels; if named, names should correspond to the non-geometry list-column columns of <code>x</code></dd>
     </dl>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>a factor with the geometry type of each simple feature in x</p>
+    <p>An object of class <code>factor</code> of length 1.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>NA_agr_</code> is the <code>agr</code> object with a missing value.</p>
     
 
   </div>
@@ -100,7 +114,9 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>

@@ -75,13 +75,18 @@
   <div class="col-md-9">
     <div class="page-header">
       <h1>Function reference</h1>
-      <h4>version&nbsp;0.2-9</h4>
+      <h4>version&nbsp;0.3-0</h4>
     </div>
 
     <div class="contents">
       <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
       <p class="section-desc"></p>
 
+      
+      <p><a href="aggregate.sf.html">aggregate an </a></p>
+      <ul>
+        <li><code><a href="aggregate.sf.html">aggregate.sf</a></code></li>
+      </ul>
       
       <p><a href="as_Spatial.html">Convert to sp object</a></p>
       <ul>
@@ -108,7 +113,7 @@
         <li><code><a href="extension_map.html">extension_map</a></code></li>
       </ul>
       
-      <p><a href="geos.html">Geometric operations on (pairs of) simple feature geometries</a></p>
+      <p><a href="geos.html">Geometric operations on (pairs of) simple feature geometry sets</a></p>
       <ul>
         <li><code><a href="geos.html">geos</a></code></li><li><code><a href="geos.html">st_area</a></code></li><li><code><a href="geos.html">st_boundary</a></code></li><li><code><a href="geos.html">st_buffer</a></code></li><li><code><a href="geos.html">st_centroid</a></code></li><li><code><a href="geos.html">st_combine</a></code></li><li><code><a href="geos.html">st_contains</a></code></li><li><code><a href="geos.html">st_convex_hull</a></code></li><li><code><a href="geos.html">st_covered_by</a></code></li><li><code><a href="geos.html">st_covers</a></code></li><li><code><a href="geos.html">st_crosses</a></code></li><li><code><a href="geos.html">st_difference</a></code></li><li><code><a href="geos.html">st_dimension</a></code></li><li><code><a href="geos.html">st_disjoint</a></code></li><li><code><a href="geos.html">st_distance</a></code></li><li><code><a href="geos.html">st_equals</a></code></li><li><code><a href="geos.html">st_equals_exact</a></code></li><li><code><a href="geos.html">st_intersection</a></code></li><li><code><a href="geos.html">st_intersects</a></code></li><li><code><a href="geos.html">st_is_simple</a></code></li><li><code><a href="geos.html">st_is_valid</a></code></li><li><code><a href="geos.html">st_length</a></code></li><li><code><a href="geos.html">st_line_sample</a></code></li><li><code><a href="geos.html">st_linemerge</a></code></li><li><code><a href="geos.html">st_overlaps</a></code></li><li><code><a href="geos.html">st_polygonize</a></code></li><li><code><a href="geos.html">st_relate</a></code></li><li><code><a href="geos.html">st_segmentize</a></code></li><li><code><a href="geos.html">st_simplify</a></code></li><li><code><a href="geos.html">st_sym_difference</a></code></li><li><code><a href="geos.html">st_touches</a></code></li><li><code><a href="geos.html">st_triangulate</a></code></li><li><code><a href="geos.html">st_union</a></code></li><li><code><a href="geos.html">st_within</a></code></li>
       </ul>
@@ -158,6 +163,11 @@
         <li><code><a href="sf.html">[.sf</a></code></li><li><code><a href="sf.html">sf</a></code></li><li><code><a href="sf.html">st_sf</a></code></li>
       </ul>
       
+      <p><a href="st_agr.html">get or set relation_to_geometry attribute of an </a></p>
+      <ul>
+        <li><code><a href="st_agr.html">NA_agr_</a></code></li><li><code><a href="st_agr.html">st_agr</a></code></li><li><code><a href="st_agr.html">st_agr&lt;-</a></code></li><li><code><a href="st_agr.html">st_set_agr</a></code></li>
+      </ul>
+      
       <p><a href="st_as_binary.html">Convert sfc object to an WKB object</a></p>
       <ul>
         <li><code><a href="st_as_binary.html">st_as_binary</a></code></li><li><code><a href="st_as_binary.html">st_as_binary.sfc</a></code></li><li><code><a href="st_as_binary.html">st_as_binary.sfg</a></code></li>
@@ -170,12 +180,12 @@
       
       <p><a href="st_as_sfc.html">Convert foreign geometry object to an sfc object</a></p>
       <ul>
-        <li><code><a href="st_as_sfc.html">st_as_sfc</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialLines</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialMultiPoints</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPixels</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPoints</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPolygons</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.WKB</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.character</a></code></li>
+        <li><code><a href="st_as_sfc.html">st_as_sfc</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialLines</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialMultiPoints</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPixels</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPoints</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.SpatialPolygons</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.WKB</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.character</a></code></li><li><code><a href="st_as_sfc.html">st_as_sfc.map</a></code></li>
       </ul>
       
       <p><a href="st_as_sf.html">Convert foreign object to an sf object</a></p>
       <ul>
-        <li><code><a href="st_as_sf.html">st_as_sf</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.Spatial</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.data.frame</a></code></li>
+        <li><code><a href="st_as_sf.html">st_as_sf</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.Spatial</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.data.frame</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.map</a></code></li><li><code><a href="st_as_sf.html">st_as_sf.sf</a></code></li>
       </ul>
       
       <p><a href="st_as_text.html">Return Well-known Text representation of simple feature geometry or coordinate reference system</a></p>
@@ -185,7 +195,7 @@
       
       <p><a href="st_bbox.html">Return bounding of a simple feature or simple feature set</a></p>
       <ul>
-        <li><code><a href="st_bbox.html">st_bbox</a></code></li>
+        <li><code><a href="st_bbox.html">st_bbox</a></code></li><li><code><a href="st_bbox.html">st_bbox.GEOMETRYCOLLECTION</a></code></li><li><code><a href="st_bbox.html">st_bbox.LINESTRING</a></code></li><li><code><a href="st_bbox.html">st_bbox.MULTILINESTRING</a></code></li><li><code><a href="st_bbox.html">st_bbox.MULTIPOINT</a></code></li><li><code><a href="st_bbox.html">st_bbox.MULTIPOLYGON</a></code></li><li><code><a href="st_bbox.html">st_bbox.POINT</a></code></li><li><code><a href="st_bbox.html">st_bbox.POLYGON</a></code></li><li><code><a href="st_bbox.html">st_bbox.sf</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_GEOMETRY</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_GEOMETRYCOLLECTION</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_LINESTRING</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_MULTILINESTRING</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_MULTIPOINT</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_MULTIPOLYGON</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_POINT</a></code></li><li><code><a href="st_bbox.html">st_bbox.sfc_POLYGON</a></code></li>
       </ul>
       
       <p><a href="st_cast.html">Cast geometry to another type: either simplify, or cast explicitly</a></p>
@@ -200,17 +210,12 @@
       
       <p><a href="st_crs.html">Retrieve coordinate reference system from object</a></p>
       <ul>
-        <li><code><a href="st_crs.html">NA_crs_</a></code></li><li><code><a href="st_crs.html">st_crs</a></code></li><li><code><a href="st_crs.html">st_crs.character</a></code></li><li><code><a href="st_crs.html">st_crs.numeric</a></code></li><li><code><a href="st_crs.html">st_crs.sf</a></code></li><li><code><a href="st_crs.html">st_crs.sfc</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-.sf</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-.sfc</a></code></li><li><code><a href="st_crs.html">st_set_crs</a></code></li>
+        <li><code><a href="st_crs.html">NA_crs_</a></code></li><li><code><a href="st_crs.html">is.na.crs</a></code></li><li><code><a href="st_crs.html">st_crs</a></code></li><li><code><a href="st_crs.html">st_crs.bbox</a></code></li><li><code><a href="st_crs.html">st_crs.character</a></code></li><li><code><a href="st_crs.html">st_crs.crs</a></code></li><li><code><a href="st_crs.html">st_crs.numeric</a></code></li><li><code><a href="st_crs.html">st_crs.sf</a></code></li><li><code><a href="st_crs.html">st_crs.sfc</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-.sf</a></code></li><li><code><a href="st_crs.html">st_crs&lt;-.sfc</a></code></li><li><code><a href="st_crs.html">st_set_crs</a></code></li>
       </ul>
       
       <p><a href="st_drivers.html">Get GDAL drivers</a></p>
       <ul>
         <li><code><a href="st_drivers.html">st_drivers</a></code></li>
-      </ul>
-      
-      <p><a href="st_drop_zm.html">Drop Z and/or M dimensions from feature geometries</a></p>
-      <ul>
-        <li><code><a href="st_drop_zm.html">st_drop_zm</a></code></li>
       </ul>
       
       <p><a href="st_geometry.html">Get, set, or replace geometry from an sf object</a></p>
@@ -265,7 +270,7 @@
       
       <p><a href="st_read.html">Read simple features or layers from file or database</a></p>
       <ul>
-        <li><code><a href="st_read.html">st_read</a></code></li><li><code><a href="st_read.html">st_read_db</a></code></li>
+        <li><code><a href="st_read.html">read_sf</a></code></li><li><code><a href="st_read.html">st_read</a></code></li><li><code><a href="st_read.html">st_read_db</a></code></li><li><code><a href="st_read.html">write_sf</a></code></li>
       </ul>
       
       <p><a href="st_transform.html">Transform or convert coordinates of simple feature</a></p>
@@ -281,6 +286,11 @@
       <p><a href="st_write.html">Write simple features object to file or database</a></p>
       <ul>
         <li><code><a href="st_write.html">st_write</a></code></li><li><code><a href="st_write.html">st_write_db</a></code></li>
+      </ul>
+      
+      <p><a href="st_zm.html">Drop or add Z and/or M dimensions from feature geometries</a></p>
+      <ul>
+        <li><code><a href="st_zm.html">st_zm</a></code></li>
       </ul>
       
       <p><a href="summary.sfc.html">Summarize simple feature column</a></p>

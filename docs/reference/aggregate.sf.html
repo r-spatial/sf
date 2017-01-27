@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return geometry type of an object — st_geometry_type • sf</title>
+<title>aggregate an  — aggregate.sf • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,24 +74,33 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return geometry type of an object</h1>
+    <h1>aggregate an </h1>
     </div>
 
     
-    <p>Return geometry type of an object, as a factor</p>
+    <p>aggregate an <code>sf</code> object, possibly union-ing geometries</p>
     
 
-    <pre><span class='fu'>st_geometry_type</span>(<span class='no'>x</span>)</pre>
+    <pre><span class='co'># S3 method for sf</span>
+<span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>union</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
-      <dd>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
+      <dd>object of class <a href='sf.html'>sf</a></dd>
+      <dt>by</dt>
+      <dd>integer or <code>factor</code>, the same length as the number of rows in <code>x</code>, with groups to aggregate by (aggregation predicate)</dd>
+      <dt>FUN</dt>
+      <dd>function passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</dd>
+      <dt>...</dt>
+      <dd>arguments passed on to <code>FUN</code></dd>
+      <dt>union</dt>
+      <dd>logical; should grouped geometries be unioned using <a href='geos.html'>st_union</a>?</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a factor with the geometry type of each simple feature in x</p>
+    <p>an <code>sf</code> object with aggregated attributes and geometries, with an additional grouping variable called <code>Group.1</code>.</p>
     
 
   </div>

@@ -83,25 +83,40 @@
     <p>Set or replace retrieve coordinate reference system from object</p>
     
 
-    <pre>NA_crs_
+    <pre><span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-st_crs(x, ...)
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-\method{st_crs}{sf}(x, ...)
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-\method{st_crs}{numeric}(x, ...)
+<span class='co'># S3 method for character</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='no'>wkt</span>)
 
-\method{st_crs}{character}(x, ..., wkt)
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-\method{st_crs}{sfc}(x, ...)
+<span class='co'># S3 method for bbox</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-st_crs(x) <- value
+<span class='co'># S3 method for crs</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-\method{st_crs}{sf}(x) <- value
+<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
 
-\method{st_crs}{sfc}(x) <- value
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
 
-st_set_crs(x, value)</pre>
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+
+<span class='fu'>st_set_crs</span>(<span class='no'>x</span>, <span class='no'>value</span>)
+
+<span class='no'>NA_crs_</span>
+
+<span class='co'># S3 method for crs</span>
+<span class='fu'>is.na</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -127,7 +142,6 @@ proj4string (length-1 character).</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for epsg and proj4string.</p>
     <p>the *crs functions create, get, set or replace the <code>crs</code> attribute of a simple feature geometry
 list-column. This attribute is of class <code>crs</code>, and is a list consisting of epsg (integer epsg
 code) and proj4string (character). 
@@ -141,13 +155,14 @@ place and a warning is raised to stress this. epsg values are either read from p
 that contain <code>+init=epsg:...</code> or set to 4326 in case the proj4string contains +proj=longlat
 and +datum=WGS84, literally</p>
     <p>If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when epsg is not consistent with a proj4string that is already present.</p>
+    <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for epsg and proj4string.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
- <span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='no'>sfc</span>)
- <span class='fu'>st_crs</span>(<span class='no'>sf</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
- <span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+    <pre class="examples"><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
+<span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='no'>sfc</span>)
+<span class='fu'>st_crs</span>(<span class='no'>sf</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1

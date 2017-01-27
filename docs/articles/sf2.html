@@ -285,13 +285,14 @@ x
 <h3 class="hasAnchor"><html><body><a href="#conversion-to-and-from-sp" class="anchor"> </a></body></html>Conversion to and from sp</h3>
 <p>Spatial objects as maintained by package <code>sp</code> can be converted into simple feature objects or geometries by <code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(st_as_sf)
-## [1] st_as_sf.data.frame st_as_sf.sf         st_as_sf.Spatial   
+## [1] st_as_sf.data.frame st_as_sf.map        st_as_sf.sf        
+## [4] st_as_sf.Spatial   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
-## [1] st_as_sfc.character          st_as_sfc.SpatialLines      
-## [3] st_as_sfc.SpatialMultiPoints st_as_sfc.SpatialPixels     
-## [5] st_as_sfc.SpatialPoints      st_as_sfc.SpatialPolygons   
-## [7] st_as_sfc.WKB               
+## [1] st_as_sfc.character          st_as_sfc.map               
+## [3] st_as_sfc.SpatialLines       st_as_sfc.SpatialMultiPoints
+## [5] st_as_sfc.SpatialPixels      st_as_sfc.SpatialPoints     
+## [7] st_as_sfc.SpatialPolygons    st_as_sfc.WKB               
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>An example would be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)

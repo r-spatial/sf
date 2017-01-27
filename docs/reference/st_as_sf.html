@@ -84,10 +84,16 @@
     <pre><span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>relation_to_geometry</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
-  <span class='no'>coords</span>, <span class='no'>wkt</span>, <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>, <span class='no'>coords</span>, <span class='no'>wkt</span>,
+  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for Spatial</span>
+<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for map</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -96,7 +102,7 @@
       <dd>object to be converted into an object class <code>sf</code></dd>
       <dt>...</dt>
       <dd>passed on to <a href='sf.html'>st_sf</a>, might included crs</dd>
-      <dt>relation_to_geometry</dt>
+      <dt>agr</dt>
       <dd>character vector; see details section of <a href='sf.html'>st_sf</a></dd>
       <dt>coords</dt>
       <dd>in case of point data: names or numbers of the numeric columns holding coordinates</dd>
@@ -136,8 +142,9 @@
 #&gt;   a       geom      geom2
 #&gt; 1 1 POINT(0 0) POINT(0 1)
 #&gt; 2 2 POINT(0 1) POINT(1 1)</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>)
-<span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>, <span class='kw'>relation_to_geometry</span> <span class='kw'>=</span> <span class='st'>"constant"</span>)
+<span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='st'>"constant"</span>)
 <span class='no'>meuse_sf</span>[<span class='fl'>1</span>:<span class='fl'>3</span>,]</div><div class='output co'>#&gt; Simple feature collection with 3 features and 12 fields
+#&gt; Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611
@@ -173,10 +180,8 @@
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘sp’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:sf’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    degAxis, degreeLabelsEW, degreeLabelsNS</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
+#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
 <span class='no'>x1</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.1</span>
 <span class='no'>x2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.4</span>
 <span class='no'>x3</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.7</span>
@@ -200,10 +205,7 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-22, (SVN revision 544)</span>
-#&gt; <span class='message'> GEOS runtime version: 3.5.0-CAPI-1.9.0 r4084 </span>
-#&gt; <span class='message'> Linking to sp version: 1.2-4 </span>
-#&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
+}</div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
 #&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'>demo</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>))</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       

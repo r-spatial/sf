@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get precision — st_precision • sf</title>
+<title>Drop or add Z and/or M dimensions from feature geometries — st_zm • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,42 +74,57 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get precision</h1>
+    <h1>Drop or add Z and/or M dimensions from feature geometries</h1>
     </div>
 
     
-    <p>Get precision</p>
-
-    <p>Set precision</p>
+    <p>Drop Z and/or M dimensions from feature geometries, resetting classes appropriately</p>
     
 
-    <pre><span class='fu'>st_precision</span>(<span class='no'>x</span>)
-
-<span class='fu'>st_set_precision</span>(<span class='no'>x</span>, <span class='no'>precision</span>)
-
-<span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+    <pre><span class='fu'>st_zm</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"ZM"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>x</dt>
-      <dd>object of class <code>sfc</code> or <code>sf</code></dd>
-      <dt>precision</dt>
-      <dd>numeric; see <a href='st_as_binary.html'>st_as_binary</a></dd>
-      <dt>value</dt>
-      <dd>precision value</dd>
+      <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></dd>
+      <dt>...</dt>
+      <dd>ignored</dd>
+      <dt>drop</dt>
+      <dd>logical; drop, or (FALSE) add?</dd>
+      <dt>what</dt>
+      <dd>character which dimensions to drop or add</dd>
     </dl>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>only combinations <code>drop=TRUE</code>, <code>what = &quot;ZM&quot;</code>, and <code>drop=FALSE</code>, <code>what=&quot;Z&quot;</code> are supported so far. In case <code>add=TRUE</code>, zero values are added.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='no'>pi</span>, <span class='no'>pi</span>)))
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='fl'>0.01</span>
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0.01</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>st_zm</span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)))</div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7 15, 8 16)</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>32</span>,<span class='fl'>8</span>)), <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>8</span>,<span class='fl'>2</span>)))
+<span class='fu'>st_zm</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 1 ymin: 3 xmax: 8 ymax: 16
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING(1 3, 2 4)</span></div><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>x</span>)
+<span class='fu'>st_zm</span>(<span class='no'>a</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 1 ymin: 3 xmax: 8 ymax: 16
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;   a                           geom
+#&gt; 1 1 LINESTRING(1 9, 2 10, 3 11,...
+#&gt; 2 2           LINESTRING(1 3, 2 4)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
