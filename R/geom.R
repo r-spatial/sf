@@ -331,7 +331,44 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 
 #' @export
 st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_geometry(x) <- st_triangulate(st_geometry(x, dTolerance, bOnlyEdges))
+	st_geometry(x) <- st_triangulate(st_geometry(x), dTolerance, bOnlyEdges)
+	x
+}
+
+#' @name geos
+#' @export
+#' @param envelope object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram
+#' @details \code{st_voronoi} requires GEOS version 3.4 or above
+#' @examples
+#' set.seed(1)
+#' x = st_multipoint(matrix(runif(10),,2))
+#' box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+#' v = st_sfc(st_voronoi(x, st_sfc(box)))
+#' plot(v, col = 0, border = 1, axes = TRUE)
+#' plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+#' plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+#' plot(st_intersection(st_cast(v), box)) # clip to smaller box
+#' plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
+	UseMethod("st_voronoi")
+
+#' @export
+st_voronoi.sfg = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE)
+	get_first_sfg(st_voronoi(st_sfc(x), st_sfc(envelope), dTolerance, bOnlyEdges = bOnlyEdges))
+
+#' @export
+st_voronoi.sfc = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE) {
+	if (CPL_geos_version() >= "3.4.0") {
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_voronoi does not correctly triangulate longitude/latitude data")
+		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+	} else
+		stop("for voronoi, GEOS version 3.4.0 or higher is required")
+}
+
+#' @export
+st_voronoi.sf = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE) {
+	st_geometry(x) <- st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges)
 	x
 }
 

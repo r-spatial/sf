@@ -312,6 +312,37 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	return ret;
 }
 
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 0.0, int bOnlyEdges = 1) {
+
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init(); 
+
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
+	std::vector<GEOSGeom> out(sfc.length());
+	if (env.size() > 1)
+		throw std::invalid_argument("env should have length 0 or 1"); // #nocov
+
+	if (env.size() == 0) {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], NULL, dTolerance, bOnlyEdges));
+			GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+		}
+	} else {
+		std::vector<GEOSGeom> g_env = geometries_from_sfc(hGEOSCtxt, env);
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], g_env[0], dTolerance, bOnlyEdges));
+			GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+		}
+		GEOSGeom_destroy_r(hGEOSCtxt, g_env[0]);
+	}
+
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
+	CPL_geos_finish(hGEOSCtxt);
+	ret.attr("precision") = sfc.attr("precision");
+	ret.attr("crs") = sfc.attr("crs");
+	return ret;
+}
+
 GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, size_t *n) {
 	if (value == NULL)
 		throw std::range_error("GEOS exception"); // #nocov

@@ -140,6 +140,27 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 > st_linemerge(mls)
 LINESTRING(0 0, 1 1, 2 0)
 > 
+> # voronoi:
+> set.seed(1)
+> x = st_multipoint(matrix(runif(10),,2))
+> box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+> v = st_sfc(st_voronoi(x, st_sfc(box)))
+> plot(v, col = 0, border = 1, axes = TRUE)
+> plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+> plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+> plot(st_intersection(st_cast(v), box)) # clip to smaller box
+> plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+> 
+> v = st_voronoi(x)
+> class(v)
+[1] "XY"                 "GEOMETRYCOLLECTION" "sfg"               
+> v = st_sfc(st_voronoi(st_sfc(x)))
+> class(v)
+[1] "sfc_GEOMETRYCOLLECTION" "sfc"                   
+> v = st_voronoi(st_sf(a = 1, geom = st_sfc(x)))
+> class(v)
+[1] "sf"         "data.frame"
+> 
 > proc.time()
    user  system elapsed 
-  2.008   0.004   2.012 
+  1.984   0.020   2.001 

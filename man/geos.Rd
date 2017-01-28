@@ -34,6 +34,7 @@
 \alias{st_touches}
 \alias{st_triangulate}
 \alias{st_union}
+\alias{st_voronoi}
 \alias{st_within}
 \title{Geometric operations on (pairs of) simple feature geometry sets}
 \usage{
@@ -83,6 +84,8 @@ st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
 
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
+st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
+
 st_polygonize(x)
 
 st_linemerge(x)
@@ -125,6 +128,8 @@ st_line_sample(x, n, density, type = "regular")
 \item{dTolerance}{numeric; tolerance parameter}
 
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
+
+\item{envelope}{object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram}
 
 \item{dfMaxLength}{numeric; max length of a line segment}
 
@@ -171,6 +176,8 @@ function \code{dist_fun} should follow the pattern of the distance function \lin
 
 \code{st_triangulate} requires GEOS version 3.4 or above
 
+\code{st_voronoi} requires GEOS version 3.4 or above
+
 in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
 in case of \code{st_linemerge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
@@ -200,6 +207,15 @@ st_relate(st_sfc(p1, p2), st_sfc(pol1, pol2, pol3))
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
+set.seed(1)
+x = st_multipoint(matrix(runif(10),,2))
+box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+v = st_sfc(st_voronoi(x, st_sfc(box)))
+plot(v, col = 0, border = 1, axes = TRUE)
+plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+plot(st_intersection(st_cast(v), box)) # clip to smaller box
+plot(x, add = TRUE, col = 'red', cex=2, pch=16)
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 st_polygonize(st_sfc(mls))
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))

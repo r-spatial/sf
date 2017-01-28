@@ -310,6 +310,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_voronoi
+Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance, int bOnlyEdges);
+RcppExport SEXP sf_CPL_geos_voronoi(SEXP sfcSEXP, SEXP envSEXP, SEXP dToleranceSEXP, SEXP bOnlyEdgesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type env(envSEXP);
+    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
+    Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_voronoi(sfc, env, dTolerance, bOnlyEdges));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_op2
 Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy);
 RcppExport SEXP sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP) {

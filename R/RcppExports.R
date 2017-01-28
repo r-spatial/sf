@@ -101,6 +101,10 @@ CPL_geos_op <- function(op, sfc, bufferDist = 0.0, nQuadSegs = 30L, dTolerance =
     .Call('sf_CPL_geos_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
 }
 
+CPL_geos_voronoi <- function(sfc, env, dTolerance = 0.0, bOnlyEdges = 1L) {
+    .Call('sf_CPL_geos_voronoi', PACKAGE = 'sf', sfc, env, dTolerance, bOnlyEdges)
+}
+
 CPL_geos_op2 <- function(op, sfcx, sfcy) {
     .Call('sf_CPL_geos_op2', PACKAGE = 'sf', op, sfcx, sfcy)
 }
