@@ -54,7 +54,7 @@ Type 'q()' to quit R.
 Levels: 1028678842
 > 
 > # see https://github.com/edzer/sfr/issues/45 :
-> if ("OSM" %in% st_drivers()$name) {
+> if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 + 	osm = system.file("osm/overpass.osm", package="sf")
 + 	print(st_layers(osm))
 + 	suppressWarnings(print(st_layers(osm, do_count = TRUE)))
@@ -273,4 +273,4 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > proc.time()
    user  system elapsed 
-  0.568   0.040   0.610 
+  0.560   0.024   0.583 

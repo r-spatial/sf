@@ -26,7 +26,7 @@ if ("GPKG" %in% st_drivers()$name) { # read Int64
 }
 
 # see https://github.com/edzer/sfr/issues/45 :
-if ("OSM" %in% st_drivers()$name) {
+if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 	osm = system.file("osm/overpass.osm", package="sf")
 	print(st_layers(osm))
 	suppressWarnings(print(st_layers(osm, do_count = TRUE)))
