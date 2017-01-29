@@ -319,21 +319,22 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
 	std::vector<GEOSGeom> out(sfc.length());
-	if (env.size() > 1)
-		throw std::invalid_argument("env should have length 0 or 1"); // #nocov
 
-	if (env.size() == 0) {
-		for (size_t i = 0; i < g.size(); i++) {
-			out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], NULL, dTolerance, bOnlyEdges));
-			GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+	switch (env.size()) {
+		case 0: ;
+		case 1: {
+			std::vector<GEOSGeom> g_env = geometries_from_sfc(hGEOSCtxt, env);
+			for (size_t i = 0; i < g.size(); i++) {
+				out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], 
+					g_env.size() ? g_env[0] : NULL, dTolerance, bOnlyEdges));
+				GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+			}
+			if (g_env.size())
+				GEOSGeom_destroy_r(hGEOSCtxt, g_env[0]);
+			break;
 		}
-	} else {
-		std::vector<GEOSGeom> g_env = geometries_from_sfc(hGEOSCtxt, env);
-		for (size_t i = 0; i < g.size(); i++) {
-			out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], g_env[0], dTolerance, bOnlyEdges));
-			GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
-		}
-		GEOSGeom_destroy_r(hGEOSCtxt, g_env[0]);
+		default:
+			throw std::invalid_argument("env should have length 0 or 1"); // #nocov
 	}
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
