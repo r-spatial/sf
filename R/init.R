@@ -1,7 +1,7 @@
 #' @importFrom utils head tail object.size str
 #' @importFrom stats runif aggregate
 #' @importFrom tools file_ext file_path_sans_ext
-#' @importFrom methods as slotNames new
+#' @importFrom methods as slotNames new slot
 #' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom Rcpp evalCpp
