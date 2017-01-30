@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(sf))
 # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+ncm = st_transform(nc, 32119)
 
 x = st_transform(nc[1:10,], 32119)
 st_distance(x)
@@ -10,9 +11,20 @@ st_is_valid(nc)
 ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
 "covers", "covered_by", "equals_exact")
 for (op in ops) {
-	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, FALSE)
-	x = sf:::st_geos_binop(op, nc[1:50,], nc[51:100,], 0, TRUE)
+	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, FALSE)
+	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE)
 }
+
+ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps",
+"covers", "covered_by")
+df = data.frame(ops = ops)
+df$equal = NA
+for (op in ops)
+	df[df$ops == op, "equal"] = identical(
+		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE, FALSE),
+		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE,  TRUE)
+	)
+df	
 
 try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
 

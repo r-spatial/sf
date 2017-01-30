@@ -52,25 +52,25 @@ st_distance(x, y, dist_fun)
 
 st_relate(x, y)
 
-st_intersects(x, y, sparse = TRUE)
+st_intersects(x, y, sparse = TRUE, prepared = FALSE)
 
-st_disjoint(x, y, sparse = TRUE)
+st_disjoint(x, y, sparse = TRUE, prepared = FALSE)
 
-st_touches(x, y, sparse = TRUE)
+st_touches(x, y, sparse = TRUE, prepared = FALSE)
 
-st_crosses(x, y, sparse = TRUE)
+st_crosses(x, y, sparse = TRUE, prepared = FALSE)
 
-st_within(x, y, sparse = TRUE)
+st_within(x, y, sparse = TRUE, prepared = FALSE)
 
-st_contains(x, y, sparse = TRUE)
+st_contains(x, y, sparse = TRUE, prepared = FALSE)
 
-st_overlaps(x, y, sparse = TRUE)
+st_overlaps(x, y, sparse = TRUE, prepared = FALSE)
 
 st_equals(x, y, sparse = TRUE)
 
-st_covers(x, y, sparse = TRUE)
+st_covers(x, y, sparse = TRUE, prepared = FALSE)
 
-st_covered_by(x, y, sparse = TRUE)
+st_covered_by(x, y, sparse = TRUE, prepared = FALSE)
 
 st_equals_exact(x, y, par, sparse = TRUE)
 
@@ -116,6 +116,8 @@ st_line_sample(x, n, density, type = "regular")
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
+
+\item{prepared}{logical; prepare geometry for x, before looping over y?}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin) and "is_within_distance"}
 

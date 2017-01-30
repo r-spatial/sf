@@ -98,14 +98,14 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 # returning matrix, distance or relation string -- the work horse is:
 
-st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE) {
+st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE, prepared = FALSE) {
 	if (missing(y))
 		y = x
 	else 
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) 
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse)
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse, prepared)
 	if (sparse)
 		ret
 	else
@@ -166,31 +166,41 @@ st_relate	= function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
 #' @return st_intersects ...	st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 #' @export
-st_intersects	= function(x, y, sparse = TRUE) st_geos_binop("intersects", x, y, sparse = sparse)
+st_intersects	= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_disjoint		= function(x, y, sparse = TRUE) st_geos_binop("disjoint", x, y, sparse = sparse)
+st_disjoint		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_touches		= function(x, y, sparse = TRUE) st_geos_binop("touches", x, y, sparse = sparse)
+st_touches		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_crosses		= function(x, y, sparse = TRUE) st_geos_binop("crosses", x, y, sparse = sparse)
+st_crosses		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("crosses", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_within		= function(x, y, sparse = TRUE) st_geos_binop("within", x, y, sparse = sparse)
+st_within		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_contains		= function(x, y, sparse = TRUE) st_geos_binop("contains", x, y, sparse = sparse)
+#' @param prepared logical; prepare geometry for x, before looping over y?
+st_contains		= function(x, y, sparse = TRUE, prepared = FALSE) 
+	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
+
+# todo: contais_properly? (only with prepared)
 
 #' @name geos
 #' @export
-st_overlaps		= function(x, y, sparse = TRUE) st_geos_binop("overlaps", x, y, sparse = sparse)
+st_overlaps		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
@@ -198,11 +208,13 @@ st_equals		= function(x, y, sparse = TRUE) st_geos_binop("equals", x, y, sparse 
 
 #' @name geos
 #' @export
-st_covers		= function(x, y, sparse = TRUE) st_geos_binop("covers", x, y, sparse = sparse)
+st_covers		= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export
-st_covered_by	= function(x, y, sparse = TRUE) st_geos_binop("covered_by", x, y, sparse = sparse)
+st_covered_by	= function(x, y, sparse = TRUE, prepared = FALSE)
+	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared)
 
 #' @name geos
 #' @export

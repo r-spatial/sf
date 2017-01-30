@@ -81,8 +81,8 @@ CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = 
     invisible(.Call('sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet))
 }
 
-CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, sparse = TRUE) {
-    .Call('sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, sparse)
+CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, sparse = TRUE, prepared = FALSE) {
+    .Call('sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, sparse, prepared)
 }
 
 CPL_geos_is_valid <- function(sfc) {

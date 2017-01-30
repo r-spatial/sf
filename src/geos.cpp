@@ -95,9 +95,63 @@ bool chk_(char value) {
 	return value; // 1: true, 0: false
 }
 
+
+typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
+typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, const GEOSGeometry *);
+
+log_fn which_geom_fn(const std::string op) {
+	if (op == "intersects")
+		return GEOSIntersects_r;
+	else if (op == "disjoint")
+		return GEOSDisjoint_r;
+	else if (op == "touches")
+		return GEOSTouches_r;
+	else if (op == "crosses")
+		return GEOSCrosses_r;
+	else if (op == "within")
+		return GEOSWithin_r;
+	else if (op == "contains")
+		return GEOSContains_r;
+	else if (op == "overlaps")
+		return GEOSOverlaps_r;
+	else if (op == "equals")
+		return GEOSEquals_r;
+	else if (op == "covers")
+		return GEOSCovers_r;
+	else if (op == "covered_by")
+		return GEOSCoveredBy_r;
+	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
+}
+
+log_prfn which_prep_geom_fn(const std::string op) {
+	if (op == "intersects")
+		return GEOSPreparedIntersects_r;
+	else if (op == "disjoint")
+		return GEOSPreparedDisjoint_r;
+	else if (op == "touches")
+		return GEOSPreparedTouches_r;
+	else if (op == "crosses")
+		return GEOSPreparedCrosses_r;
+	else if (op == "within")
+		return GEOSPreparedWithin_r;
+	else if (op == "contains")
+		return GEOSPreparedContains_r;
+	else if (op == "contains_poperly") // not interfaced from R
+		return GEOSPreparedContainsProperly_r;
+	else if (op == "overlaps")
+		return GEOSPreparedOverlaps_r;
+	//else if (op == "equals")
+	//	return GEOSPreparedEquals_r;
+	else if (op == "covers")
+		return GEOSPreparedCovers_r;
+	else if (op == "covered_by")
+		return GEOSPreparedCoveredBy_r;
+	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
-		bool sparse = true) {
+		bool sparse = true, bool prepared = false) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -135,52 +189,43 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		if (! sparse)  // allocate:
 			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
 		Rcpp::List sparsemat(sfc0.length());
-		for (int i = 0; i < sfc0.length(); i++) { // row
-		// TODO: speed up contains, containsproperly, covers, and intersects with prepared geometry i
-			Rcpp::LogicalVector rowi(sfc1.length()); 
-			if (op == "intersects")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSIntersects_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "disjoint")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSDisjoint_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "touches")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSTouches_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "crosses")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSCrosses_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "within")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSWithin_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "contains")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSContains_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "overlaps")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSOverlaps_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "equals")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSEquals_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "covers")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSCovers_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "covered_by")
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSCoveredBy_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-			else if (op == "equals_exact")
+
+		if (op == "equals_exact") {
+			for (int i = 0; i < sfc0.length(); i++) { // row
+				Rcpp::LogicalVector rowi(sfc1.length()); 
 				for (int j = 0; j < sfc1.length(); j++) 
 					rowi(j) = chk_(GEOSEqualsExact_r(hGEOSCtxt, gmv0[i], gmv1[j], par));
-			/* else if (op == "is_within_distance") ==>> no C interface??
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = gmv0[i]->isWithinDistance(gmv1[j].get(), par);
-			*/
-			else
-				throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
-			if (! sparse)
-				densemat(i,_) = rowi;
-			else
-				sparsemat[i] = get_which(rowi);
+				if (! sparse)
+					densemat(i,_) = rowi;
+				else
+					sparsemat[i] = get_which(rowi);
+			}
+		} else {
+			if (prepared) {
+				log_prfn logical_fn = which_prep_geom_fn(op);
+				for (int i = 0; i < sfc0.length(); i++) { // row
+					Rcpp::LogicalVector rowi(sfc1.length()); 
+					const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
+					for (int j = 0; j < sfc1.length(); j++)
+						rowi(j) = chk_(logical_fn(hGEOSCtxt, pr, gmv1[j]));
+					GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
+					if (! sparse)
+						densemat(i,_) = rowi;
+					else
+						sparsemat[i] = get_which(rowi);
+				}
+			} else {
+				log_fn logical_fn = which_geom_fn(op);
+				for (int i = 0; i < sfc0.length(); i++) { // row
+					Rcpp::LogicalVector rowi(sfc1.length()); 
+					for (int j = 0; j < sfc1.length(); j++)
+						rowi(j) = chk_(logical_fn(hGEOSCtxt, gmv0[i], gmv1[j]));
+					if (! sparse)
+						densemat(i,_) = rowi;
+					else
+						sparsemat[i] = get_which(rowi);
+				}
+			}
 		}
 		if (sparse)
 			ret_list = sparsemat;
