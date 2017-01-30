@@ -76,7 +76,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' @param conn open database connection
 #' @param table name for the table in the database
 #' @param geom_name name of the geometry column in the database
-#' @param ... arguments passed on to \code{dbWriteTable}
+#' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
 #' @param overwrite logical; should \code{table} be dropped first?
 #' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
