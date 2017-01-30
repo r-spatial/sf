@@ -266,7 +266,7 @@ Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt) {
 // [[Rcpp::export]]
 Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	for (size_t i; i < g.size(); i++) {
+	for (size_t i = 0; i < g.size(); i++) {
 		char *out;
 		g[i]->exportToWkt(&out);
 		Rcpp::Rcout << out << std::endl;
