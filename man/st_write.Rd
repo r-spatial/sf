@@ -22,7 +22,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn}; \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
-\item{...}{arguments passed on to \code{dbWriteTable}}
+\item{...}{ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}}
 
 \item{dataset_options}{character; driver dependent dataset creation options; multiple options supported.}
 

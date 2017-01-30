@@ -96,6 +96,9 @@ write_sf <- function(...) st_write(...)
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ..., 
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
 
+	if (length(list(...)))
+		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
+
 	if (inherits(obj, "sfc"))
 		obj = st_sf(id = 1:length(obj), geom = obj)
 	stopifnot(inherits(obj, "sf"))
