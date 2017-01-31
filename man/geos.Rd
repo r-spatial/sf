@@ -121,7 +121,7 @@ st_line_sample(x, n, density, type = "regular")
 
 \item{par}{numeric; parameter used for "equals_exact" (margin) and "is_within_distance"}
 
-\item{dist}{buffer distance}
+\item{dist}{numeric; buffer distance for all, or for each of the elements in \code{x}}
 
 \item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle)}
 

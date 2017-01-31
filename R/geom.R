@@ -231,7 +231,7 @@ st_equals_exact = function(x, y, par, sparse = TRUE)
 
 #' @name geos
 #' @export
-#' @param dist buffer distance
+#' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30)
