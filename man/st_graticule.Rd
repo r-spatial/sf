@@ -5,7 +5,8 @@
 \title{Compute graticules and their parameters}
 \usage{
 st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
-  datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100)
+  datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
+  margin = 0.005)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).}
@@ -21,6 +22,9 @@ st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
 \item{lat}{numeric; degrees north for the parallels}
 
 \item{ndiscr}{integer; number of points to discretize a parallel or meridian}
+
+\item{margin}{numeric; small number to trim a longlat bounding box that touches or 
+crosses +/-180 long or +/-90 latitude.}
 }
 \value{
 an object of class \code{sf} with additional attributes describing the type 
