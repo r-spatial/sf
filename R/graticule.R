@@ -91,7 +91,9 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	if (!is.na(crs))
 		box = st_transform(box, datum)
 	
-	if (any(!is.finite(st_bbox(box)))) # recreate:
+	# as in https://github.com/edzer/sfr/issues/198 : 
+	# recreate, and ignore bbox:
+	if (any(!is.finite(st_bbox(box)))) 
 		return(st_transform(st_graticule(datum = datum), crs))
 
 	if (is.null(lon))
