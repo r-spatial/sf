@@ -61,7 +61,7 @@
 #' plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
 st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x), 
 	datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
-	margin = 0.005)
+	margin = 0.001)
 {
 	if (missing(x)) {
 		crs = datum
