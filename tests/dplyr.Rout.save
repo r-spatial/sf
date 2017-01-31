@@ -122,21 +122,33 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 199  99 SID79   9 MULTIPOLYGON(((-77.96073150...
 200 100 SID79   6 MULTIPOLYGON(((-78.65571594...
 > nc.g %>% spread(VAR, SID) %>% head()
-  row SID74 SID79
-1   1     1     0
-2   2     0     3
-3   3     5     6
-4   4     1     2
-5   5     9     3
-6   6     7     5
+Simple feature collection with 6 features and 3 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+  row SID74 SID79                       geometry
+1   1     1     0 MULTIPOLYGON(((-81.47275543...
+2   2     0     3 MULTIPOLYGON(((-81.23989105...
+3   3     5     6 MULTIPOLYGON(((-80.45634460...
+4   4     1     2 MULTIPOLYGON(((-76.00897216...
+5   5     9     3 MULTIPOLYGON(((-77.21766662...
+6   6     7     5 MULTIPOLYGON(((-76.74506378...
 > nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
-  row SID74 SID79
-1   1     1     0
-2   2     0     3
-3   3     5     6
-4   4     1     2
-5   5     9     3
-6   6     7     5
+Simple feature collection with 6 features and 3 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+  row SID74 SID79                       geometry
+1   1     1     0 MULTIPOLYGON(((-81.47275543...
+2   2     0     3 MULTIPOLYGON(((-81.23989105...
+3   3     5     6 MULTIPOLYGON(((-80.45634460...
+4   4     1     2 MULTIPOLYGON(((-76.00897216...
+5   5     9     3 MULTIPOLYGON(((-77.21766662...
+6   6     7     5 MULTIPOLYGON(((-76.74506378...
 > 
 > # test st_set_crs in pipe:
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
@@ -183,4 +195,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.928   0.012   0.939 
+  0.808   0.016   0.822 

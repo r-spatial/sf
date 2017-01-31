@@ -151,10 +151,13 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
-	sf_column = attr(data, "sf_column")
-	st_geometry(data) = NULL # drop
-	#structure(NextMethod(), sf_column = sf_column)
-	NextMethod()
+	g = st_geometry(data)
+	st_geometry(data) = NULL # drop geometry
+	row = setdiff(names(data), c(key_col, value_col))
+	ret = NextMethod()
+	if (length(row) == 1)
+		st_geometry(ret) = g[ match(ret[[1]], data[[row]]) ]
+	ret
 }
 
 ## tibble methods:
