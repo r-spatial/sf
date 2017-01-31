@@ -120,3 +120,10 @@ st_bbox(sf1)
 bb = st_bbox(nc)
 bb
 st_crs(bb)
+
+# merge:
+a = data.frame(a = 1:3, b = 5:7)
+st_geometry(a) = st_sfc(st_point(c(0,0)), st_point(c(1,1)), st_point(c(2,2)))
+b = data.frame(x = c("a", "b", "c"), b = c(2,5,6))
+merge(a, b)
+merge(a, b, all = TRUE)

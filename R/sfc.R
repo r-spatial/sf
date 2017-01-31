@@ -104,7 +104,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	if (! is.null(attr(x, "n_empty"))) {
 		ne = attr(x, "n_empty")
 		if (ne > 0)
-			cat(paste0("(of which ", ne, ifelse(ne > 1, " are ", " is "), "empty)"))
+			cat(paste0(" (of which ", ne, ifelse(ne > 1, " are ", " is "), "empty)"))
 	}
 	cat("\n")
 	if (length(x)) {
