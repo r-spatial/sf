@@ -245,6 +245,7 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30)
 st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.")
+	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
 }
 
@@ -265,7 +266,7 @@ st_boundary.sfg = function(x)
 
 #' @export
 st_boundary.sfc = function(x)
-	st_sfc(CPL_geos_op("boundary", x))
+	st_sfc(CPL_geos_op("boundary", x, numeric(0)))
 
 #' @export
 st_boundary.sf = function(x) {
@@ -288,7 +289,7 @@ st_convex_hull.sfg = function(x)
 
 #' @export
 st_convex_hull.sfc = function(x)
-	st_sfc(CPL_geos_op("convex_hull", x))
+	st_sfc(CPL_geos_op("convex_hull", x, numeric(0)))
 
 #' @export
 st_convex_hull.sf = function(x) {
@@ -311,7 +312,7 @@ st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
-	st_sfc(CPL_geos_op("simplify", x, preserveTopology = preserveTopology, dTolerance = dTolerance))
+	st_sfc(CPL_geos_op("simplify", x, numeric(0), preserveTopology = preserveTopology, dTolerance = dTolerance))
 }
 
 #' @export
@@ -336,7 +337,7 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (CPL_geos_version() >= "3.4.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
-		st_sfc(CPL_geos_op("triangulate", x, dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_op("triangulate", x, numeric(0), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
@@ -400,7 +401,7 @@ st_polygonize.sfg = function(x)
 #' @export
 st_polygonize.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("polygonize", x))
+	st_sfc(CPL_geos_op("polygonize", x, numeric(0)))
 }
 
 #' @export
@@ -425,7 +426,7 @@ st_linemerge.sfg = function(x)
 #' @export
 st_linemerge.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("linemerge", x))
+	st_sfc(CPL_geos_op("linemerge", x, numeric(0)))
 }
 
 #' @export
@@ -450,7 +451,7 @@ st_centroid.sfg = function(x)
 st_centroid.sfc = function(x) { 
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
-	st_sfc(CPL_geos_op("centroid", x))
+	st_sfc(CPL_geos_op("centroid", x, numeric(0)))
 }
 
 #' @export

@@ -303,7 +303,7 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, 
-		double bufferDist = 0.0, int nQuadSegs = 30,
+		Rcpp::NumericVector bufferDist, int nQuadSegs = 30,
 		double dTolerance = 0.0, bool preserveTopology = false, 
 		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
 
@@ -313,8 +313,10 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	std::vector<GEOSGeom> out(sfc.length());
 
 	if (op == "buffer") {
+		if (bufferDist.size() != g.size())
+			throw std::invalid_argument("invalid dist argument"); // #nocov
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist, nQuadSegs));
+			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs));
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i]));

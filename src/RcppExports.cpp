@@ -294,14 +294,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, double bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
 RcppExport SEXP sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< double >::type bufferDist(bufferDistSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type bufferDist(bufferDistSEXP);
     Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
     Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
     Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
