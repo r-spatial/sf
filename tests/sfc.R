@@ -135,3 +135,13 @@ right_join(a, b)
 full_join(a, b)
 semi_join(a, b)
 anti_join(a, b)
+
+# st_joins:
+a = st_sf(a = 1:3,
+ geom = st_sfc(st_point(c(1,1)), st_point(c(2,2)), st_point(c(3,3))))
+b = st_sf(a = 11:14,
+ geom = st_sfc(st_point(c(10,10)), st_point(c(2,2)), st_point(c(2,2)), st_point(c(3,3))))
+st_join(a, b)
+st_join(a, b, left = FALSE)
+st_join(a, b, FUN = mean)
+st_join(a, b, FUN = mean, left = FALSE)

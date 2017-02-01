@@ -66,13 +66,13 @@ st_contains(x, y, sparse = TRUE, prepared = FALSE)
 
 st_overlaps(x, y, sparse = TRUE, prepared = FALSE)
 
-st_equals(x, y, sparse = TRUE)
+st_equals(x, y, sparse = TRUE, prepared = FALSE)
 
 st_covers(x, y, sparse = TRUE, prepared = FALSE)
 
 st_covered_by(x, y, sparse = TRUE, prepared = FALSE)
 
-st_equals_exact(x, y, par, sparse = TRUE)
+st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
 
 st_buffer(x, dist, nQuadSegs = 30)
 
