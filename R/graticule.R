@@ -102,7 +102,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		lat = pretty(st_bbox(box)[c(2,4)])
 	# sanity:
 	if (st_is_longlat(crs)) {
-		lon = lon[lon > -180 & lon < 180]
+		lon = lon[lon >= -180 & lon <= 180]
 		lat = lat[lat > -90 & lat < 90]
 	}
 
