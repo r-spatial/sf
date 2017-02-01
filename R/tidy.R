@@ -155,8 +155,8 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 	st_geometry(data) = NULL # drop geometry
 	row = setdiff(names(data), c(key_col, value_col))
 	ret = NextMethod()
-	if (length(row) == 1)
-		st_geometry(ret) = g[ match(ret[[1]], data[[row]]) ]
+	if (length(row))
+		st_geometry(ret) = g[ match(ret[[1]], data[[ row[1] ]]) ]
 	ret
 }
 
