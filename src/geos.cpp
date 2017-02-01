@@ -367,6 +367,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc);
 	std::vector<GEOSGeom> out(sfc.length());
 
+#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 5
 	switch (env.size()) {
 		case 0: ;
 		case 1: {
@@ -383,6 +384,9 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 		default:
 			throw std::invalid_argument("env should have length 0 or 1"); // #nocov
 	}
+#else
+	throw std::invalid_argument("voronoi diagrams require a GEOS version >= 3.5.0"); // #nocov
+#endif
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out)); // destroys out
 	CPL_geos_finish(hGEOSCtxt);

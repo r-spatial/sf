@@ -57,16 +57,18 @@ g = st_makegrid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_linemerge(mls)
 
-# voronoi:
-set.seed(1)
-x = st_multipoint(matrix(runif(10),,2))
-box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-v = st_sfc(st_voronoi(x, st_sfc(box)))
-plot(v, col = 0, border = 1, axes = TRUE)
-plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
-plot(x, add = TRUE, col = 'red', cex=2, pch=16)
-plot(st_intersection(st_cast(v), box)) # clip to smaller box
-plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+if (sf:::CPL_geos_version() >= "3.5.0") {
+ # voronoi:
+ set.seed(1)
+ x = st_multipoint(matrix(runif(10),,2))
+ box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
+ v = st_sfc(st_voronoi(x, st_sfc(box)))
+ plot(v, col = 0, border = 1, axes = TRUE)
+ plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+ plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+ plot(st_intersection(st_cast(v), box)) # clip to smaller box
+ plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+}
 
 v = st_voronoi(x)
 class(v)

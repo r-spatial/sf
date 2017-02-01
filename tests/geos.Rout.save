@@ -144,16 +144,18 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 > st_linemerge(mls)
 LINESTRING(0 0, 1 1, 2 0)
 > 
-> # voronoi:
-> set.seed(1)
-> x = st_multipoint(matrix(runif(10),,2))
-> box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-> v = st_sfc(st_voronoi(x, st_sfc(box)))
-> plot(v, col = 0, border = 1, axes = TRUE)
-> plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
-> plot(x, add = TRUE, col = 'red', cex=2, pch=16)
-> plot(st_intersection(st_cast(v), box)) # clip to smaller box
-> plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+> if (sf:::CPL_geos_version() >= "3.5.0") {
++  # voronoi:
++  set.seed(1)
++  x = st_multipoint(matrix(runif(10),,2))
++  box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
++  v = st_sfc(st_voronoi(x, st_sfc(box)))
++  plot(v, col = 0, border = 1, axes = TRUE)
++  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
++  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
++  plot(st_intersection(st_cast(v), box)) # clip to smaller box
++  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
++ }
 > 
 > v = st_voronoi(x)
 > class(v)
@@ -167,4 +169,4 @@ LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.112   0.024   2.133 
+  2.280   0.032   2.310 
