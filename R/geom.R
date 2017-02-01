@@ -204,7 +204,11 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = FALSE)
 
 #' @name geos
 #' @export
-st_equals		= function(x, y, sparse = TRUE) st_geos_binop("equals", x, y, sparse = sparse)
+st_equals		= function(x, y, sparse = TRUE, prepared = FALSE) {
+	if (prepared)
+		stop("prepared geometries not supported for st_equals")
+	st_geos_binop("equals", x, y, sparse = sparse)
+}
 
 #' @name geos
 #' @export
@@ -219,8 +223,11 @@ st_covered_by	= function(x, y, sparse = TRUE, prepared = FALSE)
 #' @name geos
 #' @export
 #' @param par numeric; parameter used for "equals_exact" (margin) and "is_within_distance"
-st_equals_exact = function(x, y, par, sparse = TRUE) 
+st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
+	if (prepared)
+		stop("prepared geometries not supported for st_equals")
 	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
+}
 
 ##' @name geos
 ##' @export
