@@ -305,3 +305,15 @@ st_set_precision.sf <- function(x, precision) {
 "st_precision<-" <- function(x, value) {
     st_set_precision(x, value)
 }
+
+# if g may have NULL elements, replace it with (appropriate?) empty geometries
+fix_NULL_values = function(g) {
+	isNull = which(sapply(g, is.null))
+	for (i in isNull)
+		g[[i]] = st_geometrycollection() # should improve here: try st_linestring() etc
+	attr(g, "n_empty") = length(isNull)
+	if (length(isNull))
+		structure(g, class = c("sfc_GEOMETRY", "sfc"))
+	else 
+		g
+}

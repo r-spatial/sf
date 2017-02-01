@@ -326,14 +326,8 @@ merge.sf = function(x, y, ...) {
 		stop("merge on two sf objects not supported")
 	sf_column = attr(x, "sf_column")
 	ret = NextMethod()
-	g = ret[[sf_column]]
+	g = ret[[sf_column]] # may have NULL values in it
 	ret[[sf_column]] = NULL
-	isNull = which(sapply(g, is.null))
-	for (i in isNull)
-		g[[i]] = st_geometrycollection()
-	attr(g, "n_empty") = length(isNull)
-	if (length(isNull))
-		class(g) = c("sfc_GEOMETRY", "sfc")
-	st_geometry(ret) = g
+	st_geometry(ret) = fix_NULL_values(g)
 	ret
 }

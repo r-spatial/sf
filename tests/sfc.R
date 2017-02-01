@@ -57,7 +57,7 @@ st_cast(x, "POINT")
 sf = st_sf(a = 3:2, geom = x)
 st_cast(sf, "POINT")
 
-library(dplyr)
+suppressPackageStartupMessages( library(dplyr) )
 
 x %>% st_cast("POINT")
 
@@ -127,3 +127,11 @@ st_geometry(a) = st_sfc(st_point(c(0,0)), st_point(c(1,1)), st_point(c(2,2)))
 b = data.frame(x = c("a", "b", "c"), b = c(2,5,6))
 merge(a, b)
 merge(a, b, all = TRUE)
+
+# joins:
+inner_join(a, b)
+left_join(a, b)
+right_join(a, b)
+full_join(a, b)
+semi_join(a, b)
+anti_join(a, b)
