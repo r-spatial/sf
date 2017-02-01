@@ -67,7 +67,10 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' @param prepared logical; see \link{st_intersects}
 #' @param left logical; if \code{TRUE} carry out left join, else inner join; 
 #' see also \link[dplyr]{left_join}
-#' @details alternative values for argument \code{join} are: \link{st_disjoint} \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains} \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or \link{st_equals_exact}, or user-defined functions of the same profile
+#' @details alternative values for argument \code{join} are: \link{st_disjoint}
+#' \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
+#' \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
+#' \link{st_equals_exact}, or user-defined functions of the same profile
 #' @return an object of class \code{sf}, joined based on geometry
 #' @examples
 #' a = st_sf(a = 1:3,

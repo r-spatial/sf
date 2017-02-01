@@ -30,7 +30,10 @@ an object of class \code{sf}, joined based on geometry
 spatial left or inner join
 }
 \details{
-alternative values for argument \code{join} are: \link{st_disjoint} \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains} \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or \link{st_equals_exact}, or user-defined functions of the same profile
+alternative values for argument \code{join} are: \link{st_disjoint}
+\link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
+\link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
+\link{st_equals_exact}, or user-defined functions of the same profile
 }
 \examples{
 a = st_sf(a = 1:3,
