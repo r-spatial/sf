@@ -93,8 +93,11 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	
 	# as in https://github.com/edzer/sfr/issues/198 : 
 	# recreate, and ignore bbox:
-	if (any(!is.finite(st_bbox(box)))) 
-		return(st_transform(st_graticule(datum = datum), crs))
+	if (any(!is.finite(st_bbox(box)))) {
+		x = st_transform(st_graticule(datum = datum), crs)
+		x$degree_label = "."
+		return(x)
+	}
 
 	if (is.null(lon))
 		lon = pretty(st_bbox(box)[c(1,3)])
