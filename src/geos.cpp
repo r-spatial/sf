@@ -163,7 +163,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 	using namespace Rcpp; // so that later on the (i,_) works
 	if (op == "relate") { // character return matrix:
 		Rcpp::CharacterVector out(sfc0.length() * sfc1.length());
-		for (int i = 0; i < sfc0.length(); i++)
+		for (int i = 0; i < sfc0.length(); i++) {
 			for (int j = 0; j < sfc1.length(); j++) {
 				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i], gmv1[j]);
 				if (cp == NULL)
@@ -171,17 +171,21 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				out[j * sfc0.length() + i] = cp;
 				GEOSFree_r(hGEOSCtxt, cp);
 			}
+			R_CheckUserInterrupt();
+		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "distance") { // return double matrix:
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
-		for (size_t i = 0; i < gmv0.size(); i++)
+		for (size_t i = 0; i < gmv0.size(); i++) {
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
 					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
 				out(i,j) = dist;
 			}
+			R_CheckUserInterrupt();
+		}
 		ret_list = Rcpp::List::create(out);
 	} else {
 		// other cases: boolean return matrix, either dense or sparse
@@ -213,6 +217,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 						densemat(i,_) = rowi;
 					else
 						sparsemat[i] = get_which(rowi);
+					R_CheckUserInterrupt();
 				}
 			} else {
 				log_fn logical_fn = which_geom_fn(op);
@@ -224,6 +229,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 						densemat(i,_) = rowi;
 					else
 						sparsemat[i] = get_which(rowi);
+					R_CheckUserInterrupt();
 				}
 			}
 		}
@@ -298,6 +304,7 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
 		throw std::range_error("GEOS exception"); // #nocov
+	R_CheckUserInterrupt();
 	return value;
 }
 
@@ -400,6 +407,7 @@ GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, siz
 		throw std::range_error("GEOS exception"); // #nocov
 	if (!chk_(GEOSisEmpty_r(hGEOSCtxt, value)))
 		*n = *n + 1;
+	R_CheckUserInterrupt();
 	return value;
 }
 
