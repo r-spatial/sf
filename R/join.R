@@ -101,13 +101,13 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
     		ix = rep(seq_len(nrow(x)), sapply(i, length))
 		}
-		st_sf(cbind(as.data.frame(x[ix,]), y[unlist(i),,drop=FALSE]))
+		st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i),,drop=FALSE]))
 	} else { # aggregate y:
 		y = aggregate(y[unlist(i), , drop=FALSE], list(ix), FUN)
     	if (left) {
 			xNAs[!is.na(xNAs)] = seq_len(nrow(y))
 			st_sf(cbind(as.data.frame(x), y[xNAs, , drop = FALSE]))
 		} else # inner:
-			st_sf(cbind(as.data.frame(x[!is.na(xNAs), , drop=FALSE]), y))
+			st_sf(cbind(as.data.frame(x)[!is.na(xNAs), , drop=FALSE], y))
 	}
 }
