@@ -95,7 +95,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	# recreate, and ignore bbox:
 	if (any(!is.finite(st_bbox(box)))) {
 		x = st_transform(st_graticule(datum = datum), crs)
-		x$degree_label = "."
+		x$degree_label = NA_character_
 		return(x)
 	}
 
