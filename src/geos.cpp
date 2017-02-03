@@ -421,21 +421,29 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 
 	size_t n = 0;
 	if (op == "intersection") {
-		for (size_t i = 0; i < y.size(); i++)
+		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++)
 				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSIntersection_r(hGEOSCtxt, x[j], y[i]), &n);
+			R_CheckUserInterrupt();
+		}
 	} else if (op == "union") {
-		for (size_t i = 0; i < y.size(); i++)
+		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++)
 				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSUnion_r(hGEOSCtxt, x[j], y[i]), &n);
+			R_CheckUserInterrupt();
+		}
 	} else if (op == "difference") {
-		for (size_t i = 0; i < y.size(); i++)
+		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++)
 				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSDifference_r(hGEOSCtxt, x[j], y[i]), &n);
+			R_CheckUserInterrupt();
+		}
 	} else if (op == "sym_difference") {
-		for (size_t i = 0; i < y.size(); i++)
+		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++)
 				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSSymDifference_r(hGEOSCtxt, x[j], y[i]), &n);
+			R_CheckUserInterrupt();
+		}
 	} else 
 		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out // #nocov
 	// clean up x and y:
@@ -456,7 +464,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 				m(k, 1) = i + 1;
 				k++;
 				if (k > n)
-					throw std::range_error("invalid k");
+					throw std::range_error("invalid k"); // #nocov
 			} else // discard:
 				GEOSGeom_destroy_r(hGEOSCtxt, out[l]);
 		}
