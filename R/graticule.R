@@ -81,11 +81,13 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	if (st_is_longlat(crs))
 		bb = trim_bb(bb, margin)
 
-	ls = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[2]), c(bb[3],bb[4]), 
+	ls1 = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[2]), c(bb[3],bb[4]), 
 		c(bb[1],bb[4]), c(bb[1],bb[2])))
-	box = st_sfc(ls, crs = crs)
+	ls2 = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[4]), c(bb[1],bb[4]), 
+		c(bb[3],bb[2]), c(bb[1],bb[2])))
+	box = st_sfc(ls1, ls2, crs = crs)
 
-	box = st_segmentize(box, st_length(ls) / 400, warn = FALSE)
+	box = st_segmentize(box, st_length(ls1) / 400, warn = FALSE)
 
 	# Now we're moving to long/lat:
 	if (!is.na(crs))
@@ -99,17 +101,20 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		return(x)
 	}
 
-	if (is.null(lon))
-		lon = pretty(st_bbox(box)[c(1,3)])
-	if (is.null(lat))
-		lat = pretty(st_bbox(box)[c(2,4)])
-	# sanity:
-	if (st_is_longlat(crs)) {
-		lon = lon[lon >= -180 & lon <= 180]
-		lat = lat[lat > -90 & lat < 90]
-	}
-
 	bb = st_bbox(box)
+	if (is.null(lon)) {
+		lon = if (bb[1] < -170 && bb[3] > 170) # "global"
+				seq(-180, 180, by = 60)
+			else
+				pretty(bb[c(1,3)], n = 6)
+	}
+	if (is.null(lat))
+		lat = pretty(bb[c(2,4)], n = 6)
+
+	# sanity:
+	lon = lon[lon >= -180 & lon <= 180]
+	lat = lat[lat > -90 & lat < 90]
+
 	# widen bb if pretty() created values outside the box:
 	bb = c(min(bb[1], min(lon)), min(bb[2],min(lat)), max(bb[3], max(lon)), max(bb[4], max(lat)))
 
@@ -137,7 +142,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	if (!missing(x)) { # cut out box:
 		if (! is.na(crs))
 			box = st_transform(box, crs)
-		df = st_intersection(df, st_polygonize(box))
+		df = st_intersection(df, st_polygonize(box[1]))
 	}
 	graticule_attributes(st_cast(df, "MULTILINESTRING"))
 }
