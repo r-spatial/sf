@@ -279,18 +279,10 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	std::vector<GEOSGeom> gmv_out(by_feature ? sfc.size() : 1);
 	if (by_feature) {
 		for (int i = 0; i < sfc.size(); i++)
-#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3
 			gmv_out[i] = GEOSUnaryUnion_r(hGEOSCtxt, gmv[i]);
-#else
-			gmv_out[i] = GEOSUnionCascaded_r(hGEOSCtxt, gmv[i]);
-#endif
 	} else {
 		GEOSGeom gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, gmv.data(), gmv.size());
-#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3
 		gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
-#else
-		gmv_out[0] = GEOSUnionCascaded_r(hGEOSCtxt, gc);
-#endif
 		GEOSGeom_destroy_r(hGEOSCtxt, gc);
 	}
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out)); // destroys gmv_out
