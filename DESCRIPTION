@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.3-2
+Version: 0.3-3
 Title: Simple Features for R
 Description: Support for simple features, a standardized way to encode spatial data, with bindings 
     to GDAL, GEOS and Proj.4.
@@ -24,7 +24,7 @@ Imports:
     grid, 
     methods, 
     Rcpp, 
-    DBI, 
+    DBI,
     units (>= 0.4)
 Suggests: 
     sp (>= 1.2-4), 
@@ -46,7 +46,6 @@ SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/edzer/sfr/
 BugReports: https://github.com/edzer/sfr/issues/
-RoxygenNote: 5.0.1
 Collate:
 	RcppExports.R
 	init.R
@@ -74,3 +73,4 @@ Collate:
 	agr.R
 	maps.R
 	join.R
+RoxygenNote: 6.0.0
