@@ -2,6 +2,7 @@
 % Please edit documentation in R/read.R, R/db.R
 \name{st_write}
 \alias{st_write}
+\alias{st_write}
 \alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
@@ -77,4 +78,3 @@ st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
 \seealso{
 \link{st_drivers}
 }
-

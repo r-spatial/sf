@@ -23,4 +23,3 @@ an \code{sf} object with aggregated attributes and geometries, with an additiona
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
 }
-

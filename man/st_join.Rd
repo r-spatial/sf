@@ -45,4 +45,3 @@ st_join(a, b, left = FALSE)
 st_join(a, b, FUN = mean)
 st_join(a, b, FUN = mean, left = FALSE)
 }
-

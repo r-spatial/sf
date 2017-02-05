@@ -18,4 +18,3 @@
 \description{
 Summarize simple feature column
 }
-

@@ -19,4 +19,3 @@ st_makegrid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \description{
 Make a rectangular grid of polygons over the bounding box of a sf or sfc object
 }
-

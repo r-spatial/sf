@@ -23,4 +23,3 @@ b = data.frame(x = c("a", "b", "c"), b = c(2,5,6))
 merge(a, b)
 merge(a, b, all = TRUE)
 }
-

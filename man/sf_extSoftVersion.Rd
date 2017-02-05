@@ -9,4 +9,3 @@ sf_extSoftVersion()
 \description{
 Provide the external dependencies versions of the libraries linked to sf
 }
-

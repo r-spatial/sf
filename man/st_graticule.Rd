@@ -45,6 +45,7 @@ Compute graticules and their parameters
  or place names permits most viewers of the output to orient themselves
  better than a graticule.
 }
+
 \examples{
 library(sf)
 library(maps)
@@ -80,4 +81,3 @@ if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
 }))
 plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
 }
-

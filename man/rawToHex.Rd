@@ -12,4 +12,3 @@ rawToHex(x)
 \description{
 Convert raw vector(s) into hexadecimal character string(s)
 }
-

@@ -9,4 +9,3 @@
 This is data included in sf
 }
 \keyword{data}
-

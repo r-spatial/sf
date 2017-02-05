@@ -2,9 +2,15 @@
 % Please edit documentation in R/sfc.R, R/sf.R
 \name{st_geometry}
 \alias{st_geometry}
-\alias{st_geometry.sf}
 \alias{st_geometry.sfc}
+\alias{st_geometry}
+\alias{st_geometry}
+\alias{st_geometry.sf}
+\alias{st_geometry}
+\alias{st_geometry.sfc}
+\alias{st_geometry}
 \alias{st_geometry.sfg}
+\alias{st_geometry}
 \alias{st_geometry<-}
 \title{Get, set, or replace geometry from an sf object}
 \usage{
@@ -46,4 +52,3 @@ class(df)
 st_geometry(df)
 st_geometry(df) <- sfc # replaces
 }
-

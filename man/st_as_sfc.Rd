@@ -2,13 +2,21 @@
 % Please edit documentation in R/wkb.R, R/wkt.R, R/sp.R, R/maps.R
 \name{st_as_sfc}
 \alias{st_as_sfc}
-\alias{st_as_sfc.SpatialLines}
-\alias{st_as_sfc.SpatialMultiPoints}
-\alias{st_as_sfc.SpatialPixels}
-\alias{st_as_sfc.SpatialPoints}
-\alias{st_as_sfc.SpatialPolygons}
 \alias{st_as_sfc.WKB}
+\alias{st_as_sfc}
 \alias{st_as_sfc.character}
+\alias{st_as_sfc}
+\alias{st_as_sfc}
+\alias{st_as_sfc.SpatialPoints}
+\alias{st_as_sfc}
+\alias{st_as_sfc.SpatialPixels}
+\alias{st_as_sfc}
+\alias{st_as_sfc.SpatialMultiPoints}
+\alias{st_as_sfc}
+\alias{st_as_sfc.SpatialLines}
+\alias{st_as_sfc}
+\alias{st_as_sfc.SpatialPolygons}
+\alias{st_as_sfc}
 \alias{st_as_sfc.map}
 \title{Convert foreign geometry object to an sfc object}
 \usage{
@@ -58,4 +66,3 @@ st_as_sfc(wkb, EWKB = TRUE)
 wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 st_as_sfc(wkb, EWKB = TRUE)
 }
-

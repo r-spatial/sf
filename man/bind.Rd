@@ -2,13 +2,14 @@
 % Please edit documentation in R/sf.R
 \name{bind}
 \alias{bind}
-\alias{cbind.sf}
 \alias{rbind.sf}
+\alias{bind}
+\alias{cbind.sf}
 \title{Bind rows (features) of sf objects}
 \usage{
-rbind.sf(..., deparse.level = 1)
+\method{rbind}{sf}(..., deparse.level = 1)
 
-cbind.sf(..., deparse.level = 1)
+\method{cbind}{sf}(..., deparse.level = 1)
 }
 \arguments{
 \item{...}{objects to bind}
@@ -23,4 +24,3 @@ Bind rows (features) of sf objects
 
 Bind columns (variables) of sf objects
 }
-

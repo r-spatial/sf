@@ -15,4 +15,3 @@ TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is mi
 \description{
 Assert whether simple feature coordinates are longlat degrees
 }
-

@@ -21,4 +21,3 @@ The drivers available will depend on the installation of GDAL/OGR, and can vary;
 \examples{
 st_drivers()
 }
-

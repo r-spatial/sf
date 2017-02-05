@@ -28,4 +28,3 @@ st_zm(x)
 a = st_sf(a = 1:2, geom=x)
 st_zm(a)
 }
-

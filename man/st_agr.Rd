@@ -2,9 +2,12 @@
 % Please edit documentation in R/agr.R
 \docType{data}
 \name{st_agr}
+\alias{st_agr}
 \alias{NA_agr_}
 \alias{st_agr}
+\alias{st_agr}
 \alias{st_agr<-}
+\alias{st_agr}
 \alias{st_set_agr}
 \title{get or set relation_to_geometry attribute of an \code{sf} object}
 \format{An object of class \code{factor} of length 1.}
@@ -31,4 +34,3 @@ get or set relation_to_geometry attribute of an \code{sf} object
 \code{NA_agr_} is the \code{agr} object with a missing value.
 }
 \keyword{datasets}
-

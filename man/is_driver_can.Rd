@@ -18,4 +18,3 @@ is from \code{\link{st_drivers}}}
 Search through the driver table to match a driver name with 
 an action (e.g. \code{"write"}) and check if the action is supported.
 }
-

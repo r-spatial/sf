@@ -14,4 +14,3 @@ as_Spatial(from, cast = TRUE)
 \description{
 Convert to sp object
 }
-

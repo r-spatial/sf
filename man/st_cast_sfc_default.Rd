@@ -18,4 +18,3 @@ Geometries that are already MULTI* are left unchanged.
 Features that can't be cast to a single  MULTI* geometry are return as a 
 GEOMETRYCOLLECTION
 }
-

@@ -34,4 +34,3 @@ pushViewport(viewport(width = 0.8, height = 0.8))
 pushViewport(st_viewport(nc))
 invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 }
-

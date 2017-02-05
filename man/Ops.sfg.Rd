@@ -25,4 +25,3 @@ diag(m) = c(1, 3)
 # affine:
 st_point(c(1,2)) * m + c(2,5)
 }
-

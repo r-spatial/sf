@@ -2,10 +2,14 @@
 % Please edit documentation in R/sf.R, R/sp.R, R/maps.R
 \name{st_as_sf}
 \alias{st_as_sf}
-\alias{st_as_sf.Spatial}
+\alias{st_as_sf}
 \alias{st_as_sf.data.frame}
-\alias{st_as_sf.map}
+\alias{st_as_sf}
 \alias{st_as_sf.sf}
+\alias{st_as_sf}
+\alias{st_as_sf.Spatial}
+\alias{st_as_sf}
+\alias{st_as_sf.map}
 \title{Convert foreign object to an sf object}
 \usage{
 st_as_sf(x, ...)
@@ -91,4 +95,3 @@ pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 }
-

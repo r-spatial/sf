@@ -2,19 +2,31 @@
 % Please edit documentation in R/crs.R
 \docType{data}
 \name{st_crs}
-\alias{NA_crs_}
-\alias{is.na.crs}
+\alias{st_crs}
+\alias{st_crs}
+\alias{st_crs.sf}
+\alias{st_crs}
+\alias{st_crs.numeric}
+\alias{st_crs}
+\alias{st_crs.character}
+\alias{st_crs}
+\alias{st_crs.sfc}
 \alias{st_crs}
 \alias{st_crs.bbox}
-\alias{st_crs.character}
+\alias{st_crs}
 \alias{st_crs.crs}
-\alias{st_crs.numeric}
-\alias{st_crs.sf}
-\alias{st_crs.sfc}
+\alias{st_crs}
 \alias{st_crs<-}
+\alias{st_crs}
 \alias{st_crs<-.sf}
+\alias{st_crs}
 \alias{st_crs<-.sfc}
+\alias{st_crs}
 \alias{st_set_crs}
+\alias{st_crs}
+\alias{NA_crs_}
+\alias{st_crs}
+\alias{is.na.crs}
 \title{Retrieve coordinate reference system from object}
 \format{An object of class \code{crs} of length 2.}
 \usage{
@@ -97,4 +109,3 @@ x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
 }
 \keyword{datasets}
-

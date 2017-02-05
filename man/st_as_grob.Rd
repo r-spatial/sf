@@ -16,4 +16,3 @@ st_as_grob(x, ..., units = "native")
 \description{
 Convert sf* object to an grid graphics object (grob)
 }
-

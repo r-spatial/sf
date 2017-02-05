@@ -3,16 +3,27 @@
 \name{plot}
 \alias{plot}
 \alias{plot.sf}
-\alias{plot.sfc_GEOMETRY}
-\alias{plot.sfc_GEOMETRYCOLLECTION}
-\alias{plot.sfc_LINESTRING}
-\alias{plot.sfc_MULTILINESTRING}
-\alias{plot.sfc_MULTIPOINT}
-\alias{plot.sfc_MULTIPOLYGON}
+\alias{plot}
 \alias{plot.sfc_POINT}
+\alias{plot}
+\alias{plot.sfc_MULTIPOINT}
+\alias{plot}
+\alias{plot.sfc_LINESTRING}
+\alias{plot}
+\alias{plot.sfc_MULTILINESTRING}
+\alias{plot}
 \alias{plot.sfc_POLYGON}
+\alias{plot}
+\alias{plot.sfc_MULTIPOLYGON}
+\alias{plot}
+\alias{plot.sfc_GEOMETRYCOLLECTION}
+\alias{plot}
+\alias{plot.sfc_GEOMETRY}
+\alias{plot}
 \alias{plot.sfg}
+\alias{plot}
 \alias{plot_sf}
+\alias{plot}
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
@@ -203,4 +214,3 @@ gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 sf.colors(10)
 }
-

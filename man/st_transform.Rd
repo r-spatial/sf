@@ -2,8 +2,11 @@
 % Please edit documentation in R/transform.R
 \name{st_transform}
 \alias{st_transform}
-\alias{st_transform.sf}
+\alias{st_transform}
 \alias{st_transform.sfc}
+\alias{st_transform}
+\alias{st_transform.sf}
+\alias{st_transform}
 \alias{st_transform.sfg}
 \title{Transform or convert coordinates of simple feature}
 \usage{
@@ -45,4 +48,3 @@ library(units)
 as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 }
-

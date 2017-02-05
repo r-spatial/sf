@@ -2,15 +2,24 @@
 % Please edit documentation in R/cast_sfg.R, R/cast_sfc.R
 \name{st_cast}
 \alias{st_cast}
-\alias{st_cast.GEOMETRYCOLLECTION}
-\alias{st_cast.LINESTRING}
-\alias{st_cast.MULTILINESTRING}
-\alias{st_cast.MULTIPOINT}
 \alias{st_cast.MULTIPOLYGON}
-\alias{st_cast.POINT}
+\alias{st_cast}
+\alias{st_cast.MULTILINESTRING}
+\alias{st_cast}
+\alias{st_cast.MULTIPOINT}
+\alias{st_cast}
 \alias{st_cast.POLYGON}
-\alias{st_cast.sf}
+\alias{st_cast}
+\alias{st_cast.LINESTRING}
+\alias{st_cast}
+\alias{st_cast.POINT}
+\alias{st_cast}
+\alias{st_cast.GEOMETRYCOLLECTION}
+\alias{st_cast}
+\alias{st_cast}
 \alias{st_cast.sfc}
+\alias{st_cast}
+\alias{st_cast.sf}
 \title{Cast geometry to another type: either simplify, or cast explicitly}
 \usage{
 \method{st_cast}{MULTIPOLYGON}(x, to, ...)
@@ -89,4 +98,3 @@ st_sfc(lapply(c("POINT", "MULTIPOINT"), function(x) st_cast(pt, x)))
 s = st_multipoint(rbind(c(1,0)))
 st_cast(s, "POINT")
 }
-

@@ -23,4 +23,3 @@ st_is(sfc, "LINESTRING")
 st_is(st_sf(a = 1:2, sfc), "LINESTRING")
 st_is(sfc, c("POINT", "LINESTRING"))
 }
-

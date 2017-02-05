@@ -27,4 +27,3 @@ a1$intensive = a1$BIR74
 a1$extensive = a2$BIR74
 plot(a1[c("intensive", "extensive")])
 }
-

@@ -15,4 +15,3 @@ a factor with the geometry type of each simple feature in x
 \description{
 Return geometry type of an object, as a factor
 }
-

@@ -2,9 +2,12 @@
 % Please edit documentation in R/wkt.R, R/crs.R
 \name{st_as_text}
 \alias{st_as_text}
-\alias{st_as_text.crs}
-\alias{st_as_text.sfc}
+\alias{st_as_text}
 \alias{st_as_text.sfg}
+\alias{st_as_text}
+\alias{st_as_text.sfc}
+\alias{st_as_text}
+\alias{st_as_text.crs}
 \title{Return Well-known Text representation of simple feature geometry or coordinate reference system}
 \usage{
 st_as_text(x, ...)
@@ -33,4 +36,3 @@ to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
 \examples{
 st_as_text(st_point(1:2))
 }
-

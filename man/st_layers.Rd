@@ -2,6 +2,7 @@
 % Please edit documentation in R/read.R
 \name{st_layers}
 \alias{st_layers}
+\alias{st_layers}
 \alias{st_list}
 \title{List layers in a datasource}
 \usage{
@@ -19,4 +20,3 @@ st_list(dsn, options = character(0), do_count = FALSE)
 \description{
 List layers in a datasource
 }
-
