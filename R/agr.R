@@ -44,8 +44,8 @@ st_agr.default = function(x = NA_character_, ...) {
 
 #' @export
 `st_agr<-.sf` = function(x, value) {
-	stopifnot(!is.null(value))
 	stopifnot(is.character(value) || is.factor(value))
+	nv = setdiff(names(x), attr(x, "sf_column"))
 	if (length(value) == 0)
 		attr(x, "agr") = NA_agr_[0]
 	else if (! is.null(names(value)) && length(value) == 1) { 
@@ -55,15 +55,19 @@ st_agr.default = function(x = NA_character_, ...) {
 		else
 			attr(x, "agr") = st_agr(value)
 	} else {
-		n = ncol(x) - length(attr(x, "sf_column"))
-		value = rep(st_agr(value), length.out = n)
-		nv = setdiff(names(x), attr(x, "sf_column"))
-		if (! is.null(names(value))) {
-			stopifnot(length(setdiff(names(value), nv)) == 0)
+		value = rep(st_agr(value), length.out = ncol(x) - 1)
+		if (! is.null(names(value)))
 			value = value[match(nv, names(value))]
-		} else
+		else
 			names(value) = nv
 		attr(x, "agr") <- value
+	}
+	a = st_agr(x)
+	absent = setdiff(names(x), c(na.omit(names(a)), attr(x, "sf_column")))
+	if (length(absent)) { # repair:
+		a[absent] = NA_agr_
+		names(a[absent]) = absent
+		attr(x, "agr") = a[nv]
 	}
 	x
 }
