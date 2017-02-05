@@ -85,25 +85,25 @@ st_distance(x, y, dist_fun)
 
 st_relate(x, y)
 
-st_intersects(x, y, sparse = TRUE, prepared = FALSE)
+st_intersects(x, y, sparse = TRUE, prepared = TRUE)
 
-st_disjoint(x, y, sparse = TRUE, prepared = FALSE)
+st_disjoint(x, y, sparse = TRUE, prepared = TRUE)
 
-st_touches(x, y, sparse = TRUE, prepared = FALSE)
+st_touches(x, y, sparse = TRUE, prepared = TRUE)
 
-st_crosses(x, y, sparse = TRUE, prepared = FALSE)
+st_crosses(x, y, sparse = TRUE, prepared = TRUE)
 
-st_within(x, y, sparse = TRUE, prepared = FALSE)
+st_within(x, y, sparse = TRUE, prepared = TRUE)
 
-st_contains(x, y, sparse = TRUE, prepared = FALSE)
+st_contains(x, y, sparse = TRUE, prepared = TRUE)
 
-st_overlaps(x, y, sparse = TRUE, prepared = FALSE)
+st_overlaps(x, y, sparse = TRUE, prepared = TRUE)
 
 st_equals(x, y, sparse = TRUE, prepared = FALSE)
 
-st_covers(x, y, sparse = TRUE, prepared = FALSE)
+st_covers(x, y, sparse = TRUE, prepared = TRUE)
 
-st_covered_by(x, y, sparse = TRUE, prepared = FALSE)
+st_covered_by(x, y, sparse = TRUE, prepared = TRUE)
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
 
@@ -245,12 +245,14 @@ plot(nc, border = grey(.5))
 set.seed(1)
 x = st_multipoint(matrix(runif(10),,2))
 box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-v = st_sfc(st_voronoi(x, st_sfc(box)))
-plot(v, col = 0, border = 1, axes = TRUE)
-plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
-plot(x, add = TRUE, col = 'red', cex=2, pch=16)
-plot(st_intersection(st_cast(v), box)) # clip to smaller box
-plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+ v = st_sfc(st_voronoi(x, st_sfc(box)))
+ plot(v, col = 0, border = 1, axes = TRUE)
+ plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+ plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+ plot(st_intersection(st_cast(v), box)) # clip to smaller box
+ plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+}
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 st_polygonize(st_sfc(mls))
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))

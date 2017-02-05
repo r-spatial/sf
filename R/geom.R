@@ -363,12 +363,14 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
 #' box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-#' v = st_sfc(st_voronoi(x, st_sfc(box)))
-#' plot(v, col = 0, border = 1, axes = TRUE)
-#' plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
-#' plot(x, add = TRUE, col = 'red', cex=2, pch=16)
-#' plot(st_intersection(st_cast(v), box)) # clip to smaller box
-#' plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+#' if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+#'  v = st_sfc(st_voronoi(x, st_sfc(box)))
+#'  plot(v, col = 0, border = 1, axes = TRUE)
+#'  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
+#'  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+#'  plot(st_intersection(st_cast(v), box)) # clip to smaller box
+#'  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+#' }
 st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_voronoi")
 
@@ -378,7 +380,7 @@ st_voronoi.sfg = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = F
 
 #' @export
 st_voronoi.sfc = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (CPL_geos_version() >= "3.5.0") {
+	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))

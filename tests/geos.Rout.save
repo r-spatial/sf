@@ -144,7 +144,7 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 > st_linemerge(mls)
 LINESTRING(0 0, 1 1, 2 0)
 > 
-> if (sf:::CPL_geos_version() >= "3.5.0") {
+> if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 +  # voronoi:
 +  set.seed(1)
 +  x = st_multipoint(matrix(runif(10),,2))
@@ -155,18 +155,18 @@ LINESTRING(0 0, 1 1, 2 0)
 +  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
 +  plot(st_intersection(st_cast(v), box)) # clip to smaller box
 +  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
++ 
++  v = st_voronoi(x)
++  print(class(v))
++  v = st_sfc(st_voronoi(st_sfc(x)))
++  print(class(v))
++  v = st_voronoi(st_sf(a = 1, geom = st_sfc(x)))
++  print(class(v))
 + }
-> 
-> v = st_voronoi(x)
-> class(v)
 [1] "XY"                 "GEOMETRYCOLLECTION" "sfg"               
-> v = st_sfc(st_voronoi(st_sfc(x)))
-> class(v)
 [1] "sfc_GEOMETRYCOLLECTION" "sfc"                   
-> v = st_voronoi(st_sf(a = 1, geom = st_sfc(x)))
-> class(v)
 [1] "sf"         "data.frame"
 > 
 > proc.time()
    user  system elapsed 
-  2.280   0.032   2.310 
+  2.084   0.048   2.129 
