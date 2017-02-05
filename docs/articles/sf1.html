@@ -159,23 +159,26 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 <li>that although geometries are native R objects, they are printed as <a href="#wkb">well-known text</a></li>
 </ul><p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
-##  [1] aggregate         arrange_          cbind            
-##  [4] coerce            distinct_         filter_          
-##  [7] gather_           group_by_         initialize       
-## [10] mutate_           plot              print            
-## [13] rbind             rename_           select_          
-## [16] [                 [[&lt;-              $&lt;-              
-## [19] show              slice_            slotsFromS3      
-## [22] spread_           st_agr&lt;-          st_agr           
-## [25] st_as_sf          st_bbox           st_boundary      
-## [28] st_buffer         st_cast           st_centroid      
-## [31] st_convex_hull    st_crs&lt;-          st_crs           
-## [34] st_difference     st_geometry&lt;-     st_geometry      
-## [37] st_intersection   st_is             st_linemerge     
-## [40] st_polygonize     st_precision      st_segmentize    
-## [43] st_set_precision  st_simplify       st_sym_difference
-## [46] st_transform      st_triangulate    st_union         
-## [49] st_zm             summarise_        transmute_       
+##  [1] aggregate         anti_join         arrange_         
+##  [4] cbind             coerce            distinct_        
+##  [7] filter_           full_join         gather_          
+## [10] group_by_         initialize        inner_join       
+## [13] left_join         merge             mutate_          
+## [16] plot              print             rbind            
+## [19] rename_           right_join        select_          
+## [22] semi_join         [                 [[&lt;-             
+## [25] $&lt;-               show              slice_           
+## [28] slotsFromS3       spread_           st_agr&lt;-         
+## [31] st_agr            st_as_sf          st_bbox          
+## [34] st_boundary       st_buffer         st_cast          
+## [37] st_centroid       st_convex_hull    st_crs&lt;-         
+## [40] st_crs            st_difference     st_geometry&lt;-    
+## [43] st_geometry       st_intersection   st_is            
+## [46] st_linemerge      st_polygonize     st_precision     
+## [49] st_segmentize     st_set_precision  st_simplify      
+## [52] st_sym_difference st_transform      st_triangulate   
+## [55] st_union          st_voronoi        st_zm            
+## [58] summarise_        transmute_       
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g.&nbsp;by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -239,7 +242,8 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [25] st_precision      str               st_segmentize    
 ## [28] st_set_precision  st_simplify       st_sym_difference
 ## [31] st_transform      st_triangulate    st_union         
-## [34] st_zm             summary           type_sum         
+## [34] st_voronoi        st_zm             summary          
+## [37] type_sum         
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -484,8 +488,6 @@ kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719 
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
 <span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s
-## Warning in `st_crs&lt;-.sfc`(`*tmp*`, value = structure(list(structure(list(:
-## st_crs&lt;- : replacing crs does not reproject data; use st_transform for that
 <span class="co"># anticipate geometry column name changes:</span>
 <span class="kw">names</span>(nc)[<span class="dv">15</span>] =<span class="st"> "geometry"</span>
 <span class="kw">attr</span>(nc, <span class="st">"sf_column"</span>) =<span class="st"> "geometry"</span>

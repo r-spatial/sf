@@ -95,27 +95,27 @@
 
 <span class='fu'>st_relate</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
-<span class='fu'>st_intersects</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_intersects</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_disjoint</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_disjoint</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_touches</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_touches</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_crosses</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_crosses</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_within</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_within</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_contains</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_contains</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_overlaps</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_overlaps</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_equals</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_equals</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>st_covers</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_covers</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_covered_by</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_covered_by</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>st_buffer</span>(<span class='no'>x</span>, <span class='no'>dist</span>, <span class='kw'>nQuadSegs</span> <span class='kw'>=</span> <span class='fl'>30</span>)
 
@@ -126,6 +126,8 @@
 <span class='fu'>st_simplify</span>(<span class='no'>x</span>, <span class='kw'>preserveTopology</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dTolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='fu'>st_triangulate</span>(<span class='no'>x</span>, <span class='kw'>dTolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>bOnlyEdges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>st_voronoi</span>(<span class='no'>x</span>, <span class='no'>envelope</span>, <span class='kw'>dTolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>bOnlyEdges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>st_polygonize</span>(<span class='no'>x</span>)
 
@@ -159,10 +161,12 @@
       <dd>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></dd>
       <dt>sparse</dt>
       <dd>logical; should a sparse matrix be returned (TRUE) or a dense matrix?</dd>
+      <dt>prepared</dt>
+      <dd>logical; prepare geometry for x, before looping over y?</dd>
       <dt>par</dt>
       <dd>numeric; parameter used for &quot;equals_exact&quot; (margin) and &quot;is_within_distance&quot;</dd>
       <dt>dist</dt>
-      <dd>buffer distance</dd>
+      <dd>numeric; buffer distance for all, or for each of the elements in <code>x</code></dd>
       <dt>nQuadSegs</dt>
       <dd>integer; number of segments per quadrant (fourth of a circle)</dd>
       <dt>preserveTopology</dt>
@@ -171,6 +175,8 @@
       <dd>numeric; tolerance parameter</dd>
       <dt>bOnlyEdges</dt>
       <dd>logical; if TRUE, return lines, else return polygons</dd>
+      <dt>envelope</dt>
+      <dd>object of class <code>sfc</code> or <code>sfg</code> with the envelope for a voronoi diagram</dd>
       <dt>dfMaxLength</dt>
       <dd>numeric; max length of a line segment</dd>
       <dt>...</dt>
@@ -205,6 +211,7 @@
 
     <p>function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
     <p><code>st_triangulate</code> requires GEOS version 3.4 or above</p>
+    <p><code>st_voronoi</code> requires GEOS version 3.4 or above</p>
     <p>in case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
     <p>in case of <code>st_linemerge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
     <p><code>st_combine</code> combines geometries without resolving borders.</p>
@@ -234,7 +241,17 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-14.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><img src='geos-16.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><img src='geos-14.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><img src='geos-16.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>1</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='fl'>10</span>),,<span class='fl'>2</span>))
+<span class='no'>box</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
+<span class='kw'>if</span> (<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"GEOS"</span>] <span class='kw'>&gt;=</span> <span class='st'>"3.5.0"</span>) {
+ <span class='no'>v</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>st_voronoi</span>(<span class='no'>x</span>, <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>box</span>)))
+ <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>v</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+ <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>box</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='co'># a larger box is returned, as documented</span>
+ <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
+ <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_intersection</span>(<span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='no'>v</span>), <span class='no'>box</span>)) <span class='co'># clip to smaller box</span>
+ <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
+}</div><img src='geos-18.png' alt='' width='540' height='400' /><img src='geos-19.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
 <span class='fu'>st_polygonize</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mls</span>))</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  GEOMETRYCOLLECTION
 #&gt; dimension:      XY
@@ -246,12 +263,12 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><img src='geos-26.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>st_combine</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><img src='geos-29.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>st_combine</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON(((-81.4727554321289 36.23435592651...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))</div><img src='geos-31.png' alt='' width='540' height='400' /><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON(((-81.4727554321289 36.23435592651...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))</div><img src='geos-34.png' alt='' width='540' height='400' /><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
         <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>10</span>,<span class='fl'>0</span>))))
 <span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT

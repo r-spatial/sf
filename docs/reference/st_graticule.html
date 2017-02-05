@@ -82,7 +82,8 @@
     
 
     <pre><span class='fu'>st_graticule</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>180</span>, -<span class='fl'>90</span>, <span class='fl'>180</span>, <span class='fl'>90</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
-  <span class='kw'>datum</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>4326</span>), <span class='no'>...</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ndiscr</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
+  <span class='kw'>datum</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>4326</span>), <span class='no'>...</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ndiscr</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -100,6 +101,9 @@
       <dd>numeric; degrees north for the parallels</dd>
       <dt>ndiscr</dt>
       <dd>integer; number of points to discretize a parallel or meridian</dd>
+      <dt>margin</dt>
+      <dd>numeric; small number to trim a longlat bounding box that touches or 
+crosses +/-180 long or +/-90 latitude.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -107,6 +111,18 @@
     <p>an object of class <code>sf</code> with additional attributes describing the type 
 (E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
 see example.</p>
+    
+    <h2 class="hasAnchor" id="use-of-graticules"><a class="anchor" href="#use-of-graticules"></a>Use of graticules</h2>
+
+    <p></p>
+    <p>In cartographic visualization, the use of graticules is not advised, unless
+ the graphical output will be used for measurement or navigation, or the
+ direction of North is important for the interpretation of the content, or
+ the content is intended to display distortions and artefacts created by 
+ projection. Unnecessary use of graticules only adds visual clutter but 
+ little relevant information. Use of coastlines, administrative boundaries
+ or place names permits most viewers of the output to orient themselves
+ better than a graticule.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -144,6 +160,8 @@ see example.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#use-of-graticules">Use of graticules</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

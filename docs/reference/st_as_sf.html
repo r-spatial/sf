@@ -180,8 +180,10 @@
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
+#&gt;  NA&#39;s   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘sp’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:sf’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    degAxis, degreeLabelsEW, degreeLabelsNS</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
 <span class='no'>x1</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.1</span>
 <span class='no'>x2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.4</span>
 <span class='no'>x3</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.7</span>
@@ -205,7 +207,10 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output co'>#&gt;          geometry
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-22, (SVN revision 544)</span>
+#&gt; <span class='message'> GEOS runtime version: 3.5.0-CAPI-1.9.0 r4084 </span>
+#&gt; <span class='message'> Linking to sp version: 1.2-4 </span>
+#&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
 #&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'>demo</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>))</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       

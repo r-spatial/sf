@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bind rows (features) of sf objects — bind • sf</title>
+<title>merge method for sf and data.frame object — merge.sf • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,42 +74,58 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bind rows (features) of sf objects</h1>
+    <h1>merge method for sf and data.frame object</h1>
     </div>
 
     
-    <p>Bind rows (features) of sf objects</p>
-
-    <p>Bind columns (variables) of sf objects</p>
+    <p>merge method for sf and data.frame object</p>
     
 
     <pre><span class='co'># S3 method for sf</span>
-<span class='fu'>rbind</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-<span class='co'># S3 method for sf</span>
-<span class='fu'>cbind</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+<span class='fu'>merge</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
+      <dt>x</dt>
+      <dd>object of class <code>sf</code></dd>
+      <dt>y</dt>
+      <dd>object of class <code>data.frame</code></dd>
       <dt>...</dt>
-      <dd>objects to bind</dd>
-      <dt>deparse.level</dt>
-      <dd>integer; see <a href='http://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></dd>
+      <dd>arguments passed on to <code>merge.data.frame</code></dd>
     </dl>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>cbind</code> is called with multiple <code>sf</code> objects, it warns and removes all but the first geometry column from the input objects.</p>
-    
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fl'>5</span>:<span class='fl'>7</span>)
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>a</span>) <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>2</span>)))
+<span class='no'>b</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>), <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>5</span>,<span class='fl'>6</span>))
+<span class='fu'>merge</span>(<span class='no'>a</span>, <span class='no'>b</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 3 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;   b a x   geometry
+#&gt; 1 5 1 b POINT(0 0)
+#&gt; 2 6 2 c POINT(1 1)</div><div class='input'><span class='fu'>merge</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Simple feature collection with 4 features and 3 fields (of which 1 is empty)
+#&gt; geometry type:  GEOMETRY
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 2
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;   b  a    x             geometry
+#&gt; 1 2 NA    a GEOMETRYCOLLECTION()
+#&gt; 2 5  1    b           POINT(0 0)
+#&gt; 3 6  2    c           POINT(1 1)
+#&gt; 4 7  3 &lt;NA&gt;           POINT(2 2)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
