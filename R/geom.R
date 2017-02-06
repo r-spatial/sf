@@ -164,7 +164,7 @@ st_relate	= function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 
 #' @name geos
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return st_intersects ...	st_equals_exact return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+#' @return functions \code{st_intersects} up to \code{st_equals_exact} return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)

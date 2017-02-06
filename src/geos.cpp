@@ -198,7 +198,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
 		Rcpp::List sparsemat(sfc0.length());
 
-		if (op == "equals_exact") {
+		if (op == "equals_exact") { // has it's own signature, needing `par':
 			for (int i = 0; i < sfc0.length(); i++) { // row
 				Rcpp::LogicalVector rowi(sfc1.length()); 
 				for (int j = 0; j < sfc1.length(); j++) 
