@@ -222,17 +222,9 @@ foo driver not available.
 Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
   Driver not available.
 
-> try(st_write(x, "/x", driver = "ESRI Shapefile"))
-Writing layer `x' to data source `/x' using driver `ESRI Shapefile'
-Creation of dataset /x failed.
-Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Creation failed.
-
-In addition: Warning message:
-In CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  :
-  GDAL Error 1: Failed to create directory /x
-for shapefile datastore.
-
+> if (Sys.getenv("USER") %in% c("travis")) {
++ 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
++ }
 > 
 > library(sf)
 > #> Linking to GEOS 3.5.0, GDAL 2.1.1, proj.4 4.9.3
@@ -273,4 +265,4 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > proc.time()
    user  system elapsed 
-  0.560   0.024   0.583 
+  0.564   0.024   0.594 

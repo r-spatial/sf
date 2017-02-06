@@ -47,26 +47,30 @@ void CPL_geos_finish(GEOSContextHandle_t ctxt) {
 
 std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), "XY", precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), get_dim(sfc), precision);
 	std::vector<GEOSGeom> g(sfc.size());
+	GEOSWKBReader *wkb_reader = GEOSWKBReader_create_r(hGEOSCtxt);
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		g[i] = GEOSGeomFromWKB_buf_r(hGEOSCtxt, &(r[0]), r.size());
+		g[i] = GEOSWKBReader_read_r(hGEOSCtxt, wkb_reader, &(r[0]), r.size());
 	}
+	GEOSWKBReader_destroy_r(hGEOSCtxt, wkb_reader);
 	return g;
 }
 
 Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom> geom) {
 	Rcpp::List out(geom.size());
+	GEOSWKBWriter *wkb_writer = GEOSWKBWriter_create_r(hGEOSCtxt);
 	for (size_t i = 0; i < geom.size(); i++) {
 		size_t size;
-		unsigned char *buf = GEOSGeomToWKB_buf_r(hGEOSCtxt, geom[i], &size);
+		unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
 		Rcpp::RawVector raw(size);
 		memcpy(&(raw[0]), buf, size);
-		free(buf);
+		GEOSFree_r(hGEOSCtxt, buf);
 		out[i] = raw;
 		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
+	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
 	return CPL_read_wkb(out, false, native_endian());
 }
 

@@ -57,7 +57,9 @@ try(st_read("x.gpkg", "foo")) # cannot open layer
 try(st_write(c("foo", "bar")))
 try(st_write(x, c("foo", "bar")))
 try(st_write(x, "foo", driver = "foo"))
-try(st_write(x, "/x", driver = "ESRI Shapefile"))
+if (Sys.getenv("USER") %in% c("travis")) {
+	try(st_write(x, "/x", driver = "ESRI Shapefile"))
+}
 
 library(sf)
 #> Linking to GEOS 3.5.0, GDAL 2.1.1, proj.4 4.9.3

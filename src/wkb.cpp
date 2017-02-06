@@ -615,3 +615,50 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	}
 	return output;
 }
+
+// get dim, "XY", "XYZ", "XYZM" or "XYM" from an sfc object
+Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
+
+	if (sfc.length() == 0)
+		return "XY";
+
+	// we have data:
+	Rcpp::CharacterVector cls = sfc.attr("class");
+	unsigned int tp = make_type(cls[0], "", false, NULL, 0);
+	if (tp == SF_Unknown) {
+		cls = sfc.attr("classes");
+		tp = make_type(cls[0], "", false, NULL, 0);
+	}
+	switch (tp) {
+		case SF_Unknown: { // further check:
+			throw std::range_error("impossible classs in get_dim()"); // #nocov
+		} break;
+		case SF_Point: { // numeric:
+			Rcpp::NumericVector v = sfc[0];
+			cls = v.attr("class");
+		} break;
+		case SF_LineString:  // matrix:
+		case SF_MultiPoint:
+		case SF_CircularString:
+		case SF_Curve: {
+			Rcpp::NumericMatrix m = sfc[0];
+			cls = m.attr("class");
+		} break;
+		case SF_Polygon: // list:
+		case SF_MultiLineString:
+		case SF_MultiPolygon:
+		case SF_GeometryCollection:
+		case SF_CompoundCurve:
+		case SF_CurvePolygon:
+		case SF_MultiCurve:
+		case SF_MultiSurface:
+		case SF_Surface:
+		case SF_PolyhedralSurface:
+		case SF_TIN:
+		case SF_Triangle: {
+			Rcpp::List l = sfc[0];
+			cls = l.attr("class");
+		} break;
+	}
+	return cls;
+}
