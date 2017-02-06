@@ -274,12 +274,16 @@ print.sf = function(x, ..., n =
 		app = paste0(app, "\n", "Attribute-geometry relationship: ", summarize_agr(x))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
-		y <- x
-		if (nrow(y) > n) {
-			cat(paste("First", n, "features:\n"))
-			y <- x[1:n, , drop = FALSE]
+		if (inherits(x, "tbl_df"))
+			NextMethod()
+		else {
+			y <- x
+			if (nrow(y) > n) {
+				cat(paste("First", n, "features:\n"))
+				y <- x[1:n, , drop = FALSE]
+			}
+			print.data.frame(y, ...)
 		}
-		print.data.frame(y, ...)
 	}
 	invisible(x)
 }

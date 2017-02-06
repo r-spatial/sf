@@ -195,7 +195,14 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE) 
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
 
-# todo: contais_properly? (only with prepared)
+#' @name geos
+#' @export
+#' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A. 
+st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
+	if (! prepared)
+		stop("non-prepared geometries not supported for st_contains_properly")
+	st_geos_binop("contains_properly", x, y, sparse = sparse, prepared = TRUE)
+}
 
 #' @name geos
 #' @export

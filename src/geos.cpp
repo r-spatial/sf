@@ -140,7 +140,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 		return GEOSPreparedWithin_r;
 	else if (op == "contains")
 		return GEOSPreparedContains_r;
-	else if (op == "contains_poperly") // not interfaced from R
+	else if (op == "contains_properly") // not interfaced from R
 		return GEOSPreparedContainsProperly_r;
 	else if (op == "overlaps")
 		return GEOSPreparedOverlaps_r;

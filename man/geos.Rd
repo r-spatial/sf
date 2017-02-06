@@ -28,6 +28,8 @@
 \alias{geos}
 \alias{st_contains}
 \alias{geos}
+\alias{st_contains_properly}
+\alias{geos}
 \alias{st_overlaps}
 \alias{geos}
 \alias{st_equals}
@@ -96,6 +98,8 @@ st_crosses(x, y, sparse = TRUE, prepared = TRUE)
 st_within(x, y, sparse = TRUE, prepared = TRUE)
 
 st_contains(x, y, sparse = TRUE, prepared = TRUE)
+
+st_contains_properly(x, y, sparse = TRUE, prepared = TRUE)
 
 st_overlaps(x, y, sparse = TRUE, prepared = TRUE)
 
@@ -208,6 +212,8 @@ Geometric operations on (pairs of) simple feature geometry sets
 }
 \details{
 function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+
+`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 
 \code{st_triangulate} requires GEOS version 3.4 or above
 

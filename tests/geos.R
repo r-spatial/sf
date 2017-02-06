@@ -26,6 +26,8 @@ for (op in ops)
 	)
 df	
 
+st_contains_properly(ncm[1:3,], ncm[1:3])
+
 try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
 
 st_combine(nc)
