@@ -208,8 +208,8 @@ Simple feature collection with 6 features and 1 field
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
   a       geom
 1 1 POINT(0 1)
 2 2 POINT(0 1)
@@ -650,4 +650,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.552   0.028   0.578 
+  0.564   0.020   0.583 

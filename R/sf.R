@@ -296,9 +296,14 @@ print.sf = function(x, ..., n =
 #' @name bind
 #' @export
 rbind.sf = function(..., deparse.level = 1) {
-	ret = base::rbind.data.frame(...)
-	st_geometry(ret) = do.call(st_sfc, st_geometry(ret))
-	ret
+	dots = list(...)
+	crs0 = st_crs(dots[[1]])
+	if (length(dots) > 1) { # check all crs are equal...
+		equal_crs = sapply(dots[-1], function(x) st_crs(x) == crs0)
+		if (!all(equal_crs))
+			stop("arguments have different crs", call. = FALSE)
+	}
+	st_sf(base::rbind.data.frame(...), crs = crs0)
 }
 
 #' Bind columns (variables) of sf objects
@@ -307,10 +312,8 @@ rbind.sf = function(..., deparse.level = 1) {
 #' @name bind
 #' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
-cbind.sf = function(..., deparse.level = 1) {
+cbind.sf = function(..., deparse.level = 1)
 	st_sf(base::cbind.data.frame(...))
-	# do.call(st_sf, list(...))
-}
 
 #' merge method for sf and data.frame object
 #' 
