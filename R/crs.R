@@ -18,8 +18,8 @@ Ops.crs <- function(e1, e2) {
 			FALSE
 		else if (e1$proj4string == e2$proj4string && (is.na(e1$epsg) || is.na(e2$epsg)))
 			TRUE
-		else if (!is.na(e1$epsg) && !is.na(e2$epsg) && e1$epsg == e2$epsg) # epsg identical, proj4str different
-			TRUE
+		#else if (!is.na(e1$epsg) && !is.na(e2$epsg) && e1$epsg == e2$epsg) # epsg identical, proj4str different
+		#	TRUE
 		else
 			FALSE
 	}
