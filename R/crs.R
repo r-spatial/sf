@@ -4,11 +4,11 @@
 #' @export
 Ops.crs <- function(e1, e2) {
 	if (nargs() == 1)
-		stop(paste("unary", .Generic, "not defined for \"crs\" objects"))
+		stop(paste("unary", .Generic, "not defined for \"crs\" objects"), call. = FALSE)
 
 	cmp <- switch(.Generic, "==" =, "!=" = TRUE, FALSE)
 	if (!cmp)
-		stop(paste("operation", .Generic, "not supported for crs objects"))
+		stop(paste("operation", .Generic, "not supported for crs objects"), call. = FALSE)
 	if (.Generic == "!=")
 		!(e1 == e2)
 	else { # "==": check semantic equality
@@ -122,10 +122,10 @@ make_crs = function(x, wkt = FALSE) {
 	else if (is.character(x)) {
 		is_valid = valid_proj4string(x) 
 		if (! is_valid$valid)
-			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result))
+			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
 		CPL_crs_from_proj4string(x)
 	} else
-		stop(paste("cannot create a crs from an object of class", class(x)))
+		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }
 
 #' @name st_crs
@@ -144,7 +144,7 @@ make_crs = function(x, wkt = FALSE) {
 	end_crs = make_crs(value)
 
 	if (!is.na(start_crs) && !is.na(end_crs) && start_crs != end_crs)
-		warning("st_crs<- : replacing crs does not reproject data; use st_transform for that")
+		warning("st_crs<- : replacing crs does not reproject data; use st_transform for that", call. = FALSE)
 
 	attr(x, "crs") = end_crs
 	x

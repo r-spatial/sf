@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.3-4
+Version: 0.3-5
 Title: Simple Features for R
 Description: Support for simple features, a standardized way to encode spatial data, with bindings 
     to GDAL, GEOS and Proj.4.

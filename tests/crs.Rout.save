@@ -43,8 +43,7 @@ In CPL_crs_from_epsg(as.integer(x)) :
   GDAL Error 6: EPSG PCS/GCS code 999999 not found in EPSG support files.  Is this a valid
 EPSG coordinate system?
 > try(st_crs("error"))
-Error in make_crs(x) : 
-  invalid crs: error, reason: no arguments in initialization list
+Error : invalid crs: error, reason: no arguments in initialization list
 > str = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
 > st_crs(str)
 $epsg
@@ -86,4 +85,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  0.332   0.020   0.349 
+  0.360   0.004   0.361 
