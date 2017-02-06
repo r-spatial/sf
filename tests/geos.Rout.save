@@ -83,6 +83,17 @@ Units: m
 8     covers  TRUE
 9 covered_by  TRUE
 > 
+> st_contains_properly(ncm[1:3,], ncm[1:3])
+[[1]]
+integer(0)
+
+[[2]]
+integer(0)
+
+[[3]]
+integer(0)
+
+> 
 > try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
 although coordinates are longitude/latitude, it is assumed that they are planar
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse,  : 
@@ -169,4 +180,4 @@ LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.084   0.048   2.129 
+  2.132   0.032   2.163 

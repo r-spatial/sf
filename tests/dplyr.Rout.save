@@ -83,11 +83,13 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-      area_cl mean(AREA)                       geometry
-1     (0,0.1] 0.07602857 MULTIPOLYGON(((-77.96073150...
-2  (0.1,0.12] 0.11206667 MULTIPOLYGON(((-84.29103851...
-3 (0.12,0.15] 0.13422727 MULTIPOLYGON(((-76.54427337...
-4 (0.15,0.25] 0.19039286 MULTIPOLYGON(((-76.64704895...
+# A tibble: 4 × 3
+      area_cl mean.AREA.          geometry
+       <fctr>      <dbl>  <simple_feature>
+1     (0,0.1] 0.07602857 <MULTIPOLYGON...>
+2  (0.1,0.12] 0.11206667 <MULTIPOLYGON...>
+3 (0.12,0.15] 0.13422727 <MULTIPOLYGON...>
+4 (0.15,0.25] 0.19039286 <MULTIPOLYGON...>
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -195,4 +197,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.808   0.016   0.822 
+  0.820   0.016   0.834 
