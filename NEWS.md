@@ -1,5 +1,7 @@
 # version 0.3-5
 
+* add NEWS.md file (#207)
+
 * faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Mike Sumner)
 
 * `rbind` method for `sf` objects now keeps coordinate reference system
