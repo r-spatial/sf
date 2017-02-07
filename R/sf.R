@@ -39,8 +39,15 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		x$geometry = do.call(st_sfc, c(lapply(seq_len(nrow(x)), 
-				function(i) st_point(unlist(x[i, coords]), dim = dim))))
+	  classdim = sf:::getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
+	  x$geometry =  structure( lapply(split(as.vector(t(as.matrix(x[, coords]))), 
+	               rep(seq_len(nrow(x)), each = length(coords))), 
+	         function(vec) structure(vec, class = classdim)), 
+	         n_empty = 0L, precision = 0, crs = st_crs(NA), 
+	         bbox = c(xmin = min(x[[coords[1]]], na.rm = TRUE), ymin = min(x[[coords[2]]], na.rm = TRUE), 
+	                  xmax = max(x[[coords[1]]], na.rm = TRUE),  ymax = max(x[[coords[2]]], na.rm = TRUE)), 
+	         class =  c("sfc_POINT", "sfc" ))
+	            
 		if (remove)
 			x[coords] = NULL
 	}
