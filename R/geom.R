@@ -428,26 +428,26 @@ st_polygonize.sf = function(x) {
 
 #' @name geos
 #' @export
-#' @details in case of \code{st_linemerge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+#' @details in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples 
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
-#' st_linemerge(st_sfc(mls))
-st_linemerge = function(x)
-	UseMethod("st_linemerge")
+#' st_line_merge(st_sfc(mls))
+st_line_merge = function(x)
+	UseMethod("st_line_merge")
 
 #' @export
-st_linemerge.sfg = function(x)
-	get_first_sfg(st_linemerge(st_sfc(x)))
+st_line_merge.sfg = function(x)
+	get_first_sfg(st_line_merge(st_sfc(x)))
 
 #' @export
-st_linemerge.sfc = function(x) {
+st_line_merge.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
 	st_sfc(CPL_geos_op("linemerge", x, numeric(0)))
 }
 
 #' @export
-st_linemerge.sf = function(x) {
-	st_geometry(x) <- st_linemerge(st_geometry(x))
+st_line_merge.sf = function(x) {
+	st_geometry(x) <- st_line_merge(st_geometry(x))
 	x
 }
 
@@ -676,7 +676,7 @@ st_line_sample = function(x, n, density, type = "regular") {
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @export
-st_makegrid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
+st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
 		offset = st_bbox(x)[1:2], n = c(10, 10)) {
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {

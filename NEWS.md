@@ -1,5 +1,11 @@
 # version 0.3-5
 
+* added migration list for sp, rgdal and rgeos to sf at https://github.com/edzer/sfr/wiki/migrating
+
+* remove deprecated `st_list`
+
+* rename `st_makegrid` to `st_make_grid`, and `st_linemerge` to `st_line_merge`
+
 * add NEWS.md file (#207)
 
 * faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Mike Sumner)

@@ -185,11 +185,6 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 		dsn = normalizePath(dsn)
 	CPL_get_layers(dsn, options, do_count)
 }
-#' @name st_layers
-#' @export
-st_list = function(dsn, options = character(0), do_count = FALSE) {
-	.Deprecated("st_layers") # nocov
-}
 
 guess_driver = function(dsn) {
   stopifnot(is.character(dsn))

@@ -54,7 +54,7 @@
 \alias{geos}
 \alias{st_polygonize}
 \alias{geos}
-\alias{st_linemerge}
+\alias{st_line_merge}
 \alias{geos}
 \alias{st_centroid}
 \alias{geos}
@@ -125,7 +125,7 @@ st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
 
 st_polygonize(x)
 
-st_linemerge(x)
+st_line_merge(x)
 
 st_centroid(x)
 
@@ -221,7 +221,7 @@ function \code{dist_fun} should follow the pattern of the distance function \lin
 
 in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
-in case of \code{st_linemerge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
 \code{st_combine} combines geometries without resolving borders.
 }
@@ -262,7 +262,7 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 st_polygonize(st_sfc(mls))
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
-st_linemerge(st_sfc(mls))
+st_line_merge(st_sfc(mls))
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
 st_combine(nc)

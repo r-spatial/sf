@@ -103,9 +103,9 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_silent(st_polygonize(glnc)) 
   expect_silent(st_polygonize(glnc[[1]])) 
   
-  expect_that(st_linemerge(lnc), is_a("sf"))
-  expect_that(st_linemerge(glnc), is_a("sfc"))
-  expect_that(st_linemerge(glnc[[4]]), is_a("sfg"))
+  expect_that(st_line_merge(lnc), is_a("sf"))
+  expect_that(st_line_merge(glnc), is_a("sfc"))
+  expect_that(st_line_merge(glnc[[4]]), is_a("sfg"))
   
   expect_silent(st_centroid(lnc))
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
