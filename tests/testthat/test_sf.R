@@ -53,3 +53,17 @@ test_that("rbind/cbind work", {
   expect_warning(cbind(x, x, x))
   rbind(x, x, x)
 })
+
+test_that("st_as_sf bulk points work", {
+  data(meuse, package = "sp") # load data.frame from sp
+  x <- meuse
+  meuse_sf = st_as_sf(x, coords = c("x", "y"), crs = 28992)
+  xyz_sf = st_as_sf(x, coords = c("y", "x", "dist"))
+  xym_sf = st_as_sf(x, coords = c("y", "x", "dist"), dim = "XYM")
+  xyzm_sf = st_as_sf(x, coords = c("x", "y", "dist", "zinc"), dim = "XYM")
+  expect_identical(class(meuse_sf), c("sf", "data.frame"))
+  expect_identical(class(xyz_sf), c("sf", "data.frame"))
+  expect_identical(class(xym_sf), c("sf", "data.frame"))
+  expect_identical(class(xyzm_sf), c("sf", "data.frame"))
+  
+})
