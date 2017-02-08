@@ -226,8 +226,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_write_ogr
-void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet);
-RcppExport SEXP sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP quietSEXP) {
+void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet, bool update);
+RcppExport SEXP sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP quietSEXP, SEXP updateSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type obj(objSEXP);
@@ -239,7 +239,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type geom(geomSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
-    CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, quiet);
+    Rcpp::traits::input_parameter< bool >::type update(updateSEXP);
+    CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update);
     return R_NilValue;
 END_RCPP
 }

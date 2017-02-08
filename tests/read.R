@@ -40,7 +40,8 @@ st_read(system.file("shape/nc.shp", package="sf"),  quiet = TRUE,
 if ("GPKG" %in% st_drivers()$name) { # shapefiles can't write point+multipoint mix:
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   st_write(x, "x.gpkg")
-  write_sf(x, "x.gpkg")
+  write_sf(x, "x.gpkg", layer = "foo", update = TRUE)
+  print(st_layers("x.gpkg"))
   x <- st_read("x.gpkg", quiet = TRUE)
   print(x)
 }

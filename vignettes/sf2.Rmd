@@ -133,8 +133,8 @@ st_read(fname)
 To write a simple features object to a file, we need at least
 two arguments, the object and a filename:
 
-```{r}
-st_write(nc, "nc.shp")
+```{r eval=FALSE}
+st_write(nc, "nc1.shp")
 ```
 
 The file name is taken as the data source name. The default for
@@ -143,7 +143,7 @@ data source name. For this, `st_write` needs to guess the driver. The
 above command is, for instance, equivalent to:
 
 ```{r}
-st_write(nc, dsn = "nc.shp", layer = "nc.shp", driver = "ESRI Shapefile")
+st_write(nc, dsn = "nc1.shp", layer = "nc.shp", driver = "ESRI Shapefile")
 ```
 
 How the guessing of drivers works is explained in the next section.

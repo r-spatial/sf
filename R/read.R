@@ -79,6 +79,7 @@ write_sf <- function(...) st_write(...)
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
+#' @param update logical; if \code{TRUE}, try to update (append to) existing data source (only succeeds when supported by the driver)
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
@@ -94,7 +95,8 @@ write_sf <- function(...) st_write(...)
 #' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ..., 
-		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE) {
+		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
+		update = FALSE) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
@@ -128,7 +130,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	dim = class(geom[[1]])[1]
 	CPL_write_ogr(obj, dsn, layer, driver, 
 		as.character(dataset_options), as.character(layer_options), 
-		geom, dim, quiet)
+		geom, dim, quiet, update)
 }
 
 #' Get GDAL drivers

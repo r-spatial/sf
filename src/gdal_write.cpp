@@ -106,7 +106,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 // [[Rcpp::export]]
 void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
-	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false) {
+	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false, bool update = false) {
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1) {
@@ -126,9 +126,20 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// open data set:
 	std::vector <char *> options = create_options(dco, quiet);
-	GDALDataset *poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data());
-	if (poDS == NULL) {
-		Rcpp::Rcout << "Creation of dataset " <<  dsn[0] << " failed." << std::endl;
+	GDALDataset *poDS; 
+	if (!update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+			options.data(), NULL)) != NULL) {
+		GDALClose(poDS);
+		Rcpp::Rcout << "Dataset " <<  dsn[0] << 
+			" already exists; remove first, or use update=TRUE to append." << std::endl;
+		throw std::invalid_argument("Dataset already exists.\n");
+	}
+
+	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
+			options.data(), NULL)) != NULL)
+		Rcpp::Rcout << "Updating " <<  dsn[0] << std::endl;
+	else if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
+		Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
 		throw std::invalid_argument("Creation failed.\n");
 	}
 	Rcpp::CharacterVector clsv = geom.attr("class");

@@ -8,7 +8,8 @@
 \usage{
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
-  layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE)
+  layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
+  update = FALSE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
@@ -32,6 +33,8 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 \item{quiet}{logical; suppress info on name, driver, size and spatial reference}
 
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.}
+
+\item{update}{logical; if \code{TRUE}, try to update (append to) existing data source (only succeeds when supported by the driver)}
 
 \item{conn}{open database connection}
 

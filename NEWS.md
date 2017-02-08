@@ -1,6 +1,8 @@
 # version 0.3-5
 
-* added migration list for sp, rgdal and rgeos to sf at https://github.com/edzer/sfr/wiki/migrating
+* `st_write` gains an argument, `update`, which when `TRUE` will try to append to existing datasets (#204)
+
+* added list of corresponding function for migration from sp, rgdal and rgeos to sf at https://github.com/edzer/sfr/wiki/migrating
 
 * remove deprecated `st_list`
 
