@@ -194,7 +194,7 @@ st_geometry_type = function(x) {
 #' @param ... ignored
 #' @param drop logical; drop, or (FALSE) add?
 #' @param what character which dimensions to drop or add
-#' @details only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far. In case \code{add=TRUE}, zero values are added.
+#' @details only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far. In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
 #' @examples
 #' st_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
@@ -226,6 +226,8 @@ st_zm.sfg <- function(x, ..., drop = TRUE, what = "ZM") {
 			x[1:2]
 		structure(ret, class = c("XY", class(x)[2:3]))
 	} else if (!drop && what == "Z") {
+		if (class(x)[1] != "XY")
+			stop("adding Z only supported for XY geometries")
 		ret = if (is.list(x))
 			lapply(x, st_zm, drop = drop, what = what)
 		else if (is.matrix(x))
@@ -234,7 +236,7 @@ st_zm.sfg <- function(x, ..., drop = TRUE, what = "ZM") {
 			c(unclass(x), 0)
 		structure(ret, class = c("XYZ", class(x)[2:3]))
 	} else 
-		stop("this combination of drop and what is not implemented")
+		stop("this combination of `x', `drop' and `what' is not implemented")
 }
 
 #' @export

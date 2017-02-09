@@ -1,5 +1,7 @@
 # version 0.3-5
 
+* overwriting datasets with `st_write` is no longer allowed; update=TRUE might append to them.
+
 * `st_write` gains an argument, `update`, which when `TRUE` will try to append to existing datasets (#204)
 
 * added list of corresponding function for migration from sp, rgdal and rgeos to sf at https://github.com/edzer/sfr/wiki/migrating

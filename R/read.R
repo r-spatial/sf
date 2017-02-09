@@ -79,7 +79,7 @@ write_sf <- function(...) st_write(...)
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.
-#' @param update logical; if \code{TRUE}, try to update (append to) existing data source (only succeeds when supported by the driver)
+#' @param update logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers (e.g. GPKG), for other drivers the layer may simply be overwritten
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
