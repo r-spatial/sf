@@ -1,5 +1,7 @@
 # version 0.3-5
 
+* add `st_proj_info`, modelled after `rgdal::projInfo`
+
 * overwriting datasets with `st_write` is no longer allowed; update=TRUE might append to them.
 
 * `st_write` gains an argument, `update`, which when `TRUE` will try to append to existing datasets (#204)
