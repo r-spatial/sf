@@ -34,7 +34,7 @@ st_write_db(conn = NULL, obj, table = substitute(obj),
 
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by \code{as.numeric}.}
 
-\item{update}{logical; if \code{TRUE}, try to update (append to) existing data source (only succeeds when supported by the driver)}
+\item{update}{logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers (e.g. GPKG), for other drivers the layer may simply be overwritten}
 
 \item{conn}{open database connection}
 

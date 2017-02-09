@@ -129,6 +129,10 @@ CPL_proj_is_valid <- function(proj4string) {
     .Call('sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
 }
 
+CPL_proj_info <- function(type) {
+    .Call('sf_CPL_proj_info', PACKAGE = 'sf', type)
+}
+
 CPL_hex_to_raw <- function(cx) {
     .Call('sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }

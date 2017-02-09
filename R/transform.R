@@ -62,3 +62,20 @@ st_transform.sfg = function(x, crs , ...) {
 	crs = make_crs(crs)
 	CPL_transform(x, crs$proj4string, crs$epsg)[[1]]
 }
+
+#' @name st_transform
+#' @param type character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}
+#' @export
+#' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
+#' @examples 
+#' st_proj_info("datum")
+st_proj_info = function(type = "proj") {
+    opts <- c("proj", "ellps", "datum", "units")
+    if (!(type %in% opts)) stop("unknown type")
+    t <- as.integer(match(type[1], opts) - 1)
+	res = CPL_proj_info(as.integer(t))
+    if (type == "proj") 
+		res$description <- sapply(strsplit(as.character(res$description), "\n"),
+			function(x) x[1])
+    data.frame(res)
+}

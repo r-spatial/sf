@@ -33,3 +33,10 @@ test_that("st_crs works", {
   expect_warning(sf:::CPL_crs_from_proj4string("foo"))
   # expect_true(st_crs("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") == st_crs("+proj=longlat +datum=WGS84 +no_defs"))
 })
+
+test_that("st_proj_info works", {
+  expect_silent(x <- st_proj_info("proj"))
+  expect_silent(x <- st_proj_info("ellps"))
+  expect_silent(x <- st_proj_info("datum"))
+  expect_silent(x <- st_proj_info("units"))
+})
