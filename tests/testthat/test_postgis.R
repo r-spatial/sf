@@ -1,12 +1,7 @@
 context("sf: postgis")
 
 can_con <- function(x) inherits(x, "PostgreSQLConnection")
-db_list_tables_schema <- function(con) {
-    q <- paste("select schemaname, tablename from pg_tables", 
-               "where schemaname !='information_schema'", 
-               "and schemaname !='pg_catalog';")
-    DBI::dbGetQuery(con, q)
-}
+
 db_drop_table_schema <- function(con, schema, table = NULL) {
     if (is.null(table)) {
         table <- paste(c("public", schema), collapse = ".")
@@ -94,6 +89,29 @@ test_that("can read from db", {
     expect_error(st_read_db(pg, c("sf_test__", "sf_meuse3__")), "not exist")
 })
 
+test_that("can read views (#212)", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    expect_equal(DBI::dbExecute(pg, 
+                "CREATE VIEW sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
+    expect_equal(DBI::dbExecute(pg, 
+                "CREATE VIEW sf_test__.sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
+    expect_equal(DBI::dbExecute(pg, 
+                                "CREATE MATERIALIZED VIEW sf_viewm__ AS SELECT * FROM sf_meuse__;"), 155)
+    expect_equal(DBI::dbExecute(pg, 
+                                "CREATE MATERIALIZED VIEW sf_test__.sf_viewm__ AS SELECT * FROM sf_meuse__;"), 155)
+    x <- st_read_db(pg, "sf_meuse__")
+    expect_identical(st_read_db(pg, "sf_view__"), x)
+    expect_identical(st_read_db(pg, c("public", "sf_view__")), x)
+    expect_identical(st_read_db(pg, c("sf_test__", "sf_view__")), x)
+    expect_identical(st_read_db(pg, c("sf_viewm__")), x)
+    expect_identical(st_read_db(pg, c("sf_test__", "sf_viewm__")), x)
+    
+    try(DBI::dbExecute(pg, "DROP VIEW sf_view__"), silent = TRUE)
+    try(DBI::dbExecute(pg, "DROP VIEW sf_test__.sf_view__"), silent = TRUE)
+    try(DBI::dbExecute(pg, "DROP MATERIALIZED VIEW sf_viewm__"), silent = TRUE)
+    try(DBI::dbExecute(pg, "DROP MATERIALIZED VIEW sf_test__.sf_viewm__"), silent = TRUE)
+})
+
 test_that("round trips", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     round_trip = function(conn, wkt) {
@@ -154,7 +172,6 @@ test_that("round trips", {
     round_trip(pg, "TRIANGLE((0 0, 0 9, 9 0, 0 0))")
     round_trip(pg, "TINZ(((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))")
 })
-
 
 test_that("can read using driver", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
