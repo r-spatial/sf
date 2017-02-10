@@ -24,7 +24,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
     
     if (!is.null(table)) {
         table <- schema_table(table)
-        if (!DBI::dbExistsTable(conn, table)) {
+        if (!db_exists(conn, table)) {
             stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
         }
         if (!is.null(query)) warning("Ignoring query argument, only using table")
@@ -99,7 +99,7 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
         stop("No connection provided")
     table <- schema_table(table)
     
-    if (DBI::dbExistsTable(conn, table)) {
+    if (db_exists(conn, table)) {
         if (overwrite) {
             DBI::dbGetQuery(conn, DEBUG(paste("drop table", paste(table, collapse = "."), ";")))
         } else {
@@ -160,4 +160,35 @@ schema_table <- function(table, public = "public") {
         stop("table and schema cannot be NA", call. = FALSE)
     }
     return(table)
+}
+
+db_list_tables_schema <- function(con) {
+    q <- paste("SELECT schemaname AS table_schema, tablename AS table_name", 
+               "FROM pg_tables", 
+               "WHERE schemaname !='information_schema'", 
+               "AND schemaname !='pg_catalog';")
+    DBI::dbGetQuery(con, q)
+}
+
+db_list_views_schema <- function(con) {
+    q <- paste("SELECT table_schema, table_name",
+               "FROM information_schema.views",
+               "WHERE table_schema !='information_schema'",
+               "AND table_schema !='pg_catalog';")
+    DBI::dbGetQuery(con, q)
+}
+
+db_list_mviews_schema <- function(con) {
+    q <- paste("SELECT nspname as table_schema, relname as table_name",
+               "FROM pg_catalog.pg_class c", 
+               "JOIN pg_namespace n ON n.oid = c.relnamespace", 
+               "WHERE c.relkind = 'm'")
+    DBI::dbGetQuery(con, q)
+}
+
+db_exists <- function(conn, name, ...) {
+    lst <- rbind(db_list_views_schema(conn),
+                 db_list_tables_schema(conn),
+                 db_list_mviews_schema(conn))
+    return(paste0(name, collapse = ".") %in% with(lst, paste0(table_schema, ".", table_name)))
 }
