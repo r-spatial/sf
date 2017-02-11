@@ -17,7 +17,12 @@ st_agr = function(x, ...) UseMethod("st_agr")
 
 #' @export
 st_agr.sf = function(x, ...) {
-	attr(x, "agr")[setdiff(names(x), attr(x, "sf_column"))]
+	nm = setdiff(names(x), attr(x, "sf_column"))
+	ret = attr(x, "agr")[nm]
+	if (all(is.na(names(ret))))
+		structure(rep(NA_agr_, length(nm)), names = nm)
+	else
+		ret
 }
 
 #' @export

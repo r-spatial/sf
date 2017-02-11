@@ -76,7 +76,8 @@ transmute_.sf <- function(.data, ..., .dots) {
 #' nc %>% select(SID74, SID79, geometry) %>% class()
 select_.sf <- function(.data, ..., .dots=NULL) {
   .dots <- c(.dots, attr(.data, "sf_column")) 
-  NextMethod()
+  ret = NextMethod()
+  structure(ret, agr = st_agr(ret))
 }
 
 #' @name dplyr
