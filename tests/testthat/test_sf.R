@@ -50,7 +50,7 @@ test_that("rbind/cbind work", {
   # cbind/rbind:
   x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
   # don't warn when replacing crs with identical value:
-  expect_warning(cbind(x, x, x))
+  expect_warning(sf:::cbind.sf(x, x, x)) # R < 3.3 does not dispatch itself
   rbind(x, x, x)
 })
 
