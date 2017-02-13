@@ -13,8 +13,8 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Etienne", "Racine", role = "ctb")
 	)
-Depends: 
-    R (>= 3.3.0)
+Depends:
+    R (>= 3.2.0)
 Imports: 
     utils, 
     stats, 

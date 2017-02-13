@@ -5,10 +5,8 @@
 
 #include <iostream>
 #include <iomanip>
-#include <cstdint>
 #include <sstream>
 #include <string>
-#include <climits>
 
 #include <math.h> // round()
 #include <string.h> // memcpy()
@@ -30,7 +28,6 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
 // https://stackoverflow.com/questions/105252/how-do-i-convert-between-big-endian-and-little-endian-values-in-c
 template <typename T>
 T swap_endian(T u) {
-    static_assert (CHAR_BIT == 8, "CHAR_BIT != 8");
     union {
         T u;
         unsigned char u8[sizeof(T)];
