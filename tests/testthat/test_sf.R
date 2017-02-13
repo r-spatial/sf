@@ -50,8 +50,12 @@ test_that("rbind/cbind work", {
   # cbind/rbind:
   x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
   # don't warn when replacing crs with identical value:
-  expect_warning(sf:::cbind.sf(x, x, x)) # R < 3.3 does not dispatch itself
-  rbind(x, x, x)
+  if (version$major == "3") {
+  	if (version$minor >= "3.0") {
+      expect_warning(cbind(x, x, x))
+      rbind(x, x, x)
+	}
+  }
 })
 
 test_that("st_as_sf bulk points work", {
