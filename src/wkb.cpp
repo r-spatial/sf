@@ -617,10 +617,13 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 }
 
 // get dim, "XY", "XYZ", "XYZM" or "XYM" from an sfc object
-Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
+Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 
-	if (sfc.length() == 0)
+	if (sfc.length() == 0) {
+		if (dim != NULL)
+			*dim = 2;
 		return "XY";
+	}
 
 	// we have data:
 	Rcpp::CharacterVector cls = sfc.attr("class");
@@ -631,7 +634,7 @@ Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
 	}
 	switch (tp) {
 		case SF_Unknown: { // further check:
-			throw std::range_error("impossible classs in get_dim()"); // #nocov
+			throw std::range_error("impossible classs in get_dim_sfc()"); // #nocov
 		} break;
 		case SF_Point: { // numeric:
 			Rcpp::NumericVector v = sfc[0];
@@ -659,6 +662,12 @@ Rcpp::CharacterVector get_dim(Rcpp::List sfc) {
 			Rcpp::List l = sfc[0];
 			cls = l.attr("class");
 		} break;
+	}
+	if (dim != NULL) {
+		if (strstr(cls[0], "Z") != NULL)
+			*dim = 3;
+		else
+			*dim = 2;
 	}
 	return cls;
 }

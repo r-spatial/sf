@@ -104,7 +104,7 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim(sfc), precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim_sfc(sfc, NULL), precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;

@@ -23,4 +23,4 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, int endian, Rcpp::CharacterV
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 int native_endian(void);
 unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp, int srid);
-Rcpp::CharacterVector get_dim(Rcpp::List sfc);
+Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim);
