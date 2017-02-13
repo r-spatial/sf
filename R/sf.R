@@ -50,8 +50,8 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 					ymax = max(x[[coords[2]]], na.rm = TRUE)), 
 			class =  c("sfc_POINT", "sfc" ))
 
-		if (remove)
-			x[coords] = NULL
+#		if (remove)
+#			x[coords] = NULL
 	}
 	st_sf(x, ..., agr = agr)
 }
