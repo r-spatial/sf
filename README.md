@@ -24,12 +24,11 @@ Source installs work under windows when [Rtools](https://cran.r-project.org/bin/
 To install the dependencies on Ubuntu, either:
 
 * add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories:
-
-    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-    sudo apt-get install libgdal-dev libgeos++-dev
-
+```
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get install libgdal-dev libgeos++-dev
+```
 or
-
 * install from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
 
 See also:
