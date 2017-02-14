@@ -374,6 +374,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_invert_sparse
+Rcpp::List CPL_invert_sparse(Rcpp::List m, int n);
+RcppExport SEXP sf_CPL_invert_sparse(SEXP mSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_invert_sparse(m, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP sf_CPL_proj_version(SEXP bSEXP) {

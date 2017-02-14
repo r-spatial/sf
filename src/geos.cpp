@@ -499,3 +499,32 @@ Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, false)[0];
 	return out;	
 }
+
+// [[Rcpp::export]]
+Rcpp::List CPL_invert_sparse(Rcpp::List m, int n) {
+// invert a sparse neighbourhood list m with n columns
+	std::vector<int> sizes(n);
+	for (int i = 0; i < n; i++)
+		sizes[i] = 0; // init
+	for (int i = 0; i < m.size(); i++) {
+		Rcpp::NumericVector v = m[i];
+		for (int j = 0; j < v.size(); j++) {
+			if (v[j] > n || v[j] < 0)
+				throw std::range_error("CPL_invert_sparse: index out of bounds");
+			sizes[v[j] - 1] += 1; // count
+		}
+	}
+	Rcpp::List out(n);
+	for (int i = 0; i < n; i++)
+		out[i] = Rcpp::NumericVector(sizes[i]);
+	for (int i = 0; i < m.size(); i++) {
+		Rcpp::NumericVector v = m[i];
+		for (int j = 0; j < v.size(); j++) {
+			int new_i = v[j] - 1;
+			Rcpp::NumericVector w = out[new_i];
+			w[w.size() - sizes[new_i]] = i + 1; // 1-based
+			sizes[new_i] -= 1;
+		}
+	}
+	return out;
+}

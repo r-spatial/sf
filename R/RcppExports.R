@@ -121,6 +121,10 @@ CPL_geos_relate <- function(sfc0, sfc1) {
     .Call('sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
 }
 
+CPL_invert_sparse <- function(m, n) {
+    .Call('sf_CPL_invert_sparse', PACKAGE = 'sf', m, n)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('sf_CPL_proj_version', PACKAGE = 'sf', b)
 }
