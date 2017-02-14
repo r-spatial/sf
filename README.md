@@ -9,33 +9,42 @@
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R.
 
-Install with:
-
+Install either from CRAN with:
+```r
+install.packages("sf")
+```
+or from source with
 ```r
 library(devtools)
 install_github("edzer/sfr")
 ```
 
-This currently works directly under windows with R 3.3.0 or newer when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, a recent C++ compiler (c++11), GDAL (>= 2.0.0), and GEOS (>= 3.3.0) are needed.
+Source installs work under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see for instance [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are needed.
 
-For example, to install these libraries on Ubuntu, either:
+To install the dependencies on Ubuntu, either:
 
-* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories (e.g. with `sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable` and then `sudo apt-get install libgdal-dev libgeos++-dev`), or
-* install from source; see the [travis](https://github.com/edzer/sfr/blob/master/.travis.yml) config file for hints
+* add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories:
+
+    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+    sudo apt-get install libgdal-dev libgeos++-dev
+
+or
+
+* install from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
 
 See also:
 
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
 * UseR! 2016 [presentation](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
-* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html)
+* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html), [third](https://edzer.github.io/sfr/articles/sf3.html)
 
 ### What it does
 
 The sf package:
 
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* uses S3 classes: simple features are `data.frame` objects (or similar) that have a geometry list-column 
+* uses S3 classes: simple features are `data.frame` objects (or `tibbles`) that have a geometry list-column 
 * interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
 * interfaces to [GDAL](http://www.gdal.org/) with driver dependent dataset or layer creation options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ.4](http://proj4.org/)
 * provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++/Rcpp
