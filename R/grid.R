@@ -46,6 +46,11 @@ st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
 	get_l = function(x) unlist(sapply(x, function(y) sapply(y, nrow)))
 	pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
 }
+#' @export
+st_as_grob.GEOMETRYCOLLECTION <- function(x, ..., default.units = "native") {
+  do.call(grid::grobTree, lapply(x, st_as_grob, ...))
+}
+
 
 #' Create viewport from sf, sfc or sfg object
 #' 
