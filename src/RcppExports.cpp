@@ -374,15 +374,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_invert_sparse
-Rcpp::List CPL_invert_sparse(Rcpp::List m, int n);
-RcppExport SEXP sf_CPL_invert_sparse(SEXP mSEXP, SEXP nSEXP) {
+// CPL_invert_sparse_incidence
+Rcpp::List CPL_invert_sparse_incidence(Rcpp::List m, int n);
+RcppExport SEXP sf_CPL_invert_sparse_incidence(SEXP mSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_invert_sparse(m, n));
+    rcpp_result_gen = Rcpp::wrap(CPL_invert_sparse_incidence(m, n));
     return rcpp_result_gen;
 END_RCPP
 }

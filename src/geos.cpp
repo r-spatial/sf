@@ -211,6 +211,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					densemat(i,_) = rowi;
 				else
 					sparsemat[i] = get_which(rowi);
+				R_CheckUserInterrupt();
 			}
 		} else {
 			if (prepared) {
@@ -333,8 +334,8 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i]));
 	} else if (op == "unary_union") {
-		for (size_t i = 0; i < g.size(); i++) // #nocov
-			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i])); // #nocov
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i]));
 	} else if (op == "simplify") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :
@@ -344,7 +345,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = chkNULL(GEOSLineMerge_r(hGEOSCtxt, g[i]));
 	} else if (op == "polygonize") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSPolygonize_r(hGEOSCtxt, &(g[i]), 1)); // xxx
+			out[i] = chkNULL(GEOSPolygonize_r(hGEOSCtxt, &(g[i]), 1));
 	} else if (op == "centroid") {
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i]));
@@ -501,18 +502,17 @@ Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_invert_sparse(Rcpp::List m, int n) {
-// invert a sparse incidence matrix list m having n columns
+Rcpp::List CPL_invert_sparse_incidence(Rcpp::List m, int n) {
+// invert a sparse incidence matrix list m that has n columns
 	std::vector<size_t> sizes(n);
 	for (int i = 0; i < n; i++)
 		sizes[i] = 0; // init
 	for (int i = 0; i < m.size(); i++) {
 		Rcpp::IntegerVector v = m[i];
 		for (int j = 0; j < v.size(); j++) {
-			size_t v_j = (size_t) v[j];
-			if (v_j > n || v_j < 0)
+			if (v[j] > n || v[j] < 0)
 				throw std::range_error("CPL_invert_sparse: index out of bounds");
-			sizes[v_j - 1] += 1; // count
+			sizes[v[j] - 1] += 1; // count
 		}
 	}
 	Rcpp::List out(n);
