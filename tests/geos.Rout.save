@@ -178,6 +178,11 @@ LINESTRING(0 0, 1 1, 2 0)
 [1] "sfc_GEOMETRYCOLLECTION" "sfc"                   
 [1] "sf"         "data.frame"
 > 
+> i = st_intersects(ncm, ncm)
+> j = sf:::CPL_invert_sparse_incidence(i, 100)
+> all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  2.180   0.028   2.206 
+  2.108   0.012   2.117 

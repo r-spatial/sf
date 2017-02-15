@@ -78,3 +78,7 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  v = st_voronoi(st_sf(a = 1, geom = st_sfc(x)))
  print(class(v))
 }
+
+i = st_intersects(ncm, ncm)
+j = sf:::CPL_invert_sparse_incidence(i, 100)
+all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
