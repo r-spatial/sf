@@ -4,7 +4,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used
-#' @param max.plot integer; maximium number of attributes to plot
+#' @param max.plot integer; lower boundary to maximium number of attributes to plot
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -79,19 +79,30 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 15) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 	stopifnot(missing(y))
 	dots = list(...)
 
 	if (ncol(x) > 2) {
-		if (isTRUE(is.finite(max.plot)) && ncol(x)-1 > max.plot) {
-			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes; use max.print =",
+		max_plot_missing = missing(max.plot)
+		cols = setdiff(names(x), attr(x, "sf_column"))
+		mfrow = get_mfrow(st_bbox(x), min(max.plot, length(cols)), par("din"))
+		opar = if (isTRUE(dots$axes))
+				par(mfrow = mfrow, mar = c(2.1, 2.1, 1.2, 0))
+			else
+				par(mfrow = mfrow, mar = c(0,0,1.2,0))
+		on.exit(par(opar))
+
+		if (max_plot_missing)
+			max.plot = prod(mfrow)
+
+		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
+			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes; use max.plot =",
 				ncol(x) - 1, "to plot all"))
 			x = x[, 1:max.plot]
 		}
-		cols = names(x)[names(x) != attr(x, "sf_column")]
-		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		on.exit(par(opar))
+		# col selection may have changed; set cols again:
+		cols = setdiff(names(x), attr(x, "sf_column"))
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...)))
 	} else {
 		if (is.null(col) && ncol(x) == 2)

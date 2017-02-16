@@ -30,6 +30,9 @@ The following objects are masked from 'package:base':
 
 > nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > nc %>% filter(AREA > .1) %>% plot()
+Warning message:
+In plot.sf(.) :
+  plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > 
 > # plot 10 smallest counties in grey:
 > nc %>% 
@@ -197,4 +200,4 @@ POINT(111319.490793274 111325.142866385)
 > 
 > proc.time()
    user  system elapsed 
-  0.820   0.016   0.834 
+  0.808   0.016   0.822 
