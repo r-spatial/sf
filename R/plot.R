@@ -85,7 +85,8 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 15) {
 
 	if (ncol(x) > 2) {
 		if (isTRUE(is.finite(max.plot)) && ncol(x)-1 > max.plot) {
-			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes"))
+			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes; use max.print =",
+				ncol(x) - 1, "to plot all"))
 			x = x[, 1:max.plot]
 		}
 		cols = names(x)[names(x) != attr(x, "sf_column")]
