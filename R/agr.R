@@ -19,7 +19,7 @@ st_agr = function(x, ...) UseMethod("st_agr")
 st_agr.sf = function(x, ...) {
 	nm = setdiff(names(x), attr(x, "sf_column"))
 	ret = attr(x, "agr")[nm]
-	if (all(is.na(names(ret))))
+	if (is.null(names(ret)) || all(is.na(names(ret))))
 		structure(rep(NA_agr_, length(nm)), names = nm)
 	else
 		ret
