@@ -3,7 +3,8 @@
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
-#' @param ncol integer; default number of colors to be used.
+#' @param ncol integer; default number of colors to be used
+#' @param max.plot integer; maximium number of attributes to plot
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -78,15 +79,19 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 15) {
 	stopifnot(missing(y))
 	dots = list(...)
 
 	if (ncol(x) > 2) {
+		if (isTRUE(is.finite(max.plot)) && ncol(x) > max.plot) {
+			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes"))
+			x = x[, 1:max.plot]
+		}
 		cols = names(x)[names(x) != attr(x, "sf_column")]
 		opar = par(mfrow = get_mfrow(st_bbox(x), length(cols), par("din")), mar = c(0,0,1,0))
-		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...))
-		par(opar)
+		on.exit(par(opar))
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...)))
 	} else {
 		if (is.null(col) && ncol(x) == 2)
 			col = sf.colors(ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
