@@ -84,7 +84,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 15) {
 	dots = list(...)
 
 	if (ncol(x) > 2) {
-		if (isTRUE(is.finite(max.plot)) && ncol(x) > max.plot) {
+		if (isTRUE(is.finite(max.plot)) && ncol(x)-1 > max.plot) {
 			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes"))
 			x = x[, 1:max.plot]
 		}
