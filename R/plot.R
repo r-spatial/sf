@@ -83,11 +83,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 	stopifnot(missing(y))
 	dots = list(...)
 
-	if (ncol(x) > 2) {
-
-		if (isTRUE(dots$add))
-			stop("add = TRUE cannot be used when plotting multiple attributes", call. = FALSE)
-
+	if (ncol(x) > 2 && !isTRUE(dots$add)) {
 		max_plot_missing = missing(max.plot)
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		mfrow = get_mfrow(st_bbox(x), min(max.plot, length(cols)), par("din"))
