@@ -89,19 +89,25 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 	box = st_segmentize(box, st_length(ls1) / 400, warn = FALSE)
 
+	epp = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
+	if (epp != "") # restore on exit:
+		on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = epp))
+
+	Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	# Now we're moving to long/lat:
 	if (!is.na(crs))
-		box = st_transform(box, datum)
+		box_ll <- st_transform(box, datum)
+	Sys.unsetenv("OGR_ENABLE_PARTIAL_REPROJECTION")
 	
 	# as in https://github.com/edzer/sfr/issues/198 : 
-	# recreate, and ignore bbox:
-	if (any(!is.finite(st_bbox(box)))) {
+	# recreate, and ignore bbox_ll:
+	if (any(!is.finite(st_bbox(box_ll)))) {
 		x = st_transform(st_graticule(datum = datum), crs)
 		x$degree_label = NA_character_
 		return(x)
 	}
 
-	bb = st_bbox(box)
+	bb = st_bbox(box_ll)
 	if (is.null(lon)) {
 		lon = if (bb[1] < -170 && bb[3] > 170) # "global"
 				seq(-180, 180, by = 60)
@@ -115,7 +121,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	lon = lon[lon >= -180 & lon <= 180]
 	lat = lat[lat > -90 & lat < 90]
 
-	# widen bb if pretty() created values outside the box:
+	# widen bb if pretty() created values outside the box_ll:
 	bb = c(min(bb[1], min(lon)), min(bb[2],min(lat)), max(bb[3], max(lon)), max(bb[4], max(lat)))
 
 	long_list <- vector(mode="list", length=length(lon))
@@ -140,8 +146,8 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	st_agr(df) = "constant"
 
 	if (!missing(x)) { # cut out box:
-		if (! is.na(crs))
-			box = st_transform(box, crs)
+		#if (! is.na(crs))
+		#	box = st_transform(box, crs)
 		df = st_intersection(df, st_polygonize(box[1]))
 	}
 	graticule_attributes(st_cast(df, "MULTILINESTRING"))
