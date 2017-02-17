@@ -84,6 +84,10 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 	dots = list(...)
 
 	if (ncol(x) > 2) {
+
+		if (isTRUE(dots$add))
+			stop("add = TRUE cannot be used when plotting multiple attributes", call. = FALSE)
+
 		max_plot_missing = missing(max.plot)
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		mfrow = get_mfrow(st_bbox(x), min(max.plot, length(cols)), par("din"))
@@ -98,7 +102,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 
 		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
 			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes; use max.plot =",
-				ncol(x) - 1, "to plot all"))
+				ncol(x) - 1, "to plot all"), call. = FALSE)
 			x = x[, 1:max.plot]
 		}
 		# col selection may have changed; set cols again:
