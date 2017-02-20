@@ -455,14 +455,6 @@ nc <- st_read(filename)
 
 and writing takes place in the same fashion, using `st_write`:
 
-```{r, echo=FALSE, results='hide'}
-to_delete = list.files(pattern = "nc.")
-if(length(to_delete) > 0){
-  file.remove(to_delete)
-}
-```
-
-
 ```{r}
 st_write(nc, "nc.shp")
 ```
