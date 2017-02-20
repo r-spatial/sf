@@ -26,6 +26,10 @@
 \alias{dplyr}
 \alias{spread_.sf}
 \alias{dplyr}
+\alias{sample_n.sf}
+\alias{dplyr}
+\alias{sample_frac.sf}
+\alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
 \alias{left_join.sf}
@@ -64,6 +68,12 @@ gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
 
 spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
   drop = TRUE, sep = NULL)
+
+sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
+  .env = parent.frame())
+
+sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
+  .env = parent.frame())
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
@@ -107,6 +117,16 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{drop}{see original function docs}
 
 \item{sep}{see original function docs}
+
+\item{tbl}{see original function docs}
+
+\item{size}{see original function docs}
+
+\item{replace}{see original function docs}
+
+\item{weight}{see original function docs}
+
+\item{.env}{see original function docs}
 
 \item{x}{see \link[dplyr]{left_join}}
 

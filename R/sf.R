@@ -103,7 +103,12 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 `st_geometry<-.data.frame` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
 	stopifnot(nrow(x) == length(value))
-	st_sf(x, geometry = value)
+	a = sapply(x, function(v) inherits(v, "sfc"))
+	if (any(a)) {
+		x[[ which(a)[1L] ]] = value
+		st_sf(x)
+	} else
+		st_sf(x, geometry = value)
 }
 
 #' @export

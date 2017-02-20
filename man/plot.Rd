@@ -138,8 +138,9 @@ Plot sf object
 blue-pink-yellow color scale
 }
 \details{
-\code{plot.sf} plots maps with colors following from attribute columns, 
-one map per attribute. It uses \code{sf.colors} for default colors.
+\code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns, 
+one map per attribute. It uses \code{sf.colors} for default colors. For more control over individual maps,
+set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single maps one by one.
 
 \code{plot.sfc} plots the geometry, additional parameters can be passed on
 to control color, lines or symbols.

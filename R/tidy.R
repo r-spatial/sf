@@ -161,6 +161,23 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 	ret
 }
 
+#' @name dplyr
+#' @param tbl see original function docs
+#' @param size see original function docs
+#' @param replace see original function docs
+#' @param weight see original function docs
+#' @param .env see original function docs
+#' @export
+sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame()) {
+	st_sf(NextMethod())
+}
+	      
+#' @name dplyr
+#' @export
+sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
+	st_sf(NextMethod())
+}
+
 ## tibble methods:
 
 #' Summarize simple feature type for tibble
