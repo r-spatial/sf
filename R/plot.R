@@ -1,5 +1,17 @@
 #' Plot sf object
 #'
+#' \code{plot.sf} is a modified version of the generic plot function that makes
+#' \code{plot(x)} create geographic images when \code{x} is a simple feature.
+#'
+#' \code{plot} can be used in the same way for \code{sf} objects as for non-spatial
+#' objects, although there are a few key differences to be aware of:
+#'
+##' \itemize{
+##'  \item{Multiple facets of the object will be created: one for each attribute in the data.}
+##'  \item{The \code{add = T} argument makes the plot appear overlaid on the previous plot.
+##'  (Note that if the preceding plot was facetted, this feature does not work.)}
+##' }
+#'
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}

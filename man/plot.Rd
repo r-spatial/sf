@@ -3,27 +3,16 @@
 \name{plot}
 \alias{plot}
 \alias{plot.sf}
-\alias{plot}
-\alias{plot.sfc_POINT}
-\alias{plot}
-\alias{plot.sfc_MULTIPOINT}
-\alias{plot}
-\alias{plot.sfc_LINESTRING}
-\alias{plot}
-\alias{plot.sfc_MULTILINESTRING}
-\alias{plot}
-\alias{plot.sfc_POLYGON}
-\alias{plot}
-\alias{plot.sfc_MULTIPOLYGON}
-\alias{plot}
-\alias{plot.sfc_GEOMETRYCOLLECTION}
-\alias{plot}
 \alias{plot.sfc_GEOMETRY}
-\alias{plot}
+\alias{plot.sfc_GEOMETRYCOLLECTION}
+\alias{plot.sfc_LINESTRING}
+\alias{plot.sfc_MULTILINESTRING}
+\alias{plot.sfc_MULTIPOINT}
+\alias{plot.sfc_MULTIPOLYGON}
+\alias{plot.sfc_POINT}
+\alias{plot.sfc_POLYGON}
 \alias{plot.sfg}
-\alias{plot}
 \alias{plot_sf}
-\alias{plot}
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
@@ -114,10 +103,10 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{bgMap}{object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}}
 
-\item{expandBB}{numeric; fractional values to expand the bounding box with, 
+\item{expandBB}{numeric; fractional values to expand the bounding box with,
 in each direction (bottom, left, top, right)}
 
-\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule 
+\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
 or object returned by \link{st_graticule}}
 
 \item{col_graticule}{color to used for the graticule (if present)}
@@ -133,12 +122,22 @@ or object returned by \link{st_graticule}}
 \item{categorical}{logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.}
 }
 \description{
-Plot sf object
+\code{plot.sf} is a modified version of the generic plot function that makes
+\code{plot(x)} create geographic images when \code{x} is a simple feature.
 
 blue-pink-yellow color scale
 }
 \details{
-\code{plot.sf} plots maps with colors following from attribute columns, 
+\code{plot} can be used in the same way for \code{sf} objects as for non-spatial
+objects, although there are a few key differences to be aware of:
+
+\itemize{
+ \item{Multiple facets of the object will be created: one for each attribute in the data.}
+ \item{The \code{add = T} argument makes the plot appear overlaid on the previous plot.
+ (Note that if the preceding plot was facetted, this feature does not work.)}
+}
+
+\code{plot.sf} plots maps with colors following from attribute columns,
 one map per attribute. It uses \code{sf.colors} for default colors.
 
 \code{plot.sfc} plots the geometry, additional parameters can be passed on
@@ -216,3 +215,4 @@ gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 sf.colors(10)
 }
+
