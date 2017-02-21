@@ -1,11 +1,13 @@
-#include <iostream>
 #include <proj_api.h>
 
-#include "Rcpp.h"
+#include <Rcpp.h>
+
+#include <string>
+
 
 // [[Rcpp::export]]
 std::string CPL_proj_version(bool b = false) {
-	int v = PJ_VERSION;	
+	int v = PJ_VERSION;
 	std::stringstream buffer;
 	buffer << v / 100 << "." << (v / 10) % 10 << "." << v % 10;
 	return buffer.str();
@@ -53,7 +55,7 @@ struct PJ_DATUMS {
 	char	*ellipse_id; /* ie from ellipse table */
 	char	*comments; /* EPSG code, etc */
 };
-struct PJ_DATUMS *pj_get_datums_ref( void ); 
+struct PJ_DATUMS *pj_get_datums_ref( void );
 struct PJ_UNITS {
 	char	*id;		/* units keyword */
 	char	*to_meter;	/* multiply by value to get meters */
@@ -89,11 +91,11 @@ Rcpp::List CPL_proj_info(int type) {
 		} break;
 		case 1: {
 			Rcpp::List ans(4);
-			ans.attr("names") = Rcpp::CharacterVector::create("name", 
+			ans.attr("names") = Rcpp::CharacterVector::create("name",
 				"major", "ell", "description");
 			int n = 0;
 			struct PJ_ELLPS *le;
-			for (le = pj_get_ellps_ref(); le->id ; ++le) 
+			for (le = pj_get_ellps_ref(); le->id ; ++le)
 				n++;
 			Rcpp::CharacterVector ans0(n);
 			Rcpp::CharacterVector ans1(n);
@@ -119,7 +121,7 @@ Rcpp::List CPL_proj_info(int type) {
 				"definition", "description");
 			int n = 0;
 			struct PJ_DATUMS *ld;
-			for (ld = pj_get_datums_ref(); ld->id ; ++ld) 
+			for (ld = pj_get_datums_ref(); ld->id ; ++ld)
 				n++;
 			Rcpp::CharacterVector ans0(n);
 			Rcpp::CharacterVector ans1(n);
@@ -145,7 +147,7 @@ Rcpp::List CPL_proj_info(int type) {
 				"name");
 			int n = 0;
 			struct PJ_UNITS *ld;
-			for (ld = pj_get_units_ref(); ld->id ; ++ld) 
+			for (ld = pj_get_units_ref(); ld->id ; ++ld)
 				n++;
 			Rcpp::CharacterVector ans0(n);
 			Rcpp::CharacterVector ans1(n);

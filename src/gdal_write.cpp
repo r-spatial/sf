@@ -1,10 +1,10 @@
-#include <string.h>
 
-#include "Rcpp.h"
+#include "gdal.h"
+#include "wkb.h"
 
 #include "ogrsf_frmts.h"
-#include "wkb.h"
-#include "gdal.h"
+
+#include <cstring>
 
 std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	std::vector<OGRFieldType> ret(obj.size());
@@ -36,7 +36,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 
 // this is like an unlist -> dbl, but only does the first 6; if we'd do unlist on the POSIXlt
 // object, we'd get a character vector...
-Rcpp::NumericVector get_dbl6(Rcpp::List in) { 
+Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 	Rcpp::NumericVector ret(6);
 	for (int i = 0; i < 6; i++) {
 		Rcpp::NumericVector x = in(i);
@@ -90,13 +90,13 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0[0] = nv[i];
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
-				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4], 
-					(int) rd[3], (int) rd[2], (int) rd[1], 
+				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4],
+					(int) rd[3], (int) rd[2], (int) rd[1],
 					(float) rd[0], 100); // nTZFlag 100: GMT
 				} break;
 			default:
 				// we should never get here! // #nocov start
-				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
+				Rcpp::Rcout << "field with unsupported type ignored" << std::endl;
 				throw std::invalid_argument("Layer creation failed.\n");
 				break; // #nocov end
 		}
@@ -126,16 +126,16 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// open data set:
 	std::vector <char *> options = create_options(dco, quiet);
-	GDALDataset *poDS; 
-	if (!update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	GDALDataset *poDS;
+	if (!update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 			options.data(), NULL)) != NULL) {
 		GDALClose(poDS);
-		Rcpp::Rcout << "Dataset " <<  dsn[0] << 
+		Rcpp::Rcout << "Dataset " <<  dsn[0] <<
 			" already exists; remove first, or use update=TRUE to append." << std::endl;
 		throw std::invalid_argument("Dataset already exists.\n");
 	}
 
-	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
+	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL,
 			options.data(), NULL)) != NULL)
 		Rcpp::Rcout << "Updating " <<  dsn[0] << std::endl;
 	else if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {

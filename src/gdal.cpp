@@ -1,3 +1,7 @@
+
+#include "gdal.h"
+#include "wkb.h"
+
 #include <gdal.h>
 #include <gdal_alg.h>
 #include <gdal_priv.h> // GDALDriver
@@ -8,12 +12,11 @@
 #include <cpl_conv.h>
 #include <cpl_string.h>
 
-#include <stdlib.h> // atoi
-#include <string.h>
+#include <cstdlib> // atoi
+#include <cstring>
 
-#include <Rcpp.h>
 
-#include "wkb.h"
+
 
 //
 // Returns errors to R
@@ -22,7 +25,7 @@
 // Compile with -DCONTINUE_ON_ERROR to ignore fatal errors
 // This may be needed when running R under a different main loop
 //
-static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
+static void err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
     switch ( eErrClass )
     {
@@ -40,7 +43,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
             #ifndef CONTINUE_ON_ERROR
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
             #endif
-            break;        
+            break;
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
             break; // #nocov
@@ -51,7 +54,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
 // [[Rcpp::export]]
 void CPL_gdal_init()
 {
-    CPLSetErrorHandler((CPLErrorHandler)__err_handler);
+    CPLSetErrorHandler((CPLErrorHandler)err_handler);
     GDALAllRegister();
     OGRRegisterAll();
 }
@@ -77,7 +80,7 @@ void handle_error(OGRErr err) {
 			Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
 		else if (err == OGRERR_CORRUPT_DATA)
 			Rcpp::Rcout << "OGR: Corrupt data" << std::endl;
-		else 
+		else
 			Rcpp::Rcout << "Error code: " << err << std::endl; // #nocov
 		throw std::range_error("OGR error");
 	}
@@ -240,7 +243,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	OGRCoordinateTransformation *ct = 
+	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL)
 		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
@@ -255,7 +258,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 	}
 	ct->DestroyCT(ct);
 	dest->Release();
-	return ret; 
+	return ret;
 }
 
 // [[Rcpp::export]]

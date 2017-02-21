@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 
 #include "bbox.h"
 
@@ -6,7 +5,7 @@
 Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 	Rcpp::NumericVector bb(4);
 	switch(depth) {
-		case 0: 
+		case 0:
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericVector pt = sf[i];
 			if (i == 0) {
@@ -27,7 +26,7 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 			if (i == 0) { // initialize:
 				bb(0) = bb(2) = m(0,0);
 				bb(1) = bb(3) = m(0,1);
-			} 
+			}
 			for (int j = 0; j < m.nrow(); j++) {
 				bb(0) = std::min(m(j,0),bb(0));
 				bb(1) = std::min(m(j,1),bb(1));

@@ -1,3 +1,8 @@
+
+#pragma once
+
+#include <Rcpp.h>
+
 /*      NULL/EMPTY             0 */
 #define SF_Unknown             0 /* sfc_GEOMETRY */
 #define SF_Point               1
