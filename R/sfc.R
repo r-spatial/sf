@@ -94,6 +94,23 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 }
 
 #' @export
+c.sfc = function(..., recursive = FALSE) {
+	lst = list(...)
+	cls = class(lst[[1]])
+	eq = if (length(lst) > 1)
+			all(sapply(lst[-1], function(x) identical(class(x), cls)))
+		else
+			TRUE
+	if (! eq)
+		cls = c("sfc_GEOMETRY", "sfc")
+	ret = unlist(lapply(lst, unclass), recursive = FALSE)
+	attributes(ret) = attributes(lst[[1]]) # crs
+	class(ret) = cls
+	attr(ret, "bbox") = st_bbox(ret) # dispatch on class
+	ret
+}
+
+#' @export
 print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") { 
 	if (length(x) != 1) 
 		sep = "s" 

@@ -182,7 +182,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 	# add attributes:
 	attr(df, "sf_column") = sfc_name
-	class(df) = c("sf", class(df))
+	if (! inherits(df, "sf"))
+		class(df) = c("sf", class(df))
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
@@ -320,7 +321,9 @@ rbind.sf = function(..., deparse.level = 1) {
 		if (!all(equal_crs))
 			stop("arguments have different crs", call. = FALSE)
 	}
-	st_sf(base::rbind.data.frame(...), crs = crs0)
+	ret = st_as_sf(base::rbind.data.frame(...), crs = crs0)
+	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = c(st_bbox(ret)) # recompute & strip crs
+	ret
 }
 
 #' Bind columns (variables) of sf objects
