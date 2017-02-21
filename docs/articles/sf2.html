@@ -22,6 +22,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/edzer/sfr/">
     <span class="fa fa-github fa-lg"></span>
@@ -119,14 +122,10 @@ Available layers:
 <div id="using-st_write" class="section level3">
 <h3 class="hasAnchor"><html><body><a href="#using-st_write" class="anchor"> </a></body></html>Using st_write</h3>
 <p>To write a simple features object to a file, we need at least two arguments, the object and a filename:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc.shp"</span>)
-## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
-## features:       100
-## fields:         14
-## geometry type:  Multi Polygon</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc1.shp"</span>)</code></pre></div>
 <p>The file name is taken as the data source name. The default for the layer name is the basename (filename without path) of the the data source name. For this, <code>st_write</code> needs to guess the driver. The above command is, for instance, equivalent to:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="dt">dsn =</span> <span class="st">"nc.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)
-## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="dt">dsn =</span> <span class="st">"nc1.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)
+## Writing layer `nc.shp' to data source `nc1.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## geometry type:  Multi Polygon</code></pre></div>
@@ -300,7 +299,9 @@ x
 <span class="kw">coordinates</span>(meuse) =<span class="st"> </span><span class="er">~</span>x+y
 m.sf =<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse)
 opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(m.sf)</code></pre></div>
+<span class="kw"><a href="../reference/plot.html">plot</a></span>(m.sf)
+## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to
+## plot all</code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Conversion of simple features into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)

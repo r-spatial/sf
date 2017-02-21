@@ -12,6 +12,8 @@ vignette: >
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
+if (file.exists("nc.shp"))
+	file.remove("nc.shp", "nc.dbf", "nc.shx")
 ```
 
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a [formal standard](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them. 

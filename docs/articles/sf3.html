@@ -22,6 +22,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/edzer/sfr/">
     <span class="fa fa-github fa-lg"></span>
@@ -238,8 +241,8 @@ s2 =<span class="st"> </span>s
 <h3 class="hasAnchor"><html><body><a href="#coordinate-reference-system-transformations" class="anchor"> </a></body></html>Coordinate reference system transformations</h3>
 <p>If we change the coordinate reference system from one non-missing value into another non-missing value, the crs is is changed without modifying any coordinates, but a warning is issued that this did not reproject values:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)
-## Warning in `st_crs&lt;-.sfc`(`*tmp*`, value = structure(list(structure(c(0, :
-## st_crs&lt;- : replacing crs does not reproject data; use st_transform for that</code></pre></div>
+## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform
+## for that</code></pre></div>
 <p>A cleaner way to do this that better expresses intention and does not generate this warning is to first wipe the CRS by assigning it a missing value, and then setting it to the intended value.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1  %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="ot">NA</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</code></pre></div>
 <p>To carry out a coordinate conversion or transformation, we use <code>st_transform</code></p>

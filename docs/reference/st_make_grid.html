@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Map extension to driver — extension_map • sf</title>
+<title>Make a rectangular grid of polygons over the bounding box of a sf or sfc object — st_make_grid • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,27 +77,35 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Map extension to driver</h1>
+    <h1>Make a rectangular grid of polygons over the bounding box of a sf or sfc object</h1>
     </div>
 
     
-    <p>Map extension to driver</p>
+    <p>Make a rectangular grid of polygons over the bounding box of a sf or sfc object</p>
     
 
-    <pre><span class='no'>extension_map</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>list</code> of length 23.</p>
+    <pre><span class='fu'>st_make_grid</span>(<span class='no'>x</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>2</span>,
+  <span class='fl'>4</span>)]))/<span class='no'>n</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>10</span>))</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <dl class="dl-horizontal">
+      <dt>x</dt>
+      <dd>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></dd>
+      <dt>cellsize</dt>
+      <dd>target cellsize</dd>
+      <dt>offset</dt>
+      <dd>numeric of lengt 2; lower left corner coordinates (x, y) of the grid</dd>
+      <dt>n</dt>
+      <dd>integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)</dd>
+    </dl>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-          </ul>
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
   </div>
 </div>

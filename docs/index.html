@@ -21,6 +21,9 @@
 <li>
   <a href="articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="news/index.html">News</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/edzer/sfr/">
     <span class="fa fa-github fa-lg"></span>
@@ -38,13 +41,19 @@
 <div class="page-header"><h1 class="hasAnchor"><a href="#simple-features-for-r" class="anchor"> </a>Simple Features for R</h1></div>
 
 <p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features access</a> for R.</p>
-<p>Install with:</p>
+<p>Install either from CRAN with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"sf"</span>)</code></pre></div>
+<p>or from source with</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
-<p>This currently works directly under windows with R 3.3.0 or newer when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, a recent C++ compiler (c++11), GDAL (&gt;= 2.0.0), and GEOS (&gt;= 3.3.0) are needed.</p>
-<p>For example, to install these libraries on Ubuntu, either:</p>
-<ul><li>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories (e.g.&nbsp;with <code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable</code> and then <code>sudo apt-get install libgdal-dev libgeos++-dev</code>), or</li>
-<li>install from source; see the <a href="https://github.com/edzer/sfr/blob/master/.travis.yml">travis</a> config file for hints</li>
+<p>Source installs work under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. For Mac, see for instance <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are needed.</p>
+<p>To install the dependencies on Ubuntu, either:</p>
+<ul><li>
+<p>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
+<pre><code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get install libgdal-dev libgeos-dev libproj-dev</code></pre>
+or</li>
+<li><p>install from source; see e.g.&nbsp;an older <a href="https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
 </ul><p>See also:</p>
 <ul><li>the original R Consortium ISC <a href="PROPOSAL.md">proposal</a>, the R Consortium <a href="https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran">blog post</a>
 </li>
@@ -52,14 +61,14 @@
 </li>
 <li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html">fourth</a>
 </li>
-<li>package vignettes: <a href="https://edzer.github.io/sfr/articles/sf1.html">first</a>, <a href="https://edzer.github.io/sfr/articles/sf2.html">second</a>
+<li>package vignettes: <a href="https://edzer.github.io/sfr/articles/sf1.html">first</a>, <a href="https://edzer.github.io/sfr/articles/sf2.html">second</a>, <a href="https://edzer.github.io/sfr/articles/sf3.html">third</a>
 </li>
 </ul><div id="what-it-does" class="section level3">
 <h3 class="hasAnchor">
 <a href="#what-it-does" class="anchor"> </a>What it does</h3>
 <p>The sf package:</p>
 <ul><li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>uses S3 classes: simple features are <code>data.frame</code> objects (or similar) that have a geometry list-column</li>
+<li>uses S3 classes: simple features are <code>data.frame</code> objects (or <code>tibbles</code>) that have a geometry list-column</li>
 <li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
 </li>
 <li>interfaces to <a href="http://www.gdal.org/">GDAL</a> with driver dependent dataset or layer creation options, Date and DateTime (<code>POSIXct</code>) columns, and coordinate reference system transformations through <a href="http://proj4.org/">PROJ.4</a>

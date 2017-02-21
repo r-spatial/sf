@@ -54,6 +54,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -84,7 +87,7 @@
     
 
     <pre><span class='co'># S3 method for sf</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.plot</span> <span class='kw'>=</span> <span class='fl'>9</span>)
 
 <span class='co'># S3 method for sfc_POINT</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -138,9 +141,11 @@
       <dt>...</dt>
       <dd>further specifications, see plot_sf and plot</dd>
       <dt>ncol</dt>
-      <dd>integer; default number of colors to be used.</dd>
+      <dd>integer; default number of colors to be used</dd>
       <dt>col</dt>
       <dd>color</dd>
+      <dt>max.plot</dt>
+      <dd>integer; lower boundary to maximium number of attributes to plot</dd>
       <dt>pch</dt>
       <dd>plotting symbol</dd>
       <dt>cex</dt>
@@ -183,7 +188,7 @@
       <dd>numeric; fractional values to expand the bounding box with, 
 in each direction (bottom, left, top, right)</dd>
       <dt>graticule</dt>
-      <dd>object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), 
+      <dd>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule 
 or object returned by <a href='st_graticule.html'>st_graticule</a></dd>
       <dt>col_graticule</dt>
       <dd>color to used for the graticule (if present)</dd>
@@ -201,8 +206,9 @@ or object returned by <a href='st_graticule.html'>st_graticule</a></dd>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>plot.sf</code> plots maps with colors following from attribute columns, 
-one map per attribute. It uses <code>sf.colors</code> for default colors.</p>
+    <p><code>plot.sf</code> maximally plots <code>max.plot</code> maps with colors following from attribute columns, 
+one map per attribute. It uses <code>sf.colors</code> for default colors. For more control over individual maps,
+set parameter <code>mfrow</code> with <code>par</code> prior to plotting,  and plot single maps one by one.</p>
     <p><code>plot.sfc</code> plots the geometry, additional parameters can be passed on
 to control color, lines or symbols.</p>
     <p><code>plot_sf</code> sets up the plotting area, axes, graticule, or webmap background; it

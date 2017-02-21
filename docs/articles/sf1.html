@@ -22,6 +22,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/edzer/sfr/">
     <span class="fa fa-github fa-lg"></span>
@@ -44,6 +47,7 @@
     
     
 <div class="contents">
+<pre><code>## [1] TRUE TRUE TRUE</code></pre>
 <p><a href="https://en.wikipedia.org/wiki/Simple_Features">Simple features</a> or <a href="http://www.opengeospatial.org/standards/sfa"><em>simple feature access</em></a> refers to a <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114">formal standard</a> that describes how objects in the real world can be represented in computers, with emphasis on the <em>spatial</em> geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.</p>
 <p>The standard is widely implemented in spatial databases (such as PostGIS), commercial GIS (e.g., <a href="http://www.esri.com/">ESRI ArcGIS</a>) and forms the vector data basis for libraries such as <a href="http://www.gdal.org/">GDAL</a>. A subset of simple features forms the <a href="http://geojson.org/">GeoJSON</a> standard.</p>
 <p>R has well-supported classes for storing spatial data (<a href="https://CRAN.R-project.org/package=sp">sp</a>) and interfacing to the above mentioned environments (<a href="https://CRAN.R-project.org/package=rgdal">rgdal</a>, <a href="https://CRAN.R-project.org/package=rgeos">rgeos</a>), but has so far lacked a complete implementation of simple features, making conversions at times convoluted, inefficient or incomplete. The package <a href="http://github.com/edzer/sfr">sf</a> tries to fill this gap, and aims at succeeding <a href="https://CRAN.R-project.org/package=sp">sp</a> in the long term.</p>
@@ -165,20 +169,21 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [10] group_by_         initialize        inner_join       
 ## [13] left_join         merge             mutate_          
 ## [16] plot              print             rbind            
-## [19] rename_           right_join        select_          
-## [22] semi_join         [                 [[&lt;-             
-## [25] $&lt;-               show              slice_           
-## [28] slotsFromS3       spread_           st_agr&lt;-         
-## [31] st_agr            st_as_sf          st_bbox          
-## [34] st_boundary       st_buffer         st_cast          
-## [37] st_centroid       st_convex_hull    st_crs&lt;-         
-## [40] st_crs            st_difference     st_geometry&lt;-    
-## [43] st_geometry       st_intersection   st_is            
-## [46] st_linemerge      st_polygonize     st_precision     
-## [49] st_segmentize     st_set_precision  st_simplify      
-## [52] st_sym_difference st_transform      st_triangulate   
-## [55] st_union          st_voronoi        st_zm            
-## [58] summarise_        transmute_       
+## [19] rename_           right_join        sample_frac      
+## [22] sample_n          select_           semi_join        
+## [25] [                 [[&lt;-              $&lt;-              
+## [28] show              slice_            slotsFromS3      
+## [31] spread_           st_agr&lt;-          st_agr           
+## [34] st_as_sf          st_bbox           st_boundary      
+## [37] st_buffer         st_cast           st_centroid      
+## [40] st_convex_hull    st_crs&lt;-          st_crs           
+## [43] st_difference     st_geometry&lt;-     st_geometry      
+## [46] st_intersection   st_is             st_line_merge    
+## [49] st_polygonize     st_precision      st_segmentize    
+## [52] st_set_precision  st_simplify       st_sym_difference
+## [55] st_transform      st_triangulate    st_union         
+## [58] st_voronoi        st_zm             summarise_       
+## [61] transmute_       
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g.&nbsp;by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -231,19 +236,19 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [1] "sfc_MULTIPOLYGON" "sfc"</code></pre></div>
 <p>Methods for geometry list-columns include</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">'sfc'</span>)
-##  [1] coerce            format            initialize       
-##  [4] Ops               print             [                
-##  [7] show              slotsFromS3       st_as_binary     
-## [10] st_as_text        st_bbox           st_boundary      
-## [13] st_buffer         st_cast           st_centroid      
-## [16] st_convex_hull    st_crs&lt;-          st_crs           
-## [19] st_difference     st_geometry       st_intersection  
-## [22] st_is             st_linemerge      st_polygonize    
-## [25] st_precision      str               st_segmentize    
-## [28] st_set_precision  st_simplify       st_sym_difference
-## [31] st_transform      st_triangulate    st_union         
-## [34] st_voronoi        st_zm             summary          
-## [37] type_sum         
+##  [1] coerce            c                 format           
+##  [4] initialize        Ops               print            
+##  [7] [                 show              slotsFromS3      
+## [10] st_as_binary      st_as_text        st_bbox          
+## [13] st_boundary       st_buffer         st_cast          
+## [16] st_centroid       st_convex_hull    st_crs&lt;-         
+## [19] st_crs            st_difference     st_geometry      
+## [22] st_intersection   st_is             st_line_merge    
+## [25] st_polygonize     st_precision      str              
+## [28] st_segmentize     st_set_precision  st_simplify      
+## [31] st_sym_difference st_transform      st_triangulate   
+## [34] st_union          st_voronoi        st_zm            
+## [37] summary           type_sum         
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -403,7 +408,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
 <p>and writing takes place in the same fashion, using <code>st_write</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc.shp"</span>)
-## Writing layer `nc.shp' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
+## Writing layer `nc.shp' to data source `nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## geometry type:  Multi Polygon</code></pre></div>
@@ -488,6 +493,8 @@ kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719 
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
 <span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s
+## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform
+## for that
 <span class="co"># anticipate geometry column name changes:</span>
 <span class="kw">names</span>(nc)[<span class="dv">15</span>] =<span class="st"> "geometry"</span>
 <span class="kw">attr</span>(nc, <span class="st">"sf_column"</span>) =<span class="st"> "geometry"</span>
