@@ -106,7 +106,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE, prep
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
-	ret = CPL_geos_binop(as.vector(st_geometry(x)), as.vector(st_geometry(y)), op, par, sparse, prepared)
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse, prepared)
 	if (sparse)
 		ret
 	else
@@ -676,7 +676,9 @@ st_line_sample = function(x, n, density, type = "regular") {
 #' @examples
 #' st_poly_sample(st_transform(poly, 3857), n = 5) # five points within polygon
 st_poly_sample = function(x, n, type = "random") {
-	stopifnot(type == "random", "st_poly_sample currently supports random sampling only");
+	if (type != "random")
+		stop("only random point-in-polygon sampling currently supported")
+
 	# TODO check x is a poly? or will this work on other feature types as-is?
 	bbox = st_bbox(x);
 	rawpts = matrix(0.0, n, 2)
