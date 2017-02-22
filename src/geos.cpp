@@ -5,13 +5,14 @@
 #define GEOS_USE_ONLY_R_API // avoid using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
+namespace {
 
-static void errorHandler(const char *fmt, ...) { // #nocov start
+void errorHandler(const char *fmt, ...) { // #nocov start
 
     char buf[BUFSIZ], *p;
     va_list(ap);
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, BUFSIZ, fmt, ap);
     va_end(ap);
     p = buf + strlen(buf) - 1;
     if(strlen(buf) > 0 && *p == '\n') *p = '\0';
@@ -22,12 +23,12 @@ static void errorHandler(const char *fmt, ...) { // #nocov start
     return; // #nocov end
 }
 
-static void warningHandler(const char *fmt, ...) {
+void warningHandler(const char *fmt, ...) {
 
     char buf[BUFSIZ], *p;
     va_list(ap);
     va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
+    vsnprintf(buf, BUFSIZ, fmt, ap);
     va_end(ap);
     p = buf + strlen(buf) - 1;
     if(strlen(buf) > 0 && *p == '\n') *p = '\0';
@@ -36,6 +37,8 @@ static void warningHandler(const char *fmt, ...) {
 	warning(buf);
 
     return;
+}
+
 }
 
 GEOSContextHandle_t CPL_geos_init(void) {
@@ -108,7 +111,7 @@ bool chk_(char value) {
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
 typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, const GEOSGeometry *);
 
-log_fn which_geom_fn(const std::string op) {
+log_fn which_geom_fn(const std::string& op) {
 	if (op == "intersects")
 		return GEOSIntersects_r;
 	else if (op == "disjoint")
@@ -132,7 +135,7 @@ log_fn which_geom_fn(const std::string op) {
 	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
 }
 
-log_prfn which_prep_geom_fn(const std::string op) {
+log_prfn which_prep_geom_fn(const std::string& op) {
 	if (op == "intersects")
 		return GEOSPreparedIntersects_r;
 	else if (op == "disjoint")
@@ -159,7 +162,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0,
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, const std::string& op, double par = 0.0,
 		bool sparse = true, bool prepared = false) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -312,7 +315,7 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
+Rcpp::List CPL_geos_op(const std::string& op, Rcpp::List sfc,
 		Rcpp::NumericVector bufferDist, int nQuadSegs = 30,
 		double dTolerance = 0.0, bool preserveTopology = false,
 		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
@@ -417,7 +420,7 @@ GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, siz
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
+Rcpp::List CPL_geos_op2(const std::string& op, Rcpp::List sfcx, Rcpp::List sfcy) {
 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
