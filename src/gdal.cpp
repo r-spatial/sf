@@ -16,7 +16,7 @@
 #include <cstring>
 
 
-
+namespace {
 
 //
 // Returns errors to R
@@ -25,7 +25,7 @@
 // Compile with -DCONTINUE_ON_ERROR to ignore fatal errors
 // This may be needed when running R under a different main loop
 //
-static void err_handler(CPLErr eErrClass, int err_no, const char *msg)
+void err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
     switch ( eErrClass )
     {
@@ -51,10 +51,12 @@ static void err_handler(CPLErr eErrClass, int err_no, const char *msg)
     return;
 }
 
+}
+
 // [[Rcpp::export]]
 void CPL_gdal_init()
 {
-    CPLSetErrorHandler((CPLErrorHandler)err_handler);
+    CPLSetErrorHandler(err_handler);
     GDALAllRegister();
     OGRRegisterAll();
 }
@@ -87,7 +89,7 @@ void handle_error(OGRErr err) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_crs_parameters(std::string p4s) {
+Rcpp::List CPL_crs_parameters(const std::string& p4s) {
 	Rcpp::List out(6);
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));

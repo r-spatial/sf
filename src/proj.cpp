@@ -14,7 +14,7 @@ std::string CPL_proj_version(bool b = false) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_proj_is_valid(std::string proj4string) {
+Rcpp::List CPL_proj_is_valid(const std::string& proj4string) {
 	Rcpp::List out(2);
 	projPJ pj = pj_init_plus(proj4string.c_str());
 	if (pj == NULL) {
