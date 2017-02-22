@@ -54,6 +54,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -107,6 +110,12 @@
 <span class='fu'>spread_.sf</span>(<span class='no'>data</span>, <span class='no'>key_col</span>, <span class='no'>value_col</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
+<span class='fu'>sample_n.sf</span>(<span class='no'>tbl</span>, <span class='no'>size</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'>parent.frame</span>())
+
+<span class='fu'>sample_frac.sf</span>(<span class='no'>tbl</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'>parent.frame</span>())
+
 <span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
 
 <span class='fu'>left_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
@@ -151,6 +160,16 @@
       <dd>see original function docs</dd>
       <dt>sep</dt>
       <dd>see original function docs</dd>
+      <dt>tbl</dt>
+      <dd>see original function docs</dd>
+      <dt>size</dt>
+      <dd>see original function docs</dd>
+      <dt>replace</dt>
+      <dd>see original function docs</dd>
+      <dt>weight</dt>
+      <dd>see original function docs</dd>
+      <dt>.env</dt>
+      <dd>see original function docs</dd>
       <dt>x</dt>
       <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
       <dt>y</dt>
@@ -177,8 +196,8 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>AREA</span> <span class='kw'>&gt;</span> <span class='fl'>.1</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><img src='dplyr-8.png' alt='' width='540' height='400' /><div class='input'><span class='co'># plot 10 smallest counties in grey:</span>
-<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>arrange</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>slice</span>(<span class='fl'>1</span>:<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>"the ten counties with smallest area"</span>)</div><img src='dplyr-12.png' alt='' width='540' height='400' /><div class='input'><span class='no'>nc</span>[<span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>10</span>), ] <span class='kw'>%&gt;%</span> <span class='fu'>distinct</span>() <span class='kw'>%&gt;%</span> <span class='fu'>nrow</span>()</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>AREA</span> <span class='kw'>&gt;</span> <span class='fl'>.1</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><img src='dplyr-9.png' alt='' width='540' height='400' /><div class='input'><span class='co'># plot 10 smallest counties in grey:</span>
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>arrange</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>slice</span>(<span class='fl'>1</span>:<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>"the ten counties with smallest area"</span>)</div><img src='dplyr-13.png' alt='' width='540' height='400' /><div class='input'><span class='no'>nc</span>[<span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>10</span>), ] <span class='kw'>%&gt;%</span> <span class='fu'>distinct</span>() <span class='kw'>%&gt;%</span> <span class='fu'>nrow</span>()</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>group_by</span>(<span class='no'>area_cl</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;grouped_df&quot; &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>mutate</span>(<span class='kw'>area10</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] &quot;SID74&quot;    &quot;SID79&quot;    &quot;geometry&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] &quot;SID74&quot;    &quot;SID79&quot;    &quot;geometry&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>rename</span>(<span class='kw'>area</span> <span class='kw'>=</span> <span class='no'>AREA</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>slice</span>(<span class='fl'>1</span>:<span class='fl'>2</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 15 fields
@@ -200,21 +219,25 @@
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
-#&gt;       area_cl mean(AREA)                       geometry
-#&gt; 1     (0,0.1] 0.07602857 MULTIPOLYGON(((-77.96073150...
-#&gt; 2  (0.1,0.12] 0.11206667 MULTIPOLYGON(((-84.29103851...
-#&gt; 3 (0.12,0.15] 0.13422727 MULTIPOLYGON(((-76.54427337...
-#&gt; 4 (0.15,0.25] 0.19039286 MULTIPOLYGON(((-76.64704895...</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarize</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
+#&gt; # A tibble: 4 × 3
+#&gt;       area_cl `mean(AREA)`          geometry
+#&gt;        &lt;fctr&gt;        &lt;dbl&gt;  &lt;simple_feature&gt;
+#&gt; 1     (0,0.1]   0.07602857 &lt;MULTIPOLYGON...&gt;
+#&gt; 2  (0.1,0.12]   0.11206667 &lt;MULTIPOLYGON...&gt;
+#&gt; 3 (0.12,0.15]   0.13422727 &lt;MULTIPOLYGON...&gt;
+#&gt; 4 (0.15,0.25]   0.19039286 &lt;MULTIPOLYGON...&gt;</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarize</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
-#&gt;       area_cl mean(AREA)                       geometry
-#&gt; 1     (0,0.1] 0.07602857 MULTIPOLYGON(((-77.96073150...
-#&gt; 2  (0.1,0.12] 0.11206667 MULTIPOLYGON(((-84.29103851...
-#&gt; 3 (0.12,0.15] 0.13422727 MULTIPOLYGON(((-76.54427337...
-#&gt; 4 (0.15,0.25] 0.19039286 MULTIPOLYGON(((-76.64704895...</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarize</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><img src='dplyr-36.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>library</span>(<span class='no'>tidyr</span>)
+#&gt; # A tibble: 4 × 3
+#&gt;       area_cl `mean(AREA)`          geometry
+#&gt;        &lt;fctr&gt;        &lt;dbl&gt;  &lt;simple_feature&gt;
+#&gt; 1     (0,0.1]   0.07602857 &lt;MULTIPOLYGON...&gt;
+#&gt; 2  (0.1,0.12]   0.11206667 &lt;MULTIPOLYGON...&gt;
+#&gt; 3 (0.12,0.15]   0.13422727 &lt;MULTIPOLYGON...&gt;
+#&gt; 4 (0.15,0.25]   0.19039286 &lt;MULTIPOLYGON...&gt;</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarize</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><img src='dplyr-37.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>library</span>(<span class='no'>tidyr</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>gather</span>(<span class='no'>VAR</span>, <span class='no'>SID</span>, -<span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>summary</span>()</div><div class='output co'>#&gt;      VAR                 SID                  geometry  
 #&gt;  Length:200         Min.   : 0.000   MULTIPOLYGON :200  
 #&gt;  Class :character   1st Qu.: 2.000   epsg:4267    :  0  

@@ -34,11 +34,6 @@ st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
 # but do when it changes:
 st_sfc(x, crs = 3857)
 
-# rbind:
-x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
-rbind(x, x, x)
-
-
 p = st_point(0:1)
 st_cast(p, "MULTIPOINT")
 mp = st_multipoint(rbind(c(0,1), c(2,2)))
@@ -145,3 +140,9 @@ st_join(a, b)
 st_join(a, b, left = FALSE)
 st_join(a, b, FUN = mean)
 st_join(a, b, FUN = mean, left = FALSE)
+
+# rbind:
+x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
+rbind(x, x, x)
+nc2 = rbind(nc[1:50, ], nc[51:100, ])
+all.equal(nc, nc2)

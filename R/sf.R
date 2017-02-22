@@ -105,7 +105,15 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 	stopifnot(nrow(x) == length(value))
 	a = sapply(x, function(v) inherits(v, "sfc"))
 	if (any(a)) {
-		x[[ which(a)[1L] ]] = value
+		w = which(a)
+		sf_col = attr(x, "sf_column")
+		if (! is.null(sf_col))
+			x[[ sf_col ]] = value
+		else {
+			if (length(w) > 1)
+				warning("overwriting first sfc column")
+			x[[ which(a)[1L] ]] = value
+		}
 		st_sf(x)
 	} else
 		st_sf(x, geometry = value)
@@ -144,8 +152,8 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 st_sf = function(..., agr = NA_agr_, row.names, 
 		stringsAsFactors = default.stringsAsFactors(), crs, precision) {
 	x = list(...)
-	if (length(x) == 1 && inherits(x[[1]], "data.frame"))
-		x = x[[1]]
+	if (length(x) == 1 && inherits(x[[1L]], "data.frame"))
+		x = x[[1L]]
 	# find & remove the sfc column:
 	sf = sapply(x, function(x) inherits(x, "sfc"))
 	if (! any(sf))
@@ -153,8 +161,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	sf_column = which(sf)
 	if (length(sf_column) > 1) {
 		warning("more than one geometry column: ignoring all but first")
-		x[sf_column[-1]] = NULL
-		sf_column = sf_column[1]
+		x[sf_column[-1L]] = NULL
+		sf_column = sf_column[1L]
 	}
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
@@ -182,7 +190,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 	# add attributes:
 	attr(df, "sf_column") = sfc_name
-	class(df) = c("sf", class(df))
+	if (! inherits(df, "sf"))
+		class(df) = c("sf", class(df))
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
@@ -315,12 +324,14 @@ print.sf = function(x, ..., n =
 rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
 	crs0 = st_crs(dots[[1]])
-	if (length(dots) > 1) { # check all crs are equal...
-		equal_crs = sapply(dots[-1], function(x) st_crs(x) == crs0)
+	if (length(dots) > 1L) { # check all crs are equal...
+		equal_crs = sapply(dots[-1L], function(x) st_crs(x) == crs0)
 		if (!all(equal_crs))
 			stop("arguments have different crs", call. = FALSE)
 	}
-	st_sf(base::rbind.data.frame(...), crs = crs0)
+	ret = st_as_sf(base::rbind.data.frame(...), crs = crs0)
+	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = c(st_bbox(ret)) # recompute & strip crs
+	ret
 }
 
 #' Bind columns (variables) of sf objects
