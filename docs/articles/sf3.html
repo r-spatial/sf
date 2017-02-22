@@ -451,12 +451,12 @@ ls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <span class="kw">points</span>(pts)
 ls.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_segmentize</a></span>(ls, <span class="fl">0.3</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(ls.seg)
-pts =<span class="st"> </span>ls.seg[[<span class="dv">1</span>]] <span class="co"># matrix</span>
+pts =<span class="st"> </span>ls.seg
 <span class="kw">points</span>(pts)
 pol =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))))
 pol.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos.html">st_segmentize</a></span>(pol, <span class="fl">0.3</span>)
 <span class="kw"><a href="../reference/plot.html">plot</a></span>(pol.seg, <span class="dt">col =</span> <span class="st">'grey'</span>)
-<span class="kw">points</span>(pol.seg[[<span class="dv">1</span>]][[<span class="dv">1</span>]])</code></pre></div>
+<span class="kw">points</span>(pol.seg[[<span class="dv">1</span>]])</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
 <p>Function <code>st_polygonize</code> polygonizes a multilinestring, as far as the points form a closed polygon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
