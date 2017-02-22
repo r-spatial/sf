@@ -72,6 +72,8 @@ Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
 	for (size_t i = 0; i < g.size(); i++) {
+		if (wkbFlatten(g[i]->getGeometryType()) != wkbLineString)
+			throw std::invalid_argument("CPL_gdal_linestring_sample only available for LINESTRING"); // #nocov
 		OGRGeometryCollection *gc = new OGRGeometryCollection;
 		Rcpp::NumericVector dists = distLst[i];
 		for (int j = 0; j < dists.size(); j++) {

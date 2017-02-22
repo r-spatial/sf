@@ -665,7 +665,9 @@ st_line_sample = function(x, n, density, type = "regular") {
 		random = random,
 		stop("unknown type"))
 	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
-	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
+	x = st_geometry(x)
+	stopifnot(inherits(x, "sfc_LINESTRING"))
+	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
 #' Make a rectangular grid of polygons over the bounding box of a sf or sfc object

@@ -99,6 +99,7 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 	srs->exportToWkt(&cp);
 	out(5) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
+	delete srs;
 	return out;
 }
 
@@ -240,10 +241,16 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	if (g.size() == 0) {
+		dest->Release();
+		throw std::range_error("CPL_transform: zero length geometry list");
+	}
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
-	if (ct == NULL)
+	if (ct == NULL) {
+		dest->Release();
 		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
+	}
 	for (size_t i = 0; i < g.size(); i++)
 		handle_error(g[i]->transform(ct));
 
