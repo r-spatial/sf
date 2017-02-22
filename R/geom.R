@@ -675,12 +675,12 @@ st_line_sample = function(x, n, density, type = "regular") {
 #' @export
 #' @examples
 #' st_poly_sample(st_transform(poly, 3857), n = 5) # five points within polygon
-st_poly_sample = function(x, n, type = "random") {
+st_poly_sample = function(poly, n, type = "random") {
 	if (type != "random")
 		stop("only random point-in-polygon sampling currently supported")
 
 	# TODO check x is a poly? or will this work on other feature types as-is?
-	bbox = st_bbox(x);
+	bbox = st_bbox(poly);
 	rawpts = matrix(0.0, n, 2)
 	idx = 1
 	# not very efficient loop
@@ -689,7 +689,7 @@ st_poly_sample = function(x, n, type = "random") {
 		y = runif(1,bbox["ymin"], bbox["ymax"])
 		# TODO probably need to get dim from x?
 		pt = st_point(c(x,y), dim="XY")
-		inPoly=length(st_within(pt,poly)[[1]])
+		inPoly=st_within(pt,poly, sparse=FALSE)
 		if (inPoly) {
 			rawpts[idx,1] = x
 			rawpts[idx,2] = y
