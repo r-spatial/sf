@@ -146,3 +146,20 @@ x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326)
 rbind(x, x, x)
 nc2 = rbind(nc[1:50, ], nc[51:100, ])
 all.equal(nc, nc2)
+
+# st_sample:
+set.seed(131)
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
+(p <- st_sample(x, 10))
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+st_sample(x, 10)
+x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
+ crs=st_crs(4326))
+p <- st_sample(x, 10)
+pt = st_multipoint(matrix(1:20,,2))
+st_sample(p, 3)
+ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
+ st_linestring(rbind(c(0,0),c(.1,0))),
+ st_linestring(rbind(c(0,1),c(.1,1))),
+ st_linestring(rbind(c(2,2),c(2,2.00001))))
+st_sample(ls, 80)

@@ -32,7 +32,8 @@ plot(p2, add = TRUE)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)
 plot(st_sample(x, 1000), add = TRUE)
-x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),crs=st_crs(4326))
+x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
+ crs=st_crs(4326))
 p = st_sample(x, 1000)
 pt = st_multipoint(matrix(1:20,,2))
 st_sample(p, 3)
