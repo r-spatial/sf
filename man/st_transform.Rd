@@ -12,9 +12,9 @@
 \alias{st_proj_info}
 \title{Transform or convert coordinates of simple feature}
 \usage{
-st_transform(x, crs)
+st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ...)
+\method{st_transform}{sfc}(x, crs, ..., partial = FALSE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -28,6 +28,8 @@ st_proj_info(type = "proj")
 \item{crs}{coordinate reference system: integer with the epsg code, or character with proj4string}
 
 \item{...}{ignored}
+
+\item{partial}{logical; if TRUE, set environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE} to enable removal of vertices that cannot be projected}
 
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 }

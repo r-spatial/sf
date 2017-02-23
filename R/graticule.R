@@ -85,9 +85,11 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		c(bb[1],bb[4]), c(bb[1],bb[2])))
 	ls2 = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[4]), c(bb[1],bb[4]), 
 		c(bb[3],bb[2]), c(bb[1],bb[2])))
-	box = st_sfc(ls1, ls2, crs = crs)
+	box = st_sfc(ls1, ls2)
 
-	box = st_segmentize(box, st_length(ls1) / 400, warn = FALSE)
+	box = st_segmentize(box, st_length(box)[1] / ndiscr) # in planar coordinates
+
+	st_crs(box) = crs
 
 	epp = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
 	if (epp != "") # restore on exit:

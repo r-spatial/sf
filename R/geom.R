@@ -247,7 +247,10 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 #' @export
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
-#' @return st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
+#' @return \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
+#' \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
+#' \code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf} 
+#' object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
 
@@ -478,26 +481,26 @@ st_centroid.sf = function(x) {
 
 #' @name geos
 #' @export
-#' @param dfMaxLength numeric; max length of a line segment
+#' @param dfMaxLength numeric; max length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a length with unit metre, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
-#' @param warn logical; generate a warning in case of long/lat data
-st_segmentize	= function(x, dfMaxLength, ..., warn = TRUE)
+st_segmentize	= function(x, dfMaxLength, ...)
 	UseMethod("st_segmentize")
 
 #' @export 
-st_segmentize.sfg = function(x, dfMaxLength, ..., warn = TRUE)
-	get_first_sfg(st_segmentize(st_sfc(x), dfMaxLength, ..., warn = warn))
+st_segmentize.sfg = function(x, dfMaxLength, ...)
+	get_first_sfg(st_segmentize(st_sfc(x), dfMaxLength, ...))
 
 #' @export 
-st_segmentize.sfc	= function(x, dfMaxLength, ..., warn = TRUE) {
-	if (warn && isTRUE(st_is_longlat(x)))
-		warning("st_segmentize does not correctly segmentize longitude/latitude data")
-	st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
+st_segmentize.sfc	= function(x, dfMaxLength, ...) {
+	if (isTRUE(st_is_longlat(x)))
+		st_sfc(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = st_crs(x)), crs = st_crs(x))
+	else
+		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
 }
 
 #' @export
-st_segmentize.sf = function(x, dfMaxLength, ..., warn = TRUE) {
-	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ..., warn = warn)
+st_segmentize.sf = function(x, dfMaxLength, ...) {
+	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ...)
 	x
 }
 
@@ -717,4 +720,30 @@ st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x
 		st_sfc(ret)
 	else
 		st_sfc(ret, crs = st_crs(x))
+}
+
+ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
+	# x is a single sfg: LINESTRING or MULTILINESTRING
+	if (is.list(x)) # MULTILINESTRING:
+		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), class = attr(x, "class"))
+	else { # matrix
+		if (!requireNamespace("geosphere", quietly = TRUE))
+			stop("package geosphere required, please install it first")
+		p = crs_parameters(crs)
+		pts = unclass(x) # matrix
+		p1 = head(pts, -1)
+		p2 = tail(pts, -1)
+		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
+		n = ceiling(ll / as.numeric(dfMaxLength)) - 1
+		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
+		if (length(n) == 1) # would be a matrix otherwise
+			ret = list(ret)
+		for (i in seq_along(n)) {
+			if (n[i] < 1) # 0 or -1, because of the -1, for 0 distance
+				ret[[i]] = ret[[i]][-2,] # take out interpolated middle point
+			if (i > 1)
+				ret[[i]] = tail(ret[[i]], -1) # take out duplicate starting point
+		}
+		structure(do.call(rbind, ret), class = attr(x, "class"))
+	}
 }

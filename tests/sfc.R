@@ -149,6 +149,7 @@ all.equal(nc, nc2)
 
 # st_sample:
 set.seed(131)
+options(digits=6)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 (p <- st_sample(x, 10))
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:

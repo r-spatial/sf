@@ -84,10 +84,10 @@
     <p>Transform or convert coordinates of simple feature</p>
     
 
-    <pre><span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>)
+    <pre><span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
+<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>, <span class='kw'>partial</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
@@ -105,6 +105,8 @@
       <dd>coordinate reference system: integer with the epsg code, or character with proj4string</dd>
       <dt>...</dt>
       <dd>ignored</dd>
+      <dt>partial</dt>
+      <dd>logical; if TRUE, set environment variable <code>OGR_ENABLE_PARTIAL_REPROJECTION</code> to <code>TRUE</code> to enable removal of vertices that cannot be projected</dd>
       <dt>type</dt>
       <dd>character; one of <code>proj</code>, <code>ellps</code>, <code>datum</code> or <code>units</code></dd>
     </dl>
@@ -146,7 +148,12 @@
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='geos.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area, using geosphere::areaPolygon</span></div><div class='output co'>#&gt; 1137388604 m^2</div><div class='input'><span class='fu'><a href='geos.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'><a href='geos.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 US_survey_foot^2</div><div class='input'><span class='fu'>library</span>(<span class='no'>units</span>)
-<span class='fu'>as.units</span>(<span class='fu'><a href='geos.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='fu'>make_unit</span>(<span class='st'>"m"</span>)^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT(779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
+<span class='fu'>as.units</span>(<span class='fu'><a href='geos.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='fu'>make_unit</span>(<span class='st'>"m"</span>)^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 779236.4 ymin: 6800125 xmax: 779236.4 ymax: 6800125
+#&gt; epsg (SRID):    3857
+#&gt; proj4string:    +proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
 #&gt; 1          WGS84     WGS84
 #&gt; 2         GGRS87     GRS80
 #&gt; 3          NAD83     GRS80

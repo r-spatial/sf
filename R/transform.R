@@ -5,7 +5,7 @@
 #' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
-#' 
+#' @param partial logical; if TRUE, set environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE} to enable removal of vertices that cannot be projected
 #' @details transforms coordinates of object to new projection
 #' @examples
 #' p1 = st_point(c(7,52))
@@ -14,13 +14,13 @@
 #' sfc
 #' st_transform(sfc, "+init=epsg:3857")
 #' @export
-st_transform = function(x, crs) UseMethod("st_transform")
+st_transform = function(x, crs, ...) UseMethod("st_transform")
 
 #' @name st_transform
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ...) {
+st_transform.sfc = function(x, crs, ..., partial = FALSE) {
 	if (is.na(st_crs(x)))
 		stop("sfc object should have crs set")
 	if (missing(crs))
@@ -30,6 +30,11 @@ st_transform.sfc = function(x, crs, ...) {
 	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
 		x = st_zm(x, drop = FALSE, what = "Z")
 
+	if (partial) {
+		orig = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
+		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
+		on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = orig))
+	}
 	if (crs != st_crs(x))
 		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
 	else
@@ -46,7 +51,7 @@ st_transform.sfc = function(x, crs, ...) {
 #' library(units)
 #' as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
 st_transform.sf = function(x, crs, ...) {
-	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs)
+	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
 	x
 }
 
@@ -60,7 +65,7 @@ st_transform.sfg = function(x, crs , ...) {
 	if (missing(crs))
 		stop("argument crs cannot be missing")
 	crs = make_crs(crs)
-	CPL_transform(x, crs$proj4string, crs$epsg)[[1]]
+	st_transform(x, crs, ...)
 }
 
 #' @name st_transform

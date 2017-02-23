@@ -10,8 +10,10 @@
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 #' plot(x, axes = TRUE, graticule = TRUE)
 #' plot(p <- st_sample(x, 1000), add = TRUE)
-#' x2 = st_transform(st_segmentize(x,1), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-#' plot(x2)
+#' x2 = st_transform(st_segmentize(x,1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+#' g = st_transform(st_graticule(lon = seq(0,90,10), lat = seq(0,90,10)), 
+#'   st_crs("+proj=ortho +lat_0=30 +lon_0=45"), partial = TRUE)
+#' plot(x2, graticule = g)
 #' p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #' plot(p2, add = TRUE)
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
@@ -32,7 +34,8 @@ st_sample = function(x, size, ..., type = "random") {
 	x = st_geometry(x)
 	if (length(size) > 1) {
 		size = rep(size, length.out = length(x))
-		st_sfc(lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type)))
+		st_sfc(lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type)),
+			crs = st_crs(x))
 	} else {
 		dim = max(st_dimension(x))
 		if (dim == 0)
@@ -47,6 +50,7 @@ st_sample = function(x, size, ..., type = "random") {
 }
 
 st_poly_sample = function(x, size, ..., type = "random") {
+	toRad = pi/180
 	bb = st_bbox(x)
 	a0 = st_area(st_make_grid(x, n = c(1,1))) 
 	a1 = sum(st_area(x))
@@ -56,10 +60,10 @@ st_poly_sample = function(x, size, ..., type = "random") {
 		size = round(size * a0 / a1)
 	lon = runif(size, bb[1], bb[3])
 	lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-		lat0 = (cos(pi * (90 - bb[2]) / 180) + 1)/2
-		lat1 = (cos(pi * (90 - bb[4]) / 180) + 1)/2
+		lat0 = (sin(bb[2] * toRad) + 1)/2
+		lat1 = (sin(bb[4] * toRad) + 1)/2
 		y = runif(size, lat0, lat1)
-		90 - acos(2 * y - 1) * 180 / pi # http://mathworld.wolfram.com/SpherePointPicking.html
+		asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
 	} else 
 		runif(size, bb[2], bb[4])
 	m = cbind(lon, lat)

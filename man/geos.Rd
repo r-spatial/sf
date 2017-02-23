@@ -129,7 +129,7 @@ st_line_merge(x)
 
 st_centroid(x)
 
-st_segmentize(x, dfMaxLength, ..., warn = TRUE)
+st_segmentize(x, dfMaxLength, ...)
 
 st_combine(x)
 
@@ -174,8 +174,6 @@ st_line_sample(x, n, density, type = "regular")
 
 \item{...}{ignored}
 
-\item{warn}{logical; generate a warning in case of long/lat data}
-
 \item{by_feature}{logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features}
 
 \item{n}{integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.}
@@ -201,7 +199,10 @@ st_relate returns a dense \code{character} matrix; element [i,j] has nine charac
 
 functions \code{st_intersects} up to \code{st_equals_exact} return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
-st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
+\code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
+\code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
+\code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf} 
+object with the same number of geometries as in \code{x}
 
 All functions (or methods) returning a geometry return an object of the same class as that of the first argument (\code{x}).  \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_sym_difference} return the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}, and return an object of class \code{sfg}, \code{sfc} or \code{sf}, where in the latter case the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. \code{st_union} has in addition the ability to work on a single argument \code{x} (\code{y} missing): in this case, if \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned, if \code{by_feature} is \code{TRUE} each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}.
 

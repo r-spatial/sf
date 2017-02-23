@@ -652,6 +652,7 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > 
 > # st_sample:
 > set.seed(131)
+> options(digits=6)
 > x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 > (p <- st_sample(x, 10))
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -693,7 +694,7 @@ dimension:      XY
 bbox:           xmin: -15.77728 ymin: -22.46808 xmax: 143.823 ymax: 27.16136
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT(48.8473404105753 9.37328114613776, 1...
+MULTIPOINT(48.8473404105753 9.37328114613777, 1...
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 +  st_linestring(rbind(c(0,0),c(.1,0))),
 +  st_linestring(rbind(c(0,1),c(.1,1))),
@@ -712,4 +713,4 @@ MULTIPOINT()
 > 
 > proc.time()
    user  system elapsed 
-  0.768   0.016   0.782 
+  0.784   0.024   0.806 
