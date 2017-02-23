@@ -19,7 +19,28 @@ library(devtools)
 install_github("edzer/sfr")
 ```
 
-Source installs work under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. For Mac, see for instance [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are needed.
+## Source installs 
+
+### Windows
+
+Installing work under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. 
+
+### MacOS
+
+One way is to install the dependencies as root (using sudo); the other is using homebrew. For the latter,
+see e.g. [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). Homebrew commands might
+be (at your own risk):
+
+```
+brew unlink gdal
+brew tap osgeo/osgeo4mac && brew tap --repair
+brew install proj geos udunits
+brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
+```
+
+### Linux
+
+For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are needed.
 
 To install the dependencies on Ubuntu, either:
 
@@ -31,12 +52,15 @@ sudo apt-get install libgdal-dev libgeos-dev libproj-dev
 or
 * install from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
 
+
+### Blogs, presentations, vignettes
+
 See also:
 
+* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html), [third](https://edzer.github.io/sfr/articles/sf3.html)
+* blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
 * UseR! 2016 [presentation](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
-* blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
-* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html), [third](https://edzer.github.io/sfr/articles/sf3.html)
 
 ### What it does
 
