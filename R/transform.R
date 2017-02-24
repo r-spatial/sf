@@ -17,23 +17,27 @@
 #' @export
 st_transform = function(x, crs, ...) UseMethod("st_transform")
 
+chk_pol = function(x, dim = class(x)[1]) {
+	if (length(x) > 0 && nrow(x[[1]]) > 2) 
+		x 
+	else
+		st_polygon(dim = dim)
+}
+
+chk_mpol = function(x) lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+
 sanity_check = function(x) {
-    chk_pol = function(x, dim) { if (length(x) > 0 && nrow(x[[1]]) > 2) x else st_polygon(dim = dim) }
-    chk_mpol = function(x, dim) { lapply(x, function(y) unclass(chk_pol(y, dim))) }
     d = st_dimension(x) # flags empty geoms as NA
     if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
-        st_sfc(lapply(x, function(y) {
-            if (inherits(y, "POLYON"))
-                chk_pol(y, dim = class(y)[1])
-            else if (inherits(y, "MULTIPOLYON"))
-                chk_mpol(y, dim = class(y)[1])
-            else
-                y
-        }), 
-		crs = st_crs(x))
+		if (inherits(x, "sfc_POLYGON"))
+        	st_sfc(lapply(x, chk_pol), crs = st_crs(x))
+		else if (inherits(x, "sfc_MULTIPOLYGON"))
+        	st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
+		else
+			stop(paste("no check implemented for", class(x)[1]))
     } else
         x
-} 
+}
 
 #' @name st_transform
 #' @export

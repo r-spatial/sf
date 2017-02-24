@@ -25,6 +25,8 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericMatrix m = sf[i];
 			if (i == 0) { // initialize:
+				if (m.nrow() <= 0)
+					Rcpp::stop("CPL_get_bbox: invalid geometry");
 				bb(0) = bb(2) = m(0,0);
 				bb(1) = bb(3) = m(0,1);
 			} 
