@@ -18,13 +18,26 @@
 st_transform = function(x, crs, ...) UseMethod("st_transform")
 
 chk_pol = function(x, dim = class(x)[1]) {
+	PolClose = function(y) {
+		if (any(head(y[[1]], 1) != tail(y[[1]], 1)))
+			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
+		y
+	}
 	if (length(x) > 0 && nrow(x[[1]]) > 2) 
-		x 
+		PolClose(x)
 	else
 		st_polygon(dim = dim)
 }
 
-chk_mpol = function(x) lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+chk_mpol = function(x) {
+	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+	empty = if (length(cln))
+			sapply(cln, length) == 0
+		else
+			TRUE
+	# print(empty)
+	st_multipolygon(cln[!empty], dim = class(x)[1])
+}
 
 sanity_check = function(x) {
     d = st_dimension(x) # flags empty geoms as NA
