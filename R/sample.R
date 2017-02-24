@@ -11,8 +11,7 @@
 #' plot(x, axes = TRUE, graticule = TRUE)
 #' plot(p <- st_sample(x, 1000), add = TRUE)
 #' x2 = st_transform(st_segmentize(x,1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-#' g = st_transform(st_graticule(lon = seq(0,90,10), lat = seq(0,90,10)), 
-#'   st_crs("+proj=ortho +lat_0=30 +lon_0=45"), partial = TRUE)
+#' g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #' plot(x2, graticule = g)
 #' p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #' plot(p2, add = TRUE)

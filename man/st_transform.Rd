@@ -14,7 +14,7 @@
 \usage{
 st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ..., partial = FALSE)
+\method{st_transform}{sfc}(x, crs, ..., partial = TRUE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -37,7 +37,7 @@ st_proj_info(type = "proj")
 Transform or convert coordinates of simple feature
 }
 \details{
-transforms coordinates of object to new projection
+transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
 
 the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
 

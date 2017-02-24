@@ -170,7 +170,7 @@ st_line_sample(x, n, density, type = "regular")
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram}
 
-\item{dfMaxLength}{numeric; max length of a line segment}
+\item{dfMaxLength}{numeric; max length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a length with unit metre, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
 
 \item{...}{ignored}
 

@@ -19,8 +19,6 @@
 // Returns errors to R
 // Note only case 4 actually returns immediately
 // Lower error codes are recoverable
-// Compile with -DCONTINUE_ON_ERROR to ignore fatal errors
-// This may be needed when running R under a different main loop
 //
 static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
@@ -37,9 +35,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
             break;
         case 4:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
-            #ifndef CONTINUE_ON_ERROR
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
-            #endif
             break;        
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
@@ -192,8 +188,9 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
+		OGRGeometryFactory f;
 		if (destroy)
-			delete g[i];
+			f.destroyGeometry(g[i]);
 	}
 	Rcpp::List ret = CPL_read_wkb(lst, false, native_endian());
 	ret.attr("crs") = crs;
@@ -251,8 +248,18 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 		dest->Release();
 		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
 	}
-	for (size_t i = 0; i < g.size(); i++)
-		handle_error(g[i]->transform(ct));
+	for (size_t i = 0; i < g.size(); i++) {
+		CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
+		OGRErr err = g[i]->transform(ct);
+		CPLPopErrorHandler();
+		if (err == 1 || err == 6) {
+			OGRwkbGeometryType geomType = g[i]->getGeometryType();
+			OGRGeometryFactory f;
+			f.destroyGeometry(g[i]);
+			g[i] = f.createGeometry(geomType);
+		} else
+			handle_error(err);
+	}
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	if (epsg[0] != NA_INTEGER) {

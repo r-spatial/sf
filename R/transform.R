@@ -6,7 +6,7 @@
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
 #' @param partial logical; if TRUE, set environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE} to enable removal of vertices that cannot be projected
-#' @details transforms coordinates of object to new projection
+#' @details transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
@@ -20,7 +20,7 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ..., partial = FALSE) {
+st_transform.sfc = function(x, crs, ..., partial = TRUE) {
 	if (is.na(st_crs(x)))
 		stop("sfc object should have crs set")
 	if (missing(crs))
@@ -32,8 +32,9 @@ st_transform.sfc = function(x, crs, ..., partial = FALSE) {
 
 	if (partial) {
 		orig = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
+		if (orig != "")
+			on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = orig))
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
-		on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = orig))
 	}
 	if (crs != st_crs(x))
 		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
