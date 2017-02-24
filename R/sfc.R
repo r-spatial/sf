@@ -112,10 +112,7 @@ c.sfc = function(..., recursive = FALSE) {
 
 #' @export
 print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") { 
-	if (length(x) != 1) 
-		sep = "s" 
-	else
-		sep = ""
+	sep = if (length(x) != 1) "s" else ""
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
 	cat(paste0(what, " ", length(x), " feature", sep, " ", append))
 	if (! is.null(attr(x, "n_empty"))) {

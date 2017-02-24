@@ -15,7 +15,8 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 			out[i] = a->get_Area();
 		} else
 			out[i] = 0.0;
-		delete g[i];
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }
@@ -25,10 +26,12 @@ Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::IntegerVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {
-		out[i] = g[i]->getDimension();
 		if (NA_if_empty && g[i]->IsEmpty())
 			out[i] = NA_INTEGER;
-		delete g[i];
+		else
+			out[i] = g[i]->getDimension();
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }
@@ -46,7 +49,8 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 			OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
 			out[i] = a->get_Length();
 		}
-		delete g[i];
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }

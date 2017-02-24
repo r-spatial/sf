@@ -5,7 +5,8 @@
 \title{Make a rectangular grid of polygons over the bounding box of a sf or sfc object}
 \usage{
 st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
-  4)]))/n, offset = st_bbox(x)[1:2], n = c(10, 10))
+  4)]))/n, offset = st_bbox(x)[1:2], n = c(10, 10), crs = if (missing(x))
+  NA_crs_ else st_crs(x))
 }
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
@@ -15,6 +16,8 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \item{offset}{numeric of lengt 2; lower left corner coordinates (x, y) of the grid}
 
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
+
+\item{crs}{object of class \code{crs}}
 }
 \description{
 Make a rectangular grid of polygons over the bounding box of a sf or sfc object

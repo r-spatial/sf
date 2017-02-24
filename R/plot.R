@@ -130,7 +130,9 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	col = rep(col, length.out = npts)
 	bg = rep(bg, length.out = npts)
 	cex = rep(cex, length.out = npts)
-	points(do.call(rbind, x), pch = pch, col = col, bg = bg, cex = cex, lwd = lwd, lty = lty,
+	mat = do.call(rbind, x)
+	ne = apply(mat, 1, function(x) all(is.finite(x))) # ne: not empty
+	points(mat[ne,], pch = pch[ne], col = col[ne], bg = bg[ne], cex = cex[ne], lwd = lwd, lty = lty,
 		type = type)
 }
 
@@ -149,8 +151,11 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 	cex = rep(cex, length.out = n)
 	lwd = rep(lwd, length.out = n)
 	lty = rep(lty, length.out = n)
-	lapply(seq_along(x), function(i) points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
-		cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
+	non_empty = !is.na(st_dimension(x))
+	lapply(seq_along(x), function(i) 
+	  if (non_empty[i])
+		points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
+			cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
 	invisible(NULL)
 }
 
@@ -167,7 +172,9 @@ plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, ty
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
+	non_empty = !is.na(st_dimension(x))
 	lapply(seq_along(x), function(i)
+	  if (non_empty[i])
 		lines(x[[i]], lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type))
 	invisible(NULL)
 }
@@ -185,7 +192,9 @@ plot.sfc_MULTILINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	pch  = rep(pch, length.out = length(x))
+	non_empty = !is.na(st_dimension(x))
 	lapply(seq_along(x), function(i)
+	  if (non_empty[i])
 		lapply(x[[i]], function(L)
 			lines(L, lty = lty[i], lwd = lwd[i], col = col[i], pch = pch[i], type = type)))
 	invisible(NULL)
@@ -216,7 +225,9 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
+	non_empty = !is.na(st_dimension(x))
 	lapply(seq_along(x), function(i)
+	  if (non_empty[i])
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule))
 	invisible(NULL)
 }
@@ -233,7 +244,9 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border =
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
+	non_empty = !is.na(st_dimension(x))
 	lapply(seq_along(x), function(i)
+	  if (non_empty[i])
 		lapply(x[[i]], function(L)
 			polypath(p_bind(L), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule)))
 	invisible(NULL)
@@ -242,7 +255,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border =
 # plot single geometrycollection:
 plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col) {
 	lapply(x, function(subx) {
-		args = list(list(subx), pch = pch, cex = cex, bg = bg, border = border, 
+		args = list(st_sfc(subx), pch = pch, cex = cex, bg = bg, border = border, 
 			lty = lty, lwd = lwd, col = col, add = TRUE)
 		fn = switch(class(subx)[2],
 			POINT = plot.sfc_POINT,

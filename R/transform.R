@@ -5,7 +5,8 @@
 #' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
-#' @param partial logical; if TRUE, set environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE} to enable removal of vertices that cannot be projected
+#' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
+#' @param check logical; perform a sanity check on resulting polygons?
 #' @details transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
 #' @examples
 #' p1 = st_point(c(7,52))
@@ -16,11 +17,29 @@
 #' @export
 st_transform = function(x, crs, ...) UseMethod("st_transform")
 
+sanity_check = function(x) {
+    chk_pol = function(x, dim) { if (length(x) > 0 && nrow(x[[1]]) > 2) x else st_polygon(dim = dim) }
+    chk_mpol = function(x, dim) { lapply(x, function(y) unclass(chk_pol(y, dim))) }
+    d = st_dimension(x) # flags empty geoms as NA
+    if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+        st_sfc(lapply(x, function(y) {
+            if (inherits(y, "POLYON"))
+                chk_pol(y, dim = class(y)[1])
+            else if (inherits(y, "MULTIPOLYON"))
+                chk_mpol(y, dim = class(y)[1])
+            else
+                y
+        }), 
+		crs = st_crs(x))
+    } else
+        x
+} 
+
 #' @name st_transform
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ..., partial = TRUE) {
+st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
 	if (is.na(st_crs(x)))
 		stop("sfc object should have crs set")
 	if (missing(crs))
@@ -36,9 +55,16 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE) {
 			on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = orig))
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	}
-	if (crs != st_crs(x))
-		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
-	else
+
+	if (crs != st_crs(x)) {
+		ret = CPL_transform(x, crs$proj4string, crs$epsg)
+		attr(ret, "single_type") = NULL
+		ret = st_sfc(ret, crs = crs)
+		if (check)
+			sanity_check(ret)
+		else
+			ret
+	} else
 		x
 }
 

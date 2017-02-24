@@ -249,7 +249,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
 	}
 	for (size_t i = 0; i < g.size(); i++) {
-		CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
+		CPLPushErrorHandler(CPLQuietErrorHandler);
 		OGRErr err = g[i]->transform(ct);
 		CPLPopErrorHandler();
 		if (err == 1 || err == 6) {

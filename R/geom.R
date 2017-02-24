@@ -680,14 +680,22 @@ st_line_sample = function(x, n, density, type = "regular") {
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
+#' @param crs object of class \code{crs}
 #' @export
-st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
-		offset = st_bbox(x)[1:2], n = c(10, 10)) {
+st_make_grid = function(x, 
+		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
+		offset = st_bbox(x)[1:2], n = c(10, 10),
+		crs = if(missing(x)) NA_crs_ else st_crs(x)) {
+
+	if (nargs() == 0) # create global 10 x 10 degree grid
+		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
+			crs = st_crs(4326)))
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)
 		n = rep(n, length.out = 2)
-		structure(c(offset, offset + n * cellsize), names = c("xmin", "ymin", "xmax", "ymax"))
+		structure(c(offset, offset + n * cellsize), 
+			names = c("xmin", "ymin", "xmax", "ymax"))
 	} else
 		st_bbox(x)
 	
@@ -717,7 +725,7 @@ st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x
 			ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
 	
 	if (missing(x))
-		st_sfc(ret)
+		st_sfc(ret, crs = crs)
 	else
 		st_sfc(ret, crs = st_crs(x))
 }
@@ -725,7 +733,8 @@ st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x
 ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 	# x is a single sfg: LINESTRING or MULTILINESTRING
 	if (is.list(x)) # MULTILINESTRING:
-		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), class = attr(x, "class"))
+		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), 
+			class = attr(x, "class"))
 	else { # matrix
 		if (!requireNamespace("geosphere", quietly = TRUE))
 			stop("package geosphere required, please install it first")

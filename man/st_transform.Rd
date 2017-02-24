@@ -14,7 +14,7 @@
 \usage{
 st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ..., partial = TRUE)
+\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -29,7 +29,9 @@ st_proj_info(type = "proj")
 
 \item{...}{ignored}
 
-\item{partial}{logical; if TRUE, set environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE} to enable removal of vertices that cannot be projected}
+\item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
+
+\item{check}{logical; perform a sanity check on resulting polygons?}
 
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 }
