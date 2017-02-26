@@ -83,11 +83,12 @@ Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 		for (int j = 0; j < dists.size(); j++) {
 			OGRPoint *poPoint  = new OGRPoint;
 			((OGRLineString *) g[i])->Value(dists[j], poPoint);
-			gc->addGeometry(poPoint);
+			gc->addGeometryDirectly(poPoint);
 		}
 		out[i] = OGRGeometryFactory::forceToMultiPoint(gc);
 	}
-	Rcpp::List ret = sfc_from_ogr(out, true);
+	Rcpp::List ret = sfc_from_ogr(g, true); // releases g
+	ret = sfc_from_ogr(out, true); // releases out
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;
 }

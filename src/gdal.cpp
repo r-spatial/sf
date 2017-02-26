@@ -110,11 +110,20 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	if (p4s != NA_STRING) {
 		Rcpp::CharacterVector cv = crs["proj4string"];
 		local_srs = new OGRSpatialReference;
-		handle_error(local_srs->importFromProj4(cv[0]));
+		OGRErr err = local_srs->importFromProj4(cv[0]);
+		if (err != 0) {
+			local_srs->Release();
+			handle_error(err);
+		}
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso));
+		OGRErr err = f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso);
+		if (err != 0) {
+			if (local_srs != NULL)
+				local_srs->Release();
+			handle_error(err);
+		}
 	}
 	if (sref != NULL)
 		*sref = local_srs; // return and release later, or
