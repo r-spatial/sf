@@ -73,10 +73,10 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	}
 
-	if (crs != st_crs(x)) {
-		ret = CPL_transform(x, crs$proj4string, crs$epsg)
-		attr(ret, "single_type") = NULL
-		ret = st_sfc(ret, crs = crs)
+	if (crs != st_crs(x)) { # transform:
+		ret = structure(CPL_transform(x, crs$proj4string, crs$epsg),
+			single_type = NULL, crs = crs)
+		ret = st_sfc(ret)
 		if (check)
 			sanity_check(ret)
 		else

@@ -67,11 +67,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		}
 		attr(lst, "single_type") = NULL # clean up
 	}
-	if (is.na(crs) && !is.null(attr(lst, "crs")))
-		crs = attr(lst, "crs")
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
+
+	if (is.na(crs) && !is.null(attr(lst, "crs")))
+		crs = attr(lst, "crs")
 	st_crs(lst) = crs
+
 	structure(lst, "bbox" = c(st_bbox(lst)))
 }
 
