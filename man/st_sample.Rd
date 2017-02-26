@@ -9,7 +9,7 @@ st_sample(x, size, ..., type = "random")
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
 
-\item{size}{sample size(s) required; either total size, or a numeric vector with sample sizes for each feature geometry}
+\item{size}{sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.}
 
 \item{...}{ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling}
 

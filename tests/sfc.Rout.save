@@ -710,7 +710,22 @@ MULTIPOINT(0 0.302590963631447, 0 0.25143881739...
 MULTIPOINT(0.0914728223831462 0, 0.073852008753...
 MULTIPOINT(0.0488222356901458 1, 0.071650771392...
 MULTIPOINT()
+> st_sample(nc[1:2,], size = c(10,20))
+although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, it is assumed that they are planar
+Geometry set for 24 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -81.66639 ymin: 36.29542 xmax: -80.96982 ymax: 36.56871
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+First 5 geometries:
+POINT(-81.6663939738046 36.5562903100378)
+POINT(-81.4734699225191 36.4148674289981)
+POINT(-81.4985141439355 36.2954179169056)
+POINT(-81.5255186840243 36.3320840914148)
+POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  0.784   0.024   0.806 
+  0.756   0.044   0.798 

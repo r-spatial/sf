@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(sf))
 # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+nc_checked = st_transform(nc, 32119, check = TRUE)
 ncm = st_transform(nc, 32119)
 
 x = st_transform(nc[1:10,], 32119)

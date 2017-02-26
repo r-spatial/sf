@@ -164,3 +164,4 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,1),c(.1,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
+st_sample(nc[1:2,], size = c(10,20))

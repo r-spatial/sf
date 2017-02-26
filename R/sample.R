@@ -2,7 +2,7 @@
 #' 
 #' sample points on or in (sets of) spatial features
 #' @param x object of class \code{sf} or \code{sfc}
-#' @param size sample size(s) required; either total size, or a numeric vector with sample sizes for each feature geometry
+#' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. http://mathworld.wolfram.com/SpherePointPicking.html
@@ -33,8 +33,10 @@ st_sample = function(x, size, ..., type = "random") {
 	x = st_geometry(x)
 	if (length(size) > 1) {
 		size = rep(size, length.out = length(x))
-		st_sfc(lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type)),
-			crs = st_crs(x))
+		ret = do.call(c, lapply(1:length(x), 
+			function(i) st_sample(x[i], size[i], type = type)))
+		st_crs(ret) = st_crs(x)
+		ret
 	} else {
 		dim = max(st_dimension(x))
 		if (dim == 0)
