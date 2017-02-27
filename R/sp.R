@@ -164,6 +164,10 @@ setAs("sf", "Spatial", function(from) {
 
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
+# setAs("sfg", "Spatial", function(from) as(st_sfc(from), "Spatial"))
+##  doesn't work for:
+## as(st_point(0:1), "Spatial")
+
 #' Convert to sp object
 #' 
 #' @param from sfc to convert

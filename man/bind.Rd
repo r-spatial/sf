@@ -5,11 +5,15 @@
 \alias{rbind.sf}
 \alias{bind}
 \alias{cbind.sf}
+\alias{bind}
+\alias{st_bind_cols}
 \title{Bind rows (features) of sf objects}
 \usage{
 \method{rbind}{sf}(..., deparse.level = 1)
 
 \method{cbind}{sf}(..., deparse.level = 1)
+
+st_bind_cols(...)
 }
 \arguments{
 \item{...}{objects to bind}
@@ -17,7 +21,7 @@
 \item{deparse.level}{integer; see \link[base]{rbind}}
 }
 \value{
-if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
+if \code{cbind} or \code{st_bind_cols} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 }
 \description{
 Bind rows (features) of sf objects

@@ -344,10 +344,16 @@ rbind.sf = function(..., deparse.level = 1) {
 #'
 #' Bind columns (variables) of sf objects
 #' @name bind
-#' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
+#' @return if \code{cbind} or \code{st_bind_cols} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
 cbind.sf = function(..., deparse.level = 1)
 	st_sf(base::cbind.data.frame(...))
+
+#' @name bind
+#' @export
+st_bind_cols = function(...) {
+	cbind.sf(...)
+}
 
 #' merge method for sf and data.frame object
 #' 
