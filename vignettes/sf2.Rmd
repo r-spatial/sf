@@ -327,8 +327,8 @@ opar = par(mar=rep(0,4))
 plot(m.sf)
 ```
 
-Conversion of simple features into corresponding `Spatial*` objects
-is done using the `as` method, coercing to `Spatial`:
+Conversion of simple feature objects of class `sf` or `sfc` into corresponding 
+`Spatial*` objects is done using the `as` method, coercing to `Spatial`:
 
 ```{r}
 x = st_sfc(st_point(c(5,5)), st_point(c(6,9)), crs = 4326)
