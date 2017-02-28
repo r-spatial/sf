@@ -281,6 +281,8 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 as.matrix.sfg = function(x, ...) {
 	switch(class(x)[2],
 		POINT = matrix(x, 1),
+		MULTIPOINT = as.matrix(unclass(x)),
+		LINESTRING = as.matrix(unclass(x)),
 		POLYGON = do.call(rbind, x),
 		MULTILINESTRING = do.call(rbind, x),
 		MULTIPOLYGON = do.call(rbind, lapply(x, function(y) do.call(rbind, y))),
