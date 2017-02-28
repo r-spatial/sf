@@ -17,6 +17,7 @@ Mtrx = function(x, dim = "XYZ", type) {
 	structure(x, class = getClassDim(x, ncol(x), dim, type))
 }
 
+# creates object of class c(dim, type, "sfg") from list x, possibly checking rings are closed
 MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x))
 	if (length(x) > 0) { # list()
@@ -31,6 +32,7 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
+# creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
 MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x) && all(sapply(x, is.list)))
 	if (length(x)) {
@@ -273,19 +275,16 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 }
 
 #' @name st
-#' @method unlist sfg
+#' @method as.matrix sfg
 #' @export
-#' @param use.names ignored
-#' @return unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.
-unlist.sfg = function(x, recursive = TRUE, use.names = TRUE) {
+#' @return as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use \link{unlist(x, recursive = FALSE) to get sets of matrices} .
+as.matrix.sfg = function(x, ...) {
 	switch(class(x)[2],
 		POINT = matrix(x, 1),
-		MULTIPOINT = unclass(x),
-		LINESTRING = unclass(x),
 		POLYGON = do.call(rbind, x),
 		MULTILINESTRING = do.call(rbind, x),
 		MULTIPOLYGON = do.call(rbind, lapply(x, function(y) do.call(rbind, y))),
-		GEOMETRYCOLLECTION = do.call(rbind, lapply(x, unlist)),
-		stop(paste("unlist not implemented for class", class(x)[2]))
+		GEOMETRYCOLLECTION = do.call(rbind, lapply(x, as.matrix)),
+		NextMethod()
 	)
 }

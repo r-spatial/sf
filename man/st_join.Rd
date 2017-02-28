@@ -5,7 +5,7 @@
 \title{spatial left or inner join}
 \usage{
 st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
-  prepared = FALSE, left = TRUE)
+  prepared = TRUE, left = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sf}}

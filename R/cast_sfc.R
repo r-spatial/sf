@@ -148,7 +148,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		if (to == "POINT")
 			st_cast(st_cast(x, "MULTIPOINT"), "POINT")
 		else if (to %in% c("MULTIPOINT", "LINESTRING")) {
-			ret = lapply(x, function(y) structure(unlist(y), class = c(class(y)[1], to, "sfg")))
+			ret = lapply(x, function(y) structure(as.matrix(y), class = c(class(y)[1], to, "sfg")))
 			attributes(ret) = attributes(x)
 			reclass(ret, to, FALSE)
 		} else

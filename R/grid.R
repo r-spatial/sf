@@ -26,25 +26,28 @@ st_as_grob.LINESTRING = function(x, ..., default.units = "native") {
 
 #' @export
 st_as_grob.MULTILINESTRING = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) y[,1]))
-	get_y = function(x) unlist(sapply(x, function(y) y[,2]))
-	polylineGrob(get_x(x), get_y(x), id.lengths = sapply(x, nrow), ..., 
+	#get_x = function(x) unlist(sapply(x, function(y) y[,1]))
+	#get_y = function(x) unlist(sapply(x, function(y) y[,2]))
+	xy = as.matrix(x)
+	polylineGrob(xy[,1], xy[,2], id.lengths = sapply(x, nrow), ..., 
 		default.units = default.units)
 }
 
 #' @export
 st_as_grob.POLYGON = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) y[,1]))
-	get_y = function(x) unlist(sapply(x, function(y) y[,2]))
-	pathGrob(get_x(x), get_y(x), id.lengths = sapply(x, nrow), ..., default.units = default.units)
+	#get_x = function(x) unlist(sapply(x, function(y) y[,1]))
+	#get_y = function(x) unlist(sapply(x, function(y) y[,2]))
+	xy = as.matrix(x)
+	pathGrob(xy[,1], xy[,2], id.lengths = sapply(x, nrow), ..., default.units = default.units)
 }
 
 #' @export
 st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,1])))
-	get_y = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,2])))
+	#get_x = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,1])))
+	#get_y = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,2])))
+	xy = as.matrix(x)
 	get_l = function(x) unlist(sapply(x, function(y) sapply(y, nrow)))
-	pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
+	pathGrob(xy[,1], xy[,2], id.lengths = get_l(x), ..., default.units = default.units)
 }
 
 #' @export
