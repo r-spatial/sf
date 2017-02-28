@@ -277,7 +277,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 #' @name st
 #' @method as.matrix sfg
 #' @export
-#' @return as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use \link{unlist(x, recursive = FALSE) to get sets of matrices} .
+#' @return as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use \code{unlist(x, recursive = FALSE)} to get sets of matrices.
 as.matrix.sfg = function(x, ...) {
 	switch(class(x)[2],
 		POINT = matrix(x, 1),

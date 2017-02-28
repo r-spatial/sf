@@ -71,7 +71,7 @@ st_geometrycollection(x = list(), dims = "XY")
 \value{
 object of the same nature as \code{x}, but with appropriate class attribute set
 
-as.matrix returns the set of points that form a geometry as a matrix, where each point is a row.
+as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use \code{unlist(x, recursive = FALSE)} to get sets of matrices.
 }
 \description{
 Create simple feature from a numeric vector, matrix or list
