@@ -61,12 +61,13 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 
 #' @name st_read
 #' @export
-#' @details \code{read_st} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively.
-read_sf <- function(...) st_read(...)
+#' @details \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some modified default arguments.
+read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
+	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 
 #' @name st_read
 #' @export
-write_sf <- function(...) st_write(...)
+write_sf <- function(..., quiet = TRUE) st_write(..., quiet = quiet)
 
 #' Write simple features object to file or database
 #'

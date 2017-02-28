@@ -14,9 +14,9 @@ st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
   type = 0, promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
 
-read_sf(...)
+read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
-write_sf(...)
+write_sf(..., quiet = TRUE)
 
 st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
   EWKB, ...)
@@ -63,7 +63,7 @@ Read PostGIS table directly through DBI and RPostgreSQL interface, converting bi
 \details{
 for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
 
-\code{read_st} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively.
+\code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some modified default arguments.
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 }
