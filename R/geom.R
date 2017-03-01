@@ -101,7 +101,7 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE, prepared = FALSE) {
 	if (missing(y))
 		y = x
-	else 
+	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) 
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
