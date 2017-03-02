@@ -671,7 +671,7 @@ st_line_sample = function(x, n, density, type = "regular") {
 
 #' @name geos
 #' @param n integer; number of points to choose per geometry; default is 1.
-#' @param type character; indicate the sampling type, "random" (uniform random, default and only value currently)
+#' @param type character; indicate the sampling type, "random" (uniform random assuming planar, default and only value currently)
 #' @export
 #' @examples
 #' st_poly_sample(st_transform(poly, 3857), n = 5) # five points within polygon
@@ -687,8 +687,8 @@ st_poly_sample = function(poly, n, type = "random") {
 	while (idx <= n) {
 		x = runif(1,bbox["xmin"], bbox["xmax"])
 		y = runif(1,bbox["ymin"], bbox["ymax"])
-		# TODO probably need to get dim from x?
-		pt = st_point(c(x,y), dim="XY")
+		pt = st_sfc(st_point(c(x,y), dim="XY"))
+		st_crs(pt) = st_crs(poly)
 		inPoly=st_within(pt,poly, sparse=FALSE)
 		if (inPoly) {
 			rawpts[idx,1] = x
