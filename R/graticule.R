@@ -85,19 +85,18 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		c(bb[1],bb[4]), c(bb[1],bb[2])))
 	ls2 = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[4]), c(bb[1],bb[4]), 
 		c(bb[3],bb[2]), c(bb[1],bb[2])))
-	box = st_sfc(ls1, ls2, crs = crs)
+	box = st_sfc(ls1, ls2)
 
-	box = st_segmentize(box, st_length(ls1) / 400, warn = FALSE)
+	# without crs, we segmentize in planar coordinates --
+	# segmentizing along great circles doesn't give parallels:
+	box = st_segmentize(box, st_length(box)[1] / ndiscr) 
 
-	epp = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
-	if (epp != "") # restore on exit:
-		on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = epp))
+	# and only now set the crs:
+	st_crs(box) = crs
 
-	Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
-	# Now we're moving to long/lat:
+	# Now, in case we're not already in longlat, we convert to longlat:
 	if (!is.na(crs))
-		box_ll <- st_transform(box, datum)
-	Sys.unsetenv("OGR_ENABLE_PARTIAL_REPROJECTION")
+		box_ll <- st_transform(box, datum, partial = TRUE)
 	
 	# as in https://github.com/edzer/sfr/issues/198 : 
 	# recreate, and ignore bbox_ll:

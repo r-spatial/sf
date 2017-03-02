@@ -43,6 +43,11 @@ st_geometry returns an object of class \link{sfc}, a list-column with geometries
 \description{
 Get, set, or replace geometry from an sf object
 }
+\details{
+when applied to a \code{data.frame}, the replacement function will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}. 
+
+the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
+}
 \examples{
 df = data.frame(a = 1:2)
 sfc = st_sfc(st_point(c(3,4)), st_point(c(10,11)))

@@ -67,11 +67,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		}
 		attr(lst, "single_type") = NULL # clean up
 	}
-	if (is.na(crs) && !is.null(attr(lst, "crs")))
-		crs = attr(lst, "crs")
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
+
+	if (is.na(crs) && !is.null(attr(lst, "crs")))
+		crs = attr(lst, "crs")
 	st_crs(lst) = crs
+
 	structure(lst, "bbox" = c(st_bbox(lst)))
 }
 
@@ -112,10 +114,7 @@ c.sfc = function(..., recursive = FALSE) {
 
 #' @export
 print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") { 
-	if (length(x) != 1) 
-		sep = "s" 
-	else
-		sep = ""
+	sep = if (length(x) != 1) "s" else ""
 	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
 	cat(paste0(what, " ", length(x), " feature", sep, " ", append))
 	if (! is.null(attr(x, "n_empty"))) {

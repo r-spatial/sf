@@ -102,7 +102,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE, prep
 
 	if (missing(y))
 		y = x
-	else
+	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
@@ -248,7 +248,10 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 #' @export
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
-#' @return st_buffer ... st_segmentize return an \link{sfc} or an \link{sf} object with the same number of geometries as in \code{x}
+#' @return \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
+#' \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
+#' \code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf} 
+#' object with the same number of geometries as in \code{x}
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
 
@@ -479,26 +482,26 @@ st_centroid.sf = function(x) {
 
 #' @name geos
 #' @export
-#' @param dfMaxLength numeric; max length of a line segment
+#' @param dfMaxLength numeric; max length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a length with unit metre, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
-#' @param warn logical; generate a warning in case of long/lat data
-st_segmentize	= function(x, dfMaxLength, ..., warn = TRUE)
+st_segmentize	= function(x, dfMaxLength, ...)
 	UseMethod("st_segmentize")
 
-#' @export
-st_segmentize.sfg = function(x, dfMaxLength, ..., warn = TRUE)
-	get_first_sfg(st_segmentize(st_sfc(x), dfMaxLength, ..., warn = warn))
+#' @export 
+st_segmentize.sfg = function(x, dfMaxLength, ...)
+	get_first_sfg(st_segmentize(st_sfc(x), dfMaxLength, ...))
 
-#' @export
-st_segmentize.sfc	= function(x, dfMaxLength, ..., warn = TRUE) {
-	if (warn && isTRUE(st_is_longlat(x)))
-		warning("st_segmentize does not correctly segmentize longitude/latitude data")
-	st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
+#' @export 
+st_segmentize.sfc	= function(x, dfMaxLength, ...) {
+	if (isTRUE(st_is_longlat(x)))
+		st_sfc(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = st_crs(x)), crs = st_crs(x))
+	else
+		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
 }
 
 #' @export
-st_segmentize.sf = function(x, dfMaxLength, ..., warn = TRUE) {
-	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ..., warn = warn)
+st_segmentize.sf = function(x, dfMaxLength, ...) {
+	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ...)
 	x
 }
 
@@ -666,7 +669,9 @@ st_line_sample = function(x, n, density, type = "regular") {
 				random = random,
 				stop("unknown type"))
 	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
-	st_sfc(CPL_gdal_linestring_sample(st_geometry(x), distList))
+	x = st_geometry(x)
+	stopifnot(inherits(x, "sfc_LINESTRING"))
+	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
 #' @name geos
@@ -699,53 +704,6 @@ st_poly_sample = function(poly, n, type = "random") {
 	return(st_multipoint(rawpts))
 }
 
-# This is the SP implementation
-# sample.Polygon = function(x, n, type = "random", bb = bbox(x), offset = runif(2), proj4string=CRS(as.character(NA)), iter=4, ...) {
-#
-# 	if (missing(n))
-# 		n <- as.integer(NA)
-#
-# 	#cat("n in sample.Polygon", n, "\n")
-#
-# 	area = slot(x, "area")
-# 	if (area == 0.0)
-# 		spsample(Line(slot(x, "coords")), n, type, offset = offset[1], proj4string=proj4string)
-#
-# 	#CRS(proj4string(x))), n, type, offset = offset[1])
-# 	else {
-# 		res <- NULL
-# 		its <- 0
-# 		n_now <- 0
-# 		bb.area = prod(apply(bb, 1, function(x) diff(range(x))))
-# 		bb.area <- bb.area + bb.area*its*0.1
-# 		xSP <- new("Spatial", bbox=bbox(x), proj4string=proj4string)
-# 		if (type == "random") {
-# 			brks <- c(1,3,6,10,20,100)
-# 			reps <- c(5,4,3,2,1.5)
-# 			n_is <- round(n * reps[findInterval(n,brks, all.inside=TRUE)] * bb.area/area)
-# 		} else
-# 			n_is <- round(n * bb.area/area)
-#
-# 		while (is.null(res) && its < iter && n_is > 0 && ifelse(type == "random", (n_now < n), TRUE)) {
-# 			pts = sample.Spatial(xSP, n_is, type=type, offset = offset, ...)
-# 			id = over(pts, SpatialPolygons(list(Polygons(list(x),	"xx")), proj4string=proj4string))
-# 			Not_NAs <- !is.na(id)
-# 			if (!any(Not_NAs))
-# 				res <- NULL
-# 			else
-# 				res <- pts[which(Not_NAs)]
-# 			if (!is.null(res))
-# 				n_now <- nrow(res@coords)
-# 			its <- its+1
-# 		}
-# 		if (type == "random")
-# 			if (!is.null(res) && n < nrow(res@coords))
-# 				res <- res[sample(nrow(res@coords), n)]
-# 		res
-# 	}
-# }
-# setMethod("spsample", signature(x = "Polygon"), sample.Polygon)
-
 
 #' Make a rectangular grid of polygons over the bounding box of a sf or sfc object
 #'
@@ -754,14 +712,22 @@ st_poly_sample = function(poly, n, type = "random") {
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
+#' @param crs object of class \code{crs}
 #' @export
-st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n,
-						offset = st_bbox(x)[1:2], n = c(10, 10)) {
+st_make_grid = function(x, 
+		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
+		offset = st_bbox(x)[1:2], n = c(10, 10),
+		crs = if(missing(x)) NA_crs_ else st_crs(x)) {
+
+	if (nargs() == 0) # create global 10 x 10 degree grid
+		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
+			crs = st_crs(4326)))
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)
 		n = rep(n, length.out = 2)
-		structure(c(offset, offset + n * cellsize), names = c("xmin", "ymin", "xmax", "ymax"))
+		structure(c(offset, offset + n * cellsize), 
+			names = c("xmin", "ymin", "xmax", "ymax"))
 	} else
 		st_bbox(x)
 
@@ -791,7 +757,34 @@ st_make_grid = function(x, cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x
 			ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
 
 	if (missing(x))
-		st_sfc(ret)
+		st_sfc(ret, crs = crs)
 	else
 		st_sfc(ret, crs = st_crs(x))
+}
+
+ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
+	# x is a single sfg: LINESTRING or MULTILINESTRING
+	if (is.list(x)) # MULTILINESTRING:
+		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), 
+			class = attr(x, "class"))
+	else { # matrix
+		if (!requireNamespace("geosphere", quietly = TRUE))
+			stop("package geosphere required, please install it first")
+		p = crs_parameters(crs)
+		pts = unclass(x) # matrix
+		p1 = head(pts, -1)
+		p2 = tail(pts, -1)
+		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
+		n = ceiling(ll / as.numeric(dfMaxLength)) - 1
+		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
+		if (length(n) == 1) # would be a matrix otherwise
+			ret = list(ret)
+		for (i in seq_along(n)) {
+			if (n[i] < 1) # 0 or -1, because of the -1, for 0 distance
+				ret[[i]] = ret[[i]][-2,] # take out interpolated middle point
+			if (i > 1)
+				ret[[i]] = tail(ret[[i]], -1) # take out duplicate starting point
+		}
+		structure(do.call(rbind, ret), class = attr(x, "class"))
+	}
 }

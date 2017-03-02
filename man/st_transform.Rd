@@ -12,9 +12,9 @@
 \alias{st_proj_info}
 \title{Transform or convert coordinates of simple feature}
 \usage{
-st_transform(x, crs)
+st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ...)
+\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -29,13 +29,17 @@ st_proj_info(type = "proj")
 
 \item{...}{ignored}
 
+\item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
+
+\item{check}{logical; perform a sanity check on resulting polygons?}
+
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 }
 \description{
 Transform or convert coordinates of simple feature
 }
 \details{
-transforms coordinates of object to new projection
+transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
 
 the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
 

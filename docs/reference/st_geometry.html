@@ -117,6 +117,11 @@
     <p>st_geometry returns an object of class <a href='sfc.html'>sfc</a>, a list-column with geometries</p>
     <p><code>st_geometry</code> returns an object of class <a href='sfc.html'>sfc</a>. Assigning geometry to a <code>data.frame</code> creates an <a href='sf.html'>sf</a> object, assigning it to an <a href='sf.html'>sf</a> object replaces the geometry list-column.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>when applied to a <code>data.frame</code>, the replacement function will first check for the existance of an attribute <code>sf_column</code> and overwrite that, or else look for list-columns of class <code>sfc</code> and overwrite the first of that, or else write the geometry list-column to a column named <code>geometry</code>.</p>
+    <p>the replacement function applied to <code>sf</code> objects will overwrite the geometry list-column, if <code>value</code> is <code>NULL</code>, it will remove it and coerce <code>x</code> to a <code>data.frame</code>.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
@@ -140,6 +145,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

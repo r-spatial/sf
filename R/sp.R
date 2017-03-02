@@ -164,6 +164,10 @@ setAs("sf", "Spatial", function(from) {
 
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
+# setAs("sfg", "Spatial", function(from) as(st_sfc(from), "Spatial"))
+##  doesn't work for:
+## as(st_point(0:1), "Spatial")
+
 #' Convert to sp object
 #' 
 #' @param from sfc to convert
@@ -221,6 +225,9 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 						recursive = FALSE), "ID"))
 	else lapply(from, function(x) 
 		sp::Polygons(lapply(seq_along(x), function(i) sp::Polygon(x[[i]], i > 1)), "ID"))
+
+	# set comment: ?Polygons: "Exterior rings are coded zero, while interior rings are 
+	# coded with the 1-based index of the exterior ring to which they belong.":
 	for (i in 1:length(from)) {
 		l[[i]]@ID = IDs[i]
 		if (class(from)[1] == "sfc_MULTIPOLYGON")
@@ -229,9 +236,6 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 			comm = c(0, rep(1, length(from[[i]])-1))
 		comment(l[[i]]) = paste(as.character(comm), collapse = " ")
 	}
-	# TODO: add comments()
-	# ?Polygons: "Exterior rings are coded zero, while interior rings are coded with the 
-	# 1-based index of the exterior ring to which they belong."
 	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
 }
 

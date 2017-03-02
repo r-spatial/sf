@@ -5,8 +5,9 @@
 #' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
-#' 
-#' @details transforms coordinates of object to new projection
+#' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
+#' @param check logical; perform a sanity check on resulting polygons?
+#' @details transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
@@ -14,13 +15,48 @@
 #' sfc
 #' st_transform(sfc, "+init=epsg:3857")
 #' @export
-st_transform = function(x, crs) UseMethod("st_transform")
+st_transform = function(x, crs, ...) UseMethod("st_transform")
+
+chk_pol = function(x, dim = class(x)[1]) {
+	PolClose = function(y) {
+		if (any(head(y[[1]], 1) != tail(y[[1]], 1)))
+			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
+		y
+	}
+	if (length(x) > 0 && nrow(x[[1]]) > 2) 
+		PolClose(x)
+	else
+		st_polygon(dim = dim)
+}
+
+chk_mpol = function(x) {
+	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+	empty = if (length(cln))
+			sapply(cln, length) == 0
+		else
+			TRUE
+	# print(empty)
+	st_multipolygon(cln[!empty], dim = class(x)[1])
+}
+
+sanity_check = function(x) {
+    d = st_dimension(x) # flags empty geoms as NA
+    if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+		if (inherits(x, "sfc_POLYGON"))
+        	st_sfc(lapply(x, chk_pol), crs = st_crs(x))
+		else if (inherits(x, "sfc_MULTIPOLYGON"))
+        	st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
+		else
+			stop(paste("no check implemented for", class(x)[1]))
+    } else
+        x
+}
 
 #' @name st_transform
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ...) {
+st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
 	if (is.na(st_crs(x)))
 		stop("sfc object should have crs set")
 	if (missing(crs))
@@ -30,9 +66,22 @@ st_transform.sfc = function(x, crs, ...) {
 	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
 		x = st_zm(x, drop = FALSE, what = "Z")
 
-	if (crs != st_crs(x))
-		st_sfc(CPL_transform(x, crs$proj4string, crs$epsg))
-	else
+	if (partial) {
+		orig = Sys.getenv("OGR_ENABLE_PARTIAL_REPROJECTION")
+		if (orig != "")
+			on.exit(Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = orig))
+		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
+	}
+
+	if (crs != st_crs(x)) { # transform:
+		ret = structure(CPL_transform(x, crs$proj4string, crs$epsg),
+			single_type = NULL, crs = crs)
+		ret = st_sfc(ret)
+		if (check)
+			sanity_check(ret)
+		else
+			ret
+	} else
 		x
 }
 
@@ -46,7 +95,7 @@ st_transform.sfc = function(x, crs, ...) {
 #' library(units)
 #' as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
 st_transform.sf = function(x, crs, ...) {
-	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs)
+	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
 	x
 }
 
@@ -60,7 +109,7 @@ st_transform.sfg = function(x, crs , ...) {
 	if (missing(crs))
 		stop("argument crs cannot be missing")
 	crs = make_crs(crs)
-	CPL_transform(x, crs$proj4string, crs$epsg)[[1]]
+	st_transform(x, crs, ...)
 }
 
 #' @name st_transform

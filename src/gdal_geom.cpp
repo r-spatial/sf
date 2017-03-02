@@ -14,7 +14,8 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 			out[i] = a->get_Area();
 		} else
 			out[i] = 0.0;
-		delete g[i];
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }
@@ -24,10 +25,12 @@ Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::IntegerVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {
-		out[i] = g[i]->getDimension();
 		if (NA_if_empty && g[i]->IsEmpty())
 			out[i] = NA_INTEGER;
-		delete g[i];
+		else
+			out[i] = g[i]->getDimension();
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }
@@ -45,7 +48,8 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 			OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
 			out[i] = a->get_Length();
 		}
-		delete g[i];
+		OGRGeometryFactory f;
+		f.destroyGeometry(g[i]);
 	}
 	return out;
 }
@@ -71,16 +75,19 @@ Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
 	for (size_t i = 0; i < g.size(); i++) {
+		if (wkbFlatten(g[i]->getGeometryType()) != wkbLineString)
+			throw std::invalid_argument("CPL_gdal_linestring_sample only available for LINESTRING"); // #nocov
 		OGRGeometryCollection *gc = new OGRGeometryCollection;
 		Rcpp::NumericVector dists = distLst[i];
 		for (int j = 0; j < dists.size(); j++) {
 			OGRPoint *poPoint  = new OGRPoint;
 			((OGRLineString *) g[i])->Value(dists[j], poPoint);
-			gc->addGeometry(poPoint);
+			gc->addGeometryDirectly(poPoint);
 		}
 		out[i] = OGRGeometryFactory::forceToMultiPoint(gc);
 	}
-	Rcpp::List ret = sfc_from_ogr(out, true);
+	Rcpp::List ret = sfc_from_ogr(g, true); // releases g
+	ret = sfc_from_ogr(out, true); // releases out
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;
 }

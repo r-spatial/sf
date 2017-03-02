@@ -83,7 +83,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' st_join(a, b, FUN = mean, left = FALSE)
 #' @export
 st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), 
-        prepared = FALSE, left = TRUE) {
+        prepared = TRUE, left = TRUE) {
     stopifnot(inherits(x, "sf") && inherits(y, "sf"))
     i = join(x, y, prepared = prepared)
     st_geometry(y) = NULL

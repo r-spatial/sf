@@ -123,6 +123,12 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
 > 
+> m = st_make_grid()
+> m = st_segmentize(m, 2e5)
+> plot(m, axes = TRUE)
+> g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
+> plot(g, axes = TRUE)
+> 
 > proc.time()
    user  system elapsed 
-  3.636   0.036   3.668 
+  5.980   0.036   6.014 

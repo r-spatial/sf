@@ -89,6 +89,9 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param value object of class \code{sfc}
 #' @export
 #' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
+#' @details when applied to a \code{data.frame}, the replacement function will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}. 
+#' 
+#' the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
 #' @examples 
 #' df = data.frame(a = 1:2)
 #' sfc = st_sfc(st_point(c(3,4)), st_point(c(10,11)))
@@ -227,8 +230,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		i = sapply(st_intersects(x, i), length) != 0
 	sf_column = attr(x, "sf_column")
 	geom = st_geometry(x)
-	if (!missing(i) && nargs > 2) # e.g. a[3:4,] not a[3:4]
+	if (!missing(i) && nargs > 2) { # e.g. a[3:4,] not a[3:4]
+		if (is.character(i))
+			i = match(i, row.names(x))
 		geom = geom[i]
+	}
 
 	x = if (missing(j))
 		NextMethod("[") # specifying drop would trigger a warning
@@ -338,10 +344,16 @@ rbind.sf = function(..., deparse.level = 1) {
 #'
 #' Bind columns (variables) of sf objects
 #' @name bind
-#' @return if \code{cbind} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
+#' @return if \code{cbind} or \code{st_bind_cols} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
 #' @export
 cbind.sf = function(..., deparse.level = 1)
 	st_sf(base::cbind.data.frame(...))
+
+#' @name bind
+#' @export
+st_bind_cols = function(...) {
+	cbind.sf(...)
+}
 
 #' merge method for sf and data.frame object
 #' 

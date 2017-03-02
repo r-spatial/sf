@@ -140,7 +140,7 @@
 
 <span class='fu'>st_centroid</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_segmentize</span>(<span class='no'>x</span>, <span class='no'>dfMaxLength</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_segmentize</span>(<span class='no'>x</span>, <span class='no'>dfMaxLength</span>, <span class='no'>...</span>)
 
 <span class='fu'>st_combine</span>(<span class='no'>x</span>)
 
@@ -186,8 +186,6 @@
       <dd>numeric; max length of a line segment</dd>
       <dt>...</dt>
       <dd>ignored</dd>
-      <dt>warn</dt>
-      <dd>logical; generate a warning in case of long/lat data</dd>
       <dt>by_feature</dt>
       <dd>logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features</dd>
       <dt>n</dt>
@@ -208,7 +206,10 @@
     <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     <p>st_relate returns a dense <code>character</code> matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of 0,1,2,F, digits denoting dimensionality, F denoting not intersecting.</p>
     <p>functions <code>st_intersects</code> up to <code>st_equals_exact</code> return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively</p>
-    <p>st_buffer ... st_segmentize return an <a href='sfc.html'>sfc</a> or an <a href='sf.html'>sf</a> object with the same number of geometries as in <code>x</code></p>
+    <p><code>st_buffer</code>, <code>st_boundary</code>, <code>st_convex_hull</code>, <code>st_simplify</code>,
+<code>st_triangulate</code>, <code>st_voronoi</code>, <code>st_polygonize</code>, <code>st_line_merge</code>,
+<code>st_centroid</code> and <code>st_segmentize</code> return an <a href='sfc.html'>sfc</a> or an <a href='sf.html'>sf</a> 
+object with the same number of geometries as in <code>x</code></p>
     <p>All functions (or methods) returning a geometry return an object of the same class as that of the first argument (<code>x</code>).  <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> return the non-empty geometries resulting from applying the operation to all geometry pairs in <code>x</code> and <code>y</code>, and return an object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code>, where in the latter case the matching attributes of the original object(s) are added. The <code>sfc</code> geometry list-column returned carries an attribute <code>idx</code>, which is an <code>n x 2</code> matrix with every row the index of the corresponding entries of <code>x</code> and <code>y</code>, respectively. <code>st_union</code> has in addition the ability to work on a single argument <code>x</code> (<code>y</code> missing): in this case, if <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned, if <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>.</p>
     <p><code>st_union(x)</code> unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context &quot;fully noded&quot; means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. &quot;Dissolved&quot; means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).</p>
     

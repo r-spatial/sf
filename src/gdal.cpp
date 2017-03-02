@@ -22,8 +22,6 @@ namespace {
 // Returns errors to R
 // Note only case 4 actually returns immediately
 // Lower error codes are recoverable
-// Compile with -DCONTINUE_ON_ERROR to ignore fatal errors
-// This may be needed when running R under a different main loop
 //
 void err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
@@ -40,10 +38,8 @@ void err_handler(CPLErr eErrClass, int err_no, const char *msg)
             break;
         case 4:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
-            #ifndef CONTINUE_ON_ERROR
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
-            #endif
-            break;
+            break;        
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
             break; // #nocov
@@ -104,6 +100,7 @@ Rcpp::List CPL_crs_parameters(const std::string& p4s) {
 	srs->exportToWkt(&cp);
 	out(5) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
+	delete srs;
 	return out;
 }
 
@@ -118,11 +115,20 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	if (p4s != NA_STRING) {
 		Rcpp::CharacterVector cv = crs["proj4string"];
 		local_srs = new OGRSpatialReference;
-		handle_error(local_srs->importFromProj4(cv[0]));
+		OGRErr err = local_srs->importFromProj4(cv[0]);
+		if (err != 0) {
+			local_srs->Release();
+			handle_error(err);
+		}
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		handle_error(f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso));
+		OGRErr err = f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso);
+		if (err != 0) {
+			if (local_srs != NULL)
+				local_srs->Release();
+			handle_error(err);
+		}
 	}
 	if (sref != NULL)
 		*sref = local_srs; // return and release later, or
@@ -196,8 +202,9 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
+		OGRGeometryFactory f;
 		if (destroy)
-			delete g[i];
+			f.destroyGeometry(g[i]);
 	}
 	Rcpp::List ret = CPL_read_wkb(lst, false, native_endian());
 	ret.attr("crs") = crs;
@@ -245,12 +252,29 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	OGRCoordinateTransformation *ct =
+
+	if (g.size() == 0) {
+		dest->Release();
+		throw std::range_error("CPL_transform: zero length geometry list");
+	}
+	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
-	if (ct == NULL)
+	if (ct == NULL) {
+		dest->Release();
 		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?");
-	for (size_t i = 0; i < g.size(); i++)
-		handle_error(g[i]->transform(ct));
+	}
+	for (size_t i = 0; i < g.size(); i++) {
+		CPLPushErrorHandler(CPLQuietErrorHandler);
+		OGRErr err = g[i]->transform(ct);
+		CPLPopErrorHandler();
+		if (err == 1 || err == 6) {
+			OGRwkbGeometryType geomType = g[i]->getGeometryType();
+			OGRGeometryFactory f;
+			f.destroyGeometry(g[i]);
+			g[i] = f.createGeometry(geomType);
+		} else
+			handle_error(err);
+	}
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	if (epsg[0] != NA_INTEGER) {

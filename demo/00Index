@@ -1,6 +1,8 @@
 affine		demo script for affine transformations
 basic		simple feature test script
 bm_wkb		benchmark for reading larg(ish) well-known-binary data, comparing sf and wkb
+ggplot		shows use of geom_sf
 meuse_sf	create meuse simple feature table from data.frame
 nc			load (read) North Carolina sids data set from a geopackage file
 webmap		webmap demo from sp, modified to plot sf objects
+twitter		twitter globe demo
