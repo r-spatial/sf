@@ -13,7 +13,9 @@ hex_to_raw = function(y) {
 }
 
 skip0x = function(x) {
-	if (substr(x, 1, 2) == "0x")
+	if (is.na(x))
+		"010700000000000000"
+	else if (substr(x, 1, 2) == "0x")
 		substr(x, 3, nchar(x))
 	else
 		x
