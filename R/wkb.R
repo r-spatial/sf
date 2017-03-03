@@ -14,7 +14,7 @@ hex_to_raw = function(y) {
 
 skip0x = function(x) {
 	if (is.na(x))
-		"010700000000000000"
+		"010700000000000000" # empty GeometryCollection, st_as_binary(st_geometrycollection())
 	else if (substr(x, 1, 2) == "0x")
 		substr(x, 3, nchar(x))
 	else
