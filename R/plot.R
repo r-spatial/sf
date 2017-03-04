@@ -132,7 +132,7 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	cex = rep(cex, length.out = npts)
 	mat = do.call(rbind, x)
 	ne = apply(mat, 1, function(x) all(is.finite(x))) # ne: not empty
-	points(mat[ne,], pch = pch[ne], col = col[ne], bg = bg[ne], cex = cex[ne], lwd = lwd, lty = lty,
+	points(mat[ne,, drop = FALSE], pch = pch[ne], col = col[ne], bg = bg[ne], cex = cex[ne], lwd = lwd, lty = lty,
 		type = type)
 }
 
