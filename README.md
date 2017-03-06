@@ -42,7 +42,7 @@ install_github("edzer/sfr")
 
 ### Windows
 
-Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from (rwinlib)[https://github.com/rwinlib].
+Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/).
 
 ### MacOS
 
