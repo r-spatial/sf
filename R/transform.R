@@ -32,7 +32,7 @@ chk_pol = function(x, dim = class(x)[1]) {
 chk_mpol = function(x) {
 	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
 	empty = if (length(cln))
-			sapply(cln, length) == 0
+			lengths(cln) == 0
 		else
 			TRUE
 	# print(empty)

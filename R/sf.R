@@ -227,7 +227,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	nargs = nargs()
 	agr = st_agr(x)
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
-		i = sapply(st_intersects(x, i), length) != 0
+		i = lengths(st_intersects(x, i)) != 0
 	sf_column = attr(x, "sf_column")
 	geom = st_geometry(x)
 	if (!missing(i) && nargs > 2) { # e.g. a[3:4,] not a[3:4]

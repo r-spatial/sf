@@ -82,7 +82,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	recompute_bb = !missing(i)
     old = x
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
-		i = sapply(st_geos_binop("intersects", x, i, ...), length) != 0
+		i = lengths(st_geos_binop("intersects", x, i, ...)) != 0
     x = NextMethod("[")
 	a = attributes(old)
 	if (!is.null(names(x)))
@@ -334,4 +334,53 @@ fix_NULL_values = function(g) {
 		structure(g, class = c("sfc_GEOMETRY", "sfc"))
 	else 
 		g
+}
+
+#' retrieve coordinates in matrix form
+#' 
+#' retrieve coordinates in matrix form
+#' @param x object of class sf, sfc or sfg
+#' @param ... ignored
+#' @value matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators \code{L1},...,\code{L3} that point out to which structure the coordinate belongs; for \code{POINT} this is absent (each coordinate is a feature), for \code{LINESTRING} \code{L1} refers to the feature, for \code{MULTIPOLYGON} \code{L1} refers to the main ring or holes, \code{L2} to the ring id in the \code{MULTIPOLYGON}, and \code{L3} to the simple feature. 
+#' @export
+st_coordinates = function(x, ...) UseMethod("st_coordinates")
+
+#' @export
+st_coordinates.sf = function(x, ...) st_coordinates(st_geometry(x))
+
+#' @export
+st_coordinates.sfg = function(x, ...) st_coordinates(st_geometry(x))
+
+#' @export
+st_coordinates.sfc = function(x, ...) {
+	if (length(x) == 0)
+		return(matrix(nrow = 0, ncol = 2))
+
+	ret = switch(class(x)[1],
+		sfc_POINT = t(simplify2array(x)),
+		sfc_MULTIPOINT = ,
+		sfc_LINESTRING = coord_2(x),
+		sfc_MULTILINESTRING = ,
+		sfc_POLYGON = coord_3(x),
+		sfc_MULTIPOLYGON = coord_4(x),
+		stop("not implemented")
+	)
+	Dims = class(x[[1]])[1]
+	ncd = nchar(Dims)
+	colnames(ret)[1:ncd] = sapply(seq_len(ncd), function(i) substr(Dims, i, i))
+	ret
+}
+
+coord_2 = function(x) { # x is a list with matrices
+	cbind(do.call(rbind, x), L1 = rep(seq_along(x), times = sapply(x, nrow)))
+}
+
+coord_3 = function(x) { # x is a list of list with matrices
+	x = lapply(x, coord_2)
+	cbind(do.call(rbind, x), L2 = rep(seq_along(x), times = sapply(x, nrow)))
+}
+
+coord_4 = function(x) { # x is a list of list with matrices
+	x = lapply(x, coord_3)
+	cbind(do.call(rbind, x), L3 = rep(seq_along(x), times = sapply(x, nrow)))
 }

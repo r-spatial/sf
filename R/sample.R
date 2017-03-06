@@ -70,7 +70,7 @@ st_poly_sample = function(x, size, ..., type = "random") {
 	m = cbind(lon, lat)
 	pts = st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 	i = st_intersects(pts, x)
-	pts[sapply(i, function(x) length(x) > 0)]
+	pts[lengths(i) > 0]
 }
 
 st_multipoints_sample = function(x, size, ..., type = "random") {

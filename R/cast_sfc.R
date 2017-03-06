@@ -83,7 +83,7 @@ get_lengths = function(x) {
 		sfc_POINT = rep(1, length(x)),
 		sfc_MULTIPOINT = sapply(x, nrow),
 		sfc_LINESTRING = sapply(x, nrow),
-		sapply(x, length) # list
+		lengths(x) # list
 	)
 }
 

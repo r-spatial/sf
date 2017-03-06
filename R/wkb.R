@@ -39,7 +39,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
 				structure(CPL_hex_to_raw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
 	} else # direct call with raw:
 		stopifnot(inherits(x, "WKB") && all(sapply(x, is.raw))) # WKB as raw
-	if (any(sapply(x, length) == 0))
+	if (any(lengths(x) == 0))
 		stop("cannot read WKB object from zero-length raw vector")
 	ret = if (pureR)
 			R_read_wkb(x, readWKB, EWKB = EWKB)
