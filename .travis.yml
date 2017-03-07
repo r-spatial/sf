@@ -29,7 +29,7 @@ before_install:
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - sudo ldconfig
+  - sudo ldconfig # needed for lwgeom
 
 warnings_are_errors: true
 
