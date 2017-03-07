@@ -21,11 +21,11 @@ Mtrx = function(x, dim = "XYZ", type) {
 MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x))
 	if (length(x) > 0) { # list()
-		nc = unique(sapply(x, ncol))
+		nc = unique(vapply(x, ncol, 0L))
 		if (length(nc) != 1)
 			stop("matrices having unequal number of columns")
 		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-		if (needClosed && any(sapply(x, NotClosed)))
+		if (needClosed && any(vapply(x, NotClosed, TRUE)))
 			stop("polygons not (all) closed")
 		structure(x, class = getClassDim(x, ncol(x[[1]]), dim, type))
 	} else
@@ -34,13 +34,13 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 
 # creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
 MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
-	stopifnot(is.list(x) && all(sapply(x, is.list)))
+	stopifnot(is.list(x) && all(vapply(x, is.list, TRUE)))
 	if (length(x)) {
-		nc = unique(unlist(lapply(x, function(y) sapply(y, ncol))))
+		nc = unique(unlist(lapply(x, function(y) vapply(y, ncol, 0L))))
 		if (length(nc) != 1)
 			stop("matrices having unequal number of columns")
 		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
-		if (needClosed && any(unlist(sapply(x, function(y) sapply(y, NotClosed)))))
+		if (needClosed && any(unlist(lapply(x, function(y) vapply(y, NotClosed, TRUE)))))
 			stop("polygons not (all) closed")
 		structure(x, class = getClassDim(x, ncol(x[[1]][[1]]), dim, type))
 	} else
@@ -140,7 +140,7 @@ st_multipolygon = function(x = list(), dim = "XYZ") MtrxSetSet(x, dim, type = "M
 #' @param dims character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case \code{x} is the empty \code{list()}.
 #' @export
 st_geometrycollection = function(x = list(), dims = "XY") {
-	cls = sapply(x, class)
+	cls = vapply(x, class, rep("", 3))
 	if (length(cls)) {
 		if (!is.matrix(cls) || !is.character(cls) || nrow(cls) != 3)
 			stop("st_geometrycollection parameter x error: list elements should be simple features")
@@ -228,7 +228,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 	Paste1 = function(lst) do.call(c, lapply(lst, unclass))
 	lst = list(...)
 	if (flatten) {
-		cls = sapply(lst, function(x) class(x)[2])
+		cls = vapply(lst, function(x) class(x)[2], "")
 		ucls = unique(cls)
 		if (length(ucls) == 1) {
 			switch(ucls, 

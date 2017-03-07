@@ -50,7 +50,7 @@ st_area = function(x) {
 
 ll_length = function(x, fn, p) {
 	if (is.list(x)) # sfc_MULTILINESTRING
-		sum(sapply(x, ll_length, fn = fn, p = p))
+		sum(vapply(x, ll_length, 0.0, fn = fn, p = p))
 	else {
 		pts = unclass(x) # matrix
 		sum(fn(head(pts, -1), tail(pts, -1), as.numeric(p$SemiMajor), 1./p$InvFlattening))
@@ -76,7 +76,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 				stop("package geosphere required, please install it first")
 			dist_fun = geosphere::distGeo
 		}
-		ret = sapply(x, ll_length, fn = dist_fun, p = p)
+		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
 		units(ret) = units(p$SemiMajor)
 		ret
 	} else {

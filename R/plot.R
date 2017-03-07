@@ -493,7 +493,7 @@ get_mfrow = function(bb, n, total_size = c(1,1)) {
 		}
 		xsize * ysize
 	}
-	sz = sapply(1:n, function(x) size(x, n, asp))
+	sz = vapply(1:n, function(x) size(x, n, asp), 0.0)
 	nrow = which.max(sz)
 	ncol = ceiling(n / nrow)
 	structure(c(nrow, ncol), names = c("nrow", "ncol"))
@@ -504,7 +504,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	wgs84 = st_crs(4326)
 	merc =  st_crs(3857) # http://wiki.openstreetmap.org/wiki/EPSG:3857
 	pts = if (cls == "ggmap") {
-		b = sapply(attr(x, "bb"), c)
+		b = vapply(attr(x, "bb"), c, 0.0)
 		st_sfc(st_point(c(b[2:1])), st_point(c(b[4:3])), crs = wgs84)
 	} else if (cls == "RgoogleMaps")
 		st_sfc(st_point(rev(x$BBOX$ll)), st_point(rev(x$BBOX$ur)), crs = wgs84)

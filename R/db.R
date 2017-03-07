@@ -47,7 +47,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
     
     if (is.null(geom_column)) { # try find the geometry column:
         geom_column = if (class(gc) == "try-error" | is.null(table))
-            tail(which(sapply(tbl, is.character)), 1) # guess it's the last character column
+            tail(which(vapply(tbl, is.character, TRUE)), 1) # guess it's the last character column
         else {
             gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
         }

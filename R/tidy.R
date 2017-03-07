@@ -74,7 +74,7 @@ transmute_.sf <- function(.data, ..., .dots) {
 #' nc %>% select(SID74, SID79, geometry) %>% names()
 #' nc %>% select(SID74, SID79) %>% class()
 #' nc %>% select(SID74, SID79, geometry) %>% class()
-select_.sf <- function(.data, ..., .dots=NULL) {
+select_.sf <- function(.data, ..., .dots = NULL) {
   .dots <- c(.dots, attr(.data, "sf_column")) 
   ret = NextMethod()
   structure(ret, agr = st_agr(ret))
@@ -197,5 +197,5 @@ type_sum.sfc <- function(x, ...) {
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {
-	sapply(x, function(sfg) format(sfg, digits = 15L))
+	vapply(x, function(sfg) format(sfg, digits = 15L), "")
 }

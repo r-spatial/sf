@@ -24,4 +24,4 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	wget \
 	r-base-dev
 
-RUN Rscript -e 'install.packages(c("sp", "sf"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("sp", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'

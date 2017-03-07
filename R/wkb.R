@@ -8,8 +8,8 @@ hex_to_raw = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
 	if (substr(y, 1, 2) == "0x")
 		y = substr(y, 3, nchar(y))
-	as.raw(as.numeric(paste0("0x", sapply(seq_len(nchar(y)/2), 
-		function(x) substr(y, (x-1)*2+1, x*2))))) # SLOW, hence the Rcpp implementation
+	as.raw(as.numeric(paste0("0x", vapply(seq_len(nchar(y)/2), 
+		function(x) substr(y, (x-1)*2+1, x*2), "")))) # SLOW, hence the Rcpp implementation
 }
 
 skip0x = function(x) {
@@ -32,13 +32,13 @@ skip0x = function(x) {
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
 st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
-    if (all(sapply(x, is.character))) {
+    if (all(vapply(x, is.character, TRUE))) {
 		x <- if (pureR)
 				structure(lapply(x, hex_to_raw), class = "WKB")
 			else 
-				structure(CPL_hex_to_raw(sapply(x, skip0x, USE.NAMES = FALSE)), class = "WKB")
+				structure(CPL_hex_to_raw(vapply(x, skip0x, USE.NAMES = FALSE, "")), class = "WKB")
 	} else # direct call with raw:
-		stopifnot(inherits(x, "WKB") && all(sapply(x, is.raw))) # WKB as raw
+		stopifnot(inherits(x, "WKB") && all(vapply(x, is.raw, TRUE))) # WKB as raw
 	if (any(lengths(x) == 0))
 		stop("cannot read WKB object from zero-length raw vector")
 	ret = if (pureR)
@@ -280,8 +280,8 @@ st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pur
 rawToHex = function(x) {
 	if (is.raw(x))
 		CPL_raw_to_hex(x)
-	else if (is.list(x) && all(sapply(x, is.raw)))
-		sapply(x, function(rw) CPL_raw_to_hex(rw))
+	else if (is.list(x) && all(vapply(x, is.raw, TRUE)))
+		vapply(x, function(rw) CPL_raw_to_hex(rw), "")
 	else
 		stop(paste("not implemented for objects of class", class(x)))
 }

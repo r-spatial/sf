@@ -22,9 +22,12 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
   EWKB, ...)
 }
 \arguments{
-\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder, or contain the name and access credentials of a database)}
+\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
+or contain the name and access credentials of a database)}
 
-\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing, \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a message when there are multiple layers, or give an error if there are no layers in \code{dsn}.}
+\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
+\code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a
+message when there are multiple layers, or give an error if there are no layers in \code{dsn}.}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 
@@ -34,13 +37,17 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
 
 \item{iGeomField}{integer; in case of multiple geometry fields, which one to take?}
 
-\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry types, conversion to the highest numeric type value found will be attempted.}
+\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry
+types, conversion to the highest numeric type value found will be attempted.}
 
-\item{promote_to_multi}{logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
+\item{promote_to_multi}{logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
+Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
 
-\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
+\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default
+is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
 
-\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double and a warning is given when precision is lost (i.e., values are larger than 2^53).}
+\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
+and a warning is given when precision is lost (i.e., values are larger than 2^53).}
 
 \item{conn}{open database connection}
 
@@ -53,7 +60,9 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
 \item{EWKB}{logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}}
 }
 \value{
-object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the layer names, each with their geometry type(s). Note that the number of layers may also be zero.
+object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
+data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
+layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 }
 \description{
 Read simple features from file or database, or retrieve layer names and their geometry type(s)
@@ -61,23 +70,30 @@ Read simple features from file or database, or retrieve layer names and their ge
 Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 }
 \details{
-for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type} values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
+for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
+values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
+may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
 
-\code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some modified default arguments.
+\code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
+modified default arguments.
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 }
 \note{
-The use of \code{system.file} in examples make sure that examples run regardless where R is installed: typical users will not use \code{system.file} but give the file name directly, either with full path or relative to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename that reside in the same directory, only one of them having extension \code{.shp}.
+The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
+typical users will not use \code{system.file} but give the file name directly, either with full path or relative
+to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
+that reside in the same directory, only one of them having extension \code{.shp}.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc)
 
-\dontrun{  
+\dontrun{
 library(sp)
 example(meuse, ask = FALSE, echo = FALSE)
-st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
      layer_options = "OVERWRITE=true")
 st_meuse = st_read("PG:dbname=postgis", "meuse")
 summary(st_meuse)}

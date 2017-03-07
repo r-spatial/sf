@@ -25,7 +25,7 @@ prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
 prnt.GEOMETRYCOLLECTION = function(x, ...) 
-	paste0(WKT_name(x, ...), "(", paste0(sapply(x, st_as_text), collapse=", "), ")")
+	paste0(WKT_name(x, ...), "(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
 
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #'
@@ -70,7 +70,7 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 		if (!is.na(epsg) && epsg != 0)
 			x = lapply(x, function(sfg) structure(sfg, epsg = epsg))
 	}
-	sapply(x, st_as_text, ..., EWKT = EWKT)
+	vapply(x, st_as_text, "", ..., EWKT = EWKT)
 }
 
 #' @name st_as_sfc

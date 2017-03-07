@@ -106,7 +106,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 `st_geometry<-.data.frame` = function(x, value) {
 	stopifnot(inherits(value, "sfc"))
 	stopifnot(nrow(x) == length(value))
-	a = sapply(x, function(v) inherits(v, "sfc"))
+	a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
 	if (any(a)) {
 		w = which(a)
 		sf_col = attr(x, "sf_column")
@@ -158,7 +158,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (length(x) == 1 && inherits(x[[1L]], "data.frame"))
 		x = x[[1L]]
 	# find & remove the sfc column:
-	sf = sapply(x, function(x) inherits(x, "sfc"))
+	sf = vapply(x, function(x) inherits(x, "sfc"), TRUE)
 	if (! any(sf))
 		stop("no simple features geometry column present")
 	sf_column = which(sf)
@@ -331,7 +331,7 @@ rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
 	crs0 = st_crs(dots[[1]])
 	if (length(dots) > 1L) { # check all crs are equal...
-		equal_crs = sapply(dots[-1L], function(x) st_crs(x) == crs0)
+		equal_crs = vapply(dots[-1L], function(x) st_crs(x) == crs0, TRUE)
 		if (!all(equal_crs))
 			stop("arguments have different crs", call. = FALSE)
 	}

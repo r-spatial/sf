@@ -6,11 +6,11 @@ st_as_sf.map = function(x, ...) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
 
-	ID0 = sapply(strsplit(x$names, ":"), function(y) y[1])
+	ID0 = vapply(strsplit(x$names, ":"), function(y) y[1], "")
 	m.sp = maptools::map2SpatialPolygons(x, IDs = ID0, 
 		proj4string = sp::CRS("+init=epsg:4326"))
 	m = st_as_sf(m.sp)
-	m$ID = sapply(m.sp@polygons, function(x) slot(x, "ID"))
+	m$ID = vapply(m.sp@polygons, function(x) slot(x, "ID"), "")
 	m
 }
 

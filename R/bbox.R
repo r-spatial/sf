@@ -65,7 +65,7 @@ st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
 #' @export
 #' @name st_bbox
 st_bbox.GEOMETRYCOLLECTION = function(obj) {
-	s = sapply(obj, st_bbox) # dispatch on class
+	s = vapply(obj, st_bbox, c(0.,0.,0.,0.)) # dispatch on class
 	if (length(s) == 0 || all(is.na(s[1L,])))
 		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
 	else

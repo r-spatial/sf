@@ -81,8 +81,8 @@ reclass = function(x, to, must_close) {
 get_lengths = function(x) {
 	switch(class(x)[1],
 		sfc_POINT = rep(1, length(x)),
-		sfc_MULTIPOINT = sapply(x, nrow),
-		sfc_LINESTRING = sapply(x, nrow),
+		sfc_MULTIPOINT = vapply(x, nrow, 0L),
+		sfc_LINESTRING = vapply(x, nrow, 0L),
 		lengths(x) # list
 	)
 }
@@ -96,12 +96,12 @@ get_lengths = function(x) {
 #' Features that can't be cast to a single  MULTI* geometry are return as a 
 #' GEOMETRYCOLLECTION
 st_cast_sfc_default = function(x) {
-  if (!identical(unique(sapply(x, function(w) class(w)[3L])), "sfg"))
+  if (!identical(unique(vapply(x, function(w) class(w)[3L], "")), "sfg"))
     stop("list item(s) not of class sfg") # sanity check
   
   a <- attributes(x)
   ids = NULL
-  cls = unique(sapply(x, function(x) class(x)[2L]))
+  cls = unique(vapply(x, function(x) class(x)[2L], ""))
   if (length(cls) > 1) {
     if (all(cls %in% c("POINT", "MULTIPOINT"))) {
       x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)

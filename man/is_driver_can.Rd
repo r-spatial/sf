@@ -15,6 +15,6 @@ is from \code{\link{st_drivers}}}
 \item{operation}{character. What action to check}
 }
 \description{
-Search through the driver table to match a driver name with 
+Search through the driver table to match a driver name with
 an action (e.g. \code{"write"}) and check if the action is supported.
 }
