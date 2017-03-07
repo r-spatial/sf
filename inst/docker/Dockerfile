@@ -20,13 +20,15 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libgdal-dev \
 	libgeos-dev \
 	libproj-dev \
-	libudunits2-dev \
 	liblwgeom-dev \
+	libudunits2-dev \
 	make \
 	wget \
 	r-base-dev
 
-RUN Rscript -e 'install.packages("sf", repos = "https://cloud.r-project.org", dependencies = TRUE)'
+RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'
 
-# allows for clean (no warnings/errors) R CMD check --no-manual sf_*gz 
+# allows for clean (no warnings/errors) R CMD check --no-manual sf_*gz
 # without the --no-manual, latex needs to be installed too
+
+# also lets you devtools::install_github("edzer/sfr") with st_make_valid/lwgeom support

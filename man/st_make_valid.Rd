@@ -10,8 +10,11 @@ st_make_valid(x)
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 }
 \value{
-object of the same class
+object of the same class as \code{x}
 }
 \description{
 try to make an invalid geometry valid
+}
+\details{
+uses the \code{lwgeom_makevalid} method also used by PostGIS' \code{ST_makevalid}.
 }
