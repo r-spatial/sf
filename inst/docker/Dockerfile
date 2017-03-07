@@ -21,6 +21,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libgeos-dev \
 	libproj-dev \
 	libudunits2-dev \
+	liblwgeom-dev \
 	make \
 	wget \
 	r-base-dev
