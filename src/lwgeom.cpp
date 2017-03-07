@@ -26,11 +26,14 @@ Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 		LWGEOM *lwg = lwgeom_from_wkb(wkb, rv.size(),
 			LW_PARSER_CHECK_MINPOINTS & LW_PARSER_CHECK_ODD & LW_PARSER_CHECK_CLOSURE);
 		// do the trick:
-		lwg = lwgeom_make_valid(lwg);
+		LWGEOM *lwg_ret = lwgeom_make_valid(lwg);
+		lwgeom_free(lwg);
 		size_t size;
-		wkb = lwgeom_to_wkb(lwg, WKB_EXTENDED, &size);
+		wkb = lwgeom_to_wkb(lwg_ret, WKB_EXTENDED, &size);
+		lwgeom_free(lwg_ret);
 		Rcpp::RawVector raw(size);
 		memcpy(&(raw[0]), wkb, size);
+		lwfree((void *) wkb);
 		wkblst[i] = raw;
 	}
 	return CPL_read_wkb(wkblst, true, native_endian());
