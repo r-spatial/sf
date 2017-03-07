@@ -52,8 +52,10 @@ setOldClass("sfg")
 }
 
 .onAttach = function(libname, pkgname) {
-	packageStartupMessage(paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", 
-		CPL_gdal_version(), ", proj.4 ", CPL_proj_version()))
+	m = paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", CPL_gdal_version(), ", proj.4 ", CPL_proj_version())
+	if (!is.na(CPL_lwgeom_version()))
+		m = paste0(m, ", lwgeom ", CPL_lwgeom_version())
+	packageStartupMessage(m)
 }
 
 #' Provide the external dependencies versions of the libraries linked to sf
@@ -61,6 +63,6 @@ setOldClass("sfg")
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
-	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version()),
-		names = c("GEOS", "GDAL", "proj.4"))
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), CPL_lwgeom_version()),
+		names = c("GEOS", "GDAL", "proj.4", "lwgeom"))
 }

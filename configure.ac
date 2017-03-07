@@ -542,6 +542,44 @@ if test "${geosok}" = no; then
 fi
 
 #
+# liblwgeom
+#
+lwgeomok=yes
+AC_CHECK_HEADERS(liblwgeom.h,,lwgeomok=no)
+if test "${geosok}" = no; then
+   AC_MSG_ERROR([liblwgeom.h not found in given locations.])
+else
+
+[cat > lwgeom_test.cpp <<_EOCONF
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include <liblwgeom.h>
+int main() {
+	const char *cp;
+	cp = lwgeom_version();
+	return 0;
+}
+#ifdef __cplusplus
+}
+#endif
+_EOCONF]
+AC_MSG_CHECKING(liblwgeom: linking with -llwgeom)
+${CXX} ${CPPFLAGS} -o lwgeom_test lwgeom_test.cpp -llwgeom 2> errors.txt
+if test `echo $?` -ne 0 ; then
+lwgeomok=no
+AC_MSG_RESULT(no)
+else
+AC_MSG_RESULT(yes)
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
+fi
+rm -f lwgeom_test errors.txt lwgeom_test.cpp
+
+fi # check for lwgeom header
+
+
+#
 # concluding substitution
 #
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])

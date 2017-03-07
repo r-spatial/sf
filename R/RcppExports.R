@@ -125,6 +125,14 @@ CPL_invert_sparse_incidence <- function(m, n) {
     .Call('sf_CPL_invert_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
+CPL_lwgeom_version <- function(b = FALSE) {
+    .Call('sf_CPL_lwgeom_version', PACKAGE = 'sf', b)
+}
+
+CPL_make_valid <- function(sfc) {
+    .Call('sf_CPL_make_valid', PACKAGE = 'sf', sfc)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

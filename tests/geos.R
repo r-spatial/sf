@@ -83,3 +83,11 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 i = st_intersects(ncm, ncm)
 j = sf:::CPL_invert_sparse_incidence(i, 100)
 all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
+
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
+st_is_valid(x)
+if (!is.na(sf_extSoftVersion()['lwgeom']))
+    x = st_make_valid(x)
+st_is_valid(x)
+x
+x %>% st_cast()

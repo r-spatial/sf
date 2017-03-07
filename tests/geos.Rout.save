@@ -184,6 +184,34 @@ LINESTRING(0 0, 1 1, 2 0)
 > all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
 [1] TRUE
 > 
+> x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
+> st_is_valid(x)
+[1] FALSE
+Warning message:
+In eval(substitute(expr), envir, enclos) :
+  Self-intersection at or near point 0.5 0
+> if (!is.na(sf_extSoftVersion()['lwgeom']))
++     x = st_make_valid(x)
+> st_is_valid(x)
+[1] TRUE
+> x
+Geometry set for 1 feature 
+geometry type:  GEOMETRYCOLLECTION
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+GEOMETRYCOLLECTION(POLYGON((0.5 0, 0 0, 0 1, 1 ...
+> x %>% st_cast()
+Geometry set for 2 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON((0.5 0, 0 0, 0 1, 1 1, 1 0, 0.5 0))
+LINESTRING(0.5 0, 0.5 0.5)
+> 
 > proc.time()
    user  system elapsed 
-  2.200   0.028   2.225 
+  2.316   0.036   2.365 

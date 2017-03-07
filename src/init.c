@@ -42,6 +42,8 @@ extern SEXP sf_CPL_hex_to_raw(SEXP);
 extern SEXP sf_CPL_raw_to_hex(SEXP);
 extern SEXP sf_CPL_read_wkb(SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_write_wkb(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP sf_CPL_make_valid(SEXP);
+extern SEXP sf_CPL_lwgeom_version(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_get_bbox", (DL_FUNC) &sf_CPL_get_bbox, 2 },
@@ -89,6 +91,8 @@ static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_raw_to_hex", (DL_FUNC) &sf_CPL_raw_to_hex, 1 },
 	{"sf_CPL_read_wkb", (DL_FUNC) &sf_CPL_read_wkb, 3 },
 	{"sf_CPL_write_wkb", (DL_FUNC) &sf_CPL_write_wkb, 5 },
+	{"sf_CPL_make_valid", (DL_FUNC) &sf_CPL_make_valid, 1 },
+	{"sf_CPL_lwgeom_version", (DL_FUNC) &sf_CPL_lwgeom_version, 1 },
 	
     {NULL, NULL, 0}
 };

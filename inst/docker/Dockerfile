@@ -14,7 +14,8 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
- && apt-get install -y gdal-bin \
+ && apt-get install -y \
+ 	gdal-bin \
 	libcurl4-openssl-dev \
 	libgdal-dev \
 	libgeos-dev \
@@ -24,4 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	wget \
 	r-base-dev
 
-RUN Rscript -e 'install.packages(c("sp", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'
+RUN Rscript -e 'install.packages("sf", repos = "https://cloud.r-project.org", dependencies = TRUE)'
+
+# allows for clean (no warnings/errors) R CMD check --no-manual sf_*gz 
+# without the --no-manual, latex needs to be installed too
