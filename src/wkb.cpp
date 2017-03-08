@@ -585,11 +585,14 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	// http://stackoverflow.com/questions/24744802/rcpp-how-to-check-if-any-attribute-is-null
 	Rcpp::CharacterVector classes;
 	bool have_classes = false;
-	if (! Rf_isNull(sfc.attr("classes"))) {         // only sfc_GEOMETRY, the mixed bag, sets this
-		classes = sfc.attr("classes");
-		if (classes.size() != sfc.size())
-			throw std::range_error("attr classes has wrong size: please file an issue");
-		have_classes = true;
+	if (sfc.size() > 0 && strcmp(cls, "sfc_GEOMETRY") == 0) {
+		if (! Rf_isNull(sfc.attr("classes"))) { // only sfc_GEOMETRY, the mixed bag, sets the classes attr
+			classes = sfc.attr("classes");
+			if (classes.size() != sfc.size())
+				throw std::range_error("attr classes has wrong size: please file an issue");
+			have_classes = true;
+		} else
+			throw std::range_error("sfc_GEOMETRY should have attr classes; please file an issue");
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 

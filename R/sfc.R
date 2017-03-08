@@ -59,11 +59,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 				attr(lst, "single_type")
 			else
 				length(unique(vapply(lst, function(y) class(y)[2], ""))) == 1L
-		if (single)
+		if (single) {
 			class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
-		else {
+			attr(lst, "classes") = NULL
+		} else {
 			class(lst) = c("sfc_GEOMETRY", "sfc")         # the mix
-			attr(lst, "classes") = vapply(lst, class, rep("", 3))[2L,] # Rcpp forces me to do this. Or is it me, allowing a mix?
+			attr(lst, "classes") = vapply(lst, class, rep("", 3))[2L,]
 		}
 		attr(lst, "single_type") = NULL # clean up
 	}

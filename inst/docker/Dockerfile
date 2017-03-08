@@ -26,7 +26,8 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	wget \
 	r-base-dev
 
-RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'
+#RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'
+RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org")'
 
 # allows for clean (no warnings/errors) R CMD check --no-manual sf_*gz
 # without the --no-manual, latex needs to be installed too
