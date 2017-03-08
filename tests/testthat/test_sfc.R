@@ -82,3 +82,13 @@ test_that("st_precision() works for sf", {
 test_that("st_as_sfc breaks on wrong input", {
   expect_error(st_as_sfc("foo"))
 })
+
+test_that("st_coordinates works", {
+    x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4)
+	expect_true(is.matrix(st_coordinates(st_sf(a = 1, geom = x))))
+	expect_true(is.matrix(st_coordinates(x)))
+	expect_true(is.matrix(st_coordinates(x[[1]])))
+	nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+	expect_true(is.matrix(st_coordinates(nc)))
+	# expect_true(is.matrix(st_coordinates(st_geometrycollection(list(st_point)))))
+})
