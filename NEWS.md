@@ -1,8 +1,30 @@
 # version 0.3-5
 
+* add `st_make_valid`, only working if linked to `liblwgeom`
+
+* add `st_coordinates` method, returning coordinates matrix with indexes
+
+* rename `unlist.sfg` into `as.matrix.sfg`
+
+* add `st_bind_cols` method
+
+* improve handling features that can't be projected 
+
+* support uniform sampling over polygons on the sphere
+
+* add `st_sample`, for sampling points on multipoints, linestrings, or polygons
+
+* add `c` method for `sfc` objects
+
+* import and export `magrittr::%>%`
+
+* support ggplot'ing geometrycollections
+
+* drop C++11 requirement, allowing build for older R versions
+
 * add `st_proj_info`, modelled after `rgdal::projInfo`
 
-* overwriting datasets with `st_write` is no longer allowed; update=TRUE might append to them.
+* overwriting datasets with `st_write` is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.
 
 * `st_write` gains an argument, `update`, which when `TRUE` will try to append to existing datasets (#204)
 
@@ -11,7 +33,6 @@
 * remove deprecated `st_list`
 
 * rename `st_makegrid` to `st_make_grid`, and `st_linemerge` to `st_line_merge`
-
 * add NEWS.md file (#207)
 
 * faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Mike Sumner)

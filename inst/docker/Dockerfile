@@ -26,10 +26,5 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	wget \
 	r-base-dev
 
-#RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org", dependencies = TRUE)'
-RUN Rscript -e 'install.packages(c("devtools", "sf"), repos = "https://cloud.r-project.org")'
-
-# allows for clean (no warnings/errors) R CMD check --no-manual sf_*gz
-# without the --no-manual, latex needs to be installed too
-
-# also lets you devtools::install_github("edzer/sfr") with st_make_valid/lwgeom support
+RUN Rscript -e 'install.packages(c("devtools"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'devtools::install_github("edzer/sfr")'
