@@ -682,6 +682,7 @@ with_proj_data
 with_proj_include
 with_proj_lib
 with_proj_share
+with_lwgeom
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1319,6 +1320,7 @@ Optional Packages:
                           the location of proj libraries
   --with-proj-share=SHARE_PATH
                           the location of proj metadata files
+  --without-lwgeom        disable support for lwgeom
 
 Some influential environment variables:
   CC          C compiler command
@@ -3978,57 +3980,66 @@ fi
 #
 # liblwgeom
 #
-lwgeomok=yes
-for ac_header in liblwgeom.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "liblwgeom.h" "ac_cv_header_liblwgeom_h" "$ac_includes_default"
-if test "x$ac_cv_header_liblwgeom_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBLWGEOM_H 1
+
+# Check whether --with-lwgeom was given.
+if test "${with_lwgeom+set}" = set; then :
+  withval=$with_lwgeom;
+else
+  with_lwgeom=yes
+fi
+
+LIBLWGEOM=
+if test "x$with_lwgeom" != xno; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lwgeom_version in -llwgeom" >&5
+$as_echo_n "checking for lwgeom_version in -llwgeom... " >&6; }
+if ${ac_cv_lib_lwgeom_lwgeom_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-llwgeom  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char lwgeom_version ();
+int
+main ()
+{
+return lwgeom_version ();
+  ;
+  return 0;
+}
 _ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_lwgeom_lwgeom_version=yes
+else
+  ac_cv_lib_lwgeom_lwgeom_version=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lwgeom_lwgeom_version" >&5
+$as_echo "$ac_cv_lib_lwgeom_lwgeom_version" >&6; }
+if test "x$ac_cv_lib_lwgeom_lwgeom_version" = xyes; then :
+  PKG_LIBS="${PKG_LIBS} -llwgeom"
+
+     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LWGEOM"
+
 
 else
-  lwgeomok=no
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "lwgeom test failed (--without-readline to disable)
+See \`config.log' for more details" "$LINENO" 5; }
 fi
 
-done
-
-if test "${geosok}" = no; then
-   as_fn_error $? "liblwgeom.h not found in given locations." "$LINENO" 5
-else
-
-cat > lwgeom_test.cpp <<_EOCONF
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <liblwgeom.h>
-int main() {
-	const char *cp;
-	cp = lwgeom_version();
-	return 0;
-}
-#ifdef __cplusplus
-}
-#endif
-_EOCONF
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking liblwgeom: linking with -llwgeom" >&5
-$as_echo_n "checking liblwgeom: linking with -llwgeom... " >&6; }
-${CXX} ${CPPFLAGS} -o lwgeom_test lwgeom_test.cpp -llwgeom 2> errors.txt
-if test `echo $?` -ne 0 ; then
-lwgeomok=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-PKG_LIBS="${PKG_LIBS} -llwgeom"
-
-PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LWGEOM"
-
 fi
-rm -f lwgeom_test errors.txt lwgeom_test.cpp
-
-fi # check for lwgeom header
 
 
 #
