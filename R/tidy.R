@@ -152,13 +152,15 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
-	g = st_geometry(data)
-	st_geometry(data) = NULL # drop geometry
-	row = setdiff(names(data), c(key_col, value_col))
-	ret = NextMethod()
-	if (length(row))
-		st_geometry(ret) = g[ match(ret[[1]], data[[ row[1] ]]) ]
-	ret
+#	g = st_geometry(data)
+#	st_geometry(data) = NULL # drop geometry
+#	row = setdiff(names(data), c(key_col, value_col))
+#	ret = NextMethod()
+#	if (length(row))
+#		st_geometry(ret) = g[ match(ret[[1]], data[[ row[1] ]]) ]
+#	ret
+	data <- as.data.frame(data)
+	st_as_sf(NextMethod())
 }
 
 #' @name dplyr
