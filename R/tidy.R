@@ -43,6 +43,7 @@ distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc %>% group_by(area_cl) %>% class()
 group_by_.sf <- function(.data, ..., .dots, add = FALSE) {
+	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(NextMethod())
 }
 
