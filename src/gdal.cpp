@@ -1,3 +1,7 @@
+
+#include "gdal.h"
+#include "wkb.h"
+
 #include <gdal.h>
 #include <gdal_alg.h>
 #include <gdal_priv.h> // GDALDriver
@@ -8,19 +12,18 @@
 #include <cpl_conv.h>
 #include <cpl_string.h>
 
-#include <stdlib.h> // atoi
-#include <string.h>
+#include <cstdlib> // atoi
+#include <cstring>
 
-#include <Rcpp.h>
 
-#include "wkb.h"
+namespace {
 
 //
 // Returns errors to R
 // Note only case 4 actually returns immediately
 // Lower error codes are recoverable
 //
-static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
+void err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
     switch ( eErrClass )
     {
@@ -44,10 +47,12 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
     return;
 }
 
+}
+
 // [[Rcpp::export]]
 void CPL_gdal_init()
 {
-    CPLSetErrorHandler((CPLErrorHandler)__err_handler);
+    CPLSetErrorHandler(err_handler);
     GDALAllRegister();
     OGRRegisterAll();
 }
@@ -73,14 +78,14 @@ void handle_error(OGRErr err) {
 			Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
 		else if (err == OGRERR_CORRUPT_DATA)
 			Rcpp::Rcout << "OGR: Corrupt data" << std::endl;
-		else 
+		else
 			Rcpp::Rcout << "Error code: " << err << std::endl; // #nocov
 		throw std::range_error("OGR error");
 	}
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_crs_parameters(std::string p4s) {
+Rcpp::List CPL_crs_parameters(const std::string& p4s) {
 	Rcpp::List out(6);
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
@@ -247,6 +252,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+
 	if (g.size() == 0) {
 		dest->Release(); // #nocov
 		throw std::range_error("CPL_transform: zero length geometry list"); // #nocov
@@ -278,7 +284,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 	}
 	ct->DestroyCT(ct);
 	dest->Release();
-	return ret; 
+	return ret;
 }
 
 // [[Rcpp::export]]

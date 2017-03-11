@@ -15,3 +15,5 @@ inst/gdal/
 inst/proj/
 
 nc*
+
+man/*.Rd

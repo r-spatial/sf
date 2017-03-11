@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 
 #include "bbox.h"
 
@@ -29,7 +28,7 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 					Rcpp::stop("CPL_get_bbox: invalid geometry");
 				bb(0) = bb(2) = m(0,0);
 				bb(1) = bb(3) = m(0,1);
-			} 
+			}
 			for (int j = 0; j < m.nrow(); j++) {
 				bb(0) = std::min(m(j,0),bb(0));
 				bb(1) = std::min(m(j,1),bb(1));

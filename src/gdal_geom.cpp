@@ -1,12 +1,11 @@
+#include "gdal.h"
+
 #include <ogr_api.h>
 #include <ogr_geometry.h>
 
-#include <Rcpp.h>
-
-#include "gdal.h"
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 
+Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::NumericVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {
@@ -37,7 +36,7 @@ Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) 
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CPL_length(Rcpp::List sfc) { 
+Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::NumericVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {

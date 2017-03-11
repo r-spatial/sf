@@ -1,11 +1,11 @@
-#include <ogrsf_frmts.h>
-
-#include "Rcpp.h"
-
-// #include "wkb.h"
 #include "gdal.h"
 
-Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char *geom_name, 
+// #include "wkb.h"
+
+#include <ogrsf_frmts.h>
+
+
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char *geom_name,
 		bool int64_as_string) {
 	int n = poFDefn->GetFieldCount() + 1; // last one for features
 	Rcpp::List out(n);
@@ -57,7 +57,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 
 int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool points = false, multipoints = false,
-		lines = false, multilines = false, 
+		lines = false, multilines = false,
 		polygons = false, multipolygons = false;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
@@ -104,7 +104,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		throw std::invalid_argument("argument datasource should have length 1.\n"); // #nocov
 	std::vector <char *> open_options = create_options(options, false);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 		open_options.data(), NULL);
 	if (poDS == NULL) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
@@ -149,13 +149,13 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 		open_options.data(), NULL );
 	if( poDS == NULL ) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
@@ -261,9 +261,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
 						&Second, &TZFlag);
 					//  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
-					Rcpp::List dtlst = 
-						Rcpp::List::create((double) Second, (double) Minute, 
-						(double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
+					Rcpp::List dtlst =
+						Rcpp::List::create((double) Second, (double) Minute,
+						(double) Hour, (double) Day, (double) Month, (double) Year - 1900,
 						0.0, 0.0, 0.0);
 					dtlst.attr("class") = "POSIXlt";
 					Rcpp::NumericVector nv;
@@ -315,10 +315,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	}
 	if (promote_to_multi && toTypeUser == 0)
 		toTypeUser = to_multi_what(poGeometryV);
-	if (toTypeUser != 0) { 
+	if (toTypeUser != 0) {
 		for (i = 0; i < poFeatureV.size(); i++) {
 			poFeatureV[i]->SetGeometryDirectly(
-				OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
+				OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(),
 				(OGRwkbGeometryType) toTypeUser, NULL) );
 			poGeometryV[i] = poFeatureV[i]->GetGeomFieldRef(iGeomField);
 		}
@@ -328,7 +328,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	// convert to R:
 	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
 	if (warn_int64)
-		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
+		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 <<
 			" lost significance after conversion to double;" << std::endl <<
 			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
 	out[poFDefn->GetFieldCount()] = sfc;

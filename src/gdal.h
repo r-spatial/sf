@@ -1,3 +1,13 @@
+
+#pragma once
+
+#include <Rcpp.h>
+#include <vector>
+
+// can just fwd declare as only use pointers here
+class OGRGeometry;
+class OGRSpatialReference;
+
 Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref);
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *>, bool destroy);
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref);
