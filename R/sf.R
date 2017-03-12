@@ -145,6 +145,9 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
 #' @param precision numeric; see \link{st_as_binary}
+#' @param sf_column_name character; name of the list-column with simple feature geometries, in case 
+#' there is more than one; if there is more than one and \code{sf_column_name} is not given, the 
+#' first one is selected and a warning is given
 #' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.  
 #' @examples
 #' g = st_sfc(st_point(1:2))
@@ -153,41 +156,55 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names, 
-		stringsAsFactors = default.stringsAsFactors(), crs, precision) {
+		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {
 	x = list(...)
 	if (length(x) == 1 && inherits(x[[1L]], "data.frame"))
 		x = x[[1L]]
-	# find & remove the sfc column:
-	sf = vapply(x, function(x) inherits(x, "sfc"), TRUE)
-	if (! any(sf))
+
+	# find the sfc column(s):
+	all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
+	if (! any(all_sfc_columns))
 		stop("no simple features geometry column present")
-	sf_column = which(sf)
-	if (length(sf_column) > 1) {
-		warning("more than one geometry column: ignoring all but first")
-		x[sf_column[-1L]] = NULL
-		sf_column = sf_column[1L]
+	else 
+		all_sfc_columns = which(unlist(all_sfc_columns))
+
+	# set names if not present:
+	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
+		names(x)[all_sfc_columns]
+	else {
+		object = as.list(substitute(list(...)))[-1L] 
+		arg_nm = sapply(object, function(x) deparse(x))
+		make.names(arg_nm[all_sfc_columns])
 	}
+
+	if (!is.null(sf_column_name)) {
+		stopifnot(sf_column_name %in% all_sfc_names)
+		sf_column = match(sf_column_name, all_sfc_names)
+		sfc_name = sf_column_name
+	} else {
+		if (length(all_sfc_columns) > 1L)
+			warning(paste0("more than one geometry column: taking `", all_sfc_names[1L],
+				"'; use `sf_column_name=' to specify a different column."))
+		sf_column = all_sfc_columns[1L]
+		sfc_name = all_sfc_names[1L]
+	}
+
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
 	df = if (length(x) == 1) # ONLY sfc
 			data.frame(row.names = row.names)
 		else {
 			if (inherits(x, "data.frame"))
-				x[-sf_column]
+				x[-all_sfc_columns]
 			else # create a data.frame from list:
-				data.frame(x[-sf_column], row.names = row.names, 
+				data.frame(x[-all_sfc_columns], row.names = row.names, 
 					stringsAsFactors = stringsAsFactors)
 		}
 
-	# add sfc column, with right name:
-	sfc_name = if (!is.null(names(x)) && nzchar(names(x)[sf_column]))
-		names(x)[sf_column]
-	else {
-		object = as.list(substitute(list(...)))[-1L] 
-		arg_nm = sapply(object, function(x) deparse(x))
-		make.names(arg_nm[sf_column])
-	}
-	df[[sfc_name]] = x[[sf_column]]
+
+	for (i in seq_along(all_sfc_names))
+		df[[ all_sfc_names[i] ]] = x[[ all_sfc_columns[i] ]]
+
 	if (! missing(precision))
 		attr(df[[sfc_name]], "precision") = precision
 

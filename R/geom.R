@@ -506,7 +506,7 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 
 #' @name geos
 #' @export
-#' @details \code{st_combine} combines geometries without resolving borders. 
+#' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; see \link{st_union} for resolving boundaries.
 #' @examples
 #' st_combine(nc)
 st_combine = function(x)

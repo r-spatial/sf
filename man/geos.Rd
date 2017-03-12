@@ -224,7 +224,7 @@ in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINES
 
 in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
-\code{st_combine} combines geometries without resolving borders.
+\code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; see \link{st_union} for resolving boundaries.
 }
 \examples{
 x = st_sfc(
