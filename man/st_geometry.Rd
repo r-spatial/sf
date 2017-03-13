@@ -33,7 +33,7 @@ st_geometry(x) <- value
 
 \item{x}{object of class \code{data.frame}}
 
-\item{value}{object of class \code{sfc}}
+\item{value}{object of class \code{sfc}, or \code{character}}
 }
 \value{
 st_geometry returns an object of class \link{sfc}, a list-column with geometries

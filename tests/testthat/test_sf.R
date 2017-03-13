@@ -15,6 +15,9 @@ test_that("we can subset sf objects", {
   expect_warning(st_sf(a, g, g), 
   "more than one geometry column: taking `g'; use `sf_column_name=' to specify a different column.")
   expect_silent(st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2"))
+  x = st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2")
+  expect_silent(st_geometry(x) <- "geom2")
+  expect_silent(st_geometry(x) <- "geom1")
 })
 
 test_that("we can create points sf from data.frame", {

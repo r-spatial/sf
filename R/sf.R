@@ -86,7 +86,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 
 #' @name st_geometry
 #' @param x object of class \code{data.frame}
-#' @param value object of class \code{sfc}
+#' @param value object of class \code{sfc}, or \code{character}
 #' @export
 #' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
 #' @details when applied to a \code{data.frame}, the replacement function will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}. 
@@ -104,9 +104,11 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 
 #' @export
 `st_geometry<-.data.frame` = function(x, value) {
-	stopifnot(inherits(value, "sfc"))
-	stopifnot(nrow(x) == length(value))
+	stopifnot(inherits(value, "sfc") || is.character(value))
+	if (inherits(value, "sfc"))
+		stopifnot(nrow(x) == length(value))
 	a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
+
 	if (any(a)) {
 		w = which(a)
 		sf_col = attr(x, "sf_column")
@@ -118,17 +120,29 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 			x[[ which(a)[1L] ]] = value
 		}
 		st_sf(x)
-	} else
-		st_sf(x, geometry = value)
+	} else {
+		if (is.character(value))
+			x = st_sf(x, sf_column_name = value)
+		else
+			st_sf(x, geometry = value)
+	}
 }
 
 #' @export
 `st_geometry<-.sf` = function(x, value) {
 	if (! is.null(value)) {
-		stopifnot(inherits(value, "sfc"))
-		stopifnot(nrow(x) == length(value))
+		stopifnot(inherits(value, "sfc") || is.character(value))
+		if (inherits(value, "sfc"))
+			stopifnot(nrow(x) == length(value))
+		if (is.character(value))
+			stopifnot(inherits(x[[value]], "sfc"))
 	}
-	x[[attr(x, "sf_column")]] <- value
+
+	if (!is.null(value) && is.character(value)) # set flag to another column:
+		attr(x, "sf_column") <- value
+	else # replace, or set list-column
+		x[[attr(x, "sf_column")]] <- value
+
 	if (is.null(value))
 		data.frame(x)
 	else
