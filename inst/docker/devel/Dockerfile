@@ -54,3 +54,5 @@ RUN cd /usr/local/bin \
 && mv Rscript Rscriptdevel \
 && ln -s Rdevel RD \
 && ln -s Rscriptdevel RDscript
+
+CMD ["/bin/bash"]

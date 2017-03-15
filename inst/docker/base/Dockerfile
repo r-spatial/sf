@@ -22,9 +22,12 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libproj-dev \
 	liblwgeom-dev \
 	libudunits2-dev \
+	postgis \
 	make \
 	wget \
 	r-base-dev
 
 RUN Rscript -e 'install.packages(c("devtools"), repos = "https://cloud.r-project.org")'
 RUN Rscript -e 'devtools::install_github("edzer/sfr")'
+
+CMD ["/bin/bash"]
