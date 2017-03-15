@@ -4,7 +4,7 @@ check_join = function(x, y) {
 }
 
 sf_join = function(g, sf_column) {
-	g[[ sf_column ]] = fix_NULL_values(g[[ sf_column ]])
+	g[[ sf_column ]] = st_sfc(fix_NULL_values(g[[ sf_column ]]))
 	st_sf(g)
 }
 

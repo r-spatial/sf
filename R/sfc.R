@@ -1,11 +1,10 @@
 #' @export
-str.sfc <- function(object,...) {
+str.sfc <- function(object, ...) {
 	n <- length(object)
-	if (n == 0L)
-		str(object)
-	else {
-		cat(" List of ",n,", printing ")
-		str(object[[1]],...)
+	cat(paste0(class(object)[1], " of length ", n))
+	if (n > 0) {
+		cat("; first list element: ")
+		str(object[[1]], ...)
 	}
 }
 
