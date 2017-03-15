@@ -106,8 +106,17 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
 	Rcpp::List crs = sfc.attr("crs");
+	Rcpp::IntegerVector epsg(1);
+	epsg[0] = crs["epsg"];
 	Rcpp::String p4s = crs["proj4string"];
-	if (p4s != NA_STRING) {
+	if (epsg[0] != NA_INTEGER) {
+		local_srs = new OGRSpatialReference;
+		OGRErr err = local_srs->importFromEPSG(epsg[0]);
+		if (err != 0) {
+			local_srs->Release(); // #nocov
+			handle_error(err);    // #nocov
+		}
+	} else if (p4s != NA_STRING) {
 		Rcpp::CharacterVector cv = crs["proj4string"];
 		local_srs = new OGRSpatialReference;
 		OGRErr err = local_srs->importFromProj4(cv[0]);
