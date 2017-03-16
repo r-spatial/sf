@@ -4033,10 +4033,8 @@ if test "x$ac_cv_lib_lwgeom_lwgeom_version" = xyes; then :
 
 
 else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "lwgeom test failed (--without-readline to disable)
-See \`config.log' for more details" "$LINENO" 5; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: lwgeom test failed" >&5
+$as_echo "$as_me: lwgeom test failed" >&6;}
 fi
 
 fi

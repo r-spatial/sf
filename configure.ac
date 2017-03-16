@@ -555,8 +555,8 @@ AS_IF([test "x$with_lwgeom" != xno],
     [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
     ],
-    [AC_MSG_FAILURE(
-       [lwgeom test failed (--without-readline to disable)])],
+    [AC_MSG_NOTICE(
+       [lwgeom test failed])],
     [])])
 
 
