@@ -74,7 +74,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' 
 #' Write simple feature table to a spatial database
 #' @param conn open database connection
-#' @param table name for the table in the database
+#' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
 #' @param geom_name name of the geometry column in the database
 #' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
 #' @param overwrite logical; should \code{table} be dropped first?
@@ -147,18 +147,18 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 }
 
 
-schema_table <- function(table, public = "public") {
-    if (!is.character(table)) {
+schema_table <- function(table) {
+    if (!is.character(table))
         stop("table must be a character vector", call. = FALSE)
-    }
-    if (length(table) == 1) {
-        table = c(public, table[1])
-    } else if (length(table) > 2){
+
+    if (length(table) == 1L)
+        table = c("public", table)
+    else if (length(table) > 2)
         stop("table cannot be longer than 2 (schema, table)", call. = FALSE)
-    }
-    if (any(is.na(table))) {
+
+    if (any(is.na(table)))
         stop("table and schema cannot be NA", call. = FALSE)
-    }
+
     return(table)
 }
 
