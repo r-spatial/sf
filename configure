@@ -4033,8 +4033,8 @@ if test "x$ac_cv_lib_lwgeom_lwgeom_version" = xyes; then :
 
 
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: lwgeom test failed" >&5
-$as_echo "$as_me: lwgeom test failed" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: lwgeom (only needed for st_make_valid) was not found; on ubuntu, liblwgeom-dev provides this" >&5
+$as_echo "$as_me: lwgeom (only needed for st_make_valid) was not found; on ubuntu, liblwgeom-dev provides this" >&6;}
 fi
 
 fi

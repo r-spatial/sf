@@ -556,7 +556,7 @@ AS_IF([test "x$with_lwgeom" != xno],
      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
     ],
     [AC_MSG_NOTICE(
-       [lwgeom test failed])],
+       [lwgeom (only needed for st_make_valid) was not found; on ubuntu, liblwgeom-dev provides this])],
     [])])
 
 
