@@ -6,10 +6,12 @@
 #' @details uses the \code{lwgeom_makevalid} method also used by PostGIS' \code{ST_makevalid}.
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
-#' st_is_valid(x)
-#' y = st_make_valid(x)
-#' st_is_valid(y)
-#' y %>% st_cast()
+#' if (!is.na(sf_extSoftVersion()["lwgeom"])) {
+#'   suppressWarnings(st_is_valid(x))
+#'   y = st_make_valid(x)
+#'   st_is_valid(y)
+#'   y %>% st_cast()
+#' }
 #' @export
 st_make_valid = function(x) UseMethod("st_make_valid")
 
