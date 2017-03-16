@@ -3988,8 +3988,28 @@ else
   with_lwgeom=yes
 fi
 
-LIBLWGEOM=
-if test "x$with_lwgeom" != xno; then :
+
+if test "x$with_lwgeom" != xno; then
+ for ac_header in liblwgeom.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "liblwgeom.h" "ac_cv_header_liblwgeom_h" "$ac_includes_default"
+if test "x$ac_cv_header_liblwgeom_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBLWGEOM_H 1
+_ACEOF
+
+else
+  with_lwgeom=no
+fi
+
+done
+
+ if test "${with_lwgeom}" = no; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: liblwgeom.h not found." >&5
+$as_echo "$as_me: liblwgeom.h not found." >&6;}
+ else
+  LIBLWGEOM=
+  if test "x$with_lwgeom" != xno; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lwgeom_version in -llwgeom" >&5
 $as_echo_n "checking for lwgeom_version in -llwgeom... " >&6; }
 if ${ac_cv_lib_lwgeom_lwgeom_version+:} false; then :
@@ -4029,7 +4049,7 @@ $as_echo "$ac_cv_lib_lwgeom_lwgeom_version" >&6; }
 if test "x$ac_cv_lib_lwgeom_lwgeom_version" = xyes; then :
   PKG_LIBS="${PKG_LIBS} -llwgeom"
 
-     PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LWGEOM"
+      PKG_CPPFLAGS="${PKG_CPPFLAGS} -DHAVE_LWGEOM"
 
 
 else
@@ -4038,6 +4058,9 @@ $as_echo "$as_me: lwgeom (only needed for st_make_valid) was not found; on ubunt
 fi
 
 fi
+ fi
+fi
+
 
 
 #

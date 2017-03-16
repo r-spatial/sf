@@ -549,15 +549,24 @@ AC_ARG_WITH([lwgeom],
     [disable support for lwgeom])],
   [],
   [with_lwgeom=yes])
-LIBLWGEOM=
-AS_IF([test "x$with_lwgeom" != xno],
-  [AC_CHECK_LIB([lwgeom], [lwgeom_version],
-    [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
-     AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
-    ],
-    [AC_MSG_NOTICE(
-       [lwgeom (only needed for st_make_valid) was not found; on ubuntu, liblwgeom-dev provides this])],
-    [])])
+
+if test "x$with_lwgeom" != xno; then
+ AC_CHECK_HEADERS(liblwgeom.h,,with_lwgeom=no)
+ if test "${with_lwgeom}" = no; then
+   AC_MSG_NOTICE([liblwgeom.h not found.])
+ else
+  LIBLWGEOM=
+  AS_IF([test "x$with_lwgeom" != xno],
+   [AC_CHECK_LIB([lwgeom], [lwgeom_version],
+     [AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -llwgeom"])
+      AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} -DHAVE_LWGEOM"])
+     ],
+     [AC_MSG_NOTICE(
+        [lwgeom (only needed for st_make_valid) was not found; on ubuntu, liblwgeom-dev provides this])],
+     [])])
+ fi
+fi
+
 
 
 #
