@@ -268,20 +268,21 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 
 	int notice = 0;
 	if (NA_on_exception) {
+    	if (sfc.size() > 1)
+			error("NA_on_exception will only work reliably with length 1 sfc objects");
 		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
 		GEOSContext_setErrorMessageHandler_r(hGEOSCtxt, 
 			(GEOSMessageHandler_r) __emptyErrorHandler, (void *) &notice); 
 	}
 
-	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL); // where notice might be set!
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
-		if (NA_on_exception && (ret == 2 || notice != 0)) {
-			out[i] = NA_LOGICAL;
-			notice = 0;
-		} else
+		if (NA_on_exception && (ret == 2 || notice != 0))
+			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry
+		else
 			out[i] = chk_(ret);
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
