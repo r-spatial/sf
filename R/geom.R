@@ -8,7 +8,15 @@
 #' @export
 #' @return matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 st_is_valid = function(x, NA_on_exception = TRUE) {
-	CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
+	if (! NA_on_exception) 
+		CPL_geos_is_valid(x, as.logical(NA_on_exception))
+	else {
+		x = st_geometry(x)
+		ret = vector("logical", length(x))
+		for (i in seq_along(x))
+			ret[i] = CPL_geos_is_valid(x[i], as.logical(NA_on_exception))
+		ret
+	}
 }
 
 #' @name geos
