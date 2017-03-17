@@ -1,6 +1,6 @@
 # dim: what does the third dimension, if present, refer to? (XYZ or XYM)
 getClassDim = function(x, d, dim = "XYZ", type) {
-	stopifnot(d > 1)
+	stopifnot(d > 1 && d < 5)
 	type = toupper(type)
 	if (d == 2)
 		c("XY", type, "sfg")
@@ -129,13 +129,16 @@ st_multipoint = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim,
 st_linestring = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim, type = "LINESTRING")
 #' @name st
 #' @export
-st_polygon = function(x = list(), dim = "XYZ") MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
+st_polygon = function(x = list(), dim = if(length(x)) "XYZ" else "XY")
+	MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
 #' @name st
 #' @export
-st_multilinestring = function(x = list(), dim = "XYZ") MtrxSet(x, dim, type = "MULTILINESTRING", needClosed = FALSE)
+st_multilinestring = function(x = list(), dim = if (length(x)) "XYZ" else "XY")
+	MtrxSet(x, dim, type = "MULTILINESTRING", needClosed = FALSE)
 #' @name st
 #' @export
-st_multipolygon = function(x = list(), dim = "XYZ") MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = TRUE)
+st_multipolygon = function(x = list(), dim = if (length(x)) "XYZ" else "XY")
+	MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = TRUE)
 #' @name st
 #' @param dims character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case \code{x} is the empty \code{list()}.
 #' @export

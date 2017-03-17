@@ -261,13 +261,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_is_valid
-Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc);
-RcppExport SEXP sf_CPL_geos_is_valid(SEXP sfcSEXP) {
+Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception);
+RcppExport SEXP sf_CPL_geos_is_valid(SEXP sfcSEXP, SEXP NA_on_exceptionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_is_valid(sfc));
+    Rcpp::traits::input_parameter< bool >::type NA_on_exception(NA_on_exceptionSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_is_valid(sfc, NA_on_exception));
     return rcpp_result_gen;
 END_RCPP
 }

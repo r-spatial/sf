@@ -44,7 +44,7 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
 \item{conn}{open database connection}
 
-\item{table}{name for the table in the database}
+\item{table}{character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}}
 
 \item{geom_name}{name of the geometry column in the database}
 

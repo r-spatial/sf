@@ -33,11 +33,11 @@ st_multipoint(x = matrix(numeric(0), 0, 2), dim = "XYZ")
 
 st_linestring(x = matrix(numeric(0), 0, 2), dim = "XYZ")
 
-st_polygon(x = list(), dim = "XYZ")
+st_polygon(x = list(), dim = if (length(x)) "XYZ" else "XY")
 
-st_multilinestring(x = list(), dim = "XYZ")
+st_multilinestring(x = list(), dim = if (length(x)) "XYZ" else "XY")
 
-st_multipolygon(x = list(), dim = "XYZ")
+st_multipolygon(x = list(), dim = if (length(x)) "XYZ" else "XY")
 
 st_geometrycollection(x = list(), dims = "XY")
 

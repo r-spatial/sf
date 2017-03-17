@@ -16,8 +16,9 @@ test_that("CPL_geos_is_valid works", {
   	st_sfc(st_polygon(list(cbind(c(0,1,1,0,0), c(0,0,1, 1,0)))))))
   expect_warning(
     expect_false(sf:::CPL_geos_is_valid(
-  	st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0)))))))
+  	st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0))))), FALSE))
     )
+  expect_false(st_is_valid(st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0)))))))
 })
 
 test_that("geos ops give warnings and errors on longlat", {

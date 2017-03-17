@@ -73,7 +73,7 @@
 \alias{st_line_sample}
 \title{Geometric operations on (pairs of) simple feature geometry sets}
 \usage{
-st_is_valid(x)
+st_is_valid(x, NA_on_exception = TRUE)
 
 st_dimension(x, NA_if_empty = TRUE)
 
@@ -146,6 +146,8 @@ st_line_sample(x, n, density, type = "regular")
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
+\item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
+
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
 
 \item{dist_fun}{function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
@@ -185,7 +187,7 @@ st_line_sample(x, n, density, type = "regular")
 \value{
 matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
 
-st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.
+st_dimension returns 0 for points, 1 for lines, 2 for surfaces; if \code{NA_if_empty} is \code{TRUE} return \code{NA} for empty geometries.
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 

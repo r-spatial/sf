@@ -37,6 +37,13 @@ static void __warningHandler(const char *fmt, ...) {
     return;
 }
 
+static void __emptyErrorHandler(const char *fmt, void *userdata) {
+	int *i = (int *) userdata;
+	*i = *i + 1;
+}
+
+static void __emptyNoticeHandler(const char *fmt, void *userdata) { }
+
 GEOSContextHandle_t CPL_geos_init(void) {
     return initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
 }
@@ -256,12 +263,26 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc) { 
+Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) { 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+
+	int notice = 0;
+	if (NA_on_exception) {
+		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
+			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
+		GEOSContext_setErrorMessageHandler_r(hGEOSCtxt, 
+			(GEOSMessageHandler_r) __emptyErrorHandler, (void *) &notice); 
+	}
+
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
-		out[i] = chk_(GEOSisValid_r(hGEOSCtxt, gmv[i]));
+		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
+		if (NA_on_exception && (ret == 2 || notice != 0)) {
+			out[i] = NA_LOGICAL;
+			notice = 0;
+		} else
+			out[i] = chk_(ret);
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
 	CPL_geos_finish(hGEOSCtxt);

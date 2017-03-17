@@ -89,7 +89,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param value object of class \code{sfc}, or \code{character}
 #' @export
 #' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
-#' @details when applied to a \code{data.frame}, the replacement function will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}. 
+#' @details when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geomtry<-} will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}. 
 #' 
 #' the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
 #' @examples 
@@ -140,13 +140,20 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 
 	if (!is.null(value) && is.character(value)) # set flag to another column:
 		attr(x, "sf_column") <- value
-	else # replace, or set list-column
+	else # replace, remove, or set list-column
 		x[[attr(x, "sf_column")]] <- value
 
 	if (is.null(value))
 		data.frame(x)
 	else
 		x
+}
+
+#' @name st_geometry
+#' @export
+st_set_geometry = function(x, value) {
+	st_geometry(x) = value
+	x
 }
 
 #' Create sf object

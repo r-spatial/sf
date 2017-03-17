@@ -25,7 +25,7 @@ extern SEXP sf_CPL_get_layers(SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_read_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_write_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_geos_binop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP sf_CPL_geos_is_valid(SEXP);
+extern SEXP sf_CPL_geos_is_valid(SEXP, SEXP);
 extern SEXP sf_CPL_geos_is_simple(SEXP);
 extern SEXP sf_CPL_geos_union(SEXP, SEXP);
 extern SEXP sf_CPL_geos_op(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -71,7 +71,7 @@ static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_write_ogr", (DL_FUNC) &sf_CPL_write_ogr, 10 },
 
 	{"sf_CPL_geos_binop", (DL_FUNC) &sf_CPL_geos_binop, 6 },
-	{"sf_CPL_geos_is_valid", (DL_FUNC) &sf_CPL_geos_is_valid, 1 },
+	{"sf_CPL_geos_is_valid", (DL_FUNC) &sf_CPL_geos_is_valid, 2 },
 	{"sf_CPL_geos_is_simple", (DL_FUNC) &sf_CPL_geos_is_simple, 1 },
 	{"sf_CPL_geos_union", (DL_FUNC) &sf_CPL_geos_union, 2 },
 	{"sf_CPL_geos_op", (DL_FUNC) &sf_CPL_geos_op, 8 },

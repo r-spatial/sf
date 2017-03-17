@@ -21,7 +21,6 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libgeos-dev \
 	libproj-dev \
 	liblwgeom-dev \
-	liblwgeom-2.2-5 \
 	libudunits2-dev \
 	postgis \
 	make \

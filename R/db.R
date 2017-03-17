@@ -147,12 +147,12 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 }
 
 
-schema_table <- function(table) {
+schema_table <- function(table, public = "public") {
     if (!is.character(table))
         stop("table must be a character vector", call. = FALSE)
 
     if (length(table) == 1L)
-        table = c("public", table)
+        table = c(public, table)
     else if (length(table) > 2)
         stop("table cannot be longer than 2 (schema, table)", call. = FALSE)
 

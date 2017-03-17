@@ -1,8 +1,10 @@
+NA_bbox_ = structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+
 bbox.Mtrx = function(obj) {
 	# r = apply(obj, 2L, range) # min row 1, max row 2
 	# c(xmin = r[1L,1L], ymin = r[1L,2L], xmax = r[2L,1L], ymax = r[2L,2L])
 	if (length(obj) == 0) 
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
 		structure(CPL_get_bbox(list(obj), 1), names = c("xmin", "ymin", "xmax", "ymax"))
 }
@@ -10,7 +12,7 @@ bbox.MtrxSet = function(obj) {
 	#s = sapply(obj, bbox.Mtrx)
 	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
 		structure(CPL_get_bbox(obj, 1), names = c("xmin", "ymin", "xmax", "ymax"))
 }
@@ -18,7 +20,7 @@ bbox.MtrxSetSet = function(obj) {
 	#s = sapply(obj, bbox.MtrxSet)
 	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
 		structure(CPL_get_bbox(obj, 2), names = c("xmin", "ymin", "xmax", "ymax"))
 }
@@ -26,7 +28,7 @@ bbox.MtrxSetSetSet = function(obj) {
 	#s = sapply(obj, bbox.MtrxSetSet)
 	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
 		structure(CPL_get_bbox(obj, 3), names = c("xmin", "ymin", "xmax", "ymax"))
 }

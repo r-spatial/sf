@@ -4,13 +4,16 @@
 #' 
 #' Geometric operations on (pairs of) simple feature geometry sets
 #' @name geos
+#' @param NA_on_exception logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.
 #' @export
 #' @return matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
-st_is_valid = function(x) CPL_geos_is_valid(st_geometry(x))
+st_is_valid = function(x, NA_on_exception = TRUE) {
+	CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
+}
 
 #' @name geos
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
-#' @return st_dimension returns 0 for points, 1 for lines, 2 for surfaces and by default NA for empty geometries.
+#' @return st_dimension returns 0 for points, 1 for lines, 2 for surfaces; if \code{NA_if_empty} is \code{TRUE} return \code{NA} for empty geometries.
 #' @export
 #' @examples
 #' x = st_sfc(
