@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -15,6 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+> Sys.setenv(TZ="UTC")
 > suppressPackageStartupMessages(library(sf))
 > if ("GPKG" %in% st_drivers()$name) {
 + 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, quiet = TRUE)
@@ -211,15 +212,11 @@ Cannot open data source foo
 Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField -  : 
   Open failed.
 
-> try(st_read("x.gpkg", "foo")) # cannot open layer
-Reading layer `foo' from data source `/home/edzer/git/sf.Rcheck/tests/x.gpkg' using driver `GPKG'
-converted into: MULTIPOINT
-Simple feature collection with 2 features and 1 field
-geometry type:  MULTIPOINT
-dimension:      XY
-bbox:           xmin: 0 ymin: 1 xmax: 2 ymax: 4
-epsg (SRID):    NA
-proj4string:    NA
+> try(st_read("x.gpkg", "xyz")) # cannot open layer
+Cannot open layer xyz
+Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField -  : 
+  Opening layer failed.
+
 > try(st_write(c("foo", "bar")))
 Error : inherits(obj, "sf") is not TRUE
 > try(st_write(x, c("foo", "bar")))
@@ -263,9 +260,9 @@ proj4string:    NA
      a    b          c                   d       geom
 1    0    a 2001-01-01 2001-01-01 00:00:00 POINT(1 1)
 2    1    b       <NA>                <NA> POINT(2 2)
-3   NA <NA> 1969-09-24 1970-01-01 00:58:21 POINT(3 3)
-4 -Inf    c 1970-01-01 1970-01-01 01:00:00 POINT(4 4)
-5  Inf      1970-01-02 1970-01-01 01:00:01 POINT(5 5)
+3   NA <NA> 1969-09-24 1969-12-31 23:58:21 POINT(3 3)
+4 -Inf    c 1970-01-01 1970-01-01 00:00:00 POINT(4 4)
+5  Inf      1970-01-02 1970-01-01 00:00:01 POINT(5 5)
 > 
 > try(st_write(x, "x.shp", driver = character(0))) # err
 driver, dsn or layer unspecified
@@ -275,4 +272,4 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > proc.time()
    user  system elapsed 
-   0.56    0.02    0.72 
+  0.552   0.048   0.705 

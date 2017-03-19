@@ -1,3 +1,4 @@
+Sys.setenv(TZ="UTC")
 suppressPackageStartupMessages(library(sf))
 if ("GPKG" %in% st_drivers()$name) {
 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", crs = 4267, quiet = TRUE)
@@ -54,7 +55,7 @@ x <- read_sf("x.shp", quiet = TRUE)
 
 try(st_layers("foo")) # cannot open datasource
 try(st_read("foo")) # cannot open datasource
-try(st_read("x.gpkg", "foo")) # cannot open layer
+try(st_read("x.gpkg", "xyz")) # cannot open layer
 try(st_write(c("foo", "bar")))
 try(st_write(x, c("foo", "bar")))
 try(st_write(x, "foo", driver = "foo"))
