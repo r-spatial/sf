@@ -5,11 +5,18 @@
 #' Geometric operations on (pairs of) simple feature geometry sets
 #' @name geos
 #' @param NA_on_exception logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.
+#' @param reason logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, or \code{"Valid Geometry"} otherwise; if set to \code{TRUE}, \code{NA_on_exception} is automatically \code{FALSE} (errors are emitted in case of one or more corrupt geometries).
 #' @export
 #' @return matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
-st_is_valid = function(x, NA_on_exception = TRUE) {
-	if (! NA_on_exception) 
-		CPL_geos_is_valid(x, as.logical(NA_on_exception))
+#' @examples
+#' p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
+#' st_is_valid(p1)
+#' st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
+st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
+	if (reason)
+		CPL_geos_is_valid_reason(st_geometry(x))
+	else if (! NA_on_exception) 
+		CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
 	else {
 		x = st_geometry(x)
 		ret = vector("logical", length(x))

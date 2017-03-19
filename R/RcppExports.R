@@ -85,6 +85,10 @@ CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, sparse = TRUE, prepared = 
     .Call('sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, sparse, prepared)
 }
 
+CPL_geos_is_valid_reason <- function(sfc) {
+    .Call('sf_CPL_geos_is_valid_reason', PACKAGE = 'sf', sfc)
+}
+
 CPL_geos_is_valid <- function(sfc, NA_on_exception = TRUE) {
     .Call('sf_CPL_geos_is_valid', PACKAGE = 'sf', sfc, NA_on_exception)
 }

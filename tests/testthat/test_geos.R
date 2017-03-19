@@ -19,6 +19,9 @@ test_that("CPL_geos_is_valid works", {
   	st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0))))), FALSE))
     )
   expect_false(st_is_valid(st_sfc(st_polygon(list(cbind(c(0,1,1,.5,0),c(0,0,1,-1,0)))))))
+  p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
+  expect_false(st_is_valid(p1))
+  expect_equal(st_is_valid(p1, reason = TRUE), "Self-intersection[5 5]")
 })
 
 test_that("geos ops give warnings and errors on longlat", {

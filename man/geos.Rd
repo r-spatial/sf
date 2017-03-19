@@ -73,7 +73,7 @@
 \alias{st_line_sample}
 \title{Geometric operations on (pairs of) simple feature geometry sets}
 \usage{
-st_is_valid(x, NA_on_exception = TRUE)
+st_is_valid(x, NA_on_exception = TRUE, reason = FALSE)
 
 st_dimension(x, NA_if_empty = TRUE)
 
@@ -147,6 +147,8 @@ st_line_sample(x, n, density, type = "regular")
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
+
+\item{reason}{logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, or \code{"Valid Geometry"} otherwise; if set to \code{TRUE}, \code{NA_on_exception} is automatically \code{FALSE} (errors are emitted in case of one or more corrupt geometries).}
 
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
 
@@ -229,6 +231,9 @@ in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTI
 \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; see \link{st_union} for resolving boundaries.
 }
 \examples{
+p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
+st_is_valid(p1)
+st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
 x = st_sfc(
 	st_point(0:1), 
 	st_linestring(rbind(c(0,0),c(1,1))), 

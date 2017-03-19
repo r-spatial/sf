@@ -263,6 +263,26 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 }
 
 // [[Rcpp::export]]
+Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) { 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+
+	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	Rcpp::CharacterVector out(gmv.size());
+	for (int i = 0; i < out.length(); i++) {
+		char *buf = GEOSisValidReason_r(hGEOSCtxt, gmv[i]);
+		if (buf == NULL)
+			out[i] = NA_STRING;
+		else {
+			out[i] = buf;
+			GEOSFree_r(hGEOSCtxt, buf);
+		}
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
+	}
+	CPL_geos_finish(hGEOSCtxt);
+	return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) { 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
