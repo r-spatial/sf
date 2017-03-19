@@ -13,9 +13,16 @@
 #' st_is_valid(p1)
 #' st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
 st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
-	if (reason)
-		CPL_geos_is_valid_reason(st_geometry(x))
-	else if (! NA_on_exception) 
+	if (reason) {
+		if (NA_on_exception) {
+			g = st_geometry(x)
+			ret = rep(NA_character_, length(g))
+			not_na = !is.na(st_is_valid(g))
+			ret[not_na] = st_is_valid(g[not_na], FALSE, TRUE)
+			ret
+		} else 
+			CPL_geos_is_valid_reason(st_geometry(x))
+	} else if (! NA_on_exception) 
 		CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
 	else {
 		x = st_geometry(x)
