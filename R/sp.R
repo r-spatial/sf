@@ -150,10 +150,13 @@ Polygons2POLYGON = function(PolygonsLst) {
 	lapply(PolygonsLst, function(x) x@coords)
 }
 
+#' @importFrom sp Spatial
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
+#' @importFrom sp Spatial
 setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
+#' @importFrom sp Spatial
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -162,6 +165,7 @@ setAs("sf", "Spatial", function(from) {
 	sp::addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
 })
 
+#' @importFrom sp Spatial
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 # setAs("sfg", "Spatial", function(from) as(st_sfc(from), "Spatial"))
