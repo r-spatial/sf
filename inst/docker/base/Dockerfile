@@ -15,19 +15,34 @@ RUN apt-get upgrade -y
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
  && apt-get install -y \
- 	gdal-bin \
 	libcurl4-openssl-dev \
+	qpdf \
+	pandoc \
+	make \
+	wget \
+	git \
 	libgdal-dev \
 	libgeos-dev \
 	libproj-dev \
 	liblwgeom-dev \
 	libudunits2-dev \
 	postgis \
-	make \
-	wget \
 	r-base-dev
 
-RUN Rscript -e 'install.packages(c("devtools"), repos = "https://cloud.r-project.org")'
-RUN Rscript -e 'devtools::install_github("edzer/sfr")'
+RUN apt-get install -y texinfo \
+       texlive-base \
+       texlive-extra-utils \
+       texlive-fonts-extra \
+       texlive-fonts-recommended \
+       texlive-generic-recommended \
+       texlive-latex-base \
+       texlive-latex-extra \
+       texlive-latex-recommended
+
+RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
+RUN git clone https://github.com/edzer/sfr.git
+RUN R CMD build sfr
+RUN R CMD INSTALL sf_*tar.gz
+RUN R CMD check --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]

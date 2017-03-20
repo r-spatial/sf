@@ -102,4 +102,4 @@ static const R_CallMethodDef CallEntries[] = {
 void R_init_sf(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
-};
+}

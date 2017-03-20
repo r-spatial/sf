@@ -8,16 +8,7 @@ RUN apt-get install -y subversion
 RUN cd /tmp \
 && svn co https://svn.r-project.org/R/trunk R-devel
 
-RUN apt-get install -y texinfo \
-       texlive-base \
-       texlive-extra-utils \
-       texlive-fonts-extra \
-       texlive-fonts-recommended \
-       texlive-generic-recommended \
-       texlive-latex-base \
-       texlive-latex-extra \
-       texlive-latex-recommended
-
+RUN /tmp/R-devel/tools/rsync-recommended
 ## Build and install according the standard 'recipe' I emailed/posted years ago
 RUN cd /tmp/R-devel \
 	&& R_PAPERSIZE=letter \
@@ -36,7 +27,7 @@ RUN cd /tmp/R-devel \
                --without-blas \
                --without-lapack \
                --with-readline \
-               --without-recommended-packages \
+               --with-recommended-packages \
                --program-suffix=dev \
 			   --with-x=no \
 	&& make \
@@ -54,5 +45,8 @@ RUN cd /usr/local/bin \
 && mv Rscript Rscriptdevel \
 && ln -s Rdevel RD \
 && ln -s Rscriptdevel RDscript
+
+RUN rm -fr sf.Rcheck
+RUN RD CMD check --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]
