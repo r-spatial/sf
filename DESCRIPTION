@@ -12,8 +12,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Robin", "Lovelace", role = "ctb"),
 	person("Hadley", "Wickham", role = "ctb"),
 	person("Jeroen", "Ooms", role = "ctb"),
-	person("Etienne", "Racine", role = "ctb")
-	)
+	person("Etienne", "Racine", role = "ctb"))
 Depends:
     R (>= 3.2.0)
 Imports: 
