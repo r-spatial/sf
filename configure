@@ -2067,8 +2067,7 @@ $as_echo "$as_me: CC: ${CC}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: CXX: ${CXX}" >&5
 $as_echo "$as_me: CXX: ${CXX}" >&6;}
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&5
-$as_echo "$as_me: ${PACKAGE_NAME}: ${PACKAGE_VERSION}" >&6;}
+# AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
 #GDAL
 GDAL_CONFIG="gdal-config"
