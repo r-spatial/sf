@@ -46,7 +46,7 @@ Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 }
 
 Rcpp::List CPL_make_valid(Rcpp::List sfc) {
-	Rcpp::stop("st_make_valid requires compiling against liblwgeom\n"); // #nocov
+	Rcpp::stop("st_make_valid requires compilation against liblwgeom\n"); // #nocov
 	return sfc;
 }
 
