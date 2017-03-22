@@ -322,8 +322,8 @@ plot.sfg = function(x, ...) {
 
 # set up plotting area & axes; reuses sp:::plot.Spatial
 #' @name plot
-#' @param xlim see \link{par}
-#' @param ylim see \link{par}
+#' @param xlim see \link{plot.window}
+#' @param ylim see \link{plot.window}
 #' @param asp see below, and see \link{par}
 #' @param axes logical; should axes be plotted? (default FALSE)
 #' @param bgc background color
