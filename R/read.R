@@ -141,7 +141,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	else
 		obj = lapply(obj, function(x) if (is.factor(x)) as.numeric(x) else x)
 	ccls = vapply(obj, function(x) class(x)[1], "")
-	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct")
+	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct", "units")
 	if (any(!ccls.ok)) {
 		# nocov start
 		cat("ignoring columns with unsupported type:\n")
