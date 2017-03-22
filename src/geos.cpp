@@ -1,43 +1,51 @@
 #define GEOS_USE_ONLY_R_API // avoid using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
+#if GEOS_VERSION_MAJOR == 3 && GEOS_VERSION_MINOR >= 5
+#  define HAVE350
+#else
+# if GEOS_VERSION_MAJOR > 3
+#  define HAVE350
+# endif
+#endif
+
 #include <Rcpp.h>
 
 #include "wkb.h"
 
 static void __errorHandler(const char *fmt, ...) { // #nocov start
 
-    char buf[BUFSIZ], *p;
-    va_list(ap);
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
-    va_end(ap);
-    p = buf + strlen(buf) - 1;
-    if(strlen(buf) > 0 && *p == '\n') *p = '\0';
+	char buf[BUFSIZ], *p;
+	va_list(ap);
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	va_end(ap);
+	p = buf + strlen(buf) - 1;
+	if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
 	Rcpp::Function error("stop");
-    error(buf);
+	error(buf);
 
-    return; // #nocov end
+	return; // #nocov end
 }
 
 static void __warningHandler(const char *fmt, ...) {
 
-    char buf[BUFSIZ], *p;
-    va_list(ap);
-    va_start(ap, fmt);
-    vsprintf(buf, fmt, ap);
-    va_end(ap);
-    p = buf + strlen(buf) - 1;
-    if(strlen(buf) > 0 && *p == '\n') *p = '\0';
+	char buf[BUFSIZ], *p;
+	va_list(ap);
+	va_start(ap, fmt);
+	vsprintf(buf, fmt, ap);
+	va_end(ap);
+	p = buf + strlen(buf) - 1;
+	if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
 	Rcpp::Function warning("warning");
 	warning(buf);
-    
-    return;
+	
+	return;
 }
 
-static void __emptyErrorHandler(const char *fmt, void *userdata) {
+static void __countErrorHandler(const char *fmt, void *userdata) {
 	int *i = (int *) userdata;
 	*i = *i + 1;
 }
@@ -45,11 +53,22 @@ static void __emptyErrorHandler(const char *fmt, void *userdata) {
 static void __emptyNoticeHandler(const char *fmt, void *userdata) { }
 
 GEOSContextHandle_t CPL_geos_init(void) {
-    return initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
+#ifdef HAVE350
+	GEOSContextHandle_t ctxt = GEOS_init_r();
+	GEOSContext_setNoticeHandler_r(ctxt, __warningHandler);
+	GEOSContext_setErrorHandler_r(ctxt, __errorHandler);
+	return ctxt;
+#else
+	return initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
+#endif
 }
 
 void CPL_geos_finish(GEOSContextHandle_t ctxt) {
+#ifdef HAVE350
+	GEOS_finish_r(ctxt);
+#else
 	finishGEOS_r(ctxt);
+#endif
 }
 
 std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc, int *dim = NULL) {
@@ -288,15 +307,21 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 
 	int notice = 0;
 	if (NA_on_exception) {
-    	if (sfc.size() > 1)
+		if (sfc.size() > 1)
 			throw std::range_error("NA_on_exception will only work reliably with length 1 sfc objects");
+#ifdef HAVE350
 		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
 		GEOSContext_setErrorMessageHandler_r(hGEOSCtxt, 
-			(GEOSMessageHandler_r) __emptyErrorHandler, (void *) &notice); 
+			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice); 
+#endif
 	}
 
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL); // where notice might be set!
+#ifdef HAVE350
+	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
+	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
+#endif
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
@@ -420,7 +445,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GEOSGeom> out(sfc.length());
 
-#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 5
+#ifdef HAVE350
 	switch (env.size()) {
 		case 0: ;
 		case 1: {
