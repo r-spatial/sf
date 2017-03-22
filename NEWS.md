@@ -1,10 +1,16 @@
-# version 0.3-5
+# version 0.4-1
 
-* add `st_make_valid`, only working if linked to `liblwgeom`
+# version 0.4-0
+
+* have `st_is_valid` catch corrupt geometries too, returning `NA` in that case (requiring GEOS 3.5.0)
+
+* add `st_make_valid`, only working if sf was linked to `liblwgeom`
 
 * add `st_coordinates` method, returning coordinates matrix with indexes
 
-* rename `unlist.sfg` into `as.matrix.sfg`
+* remove `unlist.sfg` 
+
+* add `as.matrix.sfg`; have as.matrix.sfg add indexes to coordinates
 
 * add `st_bind_cols` method
 
