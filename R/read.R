@@ -85,6 +85,34 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
 #' @export
 write_sf <- function(..., quiet = TRUE) st_write(..., quiet = quiet)
 
+
+clean_columns = function(obj, factorsAsCharacter) {
+	for (i in seq_along(obj)) {
+		if (is.factor(obj[[i]])) {
+			obj[[i]] = if (factorsAsCharacter)
+					as.character(obj[[i]])
+				else
+					as.numeric(obj[[i]])
+		}
+		if (!(class(obj[[i]])[1] %in% c("character", "integer", "numeric", "Date", "POSIXct"))) {
+			if (inherits(obj[[i]], "POSIXlt"))
+				obj[[i]] = as.POSIXct(obj[[i]])
+			else if (is.numeric(obj[[i]]))
+				obj[[i]] = as.numeric(obj[[i]]) # strips class
+		}
+	}
+	ccls = vapply(obj, function(x) class(x)[1], "")
+	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct")
+	if (any(!ccls.ok)) {
+		# nocov start
+		cat("ignoring columns with unsupported type:\n")
+		print(cbind(names(obj)[!ccls.ok], ccls[!ccls.ok]))
+		obj[ccls.ok]
+		# nocov end
+	} else
+		obj
+}
+
 #' Write simple features object to file or database
 #'
 #' Write simple features object to file or database
@@ -136,21 +164,14 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
-	if (factorsAsCharacter)
-		obj = lapply(obj, function(x) if (is.factor(x)) as.character(x) else x)
-	else
-		obj = lapply(obj, function(x) if (is.factor(x)) as.numeric(x) else x)
-	ccls = vapply(obj, function(x) class(x)[1], "")
-	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct", "units")
-	if (any(!ccls.ok)) {
-		# nocov start
-		cat("ignoring columns with unsupported type:\n")
-		print(cbind(names(obj)[!ccls.ok], ccls[!ccls.ok]))
-		obj = obj[ccls.ok]
-		# nocov end
-	}
+
+	obj = clean_columns(obj, factorsAsCharacter)
+
 	attr(obj, "colclasses") = vapply(obj, function(x) class(x)[1], "")
-	dim = class(geom[[1]])[1]
+	dim = if (length(geom) == 0)
+			"XY"
+		else
+			class(geom[[1]])[1]
 	CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update)
