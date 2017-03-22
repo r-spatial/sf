@@ -1,5 +1,11 @@
 # version 0.4-1
 
+* `st_read` supports reading objects with multiple geometry columns #257 #255
+
+* support writing (exporting) objects with non-standard columns, such as `units` or `POSIXlt` #264
+
+* catch dependencies on GEOS 3.3.5; #260 (hence no 0.4-0 binary on MacOSX)
+
 # version 0.4-0
 
 * have `st_is_valid` catch corrupt geometries too, returning `NA` in that case (requiring GEOS 3.5.0)

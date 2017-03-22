@@ -5,11 +5,11 @@
 // #include "wkb.h"
 #include "gdal.h"
 
-Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char *geom_name, 
-		bool int64_as_string) {
-	int n = poFDefn->GetFieldCount() + 1; // last one for features
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string) {
+
+	int n = poFDefn->GetFieldCount() + poFDefn->GetGeomFieldCount();
 	Rcpp::List out(n);
-	Rcpp::CharacterVector names(poFDefn->GetFieldCount() + 1);
+	Rcpp::CharacterVector names(n);
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
 		OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn(i);
 		switch (poFieldDefn->GetType()) {
@@ -47,10 +47,24 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, const char
 		}
 		names[i] = poFieldDefn->GetNameRef();
 	}
-	if (*geom_name == '\0')
-		names[poFDefn->GetFieldCount()] = "geometry";
-	else
-		names[poFDefn->GetFieldCount()] = geom_name;
+
+	for (int i = 0; i < poFDefn->GetGeomFieldCount(); i++) {
+		// get the geometry fields:
+		OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
+		if (poGFDefn == NULL)
+			throw std::range_error("GeomFieldDefn error"); // #nocov
+		std::string geom = "geometry";
+		const char *geom_name = poGFDefn->GetNameRef();
+		if (*geom_name == '\0') {
+			if (i > 0)
+				names[i + poFDefn->GetFieldCount()] = geom + std::to_string(i); // c++11
+			else
+				names[i + poFDefn->GetFieldCount()] = geom;
+		} else
+			names[i + poFDefn->GetFieldCount()] = geom_name;
+		out[i + poFDefn->GetFieldCount()] = Rcpp::List(n_features); // ?
+	}
+
 	out.attr("names") = names;
 	return out;
 }
@@ -150,7 +164,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
-		Rcpp::CharacterVector options, bool quiet = false, int iGeomField = 0, int toTypeUser = 0,
+		Rcpp::CharacterVector options, bool quiet = false, int toTypeUser = 0,
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
@@ -199,18 +213,19 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (n_d < 0)
 		n_d = (double) count_features(poLayer);
 	size_t n = (size_t) n_d; // what is List's max length?
-	std::vector<OGRGeometry *> poGeometryV(n); // full archive
+
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 
-	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 	if (! quiet)
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] <<
 			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;
-	// get the geometry field:
-	OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(iGeomField);
-	if (poGFDefn == NULL)
-		throw std::range_error("wrong value for iGeomField"); // #nocov
-	Rcpp::List out = allocate_out_list(poFDefn, n, poGFDefn->GetNameRef(), int64_as_string);
+
+	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+
+	std::vector<OGRGeometry *> poGeometryV(n * poFDefn->GetGeomFieldCount());
+	// cycles column wise: 2nd el is 1st geometry, 2nd feature
+
+	Rcpp::List out = allocate_out_list(poFDefn, n, int64_as_string);
 
 	// read all features:
 	poLayer->ResetReading();
@@ -305,33 +320,45 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					break;
 			}
 		}
-		poFeatureV[i] = poFeature;
 
 		// feature geometry:
-		poGeometryV[i] = poFeature->GetGeomFieldRef(iGeomField);
-		if (poGeometryV[i] == NULL)
-			throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef"); // #nocov
-		i++;
-	}
-	if (promote_to_multi && toTypeUser == 0)
-		toTypeUser = to_multi_what(poGeometryV);
-	if (toTypeUser != 0) { 
-		for (i = 0; i < poFeatureV.size(); i++) {
-			poFeatureV[i]->SetGeometryDirectly(
-				OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
-				(OGRwkbGeometryType) toTypeUser, NULL) );
-			poGeometryV[i] = poFeatureV[i]->GetGeomFieldRef(iGeomField);
+		for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
+			poGeometryV[i + n * iGeom] = poFeature->GetGeomFieldRef(iGeom);
+			if (poGeometryV[i + n * iGeom] == NULL)
+				throw std::invalid_argument("NULL pointer returned by GetGeomFieldRef"); // #nocov
 		}
+
+		poFeatureV[i] = poFeature;
+		i++;
+	} // all read...
+
+	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
+		if (promote_to_multi && toTypeUser == 0)
+			toTypeUser = to_multi_what(poGeometryV);
+		if (toTypeUser != 0) { 
+			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
+			for (i = 0; i < poFeatureV.size(); i++) {
+				OGRErr err = poFeatureV[i + n * iGeom]->SetGeometryDirectly(
+					OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
+					(OGRwkbGeometryType) toTypeUser, NULL) );
+				poGeometryV[i + n * iGeom] = poFeatureV[i]->GetGeomFieldRef(iGeom);
+			}
+		}
+		if (! quiet && toTypeUser && n > 0)
+			Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
+		// convert to R:
+		std::vector<OGRGeometry *> poGeom(n);
+		for (int i = 0; i < n; i++)
+			poGeom[i] = poGeometryV[i + n * iGeom];
+		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
+		out[iGeom + poFDefn->GetFieldCount()] = sfc;
 	}
-	if (! quiet && toTypeUser)
-		Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
-	// convert to R:
-	Rcpp::List sfc = sfc_from_ogr(poGeometryV, false); // don't destroy
+
 	if (warn_int64)
 		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
 			" lost significance after conversion to double;" << std::endl <<
 			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
-	out[poFDefn->GetFieldCount()] = sfc;
+
 	// clean up:
 	for (size_t i = 0; i < n; i++)
 		OGRFeature::DestroyFeature(poFeatureV[i]);

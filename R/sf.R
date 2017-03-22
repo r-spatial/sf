@@ -338,10 +338,13 @@ st_sf = function(..., agr = NA_agr_, row.names,
 print.sf = function(x, ..., n = 
 		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) { 
 
-	nf = length(x) - 1
+	geoms = which(vapply(x, function(col) inherits(col, "sfc"), TRUE))
+	nf = length(x) - length(geoms)
 	app = paste("and", nf, ifelse(nf == 1, "field", "fields"))
 	if (any(!is.na(st_agr(x))))
 		app = paste0(app, "\n", "Attribute-geometry relationship: ", summarize_agr(x))
+	if (length(geoms) > 1)
+		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
 		if (inherits(x, "tbl_df"))

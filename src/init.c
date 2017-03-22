@@ -22,7 +22,7 @@ extern SEXP sf_CPL_length(SEXP);
 extern SEXP sf_CPL_gdal_segmentize(SEXP, SEXP);
 extern SEXP sf_CPL_gdal_linestring_sample(SEXP, SEXP);
 extern SEXP sf_CPL_get_layers(SEXP, SEXP, SEXP);
-extern SEXP sf_CPL_read_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP sf_CPL_read_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_write_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_geos_binop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_geos_is_valid(SEXP, SEXP);
@@ -68,7 +68,7 @@ static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_gdal_segmentize", (DL_FUNC) &sf_CPL_gdal_segmentize, 2 },
 	{"sf_CPL_gdal_linestring_sample", (DL_FUNC) &sf_CPL_gdal_linestring_sample, 2 },
 	{"sf_CPL_get_layers", (DL_FUNC) &sf_CPL_get_layers, 3 },
-	{"sf_CPL_read_ogr", (DL_FUNC) &sf_CPL_read_ogr, 8 },
+	{"sf_CPL_read_ogr", (DL_FUNC) &sf_CPL_read_ogr, 7 },
 	{"sf_CPL_write_ogr", (DL_FUNC) &sf_CPL_write_ogr, 10 },
 
 	{"sf_CPL_geos_binop", (DL_FUNC) &sf_CPL_geos_binop, 6 },

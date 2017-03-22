@@ -56,18 +56,21 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 
 	if (file.exists(dsn))
 		dsn = normalizePath(dsn)
 
-	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, iGeomField - 1L, type,
-		promote_to_multi, int64_as_string)
+	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+
+	# TODO: take care of multiple geometry colums:
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 	nm = names(x)[which.geom]
-	geom = x[[which.geom]]
-	x[[which.geom]] = NULL
-	if (length(x) == 0)
-		x = data.frame(row.names = seq_along(geom))
+	geom = x[which.geom]
+
+	x = if (length(x) == length(geom)) # ONLY geometry column(s)
+		data.frame(row.names = seq_along(geom[[1]]))
 	else
-		x = as.data.frame(x, stringsAsFactors = stringsAsFactors)
-	x[[nm]] = st_sfc(geom, crs = attr(geom, "crs")) # computes bbox
-	x = st_as_sf(x, ...)
+		as.data.frame(x[-which.geom], stringsAsFactors = stringsAsFactors)
+
+	for (i in seq_along(geom))
+		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
+	x = st_as_sf(x, ..., sf_column_name = nm[iGeomField])
 	if (! quiet)
 		print(x, n = 0)
 	else
