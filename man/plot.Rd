@@ -94,9 +94,9 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{rule}{see \link[graphics]{polypath}}
 
-\item{xlim}{see \link{par}}
+\item{xlim}{see \link{plot.window}}
 
-\item{ylim}{see \link{par}}
+\item{ylim}{see \link{plot.window}}
 
 \item{asp}{see below, and see \link{par}}
 

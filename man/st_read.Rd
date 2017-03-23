@@ -10,8 +10,8 @@
 \alias{st_read_db}
 \title{Read simple features or layers from file or database}
 \usage{
-st_read(dsn, layer, ..., options = NULL, quiet = FALSE, iGeomField = 1L,
-  type = 0, promote_to_multi = TRUE,
+st_read(dsn, layer, ..., options = NULL, quiet = FALSE,
+  geometry_column = 1L, type = 0, promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
@@ -35,7 +35,7 @@ message when there are multiple layers, or give an error if there are no layers 
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers}
 
-\item{iGeomField}{integer; in case of multiple geometry fields, which one to take?}
+\item{geometry_column}{integer or character; in case of multiple geometry fields, which one to take?}
 
 \item{type}{integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry
 types, conversion to the highest numeric type value found will be attempted.}
@@ -70,10 +70,10 @@ Read simple features from file or database, or retrieve layer names and their ge
 Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 }
 \details{
-for iGeomField, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
+for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings.
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis, \code{type} is used for all geometry columns.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.

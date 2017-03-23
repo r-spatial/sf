@@ -333,23 +333,28 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	} // all read...
 
 	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
+		std::vector<OGRGeometry *> poGeom(n);
+		for (int i = 0; i < n; i++)
+			poGeom[i] = poGeometryV[i + n * iGeom];
+		int toType = 0;
 		if (promote_to_multi && toTypeUser == 0)
-			toTypeUser = to_multi_what(poGeometryV);
-		if (toTypeUser != 0) { 
+			toType = to_multi_what(poGeom);
+		else
+			toType = toTypeUser;
+		if (toType != 0) { 
 			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
 			for (i = 0; i < poFeatureV.size(); i++) {
-				OGRErr err = poFeatureV[i + n * iGeom]->SetGeometryDirectly(
-					OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(), 
-					(OGRwkbGeometryType) toTypeUser, NULL) );
-				poGeometryV[i + n * iGeom] = poFeatureV[i]->GetGeomFieldRef(iGeom);
+				OGRErr err = poFeatureV[i]->SetGeomFieldDirectly(
+					iGeom,
+					OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(iGeom), 
+					(OGRwkbGeometryType) toType, NULL) );
+				handle_error(err);
+				poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
 			}
 		}
 		if (! quiet && toTypeUser && n > 0)
 			Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
 		// convert to R:
-		std::vector<OGRGeometry *> poGeom(n);
-		for (int i = 0; i < n; i++)
-			poGeom[i] = poGeometryV[i + n * iGeom];
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		out[iGeom + poFDefn->GetFieldCount()] = sfc;
 	}
