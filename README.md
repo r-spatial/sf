@@ -57,6 +57,7 @@ brew install proj
 brew install geos 
 brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
+brew link --force gdal2
 ```
 after that, you should be able to install `sf` as a source package.
 
