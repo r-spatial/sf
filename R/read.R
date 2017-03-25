@@ -156,7 +156,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = FALSE) {
+		update = driver %in% unlist(prefix_map)) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
@@ -211,6 +211,7 @@ st_drivers = function(what = "vector") {
 
 #' @export
 print.sf_layers = function(x, ...) {
+	n_gt = max(sapply(x$geomtype, length))
 	x$geomtype = vapply(x$geomtype, function(x) paste(x, collapse = ", "), "")
 	cat(paste("Driver:", x$driver, "\n"))
 	x$driver = NULL
@@ -221,7 +222,11 @@ print.sf_layers = function(x, ...) {
 		invisible(x)
 	} else {
 		df = data.frame(unclass(x))
-		names(df) = c("layer_name", "geometry_type", "features", "fields")
+		gt = if (n_gt > 1)
+				"geometry_types"
+			else
+				"geometry_type"
+		names(df) = c("layer_name", gt, "features", "fields")
 		print(df)
 		invisible(df)
 	}
@@ -250,9 +255,9 @@ guess_driver = function(dsn) {
 
 	# find match: try extension first
 	drv = extension_map[tolower(tools::file_ext(dsn))]
-	if (any(grep(":", gsub(":[/\\]", "/", dsn)))) {
-			drv = prefix_map[tolower(strsplit(dsn, ":")[[1]][1])]
-	}
+	if (any(grep(":", gsub(":[/\\]", "/", dsn))))
+		drv = prefix_map[tolower(strsplit(dsn, ":")[[1]][1])]
+
 	drv <- unlist(drv)
 
 	if (is.null(drv)) {

@@ -209,6 +209,7 @@ ST_GeomFromText('POINT( 181232 333168 )', 28992));"
 	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
 	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
 	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geom_2"))
+	x <- st_layers("PG:dbname=postgis")
 })
 
 if (can_con(pg)) {

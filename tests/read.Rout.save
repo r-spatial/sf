@@ -265,11 +265,9 @@ proj4string:    NA
 5  Inf      1970-01-02 1970-01-01 00:00:01 POINT(5 5)
 > 
 > try(st_write(x, "x.shp", driver = character(0))) # err
-driver, dsn or layer unspecified
 Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Driver unspecified.
-
+  expecting a single value
 > 
 > proc.time()
    user  system elapsed 
-  0.688   0.044   0.843 
+  0.600   0.024   0.754 

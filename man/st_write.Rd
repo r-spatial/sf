@@ -9,7 +9,7 @@
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-  update = FALSE)
+  update = driver \%in\% unlist(prefix_map))
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
