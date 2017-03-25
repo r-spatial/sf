@@ -73,7 +73,7 @@ CPL_get_layers <- function(datasource, options, do_count = FALSE) {
     .Call('sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
-CPL_read_ogr <- function(datasource, layer, options, quiet = FALSE, toTypeUser = 0L, promote_to_multi = TRUE, int64_as_string = FALSE) {
+CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
     .Call('sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
 }
 

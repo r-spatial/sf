@@ -10,8 +10,10 @@
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
 #' @param geometry_column integer or character; in case of multiple geometry fields, which one to take?
-#' @param type integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry
-#' types, conversion to the highest numeric type value found will be attempted.
+#' @param type integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi} 
+#' is \code{TRUE}, in case of mixed feature geometry
+#' types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
+#' can be given.
 #' @param promote_to_multi logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
 #' Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default
@@ -21,7 +23,7 @@
 #' @details for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 #' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 #' may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-#' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis, \code{type} is used for all geometry columns.
+#' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
 #' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
 #' data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
 #' layer names, each with their geometry type(s). Note that the number of layers may also be zero.
@@ -55,6 +57,9 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 
 	if (file.exists(dsn))
 		dsn = normalizePath(dsn)
+
+	if (length(promote_to_multi) > 1)
+		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
 

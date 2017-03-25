@@ -164,7 +164,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
-		Rcpp::CharacterVector options, bool quiet = false, int toTypeUser = 0,
+		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
@@ -336,11 +336,16 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		std::vector<OGRGeometry *> poGeom(n);
 		for (int i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
-		int toType = 0;
-		if (promote_to_multi && toTypeUser == 0)
+		int toType = 0, toTypeU = 0;
+		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
+			toTypeU = toTypeUser[iGeom];
+		else
+			toTypeU = toTypeUser[0];
+		if (promote_to_multi && toTypeU == 0)
 			toType = to_multi_what(poGeom);
 		else
-			toType = toTypeUser;
+			toType = toTypeU;
+
 		if (toType != 0) { 
 			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
 			for (i = 0; i < poFeatureV.size(); i++) {

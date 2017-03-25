@@ -37,8 +37,10 @@ message when there are multiple layers, or give an error if there are no layers 
 
 \item{geometry_column}{integer or character; in case of multiple geometry fields, which one to take?}
 
-\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, in case of mixed feature geometry
-types, conversion to the highest numeric type value found will be attempted.}
+\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi} 
+is \code{TRUE}, in case of mixed feature geometry
+types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
+can be given.}
 
 \item{promote_to_multi}{logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
 Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
@@ -73,7 +75,7 @@ Read PostGIS table directly through DBI and RPostgreSQL interface, converting bi
 for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis, \code{type} is used for all geometry columns.
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
