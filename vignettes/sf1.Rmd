@@ -279,7 +279,7 @@ attributes(nc.geom)
 ## Mixed geometry types
 
 The class of `nc.geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
-is shared with all geometry types, and `sft_TYPE` with `TYPE`
+is shared with all geometry types, and `sfc_TYPE` with `TYPE`
 indicating the type of the particular geometry at hand.
 
 There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`. 
@@ -581,7 +581,7 @@ from such improvements, and limit the provenance of datasets.
 
 Coordinate reference system transformations can be carried out using
 `st_transform`, e.g. converting longitudes/latitudes in NAD27 to
-web mercator (EPSG:3875) can be done by
+web mercator (EPSG:3857) can be done by
 
 ```{r}
 nc.web_mercator <- st_transform(nc, 3857)
