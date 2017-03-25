@@ -35,6 +35,7 @@ before_install:
 warnings_are_errors: true
 
 r_packages:
+  - sp
   - rgdal
   - roxygen2
   - rmarkdown
