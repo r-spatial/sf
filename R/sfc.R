@@ -302,6 +302,7 @@ st_set_precision <- function(x, precision) {
     UseMethod("st_set_precision")
 }
 
+#' @export
 st_set_precision.sfc <- function(x, precision) {
     if (length(precision) != 1) {
         stop("Precision applies to all dimensions and must be of length 1.", call. = FALSE)
@@ -312,6 +313,7 @@ st_set_precision.sfc <- function(x, precision) {
     structure(x, precision = precision)
 }
 
+#' @export
 st_set_precision.sf <- function(x, precision) {
     st_geometry(x) <- st_set_precision(st_geometry(x), precision)
     return(x)
