@@ -281,6 +281,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 						(double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
 						0.0, 0.0, 0.0);
 					dtlst.attr("class") = "POSIXlt";
+					if (TZFlag == 100)
+						dtlst.attr("tzone") = "UTC";
 					Rcpp::NumericVector nv;
 					nv = out[iField];
 					if (! poFeature->IsFieldSet(iField)) {

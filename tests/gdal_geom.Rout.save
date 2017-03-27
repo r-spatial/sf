@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -103,7 +103,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 77 drivers
+GDAL has 75 drivers
 > 
 > # GEOS ops:
 > 
@@ -349,7 +349,7 @@ POINTZ(6378137 0 0)
 [1] 1
 > 
 > try(st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
-Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
+[1] 4
 > 
 > st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 [1] 0
@@ -361,4 +361,4 @@ MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1), (0 1, 0.5 0.5), (0.5 0.5, 1 0))
 > 
 > proc.time()
    user  system elapsed 
-  0.560   0.036   0.593 
+  0.584   0.024   0.608 

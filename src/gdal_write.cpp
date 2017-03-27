@@ -88,11 +88,12 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 					break;
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
+				nv0.attr("tzone") = "UTC";
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
 				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4], 
 					(int) rd[3], (int) rd[2], (int) rd[1], 
-					(float) rd[0], 100); // nTZFlag 100: GMT
+					(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
 				} break;
 			default:
 				// we should never get here! // #nocov start

@@ -1,5 +1,9 @@
 # version 0.4-1
 
+* `st_read` now respects time that is read as UTC
+
+* `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unkown" or "local"
+
 * `st_length` now works for POINT and MULTIPOINT (returning 0); POLYGON and MULTIPOLYGON are converted to MULTILINESTRING before computing length, thus giving polygon perimeter (#268)
 
 * `st_write` now has `update` depend on driver; now, for databases, the default is `TRUE`, otherwise `FALSE` (it refers to update of the database, and not to overwriting the table in the database, this will by default not succeed); #274
