@@ -8,7 +8,7 @@ db_drop_table_schema <- function(con, schema, table = NULL) {
     } else {
         table <- paste(c(schema, table), collapse = ".")
     }
-    DBI::dbSendQuery(pg, paste("DROP TABLE", table))
+    DBI::dbSendQuery(pg, paste("DROP TABLE ", table, " CASCADE;"))
 }
 require("sp")
 data(meuse)
@@ -33,6 +33,18 @@ test_that("can write to db", {
     expect_silent(st_write_db(pg, pts, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_warning(st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
+})
+
+test_that("sf can write units to database (#264)", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    ptsu <- pts
+    ptsu[["length"]] <- ptsu[["cadmium"]]
+    units(ptsu[["length"]]) <- units::make_unit("km")
+    expect_silent(st_write_db(pg, ptsu, "sf_units__", overwrite = TRUE))
+    r <- st_read_db(pg, "sf_units__")
+    expect_is(r$length, "numeric")
+    expect_equal(sort(r[["length"]]), sort(as.numeric(ptsu[["length"]])))
+    try(db_drop_table_schema(pg, "sf_units__"), silent = TRUE)
 })
 
 test_that("can write to other schema", {
