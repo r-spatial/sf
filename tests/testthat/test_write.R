@@ -15,7 +15,8 @@ test_that("sf can write to all writable formats", {
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]),
                         excluded_drivers))
         st_write(meuse, paste0(tf, ".", ext))
-	st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"))
+	if ("netCDF" %in% drvs)
+		st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"))
 })
 
 test_that("sf can write units (#264)", {
