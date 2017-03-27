@@ -90,11 +90,6 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
 	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 
-#' @name st_read
-#' @export
-write_sf <- function(..., quiet = TRUE) st_write(..., quiet = quiet)
-
-
 clean_columns = function(obj, factorsAsCharacter) {
 	for (i in seq_along(obj)) {
 		if (is.factor(obj[[i]])) {
@@ -153,6 +148,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #'     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 #' demo(nc, ask = FALSE)
 #' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
+#' @name st_write
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
@@ -185,6 +181,10 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update)
 }
+
+#' @name st_write
+#' @export
+write_sf <- function(..., quiet = TRUE) st_write(..., quiet = quiet)
 
 #' Get GDAL drivers
 #'
