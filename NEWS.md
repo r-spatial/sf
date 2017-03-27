@@ -1,12 +1,14 @@
 # version 0.4-1
 
-* `st_write` now has `update` depend on driver; now, for databases, the default is `TRUE`, otherwise `FALSE` (it refers to update of the database, and not to overwriting the table in the database, this will by default not succeed)
+* `st_length` now works for POINT and MULTIPOINT (returning 0); POLYGON and MULTIPOLYGON are converted to MULTILINESTRING before computing length, thus giving polygon perimeter (#268)
+
+* `st_write` now has `update` depend on driver; now, for databases, the default is `TRUE`, otherwise `FALSE` (it refers to update of the database, and not to overwriting the table in the database, this will by default not succeed); #274
 
 * `st_read` supports reading objects with multiple geometry columns #257 #255
 
 * support writing (exporting) objects with non-standard columns, such as `units` or `POSIXlt` #264
 
-* catch dependencies on GEOS 3.3.5; #260 (hence no 0.4-0 binary on MacOSX)
+* catch dependencies on GEOS 3.3.5 (hence no 0.4-0 CRAN binary for MacOSX) #260
 
 # version 0.4-0
 
