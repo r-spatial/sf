@@ -152,7 +152,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% unlist(prefix_map)) {
+		update = driver %in% db_drivers) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
@@ -351,3 +351,7 @@ prefix_map <- list(
         "odbc" = "ODBC",
         "pg" = "PostgreSQL",
         "sde" = "SDE")
+
+#' Drivers for which update should be \code{TRUE} by default
+#' @docType data
+db_drivers <- c(unlist(prefix_map), "GPKG", "SQLite")
