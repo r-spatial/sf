@@ -88,13 +88,13 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' library(sp)
 #' data(meuse)
 #' sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#' library(RPostgreSQL)
+#' library(RPostgreSQL) 
 #' conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #' st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
 #'   
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
                        ..., overwrite = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
-    DEBUG = function(x) { if (debug) print(x); x }
+    DEBUG = function(x) { if (debug) message(x); x }
     if (is.null(conn))
         stop("No connection provided")
     table <- schema_table(table)
@@ -130,20 +130,16 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
     rn = row.names(obj)
     if (! binary) {
         wkt = st_as_text(geom)
-        for (r in seq_along(rn)) {
-            cmd = DEBUG(paste0("UPDATE ", paste0(table, collapse = "."), " SET ", geom_name, 
-                               " = ST_GeomFromText('", wkt[r], "',",SRID,") WHERE \"row.names\" = '", rn[r], "';"))
-            dbGetQuery(conn, cmd)
-        }
+        cmd = paste0("UPDATE ", paste0(table, collapse = "."), " SET ", geom_name, " = ST_GeomFromText('", wkt, "',",SRID,") WHERE \"row.names\" = '", rn, "';")
     } else {
         wkb = st_as_binary(geom, EWKB = TRUE)
-        for (r in seq_along(rn)) {
-            cmd = DEBUG(paste0("UPDATE ", paste0(table, collapse = "."), " SET ",
-                               geom_name, " = '", CPL_raw_to_hex(wkb[[r]]), 
-                               "' WHERE \"row.names\" = '", rn[r], "';"))
-            dbGetQuery(conn, cmd)
-        }
+        wkb = vapply(wkb, CPL_raw_to_hex, CPL_raw_to_hex(wkb[[1]]))
+        cmd = paste0("UPDATE ", paste0(table, collapse = "."), " SET ",
+                     geom_name, " = '", wkb, 
+                     "' WHERE \"row.names\" = '", rn, "';")
     }
+    
+    invisible(DBI::dbGetQuery(conn, DEBUG(paste(cmd, collapse = "\n"))))
 }
 
 
