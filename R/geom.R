@@ -83,9 +83,9 @@ ll_length = function(x, fn, p) {
 }
 
 #' @name geos
-#' @param dist_fun function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
+#' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @export
-#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement.
+#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 #' @examples
 #' dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 #' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
@@ -93,14 +93,17 @@ ll_length = function(x, fn, p) {
 #' st_length(line, dist_fun = dist_vincenty)
 st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
-	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
+	if (inherits(x, "sfc_POINT") || inherits(x, "sfc_MULTIPOINT"))
+		return(0.0)
+
+	if (inherits(x, "sfc_POLYGON") || inherits(x, "sfc_MULTIPOLYGON"))
+		x = st_cast(x, "MULTILINESTRING")
+	else 
+		stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
 	if (isTRUE(st_is_longlat(x))) {
+		if (missing(dist_fun) && !requireNamespace("geosphere", quietly = TRUE))
+			stop("package geosphere required, please install it first")
 		p = crs_parameters(st_crs(x))
-		if (missing(dist_fun)) {
-			if (!requireNamespace("geosphere", quietly = TRUE))
-				stop("package geosphere required, please install it first")
-			dist_fun = geosphere::distGeo
-		}
 		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
 		units(ret) = units(p$SemiMajor)
 		ret

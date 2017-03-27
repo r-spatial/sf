@@ -1,5 +1,7 @@
 # version 0.4-1
 
+* `st_write` now has `update` depend on driver; now, for databases, the default is `TRUE`, otherwise `FALSE` (it refers to update of the database, and not to overwriting the table in the database, this will by default not succeed)
+
 * `st_read` supports reading objects with multiple geometry columns #257 #255
 
 * support writing (exporting) objects with non-standard columns, such as `units` or `POSIXlt` #264
