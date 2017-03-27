@@ -109,7 +109,7 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
     df = obj
     df[[attr(df, "sf_column")]] = NULL
     class(df) = "data.frame"
-    dbWriteTable(conn, table, df, ...)
+    dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
     geom = st_geometry(obj)
     DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
     crs = st_crs(geom)
