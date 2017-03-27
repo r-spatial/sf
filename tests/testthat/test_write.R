@@ -16,3 +16,13 @@ test_that("sf can write to all writable formats", {
                         excluded_drivers))
         st_write(meuse, paste0(tf, ".", ext))
 })
+
+test_that("sf can write units (#264)", {
+    tf <- tempfile(fileext = ".gpkg")
+    meuse[["length"]] <- meuse[["cadmium"]]
+    units(meuse$length) <- units::make_unit("km")
+    st_write(meuse, tf)
+    disc <- st_read(tf)
+    expect_is(disc[["length"]], "numeric")
+    expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
+})
