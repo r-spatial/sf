@@ -5,8 +5,6 @@
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
-\alias{write_sf}
-\alias{st_read}
 \alias{st_read_db}
 \title{Read simple features or layers from file or database}
 \usage{
@@ -15,8 +13,6 @@ st_read(dsn, layer, ..., options = NULL, quiet = FALSE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
-
-write_sf(..., quiet = TRUE)
 
 st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
   EWKB, ...)

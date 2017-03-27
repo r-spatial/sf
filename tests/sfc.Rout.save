@@ -363,8 +363,8 @@ In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
 > # plot(pol)
 > try(plot(st_polygonize(pol))) # --> breaks
 Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
-> try(st_length(st_sfc(st_point(c(0,0))))) # breaks
-Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
+> st_length(st_sfc(st_point(c(0,0))))
+[1] 0
 > 
 > try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 Error in StopZ(zm) : Z not supported: try st_drop_zm first?
@@ -733,4 +733,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  0.856   0.024   0.879 
+  0.860   0.028   0.886 

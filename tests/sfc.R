@@ -81,7 +81,7 @@ p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
 pol = st_polygon(list(p))
 # plot(pol)
 try(plot(st_polygonize(pol))) # --> breaks
-try(st_length(st_sfc(st_point(c(0,0))))) # breaks
+st_length(st_sfc(st_point(c(0,0))))
 
 try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 

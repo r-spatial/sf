@@ -152,7 +152,7 @@ st_line_sample(x, n, density, type = "regular")
 
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
 
-\item{dist_fun}{function to be used for great circle distances; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
+\item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
@@ -193,7 +193,7 @@ st_dimension returns 0 for points, 1 for lines, 2 for surfaces; if \code{NA_if_e
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
-st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement.
+st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
 st_is_simple and st_is_valid return a logical vector
 

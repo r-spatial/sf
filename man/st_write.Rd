@@ -3,13 +3,17 @@
 \name{st_write}
 \alias{st_write}
 \alias{st_write}
+\alias{write_sf}
+\alias{st_write}
 \alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-  update = driver \%in\% unlist(prefix_map))
+  update = driver \%in\% db_drivers)
+
+write_sf(..., quiet = TRUE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,

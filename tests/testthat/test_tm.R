@@ -1,6 +1,7 @@
 context("sf: date and time")
 
 test_that("st_read and write handle date and time", {
+	Sys.setenv(TZ="UTC")
     x = st_sf(a = 1:2, b=c(5.6,3), dt = Sys.Date()+1:2, tm = Sys.time()+2:3, 
               geometry = st_sfc(st_point(c(1,1)), st_point(c(2,2))))
     shp <- paste0(tempfile(), ".shp")
