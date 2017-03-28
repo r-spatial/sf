@@ -246,9 +246,7 @@ Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg) {
-	// a hard (but quite sane) assumption here is that in case epsg[0] != NA_INTEGER,
-	// proj4 and epsg correspond, and point to the same SRS.
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 
 	// import proj4string:
 	OGRSpatialReference *dest = new OGRSpatialReference;
@@ -280,14 +278,19 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::Inte
 	}
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
-	if (epsg[0] != NA_INTEGER) {
-		Rcpp::List crs = ret.attr("crs");
-		crs(0) = epsg;
-		ret.attr("crs") = crs;
-	}
 	ct->DestroyCT(ct);
 	dest->Release();
 	return ret; 
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet = true) {
+
+	std::vector <char *> options = create_options(opt, quiet);
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	for (size_t i = 0; i < g.size(); i++)
+		g[i] = OGRGeometryFactory::transformWithOptions(g[i], NULL, options.data());
+	return sfc_from_ogr(g, true); // destroys g;
 }
 
 // [[Rcpp::export]]

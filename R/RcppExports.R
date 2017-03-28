@@ -33,8 +33,12 @@ CPL_roundtrip <- function(sfc) {
     .Call('sf_CPL_roundtrip', PACKAGE = 'sf', sfc)
 }
 
-CPL_transform <- function(sfc, proj4, epsg) {
-    .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4, epsg)
+CPL_transform <- function(sfc, proj4) {
+    .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
+}
+
+CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
+    .Call('sf_CPL_wrap_dateline', PACKAGE = 'sf', sfc, opt, quiet)
 }
 
 CPL_crs_from_proj4string <- function(p4s) {

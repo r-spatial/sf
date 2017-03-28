@@ -1,3 +1,7 @@
+# version 0.4-2
+
+* `st_wrap_dateline` wraps (cuts up) geometries crossing the antimeridian, such that they no longer cross it.
+
 # version 0.4-1
 
 * `st_read` now respects time that is read as UTC

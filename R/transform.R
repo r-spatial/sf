@@ -74,7 +74,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
 	}
 
 	if (crs != st_crs(x)) { # transform:
-		ret = structure(CPL_transform(x, crs$proj4string, crs$epsg),
+		ret = structure(CPL_transform(x, crs$proj4string),
 			single_type = NULL, crs = crs)
 		ret = st_sfc(ret)
 		if (check)
@@ -109,7 +109,7 @@ st_transform.sfg = function(x, crs , ...) {
 	if (missing(crs))
 		stop("argument crs cannot be missing")
 	crs = make_crs(crs)
-	st_transform(x, crs, ...)
+	structure(st_transform(x, crs, ...)[[1]], crs = crs)
 }
 
 #' @name st_transform
@@ -127,4 +127,17 @@ st_proj_info = function(type = "proj") {
 		res$description <- sapply(strsplit(as.character(res$description), "\n"),
 			function(x) x[1])
     data.frame(res)
+}
+
+#' @name st_transform
+#' @param options character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)
+#' @param quiet logical; print options after they have been parsed?
+#' @export
+#' @examples
+#' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
+st_wrap_dateline = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
+	stopifnot(st_is_longlat(x))
+	stopifnot(is.character(options))
+	stopifnot(is.logical(quiet) && length(quiet) == 1)
+	st_sfc(CPL_wrap_dateline(x, options, quiet), crs = st_crs(x))
 }

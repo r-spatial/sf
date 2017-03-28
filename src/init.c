@@ -12,7 +12,8 @@ extern SEXP sf_CPL_crs_parameters(SEXP);
 extern SEXP sf_CPL_crs_from_epsg(SEXP);
 extern SEXP sf_CPL_crs_from_wkt(SEXP);
 extern SEXP sf_CPL_roundtrip(SEXP);
-extern SEXP sf_CPL_transform(SEXP, SEXP, SEXP);
+extern SEXP sf_CPL_transform(SEXP, SEXP);
+extern SEXP sf_CPL_wrap_dateline(SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_crs_from_proj4string(SEXP);
 extern SEXP sf_CPL_get_rgdal_drivers(SEXP);
 extern SEXP sf_CPL_sfc_from_wkt(SEXP);
@@ -56,7 +57,8 @@ static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_crs_from_epsg", (DL_FUNC) &sf_CPL_crs_from_epsg, 1},
 	{"sf_CPL_crs_from_wkt", (DL_FUNC) &sf_CPL_crs_from_wkt, 1 },
 	{"sf_CPL_roundtrip", (DL_FUNC) &sf_CPL_roundtrip, 1 },
-	{"sf_CPL_transform", (DL_FUNC) &sf_CPL_transform, 3 },
+	{"sf_CPL_transform", (DL_FUNC) &sf_CPL_transform, 2 },
+	{"sf_CPL_wrap_dateline", (DL_FUNC) &sf_CPL_wrap_dateline, 3 },
 	{"sf_CPL_crs_from_proj4string", (DL_FUNC) &sf_CPL_crs_from_proj4string, 1 },
 
 	{"sf_CPL_get_rgdal_drivers", (DL_FUNC) &sf_CPL_get_rgdal_drivers, 1 },

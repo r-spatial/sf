@@ -91,15 +91,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_transform
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4, Rcpp::IntegerVector epsg);
-RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP, SEXP epsgSEXP) {
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
+RcppExport SEXP sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type proj4(proj4SEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type epsg(epsgSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, proj4, epsg));
+    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, proj4));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_wrap_dateline
+Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet);
+RcppExport SEXP sf_CPL_wrap_dateline(SEXP sfcSEXP, SEXP optSEXP, SEXP quietSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type opt(optSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_wrap_dateline(sfc, opt, quiet));
     return rcpp_result_gen;
 END_RCPP
 }
