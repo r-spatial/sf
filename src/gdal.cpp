@@ -206,9 +206,8 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
-		OGRGeometryFactory f;
 		if (destroy)
-			f.destroyGeometry(g[i]);
+			OGRGeometryFactory::destroyGeometry(g[i]);
 	}
 	Rcpp::List ret = CPL_read_wkb(lst, false, native_endian());
 	ret.attr("crs") = crs;
@@ -288,9 +287,12 @@ Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool qui
 
 	std::vector <char *> options = create_options(opt, quiet);
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	for (size_t i = 0; i < g.size(); i++)
-		g[i] = OGRGeometryFactory::transformWithOptions(g[i], NULL, options.data());
-	return sfc_from_ogr(g, true); // destroys g;
+	std::vector<OGRGeometry *> ret(g.size());
+	for (size_t i = 0; i < g.size(); i++) {
+		ret[i] = OGRGeometryFactory::transformWithOptions(g[i], NULL, options.data());
+		OGRGeometryFactory::destroyGeometry(g[i]);
+	}
+	return sfc_from_ogr(ret, true); // destroys ret;
 }
 
 // [[Rcpp::export]]
