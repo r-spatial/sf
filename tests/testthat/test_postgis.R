@@ -1,3 +1,6 @@
+
+library(sf)
+library(testthat)
 context("sf: postgis")
 
 can_con <- function(x) inherits(x, "PostgreSQLConnection")
@@ -128,7 +131,7 @@ test_that("round trips", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     round_trip = function(conn, wkt) {
         query = paste0("SELECT '", wkt, "'::geometry;")
-        returnstr = suppressWarnings(dbGetQuery(conn, query)$geometry)
+        returnstr = suppressWarnings(DBI::dbGetQuery(conn, query)$geometry)
         wkb = structure(returnstr, class = "WKB")
         ret = st_as_sfc(wkb, EWKB = TRUE)
         message(paste("IN:  ", wkt, "\n"))
@@ -136,7 +139,7 @@ test_that("round trips", {
         message(paste("OUT: ", txt <- st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
         if (length(grep("SRID", txt)) == 0) {
             query = paste0("SELECT ST_AsText('",sf:::CPL_raw_to_hex(st_as_binary(ret[[1]])),"');")
-            received = suppressWarnings(dbGetQuery(conn, query)$st_astext)
+            received = suppressWarnings(DBI::dbGetQuery(conn, query)$st_astext)
             # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
             message(paste("PG:  ", received, "\n"))
         }
@@ -240,11 +243,11 @@ if (can_con(pg)) {
 }
 
 test_that("schema_table", {
-    expect_error(schema_table(NA), "character vector")
-    expect_error(schema_table(NA_character_), "cannot be NA")
-    expect_error(schema_table("a", NA), "cannot be NA")
-    expect_error(schema_table(letters), "longer than 2")
-    expect_equal(schema_table("a", "b"), c("b", "a"))
-    expect_equal(schema_table("a"), c("public", "a"))
+    expect_error(sf:::schema_table(NA), "character vector")
+    expect_error(sf:::schema_table(NA_character_), "cannot be NA")
+    expect_error(sf:::schema_table("a", NA), "cannot be NA")
+    expect_error(sf:::schema_table(letters), "longer than 2")
+    expect_equal(sf:::schema_table("a", "b"), c("b", "a"))
+    expect_equal(sf:::schema_table("a"), c("public", "a"))
 })
 
