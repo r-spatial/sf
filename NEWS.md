@@ -4,6 +4,8 @@
 
 # version 0.4-1
 
+* restore 3.3.0 and c++11 requirement
+
 * `st_read` now respects time that is read as UTC
 
 * `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unkown" or "local"
