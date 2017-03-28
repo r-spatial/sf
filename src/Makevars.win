@@ -13,8 +13,6 @@ PKG_LIBS = \
 	-lpng16 -ljpeg -ltiff -lgeotiff -lgif -lxml2 -llzma -lszip \
 	-lodbc32 -lodbccp32 -liconv -lz -lws2_32
 
-CXX_STD=CXX11
-
 all: clean winlibs
 
 winlibs:
