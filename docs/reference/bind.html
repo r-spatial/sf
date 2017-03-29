@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,27 +84,33 @@
 
     
     <p>Bind rows (features) of sf objects</p>
-
-    <p>Bind columns (variables) of sf objects</p>
+<p>Bind columns (variables) of sf objects</p>
     
 
     <pre><span class='co'># S3 method for sf</span>
 <span class='fu'>rbind</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>cbind</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+<span class='fu'>cbind</span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='fu'>st_bind_cols</span>(<span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>...</dt>
-      <dd>objects to bind</dd>
-      <dt>deparse.level</dt>
-      <dd>integer; see <a href='http://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>objects to bind</p></td>
+    </tr>
+    <tr>
+      <th>deparse.level</th>
+      <td><p>integer; see <a href='http://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>cbind</code> is called with multiple <code>sf</code> objects, it warns and removes all but the first geometry column from the input objects.</p>
+    <p>if <code>cbind</code> or <code>st_bind_cols</code> is called with multiple <code>sf</code> objects, it warns and removes all but the first geometry column from the input objects.</p>
     
 
   </div>

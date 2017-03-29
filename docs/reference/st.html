@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -90,11 +92,11 @@
 
 <span class='fu'>st_linestring</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>numeric</span>(<span class='fl'>0</span>), <span class='fl'>0</span>, <span class='fl'>2</span>), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>)
 
-<span class='fu'>st_polygon</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>)
+<span class='fu'>st_polygon</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>x</span>)) <span class='st'>"XYZ"</span> <span class='kw'>else</span> <span class='st'>"XY"</span>)
 
-<span class='fu'>st_multilinestring</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>)
+<span class='fu'>st_multilinestring</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>x</span>)) <span class='st'>"XYZ"</span> <span class='kw'>else</span> <span class='st'>"XY"</span>)
 
-<span class='fu'>st_multipolygon</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>)
+<span class='fu'>st_multipolygon</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>length</span>(<span class='no'>x</span>)) <span class='st'>"XYZ"</span> <span class='kw'>else</span> <span class='st'>"XY"</span>)
 
 <span class='fu'>st_geometrycollection</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>dims</span> <span class='kw'>=</span> <span class='st'>"XY"</span>)
 
@@ -111,44 +113,59 @@
 <span class='fu'>c</span>(<span class='no'>...</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>flatten</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>unlist</span>(<span class='no'>x</span>, <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>use.names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>as.matrix</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>for <code>st_point</code>, numeric vector (or one-row-matrix) of length 2, 3 or 4; for <code>st_linestring</code> and <code>st_multipoint</code>, numeric matrix with points in rows; for <code>st_polygon</code> and <code>st_multilinestring</code>, list with numeric matrices with points in rows; for <code>st_multipolygon</code>, list of lists with numeric matrices; for <code>st_geometrycollection</code> list with (non-geometrycollection) simple feature objects</dd>
-      <dt>dim</dt>
-      <dd>character, indicating dimensions: &quot;XY&quot;, &quot;XYZ&quot;, &quot;XYM&quot;, or &quot;XYZM&quot;; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details</dd>
-      <dt>dims</dt>
-      <dd>character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case <code>x</code> is the empty <code>list()</code>.</dd>
-      <dt>...</dt>
-      <dd>objects to be pasted together into a single simple feature</dd>
-      <dt>digits</dt>
-      <dd>integer; number of characters to be printed (max 30; 0 means print everything)</dd>
-      <dt>n</dt>
-      <dd>integer; number of elements to be selected</dd>
-      <dt>recursive</dt>
-      <dd>logical; ignored</dd>
-      <dt>flatten</dt>
-      <dd>logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects</dd>
-      <dt>use.names</dt>
-      <dd>ignored</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>for <code>st_point</code>, numeric vector (or one-row-matrix) of length 2, 3 or 4; for <code>st_linestring</code> and <code>st_multipoint</code>, numeric matrix with points in rows; for <code>st_polygon</code> and <code>st_multilinestring</code>, list with numeric matrices with points in rows; for <code>st_multipolygon</code>, list of lists with numeric matrices; for <code>st_geometrycollection</code> list with (non-geometrycollection) simple feature objects</p></td>
+    </tr>
+    <tr>
+      <th>dim</th>
+      <td><p>character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details</p></td>
+    </tr>
+    <tr>
+      <th>dims</th>
+      <td><p>character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case <code>x</code> is the empty <code>list()</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>objects to be pasted together into a single simple feature</p></td>
+    </tr>
+    <tr>
+      <th>digits</th>
+      <td><p>integer; number of characters to be printed (max 30; 0 means print everything)</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>integer; number of elements to be selected</p></td>
+    </tr>
+    <tr>
+      <th>recursive</th>
+      <td><p>logical; ignored</p></td>
+    </tr>
+    <tr>
+      <th>flatten</th>
+      <td><p>logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>object of the same nature as <code>x</code>, but with appropriate class attribute set</p>
-    <p>unlist.sfg returns the set of points that form a geometry as a matrix, where each point is a row.</p>
+<p>as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use <code>unlist(x, recursive = FALSE)</code> to get sets of matrices.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>&quot;XYZ&quot; refers to coordinates where the third dimension represents altitude, &quot;XYM&quot; refers to three-dimensional coordinates where the third dimension refers to something else (&quot;M&quot; for measure); checking of the sanity of <code>x</code> may be only partial.</p>
-    <p>when <code>flatten=TRUE</code>, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.</p>
+    <p>"XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of <code>x</code> may be only partial.</p>
+<p>when <code>flatten=TRUE</code>, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>(<span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)))</div><div class='output co'>#&gt; <span class='message'>POINT(1 2)</span></div><div class='input'><span class='fu'>class</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; [1] &quot;XY&quot;    &quot;POINT&quot; &quot;sfg&quot;  </div><div class='input'><span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; xmin ymin xmax ymax 
-#&gt;    1    2    1    2 </div><div class='input'>(<span class='no'>p2</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)))</div><div class='output co'>#&gt; <span class='message'>POINTZ(1 2 3)</span></div><div class='input'><span class='fu'>class</span>(<span class='no'>p2</span>)</div><div class='output co'>#&gt; [1] &quot;XYZ&quot;   &quot;POINT&quot; &quot;sfg&quot;  </div><div class='input'>(<span class='no'>p3</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='st'>"XYM"</span>))</div><div class='output co'>#&gt; <span class='message'>POINTM(1 2 3)</span></div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, , <span class='fl'>2</span>)
+    <pre class="examples"><div class='input'>(<span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)))</div><div class='output co'>#&gt; <span class='message'>POINT(1 2)</span></div><div class='input'><span class='fu'>class</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; [1] "XY"    "POINT" "sfg"  </div><div class='input'><span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; xmin ymin xmax ymax 
+#&gt;    1    2    1    2 </div><div class='input'>(<span class='no'>p2</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)))</div><div class='output co'>#&gt; <span class='message'>POINTZ(1 2 3)</span></div><div class='input'><span class='fu'>class</span>(<span class='no'>p2</span>)</div><div class='output co'>#&gt; [1] "XYZ"   "POINT" "sfg"  </div><div class='input'>(<span class='no'>p3</span> <span class='kw'>=</span> <span class='fu'>st_point</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='st'>"XYM"</span>))</div><div class='output co'>#&gt; <span class='message'>POINTM(1 2 3)</span></div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, , <span class='fl'>2</span>)
 (<span class='no'>mp1</span> <span class='kw'>=</span> <span class='fu'>st_multipoint</span>(<span class='no'>pts</span>))</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1 6, 2 7, 3 8, 4 9, 5 10)</span></div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>15</span>, , <span class='fl'>3</span>)
 (<span class='no'>mp2</span> <span class='kw'>=</span> <span class='fu'>st_multipoint</span>(<span class='no'>pts</span>))</div><div class='output co'>#&gt; <span class='message'>MULTIPOINTZ(1 6 11, 2 7 12, 3 8 13, 4 9 14, 5 10 15)</span></div><div class='input'>(<span class='no'>mp3</span> <span class='kw'>=</span> <span class='fu'>st_multipoint</span>(<span class='no'>pts</span>, <span class='st'>"XYM"</span>))</div><div class='output co'>#&gt; <span class='message'>MULTIPOINTM(1 6 11, 2 7 12, 3 8 13, 4 9 14, 5 10 15)</span></div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>20</span>, , <span class='fl'>4</span>)
 (<span class='no'>mp4</span> <span class='kw'>=</span> <span class='fu'>st_multipoint</span>(<span class='no'>pts</span>))</div><div class='output co'>#&gt; <span class='message'>MULTIPOINTZM(1 6 11 16, 2 7 12 17, 3 8 13 18, 4 9 14 19, 5 10 15 20)</span></div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, , <span class='fl'>2</span>)

@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -88,15 +90,18 @@ POLYGON and MULTIPOLYGON are returned as MULTIPOINTS, MULTILINESTRING and MULTIP
     <pre><span class='fu'>st_cast_sfc_default</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>list of geometries or simple features</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>list of geometries or simple features</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Geometries that are already MULTI* are left unchanged. 
-Features that can&#39;t be cast to a single  MULTI* geometry are return as a 
+Features that can't be cast to a single  MULTI* geometry are return as a 
 GEOMETRYCOLLECTION</p>
     
 

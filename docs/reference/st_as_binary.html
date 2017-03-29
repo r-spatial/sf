@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -95,26 +97,41 @@
   <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object to convert</dd>
-      <dt>...</dt>
-      <dd>ignored</dd>
-      <dt>EWKB</dt>
-      <dd>logical; use EWKB (PostGIS), or (default) ISO-WKB?</dd>
-      <dt>endian</dt>
-      <dd>character; either &quot;big&quot; or &quot;little&quot;; default: use that of platform</dd>
-      <dt>pureR</dt>
-      <dd>logical; use pure R solution, or C++?</dd>
-      <dt>precision</dt>
-      <dd>numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.</dd>
-      <dt>hex</dt>
-      <dd>logical; return hexadecimal encoded (character)?</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object to convert</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>EWKB</th>
+      <td><p>logical; use EWKB (PostGIS), or (default) ISO-WKB?</p></td>
+    </tr>
+    <tr>
+      <th>endian</th>
+      <td><p>character; either "big" or "little"; default: use that of platform</p></td>
+    </tr>
+    <tr>
+      <th>pureR</th>
+      <td><p>logical; use pure R solution, or C++?</p></td>
+    </tr>
+    <tr>
+      <th>precision</th>
+      <td><p>numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.</p></td>
+    </tr>
+    <tr>
+      <th>hex</th>
+      <td><p>logical; return hexadecimal encoded (character)?</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>for the precion model, see also <a href = 'http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html'>http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.&#39;&#39;. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
+    <p>for the precion model, see also <a href = 'http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html'>http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
     
 
   </div>

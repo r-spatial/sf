@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • sf</title>
+<title>retrieve coordinates in matrix form — st_coordinates • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -36,7 +36,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -76,22 +76,45 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Vignette reference <small>version&nbsp;0.4-2</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-md-9">
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="sf1.html">1. Simple Features for R</a></li>
-        <li><a href="sf2.html">2. Reading, Writing and Converting Simple Features</a></li>
-        <li><a href="sf3.html">3. Manipulating Simple Feature Geometries</a></li>
-      </ul>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>retrieve coordinates in matrix form</h1>
     </div>
+
+    
+    <p>retrieve coordinates in matrix form</p>
+    
+
+    <pre><span class='fu'>st_coordinates</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class sf, sfc or sfg</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators <code>L1</code>,...,<code>L3</code> that point out to which structure the coordinate belongs; for <code>POINT</code> this is absent (each coordinate is a feature), for <code>LINESTRING</code> <code>L1</code> refers to the feature, for <code>MULTIPOLYGON</code> <code>L1</code> refers to the main ring or holes, <code>L2</code> to the ring id in the <code>MULTIPOLYGON</code>, and <code>L3</code> to the simple feature.</p>
+    
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
+
   </div>
 </div>
 

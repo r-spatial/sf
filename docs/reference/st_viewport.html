@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,16 +89,25 @@
     <pre><span class='fu'>st_viewport</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>), <span class='no'>asp</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class sf, sfc or sfg object</dd>
-      <dt>...</dt>
-      <dd>parameters passed on to <a href='http://www.rdocumentation.org/packages/grid/topics/viewport'>viewport</a></dd>
-      <dt>bbox</dt>
-      <dd>the bounding box used for aspect ratio</dd>
-      <dt>asp</dt>
-      <dd>numeric; target aspect ratio (y/x), see Details</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class sf, sfc or sfg object</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>parameters passed on to <a href='http://www.rdocumentation.org/packages/grid/topics/viewport'>viewport</a></p></td>
+    </tr>
+    <tr>
+      <th>bbox</th>
+      <td><p>the bounding box used for aspect ratio</p></td>
+    </tr>
+    <tr>
+      <th>asp</th>
+      <td><p>numeric; target aspect ratio (y/x), see Details</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -105,13 +116,13 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...</p>
-    <p>if <code>asp</code> is missing, it is taken as 1, except when <code>isTRUE(st_is_longlat(x))</code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
+<p>if <code>asp</code> is missing, it is taken as 1, except when <code>isTRUE(st_is_longlat(x))</code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>grid</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; converted into: MULTIPOLYGON
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; converted into: POLYGON
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

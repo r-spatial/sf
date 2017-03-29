@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -85,26 +87,41 @@
     
 
     <pre><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>FUN</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
-  <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sf</code></dd>
-      <dt>y</dt>
-      <dd>object of class <code>sf</code></dd>
-      <dt>join</dt>
-      <dd>geometry predicate function with the same profile as <a href='geos.html'>st_intersects</a>; see details</dd>
-      <dt>FUN</dt>
-      <dd>aggregation function, see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>; in case of multiple matches, if <code>FUN</code> is defined, attributes of <code>y</code> will be aggregated using <code>FUN</code>; else, all combinations of <code>x</code> and <code>y</code> are returned.</dd>
-      <dt>suffix</dt>
-      <dd>length 2 character vector; see <a href='http://www.rdocumentation.org/packages/base/topics/merge'>merge</a></dd>
-      <dt>prepared</dt>
-      <dd>logical; see <a href='geos.html'>st_intersects</a></dd>
-      <dt>left</dt>
-      <dd>logical; if <code>TRUE</code> carry out left join, else inner join; 
-see also <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <code>sf</code></p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>object of class <code>sf</code></p></td>
+    </tr>
+    <tr>
+      <th>join</th>
+      <td><p>geometry predicate function with the same profile as <a href='geos.html'>st_intersects</a>; see details</p></td>
+    </tr>
+    <tr>
+      <th>FUN</th>
+      <td><p>aggregation function, see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>; in case of multiple matches, if <code>FUN</code> is defined, attributes of <code>y</code> will be aggregated using <code>FUN</code>; else, all combinations of <code>x</code> and <code>y</code> are returned.</p></td>
+    </tr>
+    <tr>
+      <th>suffix</th>
+      <td><p>length 2 character vector; see <a href='http://www.rdocumentation.org/packages/base/topics/merge'>merge</a></p></td>
+    </tr>
+    <tr>
+      <th>prepared</th>
+      <td><p>logical; see <a href='geos.html'>st_intersects</a></p></td>
+    </tr>
+    <tr>
+      <th>left</th>
+      <td><p>logical; if <code>TRUE</code> carry out left join, else inner join; 
+see also <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

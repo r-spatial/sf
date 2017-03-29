@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,19 +89,26 @@
     <pre><span class='fu'>st_interpolate_aw</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>extensive</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sf</code>, for which we want to aggregate attributes</dd>
-      <dt>to</dt>
-      <dd>object of class <code>sf</code> or <code>sfc</code>, with the target geometries</dd>
-      <dt>extensive</dt>
-      <dd>logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <code>sf</code>, for which we want to aggregate attributes</p></td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td><p>object of class <code>sf</code> or <code>sfc</code>, with the target geometries</p></td>
+    </tr>
+    <tr>
+      <th>extensive</th>
+      <td><p>logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.</p></td>
+    </tr>
+    </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; converted into: MULTIPOLYGON
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; converted into: POLYGON
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

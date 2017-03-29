@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,30 +84,71 @@
     </div>
 
     <div class="contents">
-    <div id="version-0-3-5" class="section level1">
+    <div id="version-0-4-2" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-3-5" class="anchor"> </a>version 0.3-5</h1>
-<ul><li><p>add <code>st_proj_info</code>, modelled after <code>rgdal::projInfo</code></p></li>
-<li><p>overwriting datasets with <code>st_write</code> is no longer allowed; update=TRUE might append to them.</p></li>
+<a href="#version-0-4-2" class="anchor"></a>version 0.4-2</h1>
+<ul>
+<li>
+<code>st_wrap_dateline</code> wraps (cuts up) geometries crossing the antimeridian, such that they no longer cross it.</li>
+</ul>
+</div>
+    <div id="version-0-4-1" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-4-1" class="anchor"></a>version 0.4-1</h1>
+<ul>
+<li><p>restore 3.3.0 and c++11 requirement</p></li>
+<li><p><code>st_read</code> now respects time that is read as UTC</p></li>
+<li><p><code>st_write</code> now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than “unkown” or “local”</p></li>
+<li><p><code>st_length</code> now works for POINT and MULTIPOINT (returning 0); POLYGON and MULTIPOLYGON are converted to MULTILINESTRING before computing length, thus giving polygon perimeter (#268)</p></li>
+<li><p><code>st_write</code> now has <code>update</code> depend on driver; now, for databases, the default is <code>TRUE</code>, otherwise <code>FALSE</code> (it refers to update of the database, and not to overwriting the table in the database, this will by default not succeed); #274</p></li>
+<li><p><code>st_read</code> supports reading objects with multiple geometry columns #257 #255</p></li>
+<li><p>support writing (exporting) objects with non-standard columns, such as <code>units</code> or <code>POSIXlt</code> #264</p></li>
+<li><p>catch dependencies on GEOS 3.3.5 (hence no 0.4-0 CRAN binary for MacOSX) #260</p></li>
+</ul>
+</div>
+    <div id="version-0-4-0" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-4-0" class="anchor"></a>version 0.4-0</h1>
+<ul>
+<li><p>have <code>st_is_valid</code> catch corrupt geometries too, returning <code>NA</code> in that case (requiring GEOS 3.5.0)</p></li>
+<li><p>add <code>st_make_valid</code>, only working if sf was linked to <code>liblwgeom</code></p></li>
+<li><p>add <code>st_coordinates</code> method, returning coordinates matrix with indexes</p></li>
+<li><p>remove <code>unlist.sfg</code></p></li>
+<li><p>add <code>as.matrix.sfg</code>; have as.matrix.sfg add indexes to coordinates</p></li>
+<li><p>add <code>st_bind_cols</code> method</p></li>
+<li><p>improve handling features that can’t be projected</p></li>
+<li><p>support uniform sampling over polygons on the sphere</p></li>
+<li><p>add <code>st_sample</code>, for sampling points on multipoints, linestrings, or polygons</p></li>
+<li><p>add <code>c</code> method for <code>sfc</code> objects</p></li>
+<li><p>import and export <code>magrittr::%&gt;%</code></p></li>
+<li><p>support ggplot’ing geometrycollections</p></li>
+<li><p>drop C++11 requirement, allowing build for older R versions</p></li>
+<li><p>add <code>st_proj_info</code>, modelled after <code>rgdal::projInfo</code></p></li>
+<li><p>overwriting datasets with <code>st_write</code> is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.</p></li>
 <li><p><code>st_write</code> gains an argument, <code>update</code>, which when <code>TRUE</code> will try to append to existing datasets (#204)</p></li>
 <li><p>added list of corresponding function for migration from sp, rgdal and rgeos to sf at <a href="https://github.com/edzer/sfr/wiki/migrating" class="uri">https://github.com/edzer/sfr/wiki/migrating</a></p></li>
 <li><p>remove deprecated <code>st_list</code></p></li>
-<li><p>rename <code>st_makegrid</code> to <code>st_make_grid</code>, and <code>st_linemerge</code> to <code>st_line_merge</code></p></li>
+<li>rename <code>st_makegrid</code> to <code>st_make_grid</code>, and <code>st_linemerge</code> to <code>st_line_merge</code>
+</li>
 <li><p>add NEWS.md file (#207)</p></li>
 <li><p>faster conversion of <code>data.frame</code> into <code>POINT</code> <code>sf</code> object, using <code>st_as_sf</code> (Mike Sumner)</p></li>
 <li><p><code>rbind</code> method for <code>sf</code> objects now keeps coordinate reference system</p></li>
-</ul></div>
+</ul>
+</div>
     <div id="version-0-3-4-feb-6-2017" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-3-4-feb-6-2017" class="anchor"> </a>version 0.3-4, Feb 6, 2017</h1>
-<ul><li><p>add <code>st_contains_properly</code> spatial predicate</p></li>
+<a href="#version-0-3-4-feb-6-2017" class="anchor"></a>version 0.3-4, Feb 6, 2017</h1>
+<ul>
+<li><p>add <code>st_contains_properly</code> spatial predicate</p></li>
 <li><p>GEOS functions (geometry operations) now accept XYZ geometries (and ignore Z)</p></li>
 <li><p>make <code>prepared = TRUE</code> the default for all geometry binary operations</p></li>
-</ul></div>
+</ul>
+</div>
     <div id="version-0-3-2-feb-4-2017" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-3-2-feb-4-2017" class="anchor"> </a>version 0.3-2, Feb 4, 2017</h1>
-<ul><li><p>add user interrupt checks in all GEOS geometry operations</p></li>
+<a href="#version-0-3-2-feb-4-2017" class="anchor"></a>version 0.3-2, Feb 4, 2017</h1>
+<ul>
+<li><p>add user interrupt checks in all GEOS geometry operations</p></li>
 <li><p>make <code>st_graticule</code> do something useful for polar projections</p></li>
 <li><p>make <code>st_graticule</code> return <code>NA</code> labels when labels are useless</p></li>
 <li><p>add <code>merge.sf</code> methods to merge <code>sf</code> object and <code>data.frame</code> (#193)</p></li>
@@ -113,11 +156,13 @@
 <li><p>add <code>dplyr</code>-style non-spatial joins for <code>sf</code> objects (<code>left_join</code>, <code>full_join</code> etc.) (#193)</p></li>
 <li><p>allow for multiple non-gathered variables (#196)</p></li>
 <li><p>add missing meridian to <code>st_graticule</code> (#198)</p></li>
-</ul></div>
+</ul>
+</div>
     <div id="version-0-3-1-jan-31-2017" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-3-1-jan-31-2017" class="anchor"> </a>version 0.3-1, Jan 31, 2017</h1>
-<ul><li><p>add <code>merge</code> method (#193)</p></li>
+<a href="#version-0-3-1-jan-31-2017" class="anchor"></a>version 0.3-1, Jan 31, 2017</h1>
+<ul>
+<li><p>add <code>merge</code> method (#193)</p></li>
 <li><p><code>st_graticule</code> for laea (#198)</p></li>
 <li><p>allow <code>st_buffer</code> with feature-dependent buffer distance (#197)</p></li>
 <li><p>have <code>spread</code> return an <code>sf</code> object (#196)</p></li>
@@ -132,10 +177,11 @@
 <li><p>allow for 3D coordinates returned, when <code>+proj=geocent</code> (#172, #103)</p></li>
 <li><p>fix <code>NA_integer_</code> handling in shapefiles I/O (#184)</p></li>
 <li><p>add and fix <code>st_agr</code> API, to set and get attribute-to-geometry relationships</p></li>
-</ul></div>
+</ul>
+</div>
     <div id="version-0-2-8-jan-5-2017" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-2-8-jan-5-2017" class="anchor"> </a>version 0.2-8, Jan 5, 2017</h1>
+<a href="#version-0-2-8-jan-5-2017" class="anchor"></a>version 0.2-8, Jan 5, 2017</h1>
 </div>
     </div>
   </div>
@@ -144,7 +190,9 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#version-0-3-5">0.3-5</a></li>
+        <li><a href="#version-0-4-2">0.4-2</a></li>
+        <li><a href="#version-0-4-1">0.4-1</a></li>
+        <li><a href="#version-0-4-0">0.4-0</a></li>
         <li><a href="#version-0-3-4-feb-6-2017">0.3-4</a></li>
         <li><a href="#version-0-3-2-feb-4-2017">0.3-2</a></li>
         <li><a href="#version-0-3-1-jan-31-2017">0.3-1</a></li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>aggregate an  — aggregate.sf • sf</title>
+<title>aggregate an <code>sf</code> object — aggregate.sf • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -77,7 +79,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>aggregate an </h1>
+    <h1>aggregate an <code>sf</code> object</h1>
     </div>
 
     
@@ -88,18 +90,29 @@
 <span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>union</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <a href='sf.html'>sf</a></dd>
-      <dt>by</dt>
-      <dd>integer or <code>factor</code>, the same length as the number of rows in <code>x</code>, with groups to aggregate by (aggregation predicate)</dd>
-      <dt>FUN</dt>
-      <dd>function passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</dd>
-      <dt>...</dt>
-      <dd>arguments passed on to <code>FUN</code></dd>
-      <dt>union</dt>
-      <dd>logical; should grouped geometries be unioned using <a href='geos.html'>st_union</a>?</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <a href='sf.html'>sf</a></p></td>
+    </tr>
+    <tr>
+      <th>by</th>
+      <td><p>integer or <code>factor</code>, the same length as the number of rows in <code>x</code>, with groups to aggregate by (aggregation predicate)</p></td>
+    </tr>
+    <tr>
+      <th>FUN</th>
+      <td><p>function passed on to <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to <code>FUN</code></p></td>
+    </tr>
+    <tr>
+      <th>union</th>
+      <td><p>logical; should grouped geometries be unioned using <a href='geos.html'>st_union</a>?</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

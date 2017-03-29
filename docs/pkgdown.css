@@ -81,6 +81,30 @@ a.anchor {
   margin-bottom: 0.5em;
 }
 
+/* Reference index & topics ----------------------------------------------- */
+
+.ref-index th {font-weight: normal;}
+.ref-index h2 {font-size: 20px;}
+
+.ref-index td {vertical-align: top;}
+.ref-index .alias {width: 40%;}
+.ref-index .title {width: 60%;}
+
+.ref-index .alias {width: 40%;}
+.ref-index .title {width: 60%;}
+
+.ref-arguments th {text-align: right; padding-right: 10px;}
+.ref-arguments th, .ref-arguments td {vertical-align: top;}
+.ref-arguments .name {width: 20%;}
+.ref-arguments .desc {width: 80%;}
+
+/* Nice scrolling for wide elements --------------------------------------- */
+
+table {
+  display: block;
+  overflow: auto;
+}
+
 /* Syntax highlighting ---------------------------------------------------- */
 
 code {

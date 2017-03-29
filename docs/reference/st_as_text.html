@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -96,16 +98,25 @@
 <span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>crs</code></dd>
-      <dt>...</dt>
-      <dd>passed on to WKT_name</dd>
-      <dt>EWKT</dt>
-      <dd>logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available</dd>
-      <dt>pretty</dt>
-      <dd>logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <code>sfg</code>, <code>sfc</code> or <code>crs</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>passed on to WKT_name</p></td>
+    </tr>
+    <tr>
+      <th>EWKT</th>
+      <td><p>logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available</p></td>
+    </tr>
+    <tr>
+      <th>pretty</th>
+      <td><p>logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -113,7 +124,7 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] &quot;POINT(1 2)&quot;</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] "POINT(1 2)"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

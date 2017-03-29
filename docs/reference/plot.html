@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -82,8 +84,7 @@
 
     
     <p>Plot sf object</p>
-
-    <p>blue-pink-yellow color scale</p>
+<p>blue-pink-yellow color scale</p>
     
 
     <pre><span class='co'># S3 method for sf</span>
@@ -133,93 +134,160 @@
   <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class sf</dd>
-      <dt>y</dt>
-      <dd>ignored</dd>
-      <dt>...</dt>
-      <dd>further specifications, see plot_sf and plot</dd>
-      <dt>ncol</dt>
-      <dd>integer; default number of colors to be used</dd>
-      <dt>col</dt>
-      <dd>color</dd>
-      <dt>max.plot</dt>
-      <dd>integer; lower boundary to maximium number of attributes to plot</dd>
-      <dt>pch</dt>
-      <dd>plotting symbol</dd>
-      <dt>cex</dt>
-      <dd>symbol size</dd>
-      <dt>bg</dt>
-      <dd>symbol background color</dd>
-      <dt>lwd</dt>
-      <dd>line width</dd>
-      <dt>lty</dt>
-      <dd>line type</dd>
-      <dt>type</dt>
-      <dd>plot type: &#39;p&#39; for points, &#39;l&#39; for lines, &#39;b&#39; for both</dd>
-      <dt>add</dt>
-      <dd>logical; add to current plot?</dd>
-      <dt>border</dt>
-      <dd>color of polygon border</dd>
-      <dt>rule</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/graphics/topics/polypath'>polypath</a></dd>
-      <dt>xlim</dt>
-      <dd>see par</dd>
-      <dt>ylim</dt>
-      <dd>see par</dd>
-      <dt>asp</dt>
-      <dd>see below, and see par</dd>
-      <dt>axes</dt>
-      <dd>logical; should axes be plotted? (default FALSE)</dd>
-      <dt>bgc</dt>
-      <dd>background color</dd>
-      <dt>xaxs</dt>
-      <dd>see par</dd>
-      <dt>yaxs</dt>
-      <dd>see par</dd>
-      <dt>lab</dt>
-      <dd>see par</dd>
-      <dt>setParUsrBB</dt>
-      <dd>default FALSE; set the <code>par</code> &#8220;usr&#8221; bounding box; see below</dd>
-      <dt>bgMap</dt>
-      <dd>object of class <code>ggmap</code>, or returned by function <code>RgoogleMaps::GetMap</code></dd>
-      <dt>expandBB</dt>
-      <dd>numeric; fractional values to expand the bounding box with, 
-in each direction (bottom, left, top, right)</dd>
-      <dt>graticule</dt>
-      <dd>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule 
-or object returned by <a href='st_graticule.html'>st_graticule</a></dd>
-      <dt>col_graticule</dt>
-      <dd>color to used for the graticule (if present)</dd>
-      <dt>n</dt>
-      <dd>integer; number of colors</dd>
-      <dt>xc</dt>
-      <dd>factor or numeric vector, for which colors need to be returned</dd>
-      <dt>cutoff.tails</dt>
-      <dd>numeric, in [0,0.5] start and end values</dd>
-      <dt>alpha</dt>
-      <dd>numeric, in [0,1], transparency</dd>
-      <dt>categorical</dt>
-      <dd>logical; should a categorical color ramp be returned? if <code>x</code> is a factor, yes.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class sf</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further specifications, see plot_sf and plot</p></td>
+    </tr>
+    <tr>
+      <th>ncol</th>
+      <td><p>integer; default number of colors to be used</p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>color</p></td>
+    </tr>
+    <tr>
+      <th>max.plot</th>
+      <td><p>integer; lower boundary to maximium number of attributes to plot</p></td>
+    </tr>
+    <tr>
+      <th>pch</th>
+      <td><p>plotting symbol</p></td>
+    </tr>
+    <tr>
+      <th>cex</th>
+      <td><p>symbol size</p></td>
+    </tr>
+    <tr>
+      <th>bg</th>
+      <td><p>symbol background color</p></td>
+    </tr>
+    <tr>
+      <th>lwd</th>
+      <td><p>line width</p></td>
+    </tr>
+    <tr>
+      <th>lty</th>
+      <td><p>line type</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>plot type: 'p' for points, 'l' for lines, 'b' for both</p></td>
+    </tr>
+    <tr>
+      <th>add</th>
+      <td><p>logical; add to current plot?</p></td>
+    </tr>
+    <tr>
+      <th>border</th>
+      <td><p>color of polygon border</p></td>
+    </tr>
+    <tr>
+      <th>rule</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/graphics/topics/polypath'>polypath</a></p></td>
+    </tr>
+    <tr>
+      <th>xlim</th>
+      <td><p>see plot.window</p></td>
+    </tr>
+    <tr>
+      <th>ylim</th>
+      <td><p>see plot.window</p></td>
+    </tr>
+    <tr>
+      <th>asp</th>
+      <td><p>see below, and see par</p></td>
+    </tr>
+    <tr>
+      <th>axes</th>
+      <td><p>logical; should axes be plotted? (default FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>bgc</th>
+      <td><p>background color</p></td>
+    </tr>
+    <tr>
+      <th>xaxs</th>
+      <td><p>see par</p></td>
+    </tr>
+    <tr>
+      <th>yaxs</th>
+      <td><p>see par</p></td>
+    </tr>
+    <tr>
+      <th>lab</th>
+      <td><p>see par</p></td>
+    </tr>
+    <tr>
+      <th>setParUsrBB</th>
+      <td><p>default FALSE; set the <code>par</code> &#8220;usr&#8221; bounding box; see below</p></td>
+    </tr>
+    <tr>
+      <th>bgMap</th>
+      <td><p>object of class <code>ggmap</code>, or returned by function <code>RgoogleMaps::GetMap</code></p></td>
+    </tr>
+    <tr>
+      <th>expandBB</th>
+      <td><p>numeric; fractional values to expand the bounding box with, 
+in each direction (bottom, left, top, right)</p></td>
+    </tr>
+    <tr>
+      <th>graticule</th>
+      <td><p>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule 
+or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
+    </tr>
+    <tr>
+      <th>col_graticule</th>
+      <td><p>color to used for the graticule (if present)</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>integer; number of colors</p></td>
+    </tr>
+    <tr>
+      <th>xc</th>
+      <td><p>factor or numeric vector, for which colors need to be returned</p></td>
+    </tr>
+    <tr>
+      <th>cutoff.tails</th>
+      <td><p>numeric, in [0,0.5] start and end values</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>numeric, in [0,1], transparency</p></td>
+    </tr>
+    <tr>
+      <th>categorical</th>
+      <td><p>logical; should a categorical color ramp be returned? if <code>x</code> is a factor, yes.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>plot.sf</code> maximally plots <code>max.plot</code> maps with colors following from attribute columns, 
 one map per attribute. It uses <code>sf.colors</code> for default colors. For more control over individual maps,
-set parameter <code>mfrow</code> with <code>par</code> prior to plotting,  and plot single maps one by one.</p>
-    <p><code>plot.sfc</code> plots the geometry, additional parameters can be passed on
-to control color, lines or symbols.</p>
-    <p><code>plot_sf</code> sets up the plotting area, axes, graticule, or webmap background; it
+set parameter <code>mfrow</code> with <code>par</code> prior to plotting,  and plot single maps one by one.
+    <code>plot.sfc</code> plots the geometry, additional parameters can be passed on
+to control color, lines or symbols.
+    <code>plot_sf</code> sets up the plotting area, axes, graticule, or webmap background; it
 is called by all <code>plot</code> methods before anything is drawn.</p>
-    <p>The argument <code>setParUsrBB</code> may be used to pass the logical value <code>TRUE</code> to functions within <code>plot.Spatial</code>. When set to <code>TRUE</code>, par(&#8220;usr&#8221;) will be overwritten with <code>c(xlim, ylim)</code>, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(&#8220;xaxs&#8221;) and par(&#8220;yaxs&#8221;) in addition to <code>par(mar=c(0,0,0,0))</code>.</p>
-    <p>The default aspect for map plots is 1; if however data are not
+<p>The argument <code>setParUsrBB</code> may be used to pass the logical value <code>TRUE</code> to functions within <code>plot.Spatial</code>. When set to <code>TRUE</code>, par(&#8220;usr&#8221;) will be overwritten with <code>c(xlim, ylim)</code>, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(&#8220;xaxs&#8221;) and par(&#8220;yaxs&#8221;) in addition to <code>par(mar=c(0,0,0,0))</code>.</p>
+<p>The default aspect for map plots is 1; if however data are not
 projected (coordinates are long/lat), the aspect is by default set to
 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
 (the mean of ylim, which defaults to the y range of bounding box). This
-implies an <a href = 'Equirectangular projection'>https://en.wikipedia.org/wiki/Equirectangular_projection</a>.</p>
-    <p><code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <code>http://www.colorbrewer2.org/</code> (if n &lt; 9, Set2, else Set3).</p>
+implies an <a href = 'https://en.wikipedia.org/wiki/Equirectangular_projection'>Equirectangular projection</a>.
+    <code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <code>http://www.colorbrewer2.org/</code> (if n &lt; 9, Set2, else Set3).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -264,8 +332,8 @@ implies an <a href = 'Equirectangular projection'>https://en.wikipedia.org/wiki/
 <span class='no'>gc1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo1</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>21</span>,<span class='fl'>21</span>)), <span class='no'>l1</span> * <span class='fl'>2</span> + <span class='fl'>21</span>))
 <span class='no'>gc2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo2</span>, <span class='no'>l2</span> - <span class='fl'>2</span>, <span class='no'>l3</span> - <span class='fl'>2</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))))
 <span class='no'>gc</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>gc1</span>,<span class='no'>gc2</span>))
-<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><img src='plot-27.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] &quot;#0000B3FF&quot; &quot;#0400FFFF&quot; &quot;#4500FFFF&quot; &quot;#8500FFFF&quot; &quot;#C527D8FF&quot; &quot;#FF50AFFF&quot;
-#&gt;  [7] &quot;#FF7A85FF&quot; &quot;#FFA35CFF&quot; &quot;#FFCC33FF&quot; &quot;#FFF50AFF&quot;</div></pre>
+<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><img src='plot-27.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
+#&gt;  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

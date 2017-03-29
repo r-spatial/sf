@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,10 +89,13 @@
     <pre><span class='fu'>st_drivers</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"vector"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>what</dt>
-      <dd>character: &quot;vector&quot; or &quot;raster&quot;, anything else will return all drivers.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>what</th>
+      <td><p>character: "vector" or "raster", anything else will return all drivers.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -98,7 +103,9 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The drivers available will depend on the installation of GDAL/OGR, and can vary; the <code>st_drivers()</code> function shows which are available, and which may be written (but all are assumed to be readable). Note that stray files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.</p>
+    <p>The drivers available will depend on the installation of GDAL/OGR, and can vary; the <code>st_drivers()</code>
+function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
+files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -221,7 +228,7 @@
 #&gt; PGDUMP                                          PostgreSQL SQL dump  TRUE FALSE
 #&gt; OSM                                       OpenStreetMap XML and PBF FALSE FALSE
 #&gt; GPSBabel                                                   GPSBabel  TRUE FALSE
-#&gt; SUA                 Tim Newport-Peace&#39;s Special Use Airspace Format FALSE FALSE
+#&gt; SUA                 Tim Newport-Peace's Special Use Airspace Format FALSE FALSE
 #&gt; OpenAir                                                     OpenAir FALSE FALSE
 #&gt; OGR_PDS                                Planetary Data Systems TABLE FALSE FALSE
 #&gt; WFS                                   OGC WFS (Web Feature Service) FALSE FALSE

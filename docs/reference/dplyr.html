@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -129,58 +131,109 @@
 <span class='fu'>anti_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>.data</dt>
-      <dd>data object of class <a href='sf.html'>sf</a></dd>
-      <dt>...</dt>
-      <dd>other arguments</dd>
-      <dt>.dots</dt>
-      <dd>see corresponding function in package <code>dplyr</code></dd>
-      <dt>.keep_all</dt>
-      <dd>see corresponding function in dplyr</dd>
-      <dt>add</dt>
-      <dd>see corresponding function in dplyr</dd>
-      <dt>data</dt>
-      <dd>see original function docs</dd>
-      <dt>key_col</dt>
-      <dd>see original function docs</dd>
-      <dt>value_col</dt>
-      <dd>see original function docs</dd>
-      <dt>gather_cols</dt>
-      <dd>see original function docs</dd>
-      <dt>na.rm</dt>
-      <dd>see original function docs</dd>
-      <dt>convert</dt>
-      <dd>see original function docs</dd>
-      <dt>factor_key</dt>
-      <dd>see original function docs</dd>
-      <dt>fill</dt>
-      <dd>see original function docs</dd>
-      <dt>drop</dt>
-      <dd>see original function docs</dd>
-      <dt>sep</dt>
-      <dd>see original function docs</dd>
-      <dt>tbl</dt>
-      <dd>see original function docs</dd>
-      <dt>size</dt>
-      <dd>see original function docs</dd>
-      <dt>replace</dt>
-      <dd>see original function docs</dd>
-      <dt>weight</dt>
-      <dd>see original function docs</dd>
-      <dt>.env</dt>
-      <dd>see original function docs</dd>
-      <dt>x</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-      <dt>y</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-      <dt>by</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-      <dt>copy</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-      <dt>suffix</dt>
-      <dd>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>.data</th>
+      <td><p>data object of class <a href='sf.html'>sf</a></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>other arguments</p></td>
+    </tr>
+    <tr>
+      <th>.dots</th>
+      <td><p>see corresponding function in package <code>dplyr</code></p></td>
+    </tr>
+    <tr>
+      <th>.keep_all</th>
+      <td><p>see corresponding function in dplyr</p></td>
+    </tr>
+    <tr>
+      <th>add</th>
+      <td><p>see corresponding function in dplyr</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>key_col</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>value_col</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>gather_cols</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>convert</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>factor_key</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>drop</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>sep</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>tbl</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>size</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>weight</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>.env</th>
+      <td><p>see original function docs</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    <tr>
+      <th>by</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    <tr>
+      <th>copy</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    <tr>
+      <th>suffix</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -189,8 +242,8 @@
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc&#39; from data source `/home/edzer/git/sfr/inst/shape/nc.shp&#39; using driver `ESRI Shapefile&#39;
-#&gt; converted into: MULTIPOLYGON
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; converted into: POLYGON
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -198,8 +251,8 @@
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>AREA</span> <span class='kw'>&gt;</span> <span class='fl'>.1</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><img src='dplyr-9.png' alt='' width='540' height='400' /><div class='input'><span class='co'># plot 10 smallest counties in grey:</span>
 <span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>arrange</span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'>slice</span>(<span class='fl'>1</span>:<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'>title</span>(<span class='st'>"the ten counties with smallest area"</span>)</div><img src='dplyr-13.png' alt='' width='540' height='400' /><div class='input'><span class='no'>nc</span>[<span class='fu'>c</span>(<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>10</span>), ] <span class='kw'>%&gt;%</span> <span class='fu'>distinct</span>() <span class='kw'>%&gt;%</span> <span class='fu'>nrow</span>()</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
-<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>group_by</span>(<span class='no'>area_cl</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;grouped_df&quot; &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>mutate</span>(<span class='kw'>area10</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>)
-<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] &quot;SID74&quot;    &quot;SID79&quot;    &quot;geometry&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] &quot;SID74&quot;    &quot;SID79&quot;    &quot;geometry&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>rename</span>(<span class='kw'>area</span> <span class='kw'>=</span> <span class='no'>AREA</span>)
+<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>group_by</span>(<span class='no'>area_cl</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>mutate</span>(<span class='kw'>area10</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>)
+<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>transmute</span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>names</span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>class</span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>rename</span>(<span class='kw'>area</span> <span class='kw'>=</span> <span class='no'>AREA</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>slice</span>(<span class='fl'>1</span>:<span class='fl'>2</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

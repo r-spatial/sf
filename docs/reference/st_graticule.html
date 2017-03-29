@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -89,25 +91,42 @@
   <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code> or numeric vector with bounding box (minx,miny,maxx,maxy).</dd>
-      <dt>crs</dt>
-      <dd>object of class <code>crs</code>, with the display coordinate reference system</dd>
-      <dt>datum</dt>
-      <dd>object of class <code>crs</code>, with the coordinate reference system for the graticules</dd>
-      <dt>...</dt>
-      <dd>ignored</dd>
-      <dt>lon</dt>
-      <dd>numeric; degrees east for the meridians</dd>
-      <dt>lat</dt>
-      <dd>numeric; degrees north for the parallels</dd>
-      <dt>ndiscr</dt>
-      <dd>integer; number of points to discretize a parallel or meridian</dd>
-      <dt>margin</dt>
-      <dd>numeric; small number to trim a longlat bounding box that touches or 
-crosses +/-180 long or +/-90 latitude.</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code> or numeric vector with bounding box (minx,miny,maxx,maxy).</p></td>
+    </tr>
+    <tr>
+      <th>crs</th>
+      <td><p>object of class <code>crs</code>, with the display coordinate reference system</p></td>
+    </tr>
+    <tr>
+      <th>datum</th>
+      <td><p>object of class <code>crs</code>, with the coordinate reference system for the graticules</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>lon</th>
+      <td><p>numeric; degrees east for the meridians</p></td>
+    </tr>
+    <tr>
+      <th>lat</th>
+      <td><p>numeric; degrees north for the parallels</p></td>
+    </tr>
+    <tr>
+      <th>ndiscr</th>
+      <td><p>integer; number of points to discretize a parallel or meridian</p></td>
+    </tr>
+    <tr>
+      <th>margin</th>
+      <td><p>numeric; small number to trim a longlat bounding box that touches or 
+crosses +/-180 long or +/-90 latitude.</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -117,7 +136,7 @@ see example.</p>
     
     <h2 class="hasAnchor" id="use-of-graticules"><a class="anchor" href="#use-of-graticules"></a>Use of graticules</h2>
 
-    <p></p>
+    
     <p>In cartographic visualization, the use of graticules is not advised, unless
  the graphical output will be used for measurement or navigation, or the
  direction of North is important for the interpretation of the content, or

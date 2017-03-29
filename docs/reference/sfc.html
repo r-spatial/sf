@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,19 +89,26 @@
     <pre><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>...</dt>
-      <dd>one or more simple feature geometries</dd>
-      <dt>crs</dt>
-      <dd>coordinate reference system: integer with the epsg code, or character with proj4string</dd>
-      <dt>precision</dt>
-      <dd>numeric; see <a href='st_as_binary.html'>st_as_binary</a></dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>one or more simple feature geometries</p></td>
+    </tr>
+    <tr>
+      <th>crs</th>
+      <td><p>coordinate reference system: integer with the epsg code, or character with proj4string</p></td>
+    </tr>
+    <tr>
+      <th>precision</th>
+      <td><p>numeric; see <a href='st_as_binary.html'>st_as_binary</a></p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>a simple feature collection object is a list of class 
-<code>c(&quot;stc_TYPE&quot;, &quot;sfc&quot;)</code> which contains objects of identical type. This 
+<code>c("stc_TYPE", "sfc")</code> which contains objects of identical type. This 
 function creates such an object from a list of simple feature geometries (of 
 class <code>sfg</code>).</p>
     

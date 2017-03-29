@@ -31,6 +31,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -87,20 +89,29 @@
     <pre><span class='fu'>st_zm</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"ZM"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></dd>
-      <dt>...</dt>
-      <dd>ignored</dd>
-      <dt>drop</dt>
-      <dd>logical; drop, or (FALSE) add?</dd>
-      <dt>what</dt>
-      <dd>character which dimensions to drop or add</dd>
-    </dl>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>drop</th>
+      <td><p>logical; drop, or (FALSE) add?</p></td>
+    </tr>
+    <tr>
+      <th>what</th>
+      <td><p>character which dimensions to drop or add</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>only combinations <code>drop=TRUE</code>, <code>what = &quot;ZM&quot;</code>, and <code>drop=FALSE</code>, <code>what=&quot;Z&quot;</code> are supported so far. In case <code>add=TRUE</code>, <code>x</code> should have <code>XY</code> geometry, and zero values are added for <code>Z</code>.</p>
+    <p>only combinations <code>drop=TRUE</code>, <code>what = "ZM"</code>, and <code>drop=FALSE</code>, <code>what="Z"</code> are supported so far. In case <code>add=TRUE</code>, <code>x</code> should have <code>XY</code> geometry, and zero values are added for <code>Z</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
