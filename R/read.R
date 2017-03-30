@@ -91,6 +91,7 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
 	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 
 clean_columns = function(obj, factorsAsCharacter) {
+	permitted = c("character", "integer", "numeric", "Date", "POSIXct")
 	for (i in seq_along(obj)) {
 		if (is.factor(obj[[i]])) {
 			obj[[i]] = if (factorsAsCharacter)
@@ -98,23 +99,23 @@ clean_columns = function(obj, factorsAsCharacter) {
 				else
 					as.numeric(obj[[i]])
 		}
-		if (!(class(obj[[i]])[1] %in% c("character", "integer", "numeric", "Date", "POSIXct"))) {
+		if (! inherits(obj[[i]], permitted)) {
 			if (inherits(obj[[i]], "POSIXlt"))
 				obj[[i]] = as.POSIXct(obj[[i]])
 			else if (is.numeric(obj[[i]]))
 				obj[[i]] = as.numeric(obj[[i]]) # strips class
 		}
 	}
-	ccls = vapply(obj, function(x) class(x)[1], "")
-	ccls.ok = ccls %in% c("character", "integer", "numeric", "Date", "POSIXct")
+	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
 		# nocov start
 		cat("ignoring columns with unsupported type:\n")
 		print(cbind(names(obj)[!ccls.ok], ccls[!ccls.ok]))
-		obj[ccls.ok]
+		obj = obj[ccls.ok]
 		# nocov end
-	} else
-		obj
+	} 
+	colclasses = vapply(obj, function(x) permitted[ which(inherits(x, permitted, which = TRUE) > 0)[1] ] , "")
+	structure(obj, colclasses = colclasses)
 }
 
 #' Write simple features object to file or database
@@ -170,9 +171,9 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 
-	obj = clean_columns(obj, factorsAsCharacter)
+	obj = clean_columns(as.data.frame(obj), factorsAsCharacter) 
+	# this attaches attr colclasses
 
-	attr(obj, "colclasses") = vapply(obj, function(x) class(x)[1], "")
 	dim = if (length(geom) == 0)
 			"XY"
 		else
