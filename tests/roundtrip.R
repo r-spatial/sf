@@ -53,3 +53,6 @@ all.equal(nc, st_as_sf(as(nc, "Spatial")))
 sp = as(nc, "Spatial")
 comment(sp) = "FALSE"
 all.equal(nc, st_as_sf(sp))
+detach("package:sp")
+unloadNamespace("rgeos")
+

@@ -29,8 +29,6 @@ df
 
 st_contains_properly(ncm[1:3,], ncm[1:3])
 
-try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
-
 st_combine(nc)
 
 st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
