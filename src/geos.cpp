@@ -355,16 +355,15 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GEOSGeom> gmv_out(by_feature ? sfc.size() : 1);
 	if (by_feature) {
-		for (int i = 0; i < sfc.size(); i++)
+		for (int i = 0; i < sfc.size(); i++) {
 			gmv_out[i] = GEOSUnaryUnion_r(hGEOSCtxt, gmv[i]);
+			GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
+		}
 	} else {
 		GEOSGeom gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, gmv.data(), gmv.size());
 		gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
 		GEOSGeom_destroy_r(hGEOSCtxt, gc);
 	}
-
-	for (int i = 0; i < gmv.size(); i++)
-		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out, dim)); // destroys gmv_out
 	CPL_geos_finish(hGEOSCtxt);
