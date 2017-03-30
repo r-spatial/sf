@@ -362,6 +362,10 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 		gmv_out[0] = GEOSUnaryUnion_r(hGEOSCtxt, gc);
 		GEOSGeom_destroy_r(hGEOSCtxt, gc);
 	}
+
+	for (int i = 0; i < gmv.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
+
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out, dim)); // destroys gmv_out
 	CPL_geos_finish(hGEOSCtxt);
 	out.attr("precision") = sfc.attr("precision");

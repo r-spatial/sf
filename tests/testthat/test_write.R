@@ -10,8 +10,9 @@ test_that("sf can write to all writable formats", {
     drvs <- st_drivers()$name[sapply(st_drivers()$name, function(x) is_driver_can(x, operation = "write"))] %>% as.character()
     excluded_drivers = c("gps", # requires options
                          "gtm", # doesn't handle attributes
-                         "nc",  # requires appropriate datum -> writes in 4326, below
-                         "map") # doesn't support points
+                         "nc",  # requires appropriate datum -> but writes in 4326, see below
+                         "map", # doesn't support points
+						 "ods") # generates valgrind error
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]),
                         excluded_drivers))
         st_write(meuse, paste0(tf, ".", ext))
