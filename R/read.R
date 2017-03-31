@@ -136,6 +136,8 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' \code{as.numeric}.
 #' @param update logical; if \code{TRUE}, try to update (append to) existing data source; this is only supported by some drivers
 #' (e.g. GPKG), for other drivers the layer may simply be overwritten
+#' @param overwrite logical; TRUE or FALSE (default) value determining whether the original file should be overwritten by new data. 
+#' Only works for drivers that write a single layer to a file.
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
@@ -152,7 +154,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers) {
+		update = driver %in% db_drivers, overwrite = FALSE) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
@@ -163,7 +165,15 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
-
+	
+	if (file.exists(dsn) && overwrite){
+	        if (!(driver %in% db_drivers)){
+	                file.remove(dsn)   
+	        } else{
+	                stop("`overwrite` cannot be used for drivers that write a multi layer to a file")
+	        }
+	}
+	        
 	if (file.exists(dsn))
 		dsn = normalizePath(dsn)
 
