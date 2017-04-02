@@ -110,10 +110,10 @@ clean_columns = function(obj, factorsAsCharacter) {
 	if (any(!ccls.ok)) {
 		# nocov start
 		cat("ignoring columns with unsupported type:\n")
-		print(cbind(names(obj)[!ccls.ok], ccls[!ccls.ok]))
+		print(paste(names(obj)[!ccls.ok], collapse = " "))
 		obj = obj[ccls.ok]
 		# nocov end
-	} 
+	}
 	colclasses = vapply(obj, function(x) permitted[ which(inherits(x, permitted, which = TRUE) > 0)[1] ] , "")
 	structure(obj, colclasses = colclasses)
 }

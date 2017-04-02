@@ -42,7 +42,7 @@
   pch = 1, type = "l", add = FALSE)
 
 \method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  border = 1, add = FALSE, rule = "winding")
+  cex = 1, pch = NA, border = 1, add = FALSE, rule = "winding")
 
 \method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
   border = 1, add = FALSE, rule = "winding")

@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -95,11 +95,6 @@ integer(0)
 integer(0)
 
 > 
-> try(x <- sf:::st_geos_binop("ErrorOperation", nc[1:50,], nc[51:100,], 0, TRUE))
-although coordinates are longitude/latitude, it is assumed that they are planar
-Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse,  : 
-  wrong value for op
-> 
 > st_combine(nc)
 Geometry set for 1 feature 
 geometry type:  MULTIPOLYGON
@@ -186,4 +181,4 @@ LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.136   0.020   2.154 
+  2.300   0.036   2.346 

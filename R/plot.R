@@ -214,9 +214,9 @@ p_bind = function(lst) {
 
 #' @name plot
 #' @param rule see \link[graphics]{polypath}
-#' @method plot sfc_POLYGON
 #' @export
-plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch = NA, border = 1, 
+		add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -229,6 +229,13 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, a
 	lapply(seq_along(x), function(i)
 	  if (non_empty[i])
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule))
+	if (any(!is.na(pch))) {
+		pch = rep(pch, length.out = length(x))
+		cex = rep(cex, length.out = length(x))
+		lapply(seq_along(x), function(i) 
+		  if (non_empty[i])
+			points(p_bind(x[[i]]), pch = pch[i], cex = cex[i], type = 'p'))
+	}
 	invisible(NULL)
 }
 

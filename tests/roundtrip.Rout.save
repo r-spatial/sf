@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -166,7 +166,10 @@ In data.row.names(row.names, rowsi, i) :
 > comment(sp) = "FALSE"
 > all.equal(nc, st_as_sf(sp))
 [1] TRUE
+> detach("package:sp")
+> unloadNamespace("rgeos")
+> 
 > 
 > proc.time()
    user  system elapsed 
-  3.100   0.008   3.106 
+  3.304   0.052   3.364 
