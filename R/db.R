@@ -77,7 +77,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
 #' @param geom_name name of the geometry column in the database
 #' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
-#' @param overwrite logical; should \code{table} be dropped first?
+#' @param drop logical; should \code{table} be dropped first?
 #' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
 #' @param debug logical; print SQL statements to screen before executing them.
@@ -93,14 +93,14 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
 #'   
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
-                       ..., overwrite = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
+                       ..., drop = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
     DEBUG = function(x) { if (debug) print(x); x }
     if (is.null(conn))
         stop("No connection provided")
     table <- schema_table(table)
     
     if (db_exists(conn, table)) {
-        if (overwrite) {
+        if (drop) {
             DBI::dbGetQuery(conn, DEBUG(paste("drop table", paste(table, collapse = "."), ";")))
         } else {
             stop("Table ", paste(table, collapse = "."), " exists already, use overwrite = TRUE", call. = FALSE)

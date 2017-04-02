@@ -16,7 +16,7 @@ st_write(obj, dsn, layer = basename(dsn),
 write_sf(..., quiet = TRUE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
-  geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
+  geom_name = "wkb_geometry", ..., drop = FALSE, append = FALSE,
   binary = TRUE, debug = FALSE)
 }
 \arguments{
@@ -55,13 +55,13 @@ Only works for drivers that write a single layer to a file.}
 
 \item{geom_name}{name of the geometry column in the database}
 
+\item{drop}{logical; should \code{table} be dropped first?}
+
 \item{append}{logical; append to table? (NOTE: experimental, might not work)}
 
 \item{binary}{logical; use well-known-binary for transfer?}
 
 \item{debug}{logical; print SQL statements to screen before executing them.}
-
-\item{overwrite}{logical; should \code{table} be dropped first?}
 }
 \description{
 Write simple features object to file or database
