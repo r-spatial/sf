@@ -62,7 +62,7 @@ Only works for drivers that write a single layer to a file.}
 \item{binary}{logical; use well-known-binary for transfer?}
 
 \item{debug}{logical; print SQL statements to screen before executing them.}
-}
+
 \description{
 Write simple features object to file or database
 
