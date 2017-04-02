@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{object of class \link{sf}}
 
-\item{by}{integer or \code{factor}, the same length as the number of rows in \code{x}, with groups to aggregate by (aggregation predicate)}
+\item{by}{see \link[stats]{aggregate}}
 
 \item{FUN}{function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped}
 

@@ -2,22 +2,36 @@
 #'
 #' aggregate an \code{sf} object, possibly union-ing geometries
 #' @param x object of class \link{sf}
-#' @param by integer or \code{factor}, the same length as the number of rows in \code{x}, with groups to aggregate by (aggregation predicate)
+#' @param by see \link[stats]{aggregate}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param union logical; should grouped geometries be unioned using \link{st_union}? 
 #' @return an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
 #' @export
 aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
-	geom = do.call(st_sfc, lapply(split(st_geometry(x), by), 
-		function(y) do.call(c, y)))
+
+	lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
+	geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
+
 	if (union)
 		geom = st_union(geom, by_feature = TRUE)
 	st_geometry(x) = NULL
-	x = aggregate(x, list(Group.1 = by), FUN, ..., simplify = FALSE)
+	x = aggregate(x, by, FUN, ..., simplify = FALSE)
 	st_geometry(x) = geom
-	st_agr(x) = "aggregate"
-	st_agr(x) = c(Group.1 = "identity")
+
+	# now set agr:
+	geoms = which(vapply(x, function(vr) inherits(vr, "sfc"), TRUE))
+	agr_names = names(x)[-geoms]
+	agr = rep("aggregate", length(agr_names))
+	names(agr) = agr_names
+	# which ones are identity variables?
+	n = if (!is.null(names(by)))
+		names(by)
+	else
+		paste0("Group.", seq_along(by))
+	agr[n] = "identity"
+	st_agr(x) = agr
+
 	x
 }
 

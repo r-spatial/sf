@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -257,7 +257,7 @@ POLYGON((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
 > s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
-> (a = aggregate(s, c(1,1), mean))
+> (a = aggregate(s, list(c(1,1)), mean))
 Simple feature collection with 1 feature and 2 fields
 Attribute-geometry relationship: 0 constant, 1 aggregate, 1 identity
 geometry type:  MULTIPOLYGON
@@ -267,7 +267,7 @@ epsg (SRID):    NA
 proj4string:    NA
   Group.1   a                       geometry
 1       1 1.5 MULTIPOLYGON(((0 0, 1 0, 1 ...
-> (a = aggregate(s, c(1,1), mean, union = TRUE))
+> (a = aggregate(s, list(c(1,1)), mean, union = TRUE))
 Simple feature collection with 1 feature and 2 fields
 Attribute-geometry relationship: 0 constant, 1 aggregate, 1 identity
 geometry type:  POLYGON
@@ -278,7 +278,40 @@ proj4string:    NA
   Group.1   a                       geometry
 1       1 1.5 POLYGON((1 1, 1 0, 0 0, 0 1...
 > # expect_warning(st_cast(a, "POINT"))
+> demo(meuse_sf, echo = FALSE, ask = FALSE)
+> a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
+There were 12 warnings (use warnings() to see them)
+> attributes(a)$agr
+  Group.1   cadmium    copper      lead      zinc      elev      dist        om 
+ identity aggregate aggregate aggregate aggregate aggregate aggregate aggregate 
+    ffreq      soil      lime   landuse    dist.m 
+aggregate aggregate aggregate aggregate aggregate 
+Levels: constant aggregate identity
+> a = aggregate(meuse_sf, list(soil = meuse_sf$soil), mean)
+There were 12 warnings (use warnings() to see them)
+> attributes(a)$agr
+     soil   cadmium    copper      lead      zinc      elev      dist        om 
+ identity aggregate aggregate aggregate aggregate aggregate aggregate aggregate 
+    ffreq    soil.1      lime   landuse    dist.m 
+aggregate aggregate aggregate aggregate aggregate 
+Levels: constant aggregate identity
+> a = aggregate(meuse_sf, list(meuse_sf$soil, meuse_sf$ffreq), mean)
+There were 32 warnings (use warnings() to see them)
+> attributes(a)$agr
+  Group.1   Group.2   cadmium    copper      lead      zinc      elev      dist 
+ identity  identity aggregate aggregate aggregate aggregate aggregate aggregate 
+       om     ffreq      soil      lime   landuse    dist.m 
+aggregate aggregate aggregate aggregate aggregate aggregate 
+Levels: constant aggregate identity
+> a = aggregate(meuse_sf, list(soil = meuse_sf$soil, ff = meuse_sf$ffreq), mean)
+There were 32 warnings (use warnings() to see them)
+> attributes(a)$agr
+     soil        ff   cadmium    copper      lead      zinc      elev      dist 
+ identity  identity aggregate aggregate aggregate aggregate aggregate aggregate 
+       om     ffreq    soil.1      lime   landuse    dist.m 
+aggregate aggregate aggregate aggregate aggregate aggregate 
+Levels: constant aggregate identity
 > 
 > proc.time()
    user  system elapsed 
-  0.392   0.008   0.398 
+  0.496   0.016   0.509 

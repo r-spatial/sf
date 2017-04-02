@@ -81,6 +81,15 @@ st_is(sfc, c("POINT", "LINESTRING"))
 pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
 s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
-(a = aggregate(s, c(1,1), mean))
-(a = aggregate(s, c(1,1), mean, union = TRUE))
+(a = aggregate(s, list(c(1,1)), mean))
+(a = aggregate(s, list(c(1,1)), mean, union = TRUE))
 # expect_warning(st_cast(a, "POINT"))
+demo(meuse_sf, echo = FALSE, ask = FALSE)
+a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
+attributes(a)$agr
+a = aggregate(meuse_sf, list(soil = meuse_sf$soil), mean)
+attributes(a)$agr
+a = aggregate(meuse_sf, list(meuse_sf$soil, meuse_sf$ffreq), mean)
+attributes(a)$agr
+a = aggregate(meuse_sf, list(soil = meuse_sf$soil, ff = meuse_sf$ffreq), mean)
+attributes(a)$agr
