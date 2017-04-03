@@ -1,5 +1,9 @@
 # version 0.4-2
 
+* take out more memory leaking examples in tests
+
+* the `aggregate` method for `sf` objects now assumes the `by` argument to be identical to that of `stats::aggregate`
+
 * `st_wrap_dateline` wraps (cuts up) geometries crossing the antimeridian, such that they no longer cross it.
 
 # version 0.4-1

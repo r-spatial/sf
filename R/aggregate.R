@@ -11,7 +11,7 @@
 aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
 
 	lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
-	geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
+	geom = do.call(st_sfc, lst[!sapply(lst, is.null)], crs = st_crs(x))
 
 	if (union)
 		geom = st_union(geom, by_feature = TRUE)
