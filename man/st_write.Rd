@@ -83,7 +83,7 @@ st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
 library(sp)
 data(meuse)
 sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-library(RPostgreSQL)
+library(RPostgreSQL) 
 conn = dbConnect(PostgreSQL(), dbname = "postgis")
 st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
   

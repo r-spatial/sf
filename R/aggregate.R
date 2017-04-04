@@ -6,9 +6,10 @@
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param union logical; should grouped geometries be unioned using \link{st_union}? 
+#' @param simplify logical; see \link[stats]{aggregate}
 #' @return an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
 #' @export
-aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
+aggregate.sf = function(x, by, FUN, ..., union = TRUE, simplify = TRUE) {
 
 	crs = st_crs(x)
 	lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
@@ -17,7 +18,7 @@ aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
 	if (union)
 		geom = st_union(geom, by_feature = TRUE)
 	st_geometry(x) = NULL
-	x = aggregate(x, by, FUN, ..., simplify = FALSE)
+	x = aggregate(x, by, FUN, ..., simplify = simplify)
 	st_geometry(x) = geom # coerces to sf
 	st_crs(x) = crs
 
