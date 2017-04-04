@@ -176,9 +176,12 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	        }
 	}
 	        
-	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
-
+	if (file.exists(dsn)) {
+	  dsn = normalizePath(dsn)
+	} else {
+	  dsn = path.expand(dsn)
+	}
+		
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 
