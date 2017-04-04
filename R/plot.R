@@ -229,13 +229,13 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch 
 	lapply(seq_along(x), function(i)
 	  if (non_empty[i])
 		polypath(p_bind(x[[i]]), border = border[i], lty = lty[i], lwd = lwd[i], col = col[i], rule = rule))
-	if (any(!is.na(pch))) {
-		pch = rep(pch, length.out = length(x))
-		cex = rep(cex, length.out = length(x))
-		lapply(seq_along(x), function(i) 
-		  if (non_empty[i])
-			points(p_bind(x[[i]]), pch = pch[i], cex = cex[i], type = 'p'))
-	}
+#	if (any(!is.na(pch))) {
+#		pch = rep(pch, length.out = length(x))
+#		cex = rep(cex, length.out = length(x))
+#		lapply(seq_along(x), function(i) 
+#		  if (non_empty[i])
+#			points(p_bind(x[[i]]), pch = pch[i], cex = cex[i], type = 'p'))
+#	}
 	invisible(NULL)
 }
 
@@ -483,7 +483,7 @@ sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, catego
 				else
 					cut(x, n)
 			}
-			sf.colors(n)[safe_cut(xc, n)]
+			sf.colors(n)[safe_cut(as.numeric(xc), n)]
 		}
 	}
 }
