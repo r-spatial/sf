@@ -10,14 +10,16 @@
 #' @export
 aggregate.sf = function(x, by, FUN, ..., union = FALSE) {
 
+	crs = st_crs(x)
 	lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
-	geom = do.call(st_sfc, lst[!sapply(lst, is.null)], crs = st_crs(x))
+	geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
 
 	if (union)
 		geom = st_union(geom, by_feature = TRUE)
 	st_geometry(x) = NULL
 	x = aggregate(x, by, FUN, ..., simplify = FALSE)
-	st_geometry(x) = geom
+	st_geometry(x) = geom # coerces to sf
+	st_crs(x) = crs
 
 	# now set agr:
 	geoms = which(vapply(x, function(vr) inherits(vr, "sfc"), TRUE))
