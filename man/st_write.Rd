@@ -11,12 +11,12 @@
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-  update = driver \%in\% db_drivers)
+  update = driver \%in\% db_drivers, overwrite = FALSE)
 
 write_sf(..., quiet = TRUE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
-  geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
+  geom_name = "wkb_geometry", ..., drop = FALSE, append = FALSE,
   binary = TRUE, debug = FALSE)
 }
 \arguments{
@@ -46,20 +46,23 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \item{update}{logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
 (e.g. GPKG), for other drivers the layer may simply be overwritten}
 
+\item{overwrite}{logical; TRUE or FALSE (default) value determining whether the original file should be overwritten by new data. 
+Only works for drivers that write a single layer to a file.}
+
 \item{conn}{open database connection}
 
 \item{table}{character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}}
 
 \item{geom_name}{name of the geometry column in the database}
 
-\item{overwrite}{logical; should \code{table} be dropped first?}
+\item{drop}{logical; should \code{table} be dropped first?}
 
 \item{append}{logical; append to table? (NOTE: experimental, might not work)}
 
 \item{binary}{logical; use well-known-binary for transfer?}
 
 \item{debug}{logical; print SQL statements to screen before executing them.}
-}
+
 \description{
 Write simple features object to file or database
 

@@ -132,7 +132,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			options.data(), NULL)) != NULL) {
 		GDALClose(poDS);
 		Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-			" already exists; remove first, or use update=TRUE to append." << std::endl;
+			" already exists; remove first, use overwrite=TRUE to replace, or use update=TRUE to append." << std::endl;
 		throw std::invalid_argument("Dataset already exists.\n");
 	}
 
