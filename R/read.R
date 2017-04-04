@@ -134,14 +134,13 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
-#' @param update logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
+#' @param update logical; if \code{TRUE}, try to update (append to) existing data source; this is only supported by some drivers
 #' (e.g. GPKG), for other drivers the layer may simply be overwritten
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
-#'
 #' \dontrun{
 #' library(sp)
 #' example(meuse, ask = FALSE, echo = FALSE)
