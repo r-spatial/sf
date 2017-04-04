@@ -118,7 +118,7 @@ The remaining geometries 10 are more rare, but increasingly find implementations
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the SQL-MM part 3 standard. The descriptions above were copied from the [PostGIS manual](http://postgis.net/docs/using_postgis_dbmanagement.html).
+Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the [SQL-MM part 3 standard](https://www.iso.org/standard/38651.html). The descriptions above were copied from the [PostGIS manual](http://postgis.net/docs/using_postgis_dbmanagement.html).
 
 
 ## Coordinate reference system
@@ -131,12 +131,13 @@ system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 # How simple features in R are organized
 
 Package `sf` represents simple features as native R objects.
-All functions and methods in `sf` are prefixed by `st_`, so that
-they are easily found by command-line completion.  Simple features
-are implemented as R native data, using simple data structures (S3
-classes, lists, matrix, vector).  Typical use involves reading,
-manipulating and writing of sets of features, with attributes
-and geometries.
+Similar to [PostGIS](http://postgis.net/), all functions and methods
+in `sf` that operate on spatial data are prefixed by `st_`, which
+refers to _spatial and temporal_; this makes them easily findable
+by command-line completion.  Simple features are implemented as
+R native data, using simple data structures (S3 classes, lists,
+matrix, vector).  Typical use involves reading, manipulating and
+writing of sets of features, with attributes and geometries.
 
 As attributes are typically stored in `data.frame` objects (or the
 very similar `tbl_df`), we will also store feature geometries in
