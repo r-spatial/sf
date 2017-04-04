@@ -132,7 +132,8 @@ system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
 Package `sf` represents simple features as native R objects.
 All functions and methods in `sf` are prefixed by `st_`, so that
-they are easily found by command-line completion.  Simple features
+they are easily found by command-line completion ("st" stands for
+"spatial type", which is originated from PostGIS). Simple features
 are implemented as R native data, using simple data structures (S3
 classes, lists, matrix, vector).  Typical use involves reading,
 manipulating and writing of sets of features, with attributes
