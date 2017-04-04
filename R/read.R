@@ -135,9 +135,9 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
 #' @param update logical; if \code{TRUE}, try to update (append to) existing data source; this is only supported by some drivers
-#' (e.g. GPKG), for other drivers the layer may simply be overwritten
-#' @param overwrite logical; TRUE or FALSE (default) value determining whether the original file should be overwritten by new data. 
-#' Only works for drivers that write a single layer to a file.
+#' @param overwrite logical; \code{FALSE} by default, if \code{TRUE} the original file will be overwritten by new data 
+#' (for drivers that write a single layer to a file) or an attempt will be made to update (append to) the existing data source
+#' (for database-type drivers defined by \code{db_drivers} such as GPKG).
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
