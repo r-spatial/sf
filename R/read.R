@@ -143,6 +143,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
+#' st_write(nc, "nc.shp", overwrite = TRUE)
 #' \dontrun{
 #' library(sp)
 #' example(meuse, ask = FALSE, echo = FALSE)
