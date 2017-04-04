@@ -254,7 +254,7 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
+		dsn = suppressWarnings(normalizePath(dsn))
 	CPL_get_layers(dsn, options, do_count)
 }
 
