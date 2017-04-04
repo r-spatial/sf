@@ -170,7 +170,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	
-  dsn = normalizePath(dsn)
+  dsn = suppressWarnings(normalizePath(dsn))
 	
 	if (file.exists(dsn) && overwrite && !is_db){
 	  file.remove(dsn)   
@@ -254,7 +254,7 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	if (file.exists(dsn))
-		dsn = suppressWarnings(normalizePath(dsn))
+		dsn = normalizePath(dsn)
 	CPL_get_layers(dsn, options, do_count)
 }
 
