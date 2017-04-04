@@ -97,6 +97,10 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 
 #' @export
 c.sfc = function(..., recursive = FALSE) {
+#	lst = list(...)
+#	ret = do.call(st_sfc, unlist(lapply(lst, unclass), recursive = FALSE))
+#	return(st_set_crs(ret, st_crs(lst[[1]])))
+
 	lst = list(...)
 	cls = class(lst[[1]])
 	eq = if (length(lst) > 1)
@@ -105,10 +109,13 @@ c.sfc = function(..., recursive = FALSE) {
 			TRUE
 	if (! eq)
 		cls = c("sfc_GEOMETRY", "sfc")
+
 	ret = unlist(lapply(lst, unclass), recursive = FALSE)
 	attributes(ret) = attributes(lst[[1]]) # crs
 	class(ret) = cls
 	attr(ret, "bbox") = st_bbox(ret) # dispatch on class
+	if (! eq)
+		attr(ret, "classes") = vapply(ret, class, rep("", 3))[2L,]
 	ret
 }
 

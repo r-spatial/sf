@@ -656,10 +656,9 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE) {
 st_union.sf = function(x, y, ..., by_feature = FALSE) {
 	if (missing(y)) { # unary union, possibly by_feature:
 		geom = st_sfc(CPL_geos_union(st_geometry(x), by_feature))
-		if (by_feature) {
-			st_geometry(x) = geom
-			x
-		} else
+		if (by_feature)
+			st_set_geometry(x, geom)
+		else
 			geom
 	} else
 		geos_op2_df(x, y, geos_op2_geom("union", x, y))
