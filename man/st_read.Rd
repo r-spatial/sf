@@ -33,7 +33,7 @@ message when there are multiple layers, or give an error if there are no layers 
 
 \item{geometry_column}{integer or character; in case of multiple geometry fields, which one to take?}
 
-\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi} 
+\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi}
 is \code{TRUE}, in case of mixed feature geometry
 types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
 can be given.}

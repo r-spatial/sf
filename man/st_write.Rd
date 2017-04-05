@@ -43,8 +43,10 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by
 \code{as.numeric}.}
 
-\item{update}{logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
-(e.g. GPKG), for other drivers the layer may simply be overwritten}
+\item{update}{logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
+as defined by \code{db_drivers}. For non database-type drivers that save a single layer (e.g. \code{ESRI Shapefile} and \code{GeoJSON})
+this is roughly equivalent to \code{overwrite} in functions such as \code{writeRaster} from the \code{raster} package.
+For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try to update (append to) the existing data source.}
 
 \item{conn}{open database connection}
 
@@ -71,7 +73,12 @@ columns (variables) of a class not supported are dropped with a warning.
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, "nc.shp")
-
+st_write(nc, "nc.shp", update = TRUE) # for the shapefile driver, overwrites
+data(meuse, package = "sp") # loads data.frame from sp
+meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
+file.remove("meuse.csv") # update = TRUE seems not to work for csv
+st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT") # overwrites, now with WKT column
 \dontrun{
 library(sp)
 example(meuse, ask = FALSE, echo = FALSE)
