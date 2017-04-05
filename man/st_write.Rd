@@ -11,7 +11,7 @@
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-  update = driver \%in\% db_drivers, overwrite = FALSE)
+  overwrite = driver \%in\% db_drivers)
 
 write_sf(..., quiet = TRUE)
 
@@ -43,11 +43,10 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by
 \code{as.numeric}.}
 
-\item{update}{logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
-(e.g. GPKG), for other drivers the layer may simply be overwritten}
-
-\item{overwrite}{logical; TRUE or FALSE (default) value determining whether the original file should be overwritten by new data. 
-Only works for drivers that write a single layer to a file.}
+\item{overwrite}{logical; \code{FALSE} by default.
+If \code{TRUE} the original file will be overwritten by new data 
+(for drivers that write a single layer to a file) or an attempt will be made to update (append to) the existing data source
+(for database-type drivers defined by \code{db_drivers} such as GPKG).}
 
 \item{conn}{open database connection}
 
@@ -74,7 +73,8 @@ columns (variables) of a class not supported are dropped with a warning.
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, "nc.shp")
-
+nc = nc[1, 1:5]
+st_write(nc, "nc.shp", overwrite = TRUE)
 \dontrun{
 library(sp)
 example(meuse, ask = FALSE, echo = FALSE)
