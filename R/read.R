@@ -134,8 +134,10 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
-#' @param update logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
-#' (e.g. GPKG), for other drivers the layer may simply be overwritten
+#' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
+#' as defined by \code{db_drivers}. For non database-type drivers that save a single layer (e.g. \code{ESRI Shapefile} and \code{GeoJSON})
+#' this is roughly equivalent to \code{overwrite} in functions such as \code{\link{writeRaster}} from the \code{raster} package.
+#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try to update (append to) the existing data source.
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
