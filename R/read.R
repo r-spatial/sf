@@ -10,7 +10,7 @@
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
 #' @param geometry_column integer or character; in case of multiple geometry fields, which one to take?
-#' @param type integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi} 
+#' @param type integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi}
 #' is \code{TRUE}, in case of mixed feature geometry
 #' types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
 #' can be given.
@@ -75,7 +75,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 
 	for (i in seq_along(geom))
 		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
-	x = st_as_sf(x, ..., 
+	x = st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column])
 	if (! quiet)
 		print(x, n = 0)
@@ -171,7 +171,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 
-	obj = clean_columns(as.data.frame(obj), factorsAsCharacter) 
+	obj = clean_columns(as.data.frame(obj), factorsAsCharacter)
 	# this attaches attr colclasses
 
 	dim = if (length(geom) == 0)
