@@ -134,7 +134,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
-#' @param overwrite logical; \code{FALSE} by default for single-layer data sources and \code{TRUE} by default for database data sources.
+#' @param overwrite logical; \code{FALSE} by default.
 #' If \code{TRUE} the original file will be overwritten by new data 
 #' (for drivers that write a single layer to a file) or an attempt will be made to update (append to) the existing data source
 #' (for database-type drivers defined by \code{db_drivers} such as GPKG).
