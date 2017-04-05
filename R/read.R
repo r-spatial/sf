@@ -134,14 +134,17 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
-#' @param update logical; if \code{TRUE}, try to update (append to) existing data source;this is only supported by some drivers
-#' (e.g. GPKG), for other drivers the layer may simply be overwritten
+#' @param overwrite logical; \code{FALSE} by default.
+#' If \code{TRUE} the original file will be overwritten by new data 
+#' (for drivers that write a single layer to a file) or an attempt will be made to update (append to) the existing data source
+#' (for database-type drivers defined by \code{db_drivers} such as GPKG).
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
-#'
+#' nc = nc[1, 1:5]
+#' st_write(nc, "nc.shp", overwrite = TRUE)
 #' \dontrun{
 #' library(sp)
 #' example(meuse, ask = FALSE, echo = FALSE)
@@ -153,8 +156,10 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers) {
+		overwrite = driver %in% db_drivers) {
 
+  is_db = driver %in% db_drivers
+  
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
 
@@ -164,10 +169,13 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
-
-	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
-
+	
+  dsn = suppressWarnings(normalizePath(dsn))
+	
+	if (file.exists(dsn) && overwrite && !is_db){
+	  file.remove(dsn)   
+	}
+		
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 
@@ -180,7 +188,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 			class(geom[[1]])[1]
 	CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, quiet, update)
+		geom, dim, quiet, overwrite)
 }
 
 #' @name st_write
