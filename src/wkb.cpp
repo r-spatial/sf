@@ -514,7 +514,7 @@ void write_multipoint(std::ostringstream& os, Rcpp::NumericMatrix mat,
 	}
 }
 
-// write single simple feature object as WKB to stream os
+// write single simple feature object as (E)WKB to stream os
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false, 
 		int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
 		int srid = 0) {

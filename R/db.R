@@ -90,7 +90,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #' library(RPostgreSQL) 
 #' conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#' st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
+#' st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)}
 #'   
 st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
                        ..., overwrite = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
@@ -132,8 +132,7 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
         wkt = st_as_text(geom)
         cmd = paste0("UPDATE ", paste0(table, collapse = "."), " SET ", geom_name, " = ST_GeomFromText('", wkt, "',",SRID,") WHERE \"row.names\" = '", rn, "';")
     } else {
-        wkb = st_as_binary(geom, EWKB = TRUE)
-        wkb = vapply(wkb, CPL_raw_to_hex, CPL_raw_to_hex(wkb[[1]]))
+        wkb = st_as_binary(geom, EWKB = TRUE, hex = TRUE)
         cmd = paste0("UPDATE ", paste0(table, collapse = "."), " SET ",
                      geom_name, " = '", wkb, 
                      "' WHERE \"row.names\" = '", rn, "';")
@@ -142,6 +141,72 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
     invisible(DBI::dbGetQuery(conn, DEBUG(paste(cmd, collapse = "\n"))))
 }
 
+
+#' @export
+#' @name st_write
+st_write_db_fast = function(conn = NULL, obj, table = substitute(obj), 
+		..., geom_name = "wkb_geometry", overwrite = FALSE, debug = FALSE, 
+		binary = TRUE, append = FALSE) {
+
+	DEBUG = function(x) { if (debug) message(x); x }
+	if (is.null(conn))
+		stop("No connection provided")
+	table <- schema_table(table)
+
+	if (db_exists(conn, table)) {
+		if (overwrite) {
+			DBI::dbGetQuery(conn, DEBUG(paste("drop table", paste(table, collapse = "."), ";")))
+		} else {
+			stop("Table ", paste(table, collapse = "."), 
+					 " exists already, use overwrite = TRUE", 
+					 call. = FALSE)
+		}
+	}
+  
+	sfc_name = attr(obj, "sf_column")
+	df = obj
+	st_geometry(df) = NULL # is now data.frame
+	df[[sfc_name]] <- if (binary)
+		st_as_binary(st_geometry(obj), EWKB = TRUE, hex = TRUE)
+ 	else
+		st_as_text(st_geometry(obj), EWKT = TRUE)
+	
+	
+	dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
+  
+    geom = st_geometry(obj)
+    DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
+    crs = st_crs(geom)
+    SRID = crs$epsg
+    if (is.null(SRID) || is.na(SRID)) {
+        if (!is.na(crs))
+            warning("Postgis does not support proj4string, the SRID is set to missing (0)")
+        SRID = 0
+    }
+    
+    TYPE = class(geom[[1]])[2]
+    if (! append) {
+        query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name, 
+                             "','", SRID, "','", TYPE, "',", DIM, ");"))
+        dbExecute(conn, query)
+    }
+	
+#	query = DEBUG(paste0("ALTER TABLE ", paste(table, collapse = "."),
+#			" ADD COLUMN ", geom_name," geometry(Geometry)"))
+#	dbExecute(conn, query)
+	
+	query = if (binary)
+		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
+			" set ", geom_name," = ST_GeomFromEWKB(cast(", sfc_name, " as geometry));
+			ALTER TABLE ", paste(table, collapse = "."), 
+			" DROP COLUMN IF EXISTS ", sfc_name))
+	  else
+		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
+			" set ", geom_name," = ST_GeomFromEWKT(", sfc_name, ");
+			ALTER TABLE ", paste(table, collapse = "."), 
+			" DROP COLUMN IF EXISTS ", sfc_name))
+	dbExecute(conn, query)
+}
 
 schema_table <- function(table, public = "public") {
     if (!is.character(table))

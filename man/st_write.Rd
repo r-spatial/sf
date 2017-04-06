@@ -6,6 +6,8 @@
 \alias{write_sf}
 \alias{st_write}
 \alias{st_write_db}
+\alias{st_write}
+\alias{st_write_db_fast}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer = basename(dsn),
@@ -18,6 +20,10 @@ write_sf(..., quiet = TRUE)
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
   binary = TRUE, debug = FALSE)
+
+st_write_db_fast(conn = NULL, obj, table = substitute(obj), ...,
+  geom_name = "wkb_geometry", overwrite = FALSE, debug = FALSE,
+  binary = TRUE, append = FALSE)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -92,7 +98,7 @@ data(meuse)
 sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 library(RPostgreSQL) 
 conn = dbConnect(PostgreSQL(), dbname = "postgis")
-st_write_db(conn, sf, "meuse_tbl", drop_table = FALSE)}
+st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)}
   
 }
 \seealso{
