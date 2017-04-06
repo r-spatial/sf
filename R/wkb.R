@@ -219,7 +219,7 @@ st_as_binary = function(x, ...) UseMethod("st_as_binary")
 #' @param EWKB logical; use EWKB (PostGIS), or (default) ISO-WKB?
 #' @param pureR logical; use pure R solution, or C++?
 #' @param precision numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.
-#' @param hex logical; return hexadecimal encoded (character)?
+#' @param hex logical; return as (unclassed) hexadecimal encoded character vector?
 #' @details for the precion model, see also \url{http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.
 #' @export
 st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
@@ -227,13 +227,17 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 	stopifnot(endian %in% c("big", "little"))
 	if (pureR && precision != 0.0)
 		stop("for non-zero precision values, use pureR = FALSE")
-	if (pureR) 
-		structure(lapply(x, st_as_binary, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
+	ret = if (pureR) 
+		structure(lapply(x, st_as_binary.sfg, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
 		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision), 
 				class = "WKB")
 	}
+	if (hex)
+		vapply(ret, CPL_raw_to_hex, "")
+	else
+		ret
 }
 
 createType = function(x, endian, EWKB = FALSE) {
@@ -260,15 +264,18 @@ createType = function(x, endian, EWKB = FALSE) {
 #' @export
 st_as_binary.sfg = function(x, ..., endian = .Platform$endian, EWKB = FALSE, pureR = FALSE, 
 		hex = FALSE) {
+# if pureR, it's done here, if not, it's done in st_as_binary.sfc
 	stopifnot(endian %in% c("big", "little"))
-	if (! pureR) {
-		stopifnot(endian == .Platform$endian)
-		CPL_write_wkb(st_sfc(x), EWKB, endian == "little", Dimension(x), 0.0)[[1]]
-	} else {
+	if (! pureR)
+		st_as_binary.sfc(st_sfc(x), endian == endian, EWKB = EWKB, pureR = pureR, hex = hex, ...)[[1]]
+	else {
 		rc <- rawConnection(raw(0), "r+")
 		on.exit(close(rc))
 		writeData(x, rc, endian, EWKB)
-		rawConnectionValue(rc)
+		r = rawConnectionValue(rc)
+		if (hex)
+			r = rawToHex(r)
+		r
 	}
 }
 

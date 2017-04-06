@@ -29,7 +29,7 @@ st_as_binary(x, ...)
 
 \item{precision}{numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.}
 
-\item{hex}{logical; return hexadecimal encoded (character)?}
+\item{hex}{logical; return as (unclassed) hexadecimal encoded character vector?}
 }
 \description{
 Convert sfc object to an WKB object
