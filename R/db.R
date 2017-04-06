@@ -92,7 +92,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #' st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)}
 #'   
-st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
+st_write_db_slow = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry",
                        ..., overwrite = FALSE, append = FALSE, binary = TRUE, debug = FALSE) {
     DEBUG = function(x) { if (debug) message(x); x }
     if (is.null(conn))
@@ -144,9 +144,9 @@ st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "w
 
 #' @export
 #' @name st_write
-st_write_db_fast = function(conn = NULL, obj, table = substitute(obj), 
-		..., geom_name = "wkb_geometry", overwrite = FALSE, debug = FALSE, 
-		binary = TRUE, append = FALSE) {
+#' @details st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
+st_write_db = function(conn = NULL, obj, table = substitute(obj), geom_name = "wkb_geometry", 
+		..., overwrite = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
 
 	DEBUG = function(x) { if (debug) message(x); x }
 	if (is.null(conn))
@@ -154,13 +154,11 @@ st_write_db_fast = function(conn = NULL, obj, table = substitute(obj),
 	table <- schema_table(table)
 
 	if (db_exists(conn, table)) {
-		if (overwrite) {
-			DBI::dbGetQuery(conn, DEBUG(paste("drop table", paste(table, collapse = "."), ";")))
-		} else {
-			stop("Table ", paste(table, collapse = "."), 
-					 " exists already, use overwrite = TRUE", 
+		if (overwrite)
+			DBI::dbGetQuery(conn, DEBUG(paste("drop table if exists", paste(table, collapse = "."), ";")))
+		else 
+			stop("Table ", paste(table, collapse = "."), " exists already, use overwrite = TRUE", 
 					 call. = FALSE)
-		}
 	}
   
 	sfc_name = attr(obj, "sf_column")
@@ -170,7 +168,6 @@ st_write_db_fast = function(conn = NULL, obj, table = substitute(obj),
 		st_as_binary(st_geometry(obj), EWKB = TRUE, hex = TRUE)
  	else
 		st_as_text(st_geometry(obj), EWKT = TRUE)
-	
 	
 	dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
   

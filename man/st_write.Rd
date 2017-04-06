@@ -5,9 +5,9 @@
 \alias{st_write}
 \alias{write_sf}
 \alias{st_write}
-\alias{st_write_db}
+\alias{st_write_db_slow}
 \alias{st_write}
-\alias{st_write_db_fast}
+\alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer = basename(dsn),
@@ -17,12 +17,12 @@ st_write(obj, dsn, layer = basename(dsn),
 
 write_sf(..., quiet = TRUE)
 
-st_write_db(conn = NULL, obj, table = substitute(obj),
+st_write_db_slow(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
   binary = TRUE, debug = FALSE)
 
-st_write_db_fast(conn = NULL, obj, table = substitute(obj), ...,
-  geom_name = "wkb_geometry", overwrite = FALSE, debug = FALSE,
+st_write_db(conn = NULL, obj, table = substitute(obj),
+  geom_name = "wkb_geometry", ..., overwrite = FALSE, debug = FALSE,
   binary = TRUE, append = FALSE)
 }
 \arguments{
@@ -75,6 +75,8 @@ Write simple feature table to a spatial database
 }
 \details{
 columns (variables) of a class not supported are dropped with a warning.
+
+st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
