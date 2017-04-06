@@ -75,5 +75,5 @@ Collate:
 	maps.R
 	join.R
 	sample.R
-	lwgeom.R
+	valid.R
 RoxygenNote: 6.0.1

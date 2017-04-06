@@ -2,8 +2,6 @@
 % Please edit documentation in R/geom.R
 \name{geos}
 \alias{geos}
-\alias{st_is_valid}
-\alias{geos}
 \alias{st_dimension}
 \alias{geos}
 \alias{st_area}
@@ -73,8 +71,6 @@
 \alias{st_line_sample}
 \title{Geometric operations on (pairs of) simple feature geometry sets}
 \usage{
-st_is_valid(x, NA_on_exception = TRUE, reason = FALSE)
-
 st_dimension(x, NA_if_empty = TRUE)
 
 st_area(x)
@@ -146,10 +142,6 @@ st_line_sample(x, n, density, type = "regular")
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
-
-\item{reason}{logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, or \code{"Valid Geometry"} otherwise; if set to \code{TRUE}, \code{NA_on_exception} is automatically \code{FALSE} (errors are emitted in case of one or more corrupt geometries).}
-
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
 
 \item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
@@ -187,21 +179,21 @@ st_line_sample(x, n, density, type = "regular")
 \item{type}{character; indicate the sampling type, either "regular" or "random"}
 }
 \value{
-matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
+vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
 
-st_dimension returns 0 for points, 1 for lines, 2 for surfaces; if \code{NA_if_empty} is \code{TRUE} return \code{NA} for empty geometries.
+st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if \code{NA_if_empty} is \code{TRUE}, \code{NA} for empty geometries.
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
 st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
-st_is_simple and st_is_valid return a logical vector
+st_is_simple returns a logical vector
 
 st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 
 st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
 
-functions \code{st_intersects} up to \code{st_equals_exact} return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+the binary logical functions (\code{st_intersects} up to \code{st_equals_exact}) return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
 \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
 \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
@@ -231,9 +223,6 @@ in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTI
 \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; see \link{st_union} for resolving boundaries.
 }
 \examples{
-p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
-st_is_valid(p1)
-st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
 x = st_sfc(
 	st_point(0:1), 
 	st_linestring(rbind(c(0,0),c(1,1))), 

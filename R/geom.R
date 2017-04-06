@@ -4,38 +4,9 @@
 #' 
 #' Geometric operations on (pairs of) simple feature geometry sets
 #' @name geos
-#' @param NA_on_exception logical; if TRUE, for polygons that would otherwise raise an GEOS error (e.g. for a polygon having more than zero but less than 4 points) return an \code{NA} rather than raise an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.
-#' @param reason logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, or \code{"Valid Geometry"} otherwise; if set to \code{TRUE}, \code{NA_on_exception} is automatically \code{FALSE} (errors are emitted in case of one or more corrupt geometries).
-#' @export
-#' @return matrix (sparse or dense); if dense: of type \code{character} for \code{relate}, \code{numeric} for \code{distance}, and \code{logical} for all others; matrix has dimension \code{x} by \code{y}; if sparse (only possible for those who return logical in case of dense): return list of length length(x) with indices of the TRUE values for matching \code{y}.
-#' @examples
-#' p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
-#' st_is_valid(p1)
-#' st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
-st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
-	if (reason) {
-		if (NA_on_exception) {
-			g = st_geometry(x)
-			ret = rep(NA_character_, length(g))
-			not_na = !is.na(st_is_valid(g))
-			ret[not_na] = st_is_valid(g[not_na], FALSE, TRUE)
-			ret
-		} else 
-			CPL_geos_is_valid_reason(st_geometry(x))
-	} else if (! NA_on_exception) 
-		CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
-	else {
-		x = st_geometry(x)
-		ret = vector("logical", length(x))
-		for (i in seq_along(x))
-			ret[i] = CPL_geos_is_valid(x[i], as.logical(NA_on_exception))
-		ret
-	}
-}
-
-#' @name geos
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
-#' @return st_dimension returns 0 for points, 1 for lines, 2 for surfaces; if \code{NA_if_empty} is \code{TRUE} return \code{NA} for empty geometries.
+#' @return vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
+#' @return st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if \code{NA_if_empty} is \code{TRUE}, \code{NA} for empty geometries.
 #' @export
 #' @examples
 #' x = st_sfc(
@@ -47,7 +18,8 @@ st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
 #' 	st_geometrycollection())
 #' st_dimension(x)
 #' st_dimension(x, FALSE)
-st_dimension = function(x, NA_if_empty = TRUE) CPL_gdal_dimension(st_geometry(x), NA_if_empty)
+st_dimension = function(x, NA_if_empty = TRUE) 
+	CPL_gdal_dimension(st_geometry(x), NA_if_empty)
 
 #' @name geos
 #' @export
@@ -119,7 +91,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 
 #' @name geos
 #' @export
-#' @return st_is_simple and st_is_valid return a logical vector
+#' @return st_is_simple returns a logical vector
 st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 # binary, interfaced through GEOS:
@@ -192,7 +164,7 @@ st_relate	= function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
 
 #' @name geos
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return functions \code{st_intersects} up to \code{st_equals_exact} return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+#' @return the binary logical functions (\code{st_intersects} up to \code{st_equals_exact}) return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
