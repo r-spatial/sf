@@ -1,5 +1,7 @@
 # version 0.4-2
 
+* replace `st_write_db` with a version that is fast for large datasets (#285), thanks to Josh London
+
 * take out more memory leaking examples in tests
 
 * the `aggregate` method for `sf` objects now assumes the `by` argument to be identical to that of `stats::aggregate`

@@ -1,0 +1,49 @@
+
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> suppressPackageStartupMessages(library(sf))
+> 
+> test_check("sf")
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+converted into: MULTIPOLYGON
+Simple feature collection with 100 features and 14 fields
+Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+OGR: Unsupported geometry type
+bna 
+csv 
+geojson 
+gml 
+gpkg 
+gxt 
+jml 
+shp 
+sqlite 
+vdv 
+xlsx 
+.nc 
+testthat results ================================================================
+OK: 506 SKIPPED: 1 FAILED: 0
+> 
+> proc.time()
+   user  system elapsed 
+  4.200   0.380   7.356 
