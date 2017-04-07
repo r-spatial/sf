@@ -5,8 +5,6 @@
 \alias{st_write}
 \alias{write_sf}
 \alias{st_write}
-\alias{st_write_db_slow}
-\alias{st_write}
 \alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
@@ -16,10 +14,6 @@ st_write(obj, dsn, layer = basename(dsn),
   update = driver \%in\% db_drivers)
 
 write_sf(..., quiet = TRUE)
-
-st_write_db_slow(conn = NULL, obj, table = substitute(obj),
-  geom_name = "wkb_geometry", ..., overwrite = FALSE, append = FALSE,
-  binary = TRUE, debug = FALSE)
 
 st_write_db(conn = NULL, obj, table = substitute(obj),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, debug = FALSE,
@@ -62,11 +56,11 @@ For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} t
 
 \item{overwrite}{logical; should \code{table} be dropped first?}
 
-\item{append}{logical; append to table? (NOTE: experimental, might not work)}
+\item{debug}{logical; print SQL statements to screen before executing them.}
 
 \item{binary}{logical; use well-known-binary for transfer?}
 
-\item{debug}{logical; print SQL statements to screen before executing them.}
+\item{append}{logical; append to table? (NOTE: experimental, might not work)}
 }
 \description{
 Write simple features object to file or database
@@ -94,14 +88,6 @@ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 demo(nc, ask = FALSE)
 st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
-\dontrun{
-library(sp)
-data(meuse)
-sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-library(RPostgreSQL) 
-conn = dbConnect(PostgreSQL(), dbname = "postgis")
-st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)}
-  
 }
 \seealso{
 \link{st_drivers}
