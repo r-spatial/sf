@@ -15,7 +15,7 @@ st_write(obj, dsn, layer = basename(dsn),
 
 write_sf(..., quiet = TRUE)
 
-st_write_db(conn = NULL, obj, table = substitute(obj),
+st_write_db(conn = NULL, obj, table = deparse(substitute(obj)),
   geom_name = "wkb_geometry", ..., overwrite = FALSE, debug = FALSE,
   binary = TRUE, append = FALSE)
 }
@@ -88,6 +88,14 @@ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 demo(nc, ask = FALSE)
 st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
+\dontrun{
+  library(sp)
+  data(meuse)
+  sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+  library(RPostgreSQL) 
+  conn = dbConnect(PostgreSQL(), dbname = "postgis")
+  st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)
+}
 }
 \seealso{
 \link{st_drivers}

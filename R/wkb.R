@@ -45,17 +45,20 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
 			CPL_read_wkb(x, EWKB = EWKB, endian = as.integer(.Platform$endian == "little"))
-	if (is.na(crs) && EWKB && !is.null(attr(ret, "epsg")) && attr(ret, "epsg") != 0)
-		crs = attr(ret, "epsg")
-	attr(ret, "epsg") = NULL
-	st_sfc(ret, crs = crs)
+	if (is.na(crs) && EWKB && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
+		crs = attr(ret, "srid")
+	if (! is.na(st_crs(crs))) {
+		attr(ret, "srid") = NULL # remove
+		st_sfc(ret, crs = crs)
+	} else
+		st_sfc(ret) # leave attr srid in place: PostGIS srid that is not an EPSG code
 }
 
 R_read_wkb = function(x, readWKB, EWKB = EWKB) {
 	ret = lapply(x, readWKB, EWKB = EWKB)
-	epsg = attr(ret[[1]], "epsg")
-	ret = lapply(ret, function(x) { attr(x, "epsg") = NULL; x })
-	attr(ret, "epsg") = epsg
+	srid = attr(ret[[1]], "srid")
+	ret = lapply(ret, function(x) { attr(x, "srid") = NULL; x })
+	attr(ret, "srid") = srid
 	ret
 }
 
@@ -176,7 +179,7 @@ readData = function(rc, EWKB = FALSE) {
 		stop(paste("type", pt$tp, "unsupported")))
 	class(ret) <- c(pt$zm, pt$tp, "sfg")
 	if (!is.na(srid))
-		attr(ret, "epsg") <- srid
+		attr(ret, "srid") <- srid
 	ret
 }
 

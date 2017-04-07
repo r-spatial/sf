@@ -35,7 +35,8 @@ test_that("can write to db", {
     expect_silent(st_write_db(pg, pts, "sf_meuse__", overwrite = TRUE))
     expect_silent(st_write_db(pg, pts, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_warning(st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
+    #expect_warning(st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
+    expect_silent(st_write_db(pg, z, "sf_meuse3__",  binary = TRUE))
 })
 
 test_that("sf can write units to database (#264)", {
@@ -63,8 +64,8 @@ test_that("can write to other schema", {
     expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse__"), overwrite = TRUE))
     expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse2__"), binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_warning(st_write_db(pg, z, c("sf_test__", "sf_meuse33__"),  binary = TRUE), "proj4")
-    expect_warning(st_write_db(pg, z, c("sf_test__", "sf_meuse4__"),  binary = FALSE), "proj4")
+    expect_silent(st_write_db(pg, z, c("sf_test__", "sf_meuse33__"),  binary = TRUE))
+    expect_silent(st_write_db(pg, z, c("sf_test__", "sf_meuse4__"),  binary = FALSE))
     
     # weird name work, but create lots of noise from RPostgreSQL
     #expect_silent(st_write_db(pg, pts, c(NULL, "sf_test__.meuse__")))
@@ -73,7 +74,8 @@ test_that("can write to other schema", {
 test_that("can read from db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     q <- "select * from sf_meuse__"
-    expect_warning(x <- st_read_db(pg, query = q), "crs")
+    #expect_warning(x <- st_read_db(pg, query = q), "crs")
+    expect_silent(x <- st_read_db(pg, query = q))
     
     expect_error(st_read_db(), "no connection provided")
     expect_error(st_read_db(pg), "table name or a query")
@@ -90,7 +92,8 @@ test_that("can read from db", {
     
     z <- st_read_db(pg, "sf_meuse3__")
     expect_equal(dim(pts), dim(z))
-    expect_identical(st_crs(NA), st_crs(z))
+    #expect_identical(st_crs(NA), st_crs(z))
+    expect_identical(st_crs(epsg_31370), st_crs(z))
     expect_identical(st_precision(pts), st_precision(z))
     
     w <- st_read_db(pg, c("sf_test__", "sf_meuse__"))

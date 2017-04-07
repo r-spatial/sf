@@ -51,11 +51,11 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
 
 \item{table}{table name}
 
-\item{query}{SQL query to select records}
+\item{query}{SQL query to select records; see details}
 
 \item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? defaults to TRUE if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}}
+\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise}
 }
 \value{
 object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
@@ -75,6 +75,8 @@ way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without w
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
+
+if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 
 in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 }
