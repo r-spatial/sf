@@ -202,7 +202,7 @@
 </tr>
 </tbody>
 </table>
-<p>Note that <code>CIRCULASTRING</code>, <code>COMPOUNDCURVE</code> and <code>CURVEPOLYGON</code> are not described in the SFA standard, but in the SQL-MM part 3 standard. The descriptions above were copied from the <a href="http://postgis.net/docs/using_postgis_dbmanagement.html">PostGIS manual</a>.</p>
+<p>Note that <code>CIRCULASTRING</code>, <code>COMPOUNDCURVE</code> and <code>CURVEPOLYGON</code> are not described in the SFA standard, but in the <a href="https://www.iso.org/standard/38651.html">SQL-MM part 3 standard</a>. The descriptions above were copied from the <a href="http://postgis.net/docs/using_postgis_dbmanagement.html">PostGIS manual</a>.</p>
 </div>
 <div id="coordinate-reference-system" class="section level2">
 <h2 class="hasAnchor">
@@ -213,7 +213,7 @@
 <div id="how-simple-features-in-r-are-organized" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-simple-features-in-r-are-organized" class="anchor"></a>How simple features in R are organized</h1>
-<p>Package <code>sf</code> represents simple features as native R objects. All functions and methods in <code>sf</code> are prefixed by <code>st_</code>, so that they are easily found by command-line completion. Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector). Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.</p>
+<p>Package <code>sf</code> represents simple features as native R objects. Similar to <a href="http://postgis.net/">PostGIS</a>, all functions and methods in <code>sf</code> that operate on spatial data are prefixed by <code>st_</code>, which refers to <em>spatial and temporal</em>; this makes them easily findable by command-line completion. Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector). Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.</p>
 <p>As attributes are typically stored in <code>data.frame</code> objects (or the very similar <code>tbl_df</code>), we will also store feature geometries in a <code>data.frame</code> column. Since geometries are not single-valued, they are put in a list-column, a list of length equal to the number of records in the <code>data.frame</code>, with each list element holding the simple feature geometry of that feature. The three classes used to represent simple features are:</p>
 <ul>
 <li>
@@ -229,7 +229,7 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.1.3, proj.4 4.9.2, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.1.3, proj.4 4.9.2, lwgeom 2.3.2 r15302
 nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.3/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## converted into: POLYGON
@@ -623,7 +623,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_s
 <a href="#geometrycollection" class="anchor"></a>Geometrical operations</h2>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos.html">st_is_valid</a></span>(nc[<span class="dv">1</span>:<span class="dv">2</span>,])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/valid.html">st_is_valid</a></span>(nc[<span class="dv">1</span>:<span class="dv">2</span>,])
 ## [1] TRUE TRUE</code></pre></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st_transform.html">st_transform</a></span>(nc, <span class="dv">32119</span>)
@@ -705,7 +705,7 @@ x2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))))
 <span class="kw"><a href="../reference/geos.html">st_is_simple</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x1))
 ## [1] FALSE
-<span class="kw"><a href="../reference/geos.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x2,x3))
+<span class="kw"><a href="../reference/valid.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x2,x3))
 ## Warning in eval(substitute(expr), envir, enclos): Self-intersection at or
 ## near point 1 0.59999999999999998
 ## Warning in eval(substitute(expr), envir, enclos): Self-intersection at or

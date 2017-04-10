@@ -87,7 +87,7 @@
     
 
     <pre><span class='co'># S3 method for sf</span>
-<span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>union</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -111,6 +111,10 @@
     <tr>
       <th>union</th>
       <td><p>logical; should grouped geometries be unioned using <a href='geos.html'>st_union</a>?</p></td>
+    </tr>
+    <tr>
+      <th>simplify</th>
+      <td><p>logical; see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></p></td>
     </tr>
     </table>
     

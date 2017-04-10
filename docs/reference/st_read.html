@@ -128,7 +128,7 @@ message when there are multiple layers, or give an error if there are no layers 
     </tr>
     <tr>
       <th>type</th>
-      <td><p>integer; ISO number of desired simple feature type; see details. If left zero, and <code>promote_to_multi</code> 
+      <td><p>integer; ISO number of desired simple feature type; see details. If left zero, and <code>promote_to_multi</code>
 is <code>TRUE</code>, in case of mixed feature geometry
 types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
 can be given.</p></td>
@@ -158,7 +158,7 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
     </tr>
     <tr>
       <th>query</th>
-      <td><p>SQL query to select records</p></td>
+      <td><p>SQL query to select records; see details</p></td>
     </tr>
     <tr>
       <th>geom_column</th>
@@ -166,7 +166,7 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
     </tr>
     <tr>
       <th>EWKB</th>
-      <td><p>logical; is the WKB is of type EWKB? defaults to TRUE if <code>conn</code> is of class codePostgreSQLConnection or <code>PqConnection</code></p></td>
+      <td><p>logical; is the WKB is of type EWKB? if missing, defaults to <code>TRUE</code> if <code>conn</code> is of class codePostgreSQLConnection or <code>PqConnection</code>, and to <code>FALSE</code> otherwise</p></td>
     </tr>
     </table>
     
@@ -184,6 +184,7 @@ may lead to succesful conversion. The typical conversion from POLYGON (3) to MUL
 way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.</p>
+<p>if <code>table</code> is not given but <code>query</code> is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)</p>
 <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
