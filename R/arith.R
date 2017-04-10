@@ -44,37 +44,17 @@ Ops.sfg <- function(e1, e2) {
 		else
 			Mat = e2
 	} 
-	cls = class(e1)
-	if (is.numeric(e1)) {
-		if (prd) {
-			if (inherits(e1, "POINT"))
-				structure(as.vector(e1 %*% Mat), class = cls)
-			else
-				structure(e1 %*% Mat, class = cls)
-		} else { # pm:
-			if (inherits(e1, "POINT"))
-				structure(unclass(e1) + Vec, class = cls)
-			else { 
-				# cat("here!\n")
-				structure(t(t(unclass(e1)) + Vec), class = cls)
-			}
-		}
-	} else  { # recurse:
-		structure(lapply(e1, function(x) { 
-			structure(
-			if (is.list(x)) 
-				lapply(x, function(y) {
-					if (is.list(y))
-						lapply(y, function(z) { z %*% Mat + conform(Vec, z) })
-					else
-						y %*% Mat + conform(Vec, y)
-				})
-			else
-				x %*% Mat + conform(Vec , x)
-			, class = class(x))
-		}),
-			class = cls)
-	}
+
+	if_pt = function(x, y) { if(inherits(x, "POINT")) as.vector(y) else y }
+	fn = if (prd)
+			function(x, Mat, Vec) structure(if_pt(x, x %*% Mat), class = class(x))
+		else
+			function(x, Mat, Vec) structure(if_pt(x, unclass(x) + conform(Vec, x)), class = class(x))
+		
+	if (is.list(e1))
+		rapply(e1, fn, how = "replace", Mat = Mat, Vec = Vec)
+	else
+		fn(e1, Mat, Vec)
 }
 
 conform = function(vec, m) { 
