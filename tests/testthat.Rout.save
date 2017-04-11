@@ -42,8 +42,8 @@ vdv
 xlsx 
 .nc 
 testthat results ================================================================
-OK: 506 SKIPPED: 1 FAILED: 0
+OK: 509 SKIPPED: 1 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.200   0.380   7.356 
+  4.192   0.276   7.254 

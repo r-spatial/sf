@@ -37,7 +37,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
 	if (is.null(tbl)) {
-		stop("`", query, "` returned no results.", call. = FALSE)
+		stop("`", query, "` returned no results.", call. = FALSE) # nocov
 	}
 	
 	if("row.names" %in% colnames(tbl)){
@@ -212,7 +212,7 @@ get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
 	if (class(srs_table) == "try-error")
 		return(0);
 
-	DEBUG = function(x) { if (debug) message(x); x }
+	DEBUG = function(x) { if (debug) message(x); x } # nocov
 	trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
 	srs_table$proj4text = sapply(srs_table$proj4text, trim)
 	eq = srs_table$proj4text == proj4string
