@@ -32,7 +32,7 @@ test_that("can write to db", {
     expect_error(st_write_db(), "connection")
     expect_silent(st_write_db(pg, pts, "sf_meuse__"))
     expect_error(st_write_db(pg, pts, "sf_meuse__"), "exists")
-    expect_silent(st_write_db(pg, pts, "sf_meuse__", overwrite = TRUE))
+    expect_silent(st_write_db(pg, pts, "sf_meuse__", drop = TRUE))
     expect_silent(st_write_db(pg, pts, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     #expect_warning(st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
@@ -44,7 +44,7 @@ test_that("sf can write units to database (#264)", {
     ptsu <- pts
     ptsu[["length"]] <- ptsu[["cadmium"]]
     units(ptsu[["length"]]) <- units::make_unit("km")
-    expect_silent(st_write_db(pg, ptsu, "sf_units__", overwrite = TRUE))
+    expect_silent(st_write_db(pg, ptsu, "sf_units__", drop = TRUE))
     r <- st_read_db(pg, "sf_units__")
     expect_is(r$length, "numeric")
     expect_equal(sort(r[["length"]]), sort(as.numeric(ptsu[["length"]])))
@@ -60,8 +60,8 @@ test_that("can write to other schema", {
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
     expect_error(st_write_db(pg, pts, c("public", "sf_meuse__")), "exists")
     expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse__")))
-    expect_error(st_write_db(pg, pts, c("sf_test__", "sf_meuse__")), "overwrite")
-    expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse__"), overwrite = TRUE))
+    expect_error(st_write_db(pg, pts, c("sf_test__", "sf_meuse__")), "drop")
+    expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse__"), drop = TRUE))
     expect_silent(st_write_db(pg, pts, c("sf_test__", "sf_meuse2__"), binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_silent(st_write_db(pg, z, c("sf_test__", "sf_meuse33__"),  binary = TRUE))
