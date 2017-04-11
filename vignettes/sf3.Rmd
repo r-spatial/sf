@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 

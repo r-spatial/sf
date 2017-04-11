@@ -95,7 +95,7 @@
 <span class='fu'>write_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>st_write_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>obj</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='fu'>deparse</span>(<span class='fu'>substitute</span>(<span class='no'>obj</span>)),
-  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -162,7 +162,7 @@ For database-type drivers (e.g. GPKG) <code>TRUE</code> values will make <code>G
       <td><p>name of the geometry column in the database</p></td>
     </tr>
     <tr>
-      <th>overwrite</th>
+      <th>drop</th>
       <td><p>logical; should <code>table</code> be dropped first?</p></td>
     </tr>
     <tr>
@@ -204,11 +204,8 @@ For database-type drivers (e.g. GPKG) <code>TRUE</code> values will make <code>G
 #&gt; fields:         14
 #&gt; geometry type:  Multi Polygon</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>) <span class='co'># loads data.frame from sp</span>
 <span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>)
-<span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span>) <span class='co'># writes X and Y as columns</span></div><div class='output co'>#&gt; Writing layer `meuse.csv' to data source `meuse.csv' using driver `CSV'
-#&gt; options:        GEOMETRY=AS_XY 
-#&gt; features:       155
-#&gt; fields:         12
-#&gt; geometry type:  Point</div><div class='input'><span class='fu'>file.remove</span>(<span class='st'>"meuse.csv"</span>) <span class='co'># update = TRUE seems not to work for csv</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>) <span class='co'># overwrites, now with WKT column</span></div><div class='output co'>#&gt; Writing layer `meuse.csv' to data source `meuse.csv' using driver `CSV'
+<span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span>) <span class='co'># writes X and Y as columns</span></div><div class='output co'>#&gt; Writing layer `meuse.csv' to data source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
+#&gt; Dataset /home/edzer/git/sfr/docs/reference/meuse.csv already exists; remove first, or use update=TRUE to append.</div><div class='output co'>#&gt; <span class='error'>Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),     as.character(layer_options), geom, dim, quiet, update): Dataset already exists.</span></div><div class='input'><span class='fu'>file.remove</span>(<span class='st'>"meuse.csv"</span>) <span class='co'># update = TRUE seems not to work for csv</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>) <span class='co'># overwrites, now with WKT column</span></div><div class='output co'>#&gt; Writing layer `meuse.csv' to data source `meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_WKT 
 #&gt; features:       155
 #&gt; fields:         12
@@ -226,7 +223,7 @@ For database-type drivers (e.g. GPKG) <code>TRUE</code> values will make <code>G
 <span class='co'>#   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)</span>
 <span class='co'>#   library(RPostgreSQL) </span>
 <span class='co'>#   conn = dbConnect(PostgreSQL(), dbname = "postgis")</span>
-<span class='co'>#   st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)</span>
+<span class='co'>#   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)</span>
 <span class='co'>## ---------------------------------------------</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

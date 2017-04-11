@@ -69,7 +69,6 @@
     
     
 <div class="contents">
-<pre><code>## [1] TRUE TRUE TRUE</code></pre>
 <p><a href="https://en.wikipedia.org/wiki/Simple_Features">Simple features</a> or <a href="http://www.opengeospatial.org/standards/sfa"><em>simple feature access</em></a> refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the <em>spatial</em> geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.</p>
 <p>The standard is widely implemented in spatial databases (such as PostGIS), commercial GIS (e.g., <a href="http://www.esri.com/">ESRI ArcGIS</a>) and forms the vector data basis for libraries such as <a href="http://www.gdal.org/">GDAL</a>. A subset of simple features forms the <a href="http://geojson.org/">GeoJSON</a> standard.</p>
 <p>R has well-supported classes for storing spatial data (<a href="https://CRAN.R-project.org/package=sp">sp</a>) and interfacing to the above mentioned environments (<a href="https://CRAN.R-project.org/package=rgdal">rgdal</a>, <a href="https://CRAN.R-project.org/package=rgeos">rgeos</a>), but has so far lacked a complete implementation of simple features, making conversions at times convoluted, inefficient or incomplete. The package <a href="http://github.com/edzer/sfr">sf</a> tries to fill this gap, and aims at succeeding <a href="https://CRAN.R-project.org/package=sp">sp</a> in the long term.</p>
