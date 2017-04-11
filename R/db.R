@@ -25,10 +25,10 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 	
 	if (!is.null(table)) {
 		table <- schema_table(table)
-		if (!db_exists(conn, table)) {
+		if (!db_exists(conn, table))
 			stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
-		}
-		if (!is.null(query)) warning("Ignoring query argument, only using table")
+		if (!is.null(query))
+			warning("Ignoring query argument, only using table")
 		query <- paste("SELECT * FROM", paste0(table, collapse = "."), ";")
 	} else if(is.null(query)) {
 		stop("Provide either a table name or a query", call. = FALSE)
@@ -36,11 +36,10 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 	
 	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
-	if (is.null(tbl)) {
+	if (is.null(tbl))
 		stop("`", query, "` returned no results.", call. = FALSE) # nocov
-	}
 	
-	if("row.names" %in% colnames(tbl)){
+	if("row.names" %in% colnames(tbl)) {
 		row.names(tbl) = tbl[["row.names"]]
 		tbl = tbl[,setdiff(colnames(tbl), "row.names")]
 	}
