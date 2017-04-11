@@ -16,7 +16,7 @@ st_write(obj, dsn, layer = basename(dsn),
 write_sf(..., quiet = TRUE)
 
 st_write_db(conn = NULL, obj, table = deparse(substitute(obj)),
-  geom_name = "wkb_geometry", ..., overwrite = FALSE, debug = FALSE,
+  geom_name = "wkb_geometry", ..., drop = FALSE, debug = FALSE,
   binary = TRUE, append = FALSE)
 }
 \arguments{
@@ -54,7 +54,7 @@ For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} t
 
 \item{geom_name}{name of the geometry column in the database}
 
-\item{overwrite}{logical; should \code{table} be dropped first?}
+\item{drop}{logical; should \code{table} be dropped first?}
 
 \item{debug}{logical; print SQL statements to screen before executing them.}
 
@@ -94,7 +94,7 @@ st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   library(RPostgreSQL) 
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-  st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)
+  st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 }
 }
 \seealso{
