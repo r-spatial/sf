@@ -18,9 +18,11 @@ before_install:
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
   - # install postgis from source:
   - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.6
-  - wget http://download.osgeo.org/postgis/source/postgis-2.3.1.tar.gz
-  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.1.tar.gz)
-  - (cd /tmp/postgis-2.3.1 ; ./configure; make; sudo make install)
+  - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
+  - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
+  - # activate liblwgeom:
+  - sudo ldconfig 
   - # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis
@@ -28,8 +30,6 @@ before_install:
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - # activate liblwgeom:
-  - sudo ldconfig 
 
 warnings_are_errors: true
 
