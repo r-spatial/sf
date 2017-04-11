@@ -82,7 +82,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
 #' @param geom_name name of the geometry column in the database
 #' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
-#' @param overwrite logical; should \code{table} be dropped first?
+#' @param drop logical; should \code{table} be dropped first?
 #' @param append logical; append to table? (NOTE: experimental, might not work)
 #' @param binary logical; use well-known-binary for transfer?
 #' @param debug logical; print SQL statements to screen before executing them.
@@ -95,11 +95,11 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #'   library(RPostgreSQL) 
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   st_write_db(conn, sf, "meuse_tbl", overwrite = FALSE)
+#'   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
 #' @details st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
 st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry", 
-		..., overwrite = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
+		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
 
 	DEBUG = function(x) { if (debug) message(x); x }
 	if (is.null(conn))
@@ -107,10 +107,10 @@ st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_
 	table <- schema_table(table)
 
 	if (db_exists(conn, table)) {
-		if (overwrite)
+		if (drop)
 			DBI::dbGetQuery(conn, DEBUG(paste("drop table if exists", paste(table, collapse = "."), ";")))
 		else 
-			stop("Table ", paste(table, collapse = "."), " exists already, use overwrite = TRUE", 
+			stop("Table ", paste(table, collapse = "."), " exists already, use drop = TRUE", 
 					 call. = FALSE)
 	}
   
