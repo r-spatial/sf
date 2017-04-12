@@ -100,6 +100,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' class(df)
 #' st_geometry(df)
 #' st_geometry(df) <- sfc # replaces
+#' st_geometry(df) <- NULL # remove geometry, coerce to data.frame
 `st_geometry<-` = function(x, value) UseMethod("st_geometry<-")
 
 #' @export
@@ -144,13 +145,17 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 		x[[attr(x, "sf_column")]] <- value
 
 	if (is.null(value))
-		as.data.frame(x)
+		# as.data.frame(x)
+		structure(x, sf_column = NULL, agr = NULL, class = setdiff(class(x), "sf"))
 	else
 		x
 }
 
 #' @name st_geometry
 #' @export
+#' @examples
+#' sf <- st_set_geometry(df, sfc) # set geometry, return sf
+#' st_set_geometry(sf, NULL) # remove geometry, coerce to data.frame
 st_set_geometry = function(x, value) {
 	st_geometry(x) = value
 	x

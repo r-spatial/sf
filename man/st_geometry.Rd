@@ -60,4 +60,7 @@ st_geometry(df) <- sfc
 class(df)
 st_geometry(df)
 st_geometry(df) <- sfc # replaces
+st_geometry(df) <- NULL # remove geometry, coerce to data.frame
+sf <- st_set_geometry(df, sfc) # set geometry, return sf
+st_set_geometry(sf, NULL) # remove geometry, coerce to data.frame
 }
