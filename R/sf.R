@@ -144,7 +144,7 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 		x[[attr(x, "sf_column")]] <- value
 
 	if (is.null(value))
-		data.frame(x)
+		as.data.frame(x)
 	else
 		x
 }
