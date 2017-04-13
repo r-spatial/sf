@@ -137,7 +137,7 @@ st_sym_difference(x, y)
 
 st_union(x, y, ..., by_feature = FALSE)
 
-st_line_sample(x, n, density, type = "regular")
+st_line_sample(x, n, density, type = "regular", sample = NULL)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -177,6 +177,8 @@ st_line_sample(x, n, density, type = "regular")
 \item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
 
 \item{type}{character; indicate the sampling type, either "regular" or "random"}
+
+\item{sample}{numeric; a vector of numbers between 0 and 1 indicating the points to sample - if defined sample overrules n, density and type.}
 }
 \value{
 vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
@@ -268,10 +270,11 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 	st_linestring(rbind(c(0,0),c(10,0))))
 st_line_sample(ls, density = 1)
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
- st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+ st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
 try(st_line_sample(ls, density = 1/1000)) # error
 st_line_sample(st_transform(ls, 3857), n = 5) # five points for each line
 st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
+st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) # five equidistant points including start and end
 }

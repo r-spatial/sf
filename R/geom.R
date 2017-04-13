@@ -640,33 +640,39 @@ st_union.sf = function(x, y, ..., by_feature = FALSE) {
 #' @param n integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.
 #' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
 #' @param type character; indicate the sampling type, either "regular" or "random"
+#' @param sample numeric; a vector of numbers between 0 and 1 indicating the points to sample - if defined sample overrules n, density and type.
 #' @export
 #' @examples
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 #' 	st_linestring(rbind(c(0,0),c(10,0))))
 #' st_line_sample(ls, density = 1)
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
-#'	 st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326) 
+#'	 st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
 #' try(st_line_sample(ls, density = 1/1000)) # error
 #' st_line_sample(st_transform(ls, 3857), n = 5) # five points for each line
 #' st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
-st_line_sample = function(x, n, density, type = "regular") {
+#' st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) # five equidistant points including start and end
+st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
 	l = st_length(x)
-	if (missing(n))
-		n = round(rep(density, length.out = length(l)) * l)
-	else
-		n = rep(n, length.out = length(l))
-	regular = function(n) { (1:n - 0.5)/n }
-	random = function(n) { sort(runif(n)) }
-	fn = switch(type,
-		regular = regular,
-		random = random,
-		stop("unknown type"))
-	distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
+	if (is.null(sample)) {
+		if (missing(n))
+			n = round(rep(density, length.out = length(l)) * l)
+		else
+			n = rep(n, length.out = length(l))
+		regular = function(n) { (1:n - 0.5)/n }
+		random = function(n) { sort(runif(n)) }
+		fn = switch(type,
+					regular = regular,
+					random = random,
+					stop("unknown type"))
+		distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
+	} else
+		distList = lapply(seq_along(l), function(i) sample * l[i])
+	
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING"))
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
