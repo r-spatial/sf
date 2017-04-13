@@ -43,4 +43,8 @@ r_github_packages:
   - jimhester/covr
 
 after_success:
+  - dropdb postgis
+  - createdb postgis
+  - psql -d postgis -c "CREATE EXTENSION postgis;"
+  - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
   - Rscript -e 'covr::codecov()'
