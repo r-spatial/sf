@@ -73,7 +73,9 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev
 ```
 or
-* install from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
+* install dependencies from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
+
+To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful.
 
 ### Contributing
 
