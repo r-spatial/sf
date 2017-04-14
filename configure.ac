@@ -353,7 +353,7 @@ fi
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
-#if PJ_VERSION == 480
+#if PJ_VERSION <= 480
 FILE *pj_open_lib(projCtx, const char *, const char *);
 #endif
 
@@ -409,14 +409,25 @@ fi
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
+#if PJ_VERSION <= 480
+FILE *pj_open_lib(projCtx, const char *, const char *);
+#endif
 
 int main() {
+#if PJ_VERSION <= 480
+    FILE *fp;
+#else
     PAFile fp;
+#endif
     projCtx ctx;
     ctx = pj_get_default_ctx();
     fp = pj_open_lib(ctx, "conus", "rb");
     if (fp == NULL) exit(1);
+#if PJ_VERSION <= 480
+    fclose(fp);
+#else
     pj_ctx_fclose(ctx, fp);
+#endif
     exit(0);
 }
 _EOCONF]
