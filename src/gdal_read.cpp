@@ -238,11 +238,16 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		// feature attribute fields:
 		for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
 			OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
+#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+			int not_NA = poFeature->IsFieldSetAndNotNull(iField);
+#else
+			int not_NA = poFeature->IsFieldSet(iField);
+#endif
 			switch(poFieldDefn->GetType()) {
 				case OFTInteger: {
 					Rcpp::IntegerVector iv;
 					iv = out[iField];
-					if (poFeature->IsFieldSet(iField))
+					if (not_NA)
 						iv[i] = poFeature->GetFieldAsInteger(iField);
 					else
 						iv[i] = NA_INTEGER;
@@ -252,14 +257,14 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					if (int64_as_string) {
 						Rcpp::CharacterVector cv;
 						cv = out[iField];
-						if (poFeature->IsFieldSet(iField))
+						if (not_NA)
 							cv[i] = poFeature->GetFieldAsString(iField);
 						else
 							cv[i] = NA_STRING;
 					} else {
 						Rcpp::NumericVector nv;
 						nv = out[iField];
-						if (poFeature->IsFieldSet(iField))
+						if (not_NA)
 							nv[i] = (double) poFeature->GetFieldAsInteger64(iField);
 						else
 							nv[i] = NA_REAL;
@@ -285,7 +290,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 						dtlst.attr("tzone") = "UTC";
 					Rcpp::NumericVector nv;
 					nv = out[iField];
-					if (! poFeature->IsFieldSet(iField)) {
+					if (! not_NA) {
 						nv[i] = NA_REAL;
 						break;
 					}
@@ -304,7 +309,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTReal: {
 					Rcpp::NumericVector nv;
 					nv = out[iField];
-					if (poFeature->IsFieldSet(iField))
+					if (not_NA)
 						nv[i] = (double) poFeature->GetFieldAsDouble(iField);
 					else
 						nv[i] = NA_REAL;
@@ -314,7 +319,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTString: {
 					Rcpp::CharacterVector cv;
 					cv = out[iField];
-					if (poFeature->IsFieldSet(iField))
+					if (not_NA)
 						cv[i] = poFeature->GetFieldAsString(iField);
 					else
 						cv[i] = NA_STRING;
