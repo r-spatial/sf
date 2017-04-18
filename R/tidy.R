@@ -131,7 +131,11 @@ unclass_sf <- function(x) {
 
 #' @name dplyr
 #' @export
-select.sf <- if (utils::packageVersion("dplyr") > "0.5.0") {
+select.sf <- if (!("dplyr" %in% installed.packages())) {
+  function(.data, ...) {
+	stop("dplyr not installed")
+  }
+} else if (utils::packageVersion("dplyr") > "0.5.0") {
   function(.data, ...) {
 	.data <- unclass_sf(.data)
 	sf_column <- attr(.data, "sf_column")

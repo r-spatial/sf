@@ -341,7 +341,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
 		std::vector<OGRGeometry *> poGeom(n);
-		for (int i = 0; i < n; i++)
+		for (size_t i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
 		int toType = 0, toTypeU = 0;
 		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
