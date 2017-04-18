@@ -4,25 +4,45 @@
 \alias{dplyr}
 \alias{filter_.sf}
 \alias{dplyr}
+\alias{filter.sf}
+\alias{dplyr}
 \alias{arrange_.sf}
+\alias{dplyr}
+\alias{arrange.sf}
 \alias{dplyr}
 \alias{distinct_.sf}
 \alias{dplyr}
+\alias{distinct.sf}
+\alias{dplyr}
 \alias{group_by_.sf}
+\alias{dplyr}
+\alias{group_by.sf}
 \alias{dplyr}
 \alias{mutate_.sf}
 \alias{dplyr}
+\alias{mutate.sf}
+\alias{dplyr}
 \alias{transmute_.sf}
 \alias{dplyr}
+\alias{transmute.sf}
+\alias{dplyr}
 \alias{select_.sf}
+\alias{dplyr}
+\alias{select.sf}
 \alias{dplyr}
 \alias{rename_.sf}
 \alias{dplyr}
 \alias{slice_.sf}
 \alias{dplyr}
+\alias{slice.sf}
+\alias{dplyr}
 \alias{summarise_.sf}
 \alias{dplyr}
+\alias{summarise.sf}
+\alias{dplyr}
 \alias{gather_.sf}
+\alias{dplyr}
+\alias{gather.sf}
 \alias{dplyr}
 \alias{spread_.sf}
 \alias{dplyr}
@@ -45,25 +65,46 @@
 \usage{
 filter_.sf(.data, ..., .dots)
 
+filter.sf(.data, ..., .dots)
+
 arrange_.sf(.data, ..., .dots)
+
+arrange.sf(.data, ...)
 
 distinct_.sf(.data, ..., .dots, .keep_all = FALSE)
 
+distinct.sf(.data, ..., .dots, .keep_all = FALSE)
+
 group_by_.sf(.data, ..., .dots, add = FALSE)
+
+group_by.sf(.data, ..., .dots, add = FALSE)
 
 mutate_.sf(.data, ..., .dots)
 
+mutate.sf(.data, ..., .dots)
+
 transmute_.sf(.data, ..., .dots)
 
+transmute.sf(.data, ..., .dots)
+
 select_.sf(.data, ..., .dots = NULL)
+
+select.sf(.data, ...)
 
 rename_.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
 
+slice.sf(.data, ..., .dots)
+
 summarise_.sf(.data, ..., .dots)
 
+summarise.sf(.data, ..., .dots)
+
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
+  convert = FALSE, factor_key = FALSE)
+
+gather.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
 
 spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,

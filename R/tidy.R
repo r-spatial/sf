@@ -7,12 +7,17 @@
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
 #' @name dplyr
-#' @export
 #' @examples
 #' library(dplyr)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc %>% filter(AREA > .1) %>% plot()
+#' @export
 filter_.sf <- function(.data, ..., .dots) {
+	st_as_sf(NextMethod())
+}
+#' @name dplyr
+#' @export
+filter.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
@@ -26,6 +31,11 @@ filter_.sf <- function(.data, ..., .dots) {
 arrange_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+arrange.sf <- function(.data, ...) {
+	st_as_sf(NextMethod())
+}
 
 #' @name dplyr
 #' @param .keep_all see corresponding function in dplyr
@@ -33,6 +43,11 @@ arrange_.sf <- function(.data, ..., .dots) {
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
+	st_as_sf(NextMethod())
+}
+#' @name dplyr
+#' @export
+distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 	st_as_sf(NextMethod())
 }
 
@@ -46,12 +61,23 @@ group_by_.sf <- function(.data, ..., .dots, add = FALSE) {
 	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+group_by.sf <- function(.data, ..., .dots, add = FALSE) {
+	class(.data) <- setdiff(class(.data), "sf")
+	st_as_sf(NextMethod())
+}
 
 #' @name dplyr
 #' @export
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate_.sf <- function(.data, ..., .dots) {
+	st_as_sf(NextMethod())
+}
+#' @name dplyr
+#' @export
+mutate.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
@@ -61,6 +87,15 @@ mutate_.sf <- function(.data, ..., .dots) {
 #' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #' nc %>% transmute(AREA = AREA/10) %>% class()
 transmute_.sf <- function(.data, ..., .dots) {
+	ret = NextMethod()
+	if (attr(ret, "sf_column") %in% names(ret))
+		st_as_sf(NextMethod())
+	else
+		ret
+}
+#' @name dplyr
+#' @export
+transmute.sf <- function(.data, ..., .dots) {
 	ret = NextMethod()
 	if (attr(ret, "sf_column") %in% names(ret))
 		st_as_sf(NextMethod())
@@ -81,6 +116,40 @@ select_.sf <- function(.data, ..., .dots = NULL) {
   structure(ret, agr = st_agr(ret))
 }
 
+#select.sf <- function(.data, ..., .dots = NULL) {
+#  .dots <- c(.dots, attr(.data, "sf_column")) 
+#  ret = NextMethod()
+#  structure(ret, agr = st_agr(ret))
+#}
+
+unclass_sf <- function(x) {
+	i <- match("sf", class(x))
+	class <- class(x)[-seq_len(i)]
+	structure(x, class = class)
+}
+
+
+#' @name dplyr
+#' @export
+select.sf <- if (utils::packageVersion("dplyr") > "0.5.0") {
+  function(.data, ...) {
+	.data <- unclass_sf(.data)
+	sf_column <- attr(.data, "sf_column")
+
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install first?")
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
+	st_sf(ret)
+  }
+} else {
+  function(.data, ...) {
+	stop("requires dplyr > 0.5.0")
+  }
+}
+
+
 #' @name dplyr
 #' @export
 #' @examples
@@ -96,6 +165,11 @@ rename_.sf <- function(.data, ..., .dots) {
 slice_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+slice.sf <- function(.data, ..., .dots) {
+	st_as_sf(NextMethod())
+}
 
 #' @name dplyr
 #' @export
@@ -106,6 +180,21 @@ slice_.sf <- function(.data, ..., .dots) {
 #' nc.g %>% summarize(mean(AREA))
 #' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
 summarise_.sf <- function(.data, ..., .dots) {
+	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
+		geom = st_geometry(.data)
+		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
+		sf_column = attr(.data, "sf_column")
+		ret = NextMethod()
+		# merge geometry:
+		geoms = unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
+		ret[[sf_column]] = do.call(st_sfc, geoms)
+		st_as_sf(ret, crs = st_crs(.data))
+	} else
+		as.data.frame(NextMethod())
+}
+#' @name dplyr
+#' @export
+summarise.sf <- function(.data, ..., .dots) {
 	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
 		geom = st_geometry(.data)
 		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
@@ -135,6 +224,12 @@ summarise_.sf <- function(.data, ..., .dots) {
 #' library(tidyr)
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
 gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
+		convert = FALSE, factor_key = FALSE) {
+	st_as_sf(NextMethod())
+}
+#' @name dplyr
+#' @export
+gather.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
 		convert = FALSE, factor_key = FALSE) {
 	st_as_sf(NextMethod())
 }
