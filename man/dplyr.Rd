@@ -65,7 +65,7 @@
 \usage{
 filter_.sf(.data, ..., .dots)
 
-\method{filter}{sf}(.data, ..., .dots)
+\method{filter}{sf}(.data, ...)
 
 arrange_.sf(.data, ..., .dots)
 

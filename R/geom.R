@@ -653,7 +653,8 @@ st_union.sf = function(x, y, ..., by_feature = FALSE) {
 #' st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
-#' st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) # five equidistant points including start and end
+#' # five equidistant points including start and end:
+#' st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) 
 st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported")
