@@ -6,6 +6,8 @@
 #' @import graphics
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable dbExecute
+#' @importFrom dplyr arrange distinct filter group_by rename sample_frac sample_n select summarise transmute 
+#' @importFrom tibble type_sum obj_sum
 #' @importFrom units make_unit
 #' @importFrom grDevices rgb
 #' @useDynLib sf

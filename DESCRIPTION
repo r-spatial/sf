@@ -25,6 +25,8 @@ Imports:
     methods, 
     Rcpp, 
     DBI,
+    dplyr, 
+    tibble, 
     units (>= 0.4),
 	magrittr
 Suggests: 
@@ -34,8 +36,6 @@ Suggests:
     RPostgreSQL, 
     testthat, 
     knitr, 
-    dplyr, 
-    tibble, 
     tidyr, 
     geosphere (>= 1.5-5), 
     maptools, 
@@ -65,7 +65,7 @@ Collate:
 	crs.R
 	grid.R
 	arith.R
-	tidy.R
+	tidyverse.R
 	cast_sfg.R
 	cast_sfc.R
 	graticule.R

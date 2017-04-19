@@ -17,7 +17,7 @@ filter_.sf <- function(.data, ..., .dots) {
 }
 #' @name dplyr
 #' @export
-filter.sf <- function(.data, ..., .dots) {
+filter.sf <- function(.data, ...) {
 	st_as_sf(NextMethod())
 }
 
@@ -128,14 +128,9 @@ unclass_sf <- function(x) {
 	structure(x, class = class)
 }
 
-
 #' @name dplyr
 #' @export
-select.sf <- if (!("dplyr" %in% installed.packages())) {
-  function(.data, ...) {
-	stop("dplyr not installed")
-  }
-} else if (utils::packageVersion("dplyr") > "0.5.0") {
+select.sf <- if (utils::packageVersion("dplyr") > "0.5.0") {
   function(.data, ...) {
 	.data <- unclass_sf(.data)
 	sf_column <- attr(.data, "sf_column")
@@ -145,7 +140,7 @@ select.sf <- if (!("dplyr" %in% installed.packages())) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
-	st_sf(ret)
+	st_as_sf(ret)
   }
 } else {
   function(.data, ...) {
@@ -164,14 +159,21 @@ rename_.sf <- function(.data, ..., .dots) {
 
 #' @name dplyr
 #' @export
+rename.sf <- function(.data, ...) {
+	st_as_sf(NextMethod())
+}
+
+#' @name dplyr
+#' @export
 #' @examples
 #' nc %>% slice(1:2)
 slice_.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
+
 #' @name dplyr
 #' @export
-slice.sf <- function(.data, ..., .dots) {
+slice.sf <- function(.data, ...) {
 	st_as_sf(NextMethod())
 }
 
@@ -231,12 +233,6 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 		convert = FALSE, factor_key = FALSE) {
 	st_as_sf(NextMethod())
 }
-#' @name dplyr
-#' @export
-gather.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
-		convert = FALSE, factor_key = FALSE) {
-	st_as_sf(NextMethod())
-}
 
 #' @name dplyr
 #' @param fill see original function docs
@@ -252,13 +248,6 @@ gather.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
-#	g = st_geometry(data)
-#	st_geometry(data) = NULL # drop geometry
-#	row = setdiff(names(data), c(key_col, value_col))
-#	ret = NextMethod()
-#	if (length(row))
-#		st_geometry(ret) = g[ match(ret[[1]], data[[ row[1] ]]) ]
-#	ret
 	data <- as.data.frame(data)
 	st_as_sf(NextMethod())
 }
