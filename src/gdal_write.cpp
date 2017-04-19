@@ -46,6 +46,7 @@ Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 }
 
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
+	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
 		if (j == (size_t) poFeature->GetFieldCount())
 			throw std::invalid_argument("Impossible: field count reached\n");
@@ -54,19 +55,19 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
 				if (! Rcpp::CharacterVector::is_na(cv[i]))
-					poFeature->SetField(j, (const char *) cv[i]);
+					poFeature->SetField(nm[j], (const char *) cv[i]);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
 				if (! Rcpp::IntegerVector::is_na(iv[i]))
-					poFeature->SetField(j, (int) iv[i]);
+					poFeature->SetField(nm[j], (int) iv[i]);
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (! Rcpp::NumericVector::is_na(nv[i]))
-					poFeature->SetField(j, (double) nv[i]);
+					poFeature->SetField(nm[j], (double) nv[i]);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
@@ -79,7 +80,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
 				Rcpp::Function unlist("unlist");
 				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
-				poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4], (int) ret[3]);
+				poFeature->SetField(nm[j], 1900 + (int) ret[5], (int) ret[4], (int) ret[3]);
 				} break;
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
@@ -91,7 +92,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0.attr("tzone") = "UTC";
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
-				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4], 
+				poFeature->SetField(nm[j], 1900 + (int) rd[5], (int) rd[4], 
 					(int) rd[3], (int) rd[2], (int) rd[1], 
 					(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
 				} break;

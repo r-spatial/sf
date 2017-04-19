@@ -222,14 +222,14 @@ We can retrieve the geometry list-column in this case by `nc$geom` or `nc[[15]]`
 more general way uses `st_geometry`:
 
 ```{r}
-(nc.geom <- st_geometry(nc))
+(nc_geom <- st_geometry(nc))
 ```
 
 Geometries are printed in abbreviated form, but we can
 can view a complete geometry by selecting it, e.g. the first one by
 
 ```{r}
-nc.geom[[1]]
+nc_geom[[1]]
 ```
 
 The way this is printed is called _well-known text_, and is part of the standards. The word `MULTIPOLYGON` is followed by three parenthesis, because it can consist of multiple polygons, in the form of `MULTIPOLYGON(POL1,POL2)`, where `POL1` might consist of an exterior ring and zero or more interior rings, as of `(EXT1,HOLE1,HOLE2)`. Sets of coordinates are held together with parenthesis, so we get `((crds_ext)(crds_hole1)(crds_hole2))` where `crds_` is a comma-separated set of coordinates of a ring. This leads to the case above, where `MULTIPOLYGON(((crds_ext)))` refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.
@@ -245,7 +245,7 @@ plot(nc[1,1], col = 'grey', add = TRUE)
 but some of the polygons in this dataset have multiple exterior rings; they can be identified by
 ```{r fig.height=3.5}
 par(mar = c(0,0,1,0))
-(w <- which(sapply(nc.geom, length) > 1))
+(w <- which(sapply(nc_geom, length) > 1))
 plot(nc[w,1], col = 2:7)
 ```
 
@@ -254,13 +254,13 @@ we get the first 3 coordinate pairs of the second exterior ring (first ring is a
 of feature 4 by
 
 ```{r}
-nc.geom[[4]][[2]][[1]][1:3,]
+nc_geom[[4]][[2]][[1]][1:3,]
 ```
 
 Geometry columns have their own class,
 
 ```{r}
-class(nc.geom)
+class(nc_geom)
 ```
 
 Methods for geometry list-columns include
@@ -274,12 +274,12 @@ Coordinate reference systems (`st_crs` and `st_transform`) are discussed in the 
 
 Attributes include 
 ```{r}
-attributes(nc.geom)
+attributes(nc_geom)
 ```
 
 ## Mixed geometry types
 
-The class of `nc.geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
+The class of `nc_geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
 is shared with all geometry types, and `sfc_TYPE` with `TYPE`
 indicating the type of the particular geometry at hand.
 
