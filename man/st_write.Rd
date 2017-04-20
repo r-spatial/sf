@@ -11,7 +11,8 @@
 st_write(obj, dsn, layer = basename(dsn),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-  update = driver \%in\% db_drivers)
+  update = driver \%in\% db_drivers, delete_dsn = FALSE,
+  delete_layer = FALSE)
 
 write_sf(..., quiet = TRUE)
 
@@ -44,9 +45,12 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \code{as.numeric}.}
 
 \item{update}{logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-as defined by \code{db_drivers}. For non database-type drivers that save a single layer (e.g. \code{ESRI Shapefile} and \code{GeoJSON})
-this is roughly equivalent to \code{overwrite} in functions such as \code{writeRaster} from the \code{raster} package.
+as defined by \code{db_drivers}. 
 For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try to update (append to) the existing data source.}
+
+\item{delete_dsn}{logical; delete data source \code{dsn} before attempting to write?}
+
+\item{delete_layer}{logical; delete layer \code{layer} before attempting to write? (not yet implemented)}
 
 \item{conn}{open database connection}
 

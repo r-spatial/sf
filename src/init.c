@@ -71,7 +71,7 @@ static const R_CallMethodDef CallEntries[] = {
 	{"sf_CPL_gdal_linestring_sample", (DL_FUNC) &sf_CPL_gdal_linestring_sample, 2 },
 	{"sf_CPL_get_layers", (DL_FUNC) &sf_CPL_get_layers, 3 },
 	{"sf_CPL_read_ogr", (DL_FUNC) &sf_CPL_read_ogr, 7 },
-	{"sf_CPL_write_ogr", (DL_FUNC) &sf_CPL_write_ogr, 10 },
+	{"sf_CPL_write_ogr", (DL_FUNC) &sf_CPL_write_ogr, 12 },
 
 	{"sf_CPL_geos_binop", (DL_FUNC) &sf_CPL_geos_binop, 6 },
 	{"sf_CPL_geos_is_valid", (DL_FUNC) &sf_CPL_geos_is_valid, 2 },

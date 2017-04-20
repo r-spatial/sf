@@ -108,7 +108,8 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 // [[Rcpp::export]]
 void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
-	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false, bool update = false) {
+	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false, bool update = false,
+	bool delete_dsn = false, bool delete_layer = false) {
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1) {
@@ -122,19 +123,34 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	if (poDriver == NULL) {
 		Rcpp::Rcout << driver[0] << " driver not available." << std::endl;
 		throw std::invalid_argument("Driver not available.\n");
-	}  else if (! quiet)
-		Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
-			"' using driver `" << driver[0] << "'" << std::endl;
+	}  else  {
+		if (delete_dsn) {
+			if (! quiet)
+				Rcpp::Rcout << "Deleting source `" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
+			if (poDriver->Delete(dsn[0]) != CE_None) {
+				Rcpp::Rcout << "Deleting source `" << dsn[0] << "' failed" << std::endl;
+				throw std::invalid_argument("Cannot delete data source.\n");
+			}
+		}
+		if (! quiet)
+			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
+				"' using driver `" << driver[0] << "'" << std::endl;
+	}
 
 	// open data set:
 	std::vector <char *> options = create_options(dco, quiet);
 	GDALDataset *poDS; 
-	if (!update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
-			options.data(), NULL)) != NULL) {
+	if (! (update || delete_layer) && 
+			(poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+				options.data(), NULL)) != NULL) {
 		GDALClose(poDS);
 		Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-			" already exists; remove first, or use update=TRUE to append." << std::endl;
+			" already exists; remove first, use update=TRUE to append, or delete_dsn=TRUE to remove the entire data source before writing." << std::endl;
 		throw std::invalid_argument("Dataset already exists.\n");
+	}
+
+	if (delete_layer) {
+		throw std::invalid_argument("delete_layer still to be implemented.\n");
 	}
 
 	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 

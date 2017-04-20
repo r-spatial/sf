@@ -135,9 +135,10 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
 #' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-#' as defined by \code{db_drivers}. For non database-type drivers that save a single layer (e.g. \code{ESRI Shapefile} and \code{GeoJSON})
-#' this is roughly equivalent to \code{overwrite} in functions such as \code{writeRaster} from the \code{raster} package.
+#' as defined by \code{db_drivers}. 
 #' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try to update (append to) the existing data source.
+#' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
+#' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
 #' @details columns (variables) of a class not supported are dropped with a warning.
 #' @seealso \link{st_drivers}
 #' @examples
@@ -160,7 +161,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @export
 st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers) {
+		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
@@ -187,7 +188,7 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 			class(geom[[1]])[1]
 	CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, quiet, update)
+		geom, dim, quiet, update, delete_dsn, delete_layer)
 }
 
 #' @name st_write
