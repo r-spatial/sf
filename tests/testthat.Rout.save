@@ -41,9 +41,14 @@ sqlite
 vdv 
 xlsx 
 .nc 
+driver `foo' not available.
+Dataset /home/edzer/git/sf.Rcheck/tests/testthat/x.gpkg already exists: remove first, use update=TRUE to append,
+delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
+Creating layer . failed.
+Failed to create feature 1 in x
 testthat results ================================================================
-OK: 509 SKIPPED: 1 FAILED: 0
+OK: 530 SKIPPED: 1 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.192   0.276   7.254 
+  4.416   0.364   7.899 

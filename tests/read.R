@@ -38,27 +38,7 @@ if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 st_read(system.file("shape/nc.shp", package="sf"),  quiet = TRUE,
 	options = c("ADJUST_TYPE=YES", "ENCODING=CPL_ENC_UTF8"))
 
-if ("GPKG" %in% st_drivers()$name) { # shapefiles can't write point+multipoint mix:
-  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
-  try(st_write(x, "x.gpkg", layer = c("a", "b"), driver = "GPKG")) # error
-  try(st_write(x, "x.gpkg",  driver = "foo")) # error
-  st_write(x, "x.gpkg", delete_dsn = TRUE) # message that delete failed
-  try(st_write(x, "x.gpkg")) # error: already exists
-  st_write(x, "x.gpkg", delete_dsn = TRUE) # message that delete succeeded
-  st_write(x, "x.gpkg", layer = "foo", delete_layer = TRUE) # updates, msg that delete failed
-  st_write(x, "x.gpkg", layer = "foo", delete_layer = TRUE) # updates
-  print(st_layers("x.gpkg"))
-  st_write(x, "x.gpkg", layer = "foo", delete_dsn = TRUE) # removes x.gpkg first
-  print(st_layers("x.gpkg"))
-  x <- st_read("x.gpkg", quiet = TRUE)
-  print(x)
-}
-x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)), 
-	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
-st_write(x, "x.shp")
-x <- st_read("x.shp", quiet = TRUE)
-x
-x <- read_sf("x.shp", quiet = TRUE)
+x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
 
 try(st_layers("foo")) # cannot open datasource
 try(st_read("foo")) # cannot open datasource
@@ -66,12 +46,9 @@ try(st_read("x.gpkg", "xyz")) # cannot open layer
 try(st_write(c("foo", "bar")))
 try(st_write(x, c("foo", "bar")))
 try(st_write(x, "foo", driver = "foo"))
-if (Sys.getenv("USER") %in% c("travis")) {
+if (Sys.getenv("USER") == "travis") {
 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
 }
-
-library(sf)
-#> Linking to GEOS 3.5.0, GDAL 2.1.1, proj.4 4.9.3
 
 df <- data.frame(
     a = c(0, 1, NA, -Inf, Inf),
@@ -88,5 +65,3 @@ if ("GPKG" %in% st_drivers()$name) {
  y = st_read("x2.gpkg", quiet = TRUE)
  print(y)
 }
-
-try(st_write(x, "x.shp", driver = character(0))) # err

@@ -137,7 +137,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
 #' as defined by \code{db_drivers}. 
 #' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try 
-#' to update (append to) the existing data source.
+#' to update (append to) the existing data source, e.g. adding a table to an existing database.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
 #' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or 
@@ -147,7 +147,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
-#' st_write(nc, "nc.shp", update = TRUE) # for the shapefile driver, overwrites
+#' st_write(nc, "nc.shp", delete_layer = TRUE) # overwrites
 #' data(meuse, package = "sp") # loads data.frame from sp
 #' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
@@ -185,10 +185,14 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 	obj = clean_columns(as.data.frame(obj), factorsAsCharacter)
 	# this attaches attr colclasses
 
+	if (driver == "ESRI Shapefile") # remove trailing .shp from layer name
+		layer = sub(".shp$", "", layer)
+
 	dim = if (length(geom) == 0)
 			"XY"
 		else
 			class(geom[[1]])[1]
+
 	CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update, delete_dsn, delete_layer)

@@ -49,7 +49,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
 		if (j == (size_t) poFeature->GetFieldCount())
-			throw std::invalid_argument("Impossible: field count reached\n");
+			throw std::invalid_argument("Impossible: field count reached\n"); // #nocov
 		switch (tp[j]) {
 			case OFTString: {
 				Rcpp::CharacterVector cv;
@@ -147,7 +147,8 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 				OGRErr err = poDS->DeleteLayer(iLayer);
 				if (! quiet) {
 					if (err == OGRERR_UNSUPPORTED_OPERATION)
-						Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'" << std::endl;
+						Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'"  // #nocov
+							<< std::endl; // #nocov
 					else  {
 						Rcpp::Rcout << "Deleting layer `" << layer[0] << "' using driver `" << 
 							driver[0] << "'" << std::endl;

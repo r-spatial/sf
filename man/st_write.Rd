@@ -47,7 +47,7 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \item{update}{logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
 as defined by \code{db_drivers}. 
 For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try 
-to update (append to) the existing data source.}
+to update (append to) the existing data source, e.g. adding a table to an existing database.}
 
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting to write?}
 
@@ -82,7 +82,7 @@ st_write_db was written with help of Josh London, see https://github.com/edzer/s
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, "nc.shp")
-st_write(nc, "nc.shp", update = TRUE) # for the shapefile driver, overwrites
+st_write(nc, "nc.shp", delete_layer = TRUE) # overwrites
 data(meuse, package = "sp") # loads data.frame from sp
 meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
