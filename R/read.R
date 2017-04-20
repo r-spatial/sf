@@ -136,10 +136,13 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' \code{as.numeric}.
 #' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
 #' as defined by \code{db_drivers}. 
-#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try to update (append to) the existing data source.
+#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try 
+#' to update (append to) the existing data source.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
-#' @details columns (variables) of a class not supported are dropped with a warning.
+#' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or 
+#' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be 
+#' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))

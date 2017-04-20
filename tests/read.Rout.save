@@ -165,7 +165,6 @@ Writing layer `x.gpkg' to data source `x.gpkg' using driver `GPKG'
 features:       2
 fields:         1
 geometry type:  Unknown (any)
-Updating /home/edzer/git/sf.Rcheck/tests/x.gpkg
 Driver: GPKG 
 Available layers:
   layer_name geometry_type features fields
@@ -270,4 +269,4 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > proc.time()
    user  system elapsed 
-  0.600   0.024   0.754 
+  0.772   0.300   0.891 
