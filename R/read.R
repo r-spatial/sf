@@ -196,7 +196,9 @@ st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_w
 
 #' @name st_write
 #' @export
-write_sf <- function(..., quiet = TRUE) st_write(..., quiet = quiet)
+write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
+	st_write(..., quiet = quiet, delete_layer = delete_layer)
+}
 
 #' Get GDAL drivers
 #'

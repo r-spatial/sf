@@ -14,7 +14,7 @@ st_write(obj, dsn, layer = basename(dsn),
   update = driver \%in\% db_drivers, delete_dsn = FALSE,
   delete_layer = FALSE)
 
-write_sf(..., quiet = TRUE)
+write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
 st_write_db(conn = NULL, obj, table = deparse(substitute(obj)),
   geom_name = "wkb_geometry", ..., drop = FALSE, debug = FALSE,

@@ -112,18 +112,16 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	bool delete_dsn = false, bool delete_layer = false) {
 
 	// init:
-	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1) {
-		Rcpp::Rcout << "driver, dsn or layer unspecified" << std::endl;
-		throw std::invalid_argument("Driver unspecified.\n");
-	}
+	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
+		throw std::invalid_argument("argument dsn, layer or driver not of length 1.\n");
 
 	/* GDALAllRegister(); -- has been done during .onLoad() */
 	// get driver:
 	GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(driver[0]);
 	if (poDriver == NULL) {
-		Rcpp::Rcout << driver[0] << " driver not available." << std::endl;
+		Rcpp::Rcout << "driver `" << driver[0] << "' not available." << std::endl;
 		throw std::invalid_argument("Driver not available.\n");
-	}  
+	}
 
 	// delete data source:
 	if (delete_dsn) {
