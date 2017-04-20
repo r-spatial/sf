@@ -139,3 +139,10 @@ test_that("guess driver on windows with backslashes (#127)", {
     expect_identical(guess_driver("c:\\Temp\\this.shp"), 
                      guess_driver("c:/Temp/this.shp"))
 })
+
+test_that("the first layer is selected with a warning", {
+	expect_warning(st_read(system.file("osm/overpass.osm", package="sf"), quiet = TRUE),
+		"automatically selected the first layer")
+	expect_error(st_read(system.file("osm/overpass.osm", package="sf"), "foo", quiet = TRUE),
+		"Opening layer failed")
+})

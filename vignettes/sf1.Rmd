@@ -455,12 +455,32 @@ As we've seen above, reading spatial data from an external file can be done by
 filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename)
 ```
+we can suppress the output by adding argument `quiet=TRUE` or
+by using the otherwise nearly identical but more quiet
+```{r}
+nc <- read_sf(filename)
+```
 
-and writing takes place in the same fashion, using `st_write`:
+Writing takes place in the same fashion, using `st_write`:
 
 ```{r}
 st_write(nc, "nc.shp")
 ```
+
+If we repeat this, we get an error message that the file already
+exists, and we can overwrite by
+
+```{r}
+st_write(nc, "nc.shp", delete_layer = TRUE)
+```
+
+or its quiet alternative that does this by default,
+
+```{r}
+write_sf(nc, "nc.shp") # silently overwrites
+```
+
+### Driver-specific options
 
 The `dsn` and `layer` arguments to `st_read` and `st_write`
 denote a data source name and optionally a layer name.  Their exact
@@ -475,23 +495,35 @@ meuse <- st_read("PG:dbname=postgis", "meuse")
 
 where the `PG:` string indicates this concerns the PostGIS driver,
 followed by database name, and possibly port and user credentials.
+When the `layer` and `driver` arguments are not specified, `st_read`
+tries to guess them from the datasource, or else simply reads the
+first layer, giving a warning in case there are more.
 
 `st_read` typically reads the coordinate reference system as
 `proj4string`, but not the EPSG (SRID).  GDAL cannot retrieve SRID
 (EPSG code) from `proj4string` strings, and, when needed, it has
 to be set by the user. See also the section on [crs](crs).
 
-Two further functions, `st_read_db` and `st_write_db` attempt to
-read and write directly from spatial databases, using WKB. The
-advantage over `st_read` may be that instead of a complete table,
-the result of a (spatial) query may be fetched, limiting the amount
-of data that is read into R.
-
 `st_drivers()` returns a `data.frame` listing available drivers,
 and their metadata: names, whether a driver can write, and whether
 it is a raster and/or vector driver. All drivers can read. Reading
 of some common data formats is illustrated below:
 
+`st_layers(dsn)` lists the layers present in data source `dsn`,
+and gives the number of fields, features and geometry type for each
+layer:
+```{r}
+st_layers(system.file("osm/overpass.osm", package="sf"))
+```
+we see that in this case, the number of features is `NA` because
+for this xml file the whole file needs to be read, which may be
+costly for large files. We can force counting by
+```{r}
+Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
+st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
+```
+
+Another example of reading kml and kmz files is:
 ```{r, eval=FALSE}
 # Download .shp data
 u_shp <- "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
@@ -507,6 +539,26 @@ u_kml = "http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"
 download.file(u_kml, "bikeraces.kml")
 bikraces <- st_read("bikeraces.kml")
 ```
+
+### Create, read, update and delete {#crud}
+
+GDAL provides the
+[crud](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
+(create, read, update, delete) functions to persistent storage.
+`st_read` (or `read_sf`) are used for reading. `st_write` (or `write_sf`)
+creates, and has the following arguments to control update and delete:
+
+* `update=TRUE` causes an existing data source to be updated, if it
+exists; this options is by default `TRUE` for all database drivers,
+where the database is updated by adding a table.
+* `delete_layer=TRUE` causes `st_write` try to open the the data
+source and delete the layer; no errors are given if the data source is
+not present, or the layer does not exist in the data source.
+* `delete_dsn=TRUE` causes `st_write` to delete the data source when
+present, before writing the layer in a newly created data source. No
+error is given when the data source does not exist. This option
+should be handled with care, as it may wipe complete directories
+or databases.
 
 ### Benchmarks
 
@@ -526,7 +578,7 @@ kml_read_sp <- function() rgdal::readOGR("bikeraces.kml")
 kml_read_sf <- function() st_read("bikeraces.kml")
 microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
                                kmz_read_sp(), kmz_read_sf(),
-                               kml_read_sp(), kml_read_sf(), times = 1)
+                               kml_read_sp(), kml_read_sf(), times = 10)
 ```
 
 ```{r, echo=FALSE}
@@ -535,23 +587,42 @@ files_to_remove <- list.files(pattern = "[B-b]ike")
 if(length(files_to_remove) > 0) file.remove(files_to_remove)
 ```
 
-On a modern laptop (with an Intel i7-7500U CPU @ 2.70GHz processor) the results were as follows:
+On a laptop with an Intel i5-4300M CPU @ 2.60GHz with ssd the
+results were as follows:
 
 ```
 Unit: milliseconds
-          expr        min         lq       mean     median         uq        max neval
-shp_read_sp() 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699 5651.72699     1
-shp_read_sf()  398.64002  398.64002  398.64002  398.64002  398.64002  398.64002     1
-kmz_read_sp() 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189 5838.50189     1
-kmz_read_sf() 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294 1234.79294     1
-kml_read_sp()  156.82933  156.82933  156.82933  156.82933  156.82933  156.82933     1
-kml_read_sf()   10.27719   10.27719   10.27719   10.27719   10.27719   10.27719     1
+          expr         min          lq       mean     median          uq
+ shp_read_sp() 4993.954530 5010.798950 5072.94155 5049.68057 5116.050416
+ shp_read_sf()  331.580349  341.608044  352.99233  353.00169  364.601151
+ kmz_read_sp() 4940.108931 4966.177983 5021.47680 4989.82589 5038.393259
+ kmz_read_sf() 1086.925988 1088.850196 1103.04846 1090.15794 1100.518670
+ kml_read_sp()  167.556454  176.395750  182.10324  185.31941  187.720235
+ kml_read_sf()    8.132629    8.268952   10.44328    8.52626    9.420043
+        max neval   cld
+ 5186.16240    10     e
+  376.64045    10   c  
+ 5282.25874    10     e
+ 1178.42358    10    d 
+  189.29191    10  b   
+   26.20221    10 a    
 ```
 
-This shows that `sf::st_read()` is
-substantially faster than `rgdal::readOGR()`: by more than a factor of 10
-for the Shapefile and KML files, and more than a factor of 3 for the KMZ file
-used in this benchmark, respectively.
+This shows that `sf::st_read()` is substantially faster than
+`rgdal::readOGR()`: by a factor of 14-18 for the Shapefile and KML
+files, and more than a factor of 4 for the KMZ file used in this
+benchmark, respectively.
+
+### Directly reading and writing to spatial databases
+
+Two further functions, `st_read_db` and `st_write_db` attempt to
+read and write from spatial databases, directly reading WKB or WKT
+without using GDAL. The advantage over `st_read` may be that instead
+of a complete table, the result of a (spatial) query may be fetched,
+limiting the amount of data that is read into R, and potentially
+benefiting from the spatial index of the database. Although intended
+to use the DBI interface, current use and testing of these functions
+are limited to PostGIS.
 
 ## Coordinate reference systems and transformations {#crs}
 
