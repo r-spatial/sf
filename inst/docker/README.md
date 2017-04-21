@@ -1,6 +1,12 @@
 # Build and check sf against r-release and r-devel
 
-This directory has two subdirectories with Docker files, one for installing R-release with all system dependencies required by `sf`, the other one building R-devel from source (downloaded from svn, without X11) on top of that. This allows building `sf` with r-release and r-devel with all external system requirements (udunits, proj, gdal, geos, lwgeom). 
+To allows building `sf` in alternative environments with all
+external system requirements (udunits, proj, gdal, geos, lwgeom),
+this directory has subdirectories with Docker files:
+
+* for installing R-release with all system dependencies required by `sf`, 
+* for building R-devel from source (downloaded from svn, without X11) on top of that. 
+* for testing with gdal 2.2beta0 
 
 The images are built on ubuntu:16.04 (xenial). They use [ubuntugis-unstable](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable) for GIS package system dependencies.
 

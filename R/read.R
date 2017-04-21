@@ -151,8 +151,7 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' data(meuse, package = "sp") # loads data.frame from sp
 #' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
-#' file.remove("meuse.csv") # update = TRUE seems not to work for csv
-#' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT") # overwrites, now with WKT column
+#' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT", delete_dsn=TRUE) # overwrites
 #' \dontrun{
 #' library(sp)
 #' example(meuse, ask = FALSE, echo = FALSE)
