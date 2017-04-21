@@ -1,5 +1,21 @@
 # version 0.4-2
 
+* improve docs of `st_is_valid` and `st_make_valid`, #296
+
+* coercing `sf` to `data.frame` now works better, #298
+
+* `st_line_sample` gains argument `sample` to specify the points t.b. sampled, #299 #300 thanks to @joethorley
+
+* add compatibility to upcoming dplyr 0.6.0, #304 #42
+
+* write GDAL fields by name, not by number, fixing a KML problem #308
+
+* `st_write` gains arguments `delete_layer` and `delete_dsn` to allow overwrite capability #307 #274
+
+* `write_sf` defaults to `delete_layer=TRUE`, silently overwriting layers if they're already present
+
+* compatibility with GDAL 2.2beta0, #303, #309
+
 * replace `st_write_db` with a version that is fast for large datasets (#285), thanks to Josh London
 
 * take out more memory leaking examples in tests
