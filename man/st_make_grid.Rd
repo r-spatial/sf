@@ -28,3 +28,7 @@ rectangular polygons, corner points of these polygons, or center points of these
 \description{
 Make a rectangular grid over the bounding box of a sf or sfc object
 }
+\examples{
+plot(st_make_grid(what = "centers"), axes = TRUE)
+plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
+}

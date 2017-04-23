@@ -696,6 +696,9 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
 #' @return object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
 #' rectangular polygons, corner points of these polygons, or center points of these polygons.
+#' @examples
+#' plot(st_make_grid(what = "centers"), axes = TRUE)
+#' plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
 #' @export
 st_make_grid = function(x, 
 		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
@@ -703,9 +706,10 @@ st_make_grid = function(x,
 		crs = if (missing(x)) NA_crs_ else st_crs(x),
 		what = "polygons") {
 
-	if (nargs() == 0) # create global 10 x 10 degree grid
+	if (missing(x) && missing(cellsize) && missing(offset) 
+			&& missing(n) && missing(crs)) # create global 10 x 10 degree grid
 		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
-			crs = st_crs(4326)))
+			crs = st_crs(4326), what = what))
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)
@@ -749,11 +753,14 @@ st_make_grid = function(x,
 		ret = vector("list", (nx + 1) * (ny + 1))
 		for (i in 1:(nx + 1))
 			for (j in 1:(ny + 1))
-				ret[[(j - 1) * nx + i]] = st_point(c(xc[i], yc[j]))
+				ret[[(j - 1) * (nx + 1) + i]] = st_point(c(xc[i], yc[j]))
 	} else
 		stop("unknown value of `what'")
 	
-	st_sfc(ret, crs = crs)
+	if (missing(x)) 
+		st_sfc(ret, crs = crs)
+	else
+		st_sfc(ret, crs = st_crs(x))
 }
 
 ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
