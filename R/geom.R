@@ -35,9 +35,9 @@ st_area = function(x) {
 				as.numeric(p$SemiMajor), 1./p$InvFlattening)
 		set_units(a, units(p$SemiMajor^2))
 	} else {
-		a = CPL_area(st_geometry(x))
+		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
 		if (!is.na(st_crs(x)))
-			set_units(a, units(crs_parameters(st_crs(x))$SemiMajor^2))
+			set_units(a, units(crs_parameters(st_crs(x))$ud_unit^2)) # coord units
 		else
 			a
 	}
@@ -77,7 +77,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
 		set_units(ret, units(p$SemiMajor))
 	} else {
-		ret = CPL_length(x)
+		ret = CPL_length(x) # units of coordinates
 		ret[is.nan(ret)] = NA
 		if (!is.na(st_crs(x)))
 			set_units(ret, crs_parameters(st_crs(x))$ud_unit)
@@ -663,41 +663,45 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_line_sample for longitude/latitude not supported; use st_segmentize?")
 	l = st_length(x)
-	if (is.null(sample)) {
-		if (missing(n)) {
+	distList = if (is.null(sample)) {
+		n = if (missing(n)) {
 			if (!is.na(st_crs(x)) && inherits(density, "units"))
-				units(density) = units(1 / crs_parameters(st_crs(x))$SemiMajor)
-			n = round(rep(density, length.out = length(l)) * l)
+				units(density) = units(1 / crs_parameters(st_crs(x))$ud_unit) # coordinate units
+			round(rep(density, length.out = length(l)) * l)
 		} else
-			n = rep(n, length.out = length(l))
+			rep(n, length.out = length(l))
 		regular = function(n) { (1:n - 0.5)/n }
 		random = function(n) { sort(runif(n)) }
 		fn = switch(type,
 					regular = regular,
 					random = random,
 					stop("unknown type"))
-		distList = lapply(seq_along(n), function(i) fn(n[i]) * l[i])
+		lapply(seq_along(n), function(i) fn(n[i]) * l[i])
 	} else
-		distList = lapply(seq_along(l), function(i) sample * l[i])
+		lapply(seq_along(l), function(i) sample * l[i])
 	
 	x = st_geometry(x)
 	stopifnot(inherits(x, "sfc_LINESTRING"))
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
-#' Make a rectangular grid of polygons over the bounding box of a sf or sfc object
+#' Make a rectangular grid over the bounding box of a sf or sfc object
 #' 
-#' Make a rectangular grid of polygons over the bounding box of a sf or sfc object
+#' Make a rectangular grid over the bounding box of a sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @param crs object of class \code{crs}
+#' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
+#' @return object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
+#' rectangular polygons, corner points of these polygons, or center points of these polygons.
 #' @export
 st_make_grid = function(x, 
 		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n, 
 		offset = st_bbox(x)[1:2], n = c(10, 10),
-		crs = if(missing(x)) NA_crs_ else st_crs(x)) {
+		crs = if (missing(x)) NA_crs_ else st_crs(x),
+		what = "polygons") {
 
 	if (nargs() == 0) # create global 10 x 10 degree grid
 		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
@@ -727,19 +731,29 @@ st_make_grid = function(x,
 	xc = seq(offset[1], bb[3], length.out = nx + 1)
 	yc = seq(offset[2], bb[4], length.out = ny + 1)
 	
-	ret = vector("list", nx * ny)
-	square = function(x1, y1, x2, y2)	{
-		st_polygon(list(rbind(c(x1, y1), c(x2, y1), c(x2, y2), c(x1, y2), c(x1, y1))))
-	}
+	if (what == "polygons") {
+		ret = vector("list", nx * ny)
+		square = function(x1, y1, x2, y2)
+			st_polygon(list(matrix(c(x1, x2, x2, x1, x1, y1, y1, y2, y2, y1), 5)))
+		for (i in 1:nx)
+			for (j in 1:ny)
+				ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
+	} else if (what == "centers") {
+		ret = vector("list", nx * ny)
+		cent = function(x1, y1, x2, y2)
+			st_point(c( (x1+x2)/2, (y1+y2)/2 ))
+		for (i in 1:nx)
+			for (j in 1:ny)
+				ret[[(j - 1) * nx + i]] = cent(xc[i], yc[j], xc[i+1], yc[j+1])
+	} else if (what == "corners") {
+		ret = vector("list", (nx + 1) * (ny + 1))
+		for (i in 1:(nx + 1))
+			for (j in 1:(ny + 1))
+				ret[[(j - 1) * nx + i]] = st_point(c(xc[i], yc[j]))
+	} else
+		stop("unknown value of `what'")
 	
-	for (i in 1:nx)
-		for (j in 1:ny)
-			ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
-	
-	if (missing(x))
-		st_sfc(ret, crs = crs)
-	else
-		st_sfc(ret, crs = st_crs(x))
+	st_sfc(ret, crs = crs)
 }
 
 ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {

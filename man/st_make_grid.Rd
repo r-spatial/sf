@@ -2,11 +2,11 @@
 % Please edit documentation in R/geom.R
 \name{st_make_grid}
 \alias{st_make_grid}
-\title{Make a rectangular grid of polygons over the bounding box of a sf or sfc object}
+\title{Make a rectangular grid over the bounding box of a sf or sfc object}
 \usage{
 st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
   4)]))/n, offset = st_bbox(x)[1:2], n = c(10, 10), crs = if (missing(x))
-  NA_crs_ else st_crs(x))
+  NA_crs_ else st_crs(x), what = "polygons")
 }
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
@@ -18,7 +18,13 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
 
 \item{crs}{object of class \code{crs}}
+
+\item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
+}
+\value{
+object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
+rectangular polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{
-Make a rectangular grid of polygons over the bounding box of a sf or sfc object
+Make a rectangular grid over the bounding box of a sf or sfc object
 }
