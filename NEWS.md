@@ -1,5 +1,7 @@
 # version 0.4-2
 
+* units support for function arguments of `st_segmentize` and `st_line_sample`
+
 * document problem reading shapefiles from USB drives on OSX, #252
 
 * improve docs of `st_is_valid` and `st_make_valid`, #296
