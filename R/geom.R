@@ -33,13 +33,13 @@ st_area = function(x) {
 			stop("package geosphere required, please install it first")
 		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"), 
 				as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		set_units(a, units(p$SemiMajor^2))
+		units(a) = units(p$SemiMajor^2)
+		a
 	} else {
 		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
 		if (!is.na(st_crs(x)))
-			set_units(a, units(crs_parameters(st_crs(x))$ud_unit^2)) # coord units
-		else
-			a
+			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
+		a
 	}
 }
 
@@ -75,14 +75,14 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 			stop("package geosphere required, please install it first")
 		p = crs_parameters(st_crs(x))
 		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
-		set_units(ret, units(p$SemiMajor))
+		units(ret) = units(p$SemiMajor)
+		ret
 	} else {
 		ret = CPL_length(x) # units of coordinates
 		ret[is.nan(ret)] = NA
 		if (!is.na(st_crs(x)))
-			set_units(ret, crs_parameters(st_crs(x))$ud_unit)
-		else
-			ret
+			units(ret) = crs_parameters(st_crs(x))$ud_unit
+		ret
 	}
 }
 
@@ -136,13 +136,13 @@ st_distance = function(x, y, dist_fun) {
 		m = matrix(
 			dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening), 
 			length(x), length(y))
-		set_units(m, units(p$SemiMajor))
+		units(m) = units(p$SemiMajor)
+		m
 	} else {
 		d = CPL_geos_dist(x, y)
 		if (! is.na(st_crs(x)))
-			set_units(d, p$ud_unit)
-		else
-			d
+			units(d) = p$ud_unit
+		d
 	}
 }
 
@@ -666,7 +666,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	distList = if (is.null(sample)) {
 		n = if (missing(n)) {
 			if (!is.na(st_crs(x)) && inherits(density, "units"))
-				units(density) = units(1 / crs_parameters(st_crs(x))$ud_unit) # coordinate units
+				units(density) = 1/crs_parameters(st_crs(x))$ud_unit # coordinate units
 			round(rep(density, length.out = length(l)) * l)
 		} else
 			rep(n, length.out = length(l))
@@ -777,7 +777,7 @@ ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 		p2 = tail(pts, -1)
 		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
 		if (inherits(dfMaxLength, "units"))
-			ll = set_units(ll, units(p$SemiMajor))
+			units(ll) = units(p$SemiMajor)
 		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
 		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
 		if (length(n) == 1) # would be a matrix otherwise
