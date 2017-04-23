@@ -166,7 +166,7 @@ st_line_sample(x, n, density, type = "regular", sample = NULL)
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram}
 
-\item{dfMaxLength}{numeric; max length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a length with unit metre, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a numeric with length with unit metre, or an object of class \code{units} with length units; in this case, segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
 
 \item{...}{ignored}
 
@@ -174,7 +174,7 @@ st_line_sample(x, n, density, type = "regular", sample = NULL)
 
 \item{n}{integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.}
 
-\item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).}
+\item{density}{numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled); \code{density} may be of class \code{units}.}
 
 \item{type}{character; indicate the sampling type, either "regular" or "random"}
 
@@ -264,6 +264,9 @@ mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_line_merge(st_sfc(mls))
 plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
+sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
+seg = st_segmentize(sf, units::set_units(100, km))
+nrow(seg$geom[[1]])
 st_combine(nc)
 plot(st_union(nc))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
@@ -276,6 +279,7 @@ st_line_sample(st_transform(ls, 3857), n = 5) # five points for each line
 st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
+st_line_sample(st_transform(ls, 3857), density = units::set_units(1, 1/km)) # one per km
 # five equidistant points including start and end:
 st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) 
 }

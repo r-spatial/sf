@@ -33,13 +33,11 @@ st_area = function(x) {
 			stop("package geosphere required, please install it first")
 		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"), 
 				as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		u = 1
-		units(u) = units(p$SemiMajor)
-		a * u^2
+		set_units(a, units(p$SemiMajor^2))
 	} else {
 		a = CPL_area(st_geometry(x))
 		if (!is.na(st_crs(x)))
-			a * crs_parameters(st_crs(x))$ud_unit^2
+			set_units(a, units(crs_parameters(st_crs(x))$SemiMajor^2))
 		else
 			a
 	}
@@ -77,13 +75,12 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 			stop("package geosphere required, please install it first")
 		p = crs_parameters(st_crs(x))
 		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
-		units(ret) = units(p$SemiMajor)
-		ret
+		set_units(ret, units(p$SemiMajor))
 	} else {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
 		if (!is.na(st_crs(x)))
-			ret * crs_parameters(st_crs(x))$ud_unit
+			set_units(ret, crs_parameters(st_crs(x))$ud_unit)
 		else
 			ret
 	}
@@ -139,12 +136,11 @@ st_distance = function(x, y, dist_fun) {
 		m = matrix(
 			dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening), 
 			length(x), length(y))
-		units(m) = units(p$SemiMajor)
-		m
+		set_units(m, units(p$SemiMajor))
 	} else {
 		d = CPL_geos_dist(x, y)
 		if (! is.na(st_crs(x)))
-			d * p$ud_unit
+			set_units(d, p$ud_unit)
 		else
 			d
 	}
@@ -481,8 +477,12 @@ st_centroid.sf = function(x) {
 
 #' @name geos
 #' @export
-#' @param dfMaxLength numeric; max length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a length with unit metre, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a numeric with length with unit metre, or an object of class \code{units} with length units; in this case, segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
+#' @examples
+#' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
+#' seg = st_segmentize(sf, units::set_units(100, km))
+#' nrow(seg$geom[[1]])
 st_segmentize	= function(x, dfMaxLength, ...)
 	UseMethod("st_segmentize")
 
@@ -494,8 +494,11 @@ st_segmentize.sfg = function(x, dfMaxLength, ...)
 st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 	if (isTRUE(st_is_longlat(x)))
 		st_sfc(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = st_crs(x)), crs = st_crs(x))
-	else
+	else {
+		if (!is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
+			units(dfMaxLength) = units(crs_parameters(st_crs(x))$SemiMajor) # might convert
 		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
+	}
 }
 
 #' @export
@@ -638,7 +641,7 @@ st_union.sf = function(x, y, ..., by_feature = FALSE) {
 
 #' @name geos
 #' @param n integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.
-#' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled).
+#' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled); \code{density} may be of class \code{units}.
 #' @param type character; indicate the sampling type, either "regular" or "random"
 #' @param sample numeric; a vector of numbers between 0 and 1 indicating the points to sample - if defined sample overrules n, density and type.
 #' @export
@@ -653,16 +656,19 @@ st_union.sf = function(x, y, ..., by_feature = FALSE) {
 #' st_line_sample(st_transform(ls, 3857), n = c(1, 3)) # one and three points
 #' st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 #' st_line_sample(st_transform(ls, 3857), density = c(1/1000, 1/10000)) # one per km, one per 10 km
+#' st_line_sample(st_transform(ls, 3857), density = units::set_units(1, 1/km)) # one per km
 #' # five equidistant points including start and end:
 #' st_line_sample(st_transform(ls, 3857), sample = c(0, 0.25, 0.5, 0.75, 1)) 
 st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (isTRUE(st_is_longlat(x)))
-		stop("st_line_sample for longitude/latitude not supported")
+		stop("st_line_sample for longitude/latitude not supported; use st_segmentize?")
 	l = st_length(x)
 	if (is.null(sample)) {
-		if (missing(n))
+		if (missing(n)) {
+			if (!is.na(st_crs(x)) && inherits(density, "units"))
+				units(density) = units(1 / crs_parameters(st_crs(x))$SemiMajor)
 			n = round(rep(density, length.out = length(l)) * l)
-		else
+		} else
 			n = rep(n, length.out = length(l))
 		regular = function(n) { (1:n - 0.5)/n }
 		random = function(n) { sort(runif(n)) }
@@ -749,7 +755,9 @@ ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 		p1 = head(pts, -1)
 		p2 = tail(pts, -1)
 		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		n = ceiling(ll / as.numeric(dfMaxLength)) - 1
+		if (inherits(dfMaxLength, "units"))
+			ll = set_units(ll, units(p$SemiMajor))
+		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
 		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
 		if (length(n) == 1) # would be a matrix otherwise
 			ret = list(ret)

@@ -1,5 +1,7 @@
 # version 0.4-2
 
+* document problem reading shapefiles from USB drives on OSX, #252
+
 * improve docs of `st_is_valid` and `st_make_valid`, #296
 
 * coercing `sf` to `data.frame` now works better, #298

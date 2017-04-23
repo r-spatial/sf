@@ -180,7 +180,7 @@ crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string), 
 		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
-	ret$SemiMajor = ret$SemiMajor * make_unit("m")
+	ret$SemiMajor = set_units(ret$SemiMajor, make_unit("m"))
 	ret$ud_unit = switch(ret$units_gdal,
 		"Meter"                = make_unit("m"),
 		"Foot_US"              = make_unit("US_survey_foot"),

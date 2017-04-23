@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.3.3 (2017-03-06) -- "Another Canoe"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -112,7 +112,7 @@ Units: m
 [1] 110574.39  11131.95
 > try(st_line_sample(ls, density = 1/1000))
 Error in st_line_sample(ls, density = 1/1000) : 
-  st_line_sample for longitude/latitude not supported
+  st_line_sample for longitude/latitude not supported; use st_segmentize?
 > st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
@@ -125,4 +125,4 @@ MULTIPOINT(505.997685423971 -7.08115455161362e-...
 > 
 > proc.time()
    user  system elapsed 
-  0.500   0.012   0.511 
+  0.776   0.240   0.745 
