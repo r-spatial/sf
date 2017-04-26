@@ -54,6 +54,10 @@ sum(a2$BIR74) / sum(nc$BIR74)
 
 # missing x:
 g = st_make_grid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
+g = st_make_grid(what = "centers")
+length(g)
+g = st_make_grid(what = "corners")
+length(g)
 
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_line_merge(mls)

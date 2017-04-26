@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -146,6 +146,12 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 > 
 > # missing x:
 > g = st_make_grid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
+> g = st_make_grid(what = "centers")
+> length(g)
+[1] 648
+> g = st_make_grid(what = "corners")
+> length(g)
+[1] 703
 > 
 > mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 > st_line_merge(mls)
@@ -181,4 +187,4 @@ LINESTRING(0 0, 1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.300   0.036   2.346 
+  3.020   0.272   3.019 
