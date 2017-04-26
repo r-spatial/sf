@@ -7,9 +7,9 @@
 \alias{obj_sum.sfc}
 \title{Summarize simple feature type for tibble}
 \usage{
-\method{type_sum}{sfc}(x, ...)
+type_sum.sfc(x, ...)
 
-\method{obj_sum}{sfc}(x)
+obj_sum.sfc(x)
 }
 \arguments{
 \item{x}{object of class sfc}

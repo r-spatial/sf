@@ -65,19 +65,19 @@
 \usage{
 filter_.sf(.data, ..., .dots)
 
-\method{filter}{sf}(.data, ...)
+filter.sf(.data, ...)
 
 arrange_.sf(.data, ..., .dots)
 
-\method{arrange}{sf}(.data, ...)
+arrange.sf(.data, ...)
 
 distinct_.sf(.data, ..., .dots, .keep_all = FALSE)
 
-\method{distinct}{sf}(.data, ..., .dots, .keep_all = FALSE)
+distinct.sf(.data, ..., .dots, .keep_all = FALSE)
 
 group_by_.sf(.data, ..., .dots, add = FALSE)
 
-\method{group_by}{sf}(.data, ..., .dots, add = FALSE)
+group_by.sf(.data, ..., .dots, add = FALSE)
 
 mutate_.sf(.data, ..., .dots)
 
@@ -85,15 +85,15 @@ mutate.sf(.data, ..., .dots)
 
 transmute_.sf(.data, ..., .dots)
 
-\method{transmute}{sf}(.data, ..., .dots)
+transmute.sf(.data, ..., .dots)
 
 select_.sf(.data, ..., .dots = NULL)
 
-\method{select}{sf}(.data, ...)
+select.sf(.data, ...)
 
 rename_.sf(.data, ..., .dots)
 
-\method{rename}{sf}(.data, ...)
+rename.sf(.data, ...)
 
 slice_.sf(.data, ..., .dots)
 
@@ -101,7 +101,7 @@ slice.sf(.data, ...)
 
 summarise_.sf(.data, ..., .dots)
 
-\method{summarise}{sf}(.data, ..., .dots)
+summarise.sf(.data, ..., .dots)
 
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
@@ -109,10 +109,10 @@ gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
 spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
   drop = TRUE, sep = NULL)
 
-\method{sample_n}{sf}(tbl, size, replace = FALSE, weight = NULL,
+sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
   .env = parent.frame())
 
-\method{sample_frac}{sf}(tbl, size = 1, replace = FALSE, weight = NULL,
+sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
   .env = parent.frame())
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)

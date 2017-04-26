@@ -25,14 +25,14 @@ Imports:
     methods, 
     Rcpp, 
     DBI,
-    dplyr, 
-    tibble, 
     units (>= 0.4),
 	magrittr
 Suggests: 
     sp (>= 1.2-4), 
     rgeos, 
     rgdal, 
+    dplyr, 
+    tibble, 
     RPostgreSQL, 
     testthat, 
     knitr, 
