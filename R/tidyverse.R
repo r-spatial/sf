@@ -130,15 +130,14 @@ unclass_sf <- function(x) {
 
 #' @name dplyr
 #' @export
-select.sf <- if (utils::packageVersion("dplyr") > "0.5.0") {
+select.sf <- if (requireNamespace("dplyr", quietly = TRUE) && utils::packageVersion("dplyr") > "0.5.0") {
   function(.data, ...) {
 	.data <- unclass_sf(.data)
 	sf_column <- attr(.data, "sf_column")
 
-	if (!requireNamespace("dplyr", quietly = TRUE))
-		stop("dplyr required: install first?")
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
+
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
 	st_as_sf(ret)
   }
