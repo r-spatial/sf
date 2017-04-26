@@ -461,24 +461,58 @@ fi
 #
 # GEOS:
 #
+GEOS_CONFIG="geos-config"
+
+GEOS_CONFIG_SET="no"
+
+AC_ARG_WITH([geos-config],
+    AC_HELP_STRING([--with-geos-config=GEOS_CONFIG],
+           [the location of geos-config]),
+           [geos_config=$withval])
+if test [ -n "$geos_config" ] ; then
+    GEOS_CONFIG_SET="yes"
+    AC_SUBST([GEOS_CONFIG],["${geos_config}"])
+    AC_MSG_NOTICE(geos-config set to $GEOS_CONFIG)
+fi
+
+if test ["$GEOS_CONFIG_SET" = "no"] ; then
+  AC_PATH_PROG([GEOS_CONFIG], ["$GEOS_CONFIG"],["no"])
+  if test ["$GEOS_CONFIG" = "no"] ; then
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([geos-config not found or not executable.])
+  fi
+else
+  AC_MSG_CHECKING(geos-config exists)
+  if test -r "${GEOS_CONFIG}"; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([geos-config not found - configure argument error.])
+  fi
+  AC_MSG_CHECKING(geos-config executable)
+  if test -x "${GEOS_CONFIG}"; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([geos-config not executable.])
+  fi
+fi
 
 AC_MSG_CHECKING(geos-config usability)
-GEOS_CONFIG=`which geos-config`
-if test `geos-config --version`
+if test `${GEOS_CONFIG} --version`
 then
   GEOS_CLIBS=`geos-config --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
   GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
-  GEOS_CPPFLAGS=`geos-config --cflags`
+  GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  echo "no geos support: geos-dev and/or geos++-dev not installed?"
-  exit 1
+  AC_MSG_ERROR([${GEOS_CONFIG} not usable])
 fi
 
-GEOS_VERSION=`geos-config --version`
+GEOS_VERSION=`${GEOS_CONFIG} --version`
 AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
 AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
