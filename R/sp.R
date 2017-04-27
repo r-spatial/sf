@@ -184,7 +184,7 @@ as_Spatial = function(from, cast = TRUE) {
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
 	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM")) 
-		stop("Z not supported: try st_drop_zm first?") }
+		stop("Z not supported: use st_zm first to drop Z?") }
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
 		"sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),
