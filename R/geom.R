@@ -534,7 +534,8 @@ geos_op2_df = function(x, y, geoms) {
 	if (! (all_constant_x && all_constant_y))
 		warning("attribute variables are assumed to be spatially constant throughout all geometries", 
 			call. = FALSE)
-	st_sf(df, geoms)
+	df[[ attr(x, "sf_column") ]] = geoms
+	st_sf(df, sf_column_name = attr(x, "sf_column"))
 }
 
 # after checking identical crs,
