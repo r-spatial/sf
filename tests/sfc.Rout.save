@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -364,7 +364,7 @@ Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is n
 [1] 0
 > 
 > try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
-Error in StopZ(zm) : Z not supported: try st_drop_zm first?
+Error in StopZ(zm) : Z not supported: use st_zm first to drop Z?
 > 
 > # check conus is present:
 > x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
@@ -730,4 +730,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  0.860   0.036   0.895 
+  1.376   0.232   1.403 

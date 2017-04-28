@@ -89,6 +89,34 @@ Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
 	return Rcpp::CharacterVector::create(os.str());
 }
 
+void read_gpkg_header(const unsigned char **pt, uint32_t *srid, int endian) {
+	// http://www.geopackage.org/spec/#gpb_format
+	(*pt) += 3; // 'G', 'P', version
+
+	// read flag:
+	unsigned char flag = **pt;
+	(*pt) += 1;
+	bool swap = (flag & 0x01 != (int) endian); // endian check
+
+	// read srid, if needed, swap:
+	memcpy(srid, *pt, sizeof(uint32_t));
+	if (swap)
+		*srid = swap_endian<uint32_t>(*srid);
+	(*pt) += 4;
+
+	// how much header is there to skip? bbox: 4, 6, 6, or 8 doubles:
+	flag = (flag >> 1) & 0x07; // get bytes 3,2,1
+	int n;
+	if (flag == 1) // [minx, maxx, miny, maxy]
+		n = 32;
+	else if (flag == 2 || flag == 3) 
+			// [minx, maxx, miny, maxy, minz, maxz] or [minx, maxx, miny, maxy, minm, maxm]
+		n = 48;
+	else if (flag == 4) // [minx, maxx, miny, maxy, minz, maxz, minm, maxm]
+		n = 64;
+	(*pt) += n;
+}
+
 Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool swap, 
 		bool EWKB = 0, int endian = 0, Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 	uint32_t npts;
@@ -198,6 +226,10 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
  */
 
 	Rcpp::List output(1); // to deal with varying result type
+
+	if (srid != NULL && (*pt)[0] == 'G' && (*pt)[1] == 'P') // GPKG header? skip:
+		read_gpkg_header(pt, srid, endian);
+
 	bool swap = ((int) (**pt) != (int) endian); // endian check
 	(*pt)++;
 	// read type:

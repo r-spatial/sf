@@ -161,6 +161,17 @@ st_set_geometry = function(x, value) {
 	x
 }
 
+list_column_to_sfc = function(x) {
+	if (is.list(x)) {
+		try(y <- st_as_sfc(x), silent = TRUE)
+		if (inherits(y, "try-error"))
+			x
+		else
+			y
+	} else 
+		x
+}
+
 #' Create sf object
 #' 
 #' Create sf, which extends data.frame-like objects with a simple feature list column
@@ -189,10 +200,14 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 	# find the sfc column(s):
 	all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
-	if (! any(all_sfc_columns))
-		stop("no simple features geometry column present")
-	else 
-		all_sfc_columns = which(unlist(all_sfc_columns))
+	if (! any(all_sfc_columns)) { # try converting list-columns:
+		x = lapply(x, list_column_to_sfc)
+		all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
+		if (! any(all_sfc_columns))
+			stop("no simple features geometry column present")
+	}
+	
+	all_sfc_columns = which(unlist(all_sfc_columns))
 
 	# set names if not present:
 	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
@@ -423,4 +438,22 @@ merge.sf = function(x, y, ...) {
 	ret[[sf_column]] = NULL
 	st_geometry(ret) = fix_NULL_values(g)
 	ret
+}
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.list = function(x, ..., crs = NA_crs_) {
+
+	if (length(x) == 0)
+		return(st_sfc(crs = crs))
+
+	if (is.raw(x[[1]]))
+		st_as_sfc(structure(x, class = "WKB"))
+	else if (is.character(x[[1]])) { # hex wkb or wkt:
+		ch12 = substr(x[[1]], 1, 2)
+		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
+			st_as_sfc(structure(x, class = "WKB"))
+		else
+			st_as_sfc(unlist(x)) # wkt
+	}
 }

@@ -33,6 +33,7 @@ Suggests:
     rgdal, 
     dplyr, 
     tibble, 
+	RSQLite,
     RPostgreSQL, 
     testthat, 
     knitr, 
