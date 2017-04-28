@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -88,6 +88,16 @@
 <h1 class="hasAnchor">
 <a href="#version-0-4-2" class="anchor"></a>version 0.4-2</h1>
 <ul>
+<li><p>units support for function arguments of <code>st_segmentize</code> and <code>st_line_sample</code></p></li>
+<li><p>document problem reading shapefiles from USB drives on OSX, #252</p></li>
+<li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>, #296</p></li>
+<li><p>coercing <code>sf</code> to <code>data.frame</code> now works better, #298</p></li>
+<li><p><code>st_line_sample</code> gains argument <code>sample</code> to specify the points t.b. sampled, #299 #300 thanks to @joethorley</p></li>
+<li><p>add compatibility to upcoming dplyr 0.6.0, #304 #42</p></li>
+<li><p>write GDAL fields by name, not by number, fixing a KML problem #308</p></li>
+<li><p><code>st_write</code> gains arguments <code>delete_layer</code> and <code>delete_dsn</code> to allow overwrite capability #307 #274</p></li>
+<li><p><code>write_sf</code> defaults to <code>delete_layer=TRUE</code>, silently overwriting layers if they’re already present</p></li>
+<li><p>compatibility with GDAL 2.2beta0, #303, #309</p></li>
 <li><p>replace <code>st_write_db</code> with a version that is fast for large datasets (#285), thanks to Josh London</p></li>
 <li><p>take out more memory leaking examples in tests</p></li>
 <li><p>the <code>aggregate</code> method for <code>sf</code> objects now assumes the <code>by</code> argument to be identical to that of <code>stats::aggregate</code></p></li>

@@ -36,11 +36,8 @@ img.icon {
 
 /* Section anchors ---------------------------------*/
 
-.hasAnchor {
-  margin-left: -30px;
-}
-
 a.anchor {
+  margin-left: -30px;
   display:inline-block;
   width: 30px;
   height: 30px;
@@ -56,12 +53,30 @@ a.anchor {
   visibility: visible;
 }
 
+@media (max-width: 767px) {
+  .hasAnchor:hover a.anchor {
+    visibility: hidden;
+  }
+}
+
+
 /* Fixes for fixed navbar --------------------------*/
 
 .contents h1, .contents h2, .contents h3, .contents h4 {
   padding-top: 60px;
   margin-top: -60px;
 }
+
+/* Static header placement on mobile devices */
+@media (max-width: 767px) {
+  .navbar-fixed-top {
+    position: absolute;
+  }
+  .navbar {
+    padding: 0;
+  }
+}
+
 
 /* Sidebar --------------------------*/
 
@@ -107,31 +122,33 @@ table {
 
 /* Syntax highlighting ---------------------------------------------------- */
 
-code {
-  background-color: #f7f7f7;
+pre {
+  word-wrap: normal;
+  word-break: normal;
+  border: 1px solid #eee;
+}
+
+pre, code {
+  background-color: #f8f8f8;
   color: #333;
 }
-code a {
-  color: #375f84;
-}
-
-.warning { color: red; }
-.message { font-weight: bolder; }
-.error   { color: red; font-weight: bolder; }
-
-.fl,.number {color:rgb(21,20,181);}
-.fu,.functioncall {color:#264D66 ;}
-.ch,.st,.string {color:#375D81 ;}
-.kw,.keyword {color:black;}
-.argument {color:#264D66 ;}
-.co,.comment {color: #777;}
-.formalargs {color: #264D66;}
-.eqformalargs {color:#264D66;}
-.slot {font-style:italic;}
-.symbol {color:black ;}
-.prompt {color:black ;}
 
 pre img {
   background-color: #fff;
   display: block;
 }
+
+code a, pre a {
+  color: #375f84;
+}
+
+.fl      {color: #1514b5;}
+.fu      {color: #000000;} /* function */
+.ch,.st  {color: #036a07;} /* string */
+.kw      {color: #264D66;} /* keyword */
+.co      {color: #888888;} /* comment */
+
+.message { color: black;   font-weight: bolder;}
+.error   { color: orange;  font-weight: bolder;}
+.warning { color: #6A0366; font-weight: bolder;}
+

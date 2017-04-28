@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -87,7 +87,7 @@
 <p>Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary</p>
     
 
-    <pre><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>(), <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
@@ -130,7 +130,7 @@ message when there are multiple layers, or give an error if there are no layers 
       <th>type</th>
       <td><p>integer; ISO number of desired simple feature type; see details. If left zero, and <code>promote_to_multi</code>
 is <code>TRUE</code>, in case of mixed feature geometry
-types, conversion to the highest numeric type value found will be attempted. Different values for each geometry column
+types, conversion to the highest numeric type value found will be attempted. A vector with different values for each geometry column
 can be given.</p></td>
     </tr>
     <tr>
@@ -181,7 +181,8 @@ layer names, each with their geometry type(s). Note that the number of layers ma
     <p>for <code>geometry_column</code>, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code>
 values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value
 may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.</p>
+<p>In case of problems reading shapefiles from USB drives on OSX, please see <a href = 'https://github.com/edzer/sfr/issues/252'>https://github.com/edzer/sfr/issues/252</a>.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.</p>
 <p>if <code>table</code> is not given but <code>query</code> is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)</p>
@@ -235,22 +236,22 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;                     
 #&gt;                     
 #&gt;                     </div><div class='input'>
-<span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># library(sp)</span>
-<span class='co'># example(meuse, ask = FALSE, echo = FALSE)</span>
-<span class='co'># st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",</span>
-<span class='co'>#      layer_options = "OVERWRITE=true")</span>
-<span class='co'># st_meuse = st_read("PG:dbname=postgis", "meuse")</span>
-<span class='co'># summary(st_meuse)</span>
-<span class='co'>## ---------------------------------------------</span>
-<span class='co'>## Not run: ------------------------------------</span>
-<span class='co'># library(RPostgreSQL)</span>
-<span class='co'># conn = dbConnect(PostgreSQL(), dbname = "postgis")</span>
-<span class='co'># x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")</span>
-<span class='co'># x = st_read_db(conn, table = "public.meuse")</span>
-<span class='co'># print(st_crs(x)) # SRID resolved by the database, not by GDAL!</span>
-<span class='co'># dbDisconnect(conn)</span>
-<span class='co'>## ---------------------------------------------</span></div></pre>
+<span class='fu'>not_run</span>({
+  <span class='fu'>library</span>(<span class='no'>sp</span>)
+  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
+  <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
+  <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
+})
+<span class='fu'>not_run</span>({
+  <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
+  <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
+  <span class='fu'>print</span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
+  <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
+})</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

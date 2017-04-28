@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a rectangular grid of polygons over the bounding box of a sf or sfc object — st_make_grid • sf</title>
+<title>Make a rectangular grid over the bounding box of a sf or sfc object — st_make_grid • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -79,16 +79,16 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a rectangular grid of polygons over the bounding box of a sf or sfc object</h1>
+    <h1>Make a rectangular grid over the bounding box of a sf or sfc object</h1>
     </div>
 
     
-    <p>Make a rectangular grid of polygons over the bounding box of a sf or sfc object</p>
+    <p>Make a rectangular grid over the bounding box of a sf or sfc object</p>
     
 
-    <pre><span class='fu'>st_make_grid</span>(<span class='no'>x</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>2</span>,
+    <pre class="usage"><span class='fu'>st_make_grid</span>(<span class='no'>x</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>2</span>,
   <span class='fl'>4</span>)]))/<span class='no'>n</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>10</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>missing</span>(<span class='no'>x</span>))
-  <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>))</pre>
+  <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"polygons"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -113,15 +113,30 @@
       <th>crs</th>
       <td><p>object of class <code>crs</code></p></td>
     </tr>
+    <tr>
+      <th>what</th>
+      <td><p>character; one of: <code>"polygons"</code>, <code>"corners"</code>, or <code>"centers"</code></p></td>
+    </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>object of class <code>sfc</code> (simple feature geometry list column) with, depending on <code>what</code>,
+rectangular polygons, corner points of these polygons, or center points of these polygons.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"centers"</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"corners"</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>3</span>)</div><img src='st_make_grid-3.png' alt='' width='540' height='400' /></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

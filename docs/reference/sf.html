@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -86,7 +86,7 @@
     <p>Create sf, which extends data.frame-like objects with a simple feature list column</p>
     
 
-    <pre>st_sf(..., agr = NA_agr_, row.names,
+    <pre class="usage">st_sf(..., agr = NA_agr_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision,
   sf_column_name = NULL)
 
@@ -98,7 +98,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>column elements to be binded into an <code>sf</code> object, one of them being of class <code>sfc</code></p></td>
+      <td><p>column elements to be binded into an <code>sf</code> object or a single <code>list</code> or <code>data.frame</code> with such columns; at least one of these columns shall be a geometry list-column of class <code>sfc</code> or be a list-column that can be converted into an <code>sfc</code> by <a href='st_as_sfc.html'>st_as_sfc</a>.</p></td>
     </tr>
     <tr>
       <th>agr</th>
