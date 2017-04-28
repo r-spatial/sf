@@ -14,7 +14,7 @@ st_sf(..., agr = NA_agr_, row.names,
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
 }
 \arguments{
-\item{...}{column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}}
+\item{...}{column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.}
 
 \item{agr}{character vector; see details below.}
 

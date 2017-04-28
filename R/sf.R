@@ -163,8 +163,7 @@ st_set_geometry = function(x, value) {
 
 list_column_to_sfc = function(x) {
 	if (is.list(x)) {
-		try(y <- st_as_sfc(x), silent = TRUE)
-		if (inherits(y, "try-error"))
+		if (inherits(try(y <- st_as_sfc(x), silent = TRUE), "try-error"))
 			x
 		else
 			y
@@ -176,7 +175,7 @@ list_column_to_sfc = function(x) {
 #' 
 #' Create sf, which extends data.frame-like objects with a simple feature list column
 #' @name sf
-#' @param ... column elements to be binded into an \code{sf} object, one of them being of class \code{sfc}
+#' @param ... column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param agr character vector; see details below.
 #' @param row.names row.names for the created \code{sf} object
@@ -195,12 +194,12 @@ list_column_to_sfc = function(x) {
 st_sf = function(..., agr = NA_agr_, row.names, 
 		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {
 	x = list(...)
-	if (length(x) == 1 && inherits(x[[1L]], "data.frame"))
+	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || is.list(x)))
 		x = x[[1L]]
 
 	# find the sfc column(s):
 	all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
-	if (! any(all_sfc_columns)) { # try converting list-columns:
+	if (! any(all_sfc_columns)) { # try to create sfc from list-columns:
 		x = lapply(x, list_column_to_sfc)
 		all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
 		if (! any(all_sfc_columns))

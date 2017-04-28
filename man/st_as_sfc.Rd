@@ -8,6 +8,8 @@
 \alias{st_as_sfc}
 \alias{st_as_sfc.character}
 \alias{st_as_sfc}
+\alias{st_as_sfc.factor}
+\alias{st_as_sfc}
 \alias{st_as_sfc}
 \alias{st_as_sfc.SpatialPoints}
 \alias{st_as_sfc}
@@ -28,6 +30,8 @@
   crs = NA_crs_)
 
 \method{st_as_sfc}{character}(x, crs = NA_integer_, ...)
+
+\method{st_as_sfc}{factor}(x, ...)
 
 st_as_sfc(x, ...)
 
@@ -63,6 +67,8 @@ Convert foreign geometry object to an sfc object
 when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 
 if \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element
+
+if \code{x} is a \code{factor}, it is converted to \code{character}
 }
 \examples{
 wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
