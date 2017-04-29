@@ -187,7 +187,7 @@ st_cast.sf = function(x, to, ..., warn = TRUE, group_or_split = TRUE) {
 			warning("repeating attributes for all sub-geometries for which they may not be constant")
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
 		agr[agr == "identity"] = "constant" # since we splitted
-		x = x[reps,]
+		x = x[reps, , drop = FALSE]
 		stopifnot(nrow(x) == length(geom))
 	}
 	st_geometry(x) = geom
