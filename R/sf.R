@@ -380,41 +380,6 @@ print.sf = function(x, ..., n =
 	invisible(x)
 }
 
-#' Bind rows (features) of sf objects
-#'
-#' Bind rows (features) of sf objects
-#' @param ... objects to bind
-#' @param deparse.level integer; see \link[base]{rbind}
-#' @name bind
-#' @export
-rbind.sf = function(..., deparse.level = 1) {
-	dots = list(...)
-	crs0 = st_crs(dots[[1]])
-	if (length(dots) > 1L) { # check all crs are equal...
-		equal_crs = vapply(dots[-1L], function(x) st_crs(x) == crs0, TRUE)
-		if (!all(equal_crs))
-			stop("arguments have different crs", call. = FALSE)
-	}
-	ret = st_as_sf(base::rbind.data.frame(...), crs = crs0)
-	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = c(st_bbox(ret)) # recompute & strip crs
-	ret
-}
-
-#' Bind columns (variables) of sf objects
-#'
-#' Bind columns (variables) of sf objects
-#' @name bind
-#' @return if \code{cbind} or \code{st_bind_cols} is called with multiple \code{sf} objects, it warns and removes all but the first geometry column from the input objects.
-#' @export
-cbind.sf = function(..., deparse.level = 1)
-	st_sf(base::cbind.data.frame(...))
-
-#' @name bind
-#' @export
-st_bind_cols = function(...) {
-	cbind.sf(...)
-}
-
 #' merge method for sf and data.frame object
 #' 
 #' merge method for sf and data.frame object

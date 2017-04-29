@@ -165,5 +165,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 st_sample(ls, 80)
 st_sample(nc[1:2,], size = c(10,20))
 
-class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
+#class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
+class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
 class(rbind(nc, nc))
+class(cbind(nc, nc))

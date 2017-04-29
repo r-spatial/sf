@@ -59,17 +59,21 @@ ClosePol <- function(mtrx) {
 #' p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), .Dim = c(4L, 2L))
 #' st_polygon(list(p1, p2))
 st_cast.MULTIPOLYGON <- function(x, to, ...) {
-  switch(to, 
-         MULTIPOLYGON = x, 
-         MULTILINESTRING = st_multilinestring(     unlist(Paste0(x), recursive = FALSE, use.names = FALSE)), 
-         MULTIPOINT = st_multipoint(do.call(rbind, Tail1(unlist(Paste0(x), recursive = FALSE, use.names = FALSE)))), 
+	switch(to, 
+		MULTIPOLYGON = x, 
+		MULTILINESTRING = st_multilinestring(     unlist(Paste0(x), recursive = FALSE, use.names = FALSE)), 
+		MULTIPOINT = st_multipoint(do.call(rbind, Tail1(unlist(Paste0(x), recursive = FALSE, use.names = FALSE)))), 
          ## loss, drop to first part
-         POLYGON = {if (length(x) > 1) warning("polygon from first part only"); st_polygon(x[[1L]])}, 
-         LINESTRING = {warning("line from first ring only"); st_linestring(x[[1L]][[1L]])}, 
-         ## loss, drop to first coordinate of first ring of first part
-         POINT = {warning("point from first coordinate only"); st_point(x[[1L]][[1L]][1L, , drop = TRUE])},
-		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
-  )
+		POLYGON = {
+		 	if (length(x) > 1)
+				warning("polygon from first part only")
+			st_polygon(x[[1L]])
+		}, 
+		LINESTRING = {warning("line from first ring only"); st_linestring(x[[1L]][[1L]])}, 
+		## loss, drop to first coordinate of first ring of first part
+		POINT = {warning("point from first coordinate only"); st_point(x[[1L]][[1L]][1L, , drop = TRUE])},
+		GEOMETRYCOLLECTION = st_geometrycollection(list(x))
+	)
 }
 
 #' @name st_cast
@@ -78,18 +82,25 @@ st_cast.MULTIPOLYGON <- function(x, to, ...) {
 #' mls <- st_cast(nc$geometry[[4]], "MULTILINESTRING")
 #' st_sfc(cast_all(mls))
 st_cast.MULTILINESTRING <- function(x, to, ...) {
-  switch(to, 
-         MULTIPOLYGON = st_multipolygon(list(lapply(x, ClosePol))), 
-         MULTILINESTRING = x, 
-         MULTIPOINT = st_multipoint(do.call(rbind, Paste0(x))), 
-         ## loss, drop to first line
-         #POLYGON = {warning("keeping first linestring only"); st_polygon(x[1L])}, 
-         POLYGON = st_polygon(lapply(x, ClosePol)),
-         LINESTRING = {warning("keeping first linestring only"); st_linestring(x[[1L]])},
-         ## loss, drop to first coordinate of first line 
-         POINT = {warning("keeping first coordinate only"); st_point(x[[1L]][1L, , drop = TRUE])},
-		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
-  )
+	switch(to, 
+		MULTIPOLYGON = st_multipolygon(list(lapply(x, ClosePol))), 
+		MULTILINESTRING = x, 
+		MULTIPOINT = st_multipoint(do.call(rbind, Paste0(x))), 
+		## loss, drop to first line
+		#POLYGON = {warning("keeping first linestring only"); st_polygon(x[1L])}, 
+		POLYGON = st_polygon(lapply(x, ClosePol)),
+		LINESTRING = {
+			if (length(x) > 1)
+				warning("keeping first linestring only")
+			st_linestring(x[[1L]])
+		},
+		## loss, drop to first coordinate of first line 
+		POINT = {
+			warning("keeping first coordinate only")
+			st_point(x[[1L]][1L, , drop = TRUE])
+		},
+		GEOMETRYCOLLECTION = st_geometrycollection(list(x))
+	)
 }
 
 #' @name st_cast

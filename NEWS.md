@@ -1,5 +1,7 @@
 # version 0.4-2
 
+* build proper support for `cbind` and `rbind` methods for `sf`, which work (as documented) when _all_ arguments are of class `sf`; `dplyr::bind_cols` or `st_sf(data.frame(sf, df))` work for binding `data.frame`s to an `sf` object.
+
 * units support for function arguments of `st_segmentize` and `st_line_sample`
 
 * document problem reading shapefiles from USB drives on OSX, #252

@@ -57,6 +57,7 @@ Collate:
 	sfc.R
 	sfg.R
 	sf.R
+	bind.R
 	wkb.R
 	wkt.R
 	plot.R
