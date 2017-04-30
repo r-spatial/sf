@@ -12,8 +12,7 @@ test_that("we can subset sf objects", {
 
   a = c("x", "y")
   g = st_sfc(pt1, pt2)
-  expect_warning(st_sf(a, g, g), 
-  "more than one geometry column: taking `g'; use `sf_column_name=' to specify a different column.")
+  expect_silent(xxx <- st_sf(a, g, g)) 
   expect_silent(st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2"))
   x = st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2")
   expect_silent(st_geometry(x) <- "geom2")
@@ -57,7 +56,7 @@ test_that("rbind/cbind work", {
   # don't warn when replacing crs with identical value:
   if (version$major == "3") {
   	if (version$minor >= "3.0") {
-      expect_warning(cbind(x, x, x))
+      expect_silent(xxx <- cbind(x, x, x))
       rbind(x, x, x)
 	}
   }

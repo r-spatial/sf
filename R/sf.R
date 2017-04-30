@@ -181,9 +181,8 @@ list_column_to_sfc = function(x) {
 #' @param row.names row.names for the created \code{sf} object
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
 #' @param precision numeric; see \link{st_as_binary}
-#' @param sf_column_name character; name of the list-column with simple feature geometries, in case 
-#' there is more than one; if there is more than one and \code{sf_column_name} is not given, the 
-#' first one is selected and a warning is given
+#' @param sf_column_name character; name of the active list-column with simple feature geometries; in case 
+#' there are more than one and \code{sf_column_name} is not given, the first one is taken.
 #' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.  
 #' @examples
 #' g = st_sfc(st_point(1:2))
@@ -217,20 +216,18 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		make.names(arg_nm[all_sfc_columns])
 	}
 
-	if (!is.null(sf_column_name)) {
+	if (! is.null(sf_column_name)) {
 		stopifnot(sf_column_name %in% all_sfc_names)
 		sf_column = match(sf_column_name, all_sfc_names)
 		sfc_name = sf_column_name
 	} else {
-		if (length(all_sfc_columns) > 1L)
-			warning(paste0("more than one geometry column: taking `", all_sfc_names[1L],
-				"'; use `sf_column_name=' to specify a different column."))
 		sf_column = all_sfc_columns[1L]
 		sfc_name = all_sfc_names[1L]
 	}
 
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
+
 	df = if (length(x) == 1) # ONLY sfc
 			data.frame(row.names = row.names)
 		else {

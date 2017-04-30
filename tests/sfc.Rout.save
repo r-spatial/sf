@@ -728,10 +728,7 @@ POINT(-81.6410816551367 36.3952045484235)
 [1] "sf"         "data.frame"
 > class(cbind(nc, nc))
 [1] "sf"         "data.frame"
-Warning message:
-In st_sf(data.frame(...), sf_column_name = sf_column_name) :
-  more than one geometry column: taking `geometry'; use `sf_column_name=' to specify a different column.
 > 
 > proc.time()
    user  system elapsed 
-  1.632   0.296   1.638 
+  1.480   0.272   1.441 

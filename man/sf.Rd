@@ -26,9 +26,8 @@ st_sf(..., agr = NA_agr_, row.names,
 
 \item{precision}{numeric; see \link{st_as_binary}}
 
-\item{sf_column_name}{character; name of the list-column with simple feature geometries, in case 
-there is more than one; if there is more than one and \code{sf_column_name} is not given, the 
-first one is selected and a warning is given}
+\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case 
+there are more than one and \code{sf_column_name} is not given, the first one is taken.}
 
 \item{x}{object of class \code{sf}}
 
