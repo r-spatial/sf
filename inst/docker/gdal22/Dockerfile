@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
 ENV GDAL_VERSION 2.2.0
-ENV GDAL_VERSION_NAME 2.2.0beta1
+ENV GDAL_VERSION_NAME 2.2.0RC1
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
@@ -47,7 +47,7 @@ RUN git clone https://github.com/edzer/sfr.git
 RUN R CMD build --no-build-vignettes --no-manual sfr
 RUN Rscript -e 'install.packages(c("units"), repos = "https://cloud.r-project.org")'
 RUN R CMD INSTALL sf_*tar.gz
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark"), repos = "https://cloud.r-project.org")'
 
 RUN apt-get install -y subversion
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
