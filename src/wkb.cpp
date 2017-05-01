@@ -20,8 +20,8 @@
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
 
-Rcpp::List read_data(const unsigned char **pt, bool EWKB, int endian, bool addclass, 
-	int *type, uint32_t *srid);
+Rcpp::List read_data(const unsigned char **pt, bool EWKB, bool spatialite, int endian, 
+	bool addclass, int *type, uint32_t *srid);
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
@@ -89,6 +89,21 @@ Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
 	return Rcpp::CharacterVector::create(os.str());
 }
 
+void read_spatialite_header(const unsigned char **pt, uint32_t *srid, bool swap) {
+	// we're at byte 3 now:
+	memcpy(srid, *pt, sizeof(uint32_t));
+	if (swap)
+		*srid = swap_endian<uint32_t>(*srid);
+	(*pt) += 4;
+
+	(*pt) += 32; // skip header
+	if (**pt != 0x7c) { // verify special marker; if not there, raise error
+		Rcpp::Rcout << "byte 38 should be 0x7c, but is " << **pt << std::endl;
+		throw std::range_error("invalid spatialite header");
+	}
+	(*pt) += 1; // skip marker
+}
+
 void read_gpkg_header(const unsigned char **pt, uint32_t *srid, int endian) {
 	// http://www.geopackage.org/spec/#gpb_format
 	(*pt) += 3; // 'G', 'P', version
@@ -126,7 +141,7 @@ Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool s
 	(*pt) += 4;
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++) {
-		Rcpp::List lst = read_data(pt, EWKB, endian, false, NULL, NULL);
+		Rcpp::List lst = read_data(pt, EWKB, false, endian, false, NULL, NULL);
 		Rcpp::NumericVector vec = lst[0];
 		for (int j = 0; j < n_dims; j++)
 			ret(i,j) = vec(j);
@@ -147,7 +162,7 @@ Rcpp::List read_geometrycollection(const unsigned char **pt, int n_dims, bool sw
 	(*pt) += 4;
 	Rcpp::List ret(nlst);
 	for (size_t i = 0; i < nlst; i++)
-		ret[i] = read_data(pt, EWKB, endian, isGC, NULL, NULL)[0];
+		ret[i] = read_data(pt, EWKB, false, endian, isGC, NULL, NULL)[0];
 	if (cls.size() == 3)
 		ret.attr("class") = cls;
 	if (empty != NULL)
@@ -214,8 +229,8 @@ Rcpp::List read_matrix_list(const unsigned char **pt, int n_dims, bool swap,
 	return ret;
 }
 
-Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0, 
-		bool addclass = true, int *type = NULL, uint32_t *srid = NULL) {
+Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, bool spatialite = false,
+		int endian = 0, bool addclass = true, int *type = NULL, uint32_t *srid = NULL) {
 /*
  pt: handle to the memory buffer
  EWKB: should we read EWKB, as opposed to ISO WKB?
@@ -230,8 +245,15 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 	if (srid != NULL && (*pt)[0] == 'G' && (*pt)[1] == 'P') // GPKG header? skip:
 		read_gpkg_header(pt, srid, endian);
 
+	if (spatialite)
+		(*pt)++; // starting 0x00 contains no information
+
 	bool swap = ((int) (**pt) != (int) endian); // endian check
 	(*pt)++;
+
+	if (spatialite)
+		read_spatialite_header(pt, srid, swap);
+
 	// read type:
 	uint32_t wkbType;
 	memcpy(&wkbType, *pt, sizeof(uint32_t));
@@ -359,7 +381,7 @@ Rcpp::List read_data(const unsigned char **pt, bool EWKB = false, int endian = 0
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) {
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, int endian = 0) {
 	Rcpp::List output(wkb_list.size());
 
 	int type = 0, last_type = 0, n_types = 0, n_empty = 0;
@@ -369,7 +391,7 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 		Rcpp::checkUserInterrupt();
 		Rcpp::RawVector raw = wkb_list[i];
 		const unsigned char *pt = &(raw[0]);
-		output[i] = read_data(&pt, EWKB, endian, true, &type, &srid)[0];
+		output[i] = read_data(&pt, EWKB, spatialite, endian, true, &type, &srid)[0];
 		if (type == 0)
 			n_empty++;
 		if (n_types <= 1 && type != last_type) {
@@ -379,7 +401,7 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, int endian = 0) 
 	}
 	output.attr("single_type") = n_types <= 1; // if 0, we have only empty geometrycollections
 	output.attr("n_empty") = (int) n_empty;
-	if (EWKB == true && srid != 0)
+	if ((EWKB || spatialite) && srid != 0)
 		output.attr("srid") = (int) srid;
 	return output;
 }

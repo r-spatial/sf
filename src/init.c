@@ -43,7 +43,7 @@ extern SEXP sf_CPL_proj_is_valid(SEXP);
 extern SEXP sf_CPL_proj_version(SEXP);
 extern SEXP sf_CPL_raw_to_hex(SEXP);
 extern SEXP sf_CPL_read_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP sf_CPL_read_wkb(SEXP, SEXP, SEXP);
+extern SEXP sf_CPL_read_wkb(SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_roundtrip(SEXP);
 extern SEXP sf_CPL_sfc_from_wkt(SEXP);
 extern SEXP sf_CPL_transform(SEXP, SEXP);
@@ -87,7 +87,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"sf_CPL_proj_version",            (DL_FUNC) &sf_CPL_proj_version,             1},
     {"sf_CPL_raw_to_hex",              (DL_FUNC) &sf_CPL_raw_to_hex,               1},
     {"sf_CPL_read_ogr",                (DL_FUNC) &sf_CPL_read_ogr,                 7},
-    {"sf_CPL_read_wkb",                (DL_FUNC) &sf_CPL_read_wkb,                 3},
+    {"sf_CPL_read_wkb",                (DL_FUNC) &sf_CPL_read_wkb,                 4},
     {"sf_CPL_roundtrip",               (DL_FUNC) &sf_CPL_roundtrip,                1},
     {"sf_CPL_sfc_from_wkt",            (DL_FUNC) &sf_CPL_sfc_from_wkt,             1},
     {"sf_CPL_transform",               (DL_FUNC) &sf_CPL_transform,                2},

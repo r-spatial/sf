@@ -101,7 +101,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
 	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
-	return CPL_read_wkb(out, true, native_endian());
+	return CPL_read_wkb(out, true, false, native_endian());
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {

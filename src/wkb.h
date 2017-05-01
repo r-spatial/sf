@@ -18,7 +18,7 @@
 #define SF_TIN                16
 #define SF_Triangle           17
 
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, int endian);
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite, int endian);
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, int endian, Rcpp::CharacterVector dim, double precision);
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 int native_endian(void);

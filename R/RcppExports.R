@@ -161,8 +161,8 @@ CPL_raw_to_hex <- function(raw) {
     .Call('sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-CPL_read_wkb <- function(wkb_list, EWKB = FALSE, endian = 0L) {
-    .Call('sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, endian)
+CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE, endian = 0L) {
+    .Call('sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite, endian)
 }
 
 CPL_write_wkb <- function(sfc, EWKB = FALSE, endian = 0L, dim = "XY", precision = 0.0) {

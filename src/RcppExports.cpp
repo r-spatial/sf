@@ -489,15 +489,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_wkb
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, int endian);
-RcppExport SEXP sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP endianSEXP) {
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite, int endian);
+RcppExport SEXP sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP, SEXP endianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type wkb_list(wkb_listSEXP);
     Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
+    Rcpp::traits::input_parameter< bool >::type spatialite(spatialiteSEXP);
     Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, endian));
+    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, spatialite, endian));
     return rcpp_result_gen;
 END_RCPP
 }

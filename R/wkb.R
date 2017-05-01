@@ -22,7 +22,8 @@ skip0x = function(x) {
 }
 
 #' @name st_as_sfc
-#' @param EWKB logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
+#' @param EWKB logical; if TRUE, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
+#' @param spatialite logical; if \code{TRUE}, assume the WKB is assumed to be in the spatialite dialect, see \url{https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html}
 #' @param pureR logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).
 #' @details when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 #' @examples
@@ -31,7 +32,11 @@ skip0x = function(x) {
 #' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
-st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE, crs = NA_crs_) {
+	if (EWKB && spatialite)
+		stop("arguments EWKB and spatialite cannot both be TRUE")
+	if (spatialite && pureR)
+		stop("pureR implementation for spatialite reading is not available")
     if (all(vapply(x, is.character, TRUE))) {
 		x <- if (pureR)
 				structure(lapply(x, hex_to_raw), class = "WKB")
@@ -44,8 +49,8 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, pureR = FALSE, crs = NA_crs_) {
 	ret = if (pureR)
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
-			CPL_read_wkb(x, EWKB = EWKB, endian = as.integer(.Platform$endian == "little"))
-	if (is.na(crs) && EWKB && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
+			CPL_read_wkb(x, EWKB, spatialite, endian = as.integer(.Platform$endian == "little"))
+	if (is.na(crs) && (EWKB || spatialite) && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
 		crs = attr(ret, "srid")
 	if (! is.na(st_crs(crs))) {
 		attr(ret, "srid") = NULL # remove

@@ -409,12 +409,12 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 		return(st_sfc(crs = crs))
 
 	if (is.raw(x[[1]]))
-		st_as_sfc(structure(x, class = "WKB"))
+		st_as_sfc(structure(x, class = "WKB"), ...)
 	else if (is.character(x[[1]])) { # hex wkb or wkt:
 		ch12 = substr(x[[1]], 1, 2)
 		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
-			st_as_sfc(structure(x, class = "WKB"))
+			st_as_sfc(structure(x, class = "WKB"), ...)
 		else
-			st_as_sfc(unlist(x)) # wkt
+			st_as_sfc(unlist(x), ...) # wkt
 	}
 }

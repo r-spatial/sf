@@ -36,7 +36,7 @@ Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 		lwfree((void *) wkb);
 		wkblst[i] = raw;
 	}
-	return CPL_read_wkb(wkblst, true, native_endian());
+	return CPL_read_wkb(wkblst, true, false, native_endian());
 }
 
 #else

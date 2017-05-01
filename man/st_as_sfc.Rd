@@ -26,8 +26,8 @@
 \usage{
 \method{st_as_sfc}{list}(x, ..., crs = NA_crs_)
 
-\method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, pureR = FALSE,
-  crs = NA_crs_)
+\method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, spatialite = FALSE,
+  pureR = FALSE, crs = NA_crs_)
 
 \method{st_as_sfc}{character}(x, crs = NA_integer_, ...)
 
@@ -54,7 +54,9 @@ st_as_sfc(x, ...)
 
 \item{crs}{integer or character; coordinate reference system for the geometry, see \link{st_crs}}
 
-\item{EWKB}{logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)}
+\item{EWKB}{logical; if TRUE, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)}
+
+\item{spatialite}{logical; if \code{TRUE}, assume the WKB is assumed to be in the spatialite dialect, see \url{https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html}}
 
 \item{pureR}{logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).}
 
