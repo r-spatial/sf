@@ -259,9 +259,9 @@ st_sf = function(..., agr = NA_agr_, row.names,
 #' @param x object of class \code{sf}
 #' @param i record selection, see \link{[.data.frame}
 #' @param j variable selection, see \link{[.data.frame}
-#' @param drop whether to drop to simpler (e.g. vector) representation, see \link{[.data.frame}
+#' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticy and return a \code{sf} object.
 #' @param op function; geometrical binary predicate function to apply when \code{i} is a simple feature object
-#' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped, an \code{sfc} object if only the geometry column is selected, otherwise the behavior depending on \code{drop} is identical to that of \link{[.data.frame}.
+#' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped (\code{drop=TRUE}), an \code{sfc} object if only the geometry column is selected, otherwise returns an \code{sf} object; see also \link{[.data.frame}.
 #' @examples
 #' g = st_sfc(st_point(1:2), st_point(3:4))
 #' s = st_sf(a=3:4, g)
