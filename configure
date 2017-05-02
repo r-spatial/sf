@@ -3967,7 +3967,7 @@ then
   GEOS_CLIBS=`${GEOS_CONFIG} --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
-  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --libs`
+  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --static-clibs | sed 's/-m/-lm/g'`
   GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -4031,7 +4031,6 @@ int main() {
 #endif
 _EOCONF
 
-
 PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
 
 PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
@@ -4040,8 +4039,6 @@ if test "${NEED_DEPS}" = yes; then
    PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS}"
 
 fi
-PKG_LIBS="${PKG_LIBS} ${GEOS_CLIBS} ${GEOS_DEP_CLIBS} -lproj"
-
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
@@ -4050,26 +4047,47 @@ CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with -lgeos_c" >&5
-$as_echo_n "checking geos: linking with -lgeos_c... " >&6; }
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_CLIBS}" >&5
+$as_echo_n "checking geos: linking with ${GEOS_CLIBS}... " >&6; }
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
-geosok=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ geosok=no
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 else
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ PKG_LIBS="${PKG_LIBS} ${GEOS_CLIBS}"
+
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 fi
 
 if test "${geosok}" = no; then
-   cat errors.txt
-   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_DEP_CLIBS}" >&5
+$as_echo_n "checking geos: linking with ${GEOS_DEP_CLIBS}... " >&6; }
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  if test `echo $?` -ne 0 ; then
+    geosok=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    cat errors.txt
+    { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
 $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-   as_fn_error $? "initGEOS_r not found in libgeos_c." "$LINENO" 5
+    as_fn_error $? "initGEOS_r not found in libgeos_c." "$LINENO" 5
+  else
+    PKG_LIBS="${PKG_LIBS} ${GEOS_DEP_CLIBS}"
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  fi
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
+
+#
+# add -lproj
+#
+PKG_LIBS="${PKG_LIBS} -lproj"
+
 
 #
 # liblwgeom

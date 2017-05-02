@@ -48,8 +48,8 @@ delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data 
 Creating layer . failed.
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 531 SKIPPED: 0 FAILED: 0
+OK: 528 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.752   0.408   8.336 
+  6.304   0.392  10.214 

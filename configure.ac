@@ -504,7 +504,7 @@ then
   GEOS_CLIBS=`${GEOS_CONFIG} --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
-  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --libs`
+  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --static-clibs | sed 's/-m/-lm/g'`
   GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
   AC_MSG_RESULT(yes)
 else
@@ -549,13 +549,11 @@ int main() {
 #endif
 _EOCONF]
 
-
 AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
 AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
 if test "${NEED_DEPS}" = yes; then
    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS}"])
 fi
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_CLIBS} ${GEOS_DEP_CLIBS} -lproj"])
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
@@ -564,22 +562,37 @@ CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
-AC_MSG_CHECKING(geos: linking with -lgeos_c)
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS} 2> errors.txt
+AC_MSG_CHECKING(geos: linking with ${GEOS_CLIBS})
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
-geosok=no
-AC_MSG_RESULT(no)
+ geosok=no
+ AC_MSG_RESULT(no)
 else
-AC_MSG_RESULT(yes)
+ AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_CLIBS}"])
+ AC_MSG_RESULT(yes)
 fi
 
 if test "${geosok}" = no; then
-   cat errors.txt
-   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-   AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
+  AC_MSG_CHECKING(geos: linking with ${GEOS_DEP_CLIBS})
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  if test `echo $?` -ne 0 ; then
+    geosok=no
+    AC_MSG_RESULT(no)
+    cat errors.txt
+    AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+    AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
+  else
+    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_DEP_CLIBS}"])
+    AC_MSG_RESULT(yes)
+  fi
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
+
+#
+# add -lproj
+#
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
 
 #
 # liblwgeom
