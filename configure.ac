@@ -501,10 +501,10 @@ fi
 AC_MSG_CHECKING(geos-config usability)
 if test `${GEOS_CONFIG} --version`
 then
-  GEOS_CLIBS=`geos-config --clibs`
+  GEOS_CLIBS=`${GEOS_CONFIG} --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
-  GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
+  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --libs`
   GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
   AC_MSG_RESULT(yes)
 else
@@ -551,12 +551,11 @@ _EOCONF]
 
 
 AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"])
-AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_CLIBS}"])
+AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
 if test "${NEED_DEPS}" = yes; then
-   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"])
+   AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GDAL_DEP_LIBS}"])
 fi
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
-
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_CLIBS} ${GEOS_DEP_CLIBS} -lproj"])
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
@@ -581,10 +580,6 @@ if test "${geosok}" = no; then
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
-
-if test "${geosok}" = no; then
-   AC_MSG_ERROR([libgeos_c not found in given locations.])
-fi
 
 #
 # liblwgeom
@@ -611,8 +606,6 @@ if test "x$with_lwgeom" != xno; then
      [])])
  fi
 fi
-
-
 
 #
 # concluding substitution

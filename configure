@@ -3964,10 +3964,10 @@ fi
 $as_echo_n "checking geos-config usability... " >&6; }
 if test `${GEOS_CONFIG} --version`
 then
-  GEOS_CLIBS=`geos-config --clibs`
+  GEOS_CLIBS=`${GEOS_CONFIG} --clibs`
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
-  GEOS_DEP_CLIBS="-lgeos_c -lgeos -lm"
+  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --libs`
   GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -4034,14 +4034,13 @@ _EOCONF
 
 PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
 
-PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS} ${GEOS_CLIBS}"
+PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
 
 if test "${NEED_DEPS}" = yes; then
-   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS} ${GEOS_DEP_CLIBS}"
+   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS}"
 
 fi
-PKG_LIBS="${PKG_LIBS} -lproj"
-
+PKG_LIBS="${PKG_LIBS} ${GEOS_CLIBS} ${GEOS_DEP_CLIBS} -lproj"
 
 
 # honor PKG_xx overrides
@@ -4071,10 +4070,6 @@ $as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
 fi
 
 rm -f geos_test errors.txt geos_test.cpp
-
-if test "${geosok}" = no; then
-   as_fn_error $? "libgeos_c not found in given locations." "$LINENO" 5
-fi
 
 #
 # liblwgeom
@@ -4159,8 +4154,6 @@ fi
 fi
  fi
 fi
-
-
 
 #
 # concluding substitution
