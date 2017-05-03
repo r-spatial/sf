@@ -1,4 +1,5 @@
 # version 0.4-2
+* `st_relate` gets a `pattern` parameter, same as `rgeos::gRelate`, #234
 
 * (experimental) support for direct reading of spatialite (sqlite) geometry blobs
 
