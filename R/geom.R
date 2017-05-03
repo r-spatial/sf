@@ -95,14 +95,15 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 # returning matrix, distance or relation string -- the work horse is:
 
-st_geos_binop = function(op = "intersects", x, y, par = 0.0, sparse = TRUE, prepared = FALSE) {
+st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_character_, 
+		sparse = TRUE, prepared = FALSE) {
 	if (missing(y))
 		y = x
 	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) 
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, sparse, prepared)
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, sparse, prepared)
 	if (sparse)
 		ret
 	else
@@ -147,7 +148,8 @@ st_distance = function(x, y, dist_fun) {
 }
 
 #' @name geos
-#' @return st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
+#' @param pattern character; define the pattern to match to, see details.
+#' @return in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical or sparse index list with matches to the given pattern; see also \url{https://en.wikipedia.org/wiki/DE-9IM}.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -156,7 +158,20 @@ st_distance = function(x, y, dist_fun) {
 #' pol2 = pol1 + 1
 #' pol3 = pol1 + 2
 #' st_relate(st_sfc(p1, p2), st_sfc(pol1, pol2, pol3))
-st_relate	= function(x, y) st_geos_binop("relate", x, y, sparse = FALSE)
+#' sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+#' grd = st_make_grid(sfc, n = c(3,3))
+#' st_intersects(grd)
+#' st_relate(grd, pattern = "****1****") # sides, not corners, internals
+#' st_relate(grd, pattern = "****0****") # only corners touch
+#' st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
+#' st_rook(grd)
+st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
+	if (!is.na(pattern)) {
+		stopifnot(is.character(pattern) && length(pattern) == 1 && nchar(pattern) == 9)
+		st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse)
+	} else
+		st_geos_binop("relate", x, y, sparse = FALSE)
+}
 
 #' @name geos
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?

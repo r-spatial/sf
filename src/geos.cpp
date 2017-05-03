@@ -185,7 +185,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
-		bool sparse = true, bool prepared = false) {
+		std::string pattern = "", bool sparse = true, bool prepared = false) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -233,6 +233,18 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				Rcpp::LogicalVector rowi(sfc1.length()); 
 				for (int j = 0; j < sfc1.length(); j++) 
 					rowi(j) = chk_(GEOSEqualsExact_r(hGEOSCtxt, gmv0[i], gmv1[j], par));
+				if (! sparse)
+					densemat(i,_) = rowi;
+				else
+					sparsemat[i] = get_which(rowi);
+				R_CheckUserInterrupt();
+			}
+		} else if (op == "relate_pattern") { // needing pattern
+			for (int i = 0; i < sfc0.length(); i++) { // row
+				Rcpp::LogicalVector rowi(sfc1.length()); 
+				for (int j = 0; j < sfc1.length(); j++) 
+					rowi(j) = chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[j], 
+						pattern.c_str()));
 				if (! sparse)
 					densemat(i,_) = rowi;
 				else
@@ -561,13 +573,13 @@ std::string CPL_geos_version(bool b = false) {
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, false)[0];
+	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, "", false)[0];
 	return out;
 }
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, false)[0];
+	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, "", false)[0];
 	return out;	
 }
 

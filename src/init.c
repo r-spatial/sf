@@ -19,7 +19,7 @@ extern SEXP sf_CPL_gdal_init();
 extern SEXP sf_CPL_gdal_linestring_sample(SEXP, SEXP);
 extern SEXP sf_CPL_gdal_segmentize(SEXP, SEXP);
 extern SEXP sf_CPL_gdal_version(SEXP);
-extern SEXP sf_CPL_geos_binop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP sf_CPL_geos_binop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_geos_dist(SEXP, SEXP);
 extern SEXP sf_CPL_geos_is_simple(SEXP);
 extern SEXP sf_CPL_geos_is_valid(SEXP, SEXP);
@@ -63,7 +63,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"sf_CPL_gdal_linestring_sample",  (DL_FUNC) &sf_CPL_gdal_linestring_sample,   2},
     {"sf_CPL_gdal_segmentize",         (DL_FUNC) &sf_CPL_gdal_segmentize,          2},
     {"sf_CPL_gdal_version",            (DL_FUNC) &sf_CPL_gdal_version,             1},
-    {"sf_CPL_geos_binop",              (DL_FUNC) &sf_CPL_geos_binop,               6},
+    {"sf_CPL_geos_binop",              (DL_FUNC) &sf_CPL_geos_binop,               7},
     {"sf_CPL_geos_dist",               (DL_FUNC) &sf_CPL_geos_dist,                2},
     {"sf_CPL_geos_is_simple",          (DL_FUNC) &sf_CPL_geos_is_simple,           1},
     {"sf_CPL_geos_is_valid",           (DL_FUNC) &sf_CPL_geos_is_valid,            2},

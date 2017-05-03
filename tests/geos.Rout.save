@@ -59,8 +59,8 @@ Units: m
 > ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
 + "covers", "covered_by", "equals_exact")
 > for (op in ops) {
-+ 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, FALSE)
-+ 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE)
++ 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, FALSE)
++ 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE)
 + }
 > 
 > ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps",
@@ -69,8 +69,8 @@ Units: m
 > df$equal = NA
 > for (op in ops)
 + 	df[df$ops == op, "equal"] = identical(
-+ 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE, FALSE),
-+ 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, TRUE,  TRUE)
++ 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE, FALSE),
++ 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE,  TRUE)
 + 	)
 > df	
          ops equal
@@ -185,6 +185,123 @@ LINESTRING(0 0, 1 1, 2 0)
 > all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
 [1] TRUE
 > 
+> # check use of pattern in st_relate:
+> sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+> grd = st_make_grid(sfc, n = c(3,3))
+> st_intersects(grd)
+[[1]]
+[1] 1 2 4 5
+
+[[2]]
+[1] 1 2 3 4 5 6
+
+[[3]]
+[1] 2 3 5 6
+
+[[4]]
+[1] 1 2 4 5 7 8
+
+[[5]]
+[1] 1 2 3 4 5 6 7 8 9
+
+[[6]]
+[1] 2 3 5 6 8 9
+
+[[7]]
+[1] 4 5 7 8
+
+[[8]]
+[1] 4 5 6 7 8 9
+
+[[9]]
+[1] 5 6 8 9
+
+> st_relate(grd, pattern = "****1****")
+[[1]]
+[1] 1 2 4
+
+[[2]]
+[1] 1 2 3 5
+
+[[3]]
+[1] 2 3 6
+
+[[4]]
+[1] 1 4 5 7
+
+[[5]]
+[1] 2 4 5 6 8
+
+[[6]]
+[1] 3 5 6 9
+
+[[7]]
+[1] 4 7 8
+
+[[8]]
+[1] 5 7 8 9
+
+[[9]]
+[1] 6 8 9
+
+> st_relate(grd, pattern = "****0****")
+[[1]]
+[1] 5
+
+[[2]]
+[1] 4 6
+
+[[3]]
+[1] 5
+
+[[4]]
+[1] 2 8
+
+[[5]]
+[1] 1 3 7 9
+
+[[6]]
+[1] 2 8
+
+[[7]]
+[1] 5
+
+[[8]]
+[1] 4 6
+
+[[9]]
+[1] 5
+
+> st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
+> st_rook(grd)
+[[1]]
+[1] 2 4
+
+[[2]]
+[1] 1 3 5
+
+[[3]]
+[1] 2 6
+
+[[4]]
+[1] 1 5 7
+
+[[5]]
+[1] 2 4 6 8
+
+[[6]]
+[1] 3 5 9
+
+[[7]]
+[1] 4 8
+
+[[8]]
+[1] 5 7 9
+
+[[9]]
+[1] 6 8
+
+> 
 > proc.time()
    user  system elapsed 
-  3.020   0.272   3.019 
+   2.86    0.30    2.85 

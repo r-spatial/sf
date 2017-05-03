@@ -258,8 +258,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_binop
-Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, bool sparse, bool prepared);
-RcppExport SEXP sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP sparseSEXP, SEXP preparedSEXP) {
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool sparse, bool prepared);
+RcppExport SEXP sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP sparseSEXP, SEXP preparedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -267,9 +267,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< double >::type par(parSEXP);
+    Rcpp::traits::input_parameter< std::string >::type pattern(patternSEXP);
     Rcpp::traits::input_parameter< bool >::type sparse(sparseSEXP);
     Rcpp::traits::input_parameter< bool >::type prepared(preparedSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, sparse, prepared));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, pattern, sparse, prepared));
     return rcpp_result_gen;
 END_RCPP
 }

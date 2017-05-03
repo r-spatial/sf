@@ -81,7 +81,7 @@ st_is_simple(x)
 
 st_distance(x, y, dist_fun)
 
-st_relate(x, y)
+st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
 
 st_intersects(x, y, sparse = TRUE, prepared = TRUE)
 
@@ -148,6 +148,8 @@ st_line_sample(x, n, density, type = "regular", sample = NULL)
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
+\item{pattern}{character; define the pattern to match to, see details.}
+
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 
 \item{prepared}{logical; prepare geometry for x, before looping over y?}
@@ -193,7 +195,7 @@ st_is_simple returns a logical vector
 
 st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 
-st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting.
+in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical or sparse index list with matches to the given pattern; see also \url{https://en.wikipedia.org/wiki/DE-9IM}.
 
 the binary logical functions (\code{st_intersects} up to \code{st_equals_exact}) return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
 
@@ -244,6 +246,13 @@ pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
 pol2 = pol1 + 1
 pol3 = pol1 + 2
 st_relate(st_sfc(p1, p2), st_sfc(pol1, pol2, pol3))
+sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+grd = st_make_grid(sfc, n = c(3,3))
+st_intersects(grd)
+st_relate(grd, pattern = "****1****") # sides, not corners, internals
+st_relate(grd, pattern = "****0****") # only corners touch
+st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
+st_rook(grd)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
