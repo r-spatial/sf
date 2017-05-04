@@ -298,7 +298,10 @@ st_precision.sfc <- function(x) {
 #' Set precision
 #' 
 #' @name st_precision
-#' @param precision numeric; see \link{st_as_binary}
+#' @param precision numeric; see \link{st_as_binary} for how to do this.
+#' @details setting a precision has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write}, \link{write_sf} or \link{st_write_db}, and (if present) for liblwgeom (\link{st_make_valid}). Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
+#'
+#' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
 #' @examples 
 #' x <- st_sfc(st_point(c(pi, pi)))
 #' st_precision(x)
