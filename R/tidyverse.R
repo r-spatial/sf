@@ -143,7 +143,7 @@ select.sf <- if (requireNamespace("dplyr", quietly = TRUE) && utils::packageVers
   }
 } else {
   function(.data, ...) {
-	stop("requires dplyr > 0.5.0")
+	stop("requires dplyr > 0.5.0: install that first, then reinstall sf")
   }
 }
 
