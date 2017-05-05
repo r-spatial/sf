@@ -50,6 +50,8 @@
 \alias{dplyr}
 \alias{sample_frac.sf}
 \alias{dplyr}
+\alias{nest_.sf}
+\alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
 \alias{left_join.sf}
@@ -115,6 +117,8 @@ sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
 sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
   .env = parent.frame())
 
+nest_.sf(data, key_col, nest_cols)
+
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
@@ -167,6 +171,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{weight}{see original function docs}
 
 \item{.env}{see original function docs}
+
+\item{nest_cols}{see \link[tidyr]{nest}}
 
 \item{x}{see \link[dplyr]{left_join}}
 

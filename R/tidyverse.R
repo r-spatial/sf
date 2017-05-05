@@ -268,6 +268,16 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 	st_sf(NextMethod())
 }
 
+#' @name dplyr
+#' @param nest_cols see \link[tidyr]{nest}
+#' @export
+nest_.sf <- function(data, key_col, nest_cols) {
+	class(data) <- setdiff(class(data), "sf")
+	ret = NextMethod()
+	ret$data = lapply(ret$data, st_as_sf)
+	ret
+}
+
 ## tibble methods:
 
 #' Summarize simple feature type for tibble
