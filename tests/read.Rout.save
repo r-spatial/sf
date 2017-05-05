@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -213,6 +213,100 @@ proj4string:    NA
 4 -Inf    c 1970-01-01 1970-01-01 00:00:00 POINT(4 4)
 5  Inf      1970-01-02 1970-01-01 00:00:01 POINT(5 5)
 > 
+> if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
++ 	db = system.file("sqlite/meuse.sqlite", package = "sf")
++ 	dbcon <- dbConnect(dbDriver("SQLite"), db)
++ 	m = dbReadTable(dbcon, "meuse.sqlite")
++ 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
++ 	print(st_sf(m), n = 3)
++ 
++ 	db = system.file("sqlite/nc.sqlite", package = "sf")
++ 	dbcon <- dbConnect(dbDriver("SQLite"), db)
++ 	m = dbReadTable(dbcon, "nc.sqlite")
++ 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
++ 	print(st_sf(m), n = 3)
++ 
++ 	db = system.file("sqlite/test3.sqlite", package = "sf")
++ 	dbcon <- dbConnect(dbDriver("SQLite"), db)
++ 	m = dbReadTable(dbcon, "HighWays")
++ 	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
++ 	print(st_sf(m), n = 3)
++ 	m = dbReadTable(dbcon, "Towns")
++ 	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
++ 	print(st_sf(m), n = 3)
++ 	m = dbReadTable(dbcon, "Regions")
++ 	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
++ 	print(st_sf(m), n = 3)
++ }
+Loading required package: RSQLite
+Simple feature collection with 155 features and 13 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611
+epsg (SRID):    NA
+proj4string:    NA
+First 3 features:
+  ogc_fid cadmium copper lead zinc  elev       dist   om ffreq soil lime
+1       1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1
+2       2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1
+3       3     6.5     68  199  640 7.800 0.10302900 13.0     1    1    1
+  landuse dist.m             GEOMETRY
+1      Ah     50 POINT(181072 333611)
+2      Ah     30 POINT(181025 333558)
+3      Ah    150 POINT(181165 333537)
+Simple feature collection with 100 features and 15 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    NA
+proj4string:    NA
+First 3 features:
+  ogc_fid  area perimeter cnty_ cnty_id      name  fips fipsno cress_id bir74
+1       1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091
+2       2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487
+3       3 0.143     1.630  1828    1828     Surry 37171  37171       86  3188
+  sid74 nwbir74 bir79 sid79 nwbir79                       GEOMETRY
+1     1      10  1364     0      19 MULTIPOLYGON(((-81.47275543...
+2     0      10   542     3      12 MULTIPOLYGON(((-81.23989105...
+3     5     208  3616     6     260 MULTIPOLYGON(((-80.45634460...
+Simple feature collection with 10 features and 2 fields
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 645003 ymin: 4822568 xmax: 748805.6 ymax: 4992001
+epsg (SRID):    32632
+proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+First 3 features:
+  PK_UID    Name                       Geometry
+1      1 Unknown LINESTRING(668540.706868592...
+2      2 Unknown LINESTRING(671365.867441752...
+3      3 Unknown LINESTRING(671417.575852571...
+Simple feature collection with 8101 features and 6 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 319224 ymin: 3934674 xmax: 1308585 ymax: 5214373
+epsg (SRID):    32632
+proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+First 3 features:
+  PK_UID               Name Peoples LocalCounc County Region
+1      1            Brozolo     435          1      0      0
+2      2 Campiglione-Fenile    1284          1      0      0
+3      3          Canischio     274          1      0      0
+                     Geometry
+1 POINT(427002.77 4996361.33)
+2  POINT(367470.48 4962414.5)
+3 POINT(390084.12 5025551.73)
+Simple feature collection with 10 features and 2 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: 378359.8 ymin: 4198234 xmax: 1211486 ymax: 5036803
+epsg (SRID):    32632
+proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+First 3 features:
+  PK_UID   Name                       Geometry
+1      1 VENETO MULTIPOLYGON(((752912.25029...
+2      2 VENETO MULTIPOLYGON(((751705.49671...
+3      3 VENETO MULTIPOLYGON(((766247.78071...
+> 
 > proc.time()
    user  system elapsed 
-  0.768   0.296   0.754 
+  1.192   0.208   1.202 

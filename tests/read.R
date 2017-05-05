@@ -65,3 +65,29 @@ if ("GPKG" %in% st_drivers()$name) {
  y = st_read("x2.gpkg", quiet = TRUE)
  print(y)
 }
+
+if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
+	db = system.file("sqlite/meuse.sqlite", package = "sf")
+	dbcon <- dbConnect(dbDriver("SQLite"), db)
+	m = dbReadTable(dbcon, "meuse.sqlite")
+	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
+	print(st_sf(m), n = 3)
+
+	db = system.file("sqlite/nc.sqlite", package = "sf")
+	dbcon <- dbConnect(dbDriver("SQLite"), db)
+	m = dbReadTable(dbcon, "nc.sqlite")
+	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
+	print(st_sf(m), n = 3)
+
+	db = system.file("sqlite/test3.sqlite", package = "sf")
+	dbcon <- dbConnect(dbDriver("SQLite"), db)
+	m = dbReadTable(dbcon, "HighWays")
+	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	print(st_sf(m), n = 3)
+	m = dbReadTable(dbcon, "Towns")
+	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	print(st_sf(m), n = 3)
+	m = dbReadTable(dbcon, "Regions")
+	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	print(st_sf(m), n = 3)
+}

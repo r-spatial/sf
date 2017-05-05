@@ -14,4 +14,7 @@ windows/
 inst/gdal/
 inst/proj/
 
-nc*
+nc.shp
+nc.prj
+nc.dbf
+nc.shx
