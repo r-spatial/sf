@@ -2,6 +2,7 @@ language: r
 r:
   - release
   - devel
+  - oldrel
 
 cache: packages
 
@@ -32,15 +33,6 @@ before_install:
   - psql -d empty -c "CREATE EXTENSION postgis;"
 
 warnings_are_errors: true
-
-r_packages:
-  - sp
-  - rgdal
-  - roxygen2
-  - rmarkdown
-
-r_github_packages: 
-  - jimhester/covr
 
 after_success:
   - dropdb postgis
