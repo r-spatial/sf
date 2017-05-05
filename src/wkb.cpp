@@ -111,7 +111,7 @@ void read_gpkg_header(const unsigned char **pt, uint32_t *srid, int endian) {
 	// read flag:
 	unsigned char flag = **pt;
 	(*pt) += 1;
-	bool swap = (flag & 0x01 != (int) endian); // endian check
+	bool swap = ((flag & 0x01) != (int) endian); // endian check
 
 	// read srid, if needed, swap:
 	memcpy(srid, *pt, sizeof(uint32_t));
@@ -121,7 +121,7 @@ void read_gpkg_header(const unsigned char **pt, uint32_t *srid, int endian) {
 
 	// how much header is there to skip? bbox: 4, 6, 6, or 8 doubles:
 	flag = (flag >> 1) & 0x07; // get bytes 3,2,1
-	int n;
+	int n = 0;
 	if (flag == 1) // [minx, maxx, miny, maxy]
 		n = 32;
 	else if (flag == 2 || flag == 3) 

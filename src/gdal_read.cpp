@@ -73,7 +73,6 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool points = false, multipoints = false,
 		lines = false, multilines = false, 
 		polygons = false, multipolygons = false;
-	int zm = 0;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
 		// drop Z and M:
