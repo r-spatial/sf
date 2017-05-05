@@ -178,40 +178,39 @@ slice.sf <- function(.data, ...) {
 
 #' @name dplyr
 #' @export
+#' @param do_union logical; should geometries be unioned, using \link{st_union}, or simply be combined using \link{st_combine}?
+summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
+	sf_column = attr(.data, "sf_column")
+	crs = st_crs(.data)
+	ret = NextMethod()
+	geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
+		geom = st_geometry(.data)
+		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
+		# merge geometry:
+		geom = if (do_union)
+			unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
+		else
+			unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
+		do.call(st_sfc, geom)
+	} else { # single group:
+		if (do_union)
+			st_union(st_geometry(.data))
+		else
+			st_combine(st_geometry(.data))
+	}
+	ret[[ sf_column ]] = geom
+	ret$do_union = NULL
+	st_as_sf(ret, crs = crs)
+}
+#' @name dplyr
+#' @export
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc.g <- nc %>% group_by(area_cl)
 #' nc.g %>% summarise(mean(AREA))
-#' nc.g %>% summarize(mean(AREA))
-#' nc.g %>% summarize(mean(AREA)) %>% plot(col = grey(3:6 / 7))
-summarise_.sf <- function(.data, ..., .dots) {
-	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-		geom = st_geometry(.data)
-		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
-		sf_column = attr(.data, "sf_column")
-		ret = NextMethod()
-		# merge geometry:
-		geoms = unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
-		ret[[sf_column]] = do.call(st_sfc, geoms)
-		st_as_sf(ret, crs = st_crs(.data))
-	} else
-		as.data.frame(NextMethod())
-}
-#' @name dplyr
-#' @export
-summarise.sf <- function(.data, ..., .dots) {
-	if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-		geom = st_geometry(.data)
-		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
-		sf_column = attr(.data, "sf_column")
-		ret = NextMethod()
-		# merge geometry:
-		geoms = unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
-		ret[[sf_column]] = do.call(st_sfc, geoms)
-		st_as_sf(ret, crs = st_crs(.data))
-	} else
-		as.data.frame(NextMethod())
-}
+#' nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
+#' nc %>% as.data.frame %>% summarise(mean(AREA))
+summarise_.sf = summarise.sf
 
 ## summarize_ not needed
 

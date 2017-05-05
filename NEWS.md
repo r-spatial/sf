@@ -1,4 +1,12 @@
 # version 0.4-2
+* `summarise.sf` now always returns an `sf` object, also for global (non-grouped) summaries.
+
+* `summarise.sf` gains an argument `do_union` which determines whether to union the geometries for which a summary is given, or to `st_combine` them (not resolving boundaries); #331
+
+* rename argument `union` of `aggregate.sf` into `do_union`, for consistency with `summarise`; #331
+
+* add a `nest_` method for `sf` objects
+
 * `st_relate` gets a `pattern` parameter, same as `rgeos::gRelate`, #234
 
 * (experimental) support for direct reading of spatialite (sqlite) geometry blobs

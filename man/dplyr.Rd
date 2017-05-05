@@ -38,9 +38,9 @@
 \alias{dplyr}
 \alias{slice.sf}
 \alias{dplyr}
-\alias{summarise_.sf}
-\alias{dplyr}
 \alias{summarise.sf}
+\alias{dplyr}
+\alias{summarise_.sf}
 \alias{dplyr}
 \alias{gather_.sf}
 \alias{dplyr}
@@ -101,9 +101,9 @@ slice_.sf(.data, ..., .dots)
 
 slice.sf(.data, ...)
 
-summarise_.sf(.data, ..., .dots)
+summarise.sf(.data, ..., .dots, do_union = TRUE)
 
-summarise.sf(.data, ..., .dots)
+summarise_.sf(.data, ..., .dots, do_union = TRUE)
 
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
@@ -141,6 +141,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{.keep_all}{see corresponding function in dplyr}
 
 \item{add}{see corresponding function in dplyr}
+
+\item{do_union}{logical; should geometries be unioned, using \link{st_union}, or simply be combined using \link{st_combine}?}
 
 \item{data}{see original function docs}
 
@@ -210,8 +212,8 @@ nc \%>\% slice(1:2)
 nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 nc.g <- nc \%>\% group_by(area_cl)
 nc.g \%>\% summarise(mean(AREA))
-nc.g \%>\% summarize(mean(AREA))
-nc.g \%>\% summarize(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
+nc.g \%>\% summarise(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
+nc \%>\% as.data.frame \%>\% summarise(mean(AREA))
 library(tidyr)
 nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
 library(tidyr)

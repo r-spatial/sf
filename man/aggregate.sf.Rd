@@ -4,7 +4,7 @@
 \alias{aggregate.sf}
 \title{aggregate an \code{sf} object}
 \usage{
-\method{aggregate}{sf}(x, by, FUN, ..., union = TRUE, simplify = TRUE)
+\method{aggregate}{sf}(x, by, FUN, ..., do_union = TRUE, simplify = TRUE)
 }
 \arguments{
 \item{x}{object of class \link{sf}}
@@ -15,7 +15,7 @@
 
 \item{...}{arguments passed on to \code{FUN}}
 
-\item{union}{logical; should grouped geometries be unioned using \link{st_union}?}
+\item{do_union}{logical; should grouped geometries be unioned using \link{st_union}?}
 
 \item{simplify}{logical; see \link[stats]{aggregate}}
 }
