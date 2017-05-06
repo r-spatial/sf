@@ -97,10 +97,11 @@ void read_spatialite_header(const unsigned char **pt, uint32_t *srid, bool swap)
 	(*pt) += 4;
 
 	(*pt) += 32; // skip header
-	if (**pt != 0x7c) { // verify special marker; if not there, raise error
+	// verify special marker; if not there, raise error:
+	if (**pt != 0x7c) { // #nocov start
 		Rcpp::Rcout << "byte 39 should be 0x7c, but is " << **pt << std::endl;
 		throw std::range_error("invalid spatialite header");
-	}
+	} // #nocov end
 	(*pt) += 1; // skip marker
 }
 
@@ -124,11 +125,11 @@ void read_gpkg_header(const unsigned char **pt, uint32_t *srid, int endian) {
 	int n = 0;
 	if (flag == 1) // [minx, maxx, miny, maxy]
 		n = 32;
-	else if (flag == 2 || flag == 3) 
+	else if (flag == 2 || flag == 3) // #nocov start
 			// [minx, maxx, miny, maxy, minz, maxz] or [minx, maxx, miny, maxy, minm, maxm]
 		n = 48;
 	else if (flag == 4) // [minx, maxx, miny, maxy, minz, maxz, minm, maxm]
-		n = 64;
+		n = 64; // #nocov end
 	(*pt) += n;
 }
 
@@ -143,10 +144,11 @@ Rcpp::NumericMatrix read_multipoint(const unsigned char **pt, int n_dims, bool s
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++) {
 		if (spatialite) {
-			if (**pt != 0x69) { // verify special marker; if not there, raise error
+			// verify special marker; if not there, raise error:
+			if (**pt != 0x69) {  // #nocov start
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
 				throw std::range_error("invalid spatialite header");
-			}
+			} // #nocov end
 			(*pt) += 1; // absorb the 0x69
 		}
 		Rcpp::List lst = read_data(pt, EWKB, spatialite, endian, false, NULL, NULL);
@@ -174,10 +176,11 @@ Rcpp::List read_geometrycollection(const unsigned char **pt, int n_dims, bool sw
 
 	for (size_t i = 0; i < nlst; i++) {
 		if (spatialite) {
-			if (**pt != 0x69) { // verify special marker; if not there, raise error
+			// verify special marker; if not there, raise error
+			if (**pt != 0x69) { // #nocov start
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
 				throw std::range_error("invalid spatialite header");
-			}
+			} // #nocov end
 			(*pt) += 1; // absorb the 0x69
 		}
 

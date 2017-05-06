@@ -141,6 +141,10 @@ CPL_make_valid <- function(sfc) {
     .Call('sf_CPL_make_valid', PACKAGE = 'sf', sfc)
 }
 
+CPL_geohash <- function(sfc, prec) {
+    .Call('sf_CPL_geohash', PACKAGE = 'sf', sfc, prec)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

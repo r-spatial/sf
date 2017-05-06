@@ -434,6 +434,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geohash
+Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec);
+RcppExport SEXP sf_CPL_geohash(SEXP sfcSEXP, SEXP precSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< int >::type prec(precSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geohash(sfc, prec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP sf_CPL_proj_version(SEXP bSEXP) {

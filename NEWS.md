@@ -1,3 +1,7 @@
+# version 0.4-3
+
+* `st_geohash` returns geohash for (average) points (only available when sf was linked to liblwgeom)
+
 # version 0.4-2
 * `summarise.sf` now always returns an `sf` object, also for global (non-grouped) summaries.
 
@@ -63,7 +67,7 @@
 
 * have `st_is_valid` catch corrupt geometries too, returning `NA` in that case (requiring GEOS 3.5.0)
 
-* add `st_make_valid`, only working if sf was linked to `liblwgeom`
+* add `st_make_valid`, only available when sf was linked to `liblwgeom`
 
 * add `st_coordinates` method, returning coordinates matrix with indexes
 
