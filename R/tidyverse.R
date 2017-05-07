@@ -70,6 +70,13 @@ group_by.sf <- function(.data, ..., .dots, add = FALSE) {
 
 #' @name dplyr
 #' @export
+ungroup.sf <- function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod())
+}
+
+#' @name dplyr
+#' @export
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate_.sf <- function(.data, ..., .dots) {

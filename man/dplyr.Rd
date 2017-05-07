@@ -18,6 +18,8 @@
 \alias{dplyr}
 \alias{group_by.sf}
 \alias{dplyr}
+\alias{ungroup.sf}
+\alias{dplyr}
 \alias{mutate_.sf}
 \alias{dplyr}
 \alias{mutate.sf}
@@ -81,6 +83,8 @@ group_by_.sf(.data, ..., .dots, add = FALSE)
 
 group_by.sf(.data, ..., .dots, add = FALSE)
 
+ungroup.sf(x, ...)
+
 mutate_.sf(.data, ..., .dots)
 
 mutate.sf(.data, ..., .dots)
@@ -142,6 +146,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 
 \item{add}{see corresponding function in dplyr}
 
+\item{x}{see \link[dplyr]{left_join}}
+
 \item{do_union}{logical; should geometries be unioned, using \link{st_union}, or simply be combined using \link{st_combine}?}
 
 \item{data}{see original function docs}
@@ -175,8 +181,6 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{.env}{see original function docs}
 
 \item{nest_cols}{see \link[tidyr]{nest}}
-
-\item{x}{see \link[dplyr]{left_join}}
 
 \item{y}{see \link[dplyr]{left_join}}
 
