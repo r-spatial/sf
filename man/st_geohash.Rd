@@ -22,6 +22,8 @@ see \url{http://geohash.org/} or \url{https://en.wikipedia.org/wiki/Geohash}.
 in case a geometry contains more than one point, the geohash for the average of the points in the geometry is returned.
 }
 \examples{
-st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
-st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
+if (!is.na(sf_extSoftVersion()["lwgeom"])) {
+ st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 2)
+ st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10)
+}
 }
