@@ -177,6 +177,14 @@ summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
     summary(u, maxsum = maxsum, ...)
 }
 
+#' @export
+as.data.frame.sfc = function(x, ...) {
+	ret = data.frame(row.names = seq_along(x))
+	ret$geometry = x
+	ret
+}
+
+
 #' @name st_geometry
 #' @export
 st_geometry.sfc = function(obj, ...) obj
