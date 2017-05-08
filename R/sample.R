@@ -33,10 +33,9 @@ st_sample = function(x, size, ..., type = "random") {
 	x = st_geometry(x)
 	if (length(size) > 1) {
 		size = rep(size, length.out = length(x))
-		ret = do.call(c, lapply(1:length(x), 
-			function(i) st_sample(x[i], size[i], type = type)))
-		st_crs(ret) = st_crs(x)
-		ret
+		st_set_crs(do.call(c, lapply(1:length(x), 
+			function(i) st_sample(x[i], size[i], type = type))),
+			st_crs(x))
 	} else {
 		dim = max(st_dimension(x))
 		if (dim == 0)

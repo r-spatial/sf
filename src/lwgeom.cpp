@@ -59,7 +59,7 @@ Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 
-    Rcpp::CharacterVector chr(sfc.size()); // return
+	Rcpp::CharacterVector chr(sfc.size()); // return
 	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
 	for (int i = 0; i < lwgeom_v.size(); i++) {
 		chr(i) = lwgeom_geohash(lwgeom_v[i], prec);
