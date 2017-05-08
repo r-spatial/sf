@@ -141,6 +141,8 @@ test_that("guess driver on windows with backslashes (#127)", {
 })
 
 test_that("the first layer is selected with a warning", {
+    skip_on_os("mac")
+
 	expect_warning(st_read(system.file("osm/overpass.osm", package="sf"), quiet = TRUE),
 		"automatically selected the first layer")
 	expect_error(st_read(system.file("osm/overpass.osm", package="sf"), "foo", quiet = TRUE),

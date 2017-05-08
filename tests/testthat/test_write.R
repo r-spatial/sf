@@ -35,6 +35,7 @@ test_that("sf can write units (#264)", {
 
 test_that("delete and update work (#304) ", { 
   skip_if_not("GPKG" %in% st_drivers()$name)  # shapefiles can't write point+multipoint mix:
+  skip_on_os("mac")
 
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   expect_error(st_write(x, "x.gpkg", layer = c("a", "b"), driver = "GPKG")) # error
@@ -49,7 +50,8 @@ test_that("delete and update work (#304) ", {
   expect_silent(st_layers("x.gpkg"))
   expect_output(st_write(x, "x.gpkg", layer = "foo", delete_dsn = TRUE), "Deleting source")
   expect_silent(st_layers("x.gpkg"))
-  expect_error(write_sf(x, "x.shp", "x"), "Feature creation failed")
+  expect_error(write_sf(x, "x.shp", "x"), "Feature creation failed") # on osx el capitan: "c++ exception (unknown reason)"
+  expect_error(write_sf(x, "x.shp", "x"))
   expect_silent(x <- st_read("x.gpkg", quiet = TRUE))
   x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)), 
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
