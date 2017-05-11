@@ -173,7 +173,7 @@ st_is_longlat = function(x) {
 	if (is.na(crs))
 		NA
 	else
-		length(grep("+proj=longlat", crs$proj4string)) > 0
+		isTRUE(crs$proj == "longlat")
 }
 
 crs_parameters = function(x) {
@@ -214,3 +214,24 @@ is.na.crs = function(x) {
   is.na(x$epsg) && is.na(x$proj4string) 
 }
 
+#' @name st_crs
+#' @param name element name; code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples
+#' @export
+#' @examples
+#' st_crs("+init=epsg:3857")$epsg 
+#' st_crs("+init=epsg:3857")$proj4string 
+#' st_crs("+init=epsg:3857 +units=km")$b     # numeric
+#' st_crs("+init=epsg:3857 +units=km")$units # character
+#' @export
+`$.crs` = function(x, name) {
+	if (is.numeric(name) || name %in% names(x))
+		x[[name]]
+	else {
+		tryNum = function(x) { n = suppressWarnings(as.numeric(x)); if (is.na(n)) x else n }
+		p4s = strsplit(x$proj4string, " ")[[1]]
+		p4s2 = strsplit(p4s, "=")
+		vals = lapply(p4s2, function(x) if (length(x) == 1) TRUE else tryNum(x[2]))
+		names(vals) = substring(sapply(p4s2, function(x) x[1]), 2)
+		vals[[name]]
+	}
+}

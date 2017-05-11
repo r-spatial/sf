@@ -253,6 +253,8 @@ st_relate(grd, pattern = "****1****") # sides, not corners, internals
 st_relate(grd, pattern = "****0****") # only corners touch
 st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 st_rook(grd)
+# queen neighbours, see https://github.com/edzer/sfr/issues/234#issuecomment-300511129
+st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))

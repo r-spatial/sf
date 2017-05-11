@@ -27,6 +27,8 @@
 \alias{NA_crs_}
 \alias{st_crs}
 \alias{is.na.crs}
+\alias{st_crs}
+\alias{$.crs}
 \title{Retrieve coordinate reference system from object}
 \format{An object of class \code{crs} of length 2.}
 \usage{
@@ -55,6 +57,8 @@ st_set_crs(x, value)
 NA_crs_
 
 \method{is.na}{crs}(x)
+
+\method{$}{crs}(x, name)
 }
 \arguments{
 \item{x}{numeric, character, or object of class \link{sf} or \link{sfc}}
@@ -64,6 +68,8 @@ NA_crs_
 \item{wkt}{character well-known-text representation of the crs}
 
 \item{value}{one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).}
+
+\item{name}{element name; code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
 }
 \value{
 if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
@@ -107,5 +113,9 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 library(dplyr)
 x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
+st_crs("+init=epsg:3857")$epsg 
+st_crs("+init=epsg:3857")$proj4string 
+st_crs("+init=epsg:3857 +units=km")$b     # numeric
+st_crs("+init=epsg:3857 +units=km")$units # character
 }
 \keyword{datasets}

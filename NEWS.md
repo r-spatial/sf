@@ -1,8 +1,11 @@
 # version 0.4-3
 
+* have `$.crs` also retrieve proj4string components, such as `st_crs(4326)$datum`
+
 * `st_geohash` returns geohash for (average) points (only available when sf was linked to liblwgeom)
 
 # version 0.4-2
+
 * `summarise.sf` now always returns an `sf` object, also for global (non-grouped) summaries.
 
 * `summarise.sf` gains an argument `do_union` which determines whether to union the geometries for which a summary is given, or to `st_combine` them (not resolving boundaries); #331

@@ -41,3 +41,10 @@ test_that("st_proj_info works", {
   expect_silent(x <- st_proj_info("datum"))
   expect_silent(x <- st_proj_info("units"))
 })
+
+test_that("$.crs works", {
+  expect_true(is.numeric(st_crs("+init=epsg:3857")$epsg))
+  expect_true(is.character(st_crs("+init=epsg:3857")$proj4string))
+  expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) 
+  expect_true(is.character(st_crs("+init=epsg:3857 +units=km")$units))
+})
