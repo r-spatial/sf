@@ -165,6 +165,8 @@ st_distance = function(x, y, dist_fun) {
 #' st_relate(grd, pattern = "****0****") # only corners touch
 #' st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 #' st_rook(grd)
+#' # queen neighbours, see https://github.com/edzer/sfr/issues/234#issuecomment-300511129
+#' st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 	if (!is.na(pattern)) {
 		stopifnot(is.character(pattern) && length(pattern) == 1 && nchar(pattern) == 9)
