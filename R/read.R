@@ -1,11 +1,12 @@
 set_utf8 = function(x) {
+	n = names(x)
+	Encoding(n) = "UTF-8"
 	to_utf8 = function(x) {
 		if (is.character(x))
 			Encoding(x) = "UTF-8"
 		x
 	}
-	Encoding(names(x)) = "UTF-8"
-	lapply(x, to_utf8)
+	structure(lapply(x, to_utf8), names = n)
 }
 
 
