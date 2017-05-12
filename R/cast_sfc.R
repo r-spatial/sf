@@ -128,7 +128,6 @@ st_cast_sfc_default = function(x) {
 #' @export
 #' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
 #' 
-#' In case of \code{st_cast.sf}, grouping will call \link[stats]{aggregate} and the aggregation function \code{FUN} needs to be set; in case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries.
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))
 		return(st_cast_sfc_default(x))
@@ -174,9 +173,11 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 
 #' @name st_cast
 #' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries
+#' @param do_split logical; if \code{TRUE}, allow splitting of geometries in sub-geometries
 #' @export
-st_cast.sf = function(x, to, ..., warn = TRUE, group_or_split = TRUE) {
-	geom = st_cast(st_geometry(x), to, group_or_split = group_or_split)
+#' @details the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf]{aggregate} or \link[sf]{summarise}.
+st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
+	geom = st_cast(st_geometry(x), to, group_or_split = do_split)
 	crs = st_crs(x)
 	agr = st_agr(x)
 	all_const = all_constant(x)

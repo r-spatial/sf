@@ -41,6 +41,7 @@
 \alias{slice.sf}
 \alias{dplyr}
 \alias{summarise.sf}
+\alias{summarise}
 \alias{dplyr}
 \alias{summarise_.sf}
 \alias{dplyr}
@@ -148,7 +149,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 
 \item{x}{see \link[dplyr]{left_join}}
 
-\item{do_union}{logical; should geometries be unioned, using \link{st_union}, or simply be combined using \link{st_combine}?}
+\item{do_union}{logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points.}
 
 \item{data}{see original function docs}
 

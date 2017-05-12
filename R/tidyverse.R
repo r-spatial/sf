@@ -185,7 +185,8 @@ slice.sf <- function(.data, ...) {
 
 #' @name dplyr
 #' @export
-#' @param do_union logical; should geometries be unioned, using \link{st_union}, or simply be combined using \link{st_combine}?
+#' @aliases summarise
+#' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points.
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
 	crs = st_crs(.data)

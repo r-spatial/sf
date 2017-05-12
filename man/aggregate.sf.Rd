@@ -2,6 +2,7 @@
 % Please edit documentation in R/aggregate.R
 \name{aggregate.sf}
 \alias{aggregate.sf}
+\alias{aggregate}
 \title{aggregate an \code{sf} object}
 \usage{
 \method{aggregate}{sf}(x, by, FUN, ..., do_union = TRUE, simplify = TRUE)
@@ -9,7 +10,7 @@
 \arguments{
 \item{x}{object of class \link{sf}}
 
-\item{by}{see \link[stats]{aggregate}}
+\item{by}{(see \link[stats]{aggregate}): a list of grouping elements, each as long as the variables in the data frame x. The elements are coerced to factors before use.}
 
 \item{FUN}{function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped}
 
@@ -20,7 +21,7 @@
 \item{simplify}{logical; see \link[stats]{aggregate}}
 }
 \value{
-an \code{sf} object with aggregated attributes and geometries, with an additional grouping variable called \code{Group.1}.
+an \code{sf} object with aggregated attributes and geometries, with additional grouping variables having the names of \code{names(ids)} or named \code{Group.i} for \code{ids[[i]]}; see the \code{data.frame} method of \link[stats]{aggregate}.
 }
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
