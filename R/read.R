@@ -1,3 +1,14 @@
+set_utf8 = function(x) {
+	to_utf8 = function(x) {
+		if (is.character(x))
+			Encoding(x) = "UTF-8"
+		x
+	}
+	Encoding(names(x)) = "UTF-8"
+	lapply(x, to_utf8)
+}
+
+
 #' Read simple features or layers from file or database
 #'
 #' Read simple features from file or database, or retrieve layer names and their geometry type(s)
@@ -68,12 +79,13 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 	# TODO: take care of multiple geometry colums:
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 	nm = names(x)[which.geom]
+	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
 
 	x = if (length(x) == length(geom)) # ONLY geometry column(s)
 		data.frame(row.names = seq_along(geom[[1]]))
 	else
-		as.data.frame(x[-which.geom], stringsAsFactors = stringsAsFactors)
+		as.data.frame(set_utf8(x[-which.geom]), stringsAsFactors = stringsAsFactors)
 
 	for (i in seq_along(geom))
 		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
