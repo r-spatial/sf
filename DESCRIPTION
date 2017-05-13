@@ -26,12 +26,13 @@ Imports:
     Rcpp, 
     DBI,
     units (>= 0.4),
-    dplyr,
 	magrittr
 Suggests: 
     sp (>= 1.2-4), 
     rgeos,
     rgdal,
+    dplyr,
+    lazyeval,
     tibble,
 	rlang,
 	RSQLite,

@@ -1,5 +1,7 @@
 # version 0.4-3
 
+* back-port `do_union` argument to dplyr <= 0.5.0, using lazyeval
+
 * all strings returned from OGR/GDAL now get encoding set to `UTF-8`, making them work on non-UTF-8 platforms; #5
 
 * `$.crs` now retrieves proj4string components, such as `st_crs(4326)$datum` in addition to `epsg` and `proj4string`
