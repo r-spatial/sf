@@ -39,7 +39,8 @@ rbind.sf = function(..., deparse.level = 1) {
 #' @details If you need to \code{cbind} e.g. a \code{data.frame} to an \code{sf}, use \link{data.frame} directly and use \link{st_sf} on its result, or use \link[dplyr]{bind_cols}; see examples.
 #' @examples
 #' cbind(a,b,c) # warns
-#' dplyr::bind_cols(a,b)
+#' if (require(dplyr))
+#'   dplyr::bind_cols(a,b)
 #' c = st_sf(a=4, geomc = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 #' cbind(a,b,c, sf_column_name = "geomc")
 #' df = data.frame(x=3)

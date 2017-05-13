@@ -1,8 +1,10 @@
 # version 0.4-3
 
-* have `$.crs` also retrieve proj4string components, such as `st_crs(4326)$datum`
+* all strings returned from OGR/GDAL now get encoding set to `UTF-8`, making them work on non-UTF-8 platforms; #5
 
-* `st_geohash` returns geohash for (average) points (only available when sf was linked to liblwgeom)
+* `$.crs` now retrieves proj4string components, such as `st_crs(4326)$datum` in addition to `epsg` and `proj4string`
+
+* let `st_geohash` return geohash for (average) points (only when sf was linked to liblwgeom)
 
 # version 0.4-2
 
@@ -14,23 +16,23 @@
 
 * add a `nest_` method for `sf` objects
 
-* `st_relate` gets a `pattern` parameter, same as `rgeos::gRelate`, #234
+* `st_relate` gets a `pattern` parameter, same as `rgeos::gRelate`; add examples to get rook and queen neighbour lists using this; #234
 
-* (experimental) support for direct reading of spatialite (sqlite) geometry blobs
+* support for direct reading of spatialite and sqlite geometry wkb blobs
 
 * build proper support for `cbind` and `rbind` methods for `sf`, which work (as documented) when _all_ arguments are of class `sf`; `dplyr::bind_cols` or `st_sf(data.frame(sf, df))` work for binding `data.frame`s to an `sf` object.
 
 * units support for function arguments of `st_segmentize` and `st_line_sample`
 
-* document problem reading shapefiles from USB drives on OSX, #252
+* document problem reading shapefiles from USB drives on OSX; #252
 
-* improve docs of `st_is_valid` and `st_make_valid`, #296
+* improve docs of `st_is_valid` and `st_make_valid`; #296
 
-* coercing `sf` to `data.frame` now works better, #298
+* coercing `sf` to `data.frame` now works better; #298
 
-* `st_line_sample` gains argument `sample` to specify the points t.b. sampled, #299 #300 thanks to @joethorley
+* `st_line_sample` gains argument `sample` to specify the points t.b. sampled; #299 #300 thanks to @joethorley
 
-* add compatibility to upcoming dplyr 0.6.0, #304 #42
+* add compatibility to upcoming dplyr 0.6.0; #304 #42
 
 * write GDAL fields by name, not by number, fixing a KML problem #308
 
@@ -38,7 +40,7 @@
 
 * `write_sf` defaults to `delete_layer=TRUE`, silently overwriting layers if they're already present
 
-* compatibility with GDAL 2.2beta0, #303, #309
+* compatibility with GDAL 2.2beta0; #303; #309
 
 * replace `st_write_db` with a version that is fast for large datasets (#285), thanks to Josh London
 
@@ -163,7 +165,7 @@
 
 * rename `st_drop_zm` into `st_zm`, for general more handling of Z and M
 
-* allow for 3D coordinates returned, when `+proj=geocent` (#172, #103)
+* allow for 3D coordinates returned, when `+proj=geocent` (#172; #103)
 
 * fix `NA_integer_` handling in shapefiles I/O (#184)
 
