@@ -25,16 +25,18 @@ typedef struct {
 	size_t size;
 } wkb_buf;
 
-void wkb_shift(wkb_buf *wkb, int n);
+void wkb_read(wkb_buf *wkb, void *dst, int n);
 
 Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian, 
 	bool addclass, int *type, uint32_t *srid);
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
-void wkb_shift(wkb_buf *wkb, int n) {
+void wkb_read(wkb_buf *wkb, void *dst, int n) {
 	if (n > wkb->size)
 		throw std::range_error("range check error: WKB buffer too small. Input file corrupt?");
+	if (dst != NULL)
+		memcpy(dst, wkb->pt, n);
 	wkb->pt += n;
 	wkb->size -= n;
 }
@@ -105,34 +107,35 @@ Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
 
 void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	// we're at byte 3 now:
-	memcpy(srid, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, srid, sizeof(uint32_t));
+
 	if (swap)
 		*srid = swap_endian<uint32_t>(*srid);
-	wkb_shift(wkb, 4);
 
-	wkb_shift(wkb, 32); // skip header
+	wkb_read(wkb, NULL, 32); // skip header
 	// verify special marker; if not there, raise error:
-	if (wkb->pt[0] != 0x7c) { // #nocov start
-		Rcpp::Rcout << "byte 39 should be 0x7c, but is " << wkb->pt[0] << std::endl;
-		throw std::range_error("invalid spatialite header");
-	} // #nocov end
-	wkb_shift(wkb, 1); // skip marker
+	unsigned char marker;
+	wkb_read(wkb, &marker, 1); // skip header
+	if (marker != 0x7c) { 
+		Rcpp::Rcout << "byte 39 should be 0x7c, but is " << marker << std::endl; // #nocov
+		throw std::range_error("invalid spatialite header"); // #nocov
+	}
 }
 
 void read_gpkg_header(wkb_buf *wkb, uint32_t *srid, int endian) {
 	// http://www.geopackage.org/spec/#gpb_format
-	wkb_shift(wkb, 3); // 'G', 'P', version
+	// xxx
+	wkb_read(wkb, NULL, 3); // 'G', 'P', version
 
 	// read flag:
-	unsigned char flag = wkb->pt[0];
-	wkb_shift(wkb, 1);
+	unsigned char flag;
+	wkb_read(wkb, &flag, 1);
 	bool swap = ((flag & 0x01) != (int) endian); // endian check
 
 	// read srid, if needed, swap:
-	memcpy(srid, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, srid, 4);
 	if (swap)
 		*srid = swap_endian<uint32_t>(*srid);
-	wkb_shift(wkb, 4);
 
 	// how much header is there to skip? bbox: 4, 6, 6, or 8 doubles:
 	flag = (flag >> 1) & 0x07; // get bytes 3,2,1
@@ -144,26 +147,29 @@ void read_gpkg_header(wkb_buf *wkb, uint32_t *srid, int endian) {
 		n = 48;
 	else if (flag == 4) // [minx, maxx, miny, maxy, minz, maxz, minm, maxm]
 		n = 64; // #nocov end
-	wkb_shift(wkb, n);
+	wkb_read(wkb, NULL, n);
 }
 
 Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 		bool EWKB = 0, bool spatialite = false, int endian = 0, Rcpp::CharacterVector cls = "",
 		bool *empty = NULL) {
+
 	uint32_t npts;
-	memcpy(&npts, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, &npts, 4);
+
 	if (swap)
 		npts = swap_endian<uint32_t>(npts);
-	wkb_shift(wkb, 4);
+
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++) {
 		if (spatialite) {
 			// verify special marker; if not there, raise error:
-			if (wkb->pt[0] != 0x69) {  // #nocov start
+			unsigned char marker;
+			wkb_read(wkb, &marker, 1); // absorb the 0x69
+			if (marker != 0x69) {  // #nocov start
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
 				throw std::range_error("invalid spatialite header");
 			} // #nocov end
-			wkb_shift(wkb, 1); // absorb the 0x69
 		}
 		Rcpp::List lst = read_data(wkb, EWKB, spatialite, endian, false, NULL, NULL);
 		Rcpp::NumericVector vec = lst[0];
@@ -182,22 +188,23 @@ Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWK
 		bool *empty = NULL) {
 
 	uint32_t nlst;
-	memcpy(&nlst, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, &nlst, 4);
+
 	if (swap)
 		nlst = swap_endian<uint32_t>(nlst);
-	wkb_shift(wkb, 4);
+
 	Rcpp::List ret(nlst);
 
 	for (size_t i = 0; i < nlst; i++) {
 		if (spatialite) {
 			// verify special marker; if not there, raise error
-			if (wkb->pt[0] != 0x69) { // #nocov start
+			unsigned char marker;
+			wkb_read(wkb, &marker, 1); // absorb the 0x69
+			if (marker != 0x69) { // #nocov start
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
 				throw std::range_error("invalid spatialite header");
 			} // #nocov end
-			wkb_shift(wkb, 1); // absorb the 0x69
 		}
-
 		ret[i] = read_data(wkb, EWKB, spatialite, endian, isGC, NULL, NULL)[0];
 	}
 	if (cls.size() == 3)
@@ -212,12 +219,11 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 	Rcpp::NumericVector ret(n);
 	for (int i = 0; i < n; i++) {
 		double d;
-		memcpy(&d, wkb->pt, sizeof(double));
+		wkb_read(wkb, &d, 8);
 		if (swap)
 			ret(i) = swap_endian<double>(d);
 		else
 			ret(i) = d;
-		wkb_shift(wkb, 8);
 	}
 	if (cls.size() == 3)
 		ret.attr("class") = cls;
@@ -226,21 +232,22 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 
 Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
+
 	uint32_t npts;
-	memcpy(&npts, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, &npts, 4);
+
 	if (swap)
 		npts = swap_endian<uint32_t>(npts);
-	wkb_shift(wkb, 4);
+
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++)
 		for (int j = 0; j< n_dims; j++) {
 			double d;
-			memcpy(&d, wkb->pt, sizeof(double));
+			wkb_read(wkb, &d, 8);
 			if (swap)
 				ret(i, j) = swap_endian<double>(d);
 			else
 				ret(i, j) = d;
-			wkb_shift(wkb, 8);
 		}
 	if (cls.size() == 3)
 		ret.attr("class") = cls;
@@ -251,14 +258,17 @@ Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 
 Rcpp::List read_matrix_list(wkb_buf *wkb, int n_dims, bool swap, 
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
+
 	uint32_t nlst;
-	memcpy(&nlst, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, &nlst, 4);
+
 	if (swap)
 		nlst = swap_endian<uint32_t>(nlst);
-	wkb_shift(wkb, 4);
+
 	Rcpp::List ret(nlst);
 	for (size_t i = 0; i < nlst; i++)
 		ret[i] = read_numeric_matrix(wkb, n_dims, swap, "");
+
 	if (cls.size() == 3)
 		ret.attr("class") = cls;
 	if (empty != NULL)
@@ -279,34 +289,35 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 
 	Rcpp::List output(1); // to deal with varying result type
 
-	if (srid != NULL && wkb->pt[0] == 'G' && wkb->pt[1] == 'P') // GPKG header? skip:
+	if (srid != NULL && wkb->size > 2 && wkb->pt[0] == 'G' && wkb->pt[1] == 'P') // GPKG header? skip:
 		read_gpkg_header(wkb, srid, endian);
 
 	if (spatialite && srid != NULL)
-		wkb_shift(wkb, 1); // starting 0x00 contains no information
+		wkb_read(wkb, NULL, 1); // starting 0x00 contains no information
 
+	unsigned char swap_char;
 	bool swap;
 
-	if (spatialite && srid == NULL) // nested: we know
+	if (spatialite && srid == NULL) // nested call: don't read swap:
 		swap = false;
-	else // read from stream:
-		swap = ((int) *(wkb->pt) != (int) endian); // endian check
-
-	if (swap && spatialite)
-		throw std::range_error("reading non-native endian spatialite geometries not supported");
-
-	if (! (spatialite && srid == NULL)) // NOT a spatialite nested call: step over swap byte
-		wkb_shift(wkb, 1);
-
-	if (spatialite && srid != NULL) // not nested:
-		read_spatialite_header(wkb, srid, swap);
-
+	else {
+		wkb_read(wkb, &swap_char, 1);
+		swap = ((int) swap_char != (int) endian); // endian check
+	}
+	if (spatialite) {
+		if (swap) 
+			throw std::range_error("reading non-native endian spatialite geometries not supported");
+		if (srid != NULL) // not nested:
+			read_spatialite_header(wkb, srid, swap);
+	}
+	
 	// read type:
 	uint32_t wkbType;
-	memcpy(&wkbType, wkb->pt, sizeof(uint32_t));
+	wkb_read(wkb, &wkbType, 4);
+
 	if (swap)
 		wkbType = swap_endian<uint32_t>(wkbType);
-	wkb_shift(wkb, 4);
+
 	int sf_type = 0, n_dims = 0;
 	std::string dim_str = ""; 
 	if (EWKB) { // EWKB: PostGIS default
@@ -325,11 +336,10 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			dim_str = "XYZM";
 		if (wkbSRID != 0) {
 			if (srid != NULL) { 
-				memcpy(srid, wkb->pt, sizeof(uint32_t));
+				wkb_read(wkb, srid, 4);
 				if (swap)
 					*srid = swap_endian<uint32_t>(*srid);
 			}
-			wkb_shift(wkb, 4);
 		}
 	} else { // ISO
 		sf_type = wkbType % 1000;

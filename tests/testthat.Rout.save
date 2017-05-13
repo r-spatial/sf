@@ -49,8 +49,8 @@ Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 534 SKIPPED: 0 FAILED: 0
+OK: 537 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.700   0.348   8.028 
+  4.468   0.400   7.848 
