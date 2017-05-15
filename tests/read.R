@@ -79,15 +79,17 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 	print(st_sf(m), n = 3)
 
-	db = system.file("sqlite/test3.sqlite", package = "sf")
-	dbcon <- dbConnect(dbDriver("SQLite"), db)
-	m = dbReadTable(dbcon, "HighWays")
-	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	print(st_sf(m), n = 3)
-	m = dbReadTable(dbcon, "Towns")
-	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	print(st_sf(m), n = 3)
-	m = dbReadTable(dbcon, "Regions")
-	m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	print(st_sf(m), n = 3)
+	if (.Platform$endian == "little") {
+	  db = system.file("sqlite/test3.sqlite", package = "sf")
+	  dbcon <- dbConnect(dbDriver("SQLite"), db)
+	  m = dbReadTable(dbcon, "HighWays")
+	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	  print(st_sf(m), n = 3)
+	  m = dbReadTable(dbcon, "Towns")
+	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	  print(st_sf(m), n = 3)
+	  m = dbReadTable(dbcon, "Regions")
+	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
+	  print(st_sf(m), n = 3)
+	}
 }

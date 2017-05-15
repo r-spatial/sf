@@ -1,5 +1,7 @@
 # version 0.5-0
 
+* have `st_join` accept further arguments, to be passed on to the `join` function (e.g. an `st_relate` pattern)
+
 * have WKB reader raise an error on malformed input
 
 # version 0.4-3
