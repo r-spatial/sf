@@ -1,3 +1,7 @@
+# version 0.5-0
+
+* have WKB reader raise an error on malformed input
+
 # version 0.4-3
 
 * back-port `do_union` argument to dplyr <= 0.5.0, using lazyeval
