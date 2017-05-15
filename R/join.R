@@ -67,6 +67,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' @param prepared logical; see \link{st_intersects}
 #' @param left logical; if \code{TRUE} carry out left join, else inner join; 
 #' see also \link[dplyr]{left_join}
+#' @param ... arguments passed on to the \code{join} function (e.g. a pattern for \link{st_relate})
 #' @details alternative values for argument \code{join} are: \link{st_disjoint}
 #' \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
 #' \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
@@ -83,9 +84,9 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' st_join(a, b, FUN = mean, left = FALSE)
 #' @export
 st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), 
-        prepared = TRUE, left = TRUE) {
+        prepared = TRUE, left = TRUE, ...) {
     stopifnot(inherits(x, "sf") && inherits(y, "sf"))
-    i = join(x, y, prepared = prepared)
+    i = join(x, y, prepared = prepared, ...)
     st_geometry(y) = NULL
 	which.x = which(names(x) %in% names(y))
 	which.y = which(names(y) %in% names(x))

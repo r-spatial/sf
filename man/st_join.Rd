@@ -5,7 +5,7 @@
 \title{spatial left or inner join}
 \usage{
 st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
-  prepared = TRUE, left = TRUE)
+  prepared = TRUE, left = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}}
@@ -22,6 +22,8 @@ st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 
 \item{left}{logical; if \code{TRUE} carry out left join, else inner join; 
 see also \link[dplyr]{left_join}}
+
+\item{...}{arguments passed on to the \code{join} function (e.g. a pattern for \link{st_relate})}
 }
 \value{
 an object of class \code{sf}, joined based on geometry
