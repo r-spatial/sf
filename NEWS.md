@@ -2,7 +2,7 @@
 
 * have `st_join` accept further arguments, to be passed on to the `join` function (e.g. an `st_relate` pattern)
 
-* have WKB reader raise an error on malformed input
+* have WKB reader raise an error on malformed input, and check for buffer bounds
 
 # version 0.4-3
 
