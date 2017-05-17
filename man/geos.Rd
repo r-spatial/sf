@@ -279,6 +279,8 @@ sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 seg = st_segmentize(sf, units::set_units(100, km))
 nrow(seg$geom[[1]])
 st_combine(nc)
+# a helper function that erases all of y from x:
+st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
 plot(st_union(nc))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 	st_linestring(rbind(c(0,0),c(10,0))))

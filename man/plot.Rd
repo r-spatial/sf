@@ -74,7 +74,7 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{col}{color}
 
-\item{max.plot}{integer; lower boundary to maximium number of attributes to plot}
+\item{max.plot}{integer; lower boundary to maximium number of attributes to plot (defaults to 9)}
 
 \item{pch}{plotting symbol}
 
