@@ -165,7 +165,8 @@ setAs("sf", "Spatial", function(from) {
 		stop("package sp required, please install it first")
 	geom = st_geometry(from)
 	from[[attr(from, "sf_column")]] = NULL # remove sf column list
-	sp::addAttrToGeom(as(geom, "Spatial"), data.frame(from), match.ID = FALSE)
+	sp::addAttrToGeom(as_Spatial(geom, IDs = row.names(from)),
+		data.frame(from), match.ID = FALSE)
 })
 
 #' @rdname coerce-methods
@@ -176,10 +177,11 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 ##  doesn't work for:
 ## as(st_point(0:1), "Spatial")
 
-as_Spatial = function(from, cast = TRUE) {
-  if (cast) {
-    from <- st_cast(from)
-  }
+as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
+
+	if (cast)
+		from <- st_cast(from)
+
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
@@ -188,8 +190,8 @@ as_Spatial = function(from, cast = TRUE) {
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
 		"sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),
-		"sfc_LINESTRING" = , "sfc_MULTILINESTRING" = { StopZ(zm); sfc2SpatialLines(from) },
-		"sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from) },
+		"sfc_LINESTRING" = , "sfc_MULTILINESTRING" = { StopZ(zm); sfc2SpatialLines(from, IDs) },
+		"sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from, IDs) },
 		stop(paste("conversion from feature type", class(from)[1], "to sp is not supported"))
 	)
 }
