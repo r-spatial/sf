@@ -4,7 +4,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used
-#' @param max.plot integer; lower boundary to maximium number of attributes to plot
+#' @param max.plot integer; lower boundary to maximium number of attributes to plot (defaults to 9)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -98,8 +98,9 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 			max.plot = prod(mfrow)
 
 		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
-			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, "attributes; use max.plot =",
-				ncol(x) - 1, "to plot all"), call. = FALSE)
+			if (max_plot_missing)
+				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, 
+					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
 			x = x[, 1:max.plot]
 		}
 		# col selection may have changed; set cols again:
