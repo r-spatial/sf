@@ -193,7 +193,7 @@ list_column_to_sfc = function(x) {
 st_sf = function(..., agr = NA_agr_, row.names, 
 		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {
 	x = list(...)
-	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || is.list(x)))
+	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
 		x = x[[1L]]
 
 	# find the sfc column(s):
