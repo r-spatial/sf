@@ -590,6 +590,9 @@ st_intersection.sf = function(x, y)
 
 #' @name geos
 #' @export
+#' @examples
+#' # a helper function that erases all of y from x:
+#' st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
 st_difference = function(x, y) UseMethod("st_difference")
 
 #' @export
