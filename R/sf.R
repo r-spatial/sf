@@ -12,6 +12,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param wkt name or number of the character column that holds WKT encoded geometries
 #' @param dim passed on to \link{st_point} (only when argument coords is given)
 #' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
+#' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
 #' @param ... passed on to \link{st_sf}, might included crs
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #' 
@@ -32,13 +33,15 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt, 
-		dim = "XYZ", remove = TRUE) {
+		dim = "XYZ", remove = TRUE, na.fail = TRUE) {
 	if (! missing(wkt)) {
 		if (remove) 
 			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
+		if (na.fail && any(is.na(x[coords])))
+			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
 		x$geometry = structure( lapply(split(as.vector(t(as.matrix(x[, coords]))), 
 				rep(seq_len(nrow(x)), each = length(coords))), 

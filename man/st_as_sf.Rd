@@ -15,7 +15,7 @@
 st_as_sf(x, ...)
 
 \method{st_as_sf}{data.frame}(x, ..., agr = NA_agr_, coords, wkt,
-  dim = "XYZ", remove = TRUE)
+  dim = "XYZ", remove = TRUE, na.fail = TRUE)
 
 \method{st_as_sf}{sf}(x, ...)
 
@@ -37,6 +37,8 @@ st_as_sf(x, ...)
 \item{dim}{passed on to \link{st_point} (only when argument coords is given)}
 
 \item{remove}{logical; when coords or wkt is given, remove these columns from data.frame?}
+
+\item{na.fail}{logical; if \code{TRUE}, raise an error if coordinates contain missing values}
 }
 \description{
 Convert foreign object to an sf object
