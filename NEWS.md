@@ -1,8 +1,10 @@
 # version 0.5-0
 
-* have `st_join` accept further arguments, to be passed on to the `join` function (e.g. an `st_relate` pattern)
+* have `st_as_sf.data.frame` by default break on `NA` values in coordinates; #342
 
-* have WKB reader raise an error on malformed input, and check for buffer bounds
+* have `st_join` accept further arguments, to be passed on to the `join` function (e.g. a pattern for `st_relate`)
+
+* have WKB reader throw an error on (some) malformed inputs, and check for buffer bounds
 
 # version 0.4-3
 

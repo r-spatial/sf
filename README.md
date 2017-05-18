@@ -60,6 +60,7 @@ brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsuppo
 brew link --force gdal2
 ```
 after that, you should be able to install `sf` as a source package.
+According to https://github.com/edzer/sfr/issues/349, `brew install postgis` installs a working `liblwgeom`.
 
 ### Linux
 
@@ -70,12 +71,12 @@ To install the dependencies on Ubuntu, either:
 * add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories:
 ```
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev
+sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
 ```
 or
 * install dependencies from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
 
-To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful.
+To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/edzer/sfr/tree/master/inst/docker).
 
 ### Contributing
 
