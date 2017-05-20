@@ -696,7 +696,7 @@ MULTIPOINT(48.8473404105753 9.37328114613777, 1...
 +  st_linestring(rbind(c(2,2),c(2,2.00001))))
 > st_sample(ls, 80)
 Geometry set for 4 features  (of which 1 is empty)
-geometry type:  GEOMETRY
+geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 0.09147282 ymax: 1
 epsg (SRID):    NA
@@ -731,4 +731,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  1.480   0.272   1.441 
+  1.536   0.284   1.515 

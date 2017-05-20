@@ -1,5 +1,7 @@
 # version 0.5-0
 
+* on reading, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a `GEOMETRY` object; #351
+
 * have `st_as_sf.data.frame` by default break on `NA` values in coordinates; #342
 
 * have `st_join` accept further arguments, to be passed on to the `join` function (e.g. a pattern for `st_relate`)

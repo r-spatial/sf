@@ -124,7 +124,6 @@ void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 
 void read_gpkg_header(wkb_buf *wkb, uint32_t *srid, int endian) {
 	// http://www.geopackage.org/spec/#gpb_format
-	// xxx
 	wkb_read(wkb, NULL, 3); // 'G', 'P', version
 
 	// read flag:
@@ -431,7 +430,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	}
 	if (type != NULL) {
 		if (empty)
-			*type = 0;
+			*type = -sf_type;
 		else
 			*type = sf_type;
 	}
@@ -453,8 +452,11 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 		wkb.size = raw.size();
 		// const unsigned char *pt = &(raw[0]);
 		output[i] = read_data(&wkb, EWKB, spatialite, endian, true, &type, &srid)[0];
-		if (type == 0)
+		if (type <= 0) {
+			type = -type;
 			n_empty++;
+		}
+		// Rcpp::Rcout << "type is " << type << "\n";
 		if (n_types <= 1 && type != last_type) {
 			last_type = type;
 			n_types++; // check if there's more than 1 type:
