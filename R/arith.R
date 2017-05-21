@@ -24,6 +24,9 @@ Ops.sfg <- function(e1, e2) {
 	if (!(prd || pm))
 		stop("operation not supported for sfg objects")
 	
+	if (is.na(st_dimension(e1))) # empty:
+		return(e1)
+
 	if (inherits(e2, "sfg"))
 		e2 = unclass(e2)
 

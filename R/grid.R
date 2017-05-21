@@ -11,45 +11,69 @@ st_as_grob = function(x, ..., units = "native") UseMethod("st_as_grob")
 
 #' @export
 st_as_grob.POINT = function(x, ..., default.units = "native") {
-	pointsGrob(x[1], x[2], ..., default.units = default.units)
+	if (any(is.na(x)))
+		nullGrob()
+	else
+		pointsGrob(x[1], x[2], ..., default.units = default.units)
 }
 
 #' @export
 st_as_grob.MULTIPOINT = function(x, ..., default.units = "native") {
-	pointsGrob(x[,1], x[,2], ..., default.units = default.units)
+	if (nrow(x) == 0)
+		nullGrob()
+	else
+		pointsGrob(x[,1], x[,2], ..., default.units = default.units)
 }
 
 #' @export
 st_as_grob.LINESTRING = function(x, ..., default.units = "native") {
-	linesGrob(x[,1], x[,2], ..., default.units = default.units)
+	if (nrow(x) == 0)
+		nullGrob()
+	else
+		linesGrob(x[,1], x[,2], ..., default.units = default.units)
 }
 
 #' @export
 st_as_grob.MULTILINESTRING = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) y[,1]))
-	get_y = function(x) unlist(sapply(x, function(y) y[,2]))
-	polylineGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ..., 
-		default.units = default.units)
+	if (length(x) == 0)
+		nullGrob()
+	else {
+		get_x = function(x) unlist(sapply(x, function(y) y[,1]))
+		get_y = function(x) unlist(sapply(x, function(y) y[,2]))
+		polylineGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ..., 
+			default.units = default.units)
+	}
 }
 
 #' @export
 st_as_grob.POLYGON = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) y[,1]))
-	get_y = function(x) unlist(sapply(x, function(y) y[,2]))
-	pathGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ..., default.units = default.units)
+	if (length(x) == 0)
+		nullGrob()
+	else {
+		get_x = function(x) unlist(sapply(x, function(y) y[,1]))
+		get_y = function(x) unlist(sapply(x, function(y) y[,2]))
+		pathGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ..., default.units = default.units)
+	}
 }
 
 #' @export
 st_as_grob.MULTIPOLYGON = function(x, ..., default.units = "native") {
-	get_x = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,1])))
-	get_y = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,2])))
-	get_l = function(x) unlist(sapply(x, function(y) vapply(y, nrow, 0L)))
-	pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
+	if (length(x) == 0)
+		nullGrob()
+	else {
+		get_x = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,1])))
+		get_y = function(x) unlist(sapply(x, function(y) sapply(y, function(z) z[,2])))
+		get_l = function(x) unlist(sapply(x, function(y) vapply(y, nrow, 0L)))
+		pathGrob(get_x(x), get_y(x), id.lengths = get_l(x), ..., default.units = default.units)
+	}
 }
 
 #' @export
 st_as_grob.GEOMETRYCOLLECTION = function(x, ..., default.units = "native") {
-	do.call(grid::grobTree, lapply(x, st_as_grob, ..., default.units = default.units))
+	if (length(x) == 0)
+		nullGrob()
+	else
+		do.call(grid::grobTree, lapply(x, st_as_grob, ..., default.units = default.units))
 }
 
 
