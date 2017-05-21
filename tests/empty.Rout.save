@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,82 +19,82 @@ Type 'q()' to quit R.
 > 
 > # create empty geometries:
 > st_point(rep(NA_real_,2))
-POINT(NA NA) 
+POINT(NA NA)
 > st_point(rep(NA_real_,3), dim = "XYZ")
-POINTZ(NA NA NA) 
+POINTZ(NA NA NA)
 > st_point(rep(NA_real_,3), dim = "XYM")
-POINTM(NA NA NA) 
+POINTM(NA NA NA)
 > st_point(rep(NA_real_,4), dim = "XYZM")
-POINTZM(NA NA NA NA) 
+POINTZM(NA NA NA NA)
 > 
 > st_multipoint()
-MULTIPOINT() 
+MULTIPOINT()
 > st_multipoint(matrix(numeric(0), 0, 3), dim = "XYZ")
-MULTIPOINTZ() 
+MULTIPOINTZ()
 > st_multipoint(matrix(numeric(0), 0, 3), dim = "XYM")
-MULTIPOINTM() 
+MULTIPOINTM()
 > st_multipoint(matrix(numeric(0), 0, 4), dim = "XYZM")
-MULTIPOINTZM() 
+MULTIPOINTZM()
 > 
 > st_linestring(matrix(numeric(0), 0, 2), "XY")
-LINESTRING() 
+LINESTRING()
 > st_linestring(matrix(numeric(0), 0, 3), "XYZ")
-LINESTRINGZ() 
+LINESTRINGZ()
 > st_linestring(matrix(numeric(0), 0, 3), "XYM")
-LINESTRINGM() 
+LINESTRINGM()
 > st_linestring(matrix(numeric(0), 0, 4), "XYZM")
-LINESTRINGZM() 
+LINESTRINGZM()
 > 
 > st_multilinestring(list(), "XY")
-MULTILINESTRING() 
+MULTILINESTRING()
 > st_multilinestring(list(), "XYZ")
-MULTILINESTRINGZ() 
+MULTILINESTRINGZ()
 > st_multilinestring(list(), "XYM")
-MULTILINESTRINGM() 
+MULTILINESTRINGM()
 > st_multilinestring(list(), "XYZM")
-MULTILINESTRINGZM() 
+MULTILINESTRINGZM()
 > 
 > st_polygon(list(), "XY")
-POLYGON() 
+POLYGON()
 > st_polygon(list(), "XYZ")
-POLYGONZ() 
+POLYGONZ()
 > st_polygon(list(), "XYM")
-POLYGONM() 
+POLYGONM()
 > st_polygon(list(), "XYZM")
-POLYGONZM() 
+POLYGONZM()
 > 
 > st_multipolygon(list(), "XY")
-MULTIPOLYGON() 
+MULTIPOLYGON()
 > st_multipolygon(list(), "XYZ")
-MULTIPOLYGONZ() 
+MULTIPOLYGONZ()
 > st_multipolygon(list(), "XYM")
-MULTIPOLYGONM() 
+MULTIPOLYGONM()
 > st_multipolygon(list(), "XYZM")
-MULTIPOLYGONZM() 
+MULTIPOLYGONZM()
 > 
 > st_geometrycollection()
-GEOMETRYCOLLECTION() 
+GEOMETRYCOLLECTION()
 > st_geometrycollection(dim = "XYZ")
-GEOMETRYCOLLECTIONZ() 
+GEOMETRYCOLLECTIONZ()
 > st_geometrycollection(dim = "XYM")
-GEOMETRYCOLLECTIONM() 
+GEOMETRYCOLLECTIONM()
 > st_geometrycollection(dim = "XYZM")
-GEOMETRYCOLLECTIONZM() 
+GEOMETRYCOLLECTIONZM()
 > 
 > st_point(rep(NA_real_,2))
-POINT(NA NA) 
+POINT(NA NA)
 > st_multipoint()
-MULTIPOINT() 
+MULTIPOINT()
 > st_linestring(matrix(numeric(0), 0, 2))
-LINESTRING() 
+LINESTRING()
 > st_multilinestring(list(), "XY")
-MULTILINESTRING() 
+MULTILINESTRING()
 > st_polygon(list(), "XY")
-POLYGON() 
+POLYGON()
 > st_multipolygon(list(), "XY")
-MULTIPOLYGON() 
+MULTIPOLYGON()
 > st_geometrycollection(, "XY")
-GEOMETRYCOLLECTION() 
+GEOMETRYCOLLECTION()
 > 
 > (e1 = st_sfc(
 + st_point(rep(NA_real_,2)),
@@ -104,18 +104,18 @@ GEOMETRYCOLLECTION()
 + st_polygon(list(), "XY"),
 + st_multipolygon(list(), "XY"),
 + st_geometrycollection(, "XY")))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINT(NA NA) 
-MULTIPOINT() 
-LINESTRING() 
-MULTILINESTRING() 
-POLYGON() 
+POINT(NA NA)
+MULTIPOINT()
+LINESTRING()
+MULTILINESTRING()
+POLYGON()
 > 
 > (e2 = st_sfc(st_point(rep(NA_real_,3), "XYZ"),
 + st_multipoint(matrix(numeric(0),0,3), dim = "XYZ"),
@@ -124,18 +124,18 @@ POLYGON()
 + st_polygon(list(), "XYZ"),
 + st_multipolygon(list(), "XYZ"),
 + st_geometrycollection(dim = "XYZ")))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZ
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTZ(NA NA NA) 
-MULTIPOINTZ() 
-LINESTRINGZ() 
-MULTILINESTRINGZ() 
-POLYGONZ() 
+POINTZ(NA NA NA)
+MULTIPOINTZ()
+LINESTRINGZ()
+MULTILINESTRINGZ()
+POLYGONZ()
 > 
 > (e3 = st_sfc(st_point(rep(NA_real_,3), "XYM"),
 + st_multipoint(matrix(numeric(0),0,3), dim = "XYM"),
@@ -144,18 +144,18 @@ POLYGONZ()
 + st_polygon(list(), "XYM"),
 + st_multipolygon(list(), "XYM"),
 + st_geometrycollection(dim = "XYM")))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTM(NA NA NA) 
-MULTIPOINTM() 
-LINESTRINGM() 
-MULTILINESTRINGM() 
-POLYGONM() 
+POINTM(NA NA NA)
+MULTIPOINTM()
+LINESTRINGM()
+MULTILINESTRINGM()
+POLYGONM()
 > 
 > (e4 = st_sfc(st_point(rep(NA_real_,4)),
 + st_multipoint(matrix(numeric(0),0,4), dim = "XYZM"),
@@ -164,97 +164,97 @@ POLYGONM()
 + st_polygon(list(), "XYZM"),
 + st_multipolygon(list(), "XYZM"),
 + st_geometrycollection(dim = "XYZM")))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTZM(NA NA NA NA) 
-MULTIPOINTZM() 
-LINESTRINGZM() 
-MULTILINESTRINGZM() 
-POLYGONZM() 
+POINTZM(NA NA NA NA)
+MULTIPOINTZM()
+LINESTRINGZM()
+MULTILINESTRINGZM()
+POLYGONZM()
 > 
 > st_as_sfc(st_as_binary(e1, pureR = TRUE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINT(NA NA) 
-MULTIPOINT() 
-LINESTRING() 
-MULTILINESTRING() 
-POLYGON() 
+POINT(NA NA)
+MULTIPOINT()
+LINESTRING()
+MULTILINESTRING()
+POLYGON()
 > st_as_sfc(st_as_binary(e1, pureR = FALSE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINT(NA NA) 
-MULTIPOINT() 
-LINESTRING() 
-MULTILINESTRING() 
-POLYGON() 
+POINT(NA NA)
+MULTIPOINT()
+LINESTRING()
+MULTILINESTRING()
+POLYGON()
 > st_as_sfc(st_as_binary(e2, pureR = FALSE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZ
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTZ(NA NA NA) 
-MULTIPOINTZ() 
-LINESTRINGZ() 
-MULTILINESTRINGZ() 
-POLYGONZ() 
+POINTZ(NA NA NA)
+MULTIPOINTZ()
+LINESTRINGZ()
+MULTILINESTRINGZ()
+POLYGONZ()
 > st_as_sfc(st_as_binary(e3, pureR = FALSE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTM(NA NA NA) 
-MULTIPOINTM() 
-LINESTRINGM() 
-MULTILINESTRINGM() 
-POLYGONM() 
+POINTM(NA NA NA)
+MULTIPOINTM()
+LINESTRINGM()
+MULTILINESTRINGM()
+POLYGONM()
 > st_as_sfc(st_as_binary(e4, pureR = FALSE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINTZM(NA NA NA NA) 
-MULTIPOINTZM() 
-LINESTRINGZM() 
-MULTILINESTRINGZM() 
-POLYGONZM() 
+POINTZM(NA NA NA NA)
+MULTIPOINTZM()
+LINESTRINGZM()
+MULTILINESTRINGZM()
+POLYGONZM()
 > st_as_sfc(st_as_binary(e1, pureR = FALSE))
-Geometry set for 7 features (of which 6 are empty)
+Geometry set for 7 features  (with 6 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 First 5 geometries:
-POINT(NA NA) 
-MULTIPOINT() 
-LINESTRING() 
-MULTILINESTRING() 
-POLYGON() 
+POINT(NA NA)
+MULTIPOINT()
+LINESTRING()
+MULTILINESTRING()
+POLYGON()
 > 
 > # sfc_GEOMETRY:
 > x = st_sfc(st_point(0:1), st_linestring(matrix(1:4,2,2)))
@@ -272,4 +272,4 @@ POLYGON()
 > 
 > proc.time()
    user  system elapsed 
-  0.324   0.016   0.340 
+  0.612   0.232   0.596 

@@ -78,11 +78,11 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 }
 
 #' @export
-"[.sfc" = function(x, i, j, ...) {
+"[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	recompute_bb = !missing(i)
     old = x
-	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
-		i = lengths(st_geos_binop("intersects", x, i, ...)) != 0
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
+		i = lengths(op(x, i, ...)) != 0
     x = NextMethod("[")
 	a = attributes(old)
 	if (!is.null(names(x)))
@@ -127,7 +127,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	if (! is.null(attr(x, "n_empty"))) {
 		ne = attr(x, "n_empty")
 		if (ne > 0)
-			cat(paste0(" (of which ", ne, ifelse(ne > 1, " are ", " is "), "empty)"))
+			cat(paste0(" (with ", ne, ifelse(ne > 1, " geometries ", " geometry "), "empty)"))
 	}
 	cat("\n")
 	if (length(x)) {

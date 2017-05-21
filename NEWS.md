@@ -1,6 +1,12 @@
 # version 0.5-0
 
-* on reading, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a `GEOMETRY` object; #351
+* [.sf and [.sfc now also select on i when i is an `sfg` object, and accept a geometric predicate function with optional arguments; #352
+
+* on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a `GEOMETRY` object; #351
+
+* on plotting with `ggplot2::geom_sf`, empty geometries no longer break; grid functions return `nullGrob()` for them; #351
+
+* arith operations on empty geometries no longer break or give warnings; #351
 
 * have `st_as_sf.data.frame` by default break on `NA` values in coordinates; #342
 

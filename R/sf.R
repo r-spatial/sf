@@ -264,7 +264,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticy and return a \code{sf} object.
 #' @param op function; geometrical binary predicate function to apply when \code{i} is a simple feature object
-#' @details "[.sf" will return a \code{data.frame} if the geometry column (of class \code{sfc}) is dropped (\code{drop=TRUE}), an \code{sfc} object if only the geometry column is selected, otherwise returns an \code{sf} object; see also \link{[.data.frame}.
+#' @details \code{[.sf} will return a \code{data.frame} or vector if the geometry column (of class \code{sfc}) is dropped (\code{drop=TRUE}), an \code{sfc} object if only the geometry column is selected, and otherwise return an \code{sf} object; see also \link{[.data.frame}; for \code{[.sf} \code{...} arguments are passed to \code{op}.
 #' @examples
 #' g = st_sfc(st_point(1:2), st_point(3:4))
 #' s = st_sf(a=3:4, g)
@@ -283,8 +283,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 "[.sf" = function(x, i, j, ..., drop = FALSE, op = st_intersects) {
 	nargs = nargs()
 	agr = st_agr(x)
-	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc")))
-		i = lengths(st_intersects(x, i)) != 0
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
+		i = lengths(op(x, i, ...)) != 0
 	sf_column = attr(x, "sf_column")
 	geom = st_geometry(x)
 	if (!missing(i) && nargs > 2) { # e.g. a[3:4,] not a[3:4]
@@ -323,7 +323,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		st_agr(x) = agr[match(setdiff(names(x), sf_column), names(agr))]
 		x
 	} else
-		as.data.frame(x)
+		#as.data.frame(x)
+		x
 }
 
 #' @export
