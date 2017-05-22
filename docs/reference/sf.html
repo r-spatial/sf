@@ -122,9 +122,8 @@
     </tr>
     <tr>
       <th>sf_column_name</th>
-      <td><p>character; name of the list-column with simple feature geometries, in case 
-there is more than one; if there is more than one and <code>sf_column_name</code> is not given, the 
-first one is selected and a warning is given</p></td>
+      <td><p>character; name of the active list-column with simple feature geometries; in case 
+there are more than one and <code>sf_column_name</code> is not given, the first one is taken.</p></td>
     </tr>
     <tr>
       <th>x</th>
@@ -140,7 +139,7 @@ first one is selected and a warning is given</p></td>
     </tr>
     <tr>
       <th>drop</th>
-      <td><p>whether to drop to simpler (e.g. vector) representation, see [.data.frame</p></td>
+      <td><p>logical, default <code>FALSE</code>; if <code>TRUE</code> drop the geometry column and return a <code>data.frame</code>, else make the geometry sticy and return a <code>sf</code> object.</p></td>
     </tr>
     <tr>
       <th>op</th>
@@ -150,8 +149,8 @@ first one is selected and a warning is given</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>agr</code>, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, <code>NA_agr_</code>, implies we don't know.</p>
-<p>"[.sf" will return a <code>data.frame</code> if the geometry column (of class <code>sfc</code>) is dropped, an <code>sfc</code> object if only the geometry column is selected, otherwise the behavior depending on <code>drop</code> is identical to that of [.data.frame.</p>
+    <p><code>agr</code>, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, <code>NA_agr_</code>, implies we don't know.
+    <code>[.sf</code> will return a <code>data.frame</code> or vector if the geometry column (of class <code>sfc</code>) is dropped (<code>drop=TRUE</code>), an <code>sfc</code> object if only the geometry column is selected, and otherwise return an <code>sf</code> object; see also [.data.frame; for <code>[.sf</code> <code>...</code> arguments are passed to <code>op</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

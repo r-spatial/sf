@@ -87,40 +87,43 @@
 <p>Set or replace retrieve coordinate reference system from object</p>
     
 
-    <pre class="usage"><span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage">st_crs(x, ...)
 
-<span class='co'># S3 method for sf</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+# S3 method for sf
+st_crs(x, ...)
 
-<span class='co'># S3 method for numeric</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+# S3 method for numeric
+st_crs(x, ...)
 
-<span class='co'># S3 method for character</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='no'>wkt</span>)
+# S3 method for character
+st_crs(x, ..., wkt)
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+# S3 method for sfc
+st_crs(x, ...)
 
-<span class='co'># S3 method for bbox</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+# S3 method for bbox
+st_crs(x, ...)
 
-<span class='co'># S3 method for crs</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+# S3 method for crs
+st_crs(x, ...)
 
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+st_crs(x) <- value
 
-<span class='co'># S3 method for sf</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+# S3 method for sf
+st_crs(x) <- value
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_crs</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+# S3 method for sfc
+st_crs(x) <- value
 
-<span class='fu'>st_set_crs</span>(<span class='no'>x</span>, <span class='no'>value</span>)
+st_set_crs(x, value)
 
-<span class='no'>NA_crs_</span>
+NA_crs_
 
-<span class='co'># S3 method for crs</span>
-<span class='fu'>is.na</span>(<span class='no'>x</span>)</pre>
+# S3 method for crs
+is.na(x)
+
+# S3 method for crs
+$(x, name)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +143,10 @@
     <tr>
       <th>value</th>
       <td><p>one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>element name; codeepsg or <code>proj4string</code>, or one of <code>proj4strings</code> named components without the <code>+</code>; see examples</p></td>
     </tr>
     </table>
     
@@ -195,7 +202,7 @@ and +datum=WGS84, literally</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 -7.08115455161362e-10)</span></div><div class='output co'>#&gt; <span class='message'>POINT(111319.490793274 111325.142866385)</span></div></pre>
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 -7.08115455161362e-10)</span></div><div class='output co'>#&gt; <span class='message'>POINT(111319.490793274 111325.142866385)</span></div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857"</span>)$<span class='no'>epsg</span></div><div class='output co'>#&gt; [1] 3857</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857"</span>)$<span class='no'>proj4string</span></div><div class='output co'>#&gt; [1] "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs"</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=km"</span>)$<span class='no'>b</span>     <span class='co'># numeric</span></div><div class='output co'>#&gt; [1] 6378137</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=km"</span>)$<span class='no'>units</span> <span class='co'># character</span></div><div class='output co'>#&gt; [1] "km"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

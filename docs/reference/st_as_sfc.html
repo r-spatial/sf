@@ -90,8 +90,8 @@
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
 
 <span class='co'># S3 method for WKB</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
 
 <span class='co'># S3 method for character</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='no'>...</span>)
@@ -136,7 +136,11 @@
     </tr>
     <tr>
       <th>EWKB</th>
-      <td><p>logical; if TRUE, parse as EWKB (PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)</p></td>
+      <td><p>logical; if TRUE, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)</p></td>
+    </tr>
+    <tr>
+      <th>spatialite</th>
+      <td><p>logical; if <code>TRUE</code>, WKB is assumed to be in the spatialite dialect, see <a href = 'https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html'>https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html</a>; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).</p></td>
     </tr>
     <tr>
       <th>pureR</th>

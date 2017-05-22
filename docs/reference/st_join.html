@@ -87,7 +87,7 @@
     
 
     <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>FUN</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
-  <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -120,6 +120,10 @@
       <th>left</th>
       <td><p>logical; if <code>TRUE</code> carry out left join, else inner join; 
 see also <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to the <code>join</code> function (e.g. a pattern for <a href='geos.html'>st_relate</a>)</p></td>
     </tr>
     </table>
     

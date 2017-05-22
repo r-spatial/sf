@@ -331,19 +331,20 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## [1] "sfc_MULTIPOLYGON" "sfc"</code></pre></div>
 <p>Methods for geometry list-columns include</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">'sfc'</span>)
-##  [1] coerce            c                 format           
-##  [4] initialize        Ops               print            
-##  [7] [                 show              slotsFromS3      
-## [10] st_as_binary      st_as_text        st_bbox          
-## [13] st_boundary       st_buffer         st_cast          
-## [16] st_centroid       st_convex_hull    st_coordinates   
-## [19] st_crs&lt;-          st_crs            st_difference    
-## [22] st_geometry       st_intersection   st_is            
-## [25] st_line_merge     st_make_valid     st_polygonize    
-## [28] st_precision      str               st_segmentize    
-## [31] st_set_precision  st_simplify       st_sym_difference
-## [34] st_transform      st_triangulate    st_union         
-## [37] st_voronoi        st_zm             summary          
+##  [1] as.data.frame     coerce            c                
+##  [4] format            initialize        Ops              
+##  [7] print             [                 show             
+## [10] slotsFromS3       st_as_binary      st_as_text       
+## [13] st_bbox           st_boundary       st_buffer        
+## [16] st_cast           st_centroid       st_convex_hull   
+## [19] st_coordinates    st_crs&lt;-          st_crs           
+## [22] st_difference     st_geometry       st_intersection  
+## [25] st_is             st_line_merge     st_make_valid    
+## [28] st_polygonize     st_precision      str              
+## [31] st_segmentize     st_set_precision  st_simplify      
+## [34] st_sym_difference st_transform      st_triangulate   
+## [37] st_union          st_voronoi        st_zm            
+## [40] summary          
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -655,11 +656,11 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 ## [4] st_as_sf.Spatial*   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
-## [1] st_as_sfc.character*          st_as_sfc.list*              
-## [3] st_as_sfc.map*                st_as_sfc.SpatialLines*      
-## [5] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     
-## [7] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   
-## [9] st_as_sfc.WKB*               
+##  [1] st_as_sfc.character*          st_as_sfc.factor*            
+##  [3] st_as_sfc.list*               st_as_sfc.map*               
+##  [5] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
+##  [7] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
+##  [9] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
 ## see '?methods' for accessing help and source code
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>

@@ -84,20 +84,50 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-5-0" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-0" class="anchor"></a>version 0.5-0</h1>
+<ul>
+<li><p>[.sf and [.sfc now also select on i when i is an <code>sfg</code> object, and accept a geometric predicate function with optional arguments; #352</p></li>
+<li><p>on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a <code>GEOMETRY</code> object; #351</p></li>
+<li><p>on plotting with <code>ggplot2::geom_sf</code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>
+<li><p>arith operations on empty geometries no longer break or give warnings; #351</p></li>
+<li><p>have <code>st_as_sf.data.frame</code> by default break on <code>NA</code> values in coordinates; #342</p></li>
+<li><p>have <code>st_join</code> accept further arguments, to be passed on to the <code>join</code> function (e.g. a pattern for <code>st_relate</code>)</p></li>
+<li><p>have WKB reader throw an error on (some) malformed inputs, and check for buffer bounds</p></li>
+</ul>
+</div>
+    <div id="version-0-4-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-4-3" class="anchor"></a>version 0.4-3</h1>
+<ul>
+<li><p>back-port <code>do_union</code> argument to dplyr &lt;= 0.5.0, using lazyeval</p></li>
+<li><p>all strings returned from OGR/GDAL now get encoding set to <code>UTF-8</code>, making them work on non-UTF-8 platforms; #5</p></li>
+<li><p><code>$.crs</code> now retrieves proj4string components, such as <code>st_crs(4326)$datum</code> in addition to <code>epsg</code> and <code>proj4string</code></p></li>
+<li><p>let <code>st_geohash</code> return geohash for (average) points (only when sf was linked to liblwgeom)</p></li>
+</ul>
+</div>
     <div id="version-0-4-2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-4-2" class="anchor"></a>version 0.4-2</h1>
 <ul>
+<li><p><code>summarise.sf</code> now always returns an <code>sf</code> object, also for global (non-grouped) summaries.</p></li>
+<li><p><code>summarise.sf</code> gains an argument <code>do_union</code> which determines whether to union the geometries for which a summary is given, or to <code>st_combine</code> them (not resolving boundaries); #331</p></li>
+<li><p>rename argument <code>union</code> of <code>aggregate.sf</code> into <code>do_union</code>, for consistency with <code>summarise</code>; #331</p></li>
+<li><p>add a <code>nest_</code> method for <code>sf</code> objects</p></li>
+<li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code>rgeos::gRelate</code>; add examples to get rook and queen neighbour lists using this; #234</p></li>
+<li><p>support for direct reading of spatialite and sqlite geometry wkb blobs</p></li>
+<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code>dplyr::bind_cols</code> or <code><a href="../reference/sf.html">st_sf(data.frame(sf, df))</a></code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
 <li><p>units support for function arguments of <code>st_segmentize</code> and <code>st_line_sample</code></p></li>
-<li><p>document problem reading shapefiles from USB drives on OSX, #252</p></li>
-<li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>, #296</p></li>
-<li><p>coercing <code>sf</code> to <code>data.frame</code> now works better, #298</p></li>
-<li><p><code>st_line_sample</code> gains argument <code>sample</code> to specify the points t.b. sampled, #299 #300 thanks to @joethorley</p></li>
-<li><p>add compatibility to upcoming dplyr 0.6.0, #304 #42</p></li>
+<li><p>document problem reading shapefiles from USB drives on OSX; #252</p></li>
+<li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>; #296</p></li>
+<li><p>coercing <code>sf</code> to <code>data.frame</code> now works better; #298</p></li>
+<li><p><code>st_line_sample</code> gains argument <code>sample</code> to specify the points t.b. sampled; #299 #300 thanks to @joethorley</p></li>
+<li><p>add compatibility to upcoming dplyr 0.6.0; #304 #42</p></li>
 <li><p>write GDAL fields by name, not by number, fixing a KML problem #308</p></li>
 <li><p><code>st_write</code> gains arguments <code>delete_layer</code> and <code>delete_dsn</code> to allow overwrite capability #307 #274</p></li>
 <li><p><code>write_sf</code> defaults to <code>delete_layer=TRUE</code>, silently overwriting layers if they’re already present</p></li>
-<li><p>compatibility with GDAL 2.2beta0, #303, #309</p></li>
+<li><p>compatibility with GDAL 2.2beta0; #303; #309</p></li>
 <li><p>replace <code>st_write_db</code> with a version that is fast for large datasets (#285), thanks to Josh London</p></li>
 <li><p>take out more memory leaking examples in tests</p></li>
 <li><p>the <code>aggregate</code> method for <code>sf</code> objects now assumes the <code>by</code> argument to be identical to that of <code>stats::aggregate</code></p></li>
@@ -123,7 +153,7 @@
 <a href="#version-0-4-0" class="anchor"></a>version 0.4-0</h1>
 <ul>
 <li><p>have <code>st_is_valid</code> catch corrupt geometries too, returning <code>NA</code> in that case (requiring GEOS 3.5.0)</p></li>
-<li><p>add <code>st_make_valid</code>, only working if sf was linked to <code>liblwgeom</code></p></li>
+<li><p>add <code>st_make_valid</code>, only available when sf was linked to <code>liblwgeom</code></p></li>
 <li><p>add <code>st_coordinates</code> method, returning coordinates matrix with indexes</p></li>
 <li><p>remove <code>unlist.sfg</code></p></li>
 <li><p>add <code>as.matrix.sfg</code>; have as.matrix.sfg add indexes to coordinates</p></li>
@@ -186,7 +216,7 @@
 <li><p>add RStudio project file</p></li>
 <li><p>have <code>st_bbox</code> return a <code>bbox</code> object which has an <code>st_crs</code> method</p></li>
 <li><p>rename <code>st_drop_zm</code> into <code>st_zm</code>, for general more handling of Z and M</p></li>
-<li><p>allow for 3D coordinates returned, when <code>+proj=geocent</code> (#172, #103)</p></li>
+<li><p>allow for 3D coordinates returned, when <code>+proj=geocent</code> (#172; #103)</p></li>
 <li><p>fix <code>NA_integer_</code> handling in shapefiles I/O (#184)</p></li>
 <li><p>add and fix <code>st_agr</code> API, to set and get attribute-to-geometry relationships</p></li>
 </ul>
@@ -202,6 +232,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-5-0">0.5-0</a></li>
+        <li><a href="#version-0-4-3">0.4-3</a></li>
         <li><a href="#version-0-4-2">0.4-2</a></li>
         <li><a href="#version-0-4-1">0.4-1</a></li>
         <li><a href="#version-0-4-0">0.4-0</a></li>

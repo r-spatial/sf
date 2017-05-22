@@ -90,7 +90,7 @@
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>, <span class='no'>coords</span>, <span class='no'>wkt</span>,
-  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -131,6 +131,10 @@
     <tr>
       <th>remove</th>
       <td><p>logical; when coords or wkt is given, remove these columns from data.frame?</p></td>
+    </tr>
+    <tr>
+      <th>na.fail</th>
+      <td><p>logical; if <code>TRUE</code>, raise an error if coordinates contain missing values</p></td>
     </tr>
     </table>
     

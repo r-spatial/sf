@@ -131,9 +131,18 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>for the precion model, see also <a href = 'http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html'>http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
+    <p><code>st_as_binary</code> is called on sfc objects on their way to the GDAL or GEOS libraries, and hence does rounding (if requested) on the fly before e.g. computing spatial predicates like <a href='geos.html'>st_intersects</a>. The examples show a round-trip of an <code>sfc</code> to and from binary.</p>
+<p>For the precision model used, see also <a href = 'https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html'>https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>1</span>/<span class='fl'>6</span>)), <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+<span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='fu'>st_as_binary</span>(<span class='no'>x</span>)) <span class='co'># rounds</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT(0.333 0.167)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -141,7 +150,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

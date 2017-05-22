@@ -112,7 +112,7 @@ brew install geos
 brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
-<p>after that, you should be able to install <code>sf</code> as a source package.</p>
+<p>after that, you should be able to install <code>sf</code> as a source package. According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>.</p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
@@ -123,11 +123,11 @@ brew link --force gdal2</code></pre>
 <li>
 <p>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
 <pre><code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev</code></pre>
+sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre>
 or</li>
 <li><p>install dependencies from source; see e.g. an older <a href="https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
 </ul>
-<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful.</p>
+<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/edzer/sfr/tree/master/inst/docker">here</a>.</p>
 </div>
 <div id="contributing" class="section level3">
 <h3 class="hasAnchor">
