@@ -14,7 +14,7 @@ st_make_valid(x)
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 
-\item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise an GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
+\item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
 
 \item{reason}{logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, \code{NA} on exception, or \code{"Valid Geometry"} otherwise.}
 }

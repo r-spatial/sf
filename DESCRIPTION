@@ -81,4 +81,5 @@ Collate:
 	sample.R
 	valid.R
 	geohash.R
+	split.R
 RoxygenNote: 6.0.1

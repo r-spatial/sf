@@ -467,6 +467,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_split
+Rcpp::List CPL_split(Rcpp::List sfc, Rcpp::List blade);
+RcppExport SEXP sf_CPL_split(SEXP sfcSEXP, SEXP bladeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type blade(bladeSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_split(sfc, blade));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geohash
 Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec);
 RcppExport SEXP sf_CPL_geohash(SEXP sfcSEXP, SEXP precSEXP) {

@@ -57,6 +57,20 @@ Rcpp::List CPL_make_valid(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_split(Rcpp::List sfc, Rcpp::List blade) {
+
+	std::vector<LWGEOM *> lwgeom_in = lwgeom_from_sfc(sfc);
+	std::vector<LWGEOM *> lwgeom_blade = lwgeom_from_sfc(blade);
+	for (int i = 0; i < lwgeom_in.size(); i++) {
+		LWGEOM *lwg_ret = lwgeom_split(lwgeom_in[i], lwgeom_blade[0]);
+		lwgeom_free(lwgeom_in[i]);
+		lwgeom_in[i] = lwg_ret;
+	}
+	sfc_from_lwgeom(lwgeom_blade); // free
+	return sfc_from_lwgeom(lwgeom_in);
+}
+
+// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 
 	Rcpp::CharacterVector chr(sfc.size()); // return
@@ -69,19 +83,26 @@ Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
 }
 
 #else
+// #nocov start
 
 Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 	return NA_STRING;
 }
 
 Rcpp::List CPL_make_valid(Rcpp::List sfc) {
-	Rcpp::stop("st_make_valid requires compilation against liblwgeom\n"); // #nocov
+	Rcpp::stop("st_make_valid requires compilation against liblwgeom\n");
+	return sfc;
+}
+
+Rcpp::List CPL_split(Rcpp::List sfc, Rcpp::List blade) {
+	Rcpp::stop("st_split requires compilation against liblwgeom\n");
 	return sfc;
 }
 
 Rcpp::CharacterVector CPL_geohash(Rcpp::List sfc, int prec) {
-	Rcpp::stop("st_make_valid requires compilation against liblwgeom\n"); // #nocov
+	Rcpp::stop("st_make_valid requires compilation against liblwgeom\n");
 	return NA_STRING;
 }
 
+// #nocov end
 #endif

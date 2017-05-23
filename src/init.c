@@ -47,6 +47,7 @@ extern SEXP sf_CPL_read_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_read_wkb(SEXP, SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_roundtrip(SEXP);
 extern SEXP sf_CPL_sfc_from_wkt(SEXP);
+extern SEXP sf_CPL_split(SEXP, SEXP);
 extern SEXP sf_CPL_transform(SEXP, SEXP);
 extern SEXP sf_CPL_wrap_dateline(SEXP, SEXP, SEXP);
 extern SEXP sf_CPL_write_ogr(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -93,6 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"sf_CPL_read_wkb",                 (DL_FUNC) &sf_CPL_read_wkb,                  4},
     {"sf_CPL_roundtrip",                (DL_FUNC) &sf_CPL_roundtrip,                 1},
     {"sf_CPL_sfc_from_wkt",             (DL_FUNC) &sf_CPL_sfc_from_wkt,              1},
+    {"sf_CPL_split",                    (DL_FUNC) &sf_CPL_split,                     2},
     {"sf_CPL_transform",                (DL_FUNC) &sf_CPL_transform,                 2},
     {"sf_CPL_wrap_dateline",            (DL_FUNC) &sf_CPL_wrap_dateline,             3},
     {"sf_CPL_write_ogr",                (DL_FUNC) &sf_CPL_write_ogr,                12},
