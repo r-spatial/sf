@@ -299,7 +299,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					//  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
 					Rcpp::List dtlst = 
 						Rcpp::List::create((double) Second, (double) Minute, 
-						(double) Hour, (double) Day, (double) Month, (double) Year - 1900, 
+						(double) Hour, (double) Day, (double) Month - 1, (double) Year - 1900, 
 						0.0, 0.0, 0.0);
 					dtlst.attr("class") = "POSIXlt";
 					if (TZFlag == 100)
