@@ -18,7 +18,7 @@ Areal-weighted interpolation of polygon data
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-g = sf:::st_make_grid(nc, n = c(20,10))
+g = st_make_grid(nc, n = c(20,10))
 a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
