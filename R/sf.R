@@ -192,6 +192,10 @@ list_column_to_sfc = function(x) {
 #' st_sf(a=3,g)
 #' st_sf(g, a=3)
 #' st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
+#' # create empty structure with preallocated empty geometries:
+#' nrows <- 10
+#' geometry = st_sfc(lapply(1:nrows, function(x) st_geometrycollection()))
+#' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names, 
 		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {

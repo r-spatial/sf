@@ -52,6 +52,10 @@ g = st_sfc(st_point(1:2))
 st_sf(a=3,g)
 st_sf(g, a=3)
 st_sf(a=3, st_sfc(st_point(1:2))) # better to name it!
+# create empty structure with preallocated empty geometries:
+nrows <- 10
+geometry = st_sfc(lapply(1:nrows, function(x) st_geometrycollection()))
+df <- st_sf(id = 1:nrows, geometry = geometry)
 g = st_sfc(st_point(1:2), st_point(3:4))
 s = st_sf(a=3:4, g)
 s[1,]
