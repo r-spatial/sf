@@ -25,14 +25,14 @@ typedef struct {
 	size_t size;
 } wkb_buf;
 
-void wkb_read(wkb_buf *wkb, void *dst, int n);
+void wkb_read(wkb_buf *wkb, void *dst, size_t n);
 
 Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian, 
 	bool addclass, int *type, uint32_t *srid);
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
-void wkb_read(wkb_buf *wkb, void *dst, int n) {
+void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
 	if (n > wkb->size)
 		throw std::range_error("range check error: WKB buffer too small. Input file corrupt?");
 	if (dst != NULL)

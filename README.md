@@ -60,11 +60,12 @@ brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsuppo
 brew link --force gdal2
 ```
 after that, you should be able to install `sf` as a source package.
+
 According to https://github.com/edzer/sfr/issues/349, `brew install postgis` installs a working `liblwgeom`.
 
 ### Linux
 
-For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are needed.
+For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are required; `liblwgeom` is optional.
 
 To install the dependencies on Ubuntu, either:
 

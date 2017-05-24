@@ -148,3 +148,12 @@ test_that("the first layer is selected with a warning", {
 	expect_error(st_read(system.file("osm/overpass.osm", package="sf"), "foo", quiet = TRUE),
 		"Opening layer failed")
 })
+
+test_that("we get a warning when not specifying one of multiple layers", {
+ 	skip_if_not("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin")
+
+	Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
+	osm = system.file("osm/overpass.osm", package="sf")
+	expect_warning(st_read(osm), 
+		"automatically selected the first layer in a data source containing more than one.")
+})

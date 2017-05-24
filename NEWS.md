@@ -1,5 +1,7 @@
 # version 0.5-0
 
+* fix bug reading and writing dates (months 1 off): #358
+
 * [.sf and [.sfc now also select on i when i is an `sfg` object, and accept a geometric predicate function with optional arguments; #352
 
 * on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a `GEOMETRY` object; #351
