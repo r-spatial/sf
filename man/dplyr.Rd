@@ -55,6 +55,8 @@
 \alias{dplyr}
 \alias{nest_.sf}
 \alias{dplyr}
+\alias{separate_.sf}
+\alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
 \alias{left_join.sf}
@@ -124,6 +126,9 @@ sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
 
 nest_.sf(data, key_col, nest_cols)
 
+separate_.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+  convert = FALSE, extra = "warn", fill = "warn", ...)
+
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
@@ -182,6 +187,14 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{.env}{see original function docs}
 
 \item{nest_cols}{see \link[tidyr]{nest}}
+
+\item{col}{see \link[tidyr]{separate}}
+
+\item{into}{see \link[tidyr]{separate}}
+
+\item{remove}{see \link[tidyr]{separate}}
+
+\item{extra}{see \link[tidyr]{separate}}
 
 \item{y}{see \link[dplyr]{left_join}}
 

@@ -286,6 +286,18 @@ nest_.sf <- function(data, key_col, nest_cols) {
 	ret
 }
 
+#' @name dplyr
+#' @param col see \link[tidyr]{separate}
+#' @param into see \link[tidyr]{separate}
+#' @param remove see \link[tidyr]{separate}
+#' @param extra see \link[tidyr]{separate}
+#' @export
+separate_.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+	convert = FALSE, extra = "warn", fill = "warn", ...) {
+	class(data) <- setdiff(class(data), "sf")
+	st_as_sf(NextMethod())
+}
+
 ## tibble methods:
 
 #' Summarize simple feature type for tibble
