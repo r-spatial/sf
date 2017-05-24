@@ -271,12 +271,12 @@ POLYGON()
 [2,] FALSE FALSE
 > 
 > # write & read:
-> x = st_sf(a = 2:1, geom = st_sfc(st_linestring(), st_linestring(matrix(1:4,2))))
-> write_sf(x, "empty.gpkg")
-> y = read_sf("empty.gpkg")
+> x = st_sf(a = 2:1, geometry = st_sfc(st_linestring(), st_linestring(matrix(1:4,2))))
+> write_sf(x, "empty.shp")
+> y = read_sf("empty.shp")
 > all.equal(x, y)
 [1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  1.012   0.164   1.088 
+   0.68    0.30    0.67 

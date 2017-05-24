@@ -93,7 +93,7 @@ x = st_sfc(st_multipoint(), st_linestring())
 st_intersects(x, x, sparse = FALSE)
 
 # write & read:
-x = st_sf(a = 2:1, geom = st_sfc(st_linestring(), st_linestring(matrix(1:4,2))))
-write_sf(x, "empty.gpkg")
-y = read_sf("empty.gpkg")
+x = st_sf(a = 2:1, geometry = st_sfc(st_linestring(), st_linestring(matrix(1:4,2))))
+write_sf(x, "empty.shp")
+y = read_sf("empty.shp")
 all.equal(x, y)
