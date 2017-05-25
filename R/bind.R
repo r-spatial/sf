@@ -55,6 +55,6 @@ cbind.sf = function(..., deparse.level = 1, sf_column_name = NULL) {
 #' @export
 #' @details \code{st_bind_cols} is deprecated; use \code{cbind} instead.
 st_bind_cols = function(...) {
-	.Deprecated("cbind")
-	cbind.sf(...)
+	.Deprecated("cbind") # nocov
+	cbind.sf(...)        # nocov
 }

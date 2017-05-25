@@ -90,6 +90,5 @@ st_as_sfc.character = function(x, crs = NA_integer_, ...) {
 #' @details if \code{x} is a \code{factor}, it is converted to \code{character}
 #' @export
 st_as_sfc.factor = function(x, ...) {
-	x = as.character(x)
-	NextMethod()
+	st_as_sfc(as.character(x), ...)
 }

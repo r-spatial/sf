@@ -13,7 +13,9 @@ test_that("st_make_valid works", {
 		expect_equal(st_geohash(st_sfc(st_point(c(1.5,3.5)), st_point(c(0,90))), 10), c("s095fjhkbx","upbpbpbpbp"))
 		l = st_as_sfc('MULTILINESTRING((10 10, 190 190), (15 15, 30 30, 100 90))')
 		pt = st_sfc(st_point(c(30,30)))
-		expect_silent(st_split(l, pt))
+		expect_silent(st_split(l, pt)) # sfc
+		expect_silent(st_split(l[[1]], pt)) # sfg
+		expect_silent(st_split(st_sf(a = 1, geom = l), pt)) # sf
 	}
 })
 

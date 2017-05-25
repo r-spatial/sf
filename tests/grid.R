@@ -54,3 +54,6 @@ grid.newpage()
 pushViewport(st_viewport(meuse_ll))
 invisible(lapply(st_geometry(meuse_ll), 
 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
+
+gc = st_geometrycollection(list(st_point(0:1), st_linestring(matrix(1:4,2))))
+grb = st_as_grob(gc)
