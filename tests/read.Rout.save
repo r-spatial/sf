@@ -226,6 +226,12 @@ proj4string:    NA
 + 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 + 	print(st_sf(m), n = 3)
 + 
++ 	db = system.file("sqlite/b.sqlite", package = "sf") # has an INT8 field
++ 	b = st_read(db)
++ 	print(b)
++ 	b = st_read(db, int64_as_string=TRUE)
++ 	print(b)
++ 
 + 	if (.Platform$endian == "little") {
 + 	  db = system.file("sqlite/test3.sqlite", package = "sf")
 + 	  dbcon <- dbConnect(dbDriver("SQLite"), db)
@@ -271,6 +277,40 @@ First 3 features:
 1     1      10  1364     0      19 MULTIPOLYGON(((-81.47275543...
 2     0      10   542     3      12 MULTIPOLYGON(((-81.23989105...
 3     5     208  3616     6     260 MULTIPOLYGON(((-80.45634460...
+Reading layer `a.sqlite' from data source `/home/edzer/git/sf.Rcheck/sf/sqlite/b.sqlite' using driver `SQLite'
+converted into: POINT
+Integer64 values larger than 9.0072e+15 lost significance after conversion to double;
+use argument int64_as_string = TRUE to import them lossless, as character
+Simple feature collection with 1 feature and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+Simple feature collection with 1 feature and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a       bigint   GEOMETRY
+1 1 4.611686e+18 POINT(0 1)
+Reading layer `a.sqlite' from data source `/home/edzer/git/sf.Rcheck/sf/sqlite/b.sqlite' using driver `SQLite'
+converted into: POINT
+Simple feature collection with 1 feature and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+Simple feature collection with 1 feature and 2 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a              bigint   GEOMETRY
+1 1 4611686018427387904 POINT(0 1)
 Simple feature collection with 10 features and 2 fields
 geometry type:  LINESTRING
 dimension:      XY
@@ -311,4 +351,4 @@ First 3 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.076   0.272   1.061 
+  1.088   0.280   1.068 

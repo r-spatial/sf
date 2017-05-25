@@ -79,6 +79,12 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 	print(st_sf(m), n = 3)
 
+	db = system.file("sqlite/b.sqlite", package = "sf") # has an INT8 field
+	b = st_read(db)
+	print(b)
+	b = st_read(db, int64_as_string=TRUE)
+	print(b)
+
 	if (.Platform$endian == "little") {
 	  db = system.file("sqlite/test3.sqlite", package = "sf")
 	  dbcon <- dbConnect(dbDriver("SQLite"), db)

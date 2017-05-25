@@ -45,12 +45,14 @@ static void __warningHandler(const char *fmt, ...) {
 	return;
 }
 
+// #nocov start
 static void __countErrorHandler(const char *fmt, void *userdata) {
 	int *i = (int *) userdata;
 	*i = *i + 1;
 }
 
 static void __emptyNoticeHandler(const char *fmt, void *userdata) { }
+// #nocov end
 
 GEOSContextHandle_t CPL_geos_init(void) {
 #ifdef HAVE350
@@ -158,7 +160,7 @@ log_fn which_geom_fn(const std::string op) {
 		return GEOSCovers_r;
 	else if (op == "covered_by")
 		return GEOSCoveredBy_r;
-	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
+	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
 log_prfn which_prep_geom_fn(const std::string op) {
@@ -184,7 +186,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 		return GEOSPreparedCovers_r;
 	else if (op == "covered_by")
 		return GEOSPreparedCoveredBy_r;
-	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to
+	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
 // [[Rcpp::export]]
@@ -597,7 +599,7 @@ Rcpp::List CPL_invert_sparse_incidence(Rcpp::List m, int n) {
 		Rcpp::IntegerVector v = m[i];
 		for (int j = 0; j < v.size(); j++) {
 			if (v[j] > n || v[j] < 0)
-				throw std::range_error("CPL_invert_sparse: index out of bounds");
+				throw std::range_error("CPL_invert_sparse: index out of bounds"); // #nocov
 			sizes[v[j] - 1] += 1; // count
 		}
 	}

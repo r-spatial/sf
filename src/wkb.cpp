@@ -110,7 +110,7 @@ void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	wkb_read(wkb, srid, sizeof(uint32_t));
 
 	if (swap)
-		*srid = swap_endian<uint32_t>(*srid);
+		*srid = swap_endian<uint32_t>(*srid); // #nocov
 
 	wkb_read(wkb, NULL, 32); // skip header
 	// verify special marker; if not there, raise error:
@@ -134,7 +134,7 @@ void read_gpkg_header(wkb_buf *wkb, uint32_t *srid, int endian) {
 	// read srid, if needed, swap:
 	wkb_read(wkb, srid, 4);
 	if (swap)
-		*srid = swap_endian<uint32_t>(*srid);
+		*srid = swap_endian<uint32_t>(*srid); // #nocov
 
 	// how much header is there to skip? bbox: 4, 6, 6, or 8 doubles:
 	flag = (flag >> 1) & 0x07; // get bytes 3,2,1
@@ -157,7 +157,7 @@ Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 	wkb_read(wkb, &npts, 4);
 
 	if (swap)
-		npts = swap_endian<uint32_t>(npts);
+		npts = swap_endian<uint32_t>(npts); // #nocov
 
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++) {
@@ -190,7 +190,7 @@ Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWK
 	wkb_read(wkb, &nlst, 4);
 
 	if (swap)
-		nlst = swap_endian<uint32_t>(nlst);
+		nlst = swap_endian<uint32_t>(nlst); // #nocov
 
 	Rcpp::List ret(nlst);
 
@@ -220,7 +220,7 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 		double d;
 		wkb_read(wkb, &d, 8);
 		if (swap)
-			ret(i) = swap_endian<double>(d);
+			ret(i) = swap_endian<double>(d); // #nocov
 		else
 			ret(i) = d;
 	}
@@ -236,7 +236,7 @@ Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 	wkb_read(wkb, &npts, 4);
 
 	if (swap)
-		npts = swap_endian<uint32_t>(npts);
+		npts = swap_endian<uint32_t>(npts); // #nocov
 
 	Rcpp::NumericMatrix ret(npts, n_dims);
 	for (size_t i = 0; i < npts; i++)
@@ -244,7 +244,7 @@ Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 			double d;
 			wkb_read(wkb, &d, 8);
 			if (swap)
-				ret(i, j) = swap_endian<double>(d);
+				ret(i, j) = swap_endian<double>(d); // #nocov
 			else
 				ret(i, j) = d;
 		}
@@ -262,7 +262,7 @@ Rcpp::List read_matrix_list(wkb_buf *wkb, int n_dims, bool swap,
 	wkb_read(wkb, &nlst, 4);
 
 	if (swap)
-		nlst = swap_endian<uint32_t>(nlst);
+		nlst = swap_endian<uint32_t>(nlst); // #nocov
 
 	Rcpp::List ret(nlst);
 	for (size_t i = 0; i < nlst; i++)
@@ -315,7 +315,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	wkb_read(wkb, &wkbType, 4);
 
 	if (swap)
-		wkbType = swap_endian<uint32_t>(wkbType);
+		wkbType = swap_endian<uint32_t>(wkbType); // #nocov
 
 	int sf_type = 0, n_dims = 0;
 	std::string dim_str = ""; 
@@ -337,7 +337,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			if (srid != NULL) { 
 				wkb_read(wkb, srid, 4);
 				if (swap)
-					*srid = swap_endian<uint32_t>(*srid);
+					*srid = swap_endian<uint32_t>(*srid); // #nocov
 			}
 		}
 	} else { // ISO
@@ -348,8 +348,8 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			case 2: n_dims = 3; dim_str = "XYM"; break; 
 			case 3: n_dims = 4; dim_str = "XYZM"; break; 
 			default:
-				Rcpp::Rcout << "wkbType: " << wkbType << std::endl;
-				throw std::range_error("unsupported wkbType dim in switch");
+				Rcpp::Rcout << "wkbType: " << wkbType << std::endl; // #nocov
+				throw std::range_error("unsupported wkbType dim in switch"); // #nocov
 		}
 	}
 	bool empty = false;
@@ -403,14 +403,14 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTISURFACE", "sfg"), true, &empty);
 			break;
-		case SF_Curve:
+		case SF_Curve: // #nocov start
 			output[0] = read_numeric_matrix(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : "", &empty); 
 			break;
 		case SF_Surface: 
 			output[0] = read_matrix_list(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfg") : "", &empty);
-			break;
+			break; // #nocov end
 		case SF_PolyhedralSurface: 
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfg"), false, &empty);
@@ -424,8 +424,8 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfg"), &empty);
 			break;
 		default: {
-			Rcpp::Rcout << "type is " << sf_type << std::endl;
-			throw std::range_error("reading this sf type is not supported, please file an issue");
+			Rcpp::Rcout << "type is " << sf_type << std::endl; // #nocov
+			throw std::range_error("reading this sf type is not supported, please file an issue"); // #nocov
 		}
 	}
 	if (type != NULL) {
@@ -503,9 +503,9 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 	else if (strcmp(cls, "MULTISURFACE") == 0)
 		type = SF_MultiSurface;
 	else if (strcmp(cls, "CURVE") == 0)
-		type = SF_Curve;
+		type = SF_Curve; // #nocov
 	else if (strcmp(cls, "SURFACE") == 0)
-		type = SF_Surface;
+		type = SF_Surface; // #nocov
 	else if (strcmp(cls, "POLYHEDRALSURFACE") == 0)
 		type = SF_PolyhedralSurface;
 	else if (strcmp(cls, "TIN") == 0)
@@ -667,10 +667,10 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 			break; 
 		case SF_MultiSurface: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
 			break;
-		case SF_Curve: write_matrix(os, sfc[i], prec);
+		case SF_Curve: write_matrix(os, sfc[i], prec); // #nocov start
 			break;
 		case SF_Surface: write_matrix_list(os, sfc[i], prec);
-			break;
+			break; // #nocov end
 		case SF_PolyhedralSurface: write_multipolygon(os, sfc[i], EWKB, endian, prec);
 			break;
 		case SF_TIN: write_triangles(os, sfc[i], EWKB, endian, prec);
@@ -678,8 +678,8 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 		case SF_Triangle: write_matrix_list(os, sfc[i], prec);
 			break;
 		default: {
-			Rcpp::Rcout << "type is " << sf_type << "\n";
-			throw std::range_error("writing this sf type is not supported, please file an issue");
+			Rcpp::Rcout << "type is " << sf_type << "\n"; // #nocov
+			throw std::range_error("writing this sf type is not supported, please file an issue"); // #nocov
 		}
 	}
 }
@@ -706,10 +706,10 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 		if (! Rf_isNull(sfc.attr("classes"))) { // only sfc_GEOMETRY, the mixed bag, sets the classes attr
 			classes = sfc.attr("classes");
 			if (classes.size() != sfc.size())
-				throw std::range_error("attr classes has wrong size: please file an issue");
+				throw std::range_error("attr classes has wrong size: please file an issue"); // #nocov
 			have_classes = true;
 		} else
-			throw std::range_error("sfc_GEOMETRY should have attr classes; please file an issue");
+			throw std::range_error("sfc_GEOMETRY should have attr classes; please file an issue"); // #nocov
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 
