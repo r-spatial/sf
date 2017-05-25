@@ -65,7 +65,7 @@ layer names, each with their geometry type(s). Note that the number of layers ma
 \description{
 Read simple features from file or database, or retrieve layer names and their geometry type(s)
 
-Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+Read PostGIS or SQLite directly through DBI interface
 }
 \details{
 for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
@@ -104,11 +104,10 @@ summary(nc)
 geojson_txt <- "{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"
 x = read_sf(geojson_txt)
 x
-\dontrun{
-library(RPostgreSQL)
-conn = dbConnect(PostgreSQL(), dbname = "postgis")
-x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-x = st_read_db(conn, table = "public.meuse")
-print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-dbDisconnect(conn)}
+# connect to database
+db <- system.file("sqlite/nc.sqlite", package="sf")
+sq <- RSQLite::dbConnect(RSQLite::dbDriver("SQLite"), db)
+
+# read table named "nc.sqlite"
+nc <- st_read_db(sq, "nc.sqlite")
 }

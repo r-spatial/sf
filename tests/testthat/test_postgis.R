@@ -1,6 +1,3 @@
-
-library(sf)
-library(testthat)
 context("sf: postgis")
 
 can_con <- function(x) inherits(x, "PostgreSQLConnection")
@@ -256,15 +253,16 @@ if (can_con(pg)) {
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse2__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
+    try(db_drop_table_schema(pg, "public", "sf_units__"), silent = TRUE)
     try(DBI::dbSendQuery(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
     try(RpostgreSQL::dbDisconnect(pg), silent = TRUE)
 }
 
 test_that("schema_table", {
-    expect_error(sf:::schema_table(NA), "character vector")
-    expect_error(sf:::schema_table(NA_character_), "cannot be NA")
-    expect_error(sf:::schema_table("a", NA), "cannot be NA")
-    expect_error(sf:::schema_table(letters), "longer than 2")
-    expect_equal(sf:::schema_table("a", "b"), c("b", "a"))
-    expect_equal(sf:::schema_table("a"), c("public", "a"))
+    expect_error(sf:::schema_table(pg, NA), "character vector")
+    expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
+    expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
+    expect_error(sf:::schema_table(pg, letters), "longer than 2")
+    expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
+    expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
 })
