@@ -494,11 +494,12 @@ st_centroid.sf = function(x) {
 
 #' @name geos
 #' @export
-#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a numeric with length with unit metre, or an object of class \code{units} with length units; in this case, segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 #' seg = st_segmentize(sf, units::set_units(100, km))
+#' seg = st_segmentize(sf, units::set_units(0.01, rad))
 #' nrow(seg$geom[[1]])
 st_segmentize	= function(x, dfMaxLength, ...)
 	UseMethod("st_segmentize")
@@ -797,8 +798,11 @@ ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 		p1 = head(pts, -1)
 		p2 = tail(pts, -1)
 		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		if (inherits(dfMaxLength, "units"))
+		if (inherits(dfMaxLength, "units")) {
+			if (as.character(units(dfMaxLength)) == "rad")
+				dfMaxLength = as.numeric(dfMaxLength) * p$SemiMajor
 			units(ll) = units(p$SemiMajor)
+		}
 		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
 		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
 		if (length(n) == 1) # would be a matrix otherwise

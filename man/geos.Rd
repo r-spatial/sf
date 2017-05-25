@@ -168,7 +168,7 @@ st_line_sample(x, n, density, type = "regular", sample = NULL)
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram}
 
-\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is a numeric with length with unit metre, or an object of class \code{units} with length units; in this case, segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
 
 \item{...}{ignored}
 
@@ -277,6 +277,7 @@ plot(nc, axes = TRUE)
 plot(st_centroid(nc), add = TRUE, pch = 3)
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 seg = st_segmentize(sf, units::set_units(100, km))
+seg = st_segmentize(sf, units::set_units(0.01, rad))
 nrow(seg$geom[[1]])
 st_combine(nc)
 # a helper function that erases all of y from x:
