@@ -36,7 +36,7 @@ set_utf8 = function(x) {
 #' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 #' may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 #' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
-#' 
+#'
 #' In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/edzer/sfr/issues/252}.
 #' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
 #' data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
@@ -103,6 +103,9 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 #' @export
 #' @details \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 #' modified default arguments.
+#' \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
+#' about the data source.
+#' \code{write_sf} delete layers by default: it overwrites existing files.
 #' @examples
 #' # read geojson from string:
 #' geojson_txt <- "{\"type\":\"MultiPoint\",\"coordinates\":[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"
@@ -156,13 +159,13 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
 #' \code{as.numeric}.
 #' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-#' as defined by \code{db_drivers}. 
-#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try 
+#' as defined by \code{db_drivers}.
+#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try
 #' to update (append to) the existing data source, e.g. adding a table to an existing database.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
-#' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or 
-#' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be 
+#' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or
+#' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 #' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
 #' @examples
