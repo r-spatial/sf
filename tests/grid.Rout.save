@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -72,6 +72,9 @@ Type 'q()' to quit R.
 > invisible(lapply(st_geometry(meuse_ll), 
 + 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
+> gc = st_geometrycollection(list(st_point(0:1), st_linestring(matrix(1:4,2))))
+> grb = st_as_grob(gc)
+> 
 > proc.time()
    user  system elapsed 
-  0.744   0.008   0.749 
+  0.992   0.244   0.961 

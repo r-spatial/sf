@@ -14,7 +14,7 @@ set_utf8 = function(x) {
 #'
 #' Read simple features from file or database, or retrieve layer names and their geometry type(s)
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
-#' or contain the name and access credentials of a database)
+#' or contain the name and access credentials of a database); in case of GeoJSON, \code{dsn} may be the character string holding the geojson data
 #' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
 #' \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a
 #' message when there are multiple layers, or give an error if there are no layers in \code{dsn}.
@@ -46,12 +46,13 @@ set_utf8 = function(x) {
 #' summary(nc)
 #'
 #' \dontrun{
-#' library(sp)
-#' example(meuse, ask = FALSE, echo = FALSE)
-#' st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
-#'      layer_options = "OVERWRITE=true")
-#' st_meuse = st_read("PG:dbname=postgis", "meuse")
-#' summary(st_meuse)}
+#'   library(sp)
+#'   example(meuse, ask = FALSE, echo = FALSE)
+#'   st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
+#'        layer_options = "OVERWRITE=true")
+#'   st_meuse = st_read("PG:dbname=postgis", "meuse")
+#'   summary(st_meuse)
+#' }
 
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
@@ -102,6 +103,11 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 #' @export
 #' @details \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 #' modified default arguments.
+#' @examples
+#' # read geojson from string:
+#' geojson_txt <- "{\"type\":\"MultiPoint\",\"coordinates\":[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"
+#' x = read_sf(geojson_txt)
+#' x
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
 	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 
