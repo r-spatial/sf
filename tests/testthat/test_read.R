@@ -154,6 +154,6 @@ test_that("we get a warning when not specifying one of multiple layers", {
 
 	Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 	osm = system.file("osm/overpass.osm", package="sf")
-	expect_warning(st_read(osm), 
+	expect_warning(st_read(osm, quiet = TRUE),
 		"automatically selected the first layer in a data source containing more than one.")
 })
