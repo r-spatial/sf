@@ -364,6 +364,7 @@ extension_map <- list(
         "gtm" = "GPSTrackMaker",
         "gxt" = "Geoconcept",
         "jml" = "JML",
+        "kml" = "KML",
         "map" = "WAsP",
         "mdb" = "Geomedia",
         "nc" = "netCDF",

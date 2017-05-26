@@ -44,6 +44,7 @@ test_that("guess_driver works on extensions", {
   expect_equal(guess_driver("nc.gps"), c("gps" = "GPSBabel"))
   expect_equal(guess_driver("nc.gtm"), c("gtm" = "GPSTrackMaker"))   
   expect_equal(guess_driver("nc.gxt"), c("gxt" = "Geoconcept"))
+  expect_equal(guess_driver("nc.kml"), c("kml" = "KML"))
   expect_equal(guess_driver("nc.jml"), c("jml" = "JML"))
   expect_equal(guess_driver("nc.map"), c("map" = "WAsP"))
   expect_equal(guess_driver("nc.mdb"), c("mdb" = "Geomedia"))
