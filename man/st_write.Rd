@@ -45,8 +45,8 @@ are found at \url{http://www.gdal.org/ogr_formats.html}.}
 \code{as.numeric}.}
 
 \item{update}{logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-as defined by \code{db_drivers}. 
-For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try 
+as defined by \code{db_drivers}.
+For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try
 to update (append to) the existing data source, e.g. adding a table to an existing database.}
 
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting to write?}
@@ -73,8 +73,8 @@ Write simple features object to file or database
 Write simple feature table to a spatial database
 }
 \details{
-columns (variables) of a class not supported are dropped with a warning. When deleting layers or 
-data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be 
+columns (variables) of a class not supported are dropped with a warning. When deleting layers or
+data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 
 st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
