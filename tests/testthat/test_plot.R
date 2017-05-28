@@ -7,7 +7,7 @@ test_that("plot.sf() support characters", {
 })
 
 test_that("plot.sf warns on more than 15 attributes", {
-  demo(nc, ask = FALSE, echo = FALSE)
+  nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
   x = cbind(nc,nc)
   expect_warning(plot(x))
 })

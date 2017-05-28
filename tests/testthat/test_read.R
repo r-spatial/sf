@@ -44,6 +44,7 @@ test_that("guess_driver works on extensions", {
   expect_equal(guess_driver("nc.gps"), c("gps" = "GPSBabel"))
   expect_equal(guess_driver("nc.gtm"), c("gtm" = "GPSTrackMaker"))   
   expect_equal(guess_driver("nc.gxt"), c("gxt" = "Geoconcept"))
+  expect_equal(guess_driver("nc.kml"), c("kml" = "KML"))
   expect_equal(guess_driver("nc.jml"), c("jml" = "JML"))
   expect_equal(guess_driver("nc.map"), c("map" = "WAsP"))
   expect_equal(guess_driver("nc.mdb"), c("mdb" = "Geomedia"))
@@ -154,6 +155,6 @@ test_that("we get a warning when not specifying one of multiple layers", {
 
 	Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 	osm = system.file("osm/overpass.osm", package="sf")
-	expect_warning(st_read(osm), 
+	expect_warning(st_read(osm, quiet = TRUE),
 		"automatically selected the first layer in a data source containing more than one.")
 })
