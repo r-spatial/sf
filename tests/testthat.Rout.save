@@ -19,27 +19,7 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(sf))
 > 
 > test_check("sf")
-Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-converted into: MULTIPOLYGON
-Simple feature collection with 100 features and 14 fields
-Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
 Cannot open layer foo
-Multiple layers are present in data source /home/edzer/git/sf.Rcheck/sf/osm/overpass.osm, reading layer `points'.
-Use `st_layers' to list all layer names and their type in a data source.
-Set the `layer' argument in `st_read' to read a particular layer.
-Reading layer `points' from data source `/home/edzer/git/sf.Rcheck/sf/osm/overpass.osm' using driver `OSM'
-converted into: POINT
-Simple feature collection with 1 feature and 10 fields
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -1.556488 ymin: 53.80939 xmax: -1.556488 ymax: 53.80939
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
 OGR: Unsupported geometry type
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 converted into: POLYGON
@@ -56,6 +36,7 @@ gml
 gpkg 
 gxt 
 jml 
+kml 
 shp 
 sqlite 
 vdv 
@@ -68,8 +49,8 @@ Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 545 SKIPPED: 0 FAILED: 0
+OK: 552 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.380   0.396   7.868 
+  5.476   0.412   9.268 

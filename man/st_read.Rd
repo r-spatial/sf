@@ -79,7 +79,7 @@ In case of problems reading shapefiles from USB drives on OSX, please see \url{h
 modified default arguments.
 \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
 about the data source.
-\code{write_sf} deletes existing layers by default: it overwrites existing files.
+\code{write_sf} delete layers by default: it overwrites existing files.
 
 if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 

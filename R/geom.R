@@ -1,11 +1,9 @@
 # unary, interfaced through GEOS:
 
-#' Geometric operations on (pairs of) simple feature geometry sets
-#' 
-#' Geometric operations on (pairs of) simple feature geometry sets
-#' @name geos
+#' Dimension, simplicity or validity queries on simple feature geometries
+#' @name geos_query
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
-#' @return vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
 #' @return st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if \code{NA_if_empty} is \code{TRUE}, \code{NA} for empty geometries.
 #' @export
 #' @examples
@@ -21,7 +19,12 @@
 st_dimension = function(x, NA_if_empty = TRUE) 
 	CPL_gdal_dimension(st_geometry(x), NA_if_empty)
 
-#' @name geos
+#' @name geos_query
+#' @export
+#' @return st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
+
+#' @name geos_measures
 #' @export
 #' @return st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 st_area = function(x) { 
@@ -52,8 +55,7 @@ ll_length = function(x, fn, p) {
 	}
 }
 
-#' @name geos
-#' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
+#' @name geos_measures
 #' @export
 #' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 #' @examples
@@ -86,11 +88,6 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 	}
 }
 
-#' @name geos
-#' @export
-#' @return st_is_simple returns a logical vector
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
-
 # binary, interfaced through GEOS:
 
 # returning matrix, distance or relation string -- the work horse is:
@@ -110,9 +107,13 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 		ret[[1]]
 }
 
+#' Compute distance between pairs of geometries
+#'
+#' Compute Euclidian or great circle distance between pairs of geometries
+#' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @name geos
+#' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
 #' @export
@@ -147,9 +148,14 @@ st_distance = function(x, y, dist_fun) {
 	}
 }
 
-#' @name geos
+#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
+#'
+#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
-#' @return in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical or sparse index list with matches to the given pattern; see also \url{https://en.wikipedia.org/wiki/DE-9IM}.
+#' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
+#' @return in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -175,40 +181,47 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 		st_geos_binop("relate", x, y, sparse = FALSE)
 }
 
-#' @name geos
-#' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return the binary logical functions (\code{st_intersects} up to \code{st_equals_exact}) return a sparse or dense logical matrix with rows and columns corresponding to the number of geometries (or rows) in x and y, respectively
+# @return vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
+
+#' Geometric binary predicates on pairs of simple feature geometry sets
+#' 
+#' Geometric binary predicates on pairs of simple feature geometry sets
+#' @name geos_binary_pred
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
+#' @return if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}.
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_disjoint		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_touches		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("crosses", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 #' @param prepared logical; prepare geometry for x, before looping over y?
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE) 
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 #' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A. 
 st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
@@ -217,12 +230,12 @@ st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
 	st_geos_binop("contains_properly", x, y, sparse = sparse, prepared = TRUE)
 }
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_equals		= function(x, y, sparse = TRUE, prepared = FALSE) {
 	if (prepared)
@@ -230,17 +243,17 @@ st_equals		= function(x, y, sparse = TRUE, prepared = FALSE) {
 	st_geos_binop("equals", x, y, sparse = sparse)
 }
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_covers		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared)
 
-#' @name geos
+#' @name geos_binary_pred
 #' @export
 #' @param par numeric; parameter used for "equals_exact" (margin) and "is_within_distance"
 st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
@@ -249,21 +262,23 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
 }
 
-##' @name geos
-##' @export
 #st_is_within_distance = function(x, y, par, sparse = TRUE) 
 #	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
 
-# unary, returning geometries -- GEOS interfaced through GDAL:
+# unary, returning geometries
 
-#' @name geos
-#' @export
+#' Geometric unary operations on (pairs of) simple feature geometry sets
+#' 
+#' Geometric unary operations on (pairs of) simple feature geometry sets
+#' @name geos_unary
+#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
 #' \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
 #' \code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf} 
-#' object with the same number of geometries as in \code{x}
+#' object with the same number of geometries as \code{x}
+#' @export
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
 
@@ -285,7 +300,7 @@ st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 st_boundary = function(x)
 	UseMethod("st_boundary")
@@ -304,7 +319,7 @@ st_boundary.sf = function(x) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -327,7 +342,7 @@ st_convex_hull.sf = function(x) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @param preserveTopology logical; carry out topology preserving simplification?
 #' @param dTolerance numeric; tolerance parameter
@@ -351,7 +366,7 @@ st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
 #' @details \code{st_triangulate} requires GEOS version 3.4 or above
@@ -378,7 +393,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @param envelope object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram
 #' @details \code{st_voronoi} requires GEOS version 3.4 or above
@@ -417,7 +432,7 @@ st_voronoi.sf = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FA
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @details in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @export
 #' @examples 
@@ -442,7 +457,7 @@ st_polygonize.sf = function(x) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @details in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples 
@@ -467,7 +482,7 @@ st_line_merge.sf = function(x) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @examples
 #' plot(nc, axes = TRUE)
@@ -492,7 +507,7 @@ st_centroid.sf = function(x) {
 	x
 }
 
-#' @name geos
+#' @name geos_unary
 #' @export
 #' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
@@ -525,10 +540,48 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 	x
 }
 
-#' @name geos
+ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
+	# x is a single sfg: LINESTRING or MULTILINESTRING
+	if (is.list(x)) # MULTILINESTRING:
+		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), 
+			class = attr(x, "class"))
+	else { # matrix
+		if (!requireNamespace("geosphere", quietly = TRUE))
+			stop("package geosphere required, please install it first")
+		p = crs_parameters(crs)
+		pts = unclass(x) # matrix
+		p1 = head(pts, -1)
+		p2 = tail(pts, -1)
+		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
+		if (inherits(dfMaxLength, "units")) {
+			if (as.character(units(dfMaxLength)) == "rad")
+				dfMaxLength = as.numeric(dfMaxLength) * p$SemiMajor
+			units(ll) = units(p$SemiMajor)
+		}
+		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
+		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
+		if (length(n) == 1) # would be a matrix otherwise
+			ret = list(ret)
+		for (i in seq_along(n)) {
+			if (n[i] < 1) # 0 or -1, because of the -1, for 0 distance
+				ret[[i]] = ret[[i]][-2,] # take out interpolated middle point
+			if (i > 1)
+				ret[[i]] = tail(ret[[i]], -1) # take out duplicate starting point
+		}
+		structure(do.call(rbind, ret), class = attr(x, "class"))
+	}
+}
+
+#' Combine several feature geometries into one, with or without resolving internal boundaries
+#'
+#' Combine several feature geometries into one, with or without resolving internal boundaries
+#' @name geos_combine
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @return \code{st_combine} returns a single, combined geometry, with no resolved boundaries
 #' @export
-#' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; see \link{st_union} for resolving boundaries.
+#' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; \code{st_union} (with \code{by_feature = FALSE}) combines and resolves internal boundaries if \code{y} is missing and \code{by_feature = FALSE}.
 #' @examples
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_combine(nc)
 st_combine = function(x)
 	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge
@@ -571,9 +624,15 @@ get_first_sfg = function(x) {
 		x[[1]]
 }
 
-#' @name geos
+#' Geometric binary operations on pairs of simple feature geometry sets
+#' 
+#' Geometric binary operations on pairs of simple feature geometry sets
+#' @name geos_binary_ops
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
-#' @return All functions (or methods) returning a geometry return an object of the same class as that of the first argument (\code{x}).  \code{st_intersection}, \code{st_union}, \code{st_difference} and \code{st_sym_difference} return the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}, and return an object of class \code{sfg}, \code{sfc} or \code{sf}, where in the latter case the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. \code{st_union} has in addition the ability to work on a single argument \code{x} (\code{y} missing): in this case, if \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned, if \code{by_feature} is \code{TRUE} each feature geometry is unioned; this can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}.
+#' @return an object of the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. 
+#' @seealso \link{st_union}
 #' @export
 st_intersection = function(x, y) UseMethod("st_intersection")
 
@@ -589,7 +648,7 @@ st_intersection.sfc = function(x, y)
 st_intersection.sf = function(x, y)
 	geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
 
-#' @name geos
+#' @name geos_binary_ops
 #' @export
 #' @examples
 #' # a helper function that erases all of y from x:
@@ -608,7 +667,7 @@ st_difference.sfc = function(x, y)
 st_difference.sf = function(x, y)
 	geos_op2_df(x, y, geos_op2_geom("difference", x, y))
 
-#' @name geos
+#' @name geos_binary_ops
 #' @export
 st_sym_difference = function(x, y) UseMethod("st_sym_difference")
 
@@ -624,10 +683,16 @@ st_sym_difference.sfc = function(x, y)
 st_sym_difference.sf = function(x, y)
 	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y))
 
-#' @name geos
+#' @name geos_combine
 #' @export
 #' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features
-#' @return \code{st_union(x)} unions geometries. Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param ... ignored;
+#' @seealso \link{st_intersection}, \link{st_difference}, \link{st_sym_difference}
+#' @return if \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j]
+#' @details if \code{st_union} is called with a single argument \code{x} (\code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned; if \code{by_feature} is \code{TRUE} each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is not missing, all elements of \code{x} and \code{y} are unioned, pairwise (and \code{by_feature} is ignored). The former corresponds to \link[rgeos]{gUnaryUnion}, the latter to \link[rgeos]{gUnion}.
+#' 
+#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
 st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
@@ -661,7 +726,8 @@ st_union.sf = function(x, y, ..., by_feature = FALSE) {
 		geos_op2_df(x, y, geos_op2_geom("union", x, y))
 }
 
-#' @name geos
+#' Sample points on a linear geometry
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param n integer; number of points to choose per geometry; if missing, n will be computed as \code{round(density * st_length(geom))}.
 #' @param density numeric; density (points per distance unit) of the sampling, possibly a vector of length equal to the number of features (otherwise recycled); \code{density} may be of class \code{units}.
 #' @param type character; indicate the sampling type, either "regular" or "random"
@@ -783,36 +849,4 @@ st_make_grid = function(x,
 		st_sfc(ret, crs = crs)
 	else
 		st_sfc(ret, crs = st_crs(x))
-}
-
-ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
-	# x is a single sfg: LINESTRING or MULTILINESTRING
-	if (is.list(x)) # MULTILINESTRING:
-		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs), 
-			class = attr(x, "class"))
-	else { # matrix
-		if (!requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		p = crs_parameters(crs)
-		pts = unclass(x) # matrix
-		p1 = head(pts, -1)
-		p2 = tail(pts, -1)
-		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		if (inherits(dfMaxLength, "units")) {
-			if (as.character(units(dfMaxLength)) == "rad")
-				dfMaxLength = as.numeric(dfMaxLength) * p$SemiMajor
-			units(ll) = units(p$SemiMajor)
-		}
-		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
-		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
-		if (length(n) == 1) # would be a matrix otherwise
-			ret = list(ret)
-		for (i in seq_along(n)) {
-			if (n[i] < 1) # 0 or -1, because of the -1, for 0 distance
-				ret[[i]] = ret[[i]][-2,] # take out interpolated middle point
-			if (i > 1)
-				ret[[i]] = tail(ret[[i]], -1) # take out duplicate starting point
-		}
-		structure(do.call(rbind, ret), class = attr(x, "class"))
-	}
 }
