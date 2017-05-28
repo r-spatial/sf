@@ -30,8 +30,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
 #' (sfc = st_sfc(pt1, pt2))
-#' d = data.frame(a = 1:2)
-#" d$geom = sfc
+#' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
 st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	lst = list(...)
