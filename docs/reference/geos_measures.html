@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make an invalid geometry valid — valid • sf</title>
+<title>Compute distance between pairs of geometries — geos_measures • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -79,46 +79,51 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make an invalid geometry valid</h1>
+    <h1>Compute distance between pairs of geometries</h1>
     </div>
 
     
-    <p>Make an invalid geometry valid</p>
+    <p>Compute Euclidian or great circle distance between pairs of geometries</p>
     
 
-    <pre class="usage"><span class='fu'>st_make_valid</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>st_area</span>(<span class='no'>x</span>)
+
+<span class='fu'>st_length</span>(<span class='no'>x</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='kw'>geosphere</span><span class='kw'>::</span><span class='no'>distGeo</span>)
+
+<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist_fun</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class <code>sfg</code>, <code>sfg</code> or <code>sf</code></p></td>
+      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></td>
+    </tr>
+    <tr>
+      <th>dist_fun</th>
+      <td><p>function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a> in that case; for other data metric lengths are computed.</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of the same class as <code>x</code></p>
+    <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
+<p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of <code>x</code> was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
+<p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code>. It is only available if the package was linked against liblwgeom, which is currently not the case for the binary CRAN distributions; see the package source code repository for instructions how to install liblwgeom. The example below shows how to run-time check the availability of liblwgeom.</p>
+    <p>function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0.5</span>,<span class='fl'>0.5</span>),<span class='fu'>c</span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
-<span class='kw'>if</span> (!<span class='fu'>is.na</span>(<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"lwgeom"</span>])) {
-  <span class='fu'>suppressWarnings</span>(<span class='fu'><a href='geos_query.html'>st_is_valid</a></span>(<span class='no'>x</span>))
-  <span class='no'>y</span> <span class='kw'>=</span> <span class='fu'>st_make_valid</span>(<span class='no'>x</span>)
-  <span class='fu'><a href='geos_query.html'>st_is_valid</a></span>(<span class='no'>y</span>)
-  <span class='no'>y</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span>()
-}</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; geometry type:  GEOMETRY
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POLYGON((0.5 0, 0 0, 0 1, 1 1, 1 0, 0.5 0))</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING(0.5 0, 0.5 0.5)</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>dist_vincenty</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>f</span>) <span class='kw'>geosphere</span><span class='kw'>::</span><span class='fu'>distVincentyEllipsoid</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>a</span> * (<span class='fl'>1</span>-<span class='no'>f</span>), <span class='no'>f</span>)
+<span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'>c</span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'><span class='fu'>st_length</span>(<span class='no'>line</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='no'>dist_vincenty</span>)</div><div class='output co'>#&gt; 1434649 m</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

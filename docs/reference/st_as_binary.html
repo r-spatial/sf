@@ -131,7 +131,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>st_as_binary</code> is called on sfc objects on their way to the GDAL or GEOS libraries, and hence does rounding (if requested) on the fly before e.g. computing spatial predicates like <a href='geos.html'>st_intersects</a>. The examples show a round-trip of an <code>sfc</code> to and from binary.</p>
+    <p><code>st_as_binary</code> is called on sfc objects on their way to the GDAL or GEOS libraries, and hence does rounding (if requested) on the fly before e.g. computing spatial predicates like <a href='geos_binary_pred.html'>st_intersects</a>. The examples show a round-trip of an <code>sfc</code> to and from binary.</p>
 <p>For the precision model used, see also <a href = 'https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html'>https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
     
 

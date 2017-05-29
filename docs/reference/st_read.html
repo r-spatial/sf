@@ -102,7 +102,7 @@
     <tr>
       <th>dsn</th>
       <td><p>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
-or contain the name and access credentials of a database)</p></td>
+or contain the name and access credentials of a database); in case of GeoJSON, <code>dsn</code> may be the character string holding the geojson data</p></td>
     </tr>
     <tr>
       <th>layer</th>
@@ -184,7 +184,10 @@ may lead to succesful conversion. The typical conversion from POLYGON (3) to MUL
 way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.</p>
 <p>In case of problems reading shapefiles from USB drives on OSX, please see <a href = 'https://github.com/edzer/sfr/issues/252'>https://github.com/edzer/sfr/issues/252</a>.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
-modified default arguments.</p>
+modified default arguments.
+<code>read_sf</code> and <code>write_sf</code> are quiet by default: they do not print information
+about the data source.
+<code>write_sf</code> delete layers by default: it overwrites existing files.</p>
 <p>if <code>table</code> is not given but <code>query</code> is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)</p>
 <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.</p>
     
@@ -237,14 +240,24 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;                     
 #&gt;                     </div><div class='input'>
 <span class='fu'>not_run</span>({
-  <span class='fu'>library</span>(<span class='no'>sp</span>)
-  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
-       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
-  <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
-  <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
+    <span class='fu'>library</span>(<span class='no'>sp</span>)
+    <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+         <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
+    <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
+    <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
 })
-<span class='fu'>not_run</span>({
+<span class='co'># read geojson from string:</span>
+<span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span>
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>read_sf</span>(<span class='no'>geojson_txt</span>)
+<span class='no'>x</span></div><div class='output co'>#&gt; Simple feature collection with 1 feature and 0 fields
+#&gt; geometry type:  MULTIPOINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt;                         geometry
+#&gt; 1 MULTIPOINT(3.2 4, 3 4.6, 3....</div><div class='input'><span class='fu'>not_run</span>({
   <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
   <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
   <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)

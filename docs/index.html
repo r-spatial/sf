@@ -112,12 +112,13 @@ brew install geos
 brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
-<p>after that, you should be able to install <code>sf</code> as a source package. According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>.</p>
+<p>after that, you should be able to install <code>sf</code> as a source package.</p>
+<p>According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>.</p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linux" class="anchor"></a>Linux</h3>
-<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are needed.</p>
+<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required; <code>liblwgeom</code> is optional.</p>
 <p>To install the dependencies on Ubuntu, either:</p>
 <ul>
 <li>

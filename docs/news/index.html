@@ -88,6 +88,7 @@
 <h1 class="hasAnchor">
 <a href="#version-0-5-0" class="anchor"></a>version 0.5-0</h1>
 <ul>
+<li><p>fix bug reading and writing dates (months 1 off): #358</p></li>
 <li><p>[.sf and [.sfc now also select on i when i is an <code>sfg</code> object, and accept a geometric predicate function with optional arguments; #352</p></li>
 <li><p>on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a <code>GEOMETRY</code> object; #351</p></li>
 <li><p>on plotting with <code>ggplot2::geom_sf</code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>

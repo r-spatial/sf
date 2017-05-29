@@ -146,8 +146,8 @@ are found at <a href = 'http://www.gdal.org/ogr_formats.html'>http://www.gdal.or
     <tr>
       <th>update</th>
       <td><p>logical; <code>FALSE</code> by default for single-layer drivers but <code>TRUE</code> by default for database drivers
-as defined by <code>db_drivers</code>. 
-For database-type drivers (e.g. GPKG) <code>TRUE</code> values will make <code>GDAL</code> try 
+as defined by <code>db_drivers</code>.
+For database-type drivers (e.g. GPKG) <code>TRUE</code> values will make <code>GDAL</code> try
 to update (append to) the existing data source, e.g. adding a table to an existing database.</p></td>
     </tr>
     <tr>
@@ -190,8 +190,8 @@ to update (append to) the existing data source, e.g. adding a table to an existi
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>columns (variables) of a class not supported are dropped with a warning. When deleting layers or 
-data sources is not successful, no error is emitted. <code>delete_dsn</code> and <code>delete_layers</code> should be 
+    <p>columns (variables) of a class not supported are dropped with a warning. When deleting layers or
+data sources is not successful, no error is emitted. <code>delete_dsn</code> and <code>delete_layers</code> should be
 handled with care; the former may erase complete directories or databases.</p>
 <p>st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285</p>
     

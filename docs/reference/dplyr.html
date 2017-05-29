@@ -142,6 +142,9 @@
 
 <span class='fu'>nest_.sf</span>(<span class='no'>data</span>, <span class='no'>key_col</span>, <span class='no'>nest_cols</span>)
 
+<span class='fu'>separate_.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"[^[:alnum:]]+"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>extra</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='no'>...</span>)
+
 <span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
 
 <span class='fu'>left_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
@@ -183,7 +186,7 @@
     </tr>
     <tr>
       <th>do_union</th>
-      <td><p>logical; should geometries be unioned by using <a href='geos.html'>st_union</a>, or simply be combined using <a href='geos.html'>st_combine</a>? Using <a href='geos.html'>st_union</a> resolves internal boundaries, but in case of unioning points may also change the order of the points.</p></td>
+      <td><p>logical; should geometries be unioned by using <a href='geos_combine.html'>st_union</a>, or simply be combined using <a href='geos_combine.html'>st_combine</a>? Using <a href='geos_combine.html'>st_union</a> resolves internal boundaries, but in case of unioning points may also change the order of the points.</p></td>
     </tr>
     <tr>
       <th>data</th>
@@ -248,6 +251,22 @@
     <tr>
       <th>nest_cols</th>
       <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/nest'>nest</a></p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
+    </tr>
+    <tr>
+      <th>into</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
+    </tr>
+    <tr>
+      <th>remove</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
+    </tr>
+    <tr>
+      <th>extra</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
     </tr>
     <tr>
       <th>y</th>
