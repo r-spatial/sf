@@ -5,7 +5,7 @@
 \alias{st_combine}
 \alias{geos_combine}
 \alias{st_union}
-\title{Combine several feature geometries into one, with or without resolving internal boundaries}
+\title{Combine or union feature geometries}
 \usage{
 st_combine(x)
 

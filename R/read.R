@@ -43,7 +43,7 @@ set_utf8 = function(x) {
 #' layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' summary(nc)
+#' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 #'
 #' \dontrun{
 #'   library(sp)
@@ -108,7 +108,8 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 #' \code{write_sf} delete layers by default: it overwrites existing files.
 #' @examples
 #' # read geojson from string:
-#' geojson_txt <- "{\"type\":\"MultiPoint\",\"coordinates\":[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"
+#' geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
+#'    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
 #' x = read_sf(geojson_txt)
 #' x
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)

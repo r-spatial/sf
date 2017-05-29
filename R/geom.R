@@ -22,11 +22,16 @@ st_dimension = function(x, NA_if_empty = TRUE)
 #' @name geos_query
 #' @export
 #' @return st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+#' @examples
+#' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
+#' st_is_simple(st_sfc(ls, st_point(c(0,0))))
 st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 #' @name geos_measures
 #' @export
-#' @return st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
+#' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}. 
+#'
+#' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 st_area = function(x) { 
 	if (isTRUE(st_is_longlat(x))) {
 		p = crs_parameters(st_crs(x))
@@ -57,7 +62,8 @@ ll_length = function(x, fn, p) {
 
 #' @name geos_measures
 #' @export
-#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
+#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
+#' @seealso \link{st_dimension}
 #' @examples
 #' dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 #' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
@@ -112,7 +118,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' Compute Euclidian or great circle distance between pairs of geometries
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 #' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening. 
@@ -190,7 +196,17 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
-#' @return if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}.
+#' @return if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @examples
+#' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
+#' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
+#' (lst = st_intersects(pts, pol))
+#' (mat = st_intersects(pts, pol, sparse = FALSE))
+#' # which points fall inside a polygon?
+#' apply(mat, 1, any)
+#' lengths(lst) > 0
+#' # which points fall inside the first polygon?
+#' st_intersects(pol, pts)[[1]]
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
@@ -572,7 +588,7 @@ ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 	}
 }
 
-#' Combine several feature geometries into one, with or without resolving internal boundaries
+#' Combine or union feature geometries
 #'
 #' Combine several feature geometries into one, with or without resolving internal boundaries
 #' @name geos_combine

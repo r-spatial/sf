@@ -20,12 +20,14 @@ st_distance(x, y, dist_fun)
 
 \item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
 
-\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
+\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 }
 \value{
+If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}. 
+
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
-st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of \code{x} was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
+st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
 st_distance returns a dense numeric matrix of dimension length(x) by length(y)
 }
@@ -40,4 +42,7 @@ dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, 
 line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 st_length(line)
 st_length(line, dist_fun = dist_vincenty)
+}
+\seealso{
+\link{st_dimension}
 }

@@ -63,11 +63,22 @@ st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
 \item{par}{numeric; parameter used for "equals_exact" (margin) and "is_within_distance"}
 }
 \value{
-if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}.
+if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 }
 \description{
 Geometric binary predicates on pairs of simple feature geometry sets
 }
 \details{
 `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
+}
+\examples{
+pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
+pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
+(lst = st_intersects(pts, pol))
+(mat = st_intersects(pts, pol, sparse = FALSE))
+# which points fall inside a polygon?
+apply(mat, 1, any)
+lengths(lst) > 0
+# which points fall inside the first polygon?
+st_intersects(pol, pts)[[1]]
 }

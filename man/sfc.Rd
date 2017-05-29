@@ -27,5 +27,5 @@ class \code{sfg}).
 pt1 = st_point(c(0,1))
 pt2 = st_point(c(1,1))
 (sfc = st_sfc(pt1, pt2))
-d = data.frame(a = 1:2)
+d = st_sf(data.frame(a=1:2, geom=sfc))
 }

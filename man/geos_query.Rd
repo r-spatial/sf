@@ -44,6 +44,8 @@ x = st_sfc(
 	st_geometrycollection())
 st_dimension(x)
 st_dimension(x, FALSE)
+ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
+st_is_simple(st_sfc(ls, st_point(c(0,0))))
 p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
 st_is_valid(p1)
 st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
