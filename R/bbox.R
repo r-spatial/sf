@@ -89,7 +89,7 @@ print.bbox = function(x, ...) {
 #' @export
 #' @name st_bbox
 st_bbox.sfc_POINT = function(obj) {
-	sel = lengths(obj) > 0
+	sel = vapply(obj, function(x) length(x) && !all(is.na(x)), TRUE)
 	ret = if (! any(sel))
 		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
 	else

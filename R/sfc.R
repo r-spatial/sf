@@ -345,14 +345,20 @@ st_set_precision.sf <- function(x, precision) {
 
 # if g may have NULL elements, replace it with (appropriate?) empty geometries
 fix_NULL_values = function(g) {
+
+	empty = switch(class(g)[1],
+		sfc_POINT = st_point(),
+		sfc_MULTIPOINT = st_multipoint(),
+		sfc_LINESTRING = st_linestring(),
+		sfc_MULTILINESTRING = st_multilinestring(),
+		sfc_POLYGON = st_polygon(),
+		sfc_MULTIPOLYGON = st_multipolygon(),
+		st_geometrycollection())
+
 	isNull = which(vapply(g, is.null, TRUE))
 	for (i in isNull)
-		g[[i]] = st_geometrycollection() # should improve here: try st_linestring() etc
-	attr(g, "n_empty") = length(isNull)
-	if (length(isNull))
-		structure(g, class = c("sfc_GEOMETRY", "sfc"))
-	else 
-		g
+		g[[i]] = empty
+	structure(g, n_empty = length(isNull))
 }
 
 #' retrieve coordinates in matrix form
