@@ -148,7 +148,6 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 		x[[attr(x, "sf_column")]] <- value
 
 	if (is.null(value))
-		# as.data.frame(x)
 		structure(x, sf_column = NULL, agr = NULL, class = setdiff(class(x), "sf"))
 	else
 		x
@@ -327,8 +326,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		st_agr(x) = agr[match(setdiff(names(x), sf_column), names(agr))]
 		x
 	} else
-		#as.data.frame(x)
-		x
+		structure(x, class = setdiff(class(x), "sf"))
 }
 
 #' @export

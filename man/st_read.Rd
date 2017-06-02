@@ -93,7 +93,7 @@ that reside in the same directory, only one of them having extension \code{.shp}
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-summary(nc)
+summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 
 \dontrun{
   library(sp)
