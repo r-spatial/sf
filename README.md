@@ -88,7 +88,7 @@ To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geos
 
 ### Acknowledgment
 
-This project is being realized with financial [support](https://www.r-consortium.org/projects) from the
+This project has been realized with financial [support](https://www.r-consortium.org/projects) from the
 
 <a href="https://www.r-consortium.org/projects/awarded-projects">
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="400">
