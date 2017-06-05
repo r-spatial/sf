@@ -260,8 +260,8 @@ print.sf_layers = function(x, ...) {
 	x$features[x$features < 0] = NA
 	cat("Available layers:\n")
 	if (length(x$name) == 0) {
-		cat("<none>\n")
-		invisible(x)
+		cat("<none>\n") # nocov
+		invisible(x)    # nocov
 	} else {
 		df = data.frame(unclass(x))
 		gt = if (n_gt > 1)

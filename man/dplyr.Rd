@@ -72,11 +72,11 @@
 \usage{
 filter_.sf(.data, ..., .dots)
 
-filter.sf(.data, ...)
+filter.sf(.data, ..., .dots)
 
 arrange_.sf(.data, ..., .dots)
 
-arrange.sf(.data, ...)
+arrange.sf(.data, ..., .dots)
 
 distinct_.sf(.data, ..., .dots, .keep_all = FALSE)
 
@@ -102,11 +102,11 @@ select.sf(.data, ...)
 
 rename_.sf(.data, ..., .dots)
 
-rename.sf(.data, ...)
+rename.sf(.data, ..., .dots)
 
 slice_.sf(.data, ..., .dots)
 
-slice.sf(.data, ...)
+slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE)
 

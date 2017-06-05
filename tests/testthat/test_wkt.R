@@ -10,4 +10,5 @@ test_that("well-known text", {
   p2 = st_point(5:7)
   sfc = st_sfc(p1,p2)
   expect_identical(st_as_text(sfc), c("POINTZ(1 2 3)", "POINTZ(5 6 7)"))
+  expect_equal(st_sfc(gcol), st_as_sfc(list("GEOMETRYCOLLECTION(POINT(1 2), LINESTRING(1 3, 2 4))")))
 })

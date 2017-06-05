@@ -92,3 +92,8 @@ test_that("st_coordinates works", {
 	expect_true(is.matrix(st_coordinates(nc)))
 	# expect_true(is.matrix(st_coordinates(st_geometrycollection(list(st_point)))))
 })
+
+test_that("as.data.frame.sfc", {
+  sfc = st_sfc(st_point(0:1), st_point(3:4))
+  expect_silent(as.data.frame(sfc))
+})

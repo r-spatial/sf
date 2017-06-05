@@ -9,6 +9,10 @@ test_that("well-known binary is read correctly", {
   g = st_as_sfc(wkb, EWKB = TRUE)[[1]]
   attr(g, "epsg") <- NULL
   expect_true(identical(g, st_point(c(181072,333611))))
+  wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"))
+  g = st_as_sfc(wkb, EWKB = TRUE)[[1]]
+  attr(g, "epsg") <- NULL
+  expect_true(identical(g, st_point(c(181072,333611))))
 })
 
 test_that("Char -> Raw conversion in R and C++ gives identical results", {
