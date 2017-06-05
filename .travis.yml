@@ -1,8 +1,11 @@
 language: r
+
 r:
   - release
   - devel
   - oldrel
+
+r_github_packages: tidyverse/dplyr
 
 cache: packages
 
