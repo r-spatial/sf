@@ -5,7 +5,7 @@ r:
   - devel
   - oldrel
 
-r_github_packages: tidyverse/dplyr
+# r_github_packages: tidyverse/dplyr
 
 cache: packages
 

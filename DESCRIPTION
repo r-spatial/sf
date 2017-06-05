@@ -31,7 +31,6 @@ Suggests:
     sp (>= 1.2-4), 
     rgeos,
     rgdal,
-    dplyr,
     lazyeval,
     tibble,
 	rlang,
@@ -44,6 +43,7 @@ Suggests:
     maptools, 
     maps,
     microbenchmark
+Remotes: tidyverse/dplyr
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
