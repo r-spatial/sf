@@ -3992,6 +3992,21 @@ else
 $as_echo "yes" >&6; }
 fi
 
+PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
+
+PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
+
+if test "${NEED_DEPS}" = yes; then
+   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS}"
+
+fi
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
+LIBS="${LIBS} ${PKG_LIBS}"
+
 geosok=yes
 for ac_header in geos_c.h
 do :
@@ -4030,21 +4045,6 @@ int main() {
 }
 #endif
 _EOCONF
-
-PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
-
-PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
-
-if test "${NEED_DEPS}" = yes; then
-   PKG_LIBS="${PKG_LIBS} ${GDAL_DEP_LIBS}"
-
-fi
-
-# honor PKG_xx overrides
-# for CPPFLAGS we will superfluously double R's flags
-# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
-CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
-LIBS="${LIBS} ${PKG_LIBS}"
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_CLIBS}" >&5
