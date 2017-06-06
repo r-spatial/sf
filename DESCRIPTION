@@ -34,6 +34,7 @@ Suggests:
     lazyeval,
     tibble,
 	rlang,
+	dplyr,
 	RSQLite,
     RPostgreSQL,
     testthat,
@@ -43,7 +44,6 @@ Suggests:
     maptools, 
     maps,
     microbenchmark
-Remotes: tidyverse/dplyr
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
