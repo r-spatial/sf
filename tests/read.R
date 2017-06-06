@@ -99,3 +99,9 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	  print(st_sf(m), n = 3)
 	}
 }
+
+csv = system.file("csv/pt.csv", package = "sf")
+identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_real_)
+identical(st_read(quiet = TRUE, csv, int64_as_string = TRUE, stringsAsFactors = FALSE,
+	options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_character_)
+identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], NA_integer_)

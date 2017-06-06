@@ -205,12 +205,12 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			default: { // select first layer: message + warning:
 				OGRLayer *poLayer = poDS->GetLayer(0);
 				layer = Rcpp::CharacterVector::create(poLayer->GetName());
-				if (! quiet) {
+				if (! quiet) { // #nocov start
 					Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] << ", ";
 					Rcpp::Rcout << "reading layer `" << layer[0] << "'." << std::endl;
 					Rcpp::Rcout << "Use `st_layers' to list all layer names and their type in a data source." << std::endl;
 					Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." << std::endl;
-				}
+				} // #nocov end
 				Rcpp::Function warning("warning");
 				warning("automatically selected the first layer in a data source containing more than one.");
 			}
@@ -359,8 +359,11 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		std::vector<OGRGeometry *> poGeom(n);
 		for (size_t i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
-		if (has_null_geometries)
+		if (has_null_geometries) {
+			if (! quiet)
+				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl;
 			poGeom = replace_null_with_empty(poGeom);
+		}
 
 		int toType = 0, toTypeU = 0;
 		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
@@ -383,8 +386,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
 			}
 		}
-		if (! quiet && toTypeUser && n > 0)
-			Rcpp::Rcout << "converted into: " << poGeometryV[0]->getGeometryName() << std::endl;
+		if (! quiet && toTypeU != 0 && n > 0)
+			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl;
 		// convert to R:
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		out[iGeom + poFDefn->GetFieldCount()] = sfc;

@@ -22,7 +22,6 @@ Type 'q()' to quit R.
 Cannot open layer foo
 OGR: Unsupported geometry type
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-converted into: POLYGON
 Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
@@ -49,8 +48,8 @@ Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 544 SKIPPED: 0 FAILED: 0
+OK: 556 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.472   0.424   7.887 
+  5.664   0.476   9.232 

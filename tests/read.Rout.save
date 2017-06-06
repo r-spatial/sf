@@ -278,7 +278,6 @@ First 3 features:
 2     0      10   542     3      12 MULTIPOLYGON(((-81.23989105...
 3     5     208  3616     6     260 MULTIPOLYGON(((-80.45634460...
 Reading layer `a.sqlite' from data source `/home/edzer/git/sf.Rcheck/sf/sqlite/b.sqlite' using driver `SQLite'
-converted into: POINT
 Integer64 values larger than 9.0072e+15 lost significance after conversion to double;
 use argument int64_as_string = TRUE to import them lossless, as character
 Simple feature collection with 1 feature and 2 fields
@@ -296,7 +295,6 @@ proj4string:    NA
   a       bigint   GEOMETRY
 1 1 4.611686e+18 POINT(0 1)
 Reading layer `a.sqlite' from data source `/home/edzer/git/sf.Rcheck/sf/sqlite/b.sqlite' using driver `SQLite'
-converted into: POINT
 Simple feature collection with 1 feature and 2 fields
 geometry type:  POINT
 dimension:      XY
@@ -349,6 +347,15 @@ First 3 features:
 2      2 VENETO MULTIPOLYGON(((751705.49671...
 3      3 VENETO MULTIPOLYGON(((766247.78071...
 > 
+> csv = system.file("csv/pt.csv", package = "sf")
+> identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_real_)
+[1] TRUE
+> identical(st_read(quiet = TRUE, csv, int64_as_string = TRUE, stringsAsFactors = FALSE,
++ 	options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_character_)
+[1] TRUE
+> identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], NA_integer_)
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  1.088   0.280   1.068 
+  1.100   0.296   1.088 
