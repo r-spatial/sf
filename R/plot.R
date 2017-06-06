@@ -399,9 +399,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 		plot(st_geometry(g), col = col_graticule, add = TRUE)
 		box()
 		if (axes) {
-			sel = g$type == "E" & g$y_start < min(g$y_start) + 0.01 * diff(pl_reg[3:4])
+			sel = g$type == "E" & g$plot12
 			linAxis(1L, g$x_start[sel], parse(text = g$degree_label[sel]), ...)
-			sel = g$type == "N" & g$x_start < min(g$x_start) + 0.01 * diff(pl_reg[1:2])
+			sel = g$type == "N" & g$plot12
 			linAxis(2L, g$y_start[sel], parse(text = g$degree_label[sel]), ...)
 		}
 	} else if (axes) {
