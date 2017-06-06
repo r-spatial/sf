@@ -164,8 +164,8 @@ Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 		if (spatialite) {
 			// verify special marker; if not there, raise error:
 			unsigned char marker;
-			wkb_read(wkb, &marker, 1); // absorb the 0x69
-			if (marker != 0x69) {  // #nocov start
+			wkb_read(wkb, &marker, 1); // absorb the 0x69 #nocov start
+			if (marker != 0x69) {
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
 				throw std::range_error("invalid spatialite header");
 			} // #nocov end
@@ -305,7 +305,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	}
 	if (spatialite) {
 		if (swap) 
-			throw std::range_error("reading non-native endian spatialite geometries not supported");
+			throw std::range_error("reading non-native endian spatialite geometries not supported"); // #nocov
 		if (srid != NULL) // not nested:
 			read_spatialite_header(wkb, srid, swap);
 	}
@@ -738,7 +738,7 @@ Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 
 	if (sfc.length() == 0) {
 		if (dim != NULL)
-			*dim = 2;
+			*dim = 2; // #nocov -- revisit this one?
 		return "XY";
 	}
 
@@ -782,7 +782,7 @@ Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 	}
 	if (dim != NULL) {
 		if (strstr(cls[0], "Z") != NULL)
-			*dim = 3;
+			*dim = 3; // #nocov
 		else
 			*dim = 2;
 	}

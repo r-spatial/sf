@@ -252,7 +252,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					rowi(j) = chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[j], 
 						pattern.c_str()));
 				if (! sparse)
-					densemat(i,_) = rowi;
+					densemat(i,_) = rowi; // #nocov
 				else
 					sparsemat[i] = get_which(rowi);
 				R_CheckUserInterrupt();
@@ -308,7 +308,7 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	for (int i = 0; i < out.length(); i++) {
 		char *buf = GEOSisValidReason_r(hGEOSCtxt, gmv[i]);
 		if (buf == NULL)
-			out[i] = NA_STRING;
+			out[i] = NA_STRING; // #nocov
 		else {
 			out[i] = buf;
 			GEOSFree_r(hGEOSCtxt, buf);
@@ -326,7 +326,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 	int notice = 0;
 	if (NA_on_exception) {
 		if (sfc.size() > 1)
-			throw std::range_error("NA_on_exception will only work reliably with length 1 sfc objects");
+			throw std::range_error("NA_on_exception will only work reliably with length 1 sfc objects"); // #nocov
 #ifdef HAVE350
 		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
@@ -344,7 +344,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 	for (int i = 0; i < out.length(); i++) {
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
 		if (NA_on_exception && (ret == 2 || notice != 0))
-			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry
+			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry #nocov
 		else
 			out[i] = chk_(ret);
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
@@ -390,7 +390,6 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	return out;
 }
 
-
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
 		throw std::range_error("GEOS exception"); // #nocov
@@ -421,9 +420,9 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	} else if (op == "convex_hull") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i]));
-	} else if (op == "unary_union") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i]));
+//	} else if (op == "unary_union") { // -> done by CPL_geos_union()
+//		for (size_t i = 0; i < g.size(); i++)
+//			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i]));
 	} else if (op == "simplify") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :

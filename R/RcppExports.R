@@ -177,7 +177,3 @@ CPL_write_wkb <- function(sfc, EWKB = FALSE, endian = 0L, dim = "XY", precision 
     .Call('sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, endian, dim, precision)
 }
 
-# Register entry points for exported C++ functions
-methods::setLoadAction(function(ns) {
-    .Call('sf_RcppExport_registerCCallable', PACKAGE = 'sf')
-})
