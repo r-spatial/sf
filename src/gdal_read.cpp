@@ -57,7 +57,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 		const char *geom_name = poGFDefn->GetNameRef();
 		if (*geom_name == '\0') {
 			if (i > 0)
-				names[i + poFDefn->GetFieldCount()] = geom + std::to_string(i); // c++11
+				names[i + poFDefn->GetFieldCount()] = geom + std::to_string(i); // c++11; #nocov
 			else
 				names[i + poFDefn->GetFieldCount()] = geom;
 		} else
@@ -84,7 +84,7 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			case wkbMultiLineString: multilines = true; break;
 			case wkbPolygon: polygons = true; break;
 			case wkbMultiPolygon: multipolygons = true; break;
-			default: return 0;
+			default: return 0; // #nocov
 		}
 	}
 	int sum = points + multipoints + lines + multilines + polygons + multipolygons;
@@ -361,7 +361,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			poGeom[i] = poGeometryV[i + n * iGeom];
 		if (has_null_geometries) {
 			if (! quiet)
-				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl;
+				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
 			poGeom = replace_null_with_empty(poGeom);
 		}
 
@@ -387,7 +387,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			}
 		}
 		if (! quiet && toTypeU != 0 && n > 0)
-			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl;
+			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
 		// convert to R:
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		out[iGeom + poFDefn->GetFieldCount()] = sfc;
