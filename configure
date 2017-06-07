@@ -622,6 +622,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 GEOS_CONFIG
+PROJ_CPPFLAGS
 EGREP
 GREP
 CPP
@@ -3618,12 +3619,12 @@ if test "${with_proj_include+set}" = set; then :
 fi
 
 if test  -n "$proj_include_path"  ; then
-   PKG_CPPFLAGS="-I${proj_include_path} ${INPKG_CPPFLAGS}"
+   PROJ_CPPFLAGS="-I${proj_include_path}"
 
 else
   if test "${proj_config_ok}" = yes; then
     PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
-    PKG_CPPFLAGS="${PROJ_INCLUDE_PATH} ${INPKG_CPPFLAGS}"
+    PROJ_CPPFLAGS="${PROJ_INCLUDE_PATH}"
 
   fi
 fi
@@ -3992,7 +3993,7 @@ else
 $as_echo "yes" >&6; }
 fi
 
-PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
+PKG_CPPFLAGS="${INPKG_CPPFLAGS} ${PROJ_CPPFLAGS} ${GDAL_CPPFLAGS} ${GEOS_CPPFLAGS}"
 
 PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
 
