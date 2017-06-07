@@ -123,7 +123,8 @@ brew link --force gdal2</code></pre>
 <ul>
 <li>
 <p>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
-<pre><code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+<pre class="sh"><code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt-get update
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre>
 or</li>
 <li><p>install dependencies from source; see e.g. an older <a href="https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
@@ -142,7 +143,7 @@ or</li>
 <div id="acknowledgment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#acknowledgment" class="anchor"></a>Acknowledgment</h3>
-<p>This project is being realized with financial <a href="https://www.r-consortium.org/projects">support</a> from the</p>
+<p>This project has been realized with financial <a href="https://www.r-consortium.org/projects">support</a> from the</p>
 <p><a href="https://www.r-consortium.org/projects/awarded-projects"> <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="400"></a></p>
 </div>
 </div>

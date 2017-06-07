@@ -137,13 +137,30 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>sparse=TRUE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=FALSE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>.</p>
+    <p>if <code>sparse=TRUE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=FALSE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1.5</span>, <span class='fl'>1.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>2.5</span>, <span class='fl'>2.5</span>)))
+<span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>2</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
+(<span class='no'>lst</span> <span class='kw'>=</span> <span class='fu'>st_intersects</span>(<span class='no'>pts</span>, <span class='no'>pol</span>))</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] 1
+#&gt; 
+#&gt; [[3]]
+#&gt; integer(0)
+#&gt; </div><div class='input'>(<span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'>st_intersects</span>(<span class='no'>pts</span>, <span class='no'>pol</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt;       [,1]
+#&gt; [1,]  TRUE
+#&gt; [2,]  TRUE
+#&gt; [3,] FALSE</div><div class='input'><span class='co'># which points fall inside a polygon?</span>
+<span class='fu'>apply</span>(<span class='no'>mat</span>, <span class='fl'>1</span>, <span class='no'>any</span>)</div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='fu'>lengths</span>(<span class='no'>lst</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span></div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='co'># which points fall inside the first polygon?</span>
+<span class='fu'>st_intersects</span>(<span class='no'>pol</span>, <span class='no'>pts</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; [1] 1 2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -153,7 +170,9 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

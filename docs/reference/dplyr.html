@@ -88,11 +88,11 @@
 
     <pre class="usage"><span class='fu'>filter_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>filter.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
+<span class='fu'>filter.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>arrange_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>arrange.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
+<span class='fu'>arrange.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>distinct_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>.keep_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
@@ -118,11 +118,11 @@
 
 <span class='fu'>rename_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>rename.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
+<span class='fu'>rename.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>slice_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>slice.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
+<span class='fu'>slice.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>summarise.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>do_union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -294,7 +294,6 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
 <span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
-#&gt; converted into: POLYGON
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -310,12 +309,13 @@
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
-#&gt;    AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
-#&gt; 1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091     1
-#&gt; 2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0
-#&gt;   NWBIR74 BIR79 SID79 NWBIR79    area_cl                       geometry
-#&gt; 1      10  1364     0      19 (0.1,0.12] MULTIPOLYGON(((-81.47275543...
-#&gt; 2      10   542     3      12    (0,0.1] MULTIPOLYGON(((-81.23989105...</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
+#&gt; # A tibble: 2 x 16
+#&gt;    AREA PERIMETER CNTY_ CNTY_ID      NAME   FIPS FIPSNO CRESS_ID BIR74 SID74
+#&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;fctr&gt; &lt;fctr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 0.114     1.442  1825    1825      Ashe  37009  37009        5  1091     1
+#&gt; 2 0.061     1.231  1827    1827 Alleghany  37005  37005        3   487     0
+#&gt; # ... with 6 more variables: NWBIR74 &lt;dbl&gt;, BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;,
+#&gt; #   NWBIR79 &lt;dbl&gt;, area_cl &lt;fctr&gt;, geometry &lt;simple_feature&gt;</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
 <span class='no'>nc.g</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'>group_by</span>(<span class='no'>area_cl</span>)
 <span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  MULTIPOLYGON

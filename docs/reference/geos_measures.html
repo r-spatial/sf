@@ -105,19 +105,24 @@
     </tr>
     <tr>
       <th>y</th>
-      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></td>
+      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code>, defaults to <code>x</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
-<p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system used; if the coordinate reference system of <code>x</code> was set, the returned value has a unit of measurement. POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
+    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/units'>units</a>.</p>
+<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
+<p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
 <p>st_distance returns a dense numeric matrix of dimension length(x) by length(y)</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><a href='geos_query.html'>st_dimension</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -133,6 +138,8 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
