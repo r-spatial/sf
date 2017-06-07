@@ -15,14 +15,21 @@
 #' diag(m) = c(1, 3)
 #' # affine:
 #' st_point(c(1,2)) * m + c(2,5)
+#' # world in 0-360 range:
+#' library(maps)
+#' w = st_as_sf(map('world', plot = FALSE, fill = TRUE))
+#' w2 = (st_geometry(w) + c(360,90)) %% c(360) - c(0,90)
+#' plot(w2, axes = TRUE)
 Ops.sfg <- function(e1, e2) {
 	if (nargs() == 1)
 		stop(paste("unary", .Generic, "not defined for \"sfg\" objects"))
 
 	prd <- switch(.Generic, "*" = TRUE, FALSE)
 	pm  <- switch(.Generic, "+" = , "-" = TRUE, FALSE)
-	if (!(prd || pm))
-		stop("operation not supported for sfg objects")
+	mod <- switch(.Generic, "%%" = TRUE, FALSE)
+
+	if (!(prd || pm || mod))
+		stop(paste("operation", .Generic, "not supported for sfg objects"))
 	
 	if (is.na(st_dimension(e1))) # empty:
 		return(e1)
@@ -34,7 +41,7 @@ Ops.sfg <- function(e1, e2) {
 	Vec = rep(0, dims)
 	Mat = matrix(0, dims, dims)
 	diag(Mat) = 1
-	if (pm) {
+	if (pm || mod) {
 		if (length(e2) == 1)
 			Vec = rep(e2, length.out = dims)
 		else
@@ -51,8 +58,10 @@ Ops.sfg <- function(e1, e2) {
 	if_pt = function(x, y) { if(inherits(x, "POINT")) as.vector(y) else y }
 	fn = if (prd)
 			function(x, Mat, Vec) structure(if_pt(x, x %*% Mat), class = class(x))
-		else
+		else if (pm)
 			function(x, Mat, Vec) structure(if_pt(x, unclass(x) + conform(Vec, x)), class = class(x))
+		else # mod:
+			function(x, Mat, Vec) structure(if_pt(x, unclass(x) %% conform(Vec, x)), class = class(x))
 		
 	if (is.list(e1))
 		rapply(e1, fn, how = "replace", Mat = Mat, Vec = Vec)
@@ -77,6 +86,7 @@ Ops.sfc <- function(e1, e2) {
 		"*" = mapply(function(x, y) { x * unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		"+" = mapply(function(x, y) { x + unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		"-" = mapply(function(x, y) { x - unclass(y) }, e1, e2, SIMPLIFY = FALSE),
+		"%%" = mapply(function(x, y) { x %% unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		stop(paste("operation", .Generic, "not supported")))
 	st_sfc(ret, crs = NA_integer_, precision = attr(e1, "precision"))
 }

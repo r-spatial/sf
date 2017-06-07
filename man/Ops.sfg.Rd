@@ -24,4 +24,9 @@ m = matrix(0, 2, 2)
 diag(m) = c(1, 3)
 # affine:
 st_point(c(1,2)) * m + c(2,5)
+# world in 0-360 range:
+library(maps)
+w = st_as_sf(map('world', plot = FALSE, fill = TRUE))
+w2 = (st_geometry(w) + c(360,90)) \%\% c(360) - c(0,90)
+plot(w2, axes = TRUE)
 }

@@ -399,6 +399,14 @@ bbox:           xmin: -2 ymin: -2 xmax: -2 ymax: -1
 epsg (SRID):    NA
 proj4string:    NA
 LINESTRING(-2 -2, -2 -1)
+> (ls + 2) %% 3
+Geometry set for 1 feature 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 2 ymin: 0 xmax: 2 ymax: 2
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING(2 2, 2 0)
 > 
 > str(x)
 sfc_POINT of length 2; first list element: Classes 'XY', 'POINT', 'sfg'  num [1:2] -90 35
@@ -731,4 +739,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  1.556   0.300   1.546 
+  1.516   0.296   1.503 
