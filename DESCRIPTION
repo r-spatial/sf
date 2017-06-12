@@ -35,6 +35,7 @@ Suggests:
     tibble,
 	rlang,
 	dplyr,
+	dbplyr,
 	RSQLite,
     RPostgreSQL,
     testthat,
