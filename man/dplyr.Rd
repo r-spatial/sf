@@ -57,6 +57,8 @@
 \alias{dplyr}
 \alias{separate_.sf}
 \alias{dplyr}
+\alias{unite_.sf}
+\alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
 \alias{left_join.sf}
@@ -129,6 +131,8 @@ nest_.sf(data, key_col, nest_cols)
 separate_.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
   convert = FALSE, extra = "warn", fill = "warn", ...)
 
+unite_.sf(data, col, from, sep = "_", remove = TRUE)
+
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
@@ -195,6 +199,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{remove}{see \link[tidyr]{separate}}
 
 \item{extra}{see \link[tidyr]{separate}}
+
+\item{from}{see \link[tidyr]{unite}}
 
 \item{y}{see \link[dplyr]{left_join}}
 

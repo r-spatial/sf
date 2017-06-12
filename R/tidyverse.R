@@ -269,6 +269,15 @@ separate_.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 	st_as_sf(NextMethod())
 }
 
+#' @name dplyr
+#' @param from see \link[tidyr]{unite}
+#' @export
+unite_.sf = function(data, col, from, sep = "_", remove = TRUE) {
+	class(data) <- setdiff(class(data), "sf")
+	st_as_sf(NextMethod())
+}
+
+
 ## tibble methods:
 
 #' Summarize simple feature type for tibble
