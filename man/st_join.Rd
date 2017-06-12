@@ -14,7 +14,7 @@ st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
 
-\item{FUN}{aggregation function, see \link[stats]{aggregate}; in case of multiple matches, if \code{FUN} is defined, attributes of \code{y} will be aggregated using \code{FUN}; else, all combinations of \code{x} and \code{y} are returned.}
+\item{FUN}{deprecated;}
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
@@ -44,6 +44,8 @@ b = st_sf(a = 11:14,
  geom = st_sfc(st_point(c(10,10)), st_point(c(2,2)), st_point(c(2,2)), st_point(c(3,3))))
 st_join(a, b)
 st_join(a, b, left = FALSE)
-st_join(a, b, FUN = mean)
-st_join(a, b, FUN = mean, left = FALSE)
+# two ways to aggregate y's attribute values outcome over x's geometries:
+st_join(a, b) \%>\% aggregate(list(.$a.x), mean)
+library(dplyr)
+st_join(a, b) \%>\% group_by(a.x) \%>\% summarise(mean(a.y))
 }
