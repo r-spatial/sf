@@ -611,6 +611,14 @@ proj4string:    NA
 2     2  12 POINT(2 2)
 2.1   2  13 POINT(2 2)
 3     3  14 POINT(3 3)
+> # deprecated:
+> try(x <- st_join(a, b, FUN = mean))
+Error in st_join(a, b, FUN = mean) : 
+  for aggregation/summarising after st_join, see examples in ?st_join
+In addition: Warning message:
+'st_join' is deprecated.
+Use 'aggregate' instead.
+See help("Deprecated") 
 > 
 > # rbind:
 > x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
@@ -718,4 +726,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  1.456   0.344   1.488 
+  1.588   0.308   1.587 
