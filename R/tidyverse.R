@@ -109,8 +109,11 @@ select_.sf <- function(.data, ..., .dots = NULL) {
 #' @name dplyr
 #' @export
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
-select.sf <- if (requireNamespace("dplyr", quietly = TRUE) && utils::packageVersion("dplyr") > "0.5.0") {
-  function(.data, ...) {
+select.sf <- function(.data, ...) {
+
+	if (!requireNamespace("dplyr", quietly = TRUE) || utils::packageVersion("dplyr") <= "0.5.0")
+		stop("requires dplyr > 0.5.0: install that first, then reinstall sf") # nocov
+
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
 
@@ -119,12 +122,7 @@ select.sf <- if (requireNamespace("dplyr", quietly = TRUE) && utils::packageVers
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
 	st_as_sf(ret)
-  }
-} else {
-  function(.data, ...) {
-	stop("requires dplyr > 0.5.0: install that first, then reinstall sf") # nocov
-  }
-}
+} 
 
 
 #' @name dplyr
