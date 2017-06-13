@@ -66,15 +66,23 @@ const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
 }
 
 void handle_error(OGRErr err) {
-	if (err != 0) {
-		if (err == OGRERR_NOT_ENOUGH_DATA)
-			Rcpp::Rcout << "OGR: Not enough data " << std::endl; // #nocov
-		else if (err == OGRERR_UNSUPPORTED_GEOMETRY_TYPE)
-			Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
-		else if (err == OGRERR_CORRUPT_DATA)                    // #nocov
-			Rcpp::Rcout << "OGR: Corrupt data" << std::endl;    // #nocov
-		else 
-			Rcpp::Rcout << "Error code: " << err << std::endl;  // #nocov
+	if (err != OGRERR_NONE) {
+		switch (err) {
+			case OGRERR_NOT_ENOUGH_DATA:
+				Rcpp::Rcout << "OGR: Not enough data " << std::endl; // #nocov
+				break;
+			case OGRERR_UNSUPPORTED_GEOMETRY_TYPE:
+				Rcpp::Rcout << "OGR: Unsupported geometry type" << std::endl;
+				break;
+			case OGRERR_CORRUPT_DATA:                   		 	// #nocov
+				Rcpp::Rcout << "OGR: Corrupt data" << std::endl;    // #nocov
+				break;
+			case OGRERR_FAILURE:
+				Rcpp::Rcout << "OGR: index invalid?" << std::endl;    // #nocov
+				break;
+			default:
+				Rcpp::Rcout << "Error code: " << err << std::endl;  // #nocov
+		}
 		throw std::range_error("OGR error");
 	}
 }

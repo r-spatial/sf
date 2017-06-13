@@ -172,9 +172,12 @@ std::vector<OGRGeometry *> replace_null_with_empty(std::vector<OGRGeometry *> po
 			break;
 		}
 	}
-	for (size_t i = 0; i < poGeom.size(); i++)
+	for (size_t i = 0; i < poGeom.size(); i++) {
 		if (poGeom[i] == NULL)
 			poGeom[i] = OGRGeometryFactory::createGeometry(gt);
+		if (poGeom[i] == NULL)
+			throw std::out_of_range("createGeometry returned NULL"); // #nocov
+	}
 	return poGeom;
 }
 
@@ -378,12 +381,19 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		if (toType != 0) { 
 			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
 			for (i = 0; i < poFeatureV.size(); i++) {
-				OGRErr err = poFeatureV[i]->SetGeomFieldDirectly(
-					iGeom,
-					OGRGeometryFactory::forceTo(poFeatureV[i]->StealGeometry(iGeom), 
-					(OGRwkbGeometryType) toType, NULL) );
+				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom);
+				if (geom == NULL)
+					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType);
+				else {
+					geom = OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL);
+					if (geom == NULL)
+						throw std::out_of_range("OGRGeometryFactory::forceTo returned NULL"); // #nocov
+				}
+				OGRErr err = poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom);
 				handle_error(err);
 				poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
+				if (poGeom[i] == NULL)
+					throw std::out_of_range("GetGeomFieldRef returned NULL"); // #nocov
 			}
 		}
 		if (! quiet && toTypeU != 0 && n > 0)
