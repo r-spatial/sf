@@ -622,6 +622,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 GEOS_CONFIG
+PROJ_LIBS
 PROJ_CPPFLAGS
 EGREP
 GREP
@@ -3632,7 +3633,7 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
-CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 proj4ok=yes
 for ac_header in proj_api.h
@@ -3661,22 +3662,22 @@ if test "${with_proj_lib+set}" = set; then :
 fi
 
 if test  -n "$proj_lib_path"  ; then
-    PKG_LIBS="-L${proj_lib_path} ${INPKG_LIBS}"
+    PROJ_LIBS="-L${proj_lib_path} ${INPKG_LIBS} -lproj"
 
 else
   if test "${proj_config_ok}" = yes; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-    PKG_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
+    PROJ_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
 
 	proj_version=`${PROJ_CONFIG} --modversion`
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: PROJ: ${proj_version}" >&5
 $as_echo "$as_me: PROJ: ${proj_version}" >&6;}
   else
-    PKG_LIBS="${PKG_LIBS} -lproj"
+    PROJ_LIBS="${PKG_LIBS} -lproj"
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS}"
+LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
 
 proj4ok=yes
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
@@ -3740,7 +3741,9 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+#AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
 
@@ -3782,7 +3785,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -3841,7 +3844,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -4085,9 +4088,9 @@ fi
 rm -f geos_test errors.txt geos_test.cpp
 
 #
-# add -lproj
+# add PROJ_LIBS
 #
-PKG_LIBS="${PKG_LIBS} -lproj"
+PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
 
 
 #

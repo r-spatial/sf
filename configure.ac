@@ -293,7 +293,7 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
-CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 proj4ok=yes
 AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
@@ -307,19 +307,19 @@ AC_ARG_WITH([proj-lib],
                [the location of proj libraries]),
                [proj_lib_path=$withval])
 if test [ -n "$proj_lib_path" ] ; then
-    AC_SUBST([PKG_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS}"])
+    AC_SUBST([PROJ_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS} -lproj"])
 else
   if test "${proj_config_ok}" = yes; then
     PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
-    AC_SUBST([PKG_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
+    AC_SUBST([PROJ_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
 	proj_version=`${PROJ_CONFIG} --modversion`
 	AC_MSG_NOTICE([PROJ: ${proj_version}])
   else
-    PKG_LIBS="${PKG_LIBS} -lproj"
+    PROJ_LIBS="${PKG_LIBS} -lproj"
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS}"
+LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
 
 proj4ok=yes
 AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
@@ -337,7 +337,9 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+#AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
 
@@ -376,7 +378,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -432,7 +434,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${PKG_CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PKG_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -590,9 +592,9 @@ fi
 rm -f geos_test errors.txt geos_test.cpp
 
 #
-# add -lproj
+# add PROJ_LIBS
 #
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} -lproj"])
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS}"])
 
 #
 # liblwgeom
