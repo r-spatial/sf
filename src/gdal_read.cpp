@@ -76,6 +76,8 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
 		// drop Z and M:
+		if (gv[i] == NULL)
+			break;
 		OGRwkbGeometryType gt = OGR_GT_SetModifier(gv[i]->getGeometryType(), 0, 0);
 		switch(gt) {
 			case wkbPoint: points = true; break;
@@ -362,11 +364,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		std::vector<OGRGeometry *> poGeom(n);
 		for (size_t i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
-		if (has_null_geometries) {
-			if (! quiet)
-				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
-			poGeom = replace_null_with_empty(poGeom);
-		}
 
 		int toType = 0, toTypeU = 0;
 		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
@@ -378,23 +375,25 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		else
 			toType = toTypeU;
 
-		if (toType != 0) { 
+		if (toType != 0) { // coerce to toType:
 			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
 			for (i = 0; i < poFeatureV.size(); i++) {
-				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom);
+				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom); // transfer ownership
 				if (geom == NULL)
 					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType);
-				else {
-					geom = OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL);
-					if (geom == NULL)
-						throw std::out_of_range("OGRGeometryFactory::forceTo returned NULL"); // #nocov
-				}
-				OGRErr err = poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom);
-				handle_error(err);
+				else if ((geom = 
+						OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL)) 
+						== NULL)
+					throw std::out_of_range("OGRGeometryFactory::forceTo returned NULL"); // #nocov
+				handle_error(poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom));
 				poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
 				if (poGeom[i] == NULL)
 					throw std::out_of_range("GetGeomFieldRef returned NULL"); // #nocov
 			}
+		} else if (has_null_geometries) {
+			if (! quiet)
+				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
+			poGeom = replace_null_with_empty(poGeom);
 		}
 		if (! quiet && toTypeU != 0 && n > 0)
 			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
