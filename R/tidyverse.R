@@ -112,7 +112,7 @@ select_.sf <- function(.data, ..., .dots = NULL) {
 select.sf <- function(.data, ...) {
 
 	if (!requireNamespace("dplyr", quietly = TRUE) || utils::packageVersion("dplyr") <= "0.5.0")
-		stop("requires dplyr > 0.5.0: install that first, then reinstall sf") # nocov
+		stop("requires dplyr > 0.5.0: install that first") # nocov
 
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
@@ -222,7 +222,7 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
 #' nc %>% select(SID74, SID79, geometry, row) %>% 
-#'      gather(VAR, SID, -geometry, -row) %>% 
+#'		gather(VAR, SID, -geometry, -row) %>% 
 #'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
@@ -240,7 +240,7 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod())
 }
-	      
+
 #' @name dplyr
 #' @export
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {

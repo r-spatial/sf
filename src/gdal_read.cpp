@@ -380,7 +380,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			for (i = 0; i < poFeatureV.size(); i++) {
 				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom); // transfer ownership
 				if (geom == NULL)
-					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType);
+					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType); // #nocov
 				else if ((geom = 
 						OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL)) 
 						== NULL)
