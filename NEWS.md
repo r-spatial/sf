@@ -1,5 +1,29 @@
 # version 0.5-0
 
+* better handle empty/NULL geometries in shapefiles; #351
+
+* add `unite_.sf` method
+
+* deprecate `FUN` argument to `st_join`; #376
+
+* improve graticule tic label placement in `ggplot2`; #375 and https://github.com/tidyverse/ggplot2/issues/2119
+
+* improve `configure` logic to deal with libraries installed in custom locations; #335
+
+* fix bug where `geom_sf` wouldn't deal with Z and/or M geoms; #373
+
+* return more conveniently typed empty geoms; #372 
+
+* fix subsetting with `[` of `sf` using `drop = TRUE`, #370
+
+* in addition to `m`, allow `rad` units to `st_segmentize` 
+
+* add example how to `st_read` GeoJSON from a string; #185
+
+* add `separate_.sf` method
+
+* add `st_split` to split geometries (only available if compiled against liblwgeom), #359
+
 * fix bug reading and writing dates (months 1 off): #358
 
 * [.sf and [.sfc now also select on i when i is an `sfg` object, and accept a geometric predicate function with optional arguments; #352
