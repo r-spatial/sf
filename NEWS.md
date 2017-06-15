@@ -1,3 +1,5 @@
+# version 0.5-1
+
 # version 0.5-0
 
 * better handle empty/NULL geometries in shapefiles; #351
