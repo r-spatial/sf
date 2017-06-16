@@ -246,6 +246,6 @@ nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% 
 library(tidyr)
 nc$row = 1:100 # needed for spread to work
 nc \%>\% select(SID74, SID79, geometry, row) \%>\% 
-     gather(VAR, SID, -geometry, -row) \%>\% 
+	gather(VAR, SID, -geometry, -row) \%>\% 
 	spread(VAR, SID) \%>\% head()
 }

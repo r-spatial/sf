@@ -85,5 +85,8 @@ nc.merc %>% summarise(sum(area * dens))
 out %>% summarise(sum(A * new_dens))
 
 conn = system.file("gpkg/nc.gpkg", package = "sf")
-db = src_sqlite(conn)
-tbl(db, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
+
+library(DBI)
+library(RSQLite)
+con = dbConnect(SQLite(), dbname = system.file("gpkg/nc.gpkg", package = "sf"))
+dbReadTable(con, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
