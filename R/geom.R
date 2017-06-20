@@ -240,6 +240,8 @@ st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
 #' @name geos_binary_pred
 #' @export
 #' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A. 
+#' 
+#' See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
 st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
 	if (! prepared)
 		stop("non-prepared geometries not supported for st_contains_properly")

@@ -69,7 +69,9 @@ if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersec
 Geometric binary predicates on pairs of simple feature geometry sets
 }
 \details{
-`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
+`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A. 
+
+See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
 }
 \examples{
 pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
