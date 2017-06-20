@@ -493,14 +493,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 	return ret;
 }
 
-GEOSGeometry *chkNULLcnt(GEOSContextHandle_t hGEOSCtxt, GEOSGeometry *value, size_t *n) {
-	if (value == NULL)
-		throw std::range_error("GEOS exception"); // #nocov
-	if (!chk_(GEOSisEmpty_r(hGEOSCtxt, value)))
-		*n = *n + 1;
-	R_CheckUserInterrupt();
-	return value;
-}
+typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
@@ -509,62 +502,50 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
 	std::vector<GEOSGeom> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
-	std::vector<GEOSGeom> out(x.size() * y.size());
+	std::vector<GEOSGeom> out;
+	std::vector<uint64_t> ix;
 
-	size_t n = 0;
-	if (op == "intersection") {
-		for (size_t i = 0; i < y.size(); i++) {
-			for (size_t j = 0; j < x.size(); j++)
-				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSIntersection_r(hGEOSCtxt, x[j], y[i]), &n);
-			R_CheckUserInterrupt();
+	geom_fn geom_function;
+
+	if (op == "intersection")
+		geom_function = (geom_fn) GEOSIntersection_r;
+	else if (op == "union")
+		geom_function = (geom_fn) GEOSUnion_r;
+	else if (op == "difference")
+		geom_function = (geom_fn) GEOSDifference_r;
+	else if (op == "sym_difference")
+		geom_function = (geom_fn) GEOSSymDifference_r;
+	else
+		throw std::invalid_argument("invalid operation"); // #nocov
+
+	for (size_t i = 0; i < y.size(); i++) {
+		for (size_t j = 0; j < x.size(); j++) {
+			GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
+			if (geom == NULL)
+				throw std::range_error("GEOS exception"); // #nocov
+			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) { // keep:
+				ix.push_back(j * y.size() + i);
+				out.push_back(geom);
+			} else
+				GEOSGeom_destroy_r(hGEOSCtxt, geom);
 		}
-	} else if (op == "union") {
-		for (size_t i = 0; i < y.size(); i++) {
-			for (size_t j = 0; j < x.size(); j++)
-				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSUnion_r(hGEOSCtxt, x[j], y[i]), &n);
-			R_CheckUserInterrupt();
-		}
-	} else if (op == "difference") {
-		for (size_t i = 0; i < y.size(); i++) {
-			for (size_t j = 0; j < x.size(); j++)
-				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSDifference_r(hGEOSCtxt, x[j], y[i]), &n);
-			R_CheckUserInterrupt();
-		}
-	} else if (op == "sym_difference") {
-		for (size_t i = 0; i < y.size(); i++) {
-			for (size_t j = 0; j < x.size(); j++)
-				out[i * x.size() + j] = chkNULLcnt(hGEOSCtxt, GEOSSymDifference_r(hGEOSCtxt, x[j], y[i]), &n);
-			R_CheckUserInterrupt();
-		}
-	} else 
-		throw std::invalid_argument("invalid operation"); // would leak g, g0 and out // #nocov
+		R_CheckUserInterrupt();
+	}
+
 	// clean up x and y:
 	for (size_t i = 0; i < x.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, x[i]);
 	for (size_t i = 0; i < y.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, y[i]);
-	// trim results back to non-empty geometries:
-	std::vector<GEOSGeom> out2(n);
-	Rcpp::NumericMatrix m(n, 2); // and a set of 1-based indices to x and y
-	size_t k = 0, l = 0;
-	for (size_t i = 0; i < y.size(); i++) {
-		for (size_t j = 0; j < x.size(); j++) {
-			l = i * x.size() + j;
-			if (!chk_(GEOSisEmpty_r(hGEOSCtxt, out[l]))) { // keep:
-				out2[k] = out[l];
-				m(k, 0) = j + 1;
-				m(k, 1) = i + 1;
-				k++;
-				if (k > n)
-					throw std::range_error("invalid k"); // #nocov
-			} else // discard:
-				GEOSGeom_destroy_r(hGEOSCtxt, out[l]);
-		}
-	}
-	if (k != n)
-		throw std::range_error("invalid k, check 2"); // #nocov
 
-	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out2, dim)); // destroys out2
+	// trim results back to non-empty geometries:
+	Rcpp::NumericMatrix m(ix.size(), 2); // and a set of 1-based indices to x and y
+	for (size_t i = 0; i < ix.size(); i++) {
+		m(i, 0) = (ix[i] / y.size()) + 1;
+		m(i, 1) = (ix[i] % y.size()) + 1;
+	}
+
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);
 	ret.attr("crs") = sfcx.attr("crs");
 	ret.attr("idx") = m;
