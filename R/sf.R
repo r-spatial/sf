@@ -424,3 +424,9 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 			st_as_sfc(unlist(x), ...) # wkt
 	}
 }
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.blob = function(x, ...) {
+	st_as_sfc.list(x, ...)
+}
