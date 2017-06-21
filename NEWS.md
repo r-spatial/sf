@@ -1,5 +1,11 @@
 # version 0.5-1
 
+* drastically reduce memory footprint of `st_intersection` and similar; #394
+
+* support RSQLite 2.0, provide an `st_as_sfc` method for list columns of class `blob`
+
+* drop dependency on dbplyr
+
 # version 0.5-0
 
 * better handle empty/NULL geometries in shapefiles; #351

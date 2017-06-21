@@ -1,4 +1,4 @@
-#define GEOS_USE_ONLY_R_API // avoid using non-thread-safe GEOSxx functions without _r extension.
+#define GEOS_USE_ONLY_R_API // prevents using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
 #if GEOS_VERSION_MAJOR == 3 && GEOS_VERSION_MINOR >= 5
@@ -12,6 +12,10 @@
 #include <Rcpp.h>
 
 #include "wkb.h"
+
+typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
+typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, const GEOSGeometry *);
+typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
 
 static void __errorHandler(const char *fmt, ...) { // #nocov start
 
@@ -118,15 +122,11 @@ Rcpp::NumericVector get_dim(double dim0, double dim1) {
 }
 
 Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
-	int j = 0;
+	std::vector<int32_t> v;
 	for (int i = 0; i < row.length(); i++)
 		if (row(i))
-			j++;
-	Rcpp::IntegerVector ret(j);
-	for (int i = 0, j = 0; i < row.length(); i++)
-		if (row(i))
-			ret(j++) = i + 1; // R is 1-based
-	return ret;
+			v.push_back(i + 1);
+	return Rcpp::wrap(v);
 }
 
 bool chk_(char value) {
@@ -134,10 +134,6 @@ bool chk_(char value) {
 		throw std::range_error("GEOS exception"); // #nocov
 	return value; // 1: true, 0: false
 }
-
-
-typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
-typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, const GEOSGeometry *);
 
 log_fn which_geom_fn(const std::string op) {
 	if (op == "intersects")
@@ -493,17 +489,17 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 	return ret;
 }
 
-typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
-
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
+
+	using namespace Rcpp; // so that later on the (_,1) works
 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
 	std::vector<GEOSGeom> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
 	std::vector<GEOSGeom> out;
-	std::vector<uint64_t> ix;
+	std::vector<double> index_x, index_y;
 
 	geom_fn geom_function;
 
@@ -523,11 +519,12 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
 			if (geom == NULL)
 				throw std::range_error("GEOS exception"); // #nocov
-			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) { // keep:
-				ix.push_back(j * y.size() + i);
-				out.push_back(geom);
+			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
+				index_x.push_back(j + 1);
+				index_y.push_back(i + 1);
+				out.push_back(geom); // keep
 			} else
-				GEOSGeom_destroy_r(hGEOSCtxt, geom);
+				GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
 		}
 		R_CheckUserInterrupt();
 	}
@@ -538,12 +535,9 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	for (size_t i = 0; i < y.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, y[i]);
 
-	// trim results back to non-empty geometries:
-	Rcpp::NumericMatrix m(ix.size(), 2); // and a set of 1-based indices to x and y
-	for (size_t i = 0; i < ix.size(); i++) {
-		m(i, 0) = (ix[i] / y.size()) + 1;
-		m(i, 1) = (ix[i] % y.size()) + 1;
-	}
+	Rcpp::NumericMatrix m(index_x.size(), 2); // and a set of 1-based indices to x and y
+	m(_, 0) = Rcpp::NumericVector(index_x.begin(), index_x.end());
+	m(_, 1) = Rcpp::NumericVector(index_y.begin(), index_y.end());
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim)); // destroys out2
 	CPL_geos_finish(hGEOSCtxt);
