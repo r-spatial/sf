@@ -1,8 +1,6 @@
 FROM ubuntu:16.04
-# minimal docker file to get sp and sf running on ubunty 16.04 image,
-# using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
-
-# tests sf install with custom installs of gdal, geos and proj.4 (from source, non-standard locations)
+# minimal docker file to get sf running on an ubunty 16.04 image,
+# installing gdal, geos and proj.4 from source in a non-standard location
 
 MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 
