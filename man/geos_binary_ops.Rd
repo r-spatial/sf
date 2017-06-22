@@ -26,6 +26,9 @@ an object of the same class as that of the first argument (\code{x}) with the no
 \description{
 Geometric binary operations on pairs of simple feature geometry sets
 }
+\details{
+a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
+}
 \examples{
 # a helper function that erases all of y from x:
 st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))

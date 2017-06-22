@@ -197,6 +197,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
 #' @return if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=FALSE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @details for most predicates, a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
@@ -650,6 +651,7 @@ get_first_sfg = function(x) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
 #' @return an object of the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively. 
+#' @details a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
 #' @seealso \link{st_union}
 #' @export
 st_intersection = function(x, y) UseMethod("st_intersection")

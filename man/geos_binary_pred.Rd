@@ -69,6 +69,8 @@ if \code{sparse=TRUE}, \code{st_predicate} (with \code{predicate} e.g. "intersec
 Geometric binary predicates on pairs of simple feature geometry sets
 }
 \details{
+for most predicates, a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
+
 `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A. 
 
 See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
