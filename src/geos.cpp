@@ -199,15 +199,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, NULL);
 	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, NULL);
-	std::vector<size_t> items(gmv1.size());
 
 	Rcpp::List ret_list;
-
-	GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
-	for (size_t i = 0; i < gmv1.size(); i++) {
-		items[i] = i;
-		GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
-	}
 
 	using namespace Rcpp; // so that later on the (i,_) works
 	if (op == "relate") { // character return matrix:
@@ -279,6 +272,12 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 		} else {
 			if (prepared) {
+				std::vector<size_t> items(gmv1.size());
+				GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+				for (size_t i = 0; i < gmv1.size(); i++) {
+					items[i] = i;
+					GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
+				}
 				log_prfn logical_fn = which_prep_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
 					const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
@@ -301,6 +300,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 					R_CheckUserInterrupt();
 				}
+				GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
 			} else {
 				log_fn logical_fn = which_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
