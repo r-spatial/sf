@@ -191,6 +191,15 @@ log_prfn which_prep_geom_fn(const std::string op) {
 	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
+Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
+	Rcpp::LogicalVector rowi(length);
+	for (int j = 0; j < length; j++)
+		rowi(j) = false;
+	for (size_t j = 0; j < items.size(); j++)
+		rowi(items[j] - 1) = true; // items is 1-based
+	return rowi;
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
 		std::string pattern = "", bool sparse = true, bool prepared = false) {
@@ -271,49 +280,51 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				R_CheckUserInterrupt();
 			}
 		} else {
-			if (prepared) {
-				std::vector<size_t> items(gmv1.size());
-				GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
-				for (size_t i = 0; i < gmv1.size(); i++) {
-					items[i] = i;
+			std::vector<size_t> items(gmv1.size());
+			GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+			for (size_t i = 0; i < gmv1.size(); i++) {
+				items[i] = i;
+				if (! GEOSisEmpty_r(hGEOSCtxt, gmv1[i]))
 					GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
-				}
+			}
+			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
 					const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
-					if (sparse) {
-						// pre-select sfc1's using tree:
-						std::vector<size_t> tree_sel, sel;
+					// pre-select sfc1's using tree:
+					std::vector<size_t> tree_sel, sel;
+					if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
 						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
-						for (int j = 0; j < tree_sel.size(); j++)
-							if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
-								sel.push_back(tree_sel[j] + 1); // 1-based
+					for (int j = 0; j < tree_sel.size(); j++)
+						if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
+							sel.push_back(tree_sel[j] + 1); // 1-based
+					if (sparse) {
 						std::sort(sel.begin(), sel.end());
 						sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					} else {
-						Rcpp::LogicalVector rowi(sfc1.length()); 
-						for (int j = 0; j < sfc1.length(); j++)
-							rowi(j) = chk_(logical_fn(hGEOSCtxt, pr, gmv1[j]));
-						GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
-						densemat(i,_) = rowi;
-					}
-
+					} else // dense
+						densemat(i,_) = get_dense(sel, sfc1.length());
+					GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
 					R_CheckUserInterrupt();
 				}
-				GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
 			} else {
 				log_fn logical_fn = which_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
-					Rcpp::LogicalVector rowi(sfc1.length()); 
-					for (int j = 0; j < sfc1.length(); j++)
-						rowi(j) = chk_(logical_fn(hGEOSCtxt, gmv0[i], gmv1[j]));
-					if (! sparse)
-						densemat(i,_) = rowi;
-					else
-						sparsemat[i] = get_which(rowi);
+					// pre-select sfc1's using tree:
+					std::vector<size_t> tree_sel, sel;
+					if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
+						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
+					for (int j = 0; j < tree_sel.size(); j++)
+						if (chk_(logical_fn(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]])))
+							sel.push_back(tree_sel[j] + 1); // 1-based
+					if (sparse) {
+						std::sort(sel.begin(), sel.end());
+						sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
+					} else // dense
+						densemat(i,_) = get_dense(sel, sfc1.length());
 					R_CheckUserInterrupt();
 				}
 			}
+			GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
 		}
 		if (sparse)
 			ret_list = sparsemat;
@@ -551,14 +562,16 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
 	for (size_t i = 0; i < x.size(); i++) {
 		items[i] = i;
-		GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
+		if (! GEOSisEmpty_r(hGEOSCtxt, x[i]))
+			GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
 	}
 
 	for (size_t i = 0; i < y.size(); i++) {
 		// select x's using tree:
 		std::vector<size_t> sel;
 		sel.reserve(x.size());
-		GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
+		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]))
+			GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
 		std::sort(sel.begin(), sel.end());
 		for (size_t item = 0; item < sel.size(); item++) {
 			size_t j = sel[item];
