@@ -14,8 +14,14 @@
 #include "wkb.h"
 
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
-typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, const GEOSGeometry *);
+typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, 
+	const GEOSGeometry *);
 typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
+
+void cb(void *item, void *userdata) { // callback function for tree selection
+	std::vector<size_t> *ret = (std::vector<size_t> *) userdata;
+	ret->push_back(*((size_t *) item));
+}
 
 static void __errorHandler(const char *fmt, ...) { // #nocov start
 
@@ -193,8 +199,15 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, NULL);
 	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, NULL);
+	std::vector<size_t> items(gmv1.size());
 
 	Rcpp::List ret_list;
+
+	GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+	for (size_t i = 0; i < gmv1.size(); i++) {
+		items[i] = i;
+		GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
+	}
 
 	using namespace Rcpp; // so that later on the (i,_) works
 	if (op == "relate") { // character return matrix:
@@ -253,19 +266,39 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					sparsemat[i] = get_which(rowi);
 				R_CheckUserInterrupt();
 			}
+		} else if (op == "disjoint") {
+			for (int i = 0; i < sfc0.length(); i++) { // row
+				Rcpp::LogicalVector rowi(sfc1.length()); 
+				for (int j = 0; j < sfc1.length(); j++) 
+					rowi(j) = chk_(GEOSDisjoint_r(hGEOSCtxt, gmv0[i], gmv1[j]));
+				if (! sparse)
+					densemat(i,_) = rowi; // #nocov
+				else
+					sparsemat[i] = get_which(rowi);
+				R_CheckUserInterrupt();
+			}
 		} else {
 			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
-					Rcpp::LogicalVector rowi(sfc1.length()); 
 					const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
-					for (int j = 0; j < sfc1.length(); j++)
-						rowi(j) = chk_(logical_fn(hGEOSCtxt, pr, gmv1[j]));
-					GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
-					if (! sparse)
+					if (sparse) {
+						// pre-select sfc1's using tree:
+						std::vector<size_t> tree_sel, sel;
+						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
+						for (int j = 0; j < tree_sel.size(); j++)
+							if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
+								sel.push_back(tree_sel[j] + 1); // 1-based
+						std::sort(sel.begin(), sel.end());
+						sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
+					} else {
+						Rcpp::LogicalVector rowi(sfc1.length()); 
+						for (int j = 0; j < sfc1.length(); j++)
+							rowi(j) = chk_(logical_fn(hGEOSCtxt, pr, gmv1[j]));
+						GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
 						densemat(i,_) = rowi;
-					else
-						sparsemat[i] = get_which(rowi);
+					}
+
 					R_CheckUserInterrupt();
 				}
 			} else {
@@ -500,6 +533,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	std::vector<GEOSGeom> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
 	std::vector<GEOSGeom> out;
 	std::vector<double> index_x, index_y;
+	std::vector<size_t> items(x.size());
 
 	geom_fn geom_function;
 
@@ -514,8 +548,20 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	else
 		throw std::invalid_argument("invalid operation"); // #nocov
 
+	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+	for (size_t i = 0; i < x.size(); i++) {
+		items[i] = i;
+		GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
+	}
+
 	for (size_t i = 0; i < y.size(); i++) {
-		for (size_t j = 0; j < x.size(); j++) {
+		// select x's using tree:
+		std::vector<size_t> sel;
+		sel.reserve(x.size());
+		GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
+		std::sort(sel.begin(), sel.end());
+		for (size_t item = 0; item < sel.size(); item++) {
+			size_t j = sel[item];
 			GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
 			if (geom == NULL)
 				throw std::range_error("GEOS exception"); // #nocov
@@ -528,6 +574,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		}
 		R_CheckUserInterrupt();
 	}
+	GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
 
 	// clean up x and y:
 	for (size_t i = 0; i < x.size(); i++)
