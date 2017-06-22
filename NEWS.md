@@ -1,8 +1,10 @@
 # version 0.5-1
 
+* add spatial indexes to most binary geometry operations; #394 and http://r-spatial.org/r/2017/06/22/spatial-index.html
+
 * drastically reduce memory footprint of `st_intersection` and similar; #394
 
-* support RSQLite 2.0, provide an `st_as_sfc` method for list columns of class `blob`
+* support RSQLite 2.0 by providing an `st_as_sfc` method for list columns of class `blob`
 
 * drop dependency on dbplyr
 
