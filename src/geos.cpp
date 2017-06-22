@@ -144,8 +144,8 @@ bool chk_(char value) {
 log_fn which_geom_fn(const std::string op) {
 	if (op == "intersects")
 		return GEOSIntersects_r;
-	else if (op == "disjoint")
-		return GEOSDisjoint_r;
+//	else if (op == "disjoint")
+//		return GEOSDisjoint_r;
 	else if (op == "touches")
 		return GEOSTouches_r;
 	else if (op == "crosses")
@@ -168,8 +168,8 @@ log_fn which_geom_fn(const std::string op) {
 log_prfn which_prep_geom_fn(const std::string op) {
 	if (op == "intersects")
 		return GEOSPreparedIntersects_r;
-	else if (op == "disjoint")
-		return GEOSPreparedDisjoint_r;
+//	else if (op == "disjoint")
+//		return GEOSPreparedDisjoint_r;
 	else if (op == "touches")
 		return GEOSPreparedTouches_r;
 	else if (op == "crosses")
