@@ -9,15 +9,15 @@ st_distance(x)
 
 st_is_valid(nc)
 
-ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps", "equals", 
-"covers", "covered_by", "equals_exact")
+ops = c("intersects", #"disjoint", 
+"touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 for (op in ops) {
 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, FALSE)
 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE)
 }
 
-ops = c("intersects", "disjoint", "touches", "crosses", "within", "contains", "overlaps",
-"covers", "covered_by")
+ops = c("intersects", #"disjoint", 
+"touches", "crosses", "within", "contains", "overlaps", "covers", "covered_by")
 df = data.frame(ops = ops)
 df$equal = NA
 for (op in ops)
@@ -25,7 +25,7 @@ for (op in ops)
 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE, FALSE),
 		sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE,  TRUE)
 	)
-df	
+df
 
 st_contains_properly(ncm[1:3,], ncm[1:3])
 
@@ -94,3 +94,5 @@ st_relate(grd, pattern = "****1****")
 st_relate(grd, pattern = "****0****")
 st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 st_rook(grd)
+
+try(st_relate(st_point(), st_point(), pattern = "FF*FF****"))

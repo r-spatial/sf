@@ -245,6 +245,14 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
 		Rcpp::List sparsemat(sfc0.length());
 
+		std::vector<size_t> items(gmv1.size());
+		GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+		for (size_t i = 0; i < gmv1.size(); i++) {
+			items[i] = i;
+			if (! GEOSisEmpty_r(hGEOSCtxt, gmv1[i]))
+				GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
+		}
+
 		if (op == "equals_exact") { // has it's own signature, needing `par':
 			for (int i = 0; i < sfc0.length(); i++) { // row
 				Rcpp::LogicalVector rowi(sfc1.length()); 
@@ -257,36 +265,27 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				R_CheckUserInterrupt();
 			}
 		} else if (op == "relate_pattern") { // needing pattern
+			if (GEOSRelatePatternMatch_r(hGEOSCtxt, pattern.c_str(), "FF*FF****"))
+				throw std::range_error("use st_disjoint for this pattern");
+			// all remaining can use tree:
 			for (int i = 0; i < sfc0.length(); i++) { // row
-				Rcpp::LogicalVector rowi(sfc1.length()); 
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[j], 
-						pattern.c_str()));
-				if (! sparse)
-					densemat(i,_) = rowi; // #nocov
-				else
-					sparsemat[i] = get_which(rowi);
+				// pre-select sfc1's using tree:
+				std::vector<size_t> tree_sel, sel;
+				if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
+					GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
+				for (int j = 0; j < tree_sel.size(); j++)
+					if (chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]], pattern.c_str())))
+						sel.push_back(tree_sel[j] + 1); // 1-based
+				if (sparse) {
+					std::sort(sel.begin(), sel.end());
+					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
+				} else // dense
+					densemat(i,_) = get_dense(sel, sfc1.length());
 				R_CheckUserInterrupt();
 			}
-		} else if (op == "disjoint") {
-			for (int i = 0; i < sfc0.length(); i++) { // row
-				Rcpp::LogicalVector rowi(sfc1.length()); 
-				for (int j = 0; j < sfc1.length(); j++) 
-					rowi(j) = chk_(GEOSDisjoint_r(hGEOSCtxt, gmv0[i], gmv1[j]));
-				if (! sparse)
-					densemat(i,_) = rowi; // #nocov
-				else
-					sparsemat[i] = get_which(rowi);
-				R_CheckUserInterrupt();
-			}
-		} else {
-			std::vector<size_t> items(gmv1.size());
-			GEOSSTRtree *tree1 = GEOSSTRtree_create_r(hGEOSCtxt, 10);
-			for (size_t i = 0; i < gmv1.size(); i++) {
-				items[i] = i;
-				if (! GEOSisEmpty_r(hGEOSCtxt, gmv1[i]))
-					GEOSSTRtree_insert_r(hGEOSCtxt, tree1, gmv1[i], &(items[i]));
-			}
+		} else if (op == "disjoint")
+			throw std::range_error("disjoint should have been handled in R"); // #nocov
+		else { // anything else:
 			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
@@ -324,8 +323,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					R_CheckUserInterrupt();
 				}
 			}
-			GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
 		}
+		GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
 		if (sparse)
 			ret_list = sparsemat;
 		else
