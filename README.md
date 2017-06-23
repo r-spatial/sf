@@ -62,6 +62,10 @@ after that, you should be able to install `sf` as a source package.
 
 According to https://github.com/edzer/sfr/issues/349, `brew install postgis` installs a working `liblwgeom`. In case of problems, search the issues for `brew` before opening a new one.
 
+For MacOS Sierra, see
+[these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
+instruction, using kyngchaos frameworks.
+
 ### Linux
 
 For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are required; `liblwgeom` is optional.
