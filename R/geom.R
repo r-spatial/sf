@@ -215,8 +215,9 @@ st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
 #' @name geos_binary_pred
 #' @export
 st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
-	# st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared)
+	# st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared) -> didn't use STRtree
 	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	# disjoint = !intersects :
 	if (sparse)
 		lapply(int, function(g) setdiff(1:length(st_geometry(y)), g))
 	else
