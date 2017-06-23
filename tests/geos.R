@@ -92,7 +92,7 @@ grd = st_make_grid(sfc, n = c(3,3))
 st_intersects(grd)
 st_relate(grd, pattern = "****1****")
 st_relate(grd, pattern = "****0****")
-st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
-st_rook(grd)
+st_rook = function(a, b = a, ...) st_relate(a, b, pattern = "F***1****", ...)
+st_rook(grd, sparse = FALSE)
 
-try(st_relate(st_point(), st_point(), pattern = "FF*FF****"))
+try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
