@@ -273,7 +273,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				std::vector<size_t> tree_sel, sel;
 				if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
 					GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
-				for (int j = 0; j < tree_sel.size(); j++)
+				for (size_t j = 0; j < tree_sel.size(); j++)
 					if (chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]], pattern.c_str())))
 						sel.push_back(tree_sel[j] + 1); // 1-based
 				if (sparse) {
@@ -294,7 +294,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					std::vector<size_t> tree_sel, sel;
 					if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
 						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
-					for (int j = 0; j < tree_sel.size(); j++)
+					for (size_t j = 0; j < tree_sel.size(); j++)
 						if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
 							sel.push_back(tree_sel[j] + 1); // 1-based
 					if (sparse) {
@@ -312,7 +312,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					std::vector<size_t> tree_sel, sel;
 					if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
 						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
-					for (int j = 0; j < tree_sel.size(); j++)
+					for (size_t j = 0; j < tree_sel.size(); j++)
 						if (chk_(logical_fn(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]])))
 							sel.push_back(tree_sel[j] + 1); // 1-based
 					if (sparse) {
