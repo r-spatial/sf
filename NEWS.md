@@ -1,3 +1,7 @@
+# version 0.5-2
+
+* allow setting `ndiscr` through `ggplot2::coords_sf` to improve graticule plotting in `geom_sf`; #396
+
 # version 0.5-1
 
 * add spatial indexes to most binary geometry operations; #394 and http://r-spatial.org/r/2017/06/22/spatial-index.html
