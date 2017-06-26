@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -98,7 +120,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>column elements to be binded into an <code>sf</code> object or a single <code>list</code> or <code>data.frame</code> with such columns; at least one of these columns shall be a geometry list-column of class <code>sfc</code> or be a list-column that can be converted into an <code>sfc</code> by <a href='st_as_sfc.html'>st_as_sfc</a>.</p></td>
+      <td><p>column elements to be binded into an <code>sf</code> object or a single <code>list</code> or <code>data.frame</code> with such columns; at least one of these columns shall be a geometry list-column of class <code>sfc</code> or be a list-column that can be converted into an <code>sfc</code> by st_as_sfc.</p></td>
     </tr>
     <tr>
       <th>agr</th>
@@ -118,7 +140,7 @@
     </tr>
     <tr>
       <th>precision</th>
-      <td><p>numeric; see <a href='st_as_binary.html'>st_as_binary</a></p></td>
+      <td><p>numeric; see st_as_binary</p></td>
     </tr>
     <tr>
       <th>sf_column_name</th>
@@ -149,7 +171,8 @@ there are more than one and <code>sf_column_name</code> is not given, the first 
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>agr</code>, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, <code>NA_agr_</code>, implies we don't know.
+    <p><code>agr</code>, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, <code>NA_agr_</code>, implies we don't know.</p>
+<p>When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using st_as_sfc.
     <code>[.sf</code> will return a <code>data.frame</code> or vector if the geometry column (of class <code>sfc</code>) is dropped (<code>drop=TRUE</code>), an <code>sfc</code> object if only the geometry column is selected, and otherwise return an <code>sf</code> object; see also [.data.frame; for <code>[.sf</code> <code>...</code> arguments are passed to <code>op</code>.</p>
     
 

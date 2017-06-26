@@ -32,10 +32,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -95,16 +116,18 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Linking to GEOS 3.5.1, GDAL 2.1.3, proj.4 4.9.2, lwgeom 2.3.2 r15302
 <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(dplyr))
-<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"MULTIPOINT"</span>)
+## Warning: Installed Rcpp (0.12.11.3) different from Rcpp used to build dplyr (0.12.11.2).
+## Please reinstall dplyr to avoid random crashes or undefined behavior.
+<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"MULTIPOINT"</span>)
 ## MULTIPOINT(1 1)
-<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
 ## POINT(1 1)
-<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
 ## POINT(1 1)</code></pre></div>
 <p>Examples of the fourth type are</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## POINT(1 1)</code></pre></div>
 </div>
 <div id="for-collections-of-geometry-sfc-and-simple-feature-collections-sf" class="section level3">
@@ -112,11 +135,11 @@
 <a href="#for-collections-of-geometry-sfc-and-simple-feature-collections-sf" class="anchor"></a>For collections of geometry (sfc) and simple feature collections (sf)</h3>
 <p>It should be noted here that when reading geometries using <code>st_read</code>, the <code>type</code> argument can be used to control the class of the returned geometry:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw"><a href="../reference/st_read.html">st_read</a></span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)))
+<span class="kw">class</span>(<span class="kw">st_geometry</span>(<span class="kw">st_read</span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)))
 ## [1] "sfc_MULTIPOLYGON" "sfc"
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw"><a href="../reference/st_read.html">st_read</a></span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="dv">3</span>)))
+<span class="kw">class</span>(<span class="kw">st_geometry</span>(<span class="kw">st_read</span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="dv">3</span>)))
 ## [1] "sfc_POLYGON" "sfc"
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw"><a href="../reference/st_read.html">st_read</a></span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="dv">1</span>)))
+<span class="kw">class</span>(<span class="kw">st_geometry</span>(<span class="kw">st_read</span>(shp, <span class="dt">quiet =</span> <span class="ot">TRUE</span>, <span class="dt">type =</span> <span class="dv">1</span>)))
 ## [1] "sfc_GEOMETRY" "sfc"</code></pre></div>
 <p>This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> geometries, leading to a <code>GEOMETRY</code> as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost.</p>
 <p>When functions return objects with mixed geometry type (<code>GEOMETRY</code>), downstream functions such as <code>st_write</code> may have difficulty handling them. For some of these cases, <code>st_cast</code> may help modifying their type. For sets of geometry objects (<code>sfc</code>) and simple feature sets (<code>sf),</code>st_cast` can be used by specifying the target type, or without specifying it.</p>
@@ -131,7 +154,7 @@ mls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html
 ## proj4string:    NA
 ## LINESTRING(0 0, 1 1, 2 1)
 ## MULTILINESTRING((2 2, 1 3), (0 0, 1 1, 2 1))
-<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(sfc, <span class="st">"MULTILINESTRING"</span>)
+<span class="kw">st_cast</span>(sfc, <span class="st">"MULTILINESTRING"</span>)
 ## Geometry set for 2 features 
 ## geometry type:  MULTILINESTRING
 ## dimension:      XY
@@ -141,7 +164,7 @@ mls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html
 ## MULTILINESTRING((0 0, 1 1, 2 1))
 ## MULTILINESTRING((2 2, 1 3), (0 0, 1 1, 2 1))
 sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">5</span>:<span class="dv">4</span>, <span class="dt">geom =</span> sfc)
-<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(sf, <span class="st">"MULTILINESTRING"</span>)
+<span class="kw">st_cast</span>(sf, <span class="st">"MULTILINESTRING"</span>)
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  MULTILINESTRING
 ## dimension:      XY
@@ -172,7 +195,7 @@ mls2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.htm
 ## MULTILINESTRING((4 4, 4 3), (2 2, 2 1, 3 1))
 <span class="kw">class</span>(sfc[<span class="dv">2</span>:<span class="dv">3</span>])
 ## [1] "sfc_GEOMETRY" "sfc"
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(sfc[<span class="dv">2</span>:<span class="dv">3</span>]))
+<span class="kw">class</span>(<span class="kw">st_cast</span>(sfc[<span class="dv">2</span>:<span class="dv">3</span>]))
 ## [1] "sfc_MULTILINESTRING" "sfc"
 
 gc1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)))))
@@ -188,9 +211,9 @@ gc3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html
 ## GEOMETRYCOLLECTION(LINESTRING(0 0, 1 1, 2 1))
 ## GEOMETRYCOLLECTION(MULTILINESTRING((2 2, 1 3), ...
 ## GEOMETRYCOLLECTION(MULTILINESTRING((4 4, 4 3), ...
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(sfc))
+<span class="kw">class</span>(<span class="kw">st_cast</span>(sfc))
 ## [1] "sfc_GEOMETRY" "sfc"
-<span class="kw">class</span>(<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw"><a href="../reference/st_cast.html">st_cast</a></span>(sfc), <span class="st">"MULTILINESTRING"</span>))
+<span class="kw">class</span>(<span class="kw">st_cast</span>(<span class="kw">st_cast</span>(sfc), <span class="st">"MULTILINESTRING"</span>))
 ## [1] "sfc_MULTILINESTRING" "sfc"</code></pre></div>
 </div>
 </div>
@@ -216,15 +239,15 @@ p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</s
 p *<span class="st"> </span><span class="kw">rot</span>(pi)
 ## POINT(2.44929359829471e-16 -2)</code></pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
-ncg =<span class="st"> </span><span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
+ncg =<span class="st"> </span><span class="kw">st_geometry</span>(nc)
+<span class="kw">plot</span>(ncg, <span class="dt">border =</span> <span class="st">'grey'</span>)
 cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(ncg)
 ## Warning in st_centroid.sfc(ncg): st_centroid does not give correct
 ## centroids for longitude/latitude data
 ncg2 =<span class="st"> </span>(ncg -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
+<span class="kw">plot</span>(ncg2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div id="coordinate-reference-systems-conversion-and-transformation" class="section level2">
@@ -237,7 +260,7 @@ ncg2 =<span class="st"> </span>(ncg -<span class="st"> </span>cntrd) *<span clas
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 geom =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">11</span>,<span class="dv">12</span>)))
 s =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">15</span>:<span class="dv">16</span>, <span class="dt">geometry =</span> geom)
-<span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(s)
+<span class="kw">st_crs</span>(s)
 ## $epsg
 ## [1] NA
 ## 
@@ -247,8 +270,8 @@ s =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_s
 ## attr(,"class")
 ## [1] "crs"
 s1 =<span class="st"> </span>s
-<span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(s1) &lt;-<span class="st"> </span><span class="dv">4326</span>
-<span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(s1)
+<span class="kw">st_crs</span>(s1) &lt;-<span class="st"> </span><span class="dv">4326</span>
+<span class="kw">st_crs</span>(s1)
 ## $epsg
 ## [1] 4326
 ## 
@@ -258,7 +281,7 @@ s1 =<span class="st"> </span>s
 ## attr(,"class")
 ## [1] "crs"
 s2 =<span class="st"> </span>s
-<span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(s2) &lt;-<span class="st"> "+proj=longlat +datum=WGS84"</span>
+<span class="kw">st_crs</span>(s2) &lt;-<span class="st"> "+proj=longlat +datum=WGS84"</span>
 <span class="kw">all.equal</span>(s1, s2)
 ## [1] TRUE</code></pre></div>
 <p>an alternative, more pipe-friendly version of <code>st_crs&lt;-</code> is</p>
@@ -283,7 +306,7 @@ s2 =<span class="st"> </span>s
 <p>A cleaner way to do this that better expresses intention and does not generate this warning is to first wipe the CRS by assigning it a missing value, and then setting it to the intended value.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1  %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="ot">NA</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</code></pre></div>
 <p>To carry out a coordinate conversion or transformation, we use <code>st_transform</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="dv">3857</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">3857</span>)
 s3
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  POINT
@@ -311,8 +334,8 @@ a1 =<span class="st"> </span>a0 *<span class="st"> </span><span class="fl">0.5</
 a2 =<span class="st"> </span>a0 +<span class="st"> </span><span class="dv">1</span>
 a3 =<span class="st"> </span>b0 *<span class="st"> </span><span class="fl">0.5</span> +<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, -<span class="fl">0.5</span>)
 y =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(a0,a1,a2,a3)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">border =</span> <span class="st">'red'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(y, <span class="dt">border =</span> <span class="st">'green'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw">plot</span>(x, <span class="dt">border =</span> <span class="st">'red'</span>)
+<span class="kw">plot</span>(y, <span class="dt">border =</span> <span class="st">'green'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <div id="unary-operations" class="section level3">
 <h3 class="hasAnchor">
@@ -443,70 +466,70 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <h3 class="hasAnchor">
 <a href="#operations-returning-a-geometry" class="anchor"></a>Operations returning a geometry</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u =<span class="st"> </span><span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(u)</code></pre></div>
+<span class="kw">plot</span>(u)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-23-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">0.2</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">0.2</span>), <span class="dt">border =</span> <span class="st">'grey'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, -<span class="fl">0.2</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">0.2</span>))
+<span class="kw">plot</span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">0.2</span>), <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, -<span class="fl">0.2</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_boundary</a></span>(x))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_boundary</a></span>(x))</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(x))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(u))</code></pre></div>
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(x))
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(u))</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(x), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(u), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)</code></pre></div>
+<span class="kw">plot</span>(x)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(x), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)
+<span class="kw">plot</span>(x)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(u), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
 <p>The intersection of two geometries is the geometry covered by both; it is obtained by <code>st_intersection</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plot.html">plot</a></span>(x)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(y, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y)), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(x)
+<span class="kw">plot</span>(y, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y)), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'red'</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 <p>To get <em>everything but</em> the intersection, use <code>st_difference</code> or st_sym_difference`:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">col =</span> <span class="st">'#ff333388'</span>); 
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(y, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'#33ff3388'</span>)
+<span class="kw">plot</span>(x, <span class="dt">col =</span> <span class="st">'#ff333388'</span>); 
+<span class="kw">plot</span>(y, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'#33ff3388'</span>)
 <span class="kw">title</span>(<span class="st">"x: red, y: green"</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">title</span>(<span class="st">"difference(x,y)"</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">title</span>(<span class="st">"difference(y,x)"</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_sym_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(x, <span class="dt">border =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_binary_ops.html">st_sym_difference</a></span>(<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(y),<span class="kw"><a href="../reference/geos_combine.html">st_union</a></span>(x)), <span class="dt">col =</span> <span class="st">'lightblue'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">title</span>(<span class="st">"sym_difference(x,y)"</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
 <p>Function <code>st_segmentize</code> adds points to straight line sections of a lines or polygon object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 pts =<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
 ls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(pts)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(ls)
+<span class="kw">plot</span>(ls)
 <span class="kw">points</span>(pts)
 ls.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_segmentize</a></span>(ls, <span class="fl">0.3</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(ls.seg)
+<span class="kw">plot</span>(ls.seg)
 pts =<span class="st"> </span>ls.seg
 <span class="kw">points</span>(pts)
 pol =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))))
 pol.seg =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_segmentize</a></span>(pol, <span class="fl">0.3</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(pol.seg, <span class="dt">col =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(pol.seg, <span class="dt">col =</span> <span class="st">'grey'</span>)
 <span class="kw">points</span>(pol.seg[[<span class="dv">1</span>]])</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-30-1.png" width="672"></p>
 <p>Function <code>st_polygonize</code> polygonizes a multilinestring, as far as the points form a closed polygon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
 mls =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="kw">list</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),,<span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>)))
 x =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_polygonize</a></span>(mls)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(mls, <span class="dt">col =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(mls, <span class="dt">col =</span> <span class="st">'grey'</span>)
 <span class="kw">title</span>(<span class="st">"multilinestring"</span>)
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(x, <span class="dt">col =</span> <span class="st">'grey'</span>)
+<span class="kw">plot</span>(x, <span class="dt">col =</span> <span class="st">'grey'</span>)
 <span class="kw">title</span>(<span class="st">"polygon"</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
 </div>
@@ -516,7 +539,8 @@ x =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.ht
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#type-transformations">Type transformations</a></li>
       <li><a href="#affine-transformations">Affine transformations</a></li>

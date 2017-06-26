@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -88,6 +110,9 @@
 
     <pre class="usage"><span class='co'># S3 method for list</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+
+<span class='co'># S3 method for blob</span>
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for WKB</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -132,7 +157,7 @@
     </tr>
     <tr>
       <th>crs</th>
-      <td><p>integer or character; coordinate reference system for the geometry, see <a href='st_crs.html'>st_crs</a></p></td>
+      <td><p>integer or character; coordinate reference system for the geometry, see st_crs</p></td>
     </tr>
     <tr>
       <th>EWKB</th>
@@ -140,7 +165,7 @@
     </tr>
     <tr>
       <th>spatialite</th>
-      <td><p>logical; if <code>TRUE</code>, WKB is assumed to be in the spatialite dialect, see <a href = 'https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html'>https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html</a>; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).</p></td>
+      <td><p>logical; if <code>TRUE</code>, WKB is assumed to be in the spatialite dialect, see <a href='https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html'>https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html</a>; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).</p></td>
     </tr>
     <tr>
       <th>pureR</th>

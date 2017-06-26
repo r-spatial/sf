@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -111,7 +133,11 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) + <span class='fl'>4</span></div><div class='output co'>#&gt; <span class='message'>POINTZ(5 6 7)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) * <span class='fl'>3</span> + <span class='fl'>4</span></div><div class='output co'>#&gt; <span class='message'>POINTZ(7 10 13)</span></div><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
 <span class='fu'>diag</span>(<span class='no'>m</span>) <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)
 <span class='co'># affine:</span>
-<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)) * <span class='no'>m</span> + <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>POINT(3 11)</span></div></pre>
+<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>)) * <span class='no'>m</span> + <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'>POINT(3 11)</span></div><div class='input'><span class='co'># world in 0-360 range:</span>
+<span class='fu'>library</span>(<span class='no'>maps</span>)
+<span class='no'>w</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/maps/topics/map'>map</a></span>(<span class='st'>'world'</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>w2</span> <span class='kw'>=</span> (<span class='fu'>st_geometry</span>(<span class='no'>w</span>) + <span class='fu'>c</span>(<span class='fl'>360</span>,<span class='fl'>90</span>)) <span class='kw'>%%</span> <span class='fu'>c</span>(<span class='fl'>360</span>) - <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>90</span>)
+<span class='fu'>plot</span>(<span class='no'>w2</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='Ops.sfg-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

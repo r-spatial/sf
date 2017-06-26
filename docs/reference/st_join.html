@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -106,7 +128,7 @@
     </tr>
     <tr>
       <th>FUN</th>
-      <td><p>aggregation function, see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>; in case of multiple matches, if <code>FUN</code> is defined, attributes of <code>y</code> will be aggregated using <code>FUN</code>; else, all combinations of <code>x</code> and <code>y</code> are returned.</p></td>
+      <td><p>deprecated;</p></td>
     </tr>
     <tr>
       <th>suffix</th>
@@ -119,7 +141,7 @@
     <tr>
       <th>left</th>
       <td><p>logical; if <code>TRUE</code> carry out left join, else inner join; 
-see also <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left_join</a></p></td>
+see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -163,24 +185,30 @@ see also <a href='http://www.rdocumentation.org/packages/dplyr/topics/join'>left
 #&gt;     a.x a.y       geom
 #&gt; 2     2  12 POINT(2 2)
 #&gt; 2.1   2  13 POINT(2 2)
-#&gt; 3     3  14 POINT(3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>mean</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
+#&gt; 3     3  14 POINT(3 3)</div><div class='input'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span>
+<span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span>(<span class='fu'>list</span>(<span class='no'>.</span>$<span class='no'>a.x</span>), <span class='no'>mean</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
+#&gt; Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;   a.x Group.1  a.y       geom
-#&gt; 1   1      NA   NA POINT(1 1)
-#&gt; 2   2       2 12.5 POINT(2 2)
-#&gt; 3   3       3 14.0 POINT(3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>mean</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 3 fields
+#&gt;   Group.1 a.x  a.y   geometry
+#&gt; 1       1   1   NA POINT(1 1)
+#&gt; 2       2   2 12.5 POINT(2 2)
+#&gt; 3       3   3 14.0 POINT(3 3)</div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
+<span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>a.x</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='dplyr.html'>summarise</a></span>(<span class='fu'>mean</span>(<span class='no'>a.y</span>))</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 2 ymin: 2 xmax: 3 ymax: 3
+#&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;   a.x Group.1  a.y       geom
-#&gt; 2   2       2 12.5 POINT(2 2)
-#&gt; 3   3       3 14.0 POINT(3 3)</div></pre>
+#&gt; # A tibble: 3 x 3
+#&gt;     a.x `mean(a.y)`             geom
+#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;simple_feature&gt;
+#&gt; 1     1          NA     &lt;POINT(1 1)&gt;
+#&gt; 2     2        12.5     &lt;POINT(2 2)&gt;
+#&gt; 3     3        14.0     &lt;POINT(3 3)&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -168,14 +190,14 @@
 #&gt; proj4string:    +proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs
 #&gt;   a                           geom
 #&gt; 1 2 POINT(779236.435552915 6800...
-#&gt; 2 1 POINT(-3339584.72379821 227...</div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; 2 1 POINT(-3339584.72379821 227...</div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area, using geosphere::areaPolygon</span></div><div class='output co'>#&gt; 1137388604 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 US_survey_foot^2</div><div class='input'><span class='fu'>library</span>(<span class='no'>units</span>)
-<span class='fu'>as.units</span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='fu'>make_unit</span>(<span class='st'>"m"</span>)^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT(779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
+<span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/as.units'>as.units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/make_unit'>make_unit</a></span>(<span class='st'>"m"</span>)^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT(779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
 #&gt; 1          WGS84     WGS84
 #&gt; 2         GGRS87     GRS80
 #&gt; 3          NAD83     GRS80

@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,8 +108,8 @@
     <p>Compute graticules and their parameters</p>
     
 
-    <pre class="usage"><span class='fu'>st_graticule</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>180</span>, -<span class='fl'>90</span>, <span class='fl'>180</span>, <span class='fl'>90</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
-  <span class='kw'>datum</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>4326</span>), <span class='no'>...</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ndiscr</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+    <pre class="usage"><span class='fu'>st_graticule</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>180</span>, -<span class='fl'>90</span>, <span class='fl'>180</span>, <span class='fl'>90</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'>st_crs</span>(<span class='no'>x</span>),
+  <span class='kw'>datum</span> <span class='kw'>=</span> <span class='fu'>st_crs</span>(<span class='fl'>4326</span>), <span class='no'>...</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ndiscr</span> <span class='kw'>=</span> <span class='fl'>100</span>,
   <span class='kw'>margin</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -151,16 +173,16 @@ see example.</p>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>sf</span>)
 <span class='fu'>library</span>(<span class='no'>maps</span>)
 
-<span class='no'>usa</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='fu'>map</span>(<span class='st'>'usa'</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
-<span class='no'>laea</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='st'>"+proj=laea +lat_0=30 +lon_0=-95"</span>) <span class='co'># Lambert equal area</span>
-<span class='no'>usa</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>usa</span>, <span class='no'>laea</span>)
+<span class='no'>usa</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/maps/topics/map'>map</a></span>(<span class='st'>'usa'</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))
+<span class='no'>laea</span> <span class='kw'>=</span> <span class='fu'>st_crs</span>(<span class='st'>"+proj=laea +lat_0=30 +lon_0=-95"</span>) <span class='co'># Lambert equal area</span>
+<span class='no'>usa</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='no'>usa</span>, <span class='no'>laea</span>)
 
-<span class='no'>bb</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>usa</span>)
+<span class='no'>bb</span> <span class='kw'>=</span> <span class='fu'>st_bbox</span>(<span class='no'>usa</span>)
 <span class='no'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>( <span class='no'>bb</span>[<span class='fl'>1</span>],<span class='no'>bb</span>[<span class='fl'>2</span>]),<span class='fu'>c</span>( <span class='no'>bb</span>[<span class='fl'>3</span>],<span class='no'>bb</span>[<span class='fl'>2</span>]),
    <span class='fu'>c</span>( <span class='no'>bb</span>[<span class='fl'>3</span>],<span class='no'>bb</span>[<span class='fl'>4</span>]),<span class='fu'>c</span>( <span class='no'>bb</span>[<span class='fl'>1</span>],<span class='no'>bb</span>[<span class='fl'>4</span>]),<span class='fu'>c</span>( <span class='no'>bb</span>[<span class='fl'>1</span>],<span class='no'>bb</span>[<span class='fl'>2</span>])))
 
 <span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_graticule</span>(<span class='no'>usa</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>usa</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fl'>1.2</span> * <span class='fu'>c</span>(-<span class='fl'>2450853.4</span>, <span class='fl'>2186391.9</span>))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>g</span>[<span class='fl'>1</span>], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>bbox</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'>points</span>(<span class='no'>g</span>$<span class='no'>x_start</span>, <span class='no'>g</span>$<span class='no'>y_start</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>)</div><div class='input'><span class='fu'>points</span>(<span class='no'>g</span>$<span class='no'>x_end</span>, <span class='no'>g</span>$<span class='no'>y_end</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'blue'</span>)</div><div class='input'>
+<span class='fu'>plot</span>(<span class='no'>usa</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fl'>1.2</span> * <span class='fu'>c</span>(-<span class='fl'>2450853.4</span>, <span class='fl'>2186391.9</span>))</div><div class='input'><span class='fu'>plot</span>(<span class='no'>g</span>[<span class='fl'>1</span>], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>bbox</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'>points</span>(<span class='no'>g</span>$<span class='no'>x_start</span>, <span class='no'>g</span>$<span class='no'>y_start</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>)</div><div class='input'><span class='fu'>points</span>(<span class='no'>g</span>$<span class='no'>x_end</span>, <span class='no'>g</span>$<span class='no'>y_end</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'blue'</span>)</div><div class='input'>
 <span class='fu'>invisible</span>(<span class='fu'>lapply</span>(<span class='fu'>seq_len</span>(<span class='fu'>nrow</span>(<span class='no'>g</span>)), <span class='kw'>function</span>(<span class='no'>i</span>) {
 <span class='kw'>if</span> (<span class='no'>g</span>$<span class='no'>type</span>[<span class='no'>i</span>] <span class='kw'>==</span> <span class='st'>"N"</span> <span class='kw'>&amp;&amp;</span> <span class='no'>g</span>$<span class='no'>x_start</span>[<span class='no'>i</span>] - <span class='fu'>min</span>(<span class='no'>g</span>$<span class='no'>x_start</span>) <span class='kw'>&lt;</span> <span class='fl'>1000</span>)
         <span class='fu'>text</span>(<span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"x_start"</span>], <span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"y_start"</span>], <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>parse</span>(<span class='kw'>text</span> <span class='kw'>=</span> <span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"degree_label"</span>]),
@@ -174,7 +196,7 @@ see example.</p>
 <span class='kw'>if</span> (<span class='no'>g</span>$<span class='no'>type</span>[<span class='no'>i</span>] <span class='kw'>==</span> <span class='st'>"E"</span> <span class='kw'>&amp;&amp;</span> <span class='no'>g</span>$<span class='no'>y_end</span>[<span class='no'>i</span>] - <span class='fu'>max</span>(<span class='no'>g</span>$<span class='no'>y_end</span>) <span class='kw'>&gt;</span> -<span class='fl'>1000</span>)
         <span class='fu'>text</span>(<span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"x_end"</span>], <span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"y_end"</span>], <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>parse</span>(<span class='kw'>text</span> <span class='kw'>=</span> <span class='no'>g</span>[<span class='no'>i</span>,<span class='st'>"degree_label"</span>]),
                 <span class='kw'>srt</span> <span class='kw'>=</span> <span class='no'>g</span>$<span class='no'>angle_end</span>[<span class='no'>i</span>] - <span class='fl'>90</span>, <span class='kw'>pos</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>.7</span>)
-}))</div><img src='st_graticule-7.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>usa</span>, <span class='kw'>graticule</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>4326</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>60</span>,-<span class='fl'>130</span>,<span class='kw'>by</span><span class='kw'>=</span>-<span class='fl'>10</span>))</div><img src='st_graticule-9.png' alt='' width='540' height='400' /></pre>
+}))</div><div class='img'><img src='st_graticule-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>plot</span>(<span class='no'>usa</span>, <span class='kw'>graticule</span> <span class='kw'>=</span> <span class='fu'>st_crs</span>(<span class='fl'>4326</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lon</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>60</span>,-<span class='fl'>130</span>,<span class='kw'>by</span><span class='kw'>=</span>-<span class='fl'>10</span>))</div><div class='img'><img src='st_graticule-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

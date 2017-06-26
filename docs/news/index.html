@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -84,14 +106,43 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-5-2" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-2" class="anchor"></a>version 0.5-2</h1>
+<ul>
+<li>allow setting <code>ndiscr</code> through <code>ggplot2::coords_sf</code> to improve graticule plotting in <code>geom_sf</code>; #396</li>
+</ul>
+</div>
+    <div id="version-0-5-1" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-1" class="anchor"></a>version 0.5-1</h1>
+<ul>
+<li><p>add spatial indexes to most binary geometry operations; #394 and <a href="http://r-spatial.org/r/2017/06/22/spatial-index.html" class="uri">http://r-spatial.org/r/2017/06/22/spatial-index.html</a></p></li>
+<li><p>drastically reduce memory footprint of <code>st_intersection</code> and similar; #394</p></li>
+<li><p>support RSQLite 2.0 by providing an <code>st_as_sfc</code> method for list columns of class <code>blob</code></p></li>
+<li><p>drop dependency on dbplyr</p></li>
+</ul>
+</div>
     <div id="version-0-5-0" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-5-0" class="anchor"></a>version 0.5-0</h1>
 <ul>
+<li><p>better handle empty/NULL geometries in shapefiles; #351</p></li>
+<li><p>add <code>unite_.sf</code> method</p></li>
+<li><p>deprecate <code>FUN</code> argument to <code>st_join</code>; #376</p></li>
+<li><p>improve graticule tic label placement in <code>ggplot2</code>; #375 and <a href="https://github.com/tidyverse/ggplot2/issues/2119" class="uri">https://github.com/tidyverse/ggplot2/issues/2119</a></p></li>
+<li><p>improve <code>configure</code> logic to deal with libraries installed in custom locations; #335</p></li>
+<li><p>fix bug where <code>geom_sf</code> wouldn’t deal with Z and/or M geoms; #373</p></li>
+<li><p>return more conveniently typed empty geoms; #372</p></li>
+<li><p>fix subsetting with <code>[</code> of <code>sf</code> using <code>drop = TRUE</code>, #370</p></li>
+<li><p>in addition to <code>m</code>, allow <code>rad</code> units to <code>st_segmentize</code></p></li>
+<li><p>add example how to <code>st_read</code> GeoJSON from a string; #185</p></li>
+<li><p>add <code>separate_.sf</code> method</p></li>
+<li><p>add <code>st_split</code> to split geometries (only available if compiled against liblwgeom), #359</p></li>
 <li><p>fix bug reading and writing dates (months 1 off): #358</p></li>
 <li><p>[.sf and [.sfc now also select on i when i is an <code>sfg</code> object, and accept a geometric predicate function with optional arguments; #352</p></li>
 <li><p>on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a <code>GEOMETRY</code> object; #351</p></li>
-<li><p>on plotting with <code>ggplot2::geom_sf</code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>
+<li><p>on plotting with <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggsf">ggplot2::geom_sf</a></code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>
 <li><p>arith operations on empty geometries no longer break or give warnings; #351</p></li>
 <li><p>have <code>st_as_sf.data.frame</code> by default break on <code>NA</code> values in coordinates; #342</p></li>
 <li><p>have <code>st_join</code> accept further arguments, to be passed on to the <code>join</code> function (e.g. a pattern for <code>st_relate</code>)</p></li>
@@ -116,9 +167,9 @@
 <li><p><code>summarise.sf</code> gains an argument <code>do_union</code> which determines whether to union the geometries for which a summary is given, or to <code>st_combine</code> them (not resolving boundaries); #331</p></li>
 <li><p>rename argument <code>union</code> of <code>aggregate.sf</code> into <code>do_union</code>, for consistency with <code>summarise</code>; #331</p></li>
 <li><p>add a <code>nest_</code> method for <code>sf</code> objects</p></li>
-<li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code>rgeos::gRelate</code>; add examples to get rook and queen neighbour lists using this; #234</p></li>
+<li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code><a href="http://www.rdocumentation.org/packages/rgeos/topics/pred-binary-gRelate">rgeos::gRelate</a></code>; add examples to get rook and queen neighbour lists using this; #234</p></li>
 <li><p>support for direct reading of spatialite and sqlite geometry wkb blobs</p></li>
-<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code>dplyr::bind_cols</code> or <code><a href="../reference/sf.html">st_sf(data.frame(sf, df))</a></code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
+<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="http://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_cols</a></code> or <code><a href="../reference/sf.html">st_sf(data.frame(sf, df))</a></code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
 <li><p>units support for function arguments of <code>st_segmentize</code> and <code>st_line_sample</code></p></li>
 <li><p>document problem reading shapefiles from USB drives on OSX; #252</p></li>
 <li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>; #296</p></li>
@@ -131,7 +182,7 @@
 <li><p>compatibility with GDAL 2.2beta0; #303; #309</p></li>
 <li><p>replace <code>st_write_db</code> with a version that is fast for large datasets (#285), thanks to Josh London</p></li>
 <li><p>take out more memory leaking examples in tests</p></li>
-<li><p>the <code>aggregate</code> method for <code>sf</code> objects now assumes the <code>by</code> argument to be identical to that of <code>stats::aggregate</code></p></li>
+<li><p>the <code>aggregate</code> method for <code>sf</code> objects now assumes the <code>by</code> argument to be identical to that of <code><a href="http://www.rdocumentation.org/packages/stats/topics/aggregate">stats::aggregate</a></code></p></li>
 <li><p><code>st_wrap_dateline</code> wraps (cuts up) geometries crossing the antimeridian, such that they no longer cross it.</p></li>
 </ul>
 </div>
@@ -166,7 +217,7 @@
 <li><p>import and export <code>magrittr::%&gt;%</code></p></li>
 <li><p>support ggplot’ing geometrycollections</p></li>
 <li><p>drop C++11 requirement, allowing build for older R versions</p></li>
-<li><p>add <code>st_proj_info</code>, modelled after <code>rgdal::projInfo</code></p></li>
+<li><p>add <code>st_proj_info</code>, modelled after <code><a href="http://www.rdocumentation.org/packages/rgdal/topics/projInfo">rgdal::projInfo</a></code></p></li>
 <li><p>overwriting datasets with <code>st_write</code> is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.</p></li>
 <li><p><code>st_write</code> gains an argument, <code>update</code>, which when <code>TRUE</code> will try to append to existing datasets (#204)</p></li>
 <li><p>added list of corresponding function for migration from sp, rgdal and rgeos to sf at <a href="https://github.com/edzer/sfr/wiki/migrating" class="uri">https://github.com/edzer/sfr/wiki/migrating</a></p></li>
@@ -233,6 +284,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-5-2">0.5-2</a></li>
+        <li><a href="#version-0-5-1">0.5-1</a></li>
         <li><a href="#version-0-5-0">0.5-0</a></li>
         <li><a href="#version-0-4-3">0.4-3</a></li>
         <li><a href="#version-0-4-2">0.4-2</a></li>

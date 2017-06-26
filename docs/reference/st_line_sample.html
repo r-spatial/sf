@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -125,33 +147,33 @@
 #&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 0.5)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5...</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
  <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='fu'>try</span>(<span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>)) <span class='co'># error</span>
-<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='co'># five points for each line</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='co'># five points for each line</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10018.75 ymax: 100192.6
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 11132.5142866379, 0 33397.54285991...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1113.19490793274 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)) <span class='co'># one and three points</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 11132.5142866379, 0 33397.54285991...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1113.19490793274 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)) <span class='co'># one and three points</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 9276.624 ymax: 55662.57
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 55662.5714331921)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1855.32484655456 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 55662.5714331921)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(1855.32484655456 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(505.997685423971 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>1000</span>, <span class='fl'>1</span>/<span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(505.997685423971 -7.08115455161362e-...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>1000</span>, <span class='fl'>1</span>/<span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 5565.975 ymax: 110823.7
 #&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(5565.97453966368 -7.08115455161362e-10)</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='kw'>units</span><span class='kw'>::</span><span class='fu'>set_units</span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='no'>km</span>)) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(5565.97453966368 -7.08115455161362e-10)</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='no'>km</span>)) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
 #&gt; epsg (SRID):    3857
 #&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(0 501.464607505533, 0 1504.393822518...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT(505.997685423971 -7.08115455161362e-...</span></div><div class='input'><span class='co'># five equidistant points including start and end:</span>
-<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='fu'>st_line_sample</span>(<span class='fu'>st_transform</span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 11131.95 ymax: 111325.1

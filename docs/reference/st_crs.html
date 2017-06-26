@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -130,7 +152,7 @@ $(x, name)</pre>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>numeric, character, or object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></p></td>
+      <td><p>numeric, character, or object of class sf or <a href='sfc.html'>sfc</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -182,7 +204,7 @@ and +datum=WGS84, literally</p>
     <pre class="examples"><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
 <span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='no'>sfc</span>)
 <span class='fu'>st_crs</span>(<span class='no'>sf</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
-<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+<span class='fu'>st_geometry</span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
@@ -196,7 +218,7 @@ and +datum=WGS84, literally</p>
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT(0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
 <span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'>st_transform</span>(<span class='fl'>3857</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY

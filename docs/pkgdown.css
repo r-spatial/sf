@@ -34,6 +34,10 @@ img.icon {
   float: right;
 }
 
+img {
+  max-width: 100%;
+}
+
 /* Section anchors ---------------------------------*/
 
 a.anchor {
@@ -133,9 +137,14 @@ pre, code {
   color: #333;
 }
 
-pre img {
+pre .img {
+  margin: 5px 0;
+}
+
+pre .img img {
   background-color: #fff;
   display: block;
+  height: auto;
 }
 
 code a, pre a {

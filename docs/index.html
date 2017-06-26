@@ -29,10 +29,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="/index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">News</a>
@@ -95,7 +116,7 @@
 <p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
 <p>Install development versions from github with</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
@@ -104,7 +125,7 @@
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#macos" class="anchor"></a>MacOS</h3>
-<p>One way to install the dependencies is using <code>sudo</code>; the other is using homebrew. For the latter, see e.g. <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. Homebrew commands might be (use at your own risk):</p>
+<p>One way to install the dependencies is using <code>sudo</code>; the other is using homebrew. For the latter, see e.g. <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. Homebrew commands might be:</p>
 <pre><code>brew unlink gdal
 brew tap osgeo/osgeo4mac &amp;&amp; brew tap --repair
 brew install proj 
@@ -113,7 +134,8 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
 <p>after that, you should be able to install <code>sf</code> as a source package.</p>
-<p>According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>.</p>
+<p>According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>. In case of problems, search the issues for <code>brew</code> before opening a new one.</p>
+<p>For MacOS Sierra, see <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these</a> instruction, using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
@@ -161,7 +183,7 @@ or</li>
 </li>
 </ul>
 <h2>License</h2>
-<p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a> | <a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE">LICENSE</a></p>
+<p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a> | <a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Edzer Pebesma <br><small class="roles"> Author, maintainer </small> </li>

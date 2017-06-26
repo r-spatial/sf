@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -112,7 +134,7 @@ message when there are multiple layers, or give an error if there are no layers 
     </tr>
     <tr>
       <th>...</th>
-      <td><p>parameter(s) passed on to <a href='st_as_sf.html'>st_as_sf</a></p></td>
+      <td><p>parameter(s) passed on to st_as_sf</p></td>
     </tr>
     <tr>
       <th>options</th>
@@ -172,17 +194,17 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of class <a href='sf.html'>sf</a> when a layer was succesfully read; in case argument <code>layer</code> is missing and
+    <p>object of class sf when a layer was succesfully read; in case argument <code>layer</code> is missing and
 data source <code>dsn</code> does not contain a single layer, an object of class <code>sf_layers</code> is returned with the
 layer names, each with their geometry type(s). Note that the number of layers may also be zero.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>for <code>geometry_column</code>, see also <a href = 'https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code>
-values see <a href = 'https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value
+    <p>for <code>geometry_column</code>, see also <a href='https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code>
+values see <a href='https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value
 may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.</p>
-<p>In case of problems reading shapefiles from USB drives on OSX, please see <a href = 'https://github.com/edzer/sfr/issues/252'>https://github.com/edzer/sfr/issues/252</a>.
+<p>In case of problems reading shapefiles from USB drives on OSX, please see <a href='https://github.com/edzer/sfr/issues/252'>https://github.com/edzer/sfr/issues/252</a>.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.
 <code>read_sf</code> and <code>write_sf</code> are quiet by default: they do not print information
@@ -238,15 +260,14 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;                     
 #&gt;                     
 #&gt;                     </div><div class='input'>
-<span class='fu'>not_run</span>({
-    <span class='fu'>library</span>(<span class='no'>sp</span>)
-    <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-    <span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
-         <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
-    <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
-    <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
-})
-<span class='co'># read geojson from string:</span>
+</div><span class='co'># NOT RUN {</span>
+  <span class='fu'>library</span>(<span class='no'>sp</span>)
+  <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='fu'>st_write</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
+  <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
+  <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
+<span class='co'># }</span><div class='input'><span class='co'># read geojson from string:</span>
 <span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='fu'>paste</span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>read_sf</span>(<span class='no'>geojson_txt</span>)
@@ -257,14 +278,14 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
 #&gt;                         geometry
-#&gt; 1 MULTIPOINT(3.2 4, 3 4.6, 3....</div><div class='input'><span class='fu'>not_run</span>({
-  <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
-  <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'>PostgreSQL</span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
-  <span class='fu'>print</span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
-  <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
-})</div></pre>
+#&gt; 1 MULTIPOINT(3.2 4, 3 4.6, 3....</div><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
+<span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
+<span class='fu'>print</span>(<span class='fu'>st_crs</span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
+<span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

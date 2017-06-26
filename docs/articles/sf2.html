@@ -32,10 +32,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -91,7 +112,7 @@
 fname &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 fname
 ## [1] "/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp"
-nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)
+nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(fname)
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
 ## geometry type:  MULTIPOLYGON
@@ -101,7 +122,7 @@ nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
 <p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code>setwd()</code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)
 Multiple layers are present in data source PG:dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span>
 <span class="dt">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span>
 <span class="st">Set the `layer'</span> argument in <span class="st">`</span><span class="dt">st_read' to read a particular layer.</span>
@@ -127,15 +148,15 @@ Available layers:
 <span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span>
 &gt;<span class="st"> </span></code></pre></div>
 <p>A particular layer can now be read by e.g.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span>)</code></pre></div>
 <p><code>st_layers</code> has the option to count the number of features in case these are missing: some datasources (e.g. OSM xml files) do not report the number of features, but need to be completely read for this. GDAL allows for more than one geometry column for a feature layer; these are reported by <code>st_layers</code>.</p>
 <p>In case a layer contains only geometries but no attributes (fields), <code>st_read</code> still returns an <code>sf</code> object, with a geometry column only.</p>
 <p>We see that GDAL automatically detects the driver (file format) of the datasource, by trying them all in turn.</p>
 <p><code>st_read</code> follows the conventions of base R, similar to how it reads tabular data into <code>data.frame</code>s. This means that character data are read, by default as <code>factor</code>s. For those who insist on retrieving character data as character vectors, the argument <code>stringsAsFactors</code> can be set to <code>FALSE</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_read</span>(fname, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>Alternatively, a user can set the global option <code>stringsAsFactors</code>, and this will have the same effect:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-<span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)
+<span class="kw">st_read</span>(fname)
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
 ## geometry type:  MULTIPOLYGON
@@ -148,9 +169,9 @@ Available layers:
 <h3 class="hasAnchor">
 <a href="#using-st_write" class="anchor"></a>Using st_write</h3>
 <p>To write a simple features object to a file, we need at least two arguments, the object and a filename:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc1.shp"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_write</span>(nc, <span class="st">"nc1.shp"</span>)</code></pre></div>
 <p>The file name is taken as the data source name. The default for the layer name is the basename (filename without path) of the the data source name. For this, <code>st_write</code> needs to guess the driver. The above command is, for instance, equivalent to:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="dt">dsn =</span> <span class="st">"nc1.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_write</span>(nc, <span class="dt">dsn =</span> <span class="st">"nc1.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)
 ## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
@@ -315,7 +336,7 @@ Available layers:
 <h3 class="hasAnchor">
 <a href="#dataset-and-layer-reading-or-creation-options" class="anchor"></a>Dataset and layer reading or creation options</h3>
 <p>Various GDAL drivers have options that influences the reading or writing process, for example what the driver should do when a table already exists in a database: append records to the table or overwrite it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(<span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse), <span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_write</span>(<span class="kw">st_as_sf</span>(meuse), <span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>, 
     <span class="dt">layer_options =</span> <span class="st">"OVERWRITE=true"</span>)</code></pre></div>
 <p>In case the table exists and the option is not specified, the driver will give an error. Driver-specific options are documented in the driver manual of <a href="http://www.gdal.org/ogr_formats.html">gdal</a>. Multiple options can be given by multiple strings in <code>options</code>.</p>
 <p>For <code>st_read</code>, there is only <code>options</code>; for <code>st_write</code>, one needs to distinguish between <code>dataset_options</code> and <code>layer_options</code>, the first related to opening a dataset, the second to creating layers in the dataset.</p>
@@ -326,13 +347,13 @@ Available layers:
 <a href="#reading-and-writing-directly-to-and-from-spatial-databases" class="anchor"></a>Reading and writing directly to and from spatial databases</h2>
 <p>Package <code>sf</code> has experimental support for directly reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RPostgreSQL) 
-conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw">PostgreSQL</span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) 
+conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) 
 meuse =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="st">"meuse"</span>)
 meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) 
 <span class="kw">dbDisconnect</span>(conn) </code></pre></div>
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw">PostgreSQL</span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)
 <span class="kw"><a href="../reference/st_write.html">st_write_db</a></span>(conn, meuse, <span class="dt">dropTable =</span> <span class="ot">TRUE</span>)
 <span class="kw">dbDisconnect</span>(conn)</code></pre></div>
 <p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>dropTable</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
@@ -350,11 +371,11 @@ meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_re
 ## LINESTRING(0 1, 2 3, 4 5, 6 7, 8 9)</code></pre></div>
 <p>We can create these well-known text strings explicitly using <code>st_as_wkt</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span>:<span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
-str =<span class="st"> </span><span class="kw"><a href="../reference/st_as_text.html">st_as_text</a></span>(x)
+str =<span class="st"> </span><span class="kw">st_as_text</span>(x)
 x
 ## LINESTRING(0 1, 2 3, 4 5, 6 7, 8 9)</code></pre></div>
 <p>We can convert back from WKT by using <code>st_as_sfc</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span>(str)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_as_sfc</span>(str)
 ## Geometry set for 1 feature 
 ## geometry type:  LINESTRING
 ## dimension:      XY
@@ -368,7 +389,7 @@ x
 <a href="#conversion-to-and-from-well-known-binary" class="anchor"></a>Conversion to and from well-known binary</h3>
 <p>Well-known binary is created from simple features by <code>st_as_binary</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span>:<span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
-(<span class="dt">x =</span> <span class="kw"><a href="../reference/st_as_binary.html">st_as_binary</a></span>(x))
+(<span class="dt">x =</span> <span class="kw">st_as_binary</span>(x))
 ##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ## [24] f0 3f 00 00 00 00 00 00 00 40 00 00 00 00 00 00 08 40 00 00 00 00 00
 ## [47] 00 10 40 00 00 00 00 00 00 14 40 00 00 00 00 00 00 18 40 00 00 00 00
@@ -379,8 +400,8 @@ x
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rawToHex.html">rawToHex</a></span>(x)
 ## [1] "0102000000050000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001c4000000000000020400000000000002240"</code></pre></div>
 <p>Converting back to <code>sf</code> uses <code>st_as_sfc</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st_as_binary.html">st_as_binary</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">0</span>:<span class="dv">1</span>), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">5</span>:<span class="dv">6</span>)))
-<span class="kw"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span>(x)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">st_as_binary</span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">0</span>:<span class="dv">1</span>), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">5</span>:<span class="dv">6</span>)))
+<span class="kw">st_as_sfc</span>(x)
 ## Geometry set for 2 features 
 ## geometry type:  POINT
 ## dimension:      XY
@@ -399,19 +420,20 @@ x
 ## [4] st_as_sf.Spatial*   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
-##  [1] st_as_sfc.character*          st_as_sfc.factor*            
-##  [3] st_as_sfc.list*               st_as_sfc.map*               
-##  [5] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
-##  [7] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
-##  [9] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
+##  [1] st_as_sfc.blob*               st_as_sfc.character*         
+##  [3] st_as_sfc.factor*             st_as_sfc.list*              
+##  [5] st_as_sfc.map*                st_as_sfc.SpatialLines*      
+##  [7] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     
+##  [9] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   
+## [11] st_as_sfc.WKB*               
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>An example would be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)
 <span class="kw">data</span>(meuse)
-<span class="kw">coordinates</span>(meuse) =<span class="st"> </span><span class="er">~</span>x+y
-m.sf =<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse)
+<span class="kw"><a href="http://www.rdocumentation.org/packages/sp/topics/coordinates">coordinates</a></span>(meuse) =<span class="st"> </span><span class="er">~</span>x+y
+m.sf =<span class="st"> </span><span class="kw">st_as_sf</span>(meuse)
 opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
-<span class="kw"><a href="../reference/plot.html">plot</a></span>(m.sf)
+<span class="kw">plot</span>(m.sf)
 ## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to
 ## plot all</code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
@@ -431,7 +453,8 @@ opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
         <div id="tocnav">
-      <h2>Contents</h2>
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#reading-and-writing-through-gdal">Reading and writing through GDAL</a></li>
       <li><a href="#reading-and-writing-directly-to-and-from-spatial-databases">Reading and writing directly to and from spatial databases</a></li>

@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -86,16 +108,16 @@
     <p>Make a rectangular grid over the bounding box of a sf or sfc object</p>
     
 
-    <pre class="usage"><span class='fu'>st_make_grid</span>(<span class='no'>x</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'>diff</span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>2</span>,
-  <span class='fl'>4</span>)]))/<span class='no'>n</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>10</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>missing</span>(<span class='no'>x</span>))
-  <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"polygons"</span>)</pre>
+    <pre class="usage"><span class='fu'>st_make_grid</span>(<span class='no'>x</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fu'>diff</span>(<span class='fu'>st_bbox</span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'>diff</span>(<span class='fu'>st_bbox</span>(<span class='no'>x</span>)[<span class='fu'>c</span>(<span class='fl'>2</span>,
+  <span class='fl'>4</span>)]))/<span class='no'>n</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'>st_bbox</span>(<span class='no'>x</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>10</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>missing</span>(<span class='no'>x</span>))
+  <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'>st_crs</span>(<span class='no'>x</span>), <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"polygons"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></p></td>
+      <td><p>object of class sf or <a href='sfc.html'>sfc</a></p></td>
     </tr>
     <tr>
       <th>cellsize</th>
@@ -126,7 +148,7 @@ rectangular polygons, corner points of these polygons, or center points of these
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"centers"</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"corners"</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>3</span>)</div><img src='st_make_grid-3.png' alt='' width='540' height='400' /></pre>
+    <pre class="examples"><div class='input'><span class='fu'>plot</span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"centers"</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"corners"</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='st_make_grid-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

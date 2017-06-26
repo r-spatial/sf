@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,10 +52,31 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li>
-  <a href="../articles/index.html">Articles</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/sf1.html">1. Simple Features for R</a>
+    </li>
+    <li>
+      <a href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -151,7 +173,7 @@
 
     <p><code>st_buffer</code>, <code>st_boundary</code>, <code>st_convex_hull</code>, <code>st_simplify</code>,
 <code>st_triangulate</code>, <code>st_voronoi</code>, <code>st_polygonize</code>, <code>st_line_merge</code>,
-<code>st_centroid</code> and <code>st_segmentize</code> return an <a href='sfc.html'>sfc</a> or an <a href='sf.html'>sf</a> 
+<code>st_centroid</code> and <code>st_segmentize</code> return an <a href='sfc.html'>sfc</a> or an sf 
 object with the same number of geometries as <code>x</code></p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -163,23 +185,23 @@ object with the same number of geometries as <code>x</code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><img src='geos_unary-5.png' alt='' width='540' height='400' /><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><img src='geos_unary-8.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>1</span>)
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'>plot</span>(<span class='fu'>st_convex_hull</span>(<span class='no'>nc</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='img'><img src='geos_unary-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>plot</span>(<span class='no'>nc</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>.5</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='img'><img src='geos_unary-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='fl'>10</span>),,<span class='fl'>2</span>))
 <span class='no'>box</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
 <span class='kw'>if</span> (<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"GEOS"</span>] <span class='kw'>&gt;=</span> <span class='st'>"3.5.0"</span>) {
  <span class='no'>v</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>st_voronoi</span>(<span class='no'>x</span>, <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>box</span>)))
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>v</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>box</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='co'># a larger box is returned, as documented</span>
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='geos_binary_ops.html'>st_intersection</a></span>(<span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='no'>v</span>), <span class='no'>box</span>)) <span class='co'># clip to smaller box</span>
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
-}</div><img src='geos_unary-10.png' alt='' width='540' height='400' /><img src='geos_unary-11.png' alt='' width='540' height='400' /><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
+ <span class='fu'>plot</span>(<span class='no'>v</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+ <span class='fu'>plot</span>(<span class='no'>box</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='co'># a larger box is returned, as documented</span>
+ <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
+ <span class='fu'>plot</span>(<span class='fu'><a href='geos_binary_ops.html'>st_intersection</a></span>(<span class='fu'>st_cast</span>(<span class='no'>v</span>), <span class='no'>box</span>)) <span class='co'># clip to smaller box</span>
+ <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>)
+}</div><div class='img'><img src='geos_unary-3.png' alt='' width='700' height='432.632880098887' /></div><div class='img'><img src='geos_unary-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>mls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multilinestring</a></span>(<span class='fu'>list</span>(<span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)))
 <span class='fu'>st_polygonize</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mls</span>))</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  GEOMETRYCOLLECTION
 #&gt; dimension:      XY
@@ -191,9 +213,9 @@ object with the same number of geometries as <code>x</code></p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><img src='geos_unary-22.png' alt='' width='540' height='400' /><div class='input'><span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='no'>seg</span> <span class='kw'>=</span> <span class='fu'>st_segmentize</span>(<span class='no'>sf</span>, <span class='kw'>units</span><span class='kw'>::</span><span class='fu'>set_units</span>(<span class='fl'>100</span>, <span class='no'>km</span>))
-<span class='no'>seg</span> <span class='kw'>=</span> <span class='fu'>st_segmentize</span>(<span class='no'>sf</span>, <span class='kw'>units</span><span class='kw'>::</span><span class='fu'>set_units</span>(<span class='fl'>0.01</span>, <span class='no'>rad</span>))
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING(0 0, 1 1, 2 0)</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>nc</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='input'><span class='fu'>plot</span>(<span class='fu'>st_centroid</span>(<span class='no'>nc</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><div class='img'><img src='geos_unary-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='no'>seg</span> <span class='kw'>=</span> <span class='fu'>st_segmentize</span>(<span class='no'>sf</span>, <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a></span>(<span class='fl'>100</span>, <span class='no'>km</span>))
+<span class='no'>seg</span> <span class='kw'>=</span> <span class='fu'>st_segmentize</span>(<span class='no'>sf</span>, <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a></span>(<span class='fl'>0.01</span>, <span class='no'>rad</span>))
 <span class='fu'>nrow</span>(<span class='no'>seg</span>$<span class='no'>geom</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; [1] 4</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
