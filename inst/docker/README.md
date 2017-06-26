@@ -1,5 +1,7 @@
 # Build and check sf against r-release and r-devel
 
+See [here](https://github.com/rocker-org/geospatial) for general docker files building R with a significant number of spatial extension packages and external dependencies, based on [rocker](https://github.com/rocker-org/rocker) and debian.
+
 To allows building `sf` in alternative environments with all
 external system requirements (udunits, proj, gdal, geos, lwgeom),
 this directory has subdirectories with Docker files:
