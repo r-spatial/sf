@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* have `st_sf` replace `NULL` values in an `sfc` list-column with the appropriate empty geometry; #372
+
 * allow setting `ndiscr` through `ggplot2::coords_sf` to improve graticule plotting in `geom_sf`; #396
 
 # version 0.5-1
