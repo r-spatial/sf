@@ -248,7 +248,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 
 	for (i in seq_along(all_sfc_names))
-		df[[ all_sfc_names[i] ]] = x[[ all_sfc_columns[i] ]]
+		df[[ all_sfc_names[i] ]] = fix_NULL_values(x[[ all_sfc_columns[i] ]])
 
 	if (! missing(precision))
 		attr(df[[sfc_name]], "precision") = precision

@@ -150,7 +150,10 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	if (length(x) > n && n > 0)
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
-		print(x[[i]], digits = 50)
+		if (inherits(x[[i]], "sfg"))
+			print(x[[i]], digits = 50)
+		else
+			print(x[[i]])
 	invisible(x)
 }
 
