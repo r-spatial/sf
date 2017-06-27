@@ -361,7 +361,8 @@ fix_NULL_values = function(g) {
 	isNull = which(vapply(g, is.null, TRUE))
 	for (i in isNull)
 		g[[i]] = empty
-	structure(g, n_empty = length(isNull))
+	ne = attr(g, "n_empty")
+	structure(g, n_empty = length(isNull) + ifelse(is.null(ne), 0, ne))
 }
 
 #' retrieve coordinates in matrix form
