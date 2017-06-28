@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* add `st_as_sfc` method for `bbox`, returning the bbox polygon; #377
+
 * strip file name extension from default layer name in `st_write`; #392
 
 * have `st_sf` replace `NULL` values in an `sfc` list-column with the appropriate empty geometry; #372

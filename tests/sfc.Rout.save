@@ -434,6 +434,14 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
   ..- attr(*, "names")= chr  "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...
+> st_as_sfc(st_bbox(nc))
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+POLYGON((-84.3238525390625 33.8819923400879, -7...
 > 
 > st_agr("constant")
 [1] constant
@@ -726,4 +734,4 @@ POINT(-81.6410816551367 36.3952045484235)
 > 
 > proc.time()
    user  system elapsed 
-  1.588   0.308   1.587 
+  1.536   0.340   1.569 

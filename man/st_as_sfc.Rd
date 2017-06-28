@@ -6,6 +6,8 @@
 \alias{st_as_sfc}
 \alias{st_as_sfc.blob}
 \alias{st_as_sfc}
+\alias{st_as_sfc.bbox}
+\alias{st_as_sfc}
 \alias{st_as_sfc.WKB}
 \alias{st_as_sfc}
 \alias{st_as_sfc.character}
@@ -29,6 +31,8 @@
 \method{st_as_sfc}{list}(x, ..., crs = NA_crs_)
 
 \method{st_as_sfc}{blob}(x, ...)
+
+\method{st_as_sfc}{bbox}(x, ...)
 
 \method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, spatialite = FALSE,
   pureR = FALSE, crs = NA_crs_)

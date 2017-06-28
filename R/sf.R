@@ -432,3 +432,10 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 st_as_sfc.blob = function(x, ...) {
 	st_as_sfc.list(x, ...)
 }
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.bbox = function(x, ...) {
+	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
+	st_sfc(box, crs = st_crs(x))
+}
