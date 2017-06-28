@@ -8,7 +8,7 @@
 \alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer = basename(dsn),
+st_write(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
   driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
   update = driver \%in\% db_drivers, delete_dsn = FALSE,

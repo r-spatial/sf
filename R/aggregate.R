@@ -59,7 +59,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE) {
 #' @export
 st_interpolate_aw = function(x, to, extensive) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
-		stop("aggregate.sf requires geometries in argument to")
+		stop("st_interpolate_aw requires geometries in argument to")
 	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
 	i = st_cast(i, "MULTIPOLYGON")

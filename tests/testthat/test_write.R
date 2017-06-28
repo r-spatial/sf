@@ -42,7 +42,7 @@ test_that("delete and update work (#304) ", {
   expect_error(st_write(x, "x.gpkg",  driver = "foo")) # error
   expect_output(st_write(x, "x.gpkg", delete_dsn = TRUE), "Deleting source")
   expect_error(st_write(x, "x.gpkg", update = FALSE, quiet = TRUE), "Dataset already exists") 
-  expect_output(st_write(x, "x.gpkg", delete_dsn = TRUE), "Writing layer `x.gpkg'")
+  expect_output(st_write(x, "x.gpkg", delete_dsn = TRUE), "Writing layer `x'")
   expect_output(st_write(x, "x.gpkg", layer = "foo", delete_layer = TRUE), "Deleting layer `foo' failed")
   expect_output(st_write(x, "x.gpkg", layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
   expect_output(st_write(x, "x.gpkg", layer = "foo", delete_layer = TRUE), "Updating layer `foo' to data source")

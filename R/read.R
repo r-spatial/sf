@@ -186,7 +186,8 @@ clean_columns = function(obj, factorsAsCharacter) {
 #' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
 #' @name st_write
 #' @export
-st_write = function(obj, dsn, layer = basename(dsn), driver = guess_driver_can_write(dsn), ...,
+st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
+		driver = guess_driver_can_write(dsn), ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
 
