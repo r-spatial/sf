@@ -273,7 +273,9 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	}
 	for (size_t i = 0; i < g.size(); i++) {
 		CPLPushErrorHandler(CPLQuietErrorHandler);
-		OGRErr err = g[i]->transform(ct);
+		OGRErr err = 0;
+		if (! g[i]->IsEmpty())
+			err = g[i]->transform(ct);
 		CPLPopErrorHandler();
 		if (err == 1 || err == 6) {
 			OGRwkbGeometryType geomType = g[i]->getGeometryType();

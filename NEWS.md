@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* prevent gdal from crashing when trying to `st_transform` an empty geometry; #398
+
 * add `st_as_sfc` method for `bbox`, returning the bbox polygon; #377
 
 * strip file name extension from default layer name in `st_write`; #392
