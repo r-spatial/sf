@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* allow units for argument `dist` in `st_buffer`; these must be convertable to `arc_degree` for geographic, and to the proper length unit for non-geographic data; #399
+
 * prevent gdal from crashing when trying to `st_transform` an empty geometry; #398
 
 * add `st_as_sfc` method for `bbox`, returning the bbox polygon; #377

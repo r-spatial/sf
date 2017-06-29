@@ -46,7 +46,9 @@ st_segmentize(x, dfMaxLength, ...)
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 
-\item{dist}{numeric; buffer distance for all, or for each of the elements in \code{x}}
+\item{dist}{numeric; buffer distance for all, or for each of the elements in \code{x}; in case
+\code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
+\code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise}
 
 \item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle)}
 

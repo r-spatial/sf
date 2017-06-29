@@ -298,7 +298,9 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 #' Geometric unary operations on (pairs of) simple feature geometry sets
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
-#' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}
+#' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
+#' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
+#' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
 #' @return \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
 #' \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
@@ -314,8 +316,17 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30)
 
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
-	if (isTRUE(st_is_longlat(x)))
+	if (isTRUE(st_is_longlat(x))) {
 		warning("st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.")
+		if (inherits(dist, "units"))
+			dist = units::set_units(dist, "arc_degrees")
+	} else if (inherits(dist, "units")) {
+		if (is.na(st_crs(x)))
+			stop("x does not have a crs set: can't convert units")
+		if (is.null(st_crs(x)$units))
+			stop("x has a crs without units: can't convert units")
+		dist = units::set_units(dist, st_crs(x)$units)
+	}
 	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
 }

@@ -105,3 +105,12 @@ st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 # adds the (0.5 0.5) node:
 st_union(st_multilinestring(list(rbind(c(0,0),c(1,1)), rbind(c(0,1), c(1,0)))))
 
+p1 = st_point(c(7,52))
+p2 = st_point(c(-30,20))
+sfc = st_sfc(p1, p2)
+try(st_buffer(sfc, units::set_units(1000, km))) # error: no crs
+sfc = st_sfc(p1, p2, crs = 4326)
+try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
+st_buffer(sfc, units::set_units(0.1, rad))      # OK: will convert to arc_degrees
+x = st_transform(sfc, 3857)
+st_buffer(x, units::set_units(1000, km)) # success

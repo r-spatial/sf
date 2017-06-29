@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -358,7 +358,41 @@ POINTZ(6378137 0 0)
 > st_union(st_multilinestring(list(rbind(c(0,0),c(1,1)), rbind(c(0,1), c(1,0)))))
 MULTILINESTRING((0 0, 0.5 0.5), (0.5 0.5, 1 1), (0 1, 0.5 0.5), (0.5 0.5, 1 0))
 > 
+> p1 = st_point(c(7,52))
+> p2 = st_point(c(-30,20))
+> sfc = st_sfc(p1, p2)
+> try(st_buffer(sfc, units::set_units(1000, km))) # error: no crs
+Error in st_buffer.sfc(sfc, units::set_units(1000, km)) : 
+  x does not have a crs set: can't convert units
+> sfc = st_sfc(p1, p2, crs = 4326)
+> try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
+Error : cannot convert km into °
+In addition: Warning message:
+In st_buffer.sfc(sfc, units::set_units(1000, km)) :
+  st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.
+> st_buffer(sfc, units::set_units(0.1, rad))      # OK: will convert to arc_degrees
+Geometry set for 2 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -35.72958 ymin: 14.27042 xmax: 12.72958 ymax: 57.72958
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+POLYGON((12.7295779513082 52, 12.721725763855 5...
+POLYGON((-24.2704220486918 20, -24.278274236145...
+Warning message:
+In st_buffer.sfc(sfc, units::set_units(0.1, rad)) :
+  st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.
+> x = st_transform(sfc, 3857)
+> st_buffer(x, units::set_units(1000, km)) # success
+Geometry set for 2 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -4339585 ymin: 1273031 xmax: 1779236 ymax: 7800125
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+POLYGON((1779236.43555292 6800125.45439731, 177...
+POLYGON((-2339584.72379821 2273030.92698769, -2...
 > 
 > proc.time()
    user  system elapsed 
-  0.584   0.024   0.608 
+  0.960   0.300   0.956 

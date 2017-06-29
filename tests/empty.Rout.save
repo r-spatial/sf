@@ -292,4 +292,4 @@ POINT(NaN NaN)
 > 
 > proc.time()
    user  system elapsed 
-  0.696   0.292   0.679 
+  0.676   0.300   0.689 
