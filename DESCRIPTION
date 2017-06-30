@@ -24,7 +24,7 @@ Imports:
     grid, 
     methods, 
     Rcpp, 
-    DBI,
+    DBI (>= 0.5),
     units (>= 0.4),
 	magrittr
 Suggests: 
