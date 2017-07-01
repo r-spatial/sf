@@ -569,7 +569,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		// select x's using tree:
 		std::vector<size_t> sel;
 		sel.reserve(x.size());
-		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]))
+		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]) && x.size())
 			GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
 		std::sort(sel.begin(), sel.end());
 		for (size_t item = 0; item < sel.size(); item++) {
