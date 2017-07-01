@@ -33,7 +33,7 @@ circ = function(l = c(-180:180), lon0 = 0, lat0 = 30) {
 		rbind(c(180,-90), xy, c(-180,-90),c(180,-90))
 	}
 	st_sfc(st_polygon(list(xy)), crs = st_crs(4326))
-	# TODO: break at dataline, guarantee within -180,180
+	# TODO: break at dateline, guarantee within -180,180
 }
 
 m = st_make_grid()
