@@ -546,6 +546,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	std::vector<size_t> items(x.size());
 
 	geom_fn geom_function;
+	bool tree_empty = true;
 
 	if (op == "intersection")
 		geom_function = (geom_fn) GEOSIntersection_r;
@@ -561,15 +562,17 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
 	for (size_t i = 0; i < x.size(); i++) {
 		items[i] = i;
-		if (! GEOSisEmpty_r(hGEOSCtxt, x[i]))
+		if (! GEOSisEmpty_r(hGEOSCtxt, x[i])) {
 			GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
+			tree_empty = false;
+		}
 	}
 
 	for (size_t i = 0; i < y.size(); i++) {
 		// select x's using tree:
 		std::vector<size_t> sel;
 		sel.reserve(x.size());
-		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]) && x.size())
+		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]) && ! tree_empty)
 			GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
 		std::sort(sel.begin(), sel.end());
 		for (size_t item = 0; item < sel.size(); item++) {

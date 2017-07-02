@@ -281,7 +281,8 @@ st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE)
 
 #' @name geos_binary_pred
 #' @export
-#' @param par numeric; parameter used for "equals_exact" (margin) and "is_within_distance"
+#' @param par numeric; parameter used for "equals_exact" (margin); 
+#' @details \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance. 
 st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals")
