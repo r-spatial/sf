@@ -9,7 +9,27 @@
 #' @name dplyr
 #' @examples
 #' library(dplyr)
+#'
+#' # sf object is read as a regular dataframe
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' # both methods equivalent
+#' identical(as_tibble(nc), as_data_frame(nc))
+#' # convert sf objects to tibbles (e.g. improves printing)
+#' print(as_tibble(nc))
+#' @name dplyr
+#' @export
+as_data_frame.sf <- function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod())
+}
+#' @name dplyr
+#' @export
+as_tibble.sf <- function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod())
+}
+
+#' @name dplyr
 #' nc %>% filter(AREA > .1) %>% plot()
 #' @export
 filter_.sf <- function(.data, ..., .dots) {
