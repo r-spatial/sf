@@ -1,6 +1,8 @@
 suppressPackageStartupMessages(library(sf))
 library(dplyr)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+
+# filter: subset rows
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
