@@ -27,7 +27,7 @@ an object of the same class as that of the first argument (\code{x}) with the no
 Geometric binary operations on pairs of simple feature geometry sets
 }
 \details{
-a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
+a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html ; the referenece for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997; for the pdf, search google scholar.
 }
 \examples{
 # a helper function that erases all of y from x:
