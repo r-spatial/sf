@@ -2,7 +2,9 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{dplyr}
 \alias{dplyr}
-\alias{filter_.sf}
+\alias{as_data_frame.sf}
+\alias{dplyr}
+\alias{as_tibble.sf}
 \alias{dplyr}
 \alias{filter.sf}
 \alias{dplyr}
@@ -72,7 +74,9 @@
 \alias{anti_join.sf}
 \title{Dplyr verb methods for sf objects}
 \usage{
-filter_.sf(.data, ..., .dots)
+as_data_frame.sf(x, ...)
+
+as_tibble.sf(x, ...)
 
 filter.sf(.data, ..., .dots)
 
@@ -146,17 +150,17 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 }
 \arguments{
-\item{.data}{data object of class \link{sf}}
+\item{x}{see \link[dplyr]{left_join}}
 
 \item{...}{other arguments}
+
+\item{.data}{data object of class \link{sf}}
 
 \item{.dots}{see corresponding function in package \code{dplyr}}
 
 \item{.keep_all}{see corresponding function in dplyr}
 
 \item{add}{see corresponding function in dplyr}
-
-\item{x}{see \link[dplyr]{left_join}}
 
 \item{do_union}{logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points.}
 
@@ -218,8 +222,13 @@ Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.fram
 }
 \examples{
 library(dplyr)
+
+# sf object is read as a regular dataframe
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-nc \%>\% filter(AREA > .1) \%>\% plot()
+# both methods equivalent
+identical(as_tibble(nc), as_data_frame(nc))
+# convert sf objects to tibbles (e.g. improves printing)
+print(as_tibble(nc))
 # plot 10 smallest counties in grey:
 st_geometry(nc) \%>\% plot()
 nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
