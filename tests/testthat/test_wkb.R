@@ -40,6 +40,8 @@ test_that("Reading of big-endian and little-endian gives the same result", {
 })
 
 test_that("Reading of truncated buffers results in a proper error", {
+  skip_on_os("mac") # doesn't give the message thrown
+
   wkb = structure(list("010100002040710000"), class = "WKB")
   expect_error(st_as_sfc(wkb, EWKB = TRUE), "WKB buffer too small. Input file corrupt?")
   wkb = structure(list("01"), class = "WKB")
