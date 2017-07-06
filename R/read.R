@@ -112,8 +112,13 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 #'    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
 #' x = read_sf(geojson_txt)
 #' x
-read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE)
-	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
+read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
+	sf = st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
+	if (requireNamespace("tibble", quietly = TRUE))
+		st_as_sf(tibble::as_tibble(as.data.frame(sf)))
+	else
+		sf
+}
 
 clean_columns = function(obj, factorsAsCharacter) {
 	permitted = c("character", "integer", "numeric", "Date", "POSIXct")
