@@ -113,11 +113,10 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 #' x = read_sf(geojson_txt)
 #' x
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
-	sf = st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)
 	if (requireNamespace("tibble", quietly = TRUE))
-		st_as_sf(tibble::as_tibble(as.data.frame(sf)))
-	else
-		sf
+		stop("package tibble not available: install first?")
+	st_as_sf(tibble::as_tibble(as.data.frame(
+		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors))))
 }
 
 clean_columns = function(obj, factorsAsCharacter) {

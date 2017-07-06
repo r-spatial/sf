@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* `read_sf` now returns an sf-tibble, an object of class `c("sf", "tbl_df", "tbl", "data.frame")`
+
 * work around for `dplyr::filter` not dispatching geometry column subsetting to `sf::[.sfc`
 
 * allow units for argument `dist` in `st_buffer`; these must be convertable to `arc_degree` for geographic, and to the proper length unit for non-geographic data; #399
