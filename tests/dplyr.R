@@ -1,6 +1,18 @@
 suppressPackageStartupMessages(library(sf))
 library(dplyr)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+
+# as_tibble, as_data_frame: convert sf data.frame to an sf tibble
+all(c("sf", "tbl_df", "tbl", "data.frame") %in% class(as_tibble(nc)))
+all(c("sf", "tbl_df", "tbl", "data.frame") %in% class(as_data_frame(nc)))
+
+# both methods are equivalent
+identical(as_tibble(nc), as_data_frame(nc))
+
+# an sf tibble prints nicely
+as_tibble(nc)
+
+# filter: subset rows
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
