@@ -547,6 +547,32 @@ st_centroid.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
+#' @examples
+#' plot(nc, axes = TRUE)
+#' plot(st_point_on_surface(nc), add = TRUE, pch = 3)
+st_point_on_surface = function(x)
+	UseMethod("st_point_on_surface")
+
+#' @export
+st_point_on_surface.sfg = function(x)
+	get_first_sfg(st_point_on_surface(st_sfc(x)))
+
+#' @export
+st_point_on_surface.sfc = function(x) { 
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_point_on_surface may not give correct results for longitude/latitude data")
+	st_sfc(CPL_geos_op("point_on_surface", x, numeric(0)))
+}
+
+#' @export
+st_point_on_surface.sf = function(x) {
+	st_geometry(x) <- st_point_on_surface(st_geometry(x))
+	x
+}
+
+#' @name geos_unary
+#' @export
 #' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
 #' @examples

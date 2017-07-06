@@ -1,10 +1,12 @@
 # version 0.5-2
 
+* add `st_point_on_surface` function to return a point that is guaranteed to be on the surface (standard compliance)
+
 * `read_sf` now returns an sf-tibble, an object of class `c("sf", "tbl_df", "tbl", "data.frame")`
 
 * work around for `dplyr::filter` not dispatching geometry column subsetting to `sf::[.sfc`
 
-* allow units for argument `dist` in `st_buffer`; these must be convertable to `arc_degree` for geographic, and to the proper length unit for non-geographic data; #399
+* allow `units` object `dist` argument to `st_buffer`; these must be convertable to `arc_degree` for geographic, and to the proper length unit for non-geographic data; #399
 
 * prevent gdal from crashing when trying to `st_transform` an empty geometry; #398
 

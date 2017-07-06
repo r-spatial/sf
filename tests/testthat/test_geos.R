@@ -120,6 +120,10 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_silent(st_centroid(lnc))
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
   expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
+
+  expect_silent(st_point_on_surface(lnc))
+  expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
+  expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
   
   expect_silent(st_segmentize(lnc, 10000))
   expect_silent(st_segmentize(glnc, 10000))

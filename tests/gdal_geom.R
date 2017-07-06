@@ -31,6 +31,7 @@ x = st_segmentize(nc_tr, 5e4)
 try(x <- st_segmentize(nc_tr, -0.1))
 
 x = st_centroid(nc_tr)
+x = st_point_on_surface(nc_tr)
 
 a = nc[1:5,]
 b = nc[4:10,]

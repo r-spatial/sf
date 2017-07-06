@@ -476,6 +476,10 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i]));
 		}
+	} else if (op == "point_on_surface") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = chkNULL(GEOSPointOnSurface_r(hGEOSCtxt, g[i]));
+		}
 	} else
 #if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 4
 	if (op == "triangulate") {

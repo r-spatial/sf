@@ -65,6 +65,7 @@ Error in CPL_gdal_segmentize(x, dfMaxLength) :
 
 > 
 > x = st_centroid(nc_tr)
+> x = st_point_on_surface(nc_tr)
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
@@ -397,4 +398,4 @@ POLYGON((-2339584.72379821 2273030.92698769, -2...
 > 
 > proc.time()
    user  system elapsed 
-  1.012   0.304   1.016 
+  1.240   0.280   1.282 
