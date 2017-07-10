@@ -96,7 +96,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
-#' @details st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
+#' @details st_write_db was written with help of Josh London, see https://github.com/r-spatial/sf/issues/285
 st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry", 
 		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
 

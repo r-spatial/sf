@@ -186,7 +186,7 @@ crs_parameters = function(x) {
 		"Foot_US"              = make_unit("US_survey_foot"),
 		"Foot (International)" = make_unit("ft"),
 		"degree"               = make_unit("arc_degree"),
-		stop("unknown unit: please file an issue at http://github.com/edzer/sfr/"))
+		stop("unknown unit: please file an issue at http://github.com/r-spatial/sf/"))
 	ret
 }
 

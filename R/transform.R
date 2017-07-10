@@ -135,7 +135,7 @@ st_proj_info = function(type = "proj") {
 #' @export
 #' @examples
 #' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
-#' @details for a discussion of using \code{options}, see https://github.com/edzer/sfr/issues/280
+#' @details for a discussion of using \code{options}, see https://github.com/r-spatial/sf/issues/280
 st_wrap_dateline = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	stopifnot(st_is_longlat(x))
 	stopifnot(is.character(options))
