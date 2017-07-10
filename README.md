@@ -1,8 +1,8 @@
 # Simple Features for R
 
-[![Build Status](https://travis-ci.org/edzer/sfr.png?branch=master)](https://travis-ci.org/edzer/sfr)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/edzer/sfr?branch=master&svg=true)](https://ci.appveyor.com/project/edzer/sfr)
-[![Coverage Status](https://img.shields.io/codecov/c/github/edzer/sfr/master.svg)](https://codecov.io/github/edzer/sfr?branch=master)
+[![Build Status](https://travis-ci.org/r-spatial/sf.png?branch=master)](https://travis-ci.org/r-spatial/sf)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&svg=true)](https://ci.appveyor.com/project/r-spatial/sf)
+[![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg)](https://codecov.io/github/r-spatial/sf?branch=master)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf) 
 [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
@@ -20,7 +20,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 
 See also:
 
-* package vignettes: [first](https://edzer.github.io/sfr/articles/sf1.html), [second](https://edzer.github.io/sfr/articles/sf2.html), [third](https://edzer.github.io/sfr/articles/sf3.html)
+* package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html)
 * blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
 * UseR! 2016 [presentation](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
@@ -37,7 +37,7 @@ this will install binary packages on Windows and MacOS, unless you configured R 
 Install development versions from github with
 ```r
 library(devtools)
-install_github("edzer/sfr")
+install_github("r-spatial/sf")
 ```
 
 ### Windows
@@ -60,7 +60,7 @@ brew link --force gdal2
 ```
 after that, you should be able to install `sf` as a source package.
 
-According to https://github.com/edzer/sfr/issues/349, `brew install postgis` installs a working `liblwgeom`. In case of problems, search the issues for `brew` before opening a new one.
+According to https://github.com/r-spatial/sf/issues/349, `brew install postgis` installs a working `liblwgeom`. In case of problems, search the issues for `brew` before opening a new one.
 
 For MacOS Sierra, see
 [these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
@@ -79,9 +79,9 @@ sudo apt-get update
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
 ```
 or
-* install dependencies from source; see e.g. an older [travis](https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
+* install dependencies from source; see e.g. an older [travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints
 
-To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/edzer/sfr/tree/master/inst/docker).
+To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/master/inst/docker).
 
 ### Contributing
 
