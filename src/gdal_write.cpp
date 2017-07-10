@@ -45,6 +45,14 @@ Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 	return ret;
 }
 
+void SetNull(OGRFeature *poFeature, size_t field) {
+#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+	poFeature->SetFieldNull(field);
+#else
+	poFeature->UnsetField(field);
+#endif
+}
+
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
@@ -56,24 +64,32 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				cv = obj[j];
 				if (! Rcpp::CharacterVector::is_na(cv[i]))
 					poFeature->SetField(nm[j], (const char *) cv[i]);
+				else
+					SetNull(poFeature, j);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
 				if (! Rcpp::IntegerVector::is_na(iv[i]))
 					poFeature->SetField(nm[j], (int) iv[i]);
+				else
+					SetNull(poFeature, j);
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (! Rcpp::NumericVector::is_na(nv[i]))
 					poFeature->SetField(nm[j], (double) nv[i]);
+				else
+					SetNull(poFeature, j);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (Rcpp::NumericVector::is_na(nv[i]))
+				if (Rcpp::NumericVector::is_na(nv[i])) {
+					SetNull(poFeature, j);
 					break;
+				}
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
 				nv0.attr("class") = "Date";
@@ -85,8 +101,10 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (Rcpp::NumericVector::is_na(nv[i]))
+				if (Rcpp::NumericVector::is_na(nv[i])) {
+					SetNull(poFeature, j);
 					break;
+				}
 				Rcpp::NumericVector nv0(1);
 				nv0[0] = nv[i];
 				nv0.attr("tzone") = "UTC";
