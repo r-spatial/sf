@@ -73,7 +73,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				if (! Rcpp::IntegerVector::is_na(iv[i]))
 					poFeature->SetField(nm[j], (int) iv[i]);
 				else
-					SetNull(poFeature, j);
+					SetNull(poFeature, j); // #nocov
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
