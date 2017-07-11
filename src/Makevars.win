@@ -25,6 +25,6 @@ winlibs:
 	cp -r ../windows/gdal2-2.2.0/share/proj ../inst/
 
 clean:
-	rm -f $(SHLIB)
+	rm -f $(SHLIB) $(OBJECTS)
 
 .PHONY: all winlibs clean
