@@ -786,6 +786,28 @@ title(st_as_text(x3))
 par(opar)
 ```
 
+# Units
+
+Where possible geometric operations such as `st_distance()`, `st_length()` and `st_area()` report results with a units attribute appropriate for the CRS:
+
+```{r}
+a <- st_area(nc[1,])
+attributes(a)
+```
+
+The **units** package can be used to convert between units:
+
+```{r}
+units::set_units(a, km^2) # result in square kilometers
+units::set_units(a, ha) # result in hectares
+```
+
+The result can be stripped of their attributes if needs be:
+
+```{r}
+as.numeric(a)
+```
+
 # How attributes relate to geometries 
 
 (This will eventually be the topic of a new vignette; now here to explain the last attribute of `sf` objects)
