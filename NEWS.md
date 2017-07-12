@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* made ready for rwinlib/gdal2; #408
+
 * make `[.sf` for selections including `NA` values like `x[c(1,NA,2)]`; #403
 
 * add a `[<-` method for `sfc` objects; automatically replaces `NULL` with an empty geometry; #411
