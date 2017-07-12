@@ -83,7 +83,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
 	cls = class(x)[1]
-    x = NextMethod()
+	x = NextMethod()
 	if (any(vapply(x, is.null, TRUE)))
 		x = st_sfc(fix_NULL_values(x, cls))
 	a = attributes(old)
