@@ -87,7 +87,6 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	if (any(vapply(x, is.null, TRUE)))
 		x = st_sfc(fix_NULL_values(x, cls))
 	a = attributes(old)
-	a$n_empty = attr(x, "n_empty")
 	if (!is.null(names(x)))
 		a$names = names(x)[i]
 	if (!is.null(a$classes))
@@ -95,7 +94,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
     attributes(x) = a
 	if (recompute_bb)
 		attr(x, "bbox") = st_bbox(x)
-    structure(x, class = class(old))
+    structure(x, class = class(old), n_empty = sum(is.na(st_dimension(x))))
 }
 
 

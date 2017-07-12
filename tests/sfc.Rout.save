@@ -1,5 +1,5 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -732,6 +732,20 @@ POINT(-81.6410816551367 36.3952045484235)
 > class(cbind(nc, nc))
 [1] "sf"         "data.frame"
 > 
+> x = st_sfc(st_point(0:1), st_point(2:3))
+> x[c(NA,1,NA,2,NA)]
+Geometry set for 5 features  (with 3 geometries empty)
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 2 ymax: 3
+epsg (SRID):    NA
+proj4string:    NA
+POINT(NA NA)
+POINT(0 1)
+POINT(NA NA)
+POINT(2 3)
+POINT(NA NA)
+> 
 > proc.time()
    user  system elapsed 
-  1.536   0.340   1.569 
+  1.608   0.304   1.614 
