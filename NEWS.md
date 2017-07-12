@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* make `[.sf` for selections including `NA` values like `x[c(1,NA,2)]`; #403
+
 * add a `[<-` method for `sfc` objects; automatically replaces `NULL` with an empty geometry; #411
 
 * add `st_point_on_surface` function to return a point that is guaranteed to be on the surface (standard compliance)

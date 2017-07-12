@@ -171,3 +171,6 @@ st_sample(nc[1:2,], size = c(10,20))
 class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
 class(rbind(nc, nc))
 class(cbind(nc, nc))
+
+x = st_sfc(st_point(0:1), st_point(2:3))
+x[c(NA,1,NA,2,NA)]

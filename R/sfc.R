@@ -82,8 +82,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
     old = x
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-    x = NextMethod("[")
+	cls = class(x)[1]
+    x = NextMethod()
+	if (any(vapply(x, is.null, TRUE)))
+		x = st_sfc(fix_NULL_values(x, cls))
 	a = attributes(old)
+	a$n_empty = attr(x, "n_empty")
 	if (!is.null(names(x)))
 		a$names = names(x)[i]
 	if (!is.null(a$classes))
@@ -355,9 +359,9 @@ st_set_precision.sf <- function(x, precision) {
 }
 
 # if g may have NULL elements, replace it with (appropriate?) empty geometries
-fix_NULL_values = function(g) {
+fix_NULL_values = function(g, cls = class(g)[1]) {
 
-	empty = switch(class(g)[1],
+	empty = switch(cls,
 		sfc_POINT = st_point(),
 		sfc_MULTIPOINT = st_multipoint(),
 		sfc_LINESTRING = st_linestring(),
@@ -370,7 +374,7 @@ fix_NULL_values = function(g) {
 	for (i in isNull)
 		g[[i]] = empty
 	ne = attr(g, "n_empty")
-	structure(g, n_empty = length(isNull) + ifelse(is.null(ne), 0, ne))
+	structure(g, n_empty = min(length(g), length(isNull) + ifelse(is.null(ne), 0, ne)))
 }
 
 #' retrieve coordinates in matrix form
