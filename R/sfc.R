@@ -94,6 +94,14 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
     structure(x, class = class(old))
 }
 
+
+#' @export
+"[<-.sfc" = function (x, i, j, value) {
+	if (is.null(value) || inherits(value, "sfg"))
+		value = list(value)
+	st_sfc(fix_NULL_values(NextMethod()))
+}
+
 #' @export
 c.sfc = function(..., recursive = FALSE) {
 #	lst = list(...)

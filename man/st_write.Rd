@@ -77,7 +77,7 @@ columns (variables) of a class not supported are dropped with a warning. When de
 data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 
-st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285
+st_write_db was written with help of Josh London, see https://github.com/r-spatial/sf/issues/285
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

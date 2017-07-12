@@ -1,5 +1,7 @@
 # version 0.5-2
 
+* add a `[<-` method for `sfc` objects; automatically replaces `NULL` with an empty geometry; #411
+
 * add `st_point_on_surface` function to return a point that is guaranteed to be on the surface (standard compliance)
 
 * `read_sf` now returns an sf-tibble, an object of class `c("sf", "tbl_df", "tbl", "data.frame")`

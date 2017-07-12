@@ -53,7 +53,7 @@ the st_transform method for sfg objects assumes that the crs of the object is av
 
 \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
 
-for a discussion of using \code{options}, see https://github.com/edzer/sfr/issues/280
+for a discussion of using \code{options}, see https://github.com/r-spatial/sf/issues/280
 }
 \examples{
 p1 = st_point(c(7,52))

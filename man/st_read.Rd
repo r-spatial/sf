@@ -73,7 +73,7 @@ values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}
 may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
 
-In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/edzer/sfr/issues/252}.
+In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/r-spatial/sf/issues/252}.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
