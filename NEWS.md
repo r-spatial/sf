@@ -1,5 +1,9 @@
 # version 0.5-3
 
+* `st_graticule` to return graticules in native crs; https://github.com/tidyverse/ggplot2/issues/2200 (WIP)
+
+* `st_graticule` to support data in `NA_crs_`; https://github.com/tidyverse/ggplot2/issues/2199
+
 * fix bug when joining an sf-tibble with a `tibble`; #414
 
 * read gdal `StringList`, `RealList`, and `IntegerList` fields (into a list-column); #416
