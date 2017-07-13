@@ -369,9 +369,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					for (int j = 0; j < iv.size(); j++)
 						iv(j) = psField->IntegerList.paList[j];
 					lv[i] = iv;
-					} // #nocov end
-					break;
-				default: // break through:
+					} 
+					break; // #nocov end
+				default: // break through: anything else to be converted to string?
 				case OFTString: {
 					Rcpp::CharacterVector cv;
 					cv = out[iField];
