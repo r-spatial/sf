@@ -1,3 +1,7 @@
+# version 0.5-3
+
+* read gdal `StringList`, `RealList`, and `IntegerList` fields (into a list-column); #416
+
 # version 0.5-2
 
 * made ready for rwinlib/gdal2; #408
