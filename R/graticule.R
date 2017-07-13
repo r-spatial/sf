@@ -71,6 +71,9 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 			lat = seq(-80, 80, by = 20)
 	}
 
+	if (is.null(crs))
+		crs = NA_crs_
+
 	# Get the bounding box of the plotting space, in crs
 	bb = if (inherits(x, "sf") || inherits(x, "sfc") || inherits(x, "sfg"))
 		st_bbox(x)
@@ -78,7 +81,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		x
 	stopifnot(is.numeric(bb) && length(bb) == 4)
 
-	if (st_is_longlat(crs))
+	if (isTRUE(st_is_longlat(crs)))
 		bb = trim_bb(bb, margin)
 
 	ls1 = st_linestring(rbind(c(bb[1],bb[2]), c(bb[3],bb[2]), c(bb[3],bb[4]), 
@@ -95,8 +98,12 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	st_crs(box) = crs
 
 	# Now, in case we're not already in longlat, we convert to longlat:
-	if (!is.na(crs))
-		box_ll <- st_transform(box, datum, partial = TRUE)
+	box_ll = if (! is.na(crs))
+		st_transform(box, datum, partial = TRUE)
+	else {
+		datum = NA_crs_
+		box
+	}
 	
 	# as in https://github.com/r-spatial/sf/issues/198 : 
 	# recreate, and ignore bbox_ll:
@@ -133,7 +140,10 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	
 	df = data.frame(degree = c(lon, lat))
 	df$type = c(rep("E", length(lon)), rep("N", length(lat)))
-	df$degree_label = c(degreeLabelsEW(lon), degreeLabelsNS(lat)) 
+	df$degree_label = if (is.na(crs)) 
+			as.character(c(lon, lat))
+		else
+			c(degreeLabelsEW(lon), degreeLabelsNS(lat)) 
 
 	geom = st_sfc(c(long_list, lat_list), crs = datum)
 
