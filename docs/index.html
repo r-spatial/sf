@@ -61,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/edzer/sfr/">
+  <a href="https://github.com/r-spatial/sf/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -98,7 +98,7 @@
 <a href="#blogs-presentations-vignettes" class="anchor"></a>Blogs, presentations, vignettes</h3>
 <p>See also:</p>
 <ul>
-<li>package vignettes: <a href="https://edzer.github.io/sfr/articles/sf1.html">first</a>, <a href="https://edzer.github.io/sfr/articles/sf2.html">second</a>, <a href="https://edzer.github.io/sfr/articles/sf3.html">third</a>
+<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>
 </li>
 <li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html">fourth</a>
 </li>
@@ -116,7 +116,7 @@
 <p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
 <p>Install development versions from github with</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"edzer/sfr"</span>)</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"r-spatial/sf"</span>)</code></pre></div>
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
@@ -134,7 +134,7 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
 <p>after that, you should be able to install <code>sf</code> as a source package.</p>
-<p>According to <a href="https://github.com/edzer/sfr/issues/349" class="uri">https://github.com/edzer/sfr/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>. In case of problems, search the issues for <code>brew</code> before opening a new one.</p>
+<p>According to <a href="https://github.com/r-spatial/sf/issues/349" class="uri">https://github.com/r-spatial/sf/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>. In case of problems, search the issues for <code>brew</code> before opening a new one.</p>
 <p>For MacOS Sierra, see <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these</a> instruction, using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
@@ -149,9 +149,9 @@ brew link --force gdal2</code></pre>
 sudo apt-get update
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre>
 or</li>
-<li><p>install dependencies from source; see e.g. an older <a href="https://github.com/edzer/sfr/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
+<li><p>install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
 </ul>
-<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/edzer/sfr/tree/master/inst/docker">here</a>.</p>
+<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker">here</a>.</p>
 </div>
 <div id="contributing" class="section level3">
 <h3 class="hasAnchor">
@@ -177,9 +177,9 @@ or</li>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cran.r-project.org/package=sf">https://​cran.r-project.org/​package=sf</a>
 </li>
-<li>Browse source code at <br><a href="https://github.com/edzer/sfr/">https://​github.com/​edzer/​sfr/​</a>
+<li>Browse source code at <br><a href="https://github.com/r-spatial/sf/">https://​github.com/​r-spatial/​sf/​</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/edzer/sfr/issues/">https://​github.com/​edzer/​sfr/​issues/​</a>
+<li>Report a bug at <br><a href="https://github.com/r-spatial/sf/issues/">https://​github.com/​r-spatial/​sf/​issues/​</a>
 </li>
 </ul>
 <h2>License</h2>
@@ -191,9 +191,9 @@ or</li>
 </ul>
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/edzer/sfr"><img src="https://travis-ci.org/edzer/sfr.png?branch=master" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/edzer/sfr"><img src="https://ci.appveyor.com/api/projects/status/github/edzer/sfr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/edzer/sfr?branch=master"><img src="https://img.shields.io/codecov/c/github/edzer/sfr/master.svg" alt="Coverage Status"></a></li>
+<li><a href="https://travis-ci.org/r-spatial/sf"><img src="https://travis-ci.org/r-spatial/sf.png?branch=master" alt="Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/edzerpebesma/sf"><img src="https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://codecov.io/github/r-spatial/sf?branch=master"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg" alt="Coverage Status"></a></li>
 <li><a href="http://www.gnu.org/licenses/gpl-2.0.html"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="https://cran.r-project.org/package=sf"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
 <li><a href="http://www.r-pkg.org/pkg/sf"><img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a></li>

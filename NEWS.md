@@ -12,7 +12,7 @@
 
 * work around for `dplyr::filter` not dispatching geometry column subsetting to `sf::[.sfc`
 
-* allow `units` object `dist` argument to `st_buffer`; these must be convertable to `arc_degree` for geographic, and to the proper length unit for non-geographic data; #399
+* allow `units` object as `dist` argument to `st_buffer`; these must be convertable to `arc_degree` for geographic, and to a length unit for non-geographic data; #399
 
 * prevent gdal from crashing when trying to `st_transform` an empty geometry; #398
 

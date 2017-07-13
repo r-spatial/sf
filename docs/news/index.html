@@ -85,7 +85,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/edzer/sfr/">
+  <a href="https://github.com/r-spatial/sf/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -110,7 +110,18 @@
 <h1 class="hasAnchor">
 <a href="#version-0-5-2" class="anchor"></a>version 0.5-2</h1>
 <ul>
-<li>allow setting <code>ndiscr</code> through <code>ggplot2::coords_sf</code> to improve graticule plotting in <code>geom_sf</code>; #396</li>
+<li><p>made ready for rwinlib/gdal2; #408</p></li>
+<li><p>make <code>[.sf</code> for selections including <code>NA</code> values like <code>x[c(1,NA,2)]</code>; #403</p></li>
+<li><p>add a <code>[&lt;-</code> method for <code>sfc</code> objects; automatically replaces <code>NULL</code> with an empty geometry; #411</p></li>
+<li><p>add <code>st_point_on_surface</code> function to return a point that is guaranteed to be on the surface (standard compliance)</p></li>
+<li><p><code>read_sf</code> now returns an sf-tibble, an object of class <code>c("sf", "tbl_df", "tbl", "data.frame")</code></p></li>
+<li><p>work around for <code><a href="http://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> not dispatching geometry column subsetting to <code>sf::[.sfc</code></p></li>
+<li><p>allow <code>units</code> object as <code>dist</code> argument to <code>st_buffer</code>; these must be convertable to <code>arc_degree</code> for geographic, and to a length unit for non-geographic data; #399</p></li>
+<li><p>prevent gdal from crashing when trying to <code>st_transform</code> an empty geometry; #398</p></li>
+<li><p>add <code>st_as_sfc</code> method for <code>bbox</code>, returning the bbox polygon; #377</p></li>
+<li><p>strip file name extension from default layer name in <code>st_write</code>; #392</p></li>
+<li><p>have <code>st_sf</code> replace <code>NULL</code> values in an <code>sfc</code> list-column with the appropriate empty geometry; #372</p></li>
+<li><p>allow setting <code>ndiscr</code> through <code>ggplot2::coords_sf</code> to improve graticule plotting in <code>geom_sf</code>; #396</p></li>
 </ul>
 </div>
     <div id="version-0-5-1" class="section level1">
