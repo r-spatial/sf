@@ -5,6 +5,7 @@ check_join = function(x, y) {
 
 sf_join = function(g, sf_column) {
 	g[[ sf_column ]] = st_sfc(fix_NULL_values(g[[ sf_column ]]))
+	class(g) = setdiff(class(g), "sf")
 	st_sf(g)
 }
 

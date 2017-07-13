@@ -1,5 +1,7 @@
 # version 0.5-3
 
+* fix bug when joining an sf-tibble with a `tibble`; #414
+
 * read gdal `StringList`, `RealList`, and `IntegerList` fields (into a list-column); #416
 
 # version 0.5-2
