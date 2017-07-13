@@ -84,13 +84,21 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
 
+	lc.other = setdiff(which(vapply(x, is.list, TRUE)), which.geom) # non-sfc list-columns
+	list.cols = x[lc.other]
+	nm.lc = names(x)[lc.other]
+
 	x = if (length(x) == length(geom)) # ONLY geometry column(s)
 		data.frame(row.names = seq_along(geom[[1]]))
 	else
-		as.data.frame(set_utf8(x[-which.geom]), stringsAsFactors = stringsAsFactors)
+		as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+
+	for (i in seq_along(lc.other))
+		x[[ nm.lc[i] ]] = list.cols[[i]]
 
 	for (i in seq_along(geom))
 		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
+
 	x = st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column])
 	if (! quiet)

@@ -105,3 +105,8 @@ identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], 
 identical(st_read(quiet = TRUE, csv, int64_as_string = TRUE, stringsAsFactors = FALSE,
 	options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_character_)
 identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], NA_integer_)
+
+if ("GML" %in% st_drivers()$name) {
+  gml = system.file("gml/fmi_test.gml", package = "sf")
+  st_read(gml)
+}

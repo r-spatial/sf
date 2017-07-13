@@ -41,6 +41,11 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 			case OFTString:
 				out[i] = Rcpp::CharacterVector(n_features);
 				break;
+			case OFTStringList:
+			case OFTRealList:
+			case OFTIntegerList:
+				out[i] = Rcpp::List(n_features);
+				break;
 			default:
 				throw std::invalid_argument("Unrecognized field type\n"); // #nocov
 				break;
@@ -250,7 +255,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	// read all features:
 	poLayer->ResetReading();
-	unsigned int i = 0;
+	unsigned int i = 0; // feature counter
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
@@ -335,6 +340,36 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					else
 						nv[i] = NA_REAL;
 					}
+					break;
+				case OFTStringList: {
+					Rcpp::List lv;
+					lv = out[iField];
+					OGRField *psField = poFeature->GetRawFieldRef(iField);
+					Rcpp::CharacterVector cv(psField->StringList.nCount);
+					for (int j = 0; j < cv.size(); j++)
+						cv(j) = psField->StringList.paList[j];
+					lv[i] = cv;
+					}
+					break;
+				case OFTRealList: {
+					Rcpp::List lv; // #nocov start
+					lv = out[iField];
+					OGRField *psField = poFeature->GetRawFieldRef(iField);
+					Rcpp::NumericVector numv(psField->RealList.nCount);
+					for (int j = 0; j < numv.size(); j++)
+						numv(j) = psField->RealList.paList[j];
+					lv[i] = numv;
+					}
+					break;
+				case OFTIntegerList: {
+					Rcpp::List lv;
+					lv = out[iField];
+					OGRField *psField = poFeature->GetRawFieldRef(iField);
+					Rcpp::IntegerVector iv(psField->IntegerList.nCount);
+					for (int j = 0; j < iv.size(); j++)
+						iv(j) = psField->IntegerList.paList[j];
+					lv[i] = iv;
+					} // #nocov end
 					break;
 				default: // break through:
 				case OFTString: {

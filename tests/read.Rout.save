@@ -1,5 +1,5 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -356,6 +356,18 @@ First 3 features:
 > identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], NA_integer_)
 [1] TRUE
 > 
+> if ("GML" %in% st_drivers()$name) {
++   gml = system.file("gml/fmi_test.gml", package = "sf")
++   st_read(gml)
++ }
+Reading layer `PointTimeSeriesObservation' from data source `/home/edzer/git/sf.Rcheck/sf/gml/fmi_test.gml' using driver `GML'
+Simple feature collection with 22 features and 10 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 23.57309 ymin: 59.82076 xmax: 26.44457 ymax: 60.64668
+epsg (SRID):    4258
+proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
+> 
 > proc.time()
    user  system elapsed 
-  1.100   0.296   1.088 
+  1.232   0.236   1.251 
