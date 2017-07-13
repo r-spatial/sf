@@ -124,8 +124,10 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		lat = pretty(bb[c(2,4)], n = 6)
 
 	# sanity:
-	lon = lon[lon >= -180 & lon <= 180]
-	lat = lat[lat > -90 & lat < 90]
+	if (isTRUE(st_is_longlat(datum))) {
+		lon = lon[lon >= -180 & lon <= 180]
+		lat = lat[lat > -90 & lat < 90]
+	}
 
 	# widen bb if pretty() created values outside the box_ll:
 	bb = c(min(bb[1], min(lon)), min(bb[2],min(lat)), max(bb[3], max(lon)), max(bb[4], max(lat)))
@@ -140,7 +142,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	
 	df = data.frame(degree = c(lon, lat))
 	df$type = c(rep("E", length(lon)), rep("N", length(lat)))
-	df$degree_label = if (is.na(crs)) 
+	df$degree_label = if (is.na(crs) || !isTRUE(st_is_longlat(datum)))
 			as.character(c(lon, lat))
 		else
 			c(degreeLabelsEW(lon), degreeLabelsNS(lat)) 
