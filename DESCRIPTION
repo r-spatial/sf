@@ -35,6 +35,7 @@ Suggests:
     tibble,
 	rlang,
 	dplyr,
+    ggplot2,
 	RSQLite,
     RPostgreSQL,
     testthat,
@@ -43,7 +44,7 @@ Suggests:
     geosphere (>= 1.5-5), 
     maptools, 
     maps,
-    microbenchmark
+	microbenchmark
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)

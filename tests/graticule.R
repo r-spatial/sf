@@ -43,3 +43,8 @@ plot(nc[1], graticule = st_crs(nc))
 plot(nc[1], graticule = st_crs(nc), axes = TRUE)
 
 g = st_graticule()
+
+library(ggplot2)
+if (utils::packageVersion("ggplot2") >= "2.2.1") {
+  ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
+}
