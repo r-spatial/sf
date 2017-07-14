@@ -13,9 +13,9 @@
 #'  better than a graticule.
 #'
 #' @export
-#' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).
+#' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box given as (minx, miny, maxx, maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system
-#' @param datum object of class \code{crs}, with the coordinate reference system for the graticules
+#' @param datum either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} or \code{NA} in which case a grid in the coordinate system of \code{x} is drawn.
 #' @param lon numeric; degrees east for the meridians
 #' @param lat numeric; degrees north for the parallels
 #' @param ndiscr integer; number of points to discretize a parallel or meridian
@@ -73,6 +73,9 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 	if (is.null(crs))
 		crs = NA_crs_
+	
+	if (is.null(datum) || is.na(datum))
+		datum = crs
 
 	# Get the bounding box of the plotting space, in crs
 	bb = if (inherits(x, "sf") || inherits(x, "sfc") || inherits(x, "sfg"))

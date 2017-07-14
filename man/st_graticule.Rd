@@ -9,11 +9,11 @@ st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
   margin = 0.001)
 }
 \arguments{
-\item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box (minx,miny,maxx,maxy).}
+\item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box given as (minx, miny, maxx, maxy).}
 
 \item{crs}{object of class \code{crs}, with the display coordinate reference system}
 
-\item{datum}{object of class \code{crs}, with the coordinate reference system for the graticules}
+\item{datum}{either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} or \code{NA} in which case a grid in the coordinate system of \code{x} is drawn.}
 
 \item{...}{ignored}
 

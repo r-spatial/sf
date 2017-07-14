@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.1 (2017-06-30) -- "Single Candle"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -61,6 +61,11 @@ Type 'q()' to quit R.
 > 
 > g = st_graticule()
 > 
+> library(ggplot2)
+> if (utils::packageVersion("ggplot2") > "2.2.1") {
++   ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
++ }
+> 
 > proc.time()
    user  system elapsed 
-  0.972   0.024   0.994 
+  2.212   0.296   2.198 
