@@ -143,7 +143,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	df = data.frame(degree = c(lon, lat))
 	df$type = c(rep("E", length(lon)), rep("N", length(lat)))
 	df$degree_label = if (is.na(crs) || !isTRUE(st_is_longlat(datum)))
-			as.character(c(lon, lat))
+			c(format(lon), format(lat))
 		else
 			c(degreeLabelsEW(lon), degreeLabelsNS(lat)) 
 
