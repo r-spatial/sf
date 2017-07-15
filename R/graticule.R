@@ -118,22 +118,20 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 	bb = st_bbox(box_ll)
 	if (is.null(lon)) {
-	  if (bb[3] <= 180 && bb[1] < -170 && bb[3] > 170){
-	    lon = seq(-180, 180, by=60)
-	  } else {
-	    lon = pretty(bb[c(1,3)], n = 6)
-	  }
+		lon = if (bb[3] <= 180 && bb[1] < -170 && bb[3] > 170) # global, -180,180:
+			seq(-180, 180, by = 60)
+		else
+			pretty(bb[c(1,3)], n = 6)
 	}
 	if (is.null(lat))
 		lat = pretty(bb[c(2,4)], n = 6)
 
 	# sanity:
 	if (isTRUE(st_is_longlat(datum))) {
-	  if (max(lon)>180){
-		  lon = lon[lon >= 0 & lon <= 360]
-	  } else {
-		  lon = lon[lon >= -180 & lon <= 180]
-	  }
+		lon = if (max(lon) > 180)
+			lon[lon >= 0 & lon <= 360] # assume 0,360
+		else
+			lon[lon >= -180 & lon <= 180]
 		lat = lat[lat > -90 & lat < 90]
 	}
 
@@ -188,7 +186,7 @@ graticule_attributes = function(df) {
 		function(x) { y = x[[length(x)]]; n = nrow(y); apply(y[(n-1):n,], 2, diff) } ))
 	df$angle_end = apply(dxdy, 1, function(x) atan2(x[2], x[1])*180/pi)
 	bb = st_bbox(df)
-  selE = df$type == "E" & df$y_start < min(df$y_start) + 0.001 * (bb[3] - bb[1])
+	selE = df$type == "E" & df$y_start < min(df$y_start) + 0.001 * (bb[3] - bb[1])
 	selN = df$type == "N" & df$x_start < min(df$x_start) + 0.001 * (bb[4] - bb[2])
 	df$plot12 = selE | selN
 	df
@@ -198,7 +196,7 @@ trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
 	stopifnot(margin > 0 && margin <= 1.0)
 	fr = 1.0 - margin
 	if (max(bb) > 180)
-	  wrap=c(0,360)
+		wrap=c(0, 360)
 	if (bb[1] < wrap[1] * fr)
 		bb[1] = wrap[1] * fr
 	if (bb[3] > wrap[2] * fr)
