@@ -1,5 +1,7 @@
 # version 0.5-3
 
+* have `st_graticule` work with world2 (0,360); #421, #422, fixed by Ben Best
+
 * `st_graticule` to return graticules in native crs; https://github.com/tidyverse/ggplot2/issues/2200 (WIP)
 
 * `st_graticule` to support data in `NA_crs_`; https://github.com/tidyverse/ggplot2/issues/2199
