@@ -163,7 +163,7 @@ Rcpp::List CPL_proj_info(int type) {
 			ret = ans;
 		} break;
 		default:
-			throw std::range_error("unknown type"); // #nocov
+			Rcpp::stop("unknown type"); // #nocov
 		break;
 	}
 	return ret;

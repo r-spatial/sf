@@ -1,5 +1,7 @@
 # version 0.5-3
 
+* add `st_is_within_distance`, only to return a sparse index matrix; #419
+
 * have `st_graticule` work with world2 (0,360); #421, #422, fixed by Ben Best
 
 * `st_graticule` to return graticules in native crs; https://github.com/tidyverse/ggplot2/issues/2200 (WIP)
@@ -8,7 +10,7 @@
 
 * fix bug when joining an sf-tibble with a `tibble`; #414
 
-* read gdal `StringList`, `RealList`, and `IntegerList` fields (into a list-column); #416
+* read gdal `StringList`, `RealList`, and `IntegerList` fields into a list-column; #416
 
 # version 0.5-2
 

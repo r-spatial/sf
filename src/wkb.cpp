@@ -34,7 +34,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
 
 void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
 	if (n > wkb->size)
-		throw std::range_error("range check error: WKB buffer too small. Input file corrupt?");
+		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
 	if (dst != NULL)
 		memcpy(dst, wkb->pt, n);
 	wkb->pt += n;
@@ -61,7 +61,7 @@ inline unsigned char char2int(char c) {
 		return c - 'a' + 10;
 	if (c >= 'A' && c <= 'F')
 		return c - 'A' + 10;
-	throw std::range_error("char2int: false character in hex string");
+	Rcpp::stop("char2int: false character in hex string");
 }
 
 // [[Rcpp::export]]
@@ -118,7 +118,7 @@ void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	wkb_read(wkb, &marker, 1); // skip header
 	if (marker != 0x7c) { 
 		Rcpp::Rcout << "byte 39 should be 0x7c, but is " << marker << std::endl; // #nocov
-		throw std::range_error("invalid spatialite header"); // #nocov
+		Rcpp::stop("invalid spatialite header"); // #nocov
 	}
 }
 
@@ -167,7 +167,7 @@ Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 			wkb_read(wkb, &marker, 1); // absorb the 0x69 #nocov start
 			if (marker != 0x69) {
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
-				throw std::range_error("invalid spatialite header");
+				Rcpp::stop("invalid spatialite header");
 			} // #nocov end
 		}
 		Rcpp::List lst = read_data(wkb, EWKB, spatialite, endian, false, NULL, NULL);
@@ -201,7 +201,7 @@ Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWK
 			wkb_read(wkb, &marker, 1); // absorb the 0x69
 			if (marker != 0x69) { // #nocov start
 				Rcpp::Rcout << "0x69 marker missing before ring " << i+1 << std::endl;
-				throw std::range_error("invalid spatialite header");
+				Rcpp::stop("invalid spatialite header");
 			} // #nocov end
 		}
 		ret[i] = read_data(wkb, EWKB, spatialite, endian, isGC, NULL, NULL)[0];
@@ -305,7 +305,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	}
 	if (spatialite) {
 		if (swap) 
-			throw std::range_error("reading non-native endian spatialite geometries not supported"); // #nocov
+			Rcpp::stop("reading non-native endian spatialite geometries not supported"); // #nocov
 		if (srid != NULL) // not nested:
 			read_spatialite_header(wkb, srid, swap);
 	}
@@ -349,7 +349,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			case 3: n_dims = 4; dim_str = "XYZM"; break; 
 			default:
 				Rcpp::Rcout << "wkbType: " << wkbType << std::endl; // #nocov
-				throw std::range_error("unsupported wkbType dim in switch"); // #nocov
+				Rcpp::stop("unsupported wkbType dim in switch"); // #nocov
 		}
 	}
 	bool empty = false;
@@ -425,7 +425,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << std::endl; // #nocov
-			throw std::range_error("reading this sf type is not supported, please file an issue"); // #nocov
+			Rcpp::stop("reading this sf type is not supported, please file an issue"); // #nocov
 		}
 	}
 	if (type != NULL) {
@@ -679,7 +679,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 			break;
 		default: {
 			Rcpp::Rcout << "type is " << sf_type << "\n"; // #nocov
-			throw std::range_error("writing this sf type is not supported, please file an issue"); // #nocov
+			Rcpp::stop("writing this sf type is not supported, please file an issue"); // #nocov
 		}
 	}
 }
@@ -706,10 +706,10 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 		if (! Rf_isNull(sfc.attr("classes"))) { // only sfc_GEOMETRY, the mixed bag, sets the classes attr
 			classes = sfc.attr("classes");
 			if (classes.size() != sfc.size())
-				throw std::range_error("attr classes has wrong size: please file an issue"); // #nocov
+				Rcpp::stop("attr classes has wrong size: please file an issue"); // #nocov
 			have_classes = true;
 		} else
-			throw std::range_error("sfc_GEOMETRY should have attr classes; please file an issue"); // #nocov
+			Rcpp::stop("sfc_GEOMETRY should have attr classes; please file an issue"); // #nocov
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 
@@ -751,7 +751,7 @@ Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 	}
 	switch (tp) {
 		case SF_Unknown: { // further check:
-			throw std::range_error("impossible classs in get_dim_sfc()"); // #nocov
+			Rcpp::stop("impossible classs in get_dim_sfc()"); // #nocov
 		} break;
 		case SF_Point: { // numeric:
 			Rcpp::NumericVector v = sfc[0];

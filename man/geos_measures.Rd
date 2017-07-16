@@ -23,7 +23,7 @@ st_distance(x, y, dist_fun)
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 }
 \value{
-If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}. 
+If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}.
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 

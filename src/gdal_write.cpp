@@ -23,12 +23,12 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			ret[i] = OFTDateTime;
 		else { // #nocov start
 			Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
-			throw std::invalid_argument("Layer creation failed.\n");
+			Rcpp::stop("Layer creation failed.\n");
 		}      // #nocov end
 		OGRFieldDefn oField(nm[i], ret[i]);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
-			throw std::invalid_argument("Layer creation failed.\n");
+			Rcpp::stop("Layer creation failed.\n");
 		} // #nocov end
 	}
 	return ret;
@@ -57,7 +57,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
 		if (j == (size_t) poFeature->GetFieldCount())
-			throw std::invalid_argument("Impossible: field count reached\n"); // #nocov
+			Rcpp::stop("Impossible: field count reached\n"); // #nocov
 		switch (tp[j]) {
 			case OFTString: {
 				Rcpp::CharacterVector cv;
@@ -117,7 +117,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			default:
 				// we should never get here! // #nocov start
 				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
-				throw std::invalid_argument("Layer creation failed.\n");
+				Rcpp::stop("Layer creation failed.\n");
 				break; // #nocov end
 		}
 	}
@@ -131,14 +131,14 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
-		throw std::invalid_argument("argument dsn, layer or driver not of length 1.\n");
+		Rcpp::stop("argument dsn, layer or driver not of length 1.\n");
 
 	/* GDALAllRegister(); -- has been done during .onLoad() */
 	// get driver:
 	GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(driver[0]);
 	if (poDriver == NULL) {
 		Rcpp::Rcout << "driver `" << driver[0] << "' not available." << std::endl;
-		throw std::invalid_argument("Driver not available.\n");
+		Rcpp::stop("Driver not available.\n");
 	}
 
 	// delete data source:
@@ -196,12 +196,12 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 				" already exists: remove first, use update=TRUE to append," << std::endl <<  
 				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing." 
 				<< std::endl;
-			throw std::invalid_argument("Dataset already exists.\n");
+			Rcpp::stop("Dataset already exists.\n");
 		}
 		// create:
 		if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
 			Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
-			throw std::invalid_argument("Creation failed.\n");
+			Rcpp::stop("Creation failed.\n");
 		} else if (! quiet)
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
 				"' using driver `" << driver[0] << "'" << std::endl;
@@ -221,7 +221,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	if (poLayer == NULL)  {
 		Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
 		GDALClose(poDS);
-		throw std::invalid_argument("Layer creation failed.\n");
+		Rcpp::stop("Layer creation failed.\n");
 	}
 
 	// write feature attribute fields & geometries:
@@ -238,7 +238,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
 			GDALClose(poDS);
-			throw std::invalid_argument("Feature creation failed.\n");
+			Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
 	}

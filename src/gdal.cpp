@@ -83,7 +83,7 @@ void handle_error(OGRErr err) {
 			default:
 				Rcpp::Rcout << "Error code: " << err << std::endl;    // #nocov
 		}
-		throw std::range_error("OGR error");
+		Rcpp::stop("OGR error");
 	}
 }
 
@@ -210,7 +210,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
-			throw std::range_error("NULL error in sfc_from_ogr"); // #nocov
+			Rcpp::stop("NULL error in sfc_from_ogr"); // #nocov
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
@@ -263,13 +263,13 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	if (g.size() == 0) {
 		dest->Release(); // #nocov
-		throw std::range_error("CPL_transform: zero length geometry list"); // #nocov
+		Rcpp::stop("CPL_transform: zero length geometry list"); // #nocov
 	}
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
 		dest->Release(); // #nocov
-		throw std::range_error("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?"); // #nocov
+		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?"); // #nocov
 	}
 	for (size_t i = 0; i < g.size(); i++) {
 		CPLPushErrorHandler(CPLQuietErrorHandler);

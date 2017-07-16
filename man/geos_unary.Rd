@@ -71,7 +71,7 @@ st_segmentize(x, dfMaxLength, ...)
 \value{
 \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
 \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
-\code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf} 
+\code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf}
 object with the same number of geometries as \code{x}
 }
 \description{

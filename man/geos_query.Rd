@@ -36,8 +36,8 @@ Dimension, simplicity or validity queries on simple feature geometries
 }
 \examples{
 x = st_sfc(
-	st_point(0:1), 
-	st_linestring(rbind(c(0,0),c(1,1))), 
+	st_point(0:1),
+	st_linestring(rbind(c(0,0),c(1,1))),
 	st_polygon(list(rbind(c(0,0),c(1,0),c(0,1),c(0,0)))),
 	st_multipoint(),
 	st_linestring(),

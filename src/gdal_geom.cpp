@@ -59,7 +59,7 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength = 0.0) {
 
 	if (dfMaxLength <= 0.0)
-		throw std::invalid_argument("argument dfMaxLength should be positive\n");
+		Rcpp::stop("argument dfMaxLength should be positive\n");
 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	for (size_t i = 0; i < g.size(); i++)
@@ -72,12 +72,12 @@ Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength = 0.0) {
 // [[Rcpp::export]]
 Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 	if (sfc.size() != distLst.size())
-		throw std::invalid_argument("sfc and dist should have equal length"); // #nocov
+		Rcpp::stop("sfc and dist should have equal length"); // #nocov
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
 	for (size_t i = 0; i < g.size(); i++) {
 		if (wkbFlatten(g[i]->getGeometryType()) != wkbLineString)
-			throw std::invalid_argument("CPL_gdal_linestring_sample only available for LINESTRING"); // #nocov
+			Rcpp::stop("CPL_gdal_linestring_sample only available for LINESTRING"); // #nocov
 		OGRGeometryCollection *gc = new OGRGeometryCollection;
 		Rcpp::NumericVector dists = distLst[i];
 		for (int j = 0; j < dists.size(); j++) {

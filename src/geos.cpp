@@ -137,7 +137,7 @@ Rcpp::IntegerVector get_which(Rcpp::LogicalVector row) {
 
 bool chk_(char value) {
 	if (value == 2)
-		throw std::range_error("GEOS exception"); // #nocov
+		Rcpp::stop("GEOS exception"); // #nocov
 	return value; // 1: true, 0: false
 }
 
@@ -162,7 +162,7 @@ log_fn which_geom_fn(const std::string op) {
 		return GEOSCovers_r;
 	else if (op == "covered_by")
 		return GEOSCoveredBy_r;
-	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to #nocov
+	Rcpp::stop("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
 log_prfn which_prep_geom_fn(const std::string op) {
@@ -188,7 +188,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 		return GEOSPreparedCovers_r;
 	else if (op == "covered_by")
 		return GEOSPreparedCoveredBy_r;
-	throw std::range_error("wrong value for op"); // unlikely to happen unless user wants to #nocov
+	Rcpp::stop("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
 Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
@@ -218,7 +218,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (int j = 0; j < sfc1.length(); j++) {
 				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i], gmv1[j]);
 				if (cp == NULL)
-					throw std::range_error("GEOS error in GEOSRelate_r"); // #nocov
+					Rcpp::stop("GEOS error in GEOSRelate_r"); // #nocov
 				out[j * sfc0.length() + i] = cp;
 				GEOSFree_r(hGEOSCtxt, cp);
 			}
@@ -232,7 +232,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
-					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
+					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
 				out(i, j) = dist;
 			}
 			R_CheckUserInterrupt();
@@ -240,14 +240,14 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "is_within_distance") { // return sparse matrix:
 		if (! sparse)
-			throw std::range_error("for a dense matrix, use st_distance(x,y) <= dist");
+			Rcpp::stop("for a dense matrix, use st_distance(x,y) <= dist");
 		Rcpp::List sparsemat(sfc0.length());
 		for (size_t i = 0; i < gmv0.size(); i++) {
 			std::vector<size_t> sel;
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
-					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
+					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
 				if (dist <= par)
 					sel.push_back(j + 1); // 1-based
 			}
@@ -283,7 +283,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 		} else if (op == "relate_pattern") { // needing pattern
 			if (GEOSRelatePatternMatch_r(hGEOSCtxt, pattern.c_str(), "FF*FF****"))
-				throw std::range_error("use st_disjoint for this pattern");
+				Rcpp::stop("use st_disjoint for this pattern");
 			// all remaining can use tree:
 			for (int i = 0; i < sfc0.length(); i++) { // row
 				// pre-select sfc1's using tree:
@@ -301,7 +301,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				R_CheckUserInterrupt();
 			}
 		} else if (op == "disjoint")
-			throw std::range_error("disjoint should have been handled in R"); // #nocov
+			Rcpp::stop("disjoint should have been handled in R"); // #nocov
 		else { // anything else:
 			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
@@ -382,7 +382,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 	int notice = 0;
 	if (NA_on_exception) {
 		if (sfc.size() > 1)
-			throw std::range_error("NA_on_exception will only work reliably with length 1 sfc objects"); // #nocov
+			Rcpp::stop("NA_on_exception will only work reliably with length 1 sfc objects"); // #nocov
 #ifdef HAVE350
 		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
@@ -448,7 +448,7 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
-		throw std::range_error("GEOS exception"); // #nocov
+		Rcpp::stop("GEOS exception"); // #nocov
 	R_CheckUserInterrupt();
 	return value;
 }
@@ -467,7 +467,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 
 	if (op == "buffer") {
 		if (bufferDist.size() != (int) g.size())
-			throw std::invalid_argument("invalid dist argument"); // #nocov
+			Rcpp::stop("invalid dist argument"); // #nocov
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs));
 	} else if (op == "boundary") {
@@ -504,7 +504,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i], dTolerance, bOnlyEdges));
 	} else
 #endif
-		throw std::invalid_argument("invalid operation"); // would leak g and out // #nocov
+		Rcpp::stop("invalid operation"); // would leak g and out // #nocov
 
 	for (size_t i = 0; i < g.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
@@ -540,10 +540,10 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 			break;
 		}
 		default:
-			throw std::invalid_argument("env should have length 0 or 1"); // #nocov
+			Rcpp::stop("env should have length 0 or 1"); // #nocov
 	}
 #else
-	throw std::invalid_argument("voronoi diagrams require a GEOS version >= 3.5.0"); // #nocov
+	Rcpp::stop("voronoi diagrams require a GEOS version >= 3.5.0"); // #nocov
 #endif
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim)); // destroys out
@@ -578,7 +578,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	else if (op == "sym_difference")
 		geom_function = (geom_fn) GEOSSymDifference_r;
 	else
-		throw std::invalid_argument("invalid operation"); // #nocov
+		Rcpp::stop("invalid operation"); // #nocov
 
 	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
 	for (size_t i = 0; i < x.size(); i++) {
@@ -600,7 +600,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			size_t j = sel[item];
 			GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
 			if (geom == NULL)
-				throw std::range_error("GEOS exception"); // #nocov
+				Rcpp::stop("GEOS exception"); // #nocov
 			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
 				index_x.push_back(j + 1);
 				index_y.push_back(i + 1);
@@ -656,7 +656,7 @@ Rcpp::List CPL_invert_sparse_incidence(Rcpp::List m, int n) {
 		Rcpp::IntegerVector v = m[i];
 		for (int j = 0; j < v.size(); j++) {
 			if (v[j] > n || v[j] < 0)
-				throw std::range_error("CPL_invert_sparse: index out of bounds"); // #nocov
+				Rcpp::stop("CPL_invert_sparse: index out of bounds"); // #nocov
 			sizes[v[j] - 1] += 1; // count
 		}
 	}
