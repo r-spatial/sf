@@ -16,7 +16,7 @@ if (file.exists("nc.shp"))
 	file.remove("nc.shp", "nc.dbf", "nc.shx")
 ```
 
-[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them. 
+[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
 
 The standard is widely implemented in spatial
 databases (such as PostGIS), commercial GIS (e.g., [ESRI
@@ -250,7 +250,7 @@ plot(nc[w,1], col = 2:7)
 ```
 
 Following the `MULTIPOLYGON` datastructure, in R we have a list of lists of lists of matrices. For instance,
-we get the first 3 coordinate pairs of the second exterior ring (first ring is always exterior) for the geometry 
+we get the first 3 coordinate pairs of the second exterior ring (first ring is always exterior) for the geometry
 of feature 4 by
 
 ```{r}
@@ -272,7 +272,7 @@ Coordinate reference systems (`st_crs` and `st_transform`) are discussed in the 
 `st_as_wkb` and `st_as_text` convert geometry list-columns into well-known-binary or well-known-text, explained [below](#wkb).
 `st_bbox` retrieves the coordinate bounding box.
 
-Attributes include 
+Attributes include
 ```{r}
 attributes(nc_geom)
 ```
@@ -283,17 +283,17 @@ The class of `nc_geom` is `c("sfc_MULTIPOLYGON", "sfc")`: `sfc`
 is shared with all geometry types, and `sfc_TYPE` with `TYPE`
 indicating the type of the particular geometry at hand.
 
-There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`. 
-`GEOMETRYCOLLECTION` indicates that each of the geometries may contain 
+There are two "special" types: `GEOMETRYCOLLECTION`, and `GEOMETRY`.
+`GEOMETRYCOLLECTION` indicates that each of the geometries may contain
 a mix of geometry types, as in
 ```{r}
-(mix <- st_sfc(st_geometrycollection(list(st_point(1:2))), 
+(mix <- st_sfc(st_geometrycollection(list(st_point(1:2))),
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))
 class(mix)
 ```
 Still, the geometries are here of a single type.
 
-The second `GEOMETRY`, indicates that the geometries in the geometry 
+The second `GEOMETRY`, indicates that the geometries in the geometry
 list-column are of varying type:
 ```{r}
 (mix <- st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))
@@ -436,7 +436,7 @@ copies from the Java Topology Suite
 
 * if precision is zero (default, unspecified), nothing is modified
 * negative values convert to float (4-byte real) precision
-* positive values convert to `round(x*precision)/precision`. 
+* positive values convert to `round(x*precision)/precision`.
 
 For the precion model, see also
 [here](http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html),
@@ -447,7 +447,7 @@ factor of 0.001." Note that all coordinates, so also `Z` or `M`
 values (if present) are affected. Choosing values for `precision`
 may require some experimenting.
 
-## Reading and writing 
+## Reading and writing
 
 As we've seen above, reading spatial data from an external file can be done by
 
@@ -603,7 +603,7 @@ Unit: milliseconds
  5186.16240    10     e
   376.64045    10   c  
  5282.25874    10     e
- 1178.42358    10    d 
+ 1178.42358    10    d
   189.29191    10  b   
    26.20221    10 a    
 ```
@@ -808,11 +808,11 @@ The result can be stripped of their attributes if needs be:
 as.numeric(a)
 ```
 
-# How attributes relate to geometries 
+# How attributes relate to geometries
 
 (This will eventually be the topic of a new vignette; now here to explain the last attribute of `sf` objects)
 
-The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their units of measurement, e.g. as implemented in the package [**units**](https://CRAN.R-project.org/package=units)). But there is more to it. For variables like air temperature, interpolation makes usually sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
+The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their units of measurement, e.g. as implemented in the package [**units**](https://CRAN.R-project.org/package=units)). But there is more to it. For variables like air temperature, interpolation usually makes sense, for others like human body temperature it doesn't. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn't extend beyond the body -- in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state's population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class.
 Some properties are spatially [extensive](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties), meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.
 
 Simple feature objects of class `sf` have an _agr_ attribute that points to the _attribute-geometry-relationship_, how attributes relate to their geometry. It can be defined at creation time:
@@ -830,17 +830,17 @@ st_agr(meuse_sf)
 ```
 
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one
-of three possibilities 
+of three possibilities
 
 | value | meaning                           |
 |-------| ----------------------------------|
 | constant | a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use |
-| aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use | 
+| aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use |
 | identity | values identify the geometry: they refer to (the whole of) this and only this geometry |
 
-With this information (still to be done) we can for instance 
+With this information (still to be done) we can for instance
 
-* either return missing values or generate warnings when a _aggregate_ value at a point location inside a polygon is retrieved, or 
+* either return missing values or generate warnings when a _aggregate_ value at a point location inside a polygon is retrieved, or
 * list the implicit assumptions made when retrieving attribute values at points inside a polygon when `relation_to_geometry` is missing.
 * decide what to do with attributes when a geometry is split: do nothing in case the attribute is constant, give an error or warning in case it is an aggregate, change the `relation_to_geometry` to _constant_ in case it was _identity_.
 
