@@ -104,8 +104,8 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	box_ll = if (! is.na(crs))
 		st_transform(box, datum, partial = TRUE)
 	else {
-		datum = NA_crs_
-		box
+		datum = NA_crs_ # nocov - remove when geom_sf is on CRAN
+		box             # nocov
 	}
 	
 	# as in https://github.com/r-spatial/sf/issues/198 : 

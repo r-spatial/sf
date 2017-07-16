@@ -233,11 +233,28 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
 					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
-				out(i,j) = dist;
+				out(i, j) = dist;
 			}
 			R_CheckUserInterrupt();
 		}
 		ret_list = Rcpp::List::create(out);
+	} else if (op == "is_within_distance") { // return sparse matrix:
+		if (! sparse)
+			throw std::range_error("for a dense matrix, use st_distance(x,y) <= dist");
+		Rcpp::List sparsemat(sfc0.length());
+		for (size_t i = 0; i < gmv0.size(); i++) {
+			std::vector<size_t> sel;
+			for (size_t j = 0; j < gmv1.size(); j++) {
+				double dist = -1.0;
+				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
+					throw std::range_error("GEOS error in GEOSDistance_r"); // #nocov
+				if (dist <= par)
+					sel.push_back(j + 1); // 1-based
+			}
+			sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
+			R_CheckUserInterrupt();
+		}
+		ret_list = sparsemat;
 	} else {
 		// other cases: boolean return matrix, either dense or sparse
 		Rcpp::LogicalMatrix densemat;

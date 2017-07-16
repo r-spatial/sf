@@ -58,9 +58,9 @@ for a discussion of using \code{options}, see https://github.com/r-spatial/sf/is
 \examples{
 p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
-sfc = st_sfc(p1, p2, crs = "+init=epsg:4326")
+sfc = st_sfc(p1, p2, crs = 4326)
 sfc
-st_transform(sfc, "+init=epsg:3857")
+st_transform(sfc, 3857)
 st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_area(nc[1,]) # area, using geosphere::areaPolygon

@@ -289,8 +289,18 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
 }
 
-#st_is_within_distance = function(x, y, par, sparse = TRUE) 
-#	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
+#' @name geos_binary_pred
+#' @export
+#' @details st_is_within_distance returns only a sparse matrix; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
+st_is_within_distance = function(x, y, par, sparse = TRUE) {
+	if (isTRUE(st_is_longlat(x)))
+		stop("st_is_within_distance only supported for Cartesian coordinates")
+	if (! is.na(st_crs(x))) {
+		p = crs_parameters(st_crs(x))
+		units(par) = p$ud_unit
+	}
+	st_geos_binop("is_within_distance", x, y, par = par, sparse = sparse)
+}
 
 # unary, returning geometries
 

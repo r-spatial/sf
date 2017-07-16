@@ -1,5 +1,5 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -288,6 +288,12 @@ LINESTRING(0 0, 1 1, 2 0)
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
   use st_disjoint for this pattern
 > 
+> nc_3857 = st_transform(nc, 3857)
+> x = st_is_within_distance(nc_3857, nc_3857, 100000)
+> y = st_is_within_distance(nc_3857, nc_3857, units::set_units(100, km))
+> all.equal(x, y)
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  2.220   0.256   2.203 
+  3.576   0.308   3.574 

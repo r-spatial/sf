@@ -25,6 +25,8 @@
 \alias{st_covered_by}
 \alias{geos_binary_pred}
 \alias{st_equals_exact}
+\alias{geos_binary_pred}
+\alias{st_is_within_distance}
 \title{Geometric binary predicates on pairs of simple feature geometry sets}
 \usage{
 st_intersects(x, y, sparse = TRUE, prepared = TRUE)
@@ -50,6 +52,8 @@ st_covers(x, y, sparse = TRUE, prepared = TRUE)
 st_covered_by(x, y, sparse = TRUE, prepared = TRUE)
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
+
+st_is_within_distance(x, y, par, sparse = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -76,6 +80,8 @@ for most predicates, a spatial index is built on argument \code{x}; see http://r
 See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
 
 \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
+
+st_is_within_distance returns only a sparse matrix; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
 }
 \examples{
 pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
