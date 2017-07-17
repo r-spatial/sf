@@ -35,13 +35,13 @@ Ops.crs <- function(e1, e2) {
 #' @return if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 #' @details the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 #' list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
-#' code) and proj4string (character). 
-#' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or 
-#' (2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent 
+#' code) and proj4string (character).
+#' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
+#' (2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent
 #' but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
 #' are considered different.
 #' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
-#' @return object of class \code{crs}, which is a list with elements epsg (length-1 integer) and 
+#' @return object of class \code{crs}, which is a list with elements epsg (length-1 integer) and
 #' proj4string (length-1 character).
 st_crs = function(x, ...) UseMethod("st_crs")
 
@@ -87,7 +87,7 @@ st_crs.default = function(x, ...) NA_crs_
 #' place and a warning is raised to stress this. epsg values are either read from proj4strings
 #' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
 #' and +datum=WGS84, literally
-#' 
+#'
 #' If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when epsg is not consistent with a proj4string that is already present.
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
@@ -117,10 +117,10 @@ make_crs = function(x, wkt = FALSE) {
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
-	else if (is.numeric(x)) 
+	else if (is.numeric(x))
 		CPL_crs_from_epsg(as.integer(x))
 	else if (is.character(x)) {
-		is_valid = valid_proj4string(x) 
+		is_valid = valid_proj4string(x)
 		if (! is_valid$valid)
 			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
 		CPL_crs_from_proj4string(x)
@@ -163,7 +163,7 @@ st_set_crs = function(x, value) {
 }
 
 #' Assert whether simple feature coordinates are longlat degrees
-#' 
+#'
 #' Assert whether simple feature coordinates are longlat degrees
 #' @param x object of class \link{sf} or \link{sfc}
 #' @return TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
@@ -178,7 +178,7 @@ st_is_longlat = function(x) {
 
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
-	ret = structure(CPL_crs_parameters(x$proj4string), 
+	ret = structure(CPL_crs_parameters(x$proj4string),
 		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
 	ret$SemiMajor = set_units(ret$SemiMajor, make_unit("m"))
 	ret$ud_unit = switch(ret$units_gdal,
@@ -186,6 +186,7 @@ crs_parameters = function(x) {
 		"Foot_US"              = make_unit("US_survey_foot"),
 		"Foot (International)" = make_unit("ft"),
 		"degree"               = make_unit("arc_degree"),
+		"kilometre"            = make_unit("km"),
 		stop("unknown unit: please file an issue at http://github.com/r-spatial/sf/"))
 	ret
 }
@@ -211,15 +212,15 @@ NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class
 #' @export
 #' @method is.na crs
 is.na.crs = function(x) {
-  is.na(x$epsg) && is.na(x$proj4string) 
+  is.na(x$epsg) && is.na(x$proj4string)
 }
 
 #' @name st_crs
 #' @param name element name; code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples
 #' @export
 #' @examples
-#' st_crs("+init=epsg:3857")$epsg 
-#' st_crs("+init=epsg:3857")$proj4string 
+#' st_crs("+init=epsg:3857")$epsg
+#' st_crs("+init=epsg:3857")$proj4string
 #' st_crs("+init=epsg:3857 +units=km")$b     # numeric
 #' st_crs("+init=epsg:3857 +units=km")$units # character
 #' @export
