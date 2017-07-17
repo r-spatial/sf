@@ -106,6 +106,20 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-5-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-3" class="anchor"></a>version 0.5-3</h1>
+<ul>
+<li><p>inform gdal about the CRS always through the proj4string, never through the epsg; see #424</p></li>
+<li><p>properly deal with kilometre units; #424 (fixed by Karl Dunkle Werner)</p></li>
+<li><p>add <code>st_is_within_distance</code>, only to return a sparse index matrix; #419</p></li>
+<li><p>have <code>st_graticule</code> work with world2 (0,360); #421, #422, fixed by Ben Best</p></li>
+<li><p><code>st_graticule</code> to return graticules in native crs; <a href="https://github.com/tidyverse/ggplot2/issues/2200" class="uri">https://github.com/tidyverse/ggplot2/issues/2200</a> (WIP)</p></li>
+<li><p><code>st_graticule</code> to support data in <code>NA_crs_</code>; <a href="https://github.com/tidyverse/ggplot2/issues/2199" class="uri">https://github.com/tidyverse/ggplot2/issues/2199</a></p></li>
+<li><p>fix bug when joining an sf-tibble with a <code>tibble</code>; #414</p></li>
+<li><p>read gdal <code>StringList</code>, <code>RealList</code>, and <code>IntegerList</code> fields into a list-column; #416</p></li>
+</ul>
+</div>
     <div id="version-0-5-2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-5-2" class="anchor"></a>version 0.5-2</h1>
@@ -295,6 +309,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-5-3">0.5-3</a></li>
         <li><a href="#version-0-5-2">0.5-2</a></li>
         <li><a href="#version-0-5-1">0.5-1</a></li>
         <li><a href="#version-0-5-0">0.5-0</a></li>

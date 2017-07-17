@@ -85,7 +85,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/edzer/sfr/">
+  <a href="https://github.com/r-spatial/sf/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -109,7 +109,7 @@
 <p>Write simple feature table to a spatial database</p>
     
 
-    <pre class="usage"><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>basename</span>(<span class='no'>dsn</span>),
+    <pre class="usage"><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>file_path_sans_ext</span>(<span class='fu'>basename</span>(<span class='no'>dsn</span>)),
   <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='no'>...</span>, <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>update</span> <span class='kw'>=</span> <span class='no'>driver</span> <span class='kw'>%in%</span> <span class='no'>db_drivers</span>, <span class='kw'>delete_dsn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -215,7 +215,7 @@ to update (append to) the existing data source, e.g. adding a table to an existi
     <p>columns (variables) of a class not supported are dropped with a warning. When deleting layers or
 data sources is not successful, no error is emitted. <code>delete_dsn</code> and <code>delete_layers</code> should be
 handled with care; the former may erase complete directories or databases.</p>
-<p>st_write_db was written with help of Josh London, see https://github.com/edzer/sfr/issues/285</p>
+<p>st_write_db was written with help of Josh London, see https://github.com/r-spatial/sf/issues/285</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -238,7 +238,7 @@ handled with care; the former may erase complete directories or databases.</p>
 <span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>)
 <span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span>) <span class='co'># writes X and Y as columns</span></div><div class='output co'>#&gt; Dataset /home/edzer/git/sfr/docs/reference/meuse.csv already exists: remove first, use update=TRUE to append,
 #&gt; delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.</div><div class='output co'>#&gt; <span class='error'>Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),     as.character(layer_options), geom, dim, quiet, update, delete_dsn,     delete_layer): Dataset already exists.</span></div><div class='input'><span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>, <span class='kw'>delete_dsn</span><span class='kw'>=</span><span class='fl'>TRUE</span>) <span class='co'># overwrites</span></div><div class='output co'>#&gt; Deleting source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
-#&gt; Writing layer `meuse.csv' to data source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
+#&gt; Writing layer `meuse' to data source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_WKT 
 #&gt; features:       155
 #&gt; fields:         12

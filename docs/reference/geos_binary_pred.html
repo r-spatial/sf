@@ -85,7 +85,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/edzer/sfr/">
+  <a href="https://github.com/r-spatial/sf/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +130,9 @@
 
 <span class='fu'>st_covered_by</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>st_is_within_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -153,19 +155,25 @@
     </tr>
     <tr>
       <th>par</th>
-      <td><p>numeric; parameter used for "equals_exact" (margin) and "is_within_distance"</p></td>
+      <td><p>numeric; parameter used for "equals_exact" (margin);</p></td>
+    </tr>
+    <tr>
+      <th>dist</th>
+      <td><p>distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>sparse=TRUE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=FALSE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
+    <p>if <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=TRUE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>for most predicates, a spatial index is built on argument <code>x</code>; see http://r-spatial.org/r/2017/06/22/spatial-index.html</p>
 <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
-<p>See also <a href='st_relate.html'>st_relate</a> and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.</p>
+<p>See also <a href='st_relate.html'>st_relate</a> and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
+    <code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.</p>
+<p>st_is_within_distance returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use <code>st_distance(x,y) &lt;= dist</code> to obtain the corresponding dense logical matrix.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

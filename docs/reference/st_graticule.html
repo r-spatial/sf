@@ -85,7 +85,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/edzer/sfr/">
+  <a href="https://github.com/r-spatial/sf/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -117,7 +117,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code> or numeric vector with bounding box (minx,miny,maxx,maxy).</p></td>
+      <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code> or numeric vector with bounding box given as (minx, miny, maxx, maxy).</p></td>
     </tr>
     <tr>
       <th>crs</th>
@@ -125,7 +125,7 @@
     </tr>
     <tr>
       <th>datum</th>
-      <td><p>object of class <code>crs</code>, with the coordinate reference system for the graticules</p></td>
+      <td><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> or <code>NA</code> in which case a grid in the coordinate system of <code>x</code> is drawn.</p></td>
     </tr>
     <tr>
       <th>...</th>
