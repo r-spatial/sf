@@ -183,6 +183,7 @@ crs_parameters = function(x) {
 	ret$SemiMajor = set_units(ret$SemiMajor, make_unit("m"))
 	ret$ud_unit = switch(ret$units_gdal,
 		"Meter"                = make_unit("m"),
+		"metre"                = make_unit("m"),
 		"Foot_US"              = make_unit("US_survey_foot"),
 		"Foot (International)" = make_unit("ft"),
 		"degree"               = make_unit("arc_degree"),
