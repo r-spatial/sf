@@ -1,5 +1,9 @@
 # version 0.5-3
 
+* inform gdal about the CRS always through the proj4string, never through the epsg; see #424
+
+* properly deal with kilometre units; #424 (fixed by Karl Dunkle Werner)
+
 * add `st_is_within_distance`, only to return a sparse index matrix; #419
 
 * have `st_graticule` work with world2 (0,360); #421, #422, fixed by Ben Best

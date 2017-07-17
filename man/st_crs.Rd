@@ -74,7 +74,7 @@ NA_crs_
 \value{
 if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
-object of class \code{crs}, which is a list with elements epsg (length-1 integer) and 
+object of class \code{crs}, which is a list with elements epsg (length-1 integer) and
 proj4string (length-1 character).
 }
 \description{
@@ -85,9 +85,9 @@ Set or replace retrieve coordinate reference system from object
 \details{
 the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
-code) and proj4string (character). 
-Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or 
-(2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent 
+code) and proj4string (character).
+Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
+(2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent
 but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
 are considered different.
 The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
@@ -113,8 +113,8 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 library(dplyr)
 x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
-st_crs("+init=epsg:3857")$epsg 
-st_crs("+init=epsg:3857")$proj4string 
+st_crs("+init=epsg:3857")$epsg
+st_crs("+init=epsg:3857")$proj4string
 st_crs("+init=epsg:3857 +units=km")$b     # numeric
 st_crs("+init=epsg:3857 +units=km")$units # character
 }
