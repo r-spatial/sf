@@ -2,178 +2,178 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 CPL_get_bbox <- function(sf, depth = 0L) {
-    .Call('sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
+    .Call('_sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
 }
 
 CPL_gdal_init <- function() {
-    invisible(.Call('sf_CPL_gdal_init', PACKAGE = 'sf'))
+    invisible(.Call('_sf_CPL_gdal_init', PACKAGE = 'sf'))
 }
 
 CPL_gdal_cleanup_all <- function() {
-    invisible(.Call('sf_CPL_gdal_cleanup_all', PACKAGE = 'sf'))
+    invisible(.Call('_sf_CPL_gdal_cleanup_all', PACKAGE = 'sf'))
 }
 
 CPL_gdal_version <- function(what = "RELEASE_NAME") {
-    .Call('sf_CPL_gdal_version', PACKAGE = 'sf', what)
+    .Call('_sf_CPL_gdal_version', PACKAGE = 'sf', what)
 }
 
 CPL_crs_parameters <- function(p4s) {
-    .Call('sf_CPL_crs_parameters', PACKAGE = 'sf', p4s)
+    .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', p4s)
 }
 
 CPL_crs_from_epsg <- function(epsg) {
-    .Call('sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
+    .Call('_sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
 }
 
 CPL_crs_from_wkt <- function(wkt) {
-    .Call('sf_CPL_crs_from_wkt', PACKAGE = 'sf', wkt)
+    .Call('_sf_CPL_crs_from_wkt', PACKAGE = 'sf', wkt)
 }
 
 CPL_roundtrip <- function(sfc) {
-    .Call('sf_CPL_roundtrip', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_roundtrip', PACKAGE = 'sf', sfc)
 }
 
 CPL_transform <- function(sfc, proj4) {
-    .Call('sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
+    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
 }
 
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
-    .Call('sf_CPL_wrap_dateline', PACKAGE = 'sf', sfc, opt, quiet)
+    .Call('_sf_CPL_wrap_dateline', PACKAGE = 'sf', sfc, opt, quiet)
 }
 
 CPL_crs_from_proj4string <- function(p4s) {
-    .Call('sf_CPL_crs_from_proj4string', PACKAGE = 'sf', p4s)
+    .Call('_sf_CPL_crs_from_proj4string', PACKAGE = 'sf', p4s)
 }
 
 CPL_get_rgdal_drivers <- function(dummy) {
-    .Call('sf_CPL_get_rgdal_drivers', PACKAGE = 'sf', dummy)
+    .Call('_sf_CPL_get_rgdal_drivers', PACKAGE = 'sf', dummy)
 }
 
 CPL_sfc_from_wkt <- function(wkt) {
-    .Call('sf_CPL_sfc_from_wkt', PACKAGE = 'sf', wkt)
+    .Call('_sf_CPL_sfc_from_wkt', PACKAGE = 'sf', wkt)
 }
 
 CPL_area <- function(sfc) {
-    .Call('sf_CPL_area', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
 }
 
 CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
-    .Call('sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
 }
 
 CPL_length <- function(sfc) {
-    .Call('sf_CPL_length', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
 }
 
 CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
-    .Call('sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
 }
 
 CPL_gdal_linestring_sample <- function(sfc, distLst) {
-    .Call('sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
+    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
 }
 
 CPL_get_layers <- function(datasource, options, do_count = FALSE) {
-    .Call('sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
+    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
 CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
-    .Call('sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
 }
 
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
-    invisible(.Call('sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
+    invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
 }
 
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", sparse = TRUE, prepared = FALSE) {
-    .Call('sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, pattern, sparse, prepared)
+    .Call('_sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, pattern, sparse, prepared)
 }
 
 CPL_geos_is_valid_reason <- function(sfc) {
-    .Call('sf_CPL_geos_is_valid_reason', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_geos_is_valid_reason', PACKAGE = 'sf', sfc)
 }
 
 CPL_geos_is_valid <- function(sfc, NA_on_exception = TRUE) {
-    .Call('sf_CPL_geos_is_valid', PACKAGE = 'sf', sfc, NA_on_exception)
+    .Call('_sf_CPL_geos_is_valid', PACKAGE = 'sf', sfc, NA_on_exception)
 }
 
 CPL_geos_is_simple <- function(sfc) {
-    .Call('sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc)
 }
 
 CPL_geos_union <- function(sfc, by_feature = FALSE) {
-    .Call('sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
+    .Call('_sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
 }
 
 CPL_geos_op <- function(op, sfc, bufferDist, nQuadSegs = 30L, dTolerance = 0.0, preserveTopology = FALSE, bOnlyEdges = 1L, dfMaxLength = 0.0) {
-    .Call('sf_CPL_geos_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
+    .Call('_sf_CPL_geos_op', PACKAGE = 'sf', op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength)
 }
 
 CPL_geos_voronoi <- function(sfc, env, dTolerance = 0.0, bOnlyEdges = 1L) {
-    .Call('sf_CPL_geos_voronoi', PACKAGE = 'sf', sfc, env, dTolerance, bOnlyEdges)
+    .Call('_sf_CPL_geos_voronoi', PACKAGE = 'sf', sfc, env, dTolerance, bOnlyEdges)
 }
 
 CPL_geos_op2 <- function(op, sfcx, sfcy) {
-    .Call('sf_CPL_geos_op2', PACKAGE = 'sf', op, sfcx, sfcy)
+    .Call('_sf_CPL_geos_op2', PACKAGE = 'sf', op, sfcx, sfcy)
 }
 
 CPL_geos_version <- function(b = FALSE) {
-    .Call('sf_CPL_geos_version', PACKAGE = 'sf', b)
+    .Call('_sf_CPL_geos_version', PACKAGE = 'sf', b)
 }
 
 CPL_geos_dist <- function(sfc0, sfc1) {
-    .Call('sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1)
+    .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1)
 }
 
 CPL_geos_relate <- function(sfc0, sfc1) {
-    .Call('sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
+    .Call('_sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
 }
 
 CPL_invert_sparse_incidence <- function(m, n) {
-    .Call('sf_CPL_invert_sparse_incidence', PACKAGE = 'sf', m, n)
+    .Call('_sf_CPL_invert_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
 CPL_lwgeom_version <- function(b = FALSE) {
-    .Call('sf_CPL_lwgeom_version', PACKAGE = 'sf', b)
+    .Call('_sf_CPL_lwgeom_version', PACKAGE = 'sf', b)
 }
 
 CPL_make_valid <- function(sfc) {
-    .Call('sf_CPL_make_valid', PACKAGE = 'sf', sfc)
+    .Call('_sf_CPL_make_valid', PACKAGE = 'sf', sfc)
 }
 
 CPL_split <- function(sfc, blade) {
-    .Call('sf_CPL_split', PACKAGE = 'sf', sfc, blade)
+    .Call('_sf_CPL_split', PACKAGE = 'sf', sfc, blade)
 }
 
 CPL_geohash <- function(sfc, prec) {
-    .Call('sf_CPL_geohash', PACKAGE = 'sf', sfc, prec)
+    .Call('_sf_CPL_geohash', PACKAGE = 'sf', sfc, prec)
 }
 
 CPL_proj_version <- function(b = FALSE) {
-    .Call('sf_CPL_proj_version', PACKAGE = 'sf', b)
+    .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }
 
 CPL_proj_is_valid <- function(proj4string) {
-    .Call('sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
+    .Call('_sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
 }
 
 CPL_proj_info <- function(type) {
-    .Call('sf_CPL_proj_info', PACKAGE = 'sf', type)
+    .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
 }
 
 CPL_hex_to_raw <- function(cx) {
-    .Call('sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
+    .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }
 
 CPL_raw_to_hex <- function(raw) {
-    .Call('sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
+    .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE, endian = 0L) {
-    .Call('sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite, endian)
+    .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite, endian)
 }
 
 CPL_write_wkb <- function(sfc, EWKB = FALSE, endian = 0L, dim = "XY", precision = 0.0) {
-    .Call('sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, endian, dim, precision)
+    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, endian, dim, precision)
 }
 
