@@ -37,6 +37,18 @@ CPL_circularstring_to_linestring <- function(sfc) {
     .Call('_sf_CPL_circularstring_to_linestring', PACKAGE = 'sf', sfc)
 }
 
+CPL_multisurface_to_multipolygon <- function(sfc) {
+    .Call('_sf_CPL_multisurface_to_multipolygon', PACKAGE = 'sf', sfc)
+}
+
+CPL_compoundcurve_to_linear <- function(sfc) {
+    .Call('_sf_CPL_compoundcurve_to_linear', PACKAGE = 'sf', sfc)
+}
+
+CPL_curve_to_linestring <- function(sfc) {
+    .Call('_sf_CPL_curve_to_linestring', PACKAGE = 'sf', sfc)
+}
+
 CPL_transform <- function(sfc, proj4) {
     .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
 }

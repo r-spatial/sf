@@ -10,10 +10,12 @@
 /* .Call calls */
 extern SEXP _sf_CPL_area(SEXP);
 extern SEXP _sf_CPL_circularstring_to_linestring(SEXP);
+extern SEXP _sf_CPL_compoundcurve_to_linear(SEXP);
 extern SEXP _sf_CPL_crs_from_epsg(SEXP);
 extern SEXP _sf_CPL_crs_from_proj4string(SEXP);
 extern SEXP _sf_CPL_crs_from_wkt(SEXP);
 extern SEXP _sf_CPL_crs_parameters(SEXP);
+extern SEXP _sf_CPL_curve_to_linestring(SEXP);
 extern SEXP _sf_CPL_gdal_cleanup_all();
 extern SEXP _sf_CPL_gdal_dimension(SEXP, SEXP);
 extern SEXP _sf_CPL_gdal_init();
@@ -40,6 +42,7 @@ extern SEXP _sf_CPL_invert_sparse_incidence(SEXP, SEXP);
 extern SEXP _sf_CPL_length(SEXP);
 extern SEXP _sf_CPL_lwgeom_version(SEXP);
 extern SEXP _sf_CPL_make_valid(SEXP);
+extern SEXP _sf_CPL_multisurface_to_multipolygon(SEXP);
 extern SEXP _sf_CPL_proj_info(SEXP);
 extern SEXP _sf_CPL_proj_is_valid(SEXP);
 extern SEXP _sf_CPL_proj_version(SEXP);
@@ -57,10 +60,12 @@ extern SEXP _sf_CPL_write_wkb(SEXP, SEXP, SEXP, SEXP, SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_area",                         (DL_FUNC) &_sf_CPL_area,                          1},
     {"_sf_CPL_circularstring_to_linestring", (DL_FUNC) &_sf_CPL_circularstring_to_linestring,  1},
+    {"_sf_CPL_compoundcurve_to_linear",      (DL_FUNC) &_sf_CPL_compoundcurve_to_linear,       1},
     {"_sf_CPL_crs_from_epsg",                (DL_FUNC) &_sf_CPL_crs_from_epsg,                 1},
     {"_sf_CPL_crs_from_proj4string",         (DL_FUNC) &_sf_CPL_crs_from_proj4string,          1},
     {"_sf_CPL_crs_from_wkt",                 (DL_FUNC) &_sf_CPL_crs_from_wkt,                  1},
     {"_sf_CPL_crs_parameters",               (DL_FUNC) &_sf_CPL_crs_parameters,                1},
+    {"_sf_CPL_curve_to_linestring",          (DL_FUNC) &_sf_CPL_curve_to_linestring,           1},
     {"_sf_CPL_gdal_cleanup_all",             (DL_FUNC) &_sf_CPL_gdal_cleanup_all,              0},
     {"_sf_CPL_gdal_dimension",               (DL_FUNC) &_sf_CPL_gdal_dimension,                2},
     {"_sf_CPL_gdal_init",                    (DL_FUNC) &_sf_CPL_gdal_init,                     0},
@@ -87,6 +92,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_length",                       (DL_FUNC) &_sf_CPL_length,                        1},
     {"_sf_CPL_lwgeom_version",               (DL_FUNC) &_sf_CPL_lwgeom_version,                1},
     {"_sf_CPL_make_valid",                   (DL_FUNC) &_sf_CPL_make_valid,                    1},
+    {"_sf_CPL_multisurface_to_multipolygon", (DL_FUNC) &_sf_CPL_multisurface_to_multipolygon,  1},
     {"_sf_CPL_proj_info",                    (DL_FUNC) &_sf_CPL_proj_info,                     1},
     {"_sf_CPL_proj_is_valid",                (DL_FUNC) &_sf_CPL_proj_is_valid,                 1},
     {"_sf_CPL_proj_version",                 (DL_FUNC) &_sf_CPL_proj_version,                  1},

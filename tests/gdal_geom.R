@@ -117,3 +117,8 @@ if (version$os == "linux-gnu") { # why does this break on windows - degree symbo
 }
 x = st_transform(sfc, 3857)
 st_buffer(x, units::set_units(1000, km)) # success
+
+cr = st_as_sfc("CIRCULARSTRING(0 0,1 0,1 1)")
+cr1 = st_sf(a = 1, geometry = cr)
+plot(cr)
+st_as_grob(cr[[1]])

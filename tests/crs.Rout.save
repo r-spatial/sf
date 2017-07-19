@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.1 (2017-06-30) -- "Single Candle"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -27,8 +27,7 @@ attr(,"class")
 [1] "crs"
 Warning message:
 In CPL_crs_from_epsg(as.integer(x)) :
-  GDAL Error 6: EPSG PCS/GCS code -1 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?
+  GDAL Error 6: EPSG PCS/GCS code -1 not found in EPSG support files.  Is this a valid EPSG coordinate system?
 > st_crs(999999)
 $epsg
 [1] NA
@@ -40,8 +39,7 @@ attr(,"class")
 [1] "crs"
 Warning message:
 In CPL_crs_from_epsg(as.integer(x)) :
-  GDAL Error 6: EPSG PCS/GCS code 999999 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?
+  GDAL Error 6: EPSG PCS/GCS code 999999 not found in EPSG support files.  Is this a valid EPSG coordinate system?
 > try(st_crs("error"))
 Error : invalid crs: error, reason: no arguments in initialization list
 > str = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
@@ -59,7 +57,7 @@ $epsg
 [1] 28992
 
 $proj4string
-[1] "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs"
+[1] "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs"
 
 attr(,"class")
 [1] "crs"
@@ -85,4 +83,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  0.360   0.004   0.361 
+  0.492   0.200   0.505 

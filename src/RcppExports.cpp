@@ -101,6 +101,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_multisurface_to_multipolygon
+Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_multisurface_to_multipolygon(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_multisurface_to_multipolygon(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_compoundcurve_to_linear
+Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_compoundcurve_to_linear(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_compoundcurve_to_linear(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_curve_to_linestring
+Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_curve_to_linestring(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_curve_to_linestring(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
 RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {

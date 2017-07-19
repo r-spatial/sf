@@ -1,5 +1,5 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -104,7 +104,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 75 drivers
+GDAL has 78 drivers
 > 
 > # GEOS ops:
 > 
@@ -396,6 +396,12 @@ proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
 POLYGON((1779236.43555292 6800125.45439731, 177...
 POLYGON((-2339584.72379821 2273030.92698769, -2...
 > 
+> cr = st_as_sfc("CIRCULARSTRING(0 0,1 0,1 1)")
+> cr1 = st_sf(a = 1, geometry = cr)
+> plot(cr)
+> st_as_grob(cr[[1]])
+lines[GRID.lines.1] 
+> 
 > proc.time()
    user  system elapsed 
-  1.240   0.280   1.282 
+  1.280   0.212   1.272 

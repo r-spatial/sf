@@ -18,6 +18,12 @@
 \alias{st_cast}
 \alias{st_cast.CIRCULARSTRING}
 \alias{st_cast}
+\alias{st_cast.MULTISURFACE}
+\alias{st_cast}
+\alias{st_cast.COMPOUNDCURVE}
+\alias{st_cast}
+\alias{st_cast.CURVE}
+\alias{st_cast}
 \alias{st_cast}
 \alias{st_cast.sfc}
 \alias{st_cast}
@@ -41,6 +47,12 @@
 \method{st_cast}{GEOMETRYCOLLECTION}(x, to, ...)
 
 \method{st_cast}{CIRCULARSTRING}(x, to, ...)
+
+\method{st_cast}{MULTISURFACE}(x, to, ...)
+
+\method{st_cast}{COMPOUNDCURVE}(x, to, ...)
+
+\method{st_cast}{CURVE}(x, to, ...)
 
 st_cast(x, to, ...)
 

@@ -41,8 +41,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg")))
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
-	if (length(lst) == 0) # empty set: no geometries read
-		class(lst) = c("sfc_GEOMETRY", "sfc")
+	cls = if (length(lst) == 0) # empty set: no geometries read
+		c("sfc_GEOMETRY", "sfc")
 	else {
 		# n_empty:
 		if (is.null(attr(lst, "n_empty"))) { # we're NOT comming from CPL_read_wkb:
@@ -57,23 +57,22 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 				attr(lst, "single_type")
 			else
 				length(unique(vapply(lst, function(y) class(y)[2], ""))) == 1L
-		if (single) {
-			class(lst) = c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
-			attr(lst, "classes") = NULL
-		} else {
-			class(lst) = c("sfc_GEOMETRY", "sfc")         # the mix
-			attr(lst, "classes") = vapply(lst, class, rep("", 3))[2L,]
-		}
 		attr(lst, "single_type") = NULL # clean up
+		if (single) {
+			attr(lst, "classes") = NULL
+			c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
+		} else {
+			attr(lst, "classes") = vapply(lst, class, rep("", 3))[2L,]
+			c("sfc_GEOMETRY", "sfc")         # the mix
+		}
 	}
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
 
 	if (is.na(crs) && !is.null(attr(lst, "crs")))
 		crs = attr(lst, "crs")
-	st_crs(lst) = crs
 
-	structure(lst, "bbox" = c(st_bbox(lst)))
+	st_set_crs(structure(lst, bbox = st_bbox.GEOMETRYCOLLECTION(lst), class = cls), crs)
 }
 
 #' @export

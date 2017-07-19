@@ -79,10 +79,22 @@ st_bbox.GEOMETRYCOLLECTION = function(obj) {
 st_bbox.MULTISURFACE = st_bbox.GEOMETRYCOLLECTION
 #' @export
 #' @name st_bbox
+st_bbox.MULTICURVE = st_bbox.GEOMETRYCOLLECTION
+#' @export
+#' @name st_bbox
 st_bbox.CURVEPOLYGON = st_bbox.GEOMETRYCOLLECTION
 #' @export
 #' @name st_bbox
 st_bbox.COMPOUNDCURVE = st_bbox.GEOMETRYCOLLECTION
+#' @export
+#' @name st_bbox
+st_bbox.POLYHEDRALSURFACE = bbox.MtrxSetSet
+#' @export
+#' @name st_bbox
+st_bbox.TIN = bbox.MtrxSetSet
+#' @export
+#' @name st_bbox
+st_bbox.TRIANGLE = bbox.MtrxSet
 
 #' @export
 #' @name st_bbox
@@ -102,12 +114,21 @@ print.bbox = function(x, ...) {
 	NextMethod()
 }
 
+#' @name st_bbox
+#' @details
+#' \code{NA_bbox_} is the \code{bbox} object with a missing value.
+#' @export
+NA_bbox_ = structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+
+#' @export
+is.na.bbox = function(x) identical(x, NA_bbox_)
+
 #' @export
 #' @name st_bbox
 st_bbox.sfc_POINT = function(obj) {
 	sel = vapply(obj, function(x) length(x) && !all(is.na(x)), TRUE)
 	ret = if (! any(sel))
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
 		structure(CPL_get_bbox(unclass(obj)[sel], 0), names = c("xmin", "ymin", "xmax", "ymax")) 
 	bb_wrap(ret, obj)
@@ -130,13 +151,14 @@ st_bbox.sfc_MULTILINESTRING = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
 st_bbox.sfc_MULTIPOLYGON = function(obj) bb_wrap(bbox.MtrxSetSetSet(obj), obj)
 #' @export
 #' @name st_bbox
-st_bbox.sfc_GEOMETRYCOLLECTION = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc_GEOMETRY = function(obj) bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc = function(obj) bb_wrap(structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")), obj)  # nocov
+st_bbox.sfc = function(obj) {
+	bb = attr(obj, "bbox")
+	if (all(is.na(bb))) # remove all to trap cases where bb is not of class "bbox"
+		bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
+	else
+		bb
+}
+
 #' @export
 #' @name st_bbox
 st_bbox.sf = function(obj) st_bbox(st_geometry(obj))

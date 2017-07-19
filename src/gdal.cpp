@@ -117,16 +117,6 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	Rcpp::IntegerVector epsg(1);
 	epsg[0] = crs["epsg"];
 	Rcpp::String p4s = crs["proj4string"];
-	/*
-	if (epsg[0] != NA_INTEGER) {
-		local_srs = new OGRSpatialReference;
-		OGRErr err = local_srs->importFromEPSG(epsg[0]);
-		if (err != 0) {
-			local_srs->Release(); // #nocov
-			handle_error(err);    // #nocov
-		}
-	} else 
-	*/
 	if (p4s != NA_STRING) {
 		Rcpp::CharacterVector cv = crs["proj4string"];
 		local_srs = new OGRSpatialReference;
@@ -264,6 +254,46 @@ Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc) { // need to pass mo
 		out[i] = cs->CurveToLine();
 	}
 	sfc_from_ogr(g, true); // destroys g;
+	return sfc_from_ogr(out, true); // destroys out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc) { // need to pass more parameters?
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	std::vector<OGRGeometry *> out(g.size());
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRMultiSurface *cs = (OGRMultiSurface *) g[i];
+		if (cs->hasCurveGeometry(true)) {
+			out[i] = cs->getLinearGeometry();
+			OGRGeometryFactory::destroyGeometry(g[i]);
+		} else
+			out[i] = cs->CastToMultiPolygon(cs); // consumes cs
+		if (out[i] == NULL)
+			Rcpp::stop("CPL_multisurface_to_multipolygon: NULL returned - non-polygonal surface?");
+	}
+	return sfc_from_ogr(out, true); // destroys out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc) { // need to pass more parameters?
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	std::vector<OGRGeometry *> out(g.size());
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRCompoundCurve *cs = (OGRCompoundCurve *) g[i];
+		out[i] = cs->getLinearGeometry();
+	}
+	sfc_from_ogr(g, true); // destroys g;
+	return sfc_from_ogr(out, true); // destroys out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parameters?
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	std::vector<OGRGeometry *> out(g.size());
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRCurve *cs = (OGRCurve *) g[i];
+		out[i] = cs->CastToLineString(cs);
+	}
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
