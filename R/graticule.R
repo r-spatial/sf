@@ -128,7 +128,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 	# sanity:
 	if (isTRUE(st_is_longlat(datum))) {
-		lon = if (max(lon) > 180)
+		lon = if (min(lon) > 0 && max(lon) > 180)
 			lon[lon >= 0 & lon <= 360] # assume 0,360
 		else
 			lon[lon >= -180 & lon <= 180]
@@ -162,11 +162,9 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	st_geometry(df) = geom
 	st_agr(df) = "constant"
 
-	if (! missing(x)) { # cut out box:
-		#if (! is.na(crs))
-		#	box = st_transform(box, crs)
+	if (! missing(x)) # cut out box:
 		df = st_intersection(df, st_polygonize(box[1]))
-	}
+
 	graticule_attributes(st_cast(df, "MULTILINESTRING"))
 }
 
@@ -195,16 +193,16 @@ graticule_attributes = function(df) {
 trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
 	stopifnot(margin > 0 && margin <= 1.0)
 	fr = 1.0 - margin
-	if (max(bb) > 180)
-		wrap=c(0, 360)
-	if (bb[1] < wrap[1] * fr)
-		bb[1] = wrap[1] * fr
-	if (bb[3] > wrap[2] * fr)
-		bb[3] = wrap[2] * fr
-	if (bb[2] < -90 * fr)
-		bb[2] = -90 * fr
-	if (bb[4] > 90 * fr)
-		bb[4] = 90 * fr
+	if (min(bb[c(1,3)]) > 0. && max(bb[c(1,3)]) > 180.) { # 0-360 span:
+		wrap=c(0., 360.)
+		bb[1] = max(bb[1], .5 * wrap[2] * fr)
+		bb[3] = min(bb[3], .5 * wrap[2] * fr)
+	} else {
+		bb[1] = max(bb[1], wrap[1] * fr)
+		bb[3] = min(bb[3], wrap[2] * fr)
+	}
+	bb[2] = max(bb[2], -90. * fr)
+	bb[4] = min(bb[4],  90. * fr)
 	bb
 }
 

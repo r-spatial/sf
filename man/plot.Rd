@@ -10,6 +10,8 @@
 \alias{plot}
 \alias{plot.sfc_LINESTRING}
 \alias{plot}
+\alias{plot.sfc_CIRCULARSTRING}
+\alias{plot}
 \alias{plot.sfc_MULTILINESTRING}
 \alias{plot}
 \alias{plot.sfc_POLYGON}
@@ -37,6 +39,8 @@
 
 \method{plot}{sfc_LINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
   pch = 1, type = "l", add = FALSE)
+
+\method{plot}{sfc_CIRCULARSTRING}(x, y, ...)
 
 \method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
   pch = 1, type = "l", add = FALSE)

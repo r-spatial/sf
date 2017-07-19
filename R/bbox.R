@@ -74,6 +74,22 @@ st_bbox.GEOMETRYCOLLECTION = function(obj) {
 		c(xmin = min(s[1L,], na.rm = TRUE), ymin = min(s[2L,], na.rm = TRUE), 
 		  xmax = max(s[3L,], na.rm = TRUE), ymax = max(s[4L,], na.rm = TRUE))
 }
+#' @export
+#' @name st_bbox
+st_bbox.MULTISURFACE = st_bbox.GEOMETRYCOLLECTION
+#' @export
+#' @name st_bbox
+st_bbox.CURVEPOLYGON = st_bbox.GEOMETRYCOLLECTION
+#' @export
+#' @name st_bbox
+st_bbox.COMPOUNDCURVE = st_bbox.GEOMETRYCOLLECTION
+
+#' @export
+#' @name st_bbox
+st_bbox.CIRCULARSTRING = function(obj) {
+	# this is of course wrong:
+	st_bbox(st_cast(obj, "LINESTRING"))
+}
 
 bb_wrap = function(bb, x) {
 	structure(bb, class = "bbox", crs = st_crs(x))

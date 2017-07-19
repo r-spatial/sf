@@ -328,7 +328,7 @@ writeData = function(x, rc, endian, EWKB = FALSE) {
 		MULTILINESTRING = , 
 		MULTIPOLYGON = writeMulti(x, rc, endian, EWKB),
 		GEOMETRYCOLLECTION = writeGC(x, rc, endian, EWKB),
-		stop(paste("unexpected possibility:", class(x)))
+		stop(paste("unimplemented class to write:", class(x)[2]))
 	)
 }
 

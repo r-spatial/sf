@@ -17,6 +17,14 @@
 \alias{st_bbox}
 \alias{st_bbox.GEOMETRYCOLLECTION}
 \alias{st_bbox}
+\alias{st_bbox.MULTISURFACE}
+\alias{st_bbox}
+\alias{st_bbox.CURVEPOLYGON}
+\alias{st_bbox}
+\alias{st_bbox.COMPOUNDCURVE}
+\alias{st_bbox}
+\alias{st_bbox.CIRCULARSTRING}
+\alias{st_bbox}
 \alias{st_bbox.sfc_POINT}
 \alias{st_bbox}
 \alias{st_bbox.sfc_MULTIPOINT}
@@ -53,6 +61,14 @@ st_bbox(obj)
 \method{st_bbox}{MULTIPOLYGON}(obj)
 
 \method{st_bbox}{GEOMETRYCOLLECTION}(obj)
+
+\method{st_bbox}{MULTISURFACE}(obj)
+
+\method{st_bbox}{CURVEPOLYGON}(obj)
+
+\method{st_bbox}{COMPOUNDCURVE}(obj)
+
+\method{st_bbox}{CIRCULARSTRING}(obj)
 
 \method{st_bbox}{sfc_POINT}(obj)
 

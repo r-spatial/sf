@@ -256,6 +256,18 @@ Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc) { // need to pass more parameters?
+	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
+	std::vector<OGRGeometry *> out(g.size());
+	for (size_t i = 0; i < g.size(); i++) {
+		OGRCircularString *cs = (OGRCircularString *) g[i];
+		out[i] = cs->CurveToLine();
+	}
+	sfc_from_ogr(g, true); // destroys g;
+	return sfc_from_ogr(out, true); // destroys out;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 
 	// import proj4string:

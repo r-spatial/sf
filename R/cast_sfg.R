@@ -187,6 +187,12 @@ st_cast.GEOMETRYCOLLECTION <- function(x, to, ...) {
   )
 }
 
+#' @name st_cast
+#' @export
+st_cast.CIRCULARSTRING <- function(x, to, ...) {
+	stopifnot(to == "LINESTRING")
+	CPL_circularstring_to_linestring(st_sfc(x))[[1]]
+}
 
 # st_cast.class <- function(x, to) {
 #   switch(to, 

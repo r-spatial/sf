@@ -196,6 +196,13 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 	x
 }
 
+#' @name st_cast
+#' @export
+st_cast.sfc_CIRCULARSTRING <- function(x, to, ...) {
+	stopifnot(to == "LINESTRING")
+	st_sfc(CPL_circularstring_to_linestring(st_sfc(x)), crs = st_crs(x)) # should add attributes?
+}
+
 #' test equality between the geometry type and a class or set of classes
 #'
 #' test equality between the geometry type and a class or set of classes

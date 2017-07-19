@@ -34,6 +34,11 @@ st_as_grob.LINESTRING = function(x, ..., default.units = "native") {
 }
 
 #' @export
+st_as_grob.CIRCULARSTRING = function(x, y, ...) {
+	st_as_grob(st_cast(x, "LINESTRING"),  ...)
+}
+
+#' @export
 st_as_grob.MULTILINESTRING = function(x, ..., default.units = "native") {
 	if (length(x) == 0)
 		nullGrob()
@@ -75,6 +80,15 @@ st_as_grob.GEOMETRYCOLLECTION = function(x, ..., default.units = "native") {
 	else
 		do.call(grid::grobTree, lapply(x, st_as_grob, ..., default.units = default.units))
 }
+
+#' @export
+st_as_grob.MULTISURFACE = st_as_grob.GEOMETRYCOLLECTION
+
+#' @export
+st_as_grob.CURVEPOLYGON = st_as_grob.GEOMETRYCOLLECTION
+
+#' @export
+st_as_grob.COMPOUNDCURVE = st_as_grob.GEOMETRYCOLLECTION
 
 
 #' Create viewport from sf, sfc or sfg object

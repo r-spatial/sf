@@ -33,6 +33,10 @@ CPL_roundtrip <- function(sfc) {
     .Call('_sf_CPL_roundtrip', PACKAGE = 'sf', sfc)
 }
 
+CPL_circularstring_to_linestring <- function(sfc) {
+    .Call('_sf_CPL_circularstring_to_linestring', PACKAGE = 'sf', sfc)
+}
+
 CPL_transform <- function(sfc, proj4) {
     .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
 }
