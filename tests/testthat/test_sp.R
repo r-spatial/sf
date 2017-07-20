@@ -31,55 +31,22 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
   w <- st_sfc(single, multi)
   # class is GEOMETRY
   expect_is(as(w, "Spatial"), "SpatialPolygons")
-  expect_is(as(structure(w, class = c("sfc_POLYGON", "sfc")), "Spatial"), 
-            "SpatialPolygons")
-  expect_is(as(structure(w, class = c("sfc_MULTIPOLYGON", "sfc")), "Spatial"), 
-                "SpatialPolygons")
+  expect_is(as(st_cast(w, "MULTIPOLYGON"), "Spatial"), "SpatialPolygons")
 
   # lines
   lns <- st_cast(w, "MULTILINESTRING")
   expect_is(as(lns, "Spatial"), "SpatialLines")
-  expect_is(as(structure(lns, class = c("sfc_GEOMETRY", "sfc")), "Spatial"), 
-            "SpatialLines")
-  expect_is(as(structure(lns, class = c("sfc_POINT", "sfc")), "Spatial"), 
-            "SpatialLines")
-  expect_is(as(structure(lns, class = c("sfc_LINESTRING", "sfc")), "Spatial"), 
-            "SpatialLines")
   
   expect_warning(ln <- st_cast(w, "LINESTRING"), "first ring")
   expect_is(as(ln, "Spatial"), "SpatialLines")
-  expect_is(as(structure(ln, class = c("sfc_GEOMETRY", "sfc")), "Spatial"), 
-            "SpatialLines")
-  expect_is(as(structure(ln, class = c("sfc_POINT", "sfc")), "Spatial"), 
-            "SpatialLines")
-  expect_is(as(structure(ln, class = c("sfc_LINESTRING", "sfc")), "Spatial"), 
-            "SpatialLines")
   
   # points
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
   expect_is(as(pt, "Spatial"), "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_GEOMETRY", "sfc")), "Spatial"), 
-            "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_POINT", "sfc")), "Spatial"), 
-            "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_LINESTRING", "sfc")), "Spatial"), 
-            "SpatialPoints")
   
   pts <- st_cast(w, "MULTIPOINT")
   expect_is(as(pts, "Spatial"), "SpatialMultiPoints")
-  expect_is(as(structure(pts, class = c("sfc_GEOMETRY", "sfc")), "Spatial"), 
-            "SpatialMultiPoints")
-  expect_is(as(structure(pts, class = c("sfc_POINT", "sfc")), "Spatial"), 
-            "SpatialMultiPoints")
-  expect_is(as(structure(pts, class = c("sfc_LINESTRING", "sfc")), "Spatial"), 
-            "SpatialMultiPoints")
   
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
   expect_is(as(pt, "Spatial"), "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_GEOMETRY", "sfc")), "Spatial"), 
-            "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_POINT", "sfc")), "Spatial"), 
-            "SpatialPoints")
-  expect_is(as(structure(pt, class = c("sfc_LINESTRING", "sfc")), "Spatial"), 
-            "SpatialPoints")
 })

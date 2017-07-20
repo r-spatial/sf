@@ -54,6 +54,7 @@ BugReports: https://github.com/r-spatial/sf/issues/
 Collate:
 	RcppExports.R
 	init.R
+	crs.R
 	bbox.R
 	read.R
 	db.R
@@ -67,7 +68,6 @@ Collate:
 	geom.R
 	transform.R
 	sp.R
-	crs.R
 	grid.R
 	arith.R
 	tidyverse.R

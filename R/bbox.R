@@ -1,36 +1,43 @@
-NA_bbox_ = structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+#' @name st_bbox
+#' @details
+#' \code{NA_bbox_} is the \code{bbox} object with a missing value.
+#' @export
+NA_bbox_ = structure(rep(NA_real_, 4), 
+	names = c("xmin", "ymin", "xmax", "ymax"), 
+	crs = NA_crs_,
+	class = "bbox")
+
+#' @export
+is.na.bbox = function(x) identical(x, NA_bbox_)
+
+bb_wrap = function(bb) {
+	stopifnot(is.numeric(bb) && length(bb) == 4)
+	structure(bb, names = c("xmin", "ymin", "xmax", "ymax"), class = "bbox")
+}
 
 bbox.Mtrx = function(obj) {
-	# r = apply(obj, 2L, range) # min row 1, max row 2
-	# c(xmin = r[1L,1L], ymin = r[1L,2L], xmax = r[2L,1L], ymax = r[2L,2L])
 	if (length(obj) == 0) 
 		NA_bbox_
 	else
-		structure(CPL_get_bbox(list(obj), 1), names = c("xmin", "ymin", "xmax", "ymax"))
+		bb_wrap(CPL_get_bbox(list(obj), 1))
 }
 bbox.MtrxSet = function(obj) {
-	#s = sapply(obj, bbox.Mtrx)
-	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
 		NA_bbox_
 	else
-		structure(CPL_get_bbox(obj, 1), names = c("xmin", "ymin", "xmax", "ymax"))
+		bb_wrap(CPL_get_bbox(obj, 1))
 }
 bbox.MtrxSetSet = function(obj) {
-	#s = sapply(obj, bbox.MtrxSet)
-	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
 		NA_bbox_
 	else
-		structure(CPL_get_bbox(obj, 2), names = c("xmin", "ymin", "xmax", "ymax"))
+		bb_wrap(CPL_get_bbox(obj, 2))
 }
 bbox.MtrxSetSetSet = function(obj) {
-	#s = sapply(obj, bbox.MtrxSetSet)
-	#c(xmin = min(s[1L,]), ymin = min(s[2L,]), xmax = max(s[3L,]), ymax = max(s[4L,]))
 	if (length(obj) == 0) 
 		NA_bbox_
 	else
-		structure(CPL_get_bbox(obj, 3), names = c("xmin", "ymin", "xmax", "ymax"))
+		bb_wrap(CPL_get_bbox(obj, 3))
 }
 
 #' Return bounding of a simple feature or simple feature set
@@ -48,7 +55,7 @@ st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
 #' @name st_bbox
-st_bbox.POINT = function(obj) c(xmin = obj[1L], ymin = obj[2L], xmax = obj[1L], ymax = obj[2L])
+st_bbox.POINT = function(obj) bb_wrap(c(obj[1L], obj[2L], obj[1L], obj[2L]))
 #' @export
 #' @name st_bbox
 st_bbox.MULTIPOINT = bbox.Mtrx
@@ -64,28 +71,31 @@ st_bbox.MULTILINESTRING = bbox.MtrxSet
 #' @export
 #' @name st_bbox
 st_bbox.MULTIPOLYGON = bbox.MtrxSetSet
-#' @export
-#' @name st_bbox
-st_bbox.GEOMETRYCOLLECTION = function(obj) {
+
+bbox_list = function(obj) {
 	s = vapply(obj, st_bbox, c(0.,0.,0.,0.)) # dispatch on class
 	if (length(s) == 0 || all(is.na(s[1L,])))
-		structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
+		NA_bbox_
 	else
-		c(xmin = min(s[1L,], na.rm = TRUE), ymin = min(s[2L,], na.rm = TRUE), 
-		  xmax = max(s[3L,], na.rm = TRUE), ymax = max(s[4L,], na.rm = TRUE))
+		bb_wrap(c(min(s[1L,], na.rm = TRUE), min(s[2L,], na.rm = TRUE), 
+		  max(s[3L,], na.rm = TRUE), max(s[4L,], na.rm = TRUE)))
 }
 #' @export
 #' @name st_bbox
-st_bbox.MULTISURFACE = st_bbox.GEOMETRYCOLLECTION
+st_bbox.GEOMETRYCOLLECTION = bbox_list
 #' @export
 #' @name st_bbox
-st_bbox.MULTICURVE = st_bbox.GEOMETRYCOLLECTION
+st_bbox.MULTISURFACE = bbox_list
+
 #' @export
 #' @name st_bbox
-st_bbox.CURVEPOLYGON = st_bbox.GEOMETRYCOLLECTION
+st_bbox.MULTICURVE = bbox_list
 #' @export
 #' @name st_bbox
-st_bbox.COMPOUNDCURVE = st_bbox.GEOMETRYCOLLECTION
+st_bbox.CURVEPOLYGON = bbox_list
+#' @export
+#' @name st_bbox
+st_bbox.COMPOUNDCURVE = bbox_list
 #' @export
 #' @name st_bbox
 st_bbox.POLYHEDRALSURFACE = bbox.MtrxSetSet
@@ -103,61 +113,25 @@ st_bbox.CIRCULARSTRING = function(obj) {
 	st_bbox(st_cast(obj, "LINESTRING"))
 }
 
-bb_wrap = function(bb, x) {
-	structure(bb, class = "bbox", crs = st_crs(x))
-}
-
 #' @export
 print.bbox = function(x, ...) {
 	attr(x, "crs") = NULL
-	x = unclass(x)
-	NextMethod()
+	print(unclass(x))
 }
 
-#' @name st_bbox
-#' @details
-#' \code{NA_bbox_} is the \code{bbox} object with a missing value.
-#' @export
-NA_bbox_ = structure(rep(NA_real_, 4), names = c("xmin", "ymin", "xmax", "ymax")) 
-
-#' @export
-is.na.bbox = function(x) identical(x, NA_bbox_)
-
-#' @export
-#' @name st_bbox
-st_bbox.sfc_POINT = function(obj) {
-	sel = vapply(obj, function(x) length(x) && !all(is.na(x)), TRUE)
-	ret = if (! any(sel))
-		NA_bbox_
-	else
-		structure(CPL_get_bbox(unclass(obj)[sel], 0), names = c("xmin", "ymin", "xmax", "ymax")) 
-	bb_wrap(ret, obj)
+compute_bbox = function(obj) { 
+	switch(class(obj)[1],
+		sfc_MULTIPOINT = bb_wrap(bbox.MtrxSet(obj)),
+		sfc_LINESTRING = bb_wrap(bbox.MtrxSet(obj)),
+		sfc_POLYGON = bb_wrap(bbox.MtrxSetSet(obj)),
+		sfc_MULTILINESTRING = bb_wrap(bbox.MtrxSetSet(obj)),
+		sfc_MULTIPOLYGON = bb_wrap(bbox.MtrxSetSetSet(obj)),
+		bbox_list(obj))
 }
 
 #' @export
 #' @name st_bbox
-st_bbox.sfc_MULTIPOINT = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc_LINESTRING = function(obj) bb_wrap(bbox.MtrxSet(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc_POLYGON = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc_MULTILINESTRING = function(obj) bb_wrap(bbox.MtrxSetSet(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc_MULTIPOLYGON = function(obj) bb_wrap(bbox.MtrxSetSetSet(obj), obj)
-#' @export
-#' @name st_bbox
-st_bbox.sfc = function(obj) {
-	bb = attr(obj, "bbox")
-	if (all(is.na(bb))) # remove all to trap cases where bb is not of class "bbox"
-		bb_wrap(st_bbox.GEOMETRYCOLLECTION(obj), obj)
-	else
-		bb
-}
+st_bbox.sfc = function(obj) structure(attr(obj, "bbox"), crs = st_crs(obj))
 
 #' @export
 #' @name st_bbox

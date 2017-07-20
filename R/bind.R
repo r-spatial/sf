@@ -12,9 +12,9 @@
 #' b = st_sf(a=1, geom = st_sfc(st_linestring(matrix(1:4,2))), crs = crs)
 #' c = st_sf(a=4, geom = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 #' rbind(a,b,c)
-#' rbind(a,b) %>% st_cast("POINT")
-#' rbind(a,b) %>% st_cast("MULTIPOINT")
-#' rbind(b,c) %>% st_cast("LINESTRING")
+#' rbind(a,b) 
+#' rbind(a,b)
+#' rbind(b,c)
 rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
 	crs0 = st_crs(dots[[1]])
@@ -25,7 +25,10 @@ rbind.sf = function(..., deparse.level = 1) {
 	}
 	ret = st_sf(rbind.data.frame(...), crs = crs0)
 	st_geometry(ret) = st_sfc(st_geometry(ret)) # might need to reclass to GEOMETRY
-	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = c(st_bbox(ret)) # recompute
+	bb = do.call(rbind, lapply(dots, st_bbox))
+	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE), 
+		  max(bb[,3L], na.rm = TRUE), max(bb[,4L], na.rm = TRUE)))
+	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = bb
 	ret
 }
 

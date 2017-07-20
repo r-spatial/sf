@@ -3,6 +3,8 @@
 \docType{data}
 \name{st_bbox}
 \alias{st_bbox}
+\alias{NA_bbox_}
+\alias{st_bbox}
 \alias{st_bbox}
 \alias{st_bbox.POINT}
 \alias{st_bbox}
@@ -34,75 +36,49 @@
 \alias{st_bbox}
 \alias{st_bbox.CIRCULARSTRING}
 \alias{st_bbox}
-\alias{NA_bbox_}
-\alias{st_bbox}
-\alias{st_bbox.sfc_POINT}
-\alias{st_bbox}
-\alias{st_bbox.sfc_MULTIPOINT}
-\alias{st_bbox}
-\alias{st_bbox.sfc_LINESTRING}
-\alias{st_bbox}
-\alias{st_bbox.sfc_POLYGON}
-\alias{st_bbox}
-\alias{st_bbox.sfc_MULTILINESTRING}
-\alias{st_bbox}
-\alias{st_bbox.sfc_MULTIPOLYGON}
-\alias{st_bbox}
 \alias{st_bbox.sfc}
 \alias{st_bbox}
 \alias{st_bbox.sf}
 \title{Return bounding of a simple feature or simple feature set}
-\format{An object of class \code{numeric} of length 4.}
+\format{An object of class \code{bbox} of length 4.}
 \usage{
-st_bbox(obj)
-
-\method{st_bbox}{POINT}(obj)
-
-\method{st_bbox}{MULTIPOINT}(obj)
-
-\method{st_bbox}{LINESTRING}(obj)
-
-\method{st_bbox}{POLYGON}(obj)
-
-\method{st_bbox}{MULTILINESTRING}(obj)
-
-\method{st_bbox}{MULTIPOLYGON}(obj)
-
-\method{st_bbox}{GEOMETRYCOLLECTION}(obj)
-
-\method{st_bbox}{MULTISURFACE}(obj)
-
-\method{st_bbox}{MULTICURVE}(obj)
-
-\method{st_bbox}{CURVEPOLYGON}(obj)
-
-\method{st_bbox}{COMPOUNDCURVE}(obj)
-
-\method{st_bbox}{POLYHEDRALSURFACE}(obj)
-
-\method{st_bbox}{TIN}(obj)
-
-\method{st_bbox}{TRIANGLE}(obj)
-
-\method{st_bbox}{CIRCULARSTRING}(obj)
-
 NA_bbox_
 
-\method{st_bbox}{sfc_POINT}(obj)
+st_bbox(obj)
 
-\method{st_bbox}{sfc_MULTIPOINT}(obj)
+\\method{st_bbox}{POINT}(obj)
 
-\method{st_bbox}{sfc_LINESTRING}(obj)
+\\method{st_bbox}{MULTIPOINT}(obj)
 
-\method{st_bbox}{sfc_POLYGON}(obj)
+\\method{st_bbox}{LINESTRING}(obj)
 
-\method{st_bbox}{sfc_MULTILINESTRING}(obj)
+\\method{st_bbox}{POLYGON}(obj)
 
-\method{st_bbox}{sfc_MULTIPOLYGON}(obj)
+\\method{st_bbox}{MULTILINESTRING}(obj)
 
-\method{st_bbox}{sfc}(obj)
+\\method{st_bbox}{MULTIPOLYGON}(obj)
 
-\method{st_bbox}{sf}(obj)
+\\method{st_bbox}{GEOMETRYCOLLECTION}(obj)
+
+\\method{st_bbox}{MULTISURFACE}(obj)
+
+\\method{st_bbox}{MULTICURVE}(obj)
+
+\\method{st_bbox}{CURVEPOLYGON}(obj)
+
+\\method{st_bbox}{COMPOUNDCURVE}(obj)
+
+\\method{st_bbox}{POLYHEDRALSURFACE}(obj)
+
+\\method{st_bbox}{TIN}(obj)
+
+\\method{st_bbox}{TRIANGLE}(obj)
+
+\\method{st_bbox}{CIRCULARSTRING}(obj)
+
+\\method{st_bbox}{sfc}(obj)
+
+\\method{st_bbox}{sf}(obj)
 }
 \arguments{
 \item{obj}{object to compute the bounding box from}

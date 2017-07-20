@@ -72,7 +72,9 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	if (is.na(crs) && !is.null(attr(lst, "crs")))
 		crs = attr(lst, "crs")
 
-	st_set_crs(structure(lst, bbox = st_bbox.GEOMETRYCOLLECTION(lst), class = cls), crs)
+	class(lst) = cls
+	attr(lst, "bbox") = compute_bbox(lst)
+	st_set_crs(lst, crs)
 }
 
 #' @export
@@ -92,7 +94,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		a$classes = a$classes[i]
     attributes(x) = a
 	if (recompute_bb)
-		attr(x, "bbox") = st_bbox(x)
+		attr(x, "bbox") = compute_bbox(x)
     structure(x, class = class(old), n_empty = sum(is.na(st_dimension(x))))
 }
 
@@ -122,7 +124,7 @@ c.sfc = function(..., recursive = FALSE) {
 	ret = unlist(lapply(lst, unclass), recursive = FALSE)
 	attributes(ret) = attributes(lst[[1]]) # crs
 	class(ret) = cls
-	attr(ret, "bbox") = st_bbox(ret) # dispatch on class
+	attr(ret, "bbox") = compute_bbox(ret) # dispatch on class
 	if (! eq)
 		attr(ret, "classes") = vapply(ret, class, rep("", 3))[2L,]
 	ret
