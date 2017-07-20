@@ -566,51 +566,67 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	std::vector<double> index_x, index_y;
 	std::vector<size_t> items(x.size());
 
-	geom_fn geom_function;
-	bool tree_empty = true;
+	if (op == "intersection") {
 
-	if (op == "intersection")
-		geom_function = (geom_fn) GEOSIntersection_r;
-	else if (op == "union")
-		geom_function = (geom_fn) GEOSUnion_r;
-	else if (op == "difference")
-		geom_function = (geom_fn) GEOSDifference_r;
-	else if (op == "sym_difference")
-		geom_function = (geom_fn) GEOSSymDifference_r;
-	else
-		Rcpp::stop("invalid operation"); // #nocov
+		bool tree_empty = true;
+		GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+		for (size_t i = 0; i < x.size(); i++) {
+			items[i] = i;
+			if (! GEOSisEmpty_r(hGEOSCtxt, x[i])) {
+				GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
+				tree_empty = false;
+			}
+		}
 
-	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
-	for (size_t i = 0; i < x.size(); i++) {
-		items[i] = i;
-		if (! GEOSisEmpty_r(hGEOSCtxt, x[i])) {
-			GEOSSTRtree_insert_r(hGEOSCtxt, tree, x[i], &(items[i]));
-			tree_empty = false;
+		for (size_t i = 0; i < y.size(); i++) {
+			// select x's using tree:
+			std::vector<size_t> sel;
+			sel.reserve(x.size());
+			if (! GEOSisEmpty_r(hGEOSCtxt, y[i]) && ! tree_empty)
+				GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
+			std::sort(sel.begin(), sel.end());
+			for (size_t item = 0; item < sel.size(); item++) {
+				size_t j = sel[item];
+				GEOSGeom geom = GEOSIntersection_r(hGEOSCtxt, x[j], y[i]);
+				if (geom == NULL)
+					Rcpp::stop("GEOS exception"); // #nocov
+				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
+					index_x.push_back(j + 1);
+					index_y.push_back(i + 1);
+					out.push_back(geom); // keep
+				} else
+					GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+			}
+			R_CheckUserInterrupt();
+		}
+		GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
+
+	} else {
+		geom_fn geom_function;
+		if (op == "union")
+			geom_function = (geom_fn) GEOSUnion_r;
+		else if (op == "difference")
+			geom_function = (geom_fn) GEOSDifference_r;
+		else if (op == "sym_difference")
+			geom_function = (geom_fn) GEOSSymDifference_r;
+		else
+			Rcpp::stop("invalid operation"); // #nocov
+
+		for (size_t i = 0; i < y.size(); i++) {
+			for (size_t j = 0; j < x.size(); j++) {
+				GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
+				if (geom == NULL)
+					Rcpp::stop("GEOS exception"); // #nocov
+				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
+					index_x.push_back(j + 1);
+					index_y.push_back(i + 1);
+					out.push_back(geom); // keep
+				} else
+					GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+			}
+			R_CheckUserInterrupt();
 		}
 	}
-
-	for (size_t i = 0; i < y.size(); i++) {
-		// select x's using tree:
-		std::vector<size_t> sel;
-		sel.reserve(x.size());
-		if (! GEOSisEmpty_r(hGEOSCtxt, y[i]) && ! tree_empty)
-			GEOSSTRtree_query_r(hGEOSCtxt, tree, y[i], cb, &sel);
-		std::sort(sel.begin(), sel.end());
-		for (size_t item = 0; item < sel.size(); item++) {
-			size_t j = sel[item];
-			GEOSGeom geom = geom_function(hGEOSCtxt, x[j], y[i]);
-			if (geom == NULL)
-				Rcpp::stop("GEOS exception"); // #nocov
-			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
-				index_x.push_back(j + 1);
-				index_y.push_back(i + 1);
-				out.push_back(geom); // keep
-			} else
-				GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
-		}
-		R_CheckUserInterrupt();
-	}
-	GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
 
 	// clean up x and y:
 	for (size_t i = 0; i < x.size(); i++)

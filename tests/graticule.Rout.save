@@ -66,6 +66,10 @@ Type 'q()' to quit R.
 +   ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
 + }
 > 
+> library(maps) #421
+> wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
+> plot(wrld2, graticule = TRUE)
+> 
 > proc.time()
    user  system elapsed 
-  2.212   0.296   2.198 
+  3.176   0.284   3.194 
