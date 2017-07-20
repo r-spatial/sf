@@ -51,7 +51,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				c(xmin = min(x[[coords[1]]], na.rm = TRUE), 
 				ymin = min(x[[coords[2]]], na.rm = TRUE), 
 				xmax = max(x[[coords[1]]], na.rm = TRUE),
-				ymax = max(x[[coords[2]]], na.rm = TRUE)), class = "bbox")
+				ymax = max(x[[coords[2]]], na.rm = TRUE)), class = "bbox"),
 			class =  c("sfc_POINT", "sfc" ))
 
 		if (is.character(coords))
