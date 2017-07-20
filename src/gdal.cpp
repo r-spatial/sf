@@ -252,8 +252,8 @@ Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc) { // need to pass mo
 	for (size_t i = 0; i < g.size(); i++) {
 		OGRCircularString *cs = (OGRCircularString *) g[i];
 		out[i] = cs->CurveToLine();
+		OGRGeometryFactory::destroyGeometry(g[i]);
 	}
-	sfc_from_ogr(g, true); // destroys g;
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
@@ -281,8 +281,8 @@ Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc) { // need to pass more pa
 	for (size_t i = 0; i < g.size(); i++) {
 		OGRCompoundCurve *cs = (OGRCompoundCurve *) g[i];
 		out[i] = cs->getLinearGeometry();
+		OGRGeometryFactory::destroyGeometry(g[i]);
 	}
-	sfc_from_ogr(g, true); // destroys g;
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
