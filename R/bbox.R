@@ -15,11 +15,18 @@ bb_wrap = function(bb) {
 	structure(bb, names = c("xmin", "ymin", "xmax", "ymax"), class = "bbox")
 }
 
+bbox.Set = function(obj) {
+	sel = vapply(obj, function(x) length(x) && !all(is.na(x)), TRUE)
+	if (! any(sel))
+		NA_bbox_
+	else
+		bb_wrap(CPL_get_bbox(unclass(obj)[sel], 0))
+}
 bbox.Mtrx = function(obj) {
 	if (length(obj) == 0) 
 		NA_bbox_
 	else
-		bb_wrap(CPL_get_bbox(list(obj), 1))
+		bb_wrap(CPL_get_bbox(list(obj), 1)) # note the list()
 }
 bbox.MtrxSet = function(obj) {
 	if (length(obj) == 0) 
@@ -121,12 +128,14 @@ print.bbox = function(x, ...) {
 
 compute_bbox = function(obj) { 
 	switch(class(obj)[1],
+		sfc_POINT = bb_wrap(bbox.Set(obj)),
 		sfc_MULTIPOINT = bb_wrap(bbox.MtrxSet(obj)),
 		sfc_LINESTRING = bb_wrap(bbox.MtrxSet(obj)),
 		sfc_POLYGON = bb_wrap(bbox.MtrxSetSet(obj)),
 		sfc_MULTILINESTRING = bb_wrap(bbox.MtrxSetSet(obj)),
 		sfc_MULTIPOLYGON = bb_wrap(bbox.MtrxSetSetSet(obj)),
-		bbox_list(obj))
+		bbox_list(obj)
+	)
 }
 
 #' @export

@@ -8,6 +8,7 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 	switch(depth) {
 
 		case 0: // points:
+		bb(0) = bb(1) = bb(2) = bb(3) = NA_REAL;
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericVector pt = sf[i];
 			if (i == 0) {

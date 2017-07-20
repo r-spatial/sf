@@ -287,7 +287,7 @@ Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc) { // need to pass more pa
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parameters?
+Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parameters? #nocov start
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
 	for (size_t i = 0; i < g.size(); i++) {
@@ -295,7 +295,7 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 		out[i] = cs->CastToLineString(cs);
 	}
 	return sfc_from_ogr(out, true); // destroys out;
-}
+} // #nocov end
 
 // [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {

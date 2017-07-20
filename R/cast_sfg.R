@@ -216,12 +216,12 @@ st_cast.COMPOUNDCURVE <- function(x, to, ...) {
 
 #' @name st_cast
 #' @export
-st_cast.CURVE <- function(x, to, ...) {
+st_cast.CURVE <- function(x, to, ...) { # nocov start
 	if (! missing(to) && to != "LINESTRING")
 		stop("CURVE can only be converted into LINESTRING")
 	CPL_curve_to_linestring(structure(list(x), crs = NA_crs_, precision = 0.0, 
 		class = c("sfc_CURVE", "sfc")))[[1]]
-}
+} # nocov end
 
 # st_cast.class <- function(x, to) {
 #   switch(to, 
@@ -233,6 +233,4 @@ st_cast.CURVE <- function(x, to, ...) {
 #          POINT = x
 #   )
 # }
-
-
 
