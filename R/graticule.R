@@ -128,7 +128,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 	# sanity:
 	if (isTRUE(st_is_longlat(datum))) {
-		lon = if (min(lon) > 0 && max(lon) > 180)
+		lon = if (min(lon) >= -15 && max(lon) > 195) # +- 4%
 			lon[lon >= 0 & lon <= 360] # assume 0,360
 		else
 			lon[lon >= -180 & lon <= 180]
@@ -170,6 +170,10 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 
 graticule_attributes = function(df) {
 	object = st_geometry(df)
+
+	if (nrow(df) == 0)
+		return(df)
+
 	xy = cbind(
 		do.call(rbind, lapply(object, function(x) { y = x[[1]]; y[1,] } )),
 		do.call(rbind, lapply(object, function(x) { y = x[[length(x)]]; y[nrow(y),] } ))
@@ -193,10 +197,10 @@ graticule_attributes = function(df) {
 trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
 	stopifnot(margin > 0 && margin <= 1.0)
 	fr = 1.0 - margin
-	if (min(bb[c(1,3)]) > 0. && max(bb[c(1,3)]) > 180.) { # 0-360 span:
+	if (min(bb[c(1,3)]) >= -15. && max(bb[c(1,3)]) > 195.) { # 0-360 span:
 		wrap=c(0., 360.)
-		bb[1] = max(bb[1], .5 * wrap[2] * fr)
-		bb[3] = min(bb[3], .5 * wrap[2] * fr)
+		bb[1] = max(bb[1], .5 * wrap[1] * fr)
+		bb[3] = min(bb[3], wrap[2] * fr)
 	} else {
 		bb[1] = max(bb[1], wrap[1] * fr)
 		bb[3] = min(bb[3], wrap[2] * fr)

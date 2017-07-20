@@ -48,3 +48,7 @@ library(ggplot2)
 if (utils::packageVersion("ggplot2") > "2.2.1") {
   ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
 }
+
+library(maps) #421
+wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
+plot(wrld2, graticule = TRUE)

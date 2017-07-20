@@ -267,9 +267,9 @@ Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc) { // need to pass mo
 			out[i] = cs->getLinearGeometry();
 			OGRGeometryFactory::destroyGeometry(g[i]);
 		} else
-			out[i] = cs->CastToMultiPolygon(cs); // consumes cs
+			out[i] = cs->CastToMultiPolygon(cs); // consumes cs #nocov
 		if (out[i] == NULL)
-			Rcpp::stop("CPL_multisurface_to_multipolygon: NULL returned - non-polygonal surface?");
+			Rcpp::stop("CPL_multisurface_to_multipolygon: NULL returned - non-polygonal surface?"); // #nocov
 	}
 	return sfc_from_ogr(out, true); // destroys out;
 }
