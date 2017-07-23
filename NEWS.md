@@ -1,5 +1,13 @@
 # version 0.5-3
 
+* make `op` argument to `[.sf` work
+
+* speed up `st_coordinates` for `POINT` geometries; #433
+
+* fix performance regression for `st_bbox`; #418
+
+* correct bug in `st_union`, `st_difference` and `st_sym_difference` introduced in 0.5-2; #431
+
 * inform gdal about the CRS always through the proj4string, never through the epsg; see #424
 
 * properly deal with kilometre units; #424 (fixed by Karl Dunkle Werner)

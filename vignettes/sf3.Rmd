@@ -14,13 +14,13 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-This vignetted describes how simple features can be manipulated,
-where manipulations include
+This vignetted describes how simple feature geometries can be
+manipulated, where manipulations include
 
 * type transformations (e.g., `POLYGON` to `MULTIPOLYGON`)
 * affine transformation (shift, scale, rotate)
 * transformation into a different coordinate reference system 
-* geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of features intersect, or find the union (overlap) of two polygons.
+* geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of feature geometries intersect, or find the union (overlap) of two polygons.
 
 ## Type transformations
 

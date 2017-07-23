@@ -1,0 +1,80 @@
+---
+title: "4. Manipulating Simple Feature"
+output:
+  html_document:
+    toc: true
+    theme: united
+vignette: >
+  %\VignetteIndexEntry{3. Manipulating Simple Feature Geometries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+This vignetted describes how simple features, i.e. records that come with a geometry, can be manipulated, for the case where these manipulations involve geometries. Manipulations include:
+
+* aggregating feature sets
+* summarising feature sets
+* joining two feature sets based on feature geometry
+
+Features are represented by records in an `sf` object, and have feature attributes (all non-geometry fields) and feature geometry. Since `sf` objects are a subclass of `data.frame` or `tbl_df`, operations on feature attributes work identical to how they work on `data.frame`s, e.g.
+
+```{r}
+library(sf)
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_transform(nc, 2264)
+nc[1,]
+``` 
+prints the first record.
+
+Many of the tidyverse/dplyr verbs have methods for `sf` objects. This means that given that both `sf` and `dplyr` are loaded, manipulations such as selecting a single attribute will return an `sf` object:
+```{r}
+library(dplyr)
+nc %>% select(NWBIR74) %>% head(2)
+```
+which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to `data.frame` first, this drops geometry list-columns:
+```{r}
+nc %>% as.data.frame %>% select(NWBIR74) %>% head(2)
+```
+
+## Subsetting feature sets
+
+We can subset feature sets by using the square bracket notation
+
+```{r}
+nc[1, "NWBIR74"]
+```
+and use the `drop` argument to drop geometries:
+```{r}
+nc[1, "NWBIR74", drop = TRUE]
+```
+but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:
+```{r}
+Ashe = nc[nc$NAME == "Ashe",]
+nc[Ashe,]
+```
+we see that in the result set `Ashe` is included, as the default value for argument `op` in `[.sf` is `st_intersects`, and `Ashe` intersects with itself. We could exclude self-intersection e.g. by
+```{r}
+Ashe = nc[nc$NAME == "Ashe",]
+nc[Ashe, op = st_touches]
+```
+using `dplyr`, we can do the same by calling the predicate directly:
+```{r}
+nc %>% filter(lengths(st_touches(., Ashe)) > 0)
+```
+
+## Aggregating or summarizing feature sets
+
+Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with `Ashe` to the remaining ones. We can do this by
+```{r}
+nc <- nc %>% mutate(frac74 = SID74 / BIR74)
+(a <- aggregate(nc[,"frac74"], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), mean))
+plot(a[2], col = c(grey(.8), grey(.5)))
+```
+`Group.1` indicates the grouping variable
+
+## Joining two feature sets based on spatial properties
+
+
