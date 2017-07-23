@@ -67,13 +67,13 @@ st_agr.default = function(x = NA_character_, ...) {
 			names(value) = nv
 		attr(x, "agr") <- value
 	}
-	a = st_agr(x)
-	absent = setdiff(names(x), c(na.omit(names(a)), attr(x, "sf_column")))
-	if (length(absent)) { # repair:
-		a[absent] = NA_agr_
-		names(a[absent]) = absent
-		attr(x, "agr") = a[nv]
-	}
+#	a = st_agr(x)
+#	absent = setdiff(names(x), c(na.omit(names(a)), attr(x, "sf_column")))
+#	if (length(absent)) { # repair:
+#		a[absent] = NA_agr_
+#		names(a[absent]) = absent
+#		attr(x, "agr") = a[nv]
+#	}
 	x
 }
 
