@@ -2,41 +2,55 @@
 #'
 #' aggregate an \code{sf} object, possibly union-ing geometries
 #' @param x object of class \link{sf}
-#' @param by (see \link[stats]{aggregate}): a list of grouping elements, each as long as the variables in the data frame x. The elements are coerced to factors before use.
+#' @param by either a list of grouping elements, each as long as the variables in the data frame \code{x} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc}, the geometries of which are used to find aggregation groups of \code{x} by using function \code{join}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param do_union logical; should grouped geometries be unioned using \link{st_union}? 
 #' @param simplify logical; see \link[stats]{aggregate}
-#' @return an \code{sf} object with aggregated attributes and geometries, with additional grouping variables having the names of \code{names(ids)} or named \code{Group.i} for \code{ids[[i]]}; see the \code{data.frame} method of \link[stats]{aggregate}.
+#' @param join logical spatial predicate function to use if \code{by} is a simple features object or geometry; see \link{st_join}
+#' @return an \code{sf} object with aggregated attributes and geometries; additional grouping variables having the names of \code{names(ids)} or are named \code{Group.i} for \code{ids[[i]]}; see \link[stats]{aggregate}.
 #' @aliases aggregate
 #' @export
-aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE) {
+aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE, 
+		join = st_intersects) {
 
-	crs = st_crs(x)
-	lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
-	geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
-
-	if (do_union)
-		geom = st_union(geom, by_feature = TRUE)
-	st_geometry(x) = NULL
-	x = aggregate(x, by, FUN, ..., simplify = simplify)
-	st_geometry(x) = geom # coerces to sf
-	st_crs(x) = crs
-
-	# now set agr:
-	geoms = which(vapply(x, function(vr) inherits(vr, "sfc"), TRUE))
-	agr_names = names(x)[-geoms]
-	agr = rep("aggregate", length(agr_names))
-	names(agr) = agr_names
-	# which ones are identity variables?
-	n = if (!is.null(names(by)))
-		names(by)
-	else
-		paste0("Group.", seq_along(by))
-	agr[n] = "identity"
-	st_agr(x) = agr
-
-	x
+	if (inherits(by, "sf") || inherits(by, "sfc")) {
+		if (inherits(by, "sfc"))
+			by = st_sf(by)
+		i = join(st_geometry(by), st_geometry(x))
+		st_geometry(x) = NULL
+		# dispatch to stats::aggregate:
+		a = aggregate(x[unlist(i), , drop = FALSE], 
+			list(rep(seq_len(nrow(by)), lengths(i))), FUN, ...)
+		a$Group.1 = NULL
+		st_set_geometry(a, st_geometry(by)[lengths(i) > 0])
+	} else {
+		crs = st_crs(x)
+		lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
+		geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
+	
+		if (do_union)
+			geom = st_union(geom, by_feature = TRUE)
+		st_geometry(x) = NULL
+		x = aggregate(x, by, FUN, ..., simplify = simplify)
+		st_geometry(x) = geom # coerces to sf
+		st_crs(x) = crs
+	
+		# now set agr:
+		geoms = which(vapply(x, function(vr) inherits(vr, "sfc"), TRUE))
+		agr_names = names(x)[-geoms]
+		agr = rep("aggregate", length(agr_names))
+		names(agr) = agr_names
+		# which ones are identity variables?
+		n = if (!is.null(names(by)))
+			names(by)
+		else
+			paste0("Group.", seq_along(by))
+		agr[n] = "identity"
+		st_agr(x) = agr
+	
+		x
+	}
 }
 
 
