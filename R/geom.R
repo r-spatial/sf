@@ -285,21 +285,23 @@ st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE)
 #' @details \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 	if (prepared)
-		stop("prepared geometries not supported for st_equals")
+		stop("prepared geometries not supported for st_equals_exact")
 	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
 }
 
 #' @name geos_binary_pred
 #' @export
 #' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-#' @details st_is_within_distance returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
-st_is_within_distance = function(x, y, dist, sparse = TRUE) {
+#' @details \code{st_is_within_distance} returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
+st_is_within_distance = function(x, y, dist, sparse = TRUE, prepared = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_is_within_distance only supported for Cartesian coordinates")
 	if (! is.na(st_crs(x))) {
 		p = crs_parameters(st_crs(x))
 		units(dist) = p$ud_unit
 	}
+	if (prepared)
+		stop("prepared geometries not supported for st_is_within_distance")
 	st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse)
 }
 
