@@ -13,7 +13,7 @@ st_area(x)
 
 st_length(x, dist_fun = geosphere::distGeo)
 
-st_distance(x, y, dist_fun)
+st_distance(x, y, dist_fun, by_element = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -21,6 +21,8 @@ st_distance(x, y, dist_fun)
 \item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
+
+\item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 }
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}.
@@ -29,7 +31,7 @@ st_area returns the area of a geometry, in the coordinate reference system used;
 
 st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
-st_distance returns a dense numeric matrix of dimension length(x) by length(y)
+if \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
 \description{
 Compute Euclidian or great circle distance between pairs of geometries
@@ -42,6 +44,9 @@ dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, 
 line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 st_length(line)
 st_length(line, dist_fun = dist_vincenty)
+p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
+st_distance(p, p)
+st_distance(p, p, by_element = TRUE)
 }
 \seealso{
 \link{st_dimension}

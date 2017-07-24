@@ -120,14 +120,23 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
-#' @return st_distance returns a dense numeric matrix of dimension length(x) by length(y)
+#' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
+#' @return if \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 #' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+#' @examples
+#' p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
+#' st_distance(p, p)
+#' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, dist_fun) {
+st_distance = function(x, y, dist_fun, by_element = FALSE) {
 	if (missing(y))
 		y = x
 	else
 		stopifnot(st_crs(x) == st_crs(y))
+
+	if (by_element)
+		return(mapply(st_distance, x, y, by_element = FALSE))
+
 	x = st_geometry(x)
 	y = st_geometry(y)
 	if (!is.na(st_crs(x)))

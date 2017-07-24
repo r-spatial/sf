@@ -297,6 +297,15 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 > all.equal(x, y)
 [1] TRUE
 > 
+> p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
+> st_distance(p, p)
+     [,1] [,2] [,3]
+[1,]    0    1    2
+[2,]    1    0    1
+[3,]    2    1    0
+> st_distance(p, p, by_element = TRUE)
+[1] 0 0 0
+> 
 > proc.time()
    user  system elapsed 
-  3.648   0.308   3.655 
+  3.764   0.244   3.756 

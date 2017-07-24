@@ -1,5 +1,7 @@
 # version 0.5-3
 
+* `st_distance` gains a parameter `by_element` to obtain pairwise distances; #437
+
 * add the ability to `aggregate` using a simple feature `by` argument; #429
 
 * make the `op` argument to `[.sf` work

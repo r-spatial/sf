@@ -102,3 +102,7 @@ try(st_is_within_distance(nc_3857, nc_3857, 100000, sparse = FALSE))
 x = st_is_within_distance(nc_3857, nc_3857, 100000)
 y = st_is_within_distance(nc_3857, nc_3857, units::set_units(100, km))
 all.equal(x, y)
+
+p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
+st_distance(p, p)
+st_distance(p, p, by_element = TRUE)
