@@ -1,4 +1,6 @@
 suppressPackageStartupMessages(library(sf))
+library(testthat)
+
 p = st_point(c(1/3,1/6))
 st_sfc(p, precision = 1000)
 st_as_sfc(st_as_binary(st_sfc(p, precision = 0L)))
@@ -23,7 +25,13 @@ st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
 
-st_geometry(d) = st_as_sfc(d$geom)
+d$geom = st_as_sfc(d$geom)
+d1 = d
+attr(d1, "sf_col") = "geom"
+st_geometry(d1) = d$geom
+
+d$geometry = d$geom # second geometry list-column
+expect_warning(st_geometry(d) <- d$geom)
 d
 
 x = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326)

@@ -1,11 +1,11 @@
 ---
-title: "4. Manipulating Simple Feature"
+title: "4. Manipulating Simple Features"
 output:
   html_document:
     toc: true
     theme: united
 vignette: >
-  %\VignetteIndexEntry{3. Manipulating Simple Feature Geometries}
+  %\VignetteIndexEntry{4. Manipulating Simple Features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
