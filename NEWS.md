@@ -1,6 +1,8 @@
 # version 0.5-3
 
-* make `op` argument to `[.sf` work
+* add the ability to `aggregate` using a simple feature `by` argument; #429
+
+* make the `op` argument to `[.sf` work
 
 * speed up `st_coordinates` for `POINT` geometries; #433
 
