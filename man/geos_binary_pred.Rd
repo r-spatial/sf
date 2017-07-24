@@ -53,7 +53,7 @@ st_covered_by(x, y, sparse = TRUE, prepared = TRUE)
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
 
-st_is_within_distance(x, y, dist, sparse = TRUE)
+st_is_within_distance(x, y, dist, sparse = TRUE, prepared = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -83,7 +83,7 @@ See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more de
 
 \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 
-st_is_within_distance returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
+\code{st_is_within_distance} returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use \code{st_distance(x,y) <= dist} to obtain the corresponding dense logical matrix.
 }
 \examples{
 pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))

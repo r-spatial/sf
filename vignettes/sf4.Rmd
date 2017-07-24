@@ -72,7 +72,9 @@ Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the
 nc <- nc %>% mutate(frac74 = SID74 / BIR74)
 (a <- aggregate(nc[,"frac74"], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), mean))
 plot(a[2], col = c(grey(.8), grey(.5)))
+plot(st_geometry(Ashe), border = '#ff8888', add = TRUE, lwd = 2)
 ```
+
 `Group.1` indicates the grouping variable
 
 ## Joining two feature sets based on spatial properties
