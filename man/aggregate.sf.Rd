@@ -29,3 +29,20 @@ an \code{sf} object with aggregated attributes and geometries; additional groupi
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
 }
+\examples{
+m1 = cbind(c(0, 0, 1, 0), c(0, 1, 1, 0))
+m2 = cbind(c(0, 1, 1, 0), c(0, 0, 1, 0))
+pol = st_sfc(st_polygon(list(m1)), st_polygon(list(m2)))
+library(sf)
+set.seed(1985)
+d = data.frame(matrix(runif(15), ncol = 3))
+p = st_as_sf(x = d, coords = 1:2)
+plot(pol)
+plot(p, add = TRUE)
+(p_ag = aggregate(p, pol, mean))
+plot(p_ag) # geometry same as pol
+# works when x overlaps multiple objects in 'by':
+p_buff = st_buffer(p, 0.2)
+plot(p_buff, add = TRUE)
+aggregate(p_buff, pol, mean) # increased mean of second
+}
