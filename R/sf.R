@@ -304,7 +304,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		if (nargs == 2) # `[`(x,i)
 			x[i]
 		else
-			x[i,]
+			x[i, , drop = drop]
 	} else
 		x[i, j, drop = drop]
 
