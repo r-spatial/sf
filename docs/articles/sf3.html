@@ -56,6 +56,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -90,12 +93,12 @@
     
     
 <div class="contents">
-<p>This vignetted describes how simple features can be manipulated, where manipulations include</p>
+<p>This vignetted describes how simple feature geometries can be manipulated, where manipulations include</p>
 <ul>
 <li>type transformations (e.g., <code>POLYGON</code> to <code>MULTIPOLYGON</code>)</li>
 <li>affine transformation (shift, scale, rotate)</li>
 <li>transformation into a different coordinate reference system</li>
-<li>geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of features intersect, or find the union (overlap) of two polygons.</li>
+<li>geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of feature geometries intersect, or find the union (overlap) of two polygons.</li>
 </ul>
 <div id="type-transformations" class="section level2">
 <h2 class="hasAnchor">
@@ -114,10 +117,8 @@
 </ol>
 <p>Examples of the first three types are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.1.3, proj.4 4.9.2, lwgeom 2.3.2 r15302
+## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
 <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(dplyr))
-## Warning: Installed Rcpp (0.12.12) different from Rcpp used to build dplyr (0.12.11).
-## Please reinstall dplyr to avoid random crashes or undefined behavior.
 <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"MULTIPOINT"</span>)
 ## MULTIPOINT(1 1)
 <span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)

@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -108,16 +111,16 @@
     <p>Return Well-known Text representation of simple feature geometry or coordinate reference system</p>
     
 
-    <pre class="usage"><span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='co'># S3 method for crs</span>
+<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'># S3 method for crs</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -131,12 +134,12 @@
       <td><p>passed on to WKT_name</p></td>
     </tr>
     <tr>
-      <th>EWKT</th>
-      <td><p>logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available</p></td>
-    </tr>
-    <tr>
       <th>pretty</th>
       <td><p>logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system</p></td>
+    </tr>
+    <tr>
+      <th>EWKT</th>
+      <td><p>logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available</p></td>
     </tr>
     </table>
     

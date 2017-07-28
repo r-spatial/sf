@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -109,7 +112,8 @@
     
 
     <pre class="usage"><span class='co'># S3 method for sf</span>
-<span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>do_union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>aggregate</span>(<span class='no'>x</span>, <span class='no'>by</span>, <span class='no'>FUN</span>, <span class='no'>...</span>, <span class='kw'>do_union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -120,7 +124,7 @@
     </tr>
     <tr>
       <th>by</th>
-      <td><p>(see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>): a list of grouping elements, each as long as the variables in the data frame x. The elements are coerced to factors before use.</p></td>
+      <td><p>either a list of grouping elements, each as long as the variables in the data frame <code>x</code> (see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code>, the geometries of which are used to find aggregation groups of <code>x</code> by using function <code>join</code></p></td>
     </tr>
     <tr>
       <th>FUN</th>
@@ -138,13 +142,44 @@
       <th>simplify</th>
       <td><p>logical; see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></p></td>
     </tr>
+    <tr>
+      <th>join</th>
+      <td><p>logical spatial predicate function to use if <code>by</code> is a simple features object or geometry; see <a href='st_join.html'>st_join</a></p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an <code>sf</code> object with aggregated attributes and geometries, with additional grouping variables having the names of <code>names(ids)</code> or named <code>Group.i</code> for <code>ids[[i]]</code>; see the <code>data.frame</code> method of <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>.</p>
+    <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>=</span> <span class='fu'>cbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+<span class='no'>m2</span> <span class='kw'>=</span> <span class='fu'>cbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+<span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>m1</span>)), <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>m2</span>)))
+<span class='fu'>library</span>(<span class='no'>sf</span>)
+<span class='fu'>set.seed</span>(<span class='fl'>1985</span>)
+<span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='fu'>matrix</span>(<span class='fu'>runif</span>(<span class='fl'>15</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>))
+<span class='no'>p</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
+<span class='fu'>plot</span>(<span class='no'>pol</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>p</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='aggregate.sf-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>(<span class='no'>p_ag</span> <span class='kw'>=</span> <span class='fu'>aggregate</span>(<span class='no'>p</span>, <span class='no'>pol</span>, <span class='no'>mean</span>))</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; geometry type:  POLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;          X3                      geometry
+#&gt; 1 0.5951766 POLYGON((0 0, 0 1, 1 1, 0 0))
+#&gt; 2 0.2997908 POLYGON((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'>plot</span>(<span class='no'>p_ag</span>) <span class='co'># geometry same as pol</span></div><div class='input'><span class='co'># works when x overlaps multiple objects in 'by':</span>
+<span class='no'>p_buff</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='no'>p</span>, <span class='fl'>0.2</span>)
+<span class='fu'>plot</span>(<span class='no'>p_buff</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='aggregate.sf-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>aggregate</span>(<span class='no'>p_buff</span>, <span class='no'>pol</span>, <span class='no'>mean</span>) <span class='co'># increased mean of second</span></div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; geometry type:  POLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt;          X3                      geometry
+#&gt; 1 0.5951766 POLYGON((0 0, 0 1, 1 1, 0 0))
+#&gt; 2 0.5958297 POLYGON((0 0, 1 0, 1 1, 0 0))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -152,7 +187,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

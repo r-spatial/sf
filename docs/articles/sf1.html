@@ -56,6 +56,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -249,7 +252,7 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.1.3, proj.4 4.9.2, lwgeom 2.3.2 r15302
+## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields

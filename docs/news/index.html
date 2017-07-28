@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -110,6 +113,12 @@
 <h1 class="hasAnchor">
 <a href="#version-0-5-3" class="anchor"></a>version 0.5-3</h1>
 <ul>
+<li><p><code>st_distance</code> gains a parameter <code>by_element</code> to obtain pairwise distances; #437</p></li>
+<li><p>add the ability to <code>aggregate</code> using a simple feature <code>by</code> argument; #429</p></li>
+<li><p>make the <code>op</code> argument to <code>[.sf</code> work</p></li>
+<li><p>speed up <code>st_coordinates</code> for <code>POINT</code> geometries; #433</p></li>
+<li><p>fix performance regression for <code>st_bbox</code>; #418</p></li>
+<li><p>correct bug in <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> introduced in 0.5-2; #431</p></li>
 <li><p>inform gdal about the CRS always through the proj4string, never through the epsg; see #424</p></li>
 <li><p>properly deal with kilometre units; #424 (fixed by Karl Dunkle Werner)</p></li>
 <li><p>add <code>st_is_within_distance</code>, only to return a sparse index matrix; #419</p></li>
