@@ -66,7 +66,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' @param FUN deprecated;
 #' @param suffix length 2 character vector; see \link[base]{merge}
 #' @param prepared logical; see \link{st_intersects}
-#' @param left logical; if \code{TRUE} carry out left join, else inner join; 
+#' @param left logical; if \code{TRUE} carry out left join, else inner join;
 #' see also \link[dplyr]{left_join}
 #' @param ... arguments passed on to the \code{join} function (e.g. a pattern for \link{st_relate})
 #' @details alternative values for argument \code{join} are: \link{st_disjoint}
@@ -86,7 +86,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' library(dplyr)
 #' st_join(a, b) %>% group_by(a.x) %>% summarise(mean(a.y))
 #' @export
-st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), 
+st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 		prepared = TRUE, left = TRUE, ...) {
 	stopifnot(inherits(x, "sf") && inherits(y, "sf"))
 	if (!missing(FUN)) {

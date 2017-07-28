@@ -66,7 +66,7 @@ test_that("st_precision()", {
 })
 
 test_that("st_precision() works for sf", {
-    x <- st_as_sf(data.frame("a" = 1), 
+    x <- st_as_sf(data.frame("a" = 1),
                   st_sfc(st_point(c(pi, pi)), precision = 1e-4))
     expect_equal(st_precision(x), 1e-4)
     expect_error(st_set_precision(x, NULL))

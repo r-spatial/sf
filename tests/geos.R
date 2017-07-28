@@ -9,14 +9,14 @@ st_distance(x)
 
 st_is_valid(nc)
 
-ops = c("intersects", #"disjoint", 
+ops = c("intersects", #"disjoint",
 "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 for (op in ops) {
 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, FALSE)
 	x = sf:::st_geos_binop(op, ncm[1:50,], ncm[51:100,], 0, NA_character_, TRUE)
 }
 
-ops = c("intersects", #"disjoint", 
+ops = c("intersects", #"disjoint",
 "touches", "crosses", "within", "contains", "overlaps", "covers", "covered_by")
 df = data.frame(ops = ops)
 df$equal = NA
@@ -31,7 +31,7 @@ st_contains_properly(ncm[1:3,], ncm[1:3])
 
 st_combine(nc)
 
-st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
+st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))),
 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
 
 g = st_make_grid(nc)

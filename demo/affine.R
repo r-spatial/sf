@@ -11,12 +11,12 @@ outer = rbind(c(-1,-1), c(1, -1), c(1, 1), c(-1, 1), c(-1, -1))
 hole = a * outer[5:1,]
 
 # only shift:
-p = st_sfc(lapply(0:n, 
+p = st_sfc(lapply(0:n,
 	function(i) { st_polygon(list(outer, hole)) * rot(0) * b^i + drift * i * b ^ i } ))
 plot(p, col = grey(0:n/n), border = 0)
 
 # shift + rotate:
-p = st_sfc(lapply(0:n, 
+p = st_sfc(lapply(0:n,
 	function(i) { st_polygon(list(outer, hole)) * rot(i * ang) * b ^ i + drift * i * b ^ i } ))
 p
 plot(p, col = grey(0:n/n), border = 0)

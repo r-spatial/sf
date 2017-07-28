@@ -78,11 +78,11 @@
 
 * fix bug where `geom_sf` wouldn't deal with Z and/or M geoms; #373
 
-* return more conveniently typed empty geoms; #372 
+* return more conveniently typed empty geoms; #372
 
 * fix subsetting with `[` of `sf` using `drop = TRUE`, #370
 
-* in addition to `m`, allow `rad` units to `st_segmentize` 
+* in addition to `m`, allow `rad` units to `st_segmentize`
 
 * add example how to `st_read` GeoJSON from a string; #185
 
@@ -186,13 +186,13 @@
 
 * add `st_coordinates` method, returning coordinates matrix with indexes
 
-* remove `unlist.sfg` 
+* remove `unlist.sfg`
 
 * add `as.matrix.sfg`; have as.matrix.sfg add indexes to coordinates
 
 * add `st_bind_cols` method
 
-* improve handling features that can't be projected 
+* improve handling features that can't be projected
 
 * support uniform sampling over polygons on the sphere
 

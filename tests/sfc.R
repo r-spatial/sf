@@ -20,7 +20,7 @@ st_as_sfc(c("POINT(0 0)", "POINT(1 1)"))
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"))
 st_as_sfc(character(0))
 st_as_sfc(character(0), 4326)
-st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
+st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
@@ -79,9 +79,9 @@ st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POL
 st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
 
 
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast() 
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
-	st_cast() %>% 
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast()
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>%
+	st_cast() %>%
 	st_cast("POINT")
 
 p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
@@ -93,7 +93,7 @@ st_length(st_sfc(st_point(c(0,0))))
 try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 
 # check conus is present:
-x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
+x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 	crs = "+proj=longlat +datum=NAD27")
 st_transform(x, 3857)
 

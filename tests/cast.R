@@ -7,8 +7,8 @@ mp = st_sfc(st_multipoint(matrix(0:3,,2)), st_multipoint(matrix(10:15,,2)))
 st_cast(ls, "MULTIPOINT")
 
 # column 2:
-mls = st_sfc(st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)), 
-	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))), 
+mls = st_sfc(st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)),
+	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))),
 	st_multilinestring(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1)))))
 (pol = st_cast(mls, "POLYGON"))
 st_cast(pol, "MULTILINESTRING")
@@ -32,8 +32,8 @@ st_cast(st_cast(g, "MULTILINESTRING"), "LINESTRING") # will not loose
 
 gc = st_sfc(st_geometrycollection(
   list(
-    st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)), 
-	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))), 
+    st_multilinestring(list(rbind(c(0,0), c(10,0), c(10,10), c(0,10)),
+	rbind(c(5,5),c(5,6), c(6,6), c(6,5)))),
 	st_multilinestring(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1)))),
 	st_point(0:1)
   )))

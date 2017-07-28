@@ -37,7 +37,7 @@ st_agr.factor = function(x, ...) {
 }
 
 #' @export
-st_agr.default = function(x = NA_character_, ...) { 
+st_agr.default = function(x = NA_character_, ...) {
 	stopifnot(all(is.na(x)))
 	structure(st_agr(as.character(x)), names = names(x))
 }
@@ -53,7 +53,7 @@ st_agr.default = function(x = NA_character_, ...) {
 	nv = setdiff(names(x), attr(x, "sf_column"))
 	if (length(value) == 0)
 		attr(x, "agr") = NA_agr_[0]
-	else if (! is.null(names(value)) && length(value) == 1) { 
+	else if (! is.null(names(value)) && length(value) == 1) {
 		# as in: st_agr(x) = c(Group.1 = "identity"): replace one particular named
 		if (!is.null(attr(x, "agr")))
 			attr(x, "agr")[names(value)] = st_agr(value)
@@ -79,7 +79,7 @@ st_agr.default = function(x = NA_character_, ...) {
 
 #' @name st_agr
 #' @export
-st_set_agr = function(x, value) { 
+st_set_agr = function(x, value) {
 	st_agr(x) = value
 	x
 }

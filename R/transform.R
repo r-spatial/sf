@@ -1,7 +1,7 @@
 #' Transform or convert coordinates of simple feature
-#' 
+#'
 #' Transform or convert coordinates of simple feature
-#' 
+#'
 #' @param x object of class sf, sfc or sfg
 #' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
 #' @param ... ignored
@@ -23,14 +23,14 @@ chk_pol = function(x, dim = class(x)[1]) {
 			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
 		y
 	}
-	if (length(x) > 0 && nrow(x[[1]]) > 2) 
+	if (length(x) > 0 && nrow(x[[1]]) > 2)
 		PolClose(x)
 	else
 		st_polygon(dim = dim)
 }
 
 chk_mpol = function(x) {
-	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1])))
 	empty = if (length(cln))
 			lengths(cln) == 0
 		else
@@ -102,7 +102,7 @@ st_transform.sf = function(x, crs, ...) {
 #' @name st_transform
 #' @export
 #' @details the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
-#' @examples 
+#' @examples
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
@@ -116,14 +116,14 @@ st_transform.sfg = function(x, crs , ...) {
 #' @param type character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}
 #' @export
 #' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
-#' @examples 
+#' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {
     opts <- c("proj", "ellps", "datum", "units")
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)
 	res = CPL_proj_info(as.integer(t))
-    if (type == "proj") 
+    if (type == "proj")
 		res$description <- sapply(strsplit(as.character(res$description), "\n"),
 			function(x) x[1])
     data.frame(res)

@@ -15,9 +15,9 @@ st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
 			not_na = !is.na(st_is_valid(g))
 			ret[not_na] = st_is_valid(g[not_na], FALSE, TRUE)
 			ret
-		} else 
+		} else
 			CPL_geos_is_valid_reason(st_geometry(x))
-	} else if (! NA_on_exception) 
+	} else if (! NA_on_exception)
 		CPL_geos_is_valid(st_geometry(x), as.logical(NA_on_exception))
 	else {
 		x = st_geometry(x)

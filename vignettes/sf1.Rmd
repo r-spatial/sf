@@ -601,11 +601,11 @@ Unit: milliseconds
  kml_read_sf()    8.132629    8.268952   10.44328    8.52626    9.420043
         max neval   cld
  5186.16240    10     e
-  376.64045    10   c  
+  376.64045    10   c
  5282.25874    10     e
  1178.42358    10    d
-  189.29191    10  b   
-   26.20221    10 a    
+  189.29191    10  b
+   26.20221    10 a
 ```
 
 This shows that `sf::st_read()` is substantially faster than

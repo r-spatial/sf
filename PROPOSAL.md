@@ -4,7 +4,7 @@ Applicant: [Edzer Pebesma](https://github.com/edzer/), [Institute for Geoinforma
 
 Supporting authors: Edzer Pebesma, Roger Bivand, Michael Sumner, Robert Hijmans, Virgilio Gómez-Rubio
 
-[Simple features](https://en.wikipedia.org/wiki/Simple_Features) is an open ([OGC](http://www.opengeospatial.org/standards/sfa) and [ISO](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114)) interface standard for access and manipulation of spatial vector data (points, lines, polygons). It includes a standard [SQL schema](http://www.opengeospatial.org/standards/sfs) that supports storage, retrieval, query and update of feature collections via a SQL interface. All commonly used databases provide this interface. [GeoJSON](http://geojson.org/) is a standard for encoding simple features in JSON, and is used in JavaScript and MongoDB. Well-known-text ([WKT](https://en.wikipedia.org/wiki/Well-known_text)) is a text representation of simple features used often in linked data; well-known-binary ([WKB] (https://en.wikipedia.org/wiki/Well-known_text)) a standard binary representation used in databases. _Simple Feature Access_ defines coordinate reference systems, and makes it easy to move data from longitude-latitude to projections back and forth in a standardized way. 
+[Simple features](https://en.wikipedia.org/wiki/Simple_Features) is an open ([OGC](http://www.opengeospatial.org/standards/sfa) and [ISO](http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114)) interface standard for access and manipulation of spatial vector data (points, lines, polygons). It includes a standard [SQL schema](http://www.opengeospatial.org/standards/sfs) that supports storage, retrieval, query and update of feature collections via a SQL interface. All commonly used databases provide this interface. [GeoJSON](http://geojson.org/) is a standard for encoding simple features in JSON, and is used in JavaScript and MongoDB. Well-known-text ([WKT](https://en.wikipedia.org/wiki/Well-known_text)) is a text representation of simple features used often in linked data; well-known-binary ([WKB] (https://en.wikipedia.org/wiki/Well-known_text)) a standard binary representation used in databases. _Simple Feature Access_ defines coordinate reference systems, and makes it easy to move data from longitude-latitude to projections back and forth in a standardized way.
 
 
 [GDAL](http://gdal.org/) is an open source C++ library for reading and writing both raster and vector data with more than 225 drivers (supported file formats, data base connectors, web service interfaces). GDAL is used by practically all open source geospatial projects and by many industry products (including ESRI's ArcGIS, ERDAS, and FME). It provides coordinate transformations (built on top of PROJ.4) and geometric operations (e.g. polygon intersections, unions, buffers and distance). Standards for coordinate transformations change over time; such changes are typically adopted directly in GDAL/PROJ.4 but do not easily find their way into R-only packages such as `mapproj`.
@@ -50,7 +50,7 @@ Failure modes and recovery plan:
 
 1. Failure mode: S3 classes are too simple to represent simple
 features class hierarchy. Recovery plan: try (i) using a list column
-with geometry, and nested lists to represent nested structures; (ii) 
+with geometry, and nested lists to represent nested structures; (ii)
 use a `WKT` character column; (iii) using a `WKB` blob column
 
 2. Migrating `sp` breaks downstream packages. Recovery plan: involve

@@ -25,7 +25,7 @@ WKB_MULTILINESTRING = function(m = 1, n = 2, p = 2) {
 
 mls = WKB_MULTILINESTRING(1, 5e5)
 ls1 = WKB_LINESTRING(1, 1e6)
-ls2 = WKB_LINESTRING(5e5, 2) 
+ls2 = WKB_LINESTRING(5e5, 2)
 
 system.time(sf::st_as_sfc(mls, pureR = TRUE))
 system.time(sf::st_as_sfc(mls))
