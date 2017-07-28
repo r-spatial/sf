@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -129,13 +132,28 @@
 <span class='co'># S3 method for GEOMETRYCOLLECTION</span>
 <span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for CIRCULARSTRING</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTISURFACE</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for COMPOUNDCURVE</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for CURVE</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
 <span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
 <span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'>seq_along</span>(<span class='no'>x</span>), <span class='kw'>group_or_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>do_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>do_split</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S3 method for sfc_CIRCULARSTRING</span>
+<span class='fu'>st_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">

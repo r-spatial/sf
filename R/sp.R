@@ -177,15 +177,19 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 ##  doesn't work for:
 ## as(st_point(0:1), "Spatial")
 
+#' Methods to coerce simple feature objects to \code{Spatial*} objects
+#' @rdname coerce-methods
+#' @param from object of class \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}. 
+#' @param cast logical; if \code{TRUE}, \link{st_cast} \code{from} before converting, so that e.g. \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.
+#' @param IDs character vector with IDs for the \code{Spatial*} geometries
+#' @return geometry-only object deriving from \code{Spatial}, of the appropriate class
 as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
-
 	if (cast)
-		from <- st_cast(from)
-
+		from = st_cast(from)
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp")
-	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM")) 
+	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM"))
 		stop("Z not supported: use st_zm first to drop Z?") }
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),

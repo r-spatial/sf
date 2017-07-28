@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -229,15 +232,20 @@ handled with care; the former may erase complete directories or databases.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>)</div><div class='output co'>#&gt; Dataset /home/edzer/git/sfr/docs/reference/nc.shp already exists: remove first, use update=TRUE to append,
-#&gt; delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.</div><div class='output co'>#&gt; <span class='error'>Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),     as.character(layer_options), geom, dim, quiet, update, delete_dsn,     delete_layer): Dataset already exists.</span></div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>, <span class='kw'>delete_layer</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># overwrites</span></div><div class='output co'>#&gt; Deleting layer `nc' using driver `ESRI Shapefile'
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>)</div><div class='output co'>#&gt; Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'
+#&gt; features:       100
+#&gt; fields:         14
+#&gt; geometry type:  Multi Polygon</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"nc.shp"</span>, <span class='kw'>delete_layer</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># overwrites</span></div><div class='output co'>#&gt; Deleting layer `nc' using driver `ESRI Shapefile'
 #&gt; Writing layer `nc' to data source `/home/edzer/git/sfr/docs/reference/nc.shp' using driver `ESRI Shapefile'
 #&gt; features:       100
 #&gt; fields:         14
 #&gt; geometry type:  Multi Polygon</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>) <span class='co'># loads data.frame from sp</span>
 <span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>)
-<span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span>) <span class='co'># writes X and Y as columns</span></div><div class='output co'>#&gt; Dataset /home/edzer/git/sfr/docs/reference/meuse.csv already exists: remove first, use update=TRUE to append,
-#&gt; delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.</div><div class='output co'>#&gt; <span class='error'>Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),     as.character(layer_options), geom, dim, quiet, update, delete_dsn,     delete_layer): Dataset already exists.</span></div><div class='input'><span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>, <span class='kw'>delete_dsn</span><span class='kw'>=</span><span class='fl'>TRUE</span>) <span class='co'># overwrites</span></div><div class='output co'>#&gt; Deleting source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
+<span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span>) <span class='co'># writes X and Y as columns</span></div><div class='output co'>#&gt; Writing layer `meuse' to data source `meuse.csv' using driver `CSV'
+#&gt; options:        GEOMETRY=AS_XY 
+#&gt; features:       155
+#&gt; fields:         12
+#&gt; geometry type:  Point</div><div class='input'><span class='fu'>st_write</span>(<span class='no'>meuse_sf</span>, <span class='st'>"meuse.csv"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>, <span class='kw'>delete_dsn</span><span class='kw'>=</span><span class='fl'>TRUE</span>) <span class='co'># overwrites</span></div><div class='output co'>#&gt; Deleting source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
 #&gt; Writing layer `meuse' to data source `/home/edzer/git/sfr/docs/reference/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_WKT 
 #&gt; features:       155

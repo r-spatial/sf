@@ -76,6 +76,9 @@
     <li>
       <a href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
     </li>
+    <li>
+      <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -108,58 +111,43 @@
     <p>Return bounding of a simple feature or simple feature set</p>
     
 
-    <pre class="usage"><span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+    <pre class="usage">NA_bbox_
 
-<span class='co'># S3 method for POINT</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+st_bbox(obj)
 
-<span class='co'># S3 method for MULTIPOINT</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{POINT}(obj)
 
-<span class='co'># S3 method for LINESTRING</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{MULTIPOINT}(obj)
 
-<span class='co'># S3 method for POLYGON</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{LINESTRING}(obj)
 
-<span class='co'># S3 method for MULTILINESTRING</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{POLYGON}(obj)
 
-<span class='co'># S3 method for MULTIPOLYGON</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{MULTILINESTRING}(obj)
 
-<span class='co'># S3 method for GEOMETRYCOLLECTION</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{MULTIPOLYGON}(obj)
 
-<span class='co'># S3 method for sfc_POINT</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{GEOMETRYCOLLECTION}(obj)
 
-<span class='co'># S3 method for sfc_MULTIPOINT</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{MULTISURFACE}(obj)
 
-<span class='co'># S3 method for sfc_LINESTRING</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{MULTICURVE}(obj)
 
-<span class='co'># S3 method for sfc_POLYGON</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{CURVEPOLYGON}(obj)
 
-<span class='co'># S3 method for sfc_MULTILINESTRING</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{COMPOUNDCURVE}(obj)
 
-<span class='co'># S3 method for sfc_MULTIPOLYGON</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{POLYHEDRALSURFACE}(obj)
 
-<span class='co'># S3 method for sfc_GEOMETRYCOLLECTION</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{TIN}(obj)
 
-<span class='co'># S3 method for sfc_GEOMETRY</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{TRIANGLE}(obj)
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)
+\method{st_bbox}{CIRCULARSTRING}(obj)
 
-<span class='co'># S3 method for sf</span>
-<span class='fu'>st_bbox</span>(<span class='no'>obj</span>)</pre>
+\method{st_bbox}{sfc}(obj)
+
+\method{st_bbox}{sf}(obj)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -170,6 +158,10 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>bbox</code> of length 4.</p>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a numeric vector of length four, with <code>xmin</code>, <code>ymin</code>, <code>xmax</code>
@@ -178,6 +170,10 @@ returned has a class <code>bbox</code>, an attribute <code>crs</code> and a meth
 bbox and an <code>st_crs</code> method to retrieve the coordinate reference system 
 corresponding to <code>obj</code> (and hence the bounding box).</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>NA_bbox_</code> is the <code>bbox</code> object with a missing value.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -185,7 +181,11 @@ corresponding to <code>obj</code> (and hence the bounding box).</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#format">Format</a></li>
+
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>
