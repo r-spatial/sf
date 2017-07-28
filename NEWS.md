@@ -1,5 +1,7 @@
 # version 0.5-3
 
+* export `as_Spatial`, to make it easer for packages to convert `sfc` objects without importing `sf`
+
 * `st_distance` gains a parameter `by_element` to obtain pairwise distances; #437
 
 * add the ability to `aggregate` using a simple feature `by` argument; #429
