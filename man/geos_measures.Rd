@@ -7,7 +7,7 @@
 \alias{st_length}
 \alias{geos_measures}
 \alias{st_distance}
-\title{Compute distance between pairs of geometries}
+\title{Compute geometric measurements}
 \usage{
 st_area(x)
 
@@ -34,7 +34,7 @@ st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using 
 if \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
 \description{
-Compute Euclidian or great circle distance between pairs of geometries
+Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.
 }
 \details{
 function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.

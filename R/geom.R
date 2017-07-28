@@ -113,9 +113,9 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 		ret[[1]]
 }
 
-#' Compute distance between pairs of geometries
+#' Compute geometric measurements
 #'
-#' Compute Euclidian or great circle distance between pairs of geometries
+#' Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
@@ -170,7 +170,7 @@ st_distance = function(x, y, dist_fun, by_element = FALSE) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
+#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -186,7 +186,7 @@ st_distance = function(x, y, dist_fun, by_element = FALSE) {
 #' st_relate(grd, pattern = "****0****") # only corners touch
 #' st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 #' st_rook(grd)
-#' # queen neighbours, see https://github.com/r-spatial/sf/issues/234#issuecomment-300511129
+#' # queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
 #' st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 	if (!is.na(pattern)) {
@@ -196,8 +196,6 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 		st_geos_binop("relate", x, y, sparse = FALSE)
 }
 
-# @return vector, matrix, or if \code{sparse=TRUE} a list representing a sparse logical matrix; if dense: matrix of type \code{character} for \code{st_relate}, of type \code{numeric} for \code{st_distance}, and \code{logical} for all others; matrix has dimension \code{NROW(x)} by \code{NROW(y)}; if sparse (only for logical predicates): a list of length \code{NROW(x)}, with entry \code{i} an integer vector with the \code{TRUE} indices for that row (if \code{m} is the dense matrix, list entry \code{l[[i]]} is identical to \code{which(m[i,])}).
-
 #' Geometric binary predicates on pairs of simple feature geometry sets
 #'
 #' Geometric binary predicates on pairs of simple feature geometry sets
@@ -206,7 +204,8 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
 #' @return if \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=TRUE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
-#' @details for most predicates, a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html
+#' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
+#' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
@@ -258,7 +257,7 @@ st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
 #' @export
 #' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 #'
-#' See also \link{st_relate} and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
+#' See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
 st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
 	if (! prepared)
 		stop("non-prepared geometries not supported for st_contains_properly")
@@ -663,9 +662,9 @@ ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
 #' Combine several feature geometries into one, with or without resolving internal boundaries
 #' @name geos_combine
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @return \code{st_combine} returns a single, combined geometry, with no resolved boundaries
+#' @return \code{st_combine} returns a single, combined geometry, with no resolved boundaries.
 #' @export
-#' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg}; \code{st_union} (with \code{by_feature = FALSE}) combines and resolves internal boundaries if \code{y} is missing and \code{by_feature = FALSE}.
+#' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg} (analogous to \link[base]{c} for ordinary vectors).
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_combine(nc)
@@ -710,16 +709,17 @@ get_first_sfg = function(x) {
 		x[[1]]
 }
 
-#' Geometric binary operations on pairs of simple feature geometry sets
+#' Geometric operations on pairs of simple feature geometry sets
 #'
-#' Geometric binary operations on pairs of simple feature geometry sets
+#' Perform geometric set operations with simple feature geometry collections
 #' @name geos_binary_ops
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
-#' @return an object of the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n x 2} matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details a spatial index is built on argument \code{x}; see http://r-spatial.org/r/2017/06/22/spatial-index.html ; the referenece for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997; for the pdf, search google scholar.
-#' @seealso \link{st_union}
+#' @return The intersection, difference or symmetric difference between two sets of geometries.
+#' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
+#' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The referenece for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 st_intersection = function(x, y) UseMethod("st_intersection")
 
@@ -738,7 +738,7 @@ st_intersection.sf = function(x, y)
 #' @name geos_binary_ops
 #' @export
 #' @examples
-#' # a helper function that erases all of y from x:
+#' # A helper function that erases all of y from x:
 #' st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
 st_difference = function(x, y) UseMethod("st_difference")
 
@@ -772,12 +772,13 @@ st_sym_difference.sf = function(x, y)
 
 #' @name geos_combine
 #' @export
-#' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature with the union the set of features
-#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param ... ignored;
+#' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features
+#' @param y object of class \code{sf}, \code{sfc} or \code{sfg} (optional)
+#' @param ... ignored
 #' @seealso \link{st_intersection}, \link{st_difference}, \link{st_sym_difference}
-#' @return if \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j]
-#' @details if \code{st_union} is called with a single argument \code{x} (\code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned; if \code{by_feature} is \code{TRUE} each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is not missing, all elements of \code{x} and \code{y} are unioned, pairwise (and \code{by_feature} is ignored). The former corresponds to \link[rgeos]{gUnaryUnion}, the latter to \link[rgeos]{gUnion}.
+#' @return If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j].
+#' @details
+#' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise (and \code{by_feature} is ignored). The former corresponds to \link[rgeos]{gUnaryUnion}, the latter to \link[rgeos]{gUnion}.
 #'
 #' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
 #' @examples
