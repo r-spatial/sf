@@ -1,5 +1,9 @@
 # version 0.5-3
 
+* allow for arith ops on empty `sfc` objects
+
+* have `st_graticule` return an empty `sf` when argument `datum` is `NA`
+
 * export `as_Spatial`, to make it easer for packages to convert `sfc` objects without importing `sf`
 
 * `st_distance` gains a parameter `by_element` to obtain pairwise distances; #437

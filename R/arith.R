@@ -78,15 +78,22 @@ conform = function(vec, m) {
 
 #' @export
 Ops.sfc <- function(e1, e2) {
+
+	if (length(e1) == 0) # empty set
+		return(e1)
+
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
+
 	if (!is.list(e2))
 		e2 = list(e2)
+
 	ret = switch(.Generic,
 		"*" = mapply(function(x, y) { x * unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		"+" = mapply(function(x, y) { x + unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		"-" = mapply(function(x, y) { x - unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		"%%" = mapply(function(x, y) { x %% unclass(y) }, e1, e2, SIMPLIFY = FALSE),
 		stop(paste("operation", .Generic, "not supported")))
+
 	st_sfc(ret, crs = NA_integer_, precision = attr(e1, "precision"))
 }

@@ -74,8 +74,11 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	if (is.null(crs))
 		crs = NA_crs_
 	
-	if (is.null(datum) || is.na(datum))
+	if (is.null(datum))
 		datum = crs
+
+	if (is.na(datum))
+		return(st_sf(geom = st_sfc()))
 
 	# Get the bounding box of the plotting space, in crs
 	bb = if (inherits(x, "sf") || inherits(x, "sfc") || inherits(x, "sfg"))
