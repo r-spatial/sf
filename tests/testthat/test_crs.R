@@ -5,10 +5,10 @@ test_that("st_crs works", {
   nc2 = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
   nc3 = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = NA, quiet = TRUE)
   crs_4267 <- structure(
-    list(epsg = 4267L, proj4string = "+proj=longlat +datum=NAD27 +no_defs"), 
+    list(epsg = 4267L, proj4string = "+proj=longlat +datum=NAD27 +no_defs"),
     class = "crs")
   crs_na <- structure(
-    list(epsg = NA_integer_, 
+    list(epsg = NA_integer_,
          proj4string = NA_character_), class = "crs")
   expect_equal(st_crs(nc2), crs_4267)
   expect_equal(st_crs(nc3), crs_na)
@@ -45,6 +45,6 @@ test_that("st_proj_info works", {
 test_that("$.crs works", {
   expect_true(is.numeric(st_crs("+init=epsg:3857")$epsg))
   expect_true(is.character(st_crs("+init=epsg:3857")$proj4string))
-  expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) 
+  expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b))
   expect_true(is.character(st_crs("+init=epsg:3857 +units=km")$units))
 })

@@ -2,8 +2,8 @@
 #' @details
 #' \code{NA_bbox_} is the \code{bbox} object with a missing value.
 #' @export
-NA_bbox_ = structure(rep(NA_real_, 4), 
-	names = c("xmin", "ymin", "xmax", "ymax"), 
+NA_bbox_ = structure(rep(NA_real_, 4),
+	names = c("xmin", "ymin", "xmax", "ymax"),
 	crs = NA_crs_,
 	class = "bbox")
 
@@ -23,25 +23,25 @@ bbox.Set = function(obj) {
 		bb_wrap(CPL_get_bbox(unclass(obj)[sel], 0))
 }
 bbox.Mtrx = function(obj) {
-	if (length(obj) == 0) 
+	if (length(obj) == 0)
 		NA_bbox_
 	else
 		bb_wrap(CPL_get_bbox(list(obj), 1)) # note the list()
 }
 bbox.MtrxSet = function(obj) {
-	if (length(obj) == 0) 
+	if (length(obj) == 0)
 		NA_bbox_
 	else
 		bb_wrap(CPL_get_bbox(obj, 1))
 }
 bbox.MtrxSetSet = function(obj) {
-	if (length(obj) == 0) 
+	if (length(obj) == 0)
 		NA_bbox_
 	else
 		bb_wrap(CPL_get_bbox(obj, 2))
 }
 bbox.MtrxSetSetSet = function(obj) {
-	if (length(obj) == 0) 
+	if (length(obj) == 0)
 		NA_bbox_
 	else
 		bb_wrap(CPL_get_bbox(obj, 3))
@@ -55,7 +55,7 @@ bbox.MtrxSetSetSet = function(obj) {
 #' @return a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
 #' and \code{ymax} values; if \code{obj} is of class \code{sf} or \code{sfc}, the object
 #' returned has a class \code{bbox}, an attribute \code{crs} and a method to print the
-#' bbox and an \code{st_crs} method to retrieve the coordinate reference system 
+#' bbox and an \code{st_crs} method to retrieve the coordinate reference system
 #' corresponding to \code{obj} (and hence the bounding box).
 #' @name st_bbox
 st_bbox = function(obj) UseMethod("st_bbox")
@@ -84,7 +84,7 @@ bbox_list = function(obj) {
 	if (length(s) == 0 || all(is.na(s[1L,])))
 		NA_bbox_
 	else
-		bb_wrap(c(min(s[1L,], na.rm = TRUE), min(s[2L,], na.rm = TRUE), 
+		bb_wrap(c(min(s[1L,], na.rm = TRUE), min(s[2L,], na.rm = TRUE),
 		  max(s[3L,], na.rm = TRUE), max(s[4L,], na.rm = TRUE)))
 }
 #' @export
@@ -126,7 +126,7 @@ print.bbox = function(x, ...) {
 	print(unclass(x))
 }
 
-compute_bbox = function(obj) { 
+compute_bbox = function(obj) {
 	switch(class(obj)[1],
 		sfc_POINT = bb_wrap(bbox.Set(obj)),
 		sfc_MULTIPOINT = bb_wrap(bbox.MtrxSet(obj)),

@@ -69,10 +69,10 @@ test_that("geos ops give warnings and errors on longlat", {
 test_that("st_area() works on GEOMETRY in longlat (#131)", {
   single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
   multi <- list(single + 2, single + 4) %>% st_multipolygon()
-  
+
   w <- st_sfc(single, multi)
   expect_equal(st_area(w), 1:2)
-  expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(), 
+  expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(),
                c(12308778361, 24570125261))
 })
 
@@ -90,33 +90,33 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_silent(st_buffer(pnc, 1000))
   expect_silent(st_buffer(gpnc, 1000))
   expect_silent(st_buffer(gpnc[[1L]], 1000))
-  
+
   expect_silent(st_boundary(pnc))
   expect_that(st_boundary(gpnc), is_a("sfc_MULTILINESTRING"))
   expect_that(st_boundary(gpnc[[1L]]), is_a("MULTILINESTRING"))
-  
+
   expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
   expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
   expect_true(inherits(st_convex_hull(gpnc[[1L]]), "POLYGON"))
-  
+
   expect_silent(st_simplify(pnc, FALSE, 1e4))
   expect_silent(st_simplify(gpnc, FALSE, 1e4))
   expect_silent(st_simplify(gpnc[[1L]], FALSE, 1e4))
 
-  if (sf:::CPL_geos_version() >= "3.4.0") {  
+  if (sf:::CPL_geos_version() >= "3.4.0") {
    expect_silent(st_triangulate(pnc))
    expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
    expect_that(st_triangulate(gpnc[[1]]), is_a("GEOMETRYCOLLECTION"))
   }
-  
+
   expect_silent(st_polygonize(lnc))
-  expect_silent(st_polygonize(glnc)) 
-  expect_silent(st_polygonize(glnc[[1]])) 
-  
+  expect_silent(st_polygonize(glnc))
+  expect_silent(st_polygonize(glnc[[1]]))
+
   expect_that(st_line_merge(lnc), is_a("sf"))
   expect_that(st_line_merge(glnc), is_a("sfc"))
   expect_that(st_line_merge(glnc[[4]]), is_a("sfg"))
-  
+
   expect_silent(st_centroid(lnc))
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
   expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
@@ -124,7 +124,7 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_silent(st_point_on_surface(lnc))
   expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
   expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
-  
+
   expect_silent(st_segmentize(lnc, 10000))
   expect_silent(st_segmentize(glnc, 10000))
   expect_silent(st_segmentize(glnc[[1]], 10000))

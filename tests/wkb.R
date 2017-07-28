@@ -47,7 +47,7 @@ rawToHex(st_as_binary(st_multipoint(matrix(1:6,3))))
 rawToHex(st_as_binary(st_sfc(st_point(c(0,1)), st_multipoint(matrix(1:6,3)))))
 try(rawToHex("error"))
 
-# debug roundtrips sf -> GDAL -> sf; 
+# debug roundtrips sf -> GDAL -> sf;
 # the first WKT is what GDAL reports, and will lack M
 st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYZ")))))
 st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYZ")))))

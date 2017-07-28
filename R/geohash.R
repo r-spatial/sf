@@ -1,7 +1,7 @@
 #' compute geohash from (average) coordinates (requires lwgeom)
 #'
 #' compute geohash from (average) coordinates (requires lwgeom)
-#' 
+#'
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param precision integer; precision (length) of geohash returned; when omitted, precision 10 is taken.
 #' @export

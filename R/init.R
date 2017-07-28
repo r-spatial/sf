@@ -59,7 +59,7 @@ setOldClass("sfg")
 }
 
 #' Provide the external dependencies versions of the libraries linked to sf
-#' 
+#'
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {

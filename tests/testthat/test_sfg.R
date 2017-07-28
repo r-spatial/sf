@@ -40,9 +40,9 @@ test_that("xx2multixx works", {
 
 test_that("format works", {
 	expect_identical(format(st_multipoint(matrix(1:6/6,3))), "MULTIPOINT(0.16666666666666...")
-	expect_identical(format(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
+	expect_identical(format(st_sfc(st_multipoint(matrix(1:6/6,3)))),
 		"MULTIPOINT(0.16666666666666...")
-	expect_identical(obj_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
+	expect_identical(obj_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))),
 		"MULTIPOINT(0...")
 	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "simple_feature")
 })

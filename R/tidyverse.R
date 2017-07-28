@@ -1,7 +1,7 @@
 ## dplyr methods:
 
 #' Dplyr verb methods for sf objects
-#' 
+#'
 #' Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let code{dplyr}'s own methods drop them.
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
@@ -108,7 +108,7 @@ transmute.sf <- transmute_.sf
 #' nc %>% select(SID74, SID79) %>% class()
 #' nc %>% select(SID74, SID79, geometry) %>% class()
 select_.sf <- function(.data, ..., .dots = NULL) {
-  .dots <- c(.dots, attr(.data, "sf_column")) 
+  .dots <- c(.dots, attr(.data, "sf_column"))
   ret = NextMethod()
   structure(ret, agr = st_agr(ret))
 }
@@ -129,7 +129,7 @@ select.sf <- function(.data, ...) {
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
 	st_as_sf(ret)
-} 
+}
 
 
 #' @name dplyr
@@ -211,10 +211,10 @@ summarise_.sf = summarise.sf
 #' @param gather_cols see original function docs
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
-#' @examples 
+#' @examples
 #' library(tidyr)
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
-gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
+gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 		convert = FALSE, factor_key = FALSE) {
 	st_as_sf(NextMethod())
 }
@@ -228,10 +228,10 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #' @examples
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
-#' nc %>% select(SID74, SID79, geometry, row) %>% 
-#'		gather(VAR, SID, -geometry, -row) %>% 
+#' nc %>% select(SID74, SID79, geometry, row) %>%
+#'		gather(VAR, SID, -geometry, -row) %>%
 #'		spread(VAR, SID) %>% head()
-spread_.sf <- function(data, key_col, value_col, fill = NA, 
+spread_.sf <- function(data, key_col, value_col, fill = NA,
 		convert = FALSE, drop = TRUE, sep = NULL) {
 	data <- as.data.frame(data)
 	st_as_sf(NextMethod())

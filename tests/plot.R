@@ -65,9 +65,9 @@ plot(st_sfc(mp1, mpo1))
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 plot(nc)
 plot(nc, axes = TRUE)
-plot(nc, col="lightgrey") 
-nc %>% 
-  select(geometry) %>% 
+plot(nc, col="lightgrey")
+nc %>%
+  select(geometry) %>%
   plot()
 
 # test background map plotting:
@@ -77,7 +77,7 @@ WGS84 = st_crs(4326)
 nc = st_transform(nc, WGS84)
 ## ggmap:
 #library(ggmap)
-#bgMap = get_map(unname(st_bbox(nc)), source = "google", zoom = 8) 
+#bgMap = get_map(unname(st_bbox(nc)), source = "google", zoom = 8)
 plot(st_transform(nc[1], merc), bgMap = bgMap)
 
 # RgoogleMaps:

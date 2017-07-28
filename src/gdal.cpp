@@ -36,7 +36,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
         case 4:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
-            break;        
+            break;
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
             break; // #nocov
@@ -310,7 +310,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		dest->Release(); // #nocov
 		Rcpp::stop("CPL_transform: zero length geometry list"); // #nocov
 	}
-	OGRCoordinateTransformation *ct = 
+	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
 		dest->Release(); // #nocov
@@ -334,7 +334,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
 	dest->Release();
-	return ret; 
+	return ret;
 }
 
 // [[Rcpp::export]]

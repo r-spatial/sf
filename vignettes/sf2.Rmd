@@ -85,7 +85,7 @@ and layers in a datasource, e.g.
 
 ```{r eval=FALSE}
 > st_layers("PG:dbname=postgis")
-Driver: PostgreSQL 
+Driver: PostgreSQL
 Available layers:
   layer_name geometry_type features fields
 1      meuse         Point      155     12
@@ -93,7 +93,7 @@ Available layers:
 3       sids Multi Polygon      100     14
 4  meuse_tbl         Point      155     13
 5 meuse_tbl2         Point      155     13
-> 
+>
 ```
 
 A particular layer can now be read by e.g.
@@ -154,7 +154,7 @@ How the guessing of drivers works is explained in the next section.
 
 The output driver is guessed from the datasource name, either from
 its extension (`.shp`: `ESRI Shapefile`), or its prefix (`PG:`:
-`PostgreSQL`). The list of extensions with corresponding driver 
+`PostgreSQL`). The list of extensions with corresponding driver
 (short driver name) is:
 
 | extension| driver short name |
@@ -207,7 +207,7 @@ table already exists in a database: append records to the table
 or overwrite it:
 
 ```{r eval=FALSE}
-st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
+st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
     layer_options = "OVERWRITE=true")
 ```
 
@@ -229,11 +229,11 @@ So far, testing has mainly be done with `PostGIS`, other databases
 might work but may also need more work. An example of reading is:
 
 ```{r eval=FALSE}
-library(RPostgreSQL) 
-conn = dbConnect(PostgreSQL(), dbname = "postgis") 
+library(RPostgreSQL)
+conn = dbConnect(PostgreSQL(), dbname = "postgis")
 meuse = st_read_db(conn, "meuse")
-meuse_1_3 = st_read_db(conn, query = "select * from meuse limit 3;") 
-dbDisconnect(conn) 
+meuse_1_3 = st_read_db(conn, query = "select * from meuse limit 3;")
+dbDisconnect(conn)
 ```
 
 We see here that in the second example a query is given. This
@@ -327,7 +327,7 @@ opar = par(mar=rep(0,4))
 plot(m.sf)
 ```
 
-Conversion of simple feature objects of class `sf` or `sfc` into corresponding 
+Conversion of simple feature objects of class `sf` or `sfc` into corresponding
 `Spatial*` objects is done using the `as` method, coercing to `Spatial`:
 
 ```{r}

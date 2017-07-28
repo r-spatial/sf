@@ -13,7 +13,7 @@ test_that("separate and unite work", {
   expect_true(st_read(system.file("shape/nc.shp", package="sf")) %>%
     separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
   expect_true(st_read(system.file("shape/nc.shp", package="sf")) %>%
-    separate(CNTY_ID, c("a", "b"), sep = 2) %>% 
+    separate(CNTY_ID, c("a", "b"), sep = 2) %>%
 	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
 })
 

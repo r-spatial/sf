@@ -1,5 +1,5 @@
 #' Return a collection of geometries resulting by splitting a geometry
-#' 
+#'
 #' @name st_split
 #' @param x object with geometries to be splitted
 #' @param y object split with (blade); if \code{y} contains more than one feature geometry, the geometries are \link{st_combine}d

@@ -36,7 +36,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 
 // this is like an unlist -> dbl, but only does the first 6; if we'd do unlist on the POSIXlt
 // object, we'd get a character vector...
-Rcpp::NumericVector get_dbl6(Rcpp::List in) { 
+Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 	Rcpp::NumericVector ret(6);
 	for (int i = 0; i < 6; i++) {
 		Rcpp::NumericVector x = in(i);
@@ -116,7 +116,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				} break;
 			default:
 				// we should never get here! // #nocov start
-				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
+				Rcpp::Rcout << "field with unsupported type ignored" << std::endl;
 				Rcpp::stop("Layer creation failed.\n");
 				break; // #nocov end
 		}
@@ -152,10 +152,10 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 
 	// data set:
 	std::vector <char *> options = create_options(dco, quiet);
-	GDALDataset *poDS; 
+	GDALDataset *poDS;
 
 	// delete layer:
-	if (delete_layer && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
+	if (delete_layer && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL,
 				options.data(), NULL)) != NULL) { // don't complain if the layer is not present
 		// find & delete layer:
 		bool deleted = false;
@@ -168,7 +168,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 						Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'"  // #nocov
 							<< std::endl; // #nocov
 					else  {
-						Rcpp::Rcout << "Deleting layer `" << layer[0] << "' using driver `" << 
+						Rcpp::Rcout << "Deleting layer `" << layer[0] << "' using driver `" <<
 							driver[0] << "'" << std::endl;
 					}
 				}
@@ -180,21 +180,21 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
 		GDALClose(poDS);
 	}
-	
+
 	// update ds:
-	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
+	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL,
 				options.data(), NULL)) != NULL) {
 		if (! quiet)
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
-	} else { // create new ds: 
+	} else { // create new ds:
 		// error when it already exists:
-		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 					options.data(), NULL)) != NULL) {
 			GDALClose(poDS);
-			Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-				" already exists: remove first, use update=TRUE to append," << std::endl <<  
-				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing." 
+			Rcpp::Rcout << "Dataset " <<  dsn[0] <<
+				" already exists: remove first, use update=TRUE to append," << std::endl <<
+				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing."
 				<< std::endl;
 			Rcpp::stop("Dataset already exists.\n");
 		}

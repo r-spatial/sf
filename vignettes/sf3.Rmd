@@ -19,7 +19,7 @@ manipulated, where manipulations include
 
 * type transformations (e.g., `POLYGON` to `MULTIPOLYGON`)
 * affine transformation (shift, scale, rotate)
-* transformation into a different coordinate reference system 
+* transformation into a different coordinate reference system
 * geometrical operations, e.g. finding the centroid of a polygon, detecting whether pairs of feature geometries intersect, or find the union (overlap) of two polygons.
 
 ## Type transformations
@@ -33,7 +33,7 @@ For single geometries, `st_cast` will
 1. convert from XX to MULTIXX, e.g. `LINESTRING` to `MULTILINESTRING`
 2. convert from MULTIXX to XX if MULTIXX has length one (else, it will still convert but warn about loss of information)
 3. convert from MULTIXX to XX if MULTIXX does not have length one, but it will warn about the loss of information
-4. convert GEOMETRYCOLLECTION of length one to its component if 
+4. convert GEOMETRYCOLLECTION of length one to its component if
 
 Examples of the first three types are
 ```{r}
@@ -58,9 +58,9 @@ class(st_geometry(st_read(shp, quiet = TRUE, type = 3)))
 class(st_geometry(st_read(shp, quiet = TRUE, type = 1)))
 ```
 
-This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost. 
+This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost.
 
-When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it.
 
 ```{r}
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
@@ -138,7 +138,7 @@ s2 = s
 st_crs(s2) <- "+proj=longlat +datum=WGS84"
 all.equal(s1, s2)
 ```
-an alternative, more pipe-friendly version of `st_crs<-` is 
+an alternative, more pipe-friendly version of `st_crs<-` is
 ```{r}
 s1 %>% st_set_crs(4326)
 ```
@@ -153,7 +153,7 @@ did not reproject values:
 s3 <- s1 %>% st_set_crs(4326) %>% st_set_crs(3857)
 ```
 A cleaner way to do this that better expresses intention and does
-not generate this warning is to first wipe the CRS by assigning it 
+not generate this warning is to first wipe the CRS by assigning it
 a missing value, and then setting it to the intended value.
 ```{r}
 s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
@@ -201,7 +201,7 @@ st_is_valid(st_sfc(b0,b1))
 ```
 and `st_is_simple` whether line geometries are simple:
 ```{r}
-s = st_sfc(st_linestring(rbind(c(0,0), c(1,1))), 
+s = st_sfc(st_linestring(rbind(c(0,0), c(1,1))),
 	st_linestring(rbind(c(0,0), c(1,1),c(0,1),c(1,0))))
 st_is_simple(s)
 ```
@@ -228,7 +228,7 @@ st_relate(x,y)
 ```
 element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as $I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y$ where $I$ refers to interior, $B$ to boundary, and $B$ to exterior, and e.g. $B_xI_y$ the dimensionality of the intersection of the the boundary $B_x$ of x[i] and the interior $I_y$ of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.
 
-### Binary logical operations: 
+### Binary logical operations:
 Binary logical operations return either a sparse matrix
 ```{r}
 st_intersects(x,y)
@@ -308,7 +308,7 @@ plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 To get _everything but_ the intersection, use `st_difference` or st_sym_difference`:
 ```{r,fig=TRUE}
 par(mfrow=c(2,2), mar = c(0,0,1,0))
-plot(x, col = '#ff333388'); 
+plot(x, col = '#ff333388');
 plot(y, add=TRUE, col='#33ff3388')
 title("x: red, y: green")
 plot(x, border = 'grey')

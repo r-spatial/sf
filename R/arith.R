@@ -30,7 +30,7 @@ Ops.sfg <- function(e1, e2) {
 
 	if (!(prd || pm || mod))
 		stop(paste("operation", .Generic, "not supported for sfg objects"))
-	
+
 	if (is.na(st_dimension(e1))) # empty:
 		return(e1)
 
@@ -53,7 +53,7 @@ Ops.sfg <- function(e1, e2) {
 			diag(Mat) = e2
 		else
 			Mat = e2
-	} 
+	}
 
 	if_pt = function(x, y) { if(inherits(x, "POINT")) as.vector(y) else y }
 	fn = if (prd)
@@ -62,14 +62,14 @@ Ops.sfg <- function(e1, e2) {
 			function(x, Mat, Vec) structure(if_pt(x, unclass(x) + conform(Vec, x)), class = class(x))
 		else # mod:
 			function(x, Mat, Vec) structure(if_pt(x, unclass(x) %% conform(Vec, x)), class = class(x))
-		
+
 	if (is.list(e1))
 		rapply(e1, fn, how = "replace", Mat = Mat, Vec = Vec)
 	else
 		fn(e1, Mat, Vec)
 }
 
-conform = function(vec, m) { 
+conform = function(vec, m) {
 	if (is.matrix(m))
 		t(matrix(vec, ncol(m), nrow(m)))
 	else

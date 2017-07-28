@@ -21,7 +21,7 @@ std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), get_dim_sfc(sfc, NULL), precision);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
-		const uint8_t *wkb = &(rv[0]); 
+		const uint8_t *wkb = &(rv[0]);
 		lwgeom_v[i] = lwgeom_from_wkb(wkb, rv.size(),
 			LW_PARSER_CHECK_MINPOINTS & LW_PARSER_CHECK_ODD & LW_PARSER_CHECK_CLOSURE);
 	}
@@ -30,7 +30,7 @@ std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 
 // out
 Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
-	Rcpp::List wkblst(lwgeom_v.size()); 
+	Rcpp::List wkblst(lwgeom_v.size());
 	for (int i = 0; i < wkblst.size(); i++) {
 		size_t size;
 		const uint8_t *wkb = lwgeom_to_wkb(lwgeom_v[i], WKB_EXTENDED, &size);

@@ -76,7 +76,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 
 int to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool points = false, multipoints = false,
-		lines = false, multilines = false, 
+		lines = false, multilines = false,
 		polygons = false, multipolygons = false;
 
 	for (unsigned int i = 0; i < gv.size(); i++) {
@@ -127,7 +127,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		Rcpp::stop("argument datasource should have length 1.\n"); // #nocov
 	std::vector <char *> open_options = create_options(options, false);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	poDS = (GDALDataset *) GDALOpenEx(datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 		open_options.data(), NULL);
 	if (poDS == NULL) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
@@ -189,13 +189,13 @@ std::vector<OGRGeometry *> replace_null_with_empty(std::vector<OGRGeometry *> po
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 		open_options.data(), NULL );
 	if( poDS == NULL ) {
 		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
@@ -307,9 +307,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
 						&Second, &TZFlag);
 					//  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
-					Rcpp::List dtlst = 
-						Rcpp::List::create((double) Second, (double) Minute, 
-						(double) Hour, (double) Day, (double) Month - 1, (double) Year - 1900, 
+					Rcpp::List dtlst =
+						Rcpp::List::create((double) Second, (double) Minute,
+						(double) Hour, (double) Day, (double) Month - 1, (double) Year - 1900,
 						0.0, 0.0, 0.0);
 					dtlst.attr("class") = "POSIXlt";
 					if (TZFlag == 100)
@@ -369,7 +369,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 					for (int j = 0; j < iv.size(); j++)
 						iv(j) = psField->IntegerList.paList[j];
 					lv[i] = iv;
-					} 
+					}
 					break; // #nocov end
 				default: // break through: anything else to be converted to string?
 				case OFTString: {
@@ -416,8 +416,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom); // transfer ownership
 				if (geom == NULL)
 					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType); // #nocov
-				else if ((geom = 
-						OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL)) 
+				else if ((geom =
+						OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL))
 						== NULL)
 					Rcpp::stop("OGRGeometryFactory::forceTo returned NULL"); // #nocov
 				handle_error(poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom));
@@ -438,7 +438,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	}
 
 	if (warn_int64)
-		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 << 
+		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 <<
 			" lost significance after conversion to double;" << std::endl <<
 			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
 

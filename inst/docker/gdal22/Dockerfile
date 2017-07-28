@@ -55,8 +55,7 @@ RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 
 RUN R CMD build rgdal/pkg --no-build-vignettes
-RUN R CMD INSTALL rgdal_1.2-7.tar.gz 
+RUN R CMD INSTALL rgdal_1.2-7.tar.gz
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]
-

@@ -12,7 +12,7 @@ test_that("we can subset sf objects", {
 
   a = c("x", "y")
   g = st_sfc(pt1, pt2)
-  expect_silent(xxx <- st_sf(a, g, g)) 
+  expect_silent(xxx <- st_sf(a, g, g))
   expect_silent(st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2"))
   x = st_sf(a, geom1 = g, geom2 = g, sf_column_name = "geom2")
   expect_silent(st_geometry(x) <- "geom2")
@@ -73,5 +73,5 @@ test_that("st_as_sf bulk points work", {
   expect_identical(class(xyz_sf), c("sf", "data.frame"))
   expect_identical(class(xym_sf), c("sf", "data.frame"))
   expect_identical(class(xyzm_sf), c("sf", "data.frame"))
-  
+
 })

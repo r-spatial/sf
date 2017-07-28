@@ -26,7 +26,7 @@ library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 nc <- st_transform(nc, 2264)
 nc[1,]
-``` 
+```
 prints the first record.
 
 Many of the tidyverse/dplyr verbs have methods for `sf` objects. This means that given that both `sf` and `dplyr` are loaded, manipulations such as selecting a single attribute will return an `sf` object:

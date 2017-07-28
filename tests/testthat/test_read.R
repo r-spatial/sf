@@ -32,7 +32,7 @@ test_that("guess_driver works on extensions", {
   # for repeatability, this is how I turned the list to tests
   # `^"(\w+)" = ("[\w\s]+"),?`
   # to `expect_equal(guess_driver("nc.\1"), c("\1" = \2))`
-  
+
   expect_equal(guess_driver("nc.bna"), c("bna" = "BNA"))
   expect_equal(guess_driver("nc.csv"), c("csv" = "CSV"))
   expect_equal(guess_driver("nc.e00"), c("e00" = "AVCE00"))
@@ -42,7 +42,7 @@ test_that("guess_driver works on extensions", {
   expect_equal(guess_driver("nc.gmt"), c("gmt" = "GMT"))
   expect_equal(guess_driver("nc.gpkg"), c("gpkg" = "GPKG"))
   expect_equal(guess_driver("nc.gps"), c("gps" = "GPSBabel"))
-  expect_equal(guess_driver("nc.gtm"), c("gtm" = "GPSTrackMaker"))   
+  expect_equal(guess_driver("nc.gtm"), c("gtm" = "GPSTrackMaker"))
   expect_equal(guess_driver("nc.gxt"), c("gxt" = "Geoconcept"))
   expect_equal(guess_driver("nc.kml"), c("kml" = "KML"))
   expect_equal(guess_driver("nc.jml"), c("jml" = "JML"))
@@ -57,7 +57,7 @@ test_that("guess_driver works on extensions", {
   expect_equal(guess_driver("nc.vdv"), c("vdv" = "VDV"))
   expect_equal(guess_driver("nc.xls"), c("xls" = "xls"))
   expect_equal(guess_driver("nc.xlsx"), c("xlsx" = "XLSX"))
-  
+
   # unsuported
   expect_equal(guess_driver("nc.notsupported"), NA)
 })
@@ -66,7 +66,7 @@ test_that("guess_driver works on suffixes", {
   # for repeatability, this is how I turned the list to tests
   # `^"(\w+)" = ("[\w\s]+"),?`
   # to `expect_equal(guess_driver("nc.\1"), c("\1" = \2))`
-  
+
   expect_equal(guess_driver("couchdb:nc"), c("couchdb" = "CouchDB"))
   expect_equal(guess_driver("db2odbc:nc"), c("db2odbc" = "DB2ODBC"))
   expect_equal(guess_driver("dods:nc"), c("dods" = "DODS"))
@@ -77,7 +77,7 @@ test_that("guess_driver works on suffixes", {
   expect_equal(guess_driver("odbc:nc"), c("odbc" = "ODBC"))
   expect_equal(guess_driver("pg:nc"), c("pg" = "PostgreSQL"))
   expect_equal(guess_driver("sde:nc"), c("sde" = "SDE"))
-  
+
   # upper case
   expect_equal(guess_driver("CouchDB:nc"), c("couchdb" = "CouchDB"))
   expect_equal(guess_driver("db2ODBC:nc"), c("db2odbc" = "DB2ODBC"))
@@ -89,7 +89,7 @@ test_that("guess_driver works on suffixes", {
   expect_equal(guess_driver("ODBC:nc"), c("odbc" = "ODBC"))
   expect_equal(guess_driver("PG:nc"), c("pg" = "PostgreSQL"))
   expect_equal(guess_driver("SDE:nc"), c("sde" = "SDE"))
-  
+
   # unsuported
   expect_equal(guess_driver("notsupported:nc"), NA)
 })
@@ -99,7 +99,7 @@ test_that("weird names are supported", {
   expect_equal(guess_driver("pg:nc.shp.e00"), c("pg" = "PostgreSQL"))
   expect_equal(guess_driver("nc.shp.e00"), c("e00" = "AVCE00"))
   expect_equal(guess_driver("couchdb:shp"), c("couchdb" = "CouchDB"))
-  
+
   expect_equal(guess_driver("notsupported:nc.shp"), NA)
   expect_equal(guess_driver("notsupported"), NA)
 })
@@ -109,7 +109,7 @@ test_that("driver utils work", {
   expect_true(is_driver_available("shp", data.frame(name = c("shp"))))
   expect_false(is_driver_available("shp", data.frame(name = c("x", "y", "z"))))
   expect_false(is_driver_available("shp", data.frame(name = c("x", "y", "z"))))
-  
+
   expect_error(is_driver_can("shp", data.frame(name = c("x", "y", "shp")), operation = "nothing"))
   expect_error(is_driver_can("shp", data.frame(name = c("x", "y")), operation = "nothing"))
   expect_true(is_driver_can("shp", data.frame(name = c("x", "y", "shp"), write = rep(TRUE, 3)), operation = "write"))
@@ -121,23 +121,23 @@ test_that("guess_driver_can_write", {
   expect_error(guess_driver_can_write("x.not", c("nothing" = "nothing")), "not available")
   expect_equal(guess_driver_can_write("x.csv"), c("csv" = "CSV"))
   expect_equal(guess_driver_can_write("c:/x.csv"), c("csv" = "CSV"))
-  
+
   expect_error(guess_driver_can_write("x.unsuported"), "Could not guess driver")
   expect_error(guess_driver_can_write("unsuported:x"), "Could not guess driver")
 })
 
-test_that("driver operations", {  
+test_that("driver operations", {
   # These tests are driver specifics to GDAL version and OS.
   expect_error(guess_driver_can_write("x.e00"), "cannot write")
   expect_error(guess_driver_can_write("x.gdb"), "cannot write")
-  
+
   expect_equal(guess_driver_can_write("x.geojson"), c("geojson" = "GeoJSON"))
   expect_equal(guess_driver_can_write("x.csv"), c("csv" = "CSV"))
   expect_equal(guess_driver_can_write("x.gml"), c("gml" = "GML"))
 })
 
 test_that("guess driver on windows with backslashes (#127)", {
-    expect_identical(guess_driver("c:\\Temp\\this.shp"), 
+    expect_identical(guess_driver("c:\\Temp\\this.shp"),
                      guess_driver("c:/Temp/this.shp"))
 })
 

@@ -38,7 +38,7 @@ b = nc[4:10,]
 
 x <- st_intersection(a[1,] ,b)
 
-u = st_union(b) 
+u = st_union(b)
 
 x <- st_intersection(st_geometry(a), st_geometry(u))
 

@@ -24,7 +24,7 @@ prnt.LINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.Matrix(x))
 prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
-prnt.GEOMETRYCOLLECTION = function(x, ...) 
+prnt.GEOMETRYCOLLECTION = function(x, ...)
 	paste0(WKT_name(x, ...), "(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
 
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
