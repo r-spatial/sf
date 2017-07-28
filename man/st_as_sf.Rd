@@ -26,7 +26,7 @@ st_as_sf(x, ...)
 \arguments{
 \item{x}{object to be converted into an object class \code{sf}}
 
-\item{...}{passed on to \link{st_sf}, might included crs}
+\item{...}{passed on to \link{st_sf}, might included \code{crs}}
 
 \item{agr}{character vector; see details section of \link{st_sf}}
 

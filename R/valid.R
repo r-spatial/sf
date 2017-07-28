@@ -31,7 +31,7 @@ st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
 #' Make an invalid geometry valid
 #' @name valid
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
-#' @return object of the same class as \code{x}
+#' @return Object of the same class as \code{x}
 #' @details \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid}. It is only available if the package was linked against liblwgeom, which is currently not the case for the binary CRAN distributions; see the package source code repository for instructions how to install liblwgeom. The example below shows how to run-time check the availability of liblwgeom.
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))

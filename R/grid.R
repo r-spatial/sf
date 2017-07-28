@@ -45,7 +45,7 @@ st_as_grob.MULTILINESTRING = function(x, ..., default.units = "native") {
 	else {
 		get_x = function(x) unlist(sapply(x, function(y) y[,1]))
 		get_y = function(x) unlist(sapply(x, function(y) y[,2]))
-		polylineGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ..., 
+		polylineGrob(get_x(x), get_y(x), id.lengths = vapply(x, nrow, 0L), ...,
 			default.units = default.units)
 	}
 }
@@ -92,15 +92,15 @@ st_as_grob.COMPOUNDCURVE = st_as_grob.GEOMETRYCOLLECTION
 
 
 #' Create viewport from sf, sfc or sfg object
-#' 
+#'
 #' Create viewport from sf, sfc or sfg object
 #' @param x object of class sf, sfc or sfg object
 #' @param bbox the bounding box used for aspect ratio
 #' @param asp numeric; target aspect ratio (y/x), see Details
 #' @param ... parameters passed on to \link[grid]{viewport}
-#' @details parameters width, height, xscale and yscale are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as ...
-#' @return the output of the call to \link[grid]{viewport}
-#' @details if \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longlat(x))}, in which case it is set to \code{1.0 /cos(y)}, with \code{y} the middle of the latitude bounding box.
+#' @details parameters \code{width}, \code{height}, \code{xscale} and \code{yscale} are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as \code{...}
+#' @return The output of the call to \link[grid]{viewport}
+#' @details If \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longlat(x))}, in which case it is set to \code{1.0 /cos(y)}, with \code{y} the middle of the latitude bounding box.
 #' @examples
 #' library(grid)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -130,7 +130,7 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 			1.0 / cos((mean(yscale) * pi)/180)
 		else
 			1.0
-	
+
    	obj.asp = asp * diff(yscale) / diff(xscale)
 	height = obj.asp / vp.asp
    	width = 1

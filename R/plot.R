@@ -4,7 +4,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used
-#' @param max.plot integer; lower boundary to maximium number of attributes to plot (defaults to 9)
+#' @param max.plot integer; lower boundary to maximum number of attributes to plot (defaults to 9)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -367,7 +367,7 @@ plot.sfg = function(x, ...) {
 #' The default aspect for map plots is 1; if however data are not
 #' projected (coordinates are long/lat), the aspect is by default set to
 #' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
-#' (the mean of ylim, which defaults to the y range of bounding box). This
+#' (the mean of \code{ylim}, which defaults to the y range of bounding box). This
 #' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 #'
 plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ...,

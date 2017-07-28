@@ -67,15 +67,15 @@ NA_crs_
 
 \item{wkt}{character well-known-text representation of the crs}
 
-\item{value}{one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).}
+\item{value}{one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).}
 
-\item{name}{element name; code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
+\item{name}{element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
 }
 \value{
-if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
-object of class \code{crs}, which is a list with elements epsg (length-1 integer) and
-proj4string (length-1 character).
+Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
+\code{proj4string} (length-1 character).
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
@@ -83,23 +83,23 @@ Retrieve coordinate reference system from sf or sfc object
 Set or replace retrieve coordinate reference system from object
 }
 \details{
-the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
-list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
-code) and proj4string (character).
+The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
+list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
+code) and \code{proj4string} (character).
 Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
-(2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent
+(2) they have identical proj4string but one of them has a missing EPSG ID. As a consequence, equivalent
 but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
 are considered different.
 The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
 
-in case a coordinate reference system is replaced, no transformation takes
-place and a warning is raised to stress this. epsg values are either read from proj4strings
+In case a coordinate reference system is replaced, no transformation takes
+place and a warning is raised to stress this. EPSG values are either read from proj4strings
 that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
-and +datum=WGS84, literally
+and +datum=WGS84, literally.
 
-If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when epsg is not consistent with a proj4string that is already present.
+If both \code{epsg} and \code{proj4string} are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when \code{epsg} is not consistent with a proj4string that is already present.
 
-\code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
+\code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
 }
 \examples{
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))

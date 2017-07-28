@@ -48,20 +48,20 @@ MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 }
 
 #return "XY", "XYZ", "XYM", or "XYZM"
-Dimension = function(x) { 
+Dimension = function(x) {
 	stopifnot(inherits(x, "sfg"))
 	class(x)[1]
 }
 
 #' Create simple feature from a numeric vector, matrix or list
-#' 
+#'
 #' Create simple feature from a numeric vector, matrix or list
 #' @param x for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects
 #' @param dim character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details
 #' @name st
 #' @details "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
 #' @return object of the same nature as \code{x}, but with appropriate class attribute set
-#' @examples 
+#' @examples
 #' (p1 = st_point(c(1,2)))
 #' class(p1)
 #' st_bbox(p1)
@@ -156,7 +156,7 @@ st_geometrycollection = function(x = list(), dims = "XY") {
 		dims = unique(cls[1,])
 		if (length(dims) > 1)
 			stop(paste("multiple dimensions found:", paste(dims, collapse = ", ")))
-	} 
+	}
 	structure(x, class = c(dims, "GEOMETRYCOLLECTION", "sfg")) # TODO: no Z/M/ZM modifier here??
 }
 
@@ -195,7 +195,7 @@ head.sfg = function(x, n = 10L, ...) {
 #' @name st
 #' @export
 format.sfg = function(x, ..., digits = 30) {
-	if (is.null(digits)) 
+	if (is.null(digits))
 		digits = 30
 	if (object.size(x) > 1000)
 		x = head(x, 10)
@@ -224,9 +224,9 @@ format.sfg = function(x, ..., digits = 30) {
 #' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
 #'   st_geometrycollection(list(st_multilinestring(list(matrix(11:16,3))))))
 #' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
-#'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
+#'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6),
 #'   st_geometrycollection(list(st_point(10:11))))
-#' @details when \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup. 
+#' @details When \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup. 
 c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 
 	stopifnot(! recursive)
@@ -237,7 +237,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 		cls = vapply(lst, function(x) class(x)[2], "")
 		ucls = unique(cls)
 		if (length(ucls) == 1) {
-			switch(ucls, 
+			switch(ucls,
 				POINT = st_multipoint(do.call(rbind, lst)),
 				# CURVE = st_multicurve(Paste0(lst))
 				# CIRCULARSTRING = st_geometrycollection(lst), # FIXME??
@@ -275,7 +275,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 					ret = append(ret, lst[[wgc[i]]])
 			}
 			st_geometrycollection(ret)
-		} 
+		}
 	} else # !flatten:
 		st_geometrycollection(lst) # breaks if one of them is a GC
 }

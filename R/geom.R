@@ -121,8 +121,8 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
-#' @return if \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
-#' @details function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+#' @return If \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
+#' @details Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 #' @examples
 #' p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 #' st_distance(p, p)
@@ -170,7 +170,7 @@ st_distance = function(x, y, dist_fun, by_element = FALSE) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
+#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -203,7 +203,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
-#' @return if \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=TRUE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=TRUE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
 #' @examples
@@ -718,7 +718,7 @@ get_first_sfg = function(x) {
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The referenece for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 st_intersection = function(x, y) UseMethod("st_intersection")
@@ -780,7 +780,7 @@ st_sym_difference.sf = function(x, y)
 #' @details
 #' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise (and \code{by_feature} is ignored). The former corresponds to \link[rgeos]{gUnaryUnion}, the latter to \link[rgeos]{gUnion}.
 #'
-#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging al identical points (producing a set with no duplicates).
+#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
 st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
@@ -870,7 +870,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @param crs object of class \code{crs}
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
-#' @return object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
+#' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
 #' rectangular polygons, corner points of these polygons, or center points of these polygons.
 #' @examples
 #' plot(st_make_grid(what = "centers"), axes = TRUE)

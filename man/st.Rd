@@ -79,7 +79,7 @@ Create simple feature from a numeric vector, matrix or list
 \details{
 "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
 
-when \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.
+When \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.
 }
 \examples{
 (p1 = st_point(c(1,2)))
@@ -146,6 +146,6 @@ c(st_linestring(matrix(1:6,3)), st_point(1:2))
 c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
   st_geometrycollection(list(st_multilinestring(list(matrix(11:16,3))))))
 c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
-  st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
+  st_multilinestring(list(matrix(11:16,3))), st_point(5:6),
   st_geometrycollection(list(st_point(10:11))))
 }
