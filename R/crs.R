@@ -176,19 +176,50 @@ st_is_longlat = function(x) {
 		isTRUE(crs$proj == "longlat")
 }
 
+# a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
+udunits_from_proj = c(
+	km =       "km",
+	m =        "m",
+	dm =       "dm",
+	cm =       "cm",
+	mm =       "mm",
+	kmi =      "nautical_mile",
+	`in` =     "in",
+	ft =       "ft",
+	yd =       "yd",
+	mi =       "mi",
+	fath =     "fathom",
+	ch =       "chain",
+	link =     "0.201168 m",
+	`us-in` =  "1./39.37 m",
+	`us-ft` =  "US_survey_foot",
+	`us-yd` =  "US_survey_yard",
+	`us-ch` =  "chain",
+	`us-mi` =  "US_survey_mile",
+	`ind-yd` = "0.91439523 m",
+	`ind-ft` = "0.30479841 m",
+	`ind-ch` = "20.11669506 m"
+)
+
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string),
 		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
 	ret$SemiMajor = set_units(ret$SemiMajor, make_unit("m"))
-	ret$ud_unit = switch(ret$units_gdal,
-		"Meter"                = make_unit("m"),
-		"metre"                = make_unit("m"),
-		"Foot_US"              = make_unit("US_survey_foot"),
-		"Foot (International)" = make_unit("ft"),
-		"degree"               = make_unit("arc_degree"),
-		"kilometre"            = make_unit("km"),
-		stop("unknown unit: please file an issue at http://github.com/r-spatial/sf/"))
+#	ret$ud_unit = switch(ret$units_gdal,
+#		"Meter"                = make_unit("m"),
+#		"metre"                = make_unit("m"),
+#		"Foot_US"              = make_unit("US_survey_foot"),
+#		"Foot (International)" = make_unit("ft"),
+#		"degree"               = make_unit("arc_degree"),
+#		"kilometre"            = make_unit("km"),
+#		stop("unknown unit: please file an issue at http://github.com/r-spatial/sf/"))
+	ret$ud_unit = if (isTRUE(st_is_longlat(x)))
+			make_unit("arc_degree")
+		else if (is.null(x$units))
+			make_unit("m")
+		else
+			make_unit(udunits_from_proj[x$units])
 	ret
 }
 

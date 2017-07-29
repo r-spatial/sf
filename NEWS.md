@@ -1,8 +1,10 @@
 # version 0.5-3
 
+* support natively all Proj.4 +units=xx units; #446
+
 * allow for arith ops on empty `sfc` objects
 
-* have `st_graticule` return an empty `sf` when argument `datum` is `NA`
+* have `st_graticule` return an empty graticule object when argument `datum` is `NA`; 
 
 * export `as_Spatial`, to make it easer for packages to convert `sfc` objects without importing `sf`
 
