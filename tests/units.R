@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 ll = st_crs(4326)
 sf:::crs_parameters(ll)$ud_unit
 

@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 library(testthat)
 # "vertical" conversions:
 # column 1:

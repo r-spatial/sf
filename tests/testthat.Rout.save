@@ -1,5 +1,5 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -55,8 +55,8 @@ Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 557 SKIPPED: 0 FAILED: 0
+OK: 536 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  5.816   0.424   9.436 
+  5.888   0.392   9.653 

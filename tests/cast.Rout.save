@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
+> suppressPackageStartupMessages(library(sf))
 > library(testthat)
 > # "vertical" conversions:
 > # column 1:
@@ -255,4 +254,4 @@ POLYGON((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > 
 > proc.time()
    user  system elapsed 
-   0.70    0.30    0.69 
+  0.676   0.308   0.681 
