@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
 > ll = st_crs(4326)
 > sf:::crs_parameters(ll)$ud_unit
-1 °
+1 arc_degree
 > 
 > u = names(sf:::udunits_from_proj)
 > 
@@ -52,4 +52,4 @@ ind-ch : 1 20.11669506 m
 > 
 > proc.time()
    user  system elapsed 
-  0.676   0.296   0.663 
+  0.696   0.284   0.673 

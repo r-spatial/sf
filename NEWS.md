@@ -1,6 +1,6 @@
 # version 0.5-3
 
-* support natively all Proj.4 +units=xx units; #446
+* support and propagate all Proj.4 +units=xx length units; #446
 
 * allow for arith ops on empty `sfc` objects
 
