@@ -74,11 +74,11 @@ st_as_sfc(x, ...)
 Convert foreign geometry object to an sfc object
 }
 \details{
-when converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
+When converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 
-if \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element
+If \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element.
 
-if \code{x} is a \code{factor}, it is converted to \code{character}
+If \code{x} is a \code{factor}, it is converted to \code{character}.
 }
 \examples{
 wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")

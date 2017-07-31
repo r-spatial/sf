@@ -13,9 +13,9 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param dim passed on to \link{st_point} (only when argument coords is given)
 #' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
-#' @param ... passed on to \link{st_sf}, might included crs
+#' @param ... passed on to \link{st_sf}, might included \code{crs}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
-#' 
+#'
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
@@ -32,10 +32,10 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
 #' @export
-st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt, 
+st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		dim = "XYZ", remove = TRUE, na.fail = TRUE) {
 	if (! missing(wkt)) {
-		if (remove) 
+		if (remove)
 			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
@@ -43,13 +43,13 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (na.fail && any(is.na(x[coords])))
 			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( lapply(split(as.vector(t(as.matrix(x[, coords]))), 
-				rep(seq_len(nrow(x)), each = length(coords))), 
-				function(vec) structure(vec, class = classdim)), 
-			n_empty = 0L, precision = 0, crs = NA_crs_, 
+		x$geometry = structure( lapply(split(as.vector(t(as.matrix(x[, coords]))),
+				rep(seq_len(nrow(x)), each = length(coords))),
+				function(vec) structure(vec, class = classdim)),
+			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
-				c(xmin = min(x[[coords[1]]], na.rm = TRUE), 
-				ymin = min(x[[coords[2]]], na.rm = TRUE), 
+				c(xmin = min(x[[coords[1]]], na.rm = TRUE),
+				ymin = min(x[[coords[2]]], na.rm = TRUE),
 				xmax = max(x[[coords[1]]], na.rm = TRUE),
 				ymax = max(x[[coords[2]]], na.rm = TRUE)), class = "bbox"),
 			class =  c("sfc_POINT", "sfc" ))
@@ -68,7 +68,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 st_as_sf.sf = function(x, ...) x
 
 #' Get, set, or replace geometry from an sf object
-#' 
+#'
 #' Get, set, or replace geometry from an sf object
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
@@ -93,10 +93,10 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @param value object of class \code{sfc}, or \code{character}
 #' @export
 #' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
-#' @details when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geomtry<-} will first check for the existance of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}. 
-#' 
+#' @details when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geomtry<-} will first check for the existence of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}.
+#'
 #' the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
-#' @examples 
+#' @examples
 #' df = data.frame(a = 1:2)
 #' sfc = st_sfc(st_point(c(3,4)), st_point(c(10,11)))
 #' st_geometry(sfc)
@@ -170,24 +170,24 @@ list_column_to_sfc = function(x) {
 			x
 		else
 			y
-	} else 
+	} else
 		x
 }
 
 #' Create sf object
-#' 
+#'
 #' Create sf, which extends data.frame-like objects with a simple feature list column
 #' @name sf
 #' @param ... column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.
-#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
+#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param agr character vector; see details below.
 #' @param row.names row.names for the created \code{sf} object
-#' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.  
+#' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.
 #' @param precision numeric; see \link{st_as_binary}
-#' @param sf_column_name character; name of the active list-column with simple feature geometries; in case 
+#' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there are more than one and \code{sf_column_name} is not given, the first one is taken.
-#' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.  
-#' 
+#' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
+#'
 #' When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
 #' @examples
 #' g = st_sfc(st_point(1:2))
@@ -199,7 +199,7 @@ list_column_to_sfc = function(x) {
 #' geometry = st_sfc(lapply(1:nrows, function(x) st_geometrycollection()))
 #' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
-st_sf = function(..., agr = NA_agr_, row.names, 
+st_sf = function(..., agr = NA_agr_, row.names,
 		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
@@ -213,14 +213,14 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		if (! any(all_sfc_columns))
 			stop("no simple features geometry column present")
 	}
-	
+
 	all_sfc_columns = which(unlist(all_sfc_columns))
 
 	# set names if not present:
 	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
 		names(x)[all_sfc_columns]
 	else {
-		object = as.list(substitute(list(...)))[-1L] 
+		object = as.list(substitute(list(...)))[-1L]
 		arg_nm = sapply(object, function(x) deparse(x))
 		make.names(arg_nm[all_sfc_columns])
 	}
@@ -243,7 +243,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			if (inherits(x, "data.frame"))
 				x[-all_sfc_columns]
 			else # create a data.frame from list:
-				data.frame(x[-all_sfc_columns], row.names = row.names, 
+				data.frame(x[-all_sfc_columns], row.names = row.names,
 					stringsAsFactors = stringsAsFactors)
 		}
 
@@ -268,7 +268,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 #' @param x object of class \code{sf}
 #' @param i record selection, see \link{[.data.frame}
 #' @param j variable selection, see \link{[.data.frame}
-#' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticy and return a \code{sf} object.
+#' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticky and return a \code{sf} object.
 #' @param op function; geometrical binary predicate function to apply when \code{i} is a simple feature object
 #' @details \code{[.sf} will return a \code{data.frame} or vector if the geometry column (of class \code{sfc}) is dropped (\code{drop=TRUE}), an \code{sfc} object if only the geometry column is selected, and otherwise return an \code{sf} object; see also \link{[.data.frame}; for \code{[.sf} \code{...} arguments are passed to \code{op}.
 #' @examples
@@ -351,8 +351,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 }
 
 #' @export
-print.sf = function(x, ..., n = 
-		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) { 
+print.sf = function(x, ..., n =
+		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) {
 
 	geoms = which(vapply(x, function(col) inherits(col, "sfc"), TRUE))
 	nf = length(x) - length(geoms)
@@ -378,7 +378,7 @@ print.sf = function(x, ..., n =
 }
 
 #' merge method for sf and data.frame object
-#' 
+#'
 #' merge method for sf and data.frame object
 #' @param x object of class \code{sf}
 #' @param y object of class \code{data.frame}

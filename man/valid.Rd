@@ -11,7 +11,7 @@ st_make_valid(x)
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 }
 \value{
-object of the same class as \code{x}
+Object of the same class as \code{x}
 }
 \description{
 Make an invalid geometry valid

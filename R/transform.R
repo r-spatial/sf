@@ -1,13 +1,13 @@
 #' Transform or convert coordinates of simple feature
-#' 
+#'
 #' Transform or convert coordinates of simple feature
-#' 
+#'
 #' @param x object of class sf, sfc or sfg
-#' @param crs coordinate reference system: integer with the epsg code, or character with proj4string
+#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param ... ignored
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
 #' @param check logical; perform a sanity check on resulting polygons?
-#' @details transforms coordinates of object to new projection. Features that cannot be tranformed are returned as empty geometries.
+#' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
@@ -23,14 +23,14 @@ chk_pol = function(x, dim = class(x)[1]) {
 			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
 		y
 	}
-	if (length(x) > 0 && nrow(x[[1]]) > 2) 
+	if (length(x) > 0 && nrow(x[[1]]) > 2)
 		PolClose(x)
 	else
 		st_polygon(dim = dim)
 }
 
 chk_mpol = function(x) {
-	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1]))) 
+	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1])))
 	empty = if (length(cln))
 			lengths(cln) == 0
 		else
@@ -101,8 +101,8 @@ st_transform.sf = function(x, crs, ...) {
 
 #' @name st_transform
 #' @export
-#' @details the st_transform method for sfg objects assumes that the crs of the object is available as an attribute of that name.
-#' @examples 
+#' @details The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
+#' @examples
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_transform.sfg = function(x, crs , ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
@@ -116,14 +116,14 @@ st_transform.sfg = function(x, crs , ...) {
 #' @param type character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}
 #' @export
 #' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
-#' @examples 
+#' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {
     opts <- c("proj", "ellps", "datum", "units")
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)
 	res = CPL_proj_info(as.integer(t))
-    if (type == "proj") 
+    if (type == "proj")
 		res$description <- sapply(strsplit(as.character(res$description), "\n"),
 			function(x) x[1])
     data.frame(res)
@@ -135,7 +135,7 @@ st_proj_info = function(type = "proj") {
 #' @export
 #' @examples
 #' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
-#' @details for a discussion of using \code{options}, see https://github.com/r-spatial/sf/issues/280
+#' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280}
 st_wrap_dateline = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	stopifnot(st_is_longlat(x))
 	stopifnot(is.character(options))

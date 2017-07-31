@@ -22,7 +22,7 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
 }
 \value{
-object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
+Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
 rectangular polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{

@@ -78,7 +78,7 @@ st_cast(x, to, ...)
 \item{do_split}{logical; if \code{TRUE}, allow splitting of geometries in sub-geometries}
 }
 \value{
-object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
+object of class \code{to} if successful, or unmodified object if unsuccessful. If information gets lost while type casting, a warning is raised.
 
 In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
 }

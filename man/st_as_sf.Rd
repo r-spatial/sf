@@ -26,7 +26,7 @@ st_as_sf(x, ...)
 \arguments{
 \item{x}{object to be converted into an object class \code{sf}}
 
-\item{...}{passed on to \link{st_sf}, might included crs}
+\item{...}{passed on to \link{st_sf}, might included \code{crs}}
 
 \item{agr}{character vector; see details section of \link{st_sf}}
 
@@ -74,7 +74,7 @@ z = x + m
 z1 = x1 + m
 z2 = x2 + m
 z3 = x3 + m
-p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3), 
+p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3),
    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 p2 = Polygons(list( Polygon(z[5:1,]), Polygon(z2), Polygon(z3), Polygon(z1)),
   "ID2")

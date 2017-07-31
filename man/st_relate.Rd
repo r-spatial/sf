@@ -16,7 +16,7 @@ st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
 \item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
 }
 \value{
-in case \code{pattern} is not given, st_relate returns a dense \code{character} matrix; element [i,j] has nine characters, refering to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
+In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 }
 \description{
 Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
@@ -35,6 +35,6 @@ st_relate(grd, pattern = "****1****") # sides, not corners, internals
 st_relate(grd, pattern = "****0****") # only corners touch
 st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 st_rook(grd)
-# queen neighbours, see https://github.com/r-spatial/sf/issues/234#issuecomment-300511129
+# queen neighbours, see \\url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
 st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 }
