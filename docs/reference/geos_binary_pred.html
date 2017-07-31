@@ -168,13 +168,14 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>if <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=TRUE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
+    <p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry i and j intersect); if <code>sparse=TRUE</code>, a sparse list representation of the same matrix, with list element <code>i</code> a numeric vector with the indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code>integer(0)</code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>for most predicates, a spatial index is built on argument <code>x</code>; see http://r-spatial.org/r/2017/06/22/spatial-index.html</p>
+    <p>For most predicates, a spatial index is built on argument <code>x</code>; see <a href='http://r-spatial.org/r/2017/06/22/spatial-index.html'>http://r-spatial.org/r/2017/06/22/spatial-index.html</a>.
+Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code> <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_contains_properly</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code> and <code>st_covered_by</code> all build spatial indexes for more efficient geometry calculations. <code>st_relate</code>, <code>st_equals_exact</code>, and <code>st_is_within_distance</code> do not.</p>
 <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
-<p>See also <a href='st_relate.html'>st_relate</a> and https://en.wikipedia.org/wiki/DE-9IM for a more detailed description of the underlying algorithms.
+<p>See also <a href='st_relate.html'>st_relate</a> and <a href='https://en.wikipedia.org/wiki/DE-9IM'>https://en.wikipedia.org/wiki/DE-9IM</a> for a more detailed description of the underlying algorithms.
     <code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
     <code>st_is_within_distance</code> returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use <code>st_distance(x,y) &lt;= dist</code> to obtain the corresponding dense logical matrix.</p>
     

@@ -135,6 +135,91 @@
     <p>geometry-only object deriving from <code>Spatial</code>, of the appropriate class</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'>as_Spatial</span>(<span class='fu'>st_geometry</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]))</div><div class='output co'>#&gt; An object of class "SpatialPolygons"
+#&gt; Slot "polygons":
+#&gt; [[1]]
+#&gt; An object of class "Polygons"
+#&gt; Slot "Polygons":
+#&gt; [[1]]
+#&gt; An object of class "Polygon"
+#&gt; Slot "labpt":
+#&gt; [1] -81.49826  36.43140
+#&gt; 
+#&gt; Slot "area":
+#&gt; [1] 0.1142835
+#&gt; 
+#&gt; Slot "hole":
+#&gt; [1] FALSE
+#&gt; 
+#&gt; Slot "ringDir":
+#&gt; [1] 1
+#&gt; 
+#&gt; Slot "coords":
+#&gt;            [,1]     [,2]
+#&gt;  [1,] -81.47276 36.23436
+#&gt;  [2,] -81.54084 36.27251
+#&gt;  [3,] -81.56198 36.27359
+#&gt;  [4,] -81.63306 36.34069
+#&gt;  [5,] -81.74107 36.39178
+#&gt;  [6,] -81.69828 36.47178
+#&gt;  [7,] -81.70280 36.51934
+#&gt;  [8,] -81.67000 36.58965
+#&gt;  [9,] -81.34530 36.57286
+#&gt; [10,] -81.34754 36.53791
+#&gt; [11,] -81.32478 36.51368
+#&gt; [12,] -81.31332 36.48070
+#&gt; [13,] -81.26624 36.43721
+#&gt; [14,] -81.26284 36.40504
+#&gt; [15,] -81.24069 36.37942
+#&gt; [16,] -81.23989 36.36536
+#&gt; [17,] -81.26424 36.35241
+#&gt; [18,] -81.32899 36.36350
+#&gt; [19,] -81.36137 36.35316
+#&gt; [20,] -81.36569 36.33905
+#&gt; [21,] -81.35413 36.29972
+#&gt; [22,] -81.36745 36.27870
+#&gt; [23,] -81.40639 36.28505
+#&gt; [24,] -81.41233 36.26729
+#&gt; [25,] -81.43104 36.26072
+#&gt; [26,] -81.45289 36.23959
+#&gt; [27,] -81.47276 36.23436
+#&gt; 
+#&gt; 
+#&gt; 
+#&gt; Slot "plotOrder":
+#&gt; [1] 1
+#&gt; 
+#&gt; Slot "labpt":
+#&gt; [1] -81.49826  36.43140
+#&gt; 
+#&gt; Slot "ID":
+#&gt; [1] "ID1"
+#&gt; 
+#&gt; Slot "area":
+#&gt; [1] 0.1142835
+#&gt; 
+#&gt; 
+#&gt; 
+#&gt; Slot "plotOrder":
+#&gt; [1] 1
+#&gt; 
+#&gt; Slot "bbox":
+#&gt;         min       max
+#&gt; x -81.74107 -81.23989
+#&gt; y  36.23436  36.58965
+#&gt; 
+#&gt; Slot "proj4string":
+#&gt; CRS arguments:
+#&gt;  +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66
+#&gt; +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat 
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -142,7 +227,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

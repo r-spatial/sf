@@ -186,7 +186,7 @@
     </tr>
     <tr>
       <th>max.plot</th>
-      <td><p>integer; lower boundary to maximium number of attributes to plot (defaults to 9)</p></td>
+      <td><p>integer; lower boundary to maximum number of attributes to plot (defaults to 9)</p></td>
     </tr>
     <tr>
       <th>pch</th>
@@ -266,12 +266,12 @@
     </tr>
     <tr>
       <th>expandBB</th>
-      <td><p>numeric; fractional values to expand the bounding box with, 
+      <td><p>numeric; fractional values to expand the bounding box with,
 in each direction (bottom, left, top, right)</p></td>
     </tr>
     <tr>
       <th>graticule</th>
-      <td><p>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule 
+      <td><p>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule
 or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
     </tr>
     <tr>
@@ -302,7 +302,7 @@ or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>plot.sf</code> maximally plots <code>max.plot</code> maps with colors following from attribute columns, 
+    <p><code>plot.sf</code> maximally plots <code>max.plot</code> maps with colors following from attribute columns,
 one map per attribute. It uses <code>sf.colors</code> for default colors. For more control over individual maps,
 set parameter <code>mfrow</code> with <code>par</code> prior to plotting,  and plot single maps one by one.
     <code>plot.sfc</code> plots the geometry, additional parameters can be passed on
@@ -313,9 +313,9 @@ is called by all <code>plot</code> methods before anything is drawn.</p>
 <p>The default aspect for map plots is 1; if however data are not
 projected (coordinates are long/lat), the aspect is by default set to
 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
-(the mean of ylim, which defaults to the y range of bounding box). This
+(the mean of <code>ylim</code>, which defaults to the y range of bounding box). This
 implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Equirectangular projection</a>.
-    <code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <code>http://www.colorbrewer2.org/</code> (if n &lt; 9, Set2, else Set3).</p>
+    <code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <a href='http://www.colorbrewer2.org/'>http://www.colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

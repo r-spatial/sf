@@ -126,7 +126,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dsn</th>
-      <td><p>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
+      <td><p>data source name (interpretation varies by driver - for some drivers, <code>dsn</code> is a file name, but may also be a folder,
 or contain the name and access credentials of a database); in case of GeoJSON, <code>dsn</code> may be the character string holding the geojson data</p></td>
     </tr>
     <tr>
@@ -197,7 +197,7 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of class sf when a layer was succesfully read; in case argument <code>layer</code> is missing and
+    <p>object of class sf when a layer was successfully read; in case argument <code>layer</code> is missing and
 data source <code>dsn</code> does not contain a single layer, an object of class <code>sf_layers</code> is returned with the
 layer names, each with their geometry type(s). Note that the number of layers may also be zero.</p>
     
@@ -205,8 +205,8 @@ layer names, each with their geometry type(s). Note that the number of layers ma
 
     <p>for <code>geometry_column</code>, see also <a href='https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code>
 values see <a href='https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value
-may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specfied for each geometry columns.</p>
+may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specified for each geometry column.</p>
 <p>In case of problems reading shapefiles from USB drives on OSX, please see <a href='https://github.com/r-spatial/sf/issues/252'>https://github.com/r-spatial/sf/issues/252</a>.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.

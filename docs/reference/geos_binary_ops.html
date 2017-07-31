@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Geometric binary operations on pairs of simple feature geometry sets — geos_binary_ops • sf</title>
+<title>Geometric operations on pairs of simple feature geometry sets — geos_binary_ops • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -104,11 +104,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Geometric binary operations on pairs of simple feature geometry sets</h1>
+    <h1>Geometric operations on pairs of simple feature geometry sets</h1>
     </div>
 
     
-    <p>Geometric binary operations on pairs of simple feature geometry sets</p>
+    <p>Perform geometric set operations with simple feature geometry collections</p>
     
 
     <pre class="usage"><span class='fu'>st_intersection</span>(<span class='no'>x</span>, <span class='no'>y</span>)
@@ -132,19 +132,20 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of the same class as that of the first argument (<code>x</code>) with the non-empty geometries resulting from applying the operation to all geometry pairs in <code>x</code> and <code>y</code>. In case <code>x</code> is of class <code>sf</code>, the matching attributes of the original object(s) are added. The <code>sfc</code> geometry list-column returned carries an attribute <code>idx</code>, which is an <code>n x 2</code> matrix with every row the index of the corresponding entries of <code>x</code> and <code>y</code>, respectively.</p>
+    <p>The intersection, difference or symmetric difference between two sets of geometries.
+The returned object has the same class as that of the first argument (<code>x</code>) with the non-empty geometries resulting from applying the operation to all geometry pairs in <code>x</code> and <code>y</code>. In case <code>x</code> is of class <code>sf</code>, the matching attributes of the original object(s) are added. The <code>sfc</code> geometry list-column returned carries an attribute <code>idx</code>, which is an <code>n</code>-by-2 matrix with every row the index of the corresponding entries of <code>x</code> and <code>y</code>, respectively.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>a spatial index is built on argument <code>x</code>; see http://r-spatial.org/r/2017/06/22/spatial-index.html ; the referenece for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997; for the pdf, search google scholar.</p>
+    <p>A spatial index is built on argument <code>x</code>; see <a href='http://r-spatial.org/r/2017/06/22/spatial-index.html'>http://r-spatial.org/r/2017/06/22/spatial-index.html</a>. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='geos_combine.html'>st_union</a></p>
+    <p><a href='geos_combine.html'>st_union</a> for the union of simple features collections; intersect and setdiff for the base R set operations.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># a helper function that erases all of y from x:</span>
+    <pre class="examples"><div class='input'><span class='co'># A helper function that erases all of y from x:</span>
 <span class='no'>st_erase</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='fu'><a href='geos_combine.html'>st_union</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>y</span>)))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

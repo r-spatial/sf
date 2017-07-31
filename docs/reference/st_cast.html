@@ -190,7 +190,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of class <code>to</code> if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.</p>
+    <p>object of class <code>to</code> if successful, or unmodified object if unsuccessful. If information gets lost while type casting, a warning is raised.</p>
 <p>In case <code>to</code> is missing, <code>st_cast.sfc</code> will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case <code>to</code> is specified, if <code>to</code> is "GEOMETRY", geometries are not converted, else, <code>st_cast</code> will try to coerce all elements into <code>to</code>; <code>ids</code> may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless <code>group_or_split</code> is <code>FALSE</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>

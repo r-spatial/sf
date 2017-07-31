@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute distance between pairs of geometries — geos_measures • sf</title>
+<title>Compute geometric measurements — geos_measures • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -104,11 +104,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute distance between pairs of geometries</h1>
+    <h1>Compute geometric measurements</h1>
     </div>
 
     
-    <p>Compute Euclidian or great circle distance between pairs of geometries</p>
+    <p>Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.</p>
     
 
     <pre class="usage"><span class='fu'>st_area</span>(<span class='no'>x</span>)
@@ -143,11 +143,11 @@
     <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/units'>units</a>.</p>
 <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
 <p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
-<p>if <code>by_element</code> is <code>FALSE</code> a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
+<p>If <code>by_element</code> is <code>FALSE</code> a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
+    <p>Function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

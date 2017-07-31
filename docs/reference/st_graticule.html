@@ -128,7 +128,7 @@
     </tr>
     <tr>
       <th>datum</th>
-      <td><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> or <code>NA</code> in which case a grid in the coordinate system of <code>x</code> is drawn.</p></td>
+      <td><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> in which case a grid in the coordinate system of <code>x</code> is drawn, or <code>NA</code>, in which case an empty <code>sf</code> object is returned.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -148,14 +148,14 @@
     </tr>
     <tr>
       <th>margin</th>
-      <td><p>numeric; small number to trim a longlat bounding box that touches or 
+      <td><p>numeric; small number to trim a longlat bounding box that touches or
 crosses +/-180 long or +/-90 latitude.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an object of class <code>sf</code> with additional attributes describing the type 
+    <p>an object of class <code>sf</code> with additional attributes describing the type
 (E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
 see example.</p>
     
@@ -165,8 +165,8 @@ see example.</p>
     <p>In cartographic visualization, the use of graticules is not advised, unless
  the graphical output will be used for measurement or navigation, or the
  direction of North is important for the interpretation of the content, or
- the content is intended to display distortions and artefacts created by 
- projection. Unnecessary use of graticules only adds visual clutter but 
+ the content is intended to display distortions and artifacts created by
+ projection. Unnecessary use of graticules only adds visual clutter but
  little relevant information. Use of coastlines, administrative boundaries
  or place names permits most viewers of the output to orient themselves
  better than a graticule.</p>
