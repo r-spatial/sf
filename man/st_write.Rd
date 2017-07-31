@@ -77,7 +77,7 @@ columns (variables) of a class not supported are dropped with a warning. When de
 data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 
-st_write_db was written with help of Josh London, see https://github.com/r-spatial/sf/issues/285
+st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -98,7 +98,7 @@ st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
   library(sp)
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-  library(RPostgreSQL) 
+  library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 }

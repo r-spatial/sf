@@ -7,7 +7,7 @@
 \alias{st_length}
 \alias{geos_measures}
 \alias{st_distance}
-\title{Compute distance between pairs of geometries}
+\title{Compute geometric measurements}
 \usage{
 st_area(x)
 
@@ -31,13 +31,13 @@ st_area returns the area of a geometry, in the coordinate reference system used;
 
 st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
-if \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
+If \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
 \description{
-Compute Euclidian or great circle distance between pairs of geometries
+Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.
 }
 \details{
-function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
+Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 }
 \examples{
 dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)

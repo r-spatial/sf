@@ -1,5 +1,5 @@
 #' Read PostGIS table directly, using DBI and binary conversion
-#' 
+#'
 #' Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 #' @param conn open database connection
 #' @param table table name
@@ -7,7 +7,7 @@
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise
 #' @details if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
-#' @examples 
+#' @examples
 #' \dontrun{
 #' library(RPostgreSQL)
 #' conn = dbConnect(PostgreSQL(), dbname = "postgis")
@@ -22,7 +22,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 					  geom_column = NULL, EWKB, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
-	
+
 	if (!is.null(table)) {
 		table <- schema_table(table)
 		if (!db_exists(conn, table))
@@ -33,18 +33,18 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 	} else if(is.null(query)) {
 		stop("Provide either a table name or a query", call. = FALSE)
 	}
-	
+
 	# suppress warning about unknown type "geometry":
 	suppressWarnings(tbl <- dbGetQuery(conn, query))
 	if (is.null(tbl))
 		stop("`", query, "` returned no results.", call. = FALSE) # nocov
-	
+
 	if("row.names" %in% colnames(tbl)) {
 		row.names(tbl) = tbl[["row.names"]]
 		tbl = tbl[,setdiff(colnames(tbl), "row.names")]
 	}
 	gc = try(dbReadTable(conn, "geometry_columns"))
-	
+
 	if (is.null(geom_column)) { # try find the geometry column:
 		geom_column = if (class(gc) == "try-error" || is.null(table))
 			tail(which(vapply(tbl, is.character, TRUE)), 1) # guess it's the last character column
@@ -75,7 +75,7 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 }
 
 #' Write simple feature table to a spatial database
-#' 
+#'
 #' Write simple feature table to a spatial database
 #' @param conn open database connection
 #' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
@@ -92,12 +92,12 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #'   library(sp)
 #'   data(meuse)
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#'   library(RPostgreSQL) 
+#'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
-#' @details st_write_db was written with help of Josh London, see https://github.com/r-spatial/sf/issues/285
-st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry", 
+#' @details st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
+st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
 		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
 
 	DEBUG = function(x) { if (debug) message(x); x }
@@ -108,11 +108,11 @@ st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_
 	if (db_exists(conn, table)) {
 		if (drop)
 			DBI::dbGetQuery(conn, DEBUG(paste("drop table if exists", paste(table, collapse = "."), ";")))
-		else 
-			stop("Table ", paste(table, collapse = "."), " exists already, use drop = TRUE", 
+		else
+			stop("Table ", paste(table, collapse = "."), " exists already, use drop = TRUE",
 					 call. = FALSE)
 	}
-  
+
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
 	crs = st_crs(geom)
@@ -126,7 +126,7 @@ st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_
 				srid
 			}
 	}
-	
+
 	sfc_name = attr(obj, "sf_column")
 	df = obj
 	st_geometry(df) = NULL # is now data.frame
@@ -134,26 +134,26 @@ st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_
 			st_as_binary(geom, EWKB = TRUE, hex = TRUE)
  		else
 			st_as_text(geom, EWKT = TRUE)
-	
+
 	dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
-  
+
 	TYPE = class(geom[[1]])[2]
 	if (! append) {
-		query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name, 
+		query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name,
 							 "','", SRID, "','", TYPE, "',", DIM, ");"))
 		dbExecute(conn, query)
 	}
-	
+
 	# convert text column `sfc_name' into geometry column `geom_name':
 	query = if (binary)
 		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
 			" set ", geom_name," = ST_GeomFromEWKB(cast(", sfc_name, " as geometry));
-			ALTER TABLE ", paste(table, collapse = "."), 
+			ALTER TABLE ", paste(table, collapse = "."),
 			" DROP COLUMN IF EXISTS ", sfc_name))
 	  else
 		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
 			" set ", geom_name," = ST_GeomFromEWKT(", sfc_name, ");
-			ALTER TABLE ", paste(table, collapse = "."), 
+			ALTER TABLE ", paste(table, collapse = "."),
 			" DROP COLUMN IF EXISTS ", sfc_name))
 	invisible(dbExecute(conn, query))
 }
@@ -174,9 +174,9 @@ schema_table <- function(table, public = "public") {
 }
 
 db_list_tables_schema <- function(con) {
-	q <- paste("SELECT schemaname AS table_schema, tablename AS table_name", 
-			   "FROM pg_tables", 
-			   "WHERE schemaname !='information_schema'", 
+	q <- paste("SELECT schemaname AS table_schema, tablename AS table_name",
+			   "FROM pg_tables",
+			   "WHERE schemaname !='information_schema'",
 			   "AND schemaname !='pg_catalog';")
 	DBI::dbGetQuery(con, q)
 }
@@ -191,8 +191,8 @@ db_list_views_schema <- function(con) {
 
 db_list_mviews_schema <- function(con) {
 	q <- paste("SELECT nspname as table_schema, relname as table_name",
-			   "FROM pg_catalog.pg_class c", 
-			   "JOIN pg_namespace n ON n.oid = c.relnamespace", 
+			   "FROM pg_catalog.pg_class c",
+			   "JOIN pg_namespace n ON n.oid = c.relnamespace",
 			   "WHERE c.relkind = 'm'")
 	DBI::dbGetQuery(con, q)
 }

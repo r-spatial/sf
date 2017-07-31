@@ -1,11 +1,11 @@
 #' sample points on or in (sets of) spatial features
-#' 
+#'
 #' sample points on or in (sets of) spatial features
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
-#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. http://mathworld.wolfram.com/SpherePointPicking.html
+#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 #' plot(x, axes = TRUE, graticule = TRUE)
@@ -33,7 +33,7 @@ st_sample = function(x, size, ..., type = "random") {
 	x = st_geometry(x)
 	if (length(size) > 1) {
 		size = rep(size, length.out = length(x))
-		st_set_crs(do.call(c, lapply(1:length(x), 
+		st_set_crs(do.call(c, lapply(1:length(x),
 			function(i) st_sample(x[i], size[i], type = type))),
 			st_crs(x))
 	} else {
@@ -52,7 +52,7 @@ st_sample = function(x, size, ..., type = "random") {
 st_poly_sample = function(x, size, ..., type = "random") {
 	toRad = pi/180
 	bb = st_bbox(x)
-	a0 = st_area(st_make_grid(x, n = c(1,1))) 
+	a0 = st_area(st_make_grid(x, n = c(1,1)))
 	a1 = sum(st_area(x))
 	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
 	# for instance has 0 st_area
@@ -64,7 +64,7 @@ st_poly_sample = function(x, size, ..., type = "random") {
 		lat1 = (sin(bb[4] * toRad) + 1)/2
 		y = runif(size, lat0, lat1)
 		asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-	} else 
+	} else
 		runif(size, bb[2], bb[4])
 	m = cbind(lon, lat)
 	pts = st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))

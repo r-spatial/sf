@@ -32,17 +32,17 @@ Ops.crs <- function(e1, e2) {
 #' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
 #' @export
-#' @return if \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
-#' @details the *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
-#' list-column. This attribute is of class \code{crs}, and is a list consisting of epsg (integer epsg
-#' code) and proj4string (character).
+#' @return If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+#' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
+#' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
+#' code) and \code{proj4string} (character).
 #' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
-#' (2) they have identical proj4string but one of them has a missing epsg ID. As a consequence, equivalent
+#' (2) they have identical proj4string but one of them has a missing EPSG ID. As a consequence, equivalent
 #' but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
 #' are considered different.
 #' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
-#' @return object of class \code{crs}, which is a list with elements epsg (length-1 integer) and
-#' proj4string (length-1 character).
+#' @return Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
+#' \code{proj4string} (length-1 character).
 st_crs = function(x, ...) UseMethod("st_crs")
 
 #' @name st_crs
@@ -82,13 +82,13 @@ st_crs.default = function(x, ...) NA_crs_
 #'
 #' Set or replace retrieve coordinate reference system from object
 #' @name st_crs
-#' @param value one of (i) character: a valid proj4string (ii) integer, a valid epsg value (numeric), or (iii) a list containing named elements proj4string (character) and/or epsg (integer) with (i) and (ii).
-#' @details in case a coordinate reference system is replaced, no transformation takes
-#' place and a warning is raised to stress this. epsg values are either read from proj4strings
+#' @param value one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).
+#' @details In case a coordinate reference system is replaced, no transformation takes
+#' place and a warning is raised to stress this. EPSG values are either read from proj4strings
 #' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
-#' and +datum=WGS84, literally
+#' and +datum=WGS84, literally.
 #'
-#' If both epsg and proj4string are provided, they are assumed to be consistent. In processing them, the epsg code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when epsg is not consistent with a proj4string that is already present.
+#' If both \code{epsg} and \code{proj4string} are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when \code{epsg} is not consistent with a proj4string that is already present.
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
@@ -236,7 +236,7 @@ st_as_text.crs = function(x, ..., pretty = FALSE) {
 
 #' @name st_crs
 #' @details
-#' \code{NA_crs_} is the \code{crs} object with missing values for epsg and proj4string.
+#' \code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
 #' @export
 NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
 
@@ -248,7 +248,7 @@ is.na.crs = function(x) {
 }
 
 #' @name st_crs
-#' @param name element name; code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples
+#' @param name element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples
 #' @export
 #' @examples
 #' st_crs("+init=epsg:3857")$epsg

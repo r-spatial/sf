@@ -25,13 +25,13 @@ st_as_text(x, ...)
 
 \item{pretty}{logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system}
 
-\item{EWKT}{logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available}
+\item{EWKT}{logical; if TRUE, print SRID=xxx; before the WKT string if \code{epsg} is available}
 }
 \description{
 Return Well-known Text representation of simple feature geometry or coordinate reference system
 }
 \details{
-to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
+To suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter.
 }
 \examples{
 st_as_text(st_point(1:2))

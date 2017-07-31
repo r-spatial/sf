@@ -24,7 +24,7 @@ prnt.LINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.Matrix(x))
 prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
 prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
-prnt.GEOMETRYCOLLECTION = function(x, ...) 
+prnt.GEOMETRYCOLLECTION = function(x, ...)
 	paste0(WKT_name(x, ...), "(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
 
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
@@ -33,7 +33,7 @@ prnt.GEOMETRYCOLLECTION = function(x, ...)
 #' @param x object of class \code{sfg}, \code{sfc} or \code{crs}
 #' @param ... passed on to WKT_name
 #' @name st_as_text
-#' @details to suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter
+#' @details To suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter.
 #' @export
 st_as_text = function(x, ...) UseMethod("st_as_text")
 
@@ -62,7 +62,7 @@ st_as_text.sfg = function(x, ...) {
 }
 
 #' @name st_as_text
-#' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if epsg is available
+#' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if \code{epsg} is available
 #' @export
 st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 	if (EWKT) {
@@ -74,7 +74,7 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 }
 
 #' @name st_as_sfc
-#' @details if \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element
+#' @details If \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element.
 #' @param crs integer or character; coordinate reference system for the geometry, see \link{st_crs}
 #' @export
 st_as_sfc.character = function(x, crs = NA_integer_, ...) {
@@ -87,7 +87,7 @@ st_as_sfc.character = function(x, crs = NA_integer_, ...) {
 	}
 }
 #' @name st_as_sfc
-#' @details if \code{x} is a \code{factor}, it is converted to \code{character}
+#' @details If \code{x} is a \code{factor}, it is converted to \code{character}.
 #' @export
 st_as_sfc.factor = function(x, ...) {
 	st_as_sfc(as.character(x), ...)

@@ -78,7 +78,7 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{col}{color}
 
-\item{max.plot}{integer; lower boundary to maximium number of attributes to plot (defaults to 9)}
+\item{max.plot}{integer; lower boundary to maximum number of attributes to plot (defaults to 9)}
 
 \item{pch}{plotting symbol}
 
@@ -118,10 +118,10 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{bgMap}{object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}}
 
-\item{expandBB}{numeric; fractional values to expand the bounding box with, 
+\item{expandBB}{numeric; fractional values to expand the bounding box with,
 in each direction (bottom, left, top, right)}
 
-\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule 
+\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
 or object returned by \link{st_graticule}}
 
 \item{col_graticule}{color to used for the graticule (if present)}
@@ -142,7 +142,7 @@ Plot sf object
 blue-pink-yellow color scale
 }
 \details{
-\code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns, 
+\code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
 one map per attribute. It uses \code{sf.colors} for default colors. For more control over individual maps,
 set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single maps one by one.
 
@@ -157,10 +157,10 @@ The argument \code{setParUsrBB} may be used to pass the logical value \code{TRUE
 The default aspect for map plots is 1; if however data are not
 projected (coordinates are long/lat), the aspect is by default set to
 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
-(the mean of ylim, which defaults to the y range of bounding box). This
+(the mean of \code{ylim}, which defaults to the y range of bounding box). This
 implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 
-\code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
+\code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \url{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 }
 \examples{
 # plot linestrings:

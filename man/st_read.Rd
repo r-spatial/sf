@@ -18,7 +18,7 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
   EWKB, ...)
 }
 \arguments{
-\item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
+\item{dsn}{data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
 or contain the name and access credentials of a database); in case of GeoJSON, \code{dsn} may be the character string holding the geojson data}
 
 \item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
@@ -58,7 +58,7 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
 \item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise}
 }
 \value{
-object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
+object of class \link{sf} when a layer was successfully read; in case argument \code{layer} is missing and
 data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
 layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 }
@@ -70,8 +70,8 @@ Read PostGIS table directly through DBI and RPostgreSQL interface, converting bi
 \details{
 for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
-may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
+may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
+way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
 
 In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/r-spatial/sf/issues/252}.
 

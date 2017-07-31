@@ -23,11 +23,11 @@ st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
 
 \item{ndiscr}{integer; number of points to discretize a parallel or meridian}
 
-\item{margin}{numeric; small number to trim a longlat bounding box that touches or 
+\item{margin}{numeric; small number to trim a longlat bounding box that touches or
 crosses +/-180 long or +/-90 latitude.}
 }
 \value{
-an object of class \code{sf} with additional attributes describing the type 
+an object of class \code{sf} with additional attributes describing the type
 (E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
 see example.
 }
@@ -39,8 +39,8 @@ Compute graticules and their parameters
  In cartographic visualization, the use of graticules is not advised, unless
  the graphical output will be used for measurement or navigation, or the
  direction of North is important for the interpretation of the content, or
- the content is intended to display distortions and artefacts created by 
- projection. Unnecessary use of graticules only adds visual clutter but 
+ the content is intended to display distortions and artifacts created by 
+ projection. Unnecessary use of graticules only adds visual clutter but
  little relevant information. Use of coastlines, administrative boundaries
  or place names permits most viewers of the output to orient themselves
  better than a graticule.
@@ -67,16 +67,16 @@ points(g$x_end, g$y_end, col = 'blue')
 
 invisible(lapply(seq_len(nrow(g)), function(i) {
 if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
-	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]),
 		srt = g$angle_start[i], pos = 2, cex = .7)
 if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
-	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
+	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]),
 		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
 if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
-	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]),
 		srt = g$angle_end[i], pos = 4, cex = .7)
 if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
-	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
+	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]),
 		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 }))
 plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))

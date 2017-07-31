@@ -22,11 +22,11 @@ st_sf(..., agr = NA_agr_, row.names,
 
 \item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
 
-\item{crs}{coordinate reference system: integer with the epsg code, or character with proj4string}
+\item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
 \item{precision}{numeric; see \link{st_as_binary}}
 
-\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case 
+\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
 there are more than one and \code{sf_column_name} is not given, the first one is taken.}
 
 \item{x}{object of class \code{sf}}
@@ -35,7 +35,7 @@ there are more than one and \code{sf_column_name} is not given, the first one is
 
 \item{j}{variable selection, see \link{[.data.frame}}
 
-\item{drop}{logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticy and return a \code{sf} object.}
+\item{drop}{logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticky and return a \code{sf} object.}
 
 \item{op}{function; geometrical binary predicate function to apply when \code{i} is a simple feature object}
 }
@@ -43,7 +43,7 @@ there are more than one and \code{sf_column_name} is not given, the first one is
 Create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
-\code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.  
+\code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 
 When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
 

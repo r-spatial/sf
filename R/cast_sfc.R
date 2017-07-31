@@ -4,7 +4,7 @@
 #'
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param to character; target type, if missing, simplification is tried; when \code{x} is of type \code{sfg} (i.e., a single geometry) then \code{to} needs to be specified.
-#' @return object of class \code{to} if successful, or unmodified object if unsuccesful. If information gets lost while type casting, a warning is raised.
+#' @return object of class \code{to} if successful, or unmodified object if unsuccessful. If information gets lost while type casting, a warning is raised.
 #' @examples
 #' s = st_multipoint(rbind(c(1,0)))
 #' st_cast(s, "POINT")
@@ -67,7 +67,7 @@ close_polygon_or_multipolygon = function(x, to) {
 # (vertical cast)
 reclass = function(x, to, must_close) {
 	l = if (length(x)) {
-		full_cls = c(class(x[[1]])[1], to, "sfg") 
+		full_cls = c(class(x[[1]])[1], to, "sfg")
 		if (must_close)
 			x = close_polygon_or_multipolygon(x, to)
 		lapply(x, function(g) structure(g, class = full_cls))
@@ -88,24 +88,24 @@ get_lengths = function(x) {
 }
 
 #' Coerce geometry to MULTI* geometry
-#' 
-#' Mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING, 
+#'
+#' Mixes of POINTS and MULTIPOINTS, LINESTRING and MULTILINESTRING,
 #' POLYGON and MULTIPOLYGON are returned as MULTIPOINTS, MULTILINESTRING and MULTIPOLYGONS respectively
 #' @param x list of geometries or simple features
-#' @details Geometries that are already MULTI* are left unchanged. 
-#' Features that can't be cast to a single  MULTI* geometry are return as a 
+#' @details Geometries that are already MULTI* are left unchanged.
+#' Features that can't be cast to a single  MULTI* geometry are return as a
 #' GEOMETRYCOLLECTION
 st_cast_sfc_default = function(x) {
   if (!identical(unique(vapply(x, function(w) class(w)[3L], "")), "sfg"))
     stop("list item(s) not of class sfg") # sanity check
-  
+
   a <- attributes(x)
   ids = NULL
   cls = unique(vapply(x, function(x) class(x)[2L], ""))
   if (length(cls) > 1) {
     if (all(cls %in% c("POINT", "MULTIPOINT"))) {
       x <- lapply(x, function(x) if (inherits(x, "POINT")) POINT2MULTIPOINT(x) else x)
-      class(x) <- c("sfc_MULTIPOINT", "sfc") 
+      class(x) <- c("sfc_MULTIPOINT", "sfc")
     } else if (all(cls %in% c("LINESTRING", "MULTILINESTRING"))) {
       x <- lapply(x, function(x) if (inherits(x, "LINESTRING")) LINESTRING2MULTILINESTRING(x) else x)
       class(x) <- c("sfc_MULTILINESTRING", "sfc")
@@ -127,7 +127,7 @@ st_cast_sfc_default = function(x) {
 #' @param ... ignored
 #' @export
 #' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
-#' 
+#'
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))
 		return(st_cast_sfc_default(x))
@@ -161,10 +161,10 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		reclass(ret, to, need_close(to))
 	} else { # "horizontal", to the left: split
 		ret = if (from_col == 1)
-				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), 
+				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)),
 						function(i) structure(m[i,], class = class(m)))),
 					recursive = FALSE)
-			else 
+			else
 				lapply(do.call(c, x), function(y) structure(y, class = class(x[[1]])))
 		attributes(ret) = attributes(x)
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))

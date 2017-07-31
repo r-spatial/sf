@@ -29,7 +29,7 @@ st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surf
 
 st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
 
-\code{st_is_vlaid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
+\code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
 }
 \description{
 Dimension, simplicity or validity queries on simple feature geometries

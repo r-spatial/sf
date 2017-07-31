@@ -4,7 +4,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used
-#' @param max.plot integer; lower boundary to maximium number of attributes to plot (defaults to 9)
+#' @param max.plot integer; lower boundary to maximum number of attributes to plot (defaults to 9)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -16,10 +16,10 @@
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @method plot sf
 #' @name plot
-#' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns, 
+#' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
 #' one map per attribute. It uses \code{sf.colors} for default colors. For more control over individual maps,
 #' set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single maps one by one.
-#' 
+#'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
 #' @examples
@@ -99,7 +99,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 
 		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
 			if (max_plot_missing)
-				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1, 
+				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
 					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
 			x = x[, 1:max.plot]
 		}
@@ -111,7 +111,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 			col = sf.colors(ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
 		if (is.null(col))
 			plot(st_geometry(x), ...)
-		else 
+		else
 			plot(st_geometry(x), col = col, ...)
 		if (is.null(dots$main) && !isTRUE(dots$add))
 			title(names(x)[names(x) != attr(x, "sf_column")])
@@ -134,7 +134,7 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	mat = do.call(rbind, x)
 	if (!is.null(mat)) {
 		ne = apply(mat, 1, function(x) all(is.finite(x))) # ne: not empty
-		points(mat[ne,, drop = FALSE], pch = pch[ne], col = col[ne], bg = bg[ne], 
+		points(mat[ne,, drop = FALSE], pch = pch[ne], col = col[ne], bg = bg[ne],
 			cex = cex[ne], lwd = lwd, lty = lty, type = type)
 	}
 }
@@ -155,9 +155,9 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 	lwd = rep(lwd, length.out = n)
 	lty = rep(lty, length.out = n)
 	non_empty = !is.na(st_dimension(x))
-	lapply(seq_along(x), function(i) 
+	lapply(seq_along(x), function(i)
 	  if (non_empty[i])
-		points(x[[i]], pch = pch[i], col = col[i], bg = bg[i], 
+		points(x[[i]], pch = pch[i], col = col[i], bg = bg[i],
 			cex = cex[i], lwd = lwd[i], lty = lty[i], type = type))
 	invisible(NULL)
 }
@@ -165,7 +165,7 @@ plot.sfc_MULTIPOINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd
 #' @name plot
 #' @method plot sfc_LINESTRING
 #' @export
-plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l', 
+plot.sfc_LINESTRING = function(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = 'l',
 		add = FALSE) {
 # FIXME: take care of lend, ljoin, and lmitre
 	stopifnot(missing(y))
@@ -225,7 +225,7 @@ p_bind = function(lst) {
 #' @name plot
 #' @param rule see \link[graphics]{polypath}
 #' @export
-plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch = NA, border = 1, 
+plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch = NA, border = 1,
 		add = FALSE, rule = "winding") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
@@ -242,7 +242,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch 
 #	if (any(!is.na(pch))) {
 #		pch = rep(pch, length.out = length(x))
 #		cex = rep(cex, length.out = length(x))
-#		lapply(seq_along(x), function(i) 
+#		lapply(seq_along(x), function(i)
 #		  if (non_empty[i])
 #			points(p_bind(x[[i]]), pch = pch[i], cex = cex[i], type = 'p'))
 #	}
@@ -272,7 +272,7 @@ plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border =
 # plot single geometrycollection:
 plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col, add) {
 	lapply(x, function(subx) {
-		args = list(st_sfc(subx), pch = pch, cex = cex, bg = bg, border = border, 
+		args = list(st_sfc(subx), pch = pch, cex = cex, bg = bg, border = border,
 			lty = lty, lwd = lwd, col = col, add = TRUE)
 		fn = switch(class(subx)[2],
 			POINT = plot.sfc_POINT,
@@ -296,7 +296,7 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col, add) {
 #' @name plot
 #' @method plot sfc_GEOMETRYCOLLECTION
 #' @export
-plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
+plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1,
 	col = 1, border = 1, add = FALSE) {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
@@ -308,8 +308,8 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	lapply(seq_along(x), function(i) plot_gc(x[[i]], 
-			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+	lapply(seq_along(x), function(i) plot_gc(x[[i]],
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i],
 			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
@@ -317,7 +317,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 #' @name plot
 #' @method plot sfc_GEOMETRY
 #' @export
-plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1, 
+plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1,
 	col = 1, border = 1, add = FALSE) {
 	stopifnot(missing(y))
 	if (! add)
@@ -328,8 +328,8 @@ plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd =
 	lwd = rep(lwd, length.out = length(x))
 	col = rep(col, length.out = length(x))
 	border = rep(border, length.out = length(x))
-	lapply(seq_along(x), function(i) plot_gc(st_sfc(x[[i]]), 
-			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i], 
+	lapply(seq_along(x), function(i) plot_gc(st_sfc(x[[i]]),
+			pch = pch[i], cex = cex[i], bg = bg[i], border = border[i], lty = lty[i],
 			lwd = lwd[i], col = col[i]))
 	invisible(NULL)
 }
@@ -353,24 +353,24 @@ plot.sfg = function(x, ...) {
 #' @param lab see \link{par}
 #' @param setParUsrBB default FALSE; set the \code{par} \dQuote{usr} bounding box; see below
 #' @param bgMap object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}
-#' @param expandBB numeric; fractional values to expand the bounding box with, 
+#' @param expandBB numeric; fractional values to expand the bounding box with,
 #' in each direction (bottom, left, top, right)
-#' @param graticule logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule 
+#' @param graticule logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
 #' or object returned by \link{st_graticule}
 #' @param col_graticule color to used for the graticule (if present)
 #' @export
 #' @details \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 #' is called by all \code{plot} methods before anything is drawn.
-#' 
+#'
 #' The argument \code{setParUsrBB} may be used to pass the logical value \code{TRUE} to functions within \code{plot.Spatial}. When set to \code{TRUE}, par(\dQuote{usr}) will be overwritten with \code{c(xlim, ylim)}, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(\dQuote{xaxs}) and par(\dQuote{yaxs}) in addition to \code{par(mar=c(0,0,0,0))}.
-#' 
+#'
 #' The default aspect for map plots is 1; if however data are not
 #' projected (coordinates are long/lat), the aspect is by default set to
 #' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
-#' (the mean of ylim, which defaults to the y range of bounding box). This
+#' (the mean of \code{ylim}, which defaults to the y range of bounding box). This
 #' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 #'
-plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ..., 
+plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ...,
     xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_,
 	col_graticule = 'grey') {
 
@@ -381,9 +381,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	bbox = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	# expandBB: 1=below, 2=left, 3=above and 4=right.
 	expBB = function(lim, expand) c(lim[1] - expand[1] * diff(lim), lim[2] + expand[2] * diff(lim))
-	if (is.null(xlim)) 
+	if (is.null(xlim))
 		xlim <- expBB(bbox[1,], expandBB[c(2,4)])
-	if (is.null(ylim)) 
+	if (is.null(ylim))
 		ylim <- expBB(bbox[2,], expandBB[c(1,3)])
 	if (is.na(asp))
 		asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(ylim) * pi)/180), 1.0)
@@ -396,10 +396,10 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	if (!missing(lab)) args$lab = lab
 	do.call(plot.window, args)
 
-	if (setParUsrBB) 
+	if (setParUsrBB)
 		par(usr=c(xlim, ylim))
 	pl_reg <- par("usr")
-	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2], 
+	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2],
 		ytop = pl_reg[4], col = bgc, border = FALSE)
 	linAxis = function(side, ..., lon, lat, ndiscr) axis(side = side, ...)
 	if (! missing(graticule)) {
@@ -458,7 +458,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 #' @param xc factor or numeric vector, for which colors need to be returned
 #' @name plot
 #' @export
-#' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \code{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
+#' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \url{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
 sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
@@ -491,7 +491,7 @@ sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, catego
 		if (is.factor(xc))
 			sf.colors(nlevels(xc), categorical = TRUE)[as.numeric(xc)]
 		else {
-			safe_cut = function(x,n) { 
+			safe_cut = function(x,n) {
 				if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
 					rep(1, length(x))
 				else
@@ -543,6 +543,6 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 			labels = parse(text = degreeLabelsEW(at))
 		else if (side == 2 || side == 4)
 			labels = parse(text = degreeLabelsNS(at))
-	} 
+	}
 	axis(side, at = at, labels = labels, ...)
 }

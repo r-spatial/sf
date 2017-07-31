@@ -13,7 +13,7 @@ set_utf8 = function(x) {
 #' Read simple features or layers from file or database
 #'
 #' Read simple features from file or database, or retrieve layer names and their geometry type(s)
-#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a folder,
+#' @param dsn data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
 #' or contain the name and access credentials of a database); in case of GeoJSON, \code{dsn} may be the character string holding the geojson data
 #' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
 #' \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a
@@ -34,11 +34,11 @@ set_utf8 = function(x) {
 #' and a warning is given when precision is lost (i.e., values are larger than 2^53).
 #' @details for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 #' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
-#' may lead to succesful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-#' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specfied for each geometry columns.
+#' may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
+#' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
 #'
 #' In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/r-spatial/sf/issues/252}.
-#' @return object of class \link{sf} when a layer was succesfully read; in case argument \code{layer} is missing and
+#' @return object of class \link{sf} when a layer was successfully read; in case argument \code{layer} is missing and
 #' data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
 #' layer names, each with their geometry type(s). Note that the number of layers may also be zero.
 #' @examples
@@ -247,7 +247,7 @@ write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
 #' @param what character: "vector" or "raster", anything else will return all drivers.
 #' @details The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{st_drivers()}
 #' function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
-#' files in data source directories (such as *.dbf) may lead to suprious errors that accompanying *.shp are missing.
+#' files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.
 #' @return a \code{data.frame} with driver metadata
 #' @export
 #' @examples
@@ -290,7 +290,7 @@ print.sf_layers = function(x, ...) {
 #' List layers in a datasource
 #'
 #' List layers in a datasource
-#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
+#' @param dsn data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a
 #' folder, or contain the name and access credentials of a database)
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
