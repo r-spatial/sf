@@ -72,82 +72,78 @@
 \alias{anti_join.sf}
 \title{Dplyr verb methods for sf objects}
 \usage{
-\method{filter_}{sf}(.data, ..., .dots)
+filter_.sf(.data, ..., .dots)
 
-\method{filter}{sf}(.data, ..., .dots)
+filter.sf(.data, ..., .dots)
 
-\method{arrange_}{sf}(.data, ..., .dots)
+arrange_.sf(.data, ..., .dots)
 
-\method{arrange}{sf}(.data, ..., .dots)
+arrange.sf(.data, ..., .dots)
 
-\method{distinct_}{sf}(.data, ..., .dots, .keep_all = FALSE)
+distinct_.sf(.data, ..., .dots, .keep_all = FALSE)
 
-\method{distinct}{sf}(.data, ..., .dots, .keep_all = FALSE)
+distinct.sf(.data, ..., .dots, .keep_all = FALSE)
 
-\method{group_by_}{sf}(.data, ..., .dots, add = FALSE)
+group_by_.sf(.data, ..., .dots, add = FALSE)
 
-\method{group_by}{sf}(.data, ..., .dots, add = FALSE)
+group_by.sf(.data, ..., .dots, add = FALSE)
 
-\method{ungroup}{sf}(x, ...)
+ungroup.sf(x, ...)
 
-\method{mutate_}{sf}(.data, ..., .dots)
+mutate_.sf(.data, ..., .dots)
 
-\method{mutate}{sf}(.data, ..., .dots)
+mutate.sf(.data, ..., .dots)
 
-\method{transmute_}{sf}(.data, ..., .dots)
+transmute_.sf(.data, ..., .dots)
 
-\method{transmute}{sf}(.data, ..., .dots)
+transmute.sf(.data, ..., .dots)
 
-\method{select_}{sf}(.data, ..., .dots = NULL)
+select_.sf(.data, ..., .dots = NULL)
 
-\method{select}{sf}(.data, ...)
+select.sf(.data, ...)
 
-\method{rename_}{sf}(.data, ..., .dots)
+rename_.sf(.data, ..., .dots)
 
-\method{rename}{sf}(.data, ..., .dots)
+rename.sf(.data, ..., .dots)
 
-\method{slice_}{sf}(.data, ..., .dots)
+slice_.sf(.data, ..., .dots)
 
-\method{slice}{sf}(.data, ..., .dots)
+slice.sf(.data, ..., .dots)
 
-\method{summarise}{sf}(.data, ..., .dots, do_union = TRUE)
+summarise.sf(.data, ..., .dots, do_union = TRUE)
 
-\method{summarise_}{sf}(.data, ..., .dots, do_union = TRUE)
+summarise_.sf(.data, ..., .dots, do_union = TRUE)
 
-\method{gather_}{sf}(data, key_col, value_col, gather_cols, na.rm = FALSE,
+gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
 
-\method{spread_}{sf}(data, key_col, value_col, fill = NA, convert = FALSE,
+spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
   drop = TRUE, sep = NULL)
 
-\method{sample_n}{sf}(tbl, size, replace = FALSE, weight = NULL,
+sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
   .env = parent.frame())
 
-\method{sample_frac}{sf}(tbl, size = 1, replace = FALSE, weight = NULL,
+sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
   .env = parent.frame())
 
-\method{nest_}{sf}(data, key_col, nest_cols)
+nest_.sf(data, key_col, nest_cols)
 
-\method{separate_}{sf}(data, col, into, sep = "[^[:alnum:]]+",
-  remove = TRUE, convert = FALSE, extra = "warn", fill = "warn", ...)
+separate_.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+  convert = FALSE, extra = "warn", fill = "warn", ...)
 
-\method{unite_}{sf}(data, col, from, sep = "_", remove = TRUE)
+unite_.sf(data, col, from, sep = "_", remove = TRUE)
 
-\method{inner_join}{sf}(x, y, by = NULL, copy = FALSE, suffix = c(".x",
-  ".y"), ...)
+inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-\method{left_join}{sf}(x, y, by = NULL, copy = FALSE, suffix = c(".x",
-  ".y"), ...)
+left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-\method{right_join}{sf}(x, y, by = NULL, copy = FALSE, suffix = c(".x",
-  ".y"), ...)
+right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-\method{full_join}{sf}(x, y, by = NULL, copy = FALSE, suffix = c(".x",
-  ".y"), ...)
+full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-\method{semi_join}{sf}(x, y, by = NULL, copy = FALSE, ...)
+semi_join.sf(x, y, by = NULL, copy = FALSE, ...)
 
-\method{anti_join}{sf}(x, y, by = NULL, copy = FALSE, ...)
+anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 }
 \arguments{
 \item{.data}{data object of class \link{sf}}
