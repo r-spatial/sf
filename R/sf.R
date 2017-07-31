@@ -299,10 +299,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		geom = geom[i]
 	}
 
-	x = as.data.frame(x)
+	# x = as.data.frame(x)
+	class(x) = setdiff(class(x), "sf") # one step down
 	x = if (missing(j)) {
 		if (nargs == 2) # `[`(x,i)
-			x[i]
+			x[i] # do sth else for tbl?
 		else
 			x[i, , drop = drop]
 	} else

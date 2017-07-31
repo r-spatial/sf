@@ -31,3 +31,11 @@ test_that("sample_n etc work", {
  sample_frac(d, .5)
  d %>% group_by(a) %>% nest
 })
+
+test_that("st_intersection of tbl returns tbl", {
+ nc = read_sf(system.file("shape/nc.shp", package="sf")) 
+ nc = st_transform(nc[1:3,], 3857)
+ st_agr(nc) = "constant"
+ expect_is(nc, "tbl_df")
+ expect_is(st_intersection(nc[1:3], nc[4:6]), "tbl_df")
+})
