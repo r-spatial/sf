@@ -36,7 +36,7 @@
 #' z1 = x1 + m
 #' z2 = x2 + m
 #' z3 = x3 + m
-#' p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3), 
+#' p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3),
 #'    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 #' p2 = Polygons(list( Polygon(z[5:1,]), Polygon(z2), Polygon(z3), Polygon(z1)),
 #'   "ID2")
@@ -62,7 +62,7 @@
 st_as_sf.Spatial = function(x, ...) {
 	if ("data" %in% slotNames(x))
 		df = x@data
-	else 
+	else
 		df = data.frame(row.names = row.names(x)) # empty
 	if ("geometry" %in% names(df))
 		warning("column \"geometry\" will be overwritten by geometry column")
@@ -109,7 +109,7 @@ st_as_sfc.SpatialMultiPoints = function(x,...) {
 #' @export
 st_as_sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
-		lapply(x@lines, 
+		lapply(x@lines,
 			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
 	else
 		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
@@ -125,7 +125,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 			x = rgeos::createSPComment(x)
 		}
-		lapply(x@polygons, function(y) 
+		lapply(x@polygons, function(y)
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
 		lapply(x@polygons, function(y) st_polygon(Polygons2POLYGON(y@Polygons)))
@@ -179,10 +179,14 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 #' Methods to coerce simple feature objects to \code{Spatial*} objects
 #' @rdname coerce-methods
-#' @param from object of class \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}. 
+#' @param from object of class \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.
 #' @param cast logical; if \code{TRUE}, \link{st_cast} \code{from} before converting, so that e.g. \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.
 #' @param IDs character vector with IDs for the \code{Spatial*} geometries
 #' @return geometry-only object deriving from \code{Spatial}, of the appropriate class
+#' @export
+#' @examples
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' as_Spatial(st_geometry(nc[1,]))
 as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	if (cast)
 		from = st_cast(from)
@@ -209,7 +213,7 @@ sfc2SpatialPoints = function(from) {
 sfc2SpatialMultiPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialMultiPoints(lapply(from, unclass), proj4string = 
+	sp::SpatialMultiPoints(lapply(from, unclass), proj4string =
 		sp::CRS(attr(from, "crs")$proj4string))
 }
 
@@ -218,7 +222,7 @@ sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 		stop("package sp required, please install it first")
 	l = if (class(from)[1]  == "sfc_MULTILINESTRING")
 		lapply(from, function(x) sp::Lines(lapply(x, function(y) sp::Line(unclass(y))), "ID"))
-	else 
+	else
 		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
@@ -231,12 +235,12 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 	l = if (class(from)[1] == "sfc_MULTIPOLYGON")
 		lapply(from, function(x)  # for each sfc item, return a Polygons
 				sp::Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
-					lapply(seq_along(y), function(i) sp::Polygon(y[[i]], i > 1))), 
+					lapply(seq_along(y), function(i) sp::Polygon(y[[i]], i > 1))),
 						recursive = FALSE), "ID"))
-	else lapply(from, function(x) 
+	else lapply(from, function(x)
 		sp::Polygons(lapply(seq_along(x), function(i) sp::Polygon(x[[i]], i > 1)), "ID"))
 
-	# set comment: ?Polygons: "Exterior rings are coded zero, while interior rings are 
+	# set comment: ?Polygons: "Exterior rings are coded zero, while interior rings are
 	# coded with the 1-based index of the exterior ring to which they belong.":
 	for (i in 1:length(from)) {
 		l[[i]]@ID = IDs[i]
