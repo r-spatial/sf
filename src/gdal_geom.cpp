@@ -11,12 +11,17 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 	Rcpp::NumericVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i]->getDimension() == 2) {
-			OGRSurface *a = (OGRSurface *) g[i];
-			out[i] = a->get_Area();
+			OGRwkbGeometryType gt = OGR_GT_Flatten(g[i]->getGeometryType());
+			if (gt == wkbMultiSurface || gt == wkbMultiPolygon) {
+				OGRGeometryCollection *gc = (OGRGeometryCollection *) g[i];
+				out[i] = gc->get_Area();
+			} else {
+				OGRSurface *surf = (OGRSurface *) g[i];
+				out[i] = surf->get_Area();
+			} 
 		} else
 			out[i] = 0.0;
-		OGRGeometryFactory f;
-		f.destroyGeometry(g[i]);
+		OGRGeometryFactory::destroyGeometry(g[i]);
 	}
 	return out;
 }
