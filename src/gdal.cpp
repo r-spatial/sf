@@ -163,6 +163,7 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	Rcpp::CharacterVector proj4string(1);
 	char *cp;
 	CPLPushErrorHandler(CPLQuietErrorHandler); // don't break on EPSG's without proj4string
+	ref->morphFromESRI();
 	(void) ref->exportToProj4(&cp);
 
 	// eliminate trailing white space, the C-way:
