@@ -5,10 +5,10 @@
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 	Rcpp::NumericVector bb(4);
+	bb(0) = bb(1) = bb(2) = bb(3) = NA_REAL;
 	switch(depth) {
 
 		case 0: // points:
-		bb(0) = bb(1) = bb(2) = bb(3) = NA_REAL;
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericVector pt = sf[i];
 			if (i == 0) {
@@ -24,7 +24,6 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 		break;
 
 		case 1: // list of matrices:
-		bb(0) = bb(1) = bb(2) = bb(3) = NA_REAL;
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericMatrix m = sf[i];
 			if (i == 0) { // initialize:
@@ -44,7 +43,6 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 		break;
 
 		default: // recursive list
-		bb(0) = bb(1) = bb(2) = bb(3) = NA_REAL;
 		for (int i = 0; i < sf.size(); i++) {
 			Rcpp::NumericVector bbi = CPL_get_bbox(sf[i], depth - 1); // recurse
 			if (! Rcpp::NumericVector::is_na(bbi[0])) {
