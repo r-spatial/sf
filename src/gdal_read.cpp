@@ -434,7 +434,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
 		// convert to R:
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
-		sfc.attr("crs") = get_crs(poLayer->GetSpatialRef()); // overwrite: see #449 where this went wrong
+		OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
+		sfc.attr("crs") = get_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
 		out[iGeom + poFDefn->GetFieldCount()] = sfc;
 	}
 
