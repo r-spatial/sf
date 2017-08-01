@@ -1,3 +1,11 @@
+# version 0.5-4
+
+* change `st_read` SRS assignment logic; corrects reading projected geojson with gdal 2.2.0; #449
+
+* `st_intersection` etc. on `tbl` now also return `tbl`; #448
+
+* `[.sf` preserves class, e.g. of `tbl`; #448
+
 # version 0.5-3
 
 * support and propagate all Proj.4 +units=xx length units; #446
