@@ -1,5 +1,11 @@
 # version 0.5-4
 
+* fixed bug where `st_intersects` with empty second argument would crash; #458
+
+* produce better WKT; #463
+
+* fix bug in `st_cast.sf`; #462
+
 * change `st_read` SRS assignment logic; corrects reading projected geojson with gdal 2.2.0; #449
 
 * `st_intersection` etc. on `tbl` now also return `tbl`; #448

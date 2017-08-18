@@ -255,7 +255,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			R_CheckUserInterrupt();
 		}
 		ret_list = sparsemat;
-	} else {
+	} else if (gmv1.size()) {
 		// other cases: boolean return matrix, either dense or sparse
 		Rcpp::LogicalMatrix densemat;
 		if (! sparse)  // allocate:
@@ -346,6 +346,17 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			ret_list = sparsemat;
 		else
 			ret_list = Rcpp::List::create(densemat);
+	} else { // gmv1.size() == 0:
+		if (! sparse) { // allocate:
+			Rcpp::LogicalMatrix densemat;
+			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
+			ret_list = Rcpp::List::create(densemat);
+		} else {
+			Rcpp::List sparsemat(sfc0.length());
+			for (size_t i = 0; i < gmv0.size(); i++)
+				sparsemat[i] = Rcpp::IntegerVector();
+			ret_list = sparsemat;
+		}
 	}
 	for (size_t i = 0; i < gmv0.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
