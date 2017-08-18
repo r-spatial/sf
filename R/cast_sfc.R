@@ -191,6 +191,7 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 		x = x[reps, , drop = FALSE]
 		stopifnot(nrow(x) == length(geom))
 	}
+	attr(geom, "ids") = NULL # remove
 	st_geometry(x) = geom
 	st_agr(x) = agr
 	x
