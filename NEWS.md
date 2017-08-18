@@ -1,5 +1,7 @@
 # version 0.5-4
 
+* add `of_largest_polygon` argument to `st_centroid`, to get the centroid of the largest polygon; #450
+
 * fix use of `st_relate` as join predicate for `st_join`; #454
 
 * fixed bug where `st_intersects` with empty second argument would crash; #458

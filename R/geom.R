@@ -542,27 +542,40 @@ st_line_merge.sf = function(x) {
 }
 
 #' @name geos_unary
+#' @param of_largest_polygon logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}
 #' @export
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
-st_centroid = function(x)
+#' mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
+#' plot(mp)
+#' plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
+#' plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) # center of largest sub-polygon
+st_centroid = function(x, ...)
 	UseMethod("st_centroid")
 
 #' @export
-st_centroid.sfg = function(x)
-	get_first_sfg(st_centroid(st_sfc(x)))
+st_centroid.sfg = function(x, ..., of_largest_polygon = FALSE)
+	get_first_sfg(st_centroid(st_sfc(x), of_largest_polygon = of_largest_polygon))
+
+largest_ring = function(x) {
+	pols = st_cast(x, "POLYGON", warn = FALSE)
+	spl = split(pols, rep(1:length(x), attr(pols, "ids")))
+	st_sfc(lapply(spl, function(y) y[[which.max(st_area(y))]]))
+}
 
 #' @export
-st_centroid.sfc = function(x) {
+st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
+	if (of_largest_polygon)
+		x = largest_ring(x)
 	st_sfc(CPL_geos_op("centroid", x, numeric(0)))
 }
 
 #' @export
-st_centroid.sf = function(x) {
-	st_geometry(x) <- st_centroid(st_geometry(x))
+st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
+	st_geometry(x) <- st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon)
 	x
 }
 
