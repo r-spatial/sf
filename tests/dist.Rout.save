@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -76,7 +76,7 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 10
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-LINESTRING(0 10, 1 0, 2 0, 3 0, 4 0)
+LINESTRING (0 10, 1 0, 2 0, 3 0, 4 0)
 > (d = st_distance(y, y))
 Units: m
         [,1]      [,2]      [,3]      [,4]      [,5]
@@ -101,8 +101,8 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT(0 0.5)
-MULTIPOINT(0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, 5...
+MULTIPOINT (0 0.5)
+MULTIPOINT (0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, ...
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + 	st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
@@ -120,9 +120,9 @@ dimension:      XY
 bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-MULTIPOINT(0 501.464607505533, 0 1504.393822518...
-MULTIPOINT(505.997685423971 -7.08115455161362e-...
+MULTIPOINT (0 501.464607505533, 0 1504.39382251...
+MULTIPOINT (505.997685423971 -7.08115455161362e...
 > 
 > proc.time()
    user  system elapsed 
-  0.776   0.240   0.745 
+  1.336   0.276   1.359 

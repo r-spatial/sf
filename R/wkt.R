@@ -1,31 +1,63 @@
-# composed, WKT class name: "Z", "POINT" -> "POINT_Z"
+# composed, WKT class name: "XYZ", "POINT" -> "POINT Z"
 WKT_name = function(x, EWKT = TRUE) {
 	cls = class(x)
-	retval = paste0(cls[2], substr(cls[1], 3, 4))
+	zm = substr(cls[1], 3, 4)
+
+	retval = if (zm == "")
+		cls[2]
+	else 
+		paste(cls[2], substr(cls[1], 3, 4))
+
 	if (EWKT && !is.null(attr(x, "epsg")) && !is.na(attr(x, "epsg")))
 		paste0("SRID=", attr(x, "epsg"), ";", retval)
 	else
 		retval
 }
 
+empty = "EMPTY"
+
 # print helper functions
 prnt.POINT = function(x, ...) {
-	nr = paste0(x, collapse = " ")
-	paste0(WKT_name(x, ...), "(", nr, ")")
+	pt = if (any(!is.finite(x)))
+		empty
+	else 
+		paste0("(", paste0(x, collapse = " "), ")")
+	paste(WKT_name(x, ...), pt)
 }
-prnt.Matrix = function(x)
-	paste0("(", paste0(apply(x, 1, paste0, collapse = " "), collapse = ", "), ")")
-prnt.MatrixList = function(x)
-	paste0("(", paste0(unlist(lapply(x, prnt.Matrix)), collapse = ", "), ")")
-prnt.MatrixListList = function(x)
-	paste0("(", paste0(unlist(lapply(x, prnt.MatrixList)), collapse = ", "), ")")
-prnt.MULTIPOINT = function(x, ...) paste0(WKT_name(x, ...), prnt.Matrix(x))
-prnt.LINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.Matrix(x))
-prnt.POLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
-prnt.MULTILINESTRING = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixList(x))
-prnt.MULTIPOLYGON = function(x, ...) paste0(WKT_name(x, ...), prnt.MatrixListList(x))
-prnt.GEOMETRYCOLLECTION = function(x, ...)
-	paste0(WKT_name(x, ...), "(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
+
+prnt.Matrix = function(x) {
+	if (nrow(x) == 0)
+		empty
+	else
+		paste0("(", paste0(apply(x, 1, paste0, collapse = " "), collapse = ", "), ")")
+}
+
+prnt.MatrixList = function(x) {
+	if (length(x) == 0)
+		empty
+	else
+		paste0("(", paste0(unlist(lapply(x, prnt.Matrix)), collapse = ", "), ")")
+}
+
+prnt.MatrixListList = function(x) {
+	if (length(x) == 0)
+		empty
+	else
+		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList)), collapse = ", "), ")")
+}
+
+prnt.MULTIPOINT = function(x, ...) paste(WKT_name(x, ...), prnt.Matrix(x))
+prnt.LINESTRING = function(x, ...) paste(WKT_name(x, ...), prnt.Matrix(x))
+prnt.POLYGON = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixList(x))
+prnt.MULTILINESTRING = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixList(x))
+prnt.MULTIPOLYGON = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixListList(x))
+prnt.GEOMETRYCOLLECTION = function(x, ...) {
+	body = if (length(x) == 0)
+		empty
+	else
+		paste0("(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
+	paste(WKT_name(x, ...), body)
+}
 
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #'

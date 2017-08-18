@@ -7,7 +7,7 @@ test_that("MtrxSet is being called", {
   pts = list(outer, hole1, hole2)
   pl1 = st_polygon(pts)
   expect_identical(st_as_text(pl1),
-  "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
+  "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
 })
 
 test_that("Dimension works", {
@@ -24,7 +24,7 @@ test_that("st_multilinestring works", {
   hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
   pts = list(outer, hole1, hole2)
   ml1 = st_multilinestring(pts)
-  expect_identical(st_as_text(ml1), "MULTILINESTRING((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
+  expect_identical(st_as_text(ml1), "MULTILINESTRING ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
 })
 
 test_that("xx2multixx works", {
@@ -39,11 +39,11 @@ test_that("xx2multixx works", {
 })
 
 test_that("format works", {
-	expect_identical(format(st_multipoint(matrix(1:6/6,3))), "MULTIPOINT(0.16666666666666...")
+	expect_identical(format(st_multipoint(matrix(1:6/6,3))), "MULTIPOINT (0.1666666666666...")
 	expect_identical(format(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
-		"MULTIPOINT(0.16666666666666...")
+		"MULTIPOINT (0.1666666666666...")
 	expect_identical(obj_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
-		"MULTIPOINT(0...")
+		"MULTIPOINT (...")
 	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "simple_feature")
 })
 
