@@ -47,7 +47,11 @@
 \alias{dplyr}
 \alias{gather_.sf}
 \alias{dplyr}
+\alias{gather.sf}
+\alias{dplyr}
 \alias{spread_.sf}
+\alias{dplyr}
+\alias{spread.sf}
 \alias{dplyr}
 \alias{sample_n.sf}
 \alias{dplyr}
@@ -57,7 +61,11 @@
 \alias{dplyr}
 \alias{separate_.sf}
 \alias{dplyr}
+\alias{separate.sf}
+\alias{dplyr}
 \alias{unite_.sf}
+\alias{dplyr}
+\alias{unite.sf}
 \alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
@@ -117,8 +125,14 @@ summarise_.sf(.data, ..., .dots, do_union = TRUE)
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
 
+gather.sf(data, key = "key", value = "value", ..., na.rm = FALSE,
+  convert = FALSE, factor_key = FALSE)
+
 spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
   drop = TRUE, sep = NULL)
+
+spread.sf(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
+  sep = NULL)
 
 sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
   .env = parent.frame())
@@ -131,7 +145,12 @@ nest_.sf(data, key_col, nest_cols)
 separate_.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
   convert = FALSE, extra = "warn", fill = "warn", ...)
 
+separate.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+  convert = FALSE, extra = "warn", fill = "warn", ...)
+
 unite_.sf(data, col, from, sep = "_", remove = TRUE)
+
+unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
@@ -173,6 +192,10 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{convert}{see original function docs}
 
 \item{factor_key}{see original function docs}
+
+\item{key}{see original function docs}
+
+\item{value}{see original function docs}
 
 \item{fill}{see original function docs}
 

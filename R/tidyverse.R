@@ -218,6 +218,15 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 		convert = FALSE, factor_key = FALSE) {
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+#' @param key see original function docs
+#' @param value see original function docs
+gather.sf <- function(data, key = "key", value = "value", ..., na.rm = FALSE,
+	        convert = FALSE, factor_key = FALSE) {
+	st_as_sf(NextMethod())
+}
+
 
 #' @name dplyr
 #' @param fill see original function docs
@@ -236,6 +245,14 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 	data <- as.data.frame(data)
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
+	        sep = NULL) {
+	data <- as.data.frame(data)
+	st_as_sf(NextMethod())
+}
+
 
 #' @name dplyr
 #' @param tbl see original function docs
@@ -275,6 +292,9 @@ separate_.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 	class(data) <- setdiff(class(data), "sf")
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+separate.sf = separate_.sf
 
 #' @name dplyr
 #' @param from see \link[tidyr]{unite}
@@ -283,6 +303,13 @@ unite_.sf = function(data, col, from, sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
 	st_as_sf(NextMethod())
 }
+#' @name dplyr
+#' @export
+unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
+	class(data) <- setdiff(class(data), "sf")
+	st_as_sf(NextMethod())
+}
+     
 
 
 ## tibble methods:
