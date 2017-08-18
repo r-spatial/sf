@@ -417,12 +417,12 @@ coord_2 = function(x) { # x is a list with matrices
 	cbind(do.call(rbind, x), L1 = rep(seq_along(x), times = vapply(x, nrow, 0L)))
 }
 
-coord_3 = function(x) { # x is a list of list with matrices
+coord_3 = function(x) { # x is a list of lists with matrices
 	x = lapply(x, coord_2)
 	cbind(do.call(rbind, x), L2 = rep(seq_along(x), times = vapply(x, nrow, 0L)))
 }
 
-coord_4 = function(x) { # x is a list of list with matrices
+coord_4 = function(x) { # x is a list of lists of lists with matrices
 	x = lapply(x, coord_3)
 	cbind(do.call(rbind, x), L3 = rep(seq_along(x), times = vapply(x, nrow, 0L)))
 }
