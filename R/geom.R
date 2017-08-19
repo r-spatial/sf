@@ -550,8 +550,8 @@ st_line_merge.sf = function(x) {
 #' mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 #' plot(mp)
 #' plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
-#' plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) # center of largest sub-polygon
-st_centroid = function(x, ...)
+#' plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) 
+st_centroid = function(x, ..., of_largest_polygon = FALSE)
 	UseMethod("st_centroid")
 
 #' @export

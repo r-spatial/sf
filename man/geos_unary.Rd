@@ -41,7 +41,7 @@ st_polygonize(x)
 
 st_line_merge(x)
 
-st_centroid(x, ...)
+st_centroid(x, ..., of_largest_polygon = FALSE)
 
 st_point_on_surface(x)
 
@@ -66,9 +66,9 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{...}{ignored}
 
-\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
-
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
+
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
 }
 \value{
 \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
@@ -114,7 +114,7 @@ plot(st_centroid(nc), add = TRUE, pch = 3)
 mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 plot(mp)
 plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
-plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) # center of largest sub-polygon
+plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) 
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
