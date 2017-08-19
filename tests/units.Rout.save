@@ -22,10 +22,15 @@ Type 'q()' to quit R.
 > 
 > u = names(sf:::udunits_from_proj)
 > 
+> unrecognized = NULL
 > out = sapply(u, function(x) { 
 +   p4s = paste0("+proj=aea +units=", x)
 +   cat(x, ": ")
-+   print(sf:::crs_parameters(st_crs(p4s))$ud_unit)
++   ret = try(sf:::crs_parameters(st_crs(p4s))$ud_unit, silent = TRUE)
++   if (! inherits(ret, "try-error"))
++   	print(ret)
++   else
++     unrecognized = c(unrecognized, x)
 + })
 km : 1 km
 m : 1 m
@@ -49,6 +54,9 @@ ind-yd : 1 0.91439523 m
 ind-ft : 1 0.30479841 m
 ind-ch : 1 20.11669506 m
 > 
+> if (length(unrecognized))
++ 	print(paste("unrecognized units:", paste(unrecognized, collapse = ", "), ": older GDAL version?"))
+> 
 > proc.time()
    user  system elapsed 
-  0.672   0.268   0.643 
+  0.616   0.316   0.620 

@@ -1,3 +1,10 @@
+# from sp/R/CRS-methods.R, https://github.com/edzer/sp/pull/31 @hughjonesd
+identicalCRS1 = function(x, y) {
+  args_x <- strsplit(x, " +")[[1]]
+  args_y <- strsplit(y, " +")[[1]]
+  setequal(args_x, args_y)
+}
+
 # this function establishes whether two crs objects are semantically identical. This is
 # the case when: (1) they are completely identical, or (2) they have identical proj4string
 # but one of them has a missing epsg ID.
@@ -16,7 +23,7 @@ Ops.crs <- function(e1, e2) {
 			TRUE
 		else if (is.na(e1) || is.na(e2)) # only one of them is NA_crs_
 			FALSE
-		else if (e1$proj4string == e2$proj4string && (is.na(e1$epsg) || is.na(e2$epsg)))
+		else if (identicalCRS1(e1$proj4string, e2$proj4string) && (is.na(e1$epsg) || is.na(e2$epsg)))
 			TRUE
 		#else if (!is.na(e1$epsg) && !is.na(e2$epsg) && e1$epsg == e2$epsg) # epsg identical, proj4str different
 		#	TRUE
@@ -123,7 +130,11 @@ make_crs = function(x, wkt = FALSE) {
 		is_valid = valid_proj4string(x)
 		if (! is_valid$valid)
 			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
-		CPL_crs_from_proj4string(x)
+		u = `$.crs`(list(proj4string = x), "units")
+		crs = CPL_crs_from_proj4string(x)
+		if (! is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
+			stop(paste0("units ", u, " not recognized: older GDAL version?"), call. = FALSE) # nocov
+		crs
 	} else
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }

@@ -57,4 +57,6 @@ if (sf:::CPL_gdal_version() >= "2.1.0") { # address GDAL/Fedora (gdal 2.0.2) err
   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYM")))))
   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYM")))))
   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYM")))))
+} else {
+	"(output expected when gdal <= 2.1.0, e.g. CRAN/fedora)"
 }
