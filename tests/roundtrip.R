@@ -31,12 +31,17 @@ m = st_as_sf(mpdf)
 all.equal(as(m, "Spatial"), mpdf) # TRUE
 
 demo(meuse, ask = FALSE, echo = FALSE)
+meuse = spTransform(meuse, CRS("+init=epsg:4326"))
+pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
+meuse.grid = spTransform(meuse.grid, CRS("+init=epsg:4326"))
+pol.grd = spTransform(pol.grd, CRS("+init=epsg:4326"))
+meuse.area = spTransform(meuse.area, CRS("+init=epsg:4326"))
+meuse.riv = spTransform(meuse.riv, CRS("+init=epsg:4326"))
 summary(st_as_sf(meuse))
 summary(st_as_sf(meuse.grid))
 summary(st_as_sf(meuse.area))
 summary(st_as_sf(meuse.riv))
 summary(st_as_sf(as(meuse.riv, "SpatialLines")))
-pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 

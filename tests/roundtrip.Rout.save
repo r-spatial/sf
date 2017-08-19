@@ -1,5 +1,5 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
+R version 3.4.1 (2017-06-30) -- "Single Candle"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -64,6 +64,15 @@ In data.row.names(row.names, rowsi, i) :
 [1] TRUE
 > 
 > demo(meuse, ask = FALSE, echo = FALSE)
+> meuse = spTransform(meuse, CRS("+init=epsg:4326"))
+> pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
+> meuse.grid = spTransform(meuse.grid, CRS("+init=epsg:4326"))
+Warning message:
+In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
+  Grid warping not available, coercing to points
+> pol.grd = spTransform(pol.grd, CRS("+init=epsg:4326"))
+> meuse.area = spTransform(meuse.area, CRS("+init=epsg:4326"))
+> meuse.riv = spTransform(meuse.riv, CRS("+init=epsg:4326"))
 > summary(st_as_sf(meuse))
     cadmium           copper            lead            zinc       
  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
@@ -83,8 +92,8 @@ In data.row.names(row.names, rowsi, i) :
                                     NA's   :2                             
     landuse       dist.m                geometry  
  W      :50   Min.   :  10.0   POINT        :155  
- Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
- Am     :22   Median : 270.0   +proj=ster...:  0  
+ Ah     :39   1st Qu.:  80.0   epsg:4326    :  0  
+ Am     :22   Median : 270.0   +proj=long...:  0  
  Fw     :10   Mean   : 290.3                      
  Ab     : 8   3rd Qu.: 450.0                      
  (Other):25   Max.   :1000.0                      
@@ -99,27 +108,26 @@ In data.row.names(row.names, rowsi, i) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  POINT        :3103  
- epsg:28992   :   0  
- +proj=ster...:   0  
+ epsg:4326    :   0  
+ +proj=long...:   0  
                      
                      
                      
 > summary(st_as_sf(meuse.area))
           geometry
  POLYGON      :1  
- epsg:28992   :0  
- +proj=ster...:0  
+ epsg:4326    :0  
+ +proj=long...:0  
 > summary(st_as_sf(meuse.riv))
           geometry
  POLYGON      :1  
- epsg:28992   :0  
- +proj=ster...:0  
+ epsg:4326    :0  
+ +proj=long...:0  
 > summary(st_as_sf(as(meuse.riv, "SpatialLines")))
           geometry
  LINESTRING   :1  
- epsg:28992   :0  
- +proj=ster...:0  
-> pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
+ epsg:4326    :0  
+ +proj=long...:0  
 > summary(st_as_sf(pol.grd))
      part.a           part.b            dist        soil     ffreq   
  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
@@ -130,8 +138,8 @@ In data.row.names(row.names, rowsi, i) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  POLYGON      :3103  
- epsg:28992   :   0  
- +proj=ster...:   0  
+ epsg:4326    :   0  
+ +proj=long...:   0  
                      
                      
                      
@@ -145,8 +153,8 @@ In data.row.names(row.names, rowsi, i) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  LINESTRING   :3103  
- epsg:28992   :   0  
- +proj=ster...:   0  
+ epsg:4326    :   0  
+ +proj=long...:   0  
                      
                      
                      
@@ -172,4 +180,4 @@ In data.row.names(row.names, rowsi, i) :
 > 
 > proc.time()
    user  system elapsed 
-  3.304   0.052   3.364 
+  4.112   0.284   4.092 
