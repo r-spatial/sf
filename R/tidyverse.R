@@ -216,7 +216,7 @@ summarise_.sf = summarise.sf
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
 gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
 		convert = FALSE, factor_key = FALSE) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod()) # nocov
 }
 #' @name dplyr
 #' @export
@@ -242,8 +242,8 @@ gather.sf <- function(data, key = "key", value = "value", ..., na.rm = FALSE,
 #'		spread(VAR, SID) %>% head()
 spread_.sf <- function(data, key_col, value_col, fill = NA, 
 		convert = FALSE, drop = TRUE, sep = NULL) {
-	data <- as.data.frame(data)
-	st_as_sf(NextMethod())
+	data <- as.data.frame(data) # nocov
+	st_as_sf(NextMethod())      # nocov
 }
 #' @name dplyr
 #' @export
@@ -275,10 +275,10 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' @param nest_cols see \link[tidyr]{nest}
 #' @export
 nest_.sf <- function(data, key_col, nest_cols) {
-	class(data) <- setdiff(class(data), "sf")
+	class(data) <- setdiff(class(data), "sf") # nocov start
 	ret = NextMethod()
 	ret$data = lapply(ret$data, st_as_sf)
-	ret
+	ret                                       # nocov end
 }
 
 #' @name dplyr
@@ -300,8 +300,8 @@ separate.sf = separate_.sf
 #' @param from see \link[tidyr]{unite}
 #' @export
 unite_.sf = function(data, col, from, sep = "_", remove = TRUE) {
-	class(data) <- setdiff(class(data), "sf")
-	st_as_sf(NextMethod())
+	class(data) <- setdiff(class(data), "sf") # nocov
+	st_as_sf(NextMethod())                    # nocov
 }
 #' @name dplyr
 #' @export

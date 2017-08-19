@@ -306,6 +306,27 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 > st_distance(p, p, by_element = TRUE)
 [1] 0 0 0
 > 
+> # from https://github.com/r-spatial/sf/issues/458 :
+> pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
+> pol <- st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
+> pol_df <- data.frame(id = 1) 
+> st_geometry(pol_df) <- st_sfc(pol)
+> st_intersects(pts, pol_df[pol_df$id == 2,]) # with empty sf/sfc
+[[1]]
+integer(0)
+
+[[2]]
+integer(0)
+
+[[3]]
+integer(0)
+
+> st_intersects(pts, pol_df[pol_df$id == 2,], sparse = FALSE) # with empty sf/sfc
+    
+[1,]
+[2,]
+[3,]
+> 
 > proc.time()
    user  system elapsed 
-  4.548   0.296   4.567 
+  3.640   0.300   3.635 

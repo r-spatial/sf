@@ -106,3 +106,11 @@ all.equal(x, y)
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
 st_distance(p, p, by_element = TRUE)
+
+# from https://github.com/r-spatial/sf/issues/458 :
+pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
+pol <- st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
+pol_df <- data.frame(id = 1) 
+st_geometry(pol_df) <- st_sfc(pol)
+st_intersects(pts, pol_df[pol_df$id == 2,]) # with empty sf/sfc
+st_intersects(pts, pol_df[pol_df$id == 2,], sparse = FALSE) # with empty sf/sfc
