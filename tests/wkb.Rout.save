@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.1 (2017-06-30) -- "Single Candle"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -77,24 +77,26 @@ Error in rawToHex("error") :
 > # the first WKT is what GDAL reports, and will lack M
 > st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYZ")))))
 LINESTRING (1 7 13,2 8 14,3 9 15,4 10 16,5 11 17,6 12 18)
-[1] "LINESTRINGZ(1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
+[1] "LINESTRING Z (1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
 > st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYZ")))))
 MULTIPOINT (1 7 13,2 8 14,3 9 15,4 10 16,5 11 17,6 12 18)
-[1] "MULTIPOINTZ(1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
+[1] "MULTIPOINT Z (1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
 > st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYZ")))))
 POINT (0 0 0)
-[1] "POINTZ(0 0 0)"
+[1] "POINT Z (0 0 0)"
 > 
 > if (sf:::CPL_gdal_version() >= "2.1.0") { # address GDAL/Fedora (gdal 2.0.2) error:
 +   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_linestring(matrix(1:18,6,3),dim="XYM")))))
 +   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYM")))))
 +   st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYM")))))
++ } else {
++ 	"(output expected when gdal <= 2.1.0, e.g. CRAN/fedora)"
 + }
 LINESTRING (1 7,2 8,3 9,4 10,5 11,6 12)
 MULTIPOINT (1 7,2 8,3 9,4 10,5 11,6 12)
 POINT (0 0)
-[1] "POINTM(0 0 0)"
+[1] "POINT M (0 0 0)"
 > 
 > proc.time()
    user  system elapsed 
-  0.400   0.024   0.424 
+  0.668   0.240   0.646 

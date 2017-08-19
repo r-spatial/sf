@@ -23,7 +23,7 @@ class(st_geometry(tst)[[1]])
 
 if ("GPKG" %in% st_drivers()$name) { # read Int64
     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE)$AWATER)
-    print(st_read(system.file("gpkg/tl.gpkg", package="sf"), , quiet = TRUE, int64_as_string = TRUE)$AWATER)
+    print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE, int64_as_string = TRUE)$AWATER)
 }
 
 # see https://github.com/edzer/sfr/issues/45 :
@@ -35,7 +35,7 @@ if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 }
 
 # layer opening option:
-st_read(system.file("shape/nc.shp", package="sf"),  quiet = TRUE,
+st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE,
 	options = c("ADJUST_TYPE=YES", "ENCODING=CPL_ENC_UTF8"))
 
 x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
@@ -80,9 +80,9 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	print(st_sf(m), n = 3)
 
 	db = system.file("sqlite/b.sqlite", package = "sf") # has an INT8 field
-	b = st_read(db)
+	b = st_read(db, quiet = TRUE)
 	print(b)
-	b = st_read(db, int64_as_string=TRUE)
+	b = st_read(db, int64_as_string = TRUE, quiet = TRUE)
 	print(b)
 
 	if (.Platform$endian == "little") {
@@ -108,5 +108,5 @@ identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], 
 
 if ("GML" %in% st_drivers()$name) {
   gml = system.file("gml/fmi_test.gml", package = "sf")
-  st_read(gml)
+  st_read(gml, quiet = TRUE)
 }
