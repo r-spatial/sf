@@ -160,12 +160,11 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		attributes(ret) = attributes(x)
 		reclass(ret, to, need_close(to))
 	} else { # "horizontal", to the left: split
-		ret = if (from_col == 1)
-				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)),
-						function(i) structure(m[i,], class = class(m)))),
-					recursive = FALSE)
-			else
-				lapply(do.call(c, x), function(y) structure(y, class = class(x[[1]])))
+		ret = if (from_col == 1) # to POINT
+				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), function(i) m[i,])), recursive = FALSE)
+			else 
+				unlist(x, recursive = FALSE)
+		ret = lapply(ret, function(y) structure(y, class = class(x[[1]]))) # will be reset by reclass()
 		attributes(ret) = attributes(x)
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
