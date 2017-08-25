@@ -132,7 +132,7 @@ test_that("can read views (#212)", {
 
 test_that("round trips", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    round_trip = function(conn, wkt, expect = TRUE) {
+    round_trip = function(conn, wkt, do_pg = TRUE) {
         query = paste0("SELECT '", wkt, "'::geometry;")
         returnstr = suppressWarnings(DBI::dbGetQuery(conn, query)$geometry)
         wkb = structure(returnstr, class = "WKB")
@@ -140,7 +140,7 @@ test_that("round trips", {
         message(paste("IN:  ", wkt, "\n"))
         # OUT contains WKB created in PostGIS from wkt, interpreted to R by sf, printed as WKT by sf
         message(paste("OUT: ", txt <- st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
-        if (length(grep("SRID", txt)) == 0) {
+        if (length(grep("SRID", txt)) == 0 && do_pg) {
             query = paste0("SELECT ST_AsText('",sf:::CPL_raw_to_hex(st_as_binary(ret[[1]])),"');")
             received = suppressWarnings(DBI::dbGetQuery(conn, query)$st_astext)
             # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
@@ -187,9 +187,11 @@ test_that("round trips", {
                          "((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),", 
                          "((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),",
                          "((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)),",
-                         "((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)))"), FALSE)
-    round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))", FALSE)
-    round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))", FALSE)
+                         "((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)))"), 
+						 	sf_extSoftVersion()["GDAL"] > "2.1.0")
+    round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))", sf_extSoftVersion()["GDAL"] > "2.1.0")
+    round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))", 
+		sf_extSoftVersion()["GDAL"] > "2.1.0")
 })
 
 test_that("can read using driver", {
