@@ -518,16 +518,16 @@ proj4string:    NA
 2 6 2 c POINT (1 1)
 > merge(a, b, all = TRUE)
 Simple feature collection with 4 features and 3 fields (with 1 geometry empty)
-geometry type:  POINT
+geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 2
 epsg (SRID):    NA
 proj4string:    NA
-  b  a    x    geometry
-1 2 NA    a POINT EMPTY
-2 5  1    b POINT (0 0)
-3 6  2    c POINT (1 1)
-4 7  3 <NA> POINT (2 2)
+  b  a    x                 geometry
+1 2 NA    a GEOMETRYCOLLECTION EMPTY
+2 5  1    b              POINT (0 0)
+3 6  2    c              POINT (1 1)
+4 7  3 <NA>              POINT (2 2)
 > 
 > # joins:
 > inner_join(a, b)
@@ -757,4 +757,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  1.656   0.300   1.647 
+  1.876   0.272   1.900 

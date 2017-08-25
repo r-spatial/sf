@@ -66,7 +66,7 @@ In data.row.names(row.names, rowsi, i) :
 > demo(meuse, ask = FALSE, echo = FALSE)
 > meuse = spTransform(meuse, CRS("+init=epsg:4326"))
 > pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
-> meuse.grid = spTransform(meuse.grid, CRS("+init=epsg:4326"))
+> meuse.grd = spTransform(meuse.grid, CRS("+init=epsg:4326"))
 Warning message:
 In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
   Grid warping not available, coercing to points
@@ -98,7 +98,7 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
  Ab     : 8   3rd Qu.: 450.0                      
  (Other):25   Max.   :1000.0                      
  NA's   : 1                                       
-> summary(st_as_sf(meuse.grid))
+> summary(st_as_sf(meuse.grd))
      part.a           part.b            dist        soil     ffreq   
  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
@@ -113,6 +113,7 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
                      
                      
                      
+> x <- st_as_sf(meuse.grid) # don't print: CRS variations.
 > summary(st_as_sf(meuse.area))
           geometry
  POLYGON      :1  
@@ -177,7 +178,6 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > detach("package:sp")
 > unloadNamespace("rgeos")
 > 
-> 
 > proc.time()
    user  system elapsed 
-  4.112   0.284   4.092 
+  4.512   0.224   4.543 
