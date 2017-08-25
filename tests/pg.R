@@ -17,7 +17,7 @@ pg <- RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "postgis")
             # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
             message(paste("PG:  ", received, "\n"))
         }
-        if (expect)
+        if (do_pg)
 			expect_equal(wkt, txt)
     }
     round_trip(pg, "SRID=4326;POINT M (0 0 0)")
