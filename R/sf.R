@@ -247,9 +247,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 					stringsAsFactors = stringsAsFactors)
 		}
 
-
 	for (i in seq_along(all_sfc_names))
-		df[[ all_sfc_names[i] ]] = fix_NULL_values(x[[ all_sfc_columns[i] ]])
+		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]])
 
 	if (! missing(precision))
 		attr(df[[sfc_name]], "precision") = precision
@@ -397,7 +396,7 @@ merge.sf = function(x, y, ...) {
 	ret = NextMethod()
 	g = ret[[sf_column]] # may have NULL values in it
 	ret[[sf_column]] = NULL
-	st_geometry(ret) = fix_NULL_values(g)
+	st_geometry(ret) = st_sfc(g)
 	ret
 }
 

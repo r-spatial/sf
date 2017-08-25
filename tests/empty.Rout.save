@@ -104,7 +104,7 @@ GEOMETRYCOLLECTION EMPTY
 + st_polygon(list(), "XY"),
 + st_multipolygon(list(), "XY"),
 + st_geometrycollection(, "XY")))
-Geometry set for 7 features  (with 6 geometries empty)
+Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
@@ -124,7 +124,7 @@ POLYGON EMPTY
 + st_polygon(list(), "XYZ"),
 + st_multipolygon(list(), "XYZ"),
 + st_geometrycollection(dim = "XYZ")))
-Geometry set for 7 features  (with 6 geometries empty)
+Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZ
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
@@ -144,7 +144,7 @@ POLYGON Z EMPTY
 + st_polygon(list(), "XYM"),
 + st_multipolygon(list(), "XYM"),
 + st_geometrycollection(dim = "XYM")))
-Geometry set for 7 features  (with 6 geometries empty)
+Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
@@ -164,7 +164,7 @@ POLYGON M EMPTY
 + st_polygon(list(), "XYZM"),
 + st_multipolygon(list(), "XYZM"),
 + st_geometrycollection(dim = "XYZM")))
-Geometry set for 7 features  (with 6 geometries empty)
+Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYZM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
@@ -292,4 +292,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  0.708   0.276   0.675 
+  0.716   0.280   0.702 

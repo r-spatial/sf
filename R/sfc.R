@@ -38,64 +38,75 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
 	# already contains a zillion sfg objects, than do.call(st_sfc, lst) ...
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfg")
-			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg")))
+			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg") || is.null(lst[[1]][[1]])))
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
+
+	# check for NULLs:
+	a = attributes(lst)
+	is_null = vapply(lst, is.null, TRUE)
+	lst = unclass(lst)
+	lst = lst[! is_null]
+	attributes(lst) = a
+
+	sfg_classes = vapply(lst, class, rep(NA_character_, 3))
 	cls = if (length(lst) == 0) # empty set: no geometries read
 		c("sfc_GEOMETRY", "sfc")
 	else {
-		# n_empty:
-		if (is.null(attr(lst, "n_empty"))) { # we're NOT comming from CPL_read_wkb:
-			attr(lst, "n_empty") = sum(vapply(lst, function(x) length(x) == 0, TRUE))
-			u = unique(vapply(lst, class, rep("", 3))[1,])
-			if (length(u) > 1)
-				stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
-		}
-
 		# class: do we have a mix of geometry types?
 		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
 				attr(lst, "single_type")
 			else
-				length(unique(vapply(lst, function(y) class(y)[2], ""))) == 1L
+				length(unique(sfg_classes[2L,])) == 1L
 		attr(lst, "single_type") = NULL # clean up
-		if (single) {
-			attr(lst, "classes") = NULL
-			c(paste0("sfc_", class(lst[[1L]])[2L]), "sfc")
-		} else {
-			attr(lst, "classes") = vapply(lst, class, rep("", 3))[2L,]
+		if (single)
+			c(paste0("sfc_", sfg_classes[2L, 1L]), "sfc")
+		else
 			c("sfc_GEOMETRY", "sfc")         # the mix
-		}
 	}
+
+	if (any(is_null)) {
+		ret = vector("list", length(is_null))
+		ret[!is_null] = lst
+		ret[ is_null] = list(typed_empty(cls))
+		attributes(ret) = attributes(lst)
+		lst = ret
+	}
+
+	# set class:
+	class(lst) = cls
+
+	# set precision
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
 
+	# (re)compute & set bbox:
+	attr(lst, "bbox") = compute_bbox(lst)
+
+	# get & set crs:
 	if (is.na(crs) && !is.null(attr(lst, "crs")))
 		crs = attr(lst, "crs")
+	st_crs(lst) = crs
 
-	class(lst) = cls
-	attr(lst, "bbox") = compute_bbox(lst)
-	st_set_crs(lst, crs)
+	# set classes attr in case of GEOMETRY
+	if (inherits(lst, "sfc_GEOMETRY")) # recompute, as NULL's may have been substituted:
+		attr(lst, "classes") = vapply(lst, class, rep(NA_character_, 3))[2L,]
+
+	# set n_empty, check XY* is uniform:
+	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # this is set by CPL_read_wkb:
+		attr(lst, "n_empty") = sum(is.na(st_dimension(lst)))
+		if (length(u <- unique(sfg_classes[1L,])) > 1)
+			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
+	}
+	lst
 }
 
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
-	recompute_bb = !missing(i)
     old = x
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	cls = class(x)[1]
-	x = NextMethod()
-	if (any(vapply(x, is.null, TRUE)))
-		x = st_sfc(fix_NULL_values(x, cls))
-	a = attributes(old)
-	if (!is.null(names(x)))
-		a$names = names(x)[i]
-	if (!is.null(a$classes))
-		a$classes = a$classes[i]
-    attributes(x) = a
-	if (recompute_bb)
-		attr(x, "bbox") = compute_bbox(x)
-    structure(x, class = class(old), n_empty = sum(is.na(st_dimension(x))))
+	st_sfc(NextMethod(), crs = st_crs(old), precision = st_precision(old))
 }
 
 
@@ -103,15 +114,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 "[<-.sfc" = function (x, i, j, value) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
-	st_sfc(fix_NULL_values(NextMethod()))
+	class(x) = setdiff(class(x), "sfc")
+	st_sfc(NextMethod())
 }
 
 #' @export
 c.sfc = function(..., recursive = FALSE) {
-#	lst = list(...)
-#	ret = do.call(st_sfc, unlist(lapply(lst, unclass), recursive = FALSE))
-#	return(st_set_crs(ret, st_crs(lst[[1]])))
-
 	lst = list(...)
 	cls = class(lst[[1]])
 	eq = if (length(lst) > 1)
@@ -358,10 +366,8 @@ st_set_precision.sf <- function(x, precision) {
     st_set_precision(x, value)
 }
 
-# if g may have NULL elements, replace it with (appropriate?) empty geometries
-fix_NULL_values = function(g, cls = class(g)[1]) {
-
-	empty = switch(cls,
+typed_empty = function(cls) {
+	switch(cls[1],
 		sfc_POINT = st_point(),
 		sfc_MULTIPOINT = st_multipoint(),
 		sfc_LINESTRING = st_linestring(),
@@ -369,12 +375,6 @@ fix_NULL_values = function(g, cls = class(g)[1]) {
 		sfc_POLYGON = st_polygon(),
 		sfc_MULTIPOLYGON = st_multipolygon(),
 		st_geometrycollection())
-
-	isNull = which(vapply(g, is.null, TRUE))
-	for (i in isNull)
-		g[[i]] = empty
-	ne = attr(g, "n_empty")
-	structure(g, n_empty = min(length(g), length(isNull) + ifelse(is.null(ne), 0, ne)))
 }
 
 #' retrieve coordinates in matrix form

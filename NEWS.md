@@ -1,14 +1,18 @@
 # version 0.5-4
 
+* `st_sfc` converts `NULL` values into empty geometries, and correctly identifies empty `POINT`s; #466, #463
+
+* `st_write` abbreviates column names if driver is `ESRI Shapefile`; #464
+
 * add `of_largest_polygon` argument to `st_centroid`, to get the centroid of the largest polygon; #450
 
 * fix use of `st_relate` as join predicate for `st_join`; #454
 
-* fixed bug where `st_intersects` with empty second argument would crash; #458
+* fix bug where `st_intersects` with empty second argument would crash; #458
 
 * produce better WKT; #463
 
-* fix bug in `st_cast.sf`; #462
+* fix bug in `st_cast.sf`; #461, #462
 
 * change `st_read` SRS assignment logic; corrects reading projected geojson with gdal 2.2.0; #449
 
