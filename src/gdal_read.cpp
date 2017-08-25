@@ -243,8 +243,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 
 	if (! quiet)
-		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] <<
-			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;
+		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
+			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
