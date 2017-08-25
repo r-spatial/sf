@@ -1,6 +1,6 @@
 check_join = function(x, y) {
 	if (inherits(y, "sf"))
-		stop("y should be a data.frame; no spatial joins supported yet", .call = FALSE)
+		stop("y should be a data.frame; for spatial joins, use st_join", .call = FALSE)
 }
 
 sf_join = function(g, sf_column) {
@@ -107,5 +107,5 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 		i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
 		ix = rep(seq_len(nrow(x)), lengths(i))
 	}
-	st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i),,drop=FALSE]))
+	st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))
 }

@@ -62,3 +62,12 @@ test_that("delete and update work (#304) ", {
   expect_silent(x <- read_sf("x.shp"))
   expect_error(st_write(x, "x.shp", driver = character(0))) # err
 })
+
+test_that("esri shapefiles shorten long field names", {
+  nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE)
+  nc$this.is.a.very.long.field.name = 1
+  expect_warning(st_write(nc, "ncx.shp", quiet = TRUE), "Field names abbreviated for ESRI Shapefile driver")
+  nc$this.is.a.very.long.field.name2 = 2
+  expect_warning(st_write(nc, "ncy.shp", quiet = TRUE), "Field names abbreviated for ESRI Shapefile driver")
+  # expect_error(st_write(nc, "ncy.shp", quiet = TRUE), "Non-unique field names")
+})

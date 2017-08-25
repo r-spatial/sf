@@ -155,6 +155,29 @@ clean_columns = function(obj, factorsAsCharacter) {
 	structure(obj, colclasses = colclasses)
 }
 
+abbreviate_shapefile_names = function(x) {
+# from: rgdal/pkg/R/ogr_write.R:
+    fld_names <- names(x)
+#   if (!is.null(encoding)) {
+#       fld_names <- iconv(fld_names, from=encoding, to="UTF-8")
+#   }
+	if (any(nchar(fld_names) > 10)) {
+		fld_names <- abbreviate(fld_names, minlength = 7)
+		warning("Field names abbreviated for ESRI Shapefile driver")
+		if (any(nchar(fld_names) > 10)) 
+			fld_names <- abbreviate(fld_names, minlength = 5) # nocov
+	}
+# fix for dots in DBF field names 121124
+	if (length(wh. <- grep("\\.", fld_names) > 0))
+		fld_names[wh.] <- gsub("\\.", "_", fld_names[wh.])
+
+	if (length(fld_names) != length(unique(fld_names)))
+		stop("Non-unique field names") # nocov
+
+	names(x) = fld_names
+	x
+}
+
 #' Write simple features object to file or database
 #'
 #' Write simple features object to file or database
@@ -219,11 +242,13 @@ st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
 
+	if (driver == "ESRI Shapefile") { # remove trailing .shp from layer name
+		layer = sub(".shp$", "", layer)
+		obj = abbreviate_shapefile_names(obj)
+	}
+
 	obj = clean_columns(as.data.frame(obj), factorsAsCharacter)
 	# this attaches attr colclasses
-
-	if (driver == "ESRI Shapefile") # remove trailing .shp from layer name
-		layer = sub(".shp$", "", layer)
 
 	dim = if (length(geom) == 0)
 			"XY"
