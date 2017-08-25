@@ -188,9 +188,9 @@ test_that("round trips", {
                          "((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),",
                          "((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)),",
                          "((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)))"))
+      round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))")
+      round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))")
     }
-    round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))")
-    round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))")
 })
 
 test_that("can read using driver", {
