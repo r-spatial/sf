@@ -94,11 +94,19 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 
 	# set n_empty, check XY* is uniform:
 	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # this is set by CPL_read_wkb:
-		attr(lst, "n_empty") = sum(is.na(st_dimension(lst)))
+		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
 		if (length(u <- unique(sfg_classes[1L,])) > 1)
 			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 	}
 	lst
+}
+
+sfg_is_empty = function(x) {
+	switch(class(x)[2],
+		POINT = any(!is.finite(x)),
+		MULTIPOINT = , LINESTRING = , CIRCULARSTRING = , CURVE = nrow(x) == 0,
+		length(x) == 0
+	)
 }
 
 #' @export

@@ -108,6 +108,7 @@ test_that("can read from db", {
 })
 
 test_that("can read views (#212)", {
+	#skip("views test are failing")
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_equal(DBI::dbExecute(pg, 
                 "CREATE VIEW sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
@@ -132,7 +133,7 @@ test_that("can read views (#212)", {
 
 test_that("round trips", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    round_trip = function(conn, wkt, do_pg = TRUE) {
+    round_trip = function(conn, wkt) {
         query = paste0("SELECT '", wkt, "'::geometry;")
         returnstr = suppressWarnings(DBI::dbGetQuery(conn, query)$geometry)
         wkb = structure(returnstr, class = "WKB")
@@ -140,14 +141,13 @@ test_that("round trips", {
         message(paste("IN:  ", wkt, "\n"))
         # OUT contains WKB created in PostGIS from wkt, interpreted to R by sf, printed as WKT by sf
         message(paste("OUT: ", txt <- st_as_text(ret, EWKT=TRUE)[[1]], "\n"))
-        if (length(grep("SRID", txt)) == 0 && do_pg) {
+        if (length(grep("SRID", txt)) == 0) {
             query = paste0("SELECT ST_AsText('",sf:::CPL_raw_to_hex(st_as_binary(ret[[1]])),"');")
             received = suppressWarnings(DBI::dbGetQuery(conn, query)$st_astext)
             # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
             message(paste("PG:  ", received, "\n"))
         }
-        if (do_pg)
-			expect_equal(wkt, txt)
+		expect_equal(wkt, txt)
     }
     round_trip(pg, "SRID=4326;POINT M (0 0 0)")
     round_trip(pg, "POINT Z (0 0 0)")
@@ -187,11 +187,9 @@ test_that("round trips", {
                          "((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),", 
                          "((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),",
                          "((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)),",
-                         "((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)))"), 
-						 	sf_extSoftVersion()["GDAL"] > "2.1.0")
-    round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))", sf_extSoftVersion()["GDAL"] > "2.1.0")
-    round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))", 
-		sf_extSoftVersion()["GDAL"] > "2.1.0")
+                         "((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)))"))
+    round_trip(pg, "TRIANGLE ((0 0, 0 9, 9 0, 0 0))")
+    round_trip(pg, "TIN Z (((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)))")
 })
 
 test_that("can read using driver", {
