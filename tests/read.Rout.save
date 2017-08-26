@@ -344,7 +344,7 @@ First 3 features:
 > 
 > if ("GML" %in% st_drivers()$name) {
 +   gml = system.file("gml/fmi_test.gml", package = "sf")
-+   st_read(gml, quiet = TRUE)
++   print(st_read(gml, quiet = TRUE), n = 0)
 + }
 Simple feature collection with 22 features and 10 fields
 geometry type:  POINT
@@ -352,134 +352,7 @@ dimension:      XY
 bbox:           xmin: 23.57309 ymin: 59.82076 xmax: 26.44457 ymax: 60.64668
 epsg (SRID):    4258
 proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
-First 20 features:
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             gml_id
-1  WFS-8xxARxbgkA5J421_WXtx16YlC32JTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy2aujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-2  WFS-KcXd5r6N8vkebEjSG.zxUiZWIomJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy2bujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-3  WFS-GFmJLMORft8jyl1MC0x7l63vBMSJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy2cOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-4  WFS-hBRBA8VDFX9ZLwA.dD9Uq7jkiMKJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy2cujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-5  WFS-ToyE7mpc8s9RFRQDZd5swcRdyQOJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy3YujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-6  WFS-kv8O2QAcKlQg24QyjPpI_eQfVpqJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy3aOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-7  WFS-SXVWyrPYfLQt7seuJYmdrANMdTiJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy3bOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-8  WFS-yCyH2B0Vg1ozCS4FIk0OELORRCqJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy5bOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-9  WFS-npd6DKIvDvw7gNJOx.MoYei_TSCJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDBy5bujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-10 WFS-u3Zzp9UpDENLrw9rxGopUvSSYXCJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgwZujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-11 WFS-PRAWCoETeWjy5X6PT3u2sRM7GECJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgwaOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-12 WFS-pRcTSnY0UVYTu01at.H55JPUzjeJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgwaujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-13 WFS-1ei1xoSsocqT7SqpKqLxnbLoN4SJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgwbujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-14 WFS-rDUgKMXD92k0OFS0fGv8eE8bpUyJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgyZOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-15 WFS-YeL9vtCGrgM8ICSDWV3Bhr5JhJaJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgyZujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-16 WFS-NSySNpiz37QW2P4NWkuB3gICDiGJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgycOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-17 WFS-Nyk8kgdv_0.yj5tVFng1.klAp7CJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFgzcujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-18 WFS-FMnmiBqWap8.B.iFRTp6tvYD8_6JTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFiycOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-19 WFS-J07hP0OiyST28p469.wyvGUlT9CJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFizYOjXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-20 WFS-TEjY0XyoPEgv4MRsOaQWhBalfoCJTowsIWbbpdOt.Lnl5dsPTTv3c3Trvlw9NGXk6dZMOnZ5dOumnbl7YdnXLww6eULSxZc.ndU07ctr76FChGNj5c61ItCnHdOmjJq4Z2XdkqaduW199ChQjOzbdPPTk51mMWDFi0cujXl899_LJf39svLvy09MOLZliZmzD0y8.kTM2b8eHZlrUzab8aSu69MzhrbcPiJp59MO7HlpWroQGltw.IvDfj0c5wSQ.wm9ty9Mu.hh5YduXpl5c6yOmTD5a23Tz56d2epl8dKxp2Gc2t3XbPzU.mHpp37uc4TW49cOzT08yd2bfE1ufTD00791Tzwy1ub.GXdkw9MN_Jh07PLc59N_LLk49cvLzf05K4Qs23S6db8XPLy7Yemnfu5unXfLh6aMvJ06yYdOzy6ddNO3L2w7OuXhh08mh007ctPpl4TNDpp25bW_dlrGq1IY
-          beginPosition          endPosition         timePosition
-1  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-2  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-3  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-4  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-5  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-6  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-7  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-8  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-9  2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-10 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-11 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-12 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-13 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-14 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-15 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-16 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-17 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-18 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-19 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-20 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z 2014-01-01T00:00:00Z
-                              value identifier      region                 time
-1  atmosphere\n                         100965   Raasepori 2014-01-01T00:00:00Z
-2  atmosphere\n                         100967        Salo 2014-01-01T00:00:00Z
-3  atmosphere\n                         100968      Vantaa 2014-01-01T00:00:00Z
-4  atmosphere\n                         100969       Inkoo 2014-01-01T00:00:00Z
-5  atmosphere\n                         100971    Helsinki 2014-01-01T00:00:00Z
-6  atmosphere\n                         100974       Lohja 2014-01-01T00:00:00Z
-7  atmosphere\n                         100976       Vihti 2014-01-01T00:00:00Z
-8  atmosphere\n                         100996    Helsinki 2014-01-01T00:00:00Z
-9  atmosphere\n                         100997 Kirkkonummi 2014-01-01T00:00:00Z
-10 atmosphere\n                         101003    Helsinki 2014-01-01T00:00:00Z
-11 atmosphere\n                         101004    Helsinki 2014-01-01T00:00:00Z
-12 atmosphere\n                         101005       Espoo 2014-01-01T00:00:00Z
-13 atmosphere\n                         101007    Helsinki 2014-01-01T00:00:00Z
-14 atmosphere\n                         101022      Porvoo 2014-01-01T00:00:00Z
-15 atmosphere\n                         101023      Porvoo 2014-01-01T00:00:00Z
-16 atmosphere\n                         101028      Porvoo 2014-01-01T00:00:00Z
-17 atmosphere\n                         101039     Loviisa 2014-01-01T00:00:00Z
-18 atmosphere\n                         101128      Somero 2014-01-01T00:00:00Z
-19 atmosphere\n                         101130    Hyvinkää 2014-01-01T00:00:00Z
-20 atmosphere\n                         101149  Nurmijärvi 2014-01-01T00:00:00Z
-   result.MeasurementTimeseries.point.MeasurementTVP.value
-1                                                      3.3
-2                                                      2.6
-3                                                      3.1
-4                                                      3.3
-5                                                      3.6
-6                                                      3.4
-7                                                      3.4
-8                                                      3.3
-9                                                      3.4
-10                                                     3.0
-11                                                     3.2
-12                                                     3.2
-13                                                     3.7
-14                                                     2.7
-15                                                     2.9
-16                                                     3.1
-17                                                     3.0
-18                                                     2.4
-19                                                     3.2
-20                                                     2.8
-                                                  name
-1                   Raasepori Jussarö, -16000041, 2757
-2            Salo Kiikala lentokenttä, -16000126, 2777
-3  Vantaa Helsinki-Vantaan lentoasema, -16000063, 2974
-4                      Inkoo Bågaskär, -16000158, 2984
-5                 Helsinki Kaisaniemi, -16000150, 2978
-6                         Lohja Porla, -16000023, 2706
-7                       Vihti Maasoja, -16000165, 2758
-8                    Helsinki Harmaja, -16000153, 2795
-9               Kirkkonummi Mäkiluoto, -16000119, 2794
-10         Helsinki Helsingin majakka, -16000134, 2989
-11                   Helsinki Kumpula, -16000138, 2998
-12                    Espoo Sepänkylä, -16000137, 2703
-13             Helsinki Rautatientori, -16011680, 2934
-14                Porvoo Kalbådagrund, -16000007, 2987
-15                     Porvoo Emäsalo, -16000110, 2991
-16                   Porvoo Harabacka, -16000142, 2759
-17                 Loviisa Orrengrund, -16000050, 2992
-18                     Somero Salkola, -16011860, 2949
-19             Hyvinkää Hyvinkäänkylä, -16000152, 2829
-20                  Nurmijärvi Röykkä, -16000151, 2983
-                    geometry
-1  POINT (23.57309 59.82076)
-2  POINT (23.64976 60.46415)
-3   POINT (24.95675 60.3267)
-4  POINT (24.01408 59.93114)
-5  POINT (24.94459 60.17523)
-6  POINT (24.04951 60.24446)
-7  POINT (24.39862 60.41875)
-8  POINT (24.97539 60.10512)
-9  POINT (24.34934 59.92014)
-10 POINT (24.92631 59.94898)
-11 POINT (24.96131 60.20307)
-12 POINT (24.74152 60.20761)
-13  POINT (24.9446 60.17169)
-14 POINT (25.59855 59.98518)
-15 POINT (25.62546 60.20382)
-16  POINT (25.6073 60.39172)
-17 POINT (26.44457 60.27488)
-18 POINT (23.80559 60.64668)
-19   POINT (24.803 60.59589)
-20 POINT (24.65373 60.50878)
 > 
 > proc.time()
    user  system elapsed 
-  1.232   0.292   1.214 
+  1.256   0.312   1.259 
