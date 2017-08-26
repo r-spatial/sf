@@ -222,10 +222,22 @@ gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE,
 #' @export
 #' @param key see original function docs
 #' @param value see original function docs
-gather.sf <- function(data, key = "key", value = "value", ..., na.rm = FALSE,
-	        convert = FALSE, factor_key = FALSE) {
-	st_as_sf(NextMethod())
+gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
+
+	if (! requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+
+    key = rlang::enquo(key)
+    value = rlang::enquo(value)
+
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+
+	class(data) <- setdiff(class(data), "sf")
+    st_as_sf(tidyr::gather(data, !!key, !!value, ..., 
+		na.rm = na.rm, convert = convert, factor_key = factor_key))
 }
+
 
 
 #' @name dplyr
@@ -249,8 +261,15 @@ spread_.sf <- function(data, key_col, value_col, fill = NA,
 #' @export
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {
-	data <- as.data.frame(data)
-	st_as_sf(NextMethod())
+
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+    key = rlang::enquo(key)
+    value = rlang::enquo(value)
+
+	class(data) <- setdiff(class(data), "sf")
+    st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert, 
+		drop = drop, sep = sep))
 }
 
 
@@ -288,13 +307,26 @@ nest_.sf <- function(data, key_col, nest_cols) {
 #' @param extra see \link[tidyr]{separate}
 #' @export
 separate_.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
-	convert = FALSE, extra = "warn", fill = "warn", ...) {
-	class(data) <- setdiff(class(data), "sf")
-	st_as_sf(NextMethod())
+	convert = FALSE, extra = "warn", fill = "warn", ...) { 
+	class(data) <- setdiff(class(data), "sf") # nocov
+	st_as_sf(NextMethod())                    # nocov
 }
 #' @name dplyr
 #' @export
-separate.sf = separate_.sf
+separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
+	convert = FALSE, extra = "warn", fill = "warn", ...) {
+
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+	col = rlang::enquo(col)
+
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+
+	class(data) <- setdiff(class(data), "sf")
+	st_as_sf(tidyr::separate(data, !!col, into = into, 
+		sep = sep, remove = remove, convert = convert, extra = extra, fill = fill, ...))
+}
 
 #' @name dplyr
 #' @param from see \link[tidyr]{unite}

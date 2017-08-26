@@ -125,8 +125,8 @@ summarise_.sf(.data, ..., .dots, do_union = TRUE)
 gather_.sf(data, key_col, value_col, gather_cols, na.rm = FALSE,
   convert = FALSE, factor_key = FALSE)
 
-gather.sf(data, key = "key", value = "value", ..., na.rm = FALSE,
-  convert = FALSE, factor_key = FALSE)
+gather.sf(data, key, value, ..., na.rm = FALSE, convert = FALSE,
+  factor_key = FALSE)
 
 spread_.sf(data, key_col, value_col, fill = NA, convert = FALSE,
   drop = TRUE, sep = NULL)
