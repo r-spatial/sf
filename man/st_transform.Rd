@@ -67,7 +67,7 @@ st_area(nc[1,]) # area, using geosphere::areaPolygon
 st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 library(units)
-as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
+set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_proj_info("datum")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))

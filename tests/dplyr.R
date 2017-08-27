@@ -90,3 +90,7 @@ library(DBI)
 library(RSQLite)
 con = dbConnect(SQLite(), dbname = system.file("gpkg/nc.gpkg", package = "sf"))
 dbReadTable(con, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
+
+# nest:
+storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
+x <- storms.sf %>% group_by(name, year) %>% nest

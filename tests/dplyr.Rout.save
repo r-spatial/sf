@@ -262,6 +262,10 @@ proj4string:    NA
 10    15    1431  4144    17    1832 MULTIPOLYGON (((-78.6557159...
 11     5     659  2655     6     841 MULTIPOLYGON (((-78.6557159...
 > 
+> # nest:
+> storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
+> x <- storms.sf %>% group_by(name, year) %>% nest
+> 
 > proc.time()
    user  system elapsed 
-  2.056   0.280   2.025 
+  3.124   0.300   3.113 

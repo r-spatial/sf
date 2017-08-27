@@ -93,7 +93,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
 #' st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 #' library(units)
-#' as.units(st_area(st_transform(nc[1,], 2264)), make_unit("m")^2)
+#' set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform.sf = function(x, crs, ...) {
 	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
 	x

@@ -12,7 +12,7 @@
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc %>% filter(AREA > .1) %>% plot()
 #' @export
-filter_.sf <- function(.data, ..., .dots) {
+filter.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod())
 	sf_column = attr(.data, "sf_column")
 	geom = .data[[sf_column]]
@@ -22,9 +22,6 @@ filter_.sf <- function(.data, ..., .dots) {
 	ret[[sf_column]] = geom[sel]
 	st_as_sf(ret)
 }
-#' @name dplyr
-#' @export
-filter.sf <- filter_.sf
 
 #' @name dplyr
 #' @export
@@ -33,24 +30,18 @@ filter.sf <- filter_.sf
 #' st_geometry(nc) %>% plot()
 #' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 #' title("the ten counties with smallest area")
-arrange_.sf <- function(.data, ..., .dots) {
+arrange.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
-#' @name dplyr
-#' @export
-arrange.sf <- arrange_.sf
 
 #' @name dplyr
 #' @param .keep_all see corresponding function in dplyr
 #' @export
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
-distinct_.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
+distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 	st_as_sf(NextMethod())
 }
-#' @name dplyr
-#' @export
-distinct.sf <- distinct_.sf
 
 #' @name dplyr
 #' @param add see corresponding function in dplyr
@@ -58,13 +49,10 @@ distinct.sf <- distinct_.sf
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc %>% group_by(area_cl) %>% class()
-group_by_.sf <- function(.data, ..., .dots, add = FALSE) {
+group_by.sf <- function(.data, ..., .dots, add = FALSE) {
 	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(NextMethod())
 }
-#' @name dplyr
-#' @export
-group_by.sf <- group_by_.sf
 
 #' @name dplyr
 #' @export
@@ -77,28 +65,22 @@ ungroup.sf <- function(x, ...) {
 #' @export
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
-mutate_.sf <- function(.data, ..., .dots) {
+mutate.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
-#' @name dplyr
-#' @export
-mutate.sf <- mutate_.sf
 
 #' @name dplyr
 #' @export
 #' @examples
 #' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #' nc %>% transmute(AREA = AREA/10) %>% class()
-transmute_.sf <- function(.data, ..., .dots) {
+transmute.sf <- function(.data, ..., .dots) {
 	ret = NextMethod()
 	if (attr(ret, "sf_column") %in% names(ret))
 		st_as_sf(NextMethod())
 	else
 		ret
 }
-#' @name dplyr
-#' @export
-transmute.sf <- transmute_.sf
 
 #' @name dplyr
 #' @export
@@ -107,14 +89,6 @@ transmute.sf <- transmute_.sf
 #' nc %>% select(SID74, SID79, geometry) %>% names()
 #' nc %>% select(SID74, SID79) %>% class()
 #' nc %>% select(SID74, SID79, geometry) %>% class()
-select_.sf <- function(.data, ..., .dots = NULL) {
-  .dots <- c(.dots, attr(.data, "sf_column")) 
-  ret = NextMethod()
-  structure(ret, agr = st_agr(ret))
-}
-
-#' @name dplyr
-#' @export
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
 
@@ -136,39 +110,32 @@ select.sf <- function(.data, ...) {
 #' @export
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
-rename_.sf <- function(.data, ..., .dots) {
+rename.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
-
-#' @name dplyr
-#' @export
-rename.sf <- rename_.sf
 
 #' @name dplyr
 #' @export
 #' @examples
 #' nc %>% slice(1:2)
-slice_.sf <- function(.data, ..., .dots) {
+slice.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod())
 }
 
 #' @name dplyr
 #' @export
-slice.sf <- slice_.sf
-
-#' @name dplyr
-#' @export
 #' @aliases summarise
 #' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points.
+#' @examples
+#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+#' nc.g <- nc %>% group_by(area_cl)
+#' nc.g %>% summarise(mean(AREA))
+#' nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
+#' nc %>% as.data.frame %>% summarise(mean(AREA))
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
 	crs = st_crs(.data)
 	ret = NextMethod()
-
-	if (utils::packageVersion("dplyr") <= "0.5.0") {
-		stopifnot(requireNamespace("lazyeval", quietly = TRUE)) # nocov
-		do_union = is.null(.dots$do_union) || isTRUE(lazyeval::lazy_eval(.dots$do_union)) # nocov
-	}
 
 	geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
 		geom = st_geometry(.data)
@@ -189,39 +156,19 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	ret$do_union = NULL
 	st_as_sf(ret, crs = crs)
 }
-#' @name dplyr
-#' @export
-#' @examples
-#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
-#' nc.g <- nc %>% group_by(area_cl)
-#' nc.g %>% summarise(mean(AREA))
-#' nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
-#' nc %>% as.data.frame %>% summarise(mean(AREA))
-summarise_.sf = summarise.sf
-
-## summarize_ not needed
 
 ## tidyr methods:
 
 #' @name dplyr
 #' @export
 #' @param data see original function docs
-#' @param key_col see original function docs
-#' @param value_col see original function docs
-#' @param gather_cols see original function docs
+#' @param key see original function docs
+#' @param value see original function docs
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples 
 #' library(tidyr)
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
-gather_.sf <- function(data, key_col, value_col, gather_cols, na.rm = FALSE, 
-		convert = FALSE, factor_key = FALSE) {
-	st_as_sf(NextMethod()) # nocov
-}
-#' @name dplyr
-#' @export
-#' @param key see original function docs
-#' @param value see original function docs
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
 
 	if (! requireNamespace("rlang", quietly = TRUE))
@@ -239,7 +186,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 
-
 #' @name dplyr
 #' @param fill see original function docs
 #' @param convert see original function docs
@@ -252,13 +198,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 #' nc %>% select(SID74, SID79, geometry, row) %>% 
 #'		gather(VAR, SID, -geometry, -row) %>% 
 #'		spread(VAR, SID) %>% head()
-spread_.sf <- function(data, key_col, value_col, fill = NA, 
-		convert = FALSE, drop = TRUE, sep = NULL) {
-	data <- as.data.frame(data) # nocov
-	st_as_sf(NextMethod())      # nocov
-}
-#' @name dplyr
-#' @export
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {
 
@@ -271,7 +210,6 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
     st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert, 
 		drop = drop, sep = sep))
 }
-
 
 #' @name dplyr
 #' @param tbl see original function docs
@@ -291,27 +229,30 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 }
 
 #' @name dplyr
-#' @param nest_cols see \link[tidyr]{nest}
+#' @param .key see \link[tidyr]{nest}
 #' @export
-nest_.sf <- function(data, key_col, nest_cols) {
-	class(data) <- setdiff(class(data), "sf") # nocov start
-	ret = NextMethod()
-	ret$data = lapply(ret$data, st_as_sf)
-	ret                                       # nocov end
+#' @examples
+#' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
+#' x <- storms.sf %>% group_by(name, year) %>% nest
+#' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
+#' trs.sf = st_sf(x[,1:2], trs)
+#' plot(trs.sf["year"], axes = TRUE)
+#' @details \code{nest.sf} assumes that a simple feature geometry list-column was among the columns that were nested.
+nest.sf = function (data, ..., .key = "data") {
+	class(data) <- setdiff(class(data), "sf")
+	key = enquo(.key)
+	ret = nest(data, ..., .key = !! key)
+	# should find out first if geometry column was in ... !
+	ret[[.key]] = lapply(ret[[.key]], st_as_sf)
+	ret
 }
+
 
 #' @name dplyr
 #' @param col see \link[tidyr]{separate}
 #' @param into see \link[tidyr]{separate}
 #' @param remove see \link[tidyr]{separate}
 #' @param extra see \link[tidyr]{separate}
-#' @export
-separate_.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
-	convert = FALSE, extra = "warn", fill = "warn", ...) { 
-	class(data) <- setdiff(class(data), "sf") # nocov
-	st_as_sf(NextMethod())                    # nocov
-}
-#' @name dplyr
 #' @export
 separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 	convert = FALSE, extra = "warn", fill = "warn", ...) {
@@ -329,19 +270,11 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 }
 
 #' @name dplyr
-#' @param from see \link[tidyr]{unite}
-#' @export
-unite_.sf = function(data, col, from, sep = "_", remove = TRUE) {
-	class(data) <- setdiff(class(data), "sf") # nocov
-	st_as_sf(NextMethod())                    # nocov
-}
-#' @name dplyr
 #' @export
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
 	st_as_sf(NextMethod())
 }
-     
 
 
 ## tibble methods:
