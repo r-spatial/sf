@@ -174,7 +174,7 @@ Error : inherits(obj, "sf") is not TRUE
 > try(st_write(x, c("foo", "bar")))
 Error : length(dsn) == 1 is not TRUE
 In addition: Warning message:
-In if (file.exists(dsn)) dsn = normalizePath(dsn) :
+In if (file.exists(dsn)) dsn = enc2utf8(normalizePath(dsn)) :
   the condition has length > 1 and only the first element will be used
 > try(st_write(x, "foo", driver = "foo"))
 driver `foo' not available.
@@ -355,4 +355,4 @@ proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  1.256   0.312   1.259 
+  1.216   0.328   1.233 

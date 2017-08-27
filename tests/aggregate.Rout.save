@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
+Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -114,4 +114,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.900   0.200   0.899 
+  0.720   0.308   0.715 
