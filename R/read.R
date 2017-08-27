@@ -71,7 +71,7 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 		layer = character(0)
 
 	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
+		dsn = enc2utf8(normalizePath(dsn))
 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
@@ -237,7 +237,7 @@ st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
 		stop("dsn should specify a data source or filename")
 
 	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
+		dsn = enc2utf8(normalizePath(dsn))
 
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL
@@ -325,7 +325,7 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	if (file.exists(dsn))
-		dsn = normalizePath(dsn)
+		dsn = enc2utf8(normalizePath(dsn))
 	CPL_get_layers(dsn, options, do_count)
 }
 
