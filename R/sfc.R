@@ -18,14 +18,15 @@ format.sfc = function(x, ..., digits = 30) {
 #' Create simple feature list column, set class, and add coordinate reference system
 #'
 #' @name sfc
-#' @param ... one or more simple feature geometries
+#' @param ... zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.
 #' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
+#' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature collection object is a list of class
-#' \code{c("stc_TYPE", "sfc")} which contains objects of identical type. This
-#' function creates such an object from a list of simple feature geometries (of
-#' class \code{sfg}).
+#' \code{c("stc_TYPE", "sfc")} which typically contains objects of identical type; 
+#' in case of a mix of types or an empty set, \code{TYPE} is set to the 
+#' superclass \code{GEOMETRY}.
 #' @examples
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
@@ -62,7 +63,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		if (single)
 			c(paste0("sfc_", sfg_classes[2L, 1L]), "sfc")
 		else
-			c("sfc_GEOMETRY", "sfc")         # the mix
+			c("sfc_GEOMETRY", "sfc")    # the mix
 	}
 
 	if (any(is_null)) {
@@ -93,7 +94,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 		attr(lst, "classes") = vapply(lst, class, rep(NA_character_, 3))[2L,]
 
 	# set n_empty, check XY* is uniform:
-	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # this is set by CPL_read_wkb:
+	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # n_empty is set by CPL_read_wkb:
 		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
 		if (length(u <- unique(sfg_classes[1L,])) > 1)
 			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))

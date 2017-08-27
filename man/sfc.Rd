@@ -8,20 +8,23 @@
 st_sfc(..., crs = NA_crs_, precision = 0)
 }
 \arguments{
-\item{...}{one or more simple feature geometries}
+\item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
 
 \item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
 \item{precision}{numeric; see \link{st_as_binary}}
+}
+\value{
+an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 }
 \description{
 Create simple feature list column, set class, and add coordinate reference system
 }
 \details{
 A simple feature collection object is a list of class
-\code{c("stc_TYPE", "sfc")} which contains objects of identical type. This
-function creates such an object from a list of simple feature geometries (of
-class \code{sfg}).
+\code{c("stc_TYPE", "sfc")} which typically contains objects of identical type; 
+in case of a mix of types or an empty set, \code{TYPE} is set to the 
+superclass \code{GEOMETRY}.
 }
 \examples{
 pt1 = st_point(c(0,1))
