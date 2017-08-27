@@ -1,5 +1,9 @@
 # version 0.5-4
 
+* fix compatibility problems introduced by `tidyr` 0.7-0 using rlang magic
+
+* convert path names to UTF-8 in `st_read`, `st_write` and `st_layers`; #471
+
 * `st_sfc` converts `NULL` values into empty geometries, and correctly identifies empty `POINT`s; #466, #463
 
 * `st_write` abbreviates column names if driver is `ESRI Shapefile`; #464
