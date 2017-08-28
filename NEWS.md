@@ -1,3 +1,7 @@
+# version 0.5-5
+
+* change aggregate to make it return the same geometry as 'by'; #453 
+
 # version 0.5-4
 
 * fix compatibility problems introduced by `tidyr` 0.7-0 using rlang magic

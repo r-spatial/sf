@@ -45,4 +45,8 @@ plot(p_ag) # geometry same as pol
 p_buff = st_buffer(p, 0.2)
 plot(p_buff, add = TRUE)
 aggregate(p_buff, pol, mean) # increased mean of second
+# with non-matching features
+m3 = cbind(c(0, 0, 0.1, 0), c(0, 0.1, 0.1, 0))
+pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
+aggregate(p, pol, mean)
 }
