@@ -3,14 +3,14 @@
 [![Build Status](https://travis-ci.org/r-spatial/sf.png?branch=master)](https://travis-ci.org/r-spatial/sf)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&svg=true)](https://ci.appveyor.com/project/edzerpebesma/sf)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg)](https://codecov.io/github/r-spatial/sf?branch=master)
-[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
-[![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf) 
+[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
 
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* uses S3 classes: simple features are `data.frame` objects (or `tibbles`) that have a geometry list-column 
+* uses S3 classes: simple features are `data.frame` objects (or `tibbles`) that have a geometry list-column
 * interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
 * interfaces to [GDAL](http://www.gdal.org/) with driver dependent dataset or layer creation options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ.4](http://proj4.org/)
 * provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++/Rcpp
@@ -26,7 +26,7 @@ See also:
 * UseR! 2016 [presentation](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 
 
-## Installling 
+## Installling
 
 Install either from CRAN with:
 ```r
@@ -42,7 +42,7 @@ install_github("r-spatial/sf")
 
 ### Windows
 
-Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/).
+Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). (This does not include `liblwgeom`; it will need to be installed separately for functions that require it, such as `st_make_valid`, to work.)
 
 ### MacOS
 
@@ -52,8 +52,8 @@ see e.g. [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/
 ```
 brew unlink gdal
 brew tap osgeo/osgeo4mac && brew tap --repair
-brew install proj 
-brew install geos 
+brew install proj
+brew install geos
 brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2
@@ -90,7 +90,7 @@ To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geos
 
 ### Contributing
 
-* Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them. 
+* Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
 * When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
 * This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
