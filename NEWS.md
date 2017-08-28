@@ -1,5 +1,7 @@
 # version 0.5-4
 
+* `aggregate.sf` now consistently returns the geometry of the object passed to `by` making it consistent with `aggregate.Spatial`; #452
+
 * fix compatibility problems introduced by `tidyr` 0.7-0 using rlang magic
 
 * convert path names to UTF-8 in `st_read`, `st_write` and `st_layers`; #471
