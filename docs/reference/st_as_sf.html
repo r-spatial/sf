@@ -176,7 +176,7 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 1 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT(0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
 <span class='no'>d</span>$<span class='no'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pt1</span>, <span class='no'>pt2</span>)
 <span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>d</span>)
 <span class='no'>d</span>$<span class='no'>geom</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span>)
@@ -188,9 +188,9 @@
 #&gt; bbox:           xmin: 0 ymin: 1 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;   a       geom      geom2
-#&gt; 1 1 POINT(0 0) POINT(0 1)
-#&gt; 2 2 POINT(0 1) POINT(1 1)</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>)
+#&gt;   a       geom       geom2
+#&gt; 1 1 POINT(0 0) POINT (0 1)
+#&gt; 2 2 POINT(0 1) POINT (1 1)</div><div class='input'><span class='fu'>data</span>(<span class='no'>meuse</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sp"</span>)
 <span class='no'>meuse_sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='st'>"constant"</span>)
 <span class='no'>meuse_sf</span>[<span class='fl'>1</span>:<span class='fl'>3</span>,]</div><div class='output co'>#&gt; Simple feature collection with 3 features and 12 fields
 #&gt; Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity
@@ -203,10 +203,10 @@
 #&gt; 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50
 #&gt; 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30
 #&gt; 3     6.5     68  199  640 7.800 0.10302900 13.0     1    1    1      Ah    150
-#&gt;               geometry
-#&gt; 1 POINT(181072 333611)
-#&gt; 2 POINT(181025 333558)
-#&gt; 3 POINT(181165 333537)</div><div class='input'><span class='fu'>summary</span>(<span class='no'>meuse_sf</span>)</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
+#&gt;                geometry
+#&gt; 1 POINT (181072 333611)
+#&gt; 2 POINT (181025 333558)
+#&gt; 3 POINT (181165 333537)</div><div class='input'><span class='fu'>summary</span>(<span class='no'>meuse_sf</span>)</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
 #&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  

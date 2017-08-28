@@ -109,6 +109,24 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-5-4" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-4" class="anchor"></a>version 0.5-4</h1>
+<ul>
+<li><p>fix compatibility problems introduced by <code>tidyr</code> 0.7-0 using rlang magic</p></li>
+<li><p>convert path names to UTF-8 in <code>st_read</code>, <code>st_write</code> and <code>st_layers</code>; #471</p></li>
+<li><p><code>st_sfc</code> converts <code>NULL</code> values into empty geometries, and correctly identifies empty <code>POINT</code>s; #466, #463</p></li>
+<li><p><code>st_write</code> abbreviates column names if driver is <code>ESRI Shapefile</code>; #464</p></li>
+<li><p>add <code>of_largest_polygon</code> argument to <code>st_centroid</code>, to get the centroid of the largest polygon; #450</p></li>
+<li><p>fix use of <code>st_relate</code> as join predicate for <code>st_join</code>; #454</p></li>
+<li><p>fix bug where <code>st_intersects</code> with empty second argument would crash; #458</p></li>
+<li><p>produce better WKT; #463</p></li>
+<li><p>fix bug in <code>st_cast.sf</code>; #461, #462</p></li>
+<li><p>change <code>st_read</code> SRS assignment logic; corrects reading projected geojson with gdal 2.2.0; #449</p></li>
+<li><p><code>st_intersection</code> etc. on <code>tbl</code> now also return <code>tbl</code>; #448</p></li>
+<li><p><code>[.sf</code> preserves class, e.g. of <code>tbl</code>; #448</p></li>
+</ul>
+</div>
     <div id="version-0-5-3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-5-3" class="anchor"></a>version 0.5-3</h1>
@@ -322,6 +340,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-5-4">0.5-4</a></li>
         <li><a href="#version-0-5-3">0.5-3</a></li>
         <li><a href="#version-0-5-2">0.5-2</a></li>
         <li><a href="#version-0-5-1">0.5-1</a></li>

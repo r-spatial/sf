@@ -281,7 +281,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
 #&gt;                         geometry
-#&gt; 1 MULTIPOINT(3.2 4, 3 4.6, 3....</div><span class='co'># NOT RUN {</span>
+#&gt; 1 MULTIPOINT (3.2 4, 3 4.6, 3...</div><span class='co'># NOT RUN {</span>
 <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
 <span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)

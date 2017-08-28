@@ -101,7 +101,7 @@
 </ul>
 <p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identical to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
+## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -121,7 +121,7 @@ nc[<span class="dv">1</span>,]
 ##    AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 ## 1 0.114     1.442  1825    1825 Ashe 37009  37009        5  1091     1
 ##   NWBIR74 BIR79 SID79 NWBIR79                       geometry
-## 1      10  1364     0      19 MULTIPOLYGON(((1270813.8145...</code></pre></div>
+## 1      10  1364     0      19 MULTIPOLYGON (((1270813.814...</code></pre></div>
 <p>prints the first record.</p>
 <p>Many of the tidyverse/dplyr verbs have methods for <code>sf</code> objects. This means that given that both <code>sf</code> and <code>dplyr</code> are loaded, manipulations such as selecting a single attribute will return an <code>sf</code> object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
@@ -141,8 +141,8 @@ nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyver
 ## epsg (SRID):    2264
 ## proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
 ##   NWBIR74                       geometry
-## 1      10 MULTIPOLYGON(((1270813.8145...
-## 2      10 MULTIPOLYGON(((1340554.5288...</code></pre></div>
+## 1      10 MULTIPOLYGON (((1270813.814...
+## 2      10 MULTIPOLYGON (((1340554.528...</code></pre></div>
 <p>which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to <code>data.frame</code> first, this drops geometry list-columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc %&gt;%<span class="st"> </span>as.data.frame %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NWBIR74) %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)
 ##   NWBIR74
@@ -160,7 +160,7 @@ nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyver
 ## epsg (SRID):    2264
 ## proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
 ##   NWBIR74                       geometry
-## 1      10 MULTIPOLYGON(((1270813.8145...</code></pre></div>
+## 1      10 MULTIPOLYGON (((1270813.814...</code></pre></div>
 <p>and use the <code>drop</code> argument to drop geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc[<span class="dv">1</span>, <span class="st">"NWBIR74"</span>, drop =<span class="st"> </span><span class="ot">TRUE</span>]
 ## [1] 10
@@ -181,10 +181,10 @@ nc[Ashe,]
 ## 18 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146
 ## 19 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323
 ##    SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
-## 1      1      10  1364     0      19 MULTIPOLYGON(((1270813.8145...
-## 2      0      10   542     3      12 MULTIPOLYGON(((1340554.5288...
-## 18     4     200  3725     7     222 MULTIPOLYGON(((1402676.8833...
-## 19     1      17  1775     1      33 MULTIPOLYGON(((1171158.4287...</code></pre></div>
+## 1      1      10  1364     0      19 MULTIPOLYGON (((1270813.814...
+## 2      0      10   542     3      12 MULTIPOLYGON (((1340554.528...
+## 18     4     200  3725     7     222 MULTIPOLYGON (((1402676.883...
+## 19     1      17  1775     1      33 MULTIPOLYGON (((1171158.428...</code></pre></div>
 <p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc$NAME ==<span class="st"> "Ashe"</span>,]
 nc[Ashe, op =<span class="st"> </span>st_touches]
@@ -199,9 +199,9 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 ## 18 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146
 ## 19 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323
 ##    SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
-## 2      0      10   542     3      12 MULTIPOLYGON(((1340554.5288...
-## 18     4     200  3725     7     222 MULTIPOLYGON(((1402676.8833...
-## 19     1      17  1775     1      33 MULTIPOLYGON(((1171158.4287...</code></pre></div>
+## 2      0      10   542     3      12 MULTIPOLYGON (((1340554.528...
+## 18     4     200  3725     7     222 MULTIPOLYGON (((1402676.883...
+## 19     1      17  1775     1      33 MULTIPOLYGON (((1171158.428...</code></pre></div>
 <p>using <code>dplyr</code>, we can do the same by calling the predicate directly:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">lengths</span>(<span class="kw"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(., Ashe)) &gt;<span class="st"> </span><span class="dv">0</span>)
 ## Simple feature collection with 3 features and 14 fields
@@ -215,9 +215,9 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 ## 2 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146
 ## 3 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323
 ##   SID74 NWBIR74 BIR79 SID79 NWBIR79                       geometry
-## 1     0      10   542     3      12 MULTIPOLYGON(((1340554.5288...
-## 2     4     200  3725     7     222 MULTIPOLYGON(((1402676.8833...
-## 3     1      17  1775     1      33 MULTIPOLYGON(((1171158.4287...</code></pre></div>
+## 1     0      10   542     3      12 MULTIPOLYGON (((1340554.528...
+## 2     4     200  3725     7     222 MULTIPOLYGON (((1402676.883...
+## 3     1      17  1775     1      33 MULTIPOLYGON (((1171158.428...</code></pre></div>
 </div>
 <div id="aggregating-or-summarizing-feature-sets" class="section level2">
 <h2 class="hasAnchor">
@@ -233,16 +233,104 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 ## epsg (SRID):    2264
 ## proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
 ##   Ashe_nb      frac74                       geometry
-## 1   FALSE 0.002100164 MULTIPOLYGON(((2739147.1057...
-## 2    TRUE 0.000735976 POLYGON((1402676.88337961 8...
+## 1   FALSE 0.002100164 MULTIPOLYGON (((2739147.105...
+## 2    TRUE 0.000735976 POLYGON ((1402676.88337961 ...
 <span class="kw">plot</span>(a[<span class="dv">2</span>], <span class="dt">col =</span> <span class="kw">c</span>(<span class="kw">grey</span>(.<span class="dv">8</span>), <span class="kw">grey</span>(.<span class="dv">5</span>)))
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(Ashe), <span class="dt">border =</span> <span class="st">'#ff8888'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<p><code>Group.1</code> indicates the grouping variable</p>
 </div>
-<div id="joining-two-feature-sets-based-on-spatial-properties" class="section level2">
+<div id="joining-two-feature-sets-based-on-attributes" class="section level2">
 <h2 class="hasAnchor">
-<a href="#joining-two-feature-sets-based-on-spatial-properties" class="anchor"></a>Joining two feature sets based on spatial properties</h2>
+<a href="#joining-two-feature-sets-based-on-attributes" class="anchor"></a>Joining two feature sets based on attributes</h2>
+<p>The usual join verbs base R (<code>merge</code>) and of dplyr (<code>left_join</code>, etc) work for <code>sf</code> objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a <code>data.frame</code> (or similar), not an <code>sf</code> object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span>:<span class="dv">2</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))))
+y =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">2</span>:<span class="dv">3</span>)
+<span class="kw">merge</span>(x, y)
+## Simple feature collection with 1 feature and 1 field
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1 ymin: 1 xmax: 1 ymax: 1
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a    geometry
+## 1 2 POINT (1 1)
+<span class="kw">merge</span>(x, y, <span class="dt">all =</span> <span class="ot">TRUE</span>)
+## Simple feature collection with 3 features and 1 field (with 1 geometry empty)
+## geometry type:  GEOMETRY
+## dimension:      XY
+## bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a                 geometry
+## 1 1              POINT (0 0)
+## 2 2              POINT (1 1)
+## 3 3 GEOMETRYCOLLECTION EMPTY
+<span class="kw"><a href="http://dplyr.tidyverse.org/reference/join.html">right_join</a></span>(x, y)
+## Joining, by = "a"
+## Simple feature collection with 2 features and 1 field (with 1 geometry empty)
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1 ymin: 1 xmax: 1 ymax: 1
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a        geom
+## 1 2 POINT (1 1)
+## 2 3 POINT EMPTY</code></pre></div>
+</div>
+<div id="joining-two-feature-sets-based-on-geometries" class="section level2">
+<h2 class="hasAnchor">
+<a href="#joining-two-feature-sets-based-on-geometries" class="anchor"></a>Joining two feature sets based on geometries</h2>
+<p>For joining based on spatial intersections (of any kind), <code>st_join</code> is used:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span>:<span class="dv">3</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))))
+y =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(x, <span class="fl">0.1</span>)
+x =<span class="st"> </span>x[<span class="dv">1</span>:<span class="dv">2</span>,]
+y =<span class="st"> </span>y[<span class="dv">2</span>:<span class="dv">3</span>,]
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(x), <span class="dt">xlim =</span> <span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">3.5</span>))
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(y), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="sf4_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p>The join method is a left join, retaining all records of the first attribute:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_join.html">st_join</a></span>(x, y)
+## Simple feature collection with 2 features and 2 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1 ymin: 1 xmax: 2 ymax: 2
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a.x a.y        geom
+## 1   1  NA POINT (1 1)
+## 2   2   2 POINT (2 2)
+<span class="kw"><a href="../reference/st_join.html">st_join</a></span>(y, x)
+## Simple feature collection with 2 features and 2 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 1.9 ymin: 1.9 xmax: 3.1 ymax: 3.1
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a.x a.y                           geom
+## 2   2   2 POLYGON ((2.1 2, 2.09986295...
+## 3   3  NA POLYGON ((3.1 3, 3.09986295...</code></pre></div>
+<p>and the geometry retained is that of the first argument.</p>
+<p>The spatial join predicate can be controlled with any function compatible to <code>st_intersects</code> (the default), e.g.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st_join.html">st_join</a></span>(x, y, <span class="dt">join =</span> st_covers) <span class="co"># no matching y records: points don't cover circles</span>
+## Simple feature collection with 2 features and 2 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1 ymin: 1 xmax: 2 ymax: 2
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a.x a.y        geom
+## 1   1  NA POINT (1 1)
+## 2   2  NA POINT (2 2)
+<span class="kw"><a href="../reference/st_join.html">st_join</a></span>(y, x, <span class="dt">join =</span> st_covers) <span class="co"># matches for those circles covering a point</span>
+## Simple feature collection with 2 features and 2 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: 1.9 ymin: 1.9 xmax: 3.1 ymax: 3.1
+## epsg (SRID):    NA
+## proj4string:    NA
+##   a.x a.y                           geom
+## 2   2   2 POLYGON ((2.1 2, 2.09986295...
+## 3   3  NA POLYGON ((3.1 3, 3.09986295...</code></pre></div>
 </div>
 </div>
   </div>
@@ -254,7 +342,8 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#subsetting-feature-sets">Subsetting feature sets</a></li>
       <li><a href="#aggregating-or-summarizing-feature-sets">Aggregating or summarizing feature sets</a></li>
-      <li><a href="#joining-two-feature-sets-based-on-spatial-properties">Joining two feature sets based on spatial properties</a></li>
+      <li><a href="#joining-two-feature-sets-based-on-attributes">Joining two feature sets based on attributes</a></li>
+      <li><a href="#joining-two-feature-sets-based-on-geometries">Joining two feature sets based on geometries</a></li>
       </ul>
 </div>
       </div>

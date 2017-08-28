@@ -167,9 +167,9 @@
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;          X3                      geometry
-#&gt; 1 0.5951766 POLYGON((0 0, 0 1, 1 1, 0 0))
-#&gt; 2 0.2997908 POLYGON((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'>plot</span>(<span class='no'>p_ag</span>) <span class='co'># geometry same as pol</span></div><div class='input'><span class='co'># works when x overlaps multiple objects in 'by':</span>
+#&gt;          X3                       geometry
+#&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
+#&gt; 2 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'>plot</span>(<span class='no'>p_ag</span>) <span class='co'># geometry same as pol</span></div><div class='input'><span class='co'># works when x overlaps multiple objects in 'by':</span>
 <span class='no'>p_buff</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='no'>p</span>, <span class='fl'>0.2</span>)
 <span class='fu'>plot</span>(<span class='no'>p_buff</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='aggregate.sf-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>aggregate</span>(<span class='no'>p_buff</span>, <span class='no'>pol</span>, <span class='no'>mean</span>) <span class='co'># increased mean of second</span></div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POLYGON
@@ -177,9 +177,9 @@
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;          X3                      geometry
-#&gt; 1 0.5951766 POLYGON((0 0, 0 1, 1 1, 0 0))
-#&gt; 2 0.5958297 POLYGON((0 0, 1 0, 1 1, 0 0))</div></pre>
+#&gt;          X3                       geometry
+#&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
+#&gt; 2 0.5958297 POLYGON ((0 0, 1 0, 1 1, 0 0))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

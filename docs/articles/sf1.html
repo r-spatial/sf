@@ -252,7 +252,7 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.2 r15302
+## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -323,14 +323,14 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
 ## First 5 geometries:
-## MULTIPOLYGON(((-81.4727554321289 36.23435592651...
-## MULTIPOLYGON(((-81.2398910522461 36.36536407470...
-## MULTIPOLYGON(((-80.4563446044922 36.24255752563...
-## MULTIPOLYGON(((-76.0089721679688 36.31959533691...
-## MULTIPOLYGON(((-77.2176666259766 36.24098205566...</code></pre></div>
+## MULTIPOLYGON (((-81.4727554321289 36.2343559265...
+## MULTIPOLYGON (((-81.2398910522461 36.3653640747...
+## MULTIPOLYGON (((-80.4563446044922 36.2425575256...
+## MULTIPOLYGON (((-76.0089721679688 36.3195953369...
+## MULTIPOLYGON (((-77.2176666259766 36.2409820556...</code></pre></div>
 <p>Geometries are printed in abbreviated form, but we can can view a complete geometry by selecting it, e.g. the first one by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc_geom[[<span class="dv">1</span>]]
-## MULTIPOLYGON(((-81.4727554321289 36.2343559265137, -81.5408401489258 36.2725067138672, -81.5619812011719 36.2735939025879, -81.6330642700195 36.3406867980957, -81.7410736083984 36.3917846679688, -81.6982803344727 36.4717788696289, -81.7027969360352 36.5193405151367, -81.6699981689453 36.5896492004395, -81.3452987670898 36.5728645324707, -81.347541809082 36.537914276123, -81.3247756958008 36.5136795043945, -81.3133239746094 36.4806976318359, -81.2662353515625 36.4372062683105, -81.2628402709961 36.4050407409668, -81.2406921386719 36.3794174194336, -81.2398910522461 36.365364074707, -81.2642440795898 36.3524131774902, -81.3289947509766 36.3635025024414, -81.3613739013672 36.3531608581543, -81.3656921386719 36.3390502929688, -81.354133605957 36.2997169494629, -81.3674545288086 36.2786979675293, -81.4063873291016 36.2850532531738, -81.4123306274414 36.2672920227051, -81.431037902832 36.2607192993164, -81.4528884887695 36.2395858764648, -81.4727554321289 36.2343559265137)))</code></pre></div>
+## MULTIPOLYGON (((-81.4727554321289 36.2343559265137, -81.5408401489258 36.2725067138672, -81.5619812011719 36.2735939025879, -81.6330642700195 36.3406867980957, -81.7410736083984 36.3917846679688, -81.6982803344727 36.4717788696289, -81.7027969360352 36.5193405151367, -81.6699981689453 36.5896492004395, -81.3452987670898 36.5728645324707, -81.347541809082 36.537914276123, -81.3247756958008 36.5136795043945, -81.3133239746094 36.4806976318359, -81.2662353515625 36.4372062683105, -81.2628402709961 36.4050407409668, -81.2406921386719 36.3794174194336, -81.2398910522461 36.365364074707, -81.2642440795898 36.3524131774902, -81.3289947509766 36.3635025024414, -81.3613739013672 36.3531608581543, -81.3656921386719 36.3390502929688, -81.354133605957 36.2997169494629, -81.3674545288086 36.2786979675293, -81.4063873291016 36.2850532531738, -81.4123306274414 36.2672920227051, -81.431037902832 36.2607192993164, -81.4528884887695 36.2395858764648, -81.4727554321289 36.2343559265137)))</code></pre></div>
 <p>The way this is printed is called <em>well-known text</em>, and is part of the standards. The word <code>MULTIPOLYGON</code> is followed by three parenthesis, because it can consist of multiple polygons, in the form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code> might consist of an exterior ring and zero or more interior rings, as of <code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together with parenthesis, so we get <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where <code>crds_</code> is a comma-separated set of coordinates of a ring. This leads to the case above, where <code>MULTIPOLYGON(((crds_ext)))</code> refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.</p>
 <p>We can see there is a single polygon with no rings:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
@@ -409,8 +409,8 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 4
 ## epsg (SRID):    NA
 ## proj4string:    NA
-## GEOMETRYCOLLECTION(POINT(1 2))
-## GEOMETRYCOLLECTION(LINESTRING(1 3, 2 4))
+## GEOMETRYCOLLECTION (POINT (1 2))
+## GEOMETRYCOLLECTION (LINESTRING (1 3, 2 4))
 <span class="kw">class</span>(mix)
 ## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</code></pre></div>
 <p>Still, the geometries are here of a single type.</p>
@@ -422,8 +422,8 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 4
 ## epsg (SRID):    NA
 ## proj4string:    NA
-## POINT(1 2)
-## LINESTRING(1 3, 2 4)
+## POINT (1 2)
+## LINESTRING (1 3, 2 4)
 <span class="kw">class</span>(mix)
 ## [1] "sfc_GEOMETRY" "sfc"</code></pre></div>
 <p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example <a href="#geometrycollection">below</a>.</p>
@@ -441,35 +441,35 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 </ol>
 <p>Creator functions are rarely used in practice, since we typically bulk read and write spatial data. They are useful for illustration:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)))
-## POINT(1 2)
+## POINT (1 2)
 <span class="kw">str</span>(x)
 ## Classes 'XY', 'POINT', 'sfg'  num [1:2] 1 2
 (x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)))
-## POINTZ(1 2 3)
+## POINT Z (1 2 3)
 <span class="kw">str</span>(x)
 ## Classes 'XYZ', 'POINT', 'sfg'  num [1:3] 1 2 3
 (x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="st">"XYM"</span>))
-## POINTM(1 2 3)
+## POINT M (1 2 3)
 <span class="kw">str</span>(x)
 ## Classes 'XYM', 'POINT', 'sfg'  num [1:3] 1 2 3
 (x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)))
-## POINTZM(1 2 3 4)
+## POINT ZM (1 2 3 4)
 <span class="kw">str</span>(x)
 ## Classes 'XYZM', 'POINT', 'sfg'  num [1:4] 1 2 3 4
 <span class="kw"><a href="../reference/st_zm.html">st_zm</a></span>(x, <span class="dt">drop =</span> <span class="ot">TRUE</span>, <span class="dt">what =</span> <span class="st">"ZM"</span>)
-## POINT(1 2)</code></pre></div>
+## POINT (1 2)</code></pre></div>
 <p>This means that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from <code>sfg</code> (simple feature geometry), but also have a type (e.g. <code>POINT</code>), and a dimension (e.g. <code>XYM</code>) class name. A figure illustrates six of the seven most common types.</p>
 <p>With the exception of the <code>POINT</code> which has a single point as geometry, the remaining six common single simple feature geometry types that correspond to single features (single records, or rows in a <code>data.frame</code>) are created like this</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">3.2</span>,<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">4.6</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">4.4</span>), <span class="kw">c</span>(<span class="fl">3.5</span>,<span class="fl">3.8</span>), <span class="kw">c</span>(<span class="fl">3.4</span>,<span class="fl">3.6</span>), <span class="kw">c</span>(<span class="fl">3.9</span>,<span class="fl">4.5</span>))
 (mp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(p))
-## MULTIPOINT(3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5)
+## MULTIPOINT (3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5)
 s1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">4</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))
 (ls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(s1))
-## LINESTRING(0 3, 0 4, 1 5, 2 5)
+## LINESTRING (0 3, 0 4, 1 5, 2 5)
 s2 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">0.2</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="fl">0.2</span>,<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="fl">4.8</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="fl">4.8</span>))
 s3 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="fl">4.4</span>), <span class="kw">c</span>(<span class="fl">0.6</span>,<span class="dv">5</span>))
 (mls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="kw">list</span>(s1,s2,s3)))
-## MULTILINESTRING((0 3, 0 4, 1 5, 2 5), (0.2 3, 0.2 4, 1 4.8, 2 4.8), (0 4.4, 0.6 5))
+## MULTILINESTRING ((0 3, 0 4, 1 5, 2 5), (0.2 3, 0.2 4, 1 4.8, 2 4.8), (0 4.4, 0.6 5))
 p1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))
 p2 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
 pol &lt;-<span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(p1,p2))
@@ -477,14 +477,14 @@ p3 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 p4 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>))[<span class="dv">5</span>:<span class="dv">1</span>,]
 p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))
 (mpol &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multipolygon</a></span>(<span class="kw">list</span>(<span class="kw">list</span>(p1,p2), <span class="kw">list</span>(p3,p4), <span class="kw">list</span>(p5))))
-## MULTIPOLYGON(((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3)))
+## MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3)))
 (gc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(mp, mpol, ls)))
-## GEOMETRYCOLLECTION(MULTIPOINT(3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5), MULTIPOLYGON(((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3))), LINESTRING(0 3, 0 4, 1 5, 2 5))</code></pre></div>
+## GEOMETRYCOLLECTION (MULTIPOINT (3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5), MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3))), LINESTRING (0 3, 0 4, 1 5, 2 5))</code></pre></div>
 <p>The objects created are shown here:</p>
 <p><img src="sf1_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Geometries can also be empty, as in</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>())
-## GEOMETRYCOLLECTION()
+## GEOMETRYCOLLECTION EMPTY
 <span class="kw">length</span>(x)
 ## [1] 0</code></pre></div>
 </div>
@@ -497,7 +497,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 <p>Well-known text (WKT) and well-known binary (WKB) are two encodings for simple feature geometries. Well-known text, e.g. seen in</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">10</span>:<span class="dv">1</span>,<span class="dv">5</span>))
 <span class="kw">st_as_text</span>(x)
-## [1] "LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)"</code></pre></div>
+## [1] "LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)"</code></pre></div>
 <p>(but without the leading <code>## [1]</code> and quotes), is human-readable. Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. For that reason, we use well-known binary (WKB) encoding</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_as_binary</span>(x)
 ##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 24 40 00 00 00 00 00 00
@@ -506,9 +506,9 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 ## [70] 00 00 00 40 00 00 00 00 00 00 18 40 00 00 00 00 00 00 f0 3f</code></pre></div>
 <p>WKT and WKB can both be transformed back into R native objects by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_as_sfc</span>(<span class="st">"LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)"</span>)[[<span class="dv">1</span>]]
-## LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)
+## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)
 <span class="kw">st_as_sfc</span>(<span class="kw">structure</span>(<span class="kw">list</span>(<span class="kw">st_as_binary</span>(x)), <span class="dt">class =</span> <span class="st">"WKB"</span>))[[<span class="dv">1</span>]]
-## LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)</code></pre></div>
+## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</code></pre></div>
 <p>GDAL, GEOS, spatial databases and GIS read and write WKB which is fast and precise. Conversion between R native objects and WKB is done by package <code>sf</code> in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R.</p>
 </div>
 <div id="precision" class="section level3">
@@ -775,7 +775,7 @@ b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">
 <span class="kw">title</span>(<span class="st">"intersecting two polygons:"</span>)
 <span class="kw">plot</span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
 (i &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(a,b))
-## GEOMETRYCOLLECTION(POINT(1 0), LINESTRING(4 0, 3 0), POLYGON((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))
+## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))
 <span class="kw">plot</span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"GEOMETRYCOLLECTION"</span>)
 <span class="kw">plot</span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)

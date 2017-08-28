@@ -118,7 +118,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>one or more simple feature geometries</p></td>
+      <td><p>zero or more simple feature geometries (objects of class <code>sfg</code>), or a single list of such objects; <code>NULL</code> values will get replaced by empty geometries.</p></td>
     </tr>
     <tr>
       <th>crs</th>
@@ -130,12 +130,16 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>an object of class <code>sfc</code>, which is a classed list-column with simple feature geometries.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A simple feature collection object is a list of class
-<code>c("stc_TYPE", "sfc")</code> which contains objects of identical type. This
-function creates such an object from a list of simple feature geometries (of
-class <code>sfg</code>).</p>
+<code>c("stc_TYPE", "sfc")</code> which typically contains objects of identical type; 
+in case of a mix of types or an empty set, <code>TYPE</code> is set to the 
+superclass <code>GEOMETRY</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -146,13 +150,15 @@ class <code>sfg</code>).</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 1 xmax: 1 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT(0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT(1 1)</span></div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='fu'>data.frame</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>))</div></pre>
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='fu'>data.frame</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

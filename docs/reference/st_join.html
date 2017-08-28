@@ -112,7 +112,7 @@
     
 
     <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>FUN</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
-  <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -138,17 +138,13 @@
       <td><p>length 2 character vector; see <a href='http://www.rdocumentation.org/packages/base/topics/merge'>merge</a></p></td>
     </tr>
     <tr>
-      <th>prepared</th>
-      <td><p>logical; see <a href='geos_binary_pred.html'>st_intersects</a></p></td>
-    </tr>
-    <tr>
       <th>left</th>
       <td><p>logical; if <code>TRUE</code> carry out left join, else inner join; 
 see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments passed on to the <code>join</code> function (e.g. a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
+      <td><p>arguments passed on to the <code>join</code> function (e.g. <code>prepared</code>, or a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
     </tr>
     </table>
     
@@ -175,20 +171,20 @@ see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a><
 #&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;     a.x a.y       geom
-#&gt; 1     1  NA POINT(1 1)
-#&gt; 2     2  12 POINT(2 2)
-#&gt; 2.1   2  13 POINT(2 2)
-#&gt; 3     3  14 POINT(3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
+#&gt;     a.x a.y        geom
+#&gt; 1     1  NA POINT (1 1)
+#&gt; 2     2  12 POINT (2 2)
+#&gt; 2.1   2  13 POINT (2 2)
+#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 2 ymin: 2 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;     a.x a.y       geom
-#&gt; 2     2  12 POINT(2 2)
-#&gt; 2.1   2  13 POINT(2 2)
-#&gt; 3     3  14 POINT(3 3)</div><div class='input'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span>
+#&gt;     a.x a.y        geom
+#&gt; 2     2  12 POINT (2 2)
+#&gt; 2.1   2  13 POINT (2 2)
+#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span>
 <span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span>(<span class='fu'>list</span>(<span class='no'>.</span>$<span class='no'>a.x</span>), <span class='no'>mean</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
 #&gt; Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity
 #&gt; geometry type:  POINT
@@ -196,10 +192,10 @@ see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a><
 #&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
-#&gt;   Group.1 a.x  a.y   geometry
-#&gt; 1       1   1   NA POINT(1 1)
-#&gt; 2       2   2 12.5 POINT(2 2)
-#&gt; 3       3   3 14.0 POINT(3 3)</div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
+#&gt;   Group.1 a.x  a.y    geometry
+#&gt; 1       1   1   NA POINT (1 1)
+#&gt; 2       2   2 12.5 POINT (2 2)
+#&gt; 3       3   3 14.0 POINT (3 3)</div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
 <span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>a.x</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='dplyr.html'>summarise</a></span>(<span class='fu'>mean</span>(<span class='no'>a.y</span>))</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
@@ -209,9 +205,9 @@ see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a><
 #&gt; # A tibble: 3 x 3
 #&gt;     a.x `mean(a.y)`             geom
 #&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;simple_feature&gt;
-#&gt; 1     1          NA     &lt;POINT(1 1)&gt;
-#&gt; 2     2        12.5     &lt;POINT(2 2)&gt;
-#&gt; 3     3        14.0     &lt;POINT(3 3)&gt;</div></pre>
+#&gt; 1     1          NA    &lt;POINT (1 1)&gt;
+#&gt; 2     2        12.5    &lt;POINT (2 2)&gt;
+#&gt; 3     3        14.0    &lt;POINT (3 3)&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

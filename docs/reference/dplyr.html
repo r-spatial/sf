@@ -111,53 +111,33 @@
     <p>Dplyr verb methods for sf objects. Geometries are sticky, use as.data.frame to let codedplyr's own methods drop them.</p>
     
 
-    <pre class="usage"><span class='fu'>filter_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
-<span class='fu'>filter.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
-<span class='fu'>arrange_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
+    <pre class="usage"><span class='fu'>filter.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>arrange.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>distinct_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>.keep_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
 <span class='fu'>distinct.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>.keep_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>group_by_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>group_by.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>ungroup.sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>mutate_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
 <span class='fu'>mutate.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
-<span class='fu'>transmute_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>transmute.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
-<span class='fu'>select_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='kw'>.dots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
 <span class='fu'>select.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
 
-<span class='fu'>rename_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
 <span class='fu'>rename.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
-
-<span class='fu'>slice_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>slice.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
 <span class='fu'>summarise.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>do_union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>summarise_.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>, <span class='kw'>do_union</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>gather.sf</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>...</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>factor_key</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>gather_.sf</span>(<span class='no'>data</span>, <span class='no'>key_col</span>, <span class='no'>value_col</span>, <span class='no'>gather_cols</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factor_key</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>spread_.sf</span>(<span class='no'>data</span>, <span class='no'>key_col</span>, <span class='no'>value_col</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>spread.sf</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>sample_n.sf</span>(<span class='no'>tbl</span>, <span class='no'>size</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'>parent.frame</span>())
@@ -165,12 +145,12 @@
 <span class='fu'>sample_frac.sf</span>(<span class='no'>tbl</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'>parent.frame</span>())
 
-<span class='fu'>nest_.sf</span>(<span class='no'>data</span>, <span class='no'>key_col</span>, <span class='no'>nest_cols</span>)
+<span class='fu'>nest.sf</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>.key</span> <span class='kw'>=</span> <span class='st'>"data"</span>)
 
-<span class='fu'>separate_.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"[^[:alnum:]]+"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='fu'>separate.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"[^[:alnum:]]+"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>extra</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='no'>...</span>)
 
-<span class='fu'>unite_.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>from</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>unite.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>...</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
 
@@ -220,15 +200,11 @@
       <td><p>see original function docs</p></td>
     </tr>
     <tr>
-      <th>key_col</th>
+      <th>key</th>
       <td><p>see original function docs</p></td>
     </tr>
     <tr>
-      <th>value_col</th>
-      <td><p>see original function docs</p></td>
-    </tr>
-    <tr>
-      <th>gather_cols</th>
+      <th>value</th>
       <td><p>see original function docs</p></td>
     </tr>
     <tr>
@@ -276,7 +252,7 @@
       <td><p>see original function docs</p></td>
     </tr>
     <tr>
-      <th>nest_cols</th>
+      <th>.key</th>
       <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/nest'>nest</a></p></td>
     </tr>
     <tr>
@@ -294,10 +270,6 @@
     <tr>
       <th>extra</th>
       <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
-    </tr>
-    <tr>
-      <th>from</th>
-      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/unite'>unite</a></p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -319,7 +291,8 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>select</code> keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through <code>as.data.frame</code> to let dplyr's own <code>select</code> drop it.</p>
+    <p><code>select</code> keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through <code>as.data.frame</code> to let dplyr's own <code>select</code> drop it.
+    <code>nest.sf</code> assumes that a simple feature geometry list-column was among the columns that were nested.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -337,7 +310,7 @@
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; bbox:           xmin: -81.74107 ymin: 36.23436 xmax: -80.90344 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; # A tibble: 2 x 16
@@ -379,12 +352,16 @@
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt;   row SID74 SID79                       geometry
-#&gt; 1   1     1     0 MULTIPOLYGON(((-81.47275543...
-#&gt; 2   2     0     3 MULTIPOLYGON(((-81.23989105...
-#&gt; 3   3     5     6 MULTIPOLYGON(((-80.45634460...
-#&gt; 4   4     1     2 MULTIPOLYGON(((-76.00897216...
-#&gt; 5   5     9     3 MULTIPOLYGON(((-77.21766662...
-#&gt; 6   6     7     5 MULTIPOLYGON(((-76.74506378...</div></pre>
+#&gt; 1   1     1     0 MULTIPOLYGON (((-81.4727554...
+#&gt; 2   2     0     3 MULTIPOLYGON (((-81.2398910...
+#&gt; 3   3     5     6 MULTIPOLYGON (((-80.4563446...
+#&gt; 4   4     1     2 MULTIPOLYGON (((-76.0089721...
+#&gt; 5   5     9     3 MULTIPOLYGON (((-77.2176666...
+#&gt; 6   6     7     5 MULTIPOLYGON (((-76.7450637...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>storms.sf</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>name</span>, <span class='no'>year</span>) <span class='kw'>%&gt;%</span> <span class='no'>nest</span>
+<span class='no'>trs</span> <span class='kw'>=</span> <span class='fu'>lapply</span>(<span class='no'>x</span>$<span class='no'>data</span>, <span class='kw'>function</span>(<span class='no'>tr</span>) <span class='fu'>st_cast</span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>tr</span>), <span class='st'>"LINESTRING"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='no'>trs.sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='no'>x</span>[,<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='no'>trs</span>)
+<span class='fu'>plot</span>(<span class='no'>trs.sf</span>[<span class='st'>"year"</span>], <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='dplyr-4.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
