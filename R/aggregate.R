@@ -28,7 +28,7 @@
 #' aggregate(p_buff, pol, mean) # increased mean of second
 #' # with non-matching features
 #' m3 = cbind(c(0, 0, 0.1, 0), c(0, 0.1, 0.1, 0))
-#' pol = st_sfc(st_polygon(list(m1)), st_polygon(list(m2)), st_polygon(list(m3)))
+#' pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
 #' aggregate(p, pol, mean)
 #' @export
 aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
@@ -42,8 +42,15 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		# dispatch to stats::aggregate:
 		a = aggregate(x[unlist(i), , drop = FALSE],
 			list(rep(seq_len(nrow(by)), lengths(i))), FUN, ...)
+		nrow_diff = nrow(by) - nrow(a)
+		if(nrow_diff > 0) {
+			a_na = a[rep(NA, nrow(by)),] # 'top-up' missing rows
+			a_na[a$Group.1,] = a
+			a = a_na
+		}
 		a$Group.1 = NULL
-		st_set_geometry(a, st_geometry(by)[lengths(i) > 0])
+		row.names(a) = row.names(by)
+		st_set_geometry(a, st_geometry(by))
 	} else {
 		crs = st_crs(x)
 		lst = lapply(split(st_geometry(x), by), function(y) do.call(c, y))
