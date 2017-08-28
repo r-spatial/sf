@@ -38,14 +38,15 @@ d = data.frame(matrix(runif(15), ncol = 3))
 p = st_as_sf(x = d, coords = 1:2)
 plot(pol)
 plot(p, add = TRUE)
-(p_ag = aggregate(p, pol, mean))
-plot(p_ag) # geometry same as pol
+(p_ag1 = aggregate(p, pol, mean))
+plot(p_ag1) # geometry same as pol
 # works when x overlaps multiple objects in 'by':
 p_buff = st_buffer(p, 0.2)
 plot(p_buff, add = TRUE)
-aggregate(p_buff, pol, mean) # increased mean of second
+(p_ag2 = aggregate(p_buff, pol, mean)) # increased mean of second
 # with non-matching features
-m3 = cbind(c(0, 0, 0.1, 0), c(0, 0.1, 0.1, 0))
+m3 = cbind(c(0, 0, -0.1, 0), c(0, 0.1, 0.1, 0))
 pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
-aggregate(p, pol, mean)
+(p_ag3 = aggregate(p, pol, mean))
+plot(p_ag3)
 }
