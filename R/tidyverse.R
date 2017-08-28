@@ -240,8 +240,14 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' @details \code{nest.sf} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (data, ..., .key = "data") {
 	class(data) <- setdiff(class(data), "sf")
-	key = enquo(.key)
-	ret = nest(data, ..., .key = !! key)
+
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+	key = rlang::enquo(.key)
+
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+	ret = tidyr::nest(data, ..., .key = !! key)
 	# should find out first if geometry column was in ... !
 	ret[[.key]] = lapply(ret[[.key]], st_as_sf)
 	ret
