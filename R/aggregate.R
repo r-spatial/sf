@@ -14,7 +14,6 @@
 #' m1 = cbind(c(0, 0, 1, 0), c(0, 1, 1, 0))
 #' m2 = cbind(c(0, 1, 1, 0), c(0, 0, 1, 0))
 #' pol = st_sfc(st_polygon(list(m1)), st_polygon(list(m2)))
-#' library(sf)
 #' set.seed(1985)
 #' d = data.frame(matrix(runif(15), ncol = 3))
 #' p = st_as_sf(x = d, coords = 1:2)
