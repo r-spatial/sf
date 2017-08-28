@@ -167,7 +167,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 \item{suffix}{see \link[dplyr]{left_join}}
 }
 \description{
-Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let code{dplyr}'s own methods drop them.
+Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
 }
 \details{
 \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
