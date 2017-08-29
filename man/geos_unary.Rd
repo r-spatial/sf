@@ -62,7 +62,7 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 
-\item{envelope}{object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram}
+\item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
 
 \item{...}{ignored}
 
@@ -82,7 +82,7 @@ Geometric unary operations on (pairs of) simple feature geometry sets
 \details{
 \code{st_triangulate} requires GEOS version 3.4 or above
 
-\code{st_voronoi} requires GEOS version 3.4 or above
+\code{st_voronoi} requires GEOS version 3.5 or above
 
 in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 

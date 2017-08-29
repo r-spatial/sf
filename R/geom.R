@@ -454,8 +454,8 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 
 #' @name geos_unary
 #' @export
-#' @param envelope object of class \code{sfc} or \code{sfg} with the envelope for a voronoi diagram
-#' @details \code{st_voronoi} requires GEOS version 3.4 or above
+#' @param envelope object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon
+#' @details \code{st_voronoi} requires GEOS version 3.5 or above
 #' @examples
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
@@ -472,11 +472,11 @@ st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_voronoi")
 
 #' @export
-st_voronoi.sfg = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE)
+st_voronoi.sfg = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE)
 	get_first_sfg(st_voronoi(st_sfc(x), st_sfc(envelope), dTolerance, bOnlyEdges = bOnlyEdges))
 
 #' @export
-st_voronoi.sfc = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE) {
+st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
@@ -486,7 +486,7 @@ st_voronoi.sfc = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = F
 }
 
 #' @export
-st_voronoi.sf = function(x, envelope = list(), dTolerance = 0.0, bOnlyEdges = FALSE) {
+st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
 	st_geometry(x) <- st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges)
 	x
 }
