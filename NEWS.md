@@ -1,6 +1,8 @@
 # version 0.5-5
 
-* change aggregate to make it return the same geometry as 'by'; #453 
+* clarify argument `envelope` in `st_voronoi`; #474
+
+* change aggregate to make it return the same geometry as 'by', padding attributes with NA where needed; #453 
 
 # version 0.5-4
 
