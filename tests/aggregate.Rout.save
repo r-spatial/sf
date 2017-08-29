@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2
+Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -102,16 +102,17 @@ proj4string:    NA
 1   1.5 POLYGON ((0 0, 2 0, 2 2, 0 ...
 2   2.5 POLYGON ((1 1, 3 1, 3 3, 1 ...
 > aggregate(x, st_sf(st_sfc(a,b,b+10)), mean)
-Simple feature collection with 2 features and 1 field
+Simple feature collection with 3 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 3
+bbox:           xmin: 0 ymin: 0 xmax: 13 ymax: 13
 epsg (SRID):    NA
 proj4string:    NA
   count                       geometry
 1   1.5 POLYGON ((0 0, 2 0, 2 2, 0 ...
 2   2.5 POLYGON ((1 1, 3 1, 3 3, 1 ...
+3    NA POLYGON ((11 11, 13 11, 13 ...
 > 
 > proc.time()
    user  system elapsed 
-  0.720   0.308   0.715 
+  0.844   0.320   0.861 
