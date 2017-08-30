@@ -36,7 +36,6 @@ Suggests:
     sp (>= 1.2-4), 
 	RSQLite,
     RPostgreSQL,
-    lazyeval,
     tibble,
 	rlang,
     ggplot2,
