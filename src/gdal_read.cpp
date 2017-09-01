@@ -145,7 +145,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
 		Rcpp::CharacterVector fieldtp(nGeomFieldCount);
 		if (nGeomFieldCount == 0)
-			geomtype(iLayer) = "";
+			geomtype(iLayer) = NA_STRING;
 		else {
 			if( nGeomFieldCount > 1 ) {
 				for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
