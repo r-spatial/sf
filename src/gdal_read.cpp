@@ -143,10 +143,12 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		OGRLayer *poLayer = poDS->GetLayer(iLayer);
 		names(iLayer) = poLayer->GetName();
 		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
-		Rcpp::CharacterVector fieldtp(nGeomFieldCount);
-		if (nGeomFieldCount == 0)
-			geomtype(iLayer) = NA_STRING;
-		else {
+		if (nGeomFieldCount == 0) {
+			Rcpp::CharacterVector fieldtp(1);
+			fieldtp(0) = NA_STRING;
+			geomtype(iLayer) = fieldtp;
+		} else {
+			Rcpp::CharacterVector fieldtp(nGeomFieldCount);
 			if( nGeomFieldCount > 1 ) {
 				for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
 					OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
