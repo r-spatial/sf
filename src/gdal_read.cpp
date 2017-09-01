@@ -144,14 +144,18 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 		names(iLayer) = poLayer->GetName();
 		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
 		Rcpp::CharacterVector fieldtp(nGeomFieldCount);
-		if( nGeomFieldCount > 1 ) {
-			for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
-				OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
-				fieldtp(iGeom) = OGRGeometryTypeToName(poGFldDefn->GetType());
-			}
-		} else if (poLayer->GetGeomType() != wkbUnknown)
-			fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
-		geomtype(iLayer) = fieldtp;
+		if (nGeomFieldCount == 0)
+			geomtype(iLayer) = "";
+		else {
+			if( nGeomFieldCount > 1 ) {
+				for(int iGeom = 0; iGeom < nGeomFieldCount; iGeom ++ ) {
+					OGRGeomFieldDefn* poGFldDefn = poLayer->GetLayerDefn()->GetGeomFieldDefn(iGeom);
+					fieldtp(iGeom) = OGRGeometryTypeToName(poGFldDefn->GetType());
+				}
+			} else if (poLayer->GetGeomType() != wkbUnknown)
+				fieldtp(0) = OGRGeometryTypeToName(poLayer->GetGeomType());
+			geomtype(iLayer) = fieldtp;
+		}
 		OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 		field_count(iLayer) = poFDefn->GetFieldCount();
 		feature_count(iLayer) = poLayer->GetFeatureCount();
