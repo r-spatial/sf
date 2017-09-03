@@ -43,15 +43,16 @@
 
 st_as_sfc(x, ...)
 
-\method{st_as_sfc}{SpatialPoints}(x, ...)
+\method{st_as_sfc}{SpatialPoints}(x, ..., precision = 0)
 
-\method{st_as_sfc}{SpatialPixels}(x, ...)
+\method{st_as_sfc}{SpatialPixels}(x, ..., precision = 0)
 
-\method{st_as_sfc}{SpatialMultiPoints}(x, ...)
+\method{st_as_sfc}{SpatialMultiPoints}(x, ..., precision = 0)
 
-\method{st_as_sfc}{SpatialLines}(x, ..., forceMulti = FALSE)
+\method{st_as_sfc}{SpatialLines}(x, ..., precision = 0, forceMulti = FALSE)
 
-\method{st_as_sfc}{SpatialPolygons}(x, ..., forceMulti = FALSE)
+\method{st_as_sfc}{SpatialPolygons}(x, ..., precision = 0,
+  forceMulti = FALSE)
 
 \method{st_as_sfc}{map}(x, ...)
 }
@@ -67,6 +68,8 @@ st_as_sfc(x, ...)
 \item{spatialite}{logical; if \code{TRUE}, WKB is assumed to be in the spatialite dialect, see \url{https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html}; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).}
 
 \item{pureR}{logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).}
+
+\item{precision}{precision value; see \link{st_as_binary}}
 
 \item{forceMulti}{logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect}
 }

@@ -78,6 +78,7 @@ st_as_sf.Spatial = function(x, ...) {
 #' Convert foreign geometry object to an sfc object
 #' @param x object to convert
 #' @param ... further arguments
+#' @param precision precision value; see \link{st_as_binary}
 #' @param forceMulti logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect
 #' @name st_as_sfc
 #' @export
@@ -85,40 +86,40 @@ st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPoints = function(x,...) {
+st_as_sfc.SpatialPoints = function(x, ..., precision = 0) {
 	cc = x@coords
 	dimnames(cc) = NULL
 	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPixels = function(x,...) {
-	st_as_sfc(as(x, "SpatialPoints"))
+st_as_sfc.SpatialPixels = function(x, ..., precision = 0) {
+	st_as_sfc(as(x, "SpatialPoints"), precision = precision)
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialMultiPoints = function(x,...) {
+st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0) {
 	lst = lapply(x@coords, st_multipoint)
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialLines = function(x, ..., forceMulti = FALSE) {
+st_as_sfc.SpatialLines = function(x, ..., precision = 0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
 		lapply(x@lines,
 			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
 	else
 		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
+st_as_sfc.SpatialPolygons = function(x, ..., precision = 0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (is.null(comment(x)) || comment(x) == "FALSE") {
 			if (!requireNamespace("rgeos", quietly = TRUE))
@@ -129,7 +130,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., forceMulti = FALSE) {
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
 		lapply(x@polygons, function(y) st_polygon(Polygons2POLYGON(y@Polygons)))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs))
+	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
 }
 
 moreThanOneOuterRing = function(PolygonsLst) {

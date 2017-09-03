@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* deal better with precision setting and propagation; #476
+
+* fix bug in `st_layers` in case layers have no geometry; #334
+
 * clarify argument `envelope` in `st_voronoi`; #474
 
 * change aggregate to make it return the same geometry as 'by', padding attributes with NA where needed; #453 

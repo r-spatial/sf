@@ -154,7 +154,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	}
 	ret[[ sf_column ]] = geom
 	ret$do_union = NULL
-	st_as_sf(ret, crs = crs)
+	st_as_sf(ret, crs = crs, precision = st_precision(.data))
 }
 
 ## tidyr methods:
