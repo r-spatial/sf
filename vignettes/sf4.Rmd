@@ -53,9 +53,10 @@ nc[1, "NWBIR74", drop = TRUE]
 but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:
 ```{r}
 Ashe = nc[nc$NAME == "Ashe",]
+class(Ashe)
 nc[Ashe,]
 ```
-we see that in the result set `Ashe` is included, as the default value for argument `op` in `[.sf` is `st_intersects`, and `Ashe` intersects with itself. We could exclude self-intersection e.g. by
+we see that in the result set `Ashe` is included, as the default value for argument `op` in `[.sf` is `st_intersects`, and `Ashe` intersects with itself. We could exclude self-intersection by using predicate `st_touches` (overlapping features don't touch):
 ```{r}
 Ashe = nc[nc$NAME == "Ashe",]
 nc[Ashe, op = st_touches]
