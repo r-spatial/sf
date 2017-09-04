@@ -703,13 +703,13 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 	Rcpp::CharacterVector classes;
 	bool have_classes = false;
 	if (sfc.size() > 0 && strcmp(cls, "sfc_GEOMETRY") == 0) {
-		if (! Rf_isNull(sfc.attr("classes"))) { // only sfc_GEOMETRY, the mixed bag, sets the classes attr
+		if (sfc.hasAttribute("classes")) { // only sfc_GEOMETRY, the mixed bag, sets the classes attr
 			classes = sfc.attr("classes");
 			if (classes.size() != sfc.size())
 				Rcpp::stop("attr classes has wrong size: please file an issue"); // #nocov
 			have_classes = true;
 		} else
-			Rcpp::stop("sfc_GEOMETRY should have attr classes; please file an issue"); // #nocov
+			Rcpp::stop("sfc_GEOMETRY has no classes attribute; please file an issue"); // #nocov
 	}
 
 	Rcpp::List crs = sfc.attr("crs"); 
