@@ -14,7 +14,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Etienne", "Racine", role = "ctb"))
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.3.0), methods
 Imports: 
     utils, 
     stats, 
@@ -22,7 +22,6 @@ Imports:
     graphics, 
     grDevices, 
     grid, 
-    methods, 
     Rcpp, 
     DBI (>= 0.5),
     units (>= 0.4-6),
