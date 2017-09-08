@@ -3,7 +3,7 @@ set_utf8 = function(x) {
 	Encoding(n) = "UTF-8"
 	to_utf8 = function(x) {
 		if (is.character(x))
-			Encoding(x) = "UTF-8"
+			x = enc2utf8(x)
 		else if (is.factor(x))
 			levels(x) = enc2utf8(levels(x))
 		x
@@ -144,6 +144,8 @@ clean_columns = function(obj, factorsAsCharacter) {
 			else if (is.numeric(obj[[i]]))
 				obj[[i]] = as.numeric(obj[[i]]) # strips class
 		}
+		if (is.character(obj[[i]]))
+			obj[[i]] = enc2utf8(obj[[i]])
 	}
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
@@ -251,6 +253,8 @@ st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
 
 	obj = clean_columns(as.data.frame(obj), factorsAsCharacter)
 	# this attaches attr colclasses
+
+	names(obj) = enc2utf8(names(obj))
 
 	dim = if (length(geom) == 0)
 			"XY"
