@@ -245,12 +245,12 @@ Similarly, tables can be written:
 
 ```{r eval=FALSE}
 conn = dbConnect(PostgreSQL(), dbname = "postgis")
-st_write_db(conn, meuse, dropTable = TRUE)
+st_write_db(conn, meuse, drop = TRUE)
 dbDisconnect(conn)
 ```
 
 Here, the default table (layer) name is taken from the object name
-(`meuse`). Argument `dropTable` informs to drop (remove) the table
+(`meuse`). Argument `drop` informs to drop (remove) the table
 before writing; logical argument `binary` determines whether to
 use well-known binary or well-known text when writing the geometry
 (where well-known binary is faster and lossless).
