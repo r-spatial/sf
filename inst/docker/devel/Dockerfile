@@ -47,6 +47,6 @@ RUN cd /usr/local/bin \
 && ln -s Rscriptdevel RDscript
 
 RUN rm -fr sf.Rcheck
-RUN RD CMD check --as-cran sf_*tar.gz
+#RUN RD CMD check --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]

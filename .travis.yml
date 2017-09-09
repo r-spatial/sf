@@ -2,8 +2,9 @@ language: r
 
 r:
   - release
-  - devel
   - oldrel
+
+#  - devel
 
 # r_github_packages: tidyverse/dplyr 
 
