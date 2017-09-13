@@ -67,6 +67,11 @@ st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 		warning("x is already of type ", type, ".")
 		return(x)
 	}
+
+	if (!inherits(x, "GEOMETRYCOLLECTION")) {
+		stop("x is of singular geometry type that is different to supplied type: ", type)
+	}
+
 	# Find the geometries of the specified type and extract into a list
 	matches = vapply(x, st_is, types, FUN.VALUE = logical(1))
 	x_types = x[which(matches)]
@@ -92,13 +97,18 @@ st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
+	# Check it's not already what user is asking for
 	if (inherits(st_geometry(x), paste0("sfc_", types))) {
 		warning("x is already of type ", type, ".")
 		return(x)
 	}
 
-	# Cast to GEOMETRYCOLLECTION if not already (e.g., if it is sfc_GEOMETRY)
-	if (!inherits(st_geometry(x), "sfc_GEOMETRYCOLLECTION")) {
+	if (!inherits(st_geometry(x), c("sfc_GEOMETRY", "sfc_GEOMETRYCOLLECTION"))) {
+		stop("x is of singular geometry type that is different to supplied type: ", type)
+	}
+
+	# Cast to GEOMETRYCOLLECTION if is GEOMETRY)
+	if (inherits(st_geometry(x), "sfc_GEOMETRY")) {
 		x = st_cast(x, "GEOMETRYCOLLECTION")
 	}
 
@@ -113,6 +123,12 @@ st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	}
 
 	## Cast to specified (MULTI) type
+
+	if (length(st_geometry(gc_types)) == 0L) {
+		warning("x contains no geometries of specified type")
+		return(gc_types)
+	}
+
 	st_cast(gc_types, warn = warn)
 }
 

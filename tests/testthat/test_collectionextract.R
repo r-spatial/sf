@@ -53,7 +53,16 @@ test_that("st_collectionextract works with sf objects", {
 test_that("st_collectionextract behaves with unexpected inputs", {
 	expect_warning(st_collectionextract(poly1, "POLYGON"),
 				   "x is already of type POLYGON")
+	expect_error(st_collectionextract(st_sfc(pt), "POLYGON"),
+				 "x is of singular geometry type that is different to supplied type")
+	expect_error(st_collectionextract(st_sf(a = "a", geom = st_sfc(pt)), "POLYGON"),
+				 "x is of singular geometry type that is different to supplied type")
 	## Returns empty geometry
+	expect_warning(st_collectionextract(st_sfc(pt, ls), "POLYGON"),
+				   "x contains no geometries of specified type")
+	expect_warning(st_collectionextract(st_sf(a = c("a", "b"), geom = st_sfc(ls, pt)),
+										"POLYGON"),
+				   "x contains no geometries of specified type")
 	expect_warning(zero_len <- st_collectionextract(st_geometrycollection(list(pt, ls)), "POLYGON"),
 	"x contains no geometries of specified type")
 	expect_length(zero_len, 0L)
