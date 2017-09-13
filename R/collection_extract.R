@@ -33,7 +33,9 @@ st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 		# Get the contents of the first (only) list element which is an sfg
 		return(x_types[[1]])
 	} else {
-		return(st_sfc(x_types))
+		# turn list into an sfc, and cast it to single type. Will be multi
+		# if any are multi
+		return(st_cast(st_sfc(x_types), warn = warn))
 	}
 }
 
