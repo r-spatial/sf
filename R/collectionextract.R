@@ -1,6 +1,6 @@
 #' Given a (multi)geometry, return a (multi)geometry consisting only of elements of the specified type.
 #'
-#' Similar to ST_CollectionExtract in postgis. If there are no sub-geometries of the specified type, an empty geometry is returned.
+#' Similar to st_collection_extract in postgis. If there are no sub-geometries of the specified type, an empty geometry is returned.
 #'
 #' @param x an \code{sf(c/g)} object that has mixed geometry
 #' @param type One of "POLYGON", "POINT", "LINESTRING"
@@ -19,23 +19,23 @@
 #' i <- st_geometrycollection(list(pt, ls, poly1, poly2))
 #' j <- st_geometrycollection(list(pt, ls, poly1, poly2, multipoly))
 #'
-#' st_collectionextract(i, "POLYGON")
-#' st_collectionextract(i, "POINT")
-#' st_collectionextract(i, "LINESTRING")
+#' st_collection_extract(i, "POLYGON")
+#' st_collection_extract(i, "POINT")
+#' st_collection_extract(i, "LINESTRING")
 #'
 #' ## A GEOMETRYCOLLECTION
 #' aa <- rbind(st_sf(a=1, geom = st_sfc(i)),
 #' 			st_sf(a=2, geom = st_sfc(j)))
 #'
 #' ## With sf objects
-#' st_collectionextract(aa, "POLYGON")
-#' st_collectionextract(aa, "LINESTRING")
-#' st_collectionextract(aa, "POINT")
+#' st_collection_extract(aa, "POLYGON")
+#' st_collection_extract(aa, "LINESTRING")
+#' st_collection_extract(aa, "POINT")
 #'
 #' ## With sfc objects
-#' st_collectionextract(st_geometry(aa), "POLYGON")
-#' st_collectionextract(st_geometry(aa), "LINESTRING")
-#' st_collectionextract(st_geometry(aa), "POINT")
+#' st_collection_extract(st_geometry(aa), "POLYGON")
+#' st_collection_extract(st_geometry(aa), "LINESTRING")
+#' st_collection_extract(st_geometry(aa), "POINT")
 #'
 #' ## A GEOMETRY of single types
 #' bb <- rbind(
@@ -45,21 +45,21 @@
 #' 	st_sf(a = 4, geom = st_sfc(multipoly))
 #' )
 #'
-#' st_collectionextract(bb, "POLYGON")
+#' st_collection_extract(bb, "POLYGON")
 #'
 #' ## A GEOMETRY of mixed single types and GEOMETRYCOLLECTIONS
 #' cc <- rbind(aa, bb)
 #'
-#' st_collectionextract(cc, "POLYGON")
+#' st_collection_extract(cc, "POLYGON")
 #'
-st_collectionextract = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
-	UseMethod("st_collectionextract")
+st_collection_extract = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
+	UseMethod("st_collection_extract")
 }
 
-#' @name st_collectionextract
+#' @name st_collection_extract
 #'
 #' @export
-st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
+st_collection_extract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
@@ -90,10 +90,10 @@ st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	}
 }
 
-#' @name st_collectionextract
+#' @name st_collection_extract
 #'
 #' @export
-st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
+st_collection_extract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
@@ -132,7 +132,7 @@ st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	st_cast(gc_types, warn = warn)
 }
 
-#' @name st_collectionextract
+#' @name st_collection_extract
 #'
 #' @export
-st_collectionextract.sf = st_collectionextract.sfc
+st_collection_extract.sf = st_collection_extract.sfc

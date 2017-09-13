@@ -1,4 +1,4 @@
-context("sf: st_collectionextract")
+context("sf: st_collection_extract")
 
 pt <- st_point(c(1, 0))
 ls <- st_linestring(matrix(c(4, 3, 0, 0), ncol = 2))
@@ -26,44 +26,44 @@ bb <- rbind(
 ## A GEOMETRY of mixed single types and GEOMETRYCOLLECTIONS
 cc <- rbind(aa, bb)
 
-test_that("st_collectionextract works with sfg objects", {
-	expect_is(st_collectionextract(i, "POLYGON"), "sfc_POLYGON")
-	expect_is(st_collectionextract(j, "POLYGON"), "sfc_MULTIPOLYGON")
-	expect_is(st_collectionextract(i, "POINT"), "POINT")
-	expect_is(st_collectionextract(i, "LINESTRING"), "LINESTRING")
+test_that("st_collection_extract works with sfg objects", {
+	expect_is(st_collection_extract(i, "POLYGON"), "sfc_POLYGON")
+	expect_is(st_collection_extract(j, "POLYGON"), "sfc_MULTIPOLYGON")
+	expect_is(st_collection_extract(i, "POINT"), "POINT")
+	expect_is(st_collection_extract(i, "LINESTRING"), "LINESTRING")
 })
 
-test_that("st_collectionextract works with sfc objects", {
-	expect_is(st_collectionextract(st_geometry(aa), "POLYGON"), "sfc_MULTIPOLYGON")
-	expect_is(st_collectionextract(st_geometry(aa), "LINESTRING"), "sfc_LINESTRING")
-	expect_is(st_collectionextract(st_geometry(aa), "POINT"), "sfc_POINT")
-	expect_is(st_collectionextract(st_geometry(bb), "POINT"), "sfc_POINT")
-	expect_is(st_collectionextract(st_geometry(cc), "POLYGON"), "sfc_MULTIPOLYGON")
+test_that("st_collection_extract works with sfc objects", {
+	expect_is(st_collection_extract(st_geometry(aa), "POLYGON"), "sfc_MULTIPOLYGON")
+	expect_is(st_collection_extract(st_geometry(aa), "LINESTRING"), "sfc_LINESTRING")
+	expect_is(st_collection_extract(st_geometry(aa), "POINT"), "sfc_POINT")
+	expect_is(st_collection_extract(st_geometry(bb), "POINT"), "sfc_POINT")
+	expect_is(st_collection_extract(st_geometry(cc), "POLYGON"), "sfc_MULTIPOLYGON")
 })
 
 
-test_that("st_collectionextract works with sf objects", {
-	expect_is(st_geometry(st_collectionextract(aa, "POLYGON")), "sfc_MULTIPOLYGON")
-	expect_is(st_geometry(st_collectionextract(aa, "LINESTRING")), "sfc_LINESTRING")
-	expect_is(st_geometry(st_collectionextract(aa, "POINT")), "sfc_POINT")
-	expect_is(st_geometry(st_collectionextract(bb, "POLYGON")), "sfc_MULTIPOLYGON")
-	expect_is(st_geometry(st_collectionextract(cc, "POLYGON")), "sfc_MULTIPOLYGON")
+test_that("st_collection_extract works with sf objects", {
+	expect_is(st_geometry(st_collection_extract(aa, "POLYGON")), "sfc_MULTIPOLYGON")
+	expect_is(st_geometry(st_collection_extract(aa, "LINESTRING")), "sfc_LINESTRING")
+	expect_is(st_geometry(st_collection_extract(aa, "POINT")), "sfc_POINT")
+	expect_is(st_geometry(st_collection_extract(bb, "POLYGON")), "sfc_MULTIPOLYGON")
+	expect_is(st_geometry(st_collection_extract(cc, "POLYGON")), "sfc_MULTIPOLYGON")
 })
 
-test_that("st_collectionextract behaves with unexpected inputs", {
-	expect_warning(st_collectionextract(poly1, "POLYGON"),
+test_that("st_collection_extract behaves with unexpected inputs", {
+	expect_warning(st_collection_extract(poly1, "POLYGON"),
 				   "x is already of type POLYGON")
-	expect_error(st_collectionextract(st_sfc(pt), "POLYGON"),
+	expect_error(st_collection_extract(st_sfc(pt), "POLYGON"),
 				 "x is of singular geometry type that is different to supplied type")
-	expect_error(st_collectionextract(st_sf(a = "a", geom = st_sfc(pt)), "POLYGON"),
+	expect_error(st_collection_extract(st_sf(a = "a", geom = st_sfc(pt)), "POLYGON"),
 				 "x is of singular geometry type that is different to supplied type")
 	## Returns empty geometry
-	expect_warning(st_collectionextract(st_sfc(pt, ls), "POLYGON"),
+	expect_warning(st_collection_extract(st_sfc(pt, ls), "POLYGON"),
 				   "x contains no geometries of specified type")
-	expect_warning(st_collectionextract(st_sf(a = c("a", "b"), geom = st_sfc(ls, pt)),
+	expect_warning(st_collection_extract(st_sf(a = c("a", "b"), geom = st_sfc(ls, pt)),
 										"POLYGON"),
 				   "x contains no geometries of specified type")
-	expect_warning(zero_len <- st_collectionextract(st_geometrycollection(list(pt, ls)), "POLYGON"),
+	expect_warning(zero_len <- st_collection_extract(st_geometrycollection(list(pt, ls)), "POLYGON"),
 	"x contains no geometries of specified type")
 	expect_length(zero_len, 0L)
 })
