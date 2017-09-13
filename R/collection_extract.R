@@ -8,13 +8,14 @@
 #'
 #' @examples
 st_collectionextract = function(x, type = c("POLYGON", "POINT", "LINESTRING")) {
+st_collectionextract = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	UseMethod("st_collectionextract")
 }
 
 #' @name st_collectionextract
 #'
 #' @export
-st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING")) {
+st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
@@ -42,7 +43,7 @@ st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 #' @name st_collectionextract
 #'
 #' @export
-st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING")) {
+st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
@@ -57,7 +58,7 @@ st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	}
 
 	## Cast GEOMETRYCOLLECTION into all components
-	gc_casted = st_cast(x)
+	gc_casted = st_cast(x, warn = warn)
 
 	## Keep only components that match input type
 	if (inherits(gc_casted, "sf")) {
@@ -67,7 +68,7 @@ st_collectionextract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 	}
 
 	## Cast to specified (MULTI) type
-	st_cast(gc_types)
+	st_cast(gc_types, warn = warn)
 }
 
 #' @name st_collectionextract
