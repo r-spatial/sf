@@ -1,13 +1,57 @@
-#' Exctract only elements of specified type from a GEOMETRYCOLLECTION
+#' Given a (multi)geometry, return a (multi)geometry consisting only of elements of the specified type.
+#'
+#' Similar to ST_CollectionExtract in postgis. If there are no sub-geometries of the specified type, an empty geometry is returned.
 #'
 #' @param x an \code{sf(c/g)} object that has mixed geometry
 #' @param type One of "POLYGON", "POINT", "LINESTRING"
+#' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries when casting (see \code{\link{st_cast}})
 #'
-#' @return a (multi)geometry consisting only of elements of the specified type
+#' @return An sf(c/g) object with (multi)geometries consisting only of elements of the specified type. For sfg objects, an sfg object is returned if there is only one geometry of the specified type, otherwise the geometries are combined into an sfc object of the relevant type. If any subgeometries in the input are MULTI, then all of the subgeometries in the output will be MULTI.
 #' @export
 #'
 #' @examples
-st_collectionextract = function(x, type = c("POLYGON", "POINT", "LINESTRING")) {
+#' pt <- st_point(c(1, 0))
+#' ls <- st_linestring(matrix(c(4, 3, 0, 0), ncol = 2))
+#' poly1 <- st_polygon(list(matrix(c(5.5, 7, 7, 6, 5.5, 0, 0, -0.5, -0.5, 0), ncol = 2)))
+#' poly2 <- st_polygon(list(matrix(c(6.6, 8, 8, 7, 6.6, 1, 1, 1.5, 1.5, 1), ncol = 2)))
+#' multipoly <- st_multipolygon(list(poly1, poly2))
+#'
+#' i <- st_geometrycollection(list(pt, ls, poly1, poly2))
+#' j <- st_geometrycollection(list(pt, ls, poly1, poly2, multipoly))
+#'
+#' st_collectionextract(i, "POLYGON")
+#' st_collectionextract(i, "POINT")
+#' st_collectionextract(i, "LINESTRING")
+#'
+#' ## A GEOMETRYCOLLECTION
+#' aa <- rbind(st_sf(a=1, geom = st_sfc(i)),
+#' 			st_sf(a=2, geom = st_sfc(j)))
+#'
+#' ## With sf objects
+#' st_collectionextract(aa, "POLYGON")
+#' st_collectionextract(aa, "LINESTRING")
+#' st_collectionextract(aa, "POINT")
+#'
+#' ## With sfc objects
+#' st_collectionextract(st_geometry(aa), "POLYGON")
+#' st_collectionextract(st_geometry(aa), "LINESTRING")
+#' st_collectionextract(st_geometry(aa), "POINT")
+#'
+#' ## A GEOMETRY of single types
+#' bb <- rbind(
+#' 	st_sf(a = 1, geom = st_sfc(pt)),
+#' 	st_sf(a = 2, geom = st_sfc(ls)),
+#' 	st_sf(a = 3, geom = st_sfc(poly1)),
+#' 	st_sf(a = 4, geom = st_sfc(multipoly))
+#' )
+#'
+#' st_collectionextract(bb, "POLYGON")
+#'
+#' ## A GEOMETRY of mixed single types and GEOMETRYCOLLECTIONS
+#' cc <- rbind(aa, bb)
+#'
+#' st_collectionextract(cc, "POLYGON")
+#'
 st_collectionextract = function(x, type = c("POLYGON", "POINT", "LINESTRING"), warn = FALSE) {
 	UseMethod("st_collectionextract")
 }
@@ -23,6 +67,7 @@ st_collectionextract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING"
 		warning("x is already of type ", type, ".")
 		return(x)
 	}
+	# Find the geometries of the specified type and extract into a list
 	matches = vapply(x, st_is, types, FUN.VALUE = logical(1))
 	x_types = x[which(matches)]
 	if (length(x_types) == 0L) {
