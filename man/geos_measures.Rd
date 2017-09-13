@@ -40,6 +40,11 @@ Compute Euclidian or great circle distance between pairs of geometries, the area
 Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 }
 \examples{
+b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
+b1 = b0 + 2
+b2 = b0 + c(-0.2, 2)
+x = st_sfc(b0, b1, b2)
+st_area(x)
 dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 st_length(line)

@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* move package methods from Imports: to Depends: ; #478
+
 * deal better with precision setting and propagation; #476
 
 * fix bug in `st_layers` in case layers have no geometry; #334

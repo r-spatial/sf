@@ -32,6 +32,12 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 #' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}.
 #'
 #' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
+#' @examples
+#' b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
+#' b1 = b0 + 2
+#' b2 = b0 + c(-0.2, 2)
+#' x = st_sfc(b0, b1, b2)
+#' st_area(x)
 st_area = function(x) {
 	if (isTRUE(st_is_longlat(x))) {
 		p = crs_parameters(st_crs(x))
@@ -550,7 +556,7 @@ st_line_merge.sf = function(x) {
 #' mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 #' plot(mp)
 #' plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
-#' plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) 
+#' plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 st_centroid = function(x, ..., of_largest_polygon = FALSE)
 	UseMethod("st_centroid")
 
