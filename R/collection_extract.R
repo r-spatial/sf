@@ -1,13 +1,22 @@
-#' Given an object with geometries of type \code{GEOMETRY} or \code{GEOMETRYCOLLECTION}, return an object consisting only of elements of the specified type.
+#' Given an object with geometries of type \code{GEOMETRY} or \code{GEOMETRYCOLLECTION},
+#' return an object consisting only of elements of the specified type.
 #'
-#' Similar to ST_CollectionExtract in PostGIS. If there are no sub-geometries of the specified type, an empty geometry is returned.
+#' Similar to ST_CollectionExtract in PostGIS. If there are no sub-geometries
+#' of the specified type, an empty geometry is returned.
 #'
-#' @param x an object of class \code{sf}, \code{sfc} or \code{sfg} that has mixed geometry (\code{GEOMETRY} or \code{GEOMETRYCOLLECTION}).
+#' @param x an object of class \code{sf}, \code{sfc} or \code{sfg} that has
+#' mixed geometry (\code{GEOMETRY} or \code{GEOMETRYCOLLECTION}).
 #' @param type character; one of "POLYGON", "POINT", "LINESTRING"
-#' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries when casting (see \code{\link{st_cast}})
+#' @param warn logical; if \code{TRUE}, warn if attributes are assigned to
+#' sub-geometries when casting (see \code{\link{st_cast}})
 #'
-#' @return An object having the same class as \code{x}, with geometries consisting only of elements of the specified type.
-#' For \code{sfg} objects, an \code{sfg} object is returned if there is only one geometry of the specified type, otherwise the geometries are combined into an \code{sfc} object of the relevant type. If any subgeometries in the input are MULTI, then all of the subgeometries in the output will be MULTI.
+#' @return An object having the same class as \code{x}, with geometries
+#' consisting only of elements of the specified type.
+#' For \code{sfg} objects, an \code{sfg} object is returned if there is only
+#' one geometry of the specified type, otherwise the geometries are combined
+#' into an \code{sfc} object of the relevant type. If any subgeometries in the
+#' input are MULTI, then all of the subgeometries in the output will be MULTI.
+#'
 #' @export
 #'
 #' @examples
