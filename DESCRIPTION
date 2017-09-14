@@ -81,4 +81,5 @@ Collate:
 	valid.R
 	geohash.R
 	split.R
+	collection_extract.R
 RoxygenNote: 6.0.1
