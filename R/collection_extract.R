@@ -86,10 +86,9 @@ st_collection_extract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING
 	matches = vapply(x, st_is, types, FUN.VALUE = logical(1))
 	x_types = x[which(matches)]
 	if (length(x_types) == 0L) {
-		## Not sure if this should be a warning and return an empty sfg (current)
-		## or error?
+		## return an empty sfg of the specified type
 		warning("x contains no geometries of specified type")
-		return(x_types)
+		return(typed_empty(paste0("sfc_", type)))
 	} else if (length(x_types) == 1L) {
 		# Get the contents of the first (only) list element which is an sfg
 		return(x_types[[1]])
