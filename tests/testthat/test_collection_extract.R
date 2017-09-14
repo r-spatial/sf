@@ -66,5 +66,7 @@ test_that("st_collection_extract behaves with unexpected inputs", {
 	expect_warning(zero_len <- st_collection_extract(st_geometrycollection(list(pt, ls)), "POLYGON"),
 	"x contains no geometries of specified type")
 	expect_length(zero_len, 0L)
+	expect_is(zero_len, "sfg")
+	expect_true(st_is(zero_len, "POLYGON"))
 })
 
