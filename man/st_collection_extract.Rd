@@ -8,7 +8,8 @@
 \alias{st_collection_extract.sfc}
 \alias{st_collection_extract}
 \alias{st_collection_extract.sf}
-\title{Given a (multi)geometry, return a (multi)geometry consisting only of elements of the specified type.}
+\title{Given an object with geometries of type \code{GEOMETRY} or \code{GEOMETRYCOLLECTION},
+return an object consisting only of elements of the specified type.}
 \usage{
 st_collection_extract(x, type = c("POLYGON", "POINT", "LINESTRING"),
   warn = FALSE)
@@ -23,17 +24,25 @@ st_collection_extract(x, type = c("POLYGON", "POINT", "LINESTRING"),
   "LINESTRING"), warn = FALSE)
 }
 \arguments{
-\item{x}{an \code{sf(c/g)} object that has mixed geometry}
+\item{x}{an object of class \code{sf}, \code{sfc} or \code{sfg} that has
+mixed geometry (\code{GEOMETRY} or \code{GEOMETRYCOLLECTION}).}
 
-\item{type}{One of "POLYGON", "POINT", "LINESTRING"}
+\item{type}{character; one of "POLYGON", "POINT", "LINESTRING"}
 
-\item{warn}{logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries when casting (see \code{\link{st_cast}})}
+\item{warn}{logical; if \code{TRUE}, warn if attributes are assigned to
+sub-geometries when casting (see \code{\link{st_cast}})}
 }
 \value{
-An sf(c/g) object with (multi)geometries consisting only of elements of the specified type. For sfg objects, an sfg object is returned if there is only one geometry of the specified type, otherwise the geometries are combined into an sfc object of the relevant type. If any subgeometries in the input are MULTI, then all of the subgeometries in the output will be MULTI.
+An object having the same class as \code{x}, with geometries
+consisting only of elements of the specified type.
+For \code{sfg} objects, an \code{sfg} object is returned if there is only
+one geometry of the specified type, otherwise the geometries are combined
+into an \code{sfc} object of the relevant type. If any subgeometries in the
+input are MULTI, then all of the subgeometries in the output will be MULTI.
 }
 \description{
-Similar to st_collection_extract in postgis. If there are no sub-geometries of the specified type, an empty geometry is returned.
+Similar to ST_CollectionExtract in PostGIS. If there are no sub-geometries
+of the specified type, an empty geometry is returned.
 }
 \examples{
 pt <- st_point(c(1, 0))
