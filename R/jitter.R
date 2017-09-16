@@ -13,11 +13,12 @@
 #' plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 #' @export
 st_jitter = function(x, amount, factor = 0.002) {      
+	stopifnot(inherits(x, "sf") || inherits(x, "sfc"))
 	bb = st_bbox(x)
 	if (missing(amount))
 		amount = factor * sqrt(diff(bb[c(3,1)])^2 + diff(bb[c(4,2)])^2)
 	ay = amount
-	ax = if (st_is_longlat(x))
+	ax = if (isTRUE(st_is_longlat(x)))
 		amount * cos(pi * mean(bb[c(2,4)]) / 180)
 	else
 		amount
@@ -25,5 +26,9 @@ st_jitter = function(x, amount, factor = 0.002) {
 		c(runif(1L, -amount_x, amount_x),
 		  runif(1L, -amount_y, amount_y))
 	}
-	st_set_crs(x + lapply(x, f, amount_x = ax, amount_y = ay), st_crs(x))
+	geom = st_set_crs(x + lapply(x, f, amount_x = ax, amount_y = ay), st_crs(x))
+	if (inherits(x, "sf"))
+		st_set_geometry(x, geom)
+	else
+		geom
 }
