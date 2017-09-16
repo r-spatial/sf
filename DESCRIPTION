@@ -82,4 +82,5 @@ Collate:
 	geohash.R
 	split.R
 	collection_extract.R
+	jitter.R
 RoxygenNote: 6.0.1
