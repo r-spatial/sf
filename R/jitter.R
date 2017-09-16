@@ -1,7 +1,8 @@
 
 #' jitter geometries
 #' @param x object of class \code{sf} or \code{sfc}
-#' @param amount amount of jittering applied; if missing, the amount is set to factor * the bounding box diagonal.
+#' @param amount numeric; amount of jittering applied; if missing, the amount is set to factor * the bounding box diagonal; units of coordinates.
+#' @param factor numeric; fractional amount of jittering to be applied
 #' @details jitters coordinates with an amount such that `code{runif(1, -amount, amount)} is added to the coordinates. x- and y-coordinates are jittered independently but all coordinates of a single geometry are jittered with the same amount, meaning that the geometry shape does not change. For longlat data, a latitude correction is made such that jittering in East and North directions are identical in distance in the center of the bounding box of \code{x}.
 #' @examples
 #' nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
@@ -9,7 +10,7 @@
 #' plot(pts)
 #' plot(st_jitter(pts, .05), add = TRUE, col = 'red')
 #' plot(st_geometry(nc))
-#' plot(st_jitter(st_geometry(nc), factor = .01), add = T, col = '#ff8888')
+#' plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 #' @export
 st_jitter = function(x, amount, factor = 0.002) {      
 	bb = st_bbox(x)

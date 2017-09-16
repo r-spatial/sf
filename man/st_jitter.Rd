@@ -9,7 +9,9 @@ st_jitter(x, amount, factor = 0.002)
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
 
-\item{amount}{amount of jittering applied; if missing, the amount is set to factor * the bounding box diagonal.}
+\item{amount}{numeric; amount of jittering applied; if missing, the amount is set to factor * the bounding box diagonal; units of coordinates.}
+
+\item{factor}{numeric; fractional amount of jittering to be applied}
 }
 \description{
 jitter geometries
@@ -22,4 +24,6 @@ nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 pts = st_centroid(st_geometry(nc))
 plot(pts)
 plot(st_jitter(pts, .05), add = TRUE, col = 'red')
+plot(st_geometry(nc))
+plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 }
