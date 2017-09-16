@@ -79,7 +79,7 @@ st_collection_extract.sfg = function(x, type = c("POLYGON", "POINT", "LINESTRING
 	}
 
 	if (!inherits(x, "GEOMETRYCOLLECTION")) {
-		stop("x is of singular geometry type that is different to supplied type: ", type)
+		stop("x is of singular geometry type that is different to supplied type: ", type) # nocov
 	}
 
 	# Find the geometries of the specified type and extract into a list
@@ -108,8 +108,8 @@ st_collection_extract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING
 
 	# Check it's not already what user is asking for
 	if (inherits(st_geometry(x), paste0("sfc_", types))) {
-		warning("x is already of type ", type, ".")
-		return(x)
+		warning("x is already of type ", type, ".") # nocov
+		return(x)                                   # nocov
 	}
 
 	if (!inherits(st_geometry(x), c("sfc_GEOMETRY", "sfc_GEOMETRYCOLLECTION"))) {

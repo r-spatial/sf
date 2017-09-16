@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* add `st_collection_extract`, which, given an object with geometries of type `GEOMETRY` or `GEOMETRYCOLLECTION`, returns an object consisting only of elements of the specified type; by Andy Teucher, #482
+
+* `st_write` exports GeoJSON with ANSI encoding on Windows; #444
+
 * move package methods from Imports: to Depends: ; #478
 
 * deal better with precision setting and propagation; #476

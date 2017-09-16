@@ -114,7 +114,7 @@ plot(st_centroid(nc), add = TRUE, pch = 3)
 mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 plot(mp)
 plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
-plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3) 
+plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
