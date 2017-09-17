@@ -3,10 +3,9 @@ language: r
 r:
   - release
   - oldrel
+  - devel
 
-#  - devel
-
-# r_github_packages: tidyverse/dplyr 
+r_github_packages: tidyverse/tidyr 
 
 cache: packages
 
