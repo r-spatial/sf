@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* comparing two `crs` objects now uses the GDAL function `IsSame`; #180
+
 * add `st_collection_extract`, which, given an object with geometries of type `GEOMETRY` or `GEOMETRYCOLLECTION`, returns an object consisting only of elements of the specified type; by Andy Teucher, #482
 
 * `st_write` exports GeoJSON with ANSI encoding on Windows; #444

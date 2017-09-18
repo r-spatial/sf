@@ -107,6 +107,19 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 	return out;
 }
 
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
+	Rcpp::LogicalVector out(1);
+	OGRSpatialReference *srs1 = new OGRSpatialReference;
+	handle_error(srs1->importFromProj4(crs1.c_str()));
+	OGRSpatialReference *srs2 = new OGRSpatialReference;
+	handle_error(srs2->importFromProj4(crs2.c_str()));
+	out(0) = (bool) srs1->IsSame(srs2);
+	delete srs1;
+	delete srs2;
+	return out;
+}
+
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim_sfc(sfc, NULL), precision);

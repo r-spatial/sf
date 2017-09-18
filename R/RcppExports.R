@@ -21,6 +21,10 @@ CPL_crs_parameters <- function(p4s) {
     .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', p4s)
 }
 
+CPL_crs_equivalent <- function(crs1, crs2) {
+    .Call('_sf_CPL_crs_equivalent', PACKAGE = 'sf', crs1, crs2)
+}
+
 CPL_crs_from_epsg <- function(epsg) {
     .Call('_sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
 }

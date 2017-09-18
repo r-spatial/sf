@@ -1,4 +1,4 @@
-# from sp/R/CRS-methods.R, https://github.com/edzer/sp/pull/31 @hughjonesd
+# alternative, but more limiting from sp/R/CRS-methods.R, https://github.com/edzer/sp/pull/31 @hughjonesd
 identicalCRS1 = function(x, y) {
   args_x <- strsplit(x, " +")[[1]]
   args_y <- strsplit(y, " +")[[1]]
@@ -23,12 +23,7 @@ Ops.crs <- function(e1, e2) {
 			TRUE
 		else if (is.na(e1) || is.na(e2)) # only one of them is NA_crs_
 			FALSE
-		else if (identicalCRS1(e1$proj4string, e2$proj4string) && (is.na(e1$epsg) || is.na(e2$epsg)))
-			TRUE
-		#else if (!is.na(e1$epsg) && !is.na(e2$epsg) && e1$epsg == e2$epsg) # epsg identical, proj4str different
-		#	TRUE
-		else
-			FALSE
+		else CPL_crs_equivalent(e1$proj4string, e2$proj4string) # use GDAL's srs1->IsSame(srs2)
 	}
 }
 

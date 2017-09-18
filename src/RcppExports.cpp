@@ -57,6 +57,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_crs_equivalent
+Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2);
+RcppExport SEXP _sf_CPL_crs_equivalent(SEXP crs1SEXP, SEXP crs2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type crs1(crs1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type crs2(crs2SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_equivalent(crs1, crs2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_crs_from_epsg
 Rcpp::List CPL_crs_from_epsg(int epsg);
 RcppExport SEXP _sf_CPL_crs_from_epsg(SEXP epsgSEXP) {
@@ -593,6 +605,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_cleanup_all", (DL_FUNC) &_sf_CPL_gdal_cleanup_all, 0},
     {"_sf_CPL_gdal_version", (DL_FUNC) &_sf_CPL_gdal_version, 1},
     {"_sf_CPL_crs_parameters", (DL_FUNC) &_sf_CPL_crs_parameters, 1},
+    {"_sf_CPL_crs_equivalent", (DL_FUNC) &_sf_CPL_crs_equivalent, 2},
     {"_sf_CPL_crs_from_epsg", (DL_FUNC) &_sf_CPL_crs_from_epsg, 1},
     {"_sf_CPL_crs_from_wkt", (DL_FUNC) &_sf_CPL_crs_from_wkt, 1},
     {"_sf_CPL_roundtrip", (DL_FUNC) &_sf_CPL_roundtrip, 1},
