@@ -85,15 +85,21 @@ st_bbox(obj)
 }
 \value{
 a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
-and \code{ymax} values; if \code{obj} is of class \code{sf} or \code{sfc}, the object
+and \code{ymax} values; if \code{obj} is of class \code{sf}, \code{sfc}, \code{Spatial} or \code{Raster}, the object
 returned has a class \code{bbox}, an attribute \code{crs} and a method to print the
 bbox and an \code{st_crs} method to retrieve the coordinate reference system 
-corresponding to \code{obj} (and hence the bounding box).
+corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
+methods for \code{bbox} objects to generate a polygon around the four bounding box points.
 }
 \description{
 Return bounding of a simple feature or simple feature set
 }
 \details{
 \code{NA_bbox_} is the \code{bbox} object with a missing value.
+}
+\examples{
+a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
+st_bbox(a)
+st_as_sfc(st_bbox(a))
 }
 \keyword{datasets}
