@@ -773,6 +773,24 @@ epsg (SRID):    NA
 proj4string:    NA
 POINT (0.0840035506989807 1.02795670260675)
 > 
+> # st_bbox:
+> library(sp)
+> demo(meuse, ask = FALSE, echo = FALSE)
+> st_bbox(meuse)
+  xmin   ymin   xmax   ymax 
+178605 329714 181390 333611 
+> library(raster)
+
+Attaching package: 'raster'
+
+The following object is masked from 'package:dplyr':
+
+    select
+
+> st_bbox(raster(meuse.grid))
+  xmin   ymin   xmax   ymax 
+178440 329600 181560 333760 
+> 
 > proc.time()
    user  system elapsed 
-  1.892   0.312   1.906 
+  2.652   0.300   2.641 

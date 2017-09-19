@@ -33,6 +33,7 @@ Suggests:
     rgdal,
     rgeos,
     sp (>= 1.2-4), 
+	raster,
 	RSQLite,
     RPostgreSQL,
     tibble,

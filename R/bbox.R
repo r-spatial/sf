@@ -145,3 +145,21 @@ st_bbox.sfc = function(obj) structure(attr(obj, "bbox"), crs = st_crs(obj))
 #' @export
 #' @name st_bbox
 st_bbox.sf = function(obj) st_bbox(st_geometry(obj))
+
+#' @export
+st_bbox.Spatial = function(obj) {
+	bbox = NULL
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	bb = bbox(obj)
+	bb_wrap(as.vector(bb))
+}
+
+#' @export
+st_bbox.Raster = function(obj) {
+	bbox = NULL
+	if (!requireNamespace("raster", quietly = TRUE))
+		stop("package raster required, please install it first")
+	bb = bbox(obj)
+	bb_wrap(as.vector(bb))
+}

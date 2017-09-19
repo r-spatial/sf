@@ -190,3 +190,10 @@ plot(st_jitter(pts, .05), add = TRUE, col = 'red')
 plot(st_geometry(nc))
 plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 st_jitter(st_sfc(st_point(0:1)), amount = .1)
+
+# st_bbox:
+library(sp)
+demo(meuse, ask = FALSE, echo = FALSE)
+st_bbox(meuse)
+library(raster)
+st_bbox(raster(meuse.grid))
