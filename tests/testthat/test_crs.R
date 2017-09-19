@@ -48,3 +48,9 @@ test_that("$.crs works", {
   expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) 
   expect_true(is.character(st_crs("+init=epsg:3857 +units=km")$units))
 })
+
+test_that("CRS comparison uses ellipsoid and datum (#180)", {
+	expect_equal(
+		st_crs("+proj=tmerc +lat_0=0 +lon_0=0 +k=0.9999 +x_0=304800 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+		st_crs("+proj=tmerc +lat_0=0 +lon_0=0 +k=0.9999 +x_0=304800 +y_0=0 +datum=NAD83 +units=m +no_defs"))
+})
