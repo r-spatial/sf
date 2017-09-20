@@ -87,7 +87,7 @@ st_bbox(obj)
 a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
 and \code{ymax} values; if \code{obj} is of class \code{sf}, \code{sfc}, \code{Spatial} or \code{Raster}, the object
 returned has a class \code{bbox}, an attribute \code{crs} and a method to print the
-bbox and an \code{st_crs} method to retrieve the coordinate reference system 
+bbox and an \code{st_crs} method to retrieve the coordinate reference system
 corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
 methods for \code{bbox} objects to generate a polygon around the four bounding box points.
 }

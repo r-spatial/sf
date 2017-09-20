@@ -153,20 +153,20 @@ st_bbox.sf = function(obj) st_bbox(st_geometry(obj))
 
 #' @export
 st_bbox.Spatial = function(obj) {
-	bbox = NULL
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	bb = bbox(obj)
+	bb = sp::bbox(obj)
 	structure(bb_wrap(c(bb[1,1],bb[2,1],bb[1,2],bb[2,2])),
-		crs = st_crs(proj4string(obj)))
+		crs = st_crs(sp::proj4string(obj)))
 }
 
 #' @export
 st_bbox.Raster = function(obj) {
-	bbox = NULL
+	if (!requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
 	if (!requireNamespace("raster", quietly = TRUE))
 		stop("package raster required, please install it first")
-	bb = bbox(obj)
+	bb = sp::bbox(obj)
 	structure(bb_wrap(c(bb[1,1],bb[2,1],bb[1,2],bb[2,2])),
-		crs = st_crs(proj4string(obj)))
+		crs = st_crs(sp::proj4string(obj)))
 }
