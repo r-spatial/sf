@@ -435,3 +435,8 @@ coord_4 = function(x) { # x is a list of lists of lists with matrices
 	x = lapply(x, coord_3)
 	cbind(do.call(rbind, x), L3 = rep(seq_along(x), times = vapply(x, nrow, 0L)))
 }
+
+#' @export
+rep.sfc = function(x, ...) {
+	st_sfc(NextMethod(), crs = st_crs(x))
+}
