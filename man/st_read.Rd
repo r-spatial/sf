@@ -96,23 +96,26 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 
 \dontrun{
+  if (isTRUE("PostGIS" \%in\% as.character(st_drivers()$name))) {
   library(sp)
   example(meuse, ask = FALSE, echo = FALSE)
   st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
        layer_options = "OVERWRITE=true")
   st_meuse = st_read("PG:dbname=postgis", "meuse")
   summary(st_meuse)
-}
+}}
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
 x = read_sf(geojson_txt)
 x
 \dontrun{
+if(isTRUE("PostGIS" \%in\% as.character(st_drivers()$name))) {
 library(RPostgreSQL)
 conn = dbConnect(PostgreSQL(), dbname = "postgis")
 x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
 x = st_read_db(conn, table = "public.meuse")
 print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-dbDisconnect(conn)}
+dbDisconnect(conn)
+}}
 }

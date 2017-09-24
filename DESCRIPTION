@@ -84,4 +84,4 @@ Collate:
 	split.R
 	collection_extract.R
 	jitter.R
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

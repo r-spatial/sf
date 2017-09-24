@@ -88,20 +88,23 @@ meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
 st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT", delete_dsn=TRUE) # overwrites
 \dontrun{
+if (isTRUE("PostGIS" \%in\% as.character(st_drivers()$name))){
 library(sp)
 example(meuse, ask = FALSE, echo = FALSE)
 st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 demo(nc, ask = FALSE)
-st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
+st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
+}}
 \dontrun{
+  if (isTRUE("PostGIS" \%in\% as.character(st_drivers()$name))) {
   library(sp)
   data(meuse)
   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   library(RPostgreSQL)
   conn = dbConnect(PostgreSQL(), dbname = "postgis")
   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
-}
+}}
 }
 \seealso{
 \link{st_drivers}

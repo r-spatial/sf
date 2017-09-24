@@ -9,12 +9,14 @@
 #' @details if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 #' @examples
 #' \dontrun{
+#' if(isTRUE("PostGIS" %in% as.character(st_drivers()$name))) {
 #' library(RPostgreSQL)
 #' conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #' x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
 #' x = st_read_db(conn, table = "public.meuse")
 #' print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-#' dbDisconnect(conn)}
+#' dbDisconnect(conn)
+#' }}
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
@@ -89,13 +91,14 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #' @export
 #' @examples
 #' \dontrun{
+#'   if (isTRUE("PostGIS" %in% as.character(st_drivers()$name))) {
 #'   library(sp)
 #'   data(meuse)
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #'   library(RPostgreSQL)
 #'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
 #'   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
-#' }
+#' }}
 #' @details st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
 st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
 		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
