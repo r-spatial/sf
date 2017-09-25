@@ -112,11 +112,11 @@ AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
-gdalok=yes
-AC_CHECK_HEADERS(gdal.h,,gdalok=no)
-if test "${gdalok}" = no; then
-   AC_MSG_ERROR([gdal.h not found in given locations.])
-fi
+#gdalok=yes
+#AC_CHECK_HEADERS(gdal.h,,gdalok=no)
+#if test "${gdalok}" = no; then
+#   AC_MSG_ERROR([gdal.h not found in given locations.])
+#fi
 
 NEED_DEPS=no
 LIBS="${INLIBS} ${PKG_LIBS}"

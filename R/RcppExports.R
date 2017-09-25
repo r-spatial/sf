@@ -5,6 +5,38 @@ CPL_get_bbox <- function(sf, depth = 0L) {
     .Call('_sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
 }
 
+CPL_area <- function(sfc) {
+    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
+    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+}
+
+CPL_length <- function(sfc) {
+    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
+    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+}
+
+CPL_gdal_linestring_sample <- function(sfc, distLst) {
+    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
+}
+
+CPL_get_layers <- function(datasource, options, do_count = FALSE) {
+    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
+}
+
+CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
+}
+
+CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
+    invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
+}
+
 CPL_gdal_init <- function() {
     invisible(.Call('_sf_CPL_gdal_init', PACKAGE = 'sf'))
 }
@@ -71,38 +103,6 @@ CPL_get_rgdal_drivers <- function(dummy) {
 
 CPL_sfc_from_wkt <- function(wkt) {
     .Call('_sf_CPL_sfc_from_wkt', PACKAGE = 'sf', wkt)
-}
-
-CPL_area <- function(sfc) {
-    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
-    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
-}
-
-CPL_length <- function(sfc) {
-    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
-    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
-}
-
-CPL_gdal_linestring_sample <- function(sfc, distLst) {
-    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
-}
-
-CPL_get_layers <- function(datasource, options, do_count = FALSE) {
-    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
-}
-
-CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
-    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
-}
-
-CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
-    invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
 }
 
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", sparse = TRUE, prepared = FALSE) {

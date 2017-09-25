@@ -46,13 +46,14 @@ set_utf8 = function(x) {
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 #'
 #' \dontrun{
+#'   if (isTRUE("PostGIS" %in% as.character(st_drivers()$name))) {
 #'   library(sp)
 #'   example(meuse, ask = FALSE, echo = FALSE)
 #'   st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
 #'        layer_options = "OVERWRITE=true")
 #'   st_meuse = st_read("PG:dbname=postgis", "meuse")
 #'   summary(st_meuse)
-#' }
+#' }}
 
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
@@ -215,12 +216,14 @@ abbreviate_shapefile_names = function(x) {
 #' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
 #' st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT", delete_dsn=TRUE) # overwrites
 #' \dontrun{
+#' if (isTRUE("PostGIS" %in% as.character(st_drivers()$name))){
 #' library(sp)
 #' example(meuse, ask = FALSE, echo = FALSE)
 #' st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse_sf",
 #'     layer_options = c("OVERWRITE=yes", "LAUNDER=true"))
 #' demo(nc, ask = FALSE)
-#' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")}
+#' st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true")
+#' }}
 #' @name st_write
 #' @export
 st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
