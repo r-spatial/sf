@@ -98,10 +98,11 @@ summary(nc) # note that AREA was computed using Euclidian area on lon/lat degree
 \dontrun{
   library(sp)
   example(meuse, ask = FALSE, echo = FALSE)
-  st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
-       layer_options = "OVERWRITE=true")
-  st_meuse = st_read("PG:dbname=postgis", "meuse")
-  summary(st_meuse)
+  try(st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
+       layer_options = "OVERWRITE=true"))
+  try(st_meuse <- st_read("PG:dbname=postgis", "meuse"))
+  if (exists("st_meuse"))
+    summary(st_meuse)
 }
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
@@ -110,9 +111,12 @@ x = read_sf(geojson_txt)
 x
 \dontrun{
 library(RPostgreSQL)
-conn = dbConnect(PostgreSQL(), dbname = "postgis")
-x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-x = st_read_db(conn, table = "public.meuse")
-print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-dbDisconnect(conn)}
+try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
+if (exists("conn") && !inherits(conn, "try-error")) {
+  x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+  x = st_read_db(conn, table = "public.meuse")
+  print(st_crs(x)) # SRID resolved by the database, not by GDAL!
+  dbDisconnect(conn)
+ }
+}
 }

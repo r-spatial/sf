@@ -10,11 +10,14 @@
 #' @examples
 #' \dontrun{
 #' library(RPostgreSQL)
-#' conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#' x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-#' x = st_read_db(conn, table = "public.meuse")
-#' print(st_crs(x)) # SRID resolved by the database, not by GDAL!
-#' dbDisconnect(conn)}
+#' try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
+#' if (exists("conn") && !inherits(conn, "try-error")) {
+#'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
+#'   x = st_read_db(conn, table = "public.meuse")
+#'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
+#'   dbDisconnect(conn)
+#'  }
+#' }
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
@@ -93,8 +96,9 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #'   data(meuse)
 #'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 #'   library(RPostgreSQL)
-#'   conn = dbConnect(PostgreSQL(), dbname = "postgis")
-#'   st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
+#'   try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
+#'   if (exists("conn") && !inherits(conn, "try-error"))
+#'     st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
 #' @details st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
 st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
