@@ -5,8 +5,11 @@ MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 ## Check out & build R-devel:
 RUN apt-get install -y subversion
 
+#RUN cd /tmp \
+#&& svn co https://svn.r-project.org/R/trunk R-devel
+
 RUN cd /tmp \
-&& svn co https://svn.r-project.org/R/trunk R-devel
+&& svn co https://svn.r-project.org/R/branches/ALTREP R-devel
 
 RUN /tmp/R-devel/tools/rsync-recommended
 ## Build and install according the standard 'recipe' I emailed/posted years ago
