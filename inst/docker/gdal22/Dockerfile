@@ -2,10 +2,6 @@ FROM ubuntu:16.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
-ENV GDAL_VERSION 2.2.0
-ENV GDAL_VERSION_NAME 2.2.0RC1
-ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-
 MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 
 RUN apt-get update && apt-get install -y software-properties-common
@@ -18,20 +14,61 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
- && apt-get install -y \
+  && apt-get install -y \
 	libcurl4-openssl-dev \
 	qpdf \
 	pandoc \
 	make \
 	wget \
 	git \
-	libgdal-dev \
-	libgeos-dev \
-	libproj-dev \
-	liblwgeom-dev \
+	subversion \
 	libudunits2-dev \
+	libexpat1-dev \
+	libpq-dev \
+	libsqlite3-dev \
 	postgis \
-	r-base-dev
+	r-base-dev \
+	gdb \
+	valgrind \
+	vim
+
+# PROJ:
+ENV PROJ_VERSION 4.9.3
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
+  && tar zxf proj-*tar.gz \
+  && cd proj* \
+  && ./configure \
+  && make \
+  && make install \
+  && cd .. \
+  && ldconfig
+
+# install proj-datumgrid:
+RUN cd /usr/local/share/proj \
+  && wget http://download.osgeo.org/proj/proj-datumgrid-1.6.zip \
+  && unzip proj-datumgrid*zip \
+  && rm proj-datumgrid*zip \
+  && cd -
+
+# GEOS:
+ENV GEOS_VERSION 3.6.2
+
+RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
+  && bzip2 -d geos-*bz2 \
+  && tar xf geos*tar \
+  && cd geos* \
+  && ./configure \
+  && make \
+  && make install \
+  && cd .. \
+  && ldconfig
+
+# GDAL:
+
+ENV GDAL_VERSION 2.2.2
+ENV GDAL_VERSION_NAME 2.2.2
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -40,23 +77,23 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
   && make \
   && make install \
   && cd .. \
+  && ldconfig
 
 RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
-RUN Rscript -e 'install.packages(c("dplyr", "tibble"), repos = "https://cloud.r-project.org")'
-RUN git clone https://github.com/edzer/sfr.git
-RUN R CMD build --no-build-vignettes --no-manual sfr
-RUN Rscript -e 'install.packages(c("units"), repos = "https://cloud.r-project.org")'
-RUN R CMD INSTALL sf_*tar.gz
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark"), repos = "https://cloud.r-project.org")'
 
-RUN apt-get install -y subversion
+RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI"), repos = "https://cloud.r-project.org")'
+
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 
 RUN R CMD build rgdal/pkg --no-build-vignettes
-RUN R CMD INSTALL rgdal_1.2-7.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
+RUN R CMD INSTALL rgdal_*.tar.gz 
+
+RUN git clone https://github.com/edzer/sfr.git
+
+RUN R CMD build --no-build-vignettes --no-manual sfr
+
+RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 
 CMD ["/bin/bash"]
-
