@@ -178,7 +178,7 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 ##  doesn't work for:
 ## as(st_point(0:1), "Spatial")
 
-#' Methods to coerce simple feature objects to \code{Spatial*} objects
+#' Methods to coerce simple feature geometries to corresponding \code{Spatial*} objects
 #' @rdname coerce-methods
 #' @param from object of class \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.
 #' @param cast logical; if \code{TRUE}, \link{st_cast} \code{from} before converting, so that e.g. \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.
