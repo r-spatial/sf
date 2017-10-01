@@ -791,6 +791,14 @@ The following object is masked from 'package:dplyr':
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
 > 
+> # st_to_s2
+> x = sf:::st_to_s2(nc)
+> x1 = st_geometry(x)
+> cc = st_coordinates(x1)
+> summary(sqrt(cc[,1]^2+cc[,2]^2+cc[,3]^2))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      1       1       1       1       1       1 
+> 
 > proc.time()
    user  system elapsed 
-  2.652   0.300   2.641 
+  2.576   0.348   2.615 

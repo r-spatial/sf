@@ -197,3 +197,9 @@ demo(meuse, ask = FALSE, echo = FALSE)
 st_bbox(meuse)
 library(raster)
 st_bbox(raster(meuse.grid))
+
+# st_to_s2
+x = sf:::st_to_s2(nc)
+x1 = st_geometry(x)
+cc = st_coordinates(x1)
+summary(sqrt(cc[,1]^2+cc[,2]^2+cc[,3]^2))

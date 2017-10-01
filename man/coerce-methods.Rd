@@ -2,7 +2,7 @@
 % Please edit documentation in R/sp.R
 \name{as_Spatial}
 \alias{as_Spatial}
-\title{Methods to coerce simple feature objects to \code{Spatial*} objects}
+\title{Methods to coerce simple feature geometries to corresponding \code{Spatial*} objects}
 \usage{
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
 }
@@ -17,7 +17,7 @@ as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
 geometry-only object deriving from \code{Spatial}, of the appropriate class
 }
 \description{
-Methods to coerce simple feature objects to \code{Spatial*} objects
+Methods to coerce simple feature geometries to corresponding \code{Spatial*} objects
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

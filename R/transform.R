@@ -142,3 +142,9 @@ st_wrap_dateline = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	stopifnot(is.logical(quiet) && length(quiet) == 1)
 	st_sfc(CPL_wrap_dateline(x, options, quiet), crs = st_crs(x))
 }
+
+st_to_s2 = function(x) {
+	# geocentric, spherical:
+	st_transform(x, 
+		st_crs("+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
+}
