@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -71,40 +71,48 @@ Error in CPL_gdal_segmentize(x, dfMaxLength) :
 > b = nc[4:10,]
 > 
 > x <- st_intersection(a[1,] ,b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > u = st_union(b) 
 > 
 > x <- st_intersection(st_geometry(a), st_geometry(u))
+although coordinates are longitude/latitude, it is assumed that they are planar
 > 
 > x = st_union(a[1,], b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_union(a, st_union(b))
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a[1,], b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a, st_union(b))
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a[1,], b)
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a, st_union(b))
+although coordinates are longitude/latitude, it is assumed that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 78 drivers
+GDAL has 80 drivers
 > 
 > # GEOS ops:
 > 
@@ -419,4 +427,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.092   0.260   1.089 
+  1.104   0.292   1.096 

@@ -725,6 +725,8 @@ geos_op2_df = function(x, y, geoms) {
 # call geos_op2 function op on x and y:
 geos_op2_geom = function(op, x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
+	if (isTRUE(st_is_longlat(x)))
+		message("although coordinates are longitude/latitude, it is assumed that they are planar")
 	st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
 }
 

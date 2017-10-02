@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -53,11 +53,14 @@ Type 'q()' to quit R.
 > nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > # options(warn=2)
 > g = st_graticule(nc, datum = st_crs(nc))
+although coordinates are longitude/latitude, it is assumed that they are planar
 > #g = st_graticule(nc)
 > 
 > plot(nc[1], graticule = st_crs(nc))
+although coordinates are longitude/latitude, it is assumed that they are planar
 > 
 > plot(nc[1], graticule = st_crs(nc), axes = TRUE)
+although coordinates are longitude/latitude, it is assumed that they are planar
 > 
 > g = st_graticule()
 > 
@@ -69,7 +72,8 @@ Type 'q()' to quit R.
 > library(maps) #421
 > wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
 > plot(wrld2, graticule = TRUE)
+although coordinates are longitude/latitude, it is assumed that they are planar
 > 
 > proc.time()
    user  system elapsed 
-  3.176   0.284   3.194 
+  3.104   0.268   3.101 
