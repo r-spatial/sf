@@ -62,7 +62,7 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
 x
 
-library(units)
+suppressPackageStartupMessages(library(units))
 person = make_unit("person")
 nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 nc.merc <- st_transform(nc, 32119) # NC State Plane

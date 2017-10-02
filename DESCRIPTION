@@ -33,6 +33,7 @@ Suggests:
     rgdal,
     rgeos,
     sp (>= 1.2-4), 
+	s2,
 	raster,
 	RSQLite,
     RPostgreSQL,
@@ -84,4 +85,5 @@ Collate:
 	split.R
 	collection_extract.R
 	jitter.R
+	s2.R
 RoxygenNote: 6.0.1

@@ -47,7 +47,9 @@ test_that("geos ops give warnings and errors on longlat", {
 
 	expect_warning(st_buffer(x, .1))
 	expect_warning(st_simplify(x, .1))
-	expect_warning(st_centroid(x))
+	if (utils::packageVersion("s2") < "0.2.1") {
+	  expect_warning(st_centroid(x))
+	}
 	expect_silent(st_segmentize(l, 1e5))
 	expect_silent(st_segmentize(l, 1e5))
 

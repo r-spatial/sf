@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -167,7 +167,7 @@ proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
 POINT (0 -7.08115455161362e-10)
 POINT (111319.490793274 111325.142866385)
 > 
-> library(units)
+> suppressPackageStartupMessages(library(units))
 > person = make_unit("person")
 > nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 > nc.merc <- st_transform(nc, 32119) # NC State Plane
@@ -268,4 +268,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  3.124   0.300   3.113 
+  3.116   0.292   3.102 

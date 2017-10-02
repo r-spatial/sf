@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(sf))
 library(sp)
-library(units)
+suppressPackageStartupMessages(library(units))
 
 x = st_sfc(
 st_point(c(0,0)),
