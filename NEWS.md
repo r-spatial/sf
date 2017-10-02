@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* initial support for some functions in pkg `s2`, for spherical geometry
+
+* `st_intersection`, `st_union` and so on now also print a message when used directly on long/lat coordinates; #496
+
 * add `rep` method for `sfc` objects
 
 * comparing two `crs` objects now uses the GDAL function `IsSame`; #180
