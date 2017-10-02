@@ -1,6 +1,6 @@
-
 library(s2)
 library(sf)
+if (utils::packageVersion("s2") >= "0.2.1") {
 
 p0 = rbind(c(0,80), c(120,80), c(240,80), c(0,80))
 p1 = rbind(c(0,85), c(120,85), c(240,85), c(0,85))
@@ -80,3 +80,4 @@ all.equal(
   st_relate(nc, nc, pattern = "2********"),
   sf:::s2_intersects(nc, nc)
 )
+}
