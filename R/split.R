@@ -21,8 +21,11 @@ st_split.sfg = function(x, y) {
 
 #' @export
 st_split.sfc = function(x, y) {
-    stopifnot(inherits(y, "sfc_LINESTRING"))
     stopifnot(length(y) == 1)
+	if (inherits(x, "sfc_POLYGON") || inherits(x, "sfc_MULTIPOLYGON"))
+    	stopifnot(inherits(y, "sfc_LINESTRING"))
+	else
+		stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
     st_sfc(CPL_split(x, st_geometry(y)), crs = st_crs(x))
 }
 

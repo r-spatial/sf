@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* prevent `st_split` from stopping the R session; #492
+
 * initial support for some functions in pkg `s2`, for spherical geometry
 
 * `st_intersection`, `st_union` and so on now also print a message when used directly on long/lat coordinates; #496
