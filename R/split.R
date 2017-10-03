@@ -21,7 +21,9 @@ st_split.sfg = function(x, y) {
 
 #' @export
 st_split.sfc = function(x, y) {
-	st_sfc(CPL_split(x, st_combine(st_geometry(y))), crs = st_crs(x))
+    stopifnot(inherits(y, "sfc_LINESTRING"))
+    stopifnot(length(y) == 1)
+    st_sfc(CPL_split(x, st_geometry(y)), crs = st_crs(x))
 }
 
 #' @export
