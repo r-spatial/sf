@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`
+
 * prevent `st_split` from stopping the R session; #492
 
 * initial support for some functions in pkg `s2`, for spherical geometry

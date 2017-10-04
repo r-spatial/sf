@@ -113,9 +113,11 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message("although coordinates are longitude/latitude, it is assumed that they are planar")
 	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, sparse, prepared)
-	if (sparse)
-		ret
-	else
+	if (sparse) {
+		if (is.null(id <- row.names(x)))
+			id = as.character(1:length(ret))
+		structure(ret, predicate = op, region.id = id, class = "sgbp")
+	} else
 		ret[[1]]
 }
 
@@ -176,7 +178,7 @@ st_distance = function(x, y, dist_fun, by_element = FALSE) {
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
 #' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, returns a dense logical matrix or sparse index list with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
+#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -209,9 +211,11 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
-#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=TRUE}, a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry i and j intersect); if \code{sparse=TRUE}, an object of class \code{sgbp} with a sparse list representation of the same matrix, with list element \code{i} a numeric vector with the indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
+#'
+#' Sparse geometry binary predicate (\code{sgbp}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), and \code{predicate} with the name of the predicate used.
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
@@ -233,7 +237,9 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
 	# disjoint = !intersects :
 	if (sparse)
-		lapply(int, function(g) setdiff(1:length(st_geometry(y)), g))
+		structure(
+			lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
+			predicate = "disjoint", class = "sgbp")
 	else
 		!int
 }

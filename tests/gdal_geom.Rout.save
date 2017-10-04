@@ -148,6 +148,10 @@ although coordinates are longitude/latitude, it is assumed that they are planar
 [[5]]
 [1] 1 4 5 7
 
+attr(,"predicate")
+[1] "disjoint"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_touches(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -166,6 +170,12 @@ integer(0)
 [[5]]
 [1] 3 6
 
+attr(,"predicate")
+[1] "touches"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_crosses(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -184,6 +194,12 @@ integer(0)
 [[5]]
 integer(0)
 
+attr(,"predicate")
+[1] "crosses"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_within(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -202,6 +218,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "within"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_contains(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -220,6 +242,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "contains"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_overlaps(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -238,6 +266,12 @@ integer(0)
 [[5]]
 integer(0)
 
+attr(,"predicate")
+[1] "overlaps"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_equals(a, b)
 [[1]]
@@ -255,6 +289,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "equals"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_covers(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -273,6 +313,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "covers"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_covered_by(a, b)
 although coordinates are longitude/latitude, it is assumed that they are planar
@@ -291,6 +337,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "covered_by"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_equals_exact(a, b, 0.01)
 [[1]]
@@ -308,6 +360,12 @@ integer(0)
 [[5]]
 [1] 2
 
+attr(,"predicate")
+[1] "equals_exact"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5"
+attr(,"class")
+[1] "sgbp"
 > 
 > # st_is_within_distance(a, b, 2)
 > 
@@ -427,4 +485,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.104   0.292   1.096 
+  1.148   0.276   1.119 
