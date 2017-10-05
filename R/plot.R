@@ -5,6 +5,7 @@
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param ncol integer; default number of colors to be used
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot (defaults to 9)
+#' @param main title for plot (\code{NULL} to remove)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -80,7 +81,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -113,8 +114,12 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9) {
 			plot(st_geometry(x), ...)
 		else
 			plot(st_geometry(x), col = col, ...)
-		if (is.null(dots$main) && !isTRUE(dots$add))
-			title(names(x)[names(x) != attr(x, "sf_column")])
+		if (!isTRUE(dots$add)) { # title?
+			if (missing(main))
+				title(setdiff(names(x), attr(x, "sf_column")))
+			else
+				title(main)
+		}
 	}
 }
 

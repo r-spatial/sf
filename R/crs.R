@@ -217,7 +217,7 @@ crs_parameters = function(x) {
 		else if (is.null(x$units))
 			make_unit("m")
 		else
-			make_unit(udunits_from_proj[x$units])
+			set_units(1.0, udunits_from_proj[x$units])
 	ret
 }
 

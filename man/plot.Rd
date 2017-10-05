@@ -29,7 +29,7 @@
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL, max.plot = 9)
+\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -79,6 +79,8 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{col}{color}
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot (defaults to 9)}
+
+\item{main}{title for plot (\code{NULL} to remove)}
 
 \item{pch}{plotting symbol}
 
