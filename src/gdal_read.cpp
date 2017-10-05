@@ -38,16 +38,15 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 			case OFTReal:
 				out[i] = Rcpp::NumericVector(n_features);
 				break;
-			case OFTString:
-				out[i] = Rcpp::CharacterVector(n_features);
-				break;
 			case OFTStringList:
 			case OFTRealList:
 			case OFTIntegerList:
 				out[i] = Rcpp::List(n_features);
 				break;
+			case OFTString:
 			default:
-				Rcpp::stop("Unrecognized field type\n"); // #nocov
+				out[i] = Rcpp::CharacterVector(n_features);
+				// Rcpp::stop("Unrecognized field type\n");
 				break;
 		}
 		names[i] = poFieldDefn->GetNameRef();

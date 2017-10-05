@@ -93,6 +93,12 @@ integer(0)
 [[3]]
 integer(0)
 
+attr(,"predicate")
+[1] "contains_properly"
+attr(,"region.id")
+[1] "1" "2" "3"
+attr(,"class")
+[1] "sgbp"
 > 
 > st_combine(nc)
 Geometry set for 1 feature 
@@ -186,7 +192,10 @@ LINESTRING (0 0, 1 1, 2 0)
 > i = st_intersects(ncm, ncm)
 > j = sf:::CPL_invert_sparse_incidence(i, 100)
 > all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
-[1] TRUE
+[1] "Attributes: < Modes: list, NULL >"                   
+[2] "Attributes: < Lengths: 3, 0 >"                       
+[3] "Attributes: < names for target but not for current >"
+[4] "Attributes: < current is not list-like >"            
 > 
 > # check use of pattern in st_relate:
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
@@ -219,6 +228,12 @@ LINESTRING (0 0, 1 1, 2 0)
 [[9]]
 [1] 5 6 8 9
 
+attr(,"predicate")
+[1] "intersects"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
+attr(,"class")
+[1] "sgbp"
 > st_relate(grd, pattern = "****1****")
 [[1]]
 [1] 1 2 4
@@ -247,6 +262,12 @@ LINESTRING (0 0, 1 1, 2 0)
 [[9]]
 [1] 6 8 9
 
+attr(,"predicate")
+[1] "relate_pattern"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
+attr(,"class")
+[1] "sgbp"
 > st_relate(grd, pattern = "****0****")
 [[1]]
 [1] 5
@@ -275,6 +296,12 @@ LINESTRING (0 0, 1 1, 2 0)
 [[9]]
 [1] 5
 
+attr(,"predicate")
+[1] "relate_pattern"
+attr(,"region.id")
+[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
+attr(,"class")
+[1] "sgbp"
 > st_rook = function(a, b = a, ...) st_relate(a, b, pattern = "F***1****", ...)
 > st_rook(grd, sparse = FALSE)
        [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9]
@@ -325,6 +352,12 @@ integer(0)
 [[3]]
 integer(0)
 
+attr(,"predicate")
+[1] "intersects"
+attr(,"region.id")
+[1] "1" "2" "3"
+attr(,"class")
+[1] "sgbp"
 > st_intersects(pts, pol_df[pol_df$id == 2,], sparse = FALSE) # with empty sf/sfc
     
 [1,]
@@ -333,4 +366,4 @@ integer(0)
 > 
 > proc.time()
    user  system elapsed 
-  3.668   0.276   3.660 
+  3.756   0.288   3.733 
