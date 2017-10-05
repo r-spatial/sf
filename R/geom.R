@@ -359,7 +359,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 			stop("x does not have a crs set: can't convert units")
 		if (is.null(st_crs(x)$units))
 			stop("x has a crs without units: can't convert units")
-		dist = units::set_units(dist, st_crs(x)$units)
+		dist = units::set_units(dist, udunits_from_proj[st_crs(x)$units])
 	}
 	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
