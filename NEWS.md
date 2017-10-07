@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* support for reading `OFTInteger64List` fields; #508
+
 * sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`
 
 * prevent `st_split` from stopping the R session; #492
