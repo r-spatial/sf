@@ -115,11 +115,11 @@ MULTIPOLYGON (((-81.4727554321289 36.2343559265...
 > 
 > g = st_make_grid(nc)
 > x = st_intersection(nc, g)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > x = st_intersection(g, nc)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + st_linestring(rbind(c(0,0),c(10,0))))
@@ -139,14 +139,14 @@ MULTIPOINT (0.298648830503225 0, 2.484170473180...
 > g = st_make_grid(nc, n = c(20,10))
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw(nc["BIR74"], g, FALSE) :
   st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 [1] 1.20742
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
   st_interpolate_aw assumes attributes are constant over areas of x
@@ -366,4 +366,4 @@ attr(,"class")
 > 
 > proc.time()
    user  system elapsed 
-  3.756   0.288   3.733 
+  3.808   0.288   3.803 

@@ -71,42 +71,42 @@ Error in CPL_gdal_segmentize(x, dfMaxLength) :
 > b = nc[4:10,]
 > 
 > x <- st_intersection(a[1,] ,b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > u = st_union(b) 
 > 
 > x <- st_intersection(st_geometry(a), st_geometry(u))
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > x = st_union(a[1,], b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_union assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_union(a, st_union(b))
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_union assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a[1,], b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a, st_union(b))
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a[1,], b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_sym_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a, st_union(b))
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_sym_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -117,7 +117,7 @@ GDAL has 80 drivers
 > # GEOS ops:
 > 
 > st_relate(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_relate assumes that they are planar
      [,1]        [,2]        [,3]        [,4]        [,5]        [,6]       
 [1,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
 [2,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
@@ -132,7 +132,7 @@ although coordinates are longitude/latitude, it is assumed that they are planar
 [5,] "FF2FF1212"
 > 
 > st_disjoint(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
 [[1]]
 [1] 1 2 3 4 5 6 7
 
@@ -154,7 +154,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_touches(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_touches assumes that they are planar
 [[1]]
 integer(0)
 
@@ -178,7 +178,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_crosses(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_crosses assumes that they are planar
 [[1]]
 integer(0)
 
@@ -202,7 +202,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_within(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_within assumes that they are planar
 [[1]]
 integer(0)
 
@@ -226,7 +226,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_contains(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_contains assumes that they are planar
 [[1]]
 integer(0)
 
@@ -250,7 +250,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_overlaps(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_overlaps assumes that they are planar
 [[1]]
 integer(0)
 
@@ -297,7 +297,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_covers(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_covers assumes that they are planar
 [[1]]
 integer(0)
 
@@ -321,7 +321,7 @@ attr(,"class")
 [1] "sgbp"
 > 
 > st_covered_by(a, b)
-although coordinates are longitude/latitude, it is assumed that they are planar
+although coordinates are longitude/latitude, st_covered_by assumes that they are planar
 [[1]]
 integer(0)
 
@@ -485,4 +485,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.148   0.276   1.119 
+  1.100   0.304   1.093 

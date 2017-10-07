@@ -100,6 +100,10 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 	}
 }
 
+message_longlat = function(caller) {
+	message(paste("although coordinates are longitude/latitude,",
+		caller, "assumes that they are planar"))
+}
 # binary, interfaced through GEOS:
 
 # returning matrix, distance or relation string -- the work horse is:
@@ -111,7 +115,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
-		message("although coordinates are longitude/latitude, it is assumed that they are planar")
+		message_longlat(paste0("st_", op))
 	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, sparse, prepared)
 	if (sparse) {
 		if (is.null(id <- row.names(x)))
@@ -732,7 +736,7 @@ geos_op2_df = function(x, y, geoms) {
 geos_op2_geom = function(op, x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)))
-		message("although coordinates are longitude/latitude, it is assumed that they are planar")
+		message_longlat(paste0("st_", op))
 	st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
 }
 
