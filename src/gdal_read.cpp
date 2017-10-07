@@ -1,3 +1,6 @@
+#include <string>
+#include <sstream>
+
 #include <ogrsf_frmts.h>
 
 #include "Rcpp.h"
@@ -41,12 +44,12 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 			case OFTStringList:
 			case OFTRealList:
 			case OFTIntegerList:
+			case OFTInteger64List:
 				out[i] = Rcpp::List(n_features);
 				break;
 			case OFTString:
 			default:
 				out[i] = Rcpp::CharacterVector(n_features);
-				// Rcpp::stop("Unrecognized field type\n");
 				break;
 		}
 		names[i] = poFieldDefn->GetNameRef();
@@ -349,32 +352,83 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTStringList: {
 					Rcpp::List lv;
 					lv = out[iField];
-					OGRField *psField = poFeature->GetRawFieldRef(iField);
-					Rcpp::CharacterVector cv(psField->StringList.nCount);
-					for (int j = 0; j < cv.size(); j++)
-						cv(j) = psField->StringList.paList[j];
-					lv[i] = cv;
+					if (not_NA) {
+						OGRField *psField = poFeature->GetRawFieldRef(iField);
+						Rcpp::CharacterVector cv(psField->StringList.nCount);
+						for (int j = 0; j < cv.size(); j++)
+							cv(j) = psField->StringList.paList[j];
+						lv[i] = cv;
+					} else {
+						Rcpp::CharacterVector cv;
+						lv[i] = cv;
+					}
 					}
 					break;
 				case OFTRealList: {
 					Rcpp::List lv; // #nocov start
 					lv = out[iField];
-					OGRField *psField = poFeature->GetRawFieldRef(iField);
-					Rcpp::NumericVector numv(psField->RealList.nCount);
-					for (int j = 0; j < numv.size(); j++)
-						numv(j) = psField->RealList.paList[j];
-					lv[i] = numv;
+					if (not_NA) {
+						OGRField *psField = poFeature->GetRawFieldRef(iField);
+						Rcpp::NumericVector numv(psField->RealList.nCount);
+						for (int j = 0; j < numv.size(); j++)
+							numv(j) = psField->RealList.paList[j];
+						lv[i] = numv;
+					} else {
+						Rcpp::NumericVector numv;
+						lv[i] = numv;
+					}
 					}
 					break;
 				case OFTIntegerList: {
 					Rcpp::List lv;
 					lv = out[iField];
-					OGRField *psField = poFeature->GetRawFieldRef(iField);
-					Rcpp::IntegerVector iv(psField->IntegerList.nCount);
-					for (int j = 0; j < iv.size(); j++)
-						iv(j) = psField->IntegerList.paList[j];
-					lv[i] = iv;
+					if (not_NA) {
+						OGRField *psField = poFeature->GetRawFieldRef(iField);
+						Rcpp::IntegerVector iv(psField->IntegerList.nCount);
+						for (int j = 0; j < iv.size(); j++)
+							iv(j) = psField->IntegerList.paList[j];
+						lv[i] = iv;
+					} else {
+						Rcpp::IntegerVector iv;
+						lv[i] = iv;
+					}
 					} 
+					break;
+				case OFTInteger64List: {
+					Rcpp::List lv;
+					lv = out[iField];
+					if (int64_as_string) {
+						if (not_NA) {
+							int n = -1;
+							const GIntBig *int64list = poFeature->GetFieldAsInteger64List(iField, &n);
+							Rcpp::CharacterVector cv(n);
+							for (int j = 0; j < cv.size(); j++) {
+								std::stringstream stream;
+								stream << int64list[j];
+								cv[j] = stream.str();
+							}
+							lv[i] = cv;
+						} else {
+							Rcpp::CharacterVector cv;
+							lv[i] = cv;
+						}
+					} else {
+						if (not_NA) {
+							int n = -1;
+							const GIntBig *int64list = poFeature->GetFieldAsInteger64List(iField, &n);
+							Rcpp::NumericVector nv(n);
+							for (int j = 0; j < nv.size(); j++) {
+								nv[j] = (double) int64list[j];
+								if (nv[j] > dbl_max_int64)
+									warn_int64 = true;
+							}
+							lv[i] = nv;
+						} else {
+							Rcpp::NumericVector nv;
+							lv[i] = nv;
+						}
+					}
+					}
 					break; // #nocov end
 				default: // break through: anything else to be converted to string?
 				case OFTString: {
