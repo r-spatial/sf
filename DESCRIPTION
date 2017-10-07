@@ -44,6 +44,7 @@ Suggests:
     ggplot2,
     testthat,
     knitr,
+	covr,
 	microbenchmark
 LinkingTo: Rcpp
 VignetteBuilder: knitr
