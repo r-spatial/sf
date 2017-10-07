@@ -1,9 +1,10 @@
-# alternative, but more limiting from sp/R/CRS-methods.R, https://github.com/edzer/sp/pull/31 @hughjonesd
-identicalCRS1 = function(x, y) {
-  args_x <- strsplit(x, " +")[[1]]
-  args_y <- strsplit(y, " +")[[1]]
-  setequal(args_x, args_y)
-}
+#  alternative, but more limiting from sp/R/CRS-methods.R, https://github.com/edzer/sp/pull/31 @hughjonesd
+#  (no longer used)
+#identicalCRS1 = function(x, y) {
+#  args_x <- strsplit(x, " +")[[1]]
+#  args_y <- strsplit(y, " +")[[1]]
+#  setequal(args_x, args_y)
+#}
 
 # this function establishes whether two crs objects are semantically identical. This is
 # the case when: (1) they are completely identical, or (2) they have identical proj4string

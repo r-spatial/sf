@@ -109,4 +109,7 @@ identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int32[3], 
 if ("GML" %in% st_drivers()$name) {
   gml = system.file("gml/fmi_test.gml", package = "sf")
   print(st_read(gml, quiet = TRUE), n = 0)
+  gml = system.file("gml/20170930_OB_530964_UKSH.xml.gz", package = "sf")
+  print(st_read(gml, layer = "Parcely"), n = 0)
+  print(st_read(gml, layer = "Parcely", int64_as_string=TRUE), n = 0)
 }

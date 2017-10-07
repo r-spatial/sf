@@ -179,23 +179,6 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	return out;
 }
 
-std::vector<OGRGeometry *> replace_null_with_empty(std::vector<OGRGeometry *> poGeom) {
-	OGRwkbGeometryType gt = wkbGeometryCollection;
-	for (size_t i = 0; i < poGeom.size(); i++) {
-		if (poGeom[i] != NULL) {
-			gt = poGeom[i]->getGeometryType(); // first non-NULL
-			break;
-		}
-	}
-	for (size_t i = 0; i < poGeom.size(); i++) {
-		if (poGeom[i] == NULL)
-			poGeom[i] = OGRGeometryFactory::createGeometry(gt);
-		if (poGeom[i] == NULL)
-			Rcpp::stop("createGeometry returned NULL"); // #nocov
-	}
-	return poGeom;
-}
-
 // [[Rcpp::export]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
@@ -352,84 +335,60 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				case OFTStringList: {
 					Rcpp::List lv;
 					lv = out[iField];
-					if (not_NA) {
-						OGRField *psField = poFeature->GetRawFieldRef(iField);
-						Rcpp::CharacterVector cv(psField->StringList.nCount);
-						for (int j = 0; j < cv.size(); j++)
-							cv(j) = psField->StringList.paList[j];
-						lv[i] = cv;
-					} else {
-						Rcpp::CharacterVector cv;
-						lv[i] = cv;
-					}
+					char **sl = poFeature->GetFieldAsStringList(iField);
+					Rcpp::CharacterVector cv(CSLCount(sl));
+					for (int j = 0; j < cv.size(); j++)
+						cv[j] = sl[j];
+					lv[i] = cv;
 					}
 					break;
 				case OFTRealList: {
+					// for all *List types, NA is handled by zero-length lists
 					Rcpp::List lv; // #nocov start
 					lv = out[iField];
-					if (not_NA) {
-						OGRField *psField = poFeature->GetRawFieldRef(iField);
-						Rcpp::NumericVector numv(psField->RealList.nCount);
-						for (int j = 0; j < numv.size(); j++)
-							numv(j) = psField->RealList.paList[j];
-						lv[i] = numv;
-					} else {
-						Rcpp::NumericVector numv;
-						lv[i] = numv;
+					int n;
+					const double *dl = poFeature->GetFieldAsDoubleList(iField, &n);
+					Rcpp::NumericVector nv(n);
+					for (int j = 0; j < nv.size(); j++)
+						nv[j] = dl[j];
+					lv[i] = nv;
 					}
-					}
-					break;
+					break; // #nocov end
 				case OFTIntegerList: {
 					Rcpp::List lv;
 					lv = out[iField];
-					if (not_NA) {
-						OGRField *psField = poFeature->GetRawFieldRef(iField);
-						Rcpp::IntegerVector iv(psField->IntegerList.nCount);
-						for (int j = 0; j < iv.size(); j++)
-							iv(j) = psField->IntegerList.paList[j];
-						lv[i] = iv;
-					} else {
-						Rcpp::IntegerVector iv;
-						lv[i] = iv;
-					}
+					int n;
+					const int *il = poFeature->GetFieldAsIntegerList(iField, &n);
+					Rcpp::IntegerVector iv(n);
+					for (int j = 0; j < iv.size(); j++)
+						iv[j] = il[j];
+					lv[i] = iv;
 					} 
 					break;
 				case OFTInteger64List: {
 					Rcpp::List lv;
 					lv = out[iField];
+					int n;
+					const GIntBig *int64list = poFeature->GetFieldAsInteger64List(iField, &n);
 					if (int64_as_string) {
-						if (not_NA) {
-							int n = -1;
-							const GIntBig *int64list = poFeature->GetFieldAsInteger64List(iField, &n);
-							Rcpp::CharacterVector cv(n);
-							for (int j = 0; j < cv.size(); j++) {
-								std::stringstream stream;
-								stream << int64list[j];
-								cv[j] = stream.str();
-							}
-							lv[i] = cv;
-						} else {
-							Rcpp::CharacterVector cv;
-							lv[i] = cv;
+						Rcpp::CharacterVector cv(n);
+						for (int j = 0; j < cv.size(); j++) {
+							std::stringstream stream;
+							stream << int64list[j];
+							cv[j] = stream.str();
 						}
+						lv[i] = cv;
 					} else {
-						if (not_NA) {
-							int n = -1;
-							const GIntBig *int64list = poFeature->GetFieldAsInteger64List(iField, &n);
-							Rcpp::NumericVector nv(n);
-							for (int j = 0; j < nv.size(); j++) {
-								nv[j] = (double) int64list[j];
-								if (nv[j] > dbl_max_int64)
-									warn_int64 = true;
-							}
-							lv[i] = nv;
-						} else {
-							Rcpp::NumericVector nv;
-							lv[i] = nv;
+						Rcpp::NumericVector nv(n);
+						for (int j = 0; j < nv.size(); j++) {
+							nv[j] = (double) int64list[j];
+							if (nv[j] > dbl_max_int64)
+									warn_int64 = true; // #nocov
 						}
+						lv[i] = nv;
 					}
 					}
-					break; // #nocov end
+					break;
 				default: // break through: anything else to be converted to string?
 				case OFTString: {
 					Rcpp::CharacterVector cv;
@@ -454,6 +413,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		i++;
 	} // all read...
 
+	std::vector<OGRGeometry *> to_be_freed;
 	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
 		std::vector<OGRGeometry *> poGeom(n);
 		for (size_t i = 0; i < n; i++)
@@ -487,7 +447,24 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		} else if (has_null_geometries) {
 			if (! quiet)
 				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
-			poGeom = replace_null_with_empty(poGeom);
+
+			// replace null's with empty:
+			OGRwkbGeometryType gt = wkbGeometryCollection;
+			for (size_t i = 0; i < poGeom.size(); i++) {
+				if (poGeom[i] != NULL) {
+					gt = poGeom[i]->getGeometryType(); // first non-NULL
+					break;
+				}
+			}
+			for (size_t i = 0; i < poGeom.size(); i++) {
+				if (poGeom[i] == NULL) {
+					poGeom[i] = OGRGeometryFactory::createGeometry(gt);
+					if (poGeom[i] == NULL)
+						Rcpp::stop("createGeometry returned NULL"); // #nocov
+					else
+						to_be_freed.push_back(poGeom[i]);
+				}
+			}
 		}
 		if (! quiet && toTypeU != 0 && n > 0)
 			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
@@ -506,6 +483,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	// clean up:
 	for (size_t i = 0; i < n; i++)
 		OGRFeature::DestroyFeature(poFeatureV[i]);
+	for (size_t i = 0; i < to_be_freed.size(); i++)
+		OGRGeometryFactory::destroyGeometry(to_be_freed[i]);
 	GDALClose(poDS);
 
 	return out;

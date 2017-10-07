@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -345,6 +345,9 @@ First 3 features:
 > if ("GML" %in% st_drivers()$name) {
 +   gml = system.file("gml/fmi_test.gml", package = "sf")
 +   print(st_read(gml, quiet = TRUE), n = 0)
++   gml = system.file("gml/20170930_OB_530964_UKSH.xml.gz", package = "sf")
++   print(st_read(gml, layer = "Parcely"), n = 0)
++   print(st_read(gml, layer = "Parcely", int64_as_string=TRUE), n = 0)
 + }
 Simple feature collection with 22 features and 10 fields
 geometry type:  POINT
@@ -352,7 +355,43 @@ dimension:      XY
 bbox:           xmin: 23.57309 ymin: 59.82076 xmax: 26.44457 ymax: 60.64668
 epsg (SRID):    4258
 proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
+Reading layer `Parcely' from data source `/home/edzer/git/sf.Rcheck/sf/gml/20170930_OB_530964_UKSH.xml.gz' using driver `GML'
+replacing null geometries with empty geometries
+replacing null geometries with empty geometries
+replacing null geometries with empty geometries
+Simple feature collection with 644 features and 22 fields
+Active geometry column: DefinicniBod
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
+epsg (SRID):    5514
+proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
+Simple feature collection with 644 features and 22 fields
+Active geometry column: DefinicniBod
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
+epsg (SRID):    5514
+proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
+Reading layer `Parcely' from data source `/home/edzer/git/sf.Rcheck/sf/gml/20170930_OB_530964_UKSH.xml.gz' using driver `GML'
+replacing null geometries with empty geometries
+replacing null geometries with empty geometries
+replacing null geometries with empty geometries
+Simple feature collection with 644 features and 22 fields
+Active geometry column: DefinicniBod
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
+epsg (SRID):    5514
+proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
+Simple feature collection with 644 features and 22 fields
+Active geometry column: DefinicniBod
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
+epsg (SRID):    5514
+proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  1.216   0.328   1.233 
+  1.464   0.252   1.464 
