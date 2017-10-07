@@ -5,6 +5,8 @@
 
 s2_p4s = "+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"
 
+#nocov start
+
 st_as_s2 = function(x) {
 	# geocentric, spherical:
 	geom = st_transform(st_geometry(x), st_crs(s2_p4s))
@@ -68,3 +70,5 @@ s2_area = function(x) {
 	load_s2()
 	s2::S2Polygons_area(st_as_s2(x))
 }
+
+#nocov end
