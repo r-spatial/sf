@@ -9,7 +9,8 @@
 \alias{st_bind_cols}
 \title{Bind rows (features) of sf objects}
 \usage{
-\method{rbind}{sf}(..., deparse.level = 1)
+\method{rbind}{sf}(..., deparse.level = 1,
+  stringsAsFactors = default.stringsAsFactors())
 
 \method{cbind}{sf}(..., deparse.level = 1, sf_column_name = NULL)
 
@@ -19,6 +20,8 @@ st_bind_cols(...)
 \item{...}{objects to bind}
 
 \item{deparse.level}{integer; see \link[base]{rbind}}
+
+\item{stringsAsFactors}{logical; see \link[base]{rbind} (data.frame method)}
 
 \item{sf_column_name}{character; specifies active geometry; passed on to \link{st_sf}}
 }
@@ -43,7 +46,7 @@ a = st_sf(a=1, geom = st_sfc(st_point(0:1)), crs = crs)
 b = st_sf(a=1, geom = st_sfc(st_linestring(matrix(1:4,2))), crs = crs)
 c = st_sf(a=4, geom = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 rbind(a,b,c)
-rbind(a,b) 
+rbind(a,b)
 rbind(a,b)
 rbind(b,c)
 cbind(a,b,c) # warns
