@@ -3,8 +3,9 @@
 #' Bind rows (features) of sf objects
 #' @param ... objects to bind
 #' @param deparse.level integer; see \link[base]{rbind}
+#' @param stringsAsFactors logical; see \link[base]{rbind} (data.frame method)
 #' @name bind
-#' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}. 
+#' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}.
 #' @export
 #' @examples
 #' crs = st_crs(3857)
@@ -12,10 +13,10 @@
 #' b = st_sf(a=1, geom = st_sfc(st_linestring(matrix(1:4,2))), crs = crs)
 #' c = st_sf(a=4, geom = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 #' rbind(a,b,c)
-#' rbind(a,b) 
+#' rbind(a,b)
 #' rbind(a,b)
 #' rbind(b,c)
-rbind.sf = function(..., deparse.level = 1) {
+rbind.sf = function(..., deparse.level = 1, stringsAsFactors = default.stringsAsFactors()) {
 	dots = list(...)
 	crs0 = st_crs(dots[[1]])
 	if (length(dots) > 1L) { # check all crs are equal...
@@ -23,10 +24,10 @@ rbind.sf = function(..., deparse.level = 1) {
 		if (!all(equal_crs))
 			stop("arguments have different crs", call. = FALSE)
 	}
-	ret = st_sf(rbind.data.frame(...), crs = crs0)
+	ret = st_sf(rbind.data.frame(..., stringsAsFactors = stringsAsFactors), crs = crs0)
 	st_geometry(ret) = st_sfc(st_geometry(ret)) # might need to reclass to GEOMETRY
 	bb = do.call(rbind, lapply(dots, st_bbox))
-	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE), 
+	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE),
 		  max(bb[,3L], na.rm = TRUE), max(bb[,4L], na.rm = TRUE)))
 	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = bb
 	ret
