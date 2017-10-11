@@ -51,9 +51,9 @@ st_centroid(x, ..., of_largest_polygon = FALSE)
 
 st_point_on_surface(x)
 
-st_node(x, ...)
+st_node(x)
 
-\method{st_node}{sfg}(x, ...)
+\method{st_node}{sfg}(x)
 
 \method{st_node}{sfc}(x)
 
@@ -131,6 +131,8 @@ plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
+l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+st_polygonize(st_node(l))
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 seg = st_segmentize(sf, units::set_units(100, km))
 seg = st_segmentize(sf, units::set_units(0.01, rad))

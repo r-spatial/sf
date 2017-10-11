@@ -630,11 +630,11 @@ st_point_on_surface.sf = function(x) {
 #' @examples
 #' l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
 #' st_polygonize(st_node(l))
-st_node = function(x, ...) UseMethod("st_node")
+st_node = function(x) UseMethod("st_node")
 
 #' @name geos_unary
 #' @export
-st_node.sfg = function(x, ...)
+st_node.sfg = function(x)
 	get_first_sfg(st_node(st_sfc(x)))
 
 #' @name geos_unary
