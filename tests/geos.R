@@ -114,3 +114,10 @@ pol_df <- data.frame(id = 1)
 st_geometry(pol_df) <- st_sfc(pol)
 st_intersects(pts, pol_df[pol_df$id == 2,]) # with empty sf/sfc
 st_intersects(pts, pol_df[pol_df$id == 2,], sparse = FALSE) # with empty sf/sfc
+
+# st_node
+l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+st_node(l)
+st_node(st_sfc(l))
+st_node(st_sf(a = 1, st_sfc(l)))
+

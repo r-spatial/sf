@@ -22,6 +22,12 @@
 \alias{geos_unary}
 \alias{st_point_on_surface}
 \alias{geos_unary}
+\alias{st_node}
+\alias{geos_unary}
+\alias{st_node.sfg}
+\alias{geos_unary}
+\alias{st_node.sfc}
+\alias{geos_unary}
 \alias{st_segmentize}
 \title{Geometric unary operations on (pairs of) simple feature geometry sets}
 \usage{
@@ -44,6 +50,12 @@ st_line_merge(x)
 st_centroid(x, ..., of_largest_polygon = FALSE)
 
 st_point_on_surface(x)
+
+st_node(x, ...)
+
+\method{st_node}{sfg}(x, ...)
+
+\method{st_node}{sfc}(x)
 
 st_segmentize(x, dfMaxLength, ...)
 }
@@ -89,6 +101,8 @@ in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINES
 in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
 \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
+
+\code{st_node} add nodes to linear geometries at intersections without node
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

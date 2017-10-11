@@ -626,6 +626,35 @@ st_point_on_surface.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_node} add nodes to linear geometries at intersections without node
+#' @examples
+#' l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+#' st_polygonize(st_node(l))
+st_node = function(x, ...) UseMethod("st_node")
+
+#' @name geos_unary
+#' @export
+st_node.sfg = function(x, ...)
+	get_first_sfg(st_node(st_sfc(x)))
+
+#' @name geos_unary
+#' @export
+st_node.sfc = function(x) {
+	dims = st_dimension(x)
+	if (!all(is.na(dims) || dims == 1))
+		stop("st_node: all geometries should be linear")
+	if (isTRUE(st_is_longlat(x)))
+		warning("st_node may not give correct results for longitude/latitude data")
+	st_sfc(CPL_geos_op("node", x, numeric(0)))
+}
+
+#' @export
+st_node.sf = function(x) {
+	st_set_geometry(x, st_node(st_geometry(x)))
+}
+
+#' @name geos_unary
+#' @export
 #' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
 #' @param ... ignored
 #' @examples
