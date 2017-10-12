@@ -5,10 +5,6 @@ CPL_get_bbox <- function(sf, depth = 0L) {
     .Call('_sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
 }
 
-CPL_bg_intersection <- function(p1, p2) {
-    .Call('_sf_CPL_bg_intersection', PACKAGE = 'sf', p1, p2)
-}
-
 CPL_gdal_init <- function() {
     invisible(.Call('_sf_CPL_gdal_init', PACKAGE = 'sf'))
 }
