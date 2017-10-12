@@ -46,7 +46,7 @@ Suggests:
     knitr,
 	covr,
 	microbenchmark
-LinkingTo: Rcpp, BH
+LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
