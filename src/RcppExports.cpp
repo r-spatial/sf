@@ -17,6 +17,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_bg_intersection
+std::string CPL_bg_intersection(std::string p1, std::string p2);
+RcppExport SEXP _sf_CPL_bg_intersection(SEXP p1SEXP, SEXP p2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type p1(p1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type p2(p2SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_bg_intersection(p1, p2));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_gdal_init
 void CPL_gdal_init();
 RcppExport SEXP _sf_CPL_gdal_init() {
@@ -601,6 +613,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_bbox", (DL_FUNC) &_sf_CPL_get_bbox, 2},
+    {"_sf_CPL_bg_intersection", (DL_FUNC) &_sf_CPL_bg_intersection, 2},
     {"_sf_CPL_gdal_init", (DL_FUNC) &_sf_CPL_gdal_init, 0},
     {"_sf_CPL_gdal_cleanup_all", (DL_FUNC) &_sf_CPL_gdal_cleanup_all, 0},
     {"_sf_CPL_gdal_version", (DL_FUNC) &_sf_CPL_gdal_version, 1},

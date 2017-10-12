@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* better check input of `st_polygon`; #514
+
+* add `st_node`, similar to `rgeos::gNode`
+
 * support for reading `OFTInteger64List` fields; #508
 
 * sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`
