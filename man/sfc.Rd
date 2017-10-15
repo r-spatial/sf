@@ -3,7 +3,7 @@
 \name{sfc}
 \alias{sfc}
 \alias{st_sfc}
-\title{Create simple feature collection object of class sfc from list}
+\title{Create simple feature geometry list column}
 \usage{
 st_sfc(..., crs = NA_crs_, precision = 0)
 }
@@ -18,11 +18,11 @@ st_sfc(..., crs = NA_crs_, precision = 0)
 an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 }
 \description{
-Create simple feature list column, set class, and add coordinate reference system
+Create simple feature geometry list column, set class, and add coordinate reference system and precision
 }
 \details{
-A simple feature collection object is a list of class
-\code{c("stc_TYPE", "sfc")} which typically contains objects of identical type; 
+A simple feature geometry list-column is a list of class
+\code{c("stc_TYPE", "sfc")} which most often contains objects of identical type; 
 in case of a mix of types or an empty set, \code{TYPE} is set to the 
 superclass \code{GEOMETRY}.
 }
