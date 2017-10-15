@@ -364,6 +364,29 @@ attr(,"class")
 [2,]
 [3,]
 > 
+> # st_node
+> l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+> st_node(l)
+MULTILINESTRING ((0 0, 0.5 0.5), (0.5 0.5, 1 1, 0 1, 0.5 0.5), (0.5 0.5, 1 0, 0 0))
+> st_node(st_sfc(l))
+Geometry set for 1 feature 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+MULTILINESTRING ((0 0, 0.5 0.5), (0.5 0.5, 1 1,...
+> st_node(st_sf(a = 1, st_sfc(l)))
+Simple feature collection with 1 feature and 1 field
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a                      st_sfc.l.
+1 1 MULTILINESTRING ((0 0, 0.5 ...
+> 
+> 
 > proc.time()
    user  system elapsed 
-  3.808   0.288   3.803 
+  3.756   0.300   3.754 
