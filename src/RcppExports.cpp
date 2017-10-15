@@ -204,6 +204,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdal_with_geos
+Rcpp::LogicalVector CPL_gdal_with_geos();
+RcppExport SEXP _sf_CPL_gdal_with_geos() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_with_geos());
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_area
 Rcpp::NumericVector CPL_area(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_area(SEXP sfcSEXP) {
@@ -618,6 +628,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_crs_from_proj4string", (DL_FUNC) &_sf_CPL_crs_from_proj4string, 1},
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
+    {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
     {"_sf_CPL_area", (DL_FUNC) &_sf_CPL_area, 1},
     {"_sf_CPL_gdal_dimension", (DL_FUNC) &_sf_CPL_gdal_dimension, 2},
     {"_sf_CPL_length", (DL_FUNC) &_sf_CPL_length, 1},

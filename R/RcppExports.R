@@ -73,6 +73,10 @@ CPL_sfc_from_wkt <- function(wkt) {
     .Call('_sf_CPL_sfc_from_wkt', PACKAGE = 'sf', wkt)
 }
 
+CPL_gdal_with_geos <- function() {
+    .Call('_sf_CPL_gdal_with_geos', PACKAGE = 'sf')
+}
+
 CPL_area <- function(sfc) {
     .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
 }

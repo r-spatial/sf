@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* `sf_extSoftVersion` now reveals whether GDAL was linked to GEOS; #510
+
 * better check input of `st_polygon`; #514
 
 * add `st_node`, similar to `rgeos::gNode`

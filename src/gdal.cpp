@@ -22,8 +22,8 @@
 //
 static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
 {
-    switch ( eErrClass )
-    {
+	switch ( eErrClass )
+	{
         case 0:
             break; // #nocov
         case 1:
@@ -414,4 +414,25 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
 	}
 	return sfc_from_ogr(g, true);
+}
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdal_with_geos() {
+
+	bool withGEOS;
+	CPLPushErrorHandler(CPLQuietErrorHandler);
+	OGRGeometry *poGeometry1, *poGeometry2;
+	char* pszWKT = (char *) "POINT (10 20)";
+	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry1 );
+	pszWKT = (char *) "POINT (30 20)";
+	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
+	withGEOS = 1;
+	if (poGeometry1->Union(poGeometry2) == NULL) 
+		withGEOS = false;
+	else
+		withGEOS = true;
+	OGRGeometryFactory::destroyGeometry(poGeometry1);
+	OGRGeometryFactory::destroyGeometry(poGeometry2);
+	CPLPopErrorHandler();
+	return Rcpp::LogicalVector::create(withGEOS);
 }

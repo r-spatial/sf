@@ -63,6 +63,7 @@ setOldClass("sfg")
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
-	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), CPL_lwgeom_version()),
-		names = c("GEOS", "GDAL", "proj.4", "lwgeom"))
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), CPL_lwgeom_version(),
+		ifelse(CPL_gdal_with_geos(), "true", "false")),
+		names = c("GEOS", "GDAL", "proj.4", "lwgeom", "GDAL_with_GEOS"))
 }
