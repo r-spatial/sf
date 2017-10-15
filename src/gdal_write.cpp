@@ -206,6 +206,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
 				"' using driver `" << driver[0] << "'" << std::endl;
 	}
+	bool transaction = (poDS->StartTransaction() == OGRERR_NONE);
 
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
@@ -242,5 +243,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
 	}
+	if (transaction && poDS->CommitTransaction() != OGRERR_NONE)
+		Rcpp::stop("CommitTransaction() failed.\n");
 	GDALClose(poDS);
 }
