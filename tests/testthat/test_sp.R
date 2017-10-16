@@ -26,7 +26,7 @@ test_that("we can convert points & lines to and from sp objects", {
 test_that("as() can convert GEOMETRY to Spatial (#131)", {
   single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
   multi <- list(single + 2, single + 4) %>% st_multipolygon()
-  
+
   # polygons
   w <- st_sfc(single, multi)
   # class is GEOMETRY
@@ -36,17 +36,30 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
   # lines
   lns <- st_cast(w, "MULTILINESTRING")
   expect_is(as(lns, "Spatial"), "SpatialLines")
-  
+
   expect_warning(ln <- st_cast(w, "LINESTRING"), "first ring")
   expect_is(as(ln, "Spatial"), "SpatialLines")
-  
+
   # points
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
   expect_is(as(pt, "Spatial"), "SpatialPoints")
-  
+
   pts <- st_cast(w, "MULTIPOINT")
   expect_is(as(pts, "Spatial"), "SpatialMultiPoints")
-  
+
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
   expect_is(as(pt, "Spatial"), "SpatialPoints")
+})
+
+test_that("as_Spatial can convert sf (#519)", {
+	h <- st_read(system.file("shape/nc.shp", package = "sf"))
+
+	u <- as(h, "Spatial")
+	s <- as_Spatial(h)
+	g <- as_Spatial(st_geometry(h))
+
+	identical(u, s)
+	expect_is(s, "SpatialPolygonsDataFrame")
+	expect_is(g, "SpatialPolygons")
+	expect_is(as(st_geometry(h), "Spatial"), "SpatialPolygons")
 })

@@ -151,14 +151,17 @@ Polygons2POLYGON = function(PolygonsLst) {
 	lapply(PolygonsLst, function(x) x@coords)
 }
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,Spatial,sf-method
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,Spatial,sfc-method
 setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,sf,Spatial-method
 setAs("sf", "Spatial", function(from) {
@@ -170,25 +173,46 @@ setAs("sf", "Spatial", function(from) {
 		data.frame(from), match.ID = FALSE)
 })
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,sfc,Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
-# setAs("sfg", "Spatial", function(from) as(st_sfc(from), "Spatial"))
-##  doesn't work for:
-## as(st_point(0:1), "Spatial")
-
-#' Methods to coerce simple feature geometries to corresponding \code{Spatial*} objects
+#' Methods to coerce simple features to `Spatial*` and `Spatial*DataFrame` objects
+#'
+#' [as_Spatial()] allows to convert `sf` and `sfc` to `Spatial*DataFrame` and
+#' `Spatial*` for `sp` compatibility. You can also use `as(x, "Spatial")` To transform
+#' `sp` objects to `sf` and `sfc` with `as(x, "sf")`.
 #' @rdname coerce-methods
-#' @param from object of class \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.
-#' @param cast logical; if \code{TRUE}, \link{st_cast} \code{from} before converting, so that e.g. \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.
-#' @param IDs character vector with IDs for the \code{Spatial*} geometries
-#' @return geometry-only object deriving from \code{Spatial}, of the appropriate class
+#' @name as_Spatial
+#' @md
+#' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`, `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
+#' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g. `GEOMETRY` objects with a mix of `POLYGON` and `MULTIPOLYGON` are cast to `MULTIPOLYGON`.
+#' @param IDs character vector with IDs for the `Spatial*` geometries
+#' @return geometry-only object deriving from `Spatial`, of the appropriate class
 #' @export
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' as_Spatial(st_geometry(nc[1,]))
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' # convert to SpatialPolygonsDataFrame
+#' spdf <- as_Spatial(nc)
+#' # identical to
+#' spdf <- as(nc, "Spatial")
+#' # convert to SpatialPolygons
+#' as(st_geometry(nc), "Spatial")
+#' # back to sf
+#' as(spdf, "sf")
 as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
+	if (inherits(from, "sf")) {
+		geom = st_geometry(from)
+		from[[attr(from, "sf_column")]] = NULL # remove sf column list
+		sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
+						  data.frame(from), match.ID = FALSE)
+	} else {
+		.as_Spatial(from, cast, IDs)
+	}
+}
+
+.as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	if (cast)
 		from = st_cast(from)
 	zm = class(from[[1]])[1]
