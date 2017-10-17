@@ -178,6 +178,10 @@ setAs("sf", "Spatial", function(from) {
 #' @aliases coerce,sfc,Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
+# create empy class
+setClass("XY")
+setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
+
 #' Methods to coerce simple features to `Spatial*` and `Spatial*DataFrame` objects
 #'
 #' [as_Spatial()] allows to convert `sf` and `sfc` to `Spatial*DataFrame` and
@@ -186,9 +190,14 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 #' @rdname coerce-methods
 #' @name as_Spatial
 #' @md
-#' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`, `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
-#' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g. `GEOMETRY` objects with a mix of `POLYGON` and `MULTIPOLYGON` are cast to `MULTIPOLYGON`.
+#' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`,
+#' `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
+#' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g.
+#' `GEOMETRY` objects with a mix of `POLYGON` and `MULTIPOLYGON` are cast to `MULTIPOLYGON`.
 #' @param IDs character vector with IDs for the `Spatial*` geometries
+#' @details [sp][sp::sp] supports three dimensions for `POINT` and `MULTIPOINT` (`SpatialPoint*`).
+#' Other geometries must be two-dimensional (`XY`). Dimensions can be dropped using
+#' [st_zm()] with `what = "M"` or `what = "ZM"`
 #' @return geometry-only object deriving from `Spatial`, of the appropriate class
 #' @export
 #' @examples
@@ -217,9 +226,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 		from = st_cast(from)
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
-		stop("geometries containing M not supported by sp")
+		stop("geometries containing M not supported by sp\n",
+			 'use `drop_zm(..., what = "M")`')
 	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM"))
-		stop("Z not supported: use st_zm first to drop Z?") }
+		stop("sp supports Z dimension only for POINT and MULTIPOINT.\n",
+			 'use `drop_zm(...)` to coerce to XY dimensions') }
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
 		"sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),

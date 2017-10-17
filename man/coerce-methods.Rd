@@ -15,9 +15,11 @@
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
 }
 \arguments{
-\item{from}{object of class \code{sf}, \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING}, \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.}
+\item{from}{object of class \code{sf}, \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING},
+\code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.}
 
-\item{cast}{logical; if \code{TRUE}, \code{\link[=st_cast]{st_cast()}} \code{from} before converting, so that e.g. \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.}
+\item{cast}{logical; if \code{TRUE}, \code{\link[=st_cast]{st_cast()}} \code{from} before converting, so that e.g.
+\code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.}
 
 \item{IDs}{character vector with IDs for the \code{Spatial*} geometries}
 }
@@ -28,6 +30,11 @@ geometry-only object deriving from \code{Spatial}, of the appropriate class
 \code{\link[=as_Spatial]{as_Spatial()}} allows to convert \code{sf} and \code{sfc} to \code{Spatial*DataFrame} and
 \code{Spatial*} for \code{sp} compatibility. You can also use \code{as(x, "Spatial")} To transform
 \code{sp} objects to \code{sf} and \code{sfc} with \code{as(x, "sf")}.
+}
+\details{
+\link[sp:sp]{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\code{SpatialPoint*}).
+Other geometries must be two-dimensional (\code{XY}). Dimensions can be dropped using
+\code{\link[=st_zm]{st_zm()}} with \code{what = "M"} or \code{what = "ZM"}
 }
 \examples{
 nc <- st_read(system.file("shape/nc.shp", package="sf"))

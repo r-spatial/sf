@@ -63,3 +63,14 @@ test_that("as_Spatial can convert sf (#519)", {
 	expect_is(g, "SpatialPolygons")
 	expect_is(as(st_geometry(h), "Spatial"), "SpatialPolygons")
 })
+
+test_that("Can convert `XY` objects to sp", {
+	expect_is(as(st_point(1:2), "Spatial"), "SpatialPoints")
+	expect_error(as(st_point(1:3), "Spatial"))
+	expect_error(as(st_point(1:4), "Spatial"))
+})
+
+test_that("Can't convert `M` dimension to sp", {
+	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"))
+	expect_error(as_Spatial(x), "not supported by sp")
+})
