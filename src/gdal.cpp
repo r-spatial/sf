@@ -428,7 +428,7 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
 	withGEOS = 1;
 	if (poGeometry1->Union(poGeometry2) == NULL) 
-		withGEOS = false;
+		withGEOS = false; // #nocov
 	else
 		withGEOS = true;
 	OGRGeometryFactory::destroyGeometry(poGeometry1);

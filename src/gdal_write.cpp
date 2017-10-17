@@ -244,6 +244,6 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
 	}
 	if (transaction && poDS->CommitTransaction() != OGRERR_NONE)
-		Rcpp::stop("CommitTransaction() failed.\n");
+		Rcpp::stop("CommitTransaction() failed.\n"); // #nocov
 	GDALClose(poDS);
 }
