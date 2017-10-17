@@ -6,5 +6,7 @@ str = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.999907
 st_crs(str)
 st_crs(28992)
 str = st_crs(28992)$proj4string
+st_crs(28992)$units
 st_crs("+proj=longlat +datum=WGS84")
 st_crs(4326)
+st_crs("+proj=laea") # no EPSG

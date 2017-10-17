@@ -267,3 +267,21 @@ is.na.crs = function(x) {
 		vals[[name]]
 	}
 }
+
+#' @export
+print.crs = function(x, ...) {
+  cat("Coordinate Reference System:")
+  if (is.na(x)) {
+    cat(" NA\n")
+  } else {
+    cat("\n")
+    if (is.na(x$epsg))
+       cat("  No EPSG code\n")
+    else
+       cat("  EPSG:", x$epsg, "\n")
+    if (is.na(x$proj4string))
+      stop("  invalid crs: please report an issue") # nocov
+    else 
+      cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
+  }
+}
