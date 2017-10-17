@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* add `print` method for `crs` objects; #517
+
 * `sf_extSoftVersion` now reveals whether GDAL was linked to GEOS; #510
 
 * better check input of `st_polygon`; #514
@@ -11,8 +13,6 @@
 * sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`
 
 * prevent `st_split` from stopping the R session; #492
-
-* initial support for some functions in pkg `s2`, for spherical geometry
 
 * `st_intersection`, `st_union` and so on now also print a message when used directly on long/lat coordinates; #496
 
