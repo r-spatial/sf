@@ -151,14 +151,17 @@ Polygons2POLYGON = function(PolygonsLst) {
 	lapply(PolygonsLst, function(x) x@coords)
 }
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,Spatial,sf-method
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,Spatial,sfc-method
 setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,sf,Spatial-method
 setAs("sf", "Spatial", function(from) {
@@ -170,6 +173,7 @@ setAs("sf", "Spatial", function(from) {
 		data.frame(from), match.ID = FALSE)
 })
 
+#' @name as
 #' @rdname coerce-methods
 #' @aliases coerce,sfc,Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
