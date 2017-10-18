@@ -39,9 +39,9 @@ RUN apt-get install -y texinfo \
        texlive-latex-extra \
        texlive-latex-recommended
 
-RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
-RUN git clone https://github.com/edzer/sfr.git
-RUN R CMD build sfr
+RUN Rscript -e 'install.packages(c("sf", "covr", "raster"), dependencies = TRUE, repos = "https://cloud.r-project.org")'
+RUN git clone https://github.com/r-spatial/sf.git
+RUN R CMD build sf
 RUN R CMD INSTALL sf_*tar.gz
 RUN R CMD check --as-cran sf_*tar.gz
 

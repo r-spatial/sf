@@ -40,3 +40,5 @@ Run a container from this image interactively with
 	docker run -ti sf_devel
 
 to start R-devel in the container, use the `Rdevel` command. Building the image checks sf from github.
+
+## with custom gdal, geos and proj installs

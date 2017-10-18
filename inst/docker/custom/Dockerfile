@@ -24,7 +24,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libudunits2-dev \
 	r-base-dev
 
-RUN git clone https://github.com/edzer/sfr.git
+RUN git clone https://github.com/r-spatial/sf.git
 
 RUN cd \
 	&& mkdir /opt/proj \
@@ -57,9 +57,9 @@ RUN	mkdir /opt/geos \
 RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr"), repos = "https://cran.uni-muenster.de")'
 
 RUN	cd / \
-	&& (cd sfr; git pull; autoconf) \
-	&& R CMD build sfr --no-build-vignettes \
-	&& GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' sf_0.5-0.tar.gz  \
+	&& (cd sf; git pull; autoconf) \
+	&& R CMD build sf --no-build-vignettes \
+	&& GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 	&& LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
 
 CMD ["/bin/bash"]

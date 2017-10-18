@@ -81,7 +81,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 
 RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
 
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr"), repos = "https://cloud.r-project.org")'
 
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
@@ -90,9 +90,9 @@ RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 RUN R CMD build rgdal/pkg --no-build-vignettes
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN git clone https://github.com/edzer/sfr.git
+RUN git clone https://github.com/r-spatial/sf.git
 
-RUN R CMD build --no-build-vignettes --no-manual sfr
+RUN R CMD build --no-build-vignettes --no-manual sf
 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 
