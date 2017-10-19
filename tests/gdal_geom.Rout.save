@@ -112,7 +112,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 80 drivers
+GDAL has 77 drivers
 > 
 > # GEOS ops:
 > 
@@ -133,239 +133,101 @@ although coordinates are longitude/latitude, st_relate assumes that they are pla
 > 
 > st_disjoint(a, b)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
-[[1]]
-[1] 1 2 3 4 5 6 7
+Sparse geometry binary predicate list of length 5, where the predicate was `disjoint'
 
-[[2]]
-[1] 1 2 3 4 5 6 7
-
-[[3]]
-[1] 1 2 3 4 5 6
-
-[[4]]
-[1] 2 3 5 6 7
-
-[[5]]
-[1] 1 4 5 7
-
-attr(,"predicate")
-[1] "disjoint"
-attr(,"class")
-[1] "sgbp"
+ 1: 1, 2, 3, 4, 5, 6, 7
+ 2: 1, 2, 3, 4, 5, 6, 7
+ 3: 1, 2, 3, 4, 5, 6
+ 4: 2, 3, 5, 6, 7
+ 5: 1, 4, 5, 7
 > 
 > st_touches(a, b)
 although coordinates are longitude/latitude, st_touches assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `touches'
 
-[[2]]
-integer(0)
-
-[[3]]
-[1] 7
-
-[[4]]
-[1] 4
-
-[[5]]
-[1] 3 6
-
-attr(,"predicate")
-[1] "touches"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: 7
+ 4: 4
+ 5: 3, 6
 > 
 > st_crosses(a, b)
 although coordinates are longitude/latitude, st_crosses assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `crosses'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-integer(0)
-
-[[5]]
-integer(0)
-
-attr(,"predicate")
-[1] "crosses"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: (empty)
+ 5: (empty)
 > 
 > st_within(a, b)
 although coordinates are longitude/latitude, st_within assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `within'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "within"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > st_contains(a, b)
 although coordinates are longitude/latitude, st_contains assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `contains'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "contains"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > st_overlaps(a, b)
 although coordinates are longitude/latitude, st_overlaps assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `overlaps'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-integer(0)
-
-[[5]]
-integer(0)
-
-attr(,"predicate")
-[1] "overlaps"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: (empty)
+ 5: (empty)
 > 
 > st_equals(a, b)
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `equals'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "equals"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > st_covers(a, b)
 although coordinates are longitude/latitude, st_covers assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `covers'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "covers"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > st_covered_by(a, b)
 although coordinates are longitude/latitude, st_covered_by assumes that they are planar
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `covered_by'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "covered_by"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > st_equals_exact(a, b, 0.01)
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 5, where the predicate was `equals_exact'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-[[4]]
-[1] 1
-
-[[5]]
-[1] 2
-
-attr(,"predicate")
-[1] "equals_exact"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
+ 4: 1
+ 5: 2
 > 
 > # st_is_within_distance(a, b, 2)
 > 
@@ -485,4 +347,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.100   0.304   1.093 
+  0.900   0.280   0.887 

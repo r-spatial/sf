@@ -24,12 +24,8 @@
 \alias{geos_unary}
 \alias{st_node}
 \alias{geos_unary}
-\alias{st_node.sfg}
-\alias{geos_unary}
-\alias{st_node.sfc}
-\alias{geos_unary}
 \alias{st_segmentize}
-\title{Geometric unary operations on (pairs of) simple feature geometry sets}
+\title{Geometric unary operations on simple feature geometry sets}
 \usage{
 st_buffer(x, dist, nQuadSegs = 30)
 
@@ -52,10 +48,6 @@ st_centroid(x, ..., of_largest_polygon = FALSE)
 st_point_on_surface(x)
 
 st_node(x)
-
-\method{st_node}{sfg}(x)
-
-\method{st_node}{sfc}(x)
 
 st_segmentize(x, dfMaxLength, ...)
 }
@@ -83,13 +75,10 @@ st_segmentize(x, dfMaxLength, ...)
 \item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
 }
 \value{
-\code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
-\code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
-\code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf}
-object with the same number of geometries as \code{x}
+an object of the same class of \code{x}, with manipulated geometry.
 }
 \description{
-Geometric unary operations on (pairs of) simple feature geometry sets
+Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
 }
 \details{
 \code{st_triangulate} requires GEOS version 3.4 or above

@@ -331,19 +331,16 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE, prepared = FALSE) {
 
 # unary, returning geometries
 
-#' Geometric unary operations on (pairs of) simple feature geometry sets
+#' Geometric unary operations on simple feature geometry sets
 #'
-#' Geometric unary operations on (pairs of) simple feature geometry sets
+#' Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
-#' @return \code{st_buffer}, \code{st_boundary}, \code{st_convex_hull}, \code{st_simplify},
-#' \code{st_triangulate}, \code{st_voronoi}, \code{st_polygonize}, \code{st_line_merge},
-#' \code{st_centroid} and \code{st_segmentize} return an \link{sfc} or an \link{sf}
-#' object with the same number of geometries as \code{x}
+#' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
@@ -629,12 +626,10 @@ st_point_on_surface.sf = function(x) {
 #' st_polygonize(st_node(l))
 st_node = function(x) UseMethod("st_node")
 
-#' @name geos_unary
 #' @export
 st_node.sfg = function(x)
 	get_first_sfg(st_node(st_sfc(x)))
 
-#' @name geos_unary
 #' @export
 st_node.sfc = function(x) {
 	dims = st_dimension(x)

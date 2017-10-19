@@ -85,4 +85,5 @@ Collate:
 	split.R
 	collection_extract.R
 	jitter.R
+	sgbp.R
 RoxygenNote: 6.0.1

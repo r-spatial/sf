@@ -84,21 +84,11 @@ Units: m
 8 covered_by  TRUE
 > 
 > st_contains_properly(ncm[1:3,], ncm[1:3])
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 3, where the predicate was `contains_properly'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-attr(,"predicate")
-[1] "contains_properly"
-attr(,"region.id")
-[1] "1" "2" "3"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
 > 
 > st_combine(nc)
 Geometry set for 1 feature 
@@ -201,107 +191,41 @@ LINESTRING (0 0, 1 1, 2 0)
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
 > grd = st_make_grid(sfc, n = c(3,3))
 > st_intersects(grd)
-[[1]]
-[1] 1 2 4 5
+Sparse geometry binary predicate list of length 9, where the predicate was `intersects'
 
-[[2]]
-[1] 1 2 3 4 5 6
-
-[[3]]
-[1] 2 3 5 6
-
-[[4]]
-[1] 1 2 4 5 7 8
-
-[[5]]
-[1] 1 2 3 4 5 6 7 8 9
-
-[[6]]
-[1] 2 3 5 6 8 9
-
-[[7]]
-[1] 4 5 7 8
-
-[[8]]
-[1] 4 5 6 7 8 9
-
-[[9]]
-[1] 5 6 8 9
-
-attr(,"predicate")
-[1] "intersects"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
-attr(,"class")
-[1] "sgbp"
+ 1: 1, 2, 4, 5
+ 2: 1, 2, 3, 4, 5, 6
+ 3: 2, 3, 5, 6
+ 4: 1, 2, 4, 5, 7, 8
+ 5: 1, 2, 3, 4, 5, 6, 7, 8, 9
+ 6: 2, 3, 5, 6, 8, 9
+ 7: 4, 5, 7, 8
+ 8: 4, 5, 6, 7, 8, 9
+ 9: 5, 6, 8, 9
 > st_relate(grd, pattern = "****1****")
-[[1]]
-[1] 1 2 4
+Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
 
-[[2]]
-[1] 1 2 3 5
-
-[[3]]
-[1] 2 3 6
-
-[[4]]
-[1] 1 4 5 7
-
-[[5]]
-[1] 2 4 5 6 8
-
-[[6]]
-[1] 3 5 6 9
-
-[[7]]
-[1] 4 7 8
-
-[[8]]
-[1] 5 7 8 9
-
-[[9]]
-[1] 6 8 9
-
-attr(,"predicate")
-[1] "relate_pattern"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
-attr(,"class")
-[1] "sgbp"
+ 1: 1, 2, 4
+ 2: 1, 2, 3, 5
+ 3: 2, 3, 6
+ 4: 1, 4, 5, 7
+ 5: 2, 4, 5, 6, 8
+ 6: 3, 5, 6, 9
+ 7: 4, 7, 8
+ 8: 5, 7, 8, 9
+ 9: 6, 8, 9
 > st_relate(grd, pattern = "****0****")
-[[1]]
-[1] 5
+Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
 
-[[2]]
-[1] 4 6
-
-[[3]]
-[1] 5
-
-[[4]]
-[1] 2 8
-
-[[5]]
-[1] 1 3 7 9
-
-[[6]]
-[1] 2 8
-
-[[7]]
-[1] 5
-
-[[8]]
-[1] 4 6
-
-[[9]]
-[1] 5
-
-attr(,"predicate")
-[1] "relate_pattern"
-attr(,"region.id")
-[1] "1" "2" "3" "4" "5" "6" "7" "8" "9"
-attr(,"class")
-[1] "sgbp"
+ 1: 5
+ 2: 4, 6
+ 3: 5
+ 4: 2, 8
+ 5: 1, 3, 7, 9
+ 6: 2, 8
+ 7: 5
+ 8: 4, 6
+ 9: 5
 > st_rook = function(a, b = a, ...) st_relate(a, b, pattern = "F***1****", ...)
 > st_rook(grd, sparse = FALSE)
        [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9]
@@ -343,21 +267,11 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 > pol_df <- data.frame(id = 1) 
 > st_geometry(pol_df) <- st_sfc(pol)
 > st_intersects(pts, pol_df[pol_df$id == 2,]) # with empty sf/sfc
-[[1]]
-integer(0)
+Sparse geometry binary predicate list of length 3, where the predicate was `intersects'
 
-[[2]]
-integer(0)
-
-[[3]]
-integer(0)
-
-attr(,"predicate")
-[1] "intersects"
-attr(,"region.id")
-[1] "1" "2" "3"
-attr(,"class")
-[1] "sgbp"
+ 1: (empty)
+ 2: (empty)
+ 3: (empty)
 > st_intersects(pts, pol_df[pol_df$id == 2,], sparse = FALSE) # with empty sf/sfc
     
 [1,]
@@ -389,4 +303,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  3.756   0.300   3.754 
+  3.032   0.264   2.986 

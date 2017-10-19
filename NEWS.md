@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* allow for direct route to proj.4 ignoring GDAL (requires liblwgeom; #509, #511)
+
 * add `print` method for `crs` objects; #517
 
 * `sf_extSoftVersion` now reveals whether GDAL was linked to GEOS; #510
