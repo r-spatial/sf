@@ -121,3 +121,5 @@ st_node(l)
 st_node(st_sfc(l))
 st_node(st_sf(a = 1, st_sfc(l)))
 
+# print.sgbp:
+st_disjoint(nc, nc)

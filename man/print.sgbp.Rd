@@ -4,7 +4,7 @@
 \alias{print.sgbp}
 \title{Methods for dealing with sparse geometry binary predicate lists}
 \usage{
-\method{print}{sgbp}(x, ..., n = 10, max_nb = 20)
+\method{print}{sgbp}(x, ..., n = 10, max_nb = 10)
 }
 \arguments{
 \item{x}{object of class \code{sgbp}}
