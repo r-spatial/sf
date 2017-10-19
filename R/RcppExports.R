@@ -153,8 +153,8 @@ CPL_geos_relate <- function(sfc0, sfc1) {
     .Call('_sf_CPL_geos_relate', PACKAGE = 'sf', sfc0, sfc1)
 }
 
-CPL_invert_sparse_incidence <- function(m, n) {
-    .Call('_sf_CPL_invert_sparse_incidence', PACKAGE = 'sf', m, n)
+CPL_transpose_sparse_incidence <- function(m, n) {
+    .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
 CPL_lwgeom_version <- function(b = FALSE) {

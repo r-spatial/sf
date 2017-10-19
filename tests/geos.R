@@ -82,9 +82,8 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  print(class(v))
 }
 
-i = st_intersects(ncm, ncm)
-j = sf:::CPL_invert_sparse_incidence(i, 100)
-all.equal(i, sf:::CPL_invert_sparse_incidence(j, 100))
+i = st_intersects(ncm, ncm[1:88,])
+all.equal(i, t(t(i)))
 
 # check use of pattern in st_relate:
 sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))

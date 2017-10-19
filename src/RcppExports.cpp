@@ -466,15 +466,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_invert_sparse_incidence
-Rcpp::List CPL_invert_sparse_incidence(Rcpp::List m, int n);
-RcppExport SEXP _sf_CPL_invert_sparse_incidence(SEXP mSEXP, SEXP nSEXP) {
+// CPL_transpose_sparse_incidence
+Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n);
+RcppExport SEXP _sf_CPL_transpose_sparse_incidence(SEXP mSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_invert_sparse_incidence(m, n));
+    rcpp_result_gen = Rcpp::wrap(CPL_transpose_sparse_incidence(m, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -660,7 +660,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 2},
     {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
-    {"_sf_CPL_invert_sparse_incidence", (DL_FUNC) &_sf_CPL_invert_sparse_incidence, 2},
+    {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_lwgeom_version", (DL_FUNC) &_sf_CPL_lwgeom_version, 1},
     {"_sf_CPL_make_valid", (DL_FUNC) &_sf_CPL_make_valid, 1},
     {"_sf_CPL_split", (DL_FUNC) &_sf_CPL_split, 2},
