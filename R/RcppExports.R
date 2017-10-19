@@ -173,6 +173,10 @@ CPL_geohash <- function(sfc, prec) {
     .Call('_sf_CPL_geohash', PACKAGE = 'sf', sfc, prec)
 }
 
+CPL_lwgeom_transform <- function(sfc, p4s) {
+    .Call('_sf_CPL_lwgeom_transform', PACKAGE = 'sf', sfc, p4s)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

@@ -16,6 +16,10 @@ test_that("st_make_valid works", {
 		expect_silent(st_split(l, pt)) # sfc
 		expect_silent(st_split(l[[1]], pt)) # sfg
 		expect_silent(st_split(st_sf(a = 1, geom = l), pt)) # sf
+		# https://github.com/r-spatial/sf/issues/509 :
+		p1 = st_point(c(7,52))
+		geom.sf = st_sfc(p1, crs = 4326)
+		x <- st_transform(geom.sf, "+proj=wintri", use_gdal = FALSE)
 	}
 })
 

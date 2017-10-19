@@ -16,7 +16,8 @@
 \usage{
 st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE)
+\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE,
+  use_gdal = TRUE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -36,6 +37,8 @@ st_wrap_dateline(x, options = "WRAPDATELINE=YES", quiet = TRUE)
 \item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
 
 \item{check}{logical; perform a sanity check on resulting polygons?}
+
+\item{use_gdal}{logical; if \code{FALSE}, arguments \code{check} and \code{partial} get ignored, and projection is directly carried out by \code{lwgeom_transform} which ignores the GDAL api. This allows proj.4 parameters such as \code{+over} to act (https://github.com/r-spatial/sf/issues/511) and certain projections such as \code{wintri} which do not have an inverse, to work (https://github.com/r-spatial/sf/issues/509). This requires that sf is built by linking to \code{liblwgeom}.}
 
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 

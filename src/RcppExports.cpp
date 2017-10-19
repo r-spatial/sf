@@ -524,6 +524,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_lwgeom_transform
+Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s);
+RcppExport SEXP _sf_CPL_lwgeom_transform(SEXP sfcSEXP, SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_lwgeom_transform(sfc, p4s));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
@@ -653,6 +665,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_make_valid", (DL_FUNC) &_sf_CPL_make_valid, 1},
     {"_sf_CPL_split", (DL_FUNC) &_sf_CPL_split, 2},
     {"_sf_CPL_geohash", (DL_FUNC) &_sf_CPL_geohash, 2},
+    {"_sf_CPL_lwgeom_transform", (DL_FUNC) &_sf_CPL_lwgeom_transform, 2},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},

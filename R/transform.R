@@ -7,6 +7,7 @@
 #' @param ... ignored
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
 #' @param check logical; perform a sanity check on resulting polygons?
+#' @param use_gdal logical; if \code{FALSE}, arguments \code{check} and \code{partial} get ignored, and projection is directly carried out by \code{lwgeom_transform} which ignores the GDAL api. This allows proj.4 parameters such as \code{+over} to act (https://github.com/r-spatial/sf/issues/511) and certain projections such as \code{wintri} which do not have an inverse, to work (https://github.com/r-spatial/sf/issues/509). This requires that sf is built by linking to \code{liblwgeom}.
 #' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
 #' @examples
 #' p1 = st_point(c(7,52))
@@ -56,11 +57,18 @@ sanity_check = function(x) {
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE) {
+st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal = TRUE) {
 	if (is.na(st_crs(x)))
 		stop("sfc object should have crs set")
 	if (missing(crs))
 		stop("argument crs cannot be missing")
+
+	if (! use_gdal) {
+		if (inherits(crs, "crs"))
+			crs = crs$proj4string
+		return(st_sfc(CPL_lwgeom_transform(x, c(st_crs(x)$proj4string, crs))))
+	}
+
 	crs = make_crs(crs)
 
 	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
