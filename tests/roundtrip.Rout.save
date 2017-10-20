@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -180,4 +180,4 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > 
 > proc.time()
    user  system elapsed 
-  4.512   0.224   4.543 
+  3.344   0.308   3.336 

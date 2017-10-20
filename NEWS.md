@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* add `st_as_sf` methods for `lpp` and `psp` objects from spatstat.
+
 * allow for direct route to proj.4 ignoring GDAL (requires liblwgeom; #509, #511)
 
 * add `print` method for `crs` objects; #517

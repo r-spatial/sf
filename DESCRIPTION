@@ -44,7 +44,8 @@ Suggests:
     testthat,
     knitr,
 	covr,
-	microbenchmark
+	microbenchmark,
+	spatstat
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
@@ -86,4 +87,5 @@ Collate:
 	collection_extract.R
 	jitter.R
 	sgbp.R
+	spatstat.R
 RoxygenNote: 6.0.1
