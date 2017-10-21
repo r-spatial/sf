@@ -29,7 +29,8 @@
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main)
+\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL, pal = sf.colors,
+  max.plot = 9, main)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -77,6 +78,8 @@ sf.colors(n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{ncol}{integer; default number of colors to be used}
 
 \item{col}{color}
+
+\item{pal}{palette to use. Defaults to \link{sf.colors}.}
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot (defaults to 9)}
 
@@ -198,6 +201,7 @@ mp1 = st_multipoint(matrix(1:4,2))
 mp2 = st_multipoint(matrix(5:8,2))
 mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
 plot(mp)
+plot(mp, pal = heat.colors)
 plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
 # polygon:
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)

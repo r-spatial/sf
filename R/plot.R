@@ -12,6 +12,7 @@
 #' @param lty line type
 #' @param lwd line width
 #' @param col color
+#' @param pal palette to use. Defaults to \link{sf.colors}.
 #' @param border color of polygon border
 #' @param add logical; add to current plot?
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
@@ -57,6 +58,7 @@
 #' mp2 = st_multipoint(matrix(5:8,2))
 #' mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
 #' plot(mp)
+#' plot(mp, pal = heat.colors)
 #' plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
 #' # polygon:
 #' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -81,7 +83,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL, pal = sf.colors, max.plot = 9, main) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -106,10 +108,10 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
 		}
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...)))
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, pal = pal, ...)))
 	} else {
 		if (is.null(col) && ncol(x) == 2)
-			col = sf.colors(ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
+			col = get_colors(pal, ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
 		if (is.null(col))
 			plot(st_geometry(x), ...)
 		else
@@ -504,6 +506,24 @@ sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, catego
 			}
 			sf.colors(n)[safe_cut(as.numeric(xc), n)]
 		}
+	}
+}
+
+get_colors = function(pal, n, xc) {
+	if (inherits(xc, "POSIXt"))
+		xc <- as.numeric(xc)
+	if (is.character(xc))
+		xc <- as.factor(xc)
+	if (is.factor(xc))
+		pal(nlevels(xc))[as.numeric(xc)]
+	else {
+		safe_cut = function(x ,n) {
+			if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
+				rep(1, length(x))
+			else
+				cut(x, n)
+		}
+		pal(n)[safe_cut(as.numeric(xc), n)]
 	}
 }
 
