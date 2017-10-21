@@ -521,7 +521,7 @@ get_colors = function(pal, n, xc) {
 			if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
 				rep(1, length(x))
 			else
-				cut(x, n)
+				cut(x, breaks = quantile(x, seq(0, 1, 1/n), na.rm = TRUE))
 		}
 		pal(n)[safe_cut(as.numeric(xc), n)]
 	}
