@@ -6,6 +6,9 @@
 #' @param ncol integer; default number of colors to be used
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot (defaults to 9)
 #' @param main title for plot (\code{NULL} to remove)
+#' @param pal palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used
+#' @param nbreaks number of colors breaks
+#' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -23,6 +26,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
+#' 
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -81,11 +85,11 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
+plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main, pal = NULL, nbreaks = 10, breaks = "pretty") {
 	stopifnot(missing(y))
 	dots = list(...)
 
-	if (ncol(x) > 2 && !isTRUE(dots$add)) {
+	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		max_plot_missing = missing(max.plot)
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		mfrow = get_mfrow(st_bbox(x), min(max.plot, length(cols)), par("din"))
@@ -106,11 +110,41 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
 		}
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, ...)))
-	} else {
-		if (is.null(col) && ncol(x) == 2)
-			col = sf.colors(ncol, x[[setdiff(names(x), attr(x, "sf_column"))]])
-		if (is.null(col))
+		# loop over each map to plot:
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, 
+			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
+	} else { # single map:
+		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
+			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
+
+			if (inherits(values, "POSIXt"))
+				values <- as.numeric(values)
+	
+			if (is.character(values))
+				values <- as.factor(values)
+	
+			if (is.null(pal))
+				pal = function(n) sf.colors(n, categorical = is.factor(values))
+
+			col = if (is.factor(values))
+				pal(nlevels(values))[as.numeric(values)]
+			else {
+				cuts = if (all(is.na(values)))
+					rep(NA_integer_, length(values))
+				else if (diff(range(values, na.rm = TRUE)) == 0)
+					rep(1, length(values))
+				else { # find cuts from breaks:
+					if (is.character(breaks)) { # compute breaks:
+						if (! requireNamespace("classInt", quietly = TRUE))
+							stop("package classInt required, please install it first")
+						breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
+					}
+					cut(as.numeric(values), breaks)
+				}
+				pal(nbreaks)[cuts]
+			}
+		} 
+		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
 		else
 			plot(st_geometry(x), col = col, ...)
@@ -122,6 +156,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main) {
 		}
 	}
 }
+
 
 #' @name plot
 #' @method plot sfc_POINT
@@ -459,51 +494,28 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 #' @param n integer; number of colors
 #' @param cutoff.tails numeric, in [0,0.5] start and end values
 #' @param alpha numeric, in [0,1], transparency
-#' @param categorical logical; should a categorical color ramp be returned? if \code{x} is a factor, yes.
-#' @param xc factor or numeric vector, for which colors need to be returned
+#' @param categorical logical; do we want colors for a categorical variable? (see details)
 #' @name plot
 #' @export
-#' @details \code{sf.colors} was taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults; for categorical, colors were taken from \url{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
+#' @details non-categorical colors from \code{sf.colors} were taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults
+#' If categorical is \code{TRUE}, default colors are from \url{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
 #' @examples
 #' sf.colors(10)
-sf.colors = function (n = 10, xc, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
-	if (missing(xc) || length(xc) == 1) {
-		if (missing(n))
-			n = xc
-		if (categorical) {
-			cb = if (n <= 8)
-			# 8-class Set2:
-			c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3')
-			# 12-class Set3:
-			else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
-			rep(cb, length.out = n)
-		} else {
-			i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
-    		r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
-    		g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
-    		b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
-        		ifelse(i < .92, -2 * i + 1.84, i / .08 - 11.5)))
-    		rgb(r, g, b, alpha)
-		}
+sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE) {
+	if (categorical) {
+		cb = if (n <= 8)
+		# 8-class Set2:
+		c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3')
+		# 12-class Set3:
+		else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
+		rep(cb, length.out = n)
 	} else {
-
-		if (inherits(xc, "POSIXt"))
-			xc <- as.numeric(xc)
-
-		if (is.character(xc))
-			xc <- as.factor(xc)
-
-		if (is.factor(xc))
-			sf.colors(nlevels(xc), categorical = TRUE)[as.numeric(xc)]
-		else {
-			safe_cut = function(x,n) {
-				if (all(is.na(x)) || all(range(x, na.rm = TRUE) == 0))
-					rep(1, length(x))
-				else
-					cut(x, n)
-			}
-			sf.colors(n)[safe_cut(as.numeric(xc), n)]
-		}
+		i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
+   		r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
+   		g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
+   		b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
+			ifelse(i < .92, -2 * i + 1.84, i / .08 - 11.5)))
+		rgb(r, g, b, alpha)
 	}
 }
 

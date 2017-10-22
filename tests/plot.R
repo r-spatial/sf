@@ -92,3 +92,9 @@ m = st_segmentize(m, 2e5)
 plot(m, axes = TRUE)
 g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
 plot(g, axes = TRUE)
+
+nc[[1]] = NA
+nc[[10]] = 1
+plot(nc, pal = rainbow, nbreaks = 3)
+plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
+plot(nc, pal = rainbow, breaks = (0:10)/3)

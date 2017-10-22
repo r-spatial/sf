@@ -32,6 +32,7 @@ Suggests:
     maps,
     rgdal,
     rgeos,
+	classInt,
     sp (>= 1.2-4), 
 	raster,
 	RSQLite,

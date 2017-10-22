@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* `plot.sf` gets an arguments `pal` to specify a color palette function; #526
+
+* `plot.sf` gets arguments `breaks` and `nbreaks`; add support for `classInt::classIntervals` styles for finding class intervals (breaks)
+
 * add `st_as_sf` methods for `lpp` and `psp` objects from spatstat.
 
 * allow for direct route to proj.4 ignoring GDAL (requires liblwgeom; #509, #511)

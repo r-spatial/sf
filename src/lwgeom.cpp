@@ -95,8 +95,13 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	projPJ target = lwproj_from_string(p4s[1]);
 	if (target == NULL)
 		Rcpp::stop("st_lwgeom_transform: wrong target proj4string\n"); // #nocov
-	for (int i = 0; i < lwgeom_v.size(); i++)
-		lwgeom_transform(lwgeom_v[i], src, target); // in-place transformation w/o GDAL
+	for (int i = 0; i < lwgeom_v.size(); i++) {
+		// in-place transformation w/o GDAL:
+		if (lwgeom_transform(lwgeom_v[i], src, target) != LW_SUCCESS) {
+			Rcpp::Rcout << "Failed on geometry " << i + 1 << std::endl; // #nocov
+			Rcpp::stop("st_lwgeom_transform failed\n"); // #nocov
+		}
+	}
 	pj_free(src);
 	pj_free(target);
 	Rcpp::List ret = sfc_from_lwgeom(lwgeom_v); // frees lwgeom_v
