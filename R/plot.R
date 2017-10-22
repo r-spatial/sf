@@ -25,7 +25,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
-#' 
+#'
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -110,7 +110,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, 
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
 	} else { # single map:
 		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
@@ -118,10 +118,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 
 			if (inherits(values, "POSIXt"))
 				values <- as.numeric(values)
-	
+
 			if (is.character(values))
 				values <- as.factor(values)
-	
+
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
 
@@ -143,7 +143,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					}
 				pal(nbreaks)[cuts]
 			}
-		} 
+		}
 		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
 		else
