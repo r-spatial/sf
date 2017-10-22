@@ -3,12 +3,11 @@
 #' @param x object of class sf
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
-#' @param ncol integer; default number of colors to be used
-#' @param max.plot integer; lower boundary to maximum number of attributes to plot (defaults to 9)
 #' @param main title for plot (\code{NULL} to remove)
 #' @param pal palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used
-#' @param nbreaks number of colors breaks
+#' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
+#' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -85,7 +84,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main, pal = NULL, nbreaks = 10, breaks = "pretty") {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n)) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -103,7 +102,7 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main, pal = 
 			max.plot = prod(mfrow)
 
 		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
-			if (max_plot_missing)
+			if (max_plot_missing && is.null(options("sf_max.plot")[[1]]))
 				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
 					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
 			x = x[, 1:max.plot]
@@ -130,17 +129,18 @@ plot.sf <- function(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main, pal = 
 				pal(nlevels(values))[as.numeric(values)]
 			else {
 				cuts = if (all(is.na(values)))
-					rep(NA_integer_, length(values))
-				else if (diff(range(values, na.rm = TRUE)) == 0)
-					rep(1, length(values))
-				else { # find cuts from breaks:
-					if (is.character(breaks)) { # compute breaks:
-						if (! requireNamespace("classInt", quietly = TRUE))
-							stop("package classInt required, please install it first")
-						breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
+						rep(NA_integer_, length(values))
+					else if (diff(range(values, na.rm = TRUE)) == 0)
+						rep(1, length(values))
+					else { # find cuts from breaks:
+						if (is.character(breaks)) { # compute breaks from values:
+							if (! requireNamespace("classInt", quietly = TRUE))
+								stop("package classInt required, please install it first")
+							breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
+							nbreaks = length(breaks) - 1 # "pretty" takes nbreaks as advice only
+						}
+						cut(as.numeric(values), breaks, include.lowest = TRUE)
 					}
-					cut(as.numeric(values), breaks)
-				}
 				pal(nbreaks)[cuts]
 			}
 		} 

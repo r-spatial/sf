@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* argument `max.plot` takes its default from `options(sf_max.plot=n)`, if present; #516
+
 * `plot.sf` gets an arguments `pal` to specify a color palette function; #526
 
 * `plot.sf` gets arguments `breaks` and `nbreaks`; add support for `classInt::classIntervals` styles for finding class intervals (breaks)

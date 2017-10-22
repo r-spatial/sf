@@ -29,8 +29,9 @@
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., ncol = 10, col = NULL, max.plot = 9, main,
-  pal = NULL, nbreaks = 10, breaks = "pretty")
+\method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
+  breaks = "pretty", max.plot = ifelse(is.null(n <-
+  options("sf_max.plot")[[1]]), 9, n))
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -75,19 +76,17 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{...}{further specifications, see \link{plot_sf} and \link{plot}}
 
-\item{ncol}{integer; default number of colors to be used}
-
 \item{col}{color}
-
-\item{max.plot}{integer; lower boundary to maximum number of attributes to plot (defaults to 9)}
 
 \item{main}{title for plot (\code{NULL} to remove)}
 
 \item{pal}{palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used}
 
-\item{nbreaks}{number of colors breaks}
+\item{nbreaks}{number of colors breaks (ignored for \code{factor} or \code{character} variables)}
 
 \item{breaks}{either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}}
+
+\item{max.plot}{integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}}
 
 \item{pch}{plotting symbol}
 
