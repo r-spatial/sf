@@ -120,8 +120,8 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 	if (sparse) {
 		if (is.null(id <- row.names(x)))
 			id = as.character(1:length(ret))
-		ncol = length(st_geometry(y))
-		structure(ret, predicate = op, region.id = id, ncol = ncol, class = "sgbp")
+		structure(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)),
+			class = "sgbp")
 	} else
 		ret[[1]]
 }
