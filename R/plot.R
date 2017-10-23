@@ -25,7 +25,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
-#' 
+#'
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -110,44 +110,59 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, 
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
 	} else { # single map:
 		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
 
 			if (inherits(values, "POSIXt"))
-				values <- as.numeric(values)
-	
+				values = as.numeric(values)
+
 			if (is.character(values))
-				values <- as.factor(values)
-	
+				values = as.factor(values)
+
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
 
 			col = if (is.factor(values))
 				pal(nlevels(values))[as.numeric(values)]
 			else {
+				if (is.character(breaks)) { # compute breaks from values:
+					if (! requireNamespace("classInt", quietly = TRUE))
+						stop("package classInt required, please install it first")
+					breaks = if (length(values) > 1)
+						classInt::classIntervals(values, nbreaks, breaks)$brks
+					else
+						c(values, values) # lowest and highest!
+				}
+				# this is necessary if breaks were specified either as character or as numeric
+				# "pretty" takes nbreaks as advice only:
+				nbreaks = length(breaks) - 1
 				cuts = if (all(is.na(values)))
 						rep(NA_integer_, length(values))
 					else if (diff(range(values, na.rm = TRUE)) == 0)
 						rep(1, length(values))
-					else { # find cuts from breaks:
-						if (is.character(breaks)) { # compute breaks from values:
-							if (! requireNamespace("classInt", quietly = TRUE))
-								stop("package classInt required, please install it first")
-							breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
-							nbreaks = length(breaks) - 1 # "pretty" takes nbreaks as advice only
-						}
+					else
 						cut(as.numeric(values), breaks, include.lowest = TRUE)
-					}
 				pal(nbreaks)[cuts]
 			}
-		} 
+		}
 		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
-		else
+		else {
 			plot(st_geometry(x), col = col, ...)
+			# we either have a list of colours given;
+			# or we've computed them from a factor; or from a numeric
+			# in all cases, they are in col. But we only want to plot
+			# an image scale if they map to "values"
+			if (exists("values")) {
+				if (is.factor(values))
+					image.scale.factor(values, col)
+				else
+					image.scale(values, col, breaks = breaks)
+			}
+		}
 		if (!isTRUE(dots$add)) { # title?
 			if (missing(main))
 				title(setdiff(names(x), attr(x, "sf_column")))
@@ -562,4 +577,76 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 			labels = parse(text = degreeLabelsNS(at))
 	}
 	axis(side, at = at, labels = labels, ...)
+}
+
+image.scale = function(z, col, breaks = NULL, axis.pos=1, add.axis = TRUE,
+	at = NULL, ...) {
+	# what we need; the palette, the breaks.
+	stopifnot(!is.factor(z))
+	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
+		stop("must have one more break than colour")
+	zlim = range(z, na.rm=TRUE)
+	if (is.null(breaks))
+		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	if (axis.pos %in% c(1,3)) {
+		ylim = c(0, 1)
+		xlim = range(breaks)
+	}
+	if (axis.pos %in% c(2,4)) {
+		ylim = range(breaks)
+		xlim = c(0, 1)
+	}
+	poly = vector(mode="list", length(col))
+	for (i in seq(poly))
+		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	plot(1, 1, t="n", ylim = ylim, xlim = xlim, axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	for(i in seq(poly)) {
+		if (axis.pos %in% c(1,3))
+			polygon(poly[[i]], c(0,0,1,1), col=col[i], border=NA)
+		if (axis.pos %in% c(2,4))
+			polygon(c(0,0,1,1), poly[[i]], col=col[i], border=NA)
+	}
+
+	box()
+	if (add.axis)
+		axis(axis.pos, at)
+}
+
+image.scale.factor <- function(z, col = heat.colors(nlevels(z)), axis.pos = 1, scale.frac = 0.3,
+	scale.n = 15, ...) {
+	stopifnot(is.factor(z))
+	stopifnot(axis.pos %in% c(1,4))
+	frc = scale.frac
+	stre = scale.n
+	plot(1, 1, t="n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	n = nlevels(z)
+	if (n != length(col))
+		stop("# of colors must be equal to # of factor levels")
+	lb = (1:n - 0.5)/max(n, stre) # place of the labels
+	poly <- vector(mode="list", length(col))
+	breaks = (0:n) / max(n, stre)
+	if (n < stre) { # center
+		breaks = breaks + (stre - n)/(2 * stre)
+		lb = lb + (stre - n)/(2 * stre)
+	}
+	for (i in seq(poly))
+		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	for(i in seq(poly)) {
+		if (axis.pos %in% c(1,3))
+			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=col[i], border=NA)
+		if (axis.pos %in% c(2,4))
+			polygon(c(0,0,frc,frc), poly[[i]], col=col[i], border=NA)
+	}
+	b = c(breaks[1], breaks[length(breaks)])
+	if (axis.pos %in% c(1,3)) {
+		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
+		# text(x = 1.05 * frc, y = lb, levels(z), pos = axis.pos)
+		text(y = (1-frc)/1.05, x = lb, levels(z), pos = axis.pos)
+	}
+	if (axis.pos %in% c(2,4)) {
+		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
+		text(x = 1.05 * frc, y = lb, levels(z), pos = axis.pos)
+	}
 }
