@@ -1,6 +1,6 @@
 context("sf")
 
-test_that("MtrxSet is being called", {
+test_that("MtrxSet and MtrxSetSet are being called", {
   outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
   hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
   hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
@@ -8,6 +8,15 @@ test_that("MtrxSet is being called", {
   pl1 = st_polygon(pts)
   expect_identical(st_as_text(pl1),
   "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
+  pl2 = st_polygon(outer)
+  expect_identical(st_as_text(pl2),
+  "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))")
+  pl3 = st_multipolygon(list(pts))
+  expect_identical(st_as_text(pl3),
+  "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5)))")
+  pl4 = st_multipolygon(list(outer))
+  expect_identical(st_as_text(pl4),
+  "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0)))")
 })
 
 test_that("Dimension works", {
