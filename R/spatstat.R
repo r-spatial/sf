@@ -40,22 +40,21 @@ st_as_sf.psp = function(x, ...) {
 	w = as.matrix(spatstat::edges(x)$ends)
 	lst2 = lapply(seq_len(NROW(w)), function(i) st_linestring(matrix(w[i,], 2, byrow = TRUE)))
 	pol = st_cast(st_polygonize(do.call(c, do.call(st_sfc, lst2))), "POLYGON")
-	label = c(rep("segment", NROW(m)), "window")
-	st_sf(label = rev(label), geom = st_sfc(c(list(pol), lst1)))
+	label = c("window", rep("segment", NROW(m)))
+	st_sf(label = label, geom = st_sfc(c(list(pol), lst1)))
 }
 
 #' @name st_as_sf
 #' @export
-#' @param both logical; if \code{FALSE}, only return points with all attributes, if \code{TRUE} return points, line segments, and window polygon without point attributes.
 #' @examples
 #' \dontrun{ # because of spatstat interfering with units
 #' if (require(spatstat)) {
 #'  data(chicago)
-#'  plot(st_as_sf(chicago))
-#'  plot(st_as_sf(chicago, both = FALSE))
+#'  plot(st_as_sf(chicago["label"]))
+#'  plot(st_as_sf(chicago[-1,"label"]))
 #' }
 #' }
-st_as_sf.lpp = function(x, ..., both = TRUE) {
+st_as_sf.lpp = function(x, ...) {
 	if (!requireNamespace("spatstat", quietly = TRUE))
 		stop("package spatstat required, please install it first")
 	# lines, polygon:
@@ -63,9 +62,8 @@ st_as_sf.lpp = function(x, ..., both = TRUE) {
 	# points:
 	m = as.matrix(as.data.frame(x$data)[1:2])
 	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
-	# combine:
-	if (both)
-		rbind(linework_sf, st_sf(label = rep("point", NROW(m)), geom = pointwork))
-	else 
-		st_set_geometry(as.data.frame(x$data)[-(1:2)], pointwork)
+	sf = rbind(linework_sf, st_sf(label = rep("point", NROW(m)), geom = pointwork))
+	# de-select point coordinates
+	m = as.data.frame(x$data)[c(rep(NA,nrow(linework_sf)),seq_len(nrow(m))), -(1:2)]
+	structure(cbind.sf(sf, m), row.names = seq_len(nrow(m)))
 }

@@ -33,7 +33,7 @@ st_as_sf(x, ...)
 
 \method{st_as_sf}{psp}(x, ...)
 
-\method{st_as_sf}{lpp}(x, ..., both = TRUE)
+\method{st_as_sf}{lpp}(x, ...)
 }
 \arguments{
 \item{x}{object to be converted into an object class \code{sf}}
@@ -51,8 +51,6 @@ st_as_sf(x, ...)
 \item{remove}{logical; when coords or wkt is given, remove these columns from data.frame?}
 
 \item{na.fail}{logical; if \code{TRUE}, raise an error if coordinates contain missing values}
-
-\item{both}{logical; if \code{FALSE}, only return points with all attributes, if \code{TRUE} return points, line segments, and window polygon without point attributes.}
 }
 \description{
 Convert foreign object to an sf object
@@ -119,8 +117,8 @@ summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 \dontrun{ # because of spatstat interfering with units
 if (require(spatstat)) {
  data(chicago)
- plot(st_as_sf(chicago))
- plot(st_as_sf(chicago, both = FALSE))
+ plot(st_as_sf(chicago["label"]))
+ plot(st_as_sf(chicago[-1,"label"]))
 }
 }
 }
