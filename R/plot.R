@@ -84,7 +84,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n)) {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n), axis.pos = 4) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -151,17 +151,32 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
 		else {
-			plot(st_geometry(x), col = col, ...)
 			# we either have a list of colours given;
 			# or we've computed them from a factor; or from a numeric
 			# in all cases, they are in col. But we only want to plot
 			# an image scale if they map to "values"
 			if (exists("values")) {
+				mar = c(1,1,1,1)
+				if (! is.factor(values))
+					mar[axis.pos] = 3
+				if (axis.pos %in% c(2,4))
+					mar[1] = 3
+				if (axis.pos %in% c(1,3))
+					mar[2] = 3
+				par(mar = mar)
+				si = lcm(2.8) # scale size
+				switch (axis.pos,
+					layout(matrix(c(2,1), nrow=2, ncol=1), widths=1, heights=c(1,si)),  # 1
+					layout(matrix(c(1,2), nrow=1, ncol=2), widths=c(si,1), heights=1),  # 2
+					layout(matrix(c(1,2), nrow=2, ncol=1), widths=1, heights=c(si,1)),  # 3
+					layout(matrix(c(2,1), nrow=1, ncol=2), widths=c(1,si), heights=1)   # 4
+				)
 				if (is.factor(values))
-					image.scale.factor(values, col)
+					image.scale.factor(values, col, axis.pos = axis.pos)
 				else
-					image.scale(values, col, breaks = breaks)
+					image.scale(values, col, breaks = breaks, axis.pos = axis.pos)
 			}
+			plot(st_geometry(x), col = col, ...)
 		}
 		if (!isTRUE(dots$add)) { # title?
 			if (missing(main))
@@ -579,10 +594,9 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 	axis(side, at = at, labels = labels, ...)
 }
 
-image.scale = function(z, col, breaks = NULL, axis.pos=1, add.axis = TRUE,
+image.scale = function(z, col, breaks = NULL, axis.pos = 1, add.axis = TRUE,
 	at = NULL, ...) {
 	# what we need; the palette, the breaks.
-	stopifnot(!is.factor(z))
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm=TRUE)
