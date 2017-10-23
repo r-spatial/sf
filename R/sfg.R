@@ -135,9 +135,9 @@ st_linestring = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim,
 #' @name st
 #' @export
 st_polygon = function(x = list(), dim = if(length(x)) "XYZ" else "XY") {
-	if (identical(x, 1))
-		st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-	else MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
+	if (is.matrix(x)) x = list(x)
+	if (identical(x, 1)) x = list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))
+	MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
 }
 #' @name st
 #' @export
@@ -145,8 +145,11 @@ st_multilinestring = function(x = list(), dim = if (length(x)) "XYZ" else "XY")
 	MtrxSet(x, dim, type = "MULTILINESTRING", needClosed = FALSE)
 #' @name st
 #' @export
-st_multipolygon = function(x = list(), dim = if (length(x)) "XYZ" else "XY")
+st_multipolygon = function(x = list(), dim = if (length(x)) "XYZ" else "XY") {
+	idx = vapply(x, is.matrix, logical(1L))
+	x[idx] = lapply(x[idx], list)
 	MtrxSetSet(x, dim, type = "MULTIPOLYGON", needClosed = TRUE)
+}
 #' @name st
 #' @param dims character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case \code{x} is the empty \code{list()}.
 #' @export
@@ -231,7 +234,7 @@ format.sfg = function(x, ..., digits = 30) {
 #' c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
 #'   st_multilinestring(list(matrix(11:16,3))), st_point(5:6),
 #'   st_geometrycollection(list(st_point(10:11))))
-#' @details When \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup. 
+#' @details When \code{flatten=TRUE}, this method may merge points into a multipoint structure, and may not preserve order, and hence cannot be reverted. When given fish, it returns fish soup.
 c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 
 	stopifnot(! recursive)
