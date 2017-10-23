@@ -21,7 +21,7 @@ st_as_sf.ppp = function(x, ...) {
   points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
   ret = rbind(winwork_sf, points_sf)
   if (spatstat::is.marked(x)) {
-    m = spatstat::marks(x) 
+    m = as.data.frame(spatstat::marks(x))
 	cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
   } else
   	ret
