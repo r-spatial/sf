@@ -8,7 +8,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key.
+#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -112,7 +112,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = key.pos, ...)))
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
 	} else { # single map:
 		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
@@ -152,10 +152,6 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
 		else {
-			# we either have a list of colours given;
-			# or we've computed them from a factor; or from a numeric
-			# in all cases, they are in col. But we only want to plot
-			# an image scale if they map to "values"
 			if (exists("values") && ! is.null(key.pos)) {
 				mar = c(1,1,1,1)
 				if (! is.factor(values))
