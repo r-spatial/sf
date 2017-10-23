@@ -8,6 +8,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
+#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key.
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -84,7 +85,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n), axis.pos = 4) {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n), key.pos = 4) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -158,23 +159,23 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			if (exists("values")) {
 				mar = c(1,1,1,1)
 				if (! is.factor(values))
-					mar[axis.pos] = 3
-				if (axis.pos %in% c(2,4))
+					mar[key.pos] = 3
+				if (key.pos %in% c(2,4))
 					mar[1] = 3
-				if (axis.pos %in% c(1,3))
+				if (key.pos %in% c(1,3))
 					mar[2] = 3
 				par(mar = mar)
 				si = lcm(2.8) # scale size
-				switch(axis.pos,
+				switch(key.pos,
 					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, si)),  # 1
 					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(si, 1), heights = 1),  # 2
 					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(si, 1)),  # 3
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, si), heights = 1)   # 4
 				)
 				if (is.factor(values))
-					image.scale.factor(levels(values), pal(nlevels(values)), axis.pos = axis.pos)
+					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos)
 				else
-					image.scale(values, pal(nbreaks), breaks = breaks, axis.pos = axis.pos)
+					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos)
 			}
 			plot(st_geometry(x), col = col, ...)
 		}
@@ -594,18 +595,18 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 	axis(side, at = at, labels = labels, ...)
 }
 
-image.scale = function(z, col, breaks = NULL, axis.pos = 1, add.axis = TRUE,
+image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
 	at = NULL, ...) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm=TRUE)
 	if (is.null(breaks))
 		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
-	if (axis.pos %in% c(1,3)) {
+	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
 		xlim = range(breaks)
 	}
-	if (axis.pos %in% c(2,4)) {
+	if (key.pos %in% c(2,4)) {
 		ylim = range(breaks)
 		xlim = c(0, 1)
 	}
@@ -615,18 +616,18 @@ image.scale = function(z, col, breaks = NULL, axis.pos = 1, add.axis = TRUE,
 	plot(1, 1, t="n", ylim = ylim, xlim = xlim, axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
 	for(i in seq(poly)) {
-		if (axis.pos %in% c(1,3))
+		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0,0,1,1), col=col[i], border=NA)
-		if (axis.pos %in% c(2,4))
+		if (key.pos %in% c(2,4))
 			polygon(c(0,0,1,1), poly[[i]], col=col[i], border=NA)
 	}
 
 	box()
 	if (add.axis)
-		axis(axis.pos, at)
+		axis(key.pos, at)
 }
 
-image.scale.factor <- function(labels, colors, axis.pos = 1, scale.frac = 0.3,
+image.scale.factor <- function(labels, colors, key.pos = 1, scale.frac = 0.3,
 	scale.n = 15, ...) {
 	frc = scale.frac
 	stre = scale.n
@@ -645,22 +646,22 @@ image.scale.factor <- function(labels, colors, axis.pos = 1, scale.frac = 0.3,
 	for (i in seq(poly))
 		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	for(i in seq(poly)) {
-		if (axis.pos %in% c(1,3))
+		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=colors[i], border=NA)
-		if (axis.pos %in% c(2,4))
+		if (key.pos %in% c(2,4))
 			polygon(c(0,0,frc,frc), poly[[i]], col=colors[i], border=NA)
 	}
 	b = c(breaks[1], breaks[length(breaks)])
-	if (axis.pos %in% c(1,3)) {
+	if (key.pos %in% c(1,3)) {
 		text_y_loc = (1-frc)/1.05
-		if (axis.pos == 3) text_y_loc = text_y_loc - frc
+		if (key.pos == 3) text_y_loc = text_y_loc - frc
 		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
-		text(y = text_y_loc, x = lb, labels, pos = axis.pos)
+		text(y = text_y_loc, x = lb, labels, pos = key.pos)
 	}
-	if (axis.pos %in% c(2,4)) {
+	if (key.pos %in% c(2,4)) {
 		text_x_loc = 1.05 * frc
-		if (axis.pos == 2) text_x_loc = text_x_loc + frc
+		if (key.pos == 2) text_x_loc = text_x_loc + frc
 		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
-		text(x = text_x_loc, y = lb, labels, pos = axis.pos)
+		text(x = text_x_loc, y = lb, labels, pos = key.pos)
 	}
 }
