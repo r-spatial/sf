@@ -11,6 +11,8 @@
 \alias{st_as_sf}
 \alias{st_as_sf.map}
 \alias{st_as_sf}
+\alias{st_as_sf.ppp}
+\alias{st_as_sf}
 \alias{st_as_sf.psp}
 \alias{st_as_sf}
 \alias{st_as_sf.lpp}
@@ -26,6 +28,8 @@ st_as_sf(x, ...)
 \method{st_as_sf}{Spatial}(x, ...)
 
 \method{st_as_sf}{map}(x, ...)
+
+\method{st_as_sf}{ppp}(x, ...)
 
 \method{st_as_sf}{psp}(x, ...)
 
@@ -106,6 +110,12 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+\dontrun{
+  require(spatstat)
+  g = st_as_sf(gorillas)
+  # select only the points:
+  g[st_is(g, "POINT"),]
+}
 \dontrun{ # because of spatstat interfering with units
 if (require(spatstat)) {
  data(chicago)
