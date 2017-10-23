@@ -85,7 +85,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n), key.pos = 4) {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, key.pos = if (ncol(x) > 2) NULL else 4) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -112,7 +112,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = key.pos, ...)))
 	} else { # single map:
 		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
@@ -156,7 +156,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			# or we've computed them from a factor; or from a numeric
 			# in all cases, they are in col. But we only want to plot
 			# an image scale if they map to "values"
-			if (exists("values")) {
+			if (exists("values") && ! is.null(key.pos)) {
 				mar = c(1,1,1,1)
 				if (! is.factor(values))
 					mar[key.pos] = 3
