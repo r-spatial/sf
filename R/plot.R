@@ -165,16 +165,16 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					mar[2] = 3
 				par(mar = mar)
 				si = lcm(2.8) # scale size
-				switch (axis.pos,
-					layout(matrix(c(2,1), nrow=2, ncol=1), widths=1, heights=c(1,si)),  # 1
-					layout(matrix(c(1,2), nrow=1, ncol=2), widths=c(si,1), heights=1),  # 2
-					layout(matrix(c(1,2), nrow=2, ncol=1), widths=1, heights=c(si,1)),  # 3
-					layout(matrix(c(2,1), nrow=1, ncol=2), widths=c(1,si), heights=1)   # 4
+				switch(axis.pos,
+					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, si)),  # 1
+					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(si, 1), heights = 1),  # 2
+					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(si, 1)),  # 3
+					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, si), heights = 1)   # 4
 				)
 				if (is.factor(values))
-					image.scale.factor(values, col, axis.pos = axis.pos)
+					image.scale.factor(levels(values), pal(nlevels(values)), axis.pos = axis.pos)
 				else
-					image.scale(values, col, breaks = breaks, axis.pos = axis.pos)
+					image.scale(values, pal(nbreaks), breaks = breaks, axis.pos = axis.pos)
 			}
 			plot(st_geometry(x), col = col, ...)
 		}
@@ -596,7 +596,6 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 
 image.scale = function(z, col, breaks = NULL, axis.pos = 1, add.axis = TRUE,
 	at = NULL, ...) {
-	# what we need; the palette, the breaks.
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm=TRUE)
@@ -627,19 +626,17 @@ image.scale = function(z, col, breaks = NULL, axis.pos = 1, add.axis = TRUE,
 		axis(axis.pos, at)
 }
 
-image.scale.factor <- function(z, col = heat.colors(nlevels(z)), axis.pos = 1, scale.frac = 0.3,
+image.scale.factor <- function(labels, colors, axis.pos = 1, scale.frac = 0.3,
 	scale.n = 15, ...) {
-	stopifnot(is.factor(z))
-	stopifnot(axis.pos %in% c(1,4))
 	frc = scale.frac
 	stre = scale.n
 	plot(1, 1, t="n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
-	n = nlevels(z)
-	if (n != length(col))
+	n = length(labels)
+	if (n != length(colors))
 		stop("# of colors must be equal to # of factor levels")
 	lb = (1:n - 0.5)/max(n, stre) # place of the labels
-	poly <- vector(mode="list", length(col))
+	poly <- vector(mode="list", length(colors))
 	breaks = (0:n) / max(n, stre)
 	if (n < stre) { # center
 		breaks = breaks + (stre - n)/(2 * stre)
@@ -649,18 +646,21 @@ image.scale.factor <- function(z, col = heat.colors(nlevels(z)), axis.pos = 1, s
 		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	for(i in seq(poly)) {
 		if (axis.pos %in% c(1,3))
-			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=col[i], border=NA)
+			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=colors[i], border=NA)
 		if (axis.pos %in% c(2,4))
-			polygon(c(0,0,frc,frc), poly[[i]], col=col[i], border=NA)
+			polygon(c(0,0,frc,frc), poly[[i]], col=colors[i], border=NA)
 	}
 	b = c(breaks[1], breaks[length(breaks)])
 	if (axis.pos %in% c(1,3)) {
+		text_y_loc = (1-frc)/1.05
+		if (axis.pos == 3) text_y_loc = text_y_loc - frc
 		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
-		# text(x = 1.05 * frc, y = lb, levels(z), pos = axis.pos)
-		text(y = (1-frc)/1.05, x = lb, levels(z), pos = axis.pos)
+		text(y = text_y_loc, x = lb, labels, pos = axis.pos)
 	}
 	if (axis.pos %in% c(2,4)) {
+		text_x_loc = 1.05 * frc
+		if (axis.pos == 2) text_x_loc = text_x_loc + frc
 		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
-		text(x = 1.05 * frc, y = lb, levels(z), pos = axis.pos)
+		text(x = text_x_loc, y = lb, labels, pos = axis.pos)
 	}
 }
