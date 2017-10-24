@@ -575,7 +575,7 @@ st_centroid.sfg = function(x, ..., of_largest_polygon = FALSE)
 largest_ring = function(x) {
 	pols = st_cast(x, "POLYGON", warn = FALSE)
 	spl = split(pols, rep(1:length(x), attr(pols, "ids")))
-	st_sfc(lapply(spl, function(y) y[[which.max(st_area(y))]]))
+	st_sfc(lapply(spl, function(y) y[[which.max(st_area(y))]]), crs = st_crs(x))
 }
 
 #' @export
