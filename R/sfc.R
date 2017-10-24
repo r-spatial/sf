@@ -283,7 +283,7 @@ st_zm.sfg <- function(x, ..., drop = TRUE, what = "ZM") {
 		ret = if (is.list(x))
 			lapply(x, st_zm, drop = drop, what = what)
 		else if (is.matrix(x))
-			x[,1:2]
+			x[, 1:2, drop = FALSE]
 		else
 			x[1:2]
 		structure(ret, class = c("XY", class(x)[2:3]))
