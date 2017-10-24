@@ -49,9 +49,10 @@ close_polygon_or_multipolygon = function(x, to) {
 	to_col = which_sfc_col(to)
 	close_mat = function(m) {
 		if (any(m[1,] != m[nrow(m),]))
-			rbind(m, m[1,])
-		else
-			m
+			m = rbind(m, m[1,])
+		if (nrow(m) < 4)
+			stop("polygons require at least 4 points")
+		m
 	}
 	add_attributes(
 		if (to_col == 2)

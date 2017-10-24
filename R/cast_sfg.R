@@ -11,9 +11,10 @@ Tail1 <- function(lst) lapply(lst, head, -1)
 ClosePol <- function(mtrx) { 
 	stopifnot(is.matrix(mtrx))
 	if (!all(mtrx[1,] == mtrx[nrow(mtrx),])) 
-		rbind(mtrx, mtrx[1,]) 
-	else 
-		mtrx
+		mtrx = rbind(mtrx, mtrx[1,]) 
+	if (nrow(mtrx) < 4)
+		stop("polygons require at least 4 points")
+	mtrx
 }
 
 ## multi-polygon and polygon constructor, allow unclosed (but don't apply auto-closing)
