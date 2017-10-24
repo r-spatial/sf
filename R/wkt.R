@@ -157,3 +157,5 @@ get_crs_ewkt = function(x) {
 
 ewkt_to_wkt = function(x) {
 	gsub("^SRID=(\\d+);(.+)$", "\\2", x)
+}
+				   
