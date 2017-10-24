@@ -21,7 +21,7 @@ st_cast(pol, "MULTILINESTRING")
 (yy = st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
 
 (zz = st_cast(yy, "MULTILINESTRING"))
-(zz = st_cast(yy, "POLYGON"))
+#(zz = st_cast(yy, "POLYGON"))
 
 st_cast(mls, "LINESTRING")
 

@@ -29,7 +29,7 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 #' @name geos_measures
 #' @export
-#' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}.
+#' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 #'
 #' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 #' @examples
@@ -353,15 +353,17 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30)
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x))) {
-		warning("st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.")
+		warning("st_buffer does not correctly buffer longitude/latitude data")
 		if (inherits(dist, "units"))
 			dist = units::set_units(dist, "arc_degrees")
+		else
+			message("dist is assumed to be in decimal degrees (arc_degrees).")
 	} else if (inherits(dist, "units")) {
 		if (is.na(st_crs(x)))
 			stop("x does not have a crs set: can't convert units")
 		if (is.null(st_crs(x)$units))
 			stop("x has a crs without units: can't convert units")
-		dist = units::set_units(dist, udunits_from_proj[st_crs(x)$units])
+		units(dist) = units::set_units(dist, udunits_from_proj[st_crs(x)$units])
 	}
 	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))

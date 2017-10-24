@@ -185,6 +185,7 @@ st_is_longlat = function(x) {
 
 # a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
 udunits_from_proj = c(
+#   PROJ.4     UDUNITS
 	`km` =     "km",
 	`m` =      "m",
 	`dm` =     "dm",

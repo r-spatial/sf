@@ -9,7 +9,7 @@
 #' }
 st_as_sf.ppp = function(x, ...) {
   if (!requireNamespace("spatstat", quietly = TRUE))
-    stop("package spatstat required, please install it first")
+    stop("package spatstat required, please install it first") # nocov
   w = spatstat::edges(x$window)
   mw = as.matrix(w$ends)
   lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))

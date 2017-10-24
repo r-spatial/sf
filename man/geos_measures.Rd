@@ -25,7 +25,7 @@ st_distance(x, y, dist_fun, by_element = FALSE)
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 }
 \value{
-If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{units}.
+If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 
 st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
 
