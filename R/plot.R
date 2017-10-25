@@ -9,7 +9,7 @@
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
 #' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.
-#' @param key.size: amount of space reserved for the key (labels)
+#' @param key.size amount of space reserved for the key (labels)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -90,6 +90,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
 		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(2.8)) {
 	stopifnot(missing(y))
+	breaks.missing = missing(breaks)
 	dots = list(...)
 
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
@@ -117,11 +118,13 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
 	} else { # single map, or dots$add=TRUE:
-		if (ncol(x) > 2)
-			stop("for plotting a single map, select a single attribute")
-		else if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
+		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
 		else { # generate plot with colors and possibly key
+			if (ncol(x) > 2) { # add = TRUE
+				warning("ignoring all but the first attribute")
+				x = x[,1]
+			}
 
 			# store attribute in "values":
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
@@ -132,10 +135,12 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			if (is.character(values))
 				values = as.factor(values)
 
-			if (is.null(col)) { # compute colors from values:
-				if (is.null(pal))
-					pal = function(n) sf.colors(n, categorical = is.factor(values))
+			if (is.null(pal))
+				pal = function(n) sf.colors(n, categorical = is.factor(values))
+			else if (! is.null(col))
+				stop("specify only one of col and pal")
 
+			if (is.null(col)) { # compute colors from values:
 				col = if (is.factor(values))
 						pal(nlevels(values))[as.numeric(values)]
 					else {
@@ -158,11 +163,12 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 								cut(as.numeric(values), breaks, include.lowest = TRUE)
 						pal(nbreaks)[cuts]
 					}
-			} else if (! is.null(pal))
-				stop("specify only one of col and pal")
-
+			} else # no key: # TODO: warn?
+				key.pos = NULL
+			
 			if (! is.null(key.pos) && !all(is.na(values)) &&
-					(is.factor(values) || length(unique(na.omit(values))) > 1)) { # plot key?
+					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
+					length(col) > 1) { # plot key?
 				mar = c(1,1,1,1)
 				if (! is.factor(values))
 					mar[key.pos] = 3
@@ -171,7 +177,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				if (key.pos %in% c(1,3))
 					mar[2] = 3
 				par(mar = mar)
-				on.exit(layout(1)) # set back
+				# on.exit(layout(1)) # set back
 				switch(key.pos,
 					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, key.size)),  # 1 bottom
 					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(key.size, 1), heights = 1),  # 2 left

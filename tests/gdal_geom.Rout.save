@@ -288,7 +288,7 @@ Error in st_buffer.sfc(sfc, units::set_units(1000, km)) :
 Error : cannot convert km into °
 In addition: Warning message:
 In st_buffer.sfc(sfc, units::set_units(1000, km)) :
-  st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.
+  st_buffer does not correctly buffer longitude/latitude data
 > if (version$os == "linux-gnu") { # why does this break on windows - degree symbol?
 +   print(st_buffer(sfc, units::set_units(0.1, rad)))      # OK: will convert to arc_degrees
 + }
@@ -302,7 +302,7 @@ POLYGON ((12.7295779513082 52, 12.721725763855 ...
 POLYGON ((-24.2704220486918 20, -24.27827423614...
 Warning message:
 In st_buffer.sfc(sfc, units::set_units(0.1, rad)) :
-  st_buffer does not correctly buffer longitude/latitude data, dist needs to be in decimal degrees.
+  st_buffer does not correctly buffer longitude/latitude data
 > x = st_transform(sfc, 3857)
 > st_buffer(x, units::set_units(1000, km)) # success
 Geometry set for 2 features 
@@ -337,4 +337,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.880   0.292   0.876 
+  0.880   0.268   0.854 

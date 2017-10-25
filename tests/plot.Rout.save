@@ -137,15 +137,23 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > nc[[1]] = NA
 > nc[[10]] = 1
 > plot(nc, pal = rainbow, nbreaks = 3)
-Warning message:
-plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+Warning messages:
+1: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+2: In min(x, na.rm = na.rm) :
+  no non-missing arguments to min; returning Inf
+3: In max(x, na.rm = na.rm) :
+  no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
-Warning message:
-plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+Warning messages:
+1: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+2: In min(x, na.rm = na.rm) :
+  no non-missing arguments to min; returning Inf
+3: In max(x, na.rm = na.rm) :
+  no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = (0:10)/3)
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
 > 
 > proc.time()
    user  system elapsed 
-  6.036   0.280   6.010 
+  6.240   0.316   6.236 
