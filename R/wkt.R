@@ -106,13 +106,35 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 }
 
 #' @name st_as_sfc
-#' @details If \code{x} is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element.
-#' @param crs integer or character; coordinate reference system for the geometry, see \link{st_crs}
+#' @rdname st_as_sfc
+#' @md
+#' @details If `x` is a character vector, it should be a vector containing
+#' the [well-known-text](http://www.opengeospatial.org/standards/wkt-crs) or
+#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT)
+#' representations of a single geometry for each vector element.
+#' @param crs integer or character; coordinate reference system for the
+#' geometry, see [st_crs()]
 #' @export
+#' @examples
+#' st_as_sfc("SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)")
 st_as_sfc.character = function(x, crs = NA_integer_, ...) {
 	if (length(x) == 0)
 		st_sfc(crs = crs)
 	else {
+		if (all(is_ewkt(x)) & is.na(crs)) {
+			# EWKT
+			crs = get_crs_ewkt(x)
+			crs = unique(crs)
+			if (length(crs) != 1) {
+				stop("sf does not support multiple crs (",
+					 paste(crs, collapse = ", "),
+					 ") within a single geometry column.",
+					 "You can override the crs from the string by using the ",
+					 "`crs` option from `st_as_sfc()`.",
+					 call. = FALSE)
+			}
+			x = ewkt_to_wkt(x)
+		}
 		ret = st_sfc(CPL_sfc_from_wkt(x))
 		st_crs(ret) = crs
 		ret
@@ -124,3 +146,16 @@ st_as_sfc.character = function(x, crs = NA_integer_, ...) {
 st_as_sfc.factor = function(x, ...) {
 	st_as_sfc(as.character(x), ...)
 }
+
+is_ewkt = function(x) {
+	grepl("^SRID=(\\d+);", x)
+}
+
+get_crs_ewkt = function(x) {
+	as.numeric(gsub("^SRID=(\\d+);.+$", "\\1", x))
+}
+
+ewkt_to_wkt = function(x) {
+	gsub("^SRID=(\\d+);(.+)$", "\\2", x)
+}
+				   
