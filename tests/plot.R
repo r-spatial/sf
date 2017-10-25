@@ -71,7 +71,7 @@ nc %>%
   select(geometry) %>% 
   plot()
 
-nc$f = cut(nc[1], 5)
+nc$f = cut(nc[[1]], 5)
 plot(nc["f"], key.pos = 1)
 
 # test background map plotting:
