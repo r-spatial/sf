@@ -73,6 +73,7 @@ nc %>%
 
 nc$f = cut(nc[[1]], 5)
 plot(nc["f"], key.pos = 1)
+plot(nc[1],   key.pos = 1)
 
 # test background map plotting:
 data(bgmap)
