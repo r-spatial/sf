@@ -8,6 +8,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
+#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -25,7 +26,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
-#' 
+#'
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -84,7 +85,7 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n)) {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, key.pos = if (ncol(x) > 2) NULL else 4) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -110,44 +111,70 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, 
-			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
 	} else { # single map:
 		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
 
 			if (inherits(values, "POSIXt"))
-				values <- as.numeric(values)
-	
+				values = as.numeric(values)
+
 			if (is.character(values))
-				values <- as.factor(values)
-	
+				values = as.factor(values)
+
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
 
 			col = if (is.factor(values))
 				pal(nlevels(values))[as.numeric(values)]
 			else {
+				if (is.character(breaks)) { # compute breaks from values:
+					if (! requireNamespace("classInt", quietly = TRUE))
+						stop("package classInt required, please install it first")
+					breaks = if (! all(is.na(values)) && length(unique(values)) > 1)
+						classInt::classIntervals(values, nbreaks, breaks)$brks
+					else
+						c(values, values) # lowest and highest!
+				}
+				# this is necessary if breaks were specified either as character or as numeric
+				# "pretty" takes nbreaks as advice only:
+				nbreaks = length(breaks) - 1
 				cuts = if (all(is.na(values)))
 						rep(NA_integer_, length(values))
 					else if (diff(range(values, na.rm = TRUE)) == 0)
 						rep(1, length(values))
-					else { # find cuts from breaks:
-						if (is.character(breaks)) { # compute breaks from values:
-							if (! requireNamespace("classInt", quietly = TRUE))
-								stop("package classInt required, please install it first")
-							breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
-							nbreaks = length(breaks) - 1 # "pretty" takes nbreaks as advice only
-						}
+					else
 						cut(as.numeric(values), breaks, include.lowest = TRUE)
-					}
 				pal(nbreaks)[cuts]
 			}
-		} 
+		}
 		if (is.null(col)) # no attribute available
 			plot(st_geometry(x), ...)
-		else
+		else {
+			if (exists("values") && ! is.null(key.pos)) {
+				mar = c(1,1,1,1)
+				if (! is.factor(values))
+					mar[key.pos] = 3
+				if (key.pos %in% c(2,4))
+					mar[1] = 3
+				if (key.pos %in% c(1,3))
+					mar[2] = 3
+				par(mar = mar)
+				si = lcm(2.8) # scale size
+				switch(key.pos,
+					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, si)),  # 1
+					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(si, 1), heights = 1),  # 2
+					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(si, 1)),  # 3
+					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, si), heights = 1)   # 4
+				)
+				if (is.factor(values))
+					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos)
+				else
+					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos)
+			}
 			plot(st_geometry(x), col = col, ...)
+		}
 		if (!isTRUE(dots$add)) { # title?
 			if (missing(main))
 				title(setdiff(names(x), attr(x, "sf_column")))
@@ -562,4 +589,75 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 			labels = parse(text = degreeLabelsNS(at))
 	}
 	axis(side, at = at, labels = labels, ...)
+}
+
+image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
+	at = NULL, ...) {
+	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
+		stop("must have one more break than colour")
+	zlim = range(z, na.rm=TRUE)
+	if (is.null(breaks))
+		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	if (key.pos %in% c(1,3)) {
+		ylim = c(0, 1)
+		xlim = range(breaks)
+	}
+	if (key.pos %in% c(2,4)) {
+		ylim = range(breaks)
+		xlim = c(0, 1)
+	}
+	poly = vector(mode="list", length(col))
+	for (i in seq(poly))
+		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	plot(1, 1, t="n", ylim = ylim, xlim = xlim, axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	for(i in seq(poly)) {
+		if (key.pos %in% c(1,3))
+			polygon(poly[[i]], c(0,0,1,1), col=col[i], border=NA)
+		if (key.pos %in% c(2,4))
+			polygon(c(0,0,1,1), poly[[i]], col=col[i], border=NA)
+	}
+
+	box()
+	if (add.axis)
+		axis(key.pos, at)
+}
+
+image.scale.factor <- function(labels, colors, key.pos = 1, scale.frac = 0.3,
+	scale.n = 15, ...) {
+	frc = scale.frac
+	stre = scale.n
+	plot(1, 1, t="n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	n = length(labels)
+	if (n != length(colors))
+		stop("# of colors must be equal to # of factor levels")
+	lb = (1:n - 0.5)/max(n, stre) # place of the labels
+	poly <- vector(mode="list", length(colors))
+	breaks = (0:n) / max(n, stre)
+	if (n < stre) { # center
+		breaks = breaks + (stre - n)/(2 * stre)
+		lb = lb + (stre - n)/(2 * stre)
+	}
+	for (i in seq(poly))
+		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	for(i in seq(poly)) {
+		if (key.pos %in% c(1,3))
+			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=colors[i], border=NA)
+		if (key.pos %in% c(2,4))
+			polygon(c(0,0,frc,frc), poly[[i]], col=colors[i], border=NA)
+	}
+	b = c(breaks[1], breaks[length(breaks)])
+	if (key.pos %in% c(1,3)) {
+		text_y_loc = (1-frc)/1.05
+		if (key.pos == 3) text_y_loc = text_y_loc - frc
+		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
+		text(y = text_y_loc, x = lb, labels, pos = key.pos)
+	}
+	if (key.pos %in% c(2,4)) {
+		text_x_loc = 1.05 * frc
+		if (key.pos == 2) text_x_loc = text_x_loc + frc
+		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
+		text(x = text_x_loc, y = lb, labels, pos = key.pos)
+	}
 }
