@@ -99,12 +99,19 @@ Warning messages:
 > plot(nc)
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+> plot(nc[1], key.pos = 1)
 > plot(nc, axes = TRUE)
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
 > plot(nc, col="lightgrey") 
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+> plot(st_centroid(nc), add = TRUE, col = 1)
+Warning messages:
+1: In st_centroid.sfc(st_geometry(x), of_largest_polygon = of_largest_polygon) :
+  st_centroid does not give correct centroids for longitude/latitude data
+2: In plot.sf(st_centroid(nc), add = TRUE, col = 1) :
+  ignoring all but the first attribute
 > nc %>% 
 +   select(geometry) %>% 
 +   plot()
@@ -156,4 +163,4 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > 
 > proc.time()
    user  system elapsed 
-  6.240   0.316   6.236 
+  6.636   0.320   6.687 
