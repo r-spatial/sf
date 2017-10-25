@@ -1,5 +1,9 @@
 # version 0.5-5
 
+* add (default) color key to `plot.sf` if single map is plotted; #528 ctb by @hughjonesd
+
+* `st_as_sfc` can now read EWKT; #530
+
 * argument `max.plot` takes its default from `options(sf_max.plot=n)`, if present; #516
 
 * `plot.sf` gets an arguments `pal` to specify a color palette function; #526

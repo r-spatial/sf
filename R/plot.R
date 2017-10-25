@@ -8,6 +8,8 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
+#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.
+#' @param key.size: amount of space reserved for the key (labels)
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
@@ -25,7 +27,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
-#' 
+#'
 #' @examples
 #' # plot linestrings:
 #' l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -84,7 +86,9 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", max.plot = ifelse(is.null(n <- options("sf_max.plot")[[1]]), 9, n)) {
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
+		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
+		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(2.8)) {
 	stopifnot(missing(y))
 	dots = list(...)
 
@@ -110,45 +114,79 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col, 
-			pal = pal, nbreaks = nbreaks, breaks = breaks, ...)))
-	} else { # single map:
-		if (is.null(col) && ncol(x) == 2) { # compute colors from single attribute:
+		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
+	} else { # single map, or dots$add=TRUE:
+		if (ncol(x) > 2)
+			stop("for plotting a single map, select a single attribute")
+		else if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
+			plot(st_geometry(x), ...)
+		else { # generate plot with colors and possibly key
+
+			# store attribute in "values":
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
 
 			if (inherits(values, "POSIXt"))
-				values <- as.numeric(values)
-	
-			if (is.character(values))
-				values <- as.factor(values)
-	
-			if (is.null(pal))
-				pal = function(n) sf.colors(n, categorical = is.factor(values))
+				values = as.numeric(values)
 
-			col = if (is.factor(values))
-				pal(nlevels(values))[as.numeric(values)]
-			else {
-				cuts = if (all(is.na(values)))
-						rep(NA_integer_, length(values))
-					else if (diff(range(values, na.rm = TRUE)) == 0)
-						rep(1, length(values))
-					else { # find cuts from breaks:
+			if (is.character(values))
+				values = as.factor(values)
+
+			if (is.null(col)) { # compute colors from values:
+				if (is.null(pal))
+					pal = function(n) sf.colors(n, categorical = is.factor(values))
+
+				col = if (is.factor(values))
+						pal(nlevels(values))[as.numeric(values)]
+					else {
 						if (is.character(breaks)) { # compute breaks from values:
 							if (! requireNamespace("classInt", quietly = TRUE))
 								stop("package classInt required, please install it first")
-							breaks = classInt::classIntervals(values, nbreaks, breaks)$brks
-							nbreaks = length(breaks) - 1 # "pretty" takes nbreaks as advice only
+							breaks = if (! all(is.na(values)) && length(unique(na.omit(values))) > 1)
+								classInt::classIntervals(values, nbreaks, breaks)$brks
+							else
+								range(values, na.rm = TRUE) # lowest and highest!
 						}
-						cut(as.numeric(values), breaks, include.lowest = TRUE)
+						# this is necessary if breaks were specified either as character or as numeric
+						# "pretty" takes nbreaks as advice only:
+						nbreaks = length(breaks) - 1
+						cuts = if (all(is.na(values)))
+								rep(NA_integer_, length(values))
+							else if (diff(range(values, na.rm = TRUE)) == 0)
+								values * 0 + 1  # preserves NA's
+							else
+								cut(as.numeric(values), breaks, include.lowest = TRUE)
+						pal(nbreaks)[cuts]
 					}
-				pal(nbreaks)[cuts]
+			} else if (! is.null(pal))
+				stop("specify only one of col and pal")
+
+			if (! is.null(key.pos) && !all(is.na(values)) &&
+					(is.factor(values) || length(unique(na.omit(values))) > 1)) { # plot key?
+				mar = c(1,1,1,1)
+				if (! is.factor(values))
+					mar[key.pos] = 3
+				if (key.pos %in% c(2,4))
+					mar[1] = 3
+				if (key.pos %in% c(1,3))
+					mar[2] = 3
+				par(mar = mar)
+				on.exit(layout(1)) # set back
+				switch(key.pos,
+					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, key.size)),  # 1 bottom
+					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(key.size, 1), heights = 1),  # 2 left
+					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(key.size, 1)),  # 3 top
+					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
+				)
+				if (is.factor(values))
+					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos)
+				else
+					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos)
 			}
-		} 
-		if (is.null(col)) # no attribute available
-			plot(st_geometry(x), ...)
-		else
+			# plot the map:
 			plot(st_geometry(x), col = col, ...)
-		if (!isTRUE(dots$add)) { # title?
+		}
+		if (! isTRUE(dots$add)) { # title?
 			if (missing(main))
 				title(setdiff(names(x), attr(x, "sf_column")))
 			else
@@ -508,6 +546,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 		c('#66c2a5','#fc8d62','#8da0cb','#e78ac3','#a6d854','#ffd92f','#e5c494','#b3b3b3')
 		# 12-class Set3:
 		else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
+		# TODO: deal with alpha
 		rep(cb, length.out = n)
 	} else {
 		i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
@@ -562,4 +601,75 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 			labels = parse(text = degreeLabelsNS(at))
 	}
 	axis(side, at = at, labels = labels, ...)
+}
+
+image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
+	at = NULL, ...) {
+	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
+		stop("must have one more break than colour")
+	zlim = range(z, na.rm=TRUE)
+	if (is.null(breaks))
+		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	if (key.pos %in% c(1,3)) {
+		ylim = c(0, 1)
+		xlim = range(breaks)
+	}
+	if (key.pos %in% c(2,4)) {
+		ylim = range(breaks)
+		xlim = c(0, 1)
+	}
+	poly = vector(mode="list", length(col))
+	for (i in seq(poly))
+		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	plot(1, 1, t="n", ylim = ylim, xlim = xlim, axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	for(i in seq(poly)) {
+		if (key.pos %in% c(1,3))
+			polygon(poly[[i]], c(0,0,1,1), col=col[i], border=NA)
+		if (key.pos %in% c(2,4))
+			polygon(c(0,0,1,1), poly[[i]], col=col[i], border=NA)
+	}
+
+	box()
+	if (add.axis)
+		axis(key.pos, at)
+}
+
+image.scale.factor <- function(labels, colors, key.pos = 1, scale.frac = 0.3,
+	scale.n = 15, ...) {
+	frc = scale.frac
+	stre = scale.n
+	plot(1, 1, t="n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	n = length(labels)
+	if (n != length(colors))
+		stop("# of colors must be equal to # of factor levels")
+	lb = (1:n - 0.5)/max(n, stre) # place of the labels
+	poly <- vector(mode="list", length(colors))
+	breaks = (0:n) / max(n, stre)
+	if (n < stre) { # center
+		breaks = breaks + (stre - n)/(2 * stre)
+		lb = lb + (stre - n)/(2 * stre)
+	}
+	for (i in seq(poly))
+		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	for(i in seq(poly)) {
+		if (key.pos %in% c(1,3))
+			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=colors[i], border=NA)
+		if (key.pos %in% c(2,4))
+			polygon(c(0,0,frc,frc), poly[[i]], col=colors[i], border=NA)
+	}
+	b = c(breaks[1], breaks[length(breaks)])
+	if (key.pos %in% c(1,3)) {
+		text_y_loc = (1-frc)/1.05
+		if (key.pos == 3) text_y_loc = text_y_loc - frc
+		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
+		text(y = text_y_loc, x = lb, labels, pos = key.pos)
+	}
+	if (key.pos %in% c(2,4)) {
+		text_x_loc = 1.05 * frc
+		if (key.pos == 2) text_x_loc = text_x_loc + frc
+		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
+		text(x = text_x_loc, y = lb, labels, pos = key.pos)
+	}
 }
