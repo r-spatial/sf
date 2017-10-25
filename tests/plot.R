@@ -64,13 +64,15 @@ plot(st_sfc(mp1, mpo1))
 # color ramp
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 plot(nc)
-plot(nc[1], key.pos = 1)
 plot(nc, axes = TRUE)
 plot(nc, col="lightgrey") 
 plot(st_centroid(nc), add = TRUE, col = 1)
 nc %>% 
   select(geometry) %>% 
   plot()
+
+nc$f = cut(nc[1], 5)
+plot(nc["f"], key.pos = 1)
 
 # test background map plotting:
 data(bgmap)
