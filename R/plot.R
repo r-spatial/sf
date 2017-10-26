@@ -88,7 +88,7 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
-		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(2.8)) {
+		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.7)) {
 	stopifnot(missing(y))
 	breaks.missing = missing(breaks)
 	dots = list(...)
@@ -166,18 +166,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			} else # no key: # TODO: warn?
 				key.pos = NULL
 			
+			mar = c(1, 1, 1.2, 1)
 			if (! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
-				mar = c(1,1,1,1)
-				if (! is.factor(values))
-					mar[key.pos] = 3
-				if (key.pos %in% c(2,4))
-					mar[1] = 3
-				if (key.pos %in% c(1,3))
-					mar[2] = 3
-				par(mar = mar)
-				# on.exit(layout(1)) # set back
 				switch(key.pos,
 					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, key.size)),  # 1 bottom
 					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(key.size, 1), heights = 1),  # 2 left
@@ -185,11 +177,14 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
 				if (is.factor(values))
-					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos)
+					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos, axes = isTRUE(dots$axes))
 				else
-					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos)
+					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
 			# plot the map:
+			if (isTRUE(dots$axes))
+				mar[1:2] = 2.1
+			par(mar = mar)
 			plot(st_geometry(x), col = col, ...)
 		}
 		if (! isTRUE(dots$add)) { # title?
@@ -610,7 +605,7 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 }
 
 image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
-	at = NULL, ...) {
+	at = NULL, ..., axes = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm=TRUE)
@@ -619,21 +614,26 @@ image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
 		xlim = range(breaks)
+		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 	}
 	if (key.pos %in% c(2,4)) {
 		ylim = range(breaks)
 		xlim = c(0, 1)
+		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 	}
+	mar[key.pos] = 2.1
+	par(mar = mar)
+
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
-	plot(1, 1, t="n", ylim = ylim, xlim = xlim, axes = FALSE,
+	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
-	for(i in seq(poly)) {
+	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
-			polygon(poly[[i]], c(0,0,1,1), col=col[i], border=NA)
+			polygon(poly[[i]], c(0, 0, 1, 1), col=col[i], border=NA)
 		if (key.pos %in% c(2,4))
-			polygon(c(0,0,1,1), poly[[i]], col=col[i], border=NA)
+			polygon(c(0, 0, 1, 1), poly[[i]], col=col[i], border=NA)
 	}
 
 	box()
@@ -642,10 +642,18 @@ image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
 }
 
 image.scale.factor <- function(labels, colors, key.pos = 1, scale.frac = 0.3,
-	scale.n = 15, ...) {
+	scale.n = 15, axes = FALSE, ...) {
 	frc = scale.frac
 	stre = scale.n
-	plot(1, 1, t="n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
+	if (key.pos %in% c(1,3)) {
+		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
+	}
+	if (key.pos %in% c(2,4)) {
+		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
+	}
+	mar[key.pos] = 2.1
+	par(mar = mar)
+	plot(1, 1, t = "n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
 	n = length(labels)
 	if (n != length(colors))

@@ -32,7 +32,7 @@
 \method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = if (ncol(x) > 2) NULL else
-  4, key.size = lcm(2.8))
+  4, key.size = lcm(1.7))
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)

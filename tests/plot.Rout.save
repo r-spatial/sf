@@ -99,7 +99,6 @@ Warning messages:
 > plot(nc)
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
-> plot(nc[1], key.pos = 1)
 > plot(nc, axes = TRUE)
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
@@ -115,6 +114,10 @@ Warning messages:
 > nc %>% 
 +   select(geometry) %>% 
 +   plot()
+> 
+> nc$f = cut(nc[[1]], 5)
+> plot(nc["f"], key.pos = 1)
+> plot(nc[1],   key.pos = 1)
 > 
 > # test background map plotting:
 > data(bgmap)
@@ -133,7 +136,7 @@ Warning messages:
 > par(mar = c(0,0,1,0))
 > plot(st_transform(nc, merc), bgMap = g)
 Warning message:
-plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 > 
 > m = st_make_grid()
 > m = st_segmentize(m, 2e5)
@@ -145,22 +148,22 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > nc[[10]] = 1
 > plot(nc, pal = rainbow, nbreaks = 3)
 Warning messages:
-1: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+1: plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 2: In min(x, na.rm = na.rm) :
   no non-missing arguments to min; returning Inf
 3: In max(x, na.rm = na.rm) :
   no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
 Warning messages:
-1: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+1: plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 2: In min(x, na.rm = na.rm) :
   no non-missing arguments to min; returning Inf
 3: In max(x, na.rm = na.rm) :
   no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = (0:10)/3)
 Warning message:
-plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
+plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 > 
 > proc.time()
    user  system elapsed 
-  6.636   0.320   6.687 
+  6.232   0.316   6.242 
