@@ -88,7 +88,7 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
-		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.7)) {
+		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.8)) {
 	stopifnot(missing(y))
 	breaks.missing = missing(breaks)
 	dots = list(...)
@@ -166,7 +166,6 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			} else # no key: # TODO: warn?
 				key.pos = NULL
 			
-			mar = c(1, 1, 1.2, 1)
 			if (! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
@@ -177,11 +176,13 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
 				if (is.factor(values))
-					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos, axes = isTRUE(dots$axes))
+					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos, 
+						axes = isTRUE(dots$axes), key.size = key.size)
 				else
 					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
 			# plot the map:
+			mar = c(1, 1, 1.2, 1)
 			if (isTRUE(dots$axes))
 				mar[1:2] = 2.1
 			par(mar = mar)
@@ -604,7 +605,7 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
 	axis(side, at = at, labels = labels, ...)
 }
 
-image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
+image.scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 	at = NULL, ..., axes = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
@@ -641,49 +642,42 @@ image.scale = function(z, col, breaks = NULL, key.pos = 1, add.axis = TRUE,
 		axis(key.pos, at)
 }
 
-image.scale.factor <- function(labels, colors, key.pos = 1, scale.frac = 0.3,
-	scale.n = 15, axes = FALSE, ...) {
-	frc = scale.frac
-	stre = scale.n
+image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+	at = NULL, ..., axes = FALSE, key.size) {
+
+	n = length(z)
+	ksz = as.numeric(gsub(" cm", "", key.size)) * 2
+	breaks = (0:n) + 0.5
 	if (key.pos %in% c(1,3)) {
+		ylim = c(0, 1)
+		xlim = range(breaks)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
-	}
-	if (key.pos %in% c(2,4)) {
+		mar[key.pos] = 2.1
+	} else {
+		ylim = range(breaks)
+		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
+		#mar[key.pos] = 2.1
+		mar[key.pos] = ksz - 1.3
 	}
-	mar[key.pos] = 2.1
 	par(mar = mar)
-	plot(1, 1, t = "n", ylim = c(0,1), xlim = c(0,1), axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
-	n = length(labels)
-	if (n != length(colors))
-		stop("# of colors must be equal to # of factor levels")
-	lb = (1:n - 0.5)/max(n, stre) # place of the labels
-	poly <- vector(mode="list", length(colors))
-	breaks = (0:n) / max(n, stre)
-	if (n < stre) { # center
-		breaks = breaks + (stre - n)/(2 * stre)
-		lb = lb + (stre - n)/(2 * stre)
-	}
+
+	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
-		poly[[i]] <- c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
-	for(i in seq(poly)) {
+		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
-			polygon(poly[[i]], c(1,1,1-frc,1-frc), col=colors[i], border=NA)
+			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
 		if (key.pos %in% c(2,4))
-			polygon(c(0,0,frc,frc), poly[[i]], col=colors[i], border=NA)
+			polygon(c(0, 0, 1, 1), poly[[i]], col = col[i], border = NA)
 	}
-	b = c(breaks[1], breaks[length(breaks)])
-	if (key.pos %in% c(1,3)) {
-		text_y_loc = (1-frc)/1.05
-		if (key.pos == 3) text_y_loc = text_y_loc - frc
-		lines(y = c(1,1-frc,1-frc,1,1), x = c(b[1],b[1],b[2],b[2],b[1]))
-		text(y = text_y_loc, x = lb, labels, pos = key.pos)
-	}
-	if (key.pos %in% c(2,4)) {
-		text_x_loc = 1.05 * frc
-		if (key.pos == 2) text_x_loc = text_x_loc + frc
-		lines(x = c(0,frc,frc,0,0), y = c(b[1],b[1],b[2],b[2],b[1]))
-		text(x = text_x_loc, y = lb, labels, pos = key.pos)
+
+	box()
+	if (add.axis) {
+		opar = par(las = 1)
+		axis(key.pos, at = 1:n, labels = z)
+		par(opar)
 	}
 }
