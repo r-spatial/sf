@@ -1,6 +1,4 @@
 #!/bin/sh
-
-# rm -fr man R/Rcpp*R src/Rcpp*cpp 
 rm -fr src/Makevars config.log config.status autom4te.cache src/*.o src/*.so
 rm -fr vignette/nc*
 rm -fr proj_conf_test*
