@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* add vignette 5: plotting sf objects
+
 * add (default) color key to `plot.sf` if single map is plotted; #528 ctb by @hughjonesd
 
 * `st_as_sfc` can now read EWKT; #530
