@@ -141,9 +141,13 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				stop("specify only one of col and pal")
 
 			if (is.null(col)) { # compute colors from values:
-				col = if (is.factor(values))
-						pal(nlevels(values))[as.numeric(values)]
-					else {
+				col = if (is.factor(values)) {
+						colors = if (is.function(pal))
+								pal(nlevels(values))
+							else
+								pal
+						colors[as.numeric(values)]
+					} else {
 						if (is.character(breaks)) { # compute breaks from values:
 							if (! requireNamespace("classInt", quietly = TRUE))
 								stop("package classInt required, please install it first")
@@ -161,10 +165,20 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 								values * 0 + 1  # preserves NA's
 							else
 								cut(as.numeric(values), breaks, include.lowest = TRUE)
-						pal(nbreaks)[cuts]
+						colors = if (is.function(pal))
+								pal(nbreaks)
+							else
+								pal
+						colors[cuts]
 					}
-			} else # no key: # TODO: warn?
-				key.pos = NULL
+			} else { 
+				if (is.factor(values)) {
+					which.first = function(x) which(x)[1]
+					fnum = as.numeric(values)
+					colors = col[ sapply(unique(fnum), function(i) which.first(i == fnum)) ]
+				} else # no key:
+					key.pos = NULL
+			}
 			
 			if (! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
@@ -175,11 +189,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(key.size, 1)),  # 3 top
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
-				if (is.factor(values))
-					image.scale.factor(levels(values), pal(nlevels(values)), key.pos = key.pos, 
+				if (is.factor(values)) {
+					image.scale.factor(levels(values), colors, key.pos = key.pos, 
 						axes = isTRUE(dots$axes), key.size = key.size)
-				else
-					image.scale(values, pal(nbreaks), breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
+				} else
+					image.scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
