@@ -166,7 +166,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	st_agr(df) = "constant"
 
 	if (! missing(x)) # cut out box:
-		df = st_intersection(df, st_polygonize(box[1]))
+		df = suppressMessages(st_intersection(df, st_polygonize(box[1])))
 
 	graticule_attributes(st_cast(df, "MULTILINESTRING"))
 }
