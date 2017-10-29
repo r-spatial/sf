@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create simple feature collection object of class sfc from list — sfc • sf</title>
+<title>Create simple feature geometry list column — sfc • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -79,6 +79,9 @@
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
     </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -104,11 +107,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create simple feature collection object of class sfc from list</h1>
+    <h1>Create simple feature geometry list column</h1>
     </div>
 
     
-    <p>Create simple feature list column, set class, and add coordinate reference system</p>
+    <p>Create simple feature geometry list column, set class, and add coordinate reference system and precision</p>
     
 
     <pre class="usage"><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
@@ -136,8 +139,8 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A simple feature collection object is a list of class
-<code>c("stc_TYPE", "sfc")</code> which typically contains objects of identical type; 
+    <p>A simple feature geometry list-column is a list of class
+<code>c("stc_TYPE", "sfc")</code> which most often contains objects of identical type; 
 in case of a mix of types or an empty set, <code>TYPE</code> is set to the 
 superclass <code>GEOMETRY</code>.</p>
     

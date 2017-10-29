@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -113,7 +116,10 @@
     
 
     <pre class="usage"><span class='co'># S3 method for sf</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.plot</span> <span class='kw'>=</span> <span class='fl'>9</span>)
+<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>main</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nbreaks</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='st'>"pretty"</span>, <span class='kw'>max.plot</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>is.null</span>(<span class='no'>n</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>options</span>(<span class='st'>"sf_max.plot"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]])) <span class='fl'>9</span> <span class='kw'>else</span> <span class='no'>n</span>, <span class='kw'>key.pos</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'>ncol</span>(<span class='no'>x</span>) <span class='kw'>&gt;</span> <span class='fl'>2</span>) <span class='kw'>NULL</span> <span class='kw'>else</span>
+  <span class='fl'>4</span>, <span class='kw'>key.size</span> <span class='kw'>=</span> <span class='fu'>lcm</span>(<span class='fl'>1.8</span>))
 
 <span class='co'># S3 method for sfc_POINT</span>
 <span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -158,7 +164,7 @@
   <span class='kw'>bgMap</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>expandBB</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='kw'>graticule</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>,
   <span class='kw'>col_graticule</span> <span class='kw'>=</span> <span class='st'>"grey"</span>)
 
-<span class='fu'>sf.colors</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>xc</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='fu'>sf.colors</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -177,16 +183,36 @@
       <td><p>further specifications, see plot_sf and plot</p></td>
     </tr>
     <tr>
-      <th>ncol</th>
-      <td><p>integer; default number of colors to be used</p></td>
-    </tr>
-    <tr>
       <th>col</th>
       <td><p>color</p></td>
     </tr>
     <tr>
+      <th>main</th>
+      <td><p>title for plot (<code>NULL</code> to remove)</p></td>
+    </tr>
+    <tr>
+      <th>pal</th>
+      <td><p>palette function, similar to <a href='http://www.rdocumentation.org/packages/grDevices/topics/palettes'>rainbow</a>; if omitted, sf.colors is used</p></td>
+    </tr>
+    <tr>
+      <th>nbreaks</th>
+      <td><p>number of colors breaks (ignored for <code>factor</code> or <code>character</code> variables)</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>either a numeric vector with the actual breaks, or a name of a method accepted by the <code>style</code> argument of <a href='http://www.rdocumentation.org/packages/classInt/topics/classIntervals'>classIntervals</a></p></td>
+    </tr>
+    <tr>
       <th>max.plot</th>
-      <td><p>integer; lower boundary to maximum number of attributes to plot (defaults to 9)</p></td>
+      <td><p>integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option <code>sf_max.plot</code>, e.g. <code>options(sf_max.plot=2)</code></p></td>
+    </tr>
+    <tr>
+      <th>key.pos</th>
+      <td><p>integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to <code>NULL</code> for no key. Currently ignored if multiple columns are plotted.</p></td>
+    </tr>
+    <tr>
+      <th>key.size</th>
+      <td><p>amount of space reserved for the key (labels)</p></td>
     </tr>
     <tr>
       <th>pch</th>
@@ -262,7 +288,7 @@
     </tr>
     <tr>
       <th>bgMap</th>
-      <td><p>object of class <code>ggmap</code>, or returned by function <code><a href='http://www.rdocumentation.org/packages/RgoogleMaps/topics/GetMap'>RgoogleMaps::GetMap</a></code></p></td>
+      <td><p>object of class <code>ggmap</code>, or returned by function <code>RgoogleMaps::GetMap</code></p></td>
     </tr>
     <tr>
       <th>expandBB</th>
@@ -283,10 +309,6 @@ or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
       <td><p>integer; number of colors</p></td>
     </tr>
     <tr>
-      <th>xc</th>
-      <td><p>factor or numeric vector, for which colors need to be returned</p></td>
-    </tr>
-    <tr>
       <th>cutoff.tails</th>
       <td><p>numeric, in [0,0.5] start and end values</p></td>
     </tr>
@@ -296,7 +318,7 @@ or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
     </tr>
     <tr>
       <th>categorical</th>
-      <td><p>logical; should a categorical color ramp be returned? if <code>x</code> is a factor, yes.</p></td>
+      <td><p>logical; do we want colors for a categorical variable? (see details)</p></td>
     </tr>
     </table>
     
@@ -314,8 +336,9 @@ is called by all <code>plot</code> methods before anything is drawn.</p>
 projected (coordinates are long/lat), the aspect is by default set to
 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
 (the mean of <code>ylim</code>, which defaults to the y range of bounding box). This
-implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Equirectangular projection</a>.
-    <code>sf.colors</code> was taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults; for categorical, colors were taken from <a href='http://www.colorbrewer2.org/'>http://www.colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
+implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Equirectangular projection</a>.</p>
+<p>non-categorical colors from <code>sf.colors</code> were taken from <a href='http://www.rdocumentation.org/packages/sp/topics/bpy.colors'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults
+If categorical is <code>TRUE</code>, default colors are from <a href='http://www.colorbrewer2.org/'>http://www.colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -341,14 +364,15 @@ implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Eq
 <span class='no'>mp1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>matrix</span>(<span class='fl'>1</span>:<span class='fl'>4</span>,<span class='fl'>2</span>))
 <span class='no'>mp2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'>matrix</span>(<span class='fl'>5</span>:<span class='fl'>8</span>,<span class='fl'>2</span>))
 <span class='no'>mp</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mp1</span>, <span class='no'>mp2</span>))
-<span class='fu'>plot</span>(<span class='no'>mp</span>)</div><div class='img'><img src='plot-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>plot</span>(<span class='no'>mp</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'b'</span>)</div><div class='img'><img src='plot-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># polygon:</span>
+<span class='fu'>plot</span>(<span class='no'>mp</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: n greater than number of different finite values\nn reset to number of different finite values</span></div><div class='output co'>#&gt; <span class='warning'>Warning: n same as number of different finite values\neach different finite value is a separate class</span></div><div class='img'><img src='plot-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>plot</span>(<span class='no'>mp</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>bg</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='no'>mp</span>$<span class='no'>a</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>'b'</span>)
+<span class='co'># polygon:</span>
 <span class='no'>outer</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>hole1</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>hole2</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='no'>pl1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>))
 <span class='no'>pl2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>outer</span>+<span class='fl'>10</span>, <span class='no'>hole1</span>+<span class='fl'>10</span>, <span class='no'>hole2</span>+<span class='fl'>10</span>))
 <span class='no'>po</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>3</span>, <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pl1</span>,<span class='no'>pl2</span>))
-<span class='fu'>plot</span>(<span class='no'>po</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>po</span>$<span class='no'>a</span>), <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='plot-10.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># multipolygon</span>
+<span class='fu'>plot</span>(<span class='no'>po</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>po</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>po</span>$<span class='no'>a</span>), <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='plot-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># multipolygon</span>
 <span class='no'>r10</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>10</span>),<span class='kw'>each</span><span class='kw'>=</span><span class='fl'>5</span>),<span class='fl'>5</span>)
 <span class='no'>pl1</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>)
 <span class='no'>pl2</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='no'>outer</span>+<span class='fl'>10</span>, <span class='no'>hole1</span>+<span class='fl'>10</span>, <span class='no'>hole2</span>+<span class='fl'>10</span>)
@@ -356,11 +380,12 @@ implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Eq
 <span class='no'>mpo1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span>(<span class='fu'>list</span>(<span class='no'>pl1</span>,<span class='no'>pl2</span>))
 <span class='no'>mpo2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span>(<span class='fu'>list</span>(<span class='no'>pl3</span>))
 <span class='no'>mpo</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>b</span><span class='kw'>=</span><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>mpo1</span>,<span class='no'>mpo2</span>))
-<span class='fu'>plot</span>(<span class='no'>mpo</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>mpo</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>mpo</span>$<span class='no'>a</span>), <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='plot-11.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># geometrycollection:</span>
+<span class='fu'>plot</span>(<span class='no'>mpo</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>mpo</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>mpo</span>$<span class='no'>a</span>), <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='co'># geometrycollection:</span>
 <span class='no'>gc1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo1</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>21</span>,<span class='fl'>21</span>)), <span class='no'>l1</span> * <span class='fl'>2</span> + <span class='fl'>21</span>))
 <span class='no'>gc2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span>(<span class='fu'>list</span>(<span class='no'>mpo2</span>, <span class='no'>l2</span> - <span class='fl'>2</span>, <span class='no'>l3</span> - <span class='fl'>2</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))))
 <span class='no'>gc</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>gc1</span>,<span class='no'>gc2</span>))
-<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='plot-12.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
+<span class='fu'>plot</span>(<span class='no'>gc</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gc</span>$<span class='no'>a</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='fu'>rev</span>(<span class='no'>gc</span>$<span class='no'>a</span>) + <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='plot-10.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
 #&gt;  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

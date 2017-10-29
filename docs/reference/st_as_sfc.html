@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -133,19 +136,20 @@
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for SpatialPoints</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='co'># S3 method for SpatialPixels</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='co'># S3 method for SpatialMultiPoints</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='co'># S3 method for SpatialLines</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for SpatialPolygons</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for map</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
@@ -163,7 +167,8 @@
     </tr>
     <tr>
       <th>crs</th>
-      <td><p>integer or character; coordinate reference system for the geometry, see st_crs</p></td>
+      <td><p>integer or character; coordinate reference system for the
+geometry, see <code>st_crs()</code></p></td>
     </tr>
     <tr>
       <th>EWKB</th>
@@ -178,6 +183,10 @@
       <td><p>logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (<code>.Platform$endian</code>).</p></td>
     </tr>
     <tr>
+      <th>precision</th>
+      <td><p>precision value; see st_as_binary</p></td>
+    </tr>
+    <tr>
       <th>forceMulti</th>
       <td><p>logical; if <code>TRUE</code>, force coercion into <code>MULTIPOLYGON</code> or <code>MULTILINE</code> objects, else autodetect</p></td>
     </tr>
@@ -186,7 +195,10 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>When converting from WKB, the object <code>x</code> is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.</p>
-<p>If <code>x</code> is a character vector, it should be a vector containing the well-known-text representations of a single geometry for each vector element.</p>
+<p>If <code>x</code> is a character vector, it should be a vector containing
+the <a href='http://www.opengeospatial.org/standards/wkt-crs'>well-known-text</a> or
+<a href='http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>Postgis EWKT</a>
+representations of a single geometry for each vector element.</p>
 <p>If <code>x</code> is a <code>factor</code>, it is converted to <code>character</code>.</p>
     
 
@@ -197,13 +209,18 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181072 ymin: 333611 xmax: 181072 ymax: 333611
 #&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='no'>wkb</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>list</span>(<span class='st'>"0x01010000204071000000000000801A064100000000AC5C1441"</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"WKB"</span>)
+#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='no'>wkb</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>list</span>(<span class='st'>"0x01010000204071000000000000801A064100000000AC5C1441"</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"WKB"</span>)
 <span class='fu'>st_as_sfc</span>(<span class='no'>wkb</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181072 ymin: 333611 xmax: 181072 ymax: 333611
 #&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div></pre>
+#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='fu'>st_as_sfc</span>(<span class='st'>"SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)"</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 1663106 ymin: -105415 xmax: 1664320 ymax: -104617
+#&gt; epsg (SRID):    3978
+#&gt; proj4string:    +proj=lcc +lat_1=49 +lat_2=77 +lat_0=49 +lon_0=-95 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>LINESTRING (1663106 -105415, 1664320 -104617)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

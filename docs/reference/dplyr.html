@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -108,7 +111,7 @@
     </div>
 
     
-    <p>Dplyr verb methods for sf objects. Geometries are sticky, use as.data.frame to let codedplyr's own methods drop them.</p>
+    <p>Dplyr verb methods for sf objects. Geometries are sticky, use as.data.frame to let <code>dplyr</code>'s own methods drop them.</p>
     
 
     <pre class="usage"><span class='fu'>filter.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
@@ -297,7 +300,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

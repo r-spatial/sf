@@ -32,7 +32,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -111,7 +114,7 @@
 <a href="#using-st_read" class="anchor"></a>Using st_read</h3>
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
 fname &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 fname
 ## [1] "/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp"
@@ -187,150 +190,150 @@ Available layers:
 <p>The output driver is guessed from the datasource name, either from its extension (<code>.shp</code>: <code>ESRI Shapefile</code>), or its prefix (<code>PG:</code>: <code>PostgreSQL</code>). The list of extensions with corresponding driver (short driver name) is:</p>
 <table class="table">
 <thead><tr class="header">
-<th align="left">extension</th>
-<th align="left">driver short name</th>
+<th>extension</th>
+<th>driver short name</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>bna</code></td>
-<td align="left"><code>BNA</code></td>
+<td><code>bna</code></td>
+<td><code>BNA</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>csv</code></td>
-<td align="left"><code>CSV</code></td>
+<td><code>csv</code></td>
+<td><code>CSV</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>e00</code></td>
-<td align="left"><code>AVCE00</code></td>
+<td><code>e00</code></td>
+<td><code>AVCE00</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>gdb</code></td>
-<td align="left"><code>FileGDB</code></td>
+<td><code>gdb</code></td>
+<td><code>FileGDB</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>geojson</code></td>
-<td align="left"><code>GeoJSON</code></td>
+<td><code>geojson</code></td>
+<td><code>GeoJSON</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>gml</code></td>
-<td align="left"><code>GML</code></td>
+<td><code>gml</code></td>
+<td><code>GML</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>gmt</code></td>
-<td align="left"><code>GMT</code></td>
+<td><code>gmt</code></td>
+<td><code>GMT</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>gpkg</code></td>
-<td align="left"><code>GPKG</code></td>
+<td><code>gpkg</code></td>
+<td><code>GPKG</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>gps</code></td>
-<td align="left"><code>GPSBabel</code></td>
+<td><code>gps</code></td>
+<td><code>GPSBabel</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>gtm</code></td>
-<td align="left"><code>GPSTrackMaker</code></td>
+<td><code>gtm</code></td>
+<td><code>GPSTrackMaker</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>gxt</code></td>
-<td align="left"><code>Geoconcept</code></td>
+<td><code>gxt</code></td>
+<td><code>Geoconcept</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>jml</code></td>
-<td align="left"><code>JML</code></td>
+<td><code>jml</code></td>
+<td><code>JML</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>map</code></td>
-<td align="left"><code>WAsP</code></td>
+<td><code>map</code></td>
+<td><code>WAsP</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>mdb</code></td>
-<td align="left"><code>Geomedia</code></td>
+<td><code>mdb</code></td>
+<td><code>Geomedia</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>nc</code></td>
-<td align="left"><code>netCDF</code></td>
+<td><code>nc</code></td>
+<td><code>netCDF</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>ods</code></td>
-<td align="left"><code>ODS</code></td>
+<td><code>ods</code></td>
+<td><code>ODS</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>osm</code></td>
-<td align="left"><code>OSM</code></td>
+<td><code>osm</code></td>
+<td><code>OSM</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>pbf</code></td>
-<td align="left"><code>OSM</code></td>
+<td><code>pbf</code></td>
+<td><code>OSM</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>shp</code></td>
-<td align="left"><code>ESRI Shapefile</code></td>
+<td><code>shp</code></td>
+<td><code>ESRI Shapefile</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>sqlite</code></td>
-<td align="left"><code>SQLite</code></td>
+<td><code>sqlite</code></td>
+<td><code>SQLite</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>vdv</code></td>
-<td align="left"><code>VDV</code></td>
+<td><code>vdv</code></td>
+<td><code>VDV</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>xls</code></td>
-<td align="left"><code>xls</code></td>
+<td><code>xls</code></td>
+<td><code>xls</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>xlsx</code></td>
-<td align="left"><code>XLSX</code></td>
+<td><code>xlsx</code></td>
+<td><code>XLSX</code></td>
 </tr>
 </tbody>
 </table>
 <p>The list with prefixes is:</p>
 <table class="table">
 <thead><tr class="header">
-<th align="left">prefix</th>
-<th align="left">driver short name</th>
+<th>prefix</th>
+<th>driver short name</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>couchdb:</code></td>
-<td align="left"><code>CouchDB</code></td>
+<td><code>couchdb:</code></td>
+<td><code>CouchDB</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>DB2ODBC:</code></td>
-<td align="left"><code>DB2ODBC</code></td>
+<td><code>DB2ODBC:</code></td>
+<td><code>DB2ODBC</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>DODS:</code></td>
-<td align="left"><code>DODS</code></td>
+<td><code>DODS:</code></td>
+<td><code>DODS</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>GFT:</code></td>
-<td align="left"><code>GFT</code></td>
+<td><code>GFT:</code></td>
+<td><code>GFT</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>MSSQL:</code></td>
-<td align="left"><code>MSSQLSpatial</code></td>
+<td><code>MSSQL:</code></td>
+<td><code>MSSQLSpatial</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>MySQL:</code></td>
-<td align="left"><code>MySQL</code></td>
+<td><code>MySQL:</code></td>
+<td><code>MySQL</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>OCI:</code></td>
-<td align="left"><code>OCI</code></td>
+<td><code>OCI:</code></td>
+<td><code>OCI</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>ODBC:</code></td>
-<td align="left"><code>ODBC</code></td>
+<td><code>ODBC:</code></td>
+<td><code>ODBC</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>PG:</code></td>
-<td align="left"><code>PostgreSQL</code></td>
+<td><code>PG:</code></td>
+<td><code>PostgreSQL</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>SDE:</code></td>
-<td align="left"><code>SDE</code></td>
+<td><code>SDE:</code></td>
+<td><code>SDE</code></td>
 </tr>
 </tbody>
 </table>
@@ -357,9 +360,9 @@ meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_re
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)
-<span class="kw"><a href="../reference/st_write.html">st_write_db</a></span>(conn, meuse, <span class="dt">dropTable =</span> <span class="ot">TRUE</span>)
+<span class="kw"><a href="../reference/st_write.html">st_write_db</a></span>(conn, meuse, <span class="dt">drop =</span> <span class="ot">TRUE</span>)
 <span class="kw">dbDisconnect</span>(conn)</code></pre></div>
-<p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>dropTable</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
+<p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>drop</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
 </div>
 <div id="conversion-to-other-formats-wkt-wkb-sp" class="section level2">
 <h2 class="hasAnchor">
@@ -419,8 +422,9 @@ x
 <a href="#conversion-to-and-from-sp" class="anchor"></a>Conversion to and from sp</h3>
 <p>Spatial objects as maintained by package <code>sp</code> can be converted into simple feature objects or geometries by <code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(st_as_sf)
-## [1] st_as_sf.data.frame* st_as_sf.map*        st_as_sf.sf*        
-## [4] st_as_sf.Spatial*   
+## [1] st_as_sf.data.frame* st_as_sf.lpp*        st_as_sf.map*       
+## [4] st_as_sf.ppp*        st_as_sf.psp*        st_as_sf.sf*        
+## [7] st_as_sf.Spatial*   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
 ##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              
@@ -438,7 +442,9 @@ m.sf =<span class="st"> </span><span class="kw">st_as_sf</span>(meuse)
 opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
 <span class="kw">plot</span>(m.sf)
 ## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to
-## plot all</code></pre></div>
+## plot all
+## Warning in classInt::classIntervals(values, nbreaks, breaks): var has
+## missing values, omitted in finding classes</code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Conversion of simple feature objects of class <code>sf</code> or <code>sfc</code> into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)

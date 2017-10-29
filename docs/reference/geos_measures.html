@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -140,7 +143,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/units'>units</a>.</p>
+    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a>.</p>
 <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
 <p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
 <p>If <code>by_element</code> is <code>FALSE</code> a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
@@ -155,7 +158,11 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dist_vincenty</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>f</span>) <span class='kw pkg'>geosphere</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/geosphere/topics/distVincentyEllipsoid'>distVincentyEllipsoid</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>a</span> * (<span class='fl'>1</span>-<span class='no'>f</span>), <span class='no'>f</span>)
+    <pre class="examples"><div class='input'><span class='no'>b0</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))))
+<span class='no'>b1</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fl'>2</span>
+<span class='no'>b2</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fu'>c</span>(-<span class='fl'>0.2</span>, <span class='fl'>2</span>)
+<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b0</span>, <span class='no'>b1</span>, <span class='no'>b2</span>)
+<span class='fu'>st_area</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='no'>dist_vincenty</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>f</span>) <span class='kw pkg'>geosphere</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/geosphere/topics/distVincentyEllipsoid'>distVincentyEllipsoid</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>a</span> * (<span class='fl'>1</span>-<span class='no'>f</span>), <span class='no'>f</span>)
 <span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'>c</span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'><span class='fu'>st_length</span>(<span class='no'>line</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='no'>dist_vincenty</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'><span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>2</span>)))
 <span class='fu'>st_distance</span>(<span class='no'>p</span>, <span class='no'>p</span>)</div><div class='output co'>#&gt;      [,1] [,2] [,3]

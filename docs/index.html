@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="/index.html">
+  <a href="index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -55,6 +55,9 @@
     </li>
     <li>
       <a href="articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -123,7 +126,7 @@
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
-<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
+<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>. (This does not include <code>liblwgeom</code>; it will need to be installed separately for functions that require it, such as <code>st_make_valid</code>, to work.)</p>
 </div>
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
@@ -131,8 +134,8 @@
 <p>One way to install the dependencies is using <code>sudo</code>; the other is using homebrew. For the latter, see e.g. <a href="http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/">here</a>. Homebrew commands might be:</p>
 <pre><code>brew unlink gdal
 brew tap osgeo/osgeo4mac &amp;&amp; brew tap --repair
-brew install proj 
-brew install geos 
+brew install proj
+brew install geos
 brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
@@ -144,17 +147,26 @@ brew link --force gdal2</code></pre>
 <h3 class="hasAnchor">
 <a href="#linux" class="anchor"></a>Linux</h3>
 <p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required; <code>liblwgeom</code> is optional.</p>
-<p>To install the dependencies on Ubuntu, either:</p>
-<ul>
-<li>
-<p>add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
-<pre class="sh"><code>sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre>
-or</li>
-<li><p>install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints</p></li>
-</ul>
+<div id="ubuntu" class="section level4">
+<h4 class="hasAnchor">
+<a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
+<p>To install the dependencies on Ubuntu, either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+<span class="fu">sudo</span> apt-get update
+<span class="fu">sudo</span> apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre></div>
+<p>or install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
+</div>
+<div id="fedora" class="section level4">
+<h4 class="hasAnchor">
+<a href="#fedora" class="anchor"></a>Fedora</h4>
+<p>The following command installs all required dependencies:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel</code></pre></div>
+</div>
+<div id="other" class="section level4">
+<h4 class="hasAnchor">
+<a href="#other" class="anchor"></a>Other</h4>
 <p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker">here</a>.</p>
+</div>
 </div>
 <div id="contributing" class="section level3">
 <h3 class="hasAnchor">
@@ -189,7 +201,8 @@ or</li>
 <p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a> | <a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Edzer Pebesma <br><small class="roles"> Author, maintainer </small> </li>
+<li>Edzer Pebesma <br><small class="roles"> Author, maintainer </small> <br><small>(0000-0001-8049-7069)</small>
+</li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 <h2>Dev status</h2>

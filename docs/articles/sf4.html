@@ -32,7 +32,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -101,7 +104,7 @@
 </ul>
 <p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identical to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -168,6 +171,8 @@ nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyver
 ## [1] "numeric"</code></pre></div>
 <p>but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc$NAME ==<span class="st"> "Ashe"</span>,]
+<span class="kw">class</span>(Ashe)
+## [1] "sf"         "data.frame"
 nc[Ashe,]
 ## Simple feature collection with 4 features and 14 fields
 ## geometry type:  MULTIPOLYGON
@@ -185,7 +190,7 @@ nc[Ashe,]
 ## 2      0      10   542     3      12 MULTIPOLYGON (((1340554.528...
 ## 18     4     200  3725     7     222 MULTIPOLYGON (((1402676.883...
 ## 19     1      17  1775     1      33 MULTIPOLYGON (((1171158.428...</code></pre></div>
-<p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection e.g. by</p>
+<p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection by using predicate <code>st_touches</code> (overlapping features don’t touch):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc$NAME ==<span class="st"> "Ashe"</span>,]
 nc[Ashe, op =<span class="st"> </span>st_touches]
 ## Simple feature collection with 3 features and 14 fields

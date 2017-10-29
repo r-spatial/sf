@@ -18,10 +18,10 @@ simple features. It tries to be complete about the plot methods
 `sf` provides, and give examples and pointers to options to plot
 simple feature objects with other packages (mapview, tmap, ggplot2).
 
-# plot methods for `sf` and `sfc` objects
+# Plot methods for `sf` and `sfc` objects
 
 
-## geometry only: `sfc`
+## Geometry only: `sfc`
 
 Geometry list-columns (objects of class `sfc`, obtained by the `st_geometry` method) only show the geometry:
 ```{r}
@@ -42,7 +42,7 @@ and legends, titles and so on can be added afterwards. `border=NA` removes the p
 
 As can be seen, the axes plotted are sensitive to the CRS, and in case of longitude/latitude coordinates, degree symbols and orientation are added if `axes = TRUE`.
 
-## geometry with attributes: `sf`
+## Geometry with attributes: `sf`
 The default plot of an `sf` object is a multi-plot of all attributes, up to a reasonable maximum:
 ```{r}
 plot(nc)
@@ -60,7 +60,7 @@ options(sf_max.plot=1)
 plot(nc)
 ```
 
-# color keys
+# Color keys
 In case a single attribute is selected, by default a color key is given on the right side, 
 ```{r}
 plot(nc["AREA"])
@@ -83,7 +83,7 @@ nc$f = cut(nc$AREA, 10)
 plot(nc["f"], axes = TRUE, pal = sf.colors(10), key.size = lcm(4.5))
 ```
 
-# class intervals
+# Class intervals
 
 color breaks (class intervals) can be controlled by plot arguments `breaks` and `nbreaks`. `nbreaks` specifies the number of breaks; `breaks` is either a vector with break values:
 
@@ -97,7 +97,7 @@ or `breaks` is used to indicate a breaks finding method that is passed as the `s
 plot(nc["AREA"], breaks = "jenks")
 ```
 
-## how does `sf` project geographic coordinates?
+# How does `sf` project geographic coordinates?
 
 Package `sf` plots projected maps in their native projection, meaning that easting and northing are mapped linearly to the x and y axis, keeping an aspect ratio of 1 (one unit east equals one unit north). For geographic data, where coordinates constitute degrees longitude and latitude, it chooses an [equirectangular projection](https://en.wikipedia.org/wiki/Equirectangular_projection) (also called _equidistant circular_), where at the center of the plot (or of the bounding box) one unit north equals one unit east.
 
@@ -138,10 +138,11 @@ We can also pass a `crs` object to `graticule` to obtain a graticule in a datum 
 ```{r}
 g = st_graticule(usa, lon = seq(-130,-65,5))
 plot(usa, graticule = g, key.pos = NULL, axes = TRUE,
-	 xlim = st_bbox(usa)[c(1,3)], ylim = st_bbox(usa)[c(2,4)])
+	 xlim = st_bbox(usa)[c(1,3)], ylim = st_bbox(usa)[c(2,4)],
+	 xaxs = "i", yaxs = "i")
 ```
 
-(this doesn't look like one would expect)
+which still doesn't look great -- completely controlling the plotting region of base plots is not easy.
 
 # st_as_grob
 
@@ -152,7 +153,7 @@ methods(st_as_grob)
 
 which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf`) and `tmap`.
 
-# plotting sf objects with other packages
+# Plotting sf objects with other packages
 
 ## ggplot2
 
@@ -165,12 +166,14 @@ contains a geom specially for simple feature objects, with support for graticule
 
 ```{r}
 library(ggplot2)
-ggplot() + geom_sf(data = usa)
+if (utils::packageVersion("ggplot2") > "2.2.1")
+  ggplot() + geom_sf(data = usa)
 ```
 
 polygons can be colored using `aes`:
 ```{r}
-ggplot() + geom_sf(data = nc, aes(fill = BIR74))
+if (utils::packageVersion("ggplot2") > "2.2.1")
+  ggplot() + geom_sf(data = nc, aes(fill = BIR74))
 ```
 
 and sets of maps can be plotted as facet plots after rearranging the `sf` object, e.g. by
@@ -178,7 +181,8 @@ and sets of maps can be plotted as facet plots after rearranging the `sf` object
 library(dplyr)
 library(tidyr)
 nc2 <- nc %>% select(SID74, SID79, geom) %>% gather(VAR, SID, -geom)
-ggplot() + geom_sf(data = nc2, aes(fill = SID)) + facet_wrap(~VAR, ncol = 1)
+if (utils::packageVersion("ggplot2") > "2.2.1")
+  ggplot() + geom_sf(data = nc2, aes(fill = SID)) + facet_wrap(~VAR, ncol = 1)
 ```
 
 ## mapview
@@ -187,8 +191,11 @@ Package `mapview` creates interactive maps in html pages, using package `leaflet
 
 ```{r}
 library(mapview)
-mapview(nc["BIR74"], legend = TRUE, col.regions = sf.colors(10))
+if (Sys.getenv("USER") != "CRAN")
+	mapview(nc["BIR74"], col.regions = sf.colors(10))
 ```
+
+gives a map which is interactive: you can zoom and pan, and query features by clicking on them.
 
 ## tmap
 
@@ -202,13 +209,18 @@ qtm(nc)
 `tmap` also has interactive leaflet maps:
 ```{r}
 tmap_mode("view")
-tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
+if (Sys.getenv("USER") != "CRAN")
+  tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 replotting the last map in non-interactive mode is as simple as:
 ```{r}
 ttm()
-last_map()
+if (Sys.getenv("USER") != "CRAN")
+  last_map()
 ```
 
-`tmap` converts `sf` objects first to `Spatial*` objects using `as(obj, "Spatial")`. For sf objects that do not have an equivalent representation in `sp`, this fails.
+Unlike `mapview`, `tmap` currently converts `sf` objects first to `Spatial*` objects using `as(obj, "Spatial")`. For sf objects that do not have an equivalent representation in `sp`, this fails. Examples of this are objects with `GEOMETRYCOLLECTION` geometries, or mixed geometries such as obtained by
+```{r}
+st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_linestring(rbind(c(1,1), c(2,2)))))
+```

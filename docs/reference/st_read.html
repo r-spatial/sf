@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -225,7 +228,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sfr/inst/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -266,10 +269,11 @@ that reside in the same directory, only one of them having extension <code>.shp<
 </div><span class='co'># NOT RUN {</span>
   <span class='fu'>library</span>(<span class='no'>sp</span>)
   <span class='fu'>example</span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='fu'>st_write</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
-       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>)
-  <span class='no'>st_meuse</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>)
-  <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
+  <span class='fu'>try</span>(<span class='fu'>st_write</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>))
+  <span class='fu'>try</span>(<span class='no'>st_meuse</span> <span class='kw'>&lt;-</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
+  <span class='kw'>if</span> (<span class='fu'>exists</span>(<span class='st'>"st_meuse"</span>))
+    <span class='fu'>summary</span>(<span class='no'>st_meuse</span>)
 <span class='co'># }</span><div class='input'><span class='co'># read geojson from string:</span>
 <span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='fu'>paste</span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span>)
@@ -283,11 +287,13 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;                         geometry
 #&gt; 1 MULTIPOINT (3.2 4, 3 4.6, 3...</div><span class='co'># NOT RUN {</span>
 <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
-<span class='no'>conn</span> <span class='kw'>=</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
-<span class='fu'>print</span>(<span class='fu'>st_crs</span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
-<span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
+<span class='fu'>try</span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
+<span class='kw'>if</span> (<span class='fu'>exists</span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'>inherits</span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
+  <span class='fu'>print</span>(<span class='fu'>st_crs</span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
+  <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
+ }
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -78,6 +78,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -106,7 +109,7 @@
     <div class="page-header">
       <h1>
         Reference
-        <small>version&nbsp;0.5-4</small>
+        <small>version&nbsp;0.5-5</small>
       </h1>
     </div>
 
@@ -148,7 +151,7 @@
           <td>
             <p><code><a href="coerce-methods.html">as_Spatial</a></code> </p>
           </td>
-          <td><p>Methods to coerce simple feature objects to <code>Spatial*</code> objects</p></td>
+          <td><p>Methods to coerce simple feature geometries to corresponding <code>Spatial*</code> objects</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -200,9 +203,9 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="geos_unary.html">st_buffer</a></code> <code><a href="geos_unary.html">st_boundary</a></code> <code><a href="geos_unary.html">st_convex_hull</a></code> <code><a href="geos_unary.html">st_simplify</a></code> <code><a href="geos_unary.html">st_triangulate</a></code> <code><a href="geos_unary.html">st_voronoi</a></code> <code><a href="geos_unary.html">st_polygonize</a></code> <code><a href="geos_unary.html">st_line_merge</a></code> <code><a href="geos_unary.html">st_centroid</a></code> <code><a href="geos_unary.html">st_point_on_surface</a></code> <code><a href="geos_unary.html">st_segmentize</a></code> </p>
+            <p><code><a href="geos_unary.html">st_buffer</a></code> <code><a href="geos_unary.html">st_boundary</a></code> <code><a href="geos_unary.html">st_convex_hull</a></code> <code><a href="geos_unary.html">st_simplify</a></code> <code><a href="geos_unary.html">st_triangulate</a></code> <code><a href="geos_unary.html">st_voronoi</a></code> <code><a href="geos_unary.html">st_polygonize</a></code> <code><a href="geos_unary.html">st_line_merge</a></code> <code><a href="geos_unary.html">st_centroid</a></code> <code><a href="geos_unary.html">st_point_on_surface</a></code> <code><a href="geos_unary.html">st_node</a></code> <code><a href="geos_unary.html">st_segmentize</a></code> </p>
           </td>
-          <td><p>Geometric unary operations on (pairs of) simple feature geometry sets</p></td>
+          <td><p>Geometric unary operations on simple feature geometry sets</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -230,7 +233,7 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="plot.html">plot</a></code> <code><a href="plot.html">plot_sf</a></code> <code><a href="plot.html">sf.colors</a></code> </p>
+            <p><code><a href="plot.html">plot</a></code> </p>
           </td>
           <td><p>Plot sf object</p></td>
         </tr><tr>
@@ -248,12 +251,6 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="sfc.html">st_sfc</a></code> </p>
-          </td>
-          <td><p>Create simple feature collection object of class sfc from list</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></code> </p>
           </td>
           <td><p>Provide the external dependencies versions of the libraries linked to sf</p></td>
@@ -263,6 +260,18 @@
             <p><code><a href="sf.html">sf</a></code> </p>
           </td>
           <td><p>Create sf object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="sfc.html">st_sfc</a></code> </p>
+          </td>
+          <td><p>Create simple feature geometry list column</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="sgbp.html">print</a></code> <code><a href="sgbp.html">t</a></code> </p>
+          </td>
+          <td><p>Methods for dealing with sparse geometry binary predicate lists</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -284,15 +293,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="st_as_sfc.html">st_as_sfc</a></code> </p>
-          </td>
-          <td><p>Convert foreign geometry object to an sfc object</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="st_as_sf.html">st_as_sf</a></code> </p>
           </td>
           <td><p>Convert foreign object to an sf object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="st_as_sfc.html">st_as_sfc</a></code> </p>
+          </td>
+          <td><p>Convert foreign geometry object to an sfc object</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -308,15 +317,22 @@
         </tr><tr>
           <!--  -->
           <td>
+            <p><code><a href="st_cast_sfc_default.html">st_cast_sfc_default</a></code> </p>
+          </td>
+          <td><p>Coerce geometry to MULTI* geometry</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
             <p><code><a href="st_cast.html">st_cast</a></code> </p>
           </td>
           <td><p>Cast geometry to another type: either simplify, or cast explicitly</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="st_cast_sfc_default.html">st_cast_sfc_default</a></code> </p>
+            <p><code><a href="st_collection_extract.html">st_collection_extract</a></code> </p>
           </td>
-          <td><p>Coerce geometry to MULTI* geometry</p></td>
+          <td><p>Given an object with geometries of type <code>GEOMETRY</code> or <code>GEOMETRYCOLLECTION</code>,
+return an object consisting only of elements of the specified type.</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -344,15 +360,15 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="st_geometry.html">st_geometry</a></code> <code><a href="st_geometry.html">st_geometry<-</a></code> <code><a href="st_geometry.html">st_set_geometry</a></code> </p>
-          </td>
-          <td><p>Get, set, or replace geometry from an sf object</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="st_geometry_type.html">st_geometry_type</a></code> </p>
           </td>
           <td><p>Return geometry type of an object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="st_geometry.html">st_geometry</a></code> <code><a href="st_geometry.html">st_geometry<-</a></code> <code><a href="st_geometry.html">st_set_geometry</a></code> </p>
+          </td>
+          <td><p>Get, set, or replace geometry from an sf object</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -377,6 +393,12 @@
             <p><code><a href="st_is.html">st_is</a></code> </p>
           </td>
           <td><p>test equality between the geometry type and a class or set of classes</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="st_jitter.html">st_jitter</a></code> </p>
+          </td>
+          <td><p>jitter geometries</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -407,12 +429,6 @@
             <p><code><a href="st_precision.html">st_precision</a></code> <code><a href="st_precision.html">st_set_precision</a></code> <code><a href="st_precision.html">st_precision<-</a></code> </p>
           </td>
           <td><p>Get precision</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="st.html">st_point</a></code> <code><a href="st.html">st_multipoint</a></code> <code><a href="st.html">st_linestring</a></code> <code><a href="st.html">st_polygon</a></code> <code><a href="st.html">st_multilinestring</a></code> <code><a href="st.html">st_multipolygon</a></code> <code><a href="st.html">st_geometrycollection</a></code> <code><a href="st.html">print</a></code> <code><a href="st.html">head</a></code> <code><a href="st.html">format</a></code> <code><a href="st.html">c</a></code> <code><a href="st.html">as.matrix</a></code> </p>
-          </td>
-          <td><p>Create simple feature from a numeric vector, matrix or list</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -461,6 +477,12 @@
             <p><code><a href="st_zm.html">st_zm</a></code> </p>
           </td>
           <td><p>Drop or add Z and/or M dimensions from feature geometries</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="st.html">st_point</a></code> <code><a href="st.html">st_multipoint</a></code> <code><a href="st.html">st_linestring</a></code> <code><a href="st.html">st_polygon</a></code> <code><a href="st.html">st_multilinestring</a></code> <code><a href="st.html">st_multipolygon</a></code> <code><a href="st.html">st_geometrycollection</a></code> <code><a href="st.html">print</a></code> <code><a href="st.html">head</a></code> <code><a href="st.html">format</a></code> <code><a href="st.html">c</a></code> <code><a href="st.html">as.matrix</a></code> </p>
+          </td>
+          <td><p>Create simple feature from a numeric vector, matrix or list</p></td>
         </tr><tr>
           <!--  -->
           <td>

@@ -32,7 +32,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -58,6 +58,9 @@
     </li>
     <li>
       <a href="../articles/sf4.html">4. Manipulating Simple Features</a>
+    </li>
+    <li>
+      <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
   </ul>
 </li>
@@ -137,37 +140,37 @@
 <col width="70%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">type</th>
-<th align="left">description</th>
+<th>type</th>
+<th>description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>POINT</code></td>
-<td align="left">zero-dimensional geometry containing a single point</td>
+<td><code>POINT</code></td>
+<td>zero-dimensional geometry containing a single point</td>
 </tr>
 <tr class="even">
-<td align="left"><code>LINESTRING</code></td>
-<td align="left">sequence of points connected by straight, non-self intersecting line pieces; one-dimensional geometry</td>
+<td><code>LINESTRING</code></td>
+<td>sequence of points connected by straight, non-self intersecting line pieces; one-dimensional geometry</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>POLYGON</code></td>
-<td align="left">geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring</td>
+<td><code>POLYGON</code></td>
+<td>geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring</td>
 </tr>
 <tr class="even">
-<td align="left"><code>MULTIPOINT</code></td>
-<td align="left">set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal</td>
+<td><code>MULTIPOINT</code></td>
+<td>set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>MULTILINESTRING</code></td>
-<td align="left">set of linestrings</td>
+<td><code>MULTILINESTRING</code></td>
+<td>set of linestrings</td>
 </tr>
 <tr class="even">
-<td align="left"><code>MULTIPOLYGON</code></td>
-<td align="left">set of polygons</td>
+<td><code>MULTIPOLYGON</code></td>
+<td>set of polygons</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>GEOMETRYCOLLECTION</code></td>
-<td align="left">set of geometries of any type except GEOMETRYCOLLECTION</td>
+<td><code>GEOMETRYCOLLECTION</code></td>
+<td>set of geometries of any type except GEOMETRYCOLLECTION</td>
 </tr>
 </tbody>
 </table>
@@ -179,49 +182,49 @@
 <col width="70%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">type</th>
-<th align="left">description</th>
+<th>type</th>
+<th>description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>CIRCULARSTRING</code></td>
-<td align="left">The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1.</td>
+<td><code>CIRCULARSTRING</code></td>
+<td>The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>COMPOUNDCURVE</code></td>
-<td align="left">A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component.</td>
+<td><code>COMPOUNDCURVE</code></td>
+<td>A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component.</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>CURVEPOLYGON</code></td>
-<td align="left">Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) )</td>
+<td><code>CURVEPOLYGON</code></td>
+<td>Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) )</td>
 </tr>
 <tr class="even">
-<td align="left"><code>MULTICURVE</code></td>
-<td align="left">A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.</td>
+<td><code>MULTICURVE</code></td>
+<td>A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>MULTISURFACE</code></td>
-<td align="left">A MultiSurface is a 2-dimensional GeometryCollection whose elements are Surfaces, all using coordinates from the same coordinate reference system.</td>
+<td><code>MULTISURFACE</code></td>
+<td>A MultiSurface is a 2-dimensional GeometryCollection whose elements are Surfaces, all using coordinates from the same coordinate reference system.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>CURVE</code></td>
-<td align="left">A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve specifying the form of the interpolation between Points</td>
+<td><code>CURVE</code></td>
+<td>A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve specifying the form of the interpolation between Points</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>SURFACE</code></td>
-<td align="left">A Surface is a 2-dimensional geometric object</td>
+<td><code>SURFACE</code></td>
+<td>A Surface is a 2-dimensional geometric object</td>
 </tr>
 <tr class="even">
-<td align="left"><code>POLYHEDRALSURFACE</code></td>
-<td align="left">A PolyhedralSurface is a contiguous collection of polygons, which share common boundary segments</td>
+<td><code>POLYHEDRALSURFACE</code></td>
+<td>A PolyhedralSurface is a contiguous collection of polygons, which share common boundary segments</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>TIN</code></td>
-<td align="left">A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.</td>
+<td><code>TIN</code></td>
+<td>A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>TRIANGLE</code></td>
-<td align="left">A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary</td>
+<td><code>TRIANGLE</code></td>
+<td>A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary</td>
 </tr>
 </tbody>
 </table>
@@ -252,7 +255,7 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.2.0, proj.4 4.9.2, lwgeom 2.3.3 r15473
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -283,21 +286,22 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 </ul>
 <p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
-##  [1] aggregate           cbind               coerce             
-##  [4] initialize          merge               plot               
-##  [7] print               rbind               [                  
-## [10] [[&lt;-                $&lt;-                 show               
-## [13] slotsFromS3         st_agr&lt;-            st_agr             
-## [16] st_as_sf            st_bbox             st_boundary        
-## [19] st_buffer           st_cast             st_centroid        
-## [22] st_convex_hull      st_coordinates      st_crs&lt;-           
-## [25] st_crs              st_difference       st_geometry&lt;-      
-## [28] st_geometry         st_intersection     st_is              
-## [31] st_line_merge       st_make_valid       st_point_on_surface
-## [34] st_polygonize       st_precision        st_segmentize      
-## [37] st_set_precision    st_simplify         st_split           
-## [40] st_sym_difference   st_transform        st_triangulate     
-## [43] st_union            st_voronoi          st_zm              
+##  [1] [                     [[&lt;-                  $&lt;-                  
+##  [4] aggregate             cbind                 coerce               
+##  [7] initialize            merge                 plot                 
+## [10] print                 rbind                 show                 
+## [13] slotsFromS3           st_agr                st_agr&lt;-             
+## [16] st_as_sf              st_bbox               st_boundary          
+## [19] st_buffer             st_cast               st_centroid          
+## [22] st_collection_extract st_convex_hull        st_coordinates       
+## [25] st_crs                st_crs&lt;-              st_difference        
+## [28] st_geometry           st_geometry&lt;-         st_intersection      
+## [31] st_is                 st_line_merge         st_make_valid        
+## [34] st_node               st_point_on_surface   st_polygonize        
+## [37] st_precision          st_segmentize         st_set_precision     
+## [40] st_simplify           st_split              st_sym_difference    
+## [43] st_transform          st_triangulate        st_union             
+## [46] st_voronoi            st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -354,21 +358,22 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## [1] "sfc_MULTIPOLYGON" "sfc"</code></pre></div>
 <p>Methods for geometry list-columns include</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">'sfc'</span>)
-##  [1] as.data.frame       coerce              c                  
-##  [4] format              initialize          Ops                
-##  [7] print               [&lt;-                 [                  
-## [10] show                slotsFromS3         st_as_binary       
-## [13] st_as_text          st_bbox             st_boundary        
-## [16] st_buffer           st_cast             st_centroid        
-## [19] st_convex_hull      st_coordinates      st_crs&lt;-           
-## [22] st_crs              st_difference       st_geometry        
-## [25] st_intersection     st_is               st_line_merge      
-## [28] st_make_valid       st_point_on_surface st_polygonize      
-## [31] st_precision        str                 st_segmentize      
-## [34] st_set_precision    st_simplify         st_split           
-## [37] st_sym_difference   st_transform        st_triangulate     
-## [40] st_union            st_voronoi          st_zm              
-## [43] summary            
+##  [1] [                     [&lt;-                   as.data.frame        
+##  [4] c                     coerce                format               
+##  [7] initialize            Ops                   print                
+## [10] rep                   show                  slotsFromS3          
+## [13] st_as_binary          st_as_text            st_bbox              
+## [16] st_boundary           st_buffer             st_cast              
+## [19] st_centroid           st_collection_extract st_convex_hull       
+## [22] st_coordinates        st_crs                st_crs&lt;-             
+## [25] st_difference         st_geometry           st_intersection      
+## [28] st_is                 st_line_merge         st_make_valid        
+## [31] st_node               st_point_on_surface   st_polygonize        
+## [34] st_precision          st_segmentize         st_set_precision     
+## [37] st_simplify           st_split              st_sym_difference    
+## [40] st_transform          st_triangulate        st_union             
+## [43] st_voronoi            st_zm                 str                  
+## [46] summary              
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -377,14 +382,9 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## [1] 0
 ## 
 ## $crs
-## $epsg
-## [1] 4267
-## 
-## $proj4string
-## [1] "+proj=longlat +datum=NAD27 +no_defs"
-## 
-## attr(,"class")
-## [1] "crs"
+## Coordinate Reference System:
+##   EPSG: 4267 
+##   proj4string: "+proj=longlat +datum=NAD27 +no_defs"
 ## 
 ## $class
 ## [1] "sfc_MULTIPOLYGON" "sfc"             
@@ -547,7 +547,7 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(filename)
 <p>If we repeat this, we get an error message that the file already exists, and we can overwrite by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_write</span>(nc, <span class="st">"nc.shp"</span>, <span class="dt">delete_layer =</span> <span class="ot">TRUE</span>)
 ## Deleting layer `nc' using driver `ESRI Shapefile'
-## Writing layer `nc' to data source `/home/edzer/git/sfr/docs/articles/nc.shp' using driver `ESRI Shapefile'
+## Writing layer `nc' to data source `/home/edzer/git/sf/docs/articles/nc.shp' using driver `ESRI Shapefile'
 ## features:       100
 ## fields:         14
 ## geometry type:  Multi Polygon</code></pre></div>
@@ -675,8 +675,9 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 ## from="sf", to="Spatial"
 ## from="Spatial", to="sf"
 <span class="kw">methods</span>(st_as_sf)
-## [1] st_as_sf.data.frame* st_as_sf.map*        st_as_sf.sf*        
-## [4] st_as_sf.Spatial*   
+## [1] st_as_sf.data.frame* st_as_sf.lpp*        st_as_sf.map*       
+## [4] st_as_sf.ppp*        st_as_sf.psp*        st_as_sf.sf*        
+## [7] st_as_sf.Spatial*   
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
 ##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              
@@ -722,7 +723,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 ## [2,] 440561.15 114939.7 590434.80      0.0
 ## [3,]  18944.03 352719.1  78756.89 517527.8
 <span class="kw"><a href="../reference/st_relate.html">st_relate</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
-## although coordinates are longitude/latitude, it is assumed that they are planar
+## although coordinates are longitude/latitude, st_relate assumes that they are planar
 ##      [,1]        [,2]        [,3]        [,4]       
 ## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"
 ## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"
@@ -731,23 +732,15 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 ## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
-## although coordinates are longitude/latitude, it is assumed that they are planar
-## [[1]]
-## [1] 1 2
-## 
-## [[2]]
-## [1] 1 2 3
-## 
-## [[3]]
-## [1] 2 3
-## 
-## [[4]]
-## [1] 4
-## 
-## [[5]]
-## integer(0)
+## although coordinates are longitude/latitude, st_intersects assumes that they are planar
+## Sparse geometry binary predicate list of length 5, where the predicate was `intersects'
+##  1: 1, 2
+##  2: 1, 2, 3
+##  3: 2, 3
+##  4: 4
+##  5: (empty)
 <span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,], <span class="dt">sparse =</span> <span class="ot">FALSE</span>)
-## although coordinates are longitude/latitude, it is assumed that they are planar
+## although coordinates are longitude/latitude, st_intersects assumes that they are planar
 ##       [,1]  [,2]  [,3]  [,4]
 ## [1,]  TRUE  TRUE FALSE FALSE
 ## [2,]  TRUE  TRUE  TRUE FALSE
@@ -870,21 +863,21 @@ meuse_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(meuse, <
 <col width="48%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">value</th>
-<th align="left">meaning</th>
+<th>value</th>
+<th>meaning</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">constant</td>
-<td align="left">a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use</td>
+<td>constant</td>
+<td>a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use</td>
 </tr>
 <tr class="even">
-<td align="left">aggregate</td>
-<td align="left">values are summary values (aggregates) over the geometry, e.g. population density, dominant land use</td>
+<td>aggregate</td>
+<td>values are summary values (aggregates) over the geometry, e.g. population density, dominant land use</td>
 </tr>
 <tr class="odd">
-<td align="left">identity</td>
-<td align="left">values identify the geometry: they refer to (the whole of) this and only this geometry</td>
+<td>identity</td>
+<td>values identify the geometry: they refer to (the whole of) this and only this geometry</td>
 </tr>
 </tbody>
 </table>
