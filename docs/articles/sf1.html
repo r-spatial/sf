@@ -62,6 +62,9 @@
     <li>
       <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
+    <li>
+      <a href="../articles/sf6.html">6. Miscellaneous</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -255,6 +258,7 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
+## Loading required package: methods
 ## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
@@ -656,8 +660,8 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 <h2 class="hasAnchor">
 <a href="#crs" class="anchor"></a>Coordinate reference systems and transformations</h2>
 <p>Coordinate reference systems (CRS) are like measurement units for coordinates: they specify which location on Earth a particular coordinate pair refers to. We saw above that <code>sfc</code> objects (geometry list-columns) have two attributes to store a CRS: <code>epsg</code> and <code>proj4string</code>. This implies that all geometries in a geometry list-column must have the same CRS. Both may be <code>NA</code>, e.g. in case the CRS is unknown, or when we work with local coordinate systems (e.g. inside a building, a body, or an abstract space).</p>
-<p><code>proj4string</code> is a generic, string-based description of a CRS, understood by the <a href="http://proj4.org/">PROJ.4</a> library. It defines projection types and (often) defines parameter values for particular projections, and hence can cover an infinite amount of different projections. This library (also used by GDAL) provides functions to convert or transform between different CRS. <code>epsg</code> is the integer ID for a particular, known CRS that can be resolved into a <code>proj4string</code>. There is no (known, simple and general) way to resolve <code>proj4string</code> values into <code>epsg</code> IDs.</p>
-<p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit the provenance of datasets.</p>
+<p><code>proj4string</code> is a generic, string-based description of a CRS, understood by the <a href="http://proj4.org/">PROJ.4</a> library. It defines projection types and (often) defines parameter values for particular projections, and hence can cover an infinite amount of different projections. This library (also used by GDAL) provides functions to convert or transform between different CRS. <code>epsg</code> is the integer ID for a particular, known CRS that can be resolved into a <code>proj4string</code>. Some <code>proj4string</code> values can resolved back into their corresponding <code>epsg</code> ID, but this does not always work.</p>
+<p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using <code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27 to web mercator (EPSG:3857) can be done by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.web_mercator &lt;-<span class="st"> </span><span class="kw">st_transform</span>(nc, <span class="dv">3857</span>)
 <span class="kw">st_geometry</span>(nc.web_mercator)[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span>:<span class="dv">3</span>,]
