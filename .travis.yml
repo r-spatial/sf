@@ -17,15 +17,21 @@ addons:
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
+  # install tmap dependencies:
+  - sudo apt-get install --yes libprotobuf-compiler libjq-dev libv8-3.14-dev libprotobuf-dev
+  # units dependency:
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
-  - # install postgis from source:
+  # sf dependencies:
+  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
+  # postgis source compile dependencies:
   - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.6
+  # install postgis from source:
   - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
   - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
   - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
-  - # activate liblwgeom:
+  # activate liblwgeom by:
   - sudo ldconfig 
-  - # create postgis databases:
+  # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
