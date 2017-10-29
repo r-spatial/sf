@@ -144,16 +144,17 @@ plot(usa, graticule = g, key.pos = NULL, axes = TRUE,
 
 which still doesn't look great -- completely controlling the plotting region of base plots is not easy.
 
-# st_as_grob
+# Plotting sf objects with other packages
+
+## grid: `st_as_grob`
 
 Package `sf` provides a number of methods for `st_as_grob`:
 ```{r}
 methods(st_as_grob)
 ```
 
-which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf`) and `tmap`.
+which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf`) and `tmap`. In addition, `st_viewport` can be used to set up a grid viewport from an `sf` object, with an aspect ratio similar to that of `base::plot.sf`.
 
-# Plotting sf objects with other packages
 
 ## ggplot2
 
