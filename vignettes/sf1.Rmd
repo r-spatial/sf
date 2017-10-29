@@ -642,14 +642,15 @@ projections, and hence can cover an infinite amount of different
 projections.  This library (also used by GDAL) provides functions
 to convert or transform between different CRS.  `epsg` is the
 integer ID for a particular, known CRS that can be resolved into a
-`proj4string`. There is no (known, simple and general) way to resolve
-`proj4string` values into `epsg` IDs.
+`proj4string`. Some `proj4string` values can resolved back into
+their corresponding `epsg` ID, but this does not always work.
 
 The importance of having `epsg` values stored with data besides
 `proj4string` values is that the `epsg` refers to particular,
 well-known CRS, whose parameters may change (improve) over time;
 fixing only the `proj4string` may remove the possibility to benefit
-from such improvements, and limit the provenance of datasets.
+from such improvements, and limit some of the provenance of datasets,
+but may help reproducibility.
 
 Coordinate reference system transformations can be carried out using
 `st_transform`, e.g. converting longitudes/latitudes in NAD27 to

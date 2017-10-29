@@ -1,0 +1,109 @@
+---
+title: "6. Miscellaneous"
+output:
+  html_document:
+    toc: true
+    theme: united
+vignette: >
+  %\VignetteIndexEntry{6. Miscellaneous}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+This vignette describes a number of issues that did not come up in
+the previous vignettes, and that may or may not be categorized as
+"frequently asked questions". Readers are encouraged to provide
+entries for this vignette (as for the others).
+
+# What is this EPSG code all about?
+
+EPSG stands for a maintained, well-understood set of spatial reference
+systems. From R, we can get access to the EPSG dataset programatically
+(as a `data.frame`) by:
+```{r, eval=FALSE}
+rgdal::make_EPSG()
+```
+
+see also the first vignette.
+
+# How does `sf` deal with secondary geometry columns?
+
+`sf` objects can have more than one geometry list-column,
+but always only one geometry column is considered _active_,
+and returned by `st_geometry`.  When there are multiple
+geometry columns, the default `print` methods reports which
+one is active:
+```{r}
+library(sf)
+demo(nc, ask = FALSE, echo = FALSE)
+nc$geom2 = st_centroid(st_geometry(nc))
+print(nc, n = 2)
+```
+
+We can switch the active geometry by using `st_geometry<-` or `st_set_geometry`, as in 
+```{r}
+plot(st_geometry(nc))
+st_geometry(nc) <- "geom2"
+plot(st_geometry(nc))
+```
+
+# Does `st_simplify` preserve topology?
+
+`st_simplify` is a topology-preserving function, but does this on the
+level of individual feature geometries. That means, simply said, that
+after applying it, a polygon will still be a polygon. However when
+two features have a longer shared boundary, applying `st_simplify`
+to the object does not guarantee that in the resulting object these
+two polygons still have the same boundary in common, since the
+simplification is done independently, _for each feature geometry_.
+
+# Why do dplyr verbs not work for `sf` objects?
+
+They do! However, many developers like to write scripts that never
+load packages but address all functions by the `sf::` prefix, as in
+```{r,eval=FALSE}
+i = sf::st_intersects(sf1, sf2)
+```
+
+This works up to the moment that a `dplyr` method for an `sf` object
+is needed: should one call `dplyr::select` (won't know it should search
+in package `sf`) or `sf::select` (which doesn't exist)? Neither. One should
+in this case simply load `sf`, either by
+```{r,eval=FALSE}
+library(sf)
+```
+
+# What is this error/warning/message about?
+
+## _although coordinates are longitude/latitude, xxx assumes that they are planar_
+
+Most (but not all) of the geometry calculating routines used by `sf` come from the [GEOS](https://trac.osgeo.org/geos/) library. This library considers coordinates in a two-dimensional, flat, Euclidian space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:
+```{r}
+polygon = st_sfc(st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80)))), 
+		crs = 4326)
+pole = st_sfc(st_point(c(0,90)), crs = 4326)
+st_intersects(polygon, pole)
+```
+
+which gives a wrong result (no intersection).
+
+## _st\_centroid does not give correct centroids for longitude/latitude data_
+
+Similar to the above, centroids are computed assuming flat, 2D space:
+```{r}
+st_centroid(polygon)[[1]]
+```
+
+where the centroid should have been the pole.
+
+## _dist is assumed to be in decimal degrees (arc\_degrees)._
+
+This message indicates that `sf` assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:
+```{r}
+pt = st_sfc(st_point(c(0,0)), crs = 4326)
+buf = st_buffer(polygon, 1)
+buf = st_buffer(polygon, units::set_units(1, degree))
+```
