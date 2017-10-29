@@ -191,8 +191,8 @@ Package `mapview` creates interactive maps in html pages, using package `leaflet
 
 ```{r}
 library(mapview)
-if (Sys.getenv("USER") != "CRAN")
-	mapview(nc["BIR74"], col.regions = sf.colors(10))
+# if (Sys.getenv("USER") != "CRAN")
+mapview(nc["BIR74"], col.regions = sf.colors(10))
 ```
 
 gives a map which is interactive: you can zoom and pan, and query features by clicking on them.
@@ -209,15 +209,15 @@ qtm(nc)
 `tmap` also has interactive leaflet maps:
 ```{r}
 tmap_mode("view")
-if (Sys.getenv("USER") != "CRAN")
-  tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
+# if (Sys.getenv("USER") != "CRAN")
+tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 replotting the last map in non-interactive mode is as simple as:
 ```{r}
 ttm()
-if (Sys.getenv("USER") != "CRAN")
-  last_map()
+#if (Sys.getenv("USER") != "CRAN")
+last_map()
 ```
 
 Unlike `mapview`, `tmap` currently converts `sf` objects first to `Spatial*` objects using `as(obj, "Spatial")`. For sf objects that do not have an equivalent representation in `sp`, this fails. Examples of this are objects with `GEOMETRYCOLLECTION` geometries, or mixed geometries such as obtained by

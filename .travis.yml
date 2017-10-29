@@ -18,9 +18,9 @@ before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
   # install tmap dependencies:
-  - sudo apt-get install --yes libprotobuf-compiler libjq-dev libv8-3.14-dev libprotobuf-dev
-  # units dependency:
-  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
+  - sudo apt-get install --yes libprotobuf-dev protobuf-compiler libjq-dev libv8-3.14-dev
+  # units/udunits2 dependency:
+  - sudo apt-get install --yes libudunits2-dev
   # sf dependencies:
   - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
   # postgis source compile dependencies:
