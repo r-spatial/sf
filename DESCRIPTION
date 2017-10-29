@@ -42,6 +42,8 @@ Suggests:
 	dplyr (>= 0.7-0),
     tidyr (>= 0.7-0),
     ggplot2,
+	mapview,
+	tmap,
     testthat,
     knitr,
 	covr,
