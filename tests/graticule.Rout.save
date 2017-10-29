@@ -53,14 +53,11 @@ Type 'q()' to quit R.
 > nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > # options(warn=2)
 > g = st_graticule(nc, datum = st_crs(nc))
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > #g = st_graticule(nc)
 > 
 > plot(nc[1], graticule = st_crs(nc))
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > plot(nc[1], graticule = st_crs(nc), axes = TRUE)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > g = st_graticule()
 > 
@@ -72,8 +69,7 @@ although coordinates are longitude/latitude, st_intersection assumes that they a
 > library(maps) #421
 > wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
 > plot(wrld2, graticule = TRUE)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > proc.time()
    user  system elapsed 
-  3.216   0.256   3.232 
+  2.660   0.320   2.697 
