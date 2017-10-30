@@ -1,6 +1,6 @@
-# put as last, because of spatstat side effect on units:
+# put this test last, because of spatstat side effect on units:
 require(spatstat)
-require(sf)
+suppressPackageStartupMessages(library(sf))
 data(chicago)
 st_as_sf(chicago)
 # ppp:

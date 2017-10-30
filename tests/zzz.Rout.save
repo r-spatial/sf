@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # put as last, because of spatstat side effect on units:
+> # put this test last, because of spatstat side effect on units:
 > require(spatstat)
 Loading required package: spatstat
 Loading required package: spatstat.data
@@ -25,9 +25,7 @@ Loading required package: rpart
 spatstat 1.53-2.011       (nickname: 'Vexatious Litigant') 
 For an introduction to spatstat, type 'beginner' 
 
-> require(sf)
-Loading required package: sf
-Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+> suppressPackageStartupMessages(library(sf))
 > data(chicago)
 > st_as_sf(chicago)
 Simple feature collection with 620 features and 4 fields
@@ -122,4 +120,4 @@ First 20 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.516   0.364   1.556 
+  1.524   0.292   1.501 

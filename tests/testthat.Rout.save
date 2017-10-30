@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -41,8 +41,8 @@ Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 540 SKIPPED: 0 FAILED: 0
+OK: 572 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  5.920   0.468   9.724 
+  4.296   0.348   5.101 
