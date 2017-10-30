@@ -1,6 +1,6 @@
 # version 0.5-5
 
-* add vignette 5: plotting sf objects
+* add vignettes 5: plotting sf objects and 6: miscellaneous; #324
 
 * add (default) color key to `plot.sf` if single map is plotted; #528 ctb by @hughjonesd
 
