@@ -5,7 +5,7 @@ Description: Support for simple features, a standardized way to encode spatial v
     to GDAL for reading and writing data, to GEOS for geometrical operations, and to Proj.4 for projection
 	conversions and datum transformations.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
-	person("Roger", "Bivand", role = "ctb"),
+	person("Roger", "Bivand", role = "ctb", comment = c(ORCID = "0000-0003-2392-6140")),
 	person("Ian", "Cook", role = "ctb"),
 	person("Tim", "Keitt", role = "ctb"),
 	person("Michael", "Sumner", role = "ctb"),

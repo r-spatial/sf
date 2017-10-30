@@ -2,7 +2,7 @@
 
 * add vignettes 5: plotting sf objects and 6: miscellaneous; #324
 
-* add (default) color key to `plot.sf` if single map is plotted; #528 ctb by @hughjonesd
+* add (default) color key to `plot.sf` if single map is plotted, contributed by @hughjonesd; #528 
 
 * `st_as_sfc` can now read EWKT; #530
 
@@ -10,11 +10,11 @@
 
 * `plot.sf` gets an arguments `pal` to specify a color palette function; #526
 
-* `plot.sf` gets arguments `breaks` and `nbreaks`; add support for `classInt::classIntervals` styles for finding class intervals (breaks)
+* `plot.sf` gets arguments `breaks` and `nbreaks`; add support for `classInt::classIntervals` styles for finding class intervals (using `breaks`)
 
-* add `st_as_sf` methods for `lpp` and `psp` objects from spatstat.
+* add `st_as_sf` methods for `ppp`, `lpp` and `psp` objects from spatstat.
 
-* allow for direct route to proj.4 ignoring GDAL (requires liblwgeom; #509, #511)
+* allow for direct route to proj.4 ignoring GDAL (requiring liblwgeom); #509, #511
 
 * add `print` method for `crs` objects; #517
 
@@ -26,7 +26,7 @@
 
 * support for reading `OFTInteger64List` fields; #508
 
-* sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`
+* sparse geometric binary predicate lists now have a class, `sgbp`, and attributes `region.id` and `predicate`; #234, #524
 
 * prevent `st_split` from stopping the R session; #492
 
