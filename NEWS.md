@@ -1,3 +1,5 @@
+# version 0.5-6
+
 # version 0.5-5
 
 * have `classInt` in Imports:, to not break other package checks
