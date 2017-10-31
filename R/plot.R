@@ -149,8 +149,6 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						colors[as.numeric(values)]
 					} else {
 						if (is.character(breaks)) { # compute breaks from values:
-							if (! requireNamespace("classInt", quietly = TRUE))
-								stop("package classInt required, please install it first")
 							breaks = if (! all(is.na(values)) && length(unique(na.omit(values))) > 1)
 								classInt::classIntervals(values, nbreaks, breaks)$brks
 							else

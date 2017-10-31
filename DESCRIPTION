@@ -25,6 +25,7 @@ Imports:
     Rcpp, 
     DBI (>= 0.5),
     units (>= 0.4-6),
+	classInt,
 	magrittr
 Suggests: 
     geosphere (>= 1.5-5), 
@@ -32,7 +33,6 @@ Suggests:
     maps,
     rgdal,
     rgeos,
-	classInt,
     sp (>= 1.2-4), 
 	raster,
 	RSQLite,

@@ -1,5 +1,7 @@
 # version 0.5-5
 
+* have `classInt` in Imports:, to not break other package checks
+
 * add vignettes 5: plotting sf objects and 6: miscellaneous; #324
 
 * add (default) color key to `plot.sf` if single map is plotted, contributed by @hughjonesd; #528 
