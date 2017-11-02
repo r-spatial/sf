@@ -40,7 +40,7 @@ Suggests:
     tibble,
 	rlang,
 	dplyr (>= 0.7-0),
-    tidyr (>= 0.7-0),
+    tidyr (>= 0.7-1),
     ggplot2,
 	mapview,
 	tmap,

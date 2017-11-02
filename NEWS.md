@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* get rid of one of the two `classInt::classIntervals` warnings if number of unique values is smaller than the number of breaks asked for
+
 # version 0.5-5
 
 * have `classInt` in Imports:, to not break other package checks
