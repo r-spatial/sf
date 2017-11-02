@@ -90,7 +90,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
 		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.8)) {
 	stopifnot(missing(y))
-	breaks.missing = missing(breaks)
+	nbreaks.missing = missing(nbreaks)
 	dots = list(...)
 
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
@@ -149,9 +149,13 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						colors[as.numeric(values)]
 					} else {
 						if (is.character(breaks)) { # compute breaks from values:
-							breaks = if (! all(is.na(values)) && length(unique(na.omit(values))) > 1)
-								classInt::classIntervals(values, nbreaks, breaks)$brks
-							else
+							n.unq = length(unique(na.omit(values)))
+							breaks = if (! all(is.na(values)) && n.unq > 1) {
+								if (utils::packageVersion("classInt") > "0.2-1")
+									classInt::classIntervals(values, min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+								else
+									classInt::classIntervals(values, min(nbreaks, n.unq), breaks)$brks
+							} else
 								range(values, na.rm = TRUE) # lowest and highest!
 						}
 						# this is necessary if breaks were specified either as character or as numeric
