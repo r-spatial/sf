@@ -63,11 +63,9 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 	if (missing(crs))
 		stop("argument crs cannot be missing")
 
-	if (! use_gdal) {
-		if (inherits(crs, "crs"))
-			crs = crs$proj4string
-		return(st_sfc(CPL_lwgeom_transform(x, c(st_crs(x)$proj4string, crs))))
-	}
+	if (! use_gdal)
+		.Deprecated("lwgeom::st_transform_proj", "lwgeom", 
+			'install with devtools::install_github("r-spatial/lwgeom")')
 
 	crs = make_crs(crs)
 

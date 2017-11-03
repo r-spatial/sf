@@ -157,26 +157,6 @@ CPL_transpose_sparse_incidence <- function(m, n) {
     .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
-CPL_lwgeom_version <- function(b = FALSE) {
-    .Call('_sf_CPL_lwgeom_version', PACKAGE = 'sf', b)
-}
-
-CPL_make_valid <- function(sfc) {
-    .Call('_sf_CPL_make_valid', PACKAGE = 'sf', sfc)
-}
-
-CPL_split <- function(sfc, blade) {
-    .Call('_sf_CPL_split', PACKAGE = 'sf', sfc, blade)
-}
-
-CPL_geohash <- function(sfc, prec) {
-    .Call('_sf_CPL_geohash', PACKAGE = 'sf', sfc, prec)
-}
-
-CPL_lwgeom_transform <- function(sfc, p4s) {
-    .Call('_sf_CPL_lwgeom_transform', PACKAGE = 'sf', sfc, p4s)
-}
-
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

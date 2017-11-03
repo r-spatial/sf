@@ -820,7 +820,8 @@ sfc_POLYGON of length 1; first list element: List of 6
 > str(x)
 sfc_POLYGON of length 2; first list element:  list()
  - attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
-> x = st_sfc(st_polygon(), pol, check_ring_dir=TRUE)
+> # empty ring/zero area:
+> x = st_sfc(st_polygon(list(m[c(1,3,1),])), check_ring_dir=TRUE)
 > 
 > mp = st_multipolygon(list(pol, pol))
 > try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
@@ -858,4 +859,4 @@ sfc_MULTIPOLYGON of length 2; first list element: List of 2
 > 
 > proc.time()
    user  system elapsed 
-  2.068   0.304   2.060 
+  2.052   0.288   2.033 
