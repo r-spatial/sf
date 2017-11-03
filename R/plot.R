@@ -151,6 +151,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						if (is.character(breaks)) { # compute breaks from values:
 							n.unq = length(unique(na.omit(values)))
 							breaks = if (! all(is.na(values)) && n.unq > 1) {
+								values = na.omit(values)
 								if (utils::packageVersion("classInt") > "0.2-1")
 									classInt::classIntervals(values, min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
 								else

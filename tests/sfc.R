@@ -213,7 +213,8 @@ x = st_sfc(pol, check_ring_dir=TRUE)
 str(x)
 x = st_sfc(st_polygon(), st_polygon(), check_ring_dir=TRUE)
 str(x)
-x = st_sfc(st_polygon(), pol, check_ring_dir=TRUE)
+# empty ring/zero area:
+x = st_sfc(st_polygon(list(m[c(1,3,1),])), check_ring_dir=TRUE)
 
 mp = st_multipolygon(list(pol, pol))
 try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))

@@ -87,11 +87,19 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 
 	double precision = sfc.attr("precision");
 
-	Rcpp::CharacterVector cls = get_dim_sfc(sfc, dim);
+	Rcpp::List sfc_cls = get_dim_sfc(sfc);
+	Rcpp::CharacterVector cls = sfc_cls["_cls"];
+	if (dim != NULL) {
+		Rcpp::IntegerVector sfc_dim = sfc_cls["_dim"];
+		if (sfc_dim.size() == 0)
+			Rcpp::stop("sfc_dim size 0: should not happen");
+		*dim = sfc_dim[0];
+	}
+
 	if (cls[0] == "XYM" || cls[0] == "XYZM")
 		Rcpp::stop("GEOS does not support XYM or XYZM geometries; use st_zm() to drop M\n"); // #nocov
 
-	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), cls, precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, sfc_cls, true, precision);
 	std::vector<GEOSGeom> g(sfc.size());
 	GEOSWKBReader *wkb_reader = GEOSWKBReader_create_r(hGEOSCtxt);
 	for (int i = 0; i < sfc.size(); i++) {
@@ -117,7 +125,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
 	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
-	return CPL_read_wkb(out, true, false, native_endian());
+	return CPL_read_wkb(out, true, false);
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {

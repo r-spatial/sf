@@ -122,7 +122,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim_sfc(sfc, NULL), precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, get_dim_sfc(sfc), false, precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
@@ -224,7 +224,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		if (destroy)
 			OGRGeometryFactory::destroyGeometry(g[i]);
 	}
-	Rcpp::List ret = CPL_read_wkb(lst, false, false, native_endian());
+	Rcpp::List ret = CPL_read_wkb(lst, false, false);
 	ret.attr("crs") = crs;
 	ret.attr("class") = "sfc";
 	return ret;

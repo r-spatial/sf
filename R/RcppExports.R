@@ -201,11 +201,19 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE, endian = 0L) {
-    .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite, endian)
+CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
+    .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }
 
-CPL_write_wkb <- function(sfc, EWKB = FALSE, endian = 0L, dim = "XY", precision = 0.0) {
-    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, endian, dim, precision)
+CPL_write_wkb <- function(sfc, sfc_dim, EWKB = FALSE, precision = 0.0) {
+    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, sfc_dim, EWKB, precision)
 }
 
+get_dim_sfc <- function(sfc) {
+    .Call('_sf_get_dim_sfc', PACKAGE = 'sf', sfc)
+}
+
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('_sf_RcppExport_registerCCallable', PACKAGE = 'sf')
+})

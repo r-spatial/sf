@@ -20,6 +20,8 @@
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 typedef struct {
 	const unsigned char *pt;
 	size_t size;
@@ -438,10 +440,11 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, int endian = 0) {
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
 	Rcpp::List output(wkb_list.size());
 
 	int type = 0, last_type = 0, n_types = 0, n_empty = 0;
+	int endian = native_endian();
 
 	uint32_t srid = 0;
 	for (int i = 0; i < wkb_list.size(); i++) {
@@ -691,12 +694,14 @@ int native_endian(void) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0, 
-		Rcpp::CharacterVector dim = "XY", double precision = 0.0) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, Rcpp::List sfc_dim, bool EWKB = false, double precision = 0.0) {
 
 	Rcpp::List output(sfc.size()); // with raw vectors
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
+	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0], *dm = dim[0];
+
+	int endian = native_endian();
 
 	// got the following from:
 	// http://stackoverflow.com/questions/24744802/rcpp-how-to-check-if-any-attribute-is-null
@@ -734,13 +739,15 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int endian = 0,
 }
 
 // get dim, "XY", "XYZ", "XYZM" or "XYM" from an sfc object
-Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 
-	if (sfc.length() == 0) {
-		if (dim != NULL)
-			*dim = 2; // #nocov -- revisit this one?
-		return "XY";
-	}
+// [[Rcpp::export]]
+Rcpp::List get_dim_sfc(Rcpp::List sfc) {
+
+	if (sfc.length() == 0)
+		return Rcpp::List::create(
+			Rcpp::Named("_cls") = Rcpp::CharacterVector::create("XY"),
+			Rcpp::Named("_dim") = Rcpp::IntegerVector::create(2)
+		);
 
 	// we have data:
 	Rcpp::CharacterVector cls = sfc.attr("class");
@@ -780,11 +787,10 @@ Rcpp::CharacterVector get_dim_sfc(Rcpp::List sfc, int *dim = NULL) {
 			cls = l.attr("class");
 		} break;
 	}
-	if (dim != NULL) {
-		if (strstr(cls[0], "Z") != NULL)
-			*dim = 3; // #nocov
-		else
-			*dim = 2;
-	}
-	return cls;
+
+	return Rcpp::List::create(
+		Rcpp::Named("_cls") = cls,
+		Rcpp::Named("_dim") = strstr(cls[0], "Z") != NULL ?
+			Rcpp::IntegerVector::create(3) :
+			Rcpp::IntegerVector::create(2));
 }

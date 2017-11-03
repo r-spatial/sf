@@ -49,7 +49,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 	ret = if (pureR)
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
-			CPL_read_wkb(x, EWKB, spatialite, endian = as.integer(.Platform$endian == "little"))
+			CPL_read_wkb(x, EWKB, spatialite)
 	if (is.na(crs) && (EWKB || spatialite) && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
 		crs = attr(ret, "srid")
 	if (! is.na(st_crs(crs))) {
@@ -244,8 +244,7 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 		structure(lapply(x, st_as_binary.sfg, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(CPL_write_wkb(x, EWKB, endian == "little", Dimension(x[[1]]), precision),
-				class = "WKB")
+		structure(CPL_write_wkb(x, list("_cls" = Dimension(x[[1]])), EWKB, precision), class = "WKB")
 	}
 	if (hex)
 		vapply(ret, CPL_raw_to_hex, "")
