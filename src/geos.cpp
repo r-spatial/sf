@@ -11,10 +11,13 @@
 
 #include <Rcpp.h>
 
-#include "wkb.h"
+#include "../inst/include/wkb.h"
+
+using namespace sf;
+
 
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
-typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, 
+typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *,
 	const GEOSGeometry *);
 typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
 
@@ -51,7 +54,7 @@ static void __warningHandler(const char *fmt, ...) {
 
 	Rcpp::Function warning("warning");
 	warning(buf);
-	
+
 	return;
 }
 
@@ -91,7 +94,7 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 	if (cls[0] == "XYM" || cls[0] == "XYZM")
 		Rcpp::stop("GEOS does not support XYM or XYZM geometries; use st_zm() to drop M\n"); // #nocov
 
-	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), cls, precision);
+	Rcpp::List wkblst = write_wkb(sfc, true, native_endian(), cls, precision);
 	std::vector<GEOSGeom> g(sfc.size());
 	GEOSWKBReader *wkb_reader = GEOSWKBReader_create_r(hGEOSCtxt);
 	for (int i = 0; i < sfc.size(); i++) {
@@ -117,7 +120,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
 	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
-	return CPL_read_wkb(out, true, false, native_endian());
+	return read_wkb(out, true, false, native_endian());
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {
@@ -201,7 +204,7 @@ Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0,
 		std::string pattern = "", bool sparse = true, bool prepared = false) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -272,8 +275,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 		if (op == "equals_exact") { // has it's own signature, needing `par':
 			for (int i = 0; i < sfc0.length(); i++) { // row
-				Rcpp::LogicalVector rowi(sfc1.length()); 
-				for (int j = 0; j < sfc1.length(); j++) 
+				Rcpp::LogicalVector rowi(sfc1.length());
+				for (int j = 0; j < sfc1.length(); j++)
 					rowi(j) = chk_(GEOSEqualsExact_r(hGEOSCtxt, gmv0[i], gmv1[j], par));
 				if (! sparse)
 					densemat(i,_) = rowi;
@@ -367,7 +370,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) { 
+Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
@@ -387,7 +390,7 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) { 
+Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	int notice = 0;
@@ -395,10 +398,10 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 		if (sfc.size() > 1)
 			Rcpp::stop("NA_on_exception will only work reliably with length 1 sfc objects"); // #nocov
 #ifdef HAVE350
-		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt, 
+		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt,
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
-		GEOSContext_setErrorMessageHandler_r(hGEOSCtxt, 
-			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice); 
+		GEOSContext_setErrorMessageHandler_r(hGEOSCtxt,
+			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice);
 #endif
 	}
 
@@ -421,7 +424,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) { 
+Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	Rcpp::LogicalVector out(sfc.length());
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
@@ -434,7 +437,7 @@ Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) { 
+Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
@@ -465,13 +468,13 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, 
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		Rcpp::NumericVector bufferDist, int nQuadSegs = 30,
-		double dTolerance = 0.0, bool preserveTopology = false, 
+		double dTolerance = 0.0, bool preserveTopology = false,
 		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
 
 	int dim = 2;
-	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init(); 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GEOSGeom> out(sfc.length());
@@ -535,7 +538,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 0.0, int bOnlyEdges = 1) {
 
 	int dim = 2;
-	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init(); 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GEOSGeom> out(sfc.length());
@@ -546,7 +549,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 		case 1: {
 			std::vector<GEOSGeom> g_env = geometries_from_sfc(hGEOSCtxt, env);
 			for (size_t i = 0; i < g.size(); i++) {
-				out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i], 
+				out[i] = chkNULL(GEOSVoronoiDiagram_r(hGEOSCtxt, g[i],
 					g_env.size() ? g_env[0] : NULL, dTolerance, bOnlyEdges));
 				GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
 			}
@@ -674,7 +677,7 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, "", false)[0];
-	return out;	
+	return out;
 }
 
 // [[Rcpp::export]]
