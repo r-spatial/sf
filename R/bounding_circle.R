@@ -18,7 +18,7 @@
 #' 	plot(st_minimum_bounding_circle(state), asp=1)
 #' 	plot(state, add=TRUE)
 #' }
-#' 
+#'
 #' @export
 st_minimum_bounding_circle = function(x, nQuadSegs = 30) UseMethod("st_minimum_bounding_circle", x)
 
