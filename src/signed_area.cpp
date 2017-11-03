@@ -13,7 +13,7 @@ double CPL_signed_area(NumericMatrix pts) {
 	if (pts.ncol() < 2)
 		Rcpp::stop("need at least two columns in matrix\n"); // #nocov
 
-	if (pts.nrow() < 3)
+	if (pts.nrow() <= 3)
 		return 0.0;
 	
 	x0 = pts(0, 0);
