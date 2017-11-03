@@ -13,7 +13,9 @@
 
 #include <Rcpp.h>
 
-#include "wkb.h"
+#include "../inst/include/wkb.h"
+
+using namespace sf;
 
 //
 // Returns errors to R
@@ -36,7 +38,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
         case 4:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
-            break;        
+            break;
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
             break; // #nocov
@@ -122,7 +124,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, false, native_endian(), get_dim_sfc(sfc, NULL), precision);
+	Rcpp::List wkblst = write_wkb(sfc, false, native_endian(), get_dim_sfc(sfc, NULL), precision);
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
@@ -224,7 +226,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		if (destroy)
 			OGRGeometryFactory::destroyGeometry(g[i]);
 	}
-	Rcpp::List ret = CPL_read_wkb(lst, false, false, native_endian());
+	Rcpp::List ret = read_wkb(lst, false, false, native_endian());
 	ret.attr("crs") = crs;
 	ret.attr("class") = "sfc";
 	return ret;
@@ -324,7 +326,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		dest->Release(); // #nocov
 		Rcpp::stop("CPL_transform: zero length geometry list"); // #nocov
 	}
-	OGRCoordinateTransformation *ct = 
+	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
 		dest->Release(); // #nocov
@@ -348,7 +350,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
 	dest->Release();
-	return ret; 
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -427,7 +429,7 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 	pszWKT = (char *) "POINT (30 20)";
 	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
 	withGEOS = 1;
-	if (poGeometry1->Union(poGeometry2) == NULL) 
+	if (poGeometry1->Union(poGeometry2) == NULL)
 		withGEOS = false; // #nocov
 	else
 		withGEOS = true;

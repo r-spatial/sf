@@ -85,8 +85,6 @@ Collate:
 	join.R
 	sample.R
 	valid.R
-	geohash.R
-	split.R
 	collection_extract.R
 	jitter.R
 	sgbp.R
