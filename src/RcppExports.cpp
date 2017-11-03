@@ -489,6 +489,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_minimum_bounding_circle
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_minimum_bounding_circle(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_minimum_bounding_circle(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_make_valid
 Rcpp::List CPL_make_valid(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_make_valid(SEXP sfcSEXP) {
@@ -662,6 +673,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_lwgeom_version", (DL_FUNC) &_sf_CPL_lwgeom_version, 1},
+    {"_sf_CPL_minimum_bounding_circle", (DL_FUNC) &_sf_CPL_minimum_bounding_circle, 1},
     {"_sf_CPL_make_valid", (DL_FUNC) &_sf_CPL_make_valid, 1},
     {"_sf_CPL_split", (DL_FUNC) &_sf_CPL_split, 2},
     {"_sf_CPL_geohash", (DL_FUNC) &_sf_CPL_geohash, 2},

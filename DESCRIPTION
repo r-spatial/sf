@@ -91,4 +91,5 @@ Collate:
 	jitter.R
 	sgbp.R
 	spatstat.R
+	bounding_circle.R
 RoxygenNote: 6.0.1
