@@ -161,6 +161,10 @@ CPL_lwgeom_version <- function(b = FALSE) {
     .Call('_sf_CPL_lwgeom_version', PACKAGE = 'sf', b)
 }
 
+CPL_minimum_bounding_circle <- function(sfc) {
+    .Call('_sf_CPL_minimum_bounding_circle', PACKAGE = 'sf', sfc)
+}
+
 CPL_make_valid <- function(sfc) {
     .Call('_sf_CPL_make_valid', PACKAGE = 'sf', sfc)
 }

@@ -23,7 +23,7 @@ std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 	Rcpp::List wkblst = CPL_write_wkb(sfc, true, native_endian(), get_dim_sfc(sfc, NULL), precision);
 	for (int i = 0; i < wkblst.size(); i++) {
 		Rcpp::RawVector rv = wkblst[i];
-		const uint8_t *wkb = &(rv[0]); 
+		const uint8_t *wkb = &(rv[0]);
 		lwgeom_v[i] = lwgeom_from_wkb(wkb, rv.size(),
 			LW_PARSER_CHECK_MINPOINTS & LW_PARSER_CHECK_ODD & LW_PARSER_CHECK_CLOSURE);
 	}
@@ -32,7 +32,7 @@ std::vector<LWGEOM *> lwgeom_from_sfc(Rcpp::List sfc) {
 
 // out
 Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
-	Rcpp::List wkblst(lwgeom_v.size()); 
+	Rcpp::List wkblst(lwgeom_v.size());
 	for (int i = 0; i < wkblst.size(); i++) {
 		size_t size;
 		const uint8_t *wkb = lwgeom_to_wkb(lwgeom_v[i], WKB_EXTENDED, &size);
@@ -43,6 +43,29 @@ Rcpp::List sfc_from_lwgeom(std::vector<LWGEOM *> lwgeom_v) {
 		wkblst[i] = raw;
 	}
 	return CPL_read_wkb(wkblst, true, false, native_endian());
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
+
+	Rcpp::List center(sfc.size());
+	Rcpp::NumericVector radius(sfc.size());
+
+	std::vector<LWGEOM *> lwgeom_v = lwgeom_from_sfc(sfc);
+	for (int i = 0; i < lwgeom_v.size(); i++) {
+		LWBOUNDINGCIRCLE *lwg_ret = lwgeom_calculate_mbc(lwgeom_v[i]);
+		center[i] = Rcpp::NumericVector::create(
+			Rcpp::Named("x") = lwg_ret->center->x,
+			Rcpp::Named("y") = lwg_ret->center->y
+		);
+		radius[i] = lwg_ret->radius;
+
+		lwgeom_free(lwgeom_v[i]);
+	}
+	return Rcpp::List::create(
+		Rcpp::Named("center") = center,
+		Rcpp::Named("radius") = radius
+	);
 }
 
 // [[Rcpp::export]]
@@ -106,7 +129,7 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 	pj_free(target);
 	Rcpp::List ret = sfc_from_lwgeom(lwgeom_v); // frees lwgeom_v
 	Rcpp::List crs = Rcpp::List::create(
-		_["epsg"] = NA_INTEGER, 
+		_["epsg"] = NA_INTEGER,
 		_["proj4string"] = CharacterVector::create(p4s[1]));
 	crs.attr("class") = "crs";
 	ret.attr("crs") = crs;
@@ -119,6 +142,11 @@ Rcpp::List CPL_lwgeom_transform(Rcpp::List sfc, Rcpp::CharacterVector p4s) {
 
 Rcpp::CharacterVector CPL_lwgeom_version(bool b = false) {
 	return NA_STRING;
+}
+
+Rcpp::List CPL_minimum_bounding_circle(Rcpp::List sfc) {
+	Rcpp::stop("st_min_bounding_circle requires compilation against liblwgeom\n");
+	return sfc;
 }
 
 Rcpp::List CPL_make_valid(Rcpp::List sfc) {
