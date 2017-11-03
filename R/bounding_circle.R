@@ -9,14 +9,16 @@
 #' x = st_multipoint(matrix(c(0,1,0,1),2,2))
 #' y = st_multipoint(matrix(c(0,0,1,0,1,1),3,2))
 #'
-#' plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
-#' plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
+#' if (!is.na(sf_extSoftVersion()["lwgeom"])) {
+#' 	plot(st_minimum_bounding_circle(x), axes=TRUE); plot(x, add=TRUE)
+#' 	plot(st_minimum_bounding_circle(y), axes=TRUE); plot(y, add=TRUE)
 #'
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' state = st_union(st_geometry(nc))
-#' plot(st_minimum_bounding_circle(state), asp=1)
-#' plot(state, add=TRUE)
-#'
+#' 	nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' 	state = st_union(st_geometry(nc))
+#' 	plot(st_minimum_bounding_circle(state), asp=1)
+#' 	plot(state, add=TRUE)
+#' }
+#' 
 #' @export
 st_minimum_bounding_circle = function(x, nQuadSegs = 30) UseMethod("st_minimum_bounding_circle", x)
 
