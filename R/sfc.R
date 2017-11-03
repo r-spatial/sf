@@ -21,6 +21,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' @param ... zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.
 #' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
+#' @param check_ring_dir see \link{st_read}
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
@@ -33,7 +34,7 @@ format.sfc = function(x, ..., digits = 30) {
 #' (sfc = st_sfc(pt1, pt2))
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
-st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
+st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -83,6 +84,10 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0) {
 
 	# (re)compute & set bbox:
 	attr(lst, "bbox") = compute_bbox(lst)
+
+	# check ring directions:
+	if (check_ring_dir) # also GEOMETRYCOLLECTION?
+		lst = check_ring_dir(lst)
 
 	# get & set crs:
 	if (is.na(crs) && !is.null(attr(lst, "crs")))
@@ -439,4 +444,23 @@ coord_4 = function(x) { # x is a list of lists of lists with matrices
 #' @export
 rep.sfc = function(x, ...) {
 	st_sfc(NextMethod(), crs = st_crs(x))
+}
+
+check_ring_dir = function(x) {
+	check_polygon = function(pol) {
+		sa = sapply(pol, CPL_signed_area)
+		revert = if (length(sa))
+				c(sa[1] < 0, sa[-1] > 0)
+			else
+				logical(0)
+		pol[revert] = lapply(pol[revert], function(m) m[nrow(m):1,])
+		pol
+	}
+	ret = switch(class(x)[1],
+		sfc_POLYGON= lapply(x, check_polygon),
+		sfc_MULTIPOLYGON= lapply(x, function(y) structure(lapply(y, check_polygon), class = class(y))),
+		stop(paste("check_ring_dir: not supported for class", class(x)[1]))
+	)
+	attributes(ret) = attributes(x)
+	ret
 }

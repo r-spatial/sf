@@ -5,7 +5,7 @@
 \alias{st_sfc}
 \title{Create simple feature geometry list column}
 \usage{
-st_sfc(..., crs = NA_crs_, precision = 0)
+st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE)
 }
 \arguments{
 \item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
@@ -13,6 +13,8 @@ st_sfc(..., crs = NA_crs_, precision = 0)
 \item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
 \item{precision}{numeric; see \link{st_as_binary}}
+
+\item{check_ring_dir}{see \link{st_read}}
 }
 \value{
 an object of class \code{sfc}, which is a classed list-column with simple feature geometries.

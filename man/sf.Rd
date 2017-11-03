@@ -9,7 +9,7 @@
 \usage{
 st_sf(..., agr = NA_agr_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision,
-  sf_column_name = NULL)
+  sf_column_name = NULL, check_ring_dir = FALSE)
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
 }
@@ -28,6 +28,8 @@ st_sf(..., agr = NA_agr_, row.names,
 
 \item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
 there are more than one and \code{sf_column_name} is not given, the first one is taken.}
+
+\item{check_ring_dir}{see \link{st_read}}
 
 \item{x}{object of class \code{sf}}
 

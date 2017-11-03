@@ -203,3 +203,20 @@ x = sf:::st_to_s2(nc)
 x1 = st_geometry(x)
 cc = st_coordinates(x1)
 summary(sqrt(cc[,1]^2+cc[,2]^2+cc[,3]^2))
+
+# check_ring_dir
+m = rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0))
+mi = m[nrow(m):1,]
+pol = st_polygon(list(m * 10, m + .5, mi + 1.5, mi + 3.5, m + 5, mi + 6.5))
+st_sfc(pol)
+x = st_sfc(pol, check_ring_dir=TRUE)
+str(x)
+x = st_sfc(st_polygon(), st_polygon(), check_ring_dir=TRUE)
+str(x)
+x = st_sfc(st_polygon(), pol, check_ring_dir=TRUE)
+
+mp = st_multipolygon(list(pol, pol))
+try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
+x <- st_sfc(mp, pol) %>% st_cast("MULTIPOLYGON") %>% st_sfc(check_ring_dir=TRUE)
+x
+str(x)

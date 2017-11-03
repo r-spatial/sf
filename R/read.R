@@ -32,6 +32,7 @@ set_utf8 = function(x) {
 #' is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
 #' and a warning is given when precision is lost (i.e., values are larger than 2^53).
+#' @param check_ring_dir logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)
 #' @details for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
 #' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 #' may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
@@ -63,7 +64,7 @@ set_utf8 = function(x) {
 #' @export
 st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
-		int64_as_string = FALSE) {
+		int64_as_string = FALSE, check_ring_dir = FALSE) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
@@ -101,7 +102,8 @@ st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_colu
 		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
 
 	x = st_as_sf(x, ...,
-		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column])
+		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column],
+		check_ring_dir = check_ring_dir)
 	if (! quiet)
 		print(x, n = 0)
 	else

@@ -10,7 +10,8 @@
 \usage{
 st_read(dsn, layer, ..., options = NULL, quiet = FALSE,
   geometry_column = 1L, type = 0, promote_to_multi = TRUE,
-  stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE)
+  stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE,
+  check_ring_dir = FALSE)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
@@ -46,6 +47,8 @@ is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactor
 
 \item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
 and a warning is given when precision is lost (i.e., values are larger than 2^53).}
+
+\item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)}
 
 \item{conn}{open database connection}
 

@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* `st_read`, `st_sf` and `st_sfc` gain a parameter `check_ring_dir` (default: `FALSE`) that checks (and corrects) ring directions: when seen from above exterior counter clockwise, holes clockwise.
+
 * get rid of one of the two `classInt::classIntervals` warnings if number of unique values is smaller than the number of breaks asked for
 
 # version 0.5-5

@@ -794,6 +794,68 @@ The following object is masked from 'package:dplyr':
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
       1       1       1       1       1       1 
 > 
+> # check_ring_dir
+> m = rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0))
+> mi = m[nrow(m):1,]
+> pol = st_polygon(list(m * 10, m + .5, mi + 1.5, mi + 3.5, m + 5, mi + 6.5))
+> st_sfc(pol)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (0.5 0....
+> x = st_sfc(pol, check_ring_dir=TRUE)
+> str(x)
+sfc_POLYGON of length 1; first list element: List of 6
+ $ : num [1:5, 1:2] 0 10 10 0 0 0 0 10 10 0
+ $ : num [1:5, 1:2] 0.5 0.5 1.5 1.5 0.5 0.5 1.5 1.5 0.5 0.5
+ $ : num [1:5, 1:2] 1.5 1.5 2.5 2.5 1.5 1.5 2.5 2.5 1.5 1.5
+ $ : num [1:5, 1:2] 3.5 3.5 4.5 4.5 3.5 3.5 4.5 4.5 3.5 3.5
+ $ : num [1:5, 1:2] 5 5 6 6 5 5 6 6 5 5
+ $ : num [1:5, 1:2] 6.5 6.5 7.5 7.5 6.5 6.5 7.5 7.5 6.5 6.5
+ - attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
+> x = st_sfc(st_polygon(), st_polygon(), check_ring_dir=TRUE)
+> str(x)
+sfc_POLYGON of length 2; first list element:  list()
+ - attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
+> x = st_sfc(st_polygon(), pol, check_ring_dir=TRUE)
+> 
+> mp = st_multipolygon(list(pol, pol))
+> try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
+Error in check_ring_dir(lst) : 
+  check_ring_dir: not supported for class sfc_GEOMETRY
+> x <- st_sfc(mp, pol) %>% st_cast("MULTIPOLYGON") %>% st_sfc(check_ring_dir=TRUE)
+> x
+Geometry set for 2 features 
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
+epsg (SRID):    NA
+proj4string:    NA
+MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (...
+MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (...
+> str(x)
+sfc_MULTIPOLYGON of length 2; first list element: List of 2
+ $ :List of 6
+  ..$ : num [1:5, 1:2] 0 10 10 0 0 0 0 10 10 0
+  ..$ : num [1:5, 1:2] 0.5 0.5 1.5 1.5 0.5 0.5 1.5 1.5 0.5 0.5
+  ..$ : num [1:5, 1:2] 1.5 1.5 2.5 2.5 1.5 1.5 2.5 2.5 1.5 1.5
+  ..$ : num [1:5, 1:2] 3.5 3.5 4.5 4.5 3.5 3.5 4.5 4.5 3.5 3.5
+  ..$ : num [1:5, 1:2] 5 5 6 6 5 5 6 6 5 5
+  ..$ : num [1:5, 1:2] 6.5 6.5 7.5 7.5 6.5 6.5 7.5 7.5 6.5 6.5
+  ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
+ $ :List of 6
+  ..$ : num [1:5, 1:2] 0 10 10 0 0 0 0 10 10 0
+  ..$ : num [1:5, 1:2] 0.5 0.5 1.5 1.5 0.5 0.5 1.5 1.5 0.5 0.5
+  ..$ : num [1:5, 1:2] 1.5 1.5 2.5 2.5 1.5 1.5 2.5 2.5 1.5 1.5
+  ..$ : num [1:5, 1:2] 3.5 3.5 4.5 4.5 3.5 3.5 4.5 4.5 3.5 3.5
+  ..$ : num [1:5, 1:2] 5 5 6 6 5 5 6 6 5 5
+  ..$ : num [1:5, 1:2] 6.5 6.5 7.5 7.5 6.5 6.5 7.5 7.5 6.5 6.5
+  ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
+ - attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"
+> 
 > proc.time()
    user  system elapsed 
-  1.948   0.040   1.992 
+  2.068   0.304   2.060 

@@ -189,6 +189,10 @@ CPL_proj_info <- function(type) {
     .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
 }
 
+CPL_signed_area <- function(pts) {
+    .Call('_sf_CPL_signed_area', PACKAGE = 'sf', pts)
+}
+
 CPL_hex_to_raw <- function(cx) {
     .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }

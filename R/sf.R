@@ -186,6 +186,7 @@ list_column_to_sfc = function(x) {
 #' @param precision numeric; see \link{st_as_binary}
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there are more than one and \code{sf_column_name} is not given, the first one is taken.
+#' @param check_ring_dir see \link{st_read}
 #' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 #'
 #' When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
@@ -200,7 +201,8 @@ list_column_to_sfc = function(x) {
 #' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
-		stringsAsFactors = default.stringsAsFactors(), crs, precision, sf_column_name = NULL) {
+		stringsAsFactors = default.stringsAsFactors(), crs, precision, 
+		sf_column_name = NULL, check_ring_dir = FALSE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
 		x = x[[1L]]
@@ -248,7 +250,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		}
 
 	for (i in seq_along(all_sfc_names))
-		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]])
+		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]], check_ring_dir = check_ring_dir)
 
 	if (! missing(precision))
 		attr(df[[sfc_name]], "precision") = precision
