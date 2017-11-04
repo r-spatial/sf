@@ -92,7 +92,7 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 	if (dim != NULL) {
 		Rcpp::IntegerVector sfc_dim = sfc_cls["_dim"];
 		if (sfc_dim.size() == 0)
-			Rcpp::stop("sfc_dim size 0: should not happen");
+			Rcpp::stop("sfc_dim size 0: should not happen"); // #nocov
 		*dim = sfc_dim[0];
 	}
 
