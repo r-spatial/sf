@@ -42,7 +42,7 @@ install_github("r-spatial/sf")
 
 ### Windows
 
-Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). (This does not include `liblwgeom`; it will need to be installed separately for functions that require it, such as `st_make_valid`, to work.)
+Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). 
 
 ### MacOS
 
@@ -60,22 +60,20 @@ brew link --force gdal2
 ```
 after that, you should be able to install `sf` as a source package.
 
-According to https://github.com/r-spatial/sf/issues/349, `brew install postgis` installs a working `liblwgeom`. In case of problems, search the issues for `brew` before opening a new one.
-
 For MacOS Sierra, see
 [these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
 instruction, using kyngchaos frameworks.
 
 ### Linux
 
-For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are required; `liblwgeom` is optional.
+For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are required.
 
 #### Ubuntu
 To install the dependencies on Ubuntu, either add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories:
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
-sudo apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev
+sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
 ```
 or install dependencies from source; see e.g. an older [travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints.
 
@@ -87,6 +85,10 @@ sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-de
 
 #### Other
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/master/inst/docker).
+
+### lwgeom
+
+Functions and methods that require `liblwgeom`, including `st_make_valid`, have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom).
 
 ### Contributing
 
