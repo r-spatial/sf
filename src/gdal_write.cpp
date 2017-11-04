@@ -22,7 +22,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 		else if (strcmp(cls[i], "POSIXct") == 0)
 			ret[i] = OFTDateTime;
 		else { // #nocov start
-			Rcpp::Rcout << "Field of type " << nm[i] << " not supported." << std::endl;
+			Rcpp::Rcout << "Field " << nm[i] << " of type " << cls[i] << " not supported." << std::endl;
 			Rcpp::stop("Layer creation failed.\n");
 		}      // #nocov end
 		OGRFieldDefn oField(nm[i], ret[i]);
@@ -63,7 +63,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
 				if (! Rcpp::CharacterVector::is_na(cv[i]))
-					poFeature->SetField(nm[j], (const char *) cv[i]);
+					poFeature->SetField(j, (const char *) cv[i]);
 				else
 					SetNull(poFeature, j);
 				} break;
@@ -71,7 +71,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
 				if (! Rcpp::IntegerVector::is_na(iv[i]))
-					poFeature->SetField(nm[j], (int) iv[i]);
+					poFeature->SetField(j, (int) iv[i]);
 				else
 					SetNull(poFeature, j); // #nocov
 				} break;
@@ -79,7 +79,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (! Rcpp::NumericVector::is_na(nv[i]))
-					poFeature->SetField(nm[j], (double) nv[i]);
+					poFeature->SetField(j, (double) nv[i]);
 				else
 					SetNull(poFeature, j);
 				} break;
@@ -96,7 +96,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
 				Rcpp::Function unlist("unlist");
 				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
-				poFeature->SetField(nm[j], 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
+				poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
 				} break;
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
@@ -110,7 +110,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0.attr("tzone") = "UTC";
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
-				poFeature->SetField(nm[j], 1900 + (int) rd[5], (int) rd[4] + 1,
+				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4] + 1,
 					(int) rd[3], (int) rd[2], (int) rd[1],
 					(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
 				} break;
