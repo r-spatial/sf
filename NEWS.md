@@ -1,8 +1,10 @@
 # version 0.5-6
 
-* `st_read`, `st_sf` and `st_sfc` gain a parameter `check_ring_dir` (default: `FALSE`) that checks (and corrects) ring directions: when seen from above exterior counter clockwise, holes clockwise.
+* functions depending on `liblwgeom` (`st_make_valid`, `st_geohash`, `st_plit`) have been moved to their own package, https://github.com/r-spatial/lwgeom; argument `use_gdal` of `st_transform` has been deprecated, instead one can now use `lwgeom::st_transform_proj`; sf now no longer tries to link to liblwgeom; #509, #537
 
-* get rid of one of the two `classInt::classIntervals` warnings if number of unique values is smaller than the number of breaks asked for
+* `st_read`, `st_sf` and `st_sfc` gain a parameter `check_ring_dir` (default: `FALSE`) that checks ring directions and corrects to: exterior counter clockwise, holes clockwise, when seen from above.
+
+* get rid of `classInt::classIntervals` warning if number of unique values is smaller than the number of breaks asked for
 
 # version 0.5-5
 
