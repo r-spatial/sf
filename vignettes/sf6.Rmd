@@ -70,10 +70,10 @@ load packages but address all functions by the `sf::` prefix, as in
 i = sf::st_intersects(sf1, sf2)
 ```
 
-This works up to the moment that a `dplyr` method for an `sf` object
+This works up to the moment that a `dplyr` generic like `select` for an `sf` object
 is needed: should one call `dplyr::select` (won't know it should search
-in package `sf`) or `sf::select` (which doesn't exist)? Neither. One should
-in this case simply load `sf`, either by
+in package `sf`) or `sf::select` (which doesn't exist)? Neither works.
+One should in this case simply load `sf`, e.g. by
 ```{r,eval=FALSE}
 library(sf)
 ```
