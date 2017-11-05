@@ -41,9 +41,9 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 st_area = function(x) {
 	if (isTRUE(st_is_longlat(x))) {
 		p = crs_parameters(st_crs(x))
-		if (!requireNamespace("sp", quietly = TRUE))
+		if (! requireNamespace("sp", quietly = TRUE))
 			stop("package sp required, please install it first")
-		if (!requireNamespace("geosphere", quietly = TRUE))
+		if (! requireNamespace("geosphere", quietly = TRUE))
 			stop("package geosphere required, please install it first")
 		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"),
 				as.numeric(p$SemiMajor), 1./p$InvFlattening)
@@ -51,7 +51,7 @@ st_area = function(x) {
 		a
 	} else {
 		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
-		if (!is.na(st_crs(x)))
+		if (! is.na(st_crs(x)))
 			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
 		a
 	}
@@ -94,7 +94,7 @@ st_length = function(x, dist_fun = geosphere::distGeo) {
 	} else {
 		ret = CPL_length(x) # units of coordinates
 		ret[is.nan(ret)] = NA
-		if (!is.na(st_crs(x)))
+		if (! is.na(st_crs(x)))
 			units(ret) = crs_parameters(st_crs(x))$ud_unit
 		ret
 	}
@@ -355,7 +355,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x))) {
 		warning("st_buffer does not correctly buffer longitude/latitude data")
 		if (inherits(dist, "units"))
-			dist = units::set_units(dist, "arc_degrees")
+			units(dist) = make_unit("arc_degrees")
 		else
 			message("dist is assumed to be in decimal degrees (arc_degrees).")
 	} else if (inherits(dist, "units")) {
@@ -363,7 +363,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 			stop("x does not have a crs set: can't convert units")
 		if (is.null(st_crs(x)$units))
 			stop("x has a crs without units: can't convert units")
-		units(dist) = units::set_units(dist, udunits_from_proj[st_crs(x)$units])
+		units(dist) = make_unit(udunits_from_proj[st_crs(x)$units])
 	}
 	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))

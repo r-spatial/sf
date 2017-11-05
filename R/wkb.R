@@ -244,7 +244,7 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 		structure(lapply(x, st_as_binary.sfg, EWKB = EWKB, pureR = pureR, endian = endian), class = "WKB")
 	else {
 		stopifnot(endian == .Platform$endian)
-		structure(CPL_write_wkb(x, list("_cls" = Dimension(x[[1]])), EWKB, precision), class = "WKB")
+		structure(CPL_write_wkb(x, EWKB, precision), class = "WKB")
 	}
 	if (hex)
 		vapply(ret, CPL_raw_to_hex, "")

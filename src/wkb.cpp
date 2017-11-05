@@ -56,56 +56,6 @@ T swap_endian(T u) {
     return dest.u;
 }
 
-inline unsigned char char2int(char c) {
-	if (c >= '0' && c <= '9')
-		return c - '0';
-	if (c >= 'a' && c <= 'f')
-		return c - 'a' + 10;
-	if (c >= 'A' && c <= 'F')
-		return c - 'A' + 10;
-	Rcpp::stop("char2int: false character in hex string");
-}
-
-// [[Rcpp::export]]
-Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
-// HexToRaw modified from cmhh, see https://github.com/ianmcook/wkb/issues/10
-// @cmhh: if you make yourself known, I can add you to the contributors
-
-// convert a hexadecimal string into a raw vector
-// this version, dropping istringstream and std::hex, is 12 time faster than
-// the one in the wkb github issue. C rules.
-
-	Rcpp::List output(cx.size());
-	for (int j = 0; j < cx.size(); j++) {
-		Rcpp::RawVector raw(cx[j].size() / 2);
-		const char *cp = cx[j];
-		for (int i = 0; i < raw.size(); i++) {
-			raw[i] = (char2int(cp[0]) << 4) + char2int(cp[1]);
-			cp += 2;
-			if (i % 100000 == 0)
-				Rcpp::checkUserInterrupt();
-		}
-		output[j] = raw;
-		if (j % 1000 == 0)
-			Rcpp::checkUserInterrupt();
-	}
-	return output;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
-	std::ostringstream os;
-	char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'a', 'b', 'c', 'd', 'e', 'f' };
-	unsigned char *cp = &(raw[0]);
-	for (int i = 0; i < raw.size(); i++) {
-		int high = ((int) cp[i]) / 16;
-		int low =  ((int) cp[i]) % 16;
-  		os.write(&hex[high], sizeof(char));
-  		os.write(&hex[low], sizeof(char));
-	}
-	return Rcpp::CharacterVector::create(os.str());
-}
 
 void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	// we're at byte 3 now:
@@ -694,8 +644,9 @@ int native_endian(void) {
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, Rcpp::List sfc_dim, bool EWKB = false, double precision = 0.0) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, double precision = 0.0) {
 
+	Rcpp::List sfc_dim = get_dim_sfc(sfc);
 	Rcpp::List output(sfc.size()); // with raw vectors
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
@@ -740,7 +691,6 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, Rcpp::List sfc_dim, bool EWKB = false, 
 
 // get dim, "XY", "XYZ", "XYZM" or "XYM" from an sfc object
 
-// [[Rcpp::export]]
 Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 
 	if (sfc.length() == 0)

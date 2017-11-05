@@ -24,44 +24,6 @@ namespace sf {
         }
     }
 
-    inline Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
-        typedef SEXP(*Ptr_CPL_hex_to_raw)(SEXP);
-        static Ptr_CPL_hex_to_raw p_CPL_hex_to_raw = NULL;
-        if (p_CPL_hex_to_raw == NULL) {
-            validateSignature("Rcpp::List(*CPL_hex_to_raw)(Rcpp::CharacterVector)");
-            p_CPL_hex_to_raw = (Ptr_CPL_hex_to_raw)R_GetCCallable("sf", "_sf_CPL_hex_to_raw");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_CPL_hex_to_raw(Shield<SEXP>(Rcpp::wrap(cx)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
-    }
-
-    inline Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
-        typedef SEXP(*Ptr_CPL_raw_to_hex)(SEXP);
-        static Ptr_CPL_raw_to_hex p_CPL_raw_to_hex = NULL;
-        if (p_CPL_raw_to_hex == NULL) {
-            validateSignature("Rcpp::CharacterVector(*CPL_raw_to_hex)(Rcpp::RawVector)");
-            p_CPL_raw_to_hex = (Ptr_CPL_raw_to_hex)R_GetCCallable("sf", "_sf_CPL_raw_to_hex");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_CPL_raw_to_hex(Shield<SEXP>(Rcpp::wrap(raw)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::CharacterVector >(rcpp_result_gen);
-    }
-
     inline Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
         typedef SEXP(*Ptr_CPL_read_wkb)(SEXP,SEXP,SEXP);
         static Ptr_CPL_read_wkb p_CPL_read_wkb = NULL;
@@ -81,36 +43,17 @@ namespace sf {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline Rcpp::List CPL_write_wkb(Rcpp::List sfc, Rcpp::List sfc_dim, bool EWKB = false, double precision = 0.0) {
-        typedef SEXP(*Ptr_CPL_write_wkb)(SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, double precision = 0.0) {
+        typedef SEXP(*Ptr_CPL_write_wkb)(SEXP,SEXP,SEXP);
         static Ptr_CPL_write_wkb p_CPL_write_wkb = NULL;
         if (p_CPL_write_wkb == NULL) {
-            validateSignature("Rcpp::List(*CPL_write_wkb)(Rcpp::List,Rcpp::List,bool,double)");
+            validateSignature("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool,double)");
             p_CPL_write_wkb = (Ptr_CPL_write_wkb)R_GetCCallable("sf", "_sf_CPL_write_wkb");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_CPL_write_wkb(Shield<SEXP>(Rcpp::wrap(sfc)), Shield<SEXP>(Rcpp::wrap(sfc_dim)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(precision)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
-    }
-
-    inline Rcpp::List get_dim_sfc(Rcpp::List sfc) {
-        typedef SEXP(*Ptr_get_dim_sfc)(SEXP);
-        static Ptr_get_dim_sfc p_get_dim_sfc = NULL;
-        if (p_get_dim_sfc == NULL) {
-            validateSignature("Rcpp::List(*get_dim_sfc)(Rcpp::List)");
-            p_get_dim_sfc = (Ptr_get_dim_sfc)R_GetCCallable("sf", "_sf_get_dim_sfc");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_get_dim_sfc(Shield<SEXP>(Rcpp::wrap(sfc)));
+            rcpp_result_gen = p_CPL_write_wkb(Shield<SEXP>(Rcpp::wrap(sfc)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(precision)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -481,6 +481,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_hex_to_raw
+Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
+RcppExport SEXP _sf_CPL_hex_to_raw(SEXP cxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type cx(cxSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_hex_to_raw(cx));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_raw_to_hex
+Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw);
+RcppExport SEXP _sf_CPL_raw_to_hex(SEXP rawSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_raw_to_hex(raw));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
@@ -525,66 +547,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_hex_to_raw
-Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
-static SEXP _sf_CPL_hex_to_raw_try(SEXP cxSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type cx(cxSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_hex_to_raw(cx));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _sf_CPL_hex_to_raw(SEXP cxSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_CPL_hex_to_raw_try(cxSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// CPL_raw_to_hex
-Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw);
-static SEXP _sf_CPL_raw_to_hex_try(SEXP rawSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_raw_to_hex(raw));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _sf_CPL_raw_to_hex(SEXP rawSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_CPL_raw_to_hex_try(rawSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // CPL_read_wkb
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
@@ -618,53 +580,22 @@ RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatiali
     return rcpp_result_gen;
 }
 // CPL_write_wkb
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, Rcpp::List sfc_dim, bool EWKB, double precision);
-static SEXP _sf_CPL_write_wkb_try(SEXP sfcSEXP, SEXP sfc_dimSEXP, SEXP EWKBSEXP, SEXP precisionSEXP) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, double precision);
+static SEXP _sf_CPL_write_wkb_try(SEXP sfcSEXP, SEXP EWKBSEXP, SEXP precisionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc_dim(sfc_dimSEXP);
     Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
     Rcpp::traits::input_parameter< double >::type precision(precisionSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, sfc_dim, EWKB, precision));
+    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, EWKB, precision));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP sfc_dimSEXP, SEXP EWKBSEXP, SEXP precisionSEXP) {
+RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP, SEXP precisionSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_CPL_write_wkb_try(sfcSEXP, sfc_dimSEXP, EWKBSEXP, precisionSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// get_dim_sfc
-Rcpp::List get_dim_sfc(Rcpp::List sfc);
-static SEXP _sf_get_dim_sfc_try(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_dim_sfc(sfc));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _sf_get_dim_sfc(SEXP sfcSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_get_dim_sfc_try(sfcSEXP));
+        rcpp_result_gen = PROTECT(_sf_CPL_write_wkb_try(sfcSEXP, EWKBSEXP, precisionSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -685,22 +616,16 @@ RcppExport SEXP _sf_get_dim_sfc(SEXP sfcSEXP) {
 static int _sf_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Rcpp::List(*CPL_hex_to_raw)(Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*CPL_raw_to_hex)(Rcpp::RawVector)");
         signatures.insert("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool)");
-        signatures.insert("Rcpp::List(*CPL_write_wkb)(Rcpp::List,Rcpp::List,bool,double)");
-        signatures.insert("Rcpp::List(*get_dim_sfc)(Rcpp::List)");
+        signatures.insert("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool,double)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _sf_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("sf", "_sf_CPL_hex_to_raw", (DL_FUNC)_sf_CPL_hex_to_raw_try);
-    R_RegisterCCallable("sf", "_sf_CPL_raw_to_hex", (DL_FUNC)_sf_CPL_raw_to_hex_try);
     R_RegisterCCallable("sf", "_sf_CPL_read_wkb", (DL_FUNC)_sf_CPL_read_wkb_try);
     R_RegisterCCallable("sf", "_sf_CPL_write_wkb", (DL_FUNC)_sf_CPL_write_wkb_try);
-    R_RegisterCCallable("sf", "_sf_get_dim_sfc", (DL_FUNC)_sf_get_dim_sfc_try);
     R_RegisterCCallable("sf", "_sf_RcppExport_validate", (DL_FUNC)_sf_RcppExport_validate);
     return R_NilValue;
 }
@@ -745,15 +670,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 2},
     {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
+    {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
+    {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
-    {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
-    {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
-    {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 4},
-    {"_sf_get_dim_sfc", (DL_FUNC) &_sf_get_dim_sfc, 1},
+    {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 3},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

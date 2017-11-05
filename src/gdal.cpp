@@ -121,8 +121,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
 }
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
-	double precision = sfc.attr("precision");
-	Rcpp::List wkblst = CPL_write_wkb(sfc, get_dim_sfc(sfc), false, precision);
+	Rcpp::List wkblst = CPL_write_wkb(sfc, false, sfc.attr("precision"));
 	std::vector<OGRGeometry *> g(sfc.length());
 	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;

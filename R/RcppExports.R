@@ -157,6 +157,14 @@ CPL_transpose_sparse_incidence <- function(m, n) {
     .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
+CPL_hex_to_raw <- function(cx) {
+    .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
+}
+
+CPL_raw_to_hex <- function(raw) {
+    .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }
@@ -173,24 +181,12 @@ CPL_signed_area <- function(pts) {
     .Call('_sf_CPL_signed_area', PACKAGE = 'sf', pts)
 }
 
-CPL_hex_to_raw <- function(cx) {
-    .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
-}
-
-CPL_raw_to_hex <- function(raw) {
-    .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
-}
-
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
     .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }
 
-CPL_write_wkb <- function(sfc, sfc_dim, EWKB = FALSE, precision = 0.0) {
-    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, sfc_dim, EWKB, precision)
-}
-
-get_dim_sfc <- function(sfc) {
-    .Call('_sf_get_dim_sfc', PACKAGE = 'sf', sfc)
+CPL_write_wkb <- function(sfc, EWKB = FALSE, precision = 0.0) {
+    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, precision)
 }
 
 # Register entry points for exported C++ functions
