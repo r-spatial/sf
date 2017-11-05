@@ -20,7 +20,7 @@
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
 
-// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::interfaces(r, cpp)]] 
 
 typedef struct {
 	const unsigned char *pt;
@@ -389,6 +389,12 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	return output;
 }
 
+int native_endian(void) {
+	const int one = 1;
+	unsigned char *cp = (unsigned char *) &one;
+	return (int) *cp;
+}
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
 	Rcpp::List output(wkb_list.size());
@@ -637,20 +643,16 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 	}
 }
 
-int native_endian(void) {
-	const int one = 1;
-	unsigned char *cp = (unsigned char *) &one;
-	return (int) *cp;
-}
-
 // [[Rcpp::export]]
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, double precision = 0.0) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 
-	Rcpp::List sfc_dim = get_dim_sfc(sfc);
-	Rcpp::List output(sfc.size()); // with raw vectors
+	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
+	Rcpp::List sfc_dim = get_dim_sfc(sfc);
 	Rcpp::CharacterVector dim = sfc_dim["_cls"];
 	const char *cls = cls_attr[0], *dm = dim[0];
+
+	Rcpp::List output(sfc.size()); // with raw vectors
 
 	int endian = native_endian();
 

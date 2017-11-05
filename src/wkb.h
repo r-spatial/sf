@@ -19,8 +19,6 @@
 #define SF_Triangle           17
 
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, double precision);
-Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
-int native_endian(void);
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
 unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp, int srid);
 Rcpp::List get_dim_sfc(Rcpp::List sfc);

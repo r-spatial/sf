@@ -97,7 +97,7 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 	if (cls[0] == "XYM" || cls[0] == "XYZM")
 		Rcpp::stop("GEOS does not support XYM or XYZM geometries; use st_zm() to drop M\n"); // #nocov
 
-	Rcpp::List wkblst = CPL_write_wkb(sfc, true, sfc.attr("precision"));
+	Rcpp::List wkblst = CPL_write_wkb(sfc, true);
 	std::vector<GEOSGeom> g(sfc.size());
 	GEOSWKBReader *wkb_reader = GEOSWKBReader_create_r(hGEOSCtxt);
 	for (int i = 0; i < sfc.size(); i++) {
