@@ -49,10 +49,10 @@
   pch = 1, type = "l", add = FALSE)
 
 \method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  cex = 1, pch = NA, border = 1, add = FALSE, rule = "winding")
+  cex = 1, pch = NA, border = 1, add = FALSE, rule = "evenodd")
 
 \method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  border = 1, add = FALSE, rule = "winding")
+  border = 1, add = FALSE, rule = "evenodd")
 
 \method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1, bg = 0,
   lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
@@ -109,7 +109,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{border}{color of polygon border}
 
-\item{rule}{see \link[graphics]{polypath}}
+\item{rule}{see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions}
 
 \item{xlim}{see \link{plot.window}}
 
