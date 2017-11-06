@@ -246,7 +246,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	// read all features:
 	poLayer->ResetReading();
-	unsigned int i = 0; // feature counter
+	size_t i = 0; // feature counter
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
@@ -416,7 +416,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	std::vector<OGRGeometry *> to_be_freed;
 	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
 		std::vector<OGRGeometry *> poGeom(n);
-		for (size_t i = 0; i < n; i++)
+		for (i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
 
 		int toType = 0, toTypeU = 0;
@@ -450,13 +450,13 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 			// replace null's with empty:
 			OGRwkbGeometryType gt = wkbGeometryCollection;
-			for (size_t i = 0; i < poGeom.size(); i++) {
+			for (i = 0; i < poGeom.size(); i++) {
 				if (poGeom[i] != NULL) {
 					gt = poGeom[i]->getGeometryType(); // first non-NULL
 					break;
 				}
 			}
-			for (size_t i = 0; i < poGeom.size(); i++) {
+			for (i = 0; i < poGeom.size(); i++) {
 				if (poGeom[i] == NULL) {
 					poGeom[i] = OGRGeometryFactory::createGeometry(gt);
 					if (poGeom[i] == NULL)
@@ -481,9 +481,9 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
 
 	// clean up:
-	for (size_t i = 0; i < n; i++)
+	for (i = 0; i < n; i++)
 		OGRFeature::DestroyFeature(poFeatureV[i]);
-	for (size_t i = 0; i < to_be_freed.size(); i++)
+	for (i = 0; i < to_be_freed.size(); i++)
 		OGRGeometryFactory::destroyGeometry(to_be_freed[i]);
 	GDALClose(poDS);
 
