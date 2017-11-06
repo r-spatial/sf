@@ -320,10 +320,10 @@ p_bind = function(lst) {
 }
 
 #' @name plot
-#' @param rule see \link[graphics]{polypath}
+#' @param rule see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions 
 #' @export
 plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch = NA, border = 1,
-		add = FALSE, rule = "winding") {
+		add = FALSE, rule = "evenodd") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
@@ -349,7 +349,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch 
 #' @name plot
 #' @method plot sfc_MULTIPOLYGON
 #' @export
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "winding") {
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, rule = "evenodd") {
 # FIXME: take care of lend, ljoin, xpd, and lmitre
 	stopifnot(missing(y))
 	if (! add)
