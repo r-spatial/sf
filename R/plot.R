@@ -89,8 +89,10 @@
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
 		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.8)) {
+
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
+	key.pos.missing = missing(key.pos)
 	dots = list(...)
 
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
@@ -142,6 +144,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 
 			if (is.null(col)) { # compute colors from values:
 				col = if (is.factor(values)) {
+						if (key.pos.missing && nlevels(values) > 30) # doesn't make sense:
+							key.pos = NULL
 						colors = if (is.function(pal))
 								pal(nlevels(values))
 							else
@@ -179,6 +183,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					which.first = function(x) which(x)[1]
 					fnum = as.numeric(values)
 					colors = col[ sapply(unique(fnum), function(i) which.first(i == fnum)) ]
+					if (key.pos.missing && nlevels(values) > 30) # doesn't make sense:
+						key.pos = NULL
 				} else # no key:
 					key.pos = NULL
 			}
