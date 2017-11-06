@@ -12,6 +12,12 @@
 \alias{st_proj_info}
 \alias{st_transform}
 \alias{st_wrap_dateline}
+\alias{st_transform}
+\alias{st_wrap_dateline.sfc}
+\alias{st_transform}
+\alias{st_wrap_dateline.sf}
+\alias{st_transform}
+\alias{st_wrap_dateline.sfg}
 \title{Transform or convert coordinates of simple feature}
 \usage{
 st_transform(x, crs, ...)
@@ -25,7 +31,15 @@ st_transform(x, crs, ...)
 
 st_proj_info(type = "proj")
 
-st_wrap_dateline(x, options = "WRAPDATELINE=YES", quiet = TRUE)
+st_wrap_dateline(x, options, quiet)
+
+\method{st_wrap_dateline}{sfc}(x, options = "WRAPDATELINE=YES",
+  quiet = TRUE)
+
+\method{st_wrap_dateline}{sf}(x, options = "WRAPDATELINE=YES", quiet = TRUE)
+
+\method{st_wrap_dateline}{sfg}(x, options = "WRAPDATELINE=YES",
+  quiet = TRUE)
 }
 \arguments{
 \item{x}{object of class sf, sfc or sfg}

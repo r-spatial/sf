@@ -1,6 +1,10 @@
 # version 0.5-6
 
-* functions depending on `liblwgeom` (`st_make_valid`, `st_geohash`, `st_plit`) have been moved to their own package, https://github.com/r-spatial/lwgeom; argument `use_gdal` of `st_transform` has been deprecated, instead one can now use `lwgeom::st_transform_proj`; sf now no longer tries to link to liblwgeom; #509, #537
+* make `st_wrap_dateline` a generic, with methods for `sf`, `sfc` and `sfg`; #541
+
+* `plot.sf` and `st_as_grob` (used by ggplot2) are now robust against misspecified ring directions (holes that have the same direction as the exterior rings), by using `rule = "evenodd"`; #540
+
+* functions depending on `liblwgeom` (`st_make_valid`, `st_geohash`, `st_plit`) have been moved to their own package, https://github.com/r-spatial/lwgeom; argument `use_gdal` of `st_transform` has been deprecated, instead one can now use `lwgeom::st_transform_proj`; sf now no longer tries to link to liblwgeom; #509, #537, #487
 
 * `st_read`, `st_sf` and `st_sfc` gain a parameter `check_ring_dir` (default: `FALSE`) that checks ring directions and corrects to: exterior counter clockwise, holes clockwise, when seen from above.
 

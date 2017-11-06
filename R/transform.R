@@ -136,21 +136,37 @@ st_proj_info = function(type = "proj") {
 }
 
 #' @name st_transform
+#' @export
+st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
+
+#' @name st_transform
 #' @param options character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)
 #' @param quiet logical; print options after they have been parsed?
 #' @export
 #' @examples
 #' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
 #' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280}
-st_wrap_dateline = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
+st_wrap_dateline.sfc = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	stopifnot(st_is_longlat(x))
 	stopifnot(is.character(options))
 	stopifnot(is.logical(quiet) && length(quiet) == 1)
 	st_sfc(CPL_wrap_dateline(x, options, quiet), crs = st_crs(x))
 }
 
+#' @name st_transform
+#' @export
+st_wrap_dateline.sf = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
+	st_set_geometry(x, st_sfc(CPL_wrap_dateline(st_geometry(x), options, quiet), crs = st_crs(x)))
+}
+
+#' @name st_transform
+#' @export
+st_wrap_dateline.sfg = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
+	st_sfc(CPL_wrap_dateline(st_geometry(x), options, quiet), crs = st_crs(x))[[1]]
+}
+
 st_to_s2 = function(x) {
-	# geocentric, spherical:
+	# to geocentric, spherical, unit sphere:
 	st_transform(x, 
 		st_crs("+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
 }
