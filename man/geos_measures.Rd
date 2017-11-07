@@ -49,6 +49,18 @@ dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, 
 line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 st_length(line)
 st_length(line, dist_fun = dist_vincenty)
+
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+
+poly = st_polygon(list(outer, hole1, hole2))
+mpoly = st_multipolygon(list(
+	list(outer, hole1, hole2),
+	list(outer + 12, hole1 + 12)
+))
+
+st_length(st_sfc(poly, mpoly))
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
 st_distance(p, p, by_element = TRUE)

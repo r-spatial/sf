@@ -66,38 +66,69 @@ ll_length = function(x, fn, p) {
 	}
 }
 
+
+geom_length = function(x, dist_fun, longlat, crs) {
+	stopifnot(inherits(x, "sfg"))
+
+	if (inherits(x, "POINT") || inherits(x, "MULTIPOINT"))
+		return(0.0)
+
+	x = st_cast(x, "MULTILINESTRING")
+
+	if (isTRUE(longlat)) {
+		if (is.na(crs))
+			stop("crs must be defined for longitude/latitude data")
+		if (missing(dist_fun) && !requireNamespace("geosphere", quietly = TRUE))
+			stop("package geosphere required, please install it first")
+		ll_length(x, dist_fun, crs_parameters(crs))
+	} else {
+		ret = CPL_length(st_sfc(x)) # units of coordinates
+		ret[is.nan(ret)] = NA
+		ret
+	}
+}
+
 #' @name geos_measures
 #' @export
 #' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 #' @seealso \link{st_dimension}
+#'
 #' @examples
 #' dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 #' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 #' st_length(line)
 #' st_length(line, dist_fun = dist_vincenty)
+#'
+#' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+#' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+#' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+#'
+#' poly = st_polygon(list(outer, hole1, hole2))
+#' mpoly = st_multipolygon(list(
+#' 	list(outer, hole1, hole2),
+#' 	list(outer + 12, hole1 + 12)
+#' ))
+#'
+#' st_length(st_sfc(poly, mpoly))
+
 st_length = function(x, dist_fun = geosphere::distGeo) {
 	x = st_geometry(x)
-	if (inherits(x, "sfc_POINT") || inherits(x, "sfc_MULTIPOINT"))
-		return(0.0)
 
-	if (inherits(x, "sfc_POLYGON") || inherits(x, "sfc_MULTIPOLYGON"))
-		x = st_cast(x, "MULTILINESTRING")
-	else
-		stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
-	if (isTRUE(st_is_longlat(x))) {
-		if (missing(dist_fun) && !requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		p = crs_parameters(st_crs(x))
-		ret = vapply(x, ll_length, 0.0, fn = dist_fun, p = p)
-		units(ret) = units(p$SemiMajor)
-		ret
-	} else {
-		ret = CPL_length(x) # units of coordinates
-		ret[is.nan(ret)] = NA
-		if (! is.na(st_crs(x)))
-			units(ret) = crs_parameters(st_crs(x))$ud_unit
-		ret
+	longlat = st_is_longlat(x)
+	crs = st_crs(x)
+
+	ret = vapply(x, geom_length, 0.0, dist_fun = dist_fun, crs = crs, longlat = longlat)
+
+	if (!is.na(crs)) {
+		p = crs_parameters(crs)
+		if (isTRUE(longlat)) {
+			units(ret) = units(p$SemiMajor)
+		} else {
+			units(ret) = p$ud_unit
+		}
 	}
+
+	ret
 }
 
 message_longlat = function(caller) {
