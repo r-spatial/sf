@@ -50,7 +50,7 @@ st_crs = function(x, ...) UseMethod("st_crs")
 
 #' @name st_crs
 #' @export
-st_crs.sf = function(x, ...) st_crs(st_geometry(x, ...))
+st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 
 #' @name st_crs
 #' @export
@@ -67,8 +67,18 @@ st_crs.character = function(x, ..., wkt) {
 }
 
 #' @name st_crs
+#' @param parameters logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}
 #' @export
-st_crs.sfc = function(x, ...) attr(x, "crs")
+st_crs.sfc = function(x, ..., parameters = FALSE) { 
+	crs = attr(x, "crs")
+	if (parameters) {
+		if (is.na(crs))
+			list()
+		else
+			crs_parameters(crs)
+	} else
+		crs
+}
 
 #' @name st_crs
 #' @export

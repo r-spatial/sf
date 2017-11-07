@@ -40,7 +40,7 @@ st_crs(x, ...)
 
 \method{st_crs}{character}(x, ..., wkt)
 
-\method{st_crs}{sfc}(x, ...)
+\method{st_crs}{sfc}(x, ..., parameters = FALSE)
 
 \method{st_crs}{bbox}(x, ...)
 
@@ -66,6 +66,8 @@ NA_crs_
 \item{...}{ignored}
 
 \item{wkt}{character well-known-text representation of the crs}
+
+\item{parameters}{logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}}
 
 \item{value}{one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).}
 

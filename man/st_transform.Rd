@@ -70,7 +70,7 @@ The \code{st_transform} method for \code{sfg} objects assumes that the CRS of th
 
 \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
 
-For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280}
+For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
 }
 \examples{
 p1 = st_point(c(7,52))
@@ -88,4 +88,9 @@ set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_proj_info("datum")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
+library(maps)
+wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))
+wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"), quiet = TRUE)
+wrld_moll <- st_transform(wrld_wrap, "+proj=moll")
+plot(st_geometry(wrld_moll), col = "transparent")
 }
