@@ -73,7 +73,8 @@ geom_length = function(x, dist_fun, longlat, crs) {
 	if (inherits(x, "POINT") || inherits(x, "MULTIPOINT"))
 		return(0.0)
 
-	x = st_cast(x, "MULTILINESTRING")
+	if (!st_is(x, c("LINESTRING", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVE")))
+		x = st_cast(x, "MULTILINESTRING")
 
 	if (isTRUE(longlat)) {
 		if (is.na(crs))
