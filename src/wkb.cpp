@@ -13,7 +13,6 @@
 
 #include <Rcpp.h>
 
-#include "bbox.h"
 #include "wkb.h"
 
 #define EWKB_Z_BIT    0x80000000

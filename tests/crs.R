@@ -10,3 +10,6 @@ st_crs(28992)$units
 st_crs("+proj=longlat +datum=WGS84")
 st_crs(4326)
 st_crs("+proj=laea") # no EPSG
+
+st_crs(NA_crs_, parameters = TRUE)
+st_crs(st_crs(4326), parameters = TRUE)
