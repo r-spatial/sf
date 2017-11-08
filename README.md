@@ -103,3 +103,4 @@ This project has been realized with financial [support](https://www.r-consortium
 <a href="https://www.r-consortium.org/projects/awarded-projects">
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="400">
 </a>
+
