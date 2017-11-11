@@ -55,6 +55,13 @@ Coordinate Reference System:
   No EPSG code
   proj4string: "+proj=laea +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"
 > 
+> st_crs(NA_crs_, parameters = TRUE)
+Coordinate Reference System: NA
+> st_crs(st_crs(4326), parameters = TRUE)
+Coordinate Reference System:
+  EPSG: 4326 
+  proj4string: "+proj=longlat +datum=WGS84 +no_defs"
+> 
 > proc.time()
    user  system elapsed 
-  0.304   0.012   0.312 
+  0.368   0.280   0.324 
