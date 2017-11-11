@@ -236,9 +236,10 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
   use st_disjoint for this pattern
 > 
 > nc_3857 = st_transform(nc, 3857)
-> try(st_is_within_distance(nc_3857, nc_3857, 100000, sparse = FALSE))
-Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
-  for a dense matrix, use st_distance(x,y) <= dist
+> a = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], 100000, sparse = FALSE)
+> b = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], units::set_units(100000, m), sparse = FALSE)
+> all.equal(a, b)
+[1] TRUE
 > x = st_is_within_distance(nc_3857, nc_3857, 100000)
 > y = st_is_within_distance(nc_3857, nc_3857, units::set_units(100, km))
 > all.equal(x, y)
@@ -309,4 +310,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  3.068   0.260   3.020 
+  2.948   0.296   2.946 

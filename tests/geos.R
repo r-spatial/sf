@@ -97,7 +97,9 @@ st_rook(grd, sparse = FALSE)
 try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
 
 nc_3857 = st_transform(nc, 3857)
-try(st_is_within_distance(nc_3857, nc_3857, 100000, sparse = FALSE))
+a = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], 100000, sparse = FALSE)
+b = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], units::set_units(100000, m), sparse = FALSE)
+all.equal(a, b)
 x = st_is_within_distance(nc_3857, nc_3857, 100000)
 y = st_is_within_distance(nc_3857, nc_3857, units::set_units(100, km))
 all.equal(x, y)

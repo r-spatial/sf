@@ -353,13 +353,14 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
 st_is_within_distance = function(x, y, dist, sparse = TRUE, prepared = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_is_within_distance only supported for Cartesian coordinates")
-	if (! is.na(st_crs(x))) {
-		p = crs_parameters(st_crs(x))
-		units(dist) = p$ud_unit
-	}
+	if (! is.na(st_crs(x)))
+		units(dist) = crs_parameters(st_crs(x))$ud_unit # might convert
 	if (prepared)
 		stop("prepared geometries not supported for st_is_within_distance")
-	st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse)
+	if (! sparse)
+		st_distance(x, y) <= dist
+	else
+		st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse)
 }
 
 # unary, returning geometries
