@@ -11,5 +11,7 @@ st_crs("+proj=longlat +datum=WGS84")
 st_crs(4326)
 st_crs("+proj=laea") # no EPSG
 
-st_crs(NA_crs_, parameters = TRUE)
-st_crs(st_crs(4326), parameters = TRUE)
+x = st_sfc(st_point(0:1))
+st_crs(x, parameters = TRUE)
+st_crs(x) = 4326
+st_crs(x, parameters = TRUE)

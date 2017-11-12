@@ -221,3 +221,7 @@ try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
 x <- st_sfc(mp, pol) %>% st_cast("MULTIPOLYGON") %>% st_sfc(check_ring_dir=TRUE)
 x
 str(x)
+
+x = st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)
+st_wrap_dateline(x)
+st_wrap_dateline(x[[1]])

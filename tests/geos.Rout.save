@@ -313,7 +313,8 @@ first 10 elements:
 > g = st_make_grid(nc1, c(5000,5000), what = "centers")
 > s = st_snap(nc1[1:3,], g, 2501*sqrt(2))
 > sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
+> sfg = st_snap(st_geometry(nc1)[[1]], st_combine(g), 2501*sqrt(2))
 > 
 > proc.time()
    user  system elapsed 
-  3.576   0.284   3.571 
+  3.500   0.284   3.511 

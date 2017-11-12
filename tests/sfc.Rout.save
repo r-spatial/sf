@@ -857,6 +857,18 @@ sfc_MULTIPOLYGON of length 2; first list element: List of 2
   ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
  - attr(*, "class")= chr [1:3] "XY" "MULTIPOLYGON" "sfg"
 > 
+> x = st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)
+> st_wrap_dateline(x)
+Geometry set for 1 feature 
+geometry type:  MULTILINESTRING
+dimension:      XY
+bbox:           xmin: -180 ymin: 0 xmax: 180 ymax: 0
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))
+> st_wrap_dateline(x[[1]])
+MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))
+> 
 > proc.time()
    user  system elapsed 
-  2.052   0.288   2.033 
+  1.976   0.332   1.992 
