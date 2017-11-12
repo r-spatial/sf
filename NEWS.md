@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* add `st_snap`, for snapping geometries to other geometries, within a tolerance
+
 * make `st_wrap_dateline` a generic, with methods for `sf`, `sfc` and `sfg`; #541
 
 * `plot.sf` and `st_as_grob` (used by ggplot2) are now robust against misspecified ring directions (holes that have the same direction as the exterior rings), by using `rule = "evenodd"`; #540

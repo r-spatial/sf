@@ -761,7 +761,7 @@ st_combine = function(x)
 	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge
 
 # x: object of class sf
-# y: object of calss sf or sfc
+# y: object of class sf or sfc
 # geoms: result from geos_op2: list of non-empty geometries with the intersection/union/difference/sym_difference
 # which has an idx attribute pointing to what is x, what is y
 geos_op2_df = function(x, y, geoms) {
@@ -865,6 +865,29 @@ st_sym_difference.sfc = function(x, y)
 #' @export
 st_sym_difference.sf = function(x, y)
 	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y))
+
+#' @name geos_binary_ops
+#' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}
+#' @export
+st_snap = function(x, y, tolerance) UseMethod("st_snap")
+
+#' @export
+st_snap.sfg = function(x, y, tolerance)
+	get_first_sfg(st_snap(st_sfc(x), y, tolerance))
+
+#' @export
+st_snap.sfc = function(x, y, tolerance) {
+	if (isTRUE(st_is_longlat(x)))
+		stop("st_snap for longitude/latitude data not supported; use st_transform first?")
+	else if (inherits(tolerance, "units") && !is.na(st_crs(x)))
+		units(tolerance) = crs_parameters(st_crs(x))$ud_unit # coordinate units
+	tolerance = rep(tolerance, length.out = length(x))
+	st_sfc(CPL_geos_snap(st_geometry(x), st_geometry(y), as.double(tolerance)))
+}
+
+#' @export
+st_snap.sf = function(x, y, tolerance)
+	st_set_geometry(x, st_snap(st_geometry(x), st_geometry(y), tolerance))
 
 #' @name geos_combine
 #' @export

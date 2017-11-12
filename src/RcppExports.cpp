@@ -389,6 +389,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_snap
+Rcpp::List CPL_geos_snap(Rcpp::List sfc0, Rcpp::List sfc1, Rcpp::NumericVector tolerance);
+RcppExport SEXP _sf_CPL_geos_snap(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP toleranceSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type tolerance(toleranceSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_snap(sfc0, sfc1, tolerance));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_op
 Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
 RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
@@ -662,6 +675,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
     {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
+    {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 8},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},

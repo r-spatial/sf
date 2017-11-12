@@ -463,6 +463,34 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 	return out;
 }
 
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_snap(Rcpp::List sfc0, Rcpp::List sfc1, Rcpp::NumericVector tolerance) { 
+	int dim = 2;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
+	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
+	GEOSGeom gc;
+	if (gmv1.size() > 1)
+		gc = GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, 
+			gmv1.data(), gmv1.size());
+	else
+		gc = gmv1[0];
+
+	std::vector<GEOSGeom> gmv_out(sfc0.size());
+	for (int i = 0; i < sfc0.size(); i++) {
+		gmv_out[i] = GEOSSnap_r(hGEOSCtxt, gmv0[i], gc, tolerance[i]);
+		if (gmv_out[i] == NULL)
+			Rcpp::stop("snap: GEOS exception"); // #nocov
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
+	}
+	GEOSGeom_destroy_r(hGEOSCtxt, gc);
+	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out, dim)); // destroys gmv_out
+	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc0.attr("precision");
+	out.attr("crs") = sfc0.attr("crs");
+	return out;
+}
+
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
 		Rcpp::stop("GEOS exception"); // #nocov

@@ -7,6 +7,8 @@
 \alias{st_difference}
 \alias{geos_binary_ops}
 \alias{st_sym_difference}
+\alias{geos_binary_ops}
+\alias{st_snap}
 \title{Geometric operations on pairs of simple feature geometry sets}
 \usage{
 st_intersection(x, y)
@@ -14,11 +16,15 @@ st_intersection(x, y)
 st_difference(x, y)
 
 st_sym_difference(x, y)
+
+st_snap(x, y, tolerance)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
+
+\item{tolerance}{tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}}
 }
 \value{
 The intersection, difference or symmetric difference between two sets of geometries.

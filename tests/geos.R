@@ -124,3 +124,9 @@ st_node(st_sf(a = 1, st_sfc(l)))
 
 # print.sgbp:
 st_disjoint(nc, nc)
+
+# snap:
+nc1 = st_transform(nc, 32119)
+g = st_make_grid(nc1, c(5000,5000), what = "centers")
+s = st_snap(nc1[1:3,], g, 2501*sqrt(2))
+sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
