@@ -245,8 +245,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		}
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "is_within_distance") { // return sparse matrix:
-		if (! sparse)
-			Rcpp::stop("for a dense matrix, use st_distance(x,y) <= dist");
+		if (! sparse) // taken care of at R level, use st_distance(x,y) <= z
+			Rcpp::stop("is_within_distance: shouldn't happen"); // #nocov
 		Rcpp::List sparsemat(sfc0.length());
 		for (size_t i = 0; i < gmv0.size(); i++) {
 			std::vector<size_t> sel;
