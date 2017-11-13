@@ -248,6 +248,7 @@ test_that("new SRIDs are handled correctly", {
 
 if (can_con(pg)) {
     # cleanup
+    try(db_drop_table_schema(pg, "meuse_sf"), silent = TRUE)
     try(db_drop_table_schema(pg, "meuse_multi"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_meuse__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_meuse2__"), silent = TRUE)
