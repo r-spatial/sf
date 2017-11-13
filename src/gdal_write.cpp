@@ -238,7 +238,18 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		poFeature->SetGeometryDirectly(geomv[i]);
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
+		    // delete layer when  failing to  create feature
+		    OGRErr err = poDS->DeleteLayer(0);
 			GDALClose(poDS);
+			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
+			if (err != OGRERR_NONE) {
+			    if (err == OGRERR_UNSUPPORTED_OPERATION) {
+			        Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'"  // #nocov
+                       << std::endl; // #nocov
+			    } else {
+			        Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
+			    }
+			}
 			Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
