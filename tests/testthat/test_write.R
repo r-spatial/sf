@@ -59,7 +59,6 @@ test_that("delete and update work (#304) ", {
   expect_warning(
   	expect_error(write_sf(x, shp, "x"), "Feature creation failed") ,
   	"non-point")# on osx el capitan: "c++ exception (unknown reason)"
-  expect_error(write_sf(x, shp, "x"), "already exists")
   expect_silent(x <- st_read(gpkg, quiet = TRUE))
   x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)),
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
@@ -68,6 +67,16 @@ test_that("delete and update work (#304) ", {
   expect_silent(x <- st_read(shp, quiet = TRUE))
   expect_silent(x <- read_sf(shp))
   expect_error(st_write(x, shp, driver = character(0))) # err
+})
+
+test_that("layer is deleted when fails to create features (#549)", {
+	skip_on_os("mac")
+	shp <- tempfile(fileext = ".shp")
+	x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
+	expect_warning(expect_error(st_write(x, shp, "x"), "Feature creation failed"),
+				   "non-point")
+	expect_warning(expect_error(st_write(x, shp, "x"), "Feature creation failed"),
+				   "non-point")
 })
 
 test_that("esri shapefiles shorten long field names", {
