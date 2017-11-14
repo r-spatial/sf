@@ -35,14 +35,26 @@ vdv
 xlsx 
 .nc 
 driver `foo' not available.
-Dataset /home/edzer/git/sf.Rcheck/tests/testthat/x.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/Rtmp3Z39zz/file34f71b234c00.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
+Writing layer `x' to data source `/tmp/Rtmp3Z39zz/file34f72438d696.shp' using driver `ESRI Shapefile'
+features:       2
+fields:         1
+geometry type:  Unknown (any)
+Failed to create feature 1 in x
+Failed to create feature 1 in x
+Writing layer `x' to data source `/tmp/Rtmp3Z39zz/file34f72438d696.shp' using driver `ESRI Shapefile'
+features:       2
+fields:         1
+geometry type:  Unknown (any)
+Failed to create feature 1 in x
+Failed to create feature 1 in x
 testthat results ================================================================
-OK: 572 SKIPPED: 0 FAILED: 0
+OK: 564 SKIPPED: 1 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.296   0.348   5.101 
+  4.020   0.388   4.758 
