@@ -13,6 +13,8 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param dim passed on to \link{st_point} (only when argument coords is given)
 #' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
+#' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
+#' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #'
@@ -33,7 +35,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
-		dim = "XYZ", remove = TRUE, na.fail = TRUE) {
+		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL) {
 	if (! missing(wkt)) {
 		if (remove)
 			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
@@ -60,7 +62,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (remove)
 			x = x[-coords]
 	}
-	st_sf(x, ..., agr = agr)
+	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name)
 }
 
 #' @name st_as_sf
@@ -185,7 +187,7 @@ list_column_to_sfc = function(x) {
 #' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.
 #' @param precision numeric; see \link{st_as_binary}
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
-#' there are more than one and \code{sf_column_name} is not given, the first one is taken.
+#' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param check_ring_dir see \link{st_read}
 #' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 #'

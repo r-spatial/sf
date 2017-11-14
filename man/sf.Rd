@@ -27,7 +27,7 @@ st_sf(..., agr = NA_agr_, row.names,
 \item{precision}{numeric; see \link{st_as_binary}}
 
 \item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
-there are more than one and \code{sf_column_name} is not given, the first one is taken.}
+there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
 
 \item{check_ring_dir}{see \link{st_read}}
 

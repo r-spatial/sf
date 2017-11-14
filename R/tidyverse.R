@@ -16,11 +16,11 @@ filter.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod())
 	sf_column = attr(.data, "sf_column")
 	geom = .data[[sf_column]]
-	.data[[sf_column]] = 1:nrow(.data)
+	.data[[sf_column]] = seq_len(nrow(.data))
 	ret = NextMethod()
 	sel = ret[[sf_column]]
 	ret[[sf_column]] = geom[sel]
-	st_as_sf(ret)
+	st_as_sf(ret, sf_column_name = sf_column)
 }
 
 #' @name dplyr
@@ -31,7 +31,7 @@ filter.sf <- function(.data, ..., .dots) {
 #' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 #' title("the ten counties with smallest area")
 arrange.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -40,7 +40,7 @@ arrange.sf <- function(.data, ..., .dots) {
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -51,14 +51,14 @@ distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 #' nc %>% group_by(area_cl) %>% class()
 group_by.sf <- function(.data, ..., .dots, add = FALSE) {
 	class(.data) <- setdiff(class(.data), "sf")
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
 #' @export
 ungroup.sf <- function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(x, "sf_column"))
 }
 
 #' @name dplyr
@@ -66,7 +66,7 @@ ungroup.sf <- function(x, ...) {
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -77,7 +77,7 @@ mutate.sf <- function(.data, ..., .dots) {
 transmute.sf <- function(.data, ..., .dots) {
 	ret = NextMethod()
 	if (attr(ret, "sf_column") %in% names(ret))
-		st_as_sf(NextMethod())
+		st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 	else
 		ret
 }
@@ -111,7 +111,7 @@ select.sf <- function(.data, ...) {
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
 rename.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -119,7 +119,7 @@ rename.sf <- function(.data, ..., .dots) {
 #' @examples
 #' nc %>% slice(1:2)
 slice.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -154,7 +154,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	}
 	ret[[ sf_column ]] = geom
 	ret$do_union = NULL
-	st_as_sf(ret, crs = crs, precision = st_precision(.data))
+	st_as_sf(ret, crs = crs, precision = st_precision(.data),
+		sf_column_name = attr(.data, "sf_column"))
 }
 
 ## tidyr methods:
@@ -182,7 +183,8 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 
 	class(data) <- setdiff(class(data), "sf")
     st_as_sf(tidyr::gather(data, !!key, !!value, ..., 
-		na.rm = na.rm, convert = convert, factor_key = factor_key))
+		na.rm = na.rm, convert = convert, factor_key = factor_key),
+		sf_column_name = attr(data, "sf_column"))
 }
 
 
@@ -208,7 +210,7 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 
 	class(data) <- setdiff(class(data), "sf")
     st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert, 
-		drop = drop, sep = sep))
+		drop = drop, sep = sep), sf_column_name = attr(data, "sf_column"))
 }
 
 #' @name dplyr
@@ -219,13 +221,13 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 #' @param .env see original function docs
 #' @export
 sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame()) {
-	st_sf(NextMethod())
+	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
 #' @name dplyr
 #' @export
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
-	st_sf(NextMethod())
+	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
 #' @name dplyr
@@ -249,7 +251,7 @@ nest.sf = function (data, ..., .key = "data") {
 		stop("tidyr required: install first?")
 	ret = tidyr::nest(data, ..., .key = !! key)
 	# should find out first if geometry column was in ... !
-	ret[[.key]] = lapply(ret[[.key]], st_as_sf)
+	ret[[.key]] = lapply(ret[[.key]], st_as_sf, sf_column_name = attr(data, "sf_column"))
 	ret
 }
 
@@ -272,14 +274,15 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 
 	class(data) <- setdiff(class(data), "sf")
 	st_as_sf(tidyr::separate(data, !!col, into = into, 
-		sep = sep, remove = remove, convert = convert, extra = extra, fill = fill, ...))
+		sep = sep, remove = remove, convert = convert, extra = extra, fill = fill, ...),
+			sf_column_name = attr(data, "sf_column"))
 }
 
 #' @name dplyr
 #' @export
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
-	st_as_sf(NextMethod())
+	st_as_sf(NextMethod(), sf_column_name = attr(data, "sf_column"))
 }
 
 

@@ -21,7 +21,7 @@
 st_as_sf(x, ...)
 
 \method{st_as_sf}{data.frame}(x, ..., agr = NA_agr_, coords, wkt,
-  dim = "XYZ", remove = TRUE, na.fail = TRUE)
+  dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL)
 
 \method{st_as_sf}{sf}(x, ...)
 
@@ -51,6 +51,9 @@ st_as_sf(x, ...)
 \item{remove}{logical; when coords or wkt is given, remove these columns from data.frame?}
 
 \item{na.fail}{logical; if \code{TRUE}, raise an error if coordinates contain missing values}
+
+\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
+there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
 }
 \description{
 Convert foreign object to an sf object
