@@ -321,7 +321,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		x
 	else if (! drop) {
 		x[[ sf_column ]] = geom
-		st_set_agr(st_sf(x), agr[match(setdiff(names(x), sf_column), names(agr))])
+		st_set_agr(st_sf(x, sf_column_name = sf_column),
+			agr[match(setdiff(names(x), sf_column), names(agr))])
 	} else
 		structure(x, class = setdiff(class(x), "sf"))
 }
