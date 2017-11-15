@@ -170,7 +170,8 @@ Error in CPL_read_ogr(dsn, layer, as.character(options), quiet, type,  :
   Open failed.
 
 > try(st_write(c("foo", "bar")))
-Error : inherits(obj, "sf") is not TRUE
+Error in UseMethod("st_write") : 
+  no applicable method for 'st_write' applied to an object of class "character"
 > try(st_write(x, c("foo", "bar")))
 Error : length(dsn) == 1 is not TRUE
 In addition: Warning message:
@@ -394,4 +395,4 @@ proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.2881
 > 
 > proc.time()
    user  system elapsed 
-  1.464   0.252   1.464 
+  1.388   0.236   1.462 

@@ -9,7 +9,6 @@ set_utf8 = function(x) {
 	structure(lapply(x, to_utf8), names = n)
 }
 
-
 #' Read simple features or layers from file or database
 #'
 #' Read simple features from file or database, or retrieve layer names and their geometry type(s)
@@ -55,6 +54,8 @@ set_utf8 = function(x) {
 #'   if (exists("st_meuse"))
 #'     summary(st_meuse)
 #' }
+#' @export
+st_read = function(dsn, layer, ...) UseMethod("st_read")
 
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
@@ -62,7 +63,7 @@ set_utf8 = function(x) {
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE) {
 
@@ -225,19 +226,25 @@ abbreviate_shapefile_names = function(x) {
 #'  demo(nc, ask = FALSE)
 #'  try(st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true"))
 #' }
+#' @export
+st_write = function(obj, dsn, layer, ...) UseMethod("st_write")
+
 #' @name st_write
 #' @export
-st_write = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
-		driver = guess_driver_can_write(dsn), ...,
+st_write.sfc = function(obj, dsn, layer, ...) {
+	obj = st_sf(id = 1:length(obj), geom = obj)
+	NextMethod()
+}
+
+#' @name st_write
+#' @export
+st_write.sf = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)), ...,
+		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
-
-	if (inherits(obj, "sfc"))
-		obj = st_sf(id = 1:length(obj), geom = obj)
-	stopifnot(inherits(obj, "sf"))
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")

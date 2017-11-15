@@ -41,8 +41,8 @@ test_that("delete and update work (#304) ", {
   shp <- tempfile(fileext = ".shp")
 
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
-  expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG")) # error
-  expect_error(st_write(x, gpkg,  driver = "foo")) # error
+  expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
+  expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Deleting source")
   expect_error(st_write(x, gpkg, update = FALSE, quiet = TRUE), "Dataset already exists")
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing layer ")
@@ -66,16 +66,16 @@ test_that("delete and update work (#304) ", {
   expect_silent(write_sf(x, shp))
   expect_silent(x <- st_read(shp, quiet = TRUE))
   expect_silent(x <- read_sf(shp))
-  expect_error(st_write(x, shp, driver = character(0))) # err
+  expect_error(st_write(x, shp, driver = character(0), quiet = TRUE)) # err
 })
 
 test_that("layer is deleted when fails to create features (#549)", {
 	skip_on_os("mac")
 	shp <- tempfile(fileext = ".shp")
 	x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
-	expect_warning(expect_error(st_write(x, shp, "x"), "Feature creation failed"),
+	expect_warning(expect_error(st_write(x, shp, "x", quiet = TRUE), "Feature creation failed"),
 				   "non-point")
-	expect_warning(expect_error(st_write(x, shp, "x"), "Feature creation failed"),
+	expect_warning(expect_error(st_write(x, shp, "x", quiet = TRUE), "Feature creation failed"),
 				   "non-point")
 })
 

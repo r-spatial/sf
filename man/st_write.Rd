@@ -3,13 +3,21 @@
 \name{st_write}
 \alias{st_write}
 \alias{st_write}
+\alias{st_write.sfc}
+\alias{st_write}
+\alias{st_write.sf}
+\alias{st_write}
 \alias{write_sf}
 \alias{st_write}
 \alias{st_write_db}
 \title{Write simple features object to file or database}
 \usage{
-st_write(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
-  driver = guess_driver_can_write(dsn), ..., dataset_options = NULL,
+st_write(obj, dsn, layer, ...)
+
+\method{st_write}{sfc}(obj, dsn, layer, ...)
+
+\method{st_write}{sf}(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
+  ..., driver = guess_driver_can_write(dsn), dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
   update = driver \%in\% db_drivers, delete_dsn = FALSE,
   delete_layer = FALSE)
@@ -29,11 +37,11 @@ folder or contain a database name)}
 \item{layer}{layer name (varies by driver, may be a file name without extension); if layer is missing, the
 \link{basename} of \code{dsn} is taken.}
 
+\item{...}{ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}}
+
 \item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn};
 \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 are found at \url{http://www.gdal.org/ogr_formats.html}.}
-
-\item{...}{ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}}
 
 \item{dataset_options}{character; driver dependent dataset creation options; multiple options supported.}
 
