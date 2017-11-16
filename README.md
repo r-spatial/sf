@@ -88,7 +88,7 @@ To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geos
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including `st_make_valid`, have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom).
+Functions and methods that require `liblwgeom`, including `st_make_valid`, have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ### Contributing
 

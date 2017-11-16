@@ -1,6 +1,6 @@
 # unary, interfaced through GEOS:
 
-#' Dimension, simplicity or validity queries on simple feature geometries
+#' Dimension, simplicity, validity or is_empty queries on simple feature geometries
 #' @name geos_query
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
@@ -29,7 +29,7 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
 #' @name geos_query
 #' @export
-#' @return st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+#' @return st_is_empty returns for each geometry whether it is empty
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
