@@ -9,6 +9,8 @@ st_distance(x)
 
 st_is_valid(nc)
 
+st_is_empty(st_sfc(st_point(), st_linestring()))
+
 ops = c("intersects", #"disjoint", 
 "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 for (op in ops) {

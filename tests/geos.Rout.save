@@ -56,6 +56,9 @@ Units: m
  [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
+> st_is_empty(st_sfc(st_point(), st_linestring()))
+[1] TRUE TRUE
+> 
 > ops = c("intersects", #"disjoint", 
 + "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 > for (op in ops) {
@@ -317,4 +320,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  3.500   0.284   3.511 
+  3.444   0.308   3.441 

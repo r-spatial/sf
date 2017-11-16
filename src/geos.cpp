@@ -440,6 +440,19 @@ Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::LogicalVector CPL_geos_is_empty(Rcpp::List sfc) { 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	Rcpp::LogicalVector out(sfc.length());
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	for (size_t i = 0; i < g.size(); i++) {
+		out[i] = chk_(GEOSisEmpty_r(hGEOSCtxt, g[i]));
+		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+	}
+	CPL_geos_finish(hGEOSCtxt);
+	return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) { 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();

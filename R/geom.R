@@ -27,6 +27,14 @@ st_dimension = function(x, NA_if_empty = TRUE)
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
 st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 
+#' @name geos_query
+#' @export
+#' @return st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+#' @examples
+#' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
+#' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
+st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
+
 #' @name geos_measures
 #' @export
 #' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.

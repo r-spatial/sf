@@ -31,7 +31,7 @@ Ops.sfg <- function(e1, e2) {
 	if (!(prd || pm || mod))
 		stop(paste("operation", .Generic, "not supported for sfg objects"))
 	
-	if (is.na(st_dimension(e1))) # empty:
+	if (st_is_empty(e1))
 		return(e1)
 
 	if (inherits(e2, "sfg"))
