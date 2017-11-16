@@ -356,7 +356,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 #' @export
 print.sf = function(x, ..., n =
-		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) {
+		ifelse(options("max.print")[[1]] %in% c(99999,1000), getOption("max.sfprint", default = 20), options("max.print")[[1]])) {
 
 	geoms = which(vapply(x, function(col) inherits(col, "sfc"), TRUE))
 	nf = length(x) - length(geoms)
