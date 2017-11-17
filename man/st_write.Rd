@@ -110,7 +110,7 @@ st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT", delete_dsn=TR
   library(RPostgreSQL)
   try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
   if (exists("conn") && !inherits(conn, "try-error"))
-    st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
+    st_write(conn, sf, "meuse_tbl", drop = FALSE)
 }
 }
 \seealso{

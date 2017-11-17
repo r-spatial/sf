@@ -120,8 +120,8 @@ x
 library(RPostgreSQL)
 try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
 if (exists("conn") && !inherits(conn, "try-error")) {
-  x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-  x = st_read_db(conn, table = "public.meuse")
+  x = st_read(conn, "meuse", query = "select * from meuse limit 3;")
+  x = st_read(conn, table = "public.meuse")
   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
   dbDisconnect(conn)
  }

@@ -12,8 +12,8 @@
 #' library(RPostgreSQL)
 #' try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
 #' if (exists("conn") && !inherits(conn, "try-error")) {
-#'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-#'   x = st_read_db(conn, table = "public.meuse")
+#'   x = st_read(conn, "meuse", query = "select * from meuse limit 3;")
+#'   x = st_read(conn, table = "public.meuse")
 #'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
 #'   dbDisconnect(conn)
 #'  }
@@ -97,7 +97,7 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 #'   library(RPostgreSQL)
 #'   try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
 #'   if (exists("conn") && !inherits(conn, "try-error"))
-#'     st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
+#'     st_write(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
 #' @details database reading was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
 st_write.PostgreSQLConnection = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
