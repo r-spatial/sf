@@ -95,4 +95,5 @@ Collate:
 	deprecated.R
 	stars.R
 	gdal_utils.R
+	deprecated.R
 RoxygenNote: 6.0.1

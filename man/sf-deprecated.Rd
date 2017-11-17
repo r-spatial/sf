@@ -7,18 +7,36 @@
 \alias{st_read_db,}
 \alias{st_write_db}
 \alias{sf-deprecated-package}
+\alias{sf-deprecated}
+\alias{st_read_db}
+\alias{st_read_db,}
+\alias{st_write_db}
+\alias{sf-deprecated-package}
 \title{Deprecated functions in \code{sf}}
 \usage{
 st_read_db(...)
+
+st_read_db(...)
 }
 \arguments{
+\item{...}{Parameters to be passed to the modern version of the function}
+
 \item{...}{Parameters to be passed to the modern version of the function}
 }
 \description{
 These functions are provided for compatibility with older version of \code{sf}.
 They may eventually be completely removed.
+
+These functions are provided for compatibility with older version of \code{sf}.
+They may eventually be completely removed.
 }
 \section{Details}{
+
+\tabular{rl}{
+\code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr
+\code{st_write_db} \tab now a synonym for \code{\link{st_write}}\cr
+}
+
 
 \tabular{rl}{
 \code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr

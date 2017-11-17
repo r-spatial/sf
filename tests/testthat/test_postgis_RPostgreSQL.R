@@ -18,9 +18,9 @@ data(meuse)
 pts <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 
 epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
-					"+lat_0=90 +lon_0=4.367486666666666 +x_0=150000.013 ",
-					"+y_0=5400088.438 +ellps=intl +towgs84=-106.869,52.2978,",
-					"-103.724,0.3366,-0.457,1.8422,-1.2747 +units=m +no_defs")
+                    "+lat_0=90 +lon_0=4.367486666666666 +x_0=150000.013 ",
+                    "+y_0=5400088.438 +ellps=intl +towgs84=-106.869,52.2978,",
+                    "-103.724,0.3366,-0.457,1.8422,-1.2747 +units=m +no_defs")
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
@@ -66,12 +66,12 @@ test_that("can handle multiple geom columns", {
 test_that("sf can write units to database (#264)", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     ptsu <- pts
-    ptsu[["u"]] <- ptsu[["cadmium"]]
-    units(ptsu[["u"]]) <- units::as_units("km")
+    ptsu[["length"]] <- ptsu[["cadmium"]]
+    units(ptsu[["length"]]) <- units::as_units("km")
     expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
     r <- st_read(pg, "sf_units__")
-    expect_is(r[["u"]], "numeric")
-    expect_equal(sort(r[["u"]]), sort(as.numeric(ptsu[["u"]])))
+    expect_is(r[["length"]], "numeric")
+    expect_equal(sort(r[["length"]]), sort(as.numeric(ptsu[["length"]])))
     dbRemoveTable(pg, "sf_units__")
 })
 
@@ -80,7 +80,6 @@ test_that("can write to other schema", {
     try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
     could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0
-
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
     expect_error(st_write(pts, pg, c("public", "sf_meuse__")), "exists")
     expect_silent(st_write(pts, pg, c("sf_test__", "sf_meuse__")))
@@ -114,7 +113,6 @@ test_that("can read from db", {
     q <- "select * from sf_meuse__"
     #expect_warning(x <- st_read(pg, query = q), "crs")
     expect_silent(x <- st_read(pg, query = q))
-
     expect_error(st_read(pg), "table name or a query")
 
     y <- st_read(pg, "sf_meuse__")
