@@ -9,7 +9,7 @@
 \alias{st_write}
 \alias{write_sf}
 \alias{st_write}
-\alias{st_write_db}
+\alias{st_write.PostgreSQLConnection}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer, ...)
@@ -24,9 +24,9 @@ st_write(obj, dsn, layer, ...)
 
 write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
-st_write_db(conn = NULL, obj, table = deparse(substitute(obj)),
-  geom_name = "wkb_geometry", ..., drop = FALSE, debug = FALSE,
-  binary = TRUE, append = FALSE)
+\method{st_write}{PostgreSQLConnection}(conn = NULL, obj,
+  table = deparse(substitute(obj)), geom_name = "wkb_geometry", ...,
+  drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -85,7 +85,7 @@ columns (variables) of a class not supported are dropped with a warning. When de
 data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 
-st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
+database reading was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

@@ -20,8 +20,7 @@
 #' }
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
-#' @export
-st_read_db = function(conn = NULL, table = NULL, query = NULL,
+st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 					  geom_column = NULL, EWKB, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
@@ -100,8 +99,8 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 #'   if (exists("conn") && !inherits(conn, "try-error"))
 #'     st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
-#' @details st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
-st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
+#' @details database reading was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
+st_write.PostgreSQLConnection = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
 		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
 
 	DEBUG = function(x) { if (debug) message(x); x }

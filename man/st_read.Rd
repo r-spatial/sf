@@ -7,7 +7,7 @@
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
-\alias{st_read_db}
+\alias{st_read.PostgreSQLConnection}
 \title{Read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ...)
@@ -19,8 +19,8 @@ st_read(dsn, layer, ...)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
-st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
-  EWKB, ...)
+\method{st_read}{PostgreSQLConnection}(conn = NULL, table = NULL,
+  query = NULL, geom_column = NULL, EWKB, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
