@@ -491,6 +491,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	if (is.na(asp))
 		asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(ylim) * pi)/180), 1.0)
 
+	if (any(is.na(bbox)))
+		stop("NA value(s) in bounding box. Trying to plot empty geometries?")
+
 	plot.new()
 
 	args = list(xlim = xlim, ylim = ylim, asp = asp)

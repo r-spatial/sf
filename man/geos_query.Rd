@@ -9,7 +9,7 @@
 \alias{st_is_empty}
 \alias{geos_query}
 \alias{st_is_valid}
-\title{Dimension, simplicity or validity queries on simple feature geometries}
+\title{Dimension, simplicity, validity or is_empty queries on simple feature geometries}
 \usage{
 st_dimension(x, NA_if_empty = TRUE)
 
@@ -33,12 +33,12 @@ st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surf
 
 st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
 
-st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+st_is_empty returns for each geometry whether it is empty
 
 \code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
 }
 \description{
-Dimension, simplicity or validity queries on simple feature geometries
+Dimension, simplicity, validity or is_empty queries on simple feature geometries
 }
 \examples{
 x = st_sfc(
