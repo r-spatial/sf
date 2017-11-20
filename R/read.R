@@ -232,7 +232,7 @@ st_write = function(obj, dsn, layer, ...) UseMethod("st_write")
 #' @name st_write
 #' @export
 st_write.sfc = function(obj, dsn, layer, ...) {
-	obj = st_sf(id = 1:length(obj), geom = obj)
+	obj = st_sf(geom = obj)
 	NextMethod()
 }
 
