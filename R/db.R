@@ -139,7 +139,10 @@ st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_
  		else
 			st_as_text(geom, EWKT = TRUE)
 
-	dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
+	if (inherits(conn, "PostgreSQL")) # odbc:
+		dbWriteTable(conn, table[2], clean_columns(df, factorsAsCharacter = TRUE), ...)
+	else
+		dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
 
 	TYPE = class(geom[[1]])[2]
 	if (! append) {
