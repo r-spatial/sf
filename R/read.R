@@ -232,8 +232,10 @@ st_write = function(obj, dsn, layer, ...) UseMethod("st_write")
 #' @name st_write
 #' @export
 st_write.sfc = function(obj, dsn, layer, ...) {
-	obj = st_sf(geom = obj)
-	NextMethod()
+	if (missing(layer))
+		st_write.sf(st_sf(geom = obj), dsn, ...)
+	else
+		st_write.sf(st_sf(geom = obj), dsn, layer, ...)
 }
 
 #' @name st_write
