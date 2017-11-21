@@ -470,14 +470,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_dist
-Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1);
-RcppExport SEXP _sf_CPL_geos_dist(SEXP sfc0SEXP, SEXP sfc1SEXP) {
+Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1, Rcpp::CharacterVector which, double par);
+RcppExport SEXP _sf_CPL_geos_dist(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP whichSEXP, SEXP parSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_dist(sfc0, sfc1));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type which(whichSEXP);
+    Rcpp::traits::input_parameter< double >::type par(parSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_dist(sfc0, sfc1, which, par));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -692,7 +694,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
-    {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 2},
+    {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
     {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},

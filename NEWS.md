@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* add `Hausdorff` (and `Frechet` for those with GEOS 3.7.0) as options to `st_distance`; add `par` for densified versions
+
 * add `st_snap`, for snapping geometries to other geometries, within a tolerance
 
 * make `st_wrap_dateline` a generic, with methods for `sf`, `sfc` and `sfg`; #541

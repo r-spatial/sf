@@ -168,12 +168,14 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 
 #' Compute geometric measurements
 #'
-#' Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.
+#' Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
+#' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
+#' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
 #' @return If \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 #' @details Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 #' @examples
@@ -181,7 +183,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, dist_fun, by_element = FALSE) {
+st_distance = function(x, y, dist_fun, by_element = FALSE, which = "distance", par = 0.0) {
 	if (missing(y))
 		y = x
 	else
@@ -209,7 +211,7 @@ st_distance = function(x, y, dist_fun, by_element = FALSE) {
 		units(m) = units(p$SemiMajor)
 		m
 	} else {
-		d = CPL_geos_dist(x, y)
+		d = CPL_geos_dist(x, y, which, par)
 		if (! is.na(st_crs(x)))
 			units(d) = p$ud_unit
 		d

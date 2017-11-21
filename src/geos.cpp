@@ -1,11 +1,17 @@
 #define GEOS_USE_ONLY_R_API // prevents using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
-#if GEOS_VERSION_MAJOR == 3 && GEOS_VERSION_MINOR >= 5
+#if GEOS_VERSION_MAJOR == 3 
+# if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
+# endif
+# if GEOS_VERSION_MINOR >= 7
+#  define HAVE370
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE350
+#  define HAVE370
 # endif
 #endif
 
@@ -13,6 +19,8 @@
 
 #include "wkb.h"
 
+typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
+typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
 typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, 
 	const GEOSGeometry *);
@@ -232,16 +240,51 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
-	} else if (op == "distance") { // return double matrix:
+	} else if (op == "distance" || op == "Hausdorff" || op == "Frechet") { // return double matrix:
+		// dist_fn, dist_parfn
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
-		for (size_t i = 0; i < gmv0.size(); i++) {
-			for (size_t j = 0; j < gmv1.size(); j++) {
-				double dist = -1.0;
-				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
-					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
-				out(i, j) = dist;
+		if (par <= 0.0) {
+			dist_fn dist_function;
+			if (op == "distance")
+				dist_function = GEOSDistance_r;
+			else if (op == "Hausdorff")
+				dist_function = GEOSHausdorffDistance_r;
+#ifdef HAVE370
+			else if (op == "Frechet")
+				dist_function = GEOSFrechetDistance_r;
+#endif
+			else
+				Rcpp::stop("distance function not supported"); // #nocov
+			
+			for (size_t i = 0; i < gmv0.size(); i++) {
+				for (size_t j = 0; j < gmv1.size(); j++) {
+					double dist = -1.0;
+					if (dist_function(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
+						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					out(i, j) = dist;
+				}
+				R_CheckUserInterrupt();
 			}
-			R_CheckUserInterrupt();
+		} else {
+			dist_parfn dist_function = NULL;
+			if (op == "Hausdorff")
+				dist_function = GEOSHausdorffDistanceDensify_r;
+#ifdef HAVE370
+			else if (op == "Frechet")
+				dist_function = GEOSFrechetDistanceDensify_r;
+#endif
+			else
+				Rcpp::stop("distance function not supported"); // #nocov
+
+			for (size_t i = 0; i < gmv0.size(); i++) {
+				for (size_t j = 0; j < gmv1.size(); j++) {
+					double dist = -1.0;
+					if (dist_function(hGEOSCtxt, gmv0[i], gmv1[j], par, &dist) == 0)
+						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					out(i, j) = dist;
+				}
+				R_CheckUserInterrupt();
+			}
 		}
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "is_within_distance") { // return sparse matrix:
@@ -713,8 +756,9 @@ std::string CPL_geos_version(bool b = false) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, "", false)[0];
+Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1, 
+		Rcpp::CharacterVector which, double par) {
+	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, Rcpp::as<std::string>(which), par, "", false)[0];
 	return out;
 }
 

@@ -133,3 +133,10 @@ g = st_make_grid(nc1, c(5000,5000), what = "centers")
 s = st_snap(nc1[1:3,], g, 2501*sqrt(2))
 sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
 sfg = st_snap(st_geometry(nc1)[[1]], st_combine(g), 2501*sqrt(2))
+
+# Hausdorff distance: http://geos.refractions.net/ro/doxygen_docs/html/classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html
+A = st_as_sfc("LINESTRING (0 0, 100 0, 10 100, 10 100)")
+B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
+st_distance(c(A,B))
+st_distance(c(A,B), which = "Hausdorff")
+st_distance(c(A,B), which = "Hausdorff", par = 0.001)

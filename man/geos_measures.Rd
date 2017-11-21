@@ -13,7 +13,8 @@ st_area(x)
 
 st_length(x, dist_fun = geosphere::distGeo)
 
-st_distance(x, y, dist_fun, by_element = FALSE)
+st_distance(x, y, dist_fun, by_element = FALSE, which = "distance",
+  par = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -23,6 +24,10 @@ st_distance(x, y, dist_fun, by_element = FALSE)
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
+
+\item{which}{character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned}
+
+\item{par}{for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry}
 }
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
@@ -34,7 +39,7 @@ st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using 
 If \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
 \description{
-Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.
+Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
 \details{
 Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.

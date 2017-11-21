@@ -153,8 +153,8 @@ CPL_geos_version <- function(b = FALSE) {
     .Call('_sf_CPL_geos_version', PACKAGE = 'sf', b)
 }
 
-CPL_geos_dist <- function(sfc0, sfc1) {
-    .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1)
+CPL_geos_dist <- function(sfc0, sfc1, which, par) {
+    .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1, which, par)
 }
 
 CPL_geos_relate <- function(sfc0, sfc1) {
