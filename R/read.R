@@ -152,8 +152,6 @@ clean_columns = function(obj, factorsAsCharacter) {
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
 		# nocov start
-		cat("ignoring columns with unsupported type:\n")
-		print(paste(names(obj)[!ccls.ok], collapse = " "))
 		obj = obj[ccls.ok]
 		# nocov end
 	}
@@ -170,7 +168,7 @@ abbreviate_shapefile_names = function(x) {
 	if (any(nchar(fld_names) > 10)) {
 		fld_names <- abbreviate(fld_names, minlength = 7)
 		warning("Field names abbreviated for ESRI Shapefile driver")
-		if (any(nchar(fld_names) > 10)) 
+		if (any(nchar(fld_names) > 10))
 			fld_names <- abbreviate(fld_names, minlength = 5) # nocov
 	}
 # fix for dots in DBF field names 121124
@@ -240,14 +238,18 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 
 #' @name st_write
 #' @export
-st_write.sf = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)), ...,
+st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
-
+	if(inherits(dsn,"PostgreSQLConnection")) {
+		if(is.null(layer)) layer <- deparse(substitute(obj))
+		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
+	}
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
-
+	if (is.null(layer))
+		layer <- file_path_sans_ext(basename(dsn))
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 

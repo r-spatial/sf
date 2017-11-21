@@ -9,24 +9,24 @@
 \alias{st_write}
 \alias{write_sf}
 \alias{st_write}
-\alias{st_write.PostgreSQLConnection}
+\alias{.st_write_db}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer, ...)
 
 \method{st_write}{sfc}(obj, dsn, layer, ...)
 
-\method{st_write}{sf}(obj, dsn, layer = file_path_sans_ext(basename(dsn)),
-  ..., driver = guess_driver_can_write(dsn), dataset_options = NULL,
+\method{st_write}{sf}(obj, dsn, layer = NULL, ...,
+  driver = guess_driver_can_write(dsn), dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
   update = driver \%in\% db_drivers, delete_dsn = FALSE,
   delete_layer = FALSE)
 
 write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
-\method{st_write}{PostgreSQLConnection}(conn = NULL, obj,
-  table = deparse(substitute(obj)), geom_name = "wkb_geometry", ...,
-  drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE)
+.st_write_db(obj, conn = NULL, table = deparse(substitute(obj)), ...,
+  delete_layer = FALSE, debug = FALSE, binary = TRUE, append = FALSE,
+  drop = delete_layer)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -65,15 +65,15 @@ to update (append to) the existing data source, e.g. adding a table to an existi
 
 \item{table}{character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}}
 
-\item{geom_name}{name of the geometry column in the database}
-
-\item{drop}{logical; should \code{table} be dropped first?}
-
 \item{debug}{logical; print SQL statements to screen before executing them.}
 
 \item{binary}{logical; use well-known-binary for transfer?}
 
 \item{append}{logical; append to table? (NOTE: experimental, might not work)}
+
+\item{drop}{logical; should \code{table} be dropped first?}
+
+\item{geom_name}{name of the geometry column in the database}
 }
 \description{
 Write simple features object to file or database

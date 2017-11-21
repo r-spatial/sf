@@ -26,7 +26,7 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 		stop("no connection provided")
 
 	if (!is.null(table)) {
-		table <- schema_table(table)
+		table <- schema_table(conn, table)
 		if (!db_exists(conn, table))
 			stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
 		if (!is.null(query))
@@ -88,7 +88,6 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 #' @param binary logical; use well-known-binary for transfer?
 #' @param debug logical; print SQL statements to screen before executing them.
 #' @name st_write
-#' @export
 #' @examples
 #' \dontrun{
 #'   library(sp)
@@ -100,35 +99,31 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 #'     st_write(conn, sf, "meuse_tbl", drop = FALSE)
 #' }
 #' @details database reading was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
-st_write.PostgreSQLConnection = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
-		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
+.st_write_db = function(obj, conn = NULL, table = deparse(substitute(obj)),
+				  ..., delete_layer = FALSE, debug = FALSE, binary = TRUE,
+				  append = FALSE, drop = delete_layer) {
 
 	DEBUG = function(x) { if (debug) message(x); x }
 	if (is.null(conn))
 		stop("No connection provided")
-	table <- schema_table(table)
+	table <- schema_table(conn, table)
+
+	if (drop & append) stop("Can't append if `drop = TRUE`", call. = FALSE)
 
 	if (db_exists(conn, table)) {
 		if (drop)
-			DBI::dbGetQuery(conn, DEBUG(paste("drop table if exists", paste(table, collapse = "."), ";")))
-		else
-			stop("Table ", paste(table, collapse = "."), " exists already, use drop = TRUE",
+			DBI::dbRemoveTable(conn, table)
+		if (!append) {
+			stop("Table ", paste(table, collapse = "."), " exists already, use delete_layer = TRUE",
 					 call. = FALSE)
+		}
+	} else if (append) {
+			stop("Table ", paste(table, collapse = "."), " does  not exist and append = TRUE",
+			 call. = FALSE)
 	}
 
 	geom = st_geometry(obj)
 	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-	crs = st_crs(geom)
-	SRID = crs$epsg
-	if (is.na(SRID)) {
-		SRID = if (is.na(crs$proj4string))
-				0L
-			else {
-				srid = get_possibly_new_srid(conn, crs$proj4string, debug);
-				attr(geom, "crs") = list(epsg = srid, proj4string = crs$proj4string, class = "crs")
-				srid
-			}
-	}
 
 	sfc_name = attr(obj, "sf_column")
 	df = obj
@@ -164,7 +159,7 @@ st_write.PostgreSQLConnection = function(conn = NULL, obj, table = deparse(subst
 	invisible(dbExecute(conn, query))
 }
 
-schema_table <- function(table, public = "public") {
+schema_table <- function(conn, table, public = "public") {
 	if (!is.character(table))
 		stop("table must be a character vector", call. = FALSE)
 
@@ -177,6 +172,10 @@ schema_table <- function(table, public = "public") {
 		stop("table and schema cannot be NA", call. = FALSE)
 
 	return(table)
+}
+
+paste_schema_table <- function(conn, table, schema) {
+
 }
 
 db_list_tables_schema <- function(con) {
@@ -241,3 +240,47 @@ get_postgis_crs = function(conn, srid, debug = FALSE) {
 	} else
 		st_crs(srid) # trust native epgs
 }
+
+# for RPostgreSQL
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbWriteTable
+#' @export
+setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
+		  function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+		  		 append = FALSE, field.types = NULL, temporary = FALSE,
+		  		 copy = TRUE, factorsAsCharacter = TRUE) {
+		  	if (!requireNamespace("RPostgreSQL"))
+		  		stop("Missing package `RPostgreSQL`.",
+		  			 " Use `install.packages(\"RPostgreSQL\")` to install.", call. = FALSE)
+		  	field.types <- if (is.null(field.types)) dbDataType(conn, value)
+
+		  	geom_col <- vapply(value, inherits, TRUE, what = "sfc")
+		  	value[geom_col] <- st_as_binary(st_geometry(value), EWKB = TRUE, hex = TRUE)
+		  	value <- as.data.frame(value)
+
+		  	tryCatch({
+		  		dbWriteTable(conn, name, value,..., row.names = row.names,
+		  					 overwrite = overwrite, append = append,
+		  					 field.types = field.types, temporary = temporary,
+		  					 copy = copy)
+		  	}, warning=function(w) {
+		  		stop(conditionMessage(w), call. = FALSE)
+		  	})
+		  }
+)
+
+#' Determine database type for R vector.
+#'
+#' @export
+#' @inheritParams RPostgres dbDataType
+#' @rdname dbDataType
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbDataType
+#' @param dbObj PostgreSQLConnection driver or connection.
+#' @param obj Object to convert
+setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
+	dtyp <- vapply(obj, RPostgreSQL::dbDataType, character(1), dbObj =  dbObj)
+	gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
+	dtyp[gtyp] <- "geometry"
+	return(dtyp)
+})

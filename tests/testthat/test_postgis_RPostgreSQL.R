@@ -29,21 +29,24 @@ try(pg <- RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "postgis"),
 test_that("can write to db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_error(st_write(), "no applicable method for 'st_write'")
-    expect_silent(st_write(pg, pts, "sf_meuse__"))
-    expect_error(st_write(pg, pts, "sf_meuse__"), "exists")
-    expect_silent(st_write(pg, pts, "sf_meuse__", drop = TRUE))
-    expect_silent(st_write(pg, pts, "sf_meuse2__", binary = FALSE))
+    expect_silent(st_write(pts, pg, "sf_meuse__"))
+    expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
+    expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    #expect_warning(st_write(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
-    expect_silent(st_write(pg, z, "sf_meuse3__",  binary = TRUE))
+    expect_silent(st_write(z, pg, "sf_meuse3__"))
+    expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
+    expect_warning(expect_equal(nrow(dbReadTable(pg, "sf_meuse3__")),
+                                nrow(z) * 2), "type geometry")
+    expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
 })
 
 test_that("sf can write units to database (#264)", {
+	skip("can't handle units")
     skip_if_not(can_con(pg), "could not connect to postgis database")
     ptsu <- pts
     ptsu[["length"]] <- ptsu[["cadmium"]]
     units(ptsu[["length"]]) <- units::as_units("km")
-    expect_silent(st_write(pg, ptsu, "sf_units__", drop = TRUE))
+    expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
     r <- st_read(pg, "sf_units__")
     expect_is(r$length, "numeric")
     expect_equal(sort(r[["length"]]), sort(as.numeric(ptsu[["length"]])))
@@ -57,17 +60,18 @@ test_that("can write to other schema", {
     could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0
 
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_error(st_write(pg, pts, c("public", "sf_meuse__")), "exists")
-    expect_silent(st_write(pg, pts, c("sf_test__", "sf_meuse__")))
-    expect_error(st_write(pg, pts, c("sf_test__", "sf_meuse__")), "drop")
-    expect_silent(st_write(pg, pts, c("sf_test__", "sf_meuse__"), drop = TRUE))
-    expect_silent(st_write(pg, pts, c("sf_test__", "sf_meuse2__"), binary = FALSE))
+    expect_error(st_write(pts, pg, c("public", "sf_meuse__")), "exists")
+    expect_silent(st_write(pts, pg, c("sf_test__", "sf_meuse__")))
+    expect_error(st_write(pts, pg, c("sf_test__", "sf_meuse__")), "exists")
+    expect_silent(st_write(pts, pg, c("sf_test__", "sf_meuse__"), overwrite = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_silent(st_write(pg, z, c("sf_test__", "sf_meuse33__"),  binary = TRUE))
-    expect_silent(st_write(pg, z, c("sf_test__", "sf_meuse4__"),  binary = FALSE))
+    expect_silent(st_write(z, pg, c("sf_test__", "sf_meuse33__")))
+    expect_silent(st_write(z, pg, c("sf_test__", "sf_meuse4__")))
 
-    # weird name work, but create lots of noise from RPostgreSQL
-    #expect_silent(st_write(pg, pts, c(NULL, "sf_test__.meuse__")))
+    # weird name work
+    expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), overwrite = TRUE))
+    expect_silent(st_write(pts.2 <- pts, pg, overwrite = TRUE))
+    expect_true(DBI::dbRemoveTable(pg, "pts.2 <- pts"))
 })
 
 test_that("can read from db", {
@@ -83,11 +87,6 @@ test_that("can read from db", {
     expect_equal(dim(pts), dim(y))
     expect_identical(st_crs(pts), st_crs(y))
     expect_identical(st_precision(pts), st_precision(y))
-
-    z <- st_read(pg, "sf_meuse2__")
-    expect_equal(dim(pts), dim(z))
-    expect_identical(st_crs(pts), st_crs(z))
-    expect_identical(st_precision(pts), st_precision(z))
 
     z <- st_read(pg, "sf_meuse3__")
     expect_equal(dim(pts), dim(z))
@@ -196,7 +195,8 @@ test_that("can read using driver", {
     layers <- st_layers("PG:dbname=postgis")
     lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__",
                     "sf_test__.sf_meuse__", "sf_test__.sf_meuse2__",
-                    "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__"))
+                    "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__",
+    					 "pts.2 <- pts"))
     expect_equal(sort(layers$name), lyr_expect)
     expect_equal(layers$features, rep(155, length(lyr_expect)))
     expect_equal(layers$fields, rep(13, length(lyr_expect)))
@@ -239,7 +239,7 @@ test_that("new SRIDs are handled correctly", {
 		"+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
 		"+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs"))
 	st_crs(meuse_sf) = crs
-	expect_silent(st_write(pg, meuse_sf, drop = TRUE))
+	expect_silent(st_write(meuse_sf, pg, drop = TRUE))
 	expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
 		"not found in EPSG support files")
 	expect_true(st_crs(x) == crs)
@@ -262,10 +262,10 @@ if (can_con(pg)) {
 }
 
 test_that("schema_table", {
-    expect_error(sf:::schema_table(NA), "character vector")
-    expect_error(sf:::schema_table(NA_character_), "cannot be NA")
-    expect_error(sf:::schema_table("a", NA), "cannot be NA")
-    expect_error(sf:::schema_table(letters), "longer than 2")
-    expect_equal(sf:::schema_table("a", "b"), c("b", "a"))
-    expect_equal(sf:::schema_table("a"), c("public", "a"))
+    expect_error(sf:::schema_table(pg, NA), "character vector")
+    expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
+    expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
+    expect_error(sf:::schema_table(pg, letters), "longer than 2")
+    expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
+    expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
 })
