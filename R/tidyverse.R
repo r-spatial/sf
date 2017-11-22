@@ -66,6 +66,8 @@ ungroup.sf <- function(x, ...) {
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate.sf <- function(.data, ..., .dots) {
+	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
