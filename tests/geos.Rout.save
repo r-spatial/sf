@@ -318,6 +318,22 @@ first 10 elements:
 > sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
 > sfg = st_snap(st_geometry(nc1)[[1]], st_combine(g), 2501*sqrt(2))
 > 
+> # Hausdorff distance: http://geos.refractions.net/ro/doxygen_docs/html/classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html
+> A = st_as_sfc("LINESTRING (0 0, 100 0, 10 100, 10 100)")
+> B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
+> st_distance(c(A,B))
+         [,1]     [,2]
+[1,] 0.000000 8.176236
+[2,] 8.176236 0.000000
+> st_distance(c(A,B), which = "Hausdorff")
+         [,1]     [,2]
+[1,]  0.00000 22.36068
+[2,] 22.36068  0.00000
+> st_distance(c(A,B), which = "Hausdorff", par = 0.001)
+             [,1]         [,2]
+[1,] 2.929643e-14 4.789000e+01
+[2,] 4.789000e+01 2.131628e-14
+> 
 > proc.time()
    user  system elapsed 
-  3.444   0.308   3.441 
+  3.572   0.284   3.539 

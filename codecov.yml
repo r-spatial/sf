@@ -1,1 +1,3 @@
 comment: false
+ignore:
+  - "inst/include/sf_RcppExports.h" 
