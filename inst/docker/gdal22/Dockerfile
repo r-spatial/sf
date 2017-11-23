@@ -67,8 +67,8 @@ RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 # GDAL:
 
-ENV GDAL_VERSION 2.2.2
-ENV GDAL_VERSION_NAME 2.2.2
+ENV GDAL_VERSION 2.2.3
+ENV GDAL_VERSION_NAME 2.2.3
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -86,6 +86,19 @@ RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite",
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
+
+# tmap:
+RUN add-apt-repository -y ppa:opencpu/jq
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y \
+	libv8-3.14-dev \
+	libjq-dev \
+	libprotobuf-dev \
+	libxml2-dev \
+	libprotobuf-dev \
+	protobuf-compiler
+RUN Rscript -e 'install.packages(c("protolite", "tmap"), repos = "https://cloud.r-project.org")'
 
 RUN R CMD build rgdal/pkg --no-build-vignettes
 RUN R CMD INSTALL rgdal_*.tar.gz 

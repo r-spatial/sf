@@ -50,8 +50,8 @@ st_as_sf.psp = function(x, ...) {
 #' \dontrun{ # because of spatstat interfering with units
 #' if (require(spatstat)) {
 #'  data(chicago)
-#'  plot(st_as_sf(chicago["label"]))
-#'  plot(st_as_sf(chicago[-1,"label"]))
+#'  plot(st_as_sf(chicago)["label"])
+#'  plot(st_as_sf(chicago)[-1,"label"])
 #' }
 #' }
 st_as_sf.lpp = function(x, ...) {
