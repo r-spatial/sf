@@ -388,6 +388,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_normalize
+Rcpp::List CPL_geos_normalize(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_geos_normalize(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_normalize(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_union
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature);
 RcppExport SEXP _sf_CPL_geos_union(SEXP sfcSEXP, SEXP by_featureSEXP) {
@@ -688,6 +699,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
     {"_sf_CPL_geos_is_empty", (DL_FUNC) &_sf_CPL_geos_is_empty, 1},
+    {"_sf_CPL_geos_normalize", (DL_FUNC) &_sf_CPL_geos_normalize, 1},
     {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 8},

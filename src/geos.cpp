@@ -496,6 +496,22 @@ Rcpp::LogicalVector CPL_geos_is_empty(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
+	int dim = 2;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
+	for (int i = 0; i < sfc.size(); i++) {
+		if (GEOSNormalize_r(hGEOSCtxt, gmv[i]) == -1)
+			Rcpp::stop("normalize: GEOS exception");
+	}
+	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv, dim)); // destroys gmv
+	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc.attr("precision");
+	out.attr("crs") = sfc.attr("crs");
+	return out;
+} // #nocov end
+
+// [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) { 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();

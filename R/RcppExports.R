@@ -129,6 +129,10 @@ CPL_geos_is_empty <- function(sfc) {
     .Call('_sf_CPL_geos_is_empty', PACKAGE = 'sf', sfc)
 }
 
+CPL_geos_normalize <- function(sfc) {
+    .Call('_sf_CPL_geos_normalize', PACKAGE = 'sf', sfc)
+}
+
 CPL_geos_union <- function(sfc, by_feature = FALSE) {
     .Call('_sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
 }
