@@ -29,12 +29,14 @@ Imports:
 	magrittr
 Suggests: 
     geosphere (>= 1.5-5), 
-    maptools, 
     maps,
     rgdal,
     rgeos,
     sp (>= 1.2-4), 
 	raster,
+	spatstat,
+	tmap,
+    maptools, 
 	RSQLite,
     RPostgreSQL,
     tibble,
@@ -43,12 +45,11 @@ Suggests:
     tidyr (>= 0.7-1),
     ggplot2,
 	mapview,
-	tmap,
     testthat,
     knitr,
 	covr,
 	microbenchmark,
-	spatstat
+	rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
