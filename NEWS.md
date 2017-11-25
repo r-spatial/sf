@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* change default maximum number of feature to print to 10, controllable by `options(sf_max_print)`; #556
+
 * add `Hausdorff` (and `Frechet` for those with GEOS 3.7.0) as options to `st_distance`; add `par` for densified versions
 
 * add `st_snap`, for snapping geometries to other geometries, within a tolerance

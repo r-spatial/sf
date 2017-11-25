@@ -354,9 +354,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	x
 }
 
+#' @name sf
+#' @param x object of class \code{sf}
+#' @param n maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}
 #' @export
-print.sf = function(x, ..., n =
-		ifelse(options("max.print")[[1]] == 99999, 20, options("max.print")[[1]])) {
+print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 
 	geoms = which(vapply(x, function(col) inherits(col, "sfc"), TRUE))
 	nf = length(x) - length(geoms)

@@ -34,7 +34,7 @@ dimension:      XY
 bbox:           xmin: 0.3893523 ymin: 153.1034 xmax: 1281.986 ymax: 1276.56
 epsg (SRID):    NA
 proj4string:    NA
-First 20 features:
+First 10 features:
      label seg tp marks                           geom
 1   window  NA NA  <NA> POLYGON ((1281.98625717162 ...
 2  segment  NA NA  <NA> LINESTRING (0.3894738948163...
@@ -46,16 +46,6 @@ First 20 features:
 8  segment  NA NA  <NA> LINESTRING (288.99074640966...
 9  segment  NA NA  <NA> LINESTRING (380.13260158731...
 10 segment  NA NA  <NA> LINESTRING (379.98273018419...
-11 segment  NA NA  <NA> LINESTRING (466.95099475742...
-12 segment  NA NA  <NA> LINESTRING (466.95099475742...
-13 segment  NA NA  <NA> LINESTRING (578.00537249169...
-14 segment  NA NA  <NA> LINESTRING (578.00537249169...
-15 segment  NA NA  <NA> LINESTRING (679.70229544891...
-16 segment  NA NA  <NA> LINESTRING (679.70229544891...
-17 segment  NA NA  <NA> LINESTRING (731.88887450578...
-18 segment  NA NA  <NA> LINESTRING (743.93193126673...
-19 segment  NA NA  <NA> LINESTRING (826.90457748163...
-20 segment  NA NA  <NA> LINESTRING (826.90457748163...
 > # ppp:
 > g = gorillas
 > st_as_sf(g)
@@ -65,7 +55,7 @@ dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
 epsg (SRID):    NA
 proj4string:    NA
-First 20 features:
+First 10 features:
     label group season       date                           geom
 NA window  <NA>   <NA>       <NA> POLYGON ((585391.890106117 ...
 1   point major    dry 2006-01-06     POINT (582518.4 676886.25)
@@ -77,16 +67,6 @@ NA window  <NA>   <NA>       <NA> POLYGON ((585391.890106117 ...
 7   point major    dry 2006-02-01     POINT (583167.16 676730.5)
 8   point major    dry 2006-02-03    POINT (583584.54 677207.12)
 9   point major    dry 2006-02-13    POINT (583117.75 676850.27)
-10  point major    dry 2006-02-15    POINT (582902.81 676724.05)
-11  point major    dry 2006-02-20    POINT (583194.96 676632.26)
-12  point major    dry 2006-02-23    POINT (582615.91 677500.61)
-13  point major    dry 2006-02-28    POINT (582108.71 677478.35)
-14  point major    dry 2006-03-02    POINT (581974.91 676455.56)
-15  point major    dry 2006-03-06    POINT (582243.73 677702.74)
-16  point major    dry 2006-03-10    POINT (581947.83 678276.53)
-17  point major    dry 2006-03-14    POINT (583010.53 676604.36)
-18  point major    dry 2006-03-17    POINT (583685.86 677234.91)
-19  point major    dry 2006-03-19     POINT (583474.15 677016.6)
 > marks(g) = NULL
 > st_as_sf(g)
 Simple feature collection with 648 features and 1 field
@@ -95,7 +75,7 @@ dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
 epsg (SRID):    NA
 proj4string:    NA
-First 20 features:
+First 10 features:
     label                           geom
 1  window POLYGON ((585391.890106117 ...
 2   point     POINT (582518.4 676886.25)
@@ -107,17 +87,7 @@ First 20 features:
 8   point     POINT (583167.16 676730.5)
 9   point    POINT (583584.54 677207.12)
 10  point    POINT (583117.75 676850.27)
-11  point    POINT (582902.81 676724.05)
-12  point    POINT (583194.96 676632.26)
-13  point    POINT (582615.91 677500.61)
-14  point    POINT (582108.71 677478.35)
-15  point    POINT (581974.91 676455.56)
-16  point    POINT (582243.73 677702.74)
-17  point    POINT (581947.83 678276.53)
-18  point    POINT (583010.53 676604.36)
-19  point    POINT (583685.86 677234.91)
-20  point     POINT (583474.15 677016.6)
 > 
 > proc.time()
    user  system elapsed 
-  1.512   0.312   1.507 
+  1.596   0.324   1.622 
