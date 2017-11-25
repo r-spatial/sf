@@ -417,5 +417,22 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_with_geos() {
-	return OGRGeometryFactory::haveGEOS();
+	// return OGRGeometryFactory::haveGEOS(); // might return something else!!
+
+	bool withGEOS;
+	CPLPushErrorHandler(CPLQuietErrorHandler);
+	OGRGeometry *poGeometry1, *poGeometry2;
+	char* pszWKT = (char *) "POINT (10 20)";
+	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry1 );
+	pszWKT = (char *) "POINT (30 20)";
+	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
+	withGEOS = 1;
+	if (poGeometry1->Union(poGeometry2) == NULL) 
+		withGEOS = false; // #nocov
+	else
+		withGEOS = true;
+	OGRGeometryFactory::destroyGeometry(poGeometry1);
+	OGRGeometryFactory::destroyGeometry(poGeometry2);
+	CPLPopErrorHandler();
+	return Rcpp::LogicalVector::create(withGEOS);
 }
