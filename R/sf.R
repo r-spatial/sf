@@ -355,7 +355,6 @@ st_sf = function(..., agr = NA_agr_, row.names,
 }
 
 #' @name sf
-#' @param x object of class \code{sf}
 #' @param n maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}
 #' @export
 print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
