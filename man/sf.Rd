@@ -46,8 +46,6 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 \item{op}{function; geometrical binary predicate function to apply when \code{i} is a simple feature object}
 
 \item{n}{maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}}
-
-\item{x}{object of class \code{sf}}
 }
 \description{
 Create sf, which extends data.frame-like objects with a simple feature list column
