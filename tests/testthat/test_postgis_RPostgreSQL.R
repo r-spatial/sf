@@ -74,6 +74,18 @@ test_that("can write to other schema", {
     expect_true(DBI::dbRemoveTable(pg, "pts.2 <- pts"))
 })
 
+test_that("support for capital names (#571)", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	expect_silent(st_write(pts, pg, "Meuse_tbl"))
+	expect_true(DBI::dbRemoveTable(pg, "Meuse_tbl"))
+	try(DBI::dbSendQuery(pg, "CREATE SCHEMA \"CAP__\";"), silent = TRUE)
+	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
+	could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0
+	skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
+	expect_silent(st_write(pts, pg, c("CAP__", "Meuse_tbl")))
+	expect_true(DBI::dbRemoveTable(pg, c("CAP__", "Meuse_tbl")))
+})
+
 test_that("can read from db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     q <- "select * from sf_meuse__"
