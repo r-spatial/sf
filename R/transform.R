@@ -176,3 +176,14 @@ st_to_s2 = function(x) {
 	st_transform(x, 
 		st_crs("+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
 }
+
+#' directly transform a set of coordinates
+#'
+#' directly transform a set of coordinates
+#' @param from character; proj4string of pts
+#' @param to character; target coordinate reference system
+#' @param pts two-column numeric matrix, or object that can be coerced into a matrix
+#' @export
+sf_project = function(from, to, pts) {
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts))
+}

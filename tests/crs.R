@@ -15,3 +15,6 @@ x = st_sfc(st_point(0:1))
 st_crs(x, parameters = TRUE)
 st_crs(x) = 4326
 st_crs(x, parameters = TRUE)
+
+sf_project(st_crs(4326)$proj4string, st_crs(3857)$proj4string, rbind(c(0,0), c(1,1)))
+st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)

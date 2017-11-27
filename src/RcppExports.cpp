@@ -573,6 +573,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_proj_direct
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts);
+RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type from_to(from_toSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type pts(ptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_signed_area
 double CPL_signed_area(NumericMatrix pts);
 RcppExport SEXP _sf_CPL_signed_area(SEXP ptsSEXP) {
@@ -714,6 +726,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
+    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
