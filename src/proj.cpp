@@ -175,9 +175,9 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	using namespace Rcpp;
 
 	if (from_to.size() != 2)
-		stop("from_to should be size 2 character vector");
+		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
-		stop("pts should be 2-column numeric vector");
+		stop("pts should be 2-column numeric vector"); // #nocov
 
 	projPJ fromPJ, toPJ;
 
@@ -204,9 +204,9 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
 
 	if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
-		pj_free(fromPJ); pj_free(toPJ);
+		pj_free(fromPJ); pj_free(toPJ); // #nocov start
 		Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
-		stop("error");
+		stop("error"); // #nocov end
 	}
 	pj_free(fromPJ);
 	if (pj_is_latlong(toPJ)) {
@@ -226,9 +226,9 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	for (int i = 0; i < out.nrow(); i++) {
 		if (out[i,0] == HUGE_VAL || out[i,1] == HUGE_VAL )
 		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++;
+                	    nwarn++; // #nocov
 	}
 	if (nwarn > 0) 
-		warning("one or more projected point(s) not finite");
+		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }

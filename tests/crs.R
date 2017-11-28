@@ -16,5 +16,11 @@ st_crs(x, parameters = TRUE)
 st_crs(x) = 4326
 st_crs(x, parameters = TRUE)
 
-sf_project(st_crs(4326)$proj4string, st_crs(3857)$proj4string, rbind(c(0,0), c(1,1)))
+from = st_crs(4326)$proj4string
+to = st_crs(3857)$proj4string
+(ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
+sf_project(to, from, ret)
 st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
+try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
+try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
+
