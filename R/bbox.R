@@ -63,8 +63,10 @@ bbox.MtrxSetSetSet = function(obj) {
 #' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
 #' st_bbox(a)
 #' b = st_as_sfc(st_bbox(a))
-#' b2 = st_as_sfc(st_bbox(a) * 1.5)
-#' plot(b2)
+#' b_larger = b * 1.1
+#' b_shifted = b - 0.1
+#' plot(b_larger)
+#' plot(b_shifted, add = TRUE)
 #' plot(b, add = TRUE)
 st_bbox = function(obj) UseMethod("st_bbox")
 
