@@ -39,6 +39,8 @@ test_that("st_intersection of tbl returns tbl", {
 })
 
 test_that("unnest works", {
+  skip_if_not_installed("tidyr")
+  skip_if_not(utils::packageVersion("tidyr") > "0.7.2")
   nc = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
     slice(1:2) %>%
     transmute(y = list(c("a"), c("b", "c")))
