@@ -1,4 +1,9 @@
 suppressPackageStartupMessages(library(sf))
+suppressPackageStartupMessages(library(units))
+
+if (utils::packageVersion("units") >= "0.5-0")
+	units_options(auto_convert_names_to_symbols = FALSE)
+
 ll = st_crs(4326)
 sf:::crs_parameters(ll)$ud_unit
 

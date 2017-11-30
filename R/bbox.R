@@ -170,3 +170,12 @@ st_bbox.Raster = function(obj) {
 	structure(bb_wrap(c(bb[1,1],bb[2,1],bb[1,2],bb[2,2])),
 		crs = st_crs(sp::proj4string(obj)))
 }
+
+#' @export
+"$.bbox" = function(x, name) {
+	switch(name,
+		xlim = x[c("xmin", "xmax")],
+		ylim = x[c("ymin", "ymax")],
+		stop("unsupported name")
+	)
+}

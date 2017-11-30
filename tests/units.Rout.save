@@ -1,5 +1,5 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,6 +16,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> suppressPackageStartupMessages(library(units))
+> 
+> if (utils::packageVersion("units") >= "0.5-0")
++ 	units_options(auto_convert_names_to_symbols = FALSE)
+> 
 > ll = st_crs(4326)
 > sf:::crs_parameters(ll)$ud_unit
 1 arc_degree
@@ -59,4 +64,4 @@ ind-ch : 1 20.11669506 m
 > 
 > proc.time()
    user  system elapsed 
-  0.616   0.316   0.620 
+  0.520   0.212   0.521 
