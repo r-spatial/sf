@@ -284,7 +284,11 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 #' @export
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
-	st_as_sf(NextMethod(), sf_column_name = attr(data, "sf_column"))
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+	col = rlang::enquo(col)
+	st_as_sf(tidyr::unite(data, !!col, ..., sep = sep, remove = remove),
+		sf_column_name = attr(data, "sf_column"))
 }
 
 
