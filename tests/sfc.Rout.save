@@ -878,6 +878,36 @@ MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))
 > st_wrap_dateline(x[[1]])
 MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))
 > 
+> geo <- c("{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.68152563269095,36.43764870908927]}",
++          "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67408758213843,36.43366018922779]}",
++          "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67708346361097,36.44208638659282]}",
++          "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67886661944996,36.44110273135671]}",
++          "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.68089232041565,36.44173155205561]}")
+> st_as_sfc(geo, GeoJSON = TRUE)
+Geometry set for 5 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -118.6815 ymin: 36.43366 xmax: -118.6741 ymax: 36.44209
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+POINT (-118.681525632691 36.4376487090893)
+POINT (-118.674087582138 36.4336601892278)
+POINT (-118.677083463611 36.4420863865928)
+POINT (-118.67886661945 36.4411027313567)
+POINT (-118.680892320416 36.4417315520556)
+> st_as_sfc(geo, GeoJSON = TRUE, crs = 4326)
+Geometry set for 5 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -118.6815 ymin: 36.43366 xmax: -118.6741 ymax: 36.44209
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+POINT (-118.681525632691 36.4376487090893)
+POINT (-118.674087582138 36.4336601892278)
+POINT (-118.677083463611 36.4420863865928)
+POINT (-118.67886661945 36.4411027313567)
+POINT (-118.680892320416 36.4417315520556)
+> 
 > proc.time()
    user  system elapsed 
-  2.092   0.328   2.128 
+  2.232   0.280   2.217 

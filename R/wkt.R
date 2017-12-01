@@ -109,18 +109,25 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 #' @rdname st_as_sfc
 #' @md
 #' @details If `x` is a character vector, it should be a vector containing
-#' the [well-known-text](http://www.opengeospatial.org/standards/wkt-crs) or
-#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT)
-#' representations of a single geometry for each vector element.
+#' [well-known-text](http://www.opengeospatial.org/standards/wkt-crs), or
+#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT) or
+#' GeoJSON representations of a single geometry for each vector element.
 #' @param crs integer or character; coordinate reference system for the
+#' @param GeoJSON logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
 #' geometry, see [st_crs()]
 #' @export
 #' @examples
 #' st_as_sfc("SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)")
-st_as_sfc.character = function(x, crs = NA_integer_, ...) {
+st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 	if (length(x) == 0)
 		st_sfc(crs = crs)
-	else {
+	else if (GeoJSON) {
+		ret = st_geometry(do.call(rbind, lapply(x, st_read, quiet = TRUE)))
+		if (is.na(st_crs(ret)))
+			st_set_crs(ret, crs)
+		else
+			ret
+	} else {
 		if (all(is_ewkt(x)) & is.na(crs)) {
 			# EWKT
 			crs = get_crs_ewkt(x)

@@ -174,8 +174,14 @@ st_bbox.Raster = function(obj) {
 #' @export
 "$.bbox" = function(x, name) {
 	switch(name,
+		xrange =,
 		xlim = x[c("xmin", "xmax")],
+		yrange =,
 		ylim = x[c("ymin", "ymax")],
+		xmin = x["xmin"],
+		ymin = x["ymin"],
+		xmax = x["xmax"],
+		ymax = x["ymax"],
 		stop("unsupported name")
 	)
 }
