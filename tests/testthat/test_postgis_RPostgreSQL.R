@@ -1,4 +1,5 @@
 library(sf)
+library(DBI)
 library(testthat)
 context("sf: postgis using RPostgreSQL")
 
@@ -32,25 +33,47 @@ test_that("can write to db", {
     expect_silent(st_write(pts, pg, "sf_meuse__"))
     expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
     expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
+    expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_silent(st_write(z, pg, "sf_meuse3__"))
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
-    expect_warning(expect_equal(nrow(dbReadTable(pg, "sf_meuse3__")),
+    expect_warning(expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")),
                                 nrow(z) * 2), "type geometry")
     expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
 })
 
+test_that("can handle multiple geom columns", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
+	expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE))
+	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
+	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
+	x <- st_layers("PG:dbname=postgis")
+	multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
+	expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
+	expect_silent(x <- st_read(pg, "meuse_multi2"))
+	expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
+	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi2", quiet = TRUE))
+	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
+	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+})
+
 test_that("sf can write units to database (#264)", {
-	skip("can't handle units")
     skip_if_not(can_con(pg), "could not connect to postgis database")
     ptsu <- pts
-    ptsu[["length"]] <- ptsu[["cadmium"]]
-    units(ptsu[["length"]]) <- units::as_units("km")
+    ptsu[["u"]] <- ptsu[["cadmium"]]
+    units(ptsu[["u"]]) <- units::as_units("km")
     expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
     r <- st_read(pg, "sf_units__")
-    expect_is(r$length, "numeric")
-    expect_equal(sort(r[["length"]]), sort(as.numeric(ptsu[["length"]])))
-    try(db_drop_table_schema(pg, "sf_units__"), silent = TRUE)
+    expect_is(r[["u"]], "numeric")
+    expect_equal(sort(r[["u"]]), sort(as.numeric(ptsu[["u"]])))
+    dbRemoveTable(pg, "sf_units__")
 })
 
 test_that("can write to other schema", {
@@ -205,41 +228,16 @@ test_that("round trips", {
 test_that("can read using driver", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     layers <- st_layers("PG:dbname=postgis")
-    lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__",
-                    "sf_test__.sf_meuse__", "sf_test__.sf_meuse2__",
-                    "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__",
-    					 "pts.2 <- pts"))
-    expect_equal(sort(layers$name), lyr_expect)
-    expect_equal(layers$features, rep(155, length(lyr_expect)))
-    expect_equal(layers$fields, rep(13, length(lyr_expect)))
+    lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__", "meuse_multi2",
+                    "sf_test__.sf_meuse__",  "sf_test__.meuse__",
+                    "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__"))
+    expect_true(all(lyr_expect %in% layers$name))
+    expect_true(all(layers$features == 155))
+    expect_true(all(layers$fields == 12))
 
     skip_if_not(can_con(RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "empty")),
                 "could not connect to 'empty' database")
     expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers")
-})
-
-test_that("multi geom columns work", {
-    skip_if_not(can_con(pg), "could not connect to postgis database")
-	cmd = "CREATE TABLE meuse_multi (id int4 PRIMARY KEY, zinc real);
-SELECT AddGeometryColumn('', 'meuse_multi','geom_1',28992,'GEOMETRY', 2);
-SELECT AddGeometryColumn('', 'meuse_multi','geom_2',28992,'GEOMETRY', 2);
-INSERT INTO meuse_multi VALUES ( 1 , 1022 , ST_GeomFromText('POINT( 181072 333611 )', 28992),
-ST_GeomFromText('MULTIPOINT( 181390 333260, 0 0)', 28992));
-INSERT INTO meuse_multi VALUES ( 2 , 1141 , ST_GeomFromText('POINT( 181025 333558 )', 28992),
-ST_GeomFromText('POINT( 181165 333370 )', 28992));
-INSERT INTO meuse_multi VALUES ( 3 , 640 , ST_GeomFromText('POINT( 181165 333537 )', 28992),
-ST_GeomFromText('POINT( 181027 333363 )', 28992));
-INSERT INTO meuse_multi VALUES ( 4 , 257 , ST_GeomFromText('POINT( 181298 333484 )', 28992),
-ST_GeomFromText('POINT( 181060 333231 )', 28992));
-INSERT INTO meuse_multi VALUES ( 5 , 269 , ST_GeomFromText('POINT( 181307 333330 )', 28992),
-ST_GeomFromText('POINT( 181232 333168 )', 28992));"
-    try(DBI::dbExecute(pg, cmd), silent = TRUE)
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geom_2"))
-	x <- st_layers("PG:dbname=postgis")
 })
 
 test_that("new SRIDs are handled correctly", {
@@ -247,7 +245,7 @@ test_that("new SRIDs are handled correctly", {
 	data(meuse, package = "sp")
 	meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
 
-	crs = st_crs(paste("+proj=sterea  +lat_0=52 +lon_0=5", # creates FALSE, but new one
+	crs = st_crs(paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
 		"+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
 		"+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs"))
 	st_crs(meuse_sf) = crs

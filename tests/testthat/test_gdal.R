@@ -1,11 +1,13 @@
 context("sf: gdal tests")
 
 test_that("st_transform works", {
+  skip_if_not_installed("sp")
+  skip_if_not_installed("rgdal")
   library(sp)
-  
+
   s = st_sfc(st_point(c(1,1)), st_point(c(10,10)), st_point(c(5,5)), crs = 4326)
   s1.tr = st_transform(s, 3857)
-  
+
   sp = as(s, "Spatial")
   sp.tr = spTransform(sp, CRS("+init=epsg:3857"))
   s2.tr = st_as_sfc(sp.tr)

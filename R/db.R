@@ -21,7 +21,7 @@
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
-					  geom_column = NULL, EWKB, ...) {
+					  geom_column = NULL, EWKB, quiet = TRUE, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
 
@@ -53,27 +53,22 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 		else
 			gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
 	}
-	crs = if (class(gc) == "try-error" || is.null(table))
-			NA_crs_
-		else {
-			srid = gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "srid"]
-			if (srid != 0) # srid 0 is used for missing in postgis
-				make_crs(get_postgis_crs(conn, srid))
-			else
-				NA_crs_
-		}
 
 	if (missing(EWKB))
 		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
 
-	geom = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = crs)
+	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = conn)
+
+	st_sf(tbl, ...)
+}
+
+postgis_as_sfc <- function(x,  EWKB, conn) {
+	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {
 		st_crs(geom) = make_crs(get_postgis_crs(conn, attr(geom, "srid")))
 		attr(geom, "srid") = NULL
 	}
-
-	tbl[[geom_column]] = geom
-	st_sf(tbl, ...)
+	return(geom)
 }
 
 #' Write simple feature table to a spatial database
@@ -174,8 +169,8 @@ schema_table <- function(conn, table, public = "public") {
 	return(table)
 }
 
-paste_schema_table <- function(conn, table, schema) {
-
+as_wkb <- function(x) {
+	structure(x, class = "WKB")
 }
 
 db_list_tables_schema <- function(con) {
@@ -232,13 +227,30 @@ get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
 	}
 }
 
-get_postgis_crs = function(conn, srid, debug = FALSE) {
-	DEBUG = function(x) { if (debug) message(x); x }
-	if (srid > 900913) { # query postgis' own table:
-		query = DEBUG(paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";"))
-		st_crs(dbGetQuery(conn, query)[[1]])
-	} else
-		st_crs(srid) # trust native epgs
+get_postgis_crs = function(conn, srid) {
+		if (is.na(srid)) return(st_crs(NA))
+		query = paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
+		proj4text <- dbGetQuery(conn, query)
+		if (nrow(proj4text) != 1)  return(st_crs(NA))
+		return(st_crs(proj4text[[1]]))
+}
+
+set_postgis_crs = function(conn, crs, update = is.na(get_postgis_crs(conn, crs$epsg))) {
+	if (update) {
+		if (is.na(crs$epsg)) crs$epgs <- get_new_postgis_crs(conn)
+		wkt = st_as_text(crs)
+		query = paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
+					   crs$epgs, ",'", wkt, "','",  proj4string, "');")
+		dbExecute(conn, query)
+		return(srid)
+	}
+	stop("crs ", crs$epsg, " already exists in database.",
+		 " Cautiously use `update = TRUE` to  force replace it.", call. = FALSE)
+}
+
+get_new_postgis_crs <- function(conn) {
+	query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
+	dbGetQuery(conn, query)[[1]]
 }
 
 # for RPostgreSQL
@@ -248,18 +260,14 @@ get_postgis_crs = function(conn, srid, debug = FALSE) {
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 		  function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
 		  		 append = FALSE, field.types = NULL, temporary = FALSE,
-		  		 copy = TRUE, factorsAsCharacter = TRUE) {
+		  		 copy = TRUE, factorsAsCharacter = TRUE, binary = TRUE) {
 		  	if (!requireNamespace("RPostgreSQL"))
 		  		stop("Missing package `RPostgreSQL`.",
 		  			 " Use `install.packages(\"RPostgreSQL\")` to install.", call. = FALSE)
 		  	field.types <- if (is.null(field.types)) dbDataType(conn, value)
-
-		  	geom_col <- vapply(value, inherits, TRUE, what = "sfc")
-		  	value[geom_col] <- st_as_binary(st_geometry(value), EWKB = TRUE, hex = TRUE)
-		  	value <- as.data.frame(value)
-
+		  	if (temporary) warning("`RPostgreSQL` does not support temporary tables")
 		  	tryCatch({
-		  		dbWriteTable(conn, name, value,..., row.names = row.names,
+		  		dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
 		  					 overwrite = overwrite, append = append,
 		  					 field.types = field.types, temporary = temporary,
 		  					 copy = copy)
@@ -269,10 +277,38 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 		  }
 )
 
-#' Determine database type for R vector.
+to_postgis <- function(conn, x, binary) {
+	geom_col <- vapply(x, inherits, TRUE, what = "sfc")
+	x[geom_col] <- lapply(x[geom_col], sync_crs, conn = conn)
+	if (binary) {
+		x[geom_col] <- lapply(x[geom_col], st_as_binary, "", EWKB = TRUE, hex = TRUE)
+	} else {
+		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
+	}
+	x <- as.data.frame(x)
+}
+
+sync_crs <- function(conn, geom) {
+	crs <- st_crs(geom)
+	srid <- crs$epsg
+	if (is.na(crs) || is.na(srid)) {
+		if (is.na(crs$proj4string))
+			crs <- dummy_crs(0)
+		else {
+			srid <- get_possibly_new_srid(conn, crs$proj4string)
+			crs <- dummy_crs(epsg = srid, proj4string = crs$proj4string)
+		}
+	}
+	st_set_crs(geom, crs)
+}
+
+dummy_crs <- function(epsg = 0L, proj4string = "") {
+	structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+}
+#' Determine database type for R vector
 #'
 #' @export
-#' @inheritParams RPostgres dbDataType
+#' @inheritParams RPostgreSQL dbDataType
 #' @rdname dbDataType
 #' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbDataType
@@ -282,5 +318,8 @@ setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 	dtyp <- vapply(obj, RPostgreSQL::dbDataType, character(1), dbObj =  dbObj)
 	gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
 	dtyp[gtyp] <- "geometry"
+	# explicit cast for units
+	gtyp <- vapply(obj, inherits, TRUE, what = "units")
+	dtyp[gtyp] <- "numeric"
 	return(dtyp)
 })
