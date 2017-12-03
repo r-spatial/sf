@@ -52,7 +52,7 @@ st_wrap_dateline(x, options, quiet)
 
 \item{check}{logical; perform a sanity check on resulting polygons?}
 
-\item{use_gdal}{logical; if \code{FALSE}, arguments \code{check} and \code{partial} get ignored, and projection is directly carried out by \code{lwgeom_transform} which ignores the GDAL api. This allows proj.4 parameters such as \code{+over} to act (https://github.com/r-spatial/sf/issues/511) and certain projections such as \code{wintri} which do not have an inverse, to work (https://github.com/r-spatial/sf/issues/509). This requires that sf is built by linking to \code{liblwgeom}.}
+\item{use_gdal}{logical; this parameter is deprecated. Use \link[lwgeom]{st_transform_proj} instead}
 
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 
@@ -90,7 +90,7 @@ st_proj_info("datum")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
 library(maps)
 wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))
-wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"), 
+wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"),
    quiet = TRUE)
 wrld_moll <- st_transform(wrld_wrap, "+proj=moll")
 plot(st_geometry(wrld_moll), col = "transparent")
