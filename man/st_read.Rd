@@ -20,7 +20,7 @@ st_read(dsn, layer, ...)
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
 \method{st_read}{PostgreSQLConnection}(conn = NULL, table = NULL,
-  query = NULL, geom_column = NULL, EWKB, ...)
+  query = NULL, geom_column = NULL, EWKB, quiet = TRUE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,

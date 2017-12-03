@@ -3,7 +3,7 @@
 \docType{methods}
 \name{dbDataType,PostgreSQLConnection,sf-method}
 \alias{dbDataType,PostgreSQLConnection,sf-method}
-\title{Determine database type for R vector.}
+\title{Determine database type for R vector}
 \usage{
 \S4method{dbDataType}{PostgreSQLConnection,sf}(dbObj, obj)
 }
@@ -13,5 +13,5 @@
 \item{obj}{Object to convert}
 }
 \description{
-Determine database type for R vector.
+Determine database type for R vector
 }

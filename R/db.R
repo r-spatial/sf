@@ -71,89 +71,6 @@ postgis_as_sfc <- function(x,  EWKB, conn) {
 	return(geom)
 }
 
-#' Write simple feature table to a spatial database
-#'
-#' Write simple feature table to a spatial database
-#' @param conn open database connection
-#' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
-#' @param geom_name name of the geometry column in the database
-#' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
-#' @param drop logical; should \code{table} be dropped first?
-#' @param append logical; append to table? (NOTE: experimental, might not work)
-#' @param binary logical; use well-known-binary for transfer?
-#' @param debug logical; print SQL statements to screen before executing them.
-#' @name st_write
-#' @examples
-#' \dontrun{
-#'   library(sp)
-#'   data(meuse)
-#'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#'   library(RPostgreSQL)
-#'   try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
-#'   if (exists("conn") && !inherits(conn, "try-error"))
-#'     st_write(conn, sf, "meuse_tbl", drop = FALSE)
-#' }
-#' @details database reading was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
-.st_write_db = function(obj, conn = NULL, table = deparse(substitute(obj)),
-				  ..., delete_layer = FALSE, debug = FALSE, binary = TRUE,
-				  append = FALSE, drop = delete_layer) {
-
-	DEBUG = function(x) { if (debug) message(x); x }
-	if (is.null(conn))
-		stop("No connection provided")
-	table <- schema_table(conn, table)
-
-	if (drop & append) stop("Can't append if `drop = TRUE`", call. = FALSE)
-
-	if (db_exists(conn, table)) {
-		if (drop)
-			DBI::dbRemoveTable(conn, table)
-		if (!append) {
-			stop("Table ", paste(table, collapse = "."), " exists already, use delete_layer = TRUE",
-					 call. = FALSE)
-		}
-	} else if (append) {
-			stop("Table ", paste(table, collapse = "."), " does  not exist and append = TRUE",
-			 call. = FALSE)
-	}
-
-	geom = st_geometry(obj)
-	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-
-	sfc_name = attr(obj, "sf_column")
-	df = obj
-	st_geometry(df) = NULL # is now data.frame
-	df[[sfc_name]] <- if (binary)
-			st_as_binary(geom, EWKB = TRUE, hex = TRUE)
- 		else
-			st_as_text(geom, EWKT = TRUE)
-
-	if (inherits(conn, "PostgreSQL")) # odbc:
-		dbWriteTable(conn, table[2], clean_columns(df, factorsAsCharacter = TRUE), ...)
-	else
-		dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
-
-	TYPE = class(geom[[1]])[2]
-	if (! append) {
-		query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name,
-							 "','", SRID, "','", TYPE, "',", DIM, ");"))
-		dbExecute(conn, query)
-	}
-
-	# convert text column `sfc_name' into geometry column `geom_name':
-	query = if (binary)
-		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
-			" set ", geom_name," = ST_GeomFromEWKB(cast(", sfc_name, " as geometry));
-			ALTER TABLE ", paste(table, collapse = "."),
-			" DROP COLUMN IF EXISTS ", sfc_name))
-	  else
-		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
-			" set ", geom_name," = ST_GeomFromEWKT(", sfc_name, ");
-			ALTER TABLE ", paste(table, collapse = "."),
-			" DROP COLUMN IF EXISTS ", sfc_name))
-	invisible(dbExecute(conn, query))
-}
-
 schema_table <- function(conn, table, public = "public") {
 	if (!is.character(table))
 		stop("table must be a character vector", call. = FALSE)
@@ -293,18 +210,15 @@ sync_crs <- function(conn, geom) {
 	srid <- crs$epsg
 	if (is.na(crs) || is.na(srid)) {
 		if (is.na(crs$proj4string))
-			crs <- dummy_crs(0)
+			crs <- make_dummy_crs(0)
 		else {
 			srid <- get_possibly_new_srid(conn, crs$proj4string)
-			crs <- dummy_crs(epsg = srid, proj4string = crs$proj4string)
+			crs <- make_dummy_crs(epsg = srid, proj4string = crs$proj4string)
 		}
 	}
 	st_set_crs(geom, crs)
 }
 
-dummy_crs <- function(epsg = 0L, proj4string = "") {
-	structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
-}
 #' Determine database type for R vector
 #'
 #' @export

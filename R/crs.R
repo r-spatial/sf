@@ -145,6 +145,10 @@ make_crs = function(x, wkt = FALSE) {
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }
 
+make_dummy_crs <- function(epsg = 0L, proj4string = "") {
+	structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
+}
+
 #' @name st_crs
 #' @examples
 #' sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
