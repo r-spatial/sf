@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* add `unnest` method, which depends on `tidyr` > 0.7-2; #570 PR by @karldw
+
 * add `largest` option to `st_join` to get largest intersection match only; #547, by @tiernanmartin
 
 * change default maximum number of feature to print to 10, controllable by `options(sf_max_print)`; #556

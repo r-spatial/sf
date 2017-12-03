@@ -132,27 +132,20 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 	# create match index ix & i:
 	if (largest) {
 		x$.grp_a = y$.grp_b = NULL # clean up
-		i$.size = if (all(st_dimension(i) < 2))
-			i$.size = st_length(i)	
-		else
-			i$.size = st_area(i)
+		i$.size = if (all(st_dimension(i) < 2)) st_length(i) else st_area(i)
 		l = lapply(split(i, i$.grp_a), function(x) x[which.max(x$.size), ]$.grp_b)
 		ix = as.integer(names(l)) # non-empty x features
 		i = unlist(l) # matching largest y feature
 		if (left) { # fill NA's
-			idx = matrix(NA_integer_, nrow(x), 2) # all x features
-			idx[ix, 2] = i
+			idx = rep(NA_integer_, nrow(x)) # all x features
+			idx[ix] = i
 			ix = seq_len(nrow(x))
-			i = idx[,2]
-		} 
-	} else {
-		ix = rep(seq_len(nrow(x)), lengths(i))
-		xNAs = seq_len(nrow(x))
-		xNAs[sapply(i, function(x) length(x)==0)] = NA_integer_
-		if (left) { # fill NA y values when no match:
-			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
-			ix = rep(seq_len(nrow(x)), lengths(i))
+			i = idx
 		}
+	} else {
+		if (left) # fill NA y values when no match:
+			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
+		ix = rep(seq_len(nrow(x)), lengths(i))
 	}
 	st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))
 }
