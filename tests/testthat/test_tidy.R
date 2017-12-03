@@ -11,7 +11,7 @@ test_that("select works", {
 suppressMessages(library(tidyr))
 test_that("separate and unite work", {
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
-  expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% 
+  expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
 	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
 })
 
@@ -31,9 +31,24 @@ test_that("sample_n etc work", {
 })
 
 test_that("st_intersection of tbl returns tbl", {
- nc = read_sf(system.file("shape/nc.shp", package="sf")) 
+ nc = read_sf(system.file("shape/nc.shp", package="sf"))
  nc = st_transform(nc[1:3,], 3857)
  st_agr(nc) = "constant"
  expect_is(nc, "tbl_df")
  expect_is(st_intersection(nc[1:3], nc[4:6]), "tbl_df")
+})
+
+test_that("unnest works", {
+  skip_if_not_installed("tidyr")
+  skip_if_not(utils::packageVersion("tidyr") > "0.7.2")
+  nc = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
+    slice(1:2) %>%
+    transmute(y = list(c("a"), c("b", "c")))
+  unnest_explicit = unnest(nc, y)
+  unnest_implicit = unnest(nc)
+  # The second row is duplicated because the "b" and "c" become separate rows
+  expected = nc[c(1,2,2), ] %>% mutate(y = c("a", "b", "c"))
+  # Would use expect_equal, but doesn't work with geometry cols
+  expect_identical(unnest_explicit, expected)
+  expect_identical(unnest_implicit, expected)
 })

@@ -39,6 +39,8 @@
 \alias{dplyr}
 \alias{unite.sf}
 \alias{dplyr}
+\alias{unnest.sf}
+\alias{dplyr}
 \alias{inner_join.sf}
 \alias{dplyr}
 \alias{left_join.sf}
@@ -68,7 +70,7 @@ transmute.sf(.data, ..., .dots)
 
 select.sf(.data, ...)
 
-rename.sf(.data, ..., .dots)
+rename.sf(.data, ...)
 
 slice.sf(.data, ..., .dots)
 
@@ -92,6 +94,8 @@ separate.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
   convert = FALSE, extra = "warn", fill = "warn", ...)
 
 unite.sf(data, col, ..., sep = "_", remove = TRUE)
+
+unnest.sf(data, ..., .preserve = NULL)
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
@@ -158,6 +162,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 
 \item{extra}{see \link[tidyr]{separate}}
 
+\item{.preserve}{see \link[tidyr]{unnest}}
+
 \item{y}{see \link[dplyr]{left_join}}
 
 \item{by}{see \link[dplyr]{left_join}}
@@ -203,8 +209,8 @@ library(tidyr)
 nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
 library(tidyr)
 nc$row = 1:100 # needed for spread to work
-nc \%>\% select(SID74, SID79, geometry, row) \%>\% 
-	gather(VAR, SID, -geometry, -row) \%>\% 
+nc \%>\% select(SID74, SID79, geometry, row) \%>\%
+	gather(VAR, SID, -geometry, -row) \%>\%
 	spread(VAR, SID) \%>\% head()
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 x <- storms.sf \%>\% group_by(name, year) \%>\% nest

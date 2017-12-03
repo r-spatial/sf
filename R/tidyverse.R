@@ -1,7 +1,7 @@
 ## dplyr methods:
 
 #' Dplyr verb methods for sf objects
-#' 
+#'
 #' Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
@@ -94,8 +94,8 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
 
-	if (!requireNamespace("dplyr", quietly = TRUE) || utils::packageVersion("dplyr") <= "0.5.0")
-		stop("requires dplyr > 0.5.0: install that first") # nocov
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
 
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
@@ -105,15 +105,21 @@ select.sf <- function(.data, ...) {
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
 	st_as_sf(ret)
-} 
+}
 
 
 #' @name dplyr
 #' @export
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
-rename.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+rename.sf <- function(.data, ...) {
+
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+
+	class(.data) <- setdiff(class(.data), "sf")
+	st_as_sf(dplyr::rename(.data, ...))
+	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -169,7 +175,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 #' @param value see original function docs
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
-#' @examples 
+#' @examples
 #' library(tidyr)
 #' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
@@ -177,14 +183,14 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 	if (! requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
 
-    key = rlang::enquo(key)
-    value = rlang::enquo(value)
+	key = rlang::enquo(key)
+	value = rlang::enquo(value)
 
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("tidyr required: install first?")
 
 	class(data) <- setdiff(class(data), "sf")
-    st_as_sf(tidyr::gather(data, !!key, !!value, ..., 
+    st_as_sf(tidyr::gather(data, !!key, !!value, ...,
 		na.rm = na.rm, convert = convert, factor_key = factor_key),
 		sf_column_name = attr(data, "sf_column"))
 }
@@ -199,19 +205,19 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 #' @examples
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
-#' nc %>% select(SID74, SID79, geometry, row) %>% 
-#'		gather(VAR, SID, -geometry, -row) %>% 
+#' nc %>% select(SID74, SID79, geometry, row) %>%
+#'		gather(VAR, SID, -geometry, -row) %>%
 #'		spread(VAR, SID) %>% head()
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
-    key = rlang::enquo(key)
-    value = rlang::enquo(value)
+  key = rlang::enquo(key)
+  value = rlang::enquo(value)
 
 	class(data) <- setdiff(class(data), "sf")
-    st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert, 
+    st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert,
 		drop = drop, sep = sep), sf_column_name = attr(data, "sf_column"))
 }
 
@@ -275,7 +281,7 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 		stop("tidyr required: install first?")
 
 	class(data) <- setdiff(class(data), "sf")
-	st_as_sf(tidyr::separate(data, !!col, into = into, 
+	st_as_sf(tidyr::separate(data, !!col, into = into,
 		sep = sep, remove = remove, convert = convert, extra = extra, fill = fill, ...),
 			sf_column_name = attr(data, "sf_column"))
 }
@@ -290,6 +296,41 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	st_as_sf(tidyr::unite(data, !!col, ..., sep = sep, remove = remove),
 		sf_column_name = attr(data, "sf_column"))
 }
+
+#' @name dplyr
+#' @param .preserve see \link[tidyr]{unnest}
+#' @export
+unnest.sf = function(data, ..., .preserve = NULL) {
+	# nocov start
+	if (!requireNamespace("tidyr", quietly = TRUE) ||
+			utils::packageVersion("tidyr") <= "0.7.2")
+		stop("unnest requires tidyr > 0.7.2; install that first")
+	if (! requireNamespace("tidyselect", quietly = TRUE))
+		stop("unnest requires tidyselect; install that first")
+	if (! requireNamespace("rlang", quietly = TRUE))
+		stop("unnest requires rlang; install that first")
+
+	# The user might want to preserve other columns. Get these as a character
+	# vector of variable names, using any valid dplyr (i.e. rlang)
+	# variable selection syntax. By default, with .preserve = NULL, this will be
+	# empty. Note: the !!! is from rlang.
+	preserve = tidyselect::vars_select(names(data), !!! rlang::enquo(.preserve))
+	# Get the name of the geometry column(s)
+	sf_column_name = attr(data, "sf_column", exact = TRUE)
+	preserve_incl_sf = c(preserve, sf_column_name)
+
+	# Drop the "sf" class and call unnest again, providing the updated .preserve.
+	# (Normally it wouldn't be necessary to drop the class, but tidyr calls
+	# dplyr::transmute (not sf::transmute.sf), so the geometry column is
+	# inadvertantly included in some of the unnest.data.frame code.
+	# The .preserve argument will go through the vars_select/enquo
+	# process again in unnest.data.frame, but that's fine.
+	class(data) = setdiff(class(data), "sf")
+	ret = st_sf(NextMethod(.preserve = preserve_incl_sf),
+		sf_column_name = sf_column_name)
+	ret # nocov end
+}
+
 
 
 ## tibble methods:
