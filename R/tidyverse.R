@@ -94,8 +94,8 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
 
-	if (!requireNamespace("dplyr", quietly = TRUE) || utils::packageVersion("dplyr") <= "0.5.0")
-		stop("requires dplyr > 0.5.0: install that first") # nocov
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
 
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
@@ -112,8 +112,14 @@ select.sf <- function(.data, ...) {
 #' @export
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
-rename.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+rename.sf <- function(.data, ...) {
+
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+
+	class(.data) <- setdiff(class(.data), "sf")
+	st_as_sf(dplyr::rename(.data, ...))
+	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name dplyr
@@ -177,8 +183,8 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 	if (! requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
 
-  key = rlang::enquo(key)
-  value = rlang::enquo(value)
+	key = rlang::enquo(key)
+	value = rlang::enquo(value)
 
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("tidyr required: install first?")
@@ -292,16 +298,16 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 }
 
 #' @name dplyr
-#' @param ... see \link[tidyr]{unnest}
 #' @param .preserve see \link[tidyr]{unnest}
 #' @export
 unnest.sf = function(data, ..., .preserve = NULL) {
+	# nocov start
 	if (!requireNamespace("tidyr", quietly = TRUE) ||
 			utils::packageVersion("tidyr") <= "0.7.2")
 		stop("unnest requires tidyr > 0.7.2; install that first")
-	if (!requireNamespace("tidyselect"))
+	if (! requireNamespace("tidyselect", quietly = TRUE))
 		stop("unnest requires tidyselect; install that first")
-	if (!requireNamespace("rlang"))
+	if (! requireNamespace("rlang", quietly = TRUE))
 		stop("unnest requires rlang; install that first")
 
 	# The user might want to preserve other columns. Get these as a character
@@ -322,7 +328,7 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 	class(data) = setdiff(class(data), "sf")
 	ret = st_sf(NextMethod(.preserve = preserve_incl_sf),
 		sf_column_name = sf_column_name)
-	ret
+	ret # nocov end
 }
 
 
