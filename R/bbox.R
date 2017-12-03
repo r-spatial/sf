@@ -60,9 +60,15 @@ bbox.MtrxSetSetSet = function(obj) {
 #' methods for \code{bbox} objects to generate a polygon around the four bounding box points.
 #' @name st_bbox
 #' @examples
-#' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
+#' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)))
 #' st_bbox(a)
-#' st_as_sfc(st_bbox(a))
+#' b = st_as_sfc(st_bbox(a))
+#' centroid = st_centroid(b)
+#' b_larger = (b - centroid) * 1.5 + centroid
+#' b_shifted = b + c(0.1, 0)
+#' plot(b_larger)
+#' plot(b_shifted, add = TRUE)
+#' plot(b, add = TRUE, lwd = 3)
 st_bbox = function(obj) UseMethod("st_bbox")
 
 #' @export
