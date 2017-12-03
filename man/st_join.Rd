@@ -57,11 +57,12 @@ gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
 # cut, to check, NA's work out:
 gr = gr[-(1:30),]
 nc_j <- st_join(nc, gr, largest = TRUE)
-# create plot:
-opar = par(mfrow = c(2,1))
+# the two datasets:
+opar = par(mfrow = c(2,1), mar = rep(0,4))
 plot(st_geometry(nc_j))
 plot(st_geometry(gr), add = TRUE, col = gr$col)
 text(st_coordinates(st_centroid(gr)), labels = gr$label)
+# the joined dataset:
 plot(st_geometry(nc_j), border = 'black', col = nc_j$col)
 text(st_coordinates(st_centroid(nc_j)), labels = nc_j$label, cex = .8)
 plot(st_geometry(gr), border = 'green', add = TRUE)
