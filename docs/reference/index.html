@@ -112,7 +112,7 @@
     <div class="page-header">
       <h1>
         Reference
-        <small>version&nbsp;0.5-5</small>
+        <small>version&nbsp;0.5-6</small>
       </h1>
     </div>
 
@@ -176,7 +176,7 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="geos_binary_ops.html">st_intersection</a></code> <code><a href="geos_binary_ops.html">st_difference</a></code> <code><a href="geos_binary_ops.html">st_sym_difference</a></code> </p>
+            <p><code><a href="geos_binary_ops.html">st_intersection</a></code> <code><a href="geos_binary_ops.html">st_difference</a></code> <code><a href="geos_binary_ops.html">st_sym_difference</a></code> <code><a href="geos_binary_ops.html">st_snap</a></code> </p>
           </td>
           <td><p>Geometric operations on pairs of simple feature geometry sets</p></td>
         </tr><tr>
@@ -200,9 +200,9 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="geos_query.html">st_dimension</a></code> <code><a href="geos_query.html">st_is_simple</a></code> <code><a href="geos_query.html">st_is_valid</a></code> </p>
+            <p><code><a href="geos_query.html">st_dimension</a></code> <code><a href="geos_query.html">st_is_simple</a></code> <code><a href="geos_query.html">st_is_empty</a></code> <code><a href="geos_query.html">st_is_valid</a></code> </p>
           </td>
-          <td><p>Dimension, simplicity or validity queries on simple feature geometries</p></td>
+          <td><p>Dimension, simplicity, validity or is_empty queries on simple feature geometries</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -257,6 +257,12 @@
             <p><code><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></code> </p>
           </td>
           <td><p>Provide the external dependencies versions of the libraries linked to sf</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="sf_project.html">sf_project</a></code> </p>
+          </td>
+          <td><p>directly transform a set of coordinates</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -357,12 +363,6 @@ return an object consisting only of elements of the specified type.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="st_geohash.html">st_geohash</a></code> </p>
-          </td>
-          <td><p>compute geohash from (average) coordinates (requires lwgeom)</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="st_geometry_type.html">st_geometry_type</a></code> </p>
           </td>
           <td><p>Return geometry type of an object</p></td>
@@ -453,12 +453,6 @@ return an object consisting only of elements of the specified type.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="st_split.html">st_split</a></code> </p>
-          </td>
-          <td><p>Return a collection of geometries resulting by splitting a geometry</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
             <p><code><a href="st_transform.html">st_transform</a></code> <code><a href="st_transform.html">st_proj_info</a></code> <code><a href="st_transform.html">st_wrap_dateline</a></code> </p>
           </td>
           <td><p>Transform or convert coordinates of simple feature</p></td>
@@ -498,12 +492,6 @@ return an object consisting only of elements of the specified type.</p></td>
             <p><code><a href="tibble.html">type_sum.sfc</a></code> <code><a href="tibble.html">obj_sum.sfc</a></code> </p>
           </td>
           <td><p>Summarize simple feature type for tibble</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="valid.html">st_make_valid</a></code> </p>
-          </td>
-          <td><p>Make an invalid geometry valid</p></td>
         </tr>
       </tbody>
       </table>

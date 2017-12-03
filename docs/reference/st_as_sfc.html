@@ -131,7 +131,7 @@
   <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
 
 <span class='co'># S3 method for character</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='no'>...</span>, <span class='kw'>GeoJSON</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for factor</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -170,8 +170,7 @@
     </tr>
     <tr>
       <th>crs</th>
-      <td><p>integer or character; coordinate reference system for the
-geometry, see <code>st_crs()</code></p></td>
+      <td><p>integer or character; coordinate reference system for the</p></td>
     </tr>
     <tr>
       <th>EWKB</th>
@@ -184,6 +183,11 @@ geometry, see <code>st_crs()</code></p></td>
     <tr>
       <th>pureR</th>
       <td><p>logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (<code>.Platform$endian</code>).</p></td>
+    </tr>
+    <tr>
+      <th>GeoJSON</th>
+      <td><p>logical; if <code>TRUE</code>, try to read geometries from GeoJSON text strings
+geometry, see <code>st_crs()</code></p></td>
     </tr>
     <tr>
       <th>precision</th>
@@ -199,9 +203,9 @@ geometry, see <code>st_crs()</code></p></td>
 
     <p>When converting from WKB, the object <code>x</code> is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.</p>
 <p>If <code>x</code> is a character vector, it should be a vector containing
-the <a href='http://www.opengeospatial.org/standards/wkt-crs'>well-known-text</a> or
-<a href='http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>Postgis EWKT</a>
-representations of a single geometry for each vector element.</p>
+<a href='http://www.opengeospatial.org/standards/wkt-crs'>well-known-text</a>, or
+<a href='http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>Postgis EWKT</a> or
+GeoJSON representations of a single geometry for each vector element.</p>
 <p>If <code>x</code> is a <code>factor</code>, it is converted to <code>character</code>.</p>
     
 

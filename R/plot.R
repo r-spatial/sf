@@ -575,6 +575,8 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 		# 12-class Set3:
 		else c('#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f')
 		# TODO: deal with alpha
+		if (alpha != 1.0)
+			cb = paste0(cb, as.hexmode(ceiling(alpha * 255)))
 		rep(cb, length.out = n)
 	} else {
 		i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)

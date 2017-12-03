@@ -129,7 +129,7 @@
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
-<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>. (This does not include <code>liblwgeom</code>; it will need to be installed separately for functions that require it, such as <code>st_make_valid</code>, to work.)</p>
+<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
 </div>
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
@@ -143,20 +143,19 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
 <p>after that, you should be able to install <code>sf</code> as a source package.</p>
-<p>According to <a href="https://github.com/r-spatial/sf/issues/349" class="uri">https://github.com/r-spatial/sf/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>. In case of problems, search the issues for <code>brew</code> before opening a new one.</p>
 <p>For MacOS Sierra, see <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these</a> instruction, using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linux" class="anchor"></a>Linux</h3>
-<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required; <code>liblwgeom</code> is optional.</p>
+<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required.</p>
 <div id="ubuntu" class="section level4">
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
 <p>To install the dependencies on Ubuntu, either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
 <div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 <span class="fu">sudo</span> apt-get update
-<span class="fu">sudo</span> apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre></div>
+<span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </code></pre></div>
 <p>or install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
 </div>
 <div id="fedora" class="section level4">
@@ -170,6 +169,11 @@ brew link --force gdal2</code></pre>
 <a href="#other" class="anchor"></a>Other</h4>
 <p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker">here</a>.</p>
 </div>
+</div>
+<div id="lwgeom" class="section level3">
+<h3 class="hasAnchor">
+<a href="#lwgeom" class="anchor"></a>lwgeom</h3>
+<p>Functions and methods that require <code>liblwgeom</code>, including <code>st_make_valid</code>, have since sf 0.5-5 been moved to their own package, <a href="https://github.com/r-spatial/lwgeom">lwgeom</a>, which is also on <a href="https://cran.r-project.org/package=lwgeom">CRAN</a>.</p>
 </div>
 <div id="contributing" class="section level3">
 <h3 class="hasAnchor">

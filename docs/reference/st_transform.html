@@ -131,7 +131,18 @@
 
 <span class='fu'>st_proj_info</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"proj"</span>)
 
-<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='no'>options</span>, <span class='no'>quiet</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S3 method for sfg</span>
+<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>,
+  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -179,7 +190,7 @@
     <p>Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.
     <code>st_proj_info</code> lists the available projections, ellipses, datums or units supported by the Proj.4 library</p>
-<p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a></p>
+<p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a> and <a href='https://github.com/r-spatial/sf/issues/541'>https://github.com/r-spatial/sf/issues/541</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -210,8 +221,10 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area, using geosphere::areaPolygon</span></div><div class='output co'>#&gt; 1137388604 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 US_survey_foot^2</div><div class='input'><span class='fu'>library</span>(<span class='no'>units</span>)
-<span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='no'>m</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area, using geosphere::areaPolygon</span></div><div class='output co'>#&gt; 1137388604 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 US_survey_foot^2</div><div class='input'><span class='fu'>library</span>(<span class='no'>units</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘units’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    %*%</span></div><div class='input'><span class='fu'><a href='http://www.rdocumentation.org/packages/units/topics/set_units'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='no'>m</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 m^2</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'>structure</span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (779236.435552915 6800125.45439731)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name   ellipse
 #&gt; 1          WGS84     WGS84
 #&gt; 2         GGRS87     GRS80
 #&gt; 3          NAD83     GRS80
@@ -248,7 +261,11 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -180 ymin: 0 xmax: 180 ymax: 0
 #&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div></pre>
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>maps</span>)
+<span class='no'>wrld</span> <span class='kw'>&lt;-</span> <span class='fu'>st_as_sf</span>(<span class='kw pkg'>maps</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/maps/topics/map'>map</a></span>(<span class='st'>"world"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
+<span class='no'>wrld_wrap</span> <span class='kw'>&lt;-</span> <span class='fu'>st_wrap_dateline</span>(<span class='no'>wrld</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"WRAPDATELINE=YES"</span>, <span class='st'>"DATELINEOFFSET=180"</span>),
+   <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='input'><span class='no'>wrld_moll</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='no'>wrld_wrap</span>, <span class='st'>"+proj=moll"</span>)
+<span class='fu'>plot</span>(<span class='fu'>st_geometry</span>(<span class='no'>wrld_moll</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"transparent"</span>)</div><div class='img'><img src='st_transform-1.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

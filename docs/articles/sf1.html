@@ -259,7 +259,7 @@
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Loading required package: methods
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -300,12 +300,12 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## [22] st_collection_extract st_convex_hull        st_coordinates       
 ## [25] st_crs                st_crs&lt;-              st_difference        
 ## [28] st_geometry           st_geometry&lt;-         st_intersection      
-## [31] st_is                 st_line_merge         st_make_valid        
-## [34] st_node               st_point_on_surface   st_polygonize        
-## [37] st_precision          st_segmentize         st_set_precision     
-## [40] st_simplify           st_split              st_sym_difference    
-## [43] st_transform          st_triangulate        st_union             
-## [46] st_voronoi            st_zm                
+## [31] st_is                 st_line_merge         st_node              
+## [34] st_point_on_surface   st_polygonize         st_precision         
+## [37] st_segmentize         st_set_precision      st_simplify          
+## [40] st_snap               st_sym_difference     st_transform         
+## [43] st_triangulate        st_union              st_voronoi           
+## [46] st_wrap_dateline      st_write              st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -371,13 +371,13 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## [19] st_centroid           st_collection_extract st_convex_hull       
 ## [22] st_coordinates        st_crs                st_crs&lt;-             
 ## [25] st_difference         st_geometry           st_intersection      
-## [28] st_is                 st_line_merge         st_make_valid        
-## [31] st_node               st_point_on_surface   st_polygonize        
-## [34] st_precision          st_segmentize         st_set_precision     
-## [37] st_simplify           st_split              st_sym_difference    
-## [40] st_transform          st_triangulate        st_union             
-## [43] st_voronoi            st_zm                 str                  
-## [46] summary              
+## [28] st_is                 st_line_merge         st_node              
+## [31] st_point_on_surface   st_polygonize         st_precision         
+## [34] st_segmentize         st_set_precision      st_simplify          
+## [37] st_snap               st_sym_difference     st_transform         
+## [40] st_triangulate        st_union              st_voronoi           
+## [43] st_wrap_dateline      st_write              st_zm                
+## [46] str                   summary              
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>

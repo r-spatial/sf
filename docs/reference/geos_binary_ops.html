@@ -121,7 +121,9 @@
 
 <span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
-<span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
+<span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='fu'>st_snap</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>tolerance</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +135,10 @@
     <tr>
       <th>y</th>
       <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>tolerance values used for <code>st_snap</code>; numeric value or object of class <code>units</code>; may have tolerance values for each feature in <code>x</code></p></td>
     </tr>
     </table>
     

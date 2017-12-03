@@ -121,7 +121,7 @@
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>, <span class='no'>coords</span>, <span class='no'>wkt</span>,
-  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>sf_column_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -175,6 +175,11 @@
     <tr>
       <th>na.fail</th>
       <td><p>logical; if <code>TRUE</code>, raise an error if coordinates contain missing values</p></td>
+    </tr>
+    <tr>
+      <th>sf_column_name</th>
+      <td><p>character; name of the active list-column with simple feature geometries; in case
+there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></td>
     </tr>
     </table>
     
@@ -271,7 +276,7 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-25, (SVN revision 555)</span>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-26, (SVN revision 560)</span>
 #&gt; <span class='message'> GEOS runtime version: 3.5.1-CAPI-1.9.1 r4246 </span>
 #&gt; <span class='message'> Linking to sp version: 1.2-5 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
@@ -358,8 +363,8 @@
  <span class='co'># because of spatstat interfering with units</span>
 <span class='kw'>if</span> (<span class='fu'>require</span>(<span class='no'>spatstat</span>)) {
  <span class='fu'>data</span>(<span class='no'>chicago</span>)
- <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>[<span class='st'>"label"</span>]))
- <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>[-<span class='fl'>1</span>,<span class='st'>"label"</span>]))
+ <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[<span class='st'>"label"</span>])
+ <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[-<span class='fl'>1</span>,<span class='st'>"label"</span>])
 }
 <span class='co'># }</span></pre>
   </div>

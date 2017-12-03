@@ -118,7 +118,7 @@
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Loading required package: methods
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 fname &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 fname
 ## [1] "/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp"
@@ -446,9 +446,7 @@ m.sf =<span class="st"> </span><span class="kw">st_as_sf</span>(meuse)
 opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
 <span class="kw">plot</span>(m.sf)
 ## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to
-## plot all
-## Warning in classInt::classIntervals(values, nbreaks, breaks): var has
-## missing values, omitted in finding classes</code></pre></div>
+## plot all</code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Conversion of simple feature objects of class <code>sf</code> or <code>sfc</code> into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)

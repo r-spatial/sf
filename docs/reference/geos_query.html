@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dimension, simplicity or validity queries on simple feature geometries — geos_query • sf</title>
+<title>Dimension, simplicity, validity or is_empty queries on simple feature geometries — geos_query • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -110,16 +110,18 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dimension, simplicity or validity queries on simple feature geometries</h1>
+    <h1>Dimension, simplicity, validity or is_empty queries on simple feature geometries</h1>
     </div>
 
     
-    <p>Dimension, simplicity or validity queries on simple feature geometries</p>
+    <p>Dimension, simplicity, validity or is_empty queries on simple feature geometries</p>
     
 
     <pre class="usage"><span class='fu'>st_dimension</span>(<span class='no'>x</span>, <span class='kw'>NA_if_empty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>st_is_simple</span>(<span class='no'>x</span>)
+
+<span class='fu'>st_is_empty</span>(<span class='no'>x</span>)
 
 <span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='kw'>NA_on_exception</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
@@ -147,7 +149,8 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if <code>NA_if_empty</code> is <code>TRUE</code>, <code>NA</code> for empty geometries.</p>
-<p>st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
+<p>st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)</p>
+<p>st_is_empty returns for each geometry whether it is empty
 
 <code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid.</p>
     
@@ -161,7 +164,8 @@
         <span class='fu'><a href='st.html'>st_linestring</a></span>(),
         <span class='fu'><a href='st.html'>st_geometrycollection</a></span>())
 <span class='fu'>st_dimension</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1]  0  1  2 NA NA NA</div><div class='input'><span class='fu'>st_dimension</span>(<span class='no'>x</span>, <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 0 1 2 0 1 0</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
-<span class='fu'>st_is_simple</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))</div><div class='output co'>#&gt; [1] FALSE  TRUE</div><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'>st_as_sfc</span>(<span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span>)
+<span class='fu'>st_is_simple</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))</div><div class='output co'>#&gt; [1] FALSE  TRUE</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
+<span class='fu'>st_is_empty</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(), <span class='fu'><a href='st.html'>st_linestring</a></span>()))</div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE</div><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'>st_as_sfc</span>(<span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span>)
 <span class='fu'>st_is_valid</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Self-intersection at or near point 5 5</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>st_is_valid</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>), <span class='no'>p1</span><span class='kw'>[[</span><span class='fl'>1</span>]]), <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Self-intersection at or near point 5 5</span></div><div class='output co'>#&gt; [1] "Valid Geometry"         "Self-intersection[5 5]"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

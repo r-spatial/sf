@@ -103,7 +103,7 @@
 <div id="what-is-this-epsg-code-all-about" class="section level1">
 <h1 class="hasAnchor">
 <a href="#what-is-this-epsg-code-all-about" class="anchor"></a>What is this EPSG code all about?</h1>
-<p>EPSG stands for a maintained, well-understood set of spatial reference systems. From R, we can get access to the EPSG dataset programatically (as a <code>data.frame</code>) by:</p>
+<p>EPSG stands for a maintained, well-understood set of spatial reference systems, maintained by the International Association of Oil &amp; Gass Producers (IOGP), and found at <a href="http://epsg.org/">epsg.org</a>. From R, we can get access to the EPSG dataset programatically (as a <code>data.frame</code>) by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rgdal::<span class="kw">make_EPSG</span>()</code></pre></div>
 <p>see also the first vignette.</p>
 </div>
@@ -113,7 +113,7 @@
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Loading required package: methods
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 <span class="kw">demo</span>(nc, <span class="dt">ask =</span> <span class="ot">FALSE</span>, <span class="dt">echo =</span> <span class="ot">FALSE</span>)
 ## Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
 ## Simple feature collection with 100 features and 14 fields
@@ -162,7 +162,7 @@ nc$geom2 =<span class="st"> </span><span class="kw"><a href="../reference/geos_u
 <a href="#why-do-dplyr-verbs-not-work-for-sf-objects" class="anchor"></a>Why do dplyr verbs not work for <code>sf</code> objects?</h1>
 <p>They do! However, many developers like to write scripts that never load packages but address all functions by the <code>sf::</code> prefix, as in</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">i =<span class="st"> </span>sf::<span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(sf1, sf2)</code></pre></div>
-<p>This works up to the moment that a <code>dplyr</code> method for an <code>sf</code> object is needed: should one call <code><a href="http://dplyr.tidyverse.org/reference/select.html">dplyr::select</a></code> (won’t know it should search in package <code>sf</code>) or <code>sf::select</code> (which doesn’t exist)? Neither. One should in this case simply load <code>sf</code>, either by</p>
+<p>This works up to the moment that a <code>dplyr</code> generic like <code>select</code> for an <code>sf</code> object is needed: should one call <code><a href="http://dplyr.tidyverse.org/reference/select.html">dplyr::select</a></code> (won’t know it should search in package <code>sf</code>) or <code>sf::select</code> (which doesn’t exist)? Neither works. One should in this case simply load <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)</code></pre></div>
 </div>
 <div id="what-is-this-errorwarningmessage-about" class="section level1">
@@ -207,6 +207,11 @@ buf =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.
 ## Warning in st_buffer.sfc(polygon, units::set_units(1, degree)): st_buffer
 ## does not correctly buffer longitude/latitude data</code></pre></div>
 </div>
+<div id="both-operands-of-the-expression-should-be-units-objects-or-_error-operator-is-invalid-for-atomic-vectors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#both-operands-of-the-expression-should-be-units-objects-or-_error-operator-is-invalid-for-atomic-vectors" class="anchor"></a><em>both operands of the expression should be “units” objects</em> or _Error: $ operator is invalid for atomic vectors"</h2>
+<p>This message appears if you loaded package <code>spatstat</code> <em>after</em> you loaded <code>sf</code>. For units objects created by package <code>units</code>, methods from <code>spatstat</code> are chosen which also implements a <code>units</code> class. The solution is to revert the order of loading packages: first <code>spatstat</code>, then <code>units</code>. Otherwise, spatstat version 1.53-2.012 should <a href="https://github.com/spatstat/spatstat/issues/63">resolve this</a>.</p>
+</div>
 </div>
 </div>
   </div>
@@ -225,6 +230,7 @@ buf =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.
 <li><a href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar"><em>although coordinates are longitude/latitude, xxx assumes that they are planar</em></a></li>
       <li><a href="#st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data"><em>st_centroid does not give correct centroids for longitude/latitude data</em></a></li>
       <li><a href="#dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-"><em>dist is assumed to be in decimal degrees (arc_degrees).</em></a></li>
+      <li><a href="#both-operands-of-the-expression-should-be-units-objects-or-_error-operator-is-invalid-for-atomic-vectors"><em>both operands of the expression should be “units” objects</em> or _Error: $ operator is invalid for atomic vectors"</a></li>
       </ul>
 </li>
       </ul>

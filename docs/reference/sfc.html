@@ -117,7 +117,7 @@
     <p>Create simple feature geometry list column, set class, and add coordinate reference system and precision</p>
     
 
-    <pre class="usage"><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +133,10 @@
     <tr>
       <th>precision</th>
       <td><p>numeric; see st_as_binary</p></td>
+    </tr>
+    <tr>
+      <th>check_ring_dir</th>
+      <td><p>see st_read</p></td>
     </tr>
     </table>
     

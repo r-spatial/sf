@@ -115,30 +115,45 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-5-6" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-5-6" class="anchor"></a>version 0.5-6</h1>
+<ul>
+<li><p>change default maximum number of feature to print to 10, controllable by <code>options(sf_max_print)</code>; #556</p></li>
+<li><p>add <code>Hausdorff</code> (and <code>Frechet</code> for those with GEOS 3.7.0) as options to <code>st_distance</code>; add <code>par</code> for densified versions</p></li>
+<li><p>add <code>st_snap</code>, for snapping geometries to other geometries, within a tolerance</p></li>
+<li><p>make <code>st_wrap_dateline</code> a generic, with methods for <code>sf</code>, <code>sfc</code> and <code>sfg</code>; #541</p></li>
+<li><p><code>plot.sf</code> and <code>st_as_grob</code> (used by ggplot2) are now robust against misspecified ring directions (holes that have the same direction as the exterior rings), by using <code>rule = "evenodd"</code>; #540</p></li>
+<li><p>functions depending on <code>liblwgeom</code> (<code>st_make_valid</code>, <code>st_geohash</code>, <code>st_plit</code>) have been moved to their own package, <a href="https://github.com/r-spatial/lwgeom" class="uri">https://github.com/r-spatial/lwgeom</a>; argument <code>use_gdal</code> of <code>st_transform</code> has been deprecated, instead one can now use <code><a href="http://www.rdocumentation.org/packages/lwgeom/topics/st_transform_proj">lwgeom::st_transform_proj</a></code>; sf now no longer tries to link to liblwgeom; #509, #537, #487</p></li>
+<li><p><code>st_read</code>, <code>st_sf</code> and <code>st_sfc</code> gain a parameter <code>check_ring_dir</code> (default: <code>FALSE</code>) that checks ring directions and corrects to: exterior counter clockwise, holes clockwise, when seen from above.</p></li>
+<li><p>get rid of <code><a href="http://www.rdocumentation.org/packages/classInt/topics/classIntervals">classInt::classIntervals</a></code> warning if number of unique values is smaller than the number of breaks asked for</p></li>
+</ul>
+</div>
     <div id="version-0-5-5" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-5-5" class="anchor"></a>version 0.5-5</h1>
 <ul>
-<li><p>add vignette 5: plotting sf objects</p></li>
-<li><p>add (default) color key to <code>plot.sf</code> if single map is plotted; #528 ctb by @hughjonesd</p></li>
+<li><p>have <code>classInt</code> in Imports:, to not break other package checks</p></li>
+<li><p>add vignettes 5: plotting sf objects and 6: miscellaneous; #324</p></li>
+<li><p>add (default) color key to <code>plot.sf</code> if single map is plotted, contributed by @hughjonesd; #528</p></li>
 <li><p><code>st_as_sfc</code> can now read EWKT; #530</p></li>
 <li><p>argument <code>max.plot</code> takes its default from <code>options(sf_max.plot=n)</code>, if present; #516</p></li>
 <li><p><code>plot.sf</code> gets an arguments <code>pal</code> to specify a color palette function; #526</p></li>
-<li><p><code>plot.sf</code> gets arguments <code>breaks</code> and <code>nbreaks</code>; add support for <code><a href="http://www.rdocumentation.org/packages/classInt/topics/classIntervals">classInt::classIntervals</a></code> styles for finding class intervals (breaks)</p></li>
-<li><p>add <code>st_as_sf</code> methods for <code>lpp</code> and <code>psp</code> objects from spatstat.</p></li>
-<li><p>allow for direct route to proj.4 ignoring GDAL (requires liblwgeom; #509, #511)</p></li>
+<li><p><code>plot.sf</code> gets arguments <code>breaks</code> and <code>nbreaks</code>; add support for <code><a href="http://www.rdocumentation.org/packages/classInt/topics/classIntervals">classInt::classIntervals</a></code> styles for finding class intervals (using <code>breaks</code>)</p></li>
+<li><p>add <code>st_as_sf</code> methods for <code>ppp</code>, <code>lpp</code> and <code>psp</code> objects from spatstat.</p></li>
+<li><p>allow for direct route to proj.4 ignoring GDAL (requiring liblwgeom); #509, #511</p></li>
 <li><p>add <code>print</code> method for <code>crs</code> objects; #517</p></li>
 <li><p><code>sf_extSoftVersion</code> now reveals whether GDAL was linked to GEOS; #510</p></li>
 <li><p>better check input of <code>st_polygon</code>; #514</p></li>
 <li><p>add <code>st_node</code>, similar to <code><a href="http://www.rdocumentation.org/packages/rgeos/topics/topo-unary-gNode">rgeos::gNode</a></code></p></li>
 <li><p>support for reading <code>OFTInteger64List</code> fields; #508</p></li>
-<li><p>sparse geometric binary predicate lists now have a class, <code>sgbp</code>, and attributes <code>region.id</code> and <code>predicate</code></p></li>
+<li><p>sparse geometric binary predicate lists now have a class, <code>sgbp</code>, and attributes <code>region.id</code> and <code>predicate</code>; #234, #524</p></li>
 <li><p>prevent <code>st_split</code> from stopping the R session; #492</p></li>
 <li><p><code>st_intersection</code>, <code>st_union</code> and so on now also print a message when used directly on long/lat coordinates; #496</p></li>
 <li><p>add <code>rep</code> method for <code>sfc</code> objects</p></li>
 <li><p>comparing two <code>crs</code> objects now uses the GDAL function <code>IsSame</code>; #180</p></li>
 <li><p>add <code>st_collection_extract</code>, which, given an object with geometries of type <code>GEOMETRY</code> or <code>GEOMETRYCOLLECTION</code>, returns an object consisting only of elements of the specified type; by Andy Teucher, #482</p></li>
-<li><p><code>st_write</code> exports GeoJSON with ANSI encoding on Windows; #444</p></li>
+<li><p><code>st_write</code> exports GeoJSON with UTF-8 encoding on Windows; #444</p></li>
 <li><p>move package methods from Imports: to Depends: ; #478</p></li>
 <li><p>deal better with precision setting and propagation; #476</p></li>
 <li><p>fix bug in <code>st_layers</code> in case layers have no geometry; #334</p></li>
@@ -377,6 +392,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-5-6">0.5-6</a></li>
         <li><a href="#version-0-5-5">0.5-5</a></li>
         <li><a href="#version-0-5-4">0.5-4</a></li>
         <li><a href="#version-0-5-3">0.5-3</a></li>
