@@ -419,7 +419,7 @@ st_coordinates.sfc = function(x, ...) {
 		sfc_MULTILINESTRING = ,
 		sfc_POLYGON = coord_3(x),
 		sfc_MULTIPOLYGON = coord_4(x),
-		stop("not implemented")
+		stop(paste("not implemented for objects of class", class(x)[1]))
 	)
 	Dims = class(x[[1]])[1]
 	ncd = nchar(Dims)
