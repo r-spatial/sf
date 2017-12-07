@@ -125,6 +125,14 @@ bb = st_bbox(nc)
 bb
 st_crs(bb)
 
+bb$xrange
+bb$yrange
+bb$xmin
+bb$ymin
+bb$xmax
+bb$ymax
+try(bb$foo)
+
 # merge:
 a = data.frame(a = 1:3, b = 5:7)
 st_geometry(a) = st_sfc(st_point(c(0,0)), st_point(c(1,1)), st_point(c(2,2)))
@@ -149,6 +157,15 @@ st_join(a, b)
 st_join(a, b, left = FALSE)
 # deprecated:
 try(x <- st_join(a, b, FUN = mean))
+# st_join, largest = TRUE:
+nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+gr = st_sf(
+    label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
+    geom = st_make_grid(nc))
+gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
+# cut, to check, NA's work out:
+gr = gr[-(1:30),]
+st_join(nc, gr, largest = TRUE)
 
 # rbind:
 x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
