@@ -505,6 +505,12 @@ xmin ymin xmax ymax
 Coordinate Reference System:
   EPSG: 4267 
   proj4string: "+proj=longlat +datum=NAD27 +no_defs"
+> st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = st_crs(4326))
+xmin ymin xmax ymax 
+16.1 48.6 16.6 47.9 
+> st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = 4326)
+xmin ymin xmax ymax 
+16.1 48.6 16.6 47.9 
 > 
 > bb$xrange
      xmin      xmax 
@@ -982,4 +988,4 @@ POINT (-118.680892320416 36.4417315520556)
 > 
 > proc.time()
    user  system elapsed 
-  2.532   0.292   2.558 
+  2.520   0.324   2.534 

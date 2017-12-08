@@ -125,6 +125,8 @@ st_bbox(sf1)
 bb = st_bbox(nc)
 bb
 st_crs(bb)
+st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = st_crs(4326))
+st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = 4326)
 
 bb$xrange
 bb$yrange
