@@ -14,3 +14,4 @@ c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
 c(st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:6,3)))),
   st_multilinestring(list(matrix(11:16,3))), st_point(5:6), 
   st_geometrycollection(list(st_point(10:11))))
+head(st_point(0:1), 2)
