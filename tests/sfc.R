@@ -24,6 +24,7 @@ st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
+head(st_as_sf(d, wkt = "geom"), 1)
 
 d$geom = st_as_sfc(d$geom)
 d1 = d

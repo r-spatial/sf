@@ -154,6 +154,15 @@ proj4string:    NA
 First 1 features:
   a        geom
 1 1 POINT (0 0)
+> head(st_as_sf(d, wkt = "geom"), 1)
+Simple feature collection with 1 feature and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 0 ymax: 0
+epsg (SRID):    NA
+proj4string:    NA
+  a        geom
+1 1 POINT (0 0)
 > 
 > d$geom = st_as_sfc(d$geom)
 > d1 = d
@@ -973,4 +982,4 @@ POINT (-118.680892320416 36.4417315520556)
 > 
 > proc.time()
    user  system elapsed 
-  2.456   0.292   2.444 
+  2.532   0.292   2.558 
