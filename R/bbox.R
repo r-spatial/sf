@@ -1,11 +1,3 @@
-#' @name st_bbox
-#' @details
-#' \code{NA_bbox_} is the \code{bbox} object with a missing value.
-#' @export
-NA_bbox_ = structure(rep(NA_real_, 4),
-	names = c("xmin", "ymin", "xmax", "ymax"),
-	crs = NA_crs_,
-	class = "bbox")
 
 #' @name st_bbox
 #' @param x object of class \code{bbox}
@@ -95,34 +87,41 @@ bbox_list = function(obj, ...) {
 		bb_wrap(c(min(s[1L,], na.rm = TRUE), min(s[2L,], na.rm = TRUE),
 		  max(s[3L,], na.rm = TRUE), max(s[4L,], na.rm = TRUE)))
 }
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.GEOMETRYCOLLECTION = bbox_list
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.MULTISURFACE = bbox_list
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.MULTICURVE = bbox_list
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.CURVEPOLYGON = bbox_list
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.COMPOUNDCURVE = bbox_list
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.POLYHEDRALSURFACE = bbox.MtrxSetSet
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.TIN = bbox.MtrxSetSet
-#' @export
+
 #' @name st_bbox
+#' @export
 st_bbox.TRIANGLE = bbox.MtrxSet
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.CIRCULARSTRING = function(obj, ...) {
 	# this is of course wrong:
 	st_bbox(st_cast(obj, "LINESTRING"))
@@ -146,16 +145,16 @@ compute_bbox = function(obj) {
 	)
 }
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.sfc = function(obj, ...) structure(attr(obj, "bbox"), crs = st_crs(obj))
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.sf = function(obj, ...) st_bbox(st_geometry(obj))
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.Spatial = function(obj, ...) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -164,8 +163,8 @@ st_bbox.Spatial = function(obj, ...) {
 		crs = st_crs(sp::proj4string(obj)))
 }
 
-#' @export
 #' @name st_bbox
+#' @export
 st_bbox.Raster = function(obj, ...) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -176,11 +175,11 @@ st_bbox.Raster = function(obj, ...) {
 		crs = st_crs(sp::proj4string(obj)))
 }
 
-#' @export
 #' @name st_bbox
 #' @param crs object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.
 #' @examples
 #' st_bbox(c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9), crs = st_crs(4326))
+#' @export
 st_bbox.numeric = function(obj, ..., crs = NA_crs_) {
 	structure(bb_wrap(c(obj["xmin"], obj["ymin"], obj["xmax"], obj["ymax"])), crs = st_crs(crs))
 }
@@ -199,3 +198,11 @@ st_bbox.numeric = function(obj, ..., crs = NA_crs_) {
 		stop("unsupported name")
 	)
 }
+
+#' @name st_bbox
+#' @details \code{NA_bbox_} represents the missing value for a \code{bbox} object
+#' @export
+NA_bbox_ = structure(rep(NA_real_, 4),
+	names = c("xmin", "ymin", "xmax", "ymax"),
+	crs = NA_crs_,
+	class = "bbox")
