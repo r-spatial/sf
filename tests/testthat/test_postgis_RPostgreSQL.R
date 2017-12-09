@@ -242,17 +242,18 @@ test_that("can read using driver", {
 
 test_that("new SRIDs are handled correctly", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-	data(meuse, package = "sp")
-	meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
+    data(meuse, package = "sp")
+    meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
 
-	crs = st_crs(paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
-		"+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
-		"+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs"))
-	st_crs(meuse_sf) = crs
-	expect_silent(st_write(meuse_sf, pg, drop = TRUE))
-	expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
-		"not found in EPSG support files")
-	expect_true(st_crs(x) == crs)
+    crs = st_crs(NA_integer_, paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
+                       "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
+                       "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
+                       "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
+    st_crs(meuse_sf) = crs
+    expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+    expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
+                   "not found in EPSG support files")
+    expect_true(st_crs(x) == crs)
 })
 
 if (can_con(pg)) {
@@ -268,7 +269,7 @@ if (can_con(pg)) {
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
     try(DBI::dbSendQuery(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
-    try(RpostgreSQL::dbDisconnect(pg), silent = TRUE)
+    try(DBI::dbDisconnect(pg), silent = TRUE)
 }
 
 test_that("schema_table", {

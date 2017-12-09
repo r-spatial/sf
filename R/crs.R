@@ -34,6 +34,9 @@ Ops.crs <- function(e1, e2) {
 #' @name st_crs
 #' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
+#' @param valid default TRUE. This allows to create crs without checking against
+#' the local proj4 database. It can be used to synchronize crs with a remote
+#' database, but avoid it as much as possible.
 #' @export
 #' @return If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
@@ -54,7 +57,14 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 
 #' @name st_crs
 #' @export
-st_crs.numeric = function(x, ...) make_crs(x)
+st_crs.numeric = function(x, proj4string = "", valid = TRUE, ...) {
+    if (!valid)
+        return(structure(list(epsg = x, proj4string = proj4string), class = "crs"))
+    if (proj4string != "")
+        warning("`proj4string` is not used to validate crs. Remove `proj4string` ",
+                "argument or set `valid = FALSE` to stop warning.")
+    make_crs(x)
+}
 
 #' @name st_crs
 #' @export
@@ -143,10 +153,6 @@ make_crs = function(x, wkt = FALSE) {
 		crs
 	} else
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
-}
-
-make_dummy_crs <- function(epsg = 0L, proj4string = "") {
-	structure(list(epsg = epsg, proj4string = proj4string), class = "crs")
 }
 
 #' @name st_crs

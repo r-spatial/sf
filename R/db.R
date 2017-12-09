@@ -153,16 +153,26 @@ get_postgis_crs = function(conn, srid) {
 }
 
 set_postgis_crs = function(conn, crs, update = is.na(get_postgis_crs(conn, crs$epsg))) {
-	if (update) {
-		if (is.na(crs$epsg)) crs$epgs <- get_new_postgis_crs(conn)
-		wkt = st_as_text(crs)
-		query = paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
-					   crs$epgs, ",'", wkt, "','",  proj4string, "');")
-		dbExecute(conn, query)
-		return(srid)
-	}
-	stop("crs ", crs$epsg, " already exists in database.",
-		 " Cautiously use `update = TRUE` to  force replace it.", call. = FALSE)
+    if (update) {
+        if (is.na(crs$epsg)) crs$epgs <- get_new_postgis_crs(conn)
+        wkt = st_as_text(crs)
+        query = paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
+                       crs$epgs, ",'", wkt, "','",  proj4string, "');")
+        dbExecute(conn, query)
+        return(srid)
+    }
+    stop("crs ", crs$epsg, " already exists in database.",
+         " Cautiously use `update = TRUE` to  force replace it.", call. = FALSE)
+}
+
+delete_postgis_crs = function(conn, crs) {
+    if (is.na(crs$epsg)) stop("missing crs")
+    wkt <- st_as_text(crs)
+    query <- paste0("DELETE FROM spatial_ref_sys (srid,srtext,proj4text) ",
+                   "WHERE srid = '", crs$epgs, "' ",
+                   "AND srtext = '", wkt, "' ",
+                   "AND proj4text = '", proj4string, "');")
+    dbExecute(conn, query)
 }
 
 get_new_postgis_crs <- function(conn) {
@@ -206,17 +216,17 @@ to_postgis <- function(conn, x, binary) {
 }
 
 sync_crs <- function(conn, geom) {
-	crs <- st_crs(geom)
-	srid <- crs$epsg
-	if (is.na(crs) || is.na(srid)) {
-		if (is.na(crs$proj4string))
-			crs <- make_dummy_crs(0)
-		else {
-			srid <- get_possibly_new_srid(conn, crs$proj4string)
-			crs <- make_dummy_crs(epsg = srid, proj4string = crs$proj4string)
-		}
-	}
-	st_set_crs(geom, crs)
+    crs <- st_crs(geom)
+    srid <- crs$epsg
+    if (is.na(crs) || is.na(srid)) {
+        if (is.na(crs$proj4string))
+            crs <- st_crs(0, valid = FALSE)
+        else {
+            srid <- get_possibly_new_srid(conn, crs$proj4string)
+            crs <- st_crs(srid, proj4string = crs$proj4string, valid = FALSE)
+        }
+    }
+    st_set_crs(geom, crs)
 }
 
 #' Determine database type for R vector
