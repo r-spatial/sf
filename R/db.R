@@ -123,59 +123,70 @@ db_exists <- function(conn, name, ...) {
 
 get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
 
-	srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
+    srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
 
-	if (class(srs_table) == "try-error")
-		return(0);
+    if (class(srs_table) == "try-error")
+        return(0);
 
-	DEBUG = function(x) { if (debug) message(x); x } # nocov
-	trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
-	srs_table$proj4text = sapply(srs_table$proj4text, trim)
-	eq = srs_table$proj4text == proj4string
-	if (any(eq))
-		srs_table[min(which(eq)) , "srid"]
-	else { # create a new srid in conn if proj4string is not found:
-		srid = max(srs_table$srid) + 1
-		wkt = st_as_text(st_crs(proj4string))
-		query = DEBUG(paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
-			srid, ",'", wkt, "','",  proj4string, "');"))
-		dbExecute(conn, query)
-		srid
-	}
+    DEBUG = function(x) { if (debug) message(x); x } # nocov
+    trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
+    srs_table$proj4text = sapply(srs_table$proj4text, trim)
+    eq = srs_table$proj4text == proj4string
+    if (any(eq))
+        srs_table[min(which(eq)) , "srid"]
+    else { # create a new srid in conn if proj4string is not found:
+        srid <- get_new_postgis_srid(conn)
+        set_postgis_crs(conn, st_crs(srid, proj4string, valid = FALSE))
+    }
 }
 
 get_postgis_crs = function(conn, srid) {
-		if (is.na(srid)) return(st_crs(NA))
-		query = paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
-		proj4text <- dbGetQuery(conn, query)
-		if (nrow(proj4text) != 1)  return(st_crs(NA))
-		return(st_crs(proj4text[[1]]))
+    if (is.na(srid)) return(st_crs(NA))
+    query = paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
+    proj4text <- dbGetQuery(conn, query)
+    if (nrow(proj4text) != 1)  return(st_crs(NA))
+    crs <-  st_crs(srid, gsub("^\\s+|\\s+$", "", proj4text[[1]]), valid = FALSE)
+    local_crs <- st_crs(srid)
+    if(crs != local_crs & !is.na(local_crs))
+        warning("Local crs different from database crs. You can inspect the ",
+                "database crs and compare it to `st_crs(", srid,")`.")
+    return(crs)
 }
 
-set_postgis_crs = function(conn, crs, update = is.na(get_postgis_crs(conn, crs$epsg))) {
-    if (update) {
-        if (is.na(crs$epsg)) crs$epgs <- get_new_postgis_crs(conn)
-        wkt = st_as_text(crs)
-        query = paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
-                       crs$epgs, ",'", wkt, "','",  proj4string, "');")
-        dbExecute(conn, query)
-        return(srid)
+set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE) {
+    if (is.na(crs[["epsg"]])) {
+        crs[["epsg"]] <- get_new_postgis_crs(conn)
+    } else {
+        get_postgis_crs(conn, crs[["epsg"]])
     }
-    stop("crs ", crs$epsg, " already exists in database.",
-         " Cautiously use `update = TRUE` to  force replace it.", call. = FALSE)
-}
-
-delete_postgis_crs = function(conn, crs) {
-    if (is.na(crs$epsg)) stop("missing crs")
     wkt <- st_as_text(crs)
-    query <- paste0("DELETE FROM spatial_ref_sys (srid,srtext,proj4text) ",
-                   "WHERE srid = '", crs$epgs, "' ",
-                   "AND srtext = '", wkt, "' ",
-                   "AND proj4text = '", proj4string, "');")
+    q <- function(x) paste0("'", x, "'")
+    if (update) {
+        query <- paste("UPDATE spatial_ref_sys",
+                       "auth_name =", q(auth_name),
+                       ", srtext =", q(wkt),
+                      ", proj4text =", q(crs[["proj4string"]]),
+                      "WHERE srid =", q(crs[["epsg"]]), ";")
+    } else {
+        query <- paste("INSERT INTO spatial_ref_sys (srid,auth_name,auth_srid,srtext,proj4text)",
+                      "VALUES (",
+                      paste(crs[["epsg"]], q(auth_name), crs[["epsg"]], q(wkt), q(crs[["proj4string"]]), sep = ", "),
+                      ");")
+    }
     dbExecute(conn, query)
 }
 
-get_new_postgis_crs <- function(conn) {
+delete_postgis_crs = function(conn, crs) {
+    if (is.na(crs[["epsg"]])) stop("missing crs")
+    wkt <- st_as_text(crs)
+    query <- paste0("DELETE FROM spatial_ref_sys ",
+                   "WHERE srid = '", crs[["epsg"]], "' ",
+                   "AND srtext = '", wkt, "' ",
+                   "AND proj4text = '", crs[["proj4string"]], "';")
+    dbExecute(conn, query)
+}
+
+get_new_postgis_srid <- function(conn) {
 	query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
 	dbGetQuery(conn, query)[[1]]
 }
@@ -247,3 +258,4 @@ setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 	dtyp[gtyp] <- "numeric"
 	return(dtyp)
 })
+

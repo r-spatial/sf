@@ -123,10 +123,10 @@ test_that("can read from db", {
     expect_identical(st_crs(pts), st_crs(y))
     expect_identical(st_precision(pts), st_precision(y))
 
-    z <- st_read(pg, "sf_meuse3__")
+    expect_warning(z <- st_read(pg, "sf_meuse3__"), "code \\d+ not found")
     expect_equal(dim(pts), dim(z))
     #expect_identical(st_crs(NA), st_crs(z))
-    expect_identical(st_crs(epsg_31370), st_crs(z))
+    expect_true(st_crs(epsg_31370) == st_crs(z))
     expect_identical(st_precision(pts), st_precision(z))
 
     w <- st_read(pg, c("sf_test__", "sf_meuse__"))
@@ -238,6 +238,20 @@ test_that("can read using driver", {
     skip_if_not(can_con(RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "empty")),
                 "could not connect to 'empty' database")
     expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers")
+})
+
+test_that("Can safely manipulate crs", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    srid <- 4326
+    expect_true(get_postgis_crs(pg, srid) == st_crs(srid))
+    expect_error(set_postgis_crs(pg, st_crs(srid)))
+    expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
+    new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
+    expect_equal(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), 1)
+    expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
+                   "not found")
+    expect_equal(delete_postgis_crs(pg, new_crs), 1)
+    expect_equal(delete_postgis_crs(pg, new_crs), 0)
 })
 
 test_that("new SRIDs are handled correctly", {
