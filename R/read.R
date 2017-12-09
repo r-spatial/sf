@@ -187,12 +187,15 @@ abbreviate_shapefile_names = function(x) {
 #' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-#' folder or contain a database name)
+#' folder or contain a database name) or or a Database Connection (currently
+#' official support is for RPostgreSQL connections)
 #' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the
 #' \link{basename} of \code{dsn} is taken.
 #' @param driver character; driver name to be used, if missing, a driver name is guessed from \code{dsn};
 #' \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 #' are found at \url{http://www.gdal.org/ogr_formats.html}.
+#' @param ... other arguments passed to \link{dbWriteTable} when \code{dsn} is a
+#' Database Connction
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference

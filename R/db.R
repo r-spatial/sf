@@ -155,7 +155,7 @@ get_postgis_crs = function(conn, srid) {
 
 set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE) {
     if (is.na(crs[["epsg"]])) {
-        crs[["epsg"]] <- get_new_postgis_crs(conn)
+        crs[["epsg"]] <- get_new_postgis_srid(conn)
     } else {
         get_postgis_crs(conn, crs[["epsg"]])
     }
@@ -192,27 +192,38 @@ get_new_postgis_srid <- function(conn) {
 }
 
 # for RPostgreSQL
+
+#' Write `sf` object to Database
+#' @inheritParams RPostgreSQL::postgresqlWriteTable
+#' @param conn PostgreSQL DBI objects
+#' @param binary Send geometries serialized as Well-Known Binary (WKB);
+#' if `FALSE`, uses Well-Known Text (WKT). Defaults to `TRUE` (WKB).
+#' @param row.names Add a `row.name` column, or a vector of length `nrow(obj)`
+#' containing row.names; default `FALSE`.
+#' @param overwrite Will try to `drop` table before writing; default `FALSE`.
+#' @param append Append rows to existing table; default `FALSE`.
+#' @param field.types default `NULL`. Allows to override type conversion from R
+#' to PostgreSQL. See `dbDataType()` for details.
+#' @md
+#' @rdname st_write
 #' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbWriteTable
 #' @export
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
-		  function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
-		  		 append = FALSE, field.types = NULL, temporary = FALSE,
-		  		 copy = TRUE, factorsAsCharacter = TRUE, binary = TRUE) {
-		  	if (!requireNamespace("RPostgreSQL"))
-		  		stop("Missing package `RPostgreSQL`.",
-		  			 " Use `install.packages(\"RPostgreSQL\")` to install.", call. = FALSE)
-		  	field.types <- if (is.null(field.types)) dbDataType(conn, value)
-		  	if (temporary) warning("`RPostgreSQL` does not support temporary tables")
-		  	tryCatch({
-		  		dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
-		  					 overwrite = overwrite, append = append,
-		  					 field.types = field.types, temporary = temporary,
-		  					 copy = copy)
-		  	}, warning=function(w) {
-		  		stop(conditionMessage(w), call. = FALSE)
-		  	})
-		  }
+          function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+              if (!requireNamespace("RPostgreSQL"))
+                  stop("Missing package `RPostgreSQL`.",
+                       " Use `install.packages(\"RPostgreSQL\")` to install.", call. = FALSE)
+              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              tryCatch({
+                  dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
+                               overwrite = overwrite, append = append,
+                               field.types = field.types)
+              }, warning=function(w) {
+                  stop(conditionMessage(w), call. = FALSE)
+              })
+          }
 )
 
 to_postgis <- function(conn, x, binary) {
@@ -234,7 +245,7 @@ sync_crs <- function(conn, geom) {
             crs <- st_crs(0, valid = FALSE)
         else {
             srid <- get_possibly_new_srid(conn, crs$proj4string)
-            crs <- st_crs(srid, proj4string = crs$proj4string, valid = FALSE)
+            crs <- st_crs(srid, proj4text = crs$proj4string, valid = FALSE)
         }
     }
     st_set_crs(geom, crs)

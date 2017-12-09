@@ -53,11 +53,10 @@ test_that("CRS comparison uses ellipsoid and datum (#180)", {
 
 test_that("Can create dummy crs", {
     expect_equal(st_crs(0, valid = FALSE), structure(list(epsg = 0, proj4string = ""), class = "crs"))
-    expect_equal(st_crs(991115, proj4string = "+random", valid = FALSE),
+    expect_equal(st_crs(991115, proj4text = "+random", valid = FALSE),
                  structure(list(epsg = 991115, proj4string = "+random"), class = "crs"))
 })
 
 test_that("Warning if trying to supply proj4 with numeric", {
-    expect_warning(st_crs(2939, proj4string = "+random"), "`proj4string` is not used to validate crs")
-
+    expect_warning(st_crs(2939, proj4text = "+random"), "`proj4text` is not used to validate crs")
 })
