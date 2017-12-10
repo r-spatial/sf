@@ -10,6 +10,7 @@
 \alias{st_write}
 \alias{write_sf}
 \alias{dbWriteTable,PostgreSQLConnection,character,sf-method}
+\alias{dbWriteTable,DBIObject,character,sf-method}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer, ...)
@@ -26,6 +27,10 @@ write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
 \S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(conn, name, value,
   ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
+  field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE)
+
+\S4method{dbWriteTable}{DBIObject,character,sf}(conn, name, value, ...,
+  row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE)
 }
 \arguments{
@@ -63,7 +68,7 @@ to update (append to) the existing data source, e.g. adding a table to an existi
 
 \item{delete_layer}{logical; delete layer \code{layer} before attempting to write? (not yet implemented)}
 
-\item{conn}{PostgreSQL DBI objects}
+\item{conn}{DBIObject}
 
 \item{name}{
    character vector of names (table names, fields, keywords).
@@ -88,6 +93,8 @@ if \code{FALSE}, uses Well-Known Text (WKT). Defaults to \code{TRUE} (WKB).}
 }
 \description{
 Write simple features object to file or database
+
+Write \code{sf} object to Database
 
 Write \code{sf} object to Database
 }

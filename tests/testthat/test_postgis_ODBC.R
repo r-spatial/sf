@@ -1,9 +1,9 @@
 library(sf)
 library(DBI)
 library(testthat)
-context("sf: postgis using RPostgreSQL")
+context("sf: postgis using ODBC")
 
-can_con <- function(x) inherits(x, "PostgreSQLConnection")
+can_con <- function(x) inherits(x, "DBIObject")
 
 db_drop_table_schema <- function(con, schema, table = NULL) {
     if (is.null(table)) {
@@ -24,51 +24,50 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "postgis"), silent=TRUE)
+try(pg <- dbConnect(odbc::odbc(), driver = "PostgreSQL Unicode", database = "postgis"), silent=TRUE)
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_error(st_write(), "no applicable method for 'st_write'")
-    expect_silent(st_write(pts, pg, "sf_meuse__"))
+    expect_message(st_write(pts, pg, "sf_meuse__"), "Note: method with signature")
     expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
     expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
     expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_silent(st_write(z, pg, "sf_meuse3__"))
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
-    expect_warning(expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")),
-                                nrow(z) * 2), "type geometry")
+    expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2)
     expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
 })
 
 test_that("can handle multiple geom columns", {
-	skip_if_not(can_con(pg), "could not connect to postgis database")
-	multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
-	expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE))
-	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
-	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
-	x <- st_layers("PG:dbname=postgis")
-	multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
-	expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
-	expect_silent(x <- st_read(pg, "meuse_multi2"))
-	expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
-	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
-	expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi2", quiet = TRUE))
-	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
-	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
+    expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE))
+    #expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
+    expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
+    x <- st_layers("PG:dbname=postgis")
+    multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
+    expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
+    expect_silent(x <- st_read(pg, "meuse_multi2"))
+    expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
+    expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi2", quiet = TRUE))
+    #expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
+    expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
 })
 
 test_that("sf can write units to database (#264)", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     ptsu <- pts
     ptsu[["u"]] <- ptsu[["cadmium"]]
-    units(ptsu[["u"]]) <- units::as_units("km")
+    units(ptsu[["u"]]) <- units::make_unit("km")
     expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
     r <- st_read(pg, "sf_units__")
     expect_is(r[["u"]], "numeric")
@@ -80,16 +79,17 @@ test_that("can write to other schema", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
-    could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0
+    suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
 
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_error(st_write(pts, pg, c("public", "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, c("sf_test__", "sf_meuse__")))
-    expect_error(st_write(pts, pg, c("sf_test__", "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, c("sf_test__", "sf_meuse__"), overwrite = TRUE))
+    expect_error(st_write(pts, pg, DBI::SQL("public.sf_meuse__")), "exists")
+    expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")))
+    expect_error(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")), "exists")
+    # can't use overwrite = TRUE on schemas with ODBC
+    # expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__"), overwrite = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_silent(st_write(z, pg, c("sf_test__", "sf_meuse33__")))
-    expect_silent(st_write(z, pg, c("sf_test__", "sf_meuse4__")))
+    expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse33__")))
+    expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse4__")))
 
     # weird name work
     expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), overwrite = TRUE))
@@ -98,16 +98,16 @@ test_that("can write to other schema", {
 })
 
 test_that("support for capital names (#571)", {
-	skip_if_not(can_con(pg), "could not connect to postgis database")
-	expect_silent(st_write(pts, pg, "Meuse_tbl"))
-	expect_true(DBI::dbRemoveTable(pg, "Meuse_tbl"))
-	try(DBI::dbSendQuery(pg, "CREATE SCHEMA \"CAP__\";"), silent = TRUE)
-	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
-	could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0
-	skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-	expect_silent(st_write(pts, pg, c("CAP__", "Meuse_tbl")))
-	expect_true(DBI::dbRemoveTable(pg, c("CAP__", "Meuse_tbl")))
-	dbExecute(pg, 'DROP SCHEMA "CAP__" CASCADE;')
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    expect_silent(st_write(pts, pg, "Meuse_tbl"))
+    expect_true(DBI::dbRemoveTable(pg, "Meuse_tbl"))
+    try(DBI::dbSendQuery(pg, "CREATE SCHEMA \"CAP__\";"), silent = TRUE)
+    q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
+    suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
+    skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
+    expect_silent(st_write(pts, pg, DBI::SQL('"CAP__"."Meuse_tbl"')))
+    expect_true(DBI::dbRemoveTable(pg, DBI::SQL('"CAP__"."Meuse_tbl"')))
+    dbExecute(pg, 'DROP SCHEMA "CAP__" CASCADE;')
 })
 
 test_that("can read from db", {
@@ -142,12 +142,12 @@ test_that("can read from db", {
 })
 
 test_that("can read views (#212)", {
-	skip_if_not(Sys.getenv("USER") != "edzer") # this stopped working for me
+    skip_if_not(Sys.getenv("USER") != "edzer") # this stopped working for me
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_equal(DBI::dbExecute(pg,
-                "CREATE VIEW sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
+                                "CREATE VIEW sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
     expect_equal(DBI::dbExecute(pg,
-                "CREATE VIEW sf_test__.sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
+                                "CREATE VIEW sf_test__.sf_view__ AS SELECT * FROM sf_meuse__;"), 0)
     expect_equal(DBI::dbExecute(pg,
                                 "CREATE MATERIALIZED VIEW sf_viewm__ AS SELECT * FROM sf_meuse__;"), 155)
     expect_equal(DBI::dbExecute(pg,
@@ -181,7 +181,7 @@ test_that("round trips", {
             # PG: contains the PostGIS WKT, after reading the WKB created by sf from R native
             message(paste("PG:  ", received, "\n"))
         }
-		expect_equal(wkt, txt)
+        expect_equal(wkt, txt)
     }
     round_trip(pg, "SRID=4326;POINT M (0 0 0)")
     round_trip(pg, "POINT Z (0 0 0)")
@@ -230,8 +230,8 @@ test_that("can read using driver", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     layers <- st_layers("PG:dbname=postgis")
     lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__", "meuse_multi2",
-                    "sf_test__.sf_meuse__",  "sf_test__.meuse__",
-                    "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__"))
+                         "sf_test__.sf_meuse__",  "sf_test__.meuse__",
+                         "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__"))
     expect_true(all(lyr_expect %in% layers$name))
     expect_true(all(layers$features == 155))
     expect_true(all(layers$fields == 12))
@@ -261,9 +261,9 @@ test_that("new SRIDs are handled correctly", {
     meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
 
     crs = st_crs(NA_integer_, paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
-                       "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
-                       "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
-                       "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
+                                    "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
+                                    "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
+                                    "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
     st_crs(meuse_sf) = crs
     expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
     expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),

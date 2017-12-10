@@ -245,7 +245,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
-	if(inherits(dsn,"PostgreSQLConnection")) {
+	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection"))) {
 		if(is.null(layer)) layer <- deparse(substitute(obj))
 		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
 	}

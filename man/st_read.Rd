@@ -7,7 +7,7 @@
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
-\alias{st_read.PostgreSQLConnection}
+\alias{st_read.DBIObject}
 \title{Read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ...)
@@ -19,8 +19,8 @@ st_read(dsn, layer, ...)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
-\method{st_read}{PostgreSQLConnection}(conn = NULL, table = NULL,
-  query = NULL, geom_column = NULL, EWKB, quiet = TRUE, ...)
+\method{st_read}{DBIObject}(conn = NULL, table = NULL, query = NULL,
+  geom_column = NULL, EWKB = TRUE, quiet = TRUE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
@@ -62,7 +62,7 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
 
 \item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise}
+\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}}
 }
 \value{
 object of class \link{sf} when a layer was successfully read; in case argument \code{layer} is missing and
@@ -72,7 +72,8 @@ layer names, each with their geometry type(s). Note that the number of layers ma
 \description{
 Read simple features from file or database, or retrieve layer names and their geometry type(s)
 
-Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+Read PostGIS table directly through DBI and RPostgreSQL interface, converting
+Well-Know Binary geometries to sfc
 }
 \details{
 for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}

@@ -3,15 +3,20 @@
 \docType{methods}
 \name{dbDataType,PostgreSQLConnection,sf-method}
 \alias{dbDataType,PostgreSQLConnection,sf-method}
+\alias{dbDataType,DBIObject,sf-method}
 \title{Determine database type for R vector}
 \usage{
 \S4method{dbDataType}{PostgreSQLConnection,sf}(dbObj, obj)
+
+\S4method{dbDataType}{DBIObject,sf}(dbObj, obj)
 }
 \arguments{
-\item{dbObj}{PostgreSQLConnection driver or connection.}
+\item{dbObj}{DBIObject driver or connection.}
 
 \item{obj}{Object to convert}
 }
 \description{
+Determine database type for R vector
+
 Determine database type for R vector
 }

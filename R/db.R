@@ -1,11 +1,12 @@
 #' Read PostGIS table directly, using DBI and binary conversion
 #'
-#' Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+#' Read PostGIS table directly through DBI and RPostgreSQL interface, converting
+#' Well-Know Binary geometries to sfc
 #' @param conn open database connection
 #' @param table table name
 #' @param query SQL query to select records; see details
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
-#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise
+#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}
 #' @details if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 #' @examples
 #' \dontrun{
@@ -20,8 +21,8 @@
 #' }
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
-st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
-					  geom_column = NULL, EWKB, quiet = TRUE, ...) {
+st_read.DBIObject = function(conn = NULL, table = NULL, query = NULL,
+					  geom_column = NULL, EWKB = TRUE, quiet = TRUE, ...) {
 	if (is.null(conn))
 		stop("no connection provided")
 
@@ -54,15 +55,16 @@ st_read.PostgreSQLConnection = function(conn = NULL, table = NULL, query = NULL,
 			gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
 	}
 
-	if (missing(EWKB))
-		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
-
 	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = conn)
 
 	st_sf(tbl, ...)
 }
 
-postgis_as_sfc <- function(x,  EWKB, conn) {
+st_read.PostgreSQLConnection <- function(...) {
+    st_read.DBIObject(...)
+}
+
+postgis_as_sfc <- function(x, EWKB, conn) {
 	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {
 		st_crs(geom) = make_crs(get_postgis_crs(conn, attr(geom, "srid")))
@@ -195,15 +197,6 @@ get_new_postgis_srid <- function(conn) {
 
 #' Write `sf` object to Database
 #' @inheritParams RPostgreSQL::postgresqlWriteTable
-#' @param conn PostgreSQL DBI objects
-#' @param binary Send geometries serialized as Well-Known Binary (WKB);
-#' if `FALSE`, uses Well-Known Text (WKT). Defaults to `TRUE` (WKB).
-#' @param row.names Add a `row.name` column, or a vector of length `nrow(obj)`
-#' containing row.names; default `FALSE`.
-#' @param overwrite Will try to `drop` table before writing; default `FALSE`.
-#' @param append Append rows to existing table; default `FALSE`.
-#' @param field.types default `NULL`. Allows to override type conversion from R
-#' to PostgreSQL. See `dbDataType()` for details.
 #' @md
 #' @rdname st_write
 #' @importClassesFrom RPostgreSQL PostgreSQLConnection
@@ -225,6 +218,40 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
               })
           }
 )
+
+#' Write `sf` object to Database
+#' @inheritParams DBI::dbWriteTable
+#' @param conn DBIObject
+#' @param binary Send geometries serialized as Well-Known Binary (WKB);
+#' if `FALSE`, uses Well-Known Text (WKT). Defaults to `TRUE` (WKB).
+#' @param row.names Add a `row.name` column, or a vector of length `nrow(obj)`
+#' containing row.names; default `FALSE`.
+#' @param overwrite Will try to `drop` table before writing; default `FALSE`.
+#' @param append Append rows to existing table; default `FALSE`.
+#' @param field.types default `NULL`. Allows to override type conversion from R
+#' to PostgreSQL. See `dbDataType()` for details.
+#' @md
+#' @rdname st_write
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbWriteTable
+#' @export
+setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
+          function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+              if (!requireNamespace("DBI"))
+                  stop("Missing package `DBI`.",
+                       " Use `install.packages(\"DBI\")` to install.", call. = FALSE)
+              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              tryCatch({
+                  dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
+                               overwrite = overwrite, append = append,
+                               field.types = field.types)
+              }, warning=function(w) {
+                  stop(conditionMessage(w), call. = FALSE)
+              })
+          }
+)
+
 
 to_postgis <- function(conn, x, binary) {
 	geom_col <- vapply(x, inherits, TRUE, what = "sfc")
@@ -258,8 +285,6 @@ sync_crs <- function(conn, geom) {
 #' @rdname dbDataType
 #' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbDataType
-#' @param dbObj PostgreSQLConnection driver or connection.
-#' @param obj Object to convert
 setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 	dtyp <- vapply(obj, RPostgreSQL::dbDataType, character(1), dbObj =  dbObj)
 	gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
@@ -269,4 +294,24 @@ setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 	dtyp[gtyp] <- "numeric"
 	return(dtyp)
 })
+
+#' Determine database type for R vector
+#'
+#' @export
+#' @inheritParams DBI dbDataType
+#' @rdname dbDataType
+#' @importClassesFrom DBI DBIObject
+#' @importMethodsFrom DBI dbDataType
+#' @param dbObj DBIObject driver or connection.
+#' @param obj Object to convert
+setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
+    dtyp <- vapply(obj, DBI::dbDataType, character(1), dbObj =  dbObj)
+    gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
+    dtyp[gtyp] <- "geometry"
+    # explicit cast for units
+    gtyp <- vapply(obj, inherits, TRUE, what = "units")
+    dtyp[gtyp] <- "numeric"
+    return(dtyp)
+})
+
 
