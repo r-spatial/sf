@@ -64,10 +64,6 @@ st_read.PostgreSQLConnection <- function(...) {
     st_read.DBIObject(...)
 }
 
-st_read.PqConnection <- function(...) {
-    st_read.DBIObject(...)
-}
-
 postgis_as_sfc <- function(x, EWKB, conn) {
 	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {

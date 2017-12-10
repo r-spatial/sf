@@ -24,20 +24,21 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
+# requires to apt-get install odbc-postgresql
 try(pg <- dbConnect(odbc::odbc(), driver = "PostgreSQL Unicode", database = "postgis"), silent=TRUE)
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
-    skip_if_not(can_con(pg), "could not connect to postgis database")
+	skip_if_not(can_con(pg), "could not connect to postgis database")
 	expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
-    expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
-    expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
-    expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
-    expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_silent(st_write(z, pg, "sf_meuse3__"))
-    expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
-    expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2)
-    expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
+	expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
+	expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
+	expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
+	expect_warning(z <- st_set_crs(pts, epsg_31370))
+	expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
+	expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
+	expect_warning(expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2), "Unknown field type")
+	expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
 })
 
 test_that("can handle multiple geom columns", {
@@ -74,6 +75,28 @@ test_that("sf can write units to database (#264)", {
 	dbRemoveTable(pg, "sf_units__")
 })
 
+test_that("sf can preserve types (#592)", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	dtypes <- data.frame(
+		logi = c(TRUE, FALSE, NA),
+		chara = c("a", "", NA),
+		nume = c(1.1e1, 2.2e2, NA),
+		inte = c(1L, 2L, NA),
+		fact = factor(c("a", "b", NA), levels = letters),
+		#comp = c(complex(1, 2), complex(2, 3)),
+		date = rep(Sys.Date(), 3),
+		time = rep(Sys.time(), 3),
+		x = c(1, 2, 4),
+		y = c(1, 2, 4), stringsAsFactors = FALSE)
+	# cannot write lists
+	#dtypes$lst <- c(list(matrix("a")), list(matrix(c("b", "c"))), list(NA))
+	dtypes <- st_as_sf(dtypes, coords = c("x", "y"))
+	st_write(dtypes, pg, overwrite = TRUE)
+	x <- st_read(pg, "dtypes")
+	expect_equal(x[, -5], dtypes[, -5])  # skip factors
+	DBI::dbRemoveTable(pg, "dtypes")
+})
+
 test_that("can write to other schema", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
@@ -84,8 +107,8 @@ test_that("can write to other schema", {
 	expect_error(st_write(pts, pg, DBI::SQL("public.sf_meuse__")), "exists")
 	expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")))
 	expect_error(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")), "exists")
-	# can't use overwrite = TRUE on schemas with ODBC
-	# expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__"), overwrite = TRUE))
+	# can't use overwrite = TRUE on schemas with DBI
+	#expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__"), overwrite = TRUE))
 	expect_warning(z <- st_set_crs(pts, epsg_31370))
 	expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse33__")))
 	expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse4__")))
@@ -115,7 +138,6 @@ test_that("can read from db", {
 	#expect_warning(x <- st_read(pg, query = q), "crs")
 	expect_silent(x <- st_read(pg, query = q))
 
-	expect_error(st_read(), "no applicable method for 'st_read'")
 	expect_error(st_read(pg), "table name or a query")
 
 	y <- st_read(pg, "sf_meuse__")
@@ -235,7 +257,7 @@ test_that("can read using driver", {
 	expect_true(all(layers$features == 155))
 	expect_true(all(layers$fields == 12))
 
-	skip_if_not(can_con(RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), dbname = "empty")),
+	skip_if_not(can_con(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty")),
 				"could not connect to 'empty' database")
 	expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers")
 })
@@ -247,7 +269,7 @@ test_that("Can safely manipulate crs", {
 	expect_error(set_postgis_crs(pg, st_crs(srid)))
 	expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
 	new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
-	expect_equal(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), 1)
+	expect_message(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
 	expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
 				   "not found")
 	expect_equal(delete_postgis_crs(pg, new_crs), 1)
@@ -264,10 +286,20 @@ test_that("new SRIDs are handled correctly", {
 									"+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
 									"-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
 	st_crs(meuse_sf) = crs
-	expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+	expect_message(st_write(meuse_sf, pg, overwrite = TRUE), "Inserted local crs")
 	expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
 				   "not found in EPSG support files")
-	expect_true(st_crs(x) == crs)
+	expect_true(st_crs(x)$proj4string == crs$proj4string)
+	expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+})
+
+test_that("schema_table", {
+	expect_error(sf:::schema_table(pg, NA), "character vector")
+	expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
+	expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
+	expect_error(sf:::schema_table(pg, letters), "longer than 2")
+	expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
+	expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
 })
 
 if (can_con(pg)) {
@@ -283,15 +315,7 @@ if (can_con(pg)) {
 	try(db_drop_table_schema(pg, "sf_test__", "sf_meuse2__"), silent = TRUE)
 	try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
 	try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
-	try(DBI::dbSendQuery(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
-    try(DBI::dbDisconnect(pg), silent = TRUE)
+	try(DBI::dbExecute(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
+	try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
+	try(DBI::dbDisconnect(pg), silent = TRUE)
 }
-
-test_that("schema_table", {
-    expect_error(sf:::schema_table(pg, NA), "character vector")
-    expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
-    expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
-    expect_error(sf:::schema_table(pg, letters), "longer than 2")
-    expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
-    expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
-})
