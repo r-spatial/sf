@@ -152,6 +152,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 								pal
 						colors[as.numeric(values)]
 					} else {
+						values = as.numeric(values)
 						if (is.character(breaks)) { # compute breaks from values:
 							n.unq = length(unique(na.omit(values)))
 							breaks = if (! all(is.na(values)) && n.unq > 1) {
@@ -171,7 +172,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 							else if (diff(range(values, na.rm = TRUE)) == 0)
 								values * 0 + 1  # preserves NA's
 							else
-								cut(as.numeric(values), breaks, include.lowest = TRUE)
+								cut(values, breaks, include.lowest = TRUE)
 						colors = if (is.function(pal))
 								pal(nbreaks)
 							else
