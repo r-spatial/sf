@@ -213,10 +213,12 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			plot(st_geometry(x), col = col, ...)
 		}
 		if (! isTRUE(dots$add)) { # title?
-			if (missing(main))
-				title(setdiff(names(x), attr(x, "sf_column")))
-			else
-				title(main)
+			if (missing(main)) {
+				main = setdiff(names(x), attr(x, "sf_column"))
+				if (length(main) && inherits(x[[main]], "units"))
+					main = make_unit_label(main, x[[main]])
+			}
+			title(main)
 		}
 	}
 }
