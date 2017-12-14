@@ -1,5 +1,9 @@
 # version 0.5-6
 
+* `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` will be deprecated as a consequence; #593
+
+* `st_length` returns zero for polygon-type geometries; #593
+
 * if present, add units of attribute to default plot title; #591
 
 * add `unnest` method, which depends on `tidyr` > 0.7-2; #570 PR by @karldw

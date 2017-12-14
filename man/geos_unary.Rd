@@ -72,7 +72,7 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 
-\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}, and segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.}
 }
 \value{
 an object of the same class of \code{x}, with manipulated geometry.

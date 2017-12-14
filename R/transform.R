@@ -95,7 +95,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 #' @export
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' st_area(nc[1,]) # area, using geosphere::areaPolygon
+#' st_area(nc[1,]) # area from long/lat
 #' st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 #' library(units)

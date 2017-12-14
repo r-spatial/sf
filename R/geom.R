@@ -39,7 +39,7 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' @export
 #' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 #'
-#' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
+#' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[lwgeom]{st_geod_area} is used for area calculation.
 #' @examples
 #' b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 #' b1 = b0 + 2
@@ -48,15 +48,9 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' st_area(x)
 st_area = function(x) {
 	if (isTRUE(st_is_longlat(x))) {
-		p = crs_parameters(st_crs(x))
-		if (! requireNamespace("sp", quietly = TRUE))
-			stop("package sp required, please install it first")
-		if (! requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		a = geosphere::areaPolygon(as(st_geometry(x), "Spatial"),
-				as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		units(a) = units(p$SemiMajor^2)
-		a
+		if (! requireNamespace("lwgeom", quietly = TRUE))
+			stop("package lwgeom required, please install it first")
+		lwgeom::st_geod_area(x)
 	} else {
 		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
 		if (! is.na(st_crs(x)))
@@ -65,48 +59,14 @@ st_area = function(x) {
 	}
 }
 
-ll_length = function(x, fn, p) {
-	if (is.list(x)) # sfc_MULTILINESTRING
-		sum(vapply(x, ll_length, 0.0, fn = fn, p = p))
-	else {
-		pts = unclass(x) # matrix
-		sum(fn(head(pts, -1), tail(pts, -1), as.numeric(p$SemiMajor), 1./p$InvFlattening))
-	}
-}
-
-
-geom_length = function(x, dist_fun, longlat, crs) {
-	stopifnot(inherits(x, "sfg"))
-
-	if (inherits(x, "POINT") || inherits(x, "MULTIPOINT"))
-		return(0.0)
-
-	if (!st_is(x, c("LINESTRING", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVE")))
-		x = st_cast(x, "MULTILINESTRING")
-
-	if (isTRUE(longlat)) {
-		if (is.na(crs))
-			stop("crs must be defined for longitude/latitude data")
-		if (missing(dist_fun) && !requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		ll_length(x, dist_fun, crs_parameters(crs))
-	} else {
-		ret = CPL_length(st_sfc(x)) # units of coordinates
-		ret[is.nan(ret)] = NA
-		ret
-	}
-}
-
 #' @name geos_measures
 #' @export
-#' @return st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
-#' @seealso \link{st_dimension}
+#' @return st_length returns the length of a \code{LINESTRING} or \code{MULTILINESTRING} geometry, using the coordinate reference system.  \code{POINT}, \code{MULTIPOINT}, \code{POLYGON} or \code{MULTIPOLYGON} geometries return zero.
+#' @seealso \link{st_dimension}, \link{st_cast} to convert geometry types
 #'
 #' @examples
-#' dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 #' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 #' st_length(line)
-#' st_length(line, dist_fun = dist_vincenty)
 #'
 #' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 #' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
@@ -119,25 +79,21 @@ geom_length = function(x, dist_fun, longlat, crs) {
 #' ))
 #'
 #' st_length(st_sfc(poly, mpoly))
-
-st_length = function(x, dist_fun = geosphere::distGeo) {
+st_length = function(x) {
 	x = st_geometry(x)
 
-	longlat = st_is_longlat(x)
-	crs = st_crs(x)
-
-	ret = vapply(x, geom_length, 0.0, dist_fun = dist_fun, crs = crs, longlat = longlat)
-
-	if (!is.na(crs)) {
-		p = crs_parameters(crs)
-		if (isTRUE(longlat)) {
-			units(ret) = units(p$SemiMajor)
-		} else {
-			units(ret) = p$ud_unit
-		}
+	if (isTRUE(st_is_longlat(x))) {
+		if (! requireNamespace("lwgeom", quietly = TRUE))
+			stop("package lwgeom required, please install it first")
+		lwgeom::st_geod_length(x)
+	} else {
+		ret = CPL_length(x)
+		ret[is.nan(ret)] = NA
+		crs = st_crs(x)
+		if (! is.na(crs))
+			units(ret) = crs_parameters(crs)$ud_unit
+		ret
 	}
-
-	ret
 }
 
 message_longlat = function(caller) {
@@ -172,6 +128,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
+#' @param ... ignored
 #' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
@@ -183,7 +140,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, dist_fun, by_element = FALSE, which = "distance", par = 0.0) {
+st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distance", par = 0.0) {
 	if (missing(y))
 		y = x
 	else
@@ -197,19 +154,27 @@ st_distance = function(x, y, dist_fun, by_element = FALSE, which = "distance", p
 	if (!is.na(st_crs(x)))
 		p = crs_parameters(st_crs(x))
 	if (isTRUE(st_is_longlat(x))) {
-		if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
-			stop("st_distance for longitude/latitude data only available for POINT geometries")
-		if (!requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		if (missing(dist_fun))
-			dist_fun = geosphere::distGeo
-		xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
-		yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
-		m = matrix(
-			dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening),
-			length(x), length(y))
-		units(m) = units(p$SemiMajor)
-		m
+		# fork on lwgeom > 0.1-0:
+		if (requireNamespace("lwgeom", quietly = TRUE) &&
+				utils::packageVersion("lwgeom") > "0.1-0") { # have st_geod_distance
+			if (! missing(dist_fun))
+				message("dist_fun is deprecated, and will not be supported in future sf versions")
+			lwgeom::st_geod_distance(x, y, 0.0) # FIXME: pass tolerance as parameter?
+		} else {
+			if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
+				stop("st_distance for longitude/latitude data only available for POINT geometries")
+			if (!requireNamespace("geosphere", quietly = TRUE))
+				stop("package geosphere required, please install it first")
+			if (missing(dist_fun))
+				dist_fun = geosphere::distGeo
+			xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
+			yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
+			m = matrix(
+				dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening),
+				length(x), length(y))
+			units(m) = units(p$SemiMajor)
+			m
+		}
 	} else {
 		d = CPL_geos_dist(x, y, which, par)
 		if (! is.na(st_crs(x)))
@@ -693,7 +658,7 @@ st_node.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}, and segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
@@ -709,9 +674,17 @@ st_segmentize.sfg = function(x, dfMaxLength, ...)
 
 #' @export
 st_segmentize.sfc	= function(x, dfMaxLength, ...) {
-	if (isTRUE(st_is_longlat(x)))
-		st_sfc(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = st_crs(x)), crs = st_crs(x))
-	else {
+	if (isTRUE(st_is_longlat(x))) {
+		if (!requireNamespace("lwgeom", quietly = TRUE))
+			stop("package lwgeom required, please install it first")
+		if (inherits(dfMaxLength, "units")) {
+			p = crs_parameters(st_crs(x))
+			if (units(dfMaxLength) == units(as_units("degree")))
+				units(dfMaxLength) = "rad" # degree -> rad
+		} else
+			units(dfMaxLength) = "m"
+		lwgeom::st_geod_segmentize(x, dfMaxLength)
+	} else {
 		if (!is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
 			units(dfMaxLength) = units(crs_parameters(st_crs(x))$SemiMajor) # might convert
 		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
@@ -722,38 +695,6 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 st_segmentize.sf = function(x, dfMaxLength, ...) {
 	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ...)
 	x
-}
-
-ll_segmentize = function(x, dfMaxLength, crs = st_crs(4326)) {
-	# x is a single sfg: LINESTRING or MULTILINESTRING
-	if (is.list(x)) # MULTILINESTRING:
-		structure(lapply(x, ll_segmentize, dfMaxLength = dfMaxLength, crs = crs),
-			class = attr(x, "class"))
-	else { # matrix
-		if (!requireNamespace("geosphere", quietly = TRUE))
-			stop("package geosphere required, please install it first")
-		p = crs_parameters(crs)
-		pts = unclass(x) # matrix
-		p1 = head(pts, -1)
-		p2 = tail(pts, -1)
-		ll = geosphere::distGeo(p1, p2, as.numeric(p$SemiMajor), 1./p$InvFlattening)
-		if (inherits(dfMaxLength, "units")) {
-			if (as.character(units(dfMaxLength)) == "rad")
-				dfMaxLength = as.numeric(dfMaxLength) * p$SemiMajor
-			units(ll) = units(p$SemiMajor)
-		}
-		n = as.numeric(ceiling(ll / dfMaxLength)) - 1
-		ret = geosphere::gcIntermediate(p1, p2, n, addStartEnd = TRUE)
-		if (length(n) == 1) # would be a matrix otherwise
-			ret = list(ret)
-		for (i in seq_along(n)) {
-			if (n[i] < 1) # 0 or -1, because of the -1, for 0 distance
-				ret[[i]] = ret[[i]][-2,] # take out interpolated middle point
-			if (i > 1)
-				ret[[i]] = tail(ret[[i]], -1) # take out duplicate starting point
-		}
-		structure(do.call(rbind, ret), class = attr(x, "class"))
-	}
 }
 
 #' Combine or union feature geometries

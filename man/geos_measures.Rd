@@ -11,17 +11,19 @@
 \usage{
 st_area(x)
 
-st_length(x, dist_fun = geosphere::distGeo)
+st_length(x)
 
-st_distance(x, y, dist_fun, by_element = FALSE, which = "distance",
+st_distance(x, y, ..., dist_fun, by_element = FALSE, which = "distance",
   par = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.}
-
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
+
+\item{...}{ignored}
+
+\item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.}
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 
@@ -32,9 +34,9 @@ st_distance(x, y, dist_fun, by_element = FALSE, which = "distance",
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 
-st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[geosphere]{areaPolygon} is used for area calculation.
+st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[lwgeom]{st_geod_area} is used for area calculation.
 
-st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
+st_length returns the length of a \code{LINESTRING} or \code{MULTILINESTRING} geometry, using the coordinate reference system.  \code{POINT} or \code{MULTIPOINT} geometries return zero, \code{POLYGON} or \code{MULTIPOLYGON} are converted into \code{LINESTRING} or \code{MULTILINESTRING}, respectively.
 
 If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
@@ -50,10 +52,8 @@ b1 = b0 + 2
 b2 = b0 + c(-0.2, 2)
 x = st_sfc(b0, b1, b2)
 st_area(x)
-dist_vincenty = function(p1, p2, a, f) geosphere::distVincentyEllipsoid(p1, p2, a, a * (1-f), f)
 line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
 st_length(line)
-st_length(line, dist_fun = dist_vincenty)
 
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)

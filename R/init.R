@@ -7,7 +7,7 @@
 #' @importFrom grDevices rgb
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable dbExecute
-#' @importFrom units make_unit set_units make_unit_label
+#' @importFrom units make_unit set_units make_unit_label as_units
 #' @importFrom classInt classIntervals
 #' @useDynLib sf
 NULL

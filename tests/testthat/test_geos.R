@@ -63,7 +63,7 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_silent(st_length(l))
 
 	# errors:
-	expect_error(st_distance(x, y))
+	expect_silent(st_distance(x, y))
 })
 
 test_that("st_area() works on GEOMETRY in longlat (#131)", {

@@ -29,6 +29,7 @@ Imports:
 	magrittr
 Suggests:
     geosphere (>= 1.5-5),
+	lwgeom (>= 0.1-0),
     maps,
     rgdal,
     rgeos,
