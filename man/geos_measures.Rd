@@ -19,7 +19,7 @@ st_distance(x, y, dist_fun, by_element = FALSE, which = "distance",
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to \link[geosphere]{distGeo} in that case; for other data metric lengths are computed.}
+\item{dist_fun}{function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
@@ -36,7 +36,7 @@ st_area returns the area of a geometry, in the coordinate reference system used;
 
 st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.
 
-If \code{by_element} is \code{FALSE} a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
+If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 }
 \description{
 Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
