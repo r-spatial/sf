@@ -1,8 +1,10 @@
 # version 0.5-6
 
-* `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` will be deprecated as a consequence; #593
+* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom`; #593
 
-* `st_length` returns zero for polygon-type geometries; #593
+* `st_distance` for long/lat geographic coordinates now uses `lwgeom` (if present in version >= 0.1-1), accepting all geometry types; argument `dist_fun` will be ignored as a consequence; #593
+
+* `st_length` now returns zero for polygon-type geometries; #593
 
 * if present, add units of attribute to default plot title; #591
 
