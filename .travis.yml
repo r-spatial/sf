@@ -34,7 +34,7 @@ before_install:
   - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
   - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
   # activate liblwgeom by:
-  - sudo ldconfig 
+  #- sudo ldconfig 
   # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis

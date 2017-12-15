@@ -62,18 +62,20 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_silent(st_area(x))
 	expect_silent(st_length(l))
 
-	# errors:
-	expect_error(st_distance(x, y))
+	# distance on long/lat:
+	if (utils::packageVersion("lwgeom") <= "0.1-0")
+		expect_error(st_distance(x, y))
+	else
+		expect_silent(st_distance(x, y))
 })
 
 test_that("st_area() works on GEOMETRY in longlat (#131)", {
   single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
   multi <- list(single + 2, single + 4) %>% st_multipolygon()
   
-  w <- st_sfc(single, multi)
+  w <- st_sfc(single + 0.1, multi)
   expect_equal(st_area(w), 1:2)
-  expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(), 
-               c(12308778361, 24570125261))
+  expect_silent(st_area(st_set_crs(w, 4326))) # outcome might depend on backend used: lwgeom if proj.4 < 490, else proj.4
 })
 
 

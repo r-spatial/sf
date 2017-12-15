@@ -80,7 +80,7 @@ sfc
 st_transform(sfc, 3857)
 st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-st_area(nc[1,]) # area, using geosphere::areaPolygon
+st_area(nc[1,]) # area from long/lat
 st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 library(units)
