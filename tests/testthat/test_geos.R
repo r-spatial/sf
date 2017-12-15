@@ -75,8 +75,7 @@ test_that("st_area() works on GEOMETRY in longlat (#131)", {
   
   w <- st_sfc(single + 0.1, multi)
   expect_equal(st_area(w), 1:2)
-  expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(), 
-			   c(12308577626, 24570125261))
+  expect_silent(st_area(st_set_crs(w, 4326))) # outcome might depend on backend used: lwgeom if proj.4 < 490, else proj.4
 })
 
 
