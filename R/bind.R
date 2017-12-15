@@ -1,7 +1,7 @@
 #' Bind rows (features) of sf objects
 #'
 #' Bind rows (features) of sf objects
-#' @param ... objects to bind
+#' @param ... objects to bind; note that for the rbind and cbind methods, all objects have to be of class \code{sf}; see \link{dotsMethods}
 #' @param deparse.level integer; see \link[base]{rbind}
 #' @name bind
 #' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}. 
@@ -50,7 +50,7 @@ rbind.sf = function(..., deparse.level = 1) {
 #' st_sf(data.frame(c, df))
 #' dplyr::bind_cols(c, df)
 cbind.sf = function(..., deparse.level = 1, sf_column_name = NULL) {
-	# todo: handle st_agr?
+	# TODO: handle st_agr?
 	st_sf(data.frame(...), sf_column_name = sf_column_name)
 }
 
