@@ -14,7 +14,7 @@ st_area(x)
 st_length(x)
 
 st_distance(x, y, ..., dist_fun, by_element = FALSE, which = "distance",
-  par = 0)
+  par = 0, tolerance = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -30,6 +30,8 @@ st_distance(x, y, ..., dist_fun, by_element = FALSE, which = "distance",
 \item{which}{character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned}
 
 \item{par}{for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry}
+
+\item{tolerance}{ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.}
 }
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.

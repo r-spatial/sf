@@ -739,7 +739,8 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > set.seed(131)
 > options(digits=6)
 > x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
-> (p <- st_sample(x, 10))
+> if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
++   (p <- st_sample(x, 10))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 geometry type:  POINT
@@ -754,23 +755,24 @@ POINT (26.3945853430778 59.9003352040191)
 POINT (33.8201717427 18.4236330568178)
 POINT (76.171215204522 31.5416755356696)
 > x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
-> st_sample(x, 10)
+> p <- st_sample(x, 10)
+> x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
++  crs=st_crs(4326))
+> if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
++   (p <- st_sample(x, 10))
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 13.51135 ymin: 6.005704 xmax: 82.78265 ymax: 63.18553
-epsg (SRID):    NA
-proj4string:    NA
+bbox:           xmin: -170.749 ymin: -64.78781 xmax: 172.1939 ymax: 74.44
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
-POINT (19.2714130226523 21.4671036042273)
-POINT (57.340495493263 37.6075198757462)
-POINT (56.2872428074479 6.00570423994213)
-POINT (36.0554852569476 10.193104497157)
-POINT (52.4428965803236 33.3666403102688)
-> x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
-+  crs=st_crs(4326))
-> p <- st_sample(x, 10)
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
+POINT (48.8473404105753 9.37328114613777)
+POINT (48.5555493459105 -52.7577128166461)
+POINT (-102.633889932185 -35.8230091690915)
+POINT (158.154969792813 -47.3308409731512)
+POINT (72.1338790934533 -25.504819835632)
 > pt = st_multipoint(matrix(1:20,,2))
 > st_sample(p, 3)
 Geometry set for 1 feature 
@@ -988,4 +990,4 @@ POINT (-118.680892320416 36.4417315520556)
 > 
 > proc.time()
    user  system elapsed 
-  2.520   0.324   2.534 
+  2.496   0.304   2.492 

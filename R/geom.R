@@ -133,6 +133,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
 #' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
+#' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
 #' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
 #' @details Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
 #' @examples
@@ -140,7 +141,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distance", par = 0.0) {
+st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distance", par = 0.0, tolerance = 0.0) {
 	if (missing(y))
 		y = x
 	else
@@ -159,7 +160,8 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 				utils::packageVersion("lwgeom") > "0.1-0") { # have st_geod_distance
 			if (! missing(dist_fun))
 				message("dist_fun is ignored: lwgeom is used for distance calculation")
-			lwgeom::st_geod_distance(x, y, 0.0) # FIXME: pass tolerance as parameter?
+			units(tolerance) = make_unit("m")
+			lwgeom::st_geod_distance(x, y, tolerance)
 		} else {
 			if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
 				stop("st_distance for longitude/latitude data only available for POINT geometries")
