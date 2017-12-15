@@ -62,8 +62,11 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_silent(st_area(x))
 	expect_silent(st_length(l))
 
-	# errors:
-	expect_silent(st_distance(x, y))
+	# distance on long/lat:
+	if (utils::packageVersion("lwgeom") <= "0.1-0")
+		expect_error(st_distance(x, y))
+	else
+		expect_silent(st_distance(x, y))
 })
 
 test_that("st_area() works on GEOMETRY in longlat (#131)", {

@@ -679,6 +679,11 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 			stop("package lwgeom required, please install it first")
 		if (! inherits(dfMaxLength, "units"))
 			units(dfMaxLength) = make_unit("m")
+		else if (utils::packageVersion("lwgeom") <= "0.1-0") {
+			# convert rad to m:
+			if (units(dfMaxLength) == units(make_unit("rad")))
+				dfMaxLength = as.numeric(dfMaxLength) * crs_parameters(st_crs(x))$SemiMajor
+		}
 		lwgeom::st_geod_segmentize(x, dfMaxLength)
 	} else {
 		if (!is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
