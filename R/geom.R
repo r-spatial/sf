@@ -129,7 +129,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param ... ignored
-#' @param dist_fun function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.
+#' @param dist_fun (will be deprecated soon); function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
 #' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
@@ -158,7 +158,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 		if (requireNamespace("lwgeom", quietly = TRUE) &&
 				utils::packageVersion("lwgeom") > "0.1-0") { # have st_geod_distance
 			if (! missing(dist_fun))
-				message("dist_fun is deprecated, and will not be supported in future sf versions")
+				message("dist_fun is ignored: lwgeom is used for distance calculation")
 			lwgeom::st_geod_distance(x, y, 0.0) # FIXME: pass tolerance as parameter?
 		} else {
 			if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
