@@ -658,7 +658,7 @@ st_node.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}, and segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
@@ -677,12 +677,8 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (!requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
-		if (inherits(dfMaxLength, "units")) {
-			p = crs_parameters(st_crs(x))
-			if (units(dfMaxLength) == units(as_units("degree")))
-				units(dfMaxLength) = "rad" # degree -> rad
-		} else
-			units(dfMaxLength) = "m"
+		if (! inherits(dfMaxLength, "units"))
+			units(dfMaxLength) = make_unit("m")
 		lwgeom::st_geod_segmentize(x, dfMaxLength)
 	} else {
 		if (!is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
