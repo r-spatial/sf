@@ -73,10 +73,10 @@ test_that("st_area() works on GEOMETRY in longlat (#131)", {
   single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
   multi <- list(single + 2, single + 4) %>% st_multipolygon()
   
-  w <- st_sfc(single, multi)
+  w <- st_sfc(single + 0.1, multi)
   expect_equal(st_area(w), 1:2)
   expect_equal(st_area(st_set_crs(w, 4326)) %>% as.numeric(), 
-               c(12308778361, 24570125261))
+			   c(12308577626, 24570125261))
 })
 
 
