@@ -158,7 +158,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 		p = crs_parameters(st_crs(x))
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("lwgeom required: install first?|")
+			stop("lwgeom required: install first?")
 		units(tolerance) = make_unit("m")
 		lwgeom::st_geod_distance(x, y, tolerance)
 	} else {
