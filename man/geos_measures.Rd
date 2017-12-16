@@ -45,9 +45,6 @@ If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric 
 \description{
 Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
-\details{
-Function \code{dist_fun} should follow the pattern of the distance function \link[geosphere]{distGeo}: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.
-}
 \examples{
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 b1 = b0 + 2
