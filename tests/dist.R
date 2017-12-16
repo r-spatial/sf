@@ -19,9 +19,7 @@ st_point(c(4,0)),
 crs = 4326
 )
 
-st_distance(x, y)
-
-d.sf = st_distance(x, y, dist_fun = geosphere::distMeeus)
+d.sf = st_distance(x, y)
 d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
 units(d.sp) = make_unit("km")
 d.sf - d.sp

@@ -28,8 +28,7 @@ Imports:
 	classInt,
 	magrittr
 Suggests:
-    geosphere (>= 1.5-5),
-	lwgeom (>= 0.1-0),
+	lwgeom (>= 0.1-1),
     maps,
     rgdal,
     rgeos,

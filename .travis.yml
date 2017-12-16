@@ -11,6 +11,8 @@ sudo: required
 
 dist: trusty
 
+r_github_packages: r-spatial/lwgeom
+
 addons:
   postgresql: "9.6"
 

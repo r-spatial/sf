@@ -129,7 +129,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param ... ignored
-#' @param dist_fun (will be deprecated soon); function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data this should be a distance function from package geosphere, or compatible to that (defaulting to \link[geosphere]{distGeo}); ignored if \code{x} is not long/lat (see \link{st_is_longlat}), in which case metric lengths are computed instead.
+#' @param dist_fun deprecated 
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
 #' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
@@ -150,33 +150,18 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 	if (by_element)
 		return(mapply(st_distance, x, y, by_element = FALSE))
 
+	if (! missing(dist_fun))
+		stop("dist_fun is deprecated: lwgeom is used for distance calculation")
+
 	x = st_geometry(x)
 	y = st_geometry(y)
 	if (!is.na(st_crs(x)))
 		p = crs_parameters(st_crs(x))
 	if (isTRUE(st_is_longlat(x))) {
-		# fork on lwgeom > 0.1-0:
-		if (requireNamespace("lwgeom", quietly = TRUE) &&
-				utils::packageVersion("lwgeom") > "0.1-0") { # have st_geod_distance
-			if (! missing(dist_fun))
-				message("dist_fun is ignored: lwgeom is used for distance calculation")
-			units(tolerance) = make_unit("m")
-			lwgeom::st_geod_distance(x, y, tolerance)
-		} else {
-			if (!inherits(x, "sfc_POINT") || !inherits(y, "sfc_POINT"))
-				stop("st_distance for longitude/latitude data only available for POINT geometries")
-			if (!requireNamespace("geosphere", quietly = TRUE))
-				stop("package geosphere required, please install it first")
-			if (missing(dist_fun))
-				dist_fun = geosphere::distGeo
-			xp = do.call(rbind, x)[rep(seq_along(x), length(y)),]
-			yp = do.call(rbind, y)[rep(seq_along(y), each = length(x)),]
-			m = matrix(
-				dist_fun(xp, yp, as.numeric(p$SemiMajor), 1./p$InvFlattening),
-				length(x), length(y))
-			units(m) = units(p$SemiMajor)
-			m
-		}
+		if (! requireNamespace("lwgeom", quietly = TRUE))
+			stop("lwgeom required: install first?|")
+		units(tolerance) = make_unit("m")
+		lwgeom::st_geod_distance(x, y, tolerance)
 	} else {
 		d = CPL_geos_dist(x, y, which, par)
 		if (! is.na(st_crs(x)))
