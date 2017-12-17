@@ -152,8 +152,8 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			attributes(ret) = attributes(x)
 			reclass(ret, to, FALSE)
 		} else
-			st_cast(st_cast(x, "MULTILINESTRING"), to)
-			#stop("use smaller steps for st_cast; first cast to MULTILINESTRING or POLYGON?")
+			#st_cast(st_cast(x, "MULTILINESTRING"), to)
+			stop("use smaller steps for st_cast; first cast to MULTILINESTRING or POLYGON?")
 	} else if (from_col < to_col) { # "horizontal", to the right: group
 		ret = if (from_col == 0)
 			lapply(unname(split(x, ids)), function(y) structure(do.call(rbind, y), class = class(x[[1]])))
