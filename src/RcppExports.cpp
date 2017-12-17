@@ -529,6 +529,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_erase_overlaps
+Rcpp::List CPL_erase_overlaps(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_erase_overlaps(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_erase_overlaps(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_raw_to_hex
 Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw);
 RcppExport SEXP _sf_CPL_raw_to_hex(SEXP rawSEXP) {
@@ -722,6 +733,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
+    {"_sf_CPL_erase_overlaps", (DL_FUNC) &_sf_CPL_erase_overlaps, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},

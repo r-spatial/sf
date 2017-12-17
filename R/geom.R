@@ -1011,3 +1011,48 @@ st_make_grid = function(x,
 	else
 		st_sfc(ret, crs = st_crs(x))
 }
+
+#' Erase overlaps
+#' @param x object of class \code{sf} or \code{sfc}
+#' @return Object with overlaps erased.
+#' @details Overlapping areas are erased from geometries that are indexed at greater
+#' numbers in the argument to \code{x}. Furthermore, note that geometries that are empty 
+#' or contained fully inside geometries with higher priority are removed entirely. 
+#' See the \code{"idx"} attribute to find the orginal index for returned geometries.
+#' @examples
+#' # example 1
+#' ## simulate data
+#' pl1 = st_polygon(list(matrix(c(0, 0, 2, 0, 1, 1, 0 ,0), byrow = TRUE, ncol=2)))
+#' pl2 = st_polygon(list(matrix(c(0, 0.5, 2, 0.5, 1, 1.5, 0, 0.5), byrow = TRUE, ncol = 2)))
+#' pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
+#' x = st_sfc(list(pl1, pl2, pl3))
+#' ## erase overlaps
+#' y = st_erase_overlaps(x)
+#' ## visualize differences
+#' par(mfrow = c(1,2))
+#' plot(x, main = "orginal data")
+#' plot(y, main = "overlaps erased")
+#' # example 2
+#' ## simulate data
+#' pl1 = st_polygon(list(matrix(c(0, 0, 2, 0, 2, 2, 0, 2, 0, 0), byrow = TRUE, ncol=2)))
+#' pl2 = st_polygon(list(matrix(c(0.5, 0.5, 1.5, 0.5, 1.5, 1.5, 0.5, 1.5, 0.5, 0.5), byrow = TRUE, ncol = 2)))
+#' pl3 = st_polygon(list(matrix(c(5, 5, 7, 5, 7, 7, 5, 7, 5, 5), byrow = TRUE, ncol = 2)))
+#' x = st_sfc(list(pl1, pl2, pl3))
+#' ## erase overlaps
+#' y = st_erase_overlaps(x)
+#' ## visualize differences
+#' par(mfrow = c(1,2))
+#' plot(x, main = "orginal data")
+#' plot(y, main = "overlaps erased")
+#' ## print the corresponding indices of y as they appeared in x
+#' print(attr(y, "idx"))
+#' @export
+st_erase_overlaps = function(x) UseMethod("st_erase_overlaps")
+
+#' @export
+st_erase_overlaps.sfc = function(x)
+	st_sfc(CPL_erase_overlaps(st_geometry(x)), crs = st_crs(x))
+
+#' @export
+st_erase_overlaps.sf = function(x)
+	st_sfc(CPL_erase_overlaps(st_geometry(x)), crs = st_crs(x))
