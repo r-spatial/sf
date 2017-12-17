@@ -1,5 +1,7 @@
 # version 0.5-6
 
+* `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` no longer changes the number of features/feature geometries, but conversion from `MULTIPOLYGON` to `LINESTRING` now (typically) does; #596
+
 * `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` will be deprecated as a consequence; #593
 
 * `st_length` returns zero for polygon-type geometries; #593

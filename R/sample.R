@@ -90,5 +90,5 @@ st_ll_sample = function(x, size, ..., type = "random") {
 	lcs = c(0, cumsum(l))
 	grp = split(d, cut(d, lcs, include.lowest = TRUE))
 	grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
-    st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
+	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
 }
