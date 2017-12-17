@@ -711,3 +711,18 @@ image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 		par(opar)
 	}
 }
+
+# nocov start
+#' @export
+identify.sfc = function(x, ..., n = min(10, length(x)), type = "n") {
+	l = locator(n, type = type)
+	pts = st_as_sf(as.data.frame(do.call(cbind, l)), coords = c("x", "y"), crs = st_crs(x))
+	i = st_intersects(x, pts) 
+	which(lengths(i) > 0)
+}
+
+#' @export
+identify.sf = function(x, ...) {
+	identify(st_geometry(x), ...)
+}
+# nocov end
