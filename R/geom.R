@@ -1035,7 +1035,8 @@ st_make_grid = function(x,
 #' # example 2
 #' ## simulate data
 #' pl1 = st_polygon(list(matrix(c(0, 0, 2, 0, 2, 2, 0, 2, 0, 0), byrow = TRUE, ncol=2)))
-#' pl2 = st_polygon(list(matrix(c(0.5, 0.5, 1.5, 0.5, 1.5, 1.5, 0.5, 1.5, 0.5, 0.5), byrow = TRUE, ncol = 2)))
+#' pl2 = st_polygon(list(matrix(c(0.5, 0.5, 1.5, 0.5, 1.5, 1.5, 0.5, 1.5, 0.5, 0.5),
+#'                              byrow = TRUE, ncol = 2)))
 #' pl3 = st_polygon(list(matrix(c(5, 5, 7, 5, 7, 7, 5, 7, 5, 5), byrow = TRUE, ncol = 2)))
 #' x = st_sfc(list(pl1, pl2, pl3))
 #' ## erase overlaps
