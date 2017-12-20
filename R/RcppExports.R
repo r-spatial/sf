@@ -173,6 +173,10 @@ CPL_hex_to_raw <- function(cx) {
     .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }
 
+CPL_erase_overlaps <- function(sfc) {
+    .Call('_sf_CPL_erase_overlaps', PACKAGE = 'sf', sfc)
+}
+
 CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
