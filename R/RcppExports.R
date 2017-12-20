@@ -169,12 +169,16 @@ CPL_transpose_sparse_incidence <- function(m, n) {
     .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
 }
 
-CPL_hex_to_raw <- function(cx) {
-    .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
+CPL_nary_difference <- function(sfc) {
+    .Call('_sf_CPL_nary_difference', PACKAGE = 'sf', sfc)
 }
 
-CPL_erase_overlaps <- function(sfc) {
-    .Call('_sf_CPL_erase_overlaps', PACKAGE = 'sf', sfc)
+CPL_nary_intersection <- function(sfc) {
+    .Call('_sf_CPL_nary_intersection', PACKAGE = 'sf', sfc)
+}
+
+CPL_hex_to_raw <- function(cx) {
+    .Call('_sf_CPL_hex_to_raw', PACKAGE = 'sf', cx)
 }
 
 CPL_raw_to_hex <- function(raw) {

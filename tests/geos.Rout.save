@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -334,6 +334,39 @@ first 10 elements:
 [1,] 2.929643e-14 4.789000e+01
 [2,] 4.789000e+01 2.131628e-14
 > 
+> 
+> # one-argument st_intersection and st_difference:
+> set.seed(131)
+> m = rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))
+> p = st_polygon(list(m))
+> n = 100
+> l = vector("list", n)
+> for (i in 1:n)
++    l[[i]] = p + 10 * runif(2)
+> s = st_sfc(l)
+> plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+> d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
+> plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+> i = st_intersection(s) # all intersections
+> plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
+> summary(lengths(st_overlaps(s, s)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00    2.00    3.50    3.66    5.00    8.00 
+> summary(lengths(st_overlaps(d, d)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> summary(lengths(st_overlaps(i, i)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> 
+> sf = st_sf(s)
+> i = st_intersection(sf) # all intersections
+> plot(i["n.overlaps"])
+> summary(i$n.overlaps - lengths(i$origins))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> 
+> 
 > proc.time()
    user  system elapsed 
-  3.572   0.284   3.539 
+  4.688   0.224   4.770 
