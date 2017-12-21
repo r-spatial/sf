@@ -119,6 +119,11 @@
 <h1 class="hasAnchor">
 <a href="#version-0-5-6" class="anchor"></a>version 0.5-6</h1>
 <ul>
+<li><p>add package <code>lwgeom</code> to Suggests; <code>st_area</code>, <code>st_length</code>, <code>st_distance</code>, <code>st_segmentize</code> for long/lat CRS now use functions from package <code>lwgeom</code>; #593</p></li>
+<li><p><code>st_distance</code> for long/lat geographic coordinates now uses <code>lwgeom</code> (if present in version &gt;= 0.1-1), accepting all geometry types; argument <code>dist_fun</code> will be ignored as a consequence; #593</p></li>
+<li><p><code>st_length</code> now returns zero for polygon-type geometries; #593</p></li>
+<li><p>if present, add units of attribute to default plot title; #591</p></li>
+<li><p>add <code>unnest</code> method, which depends on <code>tidyr</code> &gt; 0.7-2; #570 PR by @karldw</p></li>
 <li><p>add <code>largest</code> option to <code>st_join</code> to get largest intersection match only; #547, by @tiernanmartin</p></li>
 <li><p>change default maximum number of feature to print to 10, controllable by <code>options(sf_max_print)</code>; #556</p></li>
 <li><p>add <code>Hausdorff</code> (and <code>Frechet</code> for those with GEOS 3.7.0) as options to <code>st_distance</code>; add <code>par</code> for densified versions</p></li>

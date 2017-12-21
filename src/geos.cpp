@@ -852,12 +852,11 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 					if (chk_(GEOSOverlaps_r(hGEOSCtxt, geom, out[tree_sel[j]]))) {
 						// if they do then erase overlapping parts from geom
 						GEOSGeom g = GEOSDifference_r(hGEOSCtxt, geom, out[tree_sel[j]]);
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
 						GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
 						geom = g;
 						// ensure that geom is valid
-						if (geom == NULL) {
-							Rcpp::stop("GEOS exception"); // #nocov
-						}
 					}
 				}
 			}
@@ -923,9 +922,13 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 					if (! chk_(GEOSisEmpty_r(hGEOSCtxt, inters))) { // i and k intersection
 						// something.push_back(k + 1); -> keep index k
 						GEOSGeom g = GEOSDifference_r(hGEOSCtxt, geom, inters); // cut out inters from geom
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
 						GEOSGeom_destroy_r(hGEOSCtxt, geom);
 						geom = g;
 						g = GEOSDifference_r(hGEOSCtxt, out[k], inters); // cut out inters from out[k]
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
 						GEOSGeom_destroy_r(hGEOSCtxt, out[k]);
 						out[k] = g;
 						out.push_back(inters); // keep

@@ -119,6 +119,15 @@
 
     <pre class="usage"><span class='fu'>st_intersection</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_intersection</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_intersection</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='co'># S3 method for sfc</span>
 <span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
 
 <span class='fu'>st_sym_difference</span>(<span class='no'>x</span>, <span class='no'>y</span>)
@@ -150,6 +159,14 @@ The returned object has the same class as that of the first argument (<code>x</c
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A spatial index is built on argument <code>x</code>; see <a href='http://r-spatial.org/r/2017/06/22/spatial-index.html'>http://r-spatial.org/r/2017/06/22/spatial-index.html</a>. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.</p>
+<p>When called with missing <code>y</code>, the <code>sfc</code> method for <code>st_intersection</code> returns all non-empty intersections of the geometries of <code>x</code>; an attribute <code>idx</code> contains a list-column with the indexes of contributing geometries.</p>
+<p>when called with a missing <code>y</code>, the <code>sf</code> method for <code>st_intersection</code> returns an <code>sf</code> object with attributes taken from the contributing feature with lowest index; two fields are added: <code>n.overlaps</code> with the number of overlapping features in <code>x</code>, and a list-column <code>origins</code> with indexes of all overlapping features.</p>
+<p>When <code>st_difference</code> is called with a single argument, 
+overlapping areas are erased from geometries that are indexed at greater
+numbers in the argument to <code>x</code>; geometries that are empty 
+or contained fully inside geometries with higher priority are removed entirely. 
+The <code>st_difference.sfc</code> method with a single argument returns an object with
+an <code>"idx"</code> attribute with the orginal index for returned geometries.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -157,7 +174,24 @@ The returned object has the same class as that of the first argument (<code>x</c
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># A helper function that erases all of y from x:</span>
+    <pre class="examples"><div class='input'><span class='fu'>set.seed</span>(<span class='fl'>131</span>)
+<span class='fu'>library</span>(<span class='no'>sf</span>)
+<span class='no'>m</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>))
+<span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>m</span>))
+<span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>
+<span class='no'>l</span> <span class='kw'>=</span> <span class='fu'>vector</span>(<span class='st'>"list"</span>, <span class='no'>n</span>)
+<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fl'>1</span>:<span class='no'>n</span>)
+  <span class='no'>l</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>=</span> <span class='no'>p</span> + <span class='fl'>10</span> * <span class='fu'>runif</span>(<span class='fl'>2</span>)
+<span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>l</span>)
+<span class='fu'>plot</span>(<span class='no'>s</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>))</div><div class='img'><img src='geos_binary_ops-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>d</span> <span class='kw'>=</span> <span class='fu'>st_difference</span>(<span class='no'>s</span>) <span class='co'># sequential differences: s1, s2-s1, s3-s2-s1, ...</span>
+<span class='fu'>plot</span>(<span class='no'>d</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>))</div><div class='img'><img src='geos_binary_ops-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>i</span> <span class='kw'>=</span> <span class='fu'>st_intersection</span>(<span class='no'>s</span>) <span class='co'># all intersections</span>
+<span class='fu'>plot</span>(<span class='no'>i</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>))</div><div class='img'><img src='geos_binary_ops-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>summary</span>(<span class='fu'>lengths</span>(<span class='fu'><a href='geos_binary_pred.html'>st_overlaps</a></span>(<span class='no'>s</span>, <span class='no'>s</span>)))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;    0.00    2.00    3.50    3.66    5.00    8.00 </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>lengths</span>(<span class='fu'><a href='geos_binary_pred.html'>st_overlaps</a></span>(<span class='no'>d</span>, <span class='no'>d</span>)))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;       0       0       0       0       0       0 </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>lengths</span>(<span class='fu'><a href='geos_binary_pred.html'>st_overlaps</a></span>(<span class='no'>i</span>, <span class='no'>i</span>)))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;       0       0       0       0       0       0 </div><div class='input'><span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='no'>s</span>)
+<span class='no'>i</span> <span class='kw'>=</span> <span class='fu'>st_intersection</span>(<span class='no'>sf</span>) <span class='co'># all intersections</span>
+<span class='fu'>plot</span>(<span class='no'>i</span>[<span class='st'>"n.overlaps"</span>])</div><div class='img'><img src='geos_binary_ops-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>summary</span>(<span class='no'>i</span>$<span class='no'>n.overlaps</span> - <span class='fu'>lengths</span>(<span class='no'>i</span>$<span class='no'>origins</span>))</div><div class='output co'>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;       0       0       0       0       0       0 </div><div class='input'><span class='co'># A helper function that erases all of y from x:</span>
 <span class='no'>st_erase</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>st_difference</span>(<span class='no'>x</span>, <span class='fu'><a href='geos_combine.html'>st_union</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>y</span>)))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
