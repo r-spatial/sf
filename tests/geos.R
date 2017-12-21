@@ -140,3 +140,28 @@ B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
 st_distance(c(A,B))
 st_distance(c(A,B), which = "Hausdorff")
 st_distance(c(A,B), which = "Hausdorff", par = 0.001)
+
+
+# one-argument st_intersection and st_difference:
+set.seed(131)
+m = rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))
+p = st_polygon(list(m))
+n = 100
+l = vector("list", n)
+for (i in 1:n)
+   l[[i]] = p + 10 * runif(2)
+s = st_sfc(l)
+plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
+plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+i = st_intersection(s) # all intersections
+plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
+summary(lengths(st_overlaps(s, s)))
+summary(lengths(st_overlaps(d, d)))
+summary(lengths(st_overlaps(i, i)))
+
+sf = st_sf(s)
+i = st_intersection(sf) # all intersections
+plot(i["n.overlaps"])
+summary(i$n.overlaps - lengths(i$origins))
+

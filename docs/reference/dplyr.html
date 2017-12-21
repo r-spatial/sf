@@ -133,7 +133,7 @@
 
 <span class='fu'>select.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
 
-<span class='fu'>rename.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
+<span class='fu'>rename.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
 
 <span class='fu'>slice.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>, <span class='no'>.dots</span>)
 
@@ -157,6 +157,8 @@
   <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>extra</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='no'>...</span>)
 
 <span class='fu'>unite.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>...</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>unnest.sf</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>.preserve</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>)
 
@@ -276,6 +278,10 @@
     <tr>
       <th>extra</th>
       <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/separate'>separate</a></p></td>
+    </tr>
+    <tr>
+      <th>.preserve</th>
+      <td><p>see <a href='http://www.rdocumentation.org/packages/tidyr/topics/unnest'>unnest</a></p></td>
     </tr>
     <tr>
       <th>y</th>

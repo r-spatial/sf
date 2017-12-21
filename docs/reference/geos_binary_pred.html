@@ -141,7 +141,7 @@
 
 <span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>st_is_within_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_is_within_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -183,8 +183,7 @@ Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_tou
 <p>Sparse geometry binary predicate (<code>sgbp</code>) lists have the following attributes: <code>region.id</code> with the <code>row.names</code> of <code>x</code> (if any, else <code>1:n</code>), and <code>predicate</code> with the name of the predicate used.</p>
 <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
 <p>See also <a href='st_relate.html'>st_relate</a> and <a href='https://en.wikipedia.org/wiki/DE-9IM'>https://en.wikipedia.org/wiki/DE-9IM</a> for a more detailed description of the underlying algorithms.
-    <code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
-    <code>st_is_within_distance</code> returns a sparse matrix only, and can only be used for non-geographic (Cartesian) coordinates; use <code>st_distance(x,y) &lt;= dist</code> to obtain the corresponding dense logical matrix.</p>
+    <code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

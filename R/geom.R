@@ -764,19 +764,64 @@ get_first_sfg = function(x) {
 #' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
+#' @examples
+#' set.seed(131)
+#' library(sf)
+#' m = rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))
+#' p = st_polygon(list(m))
+#' n = 100
+#' l = vector("list", n)
+#' for (i in 1:n)
+#'   l[[i]] = p + 10 * runif(2)
+#' s = st_sfc(l)
+#' plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+#' title("overlapping squares")
+#' d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
+#' plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+#' title("non-overlapping differences")
+#' i = st_intersection(s) # all intersections
+#' plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
+#' title("non-overlapping intersections")
+#' summary(lengths(st_overlaps(s, s))) # includes self-counts!
+#' summary(lengths(st_overlaps(d, d)))
+#' summary(lengths(st_overlaps(i, i)))
+#' sf = st_sf(s)
+#' i = st_intersection(sf) # all intersections
+#' plot(i["n.overlaps"])
+#' summary(i$n.overlaps - lengths(i$origins))
 st_intersection = function(x, y) UseMethod("st_intersection")
 
 #' @export
 st_intersection.sfg = function(x, y)
 	get_first_sfg(geos_op2_geom("intersection", x, y))
 
+#' @name geos_binary_ops
 #' @export
-st_intersection.sfc = function(x, y)
-	geos_op2_geom("intersection", x, y)
+#' @details When called with missing \code{y}, the \code{sfc} method for \code{st_intersection} returns all non-empty intersections of the geometries of \code{x}; an attribute \code{idx} contains a list-column with the indexes of contributing geometries.
+st_intersection.sfc = function(x, y) {
+	if (missing(y)) {
+		ret = CPL_nary_intersection(x)
+		structure(st_sfc(ret), idx = attr(ret, "idx"))
+	} else
+		geos_op2_geom("intersection", x, y)
+}
 
+#' @name geos_binary_ops
 #' @export
-st_intersection.sf = function(x, y)
-	geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
+#' @details when called with a missing \code{y}, the \code{sf} method for \code{st_intersection} returns an \code{sf} object with attributes taken from the contributing feature with lowest index; two fields are added: \code{n.overlaps} with the number of overlapping features in \code{x}, and a list-column \code{origins} with indexes of all overlapping features.
+st_intersection.sf = function(x, y) {
+	if (missing(y)) {
+		geom = st_intersection(st_geometry(x))
+		idx = attr(geom, "idx")
+		i = sapply(idx, function(i) i[1])
+		st_geometry(x) = NULL
+		ret = st_set_geometry(x[i, , drop = FALSE], structure(geom, idx = NULL))
+		ret$n.overlaps = lengths(idx)
+		ret$origins = idx
+		ret
+	} else
+		geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
+}
 
 #' @name geos_binary_ops
 #' @export
@@ -789,13 +834,31 @@ st_difference = function(x, y) UseMethod("st_difference")
 st_difference.sfg = function(x, y)
 	get_first_sfg(geos_op2_geom("difference", x, y))
 
+#' @name geos_binary_ops
 #' @export
-st_difference.sfc = function(x, y)
-	geos_op2_geom("difference", x, y)
+#' @details When \code{st_difference} is called with a single argument, 
+#' overlapping areas are erased from geometries that are indexed at greater
+#' numbers in the argument to \code{x}; geometries that are empty 
+#' or contained fully inside geometries with higher priority are removed entirely. 
+#' The \code{st_difference.sfc} method with a single argument returns an object with
+#' an \code{"idx"} attribute with the orginal index for returned geometries.
+st_difference.sfc = function(x, y) {
+	if (missing(y)) {
+		ret = CPL_nary_difference(x)
+		structure(st_sfc(ret), ret = attr(ret, "idx"))
+	} else
+		geos_op2_geom("difference", x, y)
+}
 
 #' @export
-st_difference.sf = function(x, y)
-	geos_op2_df(x, y, geos_op2_geom("difference", x, y))
+st_difference.sf = function(x, y) {
+	if (missing(y)) {
+		geom = st_difference(st_geometry(x))
+		st_geometry(x) = NULL
+		st_set_geometry(x[attr(geom, "idx"), , drop=FALSE], structure(geom, idx = NULL))
+	} else
+		geos_op2_df(x, y, geos_op2_geom("difference", x, y))
+}
 
 #' @name geos_binary_ops
 #' @export
