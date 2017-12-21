@@ -791,11 +791,14 @@ get_first_sfg = function(x) {
 #'   l[[i]] = p + 10 * runif(2)
 #' s = st_sfc(l)
 #' plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+#' title("overlapping squares")
 #' d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
 #' plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+#' title("non-overlapping differences")
 #' i = st_intersection(s) # all intersections
 #' plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
-#' summary(lengths(st_overlaps(s, s)))
+#' title("non-overlapping intersections")
+#' summary(lengths(st_overlaps(s, s))) # includes self-counts!
 #' summary(lengths(st_overlaps(d, d)))
 #' summary(lengths(st_overlaps(i, i)))
 #' sf = st_sf(s)
