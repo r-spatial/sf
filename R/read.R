@@ -57,13 +57,18 @@ set_utf8 = function(x) {
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
 
+##' @export
+#st_read.json = function(dsn, layer, ...) {
+#	st_read.character(dsn = dsn, layer = layer, ...)
+#}
+
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE) {
 
