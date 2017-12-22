@@ -920,7 +920,6 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 					if (inters == NULL)
 						Rcpp::stop("GEOS exception"); // #nocov
 					if (! chk_(GEOSisEmpty_r(hGEOSCtxt, inters))) { // i and k intersection
-						// something.push_back(k + 1); -> keep index k
 						GEOSGeom g = GEOSDifference_r(hGEOSCtxt, geom, inters); // cut out inters from geom
 						if (g == NULL)
 							Rcpp::stop("GEOS exception"); // #nocov
