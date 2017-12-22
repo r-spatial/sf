@@ -316,6 +316,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 			y = x
 		gx = st_geometry(x)
 		gy = st_geometry(y)
+		units(dist) = make_unit("m")
 		if (sparse)
 			lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
 		else
@@ -670,18 +671,13 @@ st_segmentize.sfg = function(x, dfMaxLength, ...)
 #' @export
 st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 	if (isTRUE(st_is_longlat(x))) {
-		if (!requireNamespace("lwgeom", quietly = TRUE))
+		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		if (! inherits(dfMaxLength, "units"))
 			units(dfMaxLength) = make_unit("m")
-		else if (utils::packageVersion("lwgeom") <= "0.1-0") {
-			# convert rad to m:
-			if (units(dfMaxLength) == units(make_unit("rad")))
-				dfMaxLength = as.numeric(dfMaxLength) * crs_parameters(st_crs(x))$SemiMajor
-		}
-		lwgeom::st_geod_segmentize(x, dfMaxLength)
+		lwgeom::st_geod_segmentize(x, dfMaxLength) # takes care of rad or degree units
 	} else {
-		if (!is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
+		if (! is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
 			units(dfMaxLength) = units(crs_parameters(st_crs(x))$SemiMajor) # might convert
 		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
 	}

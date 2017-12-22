@@ -738,27 +738,27 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > # st_sample:
 > set.seed(131)
 > options(digits=6)
-> x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
-> if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
-+   (p <- st_sample(x, 10))
+> x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
+> #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
+>   (p <- st_sample(x, 10))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 11.24479 ymin: 2.201237 xmax: 82.34507 ymax: 59.90034
+bbox:           xmin: 11.24479 ymin: 3.163845 xmax: 82.34507 ymax: 60.1703
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
-POINT (18.579327701591 24.5979510914074)
-POINT (11.2447945447639 20.1599067791835)
-POINT (26.3945853430778 59.9003352040191)
-POINT (33.8201717427 18.4236330568178)
-POINT (76.171215204522 31.5416755356696)
+POINT (18.579327701591 25.2416009235241)
+POINT (11.2447945447639 20.8595871000601)
+POINT (26.3945853430778 60.1703013386561)
+POINT (33.8201717427 19.1460419283996)
+POINT (76.171215204522 32.1028924283853)
 > x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
 > p <- st_sample(x, 10)
 > x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
 +  crs=st_crs(4326))
-> if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
+> if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
 +   (p <- st_sample(x, 10))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
@@ -990,4 +990,4 @@ POINT (-118.680892320416 36.4417315520556)
 > 
 > proc.time()
    user  system elapsed 
-  2.496   0.304   2.492 
+  2.460   0.312   2.523 
