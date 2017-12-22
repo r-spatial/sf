@@ -2,7 +2,7 @@ Package: sf
 Version: 0.5-6
 Title: Simple Features for R
 Description: Support for simple features, a standardized way to encode spatial vector data. Binds
-    to GDAL for reading and writing data, to GEOS for geometrical operations, and to Proj.4 for projection
+	to GDAL for reading and writing data, to GEOS for geometrical operations, and to Proj.4 for projection
 	conversions and datum transformations.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Roger", "Bivand", role = "ctb", comment = c(ORCID = "0000-0003-2392-6140")),
@@ -14,40 +14,40 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Jeroen", "Ooms", role = "ctb"),
 	person("Etienne", "Racine", role = "ctb"))
 Depends:
-    R (>= 3.3.0), methods
+	R (>= 3.3.0), methods
 Imports:
-    utils,
-    stats,
-    tools,
-    graphics,
-    grDevices,
-    grid,
-    Rcpp,
-    DBI (>= 0.5),
-    units (>= 0.4-6),
+	utils,
+	stats,
+	tools,
+	graphics,
+	grDevices,
+	grid,
+	Rcpp,
+	DBI (>= 0.5),
+	units (>= 0.4-6),
 	classInt,
 	magrittr
 Suggests:
 	lwgeom (>= 0.1-2),
-    maps,
-    rgdal,
-    rgeos,
-    sp (>= 1.2-4),
+	maps,
+	rgdal,
+	rgeos,
+	sp (>= 1.2-4),
 	raster,
 	spatstat,
 	tmap,
-    maptools,
+	maptools,
 	RSQLite,
-    RPostgreSQL,
-    tibble,
+	RPostgreSQL,
+	tibble,
 	rlang,
 	dplyr (>= 0.7-0),
-    tidyr (>= 0.7-2),
+	tidyr (>= 0.7-2),
 	tidyselect,
-    ggplot2,
+	ggplot2,
 	mapview,
-    testthat,
-    knitr,
+	testthat,
+	knitr,
 	covr,
 	microbenchmark,
 	rmarkdown
