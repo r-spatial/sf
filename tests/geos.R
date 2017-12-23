@@ -132,7 +132,11 @@ st_node(st_sfc(l))
 st_node(st_sf(a = 1, st_sfc(l)))
 
 # print.sgbp:
-st_disjoint(nc, nc)
+(lst = st_disjoint(nc, nc))
+# dim.sgbp:
+dim(lst)
+# as.matrix.sgbp:
+as.matrix(lst)[1:5, 1:5]
 
 # snap:
 nc1 = st_transform(nc, 32119)

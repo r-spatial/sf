@@ -38,3 +38,17 @@ t.sgbp = function(x) {
 		ncol = length(x),
 		class = "sgbp")
 }
+
+#' @name sgbp
+#' @export
+as.matrix.sgbp = function(x, ...) {
+	nc = attr(x, "ncol")
+	get_vec = function(x, n) { v = rep(FALSE, n); v[x] = TRUE; v }
+	do.call(rbind, lapply(x, get_vec, n = nc))
+}
+
+#' @name sgbp
+#' @export
+dim.sgbp = function(x) {
+	c(length(x), attr(x, "ncol"))
+}

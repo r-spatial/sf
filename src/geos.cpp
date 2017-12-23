@@ -41,7 +41,7 @@ static void __errorHandler(const char *fmt, ...) { // #nocov start
 	p = buf + strlen(buf) - 1;
 	if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
-	Rcpp::Function error("stop");
+	Rcpp::Function error(".stop_geos");
 	error(buf);
 
 	return; // #nocov end

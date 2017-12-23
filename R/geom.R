@@ -237,7 +237,9 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 	if (sparse)
 		structure(
 			lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
-			predicate = "disjoint", class = "sgbp")
+			predicate = "disjoint", ncol = attr(int, "ncol"),
+			region.id = attr(int, "region.id"),
+			class = "sgbp")
 	else
 		!int
 }
@@ -1063,3 +1065,15 @@ st_make_grid = function(x,
 	else
 		st_sfc(ret, crs = st_crs(x))
 }
+
+#' Internal functions
+#' @name internal
+#' @param msg error message
+#' @export
+.stop_geos = function(msg) { #nocov start
+	on.exit(stop(msg))
+	lst = strsplit(msg, " at ")[[1]]
+	pts = scan(text = lst[[length(lst)]], quiet = TRUE)
+	if (length(pts) == 2 && is.numeric(pts))
+  		assign(".geos_error", st_point(pts), envir=.sf_cache)
+} #nocov end

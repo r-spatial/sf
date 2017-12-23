@@ -5,11 +5,19 @@
 \alias{print.sgbp}
 \alias{sgbp}
 \alias{t.sgbp}
+\alias{sgbp}
+\alias{as.matrix.sgbp}
+\alias{sgbp}
+\alias{dim.sgbp}
 \title{Methods for dealing with sparse geometry binary predicate lists}
 \usage{
 \method{print}{sgbp}(x, ..., n = 10, max_nb = 10)
 
 \method{t}{sgbp}(x)
+
+\method{as.matrix}{sgbp}(x, ...)
+
+\method{dim}{sgbp}(x)
 }
 \arguments{
 \item{x}{object of class \code{sgbp}}
