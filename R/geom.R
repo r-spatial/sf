@@ -104,7 +104,7 @@ message_longlat = function(caller) {
 
 # returning matrix, distance or relation string -- the work horse is:
 
-st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_character_,
+st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		sparse = TRUE, prepared = FALSE) {
 	if (missing(y))
 		y = x
@@ -116,8 +116,7 @@ st_geos_binop = function(op = "intersects", x, y, par = 0.0, pattern = NA_charac
 	if (sparse) {
 		if (is.null(id <- row.names(x)))
 			id = as.character(1:length(ret))
-		structure(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)),
-			class = "sgbp")
+		sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
 	} else
 		ret[[1]]
 }
@@ -235,11 +234,10 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
 	# disjoint = !intersects :
 	if (sparse)
-		structure(
-			lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
-			predicate = "disjoint", ncol = attr(int, "ncol"),
-			region.id = attr(int, "region.id"),
-			class = "sgbp")
+		sgbp(lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
+			predicate = "disjoint", 
+			ncol = attr(int, "ncol"),
+			region.id = attr(int, "region.id"))
 	else
 		!int
 }
@@ -319,9 +317,15 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 		gx = st_geometry(x)
 		gy = st_geometry(y)
 		units(dist) = make_unit("m")
-		if (sparse)
-			lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
-		else
+		if (sparse) {
+			if (! requireNamespace("lwgeom", quietly = TRUE))
+				stop("lwgeom required: install first?")
+			ret = if (utils::packageVersion("lwgeom") <= "0.1-2")
+					lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
+				else
+					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
+			sgbp(ret, predicate = "is_within_distance", region.id = 1:length(x), ncol = length(gy))
+		} else
 			st_distance(x, y, tolerance = dist) <= dist
 	} else {
 		if (! is.na(st_crs(x)))
