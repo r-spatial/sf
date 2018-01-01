@@ -717,8 +717,9 @@ image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 identify.sfc = function(x, ..., n = min(10, length(x)), type = "n") {
 	l = locator(n, type = type)
 	pts = st_as_sf(as.data.frame(do.call(cbind, l)), coords = c("x", "y"), crs = st_crs(x))
-	i = st_intersects(x, pts) 
-	which(lengths(i) > 0)
+	#i = st_intersects(x, pts) 
+	#which(lengths(i) > 0)
+	sapply(st_intersects(pts, x), function(x) if (length(x)) x[1] else NA_integer_)
 }
 
 #' @export
