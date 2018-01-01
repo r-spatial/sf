@@ -7,11 +7,8 @@ test_that("st_crs works", {
   crs_4267 <- structure(
     list(epsg = 4267L, proj4string = "+proj=longlat +datum=NAD27 +no_defs"), 
     class = "crs")
-  crs_na <- structure(
-    list(epsg = NA_integer_, 
-         proj4string = NA_character_), class = "crs")
   expect_equal(st_crs(nc2), crs_4267)
-  expect_equal(st_crs(nc3), crs_na)
+  expect_equal(st_crs(nc3), NA_crs_)
   expect_equal(st_set_crs(nc3, 4267) %>% st_crs, crs_4267)
   expect_equal(nc1, nc2)
 

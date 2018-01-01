@@ -127,9 +127,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				warning("ignoring all but the first attribute")
 				x = x[,1]
 			}
-
 			# store attribute in "values":
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
+
+			if (is.list(values))
+				stop("plotting list-columns not supported") # nocov
 
 			if (inherits(values, "POSIXt"))
 				values = as.numeric(values)
