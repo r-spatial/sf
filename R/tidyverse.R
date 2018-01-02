@@ -354,3 +354,10 @@ type_sum.sfc <- function(x, ...) {
 obj_sum.sfc <- function(x) {
 	vapply(x, function(sfg) format(sfg, digits = 15L), "")
 }
+
+#' @importFrom pillar pillar_shaft
+#' @export
+pillar_shaft.sfc <- function(x, ...) {
+	out <- format(x)
+	pillar::new_pillar_shaft_simple(out, align = "right")
+}

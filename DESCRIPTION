@@ -25,6 +25,7 @@ Imports:
 	Rcpp,
 	DBI (>= 0.5),
 	units (>= 0.4-6),
+	pillar,
 	classInt,
 	magrittr
 Suggests:
@@ -39,7 +40,7 @@ Suggests:
 	maptools,
 	RSQLite,
 	RPostgreSQL,
-	tibble,
+	tibble (>= 1.4.1),
 	rlang,
 	dplyr (>= 0.7-0),
 	tidyr (>= 0.7-2),
