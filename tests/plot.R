@@ -94,9 +94,9 @@ plot(st_transform(nc, merc), bgMap = g)
 
 m = st_make_grid()
 #m = st_segmentize(m, 2e5)
-plot(m, axes = TRUE)
-g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
-plot(g, axes = TRUE)
+#plot(m, axes = TRUE)
+#g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
+#plot(g, axes = TRUE)
 
 nc[[1]] = NA
 nc[[10]] = 1
