@@ -382,6 +382,9 @@ first 10 elements:
 > sf = st_sf(s)
 > i = st_intersection(sf) # all intersections
 > plot(i["n.overlaps"])
+Warning message:
+In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
+  n same as number of different finite values\neach different finite value is a separate class
 > summary(i$n.overlaps - lengths(i$origins))
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
       0       0       0       0       0       0 
@@ -389,4 +392,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  4.160   0.284   4.149 
+  3.976   0.264   3.923 

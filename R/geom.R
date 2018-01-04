@@ -633,10 +633,11 @@ st_point_on_surface.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_node} add nodes to linear geometries at intersections without node
+#' @details \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 #' @examples
-#' l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+#' (l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
 #' st_polygonize(st_node(l))
+#' st_node(st_multilinestring(list(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))))
 st_node = function(x) UseMethod("st_node")
 
 #' @export
