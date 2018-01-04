@@ -41,11 +41,11 @@ st_multipolygon(x = list(), dim = if (length(x)) "XYZ" else "XY")
 
 st_geometrycollection(x = list(), dims = "XY")
 
-\method{print}{sfg}(x, ..., digits = 0)
+\method{print}{sfg}(x, ..., width = 0)
 
 \method{head}{sfg}(x, n = 10L, ...)
 
-\method{format}{sfg}(x, ..., digits = 30)
+\method{format}{sfg}(x, ..., width = 30)
 
 \method{c}{sfg}(..., recursive = FALSE, flatten = TRUE)
 
@@ -60,7 +60,7 @@ st_geometrycollection(x = list(), dims = "XY")
 
 \item{...}{objects to be pasted together into a single simple feature}
 
-\item{digits}{integer; number of characters to be printed (max 30; 0 means print everything)}
+\item{width}{integer; number of characters to be printed (max 30; 0 means print everything)}
 
 \item{n}{integer; number of elements to be selected}
 

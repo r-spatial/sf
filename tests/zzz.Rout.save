@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -36,16 +36,16 @@ epsg (SRID):    NA
 proj4string:    NA
 First 10 features:
      label seg tp marks                           geom
-1   window  NA NA  <NA> POLYGON ((1281.98625717162 ...
-2  segment  NA NA  <NA> LINESTRING (0.3894738948163...
-3  segment  NA NA  <NA> LINESTRING (109.68301365626...
-4  segment  NA NA  <NA> LINESTRING (109.68301365626...
-5  segment  NA NA  <NA> LINESTRING (198.14863403824...
-6  segment  NA NA  <NA> LINESTRING (197.99876263512...
-7  segment  NA NA  <NA> LINESTRING (290.47873539104...
-8  segment  NA NA  <NA> LINESTRING (288.99074640966...
-9  segment  NA NA  <NA> LINESTRING (380.13260158731...
-10 segment  NA NA  <NA> LINESTRING (379.98273018419...
+1   window  NA NA  <NA> POLYGON ((1281.986 153.1035...
+2  segment  NA NA  <NA> LINESTRING (0.3894739 1253....
+3  segment  NA NA  <NA> LINESTRING (109.683 1251.77...
+4  segment  NA NA  <NA> LINESTRING (109.683 1251.77...
+5  segment  NA NA  <NA> LINESTRING (198.1486 1276.5...
+6  segment  NA NA  <NA> LINESTRING (197.9988 1251.1...
+7  segment  NA NA  <NA> LINESTRING (290.4787 1276.5...
+8  segment  NA NA  <NA> LINESTRING (288.9907 1250.5...
+9  segment  NA NA  <NA> LINESTRING (380.1326 1276.5...
+10 segment  NA NA  <NA> LINESTRING (379.9827 1249.8...
 > # ppp:
 > g = gorillas
 > st_as_sf(g)
@@ -57,16 +57,16 @@ epsg (SRID):    NA
 proj4string:    NA
 First 10 features:
     label group season       date                           geom
-NA window  <NA>   <NA>       <NA> POLYGON ((585391.890106117 ...
-1   point major    dry 2006-01-06     POINT (582518.4 676886.25)
-2   point major    dry 2006-01-10    POINT (581822.97 677422.68)
-3   point major    dry 2006-01-15    POINT (582131.04 676937.89)
-4   point major    dry 2006-01-24    POINT (582111.89 677419.98)
-5   point minor    dry 2006-01-27    POINT (582585.14 677509.74)
-6   point major    dry 2006-01-28    POINT (582302.29 677521.62)
-7   point major    dry 2006-02-01     POINT (583167.16 676730.5)
-8   point major    dry 2006-02-03    POINT (583584.54 677207.12)
-9   point major    dry 2006-02-13    POINT (583117.75 676850.27)
+NA window  <NA>   <NA>       <NA> POLYGON ((585391.9 675110, ...
+1   point major    dry 2006-01-06      POINT (582518.4 676886.2)
+2   point major    dry 2006-01-10        POINT (581823 677422.7)
+3   point major    dry 2006-01-15        POINT (582131 676937.9)
+4   point major    dry 2006-01-24        POINT (582111.9 677420)
+5   point minor    dry 2006-01-27      POINT (582585.1 677509.7)
+6   point major    dry 2006-01-28      POINT (582302.3 677521.6)
+7   point major    dry 2006-02-01      POINT (583167.2 676730.5)
+8   point major    dry 2006-02-03      POINT (583584.5 677207.1)
+9   point major    dry 2006-02-13      POINT (583117.8 676850.3)
 > marks(g) = NULL
 > st_as_sf(g)
 Simple feature collection with 648 features and 1 field
@@ -77,17 +77,17 @@ epsg (SRID):    NA
 proj4string:    NA
 First 10 features:
     label                           geom
-1  window POLYGON ((585391.890106117 ...
-2   point     POINT (582518.4 676886.25)
-3   point    POINT (581822.97 677422.68)
-4   point    POINT (582131.04 676937.89)
-5   point    POINT (582111.89 677419.98)
-6   point    POINT (582585.14 677509.74)
-7   point    POINT (582302.29 677521.62)
-8   point     POINT (583167.16 676730.5)
-9   point    POINT (583584.54 677207.12)
-10  point    POINT (583117.75 676850.27)
+1  window POLYGON ((585391.9 675110, ...
+2   point      POINT (582518.4 676886.2)
+3   point        POINT (581823 677422.7)
+4   point        POINT (582131 676937.9)
+5   point        POINT (582111.9 677420)
+6   point      POINT (582585.1 677509.7)
+7   point      POINT (582302.3 677521.6)
+8   point      POINT (583167.2 676730.5)
+9   point      POINT (583584.5 677207.1)
+10  point      POINT (583117.8 676850.3)
 > 
 > proc.time()
    user  system elapsed 
-  1.596   0.324   1.622 
+  1.588   0.292   1.576 

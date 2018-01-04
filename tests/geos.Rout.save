@@ -99,7 +99,7 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-MULTIPOLYGON (((-81.4727554321289 36.2343559265...
+MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > 
 > st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
 + 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
@@ -125,8 +125,8 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT (0 0.887836897512898)
-MULTIPOINT (0.298648830503225 0, 2.484170473180...
+MULTIPOINT (0 0.8878369)
+MULTIPOINT (0.2986488 0, 2.48417 0, 2.567813 0,...
 > 
 > g = st_make_grid(nc, n = c(20,10))
 > 
@@ -238,6 +238,15 @@ Sparse geometry binary predicate list of length 9, where the predicate was `rela
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
   use st_disjoint for this pattern
 > 
+> a = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], 100000, sparse = FALSE)
+> b = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], units::set_units(100000, m), sparse = FALSE)
+> all.equal(a, b)
+[1] TRUE
+> x = st_is_within_distance(nc[1:3,], nc[1:5,], 100000)
+> y = st_is_within_distance(nc[1:3,], nc[1:5,], units::set_units(100, km))
+> all.equal(x, y)
+[1] TRUE
+> 
 > nc_3857 = st_transform(nc, 3857)
 > a = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], 100000, sparse = FALSE)
 > b = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], units::set_units(100000, m), sparse = FALSE)
@@ -296,7 +305,7 @@ proj4string:    NA
 1 1 MULTILINESTRING ((0 0, 0.5 ...
 > 
 > # print.sgbp:
-> st_disjoint(nc, nc)
+> (lst = st_disjoint(nc, nc))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Sparse geometry binary predicate list of length 100, where the predicate was `disjoint'
 first 10 elements:
@@ -310,6 +319,17 @@ first 10 elements:
  8: 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, ...
  9: 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, ...
  10: 1, 2, 4, 5, 6, 7, 8, 9, 11, 13, ...
+> # dim.sgbp:
+> dim(lst)
+[1] 100 100
+> # as.matrix.sgbp:
+> as.matrix(lst)[1:5, 1:5]
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] FALSE FALSE  TRUE  TRUE  TRUE
+[2,] FALSE FALSE FALSE  TRUE  TRUE
+[3,]  TRUE FALSE FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE FALSE  TRUE
+[5,]  TRUE  TRUE  TRUE  TRUE FALSE
 > 
 > # snap:
 > nc1 = st_transform(nc, 32119)
@@ -369,4 +389,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  4.688   0.224   4.770 
+  4.160   0.284   4.149 

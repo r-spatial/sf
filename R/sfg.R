@@ -182,10 +182,10 @@ POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
 }
 
 #' @name st
-#' @param digits integer; number of characters to be printed (max 30; 0 means print everything)
+#' @param width integer; number of characters to be printed (max 30; 0 means print everything)
 #' @export
-print.sfg = function(x, ..., digits = 0) { # avoids having to write print methods for 68 classes:
-	f = format(x, ..., digits = digits)
+print.sfg = function(x, ..., width = 0) { # avoids having to write print methods for 68 classes:
+	f = format(x, ..., width = width)
 	message(f)
 	invisible(f)
 }
@@ -199,14 +199,14 @@ head.sfg = function(x, n = 10L, ...) {
 
 #' @name st
 #' @export
-format.sfg = function(x, ..., digits = 30) {
-	if (is.null(digits))
-		digits = 30
+format.sfg = function(x, ..., width = 30) {
+	if (is.null(width))
+		width = 30
 #	if (object.size(x) > 1000)
 #		x = head(x, 10)
-	pr = st_as_text(x)
-	if (digits > 0 && nchar(pr) > digits)
-		paste0(substr(pr, 1, digits - 3), "...")
+	pr = st_as_text(x, ...)
+	if (width > 0 && nchar(pr) > width)
+		paste0(substr(pr, 1, width - 3), "...")
 	else
 		pr
 }

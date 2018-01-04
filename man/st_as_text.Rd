@@ -21,7 +21,7 @@ st_as_text(x, ...)
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{crs}}
 
-\item{...}{passed on to WKT_name}
+\item{...}{modifiers; in particular \code{digits} can be passed to control the number of digits used}
 
 \item{pretty}{logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system}
 

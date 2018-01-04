@@ -1,14 +1,14 @@
 # version 0.5-6
 
+* `st_as_text`, and subsequently `format` and `print`, now use argument `digits` (or `options(digits = n)`) to control the number of digits used for printing coordinates; default is now `options("digits")`, typically 7.
+
 * `st_is_within_distance` now works with geographic coordinates
 
 * `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` no longer changes the number of features/feature geometries, but conversion from `MULTIPOLYGON` to `LINESTRING` now (typically) does; #596
 
 * `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` will be deprecated as a consequence; #593
 
-* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom`; #593
-
-* `st_distance` for long/lat geographic coordinates now uses `lwgeom` (if present in version >= 0.1-1), accepting all geometry types; argument `dist_fun` will be ignored as a consequence; #593
+* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom` instead of `geosphere`; #593
 
 * `st_length` now returns zero for polygon-type geometries; #593
 

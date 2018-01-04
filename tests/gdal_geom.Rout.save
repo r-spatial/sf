@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -268,7 +268,7 @@ POINT Z (6378137 0 0)
 [1] 1
 > 
 > try(st_length(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
-[1] 4
+[1] 0
 > 
 > st_area(st_multilinestring(list(rbind(c(0,0),c(0,1)))))
 [1] 0
@@ -285,7 +285,7 @@ Error in st_buffer.sfc(sfc, units::set_units(1000, km)) :
   x does not have a crs set: can't convert units
 > sfc = st_sfc(p1, p2, crs = 4326)
 > try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
-Error : cannot convert km into °
+Error : cannot convert km into arc_degrees
 In addition: Warning message:
 In st_buffer.sfc(sfc, units::set_units(1000, km)) :
   st_buffer does not correctly buffer longitude/latitude data
@@ -298,8 +298,8 @@ dimension:      XY
 bbox:           xmin: -35.72958 ymin: 14.27042 xmax: 12.72958 ymax: 57.72958
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-POLYGON ((12.7295779513082 52, 12.721725763855 ...
-POLYGON ((-24.2704220486918 20, -24.27827423614...
+POLYGON ((12.72958 52, 12.72173 51.70014, 12.69...
+POLYGON ((-24.27042 20, -24.27827 19.70014, -24...
 Warning message:
 In st_buffer.sfc(sfc, units::set_units(0.1, rad)) :
   st_buffer does not correctly buffer longitude/latitude data
@@ -311,8 +311,8 @@ dimension:      XY
 bbox:           xmin: -4339585 ymin: 1273031 xmax: 1779236 ymax: 7800125
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-POLYGON ((1779236.43555292 6800125.45439731, 17...
-POLYGON ((-2339584.72379821 2273030.92698769, -...
+POLYGON ((1779236 6800125, 1777866 6747789, 177...
+POLYGON ((-2339585 2273031, -2340955 2220695, -...
 > 
 > cr = st_as_sfc("CIRCULARSTRING(0 0,1 0,1 1)")
 > cr1 = st_sf(a = 1, geometry = cr)
@@ -337,4 +337,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.880   0.268   0.854 
+  0.968   0.256   0.913 

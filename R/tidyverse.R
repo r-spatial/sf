@@ -343,7 +343,13 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @name tibble
 #' @export
 type_sum.sfc <- function(x, ...) {
-   "simple_feature"
+	ll = st_is_longlat(x)
+	if (is.na(ll))
+		"sf_geometry"
+	else if (ll)
+		"sf_geometry [degree]"
+	else
+		paste0("sf_geometry [", as.character(units(st_crs(x, parameters = TRUE)$ud_unit)), "]")
 }
 
 #' Summarize simple feature item for tibble
@@ -352,12 +358,12 @@ type_sum.sfc <- function(x, ...) {
 #' @name tibble
 #' @export
 obj_sum.sfc <- function(x) {
-	vapply(x, function(sfg) format(sfg, digits = 15L), "")
+	vapply(x, function(sfg) format(sfg, width = 15L), "")
 }
 
 #' @importFrom pillar pillar_shaft
 #' @export
 pillar_shaft.sfc <- function(x, ...) {
-	out <- format(x)
-	pillar::new_pillar_shaft_simple(out, align = "right")
+	out <- format(x, ...)
+	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }

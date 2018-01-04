@@ -39,10 +39,19 @@ RUN apt-get install -y texinfo \
        texlive-latex-extra \
        texlive-latex-recommended
 
-RUN Rscript -e 'install.packages(c("sf", "covr", "raster"), dependencies = TRUE, repos = "https://cloud.r-project.org")'
-RUN git clone https://github.com/r-spatial/sf.git
-RUN R CMD build sf
+# stuff for the tmaptools/rmapshaper/geojsonio etc stack:
+RUN apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler
+RUN add-apt-repository -y ppa:opencpu/jq
+RUN apt-get update
+RUN apt-get install -y libjq-dev
+
+RUN Rscript -e 'install.packages(c("sf", "lwgeom", "covr", "raster"), dependencies = TRUE, repos = "https://cloud.r-project.org")'
+RUN git clone   https://github.com/r-spatial/sf.git
+RUN R CMD build --no-build-vignettes sf
 RUN R CMD INSTALL sf_*tar.gz
+
+RUN apt-get install -y pandoc pandoc-citeproc
+
 RUN R CMD check --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]

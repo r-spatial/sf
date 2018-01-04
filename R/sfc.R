@@ -9,8 +9,8 @@ str.sfc <- function(object, ...) {
 }
 
 #' @export
-format.sfc = function(x, ..., digits = 30) {
-	vapply(x, format, "", ..., digits = digits)
+format.sfc = function(x, ..., width = 30) {
+	vapply(x, format, "", ..., width = width)
 }
 
 #' Create simple feature geometry list column
@@ -185,7 +185,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
 		if (inherits(x[[i]], "sfg"))
-			print(x[[i]], digits = 50)
+			print(x[[i]], width = 50)
 		else
 			print(x[[i]])
 	invisible(x)
