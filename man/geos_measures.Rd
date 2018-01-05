@@ -45,6 +45,9 @@ If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric 
 \description{
 Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
+\details{
+great circle distance calculations use function \code{geod_inverse} from proj.4 if proj.4 is at version larger than 4.8.0, or else the Vincenty method implemented in liblwgeom (this should correspond to what PostGIS does).
+}
 \examples{
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 b1 = b0 + 2
