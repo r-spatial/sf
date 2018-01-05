@@ -1,6 +1,8 @@
-# version 0.5-6
+# version 0.6-0
 
-* `st_as_text`, and subsequently `format` and `print`, now use argument `digits` (or `options(digits = n)`) to control the number of digits used for printing coordinates; default is now `options("digits")`, typically 7.
+* add `pillar` to Imports: to provide method for printing WKT geometries in tibbles
+
+* `st_as_text`, and subsequently `format` and `print`, now use argument `digits` (or `options(digits = n)`) to control the number of digits used for printing coordinates; default is now `options("digits")`, which is typically 7.
 
 * `st_is_within_distance` now works with geographic coordinates
 
