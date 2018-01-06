@@ -222,8 +222,10 @@ udunits_from_proj = c(
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string),
-		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
+		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal", 
+			"IsVertical", "WktPretty", "Wkt"))
 	units(ret$SemiMajor) = make_unit("m")
+	units(ret$SemiMinor) = make_unit("m")
 	ret$ud_unit = if (isTRUE(st_is_longlat(x)))
 			make_unit("arc_degree")
 		else if (is.null(x$units))
