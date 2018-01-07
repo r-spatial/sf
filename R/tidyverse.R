@@ -343,11 +343,8 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @name tibble
 #' @export
 type_sum.sfc <- function(x, ...) {
-	ll = st_is_longlat(x)
-	if (is.na(ll))
+	if (is.na(st_is_longlat(x)))
 		"sf_geometry"
-	else if (ll)
-		"sf_geometry [degree]"
 	else
 		paste0("sf_geometry [", as.character(units(st_crs(x, parameters = TRUE)$ud_unit)), "]")
 }

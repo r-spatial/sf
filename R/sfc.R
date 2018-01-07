@@ -464,3 +464,34 @@ check_ring_dir = function(x) {
 	attributes(ret) = attributes(x)
 	ret
 }
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.list = function(x, ..., crs = NA_crs_) {
+
+	if (length(x) == 0)
+		return(st_sfc(crs = crs))
+
+	if (is.raw(x[[1]]))
+		st_as_sfc(structure(x, class = "WKB"), ...)
+	else if (is.character(x[[1]])) { # hex wkb or wkt:
+		ch12 = substr(x[[1]], 1, 2)
+		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
+			st_as_sfc(structure(x, class = "WKB"), ...)
+		else
+			st_as_sfc(unlist(x), ...) # wkt
+	}
+}
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.blob = function(x, ...) {
+	st_as_sfc.list(x, ...)
+}
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.bbox = function(x, ...) {
+	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
+	st_sfc(box, crs = st_crs(x))
+}

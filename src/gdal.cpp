@@ -89,19 +89,28 @@ void handle_error(OGRErr err) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_parameters(std::string p4s) {
-	Rcpp::List out(6);
+	Rcpp::List out(7);
+	OGRErr Err;
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
-	out(1) = Rcpp::NumericVector::create(srs->GetInvFlattening());
-	out(2) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
-	out(3) = Rcpp::LogicalVector::create(srs->IsVertical());
+	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
+	Rcpp::NumericVector InvFlattening(1);
+	srs->GetInvFlattening(&Err);
+	if (Err == OGRERR_FAILURE) {
+		Rcpp::Rcout << "NA inv flattening" << std::endl;    // #nocov
+		InvFlattening(0) = NA_REAL;
+	} else
+		InvFlattening(0) = srs->GetInvFlattening(&Err);
+	out(2) = InvFlattening;
+	out(3) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	out(4) = Rcpp::LogicalVector::create(srs->IsVertical());
 	char *cp;
 	srs->exportToPrettyWkt(&cp);
-	out(4) = Rcpp::CharacterVector::create(cp);
+	out(5) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	srs->exportToWkt(&cp);
-	out(5) = Rcpp::CharacterVector::create(cp);
+	out(6) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	delete srs;
 	return out;
