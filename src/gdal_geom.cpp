@@ -50,6 +50,8 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 		switch (gt) {
 			case wkbPoint: 
 			case wkbMultiPoint:
+			case wkbPolygon:
+			case wkbMultiPolygon:
 				out[i] = 0.0;
 				break;
 			case wkbLineString:
