@@ -123,7 +123,6 @@
 </ol>
 <p>Examples of the first three types are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Loading required package: methods
 ## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(dplyr))
 <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"MULTIPOINT"</span>)
@@ -241,11 +240,11 @@ p *<span class="st"> </span>p
 ## POINT (0 4)
 rot =<span class="st"> </span>function(a) <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(a), <span class="kw">sin</span>(a), -<span class="kw">sin</span>(a), <span class="kw">cos</span>(a)), <span class="dv">2</span>, <span class="dv">2</span>)
 p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">4</span>)
-## POINT (1.41421356237309 1.4142135623731)
+## POINT (1.414214 1.414214)
 p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>)
-## POINT (2 1.22464679914735e-16)
+## POINT (2 1.224647e-16)
 p *<span class="st"> </span><span class="kw">rot</span>(pi)
-## POINT (2.44929359829471e-16 -2)</code></pre></div>
+## POINT (2.449294e-16 -2)</code></pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
 ncg =<span class="st"> </span><span class="kw">st_geometry</span>(nc)
@@ -310,9 +309,9 @@ s3
 ## bbox:           xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708
 ## epsg (SRID):    3857
 ## proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-##    a                       geometry
-## 1 15     POINT (0 111325.142866385)
-## 2 16 POINT (1224514.39872601 134...</code></pre></div>
+##    a                geometry
+## 1 15      POINT (0 111325.1)
+## 2 16 POINT (1224514 1345708)</code></pre></div>
 <p>for which we see that coordinates are actually modified (projected).</p>
 </div>
 </div>

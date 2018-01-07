@@ -112,7 +112,6 @@
 <a href="#how-does-sf-deal-with-secondary-geometry-columns" class="anchor"></a>How does <code>sf</code> deal with secondary geometry columns?</h1>
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Loading required package: methods
 ## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 <span class="kw">demo</span>(nc, <span class="dt">ask =</span> <span class="ot">FALSE</span>, <span class="dt">echo =</span> <span class="ot">FALSE</span>)
 ## Reading layer `nc.gpkg' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/gpkg/nc.gpkg' using driver `GPKG'
@@ -140,11 +139,11 @@ nc$geom2 =<span class="st"> </span><span class="kw"><a href="../reference/geos_u
 ## 1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091
 ## 2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487
 ##   SID74 NWBIR74 BIR79 SID79 NWBIR79                           geom
-## 1     1      10  1364     0      19 MULTIPOLYGON (((-81.4727554...
-## 2     0      10   542     3      12 MULTIPOLYGON (((-81.2398910...
-##                            geom2
-## 1 POINT (-81.4982613405682 36...
-## 2 POINT (-81.125145134236 36....</code></pre></div>
+## 1     1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+## 2     0      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+##                        geom2
+## 1  POINT (-81.49826 36.4314)
+## 2 POINT (-81.12515 36.49101)</code></pre></div>
 <p>We can switch the active geometry by using <code>st_geometry&lt;-</code> or <code>st_set_geometry</code>, as in</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(nc))</code></pre></div>
 <p><img src="sf6_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>

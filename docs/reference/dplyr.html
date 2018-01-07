@@ -326,12 +326,12 @@
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; # A tibble: 2 x 16
-#&gt;    AREA PERIMETER CNTY_ CNTY_ID      NAME   FIPS FIPSNO CRESS_ID BIR74 SID74
-#&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;fctr&gt; &lt;fctr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 0.114     1.442  1825    1825      Ashe  37009  37009        5  1091     1
-#&gt; 2 0.061     1.231  1827    1827 Alleghany  37005  37005        3   487     0
-#&gt; # ... with 6 more variables: NWBIR74 &lt;dbl&gt;, BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;,
-#&gt; #   NWBIR79 &lt;dbl&gt;, area_cl &lt;fctr&gt;, geometry &lt;simple_feature&gt;</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
+#&gt;     AREA PERIME… CNTY_ CNTY_… NAME    FIPS  FIPS… CRES… BIR74 SID74 NWBI… BIR79
+#&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;fctr&gt;  &lt;fct&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 0.114     1.44  1825   1825 Ashe    37009 37009     5  1091  1.00  10.0  1364
+#&gt; 2 0.0610    1.23  1827   1827 Allegh… 37005 37005     3   487  0     10.0   542
+#&gt; # ... with 4 more variables: SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;, area_cl &lt;fctr&gt;,
+#&gt; #   geometry &lt;sf_geometry [°]&gt;</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'>cut</span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
 <span class='no'>nc.g</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>area_cl</span>)
 <span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  MULTIPOLYGON
@@ -340,12 +340,12 @@
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt; # A tibble: 4 x 3
-#&gt;       area_cl `mean(AREA)`          geometry
-#&gt;        &lt;fctr&gt;        &lt;dbl&gt;  &lt;simple_feature&gt;
-#&gt; 1     (0,0.1]   0.07602857 &lt;MULTIPOLYGON...&gt;
-#&gt; 2  (0.1,0.12]   0.11206667 &lt;MULTIPOLYGON...&gt;
-#&gt; 3 (0.12,0.15]   0.13422727 &lt;MULTIPOLYGON...&gt;
-#&gt; 4 (0.15,0.25]   0.19039286 &lt;MULTIPOLYGON...&gt;</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>plot</span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><div class='img'><img src='dplyr-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='no'>as.data.frame</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt;   mean(AREA)
+#&gt;   area_cl     `mean(AREA)`                       geometry
+#&gt;   &lt;fctr&gt;             &lt;dbl&gt;              &lt;sf_geometry [°]&gt;
+#&gt; 1 (0,0.1]           0.0760 MULTIPOLYGON (((-77.96073 3...
+#&gt; 2 (0.1,0.12]        0.112  MULTIPOLYGON (((-84.29104 3...
+#&gt; 3 (0.12,0.15]       0.134  MULTIPOLYGON (((-76.54427 3...
+#&gt; 4 (0.15,0.25]       0.190  MULTIPOLYGON (((-76.64705 3...</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>plot</span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>grey</span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><div class='img'><img src='dplyr-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='no'>as.data.frame</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'>mean</span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt;   mean(AREA)
 #&gt; 1    0.12626</div><div class='input'><span class='fu'>library</span>(<span class='no'>tidyr</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></span>(<span class='no'>VAR</span>, <span class='no'>SID</span>, -<span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'>summary</span>()</div><div class='output co'>#&gt;      VAR                 SID                  geometry  
 #&gt;  Length:200         Min.   : 0.000   MULTIPOLYGON :200  
@@ -364,12 +364,12 @@
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
 #&gt;   row SID74 SID79                       geometry
-#&gt; 1   1     1     0 MULTIPOLYGON (((-81.4727554...
-#&gt; 2   2     0     3 MULTIPOLYGON (((-81.2398910...
-#&gt; 3   3     5     6 MULTIPOLYGON (((-80.4563446...
-#&gt; 4   4     1     2 MULTIPOLYGON (((-76.0089721...
-#&gt; 5   5     9     3 MULTIPOLYGON (((-77.2176666...
-#&gt; 6   6     7     5 MULTIPOLYGON (((-76.7450637...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+#&gt; 1   1     1     0 MULTIPOLYGON (((-81.47276 3...
+#&gt; 2   2     0     3 MULTIPOLYGON (((-81.23989 3...
+#&gt; 3   3     5     6 MULTIPOLYGON (((-80.45634 3...
+#&gt; 4   4     1     2 MULTIPOLYGON (((-76.00897 3...
+#&gt; 5   5     9     3 MULTIPOLYGON (((-77.21767 3...
+#&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>storms.sf</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>name</span>, <span class='no'>year</span>) <span class='kw'>%&gt;%</span> <span class='no'>nest</span>
 <span class='no'>trs</span> <span class='kw'>=</span> <span class='fu'>lapply</span>(<span class='no'>x</span>$<span class='no'>data</span>, <span class='kw'>function</span>(<span class='no'>tr</span>) <span class='fu'>st_cast</span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>tr</span>), <span class='st'>"LINESTRING"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='no'>trs.sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='no'>x</span>[,<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='no'>trs</span>)

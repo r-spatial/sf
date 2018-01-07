@@ -213,11 +213,11 @@ see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a><
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; # A tibble: 3 x 3
-#&gt;     a.x `mean(a.y)`             geom
-#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;simple_feature&gt;
-#&gt; 1     1          NA    &lt;POINT (1 1)&gt;
-#&gt; 2     2        12.5    &lt;POINT (2 2)&gt;
-#&gt; 3     3        14.0    &lt;POINT (3 3)&gt;</div><div class='input'><span class='co'># example of largest = TRUE:</span>
+#&gt;     a.x `mean(a.y)`          geom
+#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;sf_geometry&gt;
+#&gt; 1     1        NA     POINT (1 1)
+#&gt; 2     2        12.5   POINT (2 2)
+#&gt; 3     3        14.0   POINT (3 3)</div><div class='input'><span class='co'># example of largest = TRUE:</span>
 <span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>2264</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON

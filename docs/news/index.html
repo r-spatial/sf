@@ -115,12 +115,16 @@
     </div>
 
     <div class="contents">
-    <div id="version-0-5-6" class="section level1">
+    <div id="version-0-6-0" class="section level1">
 <h1 class="hasAnchor">
-<a href="#version-0-5-6" class="anchor"></a>version 0.5-6</h1>
+<a href="#version-0-6-0" class="anchor"></a>version 0.6-0</h1>
 <ul>
-<li><p>add package <code>lwgeom</code> to Suggests; <code>st_area</code>, <code>st_length</code>, <code>st_distance</code>, <code>st_segmentize</code> for long/lat CRS now use functions from package <code>lwgeom</code>; #593</p></li>
-<li><p><code>st_distance</code> for long/lat geographic coordinates now uses <code>lwgeom</code> (if present in version &gt;= 0.1-1), accepting all geometry types; argument <code>dist_fun</code> will be ignored as a consequence; #593</p></li>
+<li><p>add <code>pillar</code> to Imports: to provide method for printing WKT geometries in tibbles</p></li>
+<li><p><code>st_as_text</code>, and subsequently <code>format</code> and <code>print</code>, now use argument <code>digits</code> (or <code>options(digits = n)</code>) to control the number of digits used for printing coordinates; default is now <code>options("digits")</code>, which is typically 7.</p></li>
+<li><p><code>st_is_within_distance</code> now works with geographic coordinates</p></li>
+<li><p><code>st_cast</code> from <code>MULTIPOLYGON</code> to <code>MULTILINESTRING</code> no longer changes the number of features/feature geometries, but conversion from <code>MULTIPOLYGON</code> to <code>LINESTRING</code> now (typically) does; #596</p></li>
+<li><p><code>st_distance</code> for long/lat geographic coordinates now uses <code>lwgeom</code>, accepting all geometry types; argument <code>dist_fun</code> is deprecated as a consequence, and distance calculations are different from those in sf versions 0.5-5 or earlier; #593</p></li>
+<li><p>add package <code>lwgeom</code> to Suggests; <code>st_area</code>, <code>st_length</code>, <code>st_distance</code>, <code>st_segmentize</code> for long/lat CRS now use functions from package <code>lwgeom</code> instead of <code>geosphere</code>; #593</p></li>
 <li><p><code>st_length</code> now returns zero for polygon-type geometries; #593</p></li>
 <li><p>if present, add units of attribute to default plot title; #591</p></li>
 <li><p>add <code>unnest</code> method, which depends on <code>tidyr</code> &gt; 0.7-2; #570 PR by @karldw</p></li>
@@ -256,7 +260,7 @@
 <li><p>fix bug reading and writing dates (months 1 off): #358</p></li>
 <li><p>[.sf and [.sfc now also select on i when i is an <code>sfg</code> object, and accept a geometric predicate function with optional arguments; #352</p></li>
 <li><p>on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a <code>GEOMETRY</code> object; #351</p></li>
-<li><p>on plotting with <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/ggsf">ggplot2::geom_sf</a></code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>
+<li><p>on plotting with <code>ggplot2::geom_sf</code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; #351</p></li>
 <li><p>arith operations on empty geometries no longer break or give warnings; #351</p></li>
 <li><p>have <code>st_as_sf.data.frame</code> by default break on <code>NA</code> values in coordinates; #342</p></li>
 <li><p>have <code>st_join</code> accept further arguments, to be passed on to the <code>join</code> function (e.g. a pattern for <code>st_relate</code>)</p></li>
@@ -398,7 +402,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#version-0-5-6">0.5-6</a></li>
+        <li><a href="#version-0-6-0">0.6-0</a></li>
         <li><a href="#version-0-5-5">0.5-5</a></li>
         <li><a href="#version-0-5-4">0.5-4</a></li>
         <li><a href="#version-0-5-3">0.5-3</a></li>

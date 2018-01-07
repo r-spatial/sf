@@ -236,7 +236,7 @@
 <div id="coordinate-reference-system" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coordinate-reference-system" class="anchor"></a>Coordinate reference system</h2>
-<p>Coordinates can only be placed on the Earth’s surface when their coordinate reference system (CRS) is known; this may be an elipsoidal CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS in three-dimensions or <a href="http://www.faculty.jacobs-university.de/pbaumann/iu-bremen.de_pbaumann/Papers/acmgis-2012_crs-nts.pdf">including time</a>. Similarly, M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units">measurement unit</a>.</p>
+<p>Coordinates can only be placed on the Earth’s surface when their coordinate reference system (CRS) is known; this may be an spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units">measurement unit</a>.</p>
 </div>
 </div>
 <div id="how-simple-features-in-r-are-organized" class="section level1">
@@ -258,7 +258,6 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Loading required package: methods
 ## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
@@ -292,20 +291,21 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
 ##  [1] [                     [[&lt;-                  $&lt;-                  
 ##  [4] aggregate             cbind                 coerce               
-##  [7] initialize            merge                 plot                 
-## [10] print                 rbind                 show                 
-## [13] slotsFromS3           st_agr                st_agr&lt;-             
-## [16] st_as_sf              st_bbox               st_boundary          
-## [19] st_buffer             st_cast               st_centroid          
-## [22] st_collection_extract st_convex_hull        st_coordinates       
-## [25] st_crs                st_crs&lt;-              st_difference        
-## [28] st_geometry           st_geometry&lt;-         st_intersection      
-## [31] st_is                 st_line_merge         st_node              
-## [34] st_point_on_surface   st_polygonize         st_precision         
-## [37] st_segmentize         st_set_precision      st_simplify          
-## [40] st_snap               st_sym_difference     st_transform         
-## [43] st_triangulate        st_union              st_voronoi           
-## [46] st_wrap_dateline      st_write              st_zm                
+##  [7] identify              initialize            merge                
+## [10] plot                  print                 rbind                
+## [13] show                  slotsFromS3           st_agr               
+## [16] st_agr&lt;-              st_as_sf              st_bbox              
+## [19] st_boundary           st_buffer             st_cast              
+## [22] st_centroid           st_collection_extract st_convex_hull       
+## [25] st_coordinates        st_crs                st_crs&lt;-             
+## [28] st_difference         st_geometry           st_geometry&lt;-        
+## [31] st_intersection       st_is                 st_line_merge        
+## [34] st_node               st_point_on_surface   st_polygonize        
+## [37] st_precision          st_segmentize         st_set_precision     
+## [40] st_simplify           st_snap               st_sym_difference    
+## [43] st_transform          st_triangulate        st_union             
+## [46] st_voronoi            st_wrap_dateline      st_write             
+## [49] st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -331,14 +331,14 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
 ## First 5 geometries:
-## MULTIPOLYGON (((-81.4727554321289 36.2343559265...
-## MULTIPOLYGON (((-81.2398910522461 36.3653640747...
-## MULTIPOLYGON (((-80.4563446044922 36.2425575256...
-## MULTIPOLYGON (((-76.0089721679688 36.3195953369...
-## MULTIPOLYGON (((-77.2176666259766 36.2409820556...</code></pre></div>
+## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
+## MULTIPOLYGON (((-81.23989 36.36536, -81.24069 3...
+## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...
+## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...
+## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</code></pre></div>
 <p>Geometries are printed in abbreviated form, but we can can view a complete geometry by selecting it, e.g. the first one by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc_geom[[<span class="dv">1</span>]]
-## MULTIPOLYGON (((-81.4727554321289 36.2343559265137, -81.5408401489258 36.2725067138672, -81.5619812011719 36.2735939025879, -81.6330642700195 36.3406867980957, -81.7410736083984 36.3917846679688, -81.6982803344727 36.4717788696289, -81.7027969360352 36.5193405151367, -81.6699981689453 36.5896492004395, -81.3452987670898 36.5728645324707, -81.347541809082 36.537914276123, -81.3247756958008 36.5136795043945, -81.3133239746094 36.4806976318359, -81.2662353515625 36.4372062683105, -81.2628402709961 36.4050407409668, -81.2406921386719 36.3794174194336, -81.2398910522461 36.365364074707, -81.2642440795898 36.3524131774902, -81.3289947509766 36.3635025024414, -81.3613739013672 36.3531608581543, -81.3656921386719 36.3390502929688, -81.354133605957 36.2997169494629, -81.3674545288086 36.2786979675293, -81.4063873291016 36.2850532531738, -81.4123306274414 36.2672920227051, -81.431037902832 36.2607192993164, -81.4528884887695 36.2395858764648, -81.4727554321289 36.2343559265137)))</code></pre></div>
+## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</code></pre></div>
 <p>The way this is printed is called <em>well-known text</em>, and is part of the standards. The word <code>MULTIPOLYGON</code> is followed by three parenthesis, because it can consist of multiple polygons, in the form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code> might consist of an exterior ring and zero or more interior rings, as of <code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together with parenthesis, so we get <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where <code>crds_</code> is a comma-separated set of coordinates of a ring. This leads to the case above, where <code>MULTIPOLYGON(((crds_ext)))</code> refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.</p>
 <p>We can see there is a single polygon with no rings:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
@@ -364,20 +364,20 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">'sfc'</span>)
 ##  [1] [                     [&lt;-                   as.data.frame        
 ##  [4] c                     coerce                format               
-##  [7] initialize            Ops                   print                
-## [10] rep                   show                  slotsFromS3          
-## [13] st_as_binary          st_as_text            st_bbox              
-## [16] st_boundary           st_buffer             st_cast              
-## [19] st_centroid           st_collection_extract st_convex_hull       
-## [22] st_coordinates        st_crs                st_crs&lt;-             
-## [25] st_difference         st_geometry           st_intersection      
-## [28] st_is                 st_line_merge         st_node              
-## [31] st_point_on_surface   st_polygonize         st_precision         
-## [34] st_segmentize         st_set_precision      st_simplify          
-## [37] st_snap               st_sym_difference     st_transform         
-## [40] st_triangulate        st_union              st_voronoi           
-## [43] st_wrap_dateline      st_write              st_zm                
-## [46] str                   summary              
+##  [7] identify              initialize            Ops                  
+## [10] print                 rep                   show                 
+## [13] slotsFromS3           st_as_binary          st_as_text           
+## [16] st_bbox               st_boundary           st_buffer            
+## [19] st_cast               st_centroid           st_collection_extract
+## [22] st_convex_hull        st_coordinates        st_crs               
+## [25] st_crs&lt;-              st_difference         st_geometry          
+## [28] st_intersection       st_is                 st_line_merge        
+## [31] st_node               st_point_on_surface   st_polygonize        
+## [34] st_precision          st_segmentize         st_set_precision     
+## [37] st_simplify           st_snap               st_sym_difference    
+## [40] st_transform          st_triangulate        st_union             
+## [43] st_voronoi            st_wrap_dateline      st_write             
+## [46] st_zm                 str                   summary              
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
