@@ -1,3 +1,9 @@
+# version 0.6-1
+
+* move `pillar` from Imports: to Suggests:
+
+* add `st_as_sfc.raw` method
+
 # version 0.6-0
 
 * add `pillar` to Imports: to provide method for printing WKT geometries in tibbles

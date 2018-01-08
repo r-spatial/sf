@@ -97,11 +97,10 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
 	Rcpp::NumericVector InvFlattening(1);
 	srs->GetInvFlattening(&Err);
-	if (Err == OGRERR_FAILURE) {
-		Rcpp::Rcout << "NA inv flattening" << std::endl;    // #nocov
-		InvFlattening(0) = NA_REAL;
-	} else
-		InvFlattening(0) = srs->GetInvFlattening(&Err);
+	if (Err == OGRERR_FAILURE)
+		InvFlattening(0) = NA_REAL; // #nocov
+	else
+		InvFlattening(0) = srs->GetInvFlattening(NULL); // for +ellps=sphere, still zero :-(
 	out(2) = InvFlattening;
 	out(3) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
 	out(4) = Rcpp::LogicalVector::create(srs->IsVertical());
