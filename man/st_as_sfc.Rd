@@ -10,6 +10,8 @@
 \alias{st_as_sfc}
 \alias{st_as_sfc.WKB}
 \alias{st_as_sfc}
+\alias{st_as_sfc.raw}
+\alias{st_as_sfc}
 \alias{st_as_sfc.character}
 \alias{st_as_sfc}
 \alias{st_as_sfc.factor}
@@ -36,6 +38,8 @@
 
 \method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, spatialite = FALSE,
   pureR = FALSE, crs = NA_crs_)
+
+\method{st_as_sfc}{raw}(x, ...)
 
 \method{st_as_sfc}{character}(x, crs = NA_integer_, ..., GeoJSON = FALSE)
 
@@ -94,5 +98,6 @@ wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), clas
 st_as_sfc(wkb, EWKB = TRUE)
 wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 st_as_sfc(wkb, EWKB = TRUE)
+st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)
 st_as_sfc("SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)")
 }

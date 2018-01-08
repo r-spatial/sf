@@ -341,6 +341,7 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @param x object of class sfc
 #' @param ... ignored
 #' @name tibble
+#' @details see \link[pillar]{type_sum}
 #' @export
 type_sum.sfc <- function(x, ...) {
 	if (is.na(st_is_longlat(x)))
@@ -358,9 +359,11 @@ obj_sum.sfc <- function(x) {
 	vapply(x, function(sfg) format(sfg, width = 15L), "")
 }
 
-#' @importFrom pillar pillar_shaft
+#' @name tibble
 #' @export
 pillar_shaft.sfc <- function(x, ...) {
+	if (! requireNamespace("pillar", quietly = TRUE))
+		stop("package pillar not available: install first?")
 	out <- format(x, ...)
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }

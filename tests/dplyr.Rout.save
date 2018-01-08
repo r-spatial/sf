@@ -87,7 +87,7 @@ epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 # A tibble: 4 x 3
   area_cl     `mean(AREA)`                       geometry
-  <fctr>             <dbl>         <sf_geometry [degree]>
+  <fctr>             <dbl>              <sf_geometry [°]>
 1 (0,0.1]           0.0760 MULTIPOLYGON (((-77.96073 3...
 2 (0.1,0.12]        0.112  MULTIPOLYGON (((-84.29104 3...
 3 (0.12,0.15]       0.134  MULTIPOLYGON (((-76.54427 3...
@@ -169,6 +169,8 @@ POINT (111319.5 111325.1)
 > 
 > suppressPackageStartupMessages(library(units))
 > person = make_unit("person")
+Warning message:
+'person' is not a valid unit symbol recognized by udunits 
 > nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 > nc.merc <- st_transform(nc, 32119) # NC State Plane
 > 
@@ -199,9 +201,9 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
-  `mean(new_dens)`                           geometry
-  <units>                           <sf_geometry [m]>
-1 2.58936155283424e-06 MULTIPOLYGON (((834893.7 95...
+         `mean(new_dens)`                       geometry
+           <[person/m^2]>              <sf_geometry [m]>
+1 2.589362e-06 person/m^2 MULTIPOLYGON (((834893.7 95...
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
@@ -222,8 +224,8 @@ epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
   `sum(A * new_dens)`                       geometry
-  <units>                          <sf_geometry [m]>
-1 329962              MULTIPOLYGON (((834893.7 95...
+           <[person]>              <sf_geometry [m]>
+1       329962 person MULTIPOLYGON (((834893.7 95...
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -267,4 +269,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  3.712   0.224   3.690 
+  3.728   0.208   3.745 

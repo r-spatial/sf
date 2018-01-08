@@ -988,6 +988,15 @@ POINT (-118.677 36.4421)
 POINT (-118.679 36.4411)
 POINT (-118.681 36.4417)
 > 
+> st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)
+Geometry set for 1 feature 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+POINT (0 1)
+> 
 > proc.time()
    user  system elapsed 
-  2.776   0.284   2.747 
+  2.724   0.284   2.714 

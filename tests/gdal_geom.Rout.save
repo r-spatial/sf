@@ -285,7 +285,7 @@ Error in st_buffer.sfc(sfc, units::set_units(1000, km)) :
   x does not have a crs set: can't convert units
 > sfc = st_sfc(p1, p2, crs = 4326)
 > try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
-Error : cannot convert km into arc_degrees
+Error : cannot convert km into °
 In addition: Warning message:
 In st_buffer.sfc(sfc, units::set_units(1000, km)) :
   st_buffer does not correctly buffer longitude/latitude data
@@ -337,4 +337,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.968   0.256   0.913 
+  0.880   0.296   0.881 
