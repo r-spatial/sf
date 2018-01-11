@@ -597,6 +597,48 @@ rm -f geos_test errors.txt geos_test.cpp
 AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS}"])
 
 #
+# OpenMP:
+# (Based on OpenMP detection in ARTP2: https://cran.r-project.org/package=ARTP2)
+#
+AC_LANG(C++)
+dnl this the meat of R's m4/openmp.m4
+  OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
+  AC_ARG_ENABLE([openmp],
+    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
+  if test "$enable_openmp" != no; then
+    AC_CACHE_CHECK([for $[]_AC_CC[] option to support OpenMP],
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
+      [AC_LINK_IFELSE([_AC_LANG_OPENMP],
+        [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'],
+        [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
+          for ac_option in -fopenmp -xopenmp -qopenmp \
+                           -openmp -mp -omp -qsmp=omp -homp \
+                           -fopenmp=libomp \
+                           -Popenmp --openmp; do
+            ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+            _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+            AC_LINK_IFELSE([_AC_LANG_OPENMP],
+            [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
+            _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+            if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != unsupported; then
+              break
+            fi
+        done])])
+    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in #(
+      "none needed" | unsupported)
+    ;; #(
+      *)
+  OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
+    esac
+  fi
+
+#
+# add OpenMP LIBS
+#
+AC_SUBST([PKG_CPPFLAGS], ["${PKG_CPPFLAGS} ${OPENMP_CXXFLAGS}"])
+AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${OPENMP_CXXFLAGS}"])
+
+#
 # concluding substitution
 #
 AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])

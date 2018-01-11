@@ -4,6 +4,7 @@
 #' @name geos_query
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param NA_if_empty logical; if TRUE, return NA for empty geometries
+#' @param threads integer; number of threads for processing data
 #' @return st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if \code{NA_if_empty} is \code{TRUE}, \code{NA} for empty geometries.
 #' @export
 #' @examples
@@ -16,8 +17,9 @@
 #' 	st_geometrycollection())
 #' st_dimension(x)
 #' st_dimension(x, FALSE)
-st_dimension = function(x, NA_if_empty = TRUE)
+st_dimension = function(x, NA_if_empty = TRUE) {
 	CPL_gdal_dimension(st_geometry(x), NA_if_empty)
+}
 
 #' @name geos_query
 #' @export
@@ -25,7 +27,11 @@ st_dimension = function(x, NA_if_empty = TRUE)
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
+#' st_is_simple(st_sfc(ls, st_point(c(0,0))), threads = 2) # parallel processing
+st_is_simple = function(x, threads = 1) {
+	is_valid_thread_number(threads)
+	CPL_geos_is_simple(st_geometry(x), threads)
+}
 
 #' @name geos_query
 #' @export

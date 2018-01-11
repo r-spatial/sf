@@ -13,7 +13,7 @@
 \usage{
 st_dimension(x, NA_if_empty = TRUE)
 
-st_is_simple(x)
+st_is_simple(x, threads = 1)
 
 st_is_empty(x)
 
@@ -23,6 +23,8 @@ st_is_valid(x, NA_on_exception = TRUE, reason = FALSE)
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{NA_if_empty}{logical; if TRUE, return NA for empty geometries}
+
+\item{threads}{integer; number of threads for processing data}
 
 \item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
 
@@ -52,6 +54,7 @@ st_dimension(x)
 st_dimension(x, FALSE)
 ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 st_is_simple(st_sfc(ls, st_point(c(0,0))))
+st_is_simple(st_sfc(ls, st_point(c(0,0))), threads = 2) # parallel processing
 ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 st_is_empty(st_sfc(ls, st_point(), st_linestring()))
 p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")

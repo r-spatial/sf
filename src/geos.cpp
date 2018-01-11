@@ -19,6 +19,8 @@
 
 #include "wkb.h"
 
+#include "openmp.h"
+
 typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
 typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
@@ -470,16 +472,22 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) { 
-	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
-	Rcpp::LogicalVector out(sfc.length());
-	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc, size_t threads = 1) { 
+	std::vector<GEOSContextHandle_t> hGEOSCtxt(threads);
+	for (std::size_t i = 0; i < threads; ++i)
+		hGEOSCtxt[i] = CPL_geos_init();
+	std::vector<bool> out(sfc.length());
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt[0], sfc, NULL);
+	#if _OPENMP
+	#pragma omp parallel for num_threads(threads)
+	#endif
 	for (size_t i = 0; i < g.size(); i++) {
-		out[i] = chk_(GEOSisSimple_r(hGEOSCtxt, g[i]));
-		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+		out[i] = chk_(GEOSisSimple_r(hGEOSCtxt[omp_get_thread_num()], g[i]));
+		GEOSGeom_destroy_r(hGEOSCtxt[omp_get_thread_num()], g[i]);
 	}
-	CPL_geos_finish(hGEOSCtxt);
-	return out;
+	for (std::size_t i = 0; i < threads; ++i)
+		CPL_geos_finish(hGEOSCtxt[i]);
+	return Rcpp::wrap(out);
 }
 
 // [[Rcpp::export]]

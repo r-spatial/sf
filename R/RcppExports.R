@@ -5,38 +5,6 @@ CPL_get_bbox <- function(sf, depth = 0L) {
     .Call('_sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
 }
 
-CPL_area <- function(sfc) {
-    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
-    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
-}
-
-CPL_length <- function(sfc) {
-    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
-    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
-}
-
-CPL_gdal_linestring_sample <- function(sfc, distLst) {
-    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
-}
-
-CPL_get_layers <- function(datasource, options, do_count = FALSE) {
-    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
-}
-
-CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
-    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
-}
-
-CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
-    invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
-}
-
 CPL_gdal_init <- function() {
     invisible(.Call('_sf_CPL_gdal_init', PACKAGE = 'sf'))
 }
@@ -109,6 +77,38 @@ CPL_gdal_with_geos <- function() {
     .Call('_sf_CPL_gdal_with_geos', PACKAGE = 'sf')
 }
 
+CPL_area <- function(sfc) {
+    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
+    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+}
+
+CPL_length <- function(sfc) {
+    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
+    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+}
+
+CPL_gdal_linestring_sample <- function(sfc, distLst) {
+    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
+}
+
+CPL_get_layers <- function(datasource, options, do_count = FALSE) {
+    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
+}
+
+CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
+}
+
+CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
+    invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
+}
+
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", sparse = TRUE, prepared = FALSE) {
     .Call('_sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, pattern, sparse, prepared)
 }
@@ -121,8 +121,8 @@ CPL_geos_is_valid <- function(sfc, NA_on_exception = TRUE) {
     .Call('_sf_CPL_geos_is_valid', PACKAGE = 'sf', sfc, NA_on_exception)
 }
 
-CPL_geos_is_simple <- function(sfc) {
-    .Call('_sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc)
+CPL_geos_is_simple <- function(sfc, threads = 1L) {
+    .Call('_sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc, threads)
 }
 
 CPL_geos_is_empty <- function(sfc) {
@@ -183,6 +183,14 @@ CPL_hex_to_raw <- function(cx) {
 
 CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
+}
+
+CPL_openmp_version <- function() {
+    .Call('_sf_CPL_openmp_version', PACKAGE = 'sf')
+}
+
+CPL_number_processors <- function() {
+    .Call('_sf_CPL_number_processors', PACKAGE = 'sf')
 }
 
 CPL_proj_version <- function(b = FALSE) {

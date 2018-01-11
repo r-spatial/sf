@@ -61,6 +61,7 @@ BugReports: https://github.com/r-spatial/sf/issues/
 Collate:
 	RcppExports.R
 	init.R
+	parallel.R
 	crs.R
 	bbox.R
 	read.R
