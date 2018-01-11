@@ -146,14 +146,24 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 	else
 		stopifnot(st_crs(x) == st_crs(y))
 
-	if (by_element)
-		return(mapply(st_distance, x, y, by_element = FALSE))
+	x = st_geometry(x)
+	y = st_geometry(y)
+
+	if (by_element) {
+		d = mapply(st_distance, x, y, by_element = FALSE)
+		if (!is.na(st_crs(x))) {
+			u = if (st_is_longlat(x))
+					make_unit("m")
+				else
+					crs_parameters(st_crs(x))$ud_unit
+			units(d) = u
+		}
+		return(d)
+	}
 
 	if (! missing(dist_fun))
 		stop("dist_fun is deprecated: lwgeom is used for distance calculation")
 
-	x = st_geometry(x)
-	y = st_geometry(y)
 	if (!is.na(st_crs(x)))
 		p = crs_parameters(st_crs(x))
 	if (isTRUE(st_is_longlat(x))) {
