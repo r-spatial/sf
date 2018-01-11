@@ -31,7 +31,7 @@ is_valid_thread_number = function(threads, stopiffalse = TRUE) {
 #' Number of processors
 #' @return integer; number of logical processors
 #' @examples
-#' number_processors()
+#' try(number_processors())
 #' @export
 number_processors = function() {
 	if (!is_parallel_available())

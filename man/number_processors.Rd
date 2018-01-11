@@ -13,5 +13,5 @@ integer; number of logical processors
 Number of processors
 }
 \examples{
-number_processors()
+try(number_processors())
 }
