@@ -17,7 +17,7 @@ is_valid_thread_number = function(threads, stopiffalse = TRUE) {
 			stop("argument threads must be a single positive finite integer greater than zero")
 		}
 	}
-	if (is.finite(number_processors())) {
+	if (is_parallel_available()) {
 		if (threads > number_processors()) {
 			out = FALSE
 			if (stopiffalse) {
