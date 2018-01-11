@@ -1,5 +1,18 @@
 context("sf: parallel tests")
 
+test_that("is_valid_thread_number works", {
+	expect_true(is_valid_thread_number(1))
+	expect_true(is_valid_thread_number(1L))
+	expect_false(is_valid_thread_number(0L, FALSE))
+	expect_false(is_valid_thread_number("A", FALSE))
+	expect_false(is_valid_thread_number(NA_integer_, FALSE))
+	expect_false(is_valid_thread_number(1e+100, FALSE))
+	expect_error(is_valid_thread_number(0L))
+	expect_error(is_valid_thread_number("A"))
+	expect_error(is_valid_thread_number(NA_integer_))
+	expect_error(is_valid_thread_number(1e+100))
+})
+
 test_that("is_parallel_available works", {
 	expect_is(is_parallel_available(), "logical")
 	expect_true(!is.na(is_parallel_available()))
