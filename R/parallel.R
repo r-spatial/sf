@@ -17,7 +17,7 @@ is_valid_thread_number = function(threads, stopiffalse = TRUE) {
 			stop("argument threads must be a single positive finite integer greater than zero")
 		}
 	}
-	if (!is_parallel_available() && isTRUE(threads > 1)) {
+	if (out && !is_parallel_available() && isTRUE(threads > 1)) {
 		stop("argument to threads must be 1 when parallel processing is not available")
 	}
 	if (out && is_parallel_available()) {
