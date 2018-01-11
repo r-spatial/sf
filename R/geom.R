@@ -27,7 +27,8 @@ st_dimension = function(x, NA_if_empty = TRUE) {
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-#' st_is_simple(st_sfc(ls, st_point(c(0,0))), threads = 2) # parallel processing
+#' if (is_parallel_available())
+#' 	st_is_simple(st_sfc(ls, st_point(c(0,0))), threads = 2) # parallel processing
 st_is_simple = function(x, threads = 1) {
 	is_valid_thread_number(threads)
 	CPL_geos_is_simple(st_geometry(x), threads)
