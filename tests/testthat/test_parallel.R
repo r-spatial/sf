@@ -36,3 +36,4 @@ test_that("st_simple works", {
 	s = s[sample.int(length(s), 100, replace = TRUE)]
 	expect_equal(st_is_simple(s), st_is_simple(s, threads = 2))
 })
+
