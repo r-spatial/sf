@@ -185,14 +185,6 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-CPL_openmp_version <- function() {
-    .Call('_sf_CPL_openmp_version', PACKAGE = 'sf')
-}
-
-CPL_number_processors <- function() {
-    .Call('_sf_CPL_number_processors', PACKAGE = 'sf')
-}
-
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }
@@ -211,6 +203,14 @@ CPL_proj_direct <- function(from_to, pts) {
 
 CPL_signed_area <- function(pts) {
     .Call('_sf_CPL_signed_area', PACKAGE = 'sf', pts)
+}
+
+CPL_tbb_version <- function() {
+    .Call('_sf_CPL_tbb_version', PACKAGE = 'sf')
+}
+
+CPL_tbb_processors <- function() {
+    .Call('_sf_CPL_tbb_processors', PACKAGE = 'sf')
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {

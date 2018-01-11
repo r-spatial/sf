@@ -53,7 +53,7 @@ setOldClass("sfg")
 }
 
 .onAttach = function(libname, pkgname) {
-	m = paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", CPL_gdal_version(), ", proj.4 ", CPL_proj_version(), ", OpenMP ", CPL_openmp_version())
+	m = paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", CPL_gdal_version(), ", proj.4 ", CPL_proj_version(), ", TBB ", CPL_tbb_version())
 	packageStartupMessage(m)
 }
 
@@ -63,6 +63,6 @@ setOldClass("sfg")
 #' @export
 sf_extSoftVersion = function() {
 	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), NA_character_,
-		ifelse(CPL_gdal_with_geos(), "true", "false"), CPL_openmp_version()),
-		names = c("GEOS", "GDAL", "proj.4", "lwgeom", "GDAL_with_GEOS", "OpenMP"))
+		ifelse(CPL_gdal_with_geos(), "true", "false"), CPL_tbb_version()),
+		names = c("GEOS", "GDAL", "proj.4", "lwgeom", "GDAL_with_GEOS", "TBB"))
 }

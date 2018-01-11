@@ -563,26 +563,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_openmp_version
-Rcpp::IntegerVector CPL_openmp_version();
-RcppExport SEXP _sf_CPL_openmp_version() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CPL_openmp_version());
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_number_processors
-Rcpp::IntegerVector CPL_number_processors();
-RcppExport SEXP _sf_CPL_number_processors() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CPL_number_processors());
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
@@ -636,6 +616,26 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type pts(ptsSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_signed_area(pts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_tbb_version
+Rcpp::IntegerVector CPL_tbb_version();
+RcppExport SEXP _sf_CPL_tbb_version() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CPL_tbb_version());
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_tbb_processors
+Rcpp::IntegerVector CPL_tbb_processors();
+RcppExport SEXP _sf_CPL_tbb_processors() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CPL_tbb_processors());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -768,13 +768,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
-    {"_sf_CPL_openmp_version", (DL_FUNC) &_sf_CPL_openmp_version, 0},
-    {"_sf_CPL_number_processors", (DL_FUNC) &_sf_CPL_number_processors, 0},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
+    {"_sf_CPL_tbb_version", (DL_FUNC) &_sf_CPL_tbb_version, 0},
+    {"_sf_CPL_tbb_processors", (DL_FUNC) &_sf_CPL_tbb_processors, 0},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},

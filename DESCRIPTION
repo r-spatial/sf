@@ -23,6 +23,7 @@ Imports:
 	grDevices,
 	grid,
 	Rcpp,
+	RcppParallel,
 	DBI (>= 0.5),
 	units (>= 0.4-6),
 	classInt,
@@ -52,9 +53,9 @@ Suggests:
 	covr,
 	microbenchmark,
 	rmarkdown
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppParallel
 VignetteBuilder: knitr
-SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
+SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0), GNU make
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/

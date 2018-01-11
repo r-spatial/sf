@@ -1,3 +1,6 @@
+#' @import RcppParallel RcppParallelLibs
+NULL
+
 #' Assert that argument is valid for threads
 #' @param threads object to check for validity
 #' @param stopiffalse logical; should an error be thrown if \code{x} is not valid? Defaults to \code{TRUE}
