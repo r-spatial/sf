@@ -25,7 +25,7 @@ is_valid_thread_number = function(threads, stopiffalse = TRUE) {
 			}
 		}
 	}
-	return(TRUE)
+	return(out)
 }
 
 #' Number of processors
