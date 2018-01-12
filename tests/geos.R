@@ -116,6 +116,10 @@ all.equal(x, y)
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
 st_distance(p, p, by_element = TRUE)
+st_crs(p) = 4326
+st_distance(p, p[c(2,3,1)], by_element = TRUE)
+p = st_transform(p, 3587)
+st_distance(p, p[c(2,3,1)], by_element = TRUE)
 
 # from https://github.com/r-spatial/sf/issues/458 :
 pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))

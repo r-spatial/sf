@@ -146,35 +146,33 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 	else
 		stopifnot(st_crs(x) == st_crs(y))
 
-	x = st_geometry(x)
-	y = st_geometry(y)
-
-	if (by_element) {
-		d = mapply(st_distance, x, y, by_element = FALSE)
-		if (!is.na(st_crs(x))) {
-			u = if (st_is_longlat(x))
-					make_unit("m")
-				else
-					crs_parameters(st_crs(x))$ud_unit
-			units(d) = u
-		}
-		return(d)
-	}
-
 	if (! missing(dist_fun))
 		stop("dist_fun is deprecated: lwgeom is used for distance calculation")
 
-	if (!is.na(st_crs(x)))
-		p = crs_parameters(st_crs(x))
+	x = st_geometry(x)
+	y = st_geometry(y)
+
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("lwgeom required: install first?")
 		units(tolerance) = make_unit("m")
-		lwgeom::st_geod_distance(x, y, tolerance)
+		if (by_element) {
+			crs = st_crs(x)
+			dist_ll = function(x, y, tolerance)
+				lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs), 
+					tolerance = tolerance)
+			d = mapply(dist_ll, x, y, tolerance = tolerance)
+			units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
+			d
+		} else
+			lwgeom::st_geod_distance(x, y, tolerance)
 	} else {
-		d = CPL_geos_dist(x, y, which, par)
+		d = if (by_element)
+				mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
+			else
+				CPL_geos_dist(x, y, which, par)
 		if (! is.na(st_crs(x)))
-			units(d) = p$ud_unit
+			units(d) = crs_parameters(st_crs(x))$ud_unit
 		d
 	}
 }

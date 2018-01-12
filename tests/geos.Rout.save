@@ -265,6 +265,14 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 [3,]    2    1    0
 > st_distance(p, p, by_element = TRUE)
 [1] 0 0 0
+> st_crs(p) = 4326
+> st_distance(p, p[c(2,3,1)], by_element = TRUE)
+Units: m
+[1] 110574.4 110575.1 221149.5
+> p = st_transform(p, 3587)
+> st_distance(p, p[c(2,3,1)], by_element = TRUE)
+Units: m
+[1] 144589.5 142873.3 287462.8
 > 
 > # from https://github.com/r-spatial/sf/issues/458 :
 > pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
@@ -392,4 +400,4 @@ In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
 > 
 > proc.time()
    user  system elapsed 
-  3.976   0.264   3.923 
+  4.096   0.260   4.048 
