@@ -1,6 +1,6 @@
 # Simple Features for R
 
-![animation](https://user-images.githubusercontent.com/520851/34881006-92333030-f7b2-11e7-974c-04f79cb793ff.gif)
+[![animation](https://user-images.githubusercontent.com/520851/34881006-92333030-f7b2-11e7-974c-04f79cb793ff.gif)](https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20)
 
 [![Build Status](https://travis-ci.org/r-spatial/sf.png?branch=master)](https://travis-ci.org/r-spatial/sf)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&svg=true)](https://ci.appveyor.com/project/edzerpebesma/sf)
