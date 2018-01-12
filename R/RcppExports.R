@@ -209,8 +209,8 @@ CPL_tbb_version <- function() {
     .Call('_sf_CPL_tbb_version', PACKAGE = 'sf')
 }
 
-CPL_tbb_processors <- function() {
-    .Call('_sf_CPL_tbb_processors', PACKAGE = 'sf')
+CPL_number_processors <- function() {
+    .Call('_sf_CPL_number_processors', PACKAGE = 'sf')
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {

@@ -31,6 +31,7 @@ st_dimension = function(x, NA_if_empty = TRUE) {
 #' 	st_is_simple(st_sfc(ls, st_point(c(0,0))), threads = 2) # parallel processing
 st_is_simple = function(x, threads = 1) {
 	is_valid_thread_number(threads)
+	RcppParallel::setThreadOptions(numThreads = threads)
 	CPL_geos_is_simple(st_geometry(x), threads)
 }
 

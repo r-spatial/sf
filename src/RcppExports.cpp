@@ -629,13 +629,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_tbb_processors
-Rcpp::IntegerVector CPL_tbb_processors();
-RcppExport SEXP _sf_CPL_tbb_processors() {
+// CPL_number_processors
+Rcpp::IntegerVector CPL_number_processors();
+RcppExport SEXP _sf_CPL_number_processors() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CPL_tbb_processors());
+    rcpp_result_gen = Rcpp::wrap(CPL_number_processors());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -774,7 +774,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_tbb_version", (DL_FUNC) &_sf_CPL_tbb_version, 0},
-    {"_sf_CPL_tbb_processors", (DL_FUNC) &_sf_CPL_tbb_processors, 0},
+    {"_sf_CPL_number_processors", (DL_FUNC) &_sf_CPL_number_processors, 0},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},

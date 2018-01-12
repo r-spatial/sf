@@ -1,4 +1,4 @@
-#' @import RcppParallel RcppParallelLibs
+#' @importFrom RcppParallel RcppParallelLibs
 NULL
 
 #' Assert that argument is valid for threads
@@ -52,4 +52,4 @@ number_processors = function() {
 #' is_parallel_available()
 #' @export
 is_parallel_available = function()
-	!is.na(CPL_openmp_version())
+	!is.na(CPL_tbb_version())

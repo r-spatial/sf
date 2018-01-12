@@ -16,6 +16,7 @@
 #endif
 
 #include <Rcpp.h>
+#include <unordered_map>
 
 #include "wkb.h"
 
@@ -92,6 +93,41 @@ void CPL_geos_finish(GEOSContextHandle_t ctxt) {
 	finishGEOS_r(ctxt);
 #endif
 }
+
+class GEOSContextHandleManager
+{
+	public:
+		// constructor
+		GEOSContextHandleManager() {
+			default_handle = CPL_geos_init();
+		};
+		// deconstructor
+		~GEOSContextHandleManager() {
+			CPL_geos_finish(default_handle);
+			for (std::unordered_map<std::thread::id,GEOSContextHandle_t>::iterator itr = handles.begin();
+					itr != handles.end(); ++itr) {
+				CPL_geos_finish(itr->second);
+			};
+		};
+		// fields
+		GEOSContextHandle_t default_handle;
+		std::unordered_map<std::thread::id,GEOSContextHandle_t> handles;
+		// member functions
+		GEOSContextHandle_t operator()() {
+			return default_handle;
+		}
+		GEOSContextHandle_t operator()(std::thread::id x) {
+			std::unordered_map<std::thread::id,GEOSContextHandle_t>::iterator itr = handles.find(x);
+			if (itr == handles.end()) {
+				handles[x] = CPL_geos_init();
+				itr = handles.find(x);
+			}
+			return itr->second;
+		}
+		std::size_t size() {
+			return handles.size() + size_t(1);
+		}
+};
 
 std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc, int *dim = NULL) {
 
@@ -473,35 +509,13 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc, size_t threads = 1) { 
-	
-// 	// set number of threads
-// 	// tbb::task_scheduler_init init(3)
-// 	std::vector<GEOSContextHandle_t> hGEOSCtxt(threads);
-// 	for (std::size_t i = 0; i < threads; ++i)
-// 		hGEOSCtxt[i] = CPL_geos_init();
-// 	std::vector<bool> out(sfc.length());
-// 	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt[0], sfc, NULL);
-// 	for (size_t i = 0; i < g.size(); i++) {
-// 		out[i] = chk_(GEOSisSimple_r(hGEOSCtxt[omp_get_thread_num()], g[i]));
-// 		GEOSGeom_destroy_r(hGEOSCtxt[omp_get_thread_num()], g[i]);
-// 	}
-// 	for (std::size_t i = 0; i < threads; ++i)
-// 		CPL_geos_finish(hGEOSCtxt[i]);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	bool out = false;
+	GEOSContextHandleManager hGEOSCtxt;
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt(), sfc, NULL);
+	std::vector<bool> out(sfc.length());
+	parallel_for_loop(size_t(0), g.size(), [&]( size_t i ) {
+		out[i] = chk_(GEOSisSimple_r(hGEOSCtxt(std::this_thread::get_id()), g[i]));
+		GEOSGeom_destroy_r(hGEOSCtxt(std::this_thread::get_id()), g[i]);
+	});
 	return Rcpp::wrap(out);
 }
 

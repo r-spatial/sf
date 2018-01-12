@@ -1,8 +1,4 @@
-#include <cstddef>
-#include <string>
-
-#include <Rcpp.h>
-#include <RcppParallel.h>
+#include "tbb.h"
 
 // [[Rcpp::export]]
 Rcpp::IntegerVector CPL_tbb_version() {
@@ -15,7 +11,7 @@ Rcpp::IntegerVector CPL_tbb_version() {
 }
 
 // [[Rcpp::export]]
-Rcpp::IntegerVector CPL_tbb_processors() {
+Rcpp::IntegerVector CPL_number_processors() {
 #if RCPP_PARALLEL_USE_TBB
 	int out = tbb::task_scheduler_init::default_num_threads();
 #else
