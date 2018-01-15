@@ -928,51 +928,32 @@ st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
 
 #' @export
 st_union.sfg = function(x, y, ..., by_feature = FALSE) {
-	nc <- get_cores_option()
         x_geom <- st_geometry(x)
 	if (missing(y)) { # unary union, possibly by_feature:
-		if (!is.null(nc) && nc > 1L) {
-			if (get_mc_option()) {
-				res <- mclapply(x_geom, CPL_geos_union,
-					by_feature = by_feature,
-					mc.preschedule = TRUE, mc.cores = nc)
-				out <- st_sfc(res)
-			} else {
-				cl <- get_cluster_option()
-				if (is.null(cl)) 
-					stop("no cluster in ClusterOption")
-				res <- parLapply(cl, clusterSplit(cl, x_geom),
-#				res <- parLapply(cl, x_geom, CPL_geos_union,
-					by_feature = by_feature)
-				out <- st_sfc(do.call("c", res))
-#				out <- st_sfc(res)
-                        }
-		} else {
-			out = st_sfc(CPL_geos_union(x_geom, by_feature))
-		}
+		out = st_sfc(CPL_geos_union(x_geom, by_feature))
 	} else {
-		if (!is.null(nc) && nc > 1L) {
-		} else {
-			out = st_union(x_geom, st_geometry(y))
-		}
+		out = st_union(x_geom, st_geometry(y))
         }
 	get_first_sfg(out)
 }
 
 #' @export
 st_union.sfc = function(x, y, ..., by_feature = FALSE) {
-	nc <- get_cores_option()
         x_geom <- st_geometry(x)
 	if (missing(y)) { # unary union, possibly by_feature:
-		if (!is.null(nc) && nc > 1L) {
+		out = st_sfc(CPL_geos_union(x_geom, by_feature))
+	} else {
+		nc <- get_cores_option()
+		if (!is.null(nc) && nc > 1L && 
+			requireNamespace("parallel", quietly=TRUE)) {
 			if (!get_quiet_option())
 				message("parallel: ", nc, " cores")
 			sI <- parallel::splitIndices(length(x_geom), nc)
 			if (get_mc_option()) {
 				res <- parallel::mclapply(sI,
 					FUN = function(i) {
-					sf:::CPL_geos_union(x_geom[i],
-					by_feature = by_feature)},
+					sf:::geos_op2_geom("union", 
+						x_geom[i], y)},
 					mc.preschedule = TRUE, mc.cores = nc)
 				if (!get_quiet_option())
 					message("parallel: mclapply")
@@ -984,20 +965,14 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE) {
 #				res <- parLapply(cl, clusterSplit(cl, x_geom),
 				res <- parallel::parLapply(cl, sI,
 					fun = function(i) {
-					sf:::CPL_geos_union(x_geom[i],
-					by_feature = by_feature)})
+					sf:::geos_op2_geom("union", 
+						x_geom[i], y)})
 #				out <- st_sfc(do.call("c", res))
 				if (!get_quiet_option())
 					message("parallel: parLapply")
 				out <- st_sfc(do.call("c", res))
                         }
-		} else {
-			
-			out = st_sfc(CPL_geos_union(x_geom, by_feature))
-		}
-#		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
-	} else {
-		if (!is.null(nc) && nc > 1L) {
+
 		} else {
 			out <- geos_op2_geom("union", x, y)
 		}
