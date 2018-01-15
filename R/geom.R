@@ -928,10 +928,34 @@ st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
 
 #' @export
 st_union.sfg = function(x, y, ..., by_feature = FALSE) {
-	out = if (missing(y)) # unary union, possibly by_feature:
-		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
-	else
-		st_union(st_geometry(x), st_geometry(y))
+	nc <- get_cores_option()
+        x_geom <- st_geometry(x)
+	if (missing(y)) { # unary union, possibly by_feature:
+		if (!is.null(nc) && nc > 1L) {
+			if (get_mc_option()) {
+				res <- mclapply(x_geom, CPL_geos_union,
+					by_feature = by_feature,
+					mc.preschedule = TRUE, mc.cores = nc)
+				out <- st_sfc(res)
+			} else {
+				cl <- get.ClusterOption()
+				if (is.null(cl)) 
+					stop("no cluster in ClusterOption")
+#				res <- parLapply(cl, clusterSplit(cl, x_geom),
+				res <- parLapply(cl, x_geom, CPL_geos_union,
+					by_feature = by_feature)
+#				out <- st_sfc(do.call("c", res))
+				out <- st_sfc(res)
+                        }
+		} else {
+			out = st_sfc(CPL_geos_union(x_geom, by_feature))
+		}
+	} else {
+		if (!is.null(nc) && nc > 1L) {
+		} else {
+			out = st_union(x_geom, st_geometry(y))
+		}
+        }
 	get_first_sfg(out)
 }
 

@@ -92,4 +92,4 @@ Collate:
 	jitter.R
 	sgbp.R
 	spatstat.R
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
