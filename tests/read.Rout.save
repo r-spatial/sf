@@ -154,9 +154,6 @@ Error in UseMethod("st_write") :
   no applicable method for 'st_write' applied to an object of class "character"
 > try(st_write(x, c("foo", "bar")))
 Error : length(dsn) == 1 is not TRUE
-In addition: Warning message:
-In if (file.exists(dsn)) dsn = enc2utf8(normalizePath(dsn)) :
-  the condition has length > 1 and only the first element will be used
 > try(st_write(x, "foo", driver = "foo"))
 driver `foo' not available.
 Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
@@ -387,4 +384,4 @@ proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.2881
 > 
 > proc.time()
    user  system elapsed 
-  1.232   0.292   1.240 
+  1.252   0.264   1.224 
