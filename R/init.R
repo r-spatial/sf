@@ -27,6 +27,11 @@ setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass("sfg")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
+assign("mc", ifelse(.Platform$OS.type == "windows", FALSE, TRUE),
+	envir = .sf_cache)
+assign("cores", NULL, envir = .sf_cache)
+assign("cluster", NULL, envir = .sf_cache)
+assign("quiet", TRUE, envir = .sf_cache)
 
 .onLoad = function(libname, pkgname) {
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
@@ -37,11 +42,6 @@ setOldClass("sfg")
 		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
 		gdl = system.file("gdal", package = "sf")[1]
 		Sys.setenv("GDAL_DATA" = gdl)
-                assign("mc", ifelse(.Platform$OS.type == "windows", FALSE, TRUE),
-                  envir = .sf_cache)
-                assign("cores", NULL, envir = .sf_cache)
-                assign("cluster", NULL, envir = .sf_cache)
-                assign("rlecuyerSeed", rep(12345, 6), envir = .sf_cache)
 		# nocov end
 	}
 	CPL_gdal_init()

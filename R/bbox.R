@@ -1,5 +1,6 @@
 
 #' @name st_bbox
+#' @include crs.R
 #' @param x object of class \code{bbox}
 #' @export
 is.na.bbox = function(x) identical(x, NA_bbox_)
