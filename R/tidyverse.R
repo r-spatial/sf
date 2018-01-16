@@ -177,7 +177,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 #' @param factor_key see original function docs
 #' @examples
 #' library(tidyr)
-#' nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
+#' nc %>% select(SID74, SID79) %>% gather(VAR, SID, -geometry) %>% summary()
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
 
 	if (! requireNamespace("rlang", quietly = TRUE))
