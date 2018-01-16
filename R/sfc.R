@@ -168,7 +168,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat(paste0("dimension:      ", class(x[[1]])[1], "\n"))
 	}
 	cat(paste0("bbox:           "))
-	bb = signif(attr(x, "bbox"), 7)
+	bb = signif(attr(x, "bbox"), options("digits")$digits)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	# attributes: epsg, proj4string, precision
