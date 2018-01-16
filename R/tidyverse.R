@@ -344,10 +344,11 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @details see \link[pillar]{type_sum}
 #' @export
 type_sum.sfc <- function(x, ...) {
+	cls = substring(class(x)[1], 5)
 	if (is.na(st_is_longlat(x)))
-		"sf_geometry"
+		cls
 	else
-		paste0("sf_geometry [", as.character(units(st_crs(x, parameters = TRUE)$ud_unit)), "]")
+		paste0(cls, " [", as.character(units(st_crs(x, parameters = TRUE)$ud_unit)), "]")
 }
 
 #' Summarize simple feature item for tibble
@@ -364,6 +365,11 @@ obj_sum.sfc <- function(x) {
 pillar_shaft.sfc <- function(x, ...) {
 	if (! requireNamespace("pillar", quietly = TRUE))
 		stop("package pillar not available: install first?")
-	out <- format(x, ...)
+	digits = options("pillar.sigfig")$pillar.sigfig
+	if (is.null(digits))
+		digits = options("digits")$digits
+	out <- format(x, width = 100, digits = digits, ...)
+	if (!inherits(x, "sfc_GEOMETRY") && !inherits(x, "sfc_GEOMETRYCOLLECTION"))
+		out <- sub("[A-Z]+ ", "", out)
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }

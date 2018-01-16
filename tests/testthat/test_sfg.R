@@ -47,7 +47,7 @@ test_that("format works", {
 	options(digits = digits)
 	expect_identical(obj_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), 
 		"MULTIPOINT (...")
-	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "sf_geometry")
+	expect_identical(type_sum.sfc(st_sfc(st_multipoint(matrix(1:6/6,3)))), "MULTIPOINT")
 })
 
 test_that("Ops work for sfc", {
