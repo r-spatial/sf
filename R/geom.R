@@ -946,33 +946,50 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE) {
 		nc <- get_cores_option()
 		if (!is.null(nc) && nc > 1L && 
 			requireNamespace("parallel", quietly=TRUE)) {
+			timings <- list()
+			.ptime_start <- proc.time()
 			if (!get_quiet_option())
 				message("parallel: ", nc, " cores")
 			sI <- parallel::splitIndices(length(x_geom), nc)
+			timings[["index_split"]] <- proc.time() - .ptime_start
+        		.ptime_start <- proc.time()
 			if (get_mc_option()) {
 				res <- parallel::mclapply(sI,
 					FUN = function(i) {
 					sf:::geos_op2_geom("union", 
 						x_geom[i], y)},
 					mc.preschedule = TRUE, mc.cores = nc)
+				timings[["run_par"]] <- proc.time() - 
+					.ptime_start
+        			.ptime_start <- proc.time()
 				if (!get_quiet_option())
 					message("parallel: mclapply")
 				out <- st_sfc(do.call("c", res))
+				timings[["catenate"]] <- proc.time() - 
+					.ptime_start
 			} else {
 				cl <- get_cluster_option()
 				if (is.null(cl)) 
 					stop("no cluster in cluster_option")
 #				res <- parLapply(cl, clusterSplit(cl, x_geom),
+				y 
+# force promises, so values get sent by parallel (from boot)
 				res <- parallel::parLapply(cl, sI,
 					fun = function(i) {
 					sf:::geos_op2_geom("union", 
 						x_geom[i], y)})
 #				out <- st_sfc(do.call("c", res))
+				timings[["run_par"]] <- proc.time() - 
+					.ptime_start
+			        .ptime_start <- proc.time()
 				if (!get_quiet_option())
 					message("parallel: parLapply")
 				out <- st_sfc(do.call("c", res))
+				timings[["catenate"]] <- proc.time() -
+				 	.ptime_start
                         }
-
+			attr(out, "timings") <- do.call("rbind",
+				timings)[, c(1,3)]
 		} else {
 			out <- geos_op2_geom("union", x, y)
 		}
