@@ -38,7 +38,7 @@ Type 'q()' to quit R.
 > 
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-> units(d.sp) = make_unit("km")
+> units(d.sp) = as_units("km")
 > d.sf - d.sp
 Units: m
          [,1]          [,2]          [,3]          [,4]         [,5]
@@ -117,4 +117,4 @@ MULTIPOINT (505.9977 -7.081155e-10, 1517.993 -7...
 > 
 > proc.time()
    user  system elapsed 
-  0.804   0.276   0.765 
+  0.808   0.304   0.837 

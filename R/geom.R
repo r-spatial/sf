@@ -155,7 +155,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("lwgeom required: install first?")
-		units(tolerance) = make_unit("m")
+		units(tolerance) = as_units("m")
 		if (by_element) {
 			crs = st_crs(x)
 			dist_ll = function(x, y, tolerance)
@@ -325,7 +325,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 			y = x
 		gx = st_geometry(x)
 		gy = st_geometry(y)
-		units(dist) = make_unit("m")
+		units(dist) = as_units("m")
 		if (sparse) {
 			if (! requireNamespace("lwgeom", quietly = TRUE))
 				stop("lwgeom required: install first?")
@@ -371,7 +371,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	if (isTRUE(st_is_longlat(x))) {
 		warning("st_buffer does not correctly buffer longitude/latitude data")
 		if (inherits(dist, "units"))
-			units(dist) = make_unit("arc_degrees")
+			units(dist) = as_units("arc_degrees")
 		else
 			message("dist is assumed to be in decimal degrees (arc_degrees).")
 	} else if (inherits(dist, "units")) {
@@ -379,7 +379,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 			stop("x does not have a crs set: can't convert units")
 		if (is.null(st_crs(x)$units))
 			stop("x has a crs without units: can't convert units")
-		units(dist) = make_unit(udunits_from_proj[st_crs(x)$units])
+		units(dist) = crs_parameters(st_crs(x))$ud_unit
 	}
 	dist = rep(dist, length.out = length(x))
 	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
@@ -690,7 +690,7 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		if (! inherits(dfMaxLength, "units"))
-			units(dfMaxLength) = make_unit("m")
+			units(dfMaxLength) = as_units("m")
 		lwgeom::st_geod_segmentize(x, dfMaxLength) # takes care of rad or degree units
 	} else {
 		if (! is.na(st_crs(x)) && inherits(dfMaxLength, "units"))

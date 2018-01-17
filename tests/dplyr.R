@@ -62,12 +62,12 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
 x
 
-suppressPackageStartupMessages(library(units))
-person = make_unit("person")
 nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 nc.merc <- st_transform(nc, 32119) # NC State Plane
-
-nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person /area)
+suppressPackageStartupMessages(library(units))
+install_symbolic_unit("person")
+person = as_units("person")
+nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
 
 # summary(nc.merc$dens) # requires units 0.4-2
 nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))

@@ -86,12 +86,12 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 # A tibble: 4 x 3
-  area_cl     `mean(AREA)`                       geometry
-  <fctr>             <dbl>              <sf_geometry [°]>
-1 (0,0.1]           0.0760 MULTIPOLYGON (((-77.96073 3...
-2 (0.1,0.12]        0.112  MULTIPOLYGON (((-84.29104 3...
-3 (0.12,0.15]       0.134  MULTIPOLYGON (((-76.54427 3...
-4 (0.15,0.25]       0.190  MULTIPOLYGON (((-76.64705 3...
+  area_cl     `mean(AREA)`                                             geometry
+  <fct>              <dbl>                                   <MULTIPOLYGON [°]>
+1 (0,0.1]           0.0760 (((-77.96073 34.18924, -77.96587 34.24229, -77.9752…
+2 (0.1,0.12]        0.112  (((-84.29104 35.21054, -84.22594 35.2616, -84.17973…
+3 (0.12,0.15]       0.134  (((-76.54427 34.58783, -76.55515 34.61066, -76.5377…
+4 (0.15,0.25]       0.190  (((-76.64705 34.90633, -76.62562 34.89065, -76.7502…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -167,14 +167,13 @@ proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0
 POINT (0 -7.081155e-10)
 POINT (111319.5 111325.1)
 > 
-> suppressPackageStartupMessages(library(units))
-> person = make_unit("person")
-Warning message:
-'person' is not a valid unit symbol recognized by udunits 
 > nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 > nc.merc <- st_transform(nc, 32119) # NC State Plane
-> 
-> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person /area)
+> suppressPackageStartupMessages(library(units))
+> install_symbolic_unit("person")
+<pointer: 0x55c7e80e0b60>
+> person = as_units("person")
+> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
 > 
 > # summary(nc.merc$dens) # requires units 0.4-2
 > nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -201,9 +200,9 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
-         `mean(new_dens)`                       geometry
-           <[person/m^2]>              <sf_geometry [m]>
-1 2.589362e-06 person/m^2 MULTIPOLYGON (((834893.7 95...
+  `mean(new_dens)`                                                     geometry
+    <[person/m^2]>                                           <MULTIPOLYGON [m]>
+1     2.589362e-06 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.72, …
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
@@ -223,9 +222,9 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
-  `sum(A * new_dens)`                       geometry
-           <[person]>              <sf_geometry [m]>
-1       329962 person MULTIPOLYGON (((834893.7 95...
+  `sum(A * new_dens)`                                                  geometry
+           <[person]>                                        <MULTIPOLYGON [m]>
+1              329962 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.7…
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -269,4 +268,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  3.728   0.208   3.745 
+  2.952   0.316   2.947 

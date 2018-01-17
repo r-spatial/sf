@@ -745,7 +745,7 @@ although coordinates are longitude/latitude, st_intersects assumes that they are
 Geometry set for 10 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 11.24479 ymin: 3.163845 xmax: 82.34507 ymax: 60.1703
+bbox:           xmin: 11.2448 ymin: 3.16385 xmax: 82.3451 ymax: 60.1703
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
@@ -764,7 +764,7 @@ although coordinates are longitude/latitude, st_intersects assumes that they are
 Geometry set for 10 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: -170.749 ymin: -64.78781 xmax: 172.1939 ymax: 74.44
+bbox:           xmin: -170.749 ymin: -64.7878 xmax: 172.194 ymax: 74.44
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
@@ -778,7 +778,7 @@ POINT (72.1339 -25.5048)
 Geometry set for 1 feature 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: -15.77728 ymin: -22.46808 xmax: 143.823 ymax: 27.16136
+bbox:           xmin: -15.7773 ymin: -22.4681 xmax: 143.823 ymax: 27.1614
 epsg (SRID):    NA
 proj4string:    NA
 MULTIPOINT (48.8473 9.37328, 143.823 27.1614, -...
@@ -790,7 +790,7 @@ MULTIPOINT (48.8473 9.37328, 143.823 27.1614, -...
 Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 0.09147282 ymax: 1
+bbox:           xmin: 0 ymin: 0 xmax: 0.0914728 ymax: 1
 epsg (SRID):    NA
 proj4string:    NA
 MULTIPOINT (0 0.302591, 0 0.251439, 0 0.223373,...
@@ -801,7 +801,7 @@ MULTIPOINT EMPTY
 Geometry set for 29 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 1215227 ymin: 935866.9 xmax: 1428883 ymax: 1031901
+bbox:           xmin: 1215230 ymin: 935867 xmax: 1428880 ymax: 1031900
 epsg (SRID):    2264
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
 First 5 geometries:
@@ -843,7 +843,7 @@ POINT EMPTY
 Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 0.05511349 ymin: 1.054725 xmax: 0.05511349 ymax: 1.054725
+bbox:           xmin: 0.0551135 ymin: 1.05473 xmax: 0.0551135 ymax: 1.05473
 epsg (SRID):    NA
 proj4string:    NA
 POINT (0.0551135 1.05473)
@@ -967,7 +967,7 @@ MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))
 Geometry set for 5 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: -118.6815 ymin: 36.43366 xmax: -118.6741 ymax: 36.44209
+bbox:           xmin: -118.682 ymin: 36.4337 xmax: -118.674 ymax: 36.4421
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 POINT (-118.682 36.4376)
@@ -979,7 +979,7 @@ POINT (-118.681 36.4417)
 Geometry set for 5 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: -118.6815 ymin: 36.43366 xmax: -118.6741 ymax: 36.44209
+bbox:           xmin: -118.682 ymin: 36.4337 xmax: -118.674 ymax: 36.4421
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 POINT (-118.682 36.4376)
@@ -999,4 +999,4 @@ POINT (0 1)
 > 
 > proc.time()
    user  system elapsed 
-  2.724   0.284   2.714 
+  2.488   0.312   2.488 

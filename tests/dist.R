@@ -21,7 +21,7 @@ crs = 4326
 
 d.sf = st_distance(x, y)
 d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-units(d.sp) = make_unit("km")
+units(d.sp) = as_units("km")
 d.sf - d.sp
 
 #summary(unclass(d.sf) - d.sp)

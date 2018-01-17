@@ -206,7 +206,7 @@ nc.g \%>\% summarise(mean(AREA))
 nc.g \%>\% summarise(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
 nc \%>\% as.data.frame \%>\% summarise(mean(AREA))
 library(tidyr)
-nc \%>\% select(SID74, SID79, geometry) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
+nc \%>\% select(SID74, SID79) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
 library(tidyr)
 nc$row = 1:100 # needed for spread to work
 nc \%>\% select(SID74, SID79, geometry, row) \%>\%
