@@ -187,7 +187,9 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.</p>
+    <p>Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
+    <code>st_transform</code> uses GDAL for coordinate transformations; internally, GDAL converts the <code>proj4string</code> into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter <code>+wktext</code> to the <code>proj4string</code> definition may resolve this; see <a href='https://github.com/edzer/sp/issues/42'>https://github.com/edzer/sp/issues/42</a>.</p>
+<p>Some PROJ.4 projections are not supported by GDAL, e.g. <code>"+proj=wintri"</code> because it does not have an inverse projection. Projecting to unsupported projections can be done by <a href='http://www.rdocumentation.org/packages/lwgeom/topics/st_transform_proj'>st_transform_proj</a>, part of package lwgeom. Note that the unsupported <code>proj4string</code> cannot be passed as argument to st_crs, but has to be given as character string.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.
     <code>st_proj_info</code> lists the available projections, ellipses, datums or units supported by the Proj.4 library</p>
 <p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a> and <a href='https://github.com/r-spatial/sf/issues/541'>https://github.com/r-spatial/sf/issues/541</a></p>

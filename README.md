@@ -90,7 +90,7 @@ To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geos
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including `st_make_valid`, have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ### Contributing
 
@@ -100,9 +100,9 @@ Functions and methods that require `liblwgeom`, including `st_make_valid`, have 
 
 ### Acknowledgment
 
-This project has been realized with financial [support](https://www.r-consortium.org/projects) from the
+This project greatfully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 
 <a href="https://www.r-consortium.org/projects/awarded-projects">
-<img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="400">
+<img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300">
 </a>
 
