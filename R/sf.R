@@ -405,3 +405,9 @@ merge.sf = function(x, y, ...) {
 	st_geometry(ret) = st_sfc(g)
 	ret
 }
+
+#' @export
+as.data.frame.sf = function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	NextMethod()
+}
