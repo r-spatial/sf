@@ -601,10 +601,10 @@ largest_ring = function(x) {
 
 #' @export
 st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
-	if (of_largest_polygon)
-		x = largest_ring(x)
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
+	if (of_largest_polygon)
+		x = largest_ring(x)
 	st_sfc(CPL_geos_op("centroid", x, numeric(0)))
 }
 

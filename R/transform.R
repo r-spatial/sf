@@ -7,7 +7,7 @@
 #' @param ... ignored
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
 #' @param check logical; perform a sanity check on resulting polygons?
-#' @param use_gdal logical; this parameter is deprecated. For transformations with PROJ.4 instead of GDAL use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)
+#' @param use_gdal logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)
 #' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
 #' 
 #' \code{st_transform} uses GDAL for coordinate transformations; internally, GDAL converts the \code{proj4string} into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter \code{+wktext} to the \code{proj4string} definition may resolve this; see \url{https://github.com/edzer/sp/issues/42}.
