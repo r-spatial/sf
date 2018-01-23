@@ -593,10 +593,10 @@ st_centroid.sfg = function(x, ..., of_largest_polygon = FALSE)
 largest_ring = function(x) {
 	pols = st_cast(x, "POLYGON", warn = FALSE)
 	stopifnot(! is.null(attr(pols, "ids")))
-	areas = st_areas(pols)
-	spl = split(st_areas(pols), rep(1:length(x), attr(pols, "ids"))) # group by x
-	l = cumsum(lengths(spl))           # indexes of first rings of a MULTIPOLYGON
-	i = l + sapply(spl, which.max) - 1 # add relative index of largest ring
+	areas = st_area(pols)
+	spl = split(areas, rep(1:length(x), attr(pols, "ids"))) # group by x
+	l = c(0, head(cumsum(lengths(spl)), -1)) # 0-based indexes of first rings of a MULTIPOLYGON
+	i = l + sapply(spl, which.max)           # add relative index of largest ring
 	st_sfc(pols[i], crs = st_crs(x))
 }
 

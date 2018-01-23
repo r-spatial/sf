@@ -52,7 +52,7 @@ st_wrap_dateline(x, options, quiet)
 
 \item{check}{logical; perform a sanity check on resulting polygons?}
 
-\item{use_gdal}{logical; this parameter is deprecated. Use \link[lwgeom]{st_transform_proj} instead}
+\item{use_gdal}{logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)}
 
 \item{type}{character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}}
 
