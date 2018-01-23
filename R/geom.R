@@ -592,19 +592,23 @@ st_centroid.sfg = function(x, ..., of_largest_polygon = FALSE)
 
 largest_ring = function(x) {
 	pols = st_cast(x, "POLYGON", warn = FALSE)
-	if (! is.null(attr(pols, "ids"))) {
-		spl = split(pols, rep(1:length(x), attr(pols, "ids")))
-		st_sfc(lapply(spl, function(y) y[[which.max(st_area(y))]]), crs = st_crs(x))
-	} else # st_cast did nothing:
-		pols
+	stopifnot(! is.null(attr(pols, "ids")))
+	areas = st_areas(pols)
+	spl = split(st_areas(pols), rep(1:length(x), attr(pols, "ids"))) # group by x
+	l = cumsum(lengths(spl))           # indexes of first rings of a MULTIPOLYGON
+	i = l + sapply(spl, which.max) - 1 # add relative index of largest ring
+	st_sfc(pols[i], crs = st_crs(x))
 }
 
 #' @export
 st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
-	if (of_largest_polygon)
-		x = largest_ring(x)
+	if (of_largest_polygon) {
+		multi = which(st_dimension(x) == 2 & lengths(x) > 1)
+		if (length(multi))
+			x[multi] = largest_ring(x[multi])
+	}
 	st_sfc(CPL_geos_op("centroid", x, numeric(0)))
 }
 
