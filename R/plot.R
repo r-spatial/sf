@@ -120,6 +120,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
 	} else { # single map, or dots$add=TRUE:
+		if (!isTRUE(dots$add))
+			layout(matrix(1)) # reset
 		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
 		else { # generate plot with colors and possibly key
