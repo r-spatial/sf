@@ -80,7 +80,12 @@ st_geometry = function(obj, ...) UseMethod("st_geometry")
 
 #' @name st_geometry
 #' @export
-st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
+st_geometry.sf = function(obj, ...) { 
+	ret =  obj[[attr(obj, "sf_column")]]
+	if (is.null(ret) || !inherits(ret, "sfc")) # corrupt!
+		stop('attr(obj, "sf_column") does not point to a geometry column.\nDid you rename it, without setting st_geometry(obj) <- "newname"?')
+	ret
+}
 
 #' @name st_geometry
 #' @export
