@@ -191,7 +191,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					key.pos = NULL
 			}
 			
-			if (! is.null(key.pos) && !all(is.na(values)) &&
+			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
 				switch(key.pos,
