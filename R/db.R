@@ -64,6 +64,10 @@ st_read.PostgreSQLConnection <- function(...) {
     st_read.DBIObject(...)
 }
 
+st_read.PqConnection <- function(...) {
+    st_read.DBIObject(...)
+}
+
 postgis_as_sfc <- function(x, EWKB, conn) {
 	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {
@@ -242,6 +246,8 @@ setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
                   stop("Missing package `DBI`.",
                        " Use `install.packages(\"DBI\")` to install.", call. = FALSE)
               field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              # DBI cannot set field types with append
+              if (append) field.types <- NULL
               tryCatch({
                   dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
                                overwrite = overwrite, append = append,
