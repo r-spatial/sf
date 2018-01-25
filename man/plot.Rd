@@ -31,8 +31,8 @@
 \usage{
 \method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
-  options("sf_max.plot")[[1]])) 9 else n, key.pos = if (ncol(x) > 2) NULL else
-  4, key.size = lcm(1.8))
+  options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
+  key.size = lcm(1.8))
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -89,7 +89,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}}
 
-\item{key.pos}{integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.}
+\item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.}
 
 \item{key.size}{amount of space reserved for the key (labels)}
 

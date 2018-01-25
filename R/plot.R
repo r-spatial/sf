@@ -8,7 +8,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.
+#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.
 #' @param key.size amount of space reserved for the key (labels)
 #' @param pch plotting symbol
 #' @param cex symbol size
@@ -88,7 +88,7 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
-		key.pos = if (ncol(x) > 2) NULL else 4, key.size = lcm(1.8)) {
+		key.pos = get_key_pos(x, ...), key.size = lcm(1.8)) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -112,15 +112,16 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			if (max_plot_missing && is.null(options("sf_max.plot")[[1]]))
 				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
 					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
-			x = x[, 1:max.plot]
 		}
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
+		if (length(cols) > max.plot)
+			cols = cols[1:max.plot]
 		# loop over each map to plot:
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, ...)))
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
 	} else { # single map, or dots$add=TRUE:
-		if (!isTRUE(dots$add))
+		if (!identical(TRUE, dots$add) && !identical(FALSE, dots$reset))
 			layout(matrix(1)) # reset
 		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
@@ -226,6 +227,24 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	}
 }
 
+get_key_pos = function(x, ...) { 
+	bb = st_bbox(x)
+	if (ncol(x) > 2 || any(is.na(bb)))
+		NULL
+	else {
+		pin = par("pin") # (width, height)
+		asp_plt = pin[2]/pin[1] # y/x: < 1 means wide
+		asp_box = diff(bb[c(4,2)]) / diff(bb[c(3,1)]) 
+		asp = list(...)$asp
+		if (is.null(asp))
+			asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(bb[c(2,4)]) * pi)/180), 1.0)
+		asp_box = asp_box * asp
+		if (asp_box < asp_plt) # wider
+			1
+		else # taller
+			4
+	}
+}
 
 #' @name plot
 #' @method plot sfc_POINT
@@ -513,7 +532,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	pl_reg <- par("usr")
 	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2],
 		ytop = pl_reg[4], col = bgc, border = FALSE)
-	linAxis = function(side, ..., lon, lat, ndiscr) axis(side = side, ...)
+	linAxis = function(side, ..., lon, lat, ndiscr, reset) axis(side = side, ...)
 	if (! missing(graticule)) {
 		g = if (isTRUE(graticule))
 				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs(4326), ...)
@@ -539,7 +558,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 			linAxis(2, ...)
 		}
 	}
-	localTitle <- function(..., col, bgc, pch, cex, lty, lwd, lon, lat, ndiscr, at, labels) title(...)
+	localTitle <- function(..., col, bgc, pch, cex, lty, lwd, lon, lat, ndiscr, at, labels, reset) title(...)
 	localTitle(...)
 	if (!is.null(bgMap)) {
 		mercator = FALSE
@@ -626,7 +645,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	st_bbox(st_transform(pts, merc))
 }
 
-degAxis = function (side, at, labels, ..., lon, lat, ndiscr) {
+degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 	if (missing(at))
        	at = axTicks(side)
 	if (missing(labels)) {
