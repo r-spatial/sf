@@ -193,6 +193,10 @@ CPL_proj_is_valid <- function(proj4string) {
     .Call('_sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
 }
 
+CPL_have_datum_files <- function(foo) {
+    .Call('_sf_CPL_have_datum_files', PACKAGE = 'sf', foo)
+}
+
 CPL_proj_info <- function(type) {
     .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
 }

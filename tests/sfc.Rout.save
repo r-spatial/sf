@@ -397,7 +397,7 @@ POINT (-8905533 4300640)
 > 
 > sf_extSoftVersion()[1:3]
    GEOS    GDAL  proj.4 
-"3.5.1" "2.1.2" "4.9.3" 
+"3.5.1" "2.2.1" "4.9.3" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -999,4 +999,4 @@ POINT (0 1)
 > 
 > proc.time()
    user  system elapsed 
-  2.488   0.312   2.488 
+  2.643   0.277   2.598 

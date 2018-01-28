@@ -584,6 +584,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_have_datum_files
+bool CPL_have_datum_files(SEXP foo);
+RcppExport SEXP _sf_CPL_have_datum_files(SEXP fooSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type foo(fooSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_have_datum_files(foo));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_info
 Rcpp::List CPL_proj_info(int type);
 RcppExport SEXP _sf_CPL_proj_info(SEXP typeSEXP) {
@@ -749,6 +760,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
+    {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},

@@ -112,7 +112,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 77 drivers
+GDAL has 80 drivers
 > 
 > # GEOS ops:
 > 
@@ -337,4 +337,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.880   0.296   0.881 
+  0.980   0.245   0.908 

@@ -129,6 +129,10 @@ st_transform.sfg = function(x, crs , ...) {
 #' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {
+
+	if (type == "have_datum_files")
+		return(CPL_have_datum_files(0))
+
     opts <- c("proj", "ellps", "datum", "units")
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)

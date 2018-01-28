@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
+Linking to GEOS 3.5.1, GDAL 2.2.1, proj.4 4.9.3
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -115,4 +115,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.584   0.284   0.558 
+  0.703   0.208   0.595 

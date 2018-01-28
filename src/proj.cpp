@@ -28,6 +28,31 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	return out;
 }
 
+// [[Rcpp::export]]
+bool CPL_have_datum_files(SEXP foo) {
+#if PJ_VERSION <= 480
+    FILE *fp;
+#else
+    PAFile fp;
+#endif
+    projCtx ctx;
+	bool ret;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "conus", "rb");
+    ret = (fp != NULL);
+	if (fp != NULL) {
+#if PJ_VERSION <= 480
+    	fclose(fp);
+#else
+    	pj_ctx_fclose(ctx, fp);
+#endif
+		ret = true;
+	} else
+		ret = false;
+    return ret;
+}
+
+
 extern "C" {
 // modified from: rgdal/pkg/src/projectit.cpp
 
