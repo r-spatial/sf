@@ -258,7 +258,8 @@
 <a href="#sf-objects-with-simple-features" class="anchor"></a>sf: objects with simple features</h2>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
+## Loading required package: methods
+## Linking to GEOS 3.5.1, GDAL 2.2.1, proj.4 4.9.3
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -274,7 +275,7 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attr</span>(nc, <span class="st">"sf_column"</span>)
 ## [1] "geometry"</code></pre></div>
 <p>If we print the first three features, we see their attribute values and an abridged version of the geometry</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(nc[<span class="dv">9</span>:<span class="dv">15</span>], <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(nc[<span class="dv">9</span><span class="op">:</span><span class="dv">15</span>], <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
 <p>which would give the following output:</p>
 <div class="figure">
 <img src="sf_xfig.png">
@@ -290,22 +291,22 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
 ##  [1] [                     [[&lt;-                  $&lt;-                  
-##  [4] aggregate             cbind                 coerce               
-##  [7] identify              initialize            merge                
-## [10] plot                  print                 rbind                
-## [13] show                  slotsFromS3           st_agr               
-## [16] st_agr&lt;-              st_as_sf              st_bbox              
-## [19] st_boundary           st_buffer             st_cast              
-## [22] st_centroid           st_collection_extract st_convex_hull       
-## [25] st_coordinates        st_crs                st_crs&lt;-             
-## [28] st_difference         st_geometry           st_geometry&lt;-        
-## [31] st_intersection       st_is                 st_line_merge        
-## [34] st_node               st_point_on_surface   st_polygonize        
-## [37] st_precision          st_segmentize         st_set_precision     
-## [40] st_simplify           st_snap               st_sym_difference    
-## [43] st_transform          st_triangulate        st_union             
-## [46] st_voronoi            st_wrap_dateline      st_write             
-## [49] st_zm                
+##  [4] aggregate             as.data.frame         cbind                
+##  [7] coerce                identify              initialize           
+## [10] merge                 plot                  print                
+## [13] rbind                 show                  slotsFromS3          
+## [16] st_agr                st_agr&lt;-              st_as_sf             
+## [19] st_bbox               st_boundary           st_buffer            
+## [22] st_cast               st_centroid           st_collection_extract
+## [25] st_convex_hull        st_coordinates        st_crs               
+## [28] st_crs&lt;-              st_difference         st_geometry          
+## [31] st_geometry&lt;-         st_intersection       st_is                
+## [34] st_line_merge         st_node               st_point_on_surface  
+## [37] st_polygonize         st_precision          st_segmentize        
+## [40] st_set_precision      st_simplify           st_snap              
+## [43] st_sym_difference     st_transform          st_triangulate       
+## [46] st_union              st_voronoi            st_wrap_dateline     
+## [49] st_write              st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -347,12 +348,12 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <p><img src="sf1_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <p>but some of the polygons in this dataset have multiple exterior rings; they can be identified by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
-(w &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">sapply</span>(nc_geom, length) &gt;<span class="st"> </span><span class="dv">1</span>))
+(w &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">sapply</span>(nc_geom, length) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>))
 ## [1]  4 56 57 87 91 95
-<span class="kw">plot</span>(nc[w,<span class="dv">1</span>], <span class="dt">col =</span> <span class="dv">2</span>:<span class="dv">7</span>)</code></pre></div>
+<span class="kw">plot</span>(nc[w,<span class="dv">1</span>], <span class="dt">col =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">7</span>)</code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 <p>Following the <code>MULTIPOLYGON</code> datastructure, in R we have a list of lists of lists of matrices. For instance, we get the first 3 coordinate pairs of the second exterior ring (first ring is always exterior) for the geometry of feature 4 by</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc_geom[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span>:<span class="dv">3</span>,]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc_geom[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,]
 ##           [,1]     [,2]
 ## [1,] -76.02717 36.55672
 ## [2,] -75.99866 36.55665
@@ -405,8 +406,8 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <a href="#mixed-geometry-types" class="anchor"></a>Mixed geometry types</h2>
 <p>The class of <code>nc_geom</code> is <code>c("sfc_MULTIPOLYGON", "sfc")</code>: <code>sfc</code> is shared with all geometry types, and <code>sfc_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
 <p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indicates that each of the geometries may contain a mix of geometry types, as in</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(mix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">1</span>:<span class="dv">2</span>))),
-    <span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">2</span>))))))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(mix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>))),
+    <span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">2</span>))))))
 ## Geometry set for 2 features 
 ## geometry type:  GEOMETRYCOLLECTION
 ## dimension:      XY
@@ -419,7 +420,7 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 ## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</code></pre></div>
 <p>Still, the geometries are here of a single type.</p>
 <p>The second <code>GEOMETRY</code>, indicates that the geometries in the geometry list-column are of varying type:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(mix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">1</span>:<span class="dv">2</span>), <span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">4</span>,<span class="dv">2</span>))))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(mix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>), <span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">2</span>))))
 ## Geometry set for 2 features 
 ## geometry type:  GEOMETRY
 ## dimension:      XY
@@ -478,7 +479,7 @@ p1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 p2 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))
 pol &lt;-<span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(p1,p2))
 p3 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">0</span>))
-p4 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>))[<span class="dv">5</span>:<span class="dv">1</span>,]
+p4 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.3</span>), <span class="kw">c</span>(<span class="fl">3.8</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.8</span>), <span class="kw">c</span>(<span class="fl">3.3</span>,<span class="fl">0.3</span>))[<span class="dv">5</span><span class="op">:</span><span class="dv">1</span>,]
 p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))
 (mpol &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_multipolygon</a></span>(<span class="kw">list</span>(<span class="kw">list</span>(p1,p2), <span class="kw">list</span>(p3,p4), <span class="kw">list</span>(p5))))
 ## MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3)))
@@ -499,7 +500,7 @@ p5 &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">
 <h3 class="hasAnchor">
 <a href="#wkt-and-wkb" class="anchor"></a>WKT and WKB</h3>
 <p>Well-known text (WKT) and well-known binary (WKB) are two encodings for simple feature geometries. Well-known text, e.g. seen in</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">10</span>:<span class="dv">1</span>,<span class="dv">5</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">10</span><span class="op">:</span><span class="dv">1</span>,<span class="dv">5</span>))
 <span class="kw">st_as_text</span>(x)
 ## [1] "LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)"</code></pre></div>
 <p>(but without the leading <code>## [1]</code> and quotes), is human-readable. Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. For that reason, we use well-known binary (WKB) encoding</p>
@@ -595,7 +596,7 @@ u_kmz &lt;-<span class="st"> "http://coagisweb.cabq.gov/datadownload/BikePaths.k
 <span class="kw">download.file</span>(u_kmz, <span class="st">"BikePaths.kmz"</span>)
 <span class="co"># Read file formats</span>
 biketrails_shp &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">"biketrails.shp"</span>)
-if(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] ==<span class="st"> "Linux"</span>) <span class="co"># may not work if not Linux</span>
+<span class="cf">if</span>(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] <span class="op">==</span><span class="st"> "Linux"</span>) <span class="co"># may not work if not Linux</span>
   biketrails_kmz &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">"BikePaths.kmz"</span>)
 u_kml =<span class="st"> "http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"</span>
 <span class="kw">download.file</span>(u_kml, <span class="st">"bikeraces.kml"</span>)
@@ -618,18 +619,18 @@ bikraces &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span cla
 <h3 class="hasAnchor">
 <a href="#benchmarks" class="anchor"></a>Benchmarks</h3>
 <p>Benchmarks show that <code>st_read()</code> is faster than <code><a href="http://www.rdocumentation.org/packages/rgdal/topics/readOGR">rgdal::readOGR()</a></code>, for example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
-shp_read_sf &lt;-<span class="st"> </span>function() <span class="kw">st_read</span>(<span class="st">"biketrails.shp"</span>)
-if(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] ==<span class="st"> "Linux"</span>) {
-  kmz_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>)
-  kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw">st_read</span>(<span class="st">"BikePaths.kmz"</span>)
-} else {
-    kmz_read_sp &lt;-<span class="st"> </span>function() <span class="kw">message</span>(<span class="st">"NA"</span>)
-    kmz_read_sf &lt;-<span class="st"> </span>function() <span class="kw">message</span>(<span class="st">"NA"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">shp_read_sp &lt;-<span class="st"> </span><span class="cf">function</span>() rgdal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rgdal/topics/readOGR">readOGR</a></span>(<span class="dt">dsn =</span> <span class="st">"."</span>, <span class="dt">layer =</span> <span class="st">"biketrails"</span>)
+shp_read_sf &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">st_read</span>(<span class="st">"biketrails.shp"</span>)
+<span class="cf">if</span>(<span class="kw">Sys.info</span>()[<span class="dv">1</span>] <span class="op">==</span><span class="st"> "Linux"</span>) {
+  kmz_read_sp &lt;-<span class="st"> </span><span class="cf">function</span>() rgdal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rgdal/topics/readOGR">readOGR</a></span>(<span class="dt">dsn =</span> <span class="st">"BikePaths.kmz"</span>)
+  kmz_read_sf &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">st_read</span>(<span class="st">"BikePaths.kmz"</span>)
+} <span class="cf">else</span> {
+    kmz_read_sp &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">message</span>(<span class="st">"NA"</span>)
+    kmz_read_sf &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">message</span>(<span class="st">"NA"</span>)
 }
-kml_read_sp &lt;-<span class="st"> </span>function() rgdal::<span class="kw">readOGR</span>(<span class="st">"bikeraces.kml"</span>)
-kml_read_sf &lt;-<span class="st"> </span>function() <span class="kw">st_read</span>(<span class="st">"bikeraces.kml"</span>)
-microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read_sp</span>(), <span class="kw">shp_read_sf</span>(),
+kml_read_sp &lt;-<span class="st"> </span><span class="cf">function</span>() rgdal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rgdal/topics/readOGR">readOGR</a></span>(<span class="st">"bikeraces.kml"</span>)
+kml_read_sf &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">st_read</span>(<span class="st">"bikeraces.kml"</span>)
+microbenchmark<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/microbenchmark/topics/microbenchmark">microbenchmark</a></span>(<span class="kw">shp_read_sp</span>(), <span class="kw">shp_read_sf</span>(),
                                <span class="kw">kmz_read_sp</span>(), <span class="kw">kmz_read_sf</span>(),
                                <span class="kw">kml_read_sp</span>(), <span class="kw">kml_read_sf</span>(), <span class="dt">times =</span> <span class="dv">10</span>)</code></pre></div>
 <p>On a laptop with an Intel i5-4300M CPU @ 2.60GHz with ssd the results were as follows:</p>
@@ -664,7 +665,7 @@ microbenchmark::<span class="kw">microbenchmark</span>(<span class="kw">shp_read
 <p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using <code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27 to web mercator (EPSG:3857) can be done by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.web_mercator &lt;-<span class="st"> </span><span class="kw">st_transform</span>(nc, <span class="dv">3857</span>)
-<span class="kw">st_geometry</span>(nc.web_mercator)[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span>:<span class="dv">3</span>,]
+<span class="kw">st_geometry</span>(nc.web_mercator)[[<span class="dv">4</span>]][[<span class="dv">2</span>]][[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,]
 ##          [,1]    [,2]
 ## [1,] -8463267 4377519
 ## [2,] -8460094 4377510
@@ -717,7 +718,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 <a href="#geometrycollection" class="anchor"></a>Geometrical operations</h2>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos_query.html">st_is_valid</a></span>(nc[<span class="dv">1</span>:<span class="dv">2</span>,])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos_query.html">st_is_valid</a></span>(nc[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,])
 ## [1] TRUE TRUE</code></pre></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">st_transform</span>(nc, <span class="dv">32119</span>)
@@ -727,7 +728,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 ## [1,]      0.00 312184.9 128341.85 475623.3
 ## [2,] 440561.15 114939.7 590434.80      0.0
 ## [3,]  18944.03 352719.1  78756.89 517527.8
-<span class="kw"><a href="../reference/st_relate.html">st_relate</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
+<span class="kw"><a href="../reference/st_relate.html">st_relate</a></span>(nc[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,], nc[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,])
 ## although coordinates are longitude/latitude, st_relate assumes that they are planar
 ##      [,1]        [,2]        [,3]        [,4]       
 ## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"
@@ -736,7 +737,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 ## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"
 ## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,], nc[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,])
 ## although coordinates are longitude/latitude, st_intersects assumes that they are planar
 ## Sparse geometry binary predicate list of length 5, where the predicate was `intersects'
 ##  1: 1, 2
@@ -744,7 +745,7 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 ##  3: 2, 3
 ##  4: 4
 ##  5: (empty)
-<span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span>:<span class="dv">5</span>,], nc[<span class="dv">1</span>:<span class="dv">4</span>,], <span class="dt">sparse =</span> <span class="ot">FALSE</span>)
+<span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,], nc[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,], <span class="dt">sparse =</span> <span class="ot">FALSE</span>)
 ## although coordinates are longitude/latitude, st_intersects assumes that they are planar
 ##       [,1]  [,2]  [,3]  [,4]
 ## [1,]  TRUE  TRUE FALSE FALSE
@@ -758,7 +759,7 @@ geom =<span class="st"> </span><span class="kw">st_geometry</span>(nc.web_mercat
 buf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(geom, <span class="dt">dist =</span> <span class="dv">30000</span>)
 <span class="kw">plot</span>(buf, <span class="dt">border =</span> <span class="st">'red'</span>)
 <span class="kw">plot</span>(geom, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(geom, -<span class="dv">5000</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'blue'</span>)</code></pre></div>
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(geom, <span class="dv">-5000</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'blue'</span>)</code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-41-1.png" width="672"></p>
 <p>Commands <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
@@ -767,14 +768,14 @@ u &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos_comb
 <p><img src="sf1_files/figure-html/unnamed-chunk-42-1.png" width="672"></p>
 <p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
-a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,-<span class="dv">1</span>,-<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))))
-b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,.<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.5</span>,-<span class="fl">0.5</span>,-<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="dv">1</span>))))
-<span class="kw">plot</span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
+a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))))
+b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">7</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,.<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="dv">1</span>,<span class="dv">1</span>))))
+<span class="kw">plot</span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"intersecting two polygons:"</span>)
 <span class="kw">plot</span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
 (i &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(a,b))
 ## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))
-<span class="kw">plot</span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>))
+<span class="kw">plot</span>(a, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))
 <span class="kw">title</span>(<span class="st">"GEOMETRYCOLLECTION"</span>)
 <span class="kw">plot</span>(b, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">border =</span> <span class="st">'red'</span>)
 <span class="kw">plot</span>(i, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">col =</span> <span class="st">'green'</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre></div>
@@ -816,13 +817,15 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 ## 
 ## attr(,"class")
 ## [1] "symbolic_units"
+## attr(,"xptr")
+## &lt;pointer: 0x559f651fd340&gt;
 ## 
 ## $class
 ## [1] "units"</code></pre></div>
 <p>The <strong>units</strong> package can be used to convert between units:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">units::<span class="kw">set_units</span>(a, km^<span class="dv">2</span>) <span class="co"># result in square kilometers</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">units<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/units/topics/set_units">set_units</a></span>(a, km<span class="op">^</span><span class="dv">2</span>) <span class="co"># result in square kilometers</span>
 ## 1137.389 km^2
-units::<span class="kw">set_units</span>(a, ha) <span class="co"># result in hectares</span>
+units<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/units/topics/set_units">set_units</a></span>(a, ha) <span class="co"># result in hectares</span>
 ## 113738.9 ha</code></pre></div>
 <p>The result can be stripped of their attributes if needs be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.numeric</span>(a)

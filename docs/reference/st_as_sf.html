@@ -218,7 +218,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611
 #&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs
+#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs
 #&gt;   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m
 #&gt; 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50
 #&gt; 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30
@@ -300,7 +300,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;                                     NA's   :2                             
 #&gt;     landuse       dist.m                geometry  
 #&gt;  W      :50   Min.   :  10.0   POINT        :155  
-#&gt;  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
+#&gt;  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
 #&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
@@ -314,19 +314,19 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  POINT        :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
 #&gt;                      </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.area</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.riv</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))</div><div class='output co'>#&gt;           geometry
 #&gt;  LINESTRING   :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'>as</span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>pol.grd</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
@@ -337,7 +337,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  POLYGON      :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
@@ -350,7 +350,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  LINESTRING   :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      

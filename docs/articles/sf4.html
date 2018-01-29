@@ -107,7 +107,8 @@
 </ul>
 <p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identical to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3
+## Loading required package: methods
+## Linking to GEOS 3.5.1, GDAL 2.2.1, proj.4 4.9.3
 nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))
 ## Reading layer `nc' from data source `/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
@@ -139,7 +140,7 @@ nc[<span class="dv">1</span>,]
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union
-nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NWBIR74) %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)
+nc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NWBIR74) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
@@ -150,7 +151,7 @@ nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyver
 ## 1      10 MULTIPOLYGON (((1270814 913...
 ## 2      10 MULTIPOLYGON (((1340555 959...</code></pre></div>
 <p>which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to <code>data.frame</code> first, this drops geometry list-columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc %&gt;%<span class="st"> </span>as.data.frame %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NWBIR74) %&gt;%<span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(NWBIR74) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">2</span>)
 ##   NWBIR74
 ## 1      10
 ## 2      10</code></pre></div>
@@ -173,7 +174,7 @@ nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyver
 ## attr(,"class")
 ## [1] "numeric"</code></pre></div>
 <p>but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc$NAME ==<span class="st"> "Ashe"</span>,]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc<span class="op">$</span>NAME <span class="op">==</span><span class="st"> "Ashe"</span>,]
 <span class="kw">class</span>(Ashe)
 ## [1] "sf"         "data.frame"
 nc[Ashe,]
@@ -194,7 +195,7 @@ nc[Ashe,]
 ## 18     4     200  3725     7     222 MULTIPOLYGON (((1402677 837...
 ## 19     1      17  1775     1      33 MULTIPOLYGON (((1171158 868...</code></pre></div>
 <p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection by using predicate <code>st_touches</code> (overlapping features don’t touch):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc$NAME ==<span class="st"> "Ashe"</span>,]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Ashe =<span class="st"> </span>nc[nc<span class="op">$</span>NAME <span class="op">==</span><span class="st"> "Ashe"</span>,]
 nc[Ashe, op =<span class="st"> </span>st_touches]
 ## Simple feature collection with 3 features and 14 fields
 ## geometry type:  MULTIPOLYGON
@@ -211,7 +212,7 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 ## 18     4     200  3725     7     222 MULTIPOLYGON (((1402677 837...
 ## 19     1      17  1775     1      33 MULTIPOLYGON (((1171158 868...</code></pre></div>
 <p>using <code>dplyr</code>, we can do the same by calling the predicate directly:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">lengths</span>(<span class="kw"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(., Ashe)) &gt;<span class="st"> </span><span class="dv">0</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">lengths</span>(<span class="kw"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(., Ashe)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
 ## Simple feature collection with 3 features and 14 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
@@ -231,8 +232,8 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 <h2 class="hasAnchor">
 <a href="#aggregating-or-summarizing-feature-sets" class="anchor"></a>Aggregating or summarizing feature sets</h2>
 <p>Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with <code>Ashe</code> to the remaining ones. We can do this by</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span>nc %&gt;%<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">frac74 =</span> SID74 /<span class="st"> </span>BIR74)
-(a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/aggregate.sf.html">aggregate</a></span>(nc[,<span class="st">"frac74"</span>], <span class="kw">list</span>(<span class="dt">Ashe_nb =</span> <span class="kw">lengths</span>(<span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc, Ashe)) &gt;<span class="st"> </span><span class="dv">0</span>), mean))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span>nc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">frac74 =</span> SID74 <span class="op">/</span><span class="st"> </span>BIR74)
+(a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/aggregate.sf.html">aggregate</a></span>(nc[,<span class="st">"frac74"</span>], <span class="kw">list</span>(<span class="dt">Ashe_nb =</span> <span class="kw">lengths</span>(<span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(nc, Ashe)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>), mean))
 ## Simple feature collection with 2 features and 2 fields
 ## Attribute-geometry relationship: 0 constant, 1 aggregate, 1 identity
 ## geometry type:  GEOMETRY
@@ -251,8 +252,8 @@ nc[Ashe, op =<span class="st"> </span>st_touches]
 <h2 class="hasAnchor">
 <a href="#joining-two-feature-sets-based-on-attributes" class="anchor"></a>Joining two feature sets based on attributes</h2>
 <p>The usual join verbs base R (<code>merge</code>) and of dplyr (<code>left_join</code>, etc) work for <code>sf</code> objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a <code>data.frame</code> (or similar), not an <code>sf</code> object:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span>:<span class="dv">2</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))))
-y =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">2</span>:<span class="dv">3</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))))
+y =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">merge</span>(x, y)
 ## Simple feature collection with 1 feature and 1 field
 ## geometry type:  POINT
@@ -289,10 +290,10 @@ y =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">
 <h2 class="hasAnchor">
 <a href="#joining-two-feature-sets-based-on-geometries" class="anchor"></a>Joining two feature sets based on geometries</h2>
 <p>For joining based on spatial intersections (of any kind), <code>st_join</code> is used:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span>:<span class="dv">3</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">geom =</span> <span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">3</span>))))
 y =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(x, <span class="fl">0.1</span>)
-x =<span class="st"> </span>x[<span class="dv">1</span>:<span class="dv">2</span>,]
-y =<span class="st"> </span>y[<span class="dv">2</span>:<span class="dv">3</span>,]
+x =<span class="st"> </span>x[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]
+y =<span class="st"> </span>y[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>,]
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(x), <span class="dt">xlim =</span> <span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">3.5</span>))
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(y), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
