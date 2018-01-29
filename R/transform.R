@@ -24,8 +24,10 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 
 chk_pol = function(x, dim = class(x)[1]) {
 	PolClose = function(y) {
-		if (any(head(y[[1]], 1) != tail(y[[1]], 1)))
+		if (any(head(y[[1]], 1) != tail(y[[1]], 1))) # close
 			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
+		else if (nrow(y[[1]]) == 3) # closed, but line
+			return(st_polygon(dim = dim))
 		y
 	}
 	if (length(x) > 0 && nrow(x[[1]]) > 2)
