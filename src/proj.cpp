@@ -1,6 +1,12 @@
 #include <iostream>
 #include <proj_api.h>
 
+#if PJ_VERSION == 480
+extern "C" {
+FILE *pj_open_lib(projCtx, const char *, const char *);
+}
+#endif
+
 #include "Rcpp.h"
 
 // [[Rcpp::export]]
@@ -30,6 +36,7 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 
 // [[Rcpp::export]]
 bool CPL_have_datum_files(SEXP foo) {
+
 #if PJ_VERSION <= 480
     FILE *fp;
 #else
