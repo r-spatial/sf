@@ -43,20 +43,17 @@ bool CPL_have_datum_files(SEXP foo) {
     PAFile fp;
 #endif
     projCtx ctx;
-	bool ret;
     ctx = pj_get_default_ctx();
     fp = pj_open_lib(ctx, "conus", "rb");
-    ret = (fp != NULL);
 	if (fp != NULL) {
 #if PJ_VERSION <= 480
     	fclose(fp);
 #else
     	pj_ctx_fclose(ctx, fp);
 #endif
-		ret = true;
+		return true;
 	} else
-		ret = false;
-    return ret;
+		return false; // #nocov
 }
 
 
