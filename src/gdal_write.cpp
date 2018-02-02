@@ -265,6 +265,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			    else
 			        Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
 			} // #nocov end
+			OGRFeature::DestroyFeature(poFeature);
 			Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
