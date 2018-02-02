@@ -131,7 +131,6 @@ Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false);
 	std::vector<OGRGeometry *> g(sfc.length());
-	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
 	Rcpp::List crs = sfc.attr("crs");
 	Rcpp::IntegerVector epsg(1);
@@ -148,7 +147,8 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		OGRErr err = f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso);
+		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
+			r.length(), wkbVariantIso);
 		if (err != 0) {
 			if (local_srs != NULL)      // #nocov
 				local_srs->Release();   // #nocov
