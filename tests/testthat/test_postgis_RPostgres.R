@@ -29,8 +29,7 @@ try(pg <- DBI::dbConnect(RPostgres::Postgres(), dbname = "postgis"), silent=TRUE
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    expect_error(st_write(), "no applicable method for 'st_write'")
-    expect_message(st_write(pts, pg, "sf_meuse__"), "Note: method with signature")
+    expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
     expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
     expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
     expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
@@ -138,7 +137,6 @@ test_that("can read from db", {
     #expect_warning(x <- st_read(pg, query = q), "crs")
     expect_silent(x <- st_read(pg, query = q))
 
-    expect_error(st_read(), "no applicable method for 'st_read'")
     expect_error(st_read(pg), "table name or a query")
 
     y <- st_read(pg, "sf_meuse__")
