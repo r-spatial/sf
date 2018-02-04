@@ -363,8 +363,6 @@ obj_sum.sfc <- function(x) {
 #' @name tibble
 #' @export
 pillar_shaft.sfc <- function(x, ...) {
-	if (! requireNamespace("pillar", quietly = TRUE))
-		stop("package pillar not available: install first?")
 	digits = options("pillar.sigfig")$pillar.sigfig
 	if (is.null(digits))
 		digits = options("digits")$digits
