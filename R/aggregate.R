@@ -101,6 +101,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 st_interpolate_aw = function(x, to, extensive) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
 		stop("st_interpolate_aw requires geometries in argument to")
+	if (! all_constant(x))
+		warning("st_interpolate_aw assumes attributes are constant over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
 	i = st_cast(i, "MULTIPOLYGON")
@@ -116,8 +118,6 @@ st_interpolate_aw = function(x, to, extensive) {
 	x = aggregate(x, list(idx[,2]), sum)
 	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
 	df$...area_t = df$...area_st = df$...area_s = NULL
-	if (! all_constant(df))
-		warning("st_interpolate_aw assumes attributes are constant over areas of x")
 	st_agr(df) = "aggregate"
 	df
 }
