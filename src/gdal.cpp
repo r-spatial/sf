@@ -14,6 +14,7 @@
 #include <Rcpp.h>
 
 #include "wkb.h"
+#include "gdal_sf_pkg.h"
 
 //
 // Returns errors to R
@@ -162,7 +163,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	return g;
 }
 
-std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false) {
+std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet) {
 	if (lco.size() == 0)
 		quiet = true; // nothing to report
 	if (! quiet)
@@ -176,6 +177,17 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false
 	ret[lco.size()] = NULL;
 	if (! quiet)
 		Rcpp::Rcout << std::endl;         // #nocov
+	return ret;
+}
+
+// convert NULL-terminated array of strings to Rcpp::CharacterVector
+Rcpp::CharacterVector charpp2CV(char **cp) {
+	int n = 0;
+	while (cp && cp[n] != NULL)
+		n++; // count
+	Rcpp::CharacterVector ret(n);
+	for (int i = 0; i < n; i++)
+		ret(i) = cp[i];
 	return ret;
 }
 

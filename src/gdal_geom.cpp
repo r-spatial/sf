@@ -3,7 +3,7 @@
 
 #include <Rcpp.h>
 
-#include "gdal.h"
+#include "gdal_sf_pkg.h"
 
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 

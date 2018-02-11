@@ -4,7 +4,7 @@
 
 #include "ogrsf_frmts.h"
 #include "wkb.h"
-#include "gdal.h"
+#include "gdal_sf_pkg.h"
 
 std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	std::vector<OGRFieldType> ret(obj.size());
