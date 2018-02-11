@@ -86,7 +86,7 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
 		warning("no simple feature geometries present: returning a data.frame", call. = FALSE) # nocov
-		return(as.data.frame(x)) # nocov
+		return(as.data.frame(x , stringsAsFactors = stringsAsFactors)) # nocov
 	}
 
 	nm = names(x)[which.geom]
