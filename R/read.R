@@ -81,8 +81,14 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
 
-	# TODO: take care of multiple geometry colums:
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
+
+	# in case no geometry is present:
+	if (length(which.geom) == 0) {
+		warning("no simple feature geometries present: returning a data.frame", call. = FALSE) # nocov
+		return(as.data.frame(x)) # nocov
+	}
+
 	nm = names(x)[which.geom]
 	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
