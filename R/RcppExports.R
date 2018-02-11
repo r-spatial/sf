@@ -33,6 +33,42 @@ CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_
     .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
 }
 
+CPL_gdalinfo <- function(obj, options) {
+    .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options)
+}
+
+CPL_gdalwarp <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalrasterize <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaltranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalvectortranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalbuildvrt <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename) {
+    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename)
+}
+
+CPL_gdalnearblack <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalgrid <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
+}
+
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
     invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
 }
@@ -205,8 +241,28 @@ CPL_proj_direct <- function(from_to, pts) {
     .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts)
 }
 
+CPL_xy2sfc <- function(cc, dim, to_points) {
+    .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points)
+}
+
 CPL_signed_area <- function(pts) {
     .Call('_sf_CPL_signed_area', PACKAGE = 'sf', pts)
+}
+
+CPL_get_metadata <- function(obj, domain_item, options) {
+    .Call('_sf_CPL_get_metadata', PACKAGE = 'sf', obj, domain_item, options)
+}
+
+CPL_get_crs <- function(obj, options) {
+    .Call('_sf_CPL_get_crs', PACKAGE = 'sf', obj, options)
+}
+
+CPL_inv_geotransform <- function(gt_r) {
+    .Call('_sf_CPL_inv_geotransform', PACKAGE = 'sf', gt_r)
+}
+
+CPL_read_gdal <- function(fname, options, driver, read_data = TRUE) {
+    .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data)
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {

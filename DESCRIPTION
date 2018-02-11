@@ -93,4 +93,6 @@ Collate:
 	sgbp.R
 	spatstat.R
 	deprecated.R
+	stars.R
+	gdal_utils.R
 RoxygenNote: 6.0.1
