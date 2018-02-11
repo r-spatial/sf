@@ -1,5 +1,7 @@
 # version 0.6-1
 
+* `st_read` now returns a `data.frame` when a table contains no geometries, rather than giving an error; it does emit a warning in this case. See https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html
+
 * move `pillar` from Imports: to Suggests:
 
 * add `st_as_sfc.raw` method
