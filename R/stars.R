@@ -1,11 +1,12 @@
-#' read gdal raster file (not to be called by users, but to be used by st_stars)
+#' read gdal raster file (not to be called by users, but to be used by stars::st_stars)
 #'
 #' @param x character vector, possibly of length larger than 1 when more than one raster is read
 #' @param options character
 #' @param driver character; when empty vector, driver is auto-detected.
+#' @param read_data; logical; if \code{FALSE}, only the imagery metadata is returned
 #' @export
-gdal_read = function(x, options = character(0), driver = character(0))
-	CPL_read_gdal(x, options, driver, TRUE)
+gdal_read = function(x, options = character(0), driver = character(0), read_data = TRUE)
+	CPL_read_gdal(x, options, driver, read_data)
 
 #' retrieve the inverse of a gdal geotransform
 #' 
