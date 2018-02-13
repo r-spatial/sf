@@ -231,6 +231,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	else {
 		object = as.list(substitute(list(...)))[-1L]
 		arg_nm = sapply(object, function(x) deparse(x))
+		if (identical(arg_nm, "."))
+			arg_nm = "geometry"
 		make.names(arg_nm[all_sfc_columns])
 	}
 

@@ -2,9 +2,10 @@
 % Please edit documentation in R/stars.R
 \name{gdal_read}
 \alias{gdal_read}
-\title{read gdal raster file (not to be called by users, but to be used by st_stars)}
+\title{read gdal raster file (not to be called by users, but to be used by stars::st_stars)}
 \usage{
-gdal_read(x, options = character(0), driver = character(0))
+gdal_read(x, options = character(0), driver = character(0),
+  read_data = TRUE)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -12,7 +13,9 @@ gdal_read(x, options = character(0), driver = character(0))
 \item{options}{character}
 
 \item{driver}{character; when empty vector, driver is auto-detected.}
+
+\item{read_data;}{logical; if \code{FALSE}, only the imagery metadata is returned}
 }
 \description{
-read gdal raster file (not to be called by users, but to be used by st_stars)
+read gdal raster file (not to be called by users, but to be used by stars::st_stars)
 }
