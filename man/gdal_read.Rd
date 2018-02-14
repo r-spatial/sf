@@ -14,7 +14,7 @@ gdal_read(x, options = character(0), driver = character(0),
 
 \item{driver}{character; when empty vector, driver is auto-detected.}
 
-\item{read_data;}{logical; if \code{FALSE}, only the imagery metadata is returned}
+\item{read_data}{logical; if \code{FALSE}, only the imagery metadata is returned}
 }
 \description{
 read gdal raster file (not to be called by users, but to be used by stars::st_stars)
