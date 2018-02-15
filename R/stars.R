@@ -33,7 +33,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
-st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE) {
+st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE, which = seq_len(prod(dim(x)))) {
 
 	stopifnot(identical(names(x), c("x", "y")))
 	if (is.na(as_points))
@@ -41,7 +41,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE) {
 
 	xy2sfc = function(cc, dm, as_points) { # form points or polygons from a matrix with corner points
 		if (as_points)
-			unlist(apply(cc, 1, function(x) list(sf::st_point(x))), recursive = FALSE)
+			unlist(apply(cc, 1, function(x) list(sf::st_point(x))), recursive = FALSE)[which]
 		else {
 			stopifnot(prod(dm) == nrow(cc))
 			lst = vector("list", length = prod(dm - 1))
@@ -54,7 +54,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE) {
 					lst[[ (y-1)*(dm[1]-1) + x ]] = sf::st_polygon(list(cc[c(i1,i2,i3,i4,i1),]))
 				}
 			}
-			lst
+			lst[which]
 		}
 	}
 
@@ -74,7 +74,8 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE) {
 	}
 	dims = c(x$to, y$to) + 1
 	if (use_cpp)
-		structure(CPL_xy2sfc(cc, dims, as_points), crs = st_crs(x$refsys), n_empty = 0L)
+		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
+			crs = st_crs(x$refsys), n_empty = 0L)
 	else
 		st_sfc(xy2sfc(cc, dims, as_points), crs = x$refsys)
 }

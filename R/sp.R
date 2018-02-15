@@ -66,7 +66,7 @@ st_as_sf.Spatial = function(x, ...) {
 		df = data.frame(row.names = row.names(x)) # empty
 	if ("geometry" %in% names(df))
 		warning("column \"geometry\" will be overwritten by geometry column")
-	if (!requireNamespace("sp", quietly = TRUE))
+	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
 	df$geometry = st_as_sfc(sp::geometry(x), ...)
 	st_as_sf(df)
@@ -84,42 +84,47 @@ st_as_sf.Spatial = function(x, ...) {
 #' @export
 st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 
+handle_bbox = function(sfc, sp) {
+	bb = structure(bb_wrap(as.vector(sp::bbox(sp))), class = "bbox")
+	structure(sfc, "bbox" = bb)
+}
+
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPoints = function(x, ..., precision = 0) {
+st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	cc = x@coords
 	dimnames(cc) = NULL
 	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
+	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPixels = function(x, ..., precision = 0) {
-	st_as_sfc(as(x, "SpatialPoints"), precision = precision)
+st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
+	handle_bbox(st_as_sfc(as(x, "SpatialPoints"), precision = precision), x)
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0) {
+st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 	lst = lapply(x@coords, st_multipoint)
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
+	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialLines = function(x, ..., precision = 0, forceMulti = FALSE) {
+st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
 		lapply(x@lines,
 			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
 	else
 		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
+	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
 }
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.SpatialPolygons = function(x, ..., precision = 0, forceMulti = FALSE) {
+st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (is.null(comment(x)) || comment(x) == "FALSE") {
 			if (!requireNamespace("rgeos", quietly = TRUE))
@@ -130,7 +135,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0, forceMulti = FALSE) 
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
 		lapply(x@polygons, function(y) st_polygon(Polygons2POLYGON(y@Polygons)))
-	do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision))
+	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
 }
 
 moreThanOneOuterRing = function(PolygonsLst) {

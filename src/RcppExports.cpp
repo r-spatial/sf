@@ -737,15 +737,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_xy2sfc
-List CPL_xy2sfc(NumericMatrix cc, NumericVector dim, bool to_points);
-RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP) {
+List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which);
+RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP, SEXP whichSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type cc(ccSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< bool >::type to_points(to_pointsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points));
+    Rcpp::traits::input_parameter< IntegerVector >::type which(whichSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -953,7 +954,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
-    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 3},
+    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},
