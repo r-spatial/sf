@@ -70,8 +70,10 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 
-	if (missing(layer))
-		layer = character(0)
+	layer = if (missing(layer))
+		character(0)
+	else
+		enc2utf8(layer)
 
 	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
@@ -354,7 +356,12 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 		stop("dsn should specify a data source or filename")
 	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
-	CPL_get_layers(dsn, options, do_count)
+	ret = CPL_get_layers(dsn, options, do_count)
+	if (length(ret[[1]]) > 0) {
+		Encoding(ret[[1]]) <- "UTF-8"
+		ret[[1]] <- enc2native(ret[[1]])
+	}
+	ret
 }
 
 guess_driver = function(dsn) {
