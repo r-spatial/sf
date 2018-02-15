@@ -82,8 +82,10 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 	if (! missing(precision) || is.null(attr(lst, "precision")))
 		attr(lst, "precision") = precision
 
-	# (re)compute & set bbox:
-	attr(lst, "bbox") = compute_bbox(lst)
+	# compute bbox, if not set:
+	bb = attr(lst, "bbox")
+	if (is.null(bb) || any(is.na(bb)))
+		attr(lst, "bbox") = compute_bbox(lst)
 
 	# check ring directions:
 	if (check_ring_dir) # also GEOMETRYCOLLECTION?

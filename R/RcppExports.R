@@ -241,8 +241,8 @@ CPL_proj_direct <- function(from_to, pts) {
     .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts)
 }
 
-CPL_xy2sfc <- function(cc, dim, to_points) {
-    .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points)
+CPL_xy2sfc <- function(cc, dim, to_points, which) {
+    .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points, which)
 }
 
 CPL_signed_area <- function(pts) {
