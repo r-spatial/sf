@@ -33,7 +33,9 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	vim
 
 # PROJ:
-ENV PROJ_VERSION 4.9.3
+# was: ENV PROJ_VERSION 4.9.3
+# http://download.osgeo.org/proj/proj-5.0.0RC3.tar.gz
+ENV PROJ_VERSION 5.0.0RC3
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
@@ -81,7 +83,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 
 RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
 
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","gdtools", "svglite", "maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr"), repos = "https://cloud.r-project.org")'
 
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
@@ -107,6 +109,9 @@ RUN R CMD INSTALL rgdal_*.tar.gz
 RUN git  clone  https://github.com/r-spatial/sf.git
 
 RUN R CMD build --no-build-vignettes --no-manual sf
+
+RUN apt-get install -y libcairo2-dev
+RUN Rscript -e 'install.packages(c("mapview", "tmap"), repos = "https://cloud.r-project.org")'
 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 
