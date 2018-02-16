@@ -26,6 +26,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libexpat1-dev \
 	libpq-dev \
 	libsqlite3-dev \
+	libcairo2-dev \
 	postgis \
 	r-base-dev \
 	gdb \
@@ -81,15 +82,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
   && cd .. \
   && ldconfig
 
-RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
-
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","gdtools", "svglite", "maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr"), repos = "https://cloud.r-project.org")'
-
-RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
-# or:
-# svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
-
-# tmap:
+# for tmap:
 RUN add-apt-repository -y ppa:opencpu/jq
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -100,19 +93,21 @@ RUN apt-get install -y \
 	libxml2-dev \
 	libprotobuf-dev \
 	protobuf-compiler
-RUN Rscript -e 'install.packages(c("protolite", "tmap"), repos = "https://cloud.r-project.org")'
 
+RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
+
+RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
+
+RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
+# or:
+# svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 RUN R CMD build rgdal/pkg --no-build-vignettes
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-
-RUN git  clone  https://github.com/r-spatial/sf.git
+RUN git clone  https://github.com/r-spatial/sf.git
 
 RUN R CMD build --no-build-vignettes --no-manual sf
 
-RUN apt-get install -y libcairo2-dev
-RUN Rscript -e 'install.packages(c("mapview", "tmap"), repos = "https://cloud.r-project.org")'
-
-RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
+# RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 
 CMD ["/bin/bash"]
