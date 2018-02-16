@@ -16,7 +16,7 @@ List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVect
 		NumericVector point(2);
 		point.attr("class") = CharacterVector::create("XY", "POINT", "sfg");
 		for (size_t i; i < which.length(); i++) {
-			int ix = which[i];
+			int ix = which[i] - 1;
 			point(0) = cc(ix, 0);
 			point(1) = cc(ix, 1);
 			ret(i) = clone(point);
@@ -32,9 +32,9 @@ List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVect
 		// List ret((dim[0] - 1) * (dim[1] - 1));
 		List ret(which.length());
 		for (size_t i = 0; i < which.length(); i++) {
-			int ix = which[i];
-			size_t y = ix / dim[1]; // row
-			size_t x = ix % dim[0]; // col
+			int ix = which[i] - 1; // from R, 1-based
+			size_t y = ix / (dim[1] - 1); // row
+			size_t x = ix % (dim[0] - 1); // col
 			points(0,0) = cc(y * dim[0] + x,           0); // top left
 			points(0,1) = cc(y * dim[0] + x,           1); // top left
 			points(1,0) = cc(y * dim[0] + x + 1,       0); // top right
