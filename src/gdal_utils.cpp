@@ -30,7 +30,7 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	int err = 0;
 
 	std::vector<GDALDatasetH> src_pt(src.size());
-	for (int i; i < src.size(); i++)
+	for (int i = 0; i < src.size(); i++)
 		src_pt[i] = GDALOpen((const char *) src[i], GA_ReadOnly);
 
 	std::vector <char *> options_char = create_options(options, true);
@@ -38,7 +38,7 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 
 	GDALDatasetH result = GDALWarp((const char *) dst[0], NULL, src.size(), src_pt.data(), opt, &err);
 	GDALWarpAppOptionsFree(opt);
-	for (int i; i < src.size(); i++)
+	for (int i = 0; i < src.size(); i++)
 		if (src_pt[i] != NULL)
 			GDALClose(src_pt[i]);
 	if (result != NULL)
