@@ -49,7 +49,7 @@ List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL, 
 		create_options(options).data());
 	if (ds == NULL)
-		return ret;
+		return ret; // #nocov
 
 	ret(0) = GDALGetRasterCount(ds);
 
@@ -76,7 +76,7 @@ List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 // [[Rcpp::export]]
 NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 	if (gt_r.size() != 6)
-		stop("wrong length geotransform");
+		stop("wrong length geotransform"); // #nocov
 	double gt_inv[6], gt[6];
 	for (int i = 0; i < 6; i++)
 		gt[i] = gt_r[i];
@@ -112,7 +112,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 			nx / resample, ny / resample,
 			GDT_Float64, nbands, band_index.begin(), 0, 0, 0);
 	if (err == CE_Failure)
-		stop("read failure");
+		stop("read failure"); // #nocov
 
 	for (int band = bands(0); band <= bands(1); band++) { // unlike x & y, band is 1-based
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
@@ -121,7 +121,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 		double offset = 0.0, scale = 1.0;
 		poBand->GetNoDataValue(&success);
 		if (success)
-			nodatavalue = poBand->GetNoDataValue(NULL);
+			nodatavalue = poBand->GetNoDataValue(NULL); // #nocov
 		poBand->GetScale(&has_scale);
 		if (has_scale)
 			scale = poBand->GetScale(NULL);
@@ -133,7 +133,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 			NumericVector nv = mat(_, band - 1);
 			for (int i = 0; i < nv.size(); i++) {
 				if (nv[i] == nodatavalue[0])
-					nv[i] = NA_REAL;
+					nv[i] = NA_REAL; // #nocov
 				else
 					nv[i] = (nv[i] * scale) + offset;
 			}
@@ -148,8 +148,8 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 		dims = IntegerVector::create(nx / resample, ny / resample);
 		dims.attr("names") = CharacterVector::create("x", "y");
 	} else {
-		dims = IntegerVector::create(nx / resample, ny / resample, diff(bands)[0] + 1);
-		dims.attr("names") = CharacterVector::create("x", "y", "band");
+		dims = IntegerVector::create(nx / resample, ny / resample, diff(bands)[0] + 1); // #nocov
+		dims.attr("names") = CharacterVector::create("x", "y", "band"); // #nocov
 	}
 	mat.attr("dim") = dims;
 	return mat;
@@ -165,7 +165,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
     if( poDataset == NULL )
-        stop("file not found");
+        stop("file not found"); // #nocov
 
 	CharacterVector Driver = CharacterVector::create(
         poDataset->GetDriver()->GetDescription(),
@@ -222,7 +222,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		sr->importFromWkt(ppt);
 		char *proj4; 
 		if (sr->exportToProj4(&proj4) != OGRERR_NONE) // need to error check?
-			stop("failure to export SRS to proj.4");
+			stop("failure to export SRS to proj.4"); // #nocov
 		p4 = CharacterVector::create(proj4); // need to CPLFree?
 		CPLFree(proj4);
 		delete sr;
@@ -235,7 +235,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		int set = 0;
 		poBand->GetNoDataValue(&set);
 		if (set)
-			nodatavalue = poBand->GetNoDataValue(NULL);
+			nodatavalue = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -243,7 +243,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	for (int i = 0; i < items.size(); i++) {
 		// Rcpp::Rcout << items[i] << std::endl;
 		if (items[i] == "SUBDATASETS")
-			sub = get_meta_data(poDataset, "SUBDATASETS");
+			sub = get_meta_data(poDataset, "SUBDATASETS"); // #nocov
 	}
 
 	List ReturnList = List::create(
