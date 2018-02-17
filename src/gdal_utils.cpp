@@ -23,6 +23,8 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	return ret;
 }
 
+// #nocov start
+
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options) {
@@ -63,6 +65,8 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(result);
 	return result == NULL || err;
 }
+// #nocov end
+
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,

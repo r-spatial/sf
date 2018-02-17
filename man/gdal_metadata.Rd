@@ -31,10 +31,12 @@ named list with metadata items
 get metadata of a raster layer
 }
 \examples{
-#f = system.file("tif/L7_ETMs.tif", package="stars")
-f = system.file("nc/avhrr-only-v2.19810901.nc", package = "stars")
-gdal_metadata(f)
-gdal_metadata(f, NA_character_)
-# try(gdal_metadata(f, "wrongDomain"))
-# gdal_metadata(f, c("", "AREA_OR_POINT"))
+\dontrun{
+  f = system.file("tif/L7_ETMs.tif", package="stars")
+  f = system.file("nc/avhrr-only-v2.19810901.nc", package = "stars")
+  gdal_metadata(f)
+  gdal_metadata(f, NA_character_)
+  try(gdal_metadata(f, "wrongDomain"))
+  gdal_metadata(f, c("", "AREA_OR_POINT"))
+}
 }

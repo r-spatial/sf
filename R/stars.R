@@ -22,9 +22,9 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # Xp = geotransform[0] + P*geotransform[1] + L*geotransform[2];
 # Yp = geotransform[3] + P*geotransform[4] + L*geotransform[5];
 	if (inverse) {
-		geotransform = gdal_inv_geotransform(geotransform)
+		geotransform = gdal_inv_geotransform(geotransform) # nocov start
 		if (any(is.na(geotransform)))
-			stop("geotransform not invertible")
+			stop("geotransform not invertible") # nocov end
 	}
 	stopifnot(ncol(x) == 2)
 	matrix(geotransform[c(1, 4)], nrow(x), 2, byrow = TRUE) + 
@@ -68,9 +68,9 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE, which =
 			expand.grid(x = seq(x$from - 1, x$to), y = seq(y$from - 1, y$to))
 		xy_from_colrow(as.matrix(xy), x$geotransform)
 	} else {
-		if (!as_points)
+		if (!as_points) # nocov start
 			stop("grid cell sizes not available")
-		expand.grid(x = x$values, y = y$values)
+		expand.grid(x = x$values, y = y$values) # nocov end
 	}
 	dims = c(x$to, y$to) + 1
 	if (use_cpp)
@@ -102,12 +102,14 @@ gdal_crs = function(file, options = character(0)) {
 #' @param parse logical; should metadata be parsed into a named list (\code{TRUE}) or returned as character data?
 #' @return named list with metadata items
 #' @examples
-#' #f = system.file("tif/L7_ETMs.tif", package="stars")
-#' f = system.file("nc/avhrr-only-v2.19810901.nc", package = "stars")
-#' gdal_metadata(f)
-#' gdal_metadata(f, NA_character_)
-#' # try(gdal_metadata(f, "wrongDomain"))
-#' # gdal_metadata(f, c("", "AREA_OR_POINT"))
+#' \dontrun{
+#'   f = system.file("tif/L7_ETMs.tif", package="stars")
+#'   f = system.file("nc/avhrr-only-v2.19810901.nc", package = "stars")
+#'   gdal_metadata(f)
+#'   gdal_metadata(f, NA_character_)
+#'   try(gdal_metadata(f, "wrongDomain"))
+#'   gdal_metadata(f, c("", "AREA_OR_POINT"))
+#' }
 gdal_metadata = function(file, domain_item = character(0), options = character(0), parse = TRUE) {
 	stopifnot(is.character(file))
 	stopifnot(is.character(domain_item))
