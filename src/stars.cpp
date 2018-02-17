@@ -17,7 +17,7 @@ CharacterVector get_meta_data(GDALDatasetH ds, CharacterVector domain_item) {
 	if (ds == NULL)
 		return NA_STRING;
 	if (domain_item.size() == 0)
-		ret = charpp2CV(GDALGetMetadata(ds, NULL));
+		ret = charpp2CV(GDALGetMetadata(ds, NULL)); // #nocov
 	else if (domain_item.size() == 1) {
 		if (CharacterVector::is_na(domain_item[0])) {
 			 char **dl = GDALGetMetadataDomainList(ds);
@@ -25,10 +25,10 @@ CharacterVector get_meta_data(GDALDatasetH ds, CharacterVector domain_item) {
 			 CSLDestroy(dl);
 		} else
 			 ret = charpp2CV(GDALGetMetadata(ds, domain_item[0]));
-	} else if (domain_item.size() == 2) // domain and item
+	} else if (domain_item.size() == 2) // domain and item // #nocov start
 		ret = CharacterVector::create(GDALGetMetadataItem(ds, domain_item[1], domain_item[0]));
 	else
-		ret = NA_STRING;
+		ret = NA_STRING; // #nocov end
 	return(ret);
 }
 

@@ -6,7 +6,7 @@ gdal_metadata(tif)
 gdal_metadata(tif, NA_character_)
 try(gdal_metadata(tif, "wrongDomain")) 
 gdal_metadata(tif, c("IMAGE_STRUCTURE"))
-gdal_metadata(tif, c("DERIVED_SUBDATASETS"))
+length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))
 
 # library(stars)
 d = structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75, 
@@ -26,3 +26,15 @@ identical(x1, x2)
 y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE)
 y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE)
 identical(y1, y2)
+
+r = gdal_read(tif)
+gt = c(0,1,0,0,0,1)
+gdal_inv_geotransform(gt)
+rc = expand.grid(x=1:3, y = 1:3)
+#(xy = xy_from_colrow(rc, gt))
+#xy_from_colrow(xy, gt, inverse = TRUE)
+gdal_crs(tif)
+
+gdal_metadata("foo")
+gdal_metadata(tif)
+
