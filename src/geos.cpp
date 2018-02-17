@@ -952,16 +952,16 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 		}
 	} // for i
 	size_t j = 0;
-    for (size_t i = 0; i < out.size(); i++) {
-        if (GEOSisEmpty_r(hGEOSCtxt, out[i]))
+	for (size_t i = 0; i < out.size(); i++) {
+	if (GEOSisEmpty_r(hGEOSCtxt, out[i]))
 			GEOSGeom_destroy_r(hGEOSCtxt, out[i]); // discard
-        else {
+		else {
 			out[j] = out[i];
 			index[j] = index[i];
 			std::sort(index[j].begin(), index[j].end());
-            j++;
+			j++;
 		}
-    }
+	}
 	out.resize(j);
 	index.resize(j);
 	// prepare output
