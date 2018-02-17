@@ -22,7 +22,7 @@ Loading required package: spatstat.data
 Loading required package: nlme
 Loading required package: rpart
 
-spatstat 1.54-0       (nickname: 'Vacuous Mission Statement') 
+spatstat 1.55-0       (nickname: 'Stunned Mullet') 
 For an introduction to spatstat, type 'beginner' 
 
 > suppressPackageStartupMessages(library(sf))
@@ -90,4 +90,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.588   0.292   1.576 
+  1.372   0.257   1.332 
