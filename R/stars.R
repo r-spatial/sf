@@ -1,26 +1,29 @@
 #' functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)
 #'
 #' @param x character vector, possibly of length larger than 1 when more than one raster is read
+#' @param ... ignored
 #' @param options character; raster layer read options
 #' @param driver character; when empty vector, driver is auto-detected.
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
 #' @name gdal
 #' @export
-gdal_read = function(x, options = character(0), driver = character(0), read_data = TRUE)
+gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE)
 	CPL_read_gdal(x, options, driver, read_data)
 
 #' @name gdal
 #' @export
 #' @param type gdal write type
-#' @param na_val (double) value to use for missing values; if \code{NA_real_}, no missing values will be written to dataset
-gdal_write = function(x, file, driver = "GTiff", options = character(0), type = "Float32", na_val = NA_real_) {
+#' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, missing values are not specially flagged in output dataset
+gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
+		NA_value = NA_real_) {
 	mat = x[[1]]
 	dims = dim(mat)
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
 	dim(mat) = c(dims[1], prod(dims[-1])) # flatten to 2-D matrix
 	gt = attr(x, "dimensions")$x$geotransform
-	CPL_write_gdal(mat, file, driver, options, type, dims, gt, st_crs(x)$proj4string, as.double(na_val))
+	CPL_write_gdal(mat, file, driver, options, type, dims, gt, st_crs(x)$proj4string, 
+		as.double(NA_value))
 }
 
 #' @param gt double vector of length 6
