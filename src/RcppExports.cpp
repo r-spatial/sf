@@ -811,6 +811,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_write_gdal
+void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options, CharacterVector Type, IntegerVector dims, NumericVector gt, CharacterVector p4s, NumericVector na_val);
+RcppExport SEXP _sf_CPL_write_gdal(SEXP xSEXP, SEXP fnameSEXP, SEXP driverSEXP, SEXP optionsSEXP, SEXP TypeSEXP, SEXP dimsSEXP, SEXP gtSEXP, SEXP p4sSEXP, SEXP na_valSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type fname(fnameSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type driver(driverSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type Type(TypeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type dims(dimsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gt(gtSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type p4s(p4sSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type na_val(na_valSEXP);
+    CPL_write_gdal(x, fname, driver, options, Type, dims, gt, p4s, na_val);
+    return R_NilValue;
+END_RCPP
+}
 // CPL_read_wkb
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
@@ -960,6 +978,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},
     {"_sf_CPL_inv_geotransform", (DL_FUNC) &_sf_CPL_inv_geotransform, 1},
     {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 4},
+    {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 9},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},

@@ -14,7 +14,7 @@ gdal_utils(util = "info", source, destination, options = character(0),
 
 \item{destination}{character; name of output layer}
 
-\item{options}{character; layer opening options}
+\item{options}{character; raster layer read options}
 
 \item{quiet}{logical; if \code{TRUE}, suppress printing of output for \code{info}}
 

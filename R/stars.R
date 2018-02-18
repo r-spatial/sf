@@ -1,18 +1,32 @@
-#' read gdal raster file (not to be called by users, but to be used by stars::st_stars)
+#' functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)
 #'
 #' @param x character vector, possibly of length larger than 1 when more than one raster is read
-#' @param options character
+#' @param options character; raster layer read options
 #' @param driver character; when empty vector, driver is auto-detected.
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
+#' @name gdal
 #' @export
 gdal_read = function(x, options = character(0), driver = character(0), read_data = TRUE)
 	CPL_read_gdal(x, options, driver, read_data)
 
-#' retrieve the inverse of a gdal geotransform
-#' 
-#' @param gt double vector of length 6
+#' @name gdal
 #' @export
-gdal_inv_geotransform = function(gt) CPL_inv_geotransform(as.double(gt))
+gdal_write = function(x, file, driver = "GTiff", options = character(0), type = "Float32", na_val = NA_real_) {
+	mat = x[[1]]
+	dims = dim(mat)
+	if (length(dims) == 2)
+		dims = c(dims, 1) # one band
+	dim(mat) = c(dims[1], prod(dims[-1])) # flatten to 2-D matrix
+	gt = attr(x, "dimensions")$x$geotransform
+	CPL_write_gdal(mat, file, driver, options, type, dims, gt, st_crs(x)$proj4string, as.double(na_val))
+}
+
+#' @param gt double vector of length 6
+#' @name gdal
+#' @details gdal_inv_geotransform returns the inverse geotransform
+#' @export
+gdal_inv_geotransform = function(gt)
+	CPL_inv_geotransform(as.double(gt))
 
 ## @param x two-column matrix with columns and rows, as understood by GDAL; 0.5 refers to the first cell's center; 
 ## FIXME: this is now duplicate in sf and stars
@@ -80,10 +94,10 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE, which =
 		st_sfc(xy2sfc(cc, dims, as_points), crs = x$refsys)
 }
 
-#' read coordinate reference system from GDAL data set
+#' @details gdal_crs reads coordinate reference system from GDAL data set
 #' @param file character; file name
-#' @param options character; raster layer read options
 #' @return object of class \code{crs}, see \link[sf]{st_crs}.
+#' @name gdal
 #' @export
 gdal_crs = function(file, options = character(0)) {
 	ret = CPL_get_crs(file, options)
@@ -91,14 +105,10 @@ gdal_crs = function(file, options = character(0)) {
 	ret
 }
 
-#' get metadata of a raster layer
-#'
-#' get metadata of a raster layer
-#' @name gdal_metadata
+#' @details get_metadata gets metadata of a raster layer
+#' @name gdal
 #' @export
-#' @param file file name
 #' @param domain_item character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.
-#' @param options character; character vector with data open options
 #' @param parse logical; should metadata be parsed into a named list (\code{TRUE}) or returned as character data?
 #' @return named list with metadata items
 #' @examples
@@ -132,10 +142,11 @@ split_strings = function(md, split = "=") {
 	structure(lst, class = "gdal_metadata")
 }
 
-#' @name gdal_metadata
 #' @param name logical; retrieve name of subdataset? If \code{FALSE}, retrieve description
 #' @export
 #' @return \code{gdal_subdatasets} returns a zero-length list if \code{file} does not have subdatasets, and else a named list with subdatasets.
+#' @name gdal
+#' @details gdal_subdatasets returns the subdatasets of a gdal dataset
 gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 	if (!("SUBDATASETS" %in% CPL_get_metadata(file, NA_character_, options)))
 		list()

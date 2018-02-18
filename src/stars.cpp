@@ -4,6 +4,7 @@
 #include <ogr_api.h>
 #include <ogr_geometry.h>
 #include <ogr_srs_api.h>
+#include <cpl_string.h>
 
 #include <Rcpp.h>
 
@@ -255,7 +256,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["proj_wkt"] = proj,
 		_["proj4string"] = p4,
 		_["geotransform"] = geotransform,
-        _["datatype"] =	poBand != NULL ? 
+		_["datatype"] =	poBand != NULL ? 
 			GDALGetDataTypeName(poBand->GetRasterDataType()) :
 			CharacterVector::create(NA_STRING),
 		_["sub"] = sub,
@@ -266,4 +267,103 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 
 	GDALClose(poDataset);
 	return ReturnList;
+}
+
+// [[Rcpp::export]]
+void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options,
+		CharacterVector Type, IntegerVector dims, NumericVector gt, CharacterVector p4s, NumericVector na_val) {
+
+	// figure out driver:
+	if (driver.length() != 1)
+		stop("driver should have length one"); // #nocov
+	GDALDriver *poDriver;
+	if ((poDriver = GetGDALDriverManager()->GetDriverByName(driver[0])) == NULL)
+		stop("driver not recognized."); // #nocov
+
+	// can this driver Create()?
+	char **papszMetadata = poDriver->GetMetadata();
+	if (!CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) )
+		stop("driver does not support Create() method."); // #nocov
+
+	// figure out eType:
+	GDALDataType eType = GDT_Unknown;
+	if (Type.length() != 1)
+		stop("Type should have length 1");
+	if (Type[0] == "Byte")
+		eType = GDT_Byte;
+	else if (Type[0] == "UInt16")
+		eType = GDT_UInt16;
+	else if (Type[0] == "Int16")
+		eType = GDT_Int16;
+	else if (Type[0] == "UInt32")
+		eType = GDT_UInt32;
+	else if (Type[0] == "Int16")
+		eType = GDT_Int32;
+	else if (Type[0] == "Float32")
+		eType = GDT_Float32;
+	else if (Type[0] == "Float64")
+		eType = GDT_Float64;
+	else
+		stop("unknown data type");
+
+	// create dataset:
+	if (fname.length() != 1)
+		stop("fname should have length one"); // #nocov
+	if (dims.length() != 3)
+		stop("dims should have length three"); // #nocov
+	GDALDataset *poDstDS;
+	if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
+			create_options(options).data())) == NULL)
+		stop("creating dataset failed");
+
+	// geotransform:
+	double adfGeoTransform[6];
+	if (gt.length() != 6)
+		stop("gt should have length 6"); // #nocov
+	for (int i = 0; i < gt.length(); i++)
+		adfGeoTransform[i] = gt[i];
+	if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
+		stop("SetGeoTransform: error");
+
+	// CRS:
+	if (p4s.length() != 1)
+		stop("p4s should have length three"); // #nocov
+	OGRSpatialReference oSRS;
+	oSRS.importFromProj4( p4s[0] );
+	char *pszSRS_WKT = NULL;
+	oSRS.exportToWkt( &pszSRS_WKT );
+	if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
+		stop("SetProjection: error");
+	CPLFree( pszSRS_WKT );
+
+	// NA's?
+	if (na_val.length() != 1)
+		stop("na_val should have length 1"); // #nocov
+	if (!NumericVector::is_na(na_val[0])) {
+		for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
+			GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+			if (poBand->SetNoDataValue(na_val[0]) != CE_None) {
+				warning("SetNoDataValue failed: not supported by driver?");
+				break;
+			}
+		}
+		for (int i = 0; i < x.ncol(); i++) {
+			NumericVector nv = x(_, i);
+			for (int j = 0; j < x.nrow(); j++) {
+				if (NumericVector::is_na(nv[j]))
+					nv[j] = na_val[0];
+			}
+			x(_, i) = nv;
+		}
+		checkUserInterrupt();
+	}
+
+	// write the whole lot:
+	if (poDstDS->RasterIO( GF_Write, 0, 0, dims[0], dims[1],
+			x.begin(), dims[0], dims[1], GDT_Float64, dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
+		stop("read failure"); // #nocov
+
+	/* close: */
+	GDALClose( (GDALDatasetH) poDstDS );
+	return;
 }
