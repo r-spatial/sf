@@ -18,7 +18,8 @@
 gdal_read(x, options = character(0), driver = character(0),
   read_data = TRUE)
 
-gdal_write(x, file, driver, options)
+gdal_write(x, file, driver = "GTiff", options = character(0),
+  type = "Float32", na_val = NA_real_)
 
 gdal_inv_geotransform(gt)
 
@@ -39,6 +40,10 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 \item{read_data}{logical; if \code{FALSE}, only the imagery metadata is returned}
 
 \item{file}{character; file name}
+
+\item{type}{gdal write type}
+
+\item{na_val}{(double) value to use for missing values; if \code{NA_real_}, no missing values will be written to dataset}
 
 \item{gt}{double vector of length 6}
 

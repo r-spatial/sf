@@ -11,6 +11,8 @@ gdal_read = function(x, options = character(0), driver = character(0), read_data
 
 #' @name gdal
 #' @export
+#' @param type gdal write type
+#' @param na_val (double) value to use for missing values; if \code{NA_real_}, no missing values will be written to dataset
 gdal_write = function(x, file, driver = "GTiff", options = character(0), type = "Float32", na_val = NA_real_) {
 	mat = x[[1]]
 	dims = dim(mat)
