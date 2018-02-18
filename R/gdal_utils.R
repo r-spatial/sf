@@ -3,8 +3,8 @@
 #' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
 #' @param source character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one
 #' @param destination character; name of output layer
+#' @param options character; raster layer read options
 #' @param quiet logical; if \code{TRUE}, suppress printing of output for \code{info}
-#' @param options character; layer opening options
 #' @param processing character; processing options for \code{demprocessing}
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.

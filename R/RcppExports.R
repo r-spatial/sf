@@ -265,6 +265,10 @@ CPL_read_gdal <- function(fname, options, driver, read_data = TRUE) {
     .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data)
 }
 
+CPL_write_gdal <- function(x, fname, driver, options, Type, dims, gt, p4s, na_val) {
+    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, gt, p4s, na_val))
+}
+
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
     .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }
