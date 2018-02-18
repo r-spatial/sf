@@ -288,23 +288,23 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	// figure out eType:
 	GDALDataType eType = GDT_Unknown;
 	if (Type.length() != 1)
-		stop("Type should have length 1");
+		stop("Type should have length 1"); // #nocov
 	if (Type[0] == "Byte")
-		eType = GDT_Byte;
+		eType = GDT_Byte; // #nocov
 	else if (Type[0] == "UInt16")
-		eType = GDT_UInt16;
+		eType = GDT_UInt16; // #nocov
 	else if (Type[0] == "Int16")
-		eType = GDT_Int16;
+		eType = GDT_Int16; // #nocov
 	else if (Type[0] == "UInt32")
-		eType = GDT_UInt32;
+		eType = GDT_UInt32; // #nocov
 	else if (Type[0] == "Int16")
-		eType = GDT_Int32;
+		eType = GDT_Int32; // #nocov
 	else if (Type[0] == "Float32")
 		eType = GDT_Float32;
-	else if (Type[0] == "Float64")
-		eType = GDT_Float64;
+	else if (Type[0] == "Float64") // #nocov
+		eType = GDT_Float64; // #nocov
 	else
-		stop("unknown data type");
+		stop("unknown data type"); // #nocov
 
 	// create dataset:
 	if (fname.length() != 1)
@@ -314,7 +314,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	GDALDataset *poDstDS;
 	if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
 			create_options(options).data())) == NULL)
-		stop("creating dataset failed");
+		stop("creating dataset failed"); // #nocov
 
 	// geotransform:
 	double adfGeoTransform[6];
@@ -323,7 +323,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	for (int i = 0; i < gt.length(); i++)
 		adfGeoTransform[i] = gt[i];
 	if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
-		stop("SetGeoTransform: error");
+		stop("SetGeoTransform: error"); // #nocov
 
 	// CRS:
 	if (p4s.length() != 1)
@@ -333,7 +333,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	char *pszSRS_WKT = NULL;
 	oSRS.exportToWkt( &pszSRS_WKT );
 	if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
-		stop("SetProjection: error");
+		stop("SetProjection: error"); // #nocov
 	CPLFree( pszSRS_WKT );
 
 	// NA's?
@@ -343,8 +343,8 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
 			GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
 			if (poBand->SetNoDataValue(na_val[0]) != CE_None) {
-				warning("SetNoDataValue failed: not supported by driver?");
-				break;
+				warning("SetNoDataValue failed: not supported by driver?"); // #nocov
+				break; // #nocov
 			}
 		}
 		for (int i = 0; i < x.ncol(); i++) {
