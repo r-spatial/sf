@@ -15,11 +15,11 @@
 \alias{gdal_subdatasets}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
-gdal_read(x, options = character(0), driver = character(0),
+gdal_read(x, ..., options = character(0), driver = character(0),
   read_data = TRUE)
 
-gdal_write(x, file, driver = "GTiff", options = character(0),
-  type = "Float32", na_val = NA_real_)
+gdal_write(x, ..., file, driver = "GTiff", options = character(0),
+  type = "Float32", NA_value = NA_real_)
 
 gdal_inv_geotransform(gt)
 
@@ -33,6 +33,8 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
 
+\item{...}{ignored}
+
 \item{options}{character; raster layer read options}
 
 \item{driver}{character; when empty vector, driver is auto-detected.}
@@ -43,7 +45,7 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 \item{type}{gdal write type}
 
-\item{na_val}{(double) value to use for missing values; if \code{NA_real_}, no missing values will be written to dataset}
+\item{NA_value}{(double) non-NA value to use for missing values; if \code{NA}, missing values are not specially flagged in output dataset}
 
 \item{gt}{double vector of length 6}
 
