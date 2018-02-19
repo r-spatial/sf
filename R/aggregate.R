@@ -29,9 +29,10 @@
 #' m3 = cbind(c(0, 0, -0.1, 0), c(0, 0.1, 0.1, 0))
 #' pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
 #' (p_ag3 = aggregate(p, pol, mean))
-#' # In case we need to pass an argument to the join function:
-#' (p_ag3 = aggregate(p, pol, mean, join = function(x,y) st_is_within_distance(x,y, dist = 0.3)))
 #' plot(p_ag3)
+#' # In case we need to pass an argument to the join function:
+#' (p_ag4 = aggregate(p, pol, mean, 
+#'      join = function(x, y) st_is_within_distance(x, y, dist = 0.3)))
 #' @export
 aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		join = st_intersects) {
