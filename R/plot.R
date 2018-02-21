@@ -19,7 +19,7 @@
 #' @param border color of polygon border
 #' @param add logical; add to current plot?
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
-#' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode.
+#' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
@@ -28,6 +28,8 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
+#' 
+#' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 #'
 #' @examples
 #' # plot linestrings:
@@ -123,7 +125,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
 	} else { # single map, or dots$add=TRUE:
 		opar = par()
-		if (!identical(TRUE, dots$add) && !identical(FALSE, reset))
+		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
 		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
@@ -226,7 +228,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			}
 			title(main)
 		}
-		if (!identical(TRUE, dots$add) && !identical(FALSE, reset)) {
+		if (reset) {
 			layout(matrix(1)) # reset
 			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page"))
 			par(opar[-desel])

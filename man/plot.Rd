@@ -93,7 +93,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{key.size}{amount of space reserved for the key (labels)}
 
-\item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode.}
+\item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.}
 
 \item{pch}{plotting symbol}
 
@@ -161,6 +161,8 @@ set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single m
 
 \code{plot.sfc} plots the geometry, additional parameters can be passed on
 to control color, lines or symbols.
+
+When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.
