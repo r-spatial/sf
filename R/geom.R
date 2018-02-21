@@ -743,9 +743,9 @@ geos_op2_df = function(x, y, geoms) {
 		warning("attribute variables are assumed to be spatially constant throughout all geometries",
 			call. = FALSE)
 	if (inherits(x, "tbl_df")) {
-		if (!requireNamespace("dplyr", quietly = TRUE))
-			stop("package dplyr required: install first?")
-		df = dplyr::tbl_df(df)
+		if (!requireNamespace("tibble", quietly = TRUE))
+			stop("package tibble required: install first?")
+		df = tibble::as_tibble(df)
 	}
 	df[[ attr(x, "sf_column") ]] = geoms
 	st_sf(df, sf_column_name = attr(x, "sf_column"))
