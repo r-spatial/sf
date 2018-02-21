@@ -32,7 +32,7 @@
 \method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
-  key.size = lcm(1.8))
+  key.size = lcm(1.8), reset = TRUE)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -92,6 +92,8 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.}
 
 \item{key.size}{amount of space reserved for the key (labels)}
+
+\item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode.}
 
 \item{pch}{plotting symbol}
 
