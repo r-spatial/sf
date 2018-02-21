@@ -16,7 +16,7 @@
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
 gdal_read(x, ..., options = character(0), driver = character(0),
-  read_data = TRUE)
+  read_data = TRUE, NA_value = NA_real_)
 
 gdal_write(x, ..., file, driver = "GTiff", options = character(0),
   type = "Float32", NA_value = NA_real_)
@@ -41,11 +41,11 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 \item{read_data}{logical; if \code{FALSE}, only the imagery metadata is returned}
 
+\item{NA_value}{(double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).}
+
 \item{file}{character; file name}
 
 \item{type}{gdal write type}
-
-\item{NA_value}{(double) non-NA value to use for missing values; if \code{NA}, missing values are not specially flagged in output dataset}
 
 \item{gt}{double vector of length 6}
 

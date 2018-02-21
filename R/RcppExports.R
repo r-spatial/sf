@@ -261,8 +261,8 @@ CPL_inv_geotransform <- function(gt_r) {
     .Call('_sf_CPL_inv_geotransform', PACKAGE = 'sf', gt_r)
 }
 
-CPL_read_gdal <- function(fname, options, driver, read_data = TRUE) {
-    .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data)
+CPL_read_gdal <- function(fname, options, driver, read_data, NA_value) {
+    .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data, NA_value)
 }
 
 CPL_write_gdal <- function(x, fname, driver, options, Type, dims, gt, p4s, na_val) {

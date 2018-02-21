@@ -5,15 +5,15 @@
 #' @param options character; raster layer read options
 #' @param driver character; when empty vector, driver is auto-detected.
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
+#' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).
 #' @name gdal
 #' @export
-gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE)
-	CPL_read_gdal(x, options, driver, read_data)
+gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_)
+	CPL_read_gdal(x, options, driver, read_data, NA_value)
 
 #' @name gdal
 #' @export
 #' @param type gdal write type
-#' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, missing values are not specially flagged in output dataset
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
 		NA_value = NA_real_) {
 	mat = x[[1]]
