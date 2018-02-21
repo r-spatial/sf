@@ -117,12 +117,13 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 
 	for (int band = bands(0); band <= bands(1); band++) { // unlike x & y, band is 1-based
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
-		NumericVector nodatavalue = NumericVector::create(NA_REAL);
-		int success = 0, has_scale = 0, has_offset = 0;
+		// NumericVector nodatavalue = NumericVector::create(NA_REAL);
+		// int success = 0, 
+		int has_scale = 0, has_offset = 0;
 		double offset = 0.0, scale = 1.0;
-		poBand->GetNoDataValue(&success);
-		if (success)
-			nodatavalue = poBand->GetNoDataValue(NULL); // #nocov
+		// poBand->GetNoDataValue(&success);
+		// if (success)
+		// 	nodatavalue = poBand->GetNoDataValue(NULL); // #nocov
 		poBand->GetScale(&has_scale);
 		if (has_scale)
 			scale = poBand->GetScale(NULL);
@@ -158,7 +159,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
-		bool read_data = true) {
+		bool read_data, NumericVector NA_value) {
 // reads data set metadata, and if read_data is true, adds data array
     GDALDataset  *poDataset;
 	poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
@@ -235,8 +236,12 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		poBand = poDataset->GetRasterBand( 1 );
 		int set = 0;
 		poBand->GetNoDataValue(&set);
-		if (set)
-			nodatavalue = poBand->GetNoDataValue(NULL); // #nocov
+		if (NA_value.size() > 0 && !NumericVector::is_na(NA_value[0])) {
+			if (set)
+				warning("NoDataValue of band is ignored");
+			nodatavalue[0] = NA_value[0];
+		} else if (set)
+			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -311,9 +316,9 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		stop("fname should have length one"); // #nocov
 	if (dims.length() != 3)
 		stop("dims should have length three"); // #nocov
-	GDALDataset *poDstDS;
-	if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
-			create_options(options).data())) == NULL)
+	GDALDataset *poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
+			create_options(options).data());
+	if (poDstDS == NULL)
 		stop("creating dataset failed"); // #nocov
 
 	// geotransform:
@@ -339,11 +344,11 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	// NA's?
 	if (na_val.length() != 1)
 		stop("na_val should have length 1"); // #nocov
-	if (!NumericVector::is_na(na_val[0])) {
+	if (! NumericVector::is_na(na_val[0])) {
 		for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
 			GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
 			if (poBand->SetNoDataValue(na_val[0]) != CE_None) {
-				warning("SetNoDataValue failed: not supported by driver?"); // #nocov
+				warning("SetNoDataValue not supported by driver"); // #nocov
 				break; // #nocov
 			}
 		}
