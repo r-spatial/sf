@@ -241,12 +241,10 @@ test_that("binary operations work on sf objects with common column names", {
 	pol2 <- pol1 + 1
 	sf1 <- st_sf(id = 1, pol1)
 	sf2 <- st_sf(id = 2, pol2)
-
+	# Test as regular data.frames
 	expect_is(st_intersection(sf1, sf2), "sf")
-
 	# Convert to tibbles
 	sf1 <- st_as_sf(tibble::as_tibble(sf1))
 	sf2 <- st_as_sf(tibble::as_tibble(sf2))
-
-	expect_is(st_intersection(sf1, sf2), c("sf", "tbl"))
+	expect_is(st_intersection(sf1, sf2), c("sf", "tbl_df"))
 })
