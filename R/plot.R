@@ -19,6 +19,7 @@
 #' @param border color of polygon border
 #' @param add logical; add to current plot?
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
+#' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode.
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
@@ -88,7 +89,7 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
-		key.pos = get_key_pos(x, ...), key.size = lcm(1.8)) {
+		key.pos = get_key_pos(x, ...), key.size = lcm(1.8), reset = TRUE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -121,7 +122,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
 	} else { # single map, or dots$add=TRUE:
-		if (!identical(TRUE, dots$add) && !identical(FALSE, dots$reset))
+		opar = par()
+		if (!identical(TRUE, dots$add) && !identical(FALSE, reset))
 			layout(matrix(1)) # reset
 		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
@@ -223,6 +225,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					main = make_unit_label(main, x[[main]])
 			}
 			title(main)
+		}
+		if (!identical(TRUE, dots$add) && !identical(FALSE, reset)) {
+			layout(matrix(1)) # reset
+			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page"))
+			par(opar[-desel])
 		}
 	}
 }
