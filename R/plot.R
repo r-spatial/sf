@@ -248,7 +248,7 @@ get_key_pos = function(x, ...) {
 		if (is.null(asp))
 			asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(bb[c(2,4)]) * pi)/180), 1.0)
 		asp_box = asp_box * asp
-		if (asp_box < asp_plt | !is.finite(asp_box)) # wider
+		if (!is.finite(asp_box) || asp_box < asp_plt) # wider
 			1
 		else # taller
 			4
