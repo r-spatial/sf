@@ -28,7 +28,7 @@
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
-#' 
+#'
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 #'
 #' @examples
@@ -89,8 +89,8 @@
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty", 
-		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n, 
+plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
+		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
 		key.pos = get_key_pos(x, ...), key.size = lcm(1.8), reset = TRUE) {
 
 	stopifnot(missing(y))
@@ -187,7 +187,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 								pal
 						colors[cuts]
 					}
-			} else { 
+			} else {
 				if (is.factor(values)) {
 					which.first = function(x) which(x)[1]
 					fnum = as.numeric(values)
@@ -197,7 +197,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				} else # no key:
 					key.pos = NULL
 			}
-			
+
 			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
@@ -208,7 +208,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
 				if (is.factor(values)) {
-					image.scale.factor(levels(values), colors, key.pos = key.pos, 
+					image.scale.factor(levels(values), colors, key.pos = key.pos,
 						axes = isTRUE(dots$axes), key.size = key.size)
 				} else
 					image.scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
@@ -236,19 +236,19 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	}
 }
 
-get_key_pos = function(x, ...) { 
+get_key_pos = function(x, ...) {
 	bb = st_bbox(x)
 	if (ncol(x) > 2 || any(is.na(bb)))
 		NULL
 	else {
 		pin = par("pin") # (width, height)
 		asp_plt = pin[2]/pin[1] # y/x: < 1 means wide
-		asp_box = diff(bb[c(4,2)]) / diff(bb[c(3,1)]) 
+		asp_box = diff(bb[c(4,2)]) / diff(bb[c(3,1)])
 		asp = list(...)$asp
 		if (is.null(asp))
 			asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(bb[c(2,4)]) * pi)/180), 1.0)
 		asp_box = asp_box * asp
-		if (asp_box < asp_plt) # wider
+		if (asp_box < asp_plt | !is.finite(asp_box)) # wider
 			1
 		else # taller
 			4
@@ -360,7 +360,7 @@ p_bind = function(lst) {
 }
 
 #' @name plot
-#' @param rule see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions 
+#' @param rule see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions
 #' @export
 plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch = NA, border = 1,
 		add = FALSE, rule = "evenodd") {
@@ -749,7 +749,7 @@ image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 identify.sfc = function(x, ..., n = min(10, length(x)), type = "n") {
 	l = locator(n, type = type)
 	pts = st_as_sf(as.data.frame(do.call(cbind, l)), coords = c("x", "y"), crs = st_crs(x))
-	#i = st_intersects(x, pts) 
+	#i = st_intersects(x, pts)
 	#which(lengths(i) > 0)
 	sapply(st_intersects(pts, x), function(x) if (length(x)) x[1] else NA_integer_)
 }
