@@ -1040,8 +1040,11 @@ st_make_grid = function(x,
 	} else
 		st_bbox(x)
 
-	if (! missing(cellsize))
+	cellsize_missing = if (! missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)
+		FALSE
+	} else
+		TRUE
 
 	if (missing(n)) {
 		nx = ceiling((bb[3] - offset[1])/cellsize[1])
@@ -1053,8 +1056,13 @@ st_make_grid = function(x,
 	}
 
 	# corner points:
-	xc = seq(offset[1], bb[3], length.out = nx + 1)
-	yc = seq(offset[2], bb[4], length.out = ny + 1)
+	if (cellsize_missing) {
+		xc = seq(offset[1], bb[3], length.out = nx + 1)
+		yc = seq(offset[2], bb[4], length.out = ny + 1)
+	} else {
+		xc = offset[1] + (0:nx) * cellsize[1]
+		yc = offset[2] + (0:ny) * cellsize[2]
+	}
 
 	if (what == "polygons") {
 		ret = vector("list", nx * ny)
