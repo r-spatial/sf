@@ -84,6 +84,15 @@ The following command installs all required dependencies:
 sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel
 ```
 
+#### Arch
+
+Get gdal, proj and geos from the main repos and udunits from the AUR:
+
+```
+pacman -S gdal proj geos
+pacaur/yaourt/whatever -S udunits
+```
+
 #### Other
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/master/inst/docker).
 
