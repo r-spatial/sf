@@ -188,31 +188,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		err == CE_None ? adfGeoTransform[3] : NA_REAL,
 		err == CE_None ? adfGeoTransform[4] : NA_REAL,
 		err == CE_None ? adfGeoTransform[5] : NA_REAL);
-/*	 
-	// from GDAL tutorial:
 
-	int             nBlockXSize, nBlockYSize;
-	int             bGotMin, bGotMax;
-	double          adfMinMax[2];
-	poBand->GetBlockSize( &nBlockXSize, &nBlockYSize );
-	printf( "Block=%dx%d Type=%s, ColorInterp=%s\n",
-       		nBlockXSize, nBlockYSize,
-        	GDALGetDataTypeName(poBand->GetRasterDataType()),
-        	GDALGetColorInterpretationName(
-           	poBand->GetColorInterpretation()) ); 
-
-	adfMinMax[0] = poBand->GetMinimum( &bGotMin );
-	adfMinMax[1] = poBand->GetMaximum( &bGotMax );
-	if( ! (bGotMin && bGotMax) )
-    	GDALComputeRasterMinMax((GDALRasterBandH)poBand, TRUE, adfMinMax);
-	printf( "Min=%.3fd, Max=%.3f\n", adfMinMax[0], adfMinMax[1] );
-	if( poBand->GetOverviewCount() > 0 )
-    	printf( "Band has %d overviews.\n", poBand->GetOverviewCount() );
-	if( poBand->GetColorTable() != NULL )
-    	printf( "Band has a color table with %d entries.\n",
-             		poBand->GetColorTable()->GetColorEntryCount() );
-*/
-	// projection:
+	// CRS, projection:
 	const char *wkt = poDataset->GetProjectionRef();
 	CharacterVector proj = NA_STRING;
 	CharacterVector p4 = NA_STRING;
@@ -238,7 +215,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		poBand->GetNoDataValue(&set);
 		if (NA_value.size() > 0 && !NumericVector::is_na(NA_value[0])) {
 			if (set)
-				warning("NoDataValue of band is ignored");
+				warning("NoDataValue of band is ignored"); // #nocov
 			nodatavalue[0] = NA_value[0];
 		} else if (set)
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
