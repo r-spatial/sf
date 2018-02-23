@@ -42,3 +42,4 @@ m = matrix(runif(100*100), 100, 100)
 m[ m > .8 ] = NA
 st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
 gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0)
+r = gdal_read(tif, NA_value = 255.0)
