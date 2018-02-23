@@ -1,13 +1,13 @@
-# Simple Features for R
-
-[![animation](https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif)](https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20)
-
 [![Build Status](https://travis-ci.org/r-spatial/sf.png?branch=master)](https://travis-ci.org/r-spatial/sf)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&svg=true)](https://ci.appveyor.com/project/edzerpebesma/sf)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg)](https://codecov.io/github/r-spatial/sf?branch=master)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
+
+# Simple Features for R
+
+<a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif" /></a>
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
 
