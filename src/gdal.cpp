@@ -390,7 +390,7 @@ Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 		return get_crs(&ref);
 	else {
 		const char *cp = p4s[0];
-		Rf_warning("Cannot import crs from PROJ.4 string `%s', missing crs returned\n", cp);
+		Rf_warning("GDAL cannot import PROJ.4 string `%s': returning missing CRS\n", cp);
 		return get_crs(NULL);
 	}
 }
