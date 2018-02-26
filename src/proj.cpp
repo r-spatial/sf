@@ -87,6 +87,9 @@ struct PJ_UNITS {
 	char	*id;		/* units keyword */
 	char	*to_meter;	/* multiply by value to get meters */
 	char	*name;		/* comments */
+#if PJ_VERSION >= 500
+	double   factor;       /* to_meter factor in actual numbers */
+#endif
 };
 struct PJ_UNITS *pj_get_units_ref( void );
 
@@ -169,6 +172,32 @@ Rcpp::List CPL_proj_info(int type) {
 			ret = ans;
 		} break;
 		case 3: {
+#if PJ_VERSION >= 500
+			Rcpp::List ans(4);
+			ans.attr("names") = Rcpp::CharacterVector::create("id", "to_meter",
+				"name", "factor");
+			int n = 0;
+			struct PJ_UNITS *ld;
+			for (ld = pj_get_units_ref(); ld->id ; ++ld) 
+				n++;
+			Rcpp::CharacterVector ans0(n);
+			Rcpp::CharacterVector ans1(n);
+			Rcpp::CharacterVector ans2(n);
+			Rcpp::NumericVector ans3(n);
+			n = 0;
+			for (ld = pj_get_units_ref(); ld->id ; ++ld) {
+				ans0(n) = ld->id;
+				ans1(n) = ld->to_meter;
+				ans2(n) = ld->name;
+				ans3(n) = ld->factor;
+				n++;
+			}
+			ans(0) = ans0;
+			ans(1) = ans1;
+			ans(2) = ans2;
+			ans(3) = ans3;
+			ret = ans;
+#else
 			Rcpp::List ans(3);
 			ans.attr("names") = Rcpp::CharacterVector::create("id", "to_meter",
 				"name");
@@ -190,6 +219,7 @@ Rcpp::List CPL_proj_info(int type) {
 			ans(1) = ans1;
 			ans(2) = ans2;
 			ret = ans;
+#endif
 		} break;
 		default:
 			Rcpp::stop("unknown type"); // #nocov
