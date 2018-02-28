@@ -12,6 +12,8 @@
 
 * add `st_as_sfc.raw` method
 
+* Bugfix: binary operations (`st_intersection`, `st_difference`, etc) no longer fail when operating on data frames of class `"tbl_df"` with common column names; #644
+
 # version 0.6-0
 
 * add `pillar` to Imports: to provide method for printing WKT geometries in tibbles
