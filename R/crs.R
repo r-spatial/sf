@@ -93,7 +93,12 @@ st_crs.sfc = function(x, ..., parameters = FALSE) {
 
 #' @name st_crs
 #' @export
-st_crs.bbox = function(x, ...) attr(x, "crs")
+st_crs.bbox = function(x, ...) {
+	if (is.null(attr(x, "crs")))
+		NA_crs_
+	else
+		attr(x, "crs")
+}
 
 #' @name st_crs
 #' @export
