@@ -128,7 +128,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param ... ignored
-#' @param dist_fun deprecated 
+#' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
 #' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
@@ -159,7 +159,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distanc
 		if (by_element) {
 			crs = st_crs(x)
 			dist_ll = function(x, y, tolerance)
-				lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs), 
+				lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs),
 					tolerance = tolerance)
 			d = mapply(dist_ll, x, y, tolerance = tolerance)
 			units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
@@ -244,7 +244,7 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 	# disjoint = !intersects :
 	if (sparse)
 		sgbp(lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
-			predicate = "disjoint", 
+			predicate = "disjoint",
 			ncol = attr(int, "ncol"),
 			region.id = attr(int, "region.id"))
 	else
@@ -737,15 +737,15 @@ geos_op2_df = function(x, y, geoms) {
 	if (inherits(y, "sf")) {
 		all_constant_y = all_constant(y)
 		st_geometry(y) = NULL
-		df = cbind(df, y[idx[,2], , drop = FALSE])
+		df = data.frame(df, y[idx[,2], , drop = FALSE])
 	}
 	if (! (all_constant_x && all_constant_y))
 		warning("attribute variables are assumed to be spatially constant throughout all geometries",
 			call. = FALSE)
 	if (inherits(x, "tbl_df")) {
-		if (!requireNamespace("dplyr", quietly = TRUE))
-			stop("package dplyr required: install first?")
-		df = dplyr::tbl_df(df)
+		if (!requireNamespace("tibble", quietly = TRUE))
+			stop("package tibble required: install first?")
+		df = tibble::as_tibble(df)
 	}
 	df[[ attr(x, "sf_column") ]] = geoms
 	st_sf(df, sf_column_name = attr(x, "sf_column"))
@@ -852,10 +852,10 @@ st_difference.sfg = function(x, y)
 
 #' @name geos_binary_ops
 #' @export
-#' @details When \code{st_difference} is called with a single argument, 
+#' @details When \code{st_difference} is called with a single argument,
 #' overlapping areas are erased from geometries that are indexed at greater
-#' numbers in the argument to \code{x}; geometries that are empty 
-#' or contained fully inside geometries with higher priority are removed entirely. 
+#' numbers in the argument to \code{x}; geometries that are empty
+#' or contained fully inside geometries with higher priority are removed entirely.
 #' The \code{st_difference.sfc} method with a single argument returns an object with
 #' an \code{"idx"} attribute with the orginal index for returned geometries.
 st_difference.sfc = function(x, y) {
