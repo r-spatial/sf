@@ -450,12 +450,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice); 
 #endif
 	}
-
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL); // where notice might be set!
-#ifdef HAVE350
-	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
-	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
-#endif
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
@@ -465,6 +460,10 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			out[i] = chk_(ret);
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
+#ifdef HAVE350
+	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
+	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
+#endif
 	CPL_geos_finish(hGEOSCtxt);
 	return out;
 }
