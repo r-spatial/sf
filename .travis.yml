@@ -3,7 +3,7 @@ language: r
 r:
   - release
   - oldrel
-#  - devel
+  - devel
 
 # cache: packages
 
