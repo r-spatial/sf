@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -49,19 +49,20 @@ yd : 1 yd
 mi : 1 mi
 fath : 1 fathom
 ch : 1 chain
-link : 1 0.201168 m
-us-in : 1 (1./39.37 m)
-us-ft : 1 US_survey_foot
+link : 1 *m
+us-in : us-ft : 1 US_survey_foot
 us-yd : 1 US_survey_yard
 us-ch : 1 chain
 us-mi : 1 US_survey_mile
-ind-yd : 1 0.91439523 m
-ind-ft : 1 0.30479841 m
-ind-ch : 1 20.11669506 m
+ind-yd : 1 *m
+ind-ft : 1 *m
+ind-ch : 1 ^20*m
+Warning message:
+Could not parse expression: '`1.`/39.37 `m`'. Returning as a single symbolic unit() 
 > 
 > if (length(unrecognized))
 + 	print(paste("unrecognized units:", paste(unrecognized, collapse = ", "), ": older GDAL version?"))
 > 
 > proc.time()
    user  system elapsed 
-  0.520   0.212   0.521 
+  0.607   0.256   0.532 

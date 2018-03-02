@@ -798,8 +798,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_gdal
-List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver, bool read_data, NumericVector NA_value);
-RcppExport SEXP _sf_CPL_read_gdal(SEXP fnameSEXP, SEXP optionsSEXP, SEXP driverSEXP, SEXP read_dataSEXP, SEXP NA_valueSEXP) {
+List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver, bool read_data, NumericVector NA_value, double resample);
+RcppExport SEXP _sf_CPL_read_gdal(SEXP fnameSEXP, SEXP optionsSEXP, SEXP driverSEXP, SEXP read_dataSEXP, SEXP NA_valueSEXP, SEXP resampleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -808,7 +808,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< CharacterVector >::type driver(driverSEXP);
     Rcpp::traits::input_parameter< bool >::type read_data(read_dataSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type NA_value(NA_valueSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal(fname, options, driver, read_data, NA_value));
+    Rcpp::traits::input_parameter< double >::type resample(resampleSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal(fname, options, driver, read_data, NA_value, resample));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -978,7 +979,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},
     {"_sf_CPL_inv_geotransform", (DL_FUNC) &_sf_CPL_inv_geotransform, 1},
-    {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 5},
+    {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 6},
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 9},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},

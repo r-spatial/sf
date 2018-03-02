@@ -35,7 +35,7 @@ vdv
 xlsx 
 .nc 
 driver `foo' not available.
-Dataset /tmp/RtmpmogAwc/file7cfb27055108.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/RtmpuC9YAX/file55731aceba68.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
@@ -45,8 +45,8 @@ Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 testthat results ================================================================
-OK: 597 SKIPPED: 1 FAILED: 0
+OK: 607 SKIPPED: 0 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.332   0.352   5.125 
+  4.374   0.335   5.161 

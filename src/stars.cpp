@@ -89,18 +89,23 @@ NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 }
 
 // formerly: stars/src/gdal.cpp
-NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, NumericVector nodatavalue) {
+NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, NumericVector nodatavalue, 
+		double resample = 1.0) {
 
 	IntegerVector x = meta["cols"];
 	IntegerVector y = meta["rows"];
 	IntegerVector bands = meta["bands"];
 
-	size_t nx = diff(x)[0] + 1, ny = diff(y)[0] + 1, nbands = diff(bands)[0] + 1,
-		resample = 1; // still need to find out what resample exactly does, 
-		              // and how it interacts with/should change geotransform
+	size_t nx = diff(x)[0] + 1, ny = diff(y)[0] + 1, nbands = diff(bands)[0] + 1;
 
-	// GDALRasterBand *poBand = poDataset->GetRasterBand( 1 );
-	NumericMatrix mat( (nx / resample) * (ny / resample), nbands );
+	if (resample < 1.0)
+		warning("resample < 1: trying to oversample");
+	// resample = 1;  --
+	// still need to find out what resample exactly does, 
+	// and how it interacts with and/or should change or changes geotransform
+
+	// collapse x & y into rows, redim later:
+	NumericMatrix mat( floor(nx / resample) * floor(ny / resample), nbands );
 
 	IntegerVector band_index(nbands);
 	for (int j = 0, i = bands(0); i <= bands(1); i++)
@@ -110,7 +115,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 			x(0) - 1, y(0) - 1,
 			nx, ny,
 			mat.begin(),
-			nx / resample, ny / resample,
+			floor(nx / resample), floor(ny / resample),
 			GDT_Float64, nbands, band_index.begin(), 0, 0, 0);
 	if (err == CE_Failure)
 		stop("read failure"); // #nocov
@@ -149,7 +154,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 	if (diff(bands)[0] == 0) { // one band:
 		dims = IntegerVector::create(nx / resample, ny / resample);
 		dims.attr("names") = CharacterVector::create("x", "y");
-	} else {
+	} else { // redim:
 		dims = IntegerVector::create(nx / resample, ny / resample, diff(bands)[0] + 1); // #nocov
 		dims.attr("names") = CharacterVector::create("x", "y", "band"); // #nocov
 	}
@@ -159,15 +164,17 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
-		bool read_data, NumericVector NA_value) {
-// reads data set metadata, and if read_data is true, adds data array
+		bool read_data, NumericVector NA_value, double resample = 1.0) {
+// reads and returns data set metadata, and if read_data is true, adds data array
     GDALDataset  *poDataset;
 	poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
-    if( poDataset == NULL )
+    if( poDataset == NULL ) {
+		Rcout << "trying to read file: " << fname[0] << std::endl; // #nocov
         stop("file not found"); // #nocov
+	}
 
 	CharacterVector Driver = CharacterVector::create(
         poDataset->GetDriver()->GetDescription(),
@@ -245,7 +252,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create())
 	);
 	if (read_data)
-		ReturnList.attr("data") = CPL_read_gdal_data(ReturnList, poDataset, nodatavalue);
+		ReturnList.attr("data") = CPL_read_gdal_data(ReturnList, poDataset, nodatavalue, resample);
 
 	GDALClose(poDataset);
 	return ReturnList;
