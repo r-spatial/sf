@@ -102,10 +102,9 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), 
-			ifelse(key.pos.missing, -1, key.pos), key.size)
+		lt = get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.size)
 		key.pos = lt$key.pos
-		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = TRUE) # FIXME: respect = FALSE?
+		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
 		if (isTRUE(dots$axes))
 			par(mar = c(2.1, 2.1, 1.2, 0))
@@ -633,16 +632,19 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param bb ignore
 #' @param n ignore
 #' @param total_size ignore
-get_layout = function(bb, n, total_size = c(1,1), key.pos = 0, key.size) {
+get_layout = function(bb, n, total_size, key.pos, key.size) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
-	asp = diff(bb[c(1,3)])/diff(bb[c(2,4)])
+# if key.pos = -1, it will be a return value, "optimally" placed
+	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
+	if (isTRUE(st_is_longlat(bb)))
+		asp = asp / cos(mean(bb[c(2,4)]) * pi /180)
 	size = function(nrow, n, asp) {
 		ncol = ceiling(n / nrow)
 		xsize = total_size[1] / ncol
-		ysize = xsize  / asp
+		ysize = xsize  * asp
 		if (xsize * ysize * n > prod(total_size)) {
 			ysize = total_size[2] / nrow
-			xsize = ysize * asp
+			xsize = ysize / asp
 		}
 		xsize * ysize
 	}
