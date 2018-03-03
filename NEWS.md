@@ -1,5 +1,7 @@
 # version 0.6-1
 
+* deprecate `sf_project`; use `lwgeom::st_transform_proj` instead
+
 * all Rcpp interfaces needed by package `stars` have now been moved into `sf`; pkg `stars` is now R-only, and only `sf` needs linking to GDAL.
 
 * interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`

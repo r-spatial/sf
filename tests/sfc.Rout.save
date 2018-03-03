@@ -850,6 +850,13 @@ POINT (0.0551135 1.05473)
 > 
 > # st_bbox:
 > library(sp)
+
+Attaching package: 'sp'
+
+The following objects are masked from 'package:sf':
+
+    degAxis, degreeLabelsEW, degreeLabelsNS
+
 > demo(meuse, ask = FALSE, echo = FALSE)
 > st_bbox(meuse)
   xmin   ymin   xmax   ymax 
@@ -999,4 +1006,4 @@ POINT (0 1)
 > 
 > proc.time()
    user  system elapsed 
-  2.643   0.277   2.598 
+  3.063   0.311   3.089 
