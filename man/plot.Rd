@@ -4,6 +4,8 @@
 \alias{plot}
 \alias{plot.sf}
 \alias{plot}
+\alias{get_key_pos}
+\alias{plot}
 \alias{plot.sfc_POINT}
 \alias{plot}
 \alias{plot.sfc_MULTIPOINT}
@@ -33,6 +35,8 @@
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
   key.size = lcm(1.8), reset = TRUE)
+
+get_key_pos(x, ...)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)

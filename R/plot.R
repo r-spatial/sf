@@ -96,20 +96,24 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
 	key.pos.missing = missing(key.pos)
+	max_plot_missing = missing(max.plot)
 	dots = list(...)
 
+	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
-		max_plot_missing = missing(max.plot)
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		mfrow = get_mfrow(st_bbox(x), min(max.plot, length(cols)), par("din"))
-		opar = if (isTRUE(dots$axes))
-				par(mfrow = mfrow, mar = c(2.1, 2.1, 1.2, 0))
-			else
-				par(mfrow = mfrow, mar = c(0,0,1.2,0))
-		on.exit(par(opar))
+		lt = get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), 
+			ifelse(key.pos.missing, -1, key.pos), key.size)
+		key.pos = lt$key.pos
+		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = TRUE) # FIXME: respect = FALSE?
+
+		if (isTRUE(dots$axes))
+			par(mar = c(2.1, 2.1, 1.2, 0))
+		else
+			par(mar = c(0,0,1.2,0))
 
 		if (max_plot_missing)
-			max.plot = prod(mfrow)
+			max.plot = prod(lt$mfrow)
 
 		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
 			if (max_plot_missing && is.null(options("sf_max.plot")[[1]]))
@@ -208,10 +212,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
 				if (is.factor(values)) {
-					image.scale.factor(levels(values), colors, key.pos = key.pos,
+					image_scale_factor(levels(values), colors, key.pos = key.pos,
 						axes = isTRUE(dots$axes), key.size = key.size)
 				} else
-					image.scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
+					image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -236,9 +240,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	}
 }
 
+#' @name plot
+#' @export
 get_key_pos = function(x, ...) {
 	bb = st_bbox(x)
-	if (ncol(x) > 2 || any(is.na(bb)))
+	if (any(is.na(bb)) || (inherits(x, "sf") && ncol(x) > 2))
 		NULL
 	else {
 		pin = par("pin") # (width, height)
@@ -622,7 +628,13 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 	}
 }
 
-get_mfrow = function(bb, n, total_size = c(1,1)) {
+#' @export
+#' @name stars
+#' @param bb ignore
+#' @param n ignore
+#' @param total_size ignore
+get_layout = function(bb, n, total_size = c(1,1), key.pos = 0, key.size) {
+# return list with "m" matrix, "key.pos", "widths" and "heights" fields
 	asp = diff(bb[c(1,3)])/diff(bb[c(2,4)])
 	size = function(nrow, n, asp) {
 		ncol = ceiling(n / nrow)
@@ -637,9 +649,34 @@ get_mfrow = function(bb, n, total_size = c(1,1)) {
 	sz = vapply(1:n, function(x) size(x, n, asp), 0.0)
 	nrow = which.max(sz)
 	ncol = ceiling(n / nrow)
-	structure(c(nrow, ncol), names = c("nrow", "ncol"))
-}
 
+	ret = list()
+	ret$mfrow = c(nrow, ncol)
+
+	ret$key.pos = if (!is.null(key.pos) && key.pos == -1L) { # figure out here: right or bottom?
+			newasp = asp * ncol / nrow # of the composition
+			dispasp = total_size[1] / total_size[2]
+			ifelse(newasp > dispasp, 1, 4)
+		} else
+			key.pos
+
+	m = matrix(1 : (nrow * ncol), nrow, ncol, byrow = TRUE)
+	if (!is.null(ret$key.pos) && ret$key.pos != 0) {
+		k = key.size
+		n = nrow * ncol + 1
+		switch(ret$key.pos,
+			{ ret$m = rbind(m, n); ret$widths = c(rep(1, ncol)); ret$heights = c(rep(1, nrow), k) },
+			{ ret$m = cbind(n, m); ret$widths = c(k, rep(1, ncol)); ret$heights = c(rep(1, nrow)) },
+			{ ret$m = rbind(n, m); ret$widths = c(rep(1, ncol)); ret$heights = c(k, rep(1, nrow)) },
+			{ ret$m = cbind(m, n); ret$widths = c(rep(1, ncol), k); ret$heights = c(rep(1, nrow)) }
+		)
+	} else {
+		ret$m = m
+		ret$widths = rep(1, ncol)
+		ret$heights = rep(1, nrow)
+	}
+	ret
+}
 
 bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mercator" CRS
 	wgs84 = st_crs(4326)
@@ -654,6 +691,16 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	st_bbox(st_transform(pts, merc))
 }
 
+#' functions only exported to be used internally by stars
+#' @name stars
+#' @export
+#' @param side ignore
+#' @param at ignore
+#' @param labels ignore
+#' @param lon ignore
+#' @param lat ignore
+#' @param ndiscr ignore
+#' @param reset ignore
 degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 	if (missing(at))
        	at = axTicks(side)
@@ -667,7 +714,16 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 	axis(side, at = at, labels = labels, ...)
 }
 
-image.scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+#' @name stars
+#' @export
+#' @param z ignore
+#' @param col ignore
+#' @param breaks ignore
+#' @param key.pos ignore
+#' @param add.axis ignore
+#' @param axes ignore
+#' @param ... ignore
+image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 	at = NULL, ..., axes = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
@@ -692,19 +748,34 @@ image.scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+	offset = 0.2
+	offs = switch(key.pos,
+		c(0,0,-offset,-offset),
+		c(0,0,-offset,-offset),
+		c(offset,offset,0,0),
+		c(offset,offset,0,0)) 
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
-			polygon(poly[[i]], c(0, 0, 1, 1), col=col[i], border=NA)
+			polygon(poly[[i]], c(0, 0, 1, 1) + offs, col=col[i], border=NA)
 		if (key.pos %in% c(2,4))
-			polygon(c(0, 0, 1, 1), poly[[i]], col=col[i], border=NA)
+			polygon(c(0, 0, 1, 1) + offs, poly[[i]], col=col[i], border=NA)
 	}
 
-	box()
+	# box() now would draw around [0,1]:
+	bx = c(breaks[1], rep(tail(breaks, 1), 2), breaks[1])
+	if (key.pos %in% c(1,3))
+		polygon(bx, c(0, 0, 1, 1) + offs, col = NA, border = 'black')
+	if (key.pos %in% c(2,4))
+		polygon(c(0, 0, 1, 1) + offs, bx, col = NA, border = 'black')
+
 	if (add.axis)
 		axis(key.pos, at)
 }
 
-image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+#' @name stars
+#' @export
+#' @param key.size ignore
+image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 	at = NULL, ..., axes = FALSE, key.size) {
 
 	n = length(z)
@@ -749,8 +820,6 @@ image.scale.factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 identify.sfc = function(x, ..., n = min(10, length(x)), type = "n") {
 	l = locator(n, type = type)
 	pts = st_as_sf(as.data.frame(do.call(cbind, l)), coords = c("x", "y"), crs = st_crs(x))
-	#i = st_intersects(x, pts)
-	#which(lengths(i) > 0)
 	sapply(st_intersects(pts, x), function(x) if (length(x)) x[1] else NA_integer_)
 }
 

@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -48,6 +48,13 @@ attr(,"package")
 > 
 > # SpatialMultiPoints
 > library(sp)
+
+Attaching package: 'sp'
+
+The following objects are masked from 'package:sf':
+
+    degAxis, degreeLabelsEW, degreeLabelsNS
+
 > set.seed(1331)
 > example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
 SpatialMultiPoints:
@@ -180,4 +187,4 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > 
 > proc.time()
    user  system elapsed 
-  3.344   0.308   3.336 
+  4.126   0.226   4.081 
