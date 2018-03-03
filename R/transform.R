@@ -195,5 +195,5 @@ st_to_s2 = function(x) {
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
 #' @export
 sf_project = function(from, to, pts) {
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts))
+	.Deprecated("lwgeom::st_transform_proj")
 }
