@@ -17,13 +17,6 @@ Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
 > library(sp)
-
-Attaching package: 'sp'
-
-The following objects are masked from 'package:sf':
-
-    degAxis, degreeLabelsEW, degreeLabelsNS
-
 > suppressPackageStartupMessages(library(units))
 > 
 > x = st_sfc(
@@ -124,4 +117,4 @@ MULTIPOINT (505.9977 -7.081155e-10, 1517.993 -7...
 > 
 > proc.time()
    user  system elapsed 
-  1.109   0.192   1.033 
+  0.883   0.257   0.812 
