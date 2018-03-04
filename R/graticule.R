@@ -214,16 +214,12 @@ trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
 }
 
 # copied from sp:
-#' @name stars
-#' @param x ignore
-#' @export
 degreeLabelsNS = function(x) {
 	pos = sign(x) + 2
 	dir = c("*S", "", "*N")
 	paste0(abs(x), "*degree", dir[pos])
 }
-#' @name stars
-#' @export
+
 degreeLabelsEW = function(x) {
 	x <- ifelse(x > 180, x - 360, x)
 	pos = sign(x) + 2

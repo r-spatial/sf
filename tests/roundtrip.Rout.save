@@ -48,13 +48,6 @@ attr(,"package")
 > 
 > # SpatialMultiPoints
 > library(sp)
-
-Attaching package: 'sp'
-
-The following objects are masked from 'package:sf':
-
-    degAxis, degreeLabelsEW, degreeLabelsNS
-
 > set.seed(1331)
 > example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
 SpatialMultiPoints:
@@ -187,4 +180,4 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > 
 > proc.time()
    user  system elapsed 
-  4.126   0.226   4.081 
+  3.480   0.275   3.433 

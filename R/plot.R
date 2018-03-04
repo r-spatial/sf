@@ -102,7 +102,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.size)
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.size)
 		key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
@@ -211,10 +211,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
 				)
 				if (is.factor(values)) {
-					image_scale_factor(levels(values), colors, key.pos = key.pos,
+					.image_scale_factor(levels(values), colors, key.pos = key.pos,
 						axes = isTRUE(dots$axes), key.size = key.size)
 				} else
-					image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
+					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -565,8 +565,8 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	} else if (axes) {
 		box()
 		if (isTRUE(st_is_longlat(x))) {
-			degAxis(1, ...)
-			degAxis(2, ...)
+			.degAxis(1, ...)
+			.degAxis(2, ...)
 		} else {
 			linAxis(1, ...)
 			linAxis(2, ...)
@@ -632,7 +632,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param bb ignore
 #' @param n ignore
 #' @param total_size ignore
-get_layout = function(bb, n, total_size, key.pos, key.size) {
+.get_layout = function(bb, n, total_size, key.pos, key.size) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1, it will be a return value, "optimally" placed
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
@@ -703,7 +703,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param lat ignore
 #' @param ndiscr ignore
 #' @param reset ignore
-degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
+.degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 	if (missing(at))
        	at = axTicks(side)
 	if (missing(labels)) {
@@ -725,7 +725,7 @@ degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 #' @param add.axis ignore
 #' @param axes ignore
 #' @param ... ignore
-image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+.image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 	at = NULL, ..., axes = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
@@ -777,7 +777,7 @@ image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 #' @name stars
 #' @export
 #' @param key.size ignore
-image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+.image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 	at = NULL, ..., axes = FALSE, key.size) {
 
 	n = length(z)
