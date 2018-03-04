@@ -658,7 +658,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 	ret$key.pos = if (!is.null(key.pos) && key.pos == -1L) { # figure out here: right or bottom?
 			newasp = asp * ncol / nrow # of the composition
 			dispasp = total_size[1] / total_size[2]
-			ifelse(newasp > dispasp, 1, 4)
+			ifelse(newasp > dispasp, 1, 4) # > or < ? oh dear,
 		} else
 			key.pos
 
