@@ -419,7 +419,7 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 	return Rcpp::DataFrame::create(
 		Rcpp::Named("name") = name,
 		Rcpp::Named("long_name") = long_name,
-		Rcpp::Named("create") = create,
+		Rcpp::Named("write") = create,
 		Rcpp::Named("copy") = copy,
 		Rcpp::Named("is_raster") = rattr,
 		Rcpp::Named("is_vector") = vattr,
