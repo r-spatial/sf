@@ -405,6 +405,7 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 	Rcpp::LogicalVector copy(ndr);
 	Rcpp::LogicalVector vattr(ndr);
 	Rcpp::LogicalVector rattr(ndr);
+	Rcpp::LogicalVector vsi_attr(ndr);
 	for (int i = 0; i < ndr; i++) {
 		GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
 		name(i) = GDALGetDriverShortName( pDriver );
@@ -413,15 +414,16 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 		copy(i) =   (pDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL);
 		vattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL);
 		rattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL);
+		vsi_attr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_VIRTUALIO) != NULL);
 	}
-	Rcpp::List ret(6);
-	ret(0) = name;
-	ret(1) = long_name;
-	ret(2) = create;
-	ret(3) = copy;
-	ret(4) = rattr;
-	ret(5) = vattr;
-	return ret;
+	return Rcpp::DataFrame::create(
+		Rcpp::Named("name") = name,
+		Rcpp::Named("long_name") = long_name,
+		Rcpp::Named("create") = create,
+		Rcpp::Named("copy") = copy,
+		Rcpp::Named("is_raster") = rattr,
+		Rcpp::Named("is_vector") = vattr,
+		Rcpp::Named("vsi") = vsi_attr);
 }
 
 // [[Rcpp::export]]

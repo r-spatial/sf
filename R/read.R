@@ -304,19 +304,17 @@ write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
 #' function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
 #' files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.
 #' @return a \code{data.frame} with driver metadata
+#' @details field \code{vsi} refers to the driver's capability to read/create datasets through the VSI*L API.
 #' @export
 #' @examples
 #' st_drivers()
 st_drivers = function(what = "vector") {
-	ret = as.data.frame(CPL_get_rgdal_drivers(0))
-	names(ret) = c("name", "long_name", "write", "copy", "is_raster", "is_vector")
+	ret = CPL_get_rgdal_drivers(0)
 	row.names(ret) = ret$name
-	if (what == "vector")
-		ret[ret$is_vector,]
-	else if (what == "raster")
-		ret[ret$is_raster,]
-	else
-		ret
+	switch(what,
+		vector = ret[ret$is_vector,],
+		raster = ret[ret$is_raster,],
+		ret)
 }
 
 #' @export
