@@ -99,7 +99,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 	size_t nx = diff(x)[0] + 1, ny = diff(y)[0] + 1, nbands = diff(bands)[0] + 1;
 
 	if (resample < 1.0)
-		warning("resample < 1: trying to oversample");
+		warning("resample < 1: trying to oversample"); // #nocov
 	// resample = 1;  --
 	// still need to find out what resample exactly does, 
 	// and how it interacts with and/or should change or changes geotransform
