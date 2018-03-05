@@ -127,7 +127,6 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
 	} else { # single map, or dots$add=TRUE:
-		opar = par()
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
 		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
@@ -233,7 +232,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		}
 		if (reset) {
 			layout(matrix(1)) # reset
-			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page"))
+			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
 			par(opar[-desel])
 		}
 	}
@@ -655,6 +654,8 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 	ret = list()
 	ret$mfrow = c(nrow, ncol)
 
+	# the following is right now only used by stars; FIXME:
+	# nocov start
 	ret$key.pos = if (!is.null(key.pos) && key.pos == -1L) { # figure out here: right or bottom?
 			newasp = asp * ncol / nrow # of the composition
 			dispasp = total_size[1] / total_size[2]
@@ -677,6 +678,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 		ret$widths = rep(1, ncol)
 		ret$heights = rep(1, nrow)
 	}
+	# nocov end
 	ret
 }
 
