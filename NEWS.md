@@ -1,6 +1,6 @@
 # version 0.6-1
 
-* deprecate `sf_project`; use `lwgeom::st_transform_proj` instead
+* `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` should now work properly; #660
 
 * all Rcpp interfaces needed by package `stars` have now been moved into `sf`; pkg `stars` is now R-only, and only `sf` needs linking to GDAL.
 
