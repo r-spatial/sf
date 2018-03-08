@@ -11,7 +11,7 @@ Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.p
 	person("Michael", "Sumner", role = "ctb"),
 	person("Robin", "Lovelace", role = "ctb"),
 	person("Hadley", "Wickham", role = "ctb"),
-	person("Jeroen", "Ooms", role = "ctb"),
+	person("Jeroen", "Ooms", role = "ctb", comment = c(ORCID = "0000-0002-4035-0289")),
 	person("Etienne", "Racine", role = "ctb"))
 Depends:
 	R (>= 3.3.0), methods
