@@ -6,7 +6,7 @@
 
 * interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`
 
-* improve how (base) plots are resetted; add `reset=FALSE` to `plot` to enable adding to plots with a legend
+* improve how (base) plots are reset; add `reset = FALSE` to `plot` to enable adding to plots with a legend
 
 * `st_read` now returns a `data.frame` when a table contains no geometries, rather than giving an error; it does emit a warning in this case. See https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html
 
