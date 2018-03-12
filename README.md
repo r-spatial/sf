@@ -27,7 +27,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 * wiki page describing [sp-sf migration](https://github.com/r-spatial/sf/wiki/Migrating)
 
 
-## Installling
+## Installing
 
 Install either from CRAN with:
 ```r
