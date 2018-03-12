@@ -81,13 +81,14 @@ RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com/"), download.file.m
 
 RUN Rscript -e 'install.packages(c("sf", "lwgeom", "covr", "raster"), dependencies = TRUE, repos = "https://cloud.r-project.org")'
 
+RUN rm -fr sf
+
 RUN git clone https://github.com/r-spatial/sf.git
 
 RUN R CMD build sf
 
 ENV PROJ_VERSION 5.0.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
   && tar zxf proj-*tar.gz \
   && cd proj* \
@@ -96,6 +97,7 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
   && make install \
   && cd .. \
   && ldconfig
+
 RUN Rscript -e 'install.packages(c("rgdal"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
 
 RUN PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
