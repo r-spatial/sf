@@ -40,7 +40,7 @@ RUN apt-get install -y texinfo \
        texlive-latex-recommended
 
 # stuff for the tmaptools/rmapshaper/geojsonio etc stack:
-RUN apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler
+RUN apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler libcairo2-dev
 RUN add-apt-repository -y ppa:opencpu/jq
 RUN apt-get update
 RUN apt-get install -y libjq-dev
