@@ -886,7 +886,6 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	// initialize objects
 	int dim = 2;
-	bool contained = false;
 	std::vector< std::vector<size_t> > index;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
@@ -908,7 +907,6 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 					}
 				}
 				// query which geometries in out overlap with geom
-				contained = false;
 				std::vector<size_t> tree_sel;
 				GEOSSTRtree_query_r(hGEOSCtxt, tree, geom, cb, &tree_sel);
 				// iterate over items in query and erase overlapping areas in geom
