@@ -100,6 +100,7 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
 
 RUN Rscript -e 'install.packages(c("rgdal"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
 
-RUN PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
+#RUN PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
+RUN PROJ_LIB=/usr/share/proj R CMD INSTALL sf_*tar.gz
 
 CMD ["/bin/bash"]

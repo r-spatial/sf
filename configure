@@ -3675,7 +3675,7 @@ $as_echo "$as_me: PROJ: ${proj_version}" >&6;}
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
+LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
 proj4ok=yes
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
@@ -4088,7 +4088,7 @@ rm -f geos_test errors.txt geos_test.cpp
 #
 # add PROJ_LIBS
 #
-PKG_LIBS="${PKG_LIBS} ${PROJ_LIBS}"
+PKG_LIBS="${PROJ_LIBS} ${PKG_LIBS}"
 
 
 #
