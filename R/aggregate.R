@@ -2,6 +2,8 @@
 #'
 #' aggregate an \code{sf} object, possibly union-ing geometries
 #' 
+#' @note Does not work using the formula notation involving \code{~} defined in \link[stats]{aggregate}.
+#' 
 #' @param x object of class \link{sf}
 #' @param by either a list of grouping vectors with length equal to \code{nrow(x)} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc} with geometries that are used to generate groupings, using the binary predicate specified by the argument \code{join}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
