@@ -1,8 +1,11 @@
 #' aggregate an \code{sf} object
 #'
 #' aggregate an \code{sf} object, possibly union-ing geometries
+#' 
+#' @note Does not work using the formula notation involving \code{~} defined in \link[stats]{aggregate}.
+#' 
 #' @param x object of class \link{sf}
-#' @param by either a list of grouping elements, each as long as the variables in the data frame \code{x} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc}, the geometries of which are used to find aggregation groups of \code{x} by using function \code{join}
+#' @param by either a list of grouping vectors with length equal to \code{nrow(x)} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc} with geometries that are used to generate groupings, using the binary predicate specified by the argument \code{join}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param do_union logical; should grouped geometries be unioned using \link{st_union}?
