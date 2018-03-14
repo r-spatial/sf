@@ -265,6 +265,9 @@ First 10 features:
 > storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 > x <- storms.sf %>% group_by(name, year) %>% nest
 > 
+> nrow(distinct(nc[c(1,1,1,2,2,3:100),]))
+[1] 100
+> 
 > proc.time()
    user  system elapsed 
-  2.686   0.272   2.627 
+  2.935   0.256   2.868 
