@@ -39,9 +39,9 @@ arrange.sf <- function(.data, ..., .dots) {
 #' @export
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
-distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
-}
+#distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
+#	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+#}
 
 #' @name dplyr
 #' @param add see corresponding function in dplyr
@@ -49,7 +49,7 @@ distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc %>% group_by(area_cl) %>% class()
-group_by.sf <- function(.data, ..., .dots, add = FALSE) {
+group_by.sf <- function(.data, ..., add = FALSE) {
 	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
@@ -166,6 +166,22 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 		sf_column_name = attr(.data, "sf_column"))
 }
 
+#' @name dplyr
+#' @export
+#' @details \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
+distinct.sf <- function(.data, ..., .keep_all = FALSE) {
+	scn = attr(.data, "sf_column")
+	geom = st_geometry(.data)
+	if (!is.null(.data$distinct_geometries))
+		warning("column distinct_geometries is being overwritten") # nocov
+	.data$distinct_geometries = vapply(st_equals(.data), head, NA_integer_, n = 1)
+	st_geometry(.data) = NULL
+	.data = NextMethod()
+	.data[[ scn ]] = geom[.data$distinct_geometries]
+	.data$distinct_geometries = NULL
+	st_as_sf(.data)
+}
+
 ## tidyr methods:
 
 #' @name dplyr
@@ -213,8 +229,8 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
-  key = rlang::enquo(key)
-  value = rlang::enquo(value)
+	key = rlang::enquo(key)
+	value = rlang::enquo(value)
 
 	class(data) <- setdiff(class(data), "sf")
     st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert,
