@@ -236,9 +236,9 @@ p <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
 p <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
 ## POINT (1 4)
 p <span class="op">+</span><span class="st"> </span>p
-## POINT (0 4)
+## POINT (0 2)
 p <span class="op">*</span><span class="st"> </span>p
-## POINT (0 4)
+## POINT (0 2)
 rot =<span class="st"> </span><span class="cf">function</span>(a) <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(a), <span class="kw">sin</span>(a), <span class="op">-</span><span class="kw">sin</span>(a), <span class="kw">cos</span>(a)), <span class="dv">2</span>, <span class="dv">2</span>)
 p <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi<span class="op">/</span><span class="dv">4</span>)
 ## POINT (1.414214 1.414214)
@@ -340,8 +340,6 @@ y =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b0 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))))
 b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))))
 <span class="kw"><a href="../reference/geos_query.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(b0,b1))
-## Warning in evalq((function (..., call. = TRUE, immediate. = FALSE,
-## noBreaks. = FALSE, : Self-intersection at or near point -1 -1
 ## [1]  TRUE FALSE</code></pre></div>
 <p>and <code>st_is_simple</code> whether line geometries are simple:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))), 
@@ -373,7 +371,7 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 ## [1,] "212FF1FF2" "FF2FF1212" "212101212" "FF2FF1212"
 ## [2,] "FF2FF1212" "212101212" "212101212" "FF2FF1212"
 ## [3,] "FF2FF1212" "FF2FF1212" "212101212" "FF2FF1212"</code></pre></div>
-<p>element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(B\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
+<p>element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(E\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
 </div>
 <div id="binary-logical-operations" class="section level3">
 <h3 class="hasAnchor">

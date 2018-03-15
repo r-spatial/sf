@@ -291,22 +291,22 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
 ##  [1] [                     [[&lt;-                  $&lt;-                  
-##  [4] aggregate             cbind                 coerce               
-##  [7] identify              initialize            merge                
-## [10] plot                  print                 rbind                
-## [13] show                  slotsFromS3           st_agr               
-## [16] st_agr&lt;-              st_as_sf              st_bbox              
-## [19] st_boundary           st_buffer             st_cast              
-## [22] st_centroid           st_collection_extract st_convex_hull       
-## [25] st_coordinates        st_crs                st_crs&lt;-             
-## [28] st_difference         st_geometry           st_geometry&lt;-        
-## [31] st_intersection       st_is                 st_line_merge        
-## [34] st_node               st_point_on_surface   st_polygonize        
-## [37] st_precision          st_segmentize         st_set_precision     
-## [40] st_simplify           st_snap               st_sym_difference    
-## [43] st_transform          st_triangulate        st_union             
-## [46] st_voronoi            st_wrap_dateline      st_write             
-## [49] st_zm                
+##  [4] aggregate             as.data.frame         cbind                
+##  [7] coerce                identify              initialize           
+## [10] merge                 plot                  print                
+## [13] rbind                 show                  slotsFromS3          
+## [16] st_agr                st_agr&lt;-              st_as_sf             
+## [19] st_bbox               st_boundary           st_buffer            
+## [22] st_cast               st_centroid           st_collection_extract
+## [25] st_convex_hull        st_coordinates        st_crs               
+## [28] st_crs&lt;-              st_difference         st_geometry          
+## [31] st_geometry&lt;-         st_intersection       st_is                
+## [34] st_line_merge         st_node               st_point_on_surface  
+## [37] st_polygonize         st_precision          st_segmentize        
+## [40] st_set_precision      st_simplify           st_snap              
+## [43] st_sym_difference     st_transform          st_triangulate       
+## [46] st_union              st_voronoi            st_wrap_dateline     
+## [49] st_write              st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -686,11 +686,12 @@ microbenchmark<span class="op">::</span><span class="kw"><a href="http://www.rdo
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
 ##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              
-##  [3] st_as_sfc.character*          st_as_sfc.factor*            
-##  [5] st_as_sfc.list*               st_as_sfc.map*               
-##  [7] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
-##  [9] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
-## [11] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
+##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        
+##  [5] st_as_sfc.factor*             st_as_sfc.list*              
+##  [7] st_as_sfc.map*                st_as_sfc.raw*               
+##  [9] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
+## [11] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
+## [13] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
 ## see '?methods' for accessing help and source code
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
@@ -722,9 +723,6 @@ nc2 &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(nc.sp)
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">st_transform</span>(nc, <span class="dv">32119</span>)
 <span class="kw"><a href="../reference/geos_measures.html">st_distance</a></span>(x[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">22</span>),], x[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">33</span>,<span class="dv">55</span>,<span class="dv">56</span>),])
-## Warning: make_unit() is deprecated. Please use as_units()
-
-## Warning: make_unit() is deprecated. Please use as_units()
 ## Units: m
 ##           [,1]     [,2]      [,3]     [,4]
 ## [1,]      0.00 312184.9 128341.85 475623.3
@@ -795,11 +793,6 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <span class="kw"><a href="../reference/geos_query.html">st_is_simple</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x1))
 ## [1] FALSE
 <span class="kw"><a href="../reference/geos_query.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(x2,x3))
-## Warning in evalq((function (..., call. = TRUE, immediate. =
-## FALSE, noBreaks. = FALSE, : Self-intersection at or near point 1
-## 0.59999999999999998
-## Warning in evalq((function (..., call. = TRUE, immediate. = FALSE,
-## noBreaks. = FALSE, : Self-intersection at or near point 0.5 0.5
 ## [1] FALSE FALSE</code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-45-1.png" width="672"></p>
 </div>
@@ -809,9 +802,6 @@ x3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html"
 <a href="#units" class="anchor"></a>Units</h1>
 <p>Where possible geometric operations such as <code><a href="../reference/geos_measures.html">st_distance()</a></code>, <code><a href="../reference/geos_measures.html">st_length()</a></code> and <code><a href="../reference/geos_measures.html">st_area()</a></code> report results with a units attribute appropriate for the CRS:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/geos_measures.html">st_area</a></span>(nc[<span class="dv">1</span>,])
-## Warning: make_unit() is deprecated. Please use as_units()
-
-## Warning: make_unit() is deprecated. Please use as_units()
 <span class="kw">attributes</span>(a)
 ## $units
 ## $numerator

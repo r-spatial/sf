@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return Well-known Text representation of simple feature geometry or coordinate reference system — st_as_text • sf</title>
+<title>functions only exported to be used internally by stars — stars • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -110,65 +110,107 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return Well-known Text representation of simple feature geometry or coordinate reference system</h1>
+    <h1>functions only exported to be used internally by stars</h1>
     </div>
 
     
-    <p>Return Well-known Text representation of simple feature geometry or coordinate reference system</p>
+    <p>functions only exported to be used internally by stars</p>
     
 
-    <pre class="usage"><span class='co'># S3 method for crs</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>.get_layout</span>(<span class='no'>bb</span>, <span class='no'>n</span>, <span class='no'>total_size</span>, <span class='no'>key.pos</span>, <span class='no'>key.size</span>)
 
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>.degAxis</span>(<span class='no'>side</span>, <span class='no'>at</span>, <span class='no'>labels</span>, <span class='no'>...</span>, <span class='no'>lon</span>, <span class='no'>lat</span>, <span class='no'>ndiscr</span>, <span class='no'>reset</span>)
 
-<span class='co'># S3 method for sfg</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>.image_scale</span>(<span class='no'>z</span>, <span class='no'>col</span>, <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>key.pos</span>, <span class='kw'>add.axis</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>.image_scale_factor</span>(<span class='no'>z</span>, <span class='no'>col</span>, <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>key.pos</span>, <span class='kw'>add.axis</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>at</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>key.size</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object of class <code>sfg</code>, <code>sfc</code> or <code>crs</code></p></td>
+      <th>bb</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>total_size</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>key.pos</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>key.size</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>side</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>at</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>labels</th>
+      <td><p>ignore</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>modifiers; in particular <code>digits</code> can be passed to control the number of digits used</p></td>
+      <td><p>ignore</p></td>
     </tr>
     <tr>
-      <th>pretty</th>
-      <td><p>logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system</p></td>
+      <th>lon</th>
+      <td><p>ignore</p></td>
     </tr>
     <tr>
-      <th>EWKT</th>
-      <td><p>logical; if TRUE, print SRID=xxx; before the WKT string if <code>epsg</code> is available</p></td>
+      <th>lat</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>ndiscr</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>reset</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>z</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>add.axis</th>
+      <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>axes</th>
+      <td><p>ignore</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The returned WKT representation of simple feature geometry conforms to the
-<a href='http://www.opengeospatial.org/standards/sfa'>simple features access</a> specification and extensions,
-<a href='http://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>known as EWKT</a>, supported by
-PostGIS and other simple features implementations for addition of SRID to a WKT string.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>90</span>,<span class='fl'>40</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>), <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "SRID=4326;POINT (-90 40)"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

@@ -161,10 +161,10 @@ The returned object has the same class as that of the first argument (<code>x</c
     <p>A spatial index is built on argument <code>x</code>; see <a href='http://r-spatial.org/r/2017/06/22/spatial-index.html'>http://r-spatial.org/r/2017/06/22/spatial-index.html</a>. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.</p>
 <p>When called with missing <code>y</code>, the <code>sfc</code> method for <code>st_intersection</code> returns all non-empty intersections of the geometries of <code>x</code>; an attribute <code>idx</code> contains a list-column with the indexes of contributing geometries.</p>
 <p>when called with a missing <code>y</code>, the <code>sf</code> method for <code>st_intersection</code> returns an <code>sf</code> object with attributes taken from the contributing feature with lowest index; two fields are added: <code>n.overlaps</code> with the number of overlapping features in <code>x</code>, and a list-column <code>origins</code> with indexes of all overlapping features.</p>
-<p>When <code>st_difference</code> is called with a single argument, 
+<p>When <code>st_difference</code> is called with a single argument,
 overlapping areas are erased from geometries that are indexed at greater
-numbers in the argument to <code>x</code>; geometries that are empty 
-or contained fully inside geometries with higher priority are removed entirely. 
+numbers in the argument to <code>x</code>; geometries that are empty
+or contained fully inside geometries with higher priority are removed entirely.
 The <code>st_difference.sfc</code> method with a single argument returns an object with
 an <code>"idx"</code> attribute with the orginal index for returned geometries.</p>
     

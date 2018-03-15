@@ -115,13 +115,28 @@
     </div>
 
     <div class="contents">
+    <div id="version-0-6-2" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-6-2" class="anchor"></a>version 0.6-2</h1>
+<ul>
+<li>
+<code>+</code>, <code>-</code>, <code>*</code> and <code>/</code> for pairs of geometries (<code>sfg</code>, <code>sfc</code>) now return geometric union, difference, intersection and symmetric difference, respectively.</li>
+</ul>
+</div>
     <div id="version-0-6-1" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-6-1" class="anchor"></a>version 0.6-1</h1>
 <ul>
+<li><p><code>st_cast</code> from <code>MULTIPOLYGON</code> to <code>MULTILINESTRING</code> should now work properly; #660</p></li>
+<li><p>all Rcpp interfaces needed by package <code>stars</code> have now been moved into <code>sf</code>; pkg <code>stars</code> is now R-only, and only <code>sf</code> needs linking to GDAL.</p></li>
+<li><p>interface the 9 gdal utils using the C++ API; see R function <code><a href="../reference/gdal_utils.html">gdal_utils()</a></code></p></li>
+<li><p>improve how (base) plots are reset; add <code>reset = FALSE</code> to <code>plot</code> to enable adding to plots with a legend</p></li>
 <li><p><code>st_read</code> now returns a <code>data.frame</code> when a table contains no geometries, rather than giving an error; it does emit a warning in this case. See <a href="https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html" class="uri">https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html</a></p></li>
-<li><p>move <code>pillar</code> from Imports: to Suggests:</p></li>
+<li><p>move <code>pillar</code> from <code>Imports:</code> to <code>Suggests:</code></p></li>
+<li><p>update to the new rwinlib distribution of gdal (adds JPG2000); #639</p></li>
+<li><p>speed up computation of centroids for largest polygon; #623</p></li>
 <li><p>add <code>st_as_sfc.raw</code> method</p></li>
+<li><p>Bugfix: binary operations (<code>st_intersection</code>, <code>st_difference</code>, etc) no longer fail when operating on data frames of class <code>"tbl_df"</code> with common column names; #644</p></li>
 </ul>
 </div>
     <div id="version-0-6-0" class="section level1">
@@ -411,6 +426,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-0-6-2">0.6-2</a></li>
         <li><a href="#version-0-6-1">0.6-1</a></li>
         <li><a href="#version-0-6-0">0.6-0</a></li>
         <li><a href="#version-0-5-5">0.5-5</a></li>
