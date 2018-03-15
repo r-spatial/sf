@@ -137,6 +137,7 @@
     <p>The drivers available will depend on the installation of GDAL/OGR, and can vary; the <code>st_drivers()</code>
 function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
 files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.</p>
+<p>field <code>vsi</code> refers to the driver's capability to read/create datasets through the VSI*L API.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -302,87 +303,87 @@ files in data source directories (such as *.dbf) may lead to spurious errors tha
 #&gt; AVCBin                                              Arc/Info Binary Coverage
 #&gt; AVCE00                                         Arc/Info E00 (ASCII) Coverage
 #&gt; HTTP                                                   HTTP Fetching Wrapper
-#&gt;                write  copy is_raster is_vector
-#&gt; PCIDSK          TRUE FALSE      TRUE      TRUE
-#&gt; netCDF          TRUE  TRUE      TRUE      TRUE
-#&gt; JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE
-#&gt; PDF             TRUE  TRUE      TRUE      TRUE
-#&gt; ESRI Shapefile  TRUE FALSE     FALSE      TRUE
-#&gt; MapInfo File    TRUE FALSE     FALSE      TRUE
-#&gt; UK .NTF        FALSE FALSE     FALSE      TRUE
-#&gt; OGR_SDTS       FALSE FALSE     FALSE      TRUE
-#&gt; S57             TRUE FALSE     FALSE      TRUE
-#&gt; DGN             TRUE FALSE     FALSE      TRUE
-#&gt; OGR_VRT        FALSE FALSE     FALSE      TRUE
-#&gt; REC            FALSE FALSE     FALSE      TRUE
-#&gt; Memory          TRUE FALSE     FALSE      TRUE
-#&gt; BNA             TRUE FALSE     FALSE      TRUE
-#&gt; CSV             TRUE FALSE     FALSE      TRUE
-#&gt; NAS            FALSE FALSE     FALSE      TRUE
-#&gt; GML             TRUE FALSE     FALSE      TRUE
-#&gt; GPX             TRUE FALSE     FALSE      TRUE
-#&gt; LIBKML          TRUE FALSE     FALSE      TRUE
-#&gt; KML             TRUE FALSE     FALSE      TRUE
-#&gt; GeoJSON         TRUE FALSE     FALSE      TRUE
-#&gt; Interlis 1      TRUE FALSE     FALSE      TRUE
-#&gt; Interlis 2      TRUE FALSE     FALSE      TRUE
-#&gt; OGR_GMT         TRUE FALSE     FALSE      TRUE
-#&gt; GPKG            TRUE  TRUE      TRUE      TRUE
-#&gt; SQLite          TRUE FALSE     FALSE      TRUE
-#&gt; OGR_DODS       FALSE FALSE     FALSE      TRUE
-#&gt; ODBC            TRUE FALSE     FALSE      TRUE
-#&gt; WAsP            TRUE FALSE     FALSE      TRUE
-#&gt; PGeo           FALSE FALSE     FALSE      TRUE
-#&gt; MSSQLSpatial    TRUE FALSE     FALSE      TRUE
-#&gt; OGR_OGDI       FALSE FALSE     FALSE      TRUE
-#&gt; PostgreSQL      TRUE FALSE     FALSE      TRUE
-#&gt; MySQL           TRUE FALSE     FALSE      TRUE
-#&gt; OpenFileGDB    FALSE FALSE     FALSE      TRUE
-#&gt; XPlane         FALSE FALSE     FALSE      TRUE
-#&gt; DXF             TRUE FALSE     FALSE      TRUE
-#&gt; CAD            FALSE FALSE      TRUE      TRUE
-#&gt; Geoconcept      TRUE FALSE     FALSE      TRUE
-#&gt; GeoRSS          TRUE FALSE     FALSE      TRUE
-#&gt; GPSTrackMaker   TRUE FALSE     FALSE      TRUE
-#&gt; VFK            FALSE FALSE     FALSE      TRUE
-#&gt; PGDUMP          TRUE FALSE     FALSE      TRUE
-#&gt; OSM            FALSE FALSE     FALSE      TRUE
-#&gt; GPSBabel        TRUE FALSE     FALSE      TRUE
-#&gt; SUA            FALSE FALSE     FALSE      TRUE
-#&gt; OpenAir        FALSE FALSE     FALSE      TRUE
-#&gt; OGR_PDS        FALSE FALSE     FALSE      TRUE
-#&gt; WFS            FALSE FALSE     FALSE      TRUE
-#&gt; SOSI           FALSE FALSE     FALSE      TRUE
-#&gt; HTF            FALSE FALSE     FALSE      TRUE
-#&gt; AeronavFAA     FALSE FALSE     FALSE      TRUE
-#&gt; Geomedia       FALSE FALSE     FALSE      TRUE
-#&gt; EDIGEO         FALSE FALSE     FALSE      TRUE
-#&gt; GFT             TRUE FALSE     FALSE      TRUE
-#&gt; SVG            FALSE FALSE     FALSE      TRUE
-#&gt; CouchDB         TRUE FALSE     FALSE      TRUE
-#&gt; Cloudant        TRUE FALSE     FALSE      TRUE
-#&gt; Idrisi         FALSE FALSE     FALSE      TRUE
-#&gt; ARCGEN         FALSE FALSE     FALSE      TRUE
-#&gt; SEGUKOOA       FALSE FALSE     FALSE      TRUE
-#&gt; SEGY           FALSE FALSE     FALSE      TRUE
-#&gt; XLS            FALSE FALSE     FALSE      TRUE
-#&gt; ODS             TRUE FALSE     FALSE      TRUE
-#&gt; XLSX            TRUE FALSE     FALSE      TRUE
-#&gt; ElasticSearch   TRUE FALSE     FALSE      TRUE
-#&gt; Walk           FALSE FALSE     FALSE      TRUE
-#&gt; Carto           TRUE FALSE     FALSE      TRUE
-#&gt; AmigoCloud      TRUE FALSE     FALSE      TRUE
-#&gt; SXF            FALSE FALSE     FALSE      TRUE
-#&gt; Selafin         TRUE FALSE     FALSE      TRUE
-#&gt; JML             TRUE FALSE     FALSE      TRUE
-#&gt; PLSCENES       FALSE FALSE      TRUE      TRUE
-#&gt; CSW            FALSE FALSE     FALSE      TRUE
-#&gt; VDV             TRUE FALSE     FALSE      TRUE
-#&gt; GMLAS          FALSE  TRUE     FALSE      TRUE
-#&gt; TIGER           TRUE FALSE     FALSE      TRUE
-#&gt; AVCBin         FALSE FALSE     FALSE      TRUE
-#&gt; AVCE00         FALSE FALSE     FALSE      TRUE
-#&gt; HTTP           FALSE FALSE      TRUE      TRUE</div></pre>
+#&gt;                write  copy is_raster is_vector   vsi
+#&gt; PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE
+#&gt; netCDF          TRUE  TRUE      TRUE      TRUE FALSE
+#&gt; JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE  TRUE
+#&gt; PDF             TRUE  TRUE      TRUE      TRUE  TRUE
+#&gt; ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; UK .NTF        FALSE FALSE     FALSE      TRUE FALSE
+#&gt; OGR_SDTS       FALSE FALSE     FALSE      TRUE FALSE
+#&gt; S57             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; DGN             TRUE FALSE     FALSE      TRUE FALSE
+#&gt; OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; REC            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; Memory          TRUE FALSE     FALSE      TRUE FALSE
+#&gt; BNA             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; CSV             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; NAS            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; GML             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; GPX             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; LIBKML          TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; KML             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; GeoJSON         TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; Interlis 1      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; Interlis 2      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; OGR_GMT         TRUE FALSE     FALSE      TRUE FALSE
+#&gt; GPKG            TRUE  TRUE      TRUE      TRUE  TRUE
+#&gt; SQLite          TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; OGR_DODS       FALSE FALSE     FALSE      TRUE FALSE
+#&gt; ODBC            TRUE FALSE     FALSE      TRUE FALSE
+#&gt; WAsP            TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; PGeo           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; MSSQLSpatial    TRUE FALSE     FALSE      TRUE FALSE
+#&gt; OGR_OGDI       FALSE FALSE     FALSE      TRUE FALSE
+#&gt; PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; MySQL           TRUE FALSE     FALSE      TRUE FALSE
+#&gt; OpenFileGDB    FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; XPlane         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; DXF             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; CAD            FALSE FALSE      TRUE      TRUE  TRUE
+#&gt; Geoconcept      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; GPSTrackMaker   TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; VFK            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; OSM            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; GPSBabel        TRUE FALSE     FALSE      TRUE FALSE
+#&gt; SUA            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; OpenAir        FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; OGR_PDS        FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; WFS            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; SOSI           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; HTF            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; AeronavFAA     FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; Geomedia       FALSE FALSE     FALSE      TRUE FALSE
+#&gt; EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; GFT             TRUE FALSE     FALSE      TRUE FALSE
+#&gt; SVG            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; CouchDB         TRUE FALSE     FALSE      TRUE FALSE
+#&gt; Cloudant        TRUE FALSE     FALSE      TRUE FALSE
+#&gt; Idrisi         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; ARCGEN         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; SEGUKOOA       FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; SEGY           FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; XLS            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; ODS             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; XLSX            TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; ElasticSearch   TRUE FALSE     FALSE      TRUE FALSE
+#&gt; Walk           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; Carto           TRUE FALSE     FALSE      TRUE FALSE
+#&gt; AmigoCloud      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; SXF            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; Selafin         TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; JML             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; PLSCENES       FALSE FALSE      TRUE      TRUE FALSE
+#&gt; CSW            FALSE FALSE     FALSE      TRUE FALSE
+#&gt; VDV             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; GMLAS          FALSE  TRUE     FALSE      TRUE  TRUE
+#&gt; TIGER           TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; AVCBin         FALSE FALSE     FALSE      TRUE FALSE
+#&gt; AVCE00         FALSE FALSE     FALSE      TRUE FALSE
+#&gt; HTTP           FALSE FALSE      TRUE      TRUE FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

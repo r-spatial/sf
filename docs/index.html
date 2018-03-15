@@ -120,9 +120,9 @@
 </li>
 </ul>
 </div>
-<div id="installling" class="section level2">
+<div id="installing" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installling" class="anchor"></a>Installling</h2>
+<a href="#installing" class="anchor"></a>Installing</h2>
 <p>Install either from CRAN with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"sf"</span>)</code></pre></div>
 <p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
@@ -166,6 +166,13 @@ brew link --force gdal2</code></pre>
 <a href="#fedora" class="anchor"></a>Fedora</h4>
 <p>The following command installs all required dependencies:</p>
 <div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel</code></pre></div>
+</div>
+<div id="arch" class="section level4">
+<h4 class="hasAnchor">
+<a href="#arch" class="anchor"></a>Arch</h4>
+<p>Get gdal, proj and geos from the main repos and udunits from the AUR:</p>
+<pre><code>pacman -S gdal proj geos
+pacaur/yaourt/whatever -S udunits</code></pre>
 </div>
 <div id="other" class="section level4">
 <h4 class="hasAnchor">
