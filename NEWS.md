@@ -1,3 +1,7 @@
+# version 0.6-2
+
+* `+`, `-`, `*` and `/` for pairs of geometries (`sfg`, `sfc`) now return geometric union, difference, intersection and symmetric difference, respectively.
+
 # version 0.6-1
 
 * `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` should now work properly; #660
