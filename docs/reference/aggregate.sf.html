@@ -130,7 +130,7 @@
     </tr>
     <tr>
       <th>by</th>
-      <td><p>either a list of grouping elements, each as long as the variables in the data frame <code>x</code> (see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code>, the geometries of which are used to find aggregation groups of <code>x</code> by using function <code>join</code></p></td>
+      <td><p>either a list of grouping vectors with length equal to <code>nrow(x)</code> (see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code> with geometries that are used to generate groupings, using the binary predicate specified by the argument <code>join</code></p></td>
     </tr>
     <tr>
       <th>FUN</th>
@@ -157,6 +157,10 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Does not work using the formula notation involving <code>~</code> defined in <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -215,6 +219,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
