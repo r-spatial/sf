@@ -33,6 +33,16 @@ CharacterVector get_meta_data(GDALDatasetH ds, CharacterVector domain_item) {
 	return(ret);
 }
 
+List get_band_meta_data(GDALDataset *poDataset) {
+	int n_bands = poDataset->GetRasterCount(); 
+	List ret(n_bands);
+	for (int band = 1; band <= n_bands; band++) { // unlike x & y, band is 1-based
+		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
+		ret[band - 1] = charpp2CV(poBand->GetMetadata(NULL));
+	}
+	return ret;
+}
+
 // [[Rcpp::export]]
 CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_item,
 		CharacterVector options) {
@@ -166,8 +176,7 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
 		bool read_data, NumericVector NA_value, double resample = 1.0) {
 // reads and returns data set metadata, and if read_data is true, adds data array
-    GDALDataset  *poDataset;
-	poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
+    GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
@@ -249,7 +258,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			GDALGetDataTypeName(poBand->GetRasterDataType()) :
 			CharacterVector::create(NA_STRING),
 		_["sub"] = sub,
-		_["meta"] = get_meta_data(poDataset, CharacterVector::create())
+		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
+		_["band_meta"] = get_band_meta_data(poDataset)
 	);
 	if (read_data)
 		ReturnList.attr("data") = CPL_read_gdal_data(ReturnList, poDataset, nodatavalue, resample);
