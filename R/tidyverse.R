@@ -145,8 +145,9 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 		else
 			unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
 		if (is.null(geom))
-			geom = list() #676 #nocov
-		do.call(st_sfc, geom)
+			st_sfc() #676 #nocov
+		else
+			do.call(st_sfc, geom)
 	} else { # single group:
 		if (do_union)
 			st_union(st_geometry(.data))
