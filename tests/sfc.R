@@ -105,6 +105,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
 ls * 2
 ls - 2
 (ls + 2) %% 3
+ls / ls
 
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
