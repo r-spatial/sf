@@ -35,15 +35,6 @@ arrange.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @param .keep_all see corresponding function in dplyr
-#' @export
-#' @examples
-#' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
-#distinct.sf <- function(.data, ..., .dots, .keep_all = FALSE) {
-#	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
-#}
-
-#' @name dplyr
 #' @param add see corresponding function in dplyr
 #' @export
 #' @examples
@@ -167,18 +158,18 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 }
 
 #' @name dplyr
+#' @param .keep_all see corresponding function in dplyr
 #' @export
+#' @examples
+#' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 #' @details \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
-	scn = attr(.data, "sf_column")
+	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
-	if (!is.null(.data$distinct_geometries))
-		warning("column distinct_geometries is being overwritten") # nocov
-	.data$distinct_geometries = vapply(st_equals(.data), head, NA_integer_, n = 1)
-	st_geometry(.data) = NULL
+	.data$sf_column = vapply(st_equals(.data), head, NA_integer_, n = 1)
+	class(.data) = setdiff(class(.data), "sf")
 	.data = NextMethod()
-	.data[[ scn ]] = geom[.data$distinct_geometries]
-	.data$distinct_geometries = NULL
+	.data[[ sf_column ]] = geom[.data$sf_column]
 	st_as_sf(.data)
 }
 
