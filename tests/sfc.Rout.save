@@ -425,6 +425,14 @@ bbox:           xmin: 2 ymin: 0 xmax: 2 ymax: 2
 epsg (SRID):    NA
 proj4string:    NA
 LINESTRING (2 2, 2 0)
+> ls / ls
+Geometry set for 1 feature  (with 1 geometry empty)
+geometry type:  GEOMETRYCOLLECTION
+dimension:      XY
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+GEOMETRYCOLLECTION EMPTY
 > 
 > str(x)
 sfc_POINT of length 2; first list element: Classes 'XY', 'POINT', 'sfg'  num [1:2] -90 35
@@ -999,4 +1007,4 @@ POINT (0 1)
 > 
 > proc.time()
    user  system elapsed 
-  2.529   0.236   2.446 
+  2.503   0.299   2.482 
