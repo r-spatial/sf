@@ -33,12 +33,12 @@ Error : invalid crs: error, reason: no arguments in initialization list
 Coordinate Reference System:
   No EPSG code
   proj4string: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
-> st_crs(28992)
+> st_crs(3857)
 Coordinate Reference System:
-  EPSG: 28992 
-  proj4string: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs"
-> str = st_crs(28992)$proj4string
-> st_crs(28992)$units
+  EPSG: 3857 
+  proj4string: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"
+> str = st_crs(3857)$proj4string
+> st_crs(3857)$units
 [1] "m"
 > st_crs("+proj=longlat +datum=WGS84")
 Coordinate Reference System:
@@ -112,4 +112,4 @@ Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) :
 > 
 > proc.time()
    user  system elapsed 
-  0.550   0.235   0.456 
+  0.517   0.254   0.450 
