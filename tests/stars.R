@@ -6,7 +6,7 @@ gdal_metadata(tif)
 gdal_metadata(tif, NA_character_)
 try(gdal_metadata(tif, "wrongDomain")) 
 gdal_metadata(tif, c("IMAGE_STRUCTURE"))
-length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))
+try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 
 # library(stars)
 d = structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75, 

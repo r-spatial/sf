@@ -32,7 +32,7 @@ Error in gdal_metadata(tif, "wrongDomain") :
 
 attr(,"class")
 [1] "gdal_metadata"
-> length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))
+> try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 [1] 2
 > 
 > # library(stars)
@@ -93,4 +93,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.533   0.260   0.473 
+  0.664   0.171   0.645 
