@@ -1,8 +1,8 @@
-# version 0.6-2
+# version 0.6-1
+
+* method `distinct` now works; #669, #672
 
 * `+`, `-`, `*` and `/` for pairs of geometries (`sfg`, `sfc`) now return geometric union, difference, intersection and symmetric difference, respectively.
-
-# version 0.6-1
 
 * `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` should now work properly; #660
 
@@ -10,7 +10,7 @@
 
 * interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`
 
-* improve how (base) plots are reset; add `reset = FALSE` to `plot` to enable adding to plots with a legend
+* improve resetting (base) plots; add `reset = FALSE` in a call to `plot` to enable adding to plots that have a legend
 
 * `st_read` now returns a `data.frame` when a table contains no geometries, rather than giving an error; it does emit a warning in this case. See https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html
 
