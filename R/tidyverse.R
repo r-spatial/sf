@@ -169,10 +169,10 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
-	.data$sf_column = vapply(st_equals(.data), head, NA_integer_, n = 1)
+	.data[[ sf_column ]] = vapply(st_equals(.data), head, NA_integer_, n = 1)
 	class(.data) = setdiff(class(.data), "sf")
 	.data = NextMethod()
-	.data[[ sf_column ]] = geom[.data$sf_column]
+	.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
 	st_as_sf(.data)
 }
 
