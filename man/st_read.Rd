@@ -3,7 +3,7 @@
 \name{st_read}
 \alias{st_read}
 \alias{st_read}
-\alias{st_read.character}
+\alias{st_read.default}
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
@@ -12,7 +12,7 @@
 \usage{
 st_read(dsn, layer, ...)
 
-\method{st_read}{character}(dsn, layer, ..., options = NULL, quiet = FALSE,
+\method{st_read}{default}(dsn, layer, ..., options = NULL, quiet = FALSE,
   geometry_column = 1L, type = 0, promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE,
   check_ring_dir = FALSE)
@@ -75,8 +75,10 @@ Read simple features from file or database, or retrieve layer names and their ge
 Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
 }
 \details{
-for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
-values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
+for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+
+for values for \code{type}
+see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
 
@@ -85,8 +87,8 @@ In case of problems reading shapefiles from USB drives on OSX, please see \url{h
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
 \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
-about the data source.
-\code{write_sf} delete layers by default: it overwrites existing files.
+about the data source. \code{read_sf} returns an sf-tibble rather than an sf-data.frame.
+\code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 
 if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 

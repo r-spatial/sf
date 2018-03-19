@@ -118,8 +118,14 @@
 <p>Write simple feature table to a spatial database</p>
     
 
-    <pre class="usage"><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>file_path_sans_ext</span>(<span class='fu'>basename</span>(<span class='no'>dsn</span>)),
-  <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='no'>...</span>, <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>file_path_sans_ext</span>(<span class='fu'>basename</span>(<span class='no'>dsn</span>)),
+  <span class='no'>...</span>, <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>update</span> <span class='kw'>=</span> <span class='no'>driver</span> <span class='kw'>%in%</span> <span class='no'>db_drivers</span>, <span class='kw'>delete_dsn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>delete_layer</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -148,14 +154,14 @@ folder or contain a database name)</p></td>
 basename of <code>dsn</code> is taken.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>ignored for <code>st_write</code>, for <code>st_write_db</code> arguments passed on to <code>dbWriteTable</code></p></td>
+    </tr>
+    <tr>
       <th>driver</th>
       <td><p>character; driver name to be used, if missing, a driver name is guessed from <code>dsn</code>;
 <code><a href='st_drivers.html'>st_drivers()</a></code> returns the drivers that are available with their properties; links to full driver documentation
 are found at <a href='http://www.gdal.org/ogr_formats.html'>http://www.gdal.org/ogr_formats.html</a>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>ignored for <code>st_write</code>, for <code>st_write_db</code> arguments passed on to <code>dbWriteTable</code></p></td>
     </tr>
     <tr>
       <th>dataset_options</th>

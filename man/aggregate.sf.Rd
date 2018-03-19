@@ -11,7 +11,7 @@
 \arguments{
 \item{x}{object of class \link{sf}}
 
-\item{by}{either a list of grouping elements, each as long as the variables in the data frame \code{x} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc}, the geometries of which are used to find aggregation groups of \code{x} by using function \code{join}}
+\item{by}{either a list of grouping vectors with length equal to \code{nrow(x)} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc} with geometries that are used to generate groupings, using the binary predicate specified by the argument \code{join}}
 
 \item{FUN}{function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped}
 
@@ -28,6 +28,9 @@ an \code{sf} object with aggregated attributes and geometries; additional groupi
 }
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
+}
+\note{
+Does not work using the formula notation involving \code{~} defined in \link[stats]{aggregate}.
 }
 \examples{
 m1 = cbind(c(0, 0, 1, 0), c(0, 1, 1, 0))
@@ -49,4 +52,7 @@ m3 = cbind(c(0, 0, -0.1, 0), c(0, 0.1, 0.1, 0))
 pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
 (p_ag3 = aggregate(p, pol, mean))
 plot(p_ag3)
+# In case we need to pass an argument to the join function:
+(p_ag4 = aggregate(p, pol, mean, 
+     join = function(x, y) st_is_within_distance(x, y, dist = 0.3)))
 }

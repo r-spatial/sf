@@ -7,7 +7,7 @@
 #' @importFrom grDevices rgb
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable dbExecute
-#' @importFrom units make_unit set_units
+#' @importFrom units as_units set_units make_unit_label
 #' @importFrom classInt classIntervals
 #' @useDynLib sf
 NULL
@@ -62,7 +62,7 @@ setOldClass("sfg")
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
-	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), NA_character_,
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(),
 		ifelse(CPL_gdal_with_geos(), "true", "false")),
-		names = c("GEOS", "GDAL", "proj.4", "lwgeom", "GDAL_with_GEOS"))
+		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS"))
 }

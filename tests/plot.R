@@ -93,7 +93,9 @@ par(mar = c(0,0,1,0))
 plot(st_transform(nc, merc), bgMap = g)
 
 m = st_make_grid()
-m = st_segmentize(m, 2e5)
+st_crs(m) = NA_crs_
+m = st_segmentize(m, 2)
+st_crs(m) = 4326
 plot(m, axes = TRUE)
 g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
 plot(g, axes = TRUE)

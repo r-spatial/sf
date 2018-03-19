@@ -9,6 +9,8 @@ st_distance(x)
 
 st_is_valid(nc)
 
+st_is_empty(st_sfc(st_point(), st_linestring()))
+
 ops = c("intersects", #"disjoint", 
 "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 for (op in ops) {
@@ -96,6 +98,13 @@ st_rook(grd, sparse = FALSE)
 
 try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
 
+a = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], 100000, sparse = FALSE)
+b = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], units::set_units(100000, m), sparse = FALSE)
+all.equal(a, b)
+x = st_is_within_distance(nc[1:3,], nc[1:5,], 100000)
+y = st_is_within_distance(nc[1:3,], nc[1:5,], units::set_units(100, km))
+all.equal(x, y)
+
 nc_3857 = st_transform(nc, 3857)
 a = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], 100000, sparse = FALSE)
 b = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], units::set_units(100000, m), sparse = FALSE)
@@ -107,6 +116,10 @@ all.equal(x, y)
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
 st_distance(p, p, by_element = TRUE)
+st_crs(p) = 4326
+st_distance(p, p[c(2,3,1)], by_element = TRUE)
+p = st_transform(p, 3587)
+st_distance(p, p[c(2,3,1)], by_element = TRUE)
 
 # from https://github.com/r-spatial/sf/issues/458 :
 pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
@@ -123,7 +136,11 @@ st_node(st_sfc(l))
 st_node(st_sf(a = 1, st_sfc(l)))
 
 # print.sgbp:
-st_disjoint(nc, nc)
+(lst = st_disjoint(nc, nc))
+# dim.sgbp:
+dim(lst)
+# as.matrix.sgbp:
+as.matrix(lst)[1:5, 1:5]
 
 # snap:
 nc1 = st_transform(nc, 32119)
@@ -131,3 +148,35 @@ g = st_make_grid(nc1, c(5000,5000), what = "centers")
 s = st_snap(nc1[1:3,], g, 2501*sqrt(2))
 sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
 sfg = st_snap(st_geometry(nc1)[[1]], st_combine(g), 2501*sqrt(2))
+
+# Hausdorff distance: http://geos.refractions.net/ro/doxygen_docs/html/classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html
+A = st_as_sfc("LINESTRING (0 0, 100 0, 10 100, 10 100)")
+B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
+st_distance(c(A,B))
+st_distance(c(A,B), which = "Hausdorff")
+st_distance(c(A,B), which = "Hausdorff", par = 0.001)
+
+
+# one-argument st_intersection and st_difference:
+set.seed(131)
+m = rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))
+p = st_polygon(list(m))
+n = 100
+l = vector("list", n)
+for (i in 1:n)
+   l[[i]] = p + 10 * runif(2)
+s = st_sfc(l)
+plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
+plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+i = st_intersection(s) # all intersections
+plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
+summary(lengths(st_overlaps(s, s)))
+summary(lengths(st_overlaps(d, d)))
+summary(lengths(st_overlaps(i, i)))
+
+sf = st_sf(s)
+i = st_intersection(sf) # all intersections
+plot(i["n.overlaps"])
+summary(i$n.overlaps - lengths(i$origins))
+

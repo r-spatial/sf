@@ -119,10 +119,13 @@
 
     <pre class="usage">st_sf(..., agr = NA_agr_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision,
-  sf_column_name = NULL)
+  sf_column_name = NULL, check_ring_dir = FALSE)
 
 # S3 method for sf
-[(x, i, j, ..., drop = FALSE, op = st_intersects)</pre>
+[(x, i, j, ..., drop = FALSE, op = st_intersects)
+
+# S3 method for sf
+print(x, ..., n = getOption("sf_max_print", default = 10))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -154,7 +157,11 @@
     <tr>
       <th>sf_column_name</th>
       <td><p>character; name of the active list-column with simple feature geometries; in case
-there are more than one and <code>sf_column_name</code> is not given, the first one is taken.</p></td>
+there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></td>
+    </tr>
+    <tr>
+      <th>check_ring_dir</th>
+      <td><p>see st_read</p></td>
     </tr>
     <tr>
       <th>x</th>
@@ -175,6 +182,10 @@ there are more than one and <code>sf_column_name</code> is not given, the first 
     <tr>
       <th>op</th>
       <td><p>function; geometrical binary predicate function to apply when <code>i</code> is a simple feature object</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>maximum number of features to print; can be set globally by <code>options(sf_max_print=...)</code></p></td>
     </tr>
     </table>
     

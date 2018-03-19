@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -20,14 +20,12 @@ Type 'q()' to quit R.
 Coordinate Reference System: NA
 Warning message:
 In CPL_crs_from_epsg(as.integer(x)) :
-  GDAL Error 6: EPSG PCS/GCS code -1 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?
+  GDAL Error 6: EPSG PCS/GCS code -1 not found in EPSG support files.  Is this a valid EPSG coordinate system?
 > st_crs(999999)
 Coordinate Reference System: NA
 Warning message:
 In CPL_crs_from_epsg(as.integer(x)) :
-  GDAL Error 6: EPSG PCS/GCS code 999999 not found in EPSG support files.  Is this a valid
-EPSG coordinate system?
+  GDAL Error 6: EPSG PCS/GCS code 999999 not found in EPSG support files.  Is this a valid EPSG coordinate system?
 > try(st_crs("error"))
 Error : invalid crs: error, reason: no arguments in initialization list
 > str = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
@@ -35,12 +33,12 @@ Error : invalid crs: error, reason: no arguments in initialization list
 Coordinate Reference System:
   No EPSG code
   proj4string: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
-> st_crs(28992)
+> st_crs(3857)
 Coordinate Reference System:
-  EPSG: 28992 
-  proj4string: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs"
-> str = st_crs(28992)$proj4string
-> st_crs(28992)$units
+  EPSG: 3857 
+  proj4string: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"
+> str = st_crs(3857)$proj4string
+> st_crs(3857)$units
 [1] "m"
 > st_crs("+proj=longlat +datum=WGS84")
 Coordinate Reference System:
@@ -63,6 +61,9 @@ list()
 $SemiMajor
 6378137 m
 
+$SemiMinor
+6356752 m
+
 $InvFlattening
 [1] 298.2572
 
@@ -79,9 +80,36 @@ $Wkt
 [1] "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]"
 
 $ud_unit
-1 arc_degree
+1 °
 
+> 
+> from = st_crs(4326)$proj4string
+> to = st_crs(3857)$proj4string
+> (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
+         [,1]          [,2]
+[1,]      0.0 -7.081155e-10
+[2,] 111319.5  1.113251e+05
+> sf_project(to, from, ret)
+     [,1] [,2]
+[1,]    0    0
+[2,]    1    1
+> st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+POINT (0 -7.081155e-10)
+POINT (111319.5 111325.1)
+> try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
+> try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
+> 
 > 
 > proc.time()
    user  system elapsed 
-  0.416   0.272   0.365 
+  0.517   0.254   0.450 

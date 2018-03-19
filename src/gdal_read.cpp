@@ -5,8 +5,7 @@
 
 #include "Rcpp.h"
 
-// #include "wkb.h"
-#include "gdal.h"
+#include "gdal_sf_pkg.h"
 
 Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string) {
 

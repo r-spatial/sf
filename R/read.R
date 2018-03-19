@@ -32,8 +32,11 @@ set_utf8 = function(x) {
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
 #' and a warning is given when precision is lost (i.e., values are larger than 2^53).
 #' @param check_ring_dir logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)
-#' @details for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
-#' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
+#' @details 
+#' for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+#' 
+#' for values for \code{type}
+#' see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 #' may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 #' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
 #'
@@ -63,17 +66,19 @@ st_read = function(dsn, layer, ...) UseMethod("st_read")
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 
-	if (missing(layer))
-		layer = character(0)
+	layer = if (missing(layer))
+		character(0)
+	else
+		enc2utf8(layer)
 
-	if (file.exists(dsn))
+	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
 
 	if (length(promote_to_multi) > 1)
@@ -81,8 +86,14 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
 
-	# TODO: take care of multiple geometry colums:
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
+
+	# in case no geometry is present:
+	if (length(which.geom) == 0) {
+		warning("no simple feature geometries present: returning a data.frame", call. = FALSE) # nocov
+		return(as.data.frame(x , stringsAsFactors = stringsAsFactors)) # nocov
+	}
+
 	nm = names(x)[which.geom]
 	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
@@ -116,8 +127,8 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 #' @details \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 #' modified default arguments.
 #' \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
-#' about the data source.
-#' \code{write_sf} delete layers by default: it overwrites existing files.
+#' about the data source. \code{read_sf} returns an sf-tibble rather than an sf-data.frame.
+#' \code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 #' @examples
 #' # read geojson from string:
 #' geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
@@ -232,8 +243,10 @@ st_write = function(obj, dsn, layer, ...) UseMethod("st_write")
 #' @name st_write
 #' @export
 st_write.sfc = function(obj, dsn, layer, ...) {
-	obj = st_sf(id = 1:length(obj), geom = obj)
-	NextMethod()
+	if (missing(layer))
+		st_write.sf(st_sf(geom = obj), dsn, ...)
+	else
+		st_write.sf(st_sf(geom = obj), dsn, layer, ...)
 }
 
 #' @name st_write
@@ -249,7 +262,7 @@ st_write.sf = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)), ...,
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 
-	if (file.exists(dsn))
+	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
 
 	geom = st_geometry(obj)
@@ -289,19 +302,17 @@ write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
 #' function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
 #' files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.
 #' @return a \code{data.frame} with driver metadata
+#' @details field \code{vsi} refers to the driver's capability to read/create datasets through the VSI*L API.
 #' @export
 #' @examples
 #' st_drivers()
 st_drivers = function(what = "vector") {
-	ret = as.data.frame(CPL_get_rgdal_drivers(0))
-	names(ret) = c("name", "long_name", "write", "copy", "is_raster", "is_vector")
+	ret = CPL_get_rgdal_drivers(0)
 	row.names(ret) = ret$name
-	if (what == "vector")
-		ret[ret$is_vector,]
-	else if (what == "raster")
-		ret[ret$is_raster,]
-	else
-		ret
+	switch(what,
+		vector = ret[ret$is_vector,],
+		raster = ret[ret$is_raster,],
+		ret)
 }
 
 #' @export
@@ -339,9 +350,14 @@ print.sf_layers = function(x, ...) {
 st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
-	if (file.exists(dsn))
+	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
-	CPL_get_layers(dsn, options, do_count)
+	ret = CPL_get_layers(dsn, options, do_count)
+	if (length(ret[[1]]) > 0) {
+		Encoding(ret[[1]]) <- "UTF-8"
+		ret[[1]] <- enc2native(ret[[1]])
+	}
+	ret
 }
 
 guess_driver = function(dsn) {

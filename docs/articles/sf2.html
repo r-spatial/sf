@@ -118,7 +118,7 @@
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Loading required package: methods
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.2.1, proj.4 4.9.3
 fname &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)
 fname
 ## [1] "/home/edzer/R/x86_64-pc-linux-gnu-library/3.4/sf/shape/nc.shp"
@@ -132,10 +132,10 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(fname)
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre></div>
 <p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code>setwd()</code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)
-Multiple layers are present in data source PG:dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)
+Multiple layers are present <span class="cf">in</span> data source PG<span class="op">:</span>dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span>
 <span class="dt">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span>
-<span class="st">Set the `layer'</span> argument in <span class="st">`</span><span class="dt">st_read' to read a particular layer.</span>
+<span class="st">Set the `layer'</span> argument <span class="cf">in</span> <span class="st">`</span><span class="dt">st_read' to read a particular layer.</span>
 <span class="dt">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="dt">PostgreSQL'</span>
 <span class="dt">Simple feature collection with 155 features and 12 fields</span>
 <span class="dt">geometry type:  POINT</span>
@@ -147,16 +147,16 @@ Multiple layers are present in data source PG:dbname=postgis, reading layer <spa
 <span class="dt">In eval(substitute(expr), envir, enclos) :</span>
 <span class="dt">  automatically selected the first layer in a data source containing more than one.</span></code></pre></div>
 <p>The message points to the <code>st_layers</code> command, which lists the driver and layers in a datasource, e.g.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw"><a href="../reference/st_layers.html">st_layers</a></span>(<span class="st">"PG:dbname=postgis"</span>)
-Driver:<span class="st"> </span>PostgreSQL 
-Available layers:
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="../reference/st_layers.html">st_layers</a></span>(<span class="st">"PG:dbname=postgis"</span>)
+Driver<span class="op">:</span><span class="st"> </span>PostgreSQL 
+Available layers<span class="op">:</span>
 <span class="st">  </span>layer_name geometry_type features fields
 <span class="dv">1</span>      meuse         Point      <span class="dv">155</span>     <span class="dv">12</span>
 <span class="dv">2</span>   meuse_sf         Point      <span class="dv">155</span>     <span class="dv">12</span>
 <span class="dv">3</span>       sids Multi Polygon      <span class="dv">100</span>     <span class="dv">14</span>
 <span class="dv">4</span>  meuse_tbl         Point      <span class="dv">155</span>     <span class="dv">13</span>
 <span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span>
-&gt;<span class="st"> </span></code></pre></div>
+<span class="op">&gt;</span><span class="st"> </span></code></pre></div>
 <p>A particular layer can now be read by e.g.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span>)</code></pre></div>
 <p><code>st_layers</code> has the option to count the number of features in case these are missing: some datasources (e.g. OSM xml files) do not report the number of features, but need to be completely read for this. GDAL allows for more than one geometry column for a feature layer; these are reported by <code>st_layers</code>.</p>
@@ -359,7 +359,7 @@ Available layers:
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RPostgreSQL) 
 conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) 
 meuse =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="st">"meuse"</span>)
-meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) 
+meuse_<span class="dv">1</span>_<span class="dv">3</span> =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) 
 <span class="kw">dbDisconnect</span>(conn) </code></pre></div>
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
@@ -377,10 +377,10 @@ meuse_1_3 =<span class="st"> </span><span class="kw"><a href="../reference/st_re
 <p>The usual form in which we see simple features printed is well-known text:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))
 ## POINT (0 1)
-<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span>:<span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
+<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
 ## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</code></pre></div>
 <p>We can create these well-known text strings explicitly using <code>st_as_wkt</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span>:<span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
 str =<span class="st"> </span><span class="kw">st_as_text</span>(x)
 x
 ## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</code></pre></div>
@@ -398,7 +398,7 @@ x
 <h3 class="hasAnchor">
 <a href="#conversion-to-and-from-well-known-binary" class="anchor"></a>Conversion to and from well-known binary</h3>
 <p>Well-known binary is created from simple features by <code>st_as_binary</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span>:<span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">matrix</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))
 (<span class="dt">x =</span> <span class="kw">st_as_binary</span>(x))
 ##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 ## [24] f0 3f 00 00 00 00 00 00 00 40 00 00 00 00 00 00 08 40 00 00 00 00 00
@@ -410,7 +410,7 @@ x
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/rawToHex.html">rawToHex</a></span>(x)
 ## [1] "0102000000050000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001c4000000000000020400000000000002240"</code></pre></div>
 <p>Converting back to <code>sf</code> uses <code>st_as_sfc</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">st_as_binary</span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">0</span>:<span class="dv">1</span>), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">5</span>:<span class="dv">6</span>)))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">st_as_binary</span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1</span>), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">5</span><span class="op">:</span><span class="dv">6</span>)))
 <span class="kw">st_as_sfc</span>(x)
 ## Geometry set for 2 features 
 ## geometry type:  POINT
@@ -432,23 +432,22 @@ x
 ## see '?methods' for accessing help and source code
 <span class="kw">methods</span>(st_as_sfc)
 ##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              
-##  [3] st_as_sfc.character*          st_as_sfc.factor*            
-##  [5] st_as_sfc.list*               st_as_sfc.map*               
-##  [7] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
-##  [9] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
-## [11] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
+##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        
+##  [5] st_as_sfc.factor*             st_as_sfc.list*              
+##  [7] st_as_sfc.map*                st_as_sfc.raw*               
+##  [9] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*
+## [11] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     
+## [13] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>An example would be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)
 <span class="kw">data</span>(meuse)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/sp/topics/coordinates">coordinates</a></span>(meuse) =<span class="st"> </span><span class="er">~</span>x+y
+<span class="kw"><a href="http://www.rdocumentation.org/packages/sp/topics/coordinates">coordinates</a></span>(meuse) =<span class="st"> </span><span class="er">~</span>x<span class="op">+</span>y
 m.sf =<span class="st"> </span><span class="kw">st_as_sf</span>(meuse)
 opar =<span class="st"> </span><span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">4</span>))
 <span class="kw">plot</span>(m.sf)
 ## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to
-## plot all
-## Warning in classInt::classIntervals(values, nbreaks, breaks): var has
-## missing values, omitted in finding classes</code></pre></div>
+## plot all</code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>Conversion of simple feature objects of class <code>sf</code> or <code>sfc</code> into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)

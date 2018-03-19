@@ -50,6 +50,10 @@ if (Sys.getenv("USER") == "travis") {
 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
 }
 
+geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
+st_write(geom, "geom.gpkg")
+st_write(geom, "geom1.gpkg", layer = "foo")
+
 df <- data.frame(
     a = c(0, 1, NA, -Inf, Inf),
     b = c("a", "b", NA, "c", ""),
@@ -72,12 +76,14 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	m = dbReadTable(dbcon, "meuse.sqlite")
 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 	print(st_sf(m), n = 3)
+	dbDisconnect(dbcon)
 
 	db = system.file("sqlite/nc.sqlite", package = "sf")
 	dbcon <- dbConnect(dbDriver("SQLite"), db)
 	m = dbReadTable(dbcon, "nc.sqlite")
 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 	print(st_sf(m), n = 3)
+	dbDisconnect(dbcon)
 
 	db = system.file("sqlite/b.sqlite", package = "sf") # has an INT8 field
 	b = st_read(db, quiet = TRUE)

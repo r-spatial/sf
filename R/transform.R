@@ -7,8 +7,12 @@
 #' @param ... ignored
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
 #' @param check logical; perform a sanity check on resulting polygons?
-#' @param use_gdal logical; if \code{FALSE}, arguments \code{check} and \code{partial} get ignored, and projection is directly carried out by \code{lwgeom_transform} which ignores the GDAL api. This allows proj.4 parameters such as \code{+over} to act (https://github.com/r-spatial/sf/issues/511) and certain projections such as \code{wintri} which do not have an inverse, to work (https://github.com/r-spatial/sf/issues/509). This requires that sf is built by linking to \code{liblwgeom}.
+#' @param use_gdal logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)
 #' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
+#' 
+#' \code{st_transform} uses GDAL for coordinate transformations; internally, GDAL converts the \code{proj4string} into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter \code{+wktext} to the \code{proj4string} definition may resolve this; see \url{https://github.com/edzer/sp/issues/42}.
+#' 
+#' Some PROJ.4 projections are not supported by GDAL, e.g. \code{"+proj=wintri"} because it does not have an inverse projection. Projecting to unsupported projections can be done by \link[lwgeom]{st_transform_proj}, part of package lwgeom. Note that the unsupported \code{proj4string} cannot be passed as argument to \link{st_crs}, but has to be given as character string.
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
@@ -20,8 +24,10 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 
 chk_pol = function(x, dim = class(x)[1]) {
 	PolClose = function(y) {
-		if (any(head(y[[1]], 1) != tail(y[[1]], 1)))
+		if (any(head(y[[1]], 1) != tail(y[[1]], 1))) # close
 			y[[1]] = rbind(y[[1]], head(y[[1]], 1))
+		else if (nrow(y[[1]]) == 3) # closed, but line
+			return(st_polygon(dim = dim))
 		y
 	}
 	if (length(x) > 0 && nrow(x[[1]]) > 2)
@@ -64,7 +70,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 		stop("argument crs cannot be missing")
 
 	if (! use_gdal)
-		.Deprecated("lwgeom::st_transform_proj", "lwgeom", 
+		.Deprecated("lwgeom::st_transform_proj", "lwgeom",
 			'install with devtools::install_github("r-spatial/lwgeom")')
 
 	crs = make_crs(crs)
@@ -95,7 +101,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 #' @export
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' st_area(nc[1,]) # area, using geosphere::areaPolygon
+#' st_area(nc[1,]) # area from long/lat
 #' st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 #' library(units)
@@ -125,6 +131,10 @@ st_transform.sfg = function(x, crs , ...) {
 #' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {
+
+	if (type == "have_datum_files")
+		return(CPL_have_datum_files(0))
+
     opts <- c("proj", "ellps", "datum", "units")
     if (!(type %in% opts)) stop("unknown type")
     t <- as.integer(match(type[1], opts) - 1)
@@ -147,7 +157,8 @@ st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
 #' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
 #' library(maps)
 #' wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))
-#' wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"), quiet = TRUE)
+#' wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"),
+#'    quiet = TRUE)
 #' wrld_moll <- st_transform(wrld_wrap, "+proj=moll")
 #' plot(st_geometry(wrld_moll), col = "transparent")
 #' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
@@ -172,6 +183,19 @@ st_wrap_dateline.sfg = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 
 st_to_s2 = function(x) {
 	# to geocentric, spherical, unit sphere:
-	st_transform(x, 
+	st_transform(x,
 		st_crs("+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs"))
 }
+
+#' directly transform a set of coordinates
+#'
+#' directly transform a set of coordinates
+#' @param from character; proj4string of pts
+#' @param to character; target coordinate reference system
+#' @param pts two-column numeric matrix, or object that can be coerced into a matrix
+#' @export
+sf_project = function(from, to, pts) {
+	#.Deprecated("lwgeom::st_transform_proj")
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts))
+}
+

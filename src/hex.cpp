@@ -1,6 +1,3 @@
-#include <iostream>
-#include <iomanip>
-
 #include <Rcpp.h>
 
 inline unsigned char char2int(char c) {
@@ -15,13 +12,7 @@ inline unsigned char char2int(char c) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
-// HexToRaw modified from cmhh, see https://github.com/ianmcook/wkb/issues/10
-// @cmhh: if you make yourself known, I can add you to the contributors
-
-// convert a hexadecimal string into a raw vector
-// this version, dropping istringstream and std::hex, is 12 time faster than
-// the one in the wkb github issue. C rules.
-
+// convert hexadecimal string into a raw vector:
 	Rcpp::List output(cx.size());
 	for (int j = 0; j < cx.size(); j++) {
 		Rcpp::RawVector raw(cx[j].size() / 2);
@@ -41,15 +32,18 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
-	std::ostringstream os;
+// convert a raw vector into hexadecimal string:
+	std::vector<char> str(raw.size() * 2 + 1);
 	char hex[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 		'a', 'b', 'c', 'd', 'e', 'f' };
 	unsigned char *cp = &(raw[0]);
+	int j = 0;
 	for (int i = 0; i < raw.size(); i++) {
-		int high = ((int) cp[i]) / 16;
-		int low =  ((int) cp[i]) % 16;
-  		os.write(&hex[high], sizeof(char));
-  		os.write(&hex[low], sizeof(char));
+		str[j] = hex[(((int) cp[i]) / 16)];
+		j++;
+		str[j] = hex[(((int) cp[i]) % 16)];
+		j++;
 	}
-	return Rcpp::CharacterVector::create(os.str());
+	str[j] = '\0';
+	return Rcpp::CharacterVector::create(str.data());
 }

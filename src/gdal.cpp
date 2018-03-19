@@ -14,6 +14,7 @@
 #include <Rcpp.h>
 
 #include "wkb.h"
+#include "gdal_sf_pkg.h"
 
 //
 // Returns errors to R
@@ -89,19 +90,27 @@ void handle_error(OGRErr err) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_parameters(std::string p4s) {
-	Rcpp::List out(6);
+	Rcpp::List out(7);
+	OGRErr Err;
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	handle_error(srs->importFromProj4(p4s.c_str()));
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
-	out(1) = Rcpp::NumericVector::create(srs->GetInvFlattening());
-	out(2) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
-	out(3) = Rcpp::LogicalVector::create(srs->IsVertical());
+	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
+	Rcpp::NumericVector InvFlattening(1);
+	srs->GetInvFlattening(&Err);
+	if (Err == OGRERR_FAILURE)
+		InvFlattening(0) = NA_REAL; // #nocov
+	else
+		InvFlattening(0) = srs->GetInvFlattening(NULL); // for +ellps=sphere, still zero :-(
+	out(2) = InvFlattening;
+	out(3) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	out(4) = Rcpp::LogicalVector::create(srs->IsVertical());
 	char *cp;
 	srs->exportToPrettyWkt(&cp);
-	out(4) = Rcpp::CharacterVector::create(cp);
+	out(5) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	srs->exportToWkt(&cp);
-	out(5) = Rcpp::CharacterVector::create(cp);
+	out(6) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	delete srs;
 	return out;
@@ -123,7 +132,6 @@ Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false);
 	std::vector<OGRGeometry *> g(sfc.length());
-	OGRGeometryFactory f;
 	OGRSpatialReference *local_srs = NULL;
 	Rcpp::List crs = sfc.attr("crs");
 	Rcpp::IntegerVector epsg(1);
@@ -140,7 +148,8 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	}
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		OGRErr err = f.createFromWkb(&(r[0]), local_srs, &(g[i]), r.length(), wkbVariantIso);
+		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
+			r.length(), wkbVariantIso);
 		if (err != 0) {
 			if (local_srs != NULL)      // #nocov
 				local_srs->Release();   // #nocov
@@ -154,7 +163,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 	return g;
 }
 
-std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false) {
+std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet) {
 	if (lco.size() == 0)
 		quiet = true; // nothing to report
 	if (! quiet)
@@ -168,6 +177,17 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = false
 	ret[lco.size()] = NULL;
 	if (! quiet)
 		Rcpp::Rcout << std::endl;         // #nocov
+	return ret;
+}
+
+// convert NULL-terminated array of strings to Rcpp::CharacterVector
+Rcpp::CharacterVector charpp2CV(char **cp) {
+	int n = 0;
+	while (cp && cp[n] != NULL)
+		n++; // count
+	Rcpp::CharacterVector ret(n);
+	for (int i = 0; i < n; i++)
+		ret(i) = cp[i];
 	return ret;
 }
 
@@ -370,7 +390,7 @@ Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 		return get_crs(&ref);
 	else {
 		const char *cp = p4s[0];
-		Rf_warning("Cannot import crs from PROJ.4 string `%s', missing crs returned\n", cp);
+		Rf_warning("GDAL cannot import PROJ.4 string `%s': returning missing CRS\n", cp);
 		return get_crs(NULL);
 	}
 }
@@ -385,6 +405,7 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 	Rcpp::LogicalVector copy(ndr);
 	Rcpp::LogicalVector vattr(ndr);
 	Rcpp::LogicalVector rattr(ndr);
+	Rcpp::LogicalVector vsi_attr(ndr);
 	for (int i = 0; i < ndr; i++) {
 		GDALDriver *pDriver = GetGDALDriverManager()->GetDriver(i);
 		name(i) = GDALGetDriverShortName( pDriver );
@@ -393,15 +414,16 @@ Rcpp::List CPL_get_rgdal_drivers(int dummy) {
 		copy(i) =   (pDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL);
 		vattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL);
 		rattr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL);
+		vsi_attr(i) =  (pDriver->GetMetadataItem(GDAL_DCAP_VIRTUALIO) != NULL);
 	}
-	Rcpp::List ret(6);
-	ret(0) = name;
-	ret(1) = long_name;
-	ret(2) = create;
-	ret(3) = copy;
-	ret(4) = rattr;
-	ret(5) = vattr;
-	return ret;
+	return Rcpp::DataFrame::create(
+		Rcpp::Named("name") = name,
+		Rcpp::Named("long_name") = long_name,
+		Rcpp::Named("write") = create,
+		Rcpp::Named("copy") = copy,
+		Rcpp::Named("is_raster") = rattr,
+		Rcpp::Named("is_vector") = vattr,
+		Rcpp::Named("vsi") = vsi_attr);
 }
 
 // [[Rcpp::export]]
@@ -417,21 +439,6 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_with_geos() {
-
-	bool withGEOS;
-	CPLPushErrorHandler(CPLQuietErrorHandler);
-	OGRGeometry *poGeometry1, *poGeometry2;
-	char* pszWKT = (char *) "POINT (10 20)";
-	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry1 );
-	pszWKT = (char *) "POINT (30 20)";
-	OGRGeometryFactory::createFromWkt( &pszWKT, NULL, &poGeometry2 );
-	withGEOS = 1;
-	if (poGeometry1->Union(poGeometry2) == NULL) 
-		withGEOS = false; // #nocov
-	else
-		withGEOS = true;
-	OGRGeometryFactory::destroyGeometry(poGeometry1);
-	OGRGeometryFactory::destroyGeometry(poGeometry2);
-	CPLPopErrorHandler();
+	bool withGEOS = OGRGeometryFactory::haveGEOS(); 
 	return Rcpp::LogicalVector::create(withGEOS);
 }

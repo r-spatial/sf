@@ -319,7 +319,7 @@ else
   fi
 fi
 
-LIBS="${INLIBS} ${PKG_LIBS} ${PROJ_LIBS}"
+LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
 proj4ok=yes
 AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
@@ -594,7 +594,7 @@ rm -f geos_test errors.txt geos_test.cpp
 #
 # add PROJ_LIBS
 #
-AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${PROJ_LIBS}"])
+AC_SUBST([PKG_LIBS], ["${PROJ_LIBS} ${PKG_LIBS}"])
 
 #
 # concluding substitution

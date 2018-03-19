@@ -745,3 +745,4 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 			Rcpp::IntegerVector::create(3) :
 			Rcpp::IntegerVector::create(2));
 }
+

@@ -5,6 +5,8 @@
 \alias{st_sf}
 \alias{sf}
 \alias{[.sf}
+\alias{sf}
+\alias{print.sf}
 \title{Create sf object}
 \usage{
 st_sf(..., agr = NA_agr_, row.names,
@@ -12,6 +14,8 @@ st_sf(..., agr = NA_agr_, row.names,
   sf_column_name = NULL, check_ring_dir = FALSE)
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
+
+\method{print}{sf}(x, ..., n = getOption("sf_max_print", default = 10))
 }
 \arguments{
 \item{...}{column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.}
@@ -40,6 +44,8 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 \item{drop}{logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticky and return a \code{sf} object.}
 
 \item{op}{function; geometrical binary predicate function to apply when \code{i} is a simple feature object}
+
+\item{n}{maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}}
 }
 \description{
 Create sf, which extends data.frame-like objects with a simple feature list column

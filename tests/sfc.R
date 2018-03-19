@@ -24,6 +24,7 @@ st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
+head(st_as_sf(d, wkt = "geom"), 1)
 
 d$geom = st_as_sfc(d$geom)
 d1 = d
@@ -104,6 +105,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
 ls * 2
 ls - 2
 (ls + 2) %% 3
+ls / ls
 
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
@@ -124,6 +126,16 @@ st_bbox(sf1)
 bb = st_bbox(nc)
 bb
 st_crs(bb)
+st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = st_crs(4326))
+st_bbox(c(xmin = 16.1, xmax = 16.6, ymin = 48.6, ymax = 47.9), crs = 4326)
+
+bb$xrange
+bb$yrange
+bb$xmin
+bb$ymin
+bb$xmax
+bb$ymax
+try(bb$foo)
 
 # merge:
 a = data.frame(a = 1:3, b = 5:7)
@@ -149,6 +161,15 @@ st_join(a, b)
 st_join(a, b, left = FALSE)
 # deprecated:
 try(x <- st_join(a, b, FUN = mean))
+# st_join, largest = TRUE:
+nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+gr = st_sf(
+    label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
+    geom = st_make_grid(nc))
+gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
+# cut, to check, NA's work out:
+gr = gr[-(1:30),]
+st_join(nc, gr, largest = TRUE)
 
 # rbind:
 x = st_sf(a = 1:2, geom = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326))
@@ -159,13 +180,15 @@ all.equal(nc, nc2)
 # st_sample:
 set.seed(131)
 options(digits=6)
-x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
-(p <- st_sample(x, 10))
+x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
+#if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
+  (p <- st_sample(x, 10))
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
-st_sample(x, 10)
+p <- st_sample(x, 10)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
  crs=st_crs(4326))
-p <- st_sample(x, 10)
+if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
+  (p <- st_sample(x, 10))
 pt = st_multipoint(matrix(1:20,,2))
 st_sample(p, 3)
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
@@ -226,3 +249,13 @@ x = st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)
 st_wrap_dateline(st_sf(a = 1, geometry = x))
 st_wrap_dateline(x)
 st_wrap_dateline(x[[1]])
+
+geo <- c("{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.68152563269095,36.43764870908927]}",
+         "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67408758213843,36.43366018922779]}",
+         "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67708346361097,36.44208638659282]}",
+         "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.67886661944996,36.44110273135671]}",
+         "{\"geodesic\":true,\"type\":\"Point\",\"coordinates\":[-118.68089232041565,36.44173155205561]}")
+st_as_sfc(geo, GeoJSON = TRUE)
+st_as_sfc(geo, GeoJSON = TRUE, crs = 4326)
+
+st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)

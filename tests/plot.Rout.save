@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -61,10 +61,8 @@ The following objects are masked from 'package:base':
 > mp2 = st_multipoint(matrix(5:8,2))
 > mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
 > plot(mp)
-Warning messages:
-1: In classInt::classIntervals(values, nbreaks, breaks) :
-  n greater than number of different finite values\nn reset to number of different finite values
-2: In classInt::classIntervals(values, nbreaks, breaks) :
+Warning message:
+In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
   n same as number of different finite values\neach different finite value is a separate class
 > plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
 > # polygon:
@@ -139,7 +137,9 @@ Warning message:
 plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 > 
 > m = st_make_grid()
-> m = st_segmentize(m, 2e5)
+> st_crs(m) = NA_crs_
+> m = st_segmentize(m, 2)
+> st_crs(m) = 4326
 > plot(m, axes = TRUE)
 > g = st_transform(m, st_crs("+proj=ortho +lat_0=30 +lon_0=45"), check = TRUE)
 > plot(g, axes = TRUE)
@@ -149,21 +149,17 @@ plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all
 > plot(nc, pal = rainbow, nbreaks = 3)
 Warning messages:
 1: plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
-2: In min(x, na.rm = na.rm) :
-  no non-missing arguments to min; returning Inf
-3: In max(x, na.rm = na.rm) :
-  no non-missing arguments to max; returning -Inf
+2: In min(x) : no non-missing arguments to min; returning Inf
+3: In max(x) : no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
 Warning messages:
 1: plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
-2: In min(x, na.rm = na.rm) :
-  no non-missing arguments to min; returning Inf
-3: In max(x, na.rm = na.rm) :
-  no non-missing arguments to max; returning -Inf
+2: In min(x) : no non-missing arguments to min; returning Inf
+3: In max(x) : no non-missing arguments to max; returning -Inf
 > plot(nc, pal = rainbow, breaks = (0:10)/3)
 Warning message:
 plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 > 
 > proc.time()
    user  system elapsed 
-  6.232   0.316   6.242 
+  4.276   0.308   4.316 

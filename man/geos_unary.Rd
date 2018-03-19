@@ -72,7 +72,7 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 
-\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad}, and segmentation takes place along the great circle, using \link[geosphere]{gcIntermediate}.}
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.}
 }
 \value{
 an object of the same class of \code{x}, with manipulated geometry.
@@ -91,7 +91,7 @@ in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTI
 
 \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
 
-\code{st_node} add nodes to linear geometries at intersections without node
+\code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -120,8 +120,9 @@ plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
-l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))
+(l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
 st_polygonize(st_node(l))
+st_node(st_multilinestring(list(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))))
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 seg = st_segmentize(sf, units::set_units(100, km))
 seg = st_segmentize(sf, units::set_units(0.01, rad))

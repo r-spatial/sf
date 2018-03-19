@@ -114,14 +114,15 @@
     </div>
 
     
-    <p>Compute Euclidian or great circle distance between pairs of geometries, the area of a geometry, or the length of a geometry.</p>
+    <p>Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.</p>
     
 
     <pre class="usage"><span class='fu'>st_area</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_length</span>(<span class='no'>x</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='kw pkg'>geosphere</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a></span>)
+<span class='fu'>st_length</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist_fun</span>, <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='no'>dist_fun</span>, <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>which</span> <span class='kw'>=</span> <span class='st'>"distance"</span>,
+  <span class='kw'>par</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -131,33 +132,49 @@
       <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></td>
     </tr>
     <tr>
-      <th>dist_fun</th>
-      <td><p>function to be used for great circle distances of geographical coordinates; for unprojected (long/lat) data, this should be a distance function of package geosphere, or compatible to that; it defaults to <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a> in that case; for other data metric lengths are computed.</p></td>
-    </tr>
-    <tr>
       <th>y</th>
       <td><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code>, defaults to <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>dist_fun</th>
+      <td><p>deprecated</p></td>
     </tr>
     <tr>
       <th>by_element</th>
       <td><p>logical; if <code>TRUE</code>, return a vector with distance between the first elements of <code>x</code> and <code>y</code>, the second, etc. if <code>FALSE</code>, return the dense matrix with all pairwise distances.</p></td>
     </tr>
+    <tr>
+      <th>which</th>
+      <td><p>character; if equal to <code>Haussdorf</code> or <code>Frechet</code>, Hausdorff resp. Frechet distances are returned</p></td>
+    </tr>
+    <tr>
+      <th>par</th>
+      <td><p>for <code>which</code> equal to <code>Haussdorf</code> or <code>Frechet</code>, use a positive value this to densify the geometry</p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>ignored if <code><a href='st_is_longlat.html'>st_is_longlat(x)</a></code> is <code>FALSE</code>; otherwise, if set to a positive value, the first distance smaller than <code>tolerance</code> will be returned, and true distance may be smaller; this may speed up computation. In meters, or a <code>units</code> object convertible to meters.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/units'>set_units</a>.</p>
-<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/geosphere/topics/area'>areaPolygon</a> is used for area calculation.</p>
-<p>st_length returns the length of a LINESTRING or MULTILINESTRING geometry, using the coordinate reference system.  POINT or MULTIPOINT geometries return zero, POLYGON or MULTIPOLYGON are converted into LINESTRING or MULTILINESTRING, respectively.</p>
-<p>If <code>by_element</code> is <code>FALSE</code> a dense numeric matrix of dimension length(x) by length(y); otherwise a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
+    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='http://www.rdocumentation.org/packages/units/topics/set_units'>set_units</a>.</p>
+<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='http://www.rdocumentation.org/packages/lwgeom/topics/lw_geodetic'>st_geod_area</a> is used for area calculation.</p>
+<p>st_length returns the length of a <code>LINESTRING</code> or <code>MULTILINESTRING</code> geometry, using the coordinate reference system.  <code>POINT</code>, <code>MULTIPOINT</code>, <code>POLYGON</code> or <code>MULTIPOLYGON</code> geometries return zero.</p>
+<p>If <code>by_element</code> is <code>FALSE</code> <code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Function <code>dist_fun</code> should follow the pattern of the distance function <a href='http://www.rdocumentation.org/packages/geosphere/topics/distGeo'>distGeo</a>: the first two arguments must be 2-column point matrices, the third the semi major axis (radius, in m), the third the ellipsoid flattening.</p>
+    <p>great circle distance calculations use function <code>geod_inverse</code> from proj.4 if proj.4 is at version larger than 4.8.0, or else the Vincenty method implemented in liblwgeom (this should correspond to what PostGIS does).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='geos_query.html'>st_dimension</a></p>
+    <p><a href='geos_query.html'>st_dimension</a>, st_cast to convert geometry types</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -165,9 +182,19 @@
 <span class='no'>b1</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fl'>2</span>
 <span class='no'>b2</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fu'>c</span>(-<span class='fl'>0.2</span>, <span class='fl'>2</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b0</span>, <span class='no'>b1</span>, <span class='no'>b2</span>)
-<span class='fu'>st_area</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='no'>dist_vincenty</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>f</span>) <span class='kw pkg'>geosphere</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/geosphere/topics/distVincentyEllipsoid'>distVincentyEllipsoid</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>a</span>, <span class='no'>a</span> * (<span class='fl'>1</span>-<span class='no'>f</span>), <span class='no'>f</span>)
-<span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'>c</span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'><span class='fu'>st_length</span>(<span class='no'>line</span>, <span class='kw'>dist_fun</span> <span class='kw'>=</span> <span class='no'>dist_vincenty</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'><span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>2</span>)))
+<span class='fu'>st_area</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'>rbind</span>(<span class='fu'>c</span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'>c</span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 m</div><div class='input'>
+<span class='no'>outer</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>hole1</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+<span class='no'>hole2</span> <span class='kw'>=</span> <span class='fu'>matrix</span>(<span class='fu'>c</span>(<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+
+<span class='no'>poly</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'>list</span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>))
+<span class='no'>mpoly</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span>(<span class='fu'>list</span>(
+        <span class='fu'>list</span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>),
+        <span class='fu'>list</span>(<span class='no'>outer</span> + <span class='fl'>12</span>, <span class='no'>hole1</span> + <span class='fl'>12</span>)
+))
+
+<span class='fu'>st_length</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>poly</span>, <span class='no'>mpoly</span>))</div><div class='output co'>#&gt; [1] 0 0</div><div class='input'><span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='fl'>0</span>,<span class='fl'>2</span>)))
 <span class='fu'>st_distance</span>(<span class='no'>p</span>, <span class='no'>p</span>)</div><div class='output co'>#&gt;      [,1] [,2] [,3]
 #&gt; [1,]    0    1    2
 #&gt; [2,]    1    0    1

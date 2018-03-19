@@ -3,7 +3,7 @@
 
 #include <Rcpp.h>
 
-#include "gdal.h"
+#include "gdal_sf_pkg.h"
 
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 
@@ -47,12 +47,25 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 	Rcpp::NumericVector out(sfc.length());
 	for (size_t i = 0; i < g.size(); i++) {
 		OGRwkbGeometryType gt = OGR_GT_Flatten(g[i]->getGeometryType());
-		if (gt == wkbLineString || gt == wkbCircularString || gt == wkbCompoundCurve || gt == wkbCurve) {
-			OGRCurve *a = (OGRCurve *) g[i];
-			out[i] = a->get_Length();
-		} else {
-			OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
-			out[i] = a->get_Length();
+		switch (gt) {
+			case wkbPoint: 
+			case wkbMultiPoint:
+			case wkbPolygon:
+			case wkbMultiPolygon:
+				out[i] = 0.0;
+				break;
+			case wkbLineString:
+			case wkbCircularString:
+			case wkbCompoundCurve:
+			case wkbCurve: {
+					OGRCurve *a = (OGRCurve *) g[i];
+					out[i] = a->get_Length();
+				}
+				break;
+			default: {
+					OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
+					out[i] = a->get_Length();
+				}
 		}
 		OGRGeometryFactory f;
 		f.destroyGeometry(g[i]);

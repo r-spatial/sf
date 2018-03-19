@@ -124,18 +124,18 @@
 <p>Examples of the first three types are</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 ## Loading required package: methods
-## Linking to GEOS 3.5.1, GDAL 2.1.2, proj.4 4.9.3, lwgeom 2.3.1 r15264
+## Linking to GEOS 3.5.1, GDAL 2.2.1, proj.4 4.9.3
 <span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(dplyr))
-<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"MULTIPOINT"</span>)
+<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"MULTIPOINT"</span>)
 ## MULTIPOINT (1 1)
-<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
+<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
 ## POINT (1 1)
-<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
+<span class="kw"><a href="../reference/st.html">st_multipoint</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
 ## POINT (1 1)</code></pre></div>
 <p>Examples of the fourth type are</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))) %&gt;%<span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_cast</span>(<span class="st">"POINT"</span>)
 ## POINT (1 1)</code></pre></div>
 </div>
 <div id="for-collections-of-geometry-sfc-and-simple-feature-collections-sf" class="section level3">
@@ -171,7 +171,7 @@ mls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html
 ## proj4string:    NA
 ## MULTILINESTRING ((0 0, 1 1, 2 1))
 ## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))
-sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">5</span>:<span class="dv">4</span>, <span class="dt">geom =</span> sfc)
+sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">5</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">geom =</span> sfc)
 <span class="kw">st_cast</span>(sf, <span class="st">"MULTILINESTRING"</span>)
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  MULTILINESTRING
@@ -201,9 +201,9 @@ mls2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.htm
 ## LINESTRING (0 0, 1 1, 2 1)
 ## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))
 ## MULTILINESTRING ((4 4, 4 3), (2 2, 2 1, 3 1))
-<span class="kw">class</span>(sfc[<span class="dv">2</span>:<span class="dv">3</span>])
+<span class="kw">class</span>(sfc[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>])
 ## [1] "sfc_MULTILINESTRING" "sfc"
-<span class="kw">class</span>(<span class="kw">st_cast</span>(sfc[<span class="dv">2</span>:<span class="dv">3</span>]))
+<span class="kw">class</span>(<span class="kw">st_cast</span>(sfc[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]))
 ## [1] "sfc_MULTILINESTRING" "sfc"
 
 gc1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="kw">list</span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)))))
@@ -231,21 +231,21 @@ gc3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st.html
 <p>Affine transformations are transformations of the type <span class="math inline">\(f(x) = xA + b\)</span>, where matrix <span class="math inline">\(A\)</span> is used to flatten, scale and/or rotate, and <span class="math inline">\(b\)</span> to translate <span class="math inline">\(x\)</span>. Low-level examples are:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dt">p =</span> <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">2</span>)))
 ## POINT (0 2)
-p +<span class="st"> </span><span class="dv">1</span>
+p <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
 ## POINT (1 3)
-p +<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
+p <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)
 ## POINT (1 4)
-p +<span class="st"> </span>p
-## POINT (0 4)
-p *<span class="st"> </span>p
-## POINT (0 4)
-rot =<span class="st"> </span>function(a) <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(a), <span class="kw">sin</span>(a), -<span class="kw">sin</span>(a), <span class="kw">cos</span>(a)), <span class="dv">2</span>, <span class="dv">2</span>)
-p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">4</span>)
-## POINT (1.41421356237309 1.4142135623731)
-p *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>)
-## POINT (2 1.22464679914735e-16)
-p *<span class="st"> </span><span class="kw">rot</span>(pi)
-## POINT (2.44929359829471e-16 -2)</code></pre></div>
+p <span class="op">+</span><span class="st"> </span>p
+## POINT (0 2)
+p <span class="op">*</span><span class="st"> </span>p
+## POINT (0 2)
+rot =<span class="st"> </span><span class="cf">function</span>(a) <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">cos</span>(a), <span class="kw">sin</span>(a), <span class="op">-</span><span class="kw">sin</span>(a), <span class="kw">cos</span>(a)), <span class="dv">2</span>, <span class="dv">2</span>)
+p <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi<span class="op">/</span><span class="dv">4</span>)
+## POINT (1.414214 1.414214)
+p <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi<span class="op">/</span><span class="dv">2</span>)
+## POINT (2 1.224647e-16)
+p <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi)
+## POINT (2.449294e-16 -2)</code></pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc =<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>), <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
 ncg =<span class="st"> </span><span class="kw">st_geometry</span>(nc)
@@ -253,9 +253,9 @@ ncg =<span class="st"> </span><span class="kw">st_geometry</span>(nc)
 cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(ncg)
 ## Warning in st_centroid.sfc(ncg): st_centroid does not give correct
 ## centroids for longitude/latitude data
-ncg2 =<span class="st"> </span>(ncg -<span class="st"> </span>cntrd) *<span class="st"> </span><span class="kw">rot</span>(pi/<span class="dv">2</span>) *<span class="st"> </span>.<span class="dv">75</span> +<span class="st"> </span>cntrd
+ncg2 =<span class="st"> </span>(ncg <span class="op">-</span><span class="st"> </span>cntrd) <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi<span class="op">/</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="fl">.75</span> <span class="op">+</span><span class="st"> </span>cntrd
 <span class="kw">plot</span>(ncg2, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw">plot</span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> .<span class="dv">5</span>)</code></pre></div>
+<span class="kw">plot</span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> <span class="fl">.5</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div id="coordinate-reference-systems-conversion-and-transformation" class="section level2">
@@ -267,7 +267,7 @@ ncg2 =<span class="st"> </span>(ncg -<span class="st"> </span>cntrd) *<span clas
 <p>The coordinate reference system of objects of class <code>sf</code> or <code>sfc</code> is obtained by <code>st_crs</code>, and replaced by <code>st_crs&lt;-</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sf)
 geom =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw">c</span>(<span class="dv">11</span>,<span class="dv">12</span>)))
-s =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">15</span>:<span class="dv">16</span>, <span class="dt">geometry =</span> geom)
+s =<span class="st"> </span><span class="kw"><a href="../reference/sf.html">st_sf</a></span>(<span class="dt">a =</span> <span class="dv">15</span><span class="op">:</span><span class="dv">16</span>, <span class="dt">geometry =</span> geom)
 <span class="kw">st_crs</span>(s)
 ## Coordinate Reference System: NA
 s1 =<span class="st"> </span>s
@@ -281,7 +281,7 @@ s2 =<span class="st"> </span>s
 <span class="kw">all.equal</span>(s1, s2)
 ## [1] TRUE</code></pre></div>
 <p>an alternative, more pipe-friendly version of <code>st_crs&lt;-</code> is</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s1 %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>)
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  POINT
 ## dimension:      XY
@@ -296,13 +296,13 @@ s2 =<span class="st"> </span>s
 <h3 class="hasAnchor">
 <a href="#coordinate-reference-system-transformations" class="anchor"></a>Coordinate reference system transformations</h3>
 <p>If we change the coordinate reference system from one non-missing value into another non-missing value, the crs is is changed without modifying any coordinates, but a warning is issued that this did not reproject values:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)
 ## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform
 ## for that</code></pre></div>
 <p>A cleaner way to do this that better expresses intention and does not generate this warning is to first wipe the CRS by assigning it a missing value, and then setting it to the intended value.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1  %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="ot">NA</span>) %&gt;%<span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="ot">NA</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</code></pre></div>
 <p>To carry out a coordinate conversion or transformation, we use <code>st_transform</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 %&gt;%<span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">3857</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s3 &lt;-<span class="st"> </span>s1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_transform</span>(<span class="dv">3857</span>)
 s3
 ## Simple feature collection with 2 features and 1 field
 ## geometry type:  POINT
@@ -310,9 +310,9 @@ s3
 ## bbox:           xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708
 ## epsg (SRID):    3857
 ## proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-##    a                       geometry
-## 1 15     POINT (0 111325.142866385)
-## 2 16 POINT (1224514.39872601 134...</code></pre></div>
+##    a                geometry
+## 1 15      POINT (0 111325.1)
+## 2 16 POINT (1224514 1345708)</code></pre></div>
 <p>for which we see that coordinates are actually modified (projected).</p>
 </div>
 </div>
@@ -321,14 +321,14 @@ s3
 <a href="#geometrical-operations" class="anchor"></a>Geometrical operations</h2>
 <p>All geometrical operations <code>st_op(x)</code> or or <code>st_op2(x,y)</code> work both for <code>sf</code> objects as well as <code>sfc</code> objects <code>x</code> and <code>y</code>; since the operations work on the geometries, the non-geometries parts of an <code>sf</code> object are simply discarded. Also, all binary operations <code>st_op2(x,y)</code> called with a single argument, as <code>st_op2(x)</code>, are handled as <code>st_op2(x,x)</code>.</p>
 <p>We will illustrate the geometrical operations on a very simple dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b0 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>))))
-b1 =<span class="st"> </span>b0 +<span class="st"> </span><span class="dv">2</span>
-b2 =<span class="st"> </span>b0 +<span class="st"> </span><span class="kw">c</span>(-<span class="fl">0.2</span>, <span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b0 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))))
+b1 =<span class="st"> </span>b0 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+b2 =<span class="st"> </span>b0 <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="dv">2</span>)
 x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(b0, b1, b2)
-a0 =<span class="st"> </span>b0 *<span class="st"> </span><span class="fl">0.8</span>
-a1 =<span class="st"> </span>a0 *<span class="st"> </span><span class="fl">0.5</span> +<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.7</span>)
-a2 =<span class="st"> </span>a0 +<span class="st"> </span><span class="dv">1</span>
-a3 =<span class="st"> </span>b0 *<span class="st"> </span><span class="fl">0.5</span> +<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, -<span class="fl">0.5</span>)
+a0 =<span class="st"> </span>b0 <span class="op">*</span><span class="st"> </span><span class="fl">0.8</span>
+a1 =<span class="st"> </span>a0 <span class="op">*</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">0.7</span>)
+a2 =<span class="st"> </span>a0 <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+a3 =<span class="st"> </span>b0 <span class="op">*</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="fl">-0.5</span>)
 y =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(a0,a1,a2,a3)
 <span class="kw">plot</span>(x, <span class="dt">border =</span> <span class="st">'red'</span>)
 <span class="kw">plot</span>(y, <span class="dt">border =</span> <span class="st">'green'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -337,11 +337,9 @@ y =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_
 <h3 class="hasAnchor">
 <a href="#unary-operations" class="anchor"></a>Unary operations</h3>
 <p><code>st_is_valid</code> returns whether polygon geometries are topologically valid:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b0 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(-<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>))))
-b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,-<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">0</span>,-<span class="dv">1</span>), <span class="kw">c</span>(-<span class="dv">1</span>,-<span class="dv">1</span>))))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b0 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))))
+b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw">list</span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>), <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>))))
 <span class="kw"><a href="../reference/geos_query.html">st_is_valid</a></span>(<span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(b0,b1))
-## Warning in evalq((function (..., call. = TRUE, immediate. = FALSE,
-## noBreaks. = FALSE, : Self-intersection at or near point -1 -1
 ## [1]  TRUE FALSE</code></pre></div>
 <p>and <code>st_is_simple</code> whether line geometries are simple:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))), 
@@ -373,7 +371,7 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 ## [1,] "212FF1FF2" "FF2FF1212" "212101212" "FF2FF1212"
 ## [2,] "FF2FF1212" "212101212" "212101212" "FF2FF1212"
 ## [3,] "FF2FF1212" "FF2FF1212" "212101212" "FF2FF1212"</code></pre></div>
-<p>element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(B\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
+<p>element [i,j] of this matrix has nine characters, refering to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(E\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
 </div>
 <div id="binary-logical-operations" class="section level3">
 <h3 class="hasAnchor">
@@ -465,11 +463,11 @@ b1 =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_
 <span class="kw">plot</span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
 <span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">0.2</span>), <span class="dt">border =</span> <span class="st">'grey'</span>)
 <span class="kw">plot</span>(u, <span class="dt">border =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
-<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, -<span class="fl">0.2</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(u, <span class="fl">-0.2</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_boundary</a></span>(x))</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-25-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>))
 <span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(x))
 <span class="kw">plot</span>(<span class="kw"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(u))</code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>

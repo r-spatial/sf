@@ -4,6 +4,8 @@
 \alias{plot}
 \alias{plot.sf}
 \alias{plot}
+\alias{get_key_pos}
+\alias{plot}
 \alias{plot.sfc_POINT}
 \alias{plot}
 \alias{plot.sfc_MULTIPOINT}
@@ -31,8 +33,10 @@
 \usage{
 \method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
-  options("sf_max.plot")[[1]])) 9 else n, key.pos = if (ncol(x) > 2) NULL else
-  4, key.size = lcm(1.8))
+  options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
+  key.size = lcm(1.8), reset = TRUE)
+
+get_key_pos(x, ...)
 
 \method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
   lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -89,9 +93,11 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}}
 
-\item{key.pos}{integer; which side to plot a color key: 1 bottom, 2 left, 3 top, 4 right. Set to \code{NULL} for no key. Currently ignored if multiple columns are plotted.}
+\item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.}
 
 \item{key.size}{amount of space reserved for the key (labels)}
+
+\item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.}
 
 \item{pch}{plotting symbol}
 
@@ -159,6 +165,8 @@ set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single m
 
 \code{plot.sfc} plots the geometry, additional parameters can be passed on
 to control color, lines or symbols.
+
+When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.

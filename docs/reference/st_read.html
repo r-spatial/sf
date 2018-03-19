@@ -118,9 +118,13 @@
 <p>Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary</p>
     
 
-    <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>(), <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>default.stringsAsFactors</span>(), <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>read_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
@@ -178,6 +182,10 @@ is <code>TRUE</code>, but this can be changed by setting <code>options(stringsAs
       <th>int64_as_string</th>
       <td><p>logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
 and a warning is given when precision is lost (i.e., values are larger than 2^53).</p></td>
+    </tr>
+    <tr>
+      <th>check_ring_dir</th>
+      <td><p>logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)</p></td>
     </tr>
     <tr>
       <th>conn</th>

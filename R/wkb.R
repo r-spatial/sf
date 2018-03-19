@@ -59,6 +59,14 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 		st_sfc(ret) # leave attr srid in place: PostGIS srid that is not an EPSG code
 }
 
+#' @export
+#' @examples
+#' st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)
+#' @name st_as_sfc
+st_as_sfc.raw = function(x, ...) {
+	st_as_sfc(structure(list(x), class = "WKB"), ...)
+}
+
 R_read_wkb = function(x, readWKB, EWKB = EWKB) {
 	ret = lapply(x, readWKB, EWKB = EWKB)
 	srid = attr(ret[[1]], "srid")

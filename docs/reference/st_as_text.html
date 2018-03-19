@@ -137,7 +137,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>passed on to WKT_name</p></td>
+      <td><p>modifiers; in particular <code>digits</code> can be passed to control the number of digits used</p></td>
     </tr>
     <tr>
       <th>pretty</th>
@@ -151,11 +151,14 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>To suppress printing of SRID, <code>EWKT=FALSE</code> can be passed as parameter.</p>
+    <p>The returned WKT representation of simple feature geometry conforms to the
+<a href='http://www.opengeospatial.org/standards/sfa'>simple features access</a> specification and extensions,
+<a href='http://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>known as EWKT</a>, supported by
+PostGIS and other simple features implementations for addition of SRID to a WKT string.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(-<span class='fl'>90</span>,<span class='fl'>40</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>), <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "SRID=4326;POINT (-90 40)"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

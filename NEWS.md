@@ -1,4 +1,54 @@
-# version 0.5-6
+# version 0.6-1
+
+* method `distinct` now works; #669, #672
+
+* `+`, `-`, `*` and `/` for pairs of geometries (`sfg`, `sfc`) now return geometric union, difference, intersection and symmetric difference, respectively.
+
+* `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` should now work properly; #660
+
+* all Rcpp interfaces needed by package `stars` have now been moved into `sf`; pkg `stars` is now R-only, and only `sf` needs linking to GDAL.
+
+* interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`
+
+* improve resetting (base) plots; add `reset = FALSE` in a call to `plot` to enable adding to plots that have a legend
+
+* `st_read` now returns a `data.frame` when a table contains no geometries, rather than giving an error; it does emit a warning in this case. See https://stat.ethz.ch/pipermail/r-sig-geo/2018-February/026344.html
+
+* move `pillar` from `Imports:` to `Suggests:`
+
+* update to the new rwinlib distribution of gdal (adds JPG2000); #639
+
+* speed up computation of centroids for largest polygon; #623
+
+* add `st_as_sfc.raw` method
+
+* Bugfix: binary operations (`st_intersection`, `st_difference`, etc) no longer fail when operating on data frames of class `"tbl_df"` with common column names; #644
+
+# version 0.6-0
+
+* add `pillar` to Imports: to provide method for printing WKT geometries in tibbles
+
+* `st_as_text`, and subsequently `format` and `print`, now use argument `digits` (or `options(digits = n)`) to control the number of digits used for printing coordinates; default is now `options("digits")`, which is typically 7.
+
+* `st_is_within_distance` now works with geographic coordinates
+
+* `st_cast` from `MULTIPOLYGON` to `MULTILINESTRING` no longer changes the number of features/feature geometries, but conversion from `MULTIPOLYGON` to `LINESTRING` now (typically) does; #596
+
+* `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` is deprecated as a consequence, and distance calculations are different from those in sf versions 0.5-5 or earlier; #593
+
+* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom` instead of `geosphere`; #593
+
+* `st_length` now returns zero for polygon-type geometries; #593
+
+* if present, add units of attribute to default plot title; #591
+
+* add `unnest` method, which depends on `tidyr` > 0.7-2; #570 PR by @karldw
+
+* add `largest` option to `st_join` to get largest intersection match only; #547, by @tiernanmartin
+
+* change default maximum number of feature to print to 10, controllable by `options(sf_max_print)`; #556
+
+* add `Hausdorff` (and `Frechet` for those with GEOS 3.7.0) as options to `st_distance`; add `par` for densified versions
 
 * add `st_snap`, for snapping geometries to other geometries, within a tolerance
 

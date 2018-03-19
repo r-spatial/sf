@@ -86,10 +86,12 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="simple-features-for-r" class="section level1">
+    
+
+<div id="simple-features-for-r" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#simple-features-for-r" class="anchor"></a>Simple Features for R</h1></div>
-
+<p><a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif"></a></p>
 <p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features access</a> for R. Package sf:</p>
 <ul>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
@@ -102,24 +104,25 @@
 <li>directly reads from and writes to spatial databases such as <a href="http://postgis.net/">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
 </li>
 </ul>
-<div id="blogs-presentations-vignettes" class="section level3">
+<div id="blogs-presentations-vignettes-sp-sf-wiki" class="section level3">
 <h3 class="hasAnchor">
-<a href="#blogs-presentations-vignettes" class="anchor"></a>Blogs, presentations, vignettes</h3>
-<p>See also:</p>
+<a href="#blogs-presentations-vignettes-sp-sf-wiki" class="anchor"></a>Blogs, presentations, vignettes, sp-sf wiki</h3>
 <ul>
-<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">forth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>
+<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">forth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html">sixth</a>
 </li>
 <li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html">fourth</a>
 </li>
 <li>the original R Consortium ISC <a href="PROPOSAL.md">proposal</a>, the R Consortium <a href="https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran">blog post</a>
 </li>
-<li>UseR! 2016 <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">presentation</a>
+<li>presentations: <a href="https://edzer.github.io/rstudio_conf/#1">rstudio::conf 2018</a>, <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">UseR! 2016</a>
+</li>
+<li>wiki page describing <a href="https://github.com/r-spatial/sf/wiki/Migrating">sp-sf migration</a>
 </li>
 </ul>
 </div>
-<div id="installling" class="section level2">
+<div id="installing" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installling" class="anchor"></a>Installling</h2>
+<a href="#installing" class="anchor"></a>Installing</h2>
 <p>Install either from CRAN with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"sf"</span>)</code></pre></div>
 <p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
@@ -129,7 +132,7 @@
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
-<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>. (This does not include <code>liblwgeom</code>; it will need to be installed separately for functions that require it, such as <code>st_make_valid</code>, to work.)</p>
+<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
 </div>
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
@@ -143,20 +146,19 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2</code></pre>
 <p>after that, you should be able to install <code>sf</code> as a source package.</p>
-<p>According to <a href="https://github.com/r-spatial/sf/issues/349" class="uri">https://github.com/r-spatial/sf/issues/349</a>, <code>brew install postgis</code> installs a working <code>liblwgeom</code>. In case of problems, search the issues for <code>brew</code> before opening a new one.</p>
 <p>For MacOS Sierra, see <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these</a> instruction, using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linux" class="anchor"></a>Linux</h3>
-<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required; <code>liblwgeom</code> is optional.</p>
+<p>For Unix-alikes, GDAL (&gt;= 2.0.0), GEOS (&gt;= 3.3.0) and Proj.4 (&gt;= 4.8.0) are required.</p>
 <div id="ubuntu" class="section level4">
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
 <p>To install the dependencies on Ubuntu, either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
 <div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 <span class="fu">sudo</span> apt-get update
-<span class="fu">sudo</span> apt-get install libgdal-dev libgeos-dev libproj-dev libudunits2-dev liblwgeom-dev</code></pre></div>
+<span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </code></pre></div>
 <p>or install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
 </div>
 <div id="fedora" class="section level4">
@@ -165,11 +167,23 @@ brew link --force gdal2</code></pre>
 <p>The following command installs all required dependencies:</p>
 <div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel</code></pre></div>
 </div>
+<div id="arch" class="section level4">
+<h4 class="hasAnchor">
+<a href="#arch" class="anchor"></a>Arch</h4>
+<p>Get gdal, proj and geos from the main repos and udunits from the AUR:</p>
+<pre><code>pacman -S gdal proj geos
+pacaur/yaourt/whatever -S udunits</code></pre>
+</div>
 <div id="other" class="section level4">
 <h4 class="hasAnchor">
 <a href="#other" class="anchor"></a>Other</h4>
 <p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker">here</a>.</p>
 </div>
+</div>
+<div id="lwgeom" class="section level3">
+<h3 class="hasAnchor">
+<a href="#lwgeom" class="anchor"></a>lwgeom</h3>
+<p>Functions and methods that require <code>liblwgeom</code>, including <code>st_make_valid</code> and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, <a href="https://github.com/r-spatial/lwgeom">lwgeom</a>, which is also on <a href="https://cran.r-project.org/package=lwgeom">CRAN</a>.</p>
 </div>
 <div id="contributing" class="section level3">
 <h3 class="hasAnchor">
@@ -183,11 +197,12 @@ brew link --force gdal2</code></pre>
 <div id="acknowledgment" class="section level3">
 <h3 class="hasAnchor">
 <a href="#acknowledgment" class="anchor"></a>Acknowledgment</h3>
-<p>This project has been realized with financial <a href="https://www.r-consortium.org/projects">support</a> from the</p>
-<p><a href="https://www.r-consortium.org/projects/awarded-projects"> <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="400"></a></p>
+<p>This project greatfully acknowledges financial <a href="https://www.r-consortium.org/projects">support</a> from the</p>
+<p><a href="https://www.r-consortium.org/projects/awarded-projects"> <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300"></a></p>
 </div>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3" id="sidebar">

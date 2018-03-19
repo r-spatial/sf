@@ -117,8 +117,8 @@
     <p>spatial left or inner join</p>
     
 
-    <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>FUN</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
-  <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>FUN</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='no'>...</span>,
+  <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -144,13 +144,17 @@
       <td><p>length 2 character vector; see <a href='http://www.rdocumentation.org/packages/base/topics/merge'>merge</a></p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>arguments passed on to the <code>join</code> function (e.g. <code>prepared</code>, or a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
+    </tr>
+    <tr>
       <th>left</th>
       <td><p>logical; if <code>TRUE</code> carry out left join, else inner join; 
 see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed on to the <code>join</code> function (e.g. <code>prepared</code>, or a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
+      <th>largest</th>
+      <td><p>logical; if <code>TRUE</code>, return <code>x</code> features augmented with the fields of <code>y</code> that have the largest overlap with each of the features of <code>x</code>; see https://github.com/r-spatial/sf/issues/578</p></td>
     </tr>
     </table>
     
@@ -209,11 +213,30 @@ see also <a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a><
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt; # A tibble: 3 x 3
-#&gt;     a.x `mean(a.y)`             geom
-#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;simple_feature&gt;
-#&gt; 1     1          NA    &lt;POINT (1 1)&gt;
-#&gt; 2     2        12.5    &lt;POINT (2 2)&gt;
-#&gt; 3     3        14.0    &lt;POINT (3 3)&gt;</div></pre>
+#&gt;     a.x `mean(a.y)`    geom
+#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;POINT&gt;
+#&gt; 1     1        NA     (1 1)
+#&gt; 2     2        12.5   (2 2)
+#&gt; 3     3        14.0   (3 3)</div><div class='input'><span class='co'># example of largest = TRUE:</span>
+<span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='fu'>st_read</span>(<span class='fu'>system.file</span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>2264</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/edzer/git/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; Simple feature collection with 100 features and 14 fields
+#&gt; geometry type:  MULTIPOLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+#&gt; epsg (SRID):    4267
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(
+    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>apply</span>(<span class='fu'>expand.grid</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>LETTERS</span>[<span class='fl'>10</span>:<span class='fl'>1</span>])[,<span class='fl'>2</span>:<span class='fl'>1</span>], <span class='fl'>1</span>, <span class='no'>paste0</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>" "</span>),
+    <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='no'>nc</span>))
+<span class='no'>gr</span>$<span class='no'>col</span> <span class='kw'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='fl'>10</span>, <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.3</span>)
+<span class='co'># cut, to check, NA's work out:</span>
+<span class='no'>gr</span> <span class='kw'>=</span> <span class='no'>gr</span>[-(<span class='fl'>1</span>:<span class='fl'>30</span>),]
+<span class='no'>nc_j</span> <span class='kw'>&lt;-</span> <span class='fu'>st_join</span>(<span class='no'>nc</span>, <span class='no'>gr</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='co'># the two datasets:</span>
+<span class='no'>opar</span> <span class='kw'>=</span> <span class='fu'>par</span>(<span class='kw'>mfrow</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fu'>rep</span>(<span class='fl'>0</span>,<span class='fl'>4</span>))
+<span class='fu'>plot</span>(<span class='fu'>st_geometry</span>(<span class='no'>nc_j</span>))
+<span class='fu'>plot</span>(<span class='fu'>st_geometry</span>(<span class='no'>gr</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gr</span>$<span class='no'>col</span>)
+<span class='fu'>text</span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='no'>gr</span>)), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>gr</span>$<span class='no'>label</span>)
+<span class='co'># the joined dataset:</span>
+<span class='fu'>plot</span>(<span class='fu'>st_geometry</span>(<span class='no'>nc_j</span>), <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'black'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>nc_j</span>$<span class='no'>col</span>)</div><div class='input'><span class='fu'>text</span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='no'>nc_j</span>)), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>nc_j</span>$<span class='no'>label</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='fu'>st_geometry</span>(<span class='no'>gr</span>), <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='st_join-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>par</span>(<span class='no'>opar</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

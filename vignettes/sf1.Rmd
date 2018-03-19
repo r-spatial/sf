@@ -124,8 +124,8 @@ Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described 
 ## Coordinate reference system
 
 Coordinates can only be placed on the Earth's surface when their coordinate
-reference system (CRS) is known; this may be an elipsoidal CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
-in three-dimensions or [including time](http://www.faculty.jacobs-university.de/pbaumann/iu-bremen.de_pbaumann/Papers/acmgis-2012_crs-nts.pdf). Similarly, M-coordinates need an attribute reference
+reference system (CRS) is known; this may be an spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
+in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference
 system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
 # How simple features in R are organized

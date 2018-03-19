@@ -4,8 +4,8 @@
 \alias{st_join}
 \title{spatial left or inner join}
 \usage{
-st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
-  left = TRUE, ...)
+st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), ...,
+  left = TRUE, largest = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}}
@@ -18,10 +18,12 @@ st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
+\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
+
 \item{left}{logical; if \code{TRUE} carry out left join, else inner join; 
 see also \link[dplyr]{left_join}}
 
-\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
+\item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
 }
 \value{
 an object of class \code{sf}, joined based on geometry
@@ -46,4 +48,23 @@ st_join(a, b, left = FALSE)
 st_join(a, b) \%>\% aggregate(list(.$a.x), mean)
 library(dplyr)
 st_join(a, b) \%>\% group_by(a.x) \%>\% summarise(mean(a.y))
+# example of largest = TRUE:
+nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+gr = st_sf(
+    label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
+    geom = st_make_grid(nc))
+gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
+# cut, to check, NA's work out:
+gr = gr[-(1:30),]
+nc_j <- st_join(nc, gr, largest = TRUE)
+# the two datasets:
+opar = par(mfrow = c(2,1), mar = rep(0,4))
+plot(st_geometry(nc_j))
+plot(st_geometry(gr), add = TRUE, col = gr$col)
+text(st_coordinates(st_centroid(gr)), labels = gr$label)
+# the joined dataset:
+plot(st_geometry(nc_j), border = 'black', col = nc_j$col)
+text(st_coordinates(st_centroid(nc_j)), labels = nc_j$label, cex = .8)
+plot(st_geometry(gr), border = 'green', add = TRUE)
+par(opar)
 }

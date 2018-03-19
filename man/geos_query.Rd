@@ -6,12 +6,16 @@
 \alias{geos_query}
 \alias{st_is_simple}
 \alias{geos_query}
+\alias{st_is_empty}
+\alias{geos_query}
 \alias{st_is_valid}
-\title{Dimension, simplicity or validity queries on simple feature geometries}
+\title{Dimension, simplicity, validity or is_empty queries on simple feature geometries}
 \usage{
 st_dimension(x, NA_if_empty = TRUE)
 
 st_is_simple(x)
+
+st_is_empty(x)
 
 st_is_valid(x, NA_on_exception = TRUE, reason = FALSE)
 }
@@ -29,10 +33,12 @@ st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surf
 
 st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
 
+st_is_empty returns for each geometry whether it is empty
+
 \code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
 }
 \description{
-Dimension, simplicity or validity queries on simple feature geometries
+Dimension, simplicity, validity or is_empty queries on simple feature geometries
 }
 \examples{
 x = st_sfc(
@@ -46,6 +52,8 @@ st_dimension(x)
 st_dimension(x, FALSE)
 ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 st_is_simple(st_sfc(ls, st_point(c(0,0))))
+ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
+st_is_empty(st_sfc(ls, st_point(), st_linestring()))
 p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
 st_is_valid(p1)
 st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)

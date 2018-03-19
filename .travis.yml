@@ -3,9 +3,9 @@ language: r
 r:
   - release
   - oldrel
-  - devel
+#  - devel
 
-cache: packages
+# cache: packages
 
 sudo: required
 
@@ -15,8 +15,6 @@ addons:
   postgresql: "9.6"
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-  - sudo apt-get --yes --force-yes update -qq
   # install tmap dependencies
   - sudo apt-get install --yes libprotobuf-dev protobuf-compiler libv8-3.14-dev
   # install tmap dependencies; for 16.04 libjq-dev this ppa is needed:
@@ -25,7 +23,9 @@ before_install:
   - sudo apt-get install libjq-dev
   # units/udunits2 dependency:
   - sudo apt-get install --yes libudunits2-dev
-  # sf dependencies:
+  # sf dependencies/spatial stack:
+  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+  - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
   # postgis source compile dependencies:
   - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.6
@@ -33,8 +33,6 @@ before_install:
   - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
   - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
   - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
-  # activate liblwgeom by:
-  - sudo ldconfig 
   # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis

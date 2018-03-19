@@ -121,7 +121,7 @@
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>, <span class='no'>coords</span>, <span class='no'>wkt</span>,
-  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>sf_column_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -176,6 +176,11 @@
       <th>na.fail</th>
       <td><p>logical; if <code>TRUE</code>, raise an error if coordinates contain missing values</p></td>
     </tr>
+    <tr>
+      <th>sf_column_name</th>
+      <td><p>character; name of the active list-column with simple feature geometries; in case
+there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -213,7 +218,7 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611
 #&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs
+#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs
 #&gt;   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m
 #&gt; 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50
 #&gt; 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30
@@ -247,7 +252,7 @@
 #&gt;  NA's   : 1                                       </div><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)</div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘sp’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:sf’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    degAxis, degreeLabelsEW, degreeLabelsNS</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
+#&gt; <span class='message'>    degreeLabelsEW, degreeLabelsNS</span></div><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>rbind</span>(<span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))
 <span class='no'>x1</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.1</span>
 <span class='no'>x2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.4</span>
 <span class='no'>x3</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>x</span> + <span class='fl'>0.7</span>
@@ -271,7 +276,7 @@
   <span class='fu'>library</span>(<span class='no'>sf</span>)
   <span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>r</span>)
   <span class='fu'>summary</span>(<span class='no'>a</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-25, (SVN revision 555)</span>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.3-26, (SVN revision 560)</span>
 #&gt; <span class='message'> GEOS runtime version: 3.5.1-CAPI-1.9.1 r4246 </span>
 #&gt; <span class='message'> Linking to sp version: 1.2-5 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
@@ -295,7 +300,7 @@
 #&gt;                                     NA's   :2                             
 #&gt;     landuse       dist.m                geometry  
 #&gt;  W      :50   Min.   :  10.0   POINT        :155  
-#&gt;  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
+#&gt;  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
 #&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
@@ -309,19 +314,19 @@
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  POINT        :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
 #&gt;                      </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.area</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>meuse.riv</span>))</div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='fu'>as</span>(<span class='no'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))</div><div class='output co'>#&gt;           geometry
 #&gt;  LINESTRING   :1  
-#&gt;  epsg:28992   :0  
+#&gt;  epsg:NA      :0  
 #&gt;  +proj=ster...:0  </div><div class='input'><span class='no'>pol.grd</span> <span class='kw'>=</span> <span class='fu'>as</span>(<span class='no'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
 <span class='fu'>summary</span>(<span class='fu'>st_as_sf</span>(<span class='no'>pol.grd</span>))</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
@@ -332,7 +337,7 @@
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  POLYGON      :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
@@ -345,7 +350,7 @@
 #&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
 #&gt;           geometry   
 #&gt;  LINESTRING   :3103  
-#&gt;  epsg:28992   :   0  
+#&gt;  epsg:NA      :   0  
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
@@ -358,8 +363,8 @@
  <span class='co'># because of spatstat interfering with units</span>
 <span class='kw'>if</span> (<span class='fu'>require</span>(<span class='no'>spatstat</span>)) {
  <span class='fu'>data</span>(<span class='no'>chicago</span>)
- <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>[<span class='st'>"label"</span>]))
- <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>[-<span class='fl'>1</span>,<span class='st'>"label"</span>]))
+ <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[<span class='st'>"label"</span>])
+ <span class='fu'>plot</span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[-<span class='fl'>1</span>,<span class='st'>"label"</span>])
 }
 <span class='co'># }</span></pre>
   </div>

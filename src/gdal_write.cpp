@@ -4,7 +4,7 @@
 
 #include "ogrsf_frmts.h"
 #include "wkb.h"
-#include "gdal.h"
+#include "gdal_sf_pkg.h"
 
 std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	std::vector<OGRFieldType> ret(obj.size());
@@ -53,7 +53,7 @@ void SetNull(OGRFeature *poFeature, size_t field) {
 #endif
 }
 
-void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i = 0) {
+void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i, bool shape) {
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
 		if (j == (size_t) poFeature->GetFieldCount())
@@ -62,25 +62,34 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 			case OFTString: {
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
-				if (! Rcpp::CharacterVector::is_na(cv[i]))
-					poFeature->SetField(j, (const char *) cv[i]);
-				else
+				if (! Rcpp::CharacterVector::is_na(cv[i])) {
+					if (shape)
+						poFeature->SetField(j, (const char *) cv[i]);
+					else
+						poFeature->SetField(nm[j], (const char *) cv[i]);
+				} else
 					SetNull(poFeature, j);
 				} break;
 			case OFTInteger: {
 				Rcpp::IntegerVector iv;
 				iv = obj[j];
-				if (! Rcpp::IntegerVector::is_na(iv[i]))
-					poFeature->SetField(j, (int) iv[i]);
-				else
+				if (! Rcpp::IntegerVector::is_na(iv[i])) {
+					if (shape)
+						poFeature->SetField(j, (int) iv[i]);
+					else
+						poFeature->SetField(nm[j], (int) iv[i]);
+				} else
 					SetNull(poFeature, j); // #nocov
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
-				if (! Rcpp::NumericVector::is_na(nv[i]))
-					poFeature->SetField(j, (double) nv[i]);
-				else
+				if (! Rcpp::NumericVector::is_na(nv[i])) {
+					if (shape)
+						poFeature->SetField(j, (double) nv[i]);
+					else
+						poFeature->SetField(nm[j], (double) nv[i]);
+				} else
 					SetNull(poFeature, j);
 				} break;
 			case OFTDate: {
@@ -96,7 +105,10 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
 				Rcpp::Function unlist("unlist");
 				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
-				poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
+				if (shape)
+					poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
+				else
+					poFeature->SetField(nm[j], 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
 				} break;
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
@@ -110,9 +122,14 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0.attr("tzone") = "UTC";
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
-				poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4] + 1,
-					(int) rd[3], (int) rd[2], (int) rd[1],
-					(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
+				if (shape)
+					poFeature->SetField(j, 1900 + (int) rd[5], (int) rd[4] + 1, // #nocov start
+						(int) rd[3], (int) rd[2], (int) rd[1],
+						(float) rd[0], 100); // nTZFlag: 0=unkown, 1=local, 100=GMT; #nocov end
+				else
+					poFeature->SetField(nm[j], 1900 + (int) rd[5], (int) rd[4] + 1,
+						(int) rd[3], (int) rd[2], (int) rd[1],
+						(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
 				} break;
 			default:
 				// we should never get here! // #nocov start
@@ -234,7 +251,7 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 	}
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-		SetFields(poFeature, fieldTypes, obj, i);
+		SetFields(poFeature, fieldTypes, obj, i, driver[0] == "ESRI Shapefile");
 		poFeature->SetGeometryDirectly(geomv[i]);
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
@@ -242,14 +259,13 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		    OGRErr err = poDS->DeleteLayer(0);
 			GDALClose(poDS);
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
-			if (err != OGRERR_NONE) {
-			    if (err == OGRERR_UNSUPPORTED_OPERATION) {
-			        Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'"  // #nocov
-                       << std::endl; // #nocov
-			    } else {
+			if (err != OGRERR_NONE) { // #nocov start
+			    if (err == OGRERR_UNSUPPORTED_OPERATION)
+			        Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'" << std::endl;
+			    else
 			        Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
-			    }
-			}
+			} // #nocov end
+			OGRFeature::DestroyFeature(poFeature);
 			Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well

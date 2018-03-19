@@ -1,11 +1,17 @@
 #define GEOS_USE_ONLY_R_API // prevents using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
-#if GEOS_VERSION_MAJOR == 3 && GEOS_VERSION_MINOR >= 5
+#if GEOS_VERSION_MAJOR == 3 
+# if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
+# endif
+# if GEOS_VERSION_MINOR >= 7
+#  define HAVE370
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE350
+#  define HAVE370
 # endif
 #endif
 
@@ -13,6 +19,8 @@
 
 #include "wkb.h"
 
+typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
+typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
 typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, 
 	const GEOSGeometry *);
@@ -33,7 +41,7 @@ static void __errorHandler(const char *fmt, ...) { // #nocov start
 	p = buf + strlen(buf) - 1;
 	if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
-	Rcpp::Function error("stop");
+	Rcpp::Function error(".stop_geos");
 	error(buf);
 
 	return; // #nocov end
@@ -232,16 +240,51 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
-	} else if (op == "distance") { // return double matrix:
+	} else if (op == "distance" || op == "Hausdorff" || op == "Frechet") { // return double matrix:
+		// dist_fn, dist_parfn
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
-		for (size_t i = 0; i < gmv0.size(); i++) {
-			for (size_t j = 0; j < gmv1.size(); j++) {
-				double dist = -1.0;
-				if (GEOSDistance_r(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
-					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
-				out(i, j) = dist;
+		if (par <= 0.0) {
+			dist_fn dist_function;
+			if (op == "distance")
+				dist_function = GEOSDistance_r;
+			else if (op == "Hausdorff")
+				dist_function = GEOSHausdorffDistance_r;
+#ifdef HAVE370
+			else if (op == "Frechet")
+				dist_function = GEOSFrechetDistance_r;
+#endif
+			else
+				Rcpp::stop("distance function not supported"); // #nocov
+			
+			for (size_t i = 0; i < gmv0.size(); i++) {
+				for (size_t j = 0; j < gmv1.size(); j++) {
+					double dist = -1.0;
+					if (dist_function(hGEOSCtxt, gmv0[i], gmv1[j], &dist) == 0)
+						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					out(i, j) = dist;
+				}
+				R_CheckUserInterrupt();
 			}
-			R_CheckUserInterrupt();
+		} else {
+			dist_parfn dist_function = NULL;
+			if (op == "Hausdorff")
+				dist_function = GEOSHausdorffDistanceDensify_r;
+#ifdef HAVE370
+			else if (op == "Frechet")
+				dist_function = GEOSFrechetDistanceDensify_r;
+#endif
+			else
+				Rcpp::stop("distance function not supported"); // #nocov
+
+			for (size_t i = 0; i < gmv0.size(); i++) {
+				for (size_t j = 0; j < gmv1.size(); j++) {
+					double dist = -1.0;
+					if (dist_function(hGEOSCtxt, gmv0[i], gmv1[j], par, &dist) == 0)
+						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					out(i, j) = dist;
+				}
+				R_CheckUserInterrupt();
+			}
 		}
 		ret_list = Rcpp::List::create(out);
 	} else if (op == "is_within_distance") { // return sparse matrix:
@@ -407,12 +450,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice); 
 #endif
 	}
-
 	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL); // where notice might be set!
-#ifdef HAVE350
-	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
-	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
-#endif
 	Rcpp::LogicalVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i]);
@@ -422,6 +460,10 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			out[i] = chk_(ret);
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv[i]);
 	}
+#ifdef HAVE350
+	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
+	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
+#endif
 	CPL_geos_finish(hGEOSCtxt);
 	return out;
 }
@@ -438,6 +480,35 @@ Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 	CPL_geos_finish(hGEOSCtxt);
 	return out;
 }
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_geos_is_empty(Rcpp::List sfc) { 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	Rcpp::LogicalVector out(sfc.length());
+	std::vector<GEOSGeom> g = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	for (size_t i = 0; i < g.size(); i++) {
+		out[i] = chk_(GEOSisEmpty_r(hGEOSCtxt, g[i]));
+		GEOSGeom_destroy_r(hGEOSCtxt, g[i]);
+	}
+	CPL_geos_finish(hGEOSCtxt);
+	return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
+	int dim = 2;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> gmv = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
+	for (int i = 0; i < sfc.size(); i++) {
+		if (GEOSNormalize_r(hGEOSCtxt, gmv[i]) == -1)
+			Rcpp::stop("normalize: GEOS exception");
+	}
+	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv, dim)); // destroys gmv
+	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc.attr("precision");
+	out.attr("crs") = sfc.attr("crs");
+	return out;
+} // #nocov end
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) { 
@@ -700,8 +771,9 @@ std::string CPL_geos_version(bool b = false) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, "distance", 0.0, "", false)[0];
+Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1, 
+		Rcpp::CharacterVector which, double par) {
+	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, Rcpp::as<std::string>(which), par, "", false)[0];
 	return out;
 }
 
@@ -738,4 +810,168 @@ Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n) {
 		}
 	}
 	return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
+	// initialize objects
+	int dim = 2;
+	std::vector<size_t> index;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
+	std::vector<GEOSGeom> out;
+	// initialize trees to find overlapping areas quickly
+	for (size_t i = 0; i < x.size(); i++) {
+		// if i'th geometry in x is empty then skip it
+		if (! GEOSisEmpty_r(hGEOSCtxt, x[i])) {
+			bool contained = false;
+			GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+			GEOSGeom geom = x[i];
+			// if out contains geometries than remove overlaps from geom
+			if (out.size() > 0) {
+				// generate tree for all items in out
+				std::vector<size_t> items(out.size());
+				for (size_t j = 0; j < out.size(); j++) {
+					items[j] = j;
+					if (! GEOSisEmpty_r(hGEOSCtxt, out[j])) {
+						GEOSSTRtree_insert_r(hGEOSCtxt, tree, out[j], &(items[j]));
+					}
+				}
+				// query which geometries in out overlap with geom
+				contained = false;
+				std::vector<size_t> tree_sel;
+				GEOSSTRtree_query_r(hGEOSCtxt, tree, geom, cb, &tree_sel);
+				// iterate over items in query and erase overlapping areas in geom
+				for (size_t j = 0; j < tree_sel.size(); j++) {
+					// test if the items are fully contained
+					contained = chk_(GEOSContains_r(hGEOSCtxt, out[tree_sel[j]], geom));
+					if (contained)
+						break;
+					// test if the items overlap with geom
+					if (chk_(GEOSOverlaps_r(hGEOSCtxt, geom, out[tree_sel[j]]))) {
+						// if they do then erase overlapping parts from geom
+						GEOSGeom g = GEOSDifference_r(hGEOSCtxt, geom, out[tree_sel[j]]);
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
+						GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+						geom = g;
+						// ensure that geom is valid
+					}
+				}
+			}
+			// add geom to out if not empty
+			if (!contained) {
+				index.push_back(i + 1);
+				out.push_back(geom); // keep
+			} else
+				GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+			// destroy tree
+			GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
+			// check for user interrupt
+			R_CheckUserInterrupt();
+		}
+	}
+	// prepare output
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim)); // destroys out
+	ret.attr("crs") = sfc.attr("crs");
+	Rcpp::IntegerVector out_index = Rcpp::IntegerVector(index.begin(), index.end());
+	ret.attr("idx") = out_index;
+	// cleanup
+	CPL_geos_finish(hGEOSCtxt);
+	// return result
+	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
+	// initialize objects
+	int dim = 2;
+	std::vector< std::vector<size_t> > index;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
+	std::vector<GEOSGeom> out;
+	// initialize trees to find overlapping areas quickly
+	for (size_t i = 0; i < x.size(); i++) {
+		// if i'th geometry in x is empty then skip it
+		if (! GEOSisEmpty_r(hGEOSCtxt, x[i])) {
+			GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+			GEOSGeom geom = x[i];
+			// if out contains geometries than remove overlaps from geom
+			if (out.size() > 0) {
+				// generate tree for all items in out
+				std::vector<size_t> items(out.size());
+				for (size_t j = 0; j < out.size(); j++) {
+					items[j] = j;
+					if (! GEOSisEmpty_r(hGEOSCtxt, out[j])) {
+						GEOSSTRtree_insert_r(hGEOSCtxt, tree, out[j], &(items[j]));
+					}
+				}
+				// query which geometries in out overlap with geom
+				std::vector<size_t> tree_sel;
+				GEOSSTRtree_query_r(hGEOSCtxt, tree, geom, cb, &tree_sel);
+				// iterate over items in query and erase overlapping areas in geom
+				for (size_t j = 0; j < tree_sel.size(); j++) {
+					size_t k = tree_sel[j];
+					// test if the items are fully contained
+					GEOSGeom inters = GEOSIntersection_r(hGEOSCtxt, out[k], geom);
+					if (inters == NULL)
+						Rcpp::stop("GEOS exception"); // #nocov
+					if (! chk_(GEOSisEmpty_r(hGEOSCtxt, inters))) { // i and k intersection
+						GEOSGeom g = GEOSDifference_r(hGEOSCtxt, geom, inters); // cut out inters from geom
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
+						GEOSGeom_destroy_r(hGEOSCtxt, geom);
+						geom = g;
+						g = GEOSDifference_r(hGEOSCtxt, out[k], inters); // cut out inters from out[k]
+						if (g == NULL)
+							Rcpp::stop("GEOS exception"); // #nocov
+						GEOSGeom_destroy_r(hGEOSCtxt, out[k]);
+						out[k] = g;
+						out.push_back(inters); // keep
+						std::vector<size_t> idx = index[k]; // k < i, and k might already be an intersection
+						idx.push_back(i + 1);
+						index.push_back(idx);
+					} else
+						GEOSGeom_destroy_r(hGEOSCtxt, inters); // discard
+				}
+			}
+			if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom))) {
+				out.push_back(geom);
+				std::vector<size_t> idx;
+				idx.push_back(i + 1);
+				index.push_back(idx);
+			} else
+				GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+			// destroy tree
+			GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
+			// check for user interrupt
+			R_CheckUserInterrupt();
+		}
+	} // for i
+	size_t j = 0;
+	for (size_t i = 0; i < out.size(); i++) {
+	if (GEOSisEmpty_r(hGEOSCtxt, out[i]))
+			GEOSGeom_destroy_r(hGEOSCtxt, out[i]); // discard
+		else {
+			out[j] = out[i];
+			index[j] = index[i];
+			std::sort(index[j].begin(), index[j].end());
+			j++;
+		}
+	}
+	out.resize(j);
+	index.resize(j);
+	// prepare output
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim)); // destroys out
+	ret.attr("crs") = sfc.attr("crs");
+	Rcpp::List index_list(index.size());
+	for (size_t i = 0; i < index.size(); i++) {
+		Rcpp::IntegerVector out_index = Rcpp::IntegerVector(index[i].begin(), index[i].end());
+		index_list[i] = out_index;
+	}
+	ret.attr("idx") = index_list;
+	// cleanup
+	CPL_geos_finish(hGEOSCtxt);
+	// return result
+	return ret;
 }

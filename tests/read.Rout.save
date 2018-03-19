@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -96,8 +96,8 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 2     <NA>    <NA>   <NA>  <NA> <NA>  <NA>    <NA>       <NA>
 3     <NA>    <NA>   <NA>  <NA> <NA>  <NA>    <NA>       <NA>
                         geometry
-1 MULTIPOLYGON (((-1.5507185 ...
-2 MULTIPOLYGON (((-1.5557631 ...
+1 MULTIPOLYGON (((-1.550719 5...
+2 MULTIPOLYGON (((-1.555763 5...
 3 MULTIPOLYGON (((-1.551502 5...
 > 
 > # layer opening option:
@@ -109,7 +109,7 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-First 20 features:
+First 10 features:
     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
 2  0.061     1.231  1827    1827   Alleghany 37005  37005        3   487     0
@@ -121,37 +121,17 @@ First 20 features:
 8  0.091     1.284  1835    1835       Gates 37073  37073       37   420     0
 9  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
 10 0.124     1.428  1837    1837      Stokes 37169  37169       85  1612     1
-11 0.114     1.352  1838    1838     Caswell 37033  37033       17  1035     2
-12 0.153     1.616  1839    1839  Rockingham 37157  37157       79  4449    16
-13 0.143     1.663  1840    1840   Granville 37077  37077       39  1671     4
-14 0.109     1.325  1841    1841      Person 37145  37145       73  1556     4
-15 0.072     1.085  1842    1842       Vance 37181  37181       91  2180     4
-16 0.190     2.204  1846    1846     Halifax 37083  37083       42  3608    18
-17 0.053     1.171  1848    1848  Pasquotank 37139  37139       70  1638     3
-18 0.199     1.984  1874    1874      Wilkes 37193  37193       97  3146     4
-19 0.081     1.288  1880    1880     Watauga 37189  37189       95  1323     1
-20 0.063     1.000  1881    1881  Perquimans 37143  37143       72   484     1
    NWBIR74 BIR79 SID79 NWBIR79                       geometry
-1       10  1364     0      19 MULTIPOLYGON (((-81.4727554...
-2       10   542     3      12 MULTIPOLYGON (((-81.2398910...
-3      208  3616     6     260 MULTIPOLYGON (((-80.4563446...
-4      123   830     2     145 MULTIPOLYGON (((-76.0089721...
-5     1066  1606     3    1197 MULTIPOLYGON (((-77.2176666...
-6      954  1838     5    1237 MULTIPOLYGON (((-76.7450637...
-7      115   350     2     139 MULTIPOLYGON (((-76.0089721...
-8      254   594     2     371 MULTIPOLYGON (((-76.5625076...
-9      748  1190     2     844 MULTIPOLYGON (((-78.3087615...
-10     160  2038     5     176 MULTIPOLYGON (((-80.0256729...
-11     550  1253     2     597 MULTIPOLYGON (((-79.5305099...
-12    1243  5386     5    1369 MULTIPOLYGON (((-79.5305099...
-13     930  2074     4    1058 MULTIPOLYGON (((-78.7491226...
-14     613  1790     4     650 MULTIPOLYGON (((-78.8068008...
-15    1179  2753     6    1492 MULTIPOLYGON (((-78.4925231...
-16    2365  4463    17    2980 MULTIPOLYGON (((-77.3322067...
-17     622  2275     4     933 MULTIPOLYGON (((-76.2989273...
-18     200  3725     7     222 MULTIPOLYGON (((-81.0205688...
-19      17  1775     1      33 MULTIPOLYGON (((-81.8062210...
-20     230   676     0     310 MULTIPOLYGON (((-76.4805297...
+1       10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+2       10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+3      208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
+4      123   830     2     145 MULTIPOLYGON (((-76.00897 3...
+5     1066  1606     3    1197 MULTIPOLYGON (((-77.21767 3...
+6      954  1838     5    1237 MULTIPOLYGON (((-76.74506 3...
+7      115   350     2     139 MULTIPOLYGON (((-76.00897 3...
+8      254   594     2     371 MULTIPOLYGON (((-76.56251 3...
+9      748  1190     2     844 MULTIPOLYGON (((-78.30876 3...
+10     160  2038     5     176 MULTIPOLYGON (((-80.02567 3...
 > 
 > x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
 > 
@@ -174,9 +154,6 @@ Error in UseMethod("st_write") :
   no applicable method for 'st_write' applied to an object of class "character"
 > try(st_write(x, c("foo", "bar")))
 Error : length(dsn) == 1 is not TRUE
-In addition: Warning message:
-In if (file.exists(dsn)) dsn = enc2utf8(normalizePath(dsn)) :
-  the condition has length > 1 and only the first element will be used
 > try(st_write(x, "foo", driver = "foo"))
 driver `foo' not available.
 Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
@@ -185,6 +162,18 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > if (Sys.getenv("USER") == "travis") {
 + 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
 + }
+> 
+> geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
+> st_write(geom, "geom.gpkg")
+Writing layer `geom' to data source `geom.gpkg' using driver `GPKG'
+features:       2
+fields:         0
+geometry type:  Unknown (any)
+> st_write(geom, "geom1.gpkg", layer = "foo")
+Writing layer `foo' to data source `geom1.gpkg' using driver `GPKG'
+features:       2
+fields:         0
+geometry type:  Unknown (any)
 > 
 > df <- data.frame(
 +     a = c(0, 1, NA, -Inf, Inf),
@@ -220,12 +209,14 @@ proj4string:    NA
 + 	m = dbReadTable(dbcon, "meuse.sqlite")
 + 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 + 	print(st_sf(m), n = 3)
++ 	dbDisconnect(dbcon)
 + 
 + 	db = system.file("sqlite/nc.sqlite", package = "sf")
 + 	dbcon <- dbConnect(dbDriver("SQLite"), db)
 + 	m = dbReadTable(dbcon, "nc.sqlite")
 + 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 + 	print(st_sf(m), n = 3)
++ 	dbDisconnect(dbcon)
 + 
 + 	db = system.file("sqlite/b.sqlite", package = "sf") # has an INT8 field
 + 	b = st_read(db, quiet = TRUE)
@@ -275,9 +266,9 @@ First 3 features:
 2       2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487
 3       3 0.143     1.630  1828    1828     Surry 37171  37171       86  3188
   sid74 nwbir74 bir79 sid79 nwbir79                       GEOMETRY
-1     1      10  1364     0      19 MULTIPOLYGON (((-81.4727554...
-2     0      10   542     3      12 MULTIPOLYGON (((-81.2398910...
-3     5     208  3616     6     260 MULTIPOLYGON (((-80.4563446...
+1     1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+2     0      10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+3     5     208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
 Integer64 values larger than 9.0072e+15 lost significance after conversion to double;
 use argument int64_as_string = TRUE to import them lossless, as character
 Simple feature collection with 1 feature and 2 fields
@@ -304,9 +295,9 @@ epsg (SRID):    32632
 proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
 First 3 features:
   PK_UID    Name                       Geometry
-1      1 Unknown LINESTRING (668540.70686859...
-2      2 Unknown LINESTRING (671365.86744175...
-3      3 Unknown LINESTRING (671417.57585257...
+1      1 Unknown LINESTRING (668540.7 485826...
+2      2 Unknown LINESTRING (671365.9 485417...
+3      3 Unknown LINESTRING (671417.6 485417...
 Simple feature collection with 8101 features and 6 fields
 geometry type:  POINT
 dimension:      XY
@@ -318,10 +309,10 @@ First 3 features:
 1      1            Brozolo     435          1      0      0
 2      2 Campiglione-Fenile    1284          1      0      0
 3      3          Canischio     274          1      0      0
-                      Geometry
-1 POINT (427002.77 4996361.33)
-2  POINT (367470.48 4962414.5)
-3 POINT (390084.12 5025551.73)
+                  Geometry
+1 POINT (427002.8 4996361)
+2 POINT (367470.5 4962414)
+3 POINT (390084.1 5025552)
 Simple feature collection with 10 features and 2 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
@@ -330,9 +321,9 @@ epsg (SRID):    32632
 proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
 First 3 features:
   PK_UID   Name                       Geometry
-1      1 VENETO MULTIPOLYGON (((752912.2502...
-2      2 VENETO MULTIPOLYGON (((751705.4967...
-3      3 VENETO MULTIPOLYGON (((766247.7807...
+1      1 VENETO MULTIPOLYGON (((752912.3 50...
+2      2 VENETO MULTIPOLYGON (((751705.5 50...
+3      3 VENETO MULTIPOLYGON (((766247.8 50...
 > 
 > csv = system.file("csv/pt.csv", package = "sf")
 > identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_real_)
@@ -395,4 +386,4 @@ proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.2881
 > 
 > proc.time()
    user  system elapsed 
-  1.388   0.236   1.462 
+  1.188   0.304   1.184 

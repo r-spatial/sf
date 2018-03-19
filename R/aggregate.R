@@ -1,8 +1,11 @@
 #' aggregate an \code{sf} object
 #'
 #' aggregate an \code{sf} object, possibly union-ing geometries
+#' 
+#' @note Does not work using the formula notation involving \code{~} defined in \link[stats]{aggregate}.
+#' 
 #' @param x object of class \link{sf}
-#' @param by either a list of grouping elements, each as long as the variables in the data frame \code{x} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc}, the geometries of which are used to find aggregation groups of \code{x} by using function \code{join}
+#' @param by either a list of grouping vectors with length equal to \code{nrow(x)} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc} with geometries that are used to generate groupings, using the binary predicate specified by the argument \code{join}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
 #' @param do_union logical; should grouped geometries be unioned using \link{st_union}?
@@ -30,6 +33,9 @@
 #' pol = st_sfc(st_polygon(list(m3)), st_polygon(list(m1)), st_polygon(list(m2)))
 #' (p_ag3 = aggregate(p, pol, mean))
 #' plot(p_ag3)
+#' # In case we need to pass an argument to the join function:
+#' (p_ag4 = aggregate(p, pol, mean, 
+#'      join = function(x, y) st_is_within_distance(x, y, dist = 0.3)))
 #' @export
 aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		join = st_intersects) {
@@ -101,6 +107,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 st_interpolate_aw = function(x, to, extensive) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
 		stop("st_interpolate_aw requires geometries in argument to")
+	if (! all_constant(x))
+		warning("st_interpolate_aw assumes attributes are constant over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
 	i = st_cast(i, "MULTIPOLYGON")
@@ -116,8 +124,6 @@ st_interpolate_aw = function(x, to, extensive) {
 	x = aggregate(x, list(idx[,2]), sum)
 	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
 	df$...area_t = df$...area_st = df$...area_s = NULL
-	if (! all_constant(df))
-		warning("st_interpolate_aw assumes attributes are constant over areas of x")
 	st_agr(df) = "aggregate"
 	df
 }

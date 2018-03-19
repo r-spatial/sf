@@ -1,0 +1,96 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> suppressPackageStartupMessages(library(sf))
+> 
+> tif = system.file("tif/geomatrix.tif", package = "sf")
+> 
+> gdal_metadata(tif)
+[1] "AREA_OR_POINT=Point"
+> gdal_metadata(tif, NA_character_)
+[1] "IMAGE_STRUCTURE"     "DERIVED_SUBDATASETS" ""                   
+> try(gdal_metadata(tif, "wrongDomain")) 
+Error in gdal_metadata(tif, "wrongDomain") : 
+  domain_item[1] not found in available metadata domains
+> gdal_metadata(tif, c("IMAGE_STRUCTURE"))
+[[1]]
+[1] "BAND"
+
+attr(,"class")
+[1] "gdal_metadata"
+> try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
+[1] 2
+> 
+> # library(stars)
+> d = structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75, 
++     delta = 1.5, geotransform = c(1841001.75, 1.5, -5, 1144003.25, 
++     -5, -1.5), refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ", 
++     point = TRUE, values = NULL), .Names = c("from", "to", "offset", 
++ "delta", "geotransform", "refsys", "point", "values"), class = "dimension"), 
++     y = structure(list(from = 1, to = 20, offset = 1144003.25, 
++         delta = -1.5, geotransform = c(1841001.75, 1.5, -5, 1144003.25, 
++         -5, -1.5), refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ", 
++         point = TRUE, values = NULL), .Names = c("from", "to", 
++     "offset", "delta", "geotransform", "refsys", "point", "values"
++     ), class = "dimension")), .Names = c("x", "y"), class = "dimensions")
+> x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE)
+> x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE)
+> identical(x1, x2)
+[1] FALSE
+> y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE)
+> y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE)
+> identical(y1, y2)
+[1] FALSE
+> 
+> r = gdal_read(tif)
+> gt = c(0,1,0,0,0,1)
+> gdal_inv_geotransform(gt)
+[1] 0 1 0 0 0 1
+> rc = expand.grid(x=1:3, y = 1:3)
+> #(xy = xy_from_colrow(rc, gt))
+> #xy_from_colrow(xy, gt, inverse = TRUE)
+> gdal_crs(tif)
+$nbands
+[1] 1
+
+$crs
+Coordinate Reference System:
+  EPSG: 32611 
+  proj4string: "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs"
+
+$gt
+[1] 1841001.8       1.5      -5.0 1144003.2      -5.0      -1.5
+
+$gt_inv
+[1]  1.085693e+05  5.504587e-02 -1.834862e-01  4.007711e+05 -1.834862e-01
+[6] -5.504587e-02
+
+> 
+> gdal_metadata("foo")
+[1] NA
+> gdal_metadata(tif)
+[1] "AREA_OR_POINT=Point"
+> 
+> m = matrix(runif(100*100), 100, 100)
+> m[ m > .8 ] = NA
+> st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
+> gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0)
+> r = gdal_read(tif, NA_value = 255.0)
+> 
+> proc.time()
+   user  system elapsed 
+  0.664   0.171   0.645 

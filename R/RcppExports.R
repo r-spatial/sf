@@ -33,6 +33,42 @@ CPL_read_ogr <- function(datasource, layer, options, quiet, toTypeUser, promote_
     .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
 }
 
+CPL_gdalinfo <- function(obj, options) {
+    .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options)
+}
+
+CPL_gdalwarp <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalrasterize <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaltranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalvectortranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalbuildvrt <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename) {
+    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename)
+}
+
+CPL_gdalnearblack <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalgrid <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
+}
+
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
     invisible(.Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer))
 }
@@ -125,6 +161,14 @@ CPL_geos_is_simple <- function(sfc) {
     .Call('_sf_CPL_geos_is_simple', PACKAGE = 'sf', sfc)
 }
 
+CPL_geos_is_empty <- function(sfc) {
+    .Call('_sf_CPL_geos_is_empty', PACKAGE = 'sf', sfc)
+}
+
+CPL_geos_normalize <- function(sfc) {
+    .Call('_sf_CPL_geos_normalize', PACKAGE = 'sf', sfc)
+}
+
 CPL_geos_union <- function(sfc, by_feature = FALSE) {
     .Call('_sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
 }
@@ -149,8 +193,8 @@ CPL_geos_version <- function(b = FALSE) {
     .Call('_sf_CPL_geos_version', PACKAGE = 'sf', b)
 }
 
-CPL_geos_dist <- function(sfc0, sfc1) {
-    .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1)
+CPL_geos_dist <- function(sfc0, sfc1, which, par) {
+    .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1, which, par)
 }
 
 CPL_geos_relate <- function(sfc0, sfc1) {
@@ -159,6 +203,14 @@ CPL_geos_relate <- function(sfc0, sfc1) {
 
 CPL_transpose_sparse_incidence <- function(m, n) {
     .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
+}
+
+CPL_nary_difference <- function(sfc) {
+    .Call('_sf_CPL_nary_difference', PACKAGE = 'sf', sfc)
+}
+
+CPL_nary_intersection <- function(sfc) {
+    .Call('_sf_CPL_nary_intersection', PACKAGE = 'sf', sfc)
 }
 
 CPL_hex_to_raw <- function(cx) {
@@ -177,12 +229,44 @@ CPL_proj_is_valid <- function(proj4string) {
     .Call('_sf_CPL_proj_is_valid', PACKAGE = 'sf', proj4string)
 }
 
+CPL_have_datum_files <- function(foo) {
+    .Call('_sf_CPL_have_datum_files', PACKAGE = 'sf', foo)
+}
+
 CPL_proj_info <- function(type) {
     .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
 }
 
+CPL_proj_direct <- function(from_to, pts) {
+    .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts)
+}
+
+CPL_xy2sfc <- function(cc, dim, to_points, which) {
+    .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points, which)
+}
+
 CPL_signed_area <- function(pts) {
     .Call('_sf_CPL_signed_area', PACKAGE = 'sf', pts)
+}
+
+CPL_get_metadata <- function(obj, domain_item, options) {
+    .Call('_sf_CPL_get_metadata', PACKAGE = 'sf', obj, domain_item, options)
+}
+
+CPL_get_crs <- function(obj, options) {
+    .Call('_sf_CPL_get_crs', PACKAGE = 'sf', obj, options)
+}
+
+CPL_inv_geotransform <- function(gt_r) {
+    .Call('_sf_CPL_inv_geotransform', PACKAGE = 'sf', gt_r)
+}
+
+CPL_read_gdal <- function(fname, options, driver, read_data, NA_value, resample = 1.0) {
+    .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data, NA_value, resample)
+}
+
+CPL_write_gdal <- function(x, fname, driver, options, Type, dims, gt, p4s, na_val) {
+    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, gt, p4s, na_val))
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {

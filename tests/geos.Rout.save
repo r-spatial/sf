@@ -1,5 +1,5 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -56,6 +56,9 @@ Units: m
  [76] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
  [91] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
 > 
+> st_is_empty(st_sfc(st_point(), st_linestring()))
+[1] TRUE TRUE
+> 
 > ops = c("intersects", #"disjoint", 
 + "touches", "crosses", "within", "contains", "overlaps", "equals", "covers", "covered_by", "equals_exact")
 > for (op in ops) {
@@ -96,7 +99,7 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
-MULTIPOLYGON (((-81.4727554321289 36.2343559265...
+MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > 
 > st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
 + 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
@@ -122,8 +125,8 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT (0 0.887836897512898)
-MULTIPOINT (0.298648830503225 0, 2.484170473180...
+MULTIPOINT (0 0.8878369)
+MULTIPOINT (0.2986488 0, 2.48417 0, 2.567813 0,...
 > 
 > g = st_make_grid(nc, n = c(20,10))
 > 
@@ -235,6 +238,15 @@ Sparse geometry binary predicate list of length 9, where the predicate was `rela
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
   use st_disjoint for this pattern
 > 
+> a = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], 100000, sparse = FALSE)
+> b = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], units::set_units(100000, m), sparse = FALSE)
+> all.equal(a, b)
+[1] TRUE
+> x = st_is_within_distance(nc[1:3,], nc[1:5,], 100000)
+> y = st_is_within_distance(nc[1:3,], nc[1:5,], units::set_units(100, km))
+> all.equal(x, y)
+[1] TRUE
+> 
 > nc_3857 = st_transform(nc, 3857)
 > a = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], 100000, sparse = FALSE)
 > b = st_is_within_distance(nc_3857[c(1:3,20),], nc_3857[1:3,], units::set_units(100000, m), sparse = FALSE)
@@ -253,6 +265,14 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 [3,]    2    1    0
 > st_distance(p, p, by_element = TRUE)
 [1] 0 0 0
+> st_crs(p) = 4326
+> st_distance(p, p[c(2,3,1)], by_element = TRUE)
+Units: m
+[1] 110574.4 110575.1 221149.5
+> p = st_transform(p, 3587)
+> st_distance(p, p[c(2,3,1)], by_element = TRUE)
+Units: m
+[1] 144589.5 142873.3 287462.8
 > 
 > # from https://github.com/r-spatial/sf/issues/458 :
 > pts <- st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
@@ -293,7 +313,7 @@ proj4string:    NA
 1 1 MULTILINESTRING ((0 0, 0.5 ...
 > 
 > # print.sgbp:
-> st_disjoint(nc, nc)
+> (lst = st_disjoint(nc, nc))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Sparse geometry binary predicate list of length 100, where the predicate was `disjoint'
 first 10 elements:
@@ -307,6 +327,17 @@ first 10 elements:
  8: 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, ...
  9: 1, 2, 3, 4, 6, 7, 8, 10, 11, 12, ...
  10: 1, 2, 4, 5, 6, 7, 8, 9, 11, 13, ...
+> # dim.sgbp:
+> dim(lst)
+[1] 100 100
+> # as.matrix.sgbp:
+> as.matrix(lst)[1:5, 1:5]
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] FALSE FALSE  TRUE  TRUE  TRUE
+[2,] FALSE FALSE FALSE  TRUE  TRUE
+[3,]  TRUE FALSE FALSE  TRUE  TRUE
+[4,]  TRUE  TRUE  TRUE FALSE  TRUE
+[5,]  TRUE  TRUE  TRUE  TRUE FALSE
 > 
 > # snap:
 > nc1 = st_transform(nc, 32119)
@@ -315,6 +346,58 @@ first 10 elements:
 > sfg = st_snap(st_geometry(nc1)[[1]], g, 2501*sqrt(2))
 > sfg = st_snap(st_geometry(nc1)[[1]], st_combine(g), 2501*sqrt(2))
 > 
+> # Hausdorff distance: http://geos.refractions.net/ro/doxygen_docs/html/classgeos_1_1algorithm_1_1distance_1_1DiscreteHausdorffDistance.html
+> A = st_as_sfc("LINESTRING (0 0, 100 0, 10 100, 10 100)")
+> B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
+> st_distance(c(A,B))
+         [,1]     [,2]
+[1,] 0.000000 8.176236
+[2,] 8.176236 0.000000
+> st_distance(c(A,B), which = "Hausdorff")
+         [,1]     [,2]
+[1,]  0.00000 22.36068
+[2,] 22.36068  0.00000
+> st_distance(c(A,B), which = "Hausdorff", par = 0.001)
+             [,1]         [,2]
+[1,] 2.929643e-14 4.789000e+01
+[2,] 4.789000e+01 2.131628e-14
+> 
+> 
+> # one-argument st_intersection and st_difference:
+> set.seed(131)
+> m = rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))
+> p = st_polygon(list(m))
+> n = 100
+> l = vector("list", n)
+> for (i in 1:n)
++    l[[i]] = p + 10 * runif(2)
+> s = st_sfc(l)
+> plot(s, col = sf.colors(categorical = TRUE, alpha = .5))
+> d = st_difference(s) # sequential differences: s1, s2-s1, s3-s2-s1, ...
+> plot(d, col = sf.colors(categorical = TRUE, alpha = .5))
+> i = st_intersection(s) # all intersections
+> plot(i, col = sf.colors(categorical = TRUE, alpha = .5))
+> summary(lengths(st_overlaps(s, s)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00    2.00    3.50    3.66    5.00    8.00 
+> summary(lengths(st_overlaps(d, d)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> summary(lengths(st_overlaps(i, i)))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> 
+> sf = st_sf(s)
+> i = st_intersection(sf) # all intersections
+> plot(i["n.overlaps"])
+Warning message:
+In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
+  n same as number of different finite values\neach different finite value is a separate class
+> summary(i$n.overlaps - lengths(i$origins))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0       0       0       0       0       0 
+> 
+> 
 > proc.time()
    user  system elapsed 
-  3.500   0.284   3.511 
+  4.096   0.260   4.048 

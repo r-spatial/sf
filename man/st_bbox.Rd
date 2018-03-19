@@ -3,7 +3,7 @@
 \docType{data}
 \name{st_bbox}
 \alias{st_bbox}
-\alias{NA_bbox_}
+\alias{is.na.bbox}
 \alias{st_bbox}
 \alias{st_bbox}
 \alias{st_bbox.POINT}
@@ -39,49 +39,71 @@
 \alias{st_bbox.sfc}
 \alias{st_bbox}
 \alias{st_bbox.sf}
+\alias{st_bbox}
+\alias{st_bbox.Spatial}
+\alias{st_bbox}
+\alias{st_bbox.Raster}
+\alias{st_bbox}
+\alias{st_bbox.numeric}
+\alias{st_bbox}
+\alias{NA_bbox_}
 \title{Return bounding of a simple feature or simple feature set}
 \format{An object of class \code{bbox} of length 4.}
 \usage{
+\method{is.na}{bbox}(x)
+
+st_bbox(obj, ...)
+
+\method{st_bbox}{POINT}(obj, ...)
+
+\method{st_bbox}{MULTIPOINT}(obj, ...)
+
+\method{st_bbox}{LINESTRING}(obj, ...)
+
+\method{st_bbox}{POLYGON}(obj, ...)
+
+\method{st_bbox}{MULTILINESTRING}(obj, ...)
+
+\method{st_bbox}{MULTIPOLYGON}(obj, ...)
+
+\method{st_bbox}{GEOMETRYCOLLECTION}(obj, ...)
+
+\method{st_bbox}{MULTISURFACE}(obj, ...)
+
+\method{st_bbox}{MULTICURVE}(obj, ...)
+
+\method{st_bbox}{CURVEPOLYGON}(obj, ...)
+
+\method{st_bbox}{COMPOUNDCURVE}(obj, ...)
+
+\method{st_bbox}{POLYHEDRALSURFACE}(obj, ...)
+
+\method{st_bbox}{TIN}(obj, ...)
+
+\method{st_bbox}{TRIANGLE}(obj, ...)
+
+\method{st_bbox}{CIRCULARSTRING}(obj, ...)
+
+\method{st_bbox}{sfc}(obj, ...)
+
+\method{st_bbox}{sf}(obj, ...)
+
+\method{st_bbox}{Spatial}(obj, ...)
+
+\method{st_bbox}{Raster}(obj, ...)
+
+\method{st_bbox}{numeric}(obj, ..., crs = NA_crs_)
+
 NA_bbox_
-
-st_bbox(obj)
-
-\\method{st_bbox}{POINT}(obj)
-
-\\method{st_bbox}{MULTIPOINT}(obj)
-
-\\method{st_bbox}{LINESTRING}(obj)
-
-\\method{st_bbox}{POLYGON}(obj)
-
-\\method{st_bbox}{MULTILINESTRING}(obj)
-
-\\method{st_bbox}{MULTIPOLYGON}(obj)
-
-\\method{st_bbox}{GEOMETRYCOLLECTION}(obj)
-
-\\method{st_bbox}{MULTISURFACE}(obj)
-
-\\method{st_bbox}{MULTICURVE}(obj)
-
-\\method{st_bbox}{CURVEPOLYGON}(obj)
-
-\\method{st_bbox}{COMPOUNDCURVE}(obj)
-
-\\method{st_bbox}{POLYHEDRALSURFACE}(obj)
-
-\\method{st_bbox}{TIN}(obj)
-
-\\method{st_bbox}{TRIANGLE}(obj)
-
-\\method{st_bbox}{CIRCULARSTRING}(obj)
-
-\\method{st_bbox}{sfc}(obj)
-
-\\method{st_bbox}{sf}(obj)
 }
 \arguments{
+\item{x}{object of class \code{bbox}}
+
 \item{obj}{object to compute the bounding box from}
+
+\item{...}{ignored}
+
+\item{crs}{object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.}
 }
 \value{
 a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
@@ -95,11 +117,12 @@ methods for \code{bbox} objects to generate a polygon around the four bounding b
 Return bounding of a simple feature or simple feature set
 }
 \details{
-\code{NA_bbox_} is the \code{bbox} object with a missing value.
+\code{NA_bbox_} represents the missing value for a \code{bbox} object
 }
 \examples{
 a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
 st_bbox(a)
 st_as_sfc(st_bbox(a))
+st_bbox(c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9), crs = st_crs(4326))
 }
 \keyword{datasets}

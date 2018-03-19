@@ -219,6 +219,7 @@ degreeLabelsNS = function(x) {
 	dir = c("*S", "", "*N")
 	paste0(abs(x), "*degree", dir[pos])
 }
+
 degreeLabelsEW = function(x) {
 	x <- ifelse(x > 180, x - 360, x)
 	pos = sign(x) + 2

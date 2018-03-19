@@ -80,7 +80,12 @@ st_geometry = function(obj, ...) UseMethod("st_geometry")
 
 #' @name st_geometry
 #' @export
-st_geometry.sf = function(obj, ...) obj[[attr(obj, "sf_column")]]
+st_geometry.sf = function(obj, ...) { 
+	ret =  obj[[attr(obj, "sf_column")]]
+	if (!inherits(ret, "sfc")) # corrupt!
+		stop('attr(obj, "sf_column") does not point to a geometry column.\nDid you rename it, without setting st_geometry(obj) <- "newname"?')
+	ret
+}
 
 #' @name st_geometry
 #' @export
@@ -226,6 +231,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	else {
 		object = as.list(substitute(list(...)))[-1L]
 		arg_nm = sapply(object, function(x) deparse(x))
+		if (identical(arg_nm, "."))
+			arg_nm = "geometry"
 		make.names(arg_nm[all_sfc_columns])
 	}
 
@@ -354,9 +361,10 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	x
 }
 
+#' @name sf
+#' @param n maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}
 #' @export
-print.sf = function(x, ..., n =
-		ifelse(options("max.print")[[1]] %in% c(99999,1000), getOption("max.sfprint", default = 20), options("max.print")[[1]])) {
+print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 
 	geoms = which(vapply(x, function(col) inherits(col, "sfc"), TRUE))
 	nf = length(x) - length(geoms)
@@ -405,33 +413,8 @@ merge.sf = function(x, y, ...) {
 	ret
 }
 
-#' @name st_as_sfc
 #' @export
-st_as_sfc.list = function(x, ..., crs = NA_crs_) {
-
-	if (length(x) == 0)
-		return(st_sfc(crs = crs))
-
-	if (is.raw(x[[1]]))
-		st_as_sfc(structure(x, class = "WKB"), ...)
-	else if (is.character(x[[1]])) { # hex wkb or wkt:
-		ch12 = substr(x[[1]], 1, 2)
-		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
-			st_as_sfc(structure(x, class = "WKB"), ...)
-		else
-			st_as_sfc(unlist(x), ...) # wkt
-	}
-}
-
-#' @name st_as_sfc
-#' @export
-st_as_sfc.blob = function(x, ...) {
-	st_as_sfc.list(x, ...)
-}
-
-#' @name st_as_sfc
-#' @export
-st_as_sfc.bbox = function(x, ...) {
-	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-	st_sfc(box, crs = st_crs(x))
+as.data.frame.sf = function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	NextMethod()
 }

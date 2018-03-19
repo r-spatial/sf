@@ -120,8 +120,8 @@ summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 \dontrun{ # because of spatstat interfering with units
 if (require(spatstat)) {
  data(chicago)
- plot(st_as_sf(chicago["label"]))
- plot(st_as_sf(chicago[-1,"label"]))
+ plot(st_as_sf(chicago)["label"])
+ plot(st_as_sf(chicago)[-1,"label"])
 }
 }
 }

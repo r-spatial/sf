@@ -16,7 +16,7 @@
 st_bind_cols(...)
 }
 \arguments{
-\item{...}{objects to bind}
+\item{...}{objects to bind; note that for the rbind and cbind methods, all objects have to be of class \code{sf}; see \link{dotsMethods}}
 
 \item{deparse.level}{integer; see \link[base]{rbind}}
 

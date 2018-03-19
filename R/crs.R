@@ -82,7 +82,12 @@ st_crs.sfc = function(x, ..., parameters = FALSE) {
 
 #' @name st_crs
 #' @export
-st_crs.bbox = function(x, ...) attr(x, "crs")
+st_crs.bbox = function(x, ...) {
+	if (is.null(attr(x, "crs")))
+		NA_crs_
+	else
+		attr(x, "crs")
+}
 
 #' @name st_crs
 #' @export
@@ -194,9 +199,9 @@ st_is_longlat = function(x) {
 }
 
 # a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
-udunits_from_proj = c(
+udunits_from_proj = if (utils::packageVersion("units") < "0.5-2") {
 #   PROJ.4     UDUNITS
-	`km` =     "km",
+c(  `km` =     "km",
 	`m` =      "m",
 	`dm` =     "dm",
 	`cm` =     "cm",
@@ -218,18 +223,53 @@ udunits_from_proj = c(
 	`ind-ft` = "0.30479841 m",
 	`ind-ch` = "20.11669506 m"
 )
+} else {
+units::install_conversion_constant("m", "link", 0.201168)
+units::install_conversion_constant("m", "us_in", 1./39.37)
+units::install_conversion_constant("m", "ind_yd", 0.91439523)
+units::install_conversion_constant("m", "ind_ft", 0.30479841)
+units::install_conversion_constant("m", "ind_ch", 20.11669506)
+list(`km` =    as_units("km"),
+	`m` =      as_units("m"),
+	`dm` =     as_units("dm"),
+	`cm` =     as_units("cm"),
+	`mm` =     as_units("mm"),
+	`kmi` =    as_units("nautical_mile"),
+	`in` =     as_units("in"),
+	`ft` =     as_units("ft"),
+	`yd` =     as_units("yd"),
+	`mi` =     as_units("mi"),
+	`fath` =   as_units("fathom"),
+	`ch` =     as_units("chain"),
+	`link` =   as_units("link"),
+	`us-in` =  as_units("us_in"),
+	`us-ft` =  as_units("US_survey_foot"),
+	`us-yd` =  as_units("US_survey_yard"),
+	`us-ch` =  as_units("chain"),
+	`us-mi` =  as_units("US_survey_mile"),
+	`ind-yd` = as_units("ind_yd"),
+	`ind-ft` = as_units("ind_ft"),
+	`ind-ch` = as_units("ind_ch")
+)
+}
 
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string),
-		names = c("SemiMajor", "InvFlattening", "units_gdal", "IsVertical", "WktPretty", "Wkt"))
-	units(ret$SemiMajor) = make_unit("m")
+		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal", 
+			"IsVertical", "WktPretty", "Wkt"))
+	units(ret$SemiMajor) = as_units("m")
+	units(ret$SemiMinor) = as_units("m")
 	ret$ud_unit = if (isTRUE(st_is_longlat(x)))
-			make_unit("arc_degree")
+			as_units("arc_degree")
 		else if (is.null(x$units))
-			make_unit("m")
-		else
-			make_unit(udunits_from_proj[x$units])
+			as_units("m")
+		else {
+			if (is.character(udunits_from_proj[[x$units]]))
+				as_units(udunits_from_proj[[x$units]])
+			else
+				udunits_from_proj[[x$units]]
+		}
 	ret
 }
 

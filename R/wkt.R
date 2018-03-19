@@ -16,56 +16,64 @@ WKT_name = function(x, EWKT = TRUE) {
 
 empty = "EMPTY"
 
+# skip leading white space; ... passes on digits:
+fmt = function(x, ...) sub("^[ ]+", "", sapply(unclass(x), format, ...))
+
 # print helper functions
-prnt.POINT = function(x, ...) {
+prnt.POINT = function(x, ..., EWKT = TRUE) {
 	pt = if (any(!is.finite(x)))
 		empty
 	else 
-		paste0("(", paste0(x, collapse = " "), ")")
-	paste(WKT_name(x, ...), pt)
+		paste0("(", paste0(fmt(x, ...), collapse = " "), ")")
+	paste(WKT_name(x, EWKT = EWKT), pt)
 }
 
-prnt.Matrix = function(x) {
+prnt.Matrix = function(x, ...) {
+	pf = function(x, ..., collapse) paste0(fmt(x, ...), collapse = collapse)
 	if (nrow(x) == 0)
 		empty
 	else
-		paste0("(", paste0(apply(x, 1, paste0, collapse = " "), collapse = ", "), ")")
+		paste0("(", paste0(apply(x, 1, pf, collapse = " ", ...), collapse = ", "), ")")
 }
 
-prnt.MatrixList = function(x) {
+prnt.MatrixList = function(x, ...) {
 	if (length(x) == 0)
 		empty
 	else
-		paste0("(", paste0(unlist(lapply(x, prnt.Matrix)), collapse = ", "), ")")
+		paste0("(", paste0(unlist(lapply(x, prnt.Matrix, ...)), collapse = ", "), ")")
 }
 
-prnt.MatrixListList = function(x) {
+prnt.MatrixListList = function(x, ...) {
 	if (length(x) == 0)
 		empty
 	else
-		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList)), collapse = ", "), ")")
+		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList, ...)), collapse = ", "), ")")
 }
 
-prnt.MULTIPOINT = function(x, ...) paste(WKT_name(x, ...), prnt.Matrix(x))
-prnt.LINESTRING = function(x, ...) paste(WKT_name(x, ...), prnt.Matrix(x))
-prnt.POLYGON = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixList(x))
-prnt.MULTILINESTRING = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixList(x))
-prnt.MULTIPOLYGON = function(x, ...) paste(WKT_name(x, ...), prnt.MatrixListList(x))
-prnt.GEOMETRYCOLLECTION = function(x, ...) {
+prnt.MULTIPOINT = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
+prnt.LINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
+prnt.POLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+prnt.MULTILINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+prnt.MULTIPOLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixListList(x, ...))
+prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 	body = if (length(x) == 0)
 		empty
 	else
-		paste0("(", paste0(vapply(x, st_as_text, ""), collapse=", "), ")")
-	paste(WKT_name(x, ...), body)
+		paste0("(", paste0(vapply(x, st_as_text, "", ...), collapse=", "), ")")
+	paste(WKT_name(x, EWKT = EWKT), body)
 }
 
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #'
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #' @param x object of class \code{sfg}, \code{sfc} or \code{crs}
-#' @param ... passed on to WKT_name
+#' @param ... modifiers; in particular \code{digits} can be passed to control the number of digits used
 #' @name st_as_text
-#' @details To suppress printing of SRID, \code{EWKT=FALSE} can be passed as parameter.
+#' @details The returned WKT representation of simple feature geometry conforms to the
+#' \href{http://www.opengeospatial.org/standards/sfa}{simple features access} specification and extensions,
+#' \href{http://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT}{known as EWKT}, supported by
+#' PostGIS and other simple features implementations for addition of SRID to a WKT string.
+#'
 #' @export
 st_as_text = function(x, ...) UseMethod("st_as_text")
 
@@ -73,24 +81,27 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 #' @export
 #' @examples
 #' st_as_text(st_point(1:2))
+#' st_as_text(st_sfc(st_point(c(-90,40)), crs = 4326), EWKT = TRUE)
 st_as_text.sfg = function(x, ...) {
-	if (inherits(x, "POINT")) prnt.POINT(x, ...)
-	else if (inherits(x, "MULTIPOINT"))         prnt.MULTIPOINT(x, ...)
-	else if (inherits(x, "LINESTRING"))         prnt.LINESTRING(x, ...)
-	else if (inherits(x, "POLYGON"))            prnt.POLYGON(x, ...)
-	else if (inherits(x, "MULTILINESTRING"))    prnt.MULTILINESTRING(x, ...)
-	else if (inherits(x, "MULTIPOLYGON"))       prnt.MULTIPOLYGON(x, ...)
-	else if (inherits(x, "GEOMETRYCOLLECTION")) prnt.GEOMETRYCOLLECTION(x, ...)
-	else if (inherits(x, "CIRCULARSTRING"))     prnt.MULTIPOINT(x, ...)
-	else if (inherits(x, "COMPOUNDCURVE"))      prnt.GEOMETRYCOLLECTION(x, ...)
-	else if (inherits(x, "CURVE"))              prnt.MULTIPOINT(x, ...)
-	else if (inherits(x, "CURVEPOLYGON"))       prnt.GEOMETRYCOLLECTION(x, ...)
-	else if (inherits(x, "MULTICURVE"))         prnt.GEOMETRYCOLLECTION(x, ...)
-	else if (inherits(x, "MULTISURFACE"))       prnt.GEOMETRYCOLLECTION(x, ...)
-	else if (inherits(x, "POLYHEDRALSURFACE"))  prnt.MULTIPOLYGON(x, ...)
-	else if (inherits(x, "TRIANGLE"))           prnt.POLYGON(x, ...)
-	else if (inherits(x, "TIN"))                prnt.MULTIPOLYGON(x, ...)
-	else stop(paste("no print method available for object of class", class(x)[1])) # nocov
+	switch(class(x)[2],
+		POINT = prnt.POINT(x, ...),
+		MULTIPOINT =        prnt.MULTIPOINT(x, ...),
+		LINESTRING =        prnt.LINESTRING(x, ...),
+		POLYGON =           prnt.POLYGON(x, ...),
+		MULTILINESTRING =   prnt.MULTILINESTRING(x, ...),
+		MULTIPOLYGON =      prnt.MULTIPOLYGON(x, ...),
+		GEOMETRYCOLLECTION =prnt.GEOMETRYCOLLECTION(x, ...),
+		CIRCULARSTRING =    prnt.MULTIPOINT(x, ...),
+		COMPOUNDCURVE =     prnt.GEOMETRYCOLLECTION(x, ...),
+		CURVE =             prnt.MULTIPOINT(x, ...),
+		CURVEPOLYGON =      prnt.GEOMETRYCOLLECTION(x, ...),
+		MULTICURVE =        prnt.GEOMETRYCOLLECTION(x, ...),
+		MULTISURFACE =      prnt.GEOMETRYCOLLECTION(x, ...),
+		POLYHEDRALSURFACE = prnt.MULTIPOLYGON(x, ...),
+		TRIANGLE =          prnt.POLYGON(x, ...),
+		TIN =                prnt.MULTIPOLYGON(x, ...),
+		stop(paste("no print method available for object of class", class(x)[2])) # nocov
+	)
 }
 
 #' @name st_as_text
@@ -109,18 +120,25 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 #' @rdname st_as_sfc
 #' @md
 #' @details If `x` is a character vector, it should be a vector containing
-#' the [well-known-text](http://www.opengeospatial.org/standards/wkt-crs) or
-#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT)
-#' representations of a single geometry for each vector element.
+#' [well-known-text](http://www.opengeospatial.org/standards/wkt-crs), or
+#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT) or
+#' GeoJSON representations of a single geometry for each vector element.
 #' @param crs integer or character; coordinate reference system for the
+#' @param GeoJSON logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
 #' geometry, see [st_crs()]
 #' @export
 #' @examples
 #' st_as_sfc("SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)")
-st_as_sfc.character = function(x, crs = NA_integer_, ...) {
+st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 	if (length(x) == 0)
 		st_sfc(crs = crs)
-	else {
+	else if (GeoJSON) {
+		ret = st_geometry(do.call(rbind, lapply(x, st_read, quiet = TRUE)))
+		if (is.na(st_crs(ret)))
+			st_set_crs(ret, crs)
+		else
+			ret
+	} else {
 		if (all(is_ewkt(x)) & is.na(crs)) {
 			# EWKT
 			crs = get_crs_ewkt(x)
@@ -158,4 +176,3 @@ get_crs_ewkt = function(x) {
 ewkt_to_wkt = function(x) {
 	gsub("^SRID=(\\d+);(.+)$", "\\2", x)
 }
-				   
