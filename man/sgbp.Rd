@@ -32,5 +32,5 @@
 Methods for dealing with sparse geometry binary predicate lists
 }
 \details{
-\code{sgbp} are sparse matrices, stored as a list with integer vectors holding the \code{TRUE} indices of each row. This means that for a dense, \eqn{m \times n}{m x n} matrix \code{Q} and a list \code{L}, if \code{Q[i,j]} is \code{TRUE} then \eqn{j} is an element of \code{L[[i]]}. Reversed: when \eqn{k} is the value of \code{L[[i]][j]}, then \code{Q[i,k]} is \code{TRUE}.
+\code{sgbp} are sparse matrices, stored as a list with integer vectors holding the ordered \code{TRUE} indices of each row. This means that for a dense, \eqn{m \times n}{m x n} matrix \code{Q} and a list \code{L}, if \code{Q[i,j]} is \code{TRUE} then \eqn{j} is an element of \code{L[[i]]}. Reversed: when \eqn{k} is the value of \code{L[[i]][j]}, then \code{Q[i,k]} is \code{TRUE}.
 }
