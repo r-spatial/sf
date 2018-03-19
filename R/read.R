@@ -32,8 +32,11 @@ set_utf8 = function(x) {
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
 #' and a warning is given when precision is lost (i.e., values are larger than 2^53).
 #' @param check_ring_dir logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)
-#' @details for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}; for \code{type}
-#' values see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
+#' @details 
+#' for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+#' 
+#' for values for \code{type}
+#' see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
 #' may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
 #' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
 #'
@@ -124,8 +127,8 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 #' @details \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 #' modified default arguments.
 #' \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
-#' about the data source.
-#' \code{write_sf} delete layers by default: it overwrites existing files.
+#' about the data source. \code{read_sf} returns an sf-tibble rather than an sf-data.frame.
+#' \code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 #' @examples
 #' # read geojson from string:
 #' geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
