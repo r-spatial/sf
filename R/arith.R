@@ -121,7 +121,7 @@ Ops.sfc <- function(e1, e2) {
 		"/"  = mapply(function(x, y) { x  / y }, e1, e2, SIMPLIFY = FALSE),
 		stop(paste("operation", .Generic, "not supported")))
 
-	crs = if (.Generic %in% c("+", "-") && inherits(e2, c("sfc", "sfg"))) # retain:
+	crs = if (.Generic %in% c("+", "-", "*", "/") && inherits(e2, c("sfc", "sfg"))) # retain:
 			st_crs(e1)
 		else # geometry got displaced:
 			NA_crs_
