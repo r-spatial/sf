@@ -24,6 +24,11 @@ addons:
       - libudunits2-dev
       - libproj-dev
       - libgeos-dev
+      - libgdal20
+      - libgeos-c1v5
+      - libgdal1h
+      - liblwgeom-2.4-0
+      - libspatialite-dev
       - libgdal-dev
       - libjson-c-dev
       - postgresql-9.6
