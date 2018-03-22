@@ -26,7 +26,7 @@ pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
 # requires to apt-get install odbc-postgresql
 try(pg <- dbConnect(odbc::odbc(), driver = "PostgreSQL Unicode", database = "postgis"), silent=TRUE)
-
+pg <- NULL
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
