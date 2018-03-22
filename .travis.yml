@@ -1,5 +1,7 @@
 language: r
-
+sudo: required
+dist: trusty
+cache: packages
 r:
   - release
   #- oldrel
@@ -11,7 +13,7 @@ addons:
     sources:
       - sourceline: 'ppa:opencpu/jq'
       - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/dists/trusty-pgdg 9.6'
+      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg 9.6'
         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
     packages:
       - libprotobuf-dev
@@ -24,13 +26,6 @@ addons:
       - libgdal-dev
       - libjson-c-dev
       - postgresql-server-dev-9.6
-
-
-# cache: packages
-
-sudo: required
-
-dist: trusty
 
 before_install:
   # create postgis databases:
@@ -48,4 +43,4 @@ after_success:
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
-  - Rscript -e 'covr::codecov()'
+  #- Rscript -e 'covr::codecov()'
