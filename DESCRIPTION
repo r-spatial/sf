@@ -92,7 +92,6 @@ Collate:
 	jitter.R
 	sgbp.R
 	spatstat.R
-	deprecated.R
 	stars.R
 	gdal_utils.R
 	deprecated.R
