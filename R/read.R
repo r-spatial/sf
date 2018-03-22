@@ -138,8 +138,11 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 	if (! requireNamespace("tibble", quietly = TRUE))
 		stop("package tibble not available: install first?")
-	st_as_sf(tibble::as_tibble(as.data.frame(
-		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors))))
+	tbl <- tibble::as_tibble(as.data.frame(
+		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)))
+	has_geom <- any(vapply(tbl, function(f) inherits(f, "sfc"), TRUE))
+	if (!has_geom) return(tbl)
+	st_as_sf(tbl)
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
