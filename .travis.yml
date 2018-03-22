@@ -9,12 +9,12 @@ r:
 #  - devel
 
 addons:
-  postgresql: "9.6"
+  #postgresql: "9.6"
   apt:
     sources:
       - sourceline: 'ppa:opencpu/jq'
       - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg 9.6'
+      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
     packages:
       - libprotobuf-dev
@@ -26,7 +26,10 @@ addons:
       - libgeos-dev
       - libgdal-dev
       - libjson-c-dev
-      - postgresql-server-dev-9.6
+      - postgresql-9.6
+      - postgresql-9.6-postgis-2.3
+      - postgresql-contrib-9.6
+      - postgresql-9.6-postgis-scripts
       - postgis
 
 before_install:
