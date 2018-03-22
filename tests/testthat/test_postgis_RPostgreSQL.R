@@ -11,7 +11,7 @@ db_drop_table_schema <- function(con, schema, table = NULL) {
     } else {
         table <- paste(c(schema, table), collapse = ".")
     }
-    DBI::dbSendQuery(pg, paste("DROP TABLE ", table, " CASCADE;"))
+    DBI::dbExecute(pg, paste("DROP TABLE ", table, " CASCADE;"))
 }
 require("sp")
 data(meuse)
@@ -34,7 +34,7 @@ test_that("can write to db", {
     expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
     expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_silent(st_write(z, pg, "sf_meuse3__"))
+    expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
     expect_warning(expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")),
                                 nrow(z) * 2), "type geometry")
@@ -246,7 +246,7 @@ test_that("Can safely manipulate crs", {
     expect_error(set_postgis_crs(pg, st_crs(srid)))
     expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
     new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
-    expect_equal(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), 1)
+    expect_message(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
     expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
                    "not found")
     expect_equal(delete_postgis_crs(pg, new_crs), 1)
@@ -263,10 +263,19 @@ test_that("new SRIDs are handled correctly", {
                        "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
                        "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
     st_crs(meuse_sf) = crs
-    expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+    expect_message(st_write(meuse_sf, pg, overwrite = TRUE), "Inserted local crs")
     expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
                    "not found in EPSG support files")
     expect_true(st_crs(x) == crs)
+})
+
+test_that("schema_table", {
+    expect_error(sf:::schema_table(pg, NA), "character vector")
+    expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
+    expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
+    expect_error(sf:::schema_table(pg, letters), "longer than 2")
+    expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
+    expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
 })
 
 if (can_con(pg)) {
@@ -282,15 +291,8 @@ if (can_con(pg)) {
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse2__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
-    try(DBI::dbSendQuery(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
+    try(DBI::dbExecute(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
+    try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
     try(DBI::dbDisconnect(pg), silent = TRUE)
 }
 
-test_that("schema_table", {
-    expect_error(sf:::schema_table(pg, NA), "character vector")
-    expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
-    expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
-    expect_error(sf:::schema_table(pg, letters), "longer than 2")
-    expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
-    expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
-})
