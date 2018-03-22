@@ -34,7 +34,7 @@ test_that("can write to db", {
     expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
     expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_message(st_write(z, pg, "sf_meuse3__"))
+    expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
     expect_warning(expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2), "Unknown field type")
     expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
@@ -315,5 +315,6 @@ if (can_con(pg)) {
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
     try(DBI::dbExecute(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
+    try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
     try(DBI::dbDisconnect(pg), silent = TRUE)
 }
