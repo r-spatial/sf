@@ -2,6 +2,7 @@ language: r
 sudo: required
 dist: trusty
 cache: packages
+latex: false
 r:
   - release
   #- oldrel
@@ -26,6 +27,7 @@ addons:
       - libgdal-dev
       - libjson-c-dev
       - postgresql-server-dev-9.6
+      - postgis
 
 before_install:
   # create postgis databases:
