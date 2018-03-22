@@ -9,7 +9,7 @@ r:
 #  - devel
 
 addons:
-  #postgresql: "9.6"
+  postgresql: "9.6"
   apt:
     sources:
       - sourceline: 'ppa:opencpu/jq'
@@ -24,20 +24,15 @@ addons:
       - libudunits2-dev
       - libproj-dev
       - libgeos-dev
-      - libgdal20
-      - libgeos-c1v5
-      - libgdal1h
-      - liblwgeom-2.4-0
       - libspatialite-dev
       - libgdal-dev
       - libjson-c-dev
-      - postgresql-9.6
-      - postgresql-9.6-postgis-2.3
-      - postgresql-contrib-9.6
-      - postgresql-9.6-postgis-scripts
-      - postgis
 
 before_install:
+  # install postgis from source:
+  - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
+  - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
   # create postgis databases:
   - sudo service postgresql restart
   - createdb postgis
