@@ -155,11 +155,12 @@ get_postgis_crs = function(conn, srid) {
     local_crs <- st_crs(srid)
     if(crs != local_crs & !is.na(local_crs))
         warning("Local crs different from database crs. You can inspect the ",
-                "database crs and compare it to `st_crs(", srid,")`.")
+                "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
+                "and compare it to `st_crs(", srid,")`.")
     return(crs)
 }
 
-set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE) {
+set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose = TRUE) {
     if (is.na(crs[["epsg"]])) {
         crs[["epsg"]] <- get_new_postgis_srid(conn)
     } else {
@@ -179,7 +180,20 @@ set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE) {
                       paste(crs[["epsg"]], q(auth_name), crs[["epsg"]], q(wkt), q(crs[["proj4string"]]), sep = ", "),
                       ");")
     }
-    dbExecute(conn, query)
+    tryCatch(dbExecute(conn, query),
+            error = function(err) {
+                if(grepl("permission denied", err))
+                    stop("Write permission denied on table `spatial_ref_sys`.",
+                        "\n * Local crs is not in the database;",
+                        "\n * Write permission on table `spatial_ref_sys` is denied.",
+                        "\nEither: ",
+                        "\n * Change the crs locally using `st_transform()`;",
+                        "\n * Grant write access on `spatial_sys_ref` for this connection.",
+                        "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", crs[["epsg"]], ")")
+                stop(err)
+            })
+    if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
+                         "` in database as srid:", crs[["epsg"]], ".")
 }
 
 delete_postgis_crs = function(conn, crs) {
