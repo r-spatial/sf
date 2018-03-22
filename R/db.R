@@ -139,11 +139,12 @@ get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
     srs_table$proj4text = sapply(srs_table$proj4text, trim)
     eq = srs_table$proj4text == proj4string
     if (any(eq))
-        srs_table[min(which(eq)) , "srid"]
+        srid <- srs_table[min(which(eq)) , "srid"]
     else { # create a new srid in conn if proj4string is not found:
         srid <- get_new_postgis_srid(conn)
         set_postgis_crs(conn, st_crs(srid, proj4string, valid = FALSE))
     }
+    return(srid)
 }
 
 get_postgis_crs = function(conn, srid) {
@@ -194,6 +195,7 @@ set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose 
             })
     if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
                          "` in database as srid:", crs[["epsg"]], ".")
+    return(crs)
 }
 
 delete_postgis_crs = function(conn, crs) {
