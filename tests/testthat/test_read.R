@@ -158,3 +158,12 @@ test_that("we get a warning when not specifying one of multiple layers", {
 	expect_warning(st_read(osm, quiet = TRUE),
 		"automatically selected the first layer in a data source containing more than one.")
 })
+
+test_that("reading non-spatial table works", {
+	expect_warning(st_read(system.file("gpkg/nospatial.gpkg", package = "sf")),
+				   "no simple feature geometries present")
+	expect_is(st_read(system.file("gpkg/nospatial.gpkg", package = "sf")),
+			  "data.frame")
+	expect_is(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
+			  "tbl_df")
+})
