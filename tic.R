@@ -1,7 +1,4 @@
-#add_package_checks(args = c("--no-vignettes", "--no-build-vignettes"))
-
-get_stage("script") %>%
-	add_step(step_rcmdcheck(args = c("--no-vignettes", "--no-build-vignettes")))
+add_package_checks()
 
 if (Sys.getenv("id_rsa") != "") {
   # pkgdown documentation can be built optionally. Other example criteria:
