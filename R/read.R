@@ -141,8 +141,10 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 	tbl = tibble::as_tibble(as.data.frame(
 		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)))
 	has_geom = any(vapply(tbl, function(f) inherits(f, "sfc"), TRUE))
-	if (!has_geom) return(tbl)
-	st_as_sf(tbl)
+	if (has_geom) 
+		st_as_sf(tbl)
+	else
+		tbl
 }
 
 clean_columns = function(obj, factorsAsCharacter) {

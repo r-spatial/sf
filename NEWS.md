@@ -1,3 +1,7 @@
+# version 0.6-2
+
+* `read_sf` can now also read tables without geometry; #684, by Andy Teucher
+
 # version 0.6-1
 
 * method `distinct` now works; #669, #672
