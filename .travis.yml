@@ -1,6 +1,6 @@
 language: r
 sudo: required
-dist: trusty
+dist: xenial
 cache:
   - packages
   - ccache
@@ -34,7 +34,6 @@ addons:
       - postgresql-server-dev-9.6
 
 before_install:
-  - docker pull ubuntu:16.04
   # install postgis from source:
   - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
   - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
