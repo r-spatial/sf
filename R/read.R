@@ -90,8 +90,8 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		warning("no simple feature geometries present: returning a data.frame", call. = FALSE) # nocov
-		return(as.data.frame(x , stringsAsFactors = stringsAsFactors)) # nocov
+		warning("no simple feature geometries present: returning a data.frame", call. = FALSE)
+		return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
 	}
 
 	nm = names(x)[which.geom]
@@ -138,8 +138,13 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 	if (! requireNamespace("tibble", quietly = TRUE))
 		stop("package tibble not available: install first?")
-	st_as_sf(tibble::as_tibble(as.data.frame(
-		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors))))
+	tbl = tibble::as_tibble(as.data.frame(
+		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)))
+	has_geom = any(vapply(tbl, function(f) inherits(f, "sfc"), TRUE))
+	if (has_geom) 
+		st_as_sf(tbl)
+	else
+		tbl
 }
 
 clean_columns = function(obj, factorsAsCharacter) {

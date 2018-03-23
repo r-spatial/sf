@@ -1,3 +1,9 @@
+# version 0.6-2
+
+* restore compatibility with GDAL 2.0.x versions (which won't have `gdal_utils`); #686
+
+* `read_sf` can now also read tables without geometry; #684, by Andy Teucher
+
 # version 0.6-1
 
 * method `distinct` now works; #669, #672
