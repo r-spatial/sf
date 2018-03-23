@@ -1,6 +1,6 @@
 language: python
 sudo: required
-dist: xenial
+dist: trusty
 cache:
   - packages
   - ccache
@@ -9,8 +9,6 @@ r:
   - release
   #- oldrel
 #  - devel
-services:
-  - docker
 
 addons:
   postgresql: "9.6"
@@ -32,7 +30,6 @@ addons:
       - libgdal-dev
       - libjson-c-dev
       - postgresql-server-dev-9.6
-      - r-base-core
 
 before_install:
   # install postgis from source:
