@@ -43,6 +43,7 @@ before_install:
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
+  - R -q -e 'install.paclages("lwgeom", configure.args="--without-liblwgeom")'
   - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
 
 install: R -q -e 'tic::install()'
