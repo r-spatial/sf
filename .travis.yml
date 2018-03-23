@@ -2,7 +2,7 @@ language: r
 sudo: required
 dist: trusty
 cache:
-  - packages
+  #- packages
   - ccache
 latex: false
 r:
