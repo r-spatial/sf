@@ -32,6 +32,9 @@ addons:
       - postgresql-server-dev-9.6
       - liblwgeom-2.4-0
       - liblwgeom-dev
+      - libgdal20
+      - libgeos-c1v5
+      - libspatialite5
 
 before_install:
   # install postgis from source:
