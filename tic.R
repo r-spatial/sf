@@ -4,12 +4,16 @@ get_stage("install") %>%
 	# install lwgeom with its own library since linking again postgis source install fails sometimes
 	add_code_step(install.packages("lwgeom", configure.args="--without-liblwgeom"))
 
+get_stage("after_success") %>%
+	add_code_step(system2("dropdb", args = "postgis")) %>%
+	add_code_step(system2("createdb", args = "postgis")) %>%
+	add_code_step(system2("psql", args = c("-d", "postgis", "-c", "'CREATE EXTENSION postgis'")))
+    add_code_step(system2("psql", args = c("-d", "postgis", "-c", "'GRANT CREATE ON DATABASE postgis TO travis'")))
+
+###
+# deploy pkgdowm site
+###
 if (Sys.getenv("id_rsa") != "") {
-  # pkgdown documentation can be built optionally. Other example criteria:
-  # - `inherits(ci(), "TravisCI")`: Only for Travis CI
-  # - `ci()$is_tag()`: Only for tags, not for branches
-  # - `Sys.getenv("BUILD_PKGDOWN") != ""`: If the env var "BUILD_PKGDOWN" is set
-  # - `Sys.getenv("TRAVIS_EVENT_TYPE") == "cron"`: Only for Travis cron jobs
 
   get_stage("before_deploy") %>%
     add_step(step_setup_ssh())

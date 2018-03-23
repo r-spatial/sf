@@ -55,11 +55,4 @@ deploy:
      branch: master
      condition: $TRAVIS_PULL_REQUEST = false
 
-warnings_are_errors: true
-
-after_success:
-  - dropdb postgis
-  - createdb postgis
-  - psql -d postgis -c "CREATE EXTENSION postgis;"
-  - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
-  - Rscript -e 'covr::codecov()'
+after_success: R -q -e 'tic::after_success()'
