@@ -1,11 +1,13 @@
 #include "cpl_port.h"
 #include "cpl_conv.h" // CPLFree()
 
-#include "gdal_utils.h" // requires 2.1
+#include "gdal_version.h"
 
 #if GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1
-# error "Insufficient GDAL version, 2.1 required"
+#error "Insufficient GDAL version, 2.1 required"
 #endif
+
+#include "gdal_utils.h" // requires 2.1
 
 #include "Rcpp.h"
 #define NO_GDAL_CPP_HEADERS
