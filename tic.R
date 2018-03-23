@@ -1,5 +1,9 @@
 add_package_checks()
 
+get_stage("install") %>%
+	# install lwgeom with its own library since linking again postgis source install fails sometimes
+	add_code_step(install.packages("lwgeom", configure.args="--without-liblwgeom"))
+
 if (Sys.getenv("id_rsa") != "") {
   # pkgdown documentation can be built optionally. Other example criteria:
   # - `inherits(ci(), "TravisCI")`: Only for Travis CI
