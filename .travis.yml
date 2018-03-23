@@ -45,6 +45,12 @@ before_install:
   - psql -d empty -c "CREATE EXTENSION postgis;"
   - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
 
+after_success:
+  - dropdb postgis
+  - createdb postgis
+  - psql -d postgis -c "CREATE EXTENSION postgis;"
+  - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
+
 install: R -q -e 'tic::install()'
 script: R -q -e 'tic::script()'
 before_deploy: R -q -e 'tic::before_deploy()'
