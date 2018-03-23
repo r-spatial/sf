@@ -5,10 +5,10 @@ get_stage("install") %>%
 	add_code_step(install.packages("lwgeom", configure.args="--without-liblwgeom"))
 
 get_stage("after_success") %>%
-	add_code_step(system2("dropdb", args = "postgis")) %>%
-	add_code_step(system2("createdb", args = "postgis")) %>%
-	add_code_step(system2("psql", args = c("-d", "postgis", "-c", "'CREATE EXTENSION postgis'")))
-    add_code_step(system2("psql", args = c("-d", "postgis", "-c", "'GRANT CREATE ON DATABASE postgis TO travis'")))
+	add_code_step(system("dropdb postgis")) %>%
+	add_code_step(system("createdb postgis")) %>%
+	add_code_step(system("psql -d postgis -c")) # CREATE EXTENSION postgis
+    add_code_step(system("psql -d postgis -c")) # GRANT CREATE ON DATABASE postgis TO travis
 
 ###
 # deploy pkgdowm site
