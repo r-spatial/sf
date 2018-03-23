@@ -1,7 +1,7 @@
 add_package_checks()
 
 get_stage("script") %>%
-	add_code_step(if (length(find.package("lwgeom", quiet = TRUE)) == 0) install.packages("lwgeom")) # for vignette checking
+	add_step(step_rcmdcheck(args = c("--no-vignettes", "--no-build-vignettes")))
 
 if (Sys.getenv("id_rsa") != "") {
   # pkgdown documentation can be built optionally. Other example criteria:
