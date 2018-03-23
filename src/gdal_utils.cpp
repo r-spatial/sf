@@ -1,10 +1,10 @@
 #include "cpl_port.h"
 #include "cpl_conv.h" // CPLFree()
 
-#include "Rcpp.h"
+#if !(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1)
+# include "gdal_utils.h" // requires >= 2.1
 
-#if (GDAL_VERSION_MAJOR > 2) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 1)
-# include "gdal_utils.h" // requires 2.1
+#include "Rcpp.h"
 
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"
@@ -175,6 +175,8 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 }
 
 #else
+#include "Rcpp.h"
+
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options) {
 	Rcpp::stop("GDAL version 2.1 required for gdal_utils");
 }
