@@ -1,4 +1,4 @@
-language: python
+language: r
 sudo: required
 dist: trusty
 cache:
