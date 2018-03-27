@@ -109,7 +109,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (isTRUE(dots$axes))
 			par(mar = c(2.1, 2.1, 1.2, 0))
 		else
-			par(mar = c(0,0,1.2,0))
+			par(mar = c(0, 0, 1.2, 0))
 
 		if (max_plot_missing)
 			max.plot = prod(lt$mfrow)
