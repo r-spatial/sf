@@ -24,7 +24,7 @@ Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/no
 Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nospatial.gpkg' using driver `GPKG'
 OGR: Unsupported geometry type
 driver `foo' not available.
-Dataset /tmp/RtmpXAvjLb/file475f4336efe4.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/Rtmptm79Tg/file324659fc42c1.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
@@ -33,9 +33,9 @@ Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
-testthat results ================================================================
-OK: 616 SKIPPED: 1 FAILED: 0
+══ testthat results  ═══════════════════════════════════════════════════════════
+OK: 616 SKIPPED: 2 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  4.378   0.345   5.108 
+  4.624   0.340   5.333 

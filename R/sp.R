@@ -194,6 +194,7 @@ setAs("sfc", "Spatial", function(from) as_Spatial(from))
 #' @param IDs character vector with IDs for the \code{Spatial*} geometries
 #' @return geometry-only object deriving from \code{Spatial}, of the appropriate class
 #' @export
+#' @details for converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' as_Spatial(st_geometry(nc[1,]))
