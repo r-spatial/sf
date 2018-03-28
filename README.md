@@ -108,7 +108,7 @@ Functions and methods that require `liblwgeom`, including `st_make_valid` and al
 
 ### Acknowledgment
 
-This project greatfully acknowledges financial [support](https://www.r-consortium.org/projects) from the
+This project gratefully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 
 <a href="https://www.r-consortium.org/projects/awarded-projects">
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300">
