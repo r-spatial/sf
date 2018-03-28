@@ -17,7 +17,7 @@
 
 \item{...}{arguments passed on to \code{FUN}}
 
-\item{do_union}{logical; should grouped geometries be unioned using \link{st_union}?}
+\item{do_union}{logical; should grouped geometries be unioned using \link{st_union}? See details.}
 
 \item{simplify}{logical; see \link[stats]{aggregate}}
 
@@ -28,6 +28,9 @@ an \code{sf} object with aggregated attributes and geometries; additional groupi
 }
 \description{
 aggregate an \code{sf} object, possibly union-ing geometries
+}
+\details{
+In case \code{do_union} is \code{FALSE}, \code{aggregate} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
 }
 \note{
 Does not work using the formula notation involving \code{~} defined in \link[stats]{aggregate}.

@@ -713,10 +713,10 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 
 #' Combine or union feature geometries
 #'
-#' Combine several feature geometries into one, with or without resolving internal boundaries
+#' Combine several feature geometries into one, without unioning or resolving internal boundaries
 #' @name geos_combine
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @return \code{st_combine} returns a single, combined geometry, with no resolved boundaries.
+#' @return \code{st_combine} returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.
 #' @export
 #' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg} (analogous to \link[base]{c} for ordinary vectors).
 #' @examples

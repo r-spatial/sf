@@ -8,10 +8,11 @@
 #' @param by either a list of grouping vectors with length equal to \code{nrow(x)} (see \link[stats]{aggregate}), or an object of class \code{sf} or \code{sfc} with geometries that are used to generate groupings, using the binary predicate specified by the argument \code{join}
 #' @param FUN function passed on to \link[stats]{aggregate}, in case \code{ids} was specified and attributes need to be grouped
 #' @param ... arguments passed on to \code{FUN}
-#' @param do_union logical; should grouped geometries be unioned using \link{st_union}?
+#' @param do_union logical; should grouped geometries be unioned using \link{st_union}? See details.
 #' @param simplify logical; see \link[stats]{aggregate}
 #' @param join logical spatial predicate function to use if \code{by} is a simple features object or geometry; see \link{st_join}
 #' @return an \code{sf} object with aggregated attributes and geometries; additional grouping variables having the names of \code{names(ids)} or are named \code{Group.i} for \code{ids[[i]]}; see \link[stats]{aggregate}.
+#' @details In case \code{do_union} is \code{FALSE}, \code{aggregate} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
 #' @aliases aggregate
 #' @examples
 #' m1 = cbind(c(0, 0, 1, 0), c(0, 1, 1, 0))
@@ -64,6 +65,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 
 		if (do_union)
 			geom = st_union(geom, by_feature = TRUE)
+
 		st_geometry(x) = NULL
 		x = aggregate(x, by, FUN, ..., simplify = simplify)
 		st_geometry(x) = geom # coerces to sf

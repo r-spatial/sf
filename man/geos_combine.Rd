@@ -21,12 +21,12 @@ st_union(x, y, ..., by_feature = FALSE)
 \item{by_feature}{logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features}
 }
 \value{
-\code{st_combine} returns a single, combined geometry, with no resolved boundaries.
+\code{st_combine} returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.
 
 If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j].
 }
 \description{
-Combine several feature geometries into one, with or without resolving internal boundaries
+Combine several feature geometries into one, without unioning or resolving internal boundaries
 }
 \details{
 \code{st_combine} combines geometries without resolving borders, using \link{c.sfg} (analogous to \link[base]{c} for ordinary vectors).
