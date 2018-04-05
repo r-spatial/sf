@@ -5,7 +5,7 @@
 #' @md
 #' @rdname sf-deprecated
 #' @name sf-deprecated
-#' @param ... Parameters to be passed to the modern version of the function
+#' @inheritParams st_read
 #' @docType package
 #' @export  st_read_db st_write_db
 #' @aliases st_read_db, st_write_db
@@ -15,12 +15,18 @@
 #'   \code{st_write_db} \tab now a synonym for \code{\link{st_write}}\cr
 #' }
 #'
-st_read_db <- function(...) {
+#' @export
+st_read_db <- function(conn = NULL, table = NULL, query = NULL,
+					   geom_column = NULL, EWKB = TRUE, ...) {
 	.Deprecated("st_read")
-	st_read(...)
+	st_read(conn = conn, table = table, query = query,
+			geom_column = geom_column, EWKB = EWKB, ...)
 }
 
-st_write_db <- function(...) {
+#' @inheritDotParams dbWriteTable
+#' @export
+st_write_db <- function(conn = NULL, obj, table = deparse(substitute(obj)), ...,
+						drop = FALSE, append = FALSE) {
 	.Deprecated("st_write")
-	st_write(...)
+	st_write(obj = obj, dsn = conn, layer = table, ..., overwrite = drop, append = append)
 }
