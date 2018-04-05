@@ -128,8 +128,8 @@ test_that("support for capital names (#571)", {
 	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
 	suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
 	skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-	expect_silent(st_write(pts, pg, Id(schema = "CAP__", table = "Meuse_tbl")))
-	expect_true(DBI::dbRemoveTable(pg, Id(schema = "CAP__", table = "Meuse_tbl")))
+	expect_silent(st_write(pts, pg, c("CAP__", "Meuse_tbl")))
+	expect_true(DBI::dbRemoveTable(pg, c("CAP__", "Meuse_tbl")))
 	dbExecute(pg, 'DROP SCHEMA "CAP__" CASCADE;')
 })
 
