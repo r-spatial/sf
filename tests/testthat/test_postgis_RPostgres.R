@@ -24,7 +24,7 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- DBI::dbConnect(RPostgres::Postgres(), dbname = "postgis"), silent=TRUE)
+try(pg <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", dbname = "postgis"), silent=TRUE)
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
@@ -44,20 +44,20 @@ test_that("can handle multiple geom columns", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
     expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE))
-    #expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
+    expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
     expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
-    x <- st_layers("PG:dbname=postgis")
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
+    x <- st_layers("PG:host=localhost dbname=postgis")
     multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
     expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
     expect_silent(x <- st_read(pg, "meuse_multi2"))
     expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
     expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
-    expect_silent(x <- st_read("PG:dbname=postgis", "meuse_multi2", quiet = TRUE))
+    expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi2", quiet = TRUE))
     #expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
     expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
 })
@@ -75,7 +75,7 @@ test_that("sf can write units to database (#264)", {
 })
 
 test_that("sf can preserve types (#592)", {
-	skip_if_not(can_con(pg), "could not connect to postgis database")
+    skip_if_not(can_con(pg), "could not connect to postgis database")
     dtypes <- data.frame(
         logi = c(TRUE, FALSE, NA),
         chara = c("a", "", NA),
@@ -83,8 +83,8 @@ test_that("sf can preserve types (#592)", {
         inte = c(1L, 2L, NA),
         fact = factor(c("a", "b", NA), levels = letters),
         #comp = c(complex(1, 2), complex(2, 3)),
-        date = rep(Sys.Date(), 3),
-        time = rep(Sys.time(), 3),
+        date = c(rep(Sys.Date(), 2), NA),
+        time = c(rep(Sys.time(), 2), NA),
         x = c(1, 2, 4),
         y = c(1, 2, 4), stringsAsFactors = FALSE)
     # cannot write lists
@@ -92,7 +92,8 @@ test_that("sf can preserve types (#592)", {
     dtypes <- st_as_sf(dtypes, coords = c("x", "y"))
     st_write(dtypes, pg, overwrite = TRUE)
     x <- st_read(pg, "dtypes")
-    expect_equal(x[, -5], dtypes[, -5])  # skip factors
+    dtypes$fact <- as.character(dtypes$fact)
+    expect_equal(x, dtypes)
     DBI::dbRemoveTable(pg, "dtypes")
 })
 
@@ -103,14 +104,13 @@ test_that("can write to other schema", {
     suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
 
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_error(st_write(pts, pg, DBI::SQL("public.sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")))
-    expect_error(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__")), "exists")
-    # can't use overwrite = TRUE on schemas with DBI
-    #expect_silent(st_write(pts, pg, DBI::SQL("sf_test__.sf_meuse__"), overwrite = TRUE))
+    expect_error(st_write(pts, pg, Id(schema = "public", table = "sf_meuse__")), "exists")
+    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")))
+    expect_error(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")), "exists")
+    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__"), overwrite = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
-    expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse33__")))
-    expect_silent(st_write(z, pg, DBI::SQL("sf_test__.sf_meuse4__")))
+    expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse33__")))
+    expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse4__")))
 
     # weird name work
     expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), overwrite = TRUE))
@@ -126,8 +126,8 @@ test_that("support for capital names (#571)", {
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
     suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_silent(st_write(pts, pg, DBI::SQL('"CAP__"."Meuse_tbl"')))
-    expect_true(DBI::dbRemoveTable(pg, DBI::SQL('"CAP__"."Meuse_tbl"')))
+    expect_silent(st_write(pts, pg, Id(schema = "CAP__", table = "Meuse_tbl")))
+    expect_true(DBI::dbRemoveTable(pg, Id(schema = "CAP__", table = "Meuse_tbl")))
     dbExecute(pg, 'DROP SCHEMA "CAP__" CASCADE;')
 })
 
@@ -248,7 +248,7 @@ test_that("round trips", {
 
 test_that("can read using driver", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    layers <- st_layers("PG:dbname=postgis")
+    layers <- st_layers("PG:host=localhost dbname=postgis")
     lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__", "meuse_multi2",
                          "sf_test__.sf_meuse__",  "sf_test__.meuse__",
                          "sf_test__.sf_meuse33__", "sf_test__.sf_meuse4__"))
@@ -256,9 +256,9 @@ test_that("can read using driver", {
     expect_true(all(layers$features == 155))
     expect_true(all(layers$fields == 12))
 
-    skip_if_not(can_con(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty")),
+    skip_if_not(can_con(try(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty"), silent=TRUE)),
                 "could not connect to 'empty' database")
-    expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers")
+    expect_error(st_read("PG:host=localhost dbname=empty", quiet = TRUE), "No layers")
 })
 
 test_that("Can safely manipulate crs", {
