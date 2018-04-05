@@ -5,6 +5,8 @@
 #' @md
 #' @rdname sf-deprecated
 #' @name sf-deprecated
+#' @param conn open database connection
+#' @param table table name
 #' @inheritParams st_read
 #' @docType package
 #' @export  st_read_db st_write_db
@@ -19,7 +21,7 @@
 st_read_db <- function(conn = NULL, table = NULL, query = NULL,
 					   geom_column = NULL, EWKB = TRUE, ...) {
 	.Deprecated("st_read")
-	st_read(conn = conn, table = table, query = query,
+	st_read(dsn = conn, layer = table, query = query,
 			geom_column = geom_column, EWKB = EWKB, ...)
 }
 

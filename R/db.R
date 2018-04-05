@@ -2,8 +2,6 @@
 #'
 #' Read PostGIS table directly through DBI and RPostgreSQL interface, converting
 #' Well-Know Binary geometries to sfc
-#' @param conn open database connection
-#' @param table table name
 #' @param query SQL query to select records; see details
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
 #' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}
@@ -22,24 +20,24 @@
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
-st_read.DBIObject = function(conn = NULL, table = NULL, query = NULL,
-					  geom_column = NULL, EWKB = TRUE, quiet = TRUE, ...) {
-	if (is.null(conn))
+st_read.DBIObject = function(dsn = NULL, layer = NULL, query = NULL,
+					  geom_column = NULL, EWKB = TRUE, ...) {
+	if (is.null(dsn))
 		stop("no connection provided")
 
-	if (!is.null(table)) {
-		table <- schema_table(conn, table)
-		if (!db_exists(conn, table))
-			stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
+	if (!is.null(layer)) {
+		layer <- schema_table(dsn, layer)
+		if (!db_exists(dsn, layer))
+			stop("`", paste0(layer, collapse = "."), "` does not exist.", call. = FALSE)
 		if (!is.null(query))
 			warning("Ignoring query argument, only using table")
-		query <- paste("SELECT * FROM", paste0(table, collapse = "."), ";")
+		query <- paste("SELECT * FROM", paste0(layer, collapse = "."), ";")
 	} else if(is.null(query)) {
 		stop("Provide either a table name or a query", call. = FALSE)
 	}
 
 	# suppress warning about unknown type "geometry":
-	suppressWarnings(tbl <- dbGetQuery(conn, query))
+	suppressWarnings(tbl <- dbGetQuery(dsn, query))
 	if (is.null(tbl))
 		stop("`", query, "` returned no results.", call. = FALSE) # nocov
 
@@ -47,16 +45,16 @@ st_read.DBIObject = function(conn = NULL, table = NULL, query = NULL,
 		row.names(tbl) = tbl[["row.names"]]
 		tbl = tbl[,setdiff(colnames(tbl), "row.names")]
 	}
-	gc = try(dbReadTable(conn, "geometry_columns"))
+	gc = try(dbReadTable(dsn, "geometry_columns"))
 
 	if (is.null(geom_column)) { # try find the geometry column:
-		geom_column = if (class(gc) == "try-error" || is.null(table))
+		geom_column = if (class(gc) == "try-error" || is.null(layer))
 			tail(which(vapply(tbl, is.character, TRUE)), 1) # guess it's the last character column
 		else
-			gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
+			gc[gc$f_table_schema == layer[1] & gc$f_table_name == layer[2], "f_geometry_column"]
 	}
 
-	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = conn)
+	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = dsn)
 
 	st_sf(tbl, ...)
 }
