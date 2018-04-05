@@ -21,6 +21,7 @@
 #' }
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
+#' @export
 st_read.DBIObject = function(conn = NULL, table = NULL, query = NULL,
 					  geom_column = NULL, EWKB = TRUE, quiet = TRUE, ...) {
 	if (is.null(conn))
@@ -60,6 +61,7 @@ st_read.DBIObject = function(conn = NULL, table = NULL, query = NULL,
 	st_sf(tbl, ...)
 }
 
+#' @export
 st_read.PostgreSQLConnection <- function(...) {
     st_read.DBIObject(...)
 }
