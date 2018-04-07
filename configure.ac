@@ -516,11 +516,11 @@ fi
 
 GEOS_VERSION=`${GEOS_CONFIG} --version`
 AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
-AC_MSG_CHECKING([GEOS version >= 3.3.0]) # GDAL 2.0.1 requires GEOS 3.1.0
+AC_MSG_CHECKING([GEOS version >= 3.4.0]) # GDAL 2.0.1 requires GEOS 3.1.0
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
+if test ${GEOS_VER_DOT} -lt 340 ; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR([upgrade GEOS to 3.3.0 or later])
+  AC_MSG_ERROR([upgrade GEOS to 3.4.0 or later])
 else
   AC_MSG_RESULT(yes)
 fi
