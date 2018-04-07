@@ -34,7 +34,7 @@ void cb(void *item, void *userdata) { // callback function for tree selection
 static void __errorHandler(const char *fmt, ...) { // #nocov start
 
 	char buf[BUFSIZ], *p;
-	va_list(ap);
+	va_list ap;
 	va_start(ap, fmt);
 	vsprintf(buf, fmt, ap);
 	va_end(ap);
@@ -50,7 +50,7 @@ static void __errorHandler(const char *fmt, ...) { // #nocov start
 static void __warningHandler(const char *fmt, ...) {
 
 	char buf[BUFSIZ], *p;
-	va_list(ap);
+	va_list ap;
 	va_start(ap, fmt);
 	vsprintf(buf, fmt, ap);
 	va_end(ap);
