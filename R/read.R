@@ -11,39 +11,63 @@ set_utf8 = function(x) {
 
 #' Read simple features or layers from file or database
 #'
-#' Read simple features from file or database, or retrieve layer names and their geometry type(s)
-#' @param dsn data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
-#' or contain the name and access credentials of a database); in case of GeoJSON, \code{dsn} may be the character string holding the geojson data
-#' @param layer layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
-#' \code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a
-#' message when there are multiple layers, or give an error if there are no layers in \code{dsn}.
+#' Read simple features from file or database, or retrieve layer names and their
+#' geometry type(s)
+#' @param dsn data source name (interpretation varies by driver - for some
+#'   drivers, \code{dsn} is a file name, but may also be a folder, or contain
+#'   the name and access credentials of a database); in case of GeoJSON,
+#'   \code{dsn} may be the character string holding the geojson data. It can
+#'   also be an open database connection.
+#' @param layer layer name (varies by driver, may be a file name without
+#'   extension); in case \code{layer} is missing, \code{st_read} will read the
+#'   first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE})
+#'   print a message when there are multiple layers, or give an error if there
+#'   are no layers in \code{dsn}. If \code{dsn} is a database connection, then
+#'   \code{layer} can be a table name or a database identifier (see
+#'   \code{\link[DBI]{Id}}). It is also possible to omit \code{layer} and rather
+#'   use the \code{query} argument.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
-#' @param options character; driver dependent dataset open options, multiple options supported.
-#' @param quiet logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers
-#' @param geometry_column integer or character; in case of multiple geometry fields, which one to take?
-#' @param type integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi}
-#' is \code{TRUE}, in case of mixed feature geometry
-#' types, conversion to the highest numeric type value found will be attempted. A vector with different values for each geometry column
-#' can be given.
-#' @param promote_to_multi logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
-#' Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}
-#' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default
-#' is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.
-#' @param int64_as_string logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
-#' and a warning is given when precision is lost (i.e., values are larger than 2^53).
-#' @param check_ring_dir logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)
-#' @details 
-#' for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
-#' 
-#' for values for \code{type}
-#' see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
-#' may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-#' way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
+#' @param options character; driver dependent dataset open options, multiple
+#'   options supported.
+#' @param quiet logical; suppress info on name, driver, size and spatial
+#'   reference, or signaling no or multiple layers
+#' @param geometry_column integer or character; in case of multiple geometry
+#'   fields, which one to take?
+#' @param type integer; ISO number of desired simple feature type; see details.
+#'   If left zero, and \code{promote_to_multi} is \code{TRUE}, in case of mixed
+#'   feature geometry types, conversion to the highest numeric type value found
+#'   will be attempted. A vector with different values for each geometry column
+#'   can be given.
+#' @param promote_to_multi logical; in case of a mix of Point and MultiPoint, or
+#'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
+#'   all to the Multi variety; defaults to \code{TRUE}
+#' @param stringsAsFactors logical; logical: should character vectors be
+#'   converted to factors?  The `factory-fresh' default is \code{TRUE}, but this
+#'   can be changed by setting \code{options(stringsAsFactors = FALSE)}.
+#' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
+#'   string; if FALSE, they are returned as double and a warning is given when
+#'   precision is lost (i.e., values are larger than 2^53).
+#' @param check_ring_dir logical; if TRUE, polygon ring directions are checked
+#'   and if necessary corrected (when seen from above: exterior ring counter
+#'   clockwise, holes clockwise)
+#' @details for \code{geometry_column}, see also
+#' \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
 #'
-#' In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/r-spatial/sf/issues/252}.
-#' @return object of class \link{sf} when a layer was successfully read; in case argument \code{layer} is missing and
-#' data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
-#' layer names, each with their geometry type(s). Note that the number of layers may also be zero.
+#' for values for \code{type} see
+#' \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but
+#' note that not every target value may lead to successful conversion. The
+#' typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the
+#' other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
+#' without warnings. \code{promote_to_multi} is handled on a per-geometry column
+#' basis; \code{type} may be specified for each geometry column.
+#'
+#' In case of problems reading shapefiles from USB drives on OSX, please see
+#' \url{https://github.com/r-spatial/sf/issues/252}.
+#' @return object of class \link{sf} when a layer was successfully read; in case
+#'   argument \code{layer} is missing and data source \code{dsn} does not
+#'   contain a single layer, an object of class \code{sf_layers} is returned
+#'   with the layer names, each with their geometry type(s). Note that the
+#'   number of layers may also be zero.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
@@ -168,8 +192,6 @@ clean_columns = function(obj, factorsAsCharacter) {
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
 		# nocov start
-		cat("ignoring columns with unsupported type:\n")
-		print(paste(names(obj)[!ccls.ok], collapse = " "))
 		obj = obj[ccls.ok]
 		# nocov end
 	}
@@ -186,7 +208,7 @@ abbreviate_shapefile_names = function(x) {
 	if (any(nchar(fld_names) > 10)) {
 		fld_names <- abbreviate(fld_names, minlength = 7)
 		warning("Field names abbreviated for ESRI Shapefile driver")
-		if (any(nchar(fld_names) > 10)) 
+		if (any(nchar(fld_names) > 10))
 			fld_names <- abbreviate(fld_names, minlength = 5) # nocov
 	}
 # fix for dots in DBF field names 121124
@@ -205,12 +227,15 @@ abbreviate_shapefile_names = function(x) {
 #' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-#' folder or contain a database name)
+#' folder or contain a database name) or or a Database Connection (currently
+#' official support is for RPostgreSQL connections)
 #' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the
 #' \link{basename} of \code{dsn} is taken.
 #' @param driver character; driver name to be used, if missing, a driver name is guessed from \code{dsn};
 #' \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 #' are found at \url{http://www.gdal.org/ogr_formats.html}.
+#' @param ... other arguments passed to \link{dbWriteTable} when \code{dsn} is a
+#' Database Connction
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
@@ -256,14 +281,18 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 
 #' @name st_write
 #' @export
-st_write.sf = function(obj, dsn, layer = file_path_sans_ext(basename(dsn)), ...,
+st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
-
+	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection"))) {
+		if(is.null(layer)) layer <- deparse(substitute(obj))
+		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
+	}
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
-
+	if (is.null(layer))
+		layer <- file_path_sans_ext(basename(dsn))
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 

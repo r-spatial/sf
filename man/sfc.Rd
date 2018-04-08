@@ -24,8 +24,8 @@ Create simple feature geometry list column, set class, and add coordinate refere
 }
 \details{
 A simple feature geometry list-column is a list of class
-\code{c("stc_TYPE", "sfc")} which most often contains objects of identical type; 
-in case of a mix of types or an empty set, \code{TYPE} is set to the 
+\code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
+in case of a mix of types or an empty set, \code{TYPE} is set to the
 superclass \code{GEOMETRY}.
 }
 \examples{

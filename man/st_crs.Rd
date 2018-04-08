@@ -36,7 +36,7 @@ st_crs(x, ...)
 
 \method{st_crs}{sf}(x, ...)
 
-\method{st_crs}{numeric}(x, ...)
+\method{st_crs}{numeric}(x, proj4text = "", valid = TRUE, ...)
 
 \method{st_crs}{character}(x, ..., wkt)
 
@@ -64,6 +64,12 @@ NA_crs_
 \item{x}{numeric, character, or object of class \link{sf} or \link{sfc}}
 
 \item{...}{ignored}
+
+\item{proj4text}{character. Must be used in conjunction with \code{valid = FALSE}.}
+
+\item{valid}{default TRUE. This allows to create crs without checking against
+the local proj4 database. It can be used to synchronize crs with a remote
+database, but avoid it as much as possible.}
 
 \item{wkt}{character well-known-text representation of the crs}
 

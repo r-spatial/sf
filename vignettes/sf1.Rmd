@@ -613,16 +613,13 @@ This shows that `sf::st_read()` is substantially faster than
 files, and more than a factor of 4 for the KMZ file used in this
 benchmark, respectively.
 
-### Directly reading and writing to spatial databases
+### Connection to spatial databases
 
-Two further functions, `st_read_db` and `st_write_db` attempt to
-read and write from spatial databases, directly reading WKB or WKT
-without using GDAL. The advantage over `st_read` may be that instead
-of a complete table, the result of a (spatial) query may be fetched,
-limiting the amount of data that is read into R, and potentially
-benefiting from the spatial index of the database. Although intended
-to use the DBI interface, current use and testing of these functions
-are limited to PostGIS.
+Read and write functions, `st_read()` and `st_write()`, can handle 
+connections to spatial databases to read WKB or WKT directly
+without using GDAL.
+Although intended to use the DBI interface, current use and testing of these 
+functions are limited to PostGIS.
 
 ## Coordinate reference systems and transformations {#crs}
 
