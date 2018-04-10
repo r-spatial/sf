@@ -49,7 +49,7 @@ test_that("can handle multiple geom columns", {
 	expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
 	skip_on_travis()
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
-	expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]]))
+	# expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]])) -->> not generally true in case of different EPSG databases
 	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
@@ -57,7 +57,7 @@ test_that("can handle multiple geom columns", {
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
 	x <- st_layers("PG:host=localhost dbname=postgis")
 	expect_silent(x <- st_read(pg, "meuse_multi2"))
-	expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
+	# expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]])) #-->> not generally the case, this CRS varies accross installations (EPSG db versions)
 	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi2", quiet = TRUE))
 	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
