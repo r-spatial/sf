@@ -22,6 +22,9 @@ object of class \code{sfg}
 \description{
 S3 Ops Group Generic Functions for simple feature geometries
 }
+\details{
+in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+}
 \examples{
 st_point(c(1,2,3)) + 4
 st_point(c(1,2,3)) * 3 + 4

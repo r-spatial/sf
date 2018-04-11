@@ -3,7 +3,8 @@
 #'
 #' @param e1 object of class \code{sfg} or \code{sfc}
 #' @param e2 numeric, or object of class \code{sfg}; in case \code{e1} is of class \code{sfc} also an object of class \code{sfc} is allowed
-#' @details in case \code{e2} is numeric, \code{+}, \code{-}, \code{*}, \code{/}, \code{%%} and \code{%/%} add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, \code{*} matrix-multiplies and \code{/} multiplies by its inverse. If \code{e2} is an \code{sfg} object, \code{|}, \code{/}, \code{&} and \code{%/%} result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+#'
+#' @details in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
 #'
 #' @return object of class \code{sfg}
 #' @export
