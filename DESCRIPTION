@@ -24,7 +24,7 @@ Imports:
 	grid,
 	Rcpp,
 	RPostgreSQL,
-	DBI (>= 0.5),
+	DBI (>= 0.8),
 	units (>= 0.4-6),
 	classInt,
 	magrittr
@@ -44,6 +44,7 @@ Suggests:
 	rlang,
 	dplyr (>= 0.7-0),
 	tidyr (>= 0.7-2),
+	RPostgres (>= 1.1.0),
 	tidyselect,
 	ggplot2,
 	mapview,
