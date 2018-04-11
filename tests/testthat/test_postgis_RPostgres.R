@@ -99,7 +99,7 @@ test_that("sf can preserve types (#592)", {
 })
 
 test_that("can write to other schema", {
-	skip_if_not(FALSE) # tmp switch off
+	# skip_if_not(FALSE) # tmp switch off -- EJP
     skip_if_not(can_con(pg), "could not connect to postgis database")
     try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
@@ -260,7 +260,7 @@ test_that("can read using driver", {
 
     skip_if_not(can_con(try(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty"), silent=TRUE)),
                 "could not connect to 'empty' database")
-    expect_error(st_read("PG:host=localhost dbname=empty", quiet = TRUE), "No layers")
+    expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers") # EJP: removed host=localhost
 })
 
 test_that("Can safely manipulate crs", {
