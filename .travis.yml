@@ -11,7 +11,9 @@ sudo: required
 
 dist: trusty
 
-r_github_packages: r-dbi/DBI r-dbi/RPostgres
+r_github_packages: 
+  - r-dbi/DBI
+  - r-dbi/RPostgres
 
 addons:
   postgresql: "9.6"
