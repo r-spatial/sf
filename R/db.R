@@ -221,9 +221,6 @@ get_new_postgis_srid <- function(conn) {
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              if (!requireNamespace("RPostgreSQL"))
-                  stop("Missing package `RPostgreSQL`.",
-                       " Use `install.packages(\"RPostgreSQL\")` to install.", call. = FALSE)
               field.types <- if (is.null(field.types)) dbDataType(conn, value)
               tryCatch({
                   dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
@@ -254,9 +251,6 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              if (!requireNamespace("DBI"))
-                  stop("Missing package `DBI`.",
-                       " Use `install.packages(\"DBI\")` to install.", call. = FALSE)
               field.types <- if (is.null(field.types)) dbDataType(conn, value)
               # DBI cannot set field types with append
               if (append) field.types <- NULL
@@ -331,5 +325,3 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
     dtyp[gtyp] <- "numeric"
     return(dtyp)
 })
-
-
