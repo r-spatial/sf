@@ -433,6 +433,40 @@ bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    NA
 proj4string:    NA
 GEOMETRYCOLLECTION EMPTY
+> p_ = st_point(0:1)
+> ll = st_sfc(ls[[1]], p_)
+> ll & st_sfc(p_)
+Geometry set for 2 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POINT (0 1)
+POINT (0 1)
+> ll | st_sfc(p_)
+Geometry set for 2 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING (0 0, 0 1)
+POINT (0 1)
+> ll %/% st_sfc(p_)
+Geometry set for 2 features  (with 1 geometry empty)
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 0 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING (0 0, 0 1)
+GEOMETRYCOLLECTION EMPTY
+> ll == st_sfc(p_)
+[1] FALSE  TRUE
+> ll != st_sfc(p_)
+[1]  TRUE FALSE
+> 
 > 
 > str(x)
 sfc_POINT of length 2; first list element: Classes 'XY', 'POINT', 'sfg'  num [1:2] -90 35
@@ -1007,4 +1041,4 @@ POINT (0 1)
 > 
 > proc.time()
    user  system elapsed 
-  2.503   0.299   2.482 
+  2.650   0.304   2.662 

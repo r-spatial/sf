@@ -106,6 +106,14 @@ ls * 2
 ls - 2
 (ls + 2) %% 3
 ls / ls
+p_ = st_point(0:1)
+ll = st_sfc(ls[[1]], p_)
+ll & st_sfc(p_)
+ll | st_sfc(p_)
+ll %/% st_sfc(p_)
+ll == st_sfc(p_)
+ll != st_sfc(p_)
+
 
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)

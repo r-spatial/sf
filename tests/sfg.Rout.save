@@ -65,7 +65,14 @@ LINESTRING (-1 0, -1 1)
 LINESTRING (0 0, 0 0)
 > ls / pt
 LINESTRING (0 0, 0 1)
+> # unary:
+> +pt
+POINT (1 0)
+> -pt
+POINT (-1 0)
+> try(!pt)
+Error in Ops.sfg(pt) : unary ! not defined for "sfg" objects
 > 
 > proc.time()
    user  system elapsed 
-  0.579   0.264   0.563 
+  0.699   0.245   0.657 

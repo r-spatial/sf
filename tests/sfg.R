@@ -28,3 +28,7 @@ ls + pt
 ls - pt
 ls * pt
 ls / pt
+# unary:
++pt
+-pt
+try(!pt)
