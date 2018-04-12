@@ -39,7 +39,7 @@ st_sample = function(x, size, ..., type = "random") {
 	if (length(size) > 1) {
 		size = rep(size, length.out = length(x))
 		st_set_crs(do.call(c, lapply(1:length(x),
-			function(i) st_sample(x[i], size[i], type = type))),
+			function(i) st_sample(x[i], size[i], type = type, ...))),
 			st_crs(x))
 	} else {
 		dim = max(st_dimension(x))
@@ -85,6 +85,10 @@ st_multipoints_sample = function(x, size, ..., type = "random") {
 }
 
 st_ll_sample = function(x, size, ..., type = "random") {
+	if (isTRUE(st_is_longlat(x))) {
+		message_longlat("st_sample")
+		st_crs(x) = NA_crs_
+	}
 	l = st_length(x)
 	d = runif(size, 0, sum(l))
 	lcs = c(0, cumsum(l))

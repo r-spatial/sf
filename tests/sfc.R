@@ -205,6 +205,8 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
 st_sample(nc[1:2,], size = c(10,20))
+# try with LINES, LongLat, should generate a warning:
+nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 
 #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
 class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
