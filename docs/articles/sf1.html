@@ -292,21 +292,22 @@ nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(<span class="dt">class =</span> <span class="st">"sf"</span>)
 ##  [1] [                     [[&lt;-                  $&lt;-                  
 ##  [4] aggregate             as.data.frame         cbind                
-##  [7] coerce                identify              initialize           
-## [10] merge                 plot                  print                
-## [13] rbind                 show                  slotsFromS3          
-## [16] st_agr                st_agr&lt;-              st_as_sf             
-## [19] st_bbox               st_boundary           st_buffer            
-## [22] st_cast               st_centroid           st_collection_extract
-## [25] st_convex_hull        st_coordinates        st_crs               
-## [28] st_crs&lt;-              st_difference         st_geometry          
-## [31] st_geometry&lt;-         st_intersection       st_is                
-## [34] st_line_merge         st_node               st_point_on_surface  
-## [37] st_polygonize         st_precision          st_segmentize        
-## [40] st_set_precision      st_simplify           st_snap              
-## [43] st_sym_difference     st_transform          st_triangulate       
-## [46] st_union              st_voronoi            st_wrap_dateline     
-## [49] st_write              st_zm                
+##  [7] coerce                dbDataType            dbWriteTable         
+## [10] identify              initialize            merge                
+## [13] plot                  print                 rbind                
+## [16] show                  slotsFromS3           st_agr               
+## [19] st_agr&lt;-              st_as_sf              st_bbox              
+## [22] st_boundary           st_buffer             st_cast              
+## [25] st_centroid           st_collection_extract st_convex_hull       
+## [28] st_coordinates        st_crs                st_crs&lt;-             
+## [31] st_difference         st_geometry           st_geometry&lt;-        
+## [34] st_intersection       st_is                 st_line_merge        
+## [37] st_node               st_point_on_surface   st_polygonize        
+## [40] st_precision          st_segmentize         st_set_precision     
+## [43] st_simplify           st_snap               st_sym_difference    
+## [46] st_transform          st_triangulate        st_union             
+## [49] st_voronoi            st_wrap_dateline      st_write             
+## [52] st_zm                
 ## see '?methods' for accessing help and source code</code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc.no_sf &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(nc)
@@ -651,10 +652,10 @@ microbenchmark<span class="op">::</span><span class="kw"><a href="http://www.rdo
    26.20221    10 a    </code></pre>
 <p>This shows that <code>sf::st_read()</code> is substantially faster than <code><a href="http://www.rdocumentation.org/packages/rgdal/topics/readOGR">rgdal::readOGR()</a></code>: by a factor of 14-18 for the Shapefile and KML files, and more than a factor of 4 for the KMZ file used in this benchmark, respectively.</p>
 </div>
-<div id="directly-reading-and-writing-to-spatial-databases" class="section level3">
+<div id="connection-to-spatial-databases" class="section level3">
 <h3 class="hasAnchor">
-<a href="#directly-reading-and-writing-to-spatial-databases" class="anchor"></a>Directly reading and writing to spatial databases</h3>
-<p>Two further functions, <code>st_read_db</code> and <code>st_write_db</code> attempt to read and write from spatial databases, directly reading WKB or WKT without using GDAL. The advantage over <code>st_read</code> may be that instead of a complete table, the result of a (spatial) query may be fetched, limiting the amount of data that is read into R, and potentially benefiting from the spatial index of the database. Although intended to use the DBI interface, current use and testing of these functions are limited to PostGIS.</p>
+<a href="#connection-to-spatial-databases" class="anchor"></a>Connection to spatial databases</h3>
+<p>Read and write functions, <code>st_read()</code> and <code>st_write()</code>, can handle connections to spatial databases to read WKB or WKT directly without using GDAL. Although intended to use the DBI interface, current use and testing of these functions are limited to PostGIS.</p>
 </div>
 </div>
 <div id="crs" class="section level2">

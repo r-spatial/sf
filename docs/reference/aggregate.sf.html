@@ -142,7 +142,7 @@
     </tr>
     <tr>
       <th>do_union</th>
-      <td><p>logical; should grouped geometries be unioned using <a href='geos_combine.html'>st_union</a>?</p></td>
+      <td><p>logical; should grouped geometries be unioned using <a href='geos_combine.html'>st_union</a>? See details.</p></td>
     </tr>
     <tr>
       <th>simplify</th>
@@ -157,6 +157,10 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href='http://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a>.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>In case <code>do_union</code> is <code>FALSE</code>, <code>aggregate</code> will simply combine geometries using <a href='st.html'>c.sfg</a>. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see <a href='https://github.com/r-spatial/sf/issues/681'>https://github.com/r-spatial/sf/issues/681</a>.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -219,6 +223,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#note">Note</a></li>
       

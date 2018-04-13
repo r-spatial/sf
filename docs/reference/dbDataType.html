@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get precision — st_precision • sf</title>
+<title>Determine database type for R vector — dbDataType,PostgreSQLConnection,sf-method • sf</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -110,57 +110,40 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get precision</h1>
+    <h1>Determine database type for R vector</h1>
     </div>
 
     
-    <p>Get precision</p>
-<p>Set precision</p>
+    <p>Determine database type for R vector</p>
+<p>Determine database type for R vector</p>
     
 
-    <pre class="usage"><span class='fu'>st_precision</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='co'># S4 method for PostgreSQLConnection,sf</span>
+<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>)
 
-<span class='fu'>st_set_precision</span>(<span class='no'>x</span>, <span class='no'>precision</span>)
-
-<span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+<span class='co'># S4 method for DBIObject,sf</span>
+<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object of class <code>sfc</code> or <code>sf</code></p></td>
+      <th>dbObj</th>
+      <td><p>DBIObject driver or connection.</p></td>
     </tr>
     <tr>
-      <th>precision</th>
-      <td><p>numeric; see st_as_binary for how to do this.</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>precision value</p></td>
+      <th>obj</th>
+      <td><p>Object to convert</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Setting a <code>precision</code> has no direct effect on coordinates of geometries, but merely set an attribute tag to an <code>sfc</code> object. The effect takes place in st_as_binary or, more precise, in the C++ function <code>CPL_write_wkb</code>, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using st_write or <a href='st_write.html'>write_sf</a>, <code>st_make_valid</code> in package <code>lwgeom</code>; also <a href='aggregate.sf.html'>aggregate</a> and <a href='dplyr.html'>summarise</a> by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. st_as_binary contains an example of a roundtrip of <code>sfc</code> geometries through WKB, in order to see the rounding happening to R data.</p>
-<p>The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'>c</span>(<span class='no'>pi</span>, <span class='no'>pi</span>)))
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='fl'>0.01</span>
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0.01</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

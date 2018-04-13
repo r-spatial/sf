@@ -124,7 +124,7 @@
 st_crs(x, ...)
 
 # S3 method for numeric
-st_crs(x, ...)
+st_crs(x, proj4text = "", valid = TRUE, ...)
 
 # S3 method for character
 st_crs(x, ..., wkt)
@@ -166,6 +166,16 @@ $(x, name)</pre>
     <tr>
       <th>...</th>
       <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>proj4text</th>
+      <td><p>character. Must be used in conjunction with <code>valid = FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>valid</th>
+      <td><p>default TRUE. This allows to create crs without checking against
+the local proj4 database. It can be used to synchronize crs with a remote
+database, but avoid it as much as possible.</p></td>
     </tr>
     <tr>
       <th>wkt</th>
