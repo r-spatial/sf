@@ -124,8 +124,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (length(cols) > max.plot)
 			cols = cols[1:max.plot]
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...))
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
@@ -230,11 +230,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			}
 			title(main)
 		}
-		if (reset) {
-			layout(matrix(1)) # reset
-			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
-			par(opar[-desel])
-		}
+	}
+	if (reset) {
+		layout(matrix(1)) # reset
+		desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
+		par(opar[-desel])
 	}
 }
 
