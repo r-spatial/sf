@@ -1051,6 +1051,11 @@ epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 POINT (0 1)
 > 
+> x = nc
+> x$geom = NULL
+> class(x)
+[1] "sf"         "data.frame"
+> 
 > proc.time()
    user  system elapsed 
-  2.708   0.271   2.682 
+  2.733   0.264   2.680 
