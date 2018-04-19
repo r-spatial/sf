@@ -1,5 +1,11 @@
 # version 0.6-2
 
+* use dynamic registration of S3 methods, similar to how hms does this; #710 by Kirill Mueller
+
+* (partially) address writing GPKG to network drive; #628
+
+* add Kirill Mueller as contributor
+
 * improve speed of `st_make_grid`; #708, by Dan Baston
 
 * `st_read` and `st_write` are now generic, with methods for directly reading from and writing to database connections; `st_read_db` and `st_write_db` are now deprecated; #558, thanks to Etienne Racine @etiennebr
