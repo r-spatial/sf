@@ -141,7 +141,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 }
 
 // [[Rcpp::export]]
-void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
+int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet = false, bool update = false,
 	bool delete_dsn = false, bool delete_layer = false) {
@@ -223,7 +223,18 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
 				"' using driver `" << driver[0] << "'" << std::endl;
 	}
-	bool transaction = (poDS->StartTransaction() == OGRERR_NONE);
+
+	// can & do transaction?
+	bool can_do_transaction = (poDS->TestCapability(ODsCTransactions) == TRUE); // can?
+	bool transaction = false;
+	if (can_do_transaction) { // try to start transaction:
+		transaction = (poDS->StartTransaction() == OGRERR_NONE); // do?
+		if (! transaction) { // failed: #nocov start
+			poDS->RollbackTransaction();
+			GDALClose(poDS);
+			return 1; // transaction failed!
+		} // #nocov end
+	}
 
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
@@ -270,7 +281,11 @@ void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVec
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
 	}
-	if (transaction && poDS->CommitTransaction() != OGRERR_NONE)
-		Rcpp::stop("CommitTransaction() failed.\n"); // #nocov
+	if (transaction && poDS->CommitTransaction() != OGRERR_NONE) { // #nocov start
+		poDS->RollbackTransaction();
+		GDALClose(poDS);
+		Rcpp::stop("CommitTransaction() failed.\n"); 
+	} // #nocov end
 	GDALClose(poDS);
+	return 0; // all O.K.
 }

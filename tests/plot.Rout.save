@@ -61,9 +61,6 @@ The following objects are masked from 'package:base':
 > mp2 = st_multipoint(matrix(5:8,2))
 > mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
 > plot(mp)
-Warning message:
-In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
-  n same as number of different finite values\neach different finite value is a separate class
 > plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
 > # polygon:
 > outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
@@ -162,4 +159,4 @@ plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all
 > 
 > proc.time()
    user  system elapsed 
-  4.276   0.308   4.316 
+  4.769   0.256   4.751 
