@@ -98,3 +98,4 @@ Collate:
 	gdal_utils.R
 	deprecated.R
 RoxygenNote: 6.0.1
+Encoding: UTF-8
