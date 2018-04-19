@@ -322,10 +322,11 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		geom, dim, quiet, update, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile() # nocov start
-		ret = CPL_write_ogr(obj, tmp, layer, driver,
-			as.character(dataset_options), as.character(layer_options),
-			geom, dim, quiet, update, delete_dsn, delete_layer)
-		if (ret == 1)
+		if (!quiet)
+			message(paste("writing first to temporary file", tmp))
+		if (CPL_write_ogr(obj, tmp, layer, driver,
+				as.character(dataset_options), as.character(layer_options),
+				geom, dim, quiet, update, delete_dsn, delete_layer) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = update || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))

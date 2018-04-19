@@ -230,7 +230,6 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	if (can_do_transaction) { // try to start transaction:
 		transaction = (poDS->StartTransaction() == OGRERR_NONE); // do?
 		if (! transaction) { // failed: #nocov start
-			poDS->RollbackTransaction();
 			GDALClose(poDS);
 			return 1; // transaction failed!
 		} // #nocov end
