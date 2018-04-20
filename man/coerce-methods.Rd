@@ -34,10 +34,9 @@ geometry-only object deriving from \code{Spatial}, of the appropriate class
 \details{
 \link[sp:sp]{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\code{SpatialPoint*}).
 Other geometries must be two-dimensional (\code{XY}). Dimensions can be dropped using
-\code{\link[=st_zm]{st_zm()}} with \code{what = "M"} or \code{what = "ZM"}
-}
-\details{
-for converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
+\code{\link[=st_zm]{st_zm()}} with \code{what = "M"} or \code{what = "ZM"}.
+
+For converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
 }
 \examples{
 nc <- st_read(system.file("shape/nc.shp", package="sf"))

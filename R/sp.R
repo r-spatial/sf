@@ -202,10 +202,11 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' @param IDs character vector with IDs for the `Spatial*` geometries
 #' @details [sp][sp::sp] supports three dimensions for `POINT` and `MULTIPOINT` (`SpatialPoint*`).
 #' Other geometries must be two-dimensional (`XY`). Dimensions can be dropped using
-#' [st_zm()] with `what = "M"` or `what = "ZM"`
+#' [st_zm()] with `what = "M"` or `what = "ZM"`.
+#'
+#' For converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
 #' @return geometry-only object deriving from `Spatial`, of the appropriate class
 #' @export
-#' @details for converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
 #' @examples
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
 #' # convert to SpatialPolygonsDataFrame
