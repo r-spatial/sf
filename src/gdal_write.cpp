@@ -4,6 +4,7 @@
 
 #include "ogrsf_frmts.h"
 #include "wkb.h"
+#include "gdal.h"
 #include "gdal_sf_pkg.h"
 
 std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
@@ -228,7 +229,9 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	bool can_do_transaction = (poDS->TestCapability(ODsCTransactions) == TRUE); // can?
 	bool transaction = false;
 	if (can_do_transaction) { // try to start transaction:
+		unset_error_handler();
 		transaction = (poDS->StartTransaction() == OGRERR_NONE); // do?
+		set_error_handler();
 		if (! transaction) { // failed: #nocov start
 			GDALClose(poDS);
 			return 1; // transaction failed!
@@ -268,15 +271,17 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		    // delete layer when  failing to  create feature
 		    OGRErr err = poDS->DeleteLayer(0);
 			GDALClose(poDS);
-			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
 			if (err != OGRERR_NONE) { // #nocov start
 			    if (err == OGRERR_UNSUPPORTED_OPERATION)
 			        Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'" << std::endl;
-			    else
+			    else if (! transaction)
 			        Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
 			} // #nocov end
 			OGRFeature::DestroyFeature(poFeature);
-			Rcpp::stop("Feature creation failed.\n");
+			if (transaction)
+				return 1; // try once more, writing to tmp file and copy
+			else
+				Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
 	}
