@@ -37,16 +37,16 @@ write_sf(..., quiet = TRUE, delete_layer = TRUE)
 \item{obj}{object of class \code{sf} or \code{sfc}}
 
 \item{dsn}{data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-folder or contain a database name) or or a Database Connection (currently
+folder or contain a database name) or a Database Connection (currently
 official support is for RPostgreSQL connections)}
 
 \item{layer}{layer name (varies by driver, may be a file name without extension); if layer is missing, the
 \link{basename} of \code{dsn} is taken.}
 
 \item{...}{other arguments passed to \link{dbWriteTable} when \code{dsn} is a
-Database Connction}
+Database Connection}
 
-\item{driver}{character; driver name to be used, if missing, a driver name is guessed from \code{dsn};
+\item{driver}{character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
