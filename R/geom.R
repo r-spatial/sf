@@ -1015,7 +1015,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
-#' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing: if \code{xo} is not missing, its crs is inherited.
+#' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
 #' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
 #' rectangular polygons, corner points of these polygons, or center points of these polygons.
@@ -1037,8 +1037,7 @@ st_make_grid = function(x,
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)
 		n = rep(n, length.out = 2)
-		structure(c(offset, offset + n * cellsize),
-			names = c("xmin", "ymin", "xmax", "ymax"))
+		bb_wrap(c(offset, offset + n * cellsize))
 	} else
 		st_bbox(x)
 

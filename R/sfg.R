@@ -1,6 +1,5 @@
 # dim: what does the third dimension, if present, refer to? (XYZ or XYM)
 getClassDim = function(x, d, dim = "XYZ", type) {
-	stopifnot(d > 1 && d < 5)
 	type = toupper(type)
 	if (d == 2)
 		c("XY", type, "sfg")
@@ -26,14 +25,17 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	if (length(x) > 0) { # list()
 		nc = unique(vapply(x, ncol, 0L))
 		if (length(nc) != 1)
-			stop("matrices having unequal number of columns")
+			stop("matrices have unequal numbers of columns")
 		lapply(x, is_numeric_matrix)
-		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
+		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(vapply(x, NotClosed, TRUE)))
 			stop("polygons not (all) closed")
-		structure(x, class = getClassDim(x, nc, dim, type))
-	} else
-		structure(x, class = getClassDim(x, nchar(dim), dim, type))
+		class(x) = getClassDim(x, nc, dim, type)
+		return(x)
+	} else {
+		class(x) = getClassDim(x, nchar(dim), dim, type)
+		return(x)
+	}
 }
 
 # creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
@@ -42,14 +44,17 @@ MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	if (length(x)) {
 		nc = unique(unlist(lapply(x, function(y) vapply(y, ncol, 0L))))
 		if (length(nc) != 1)
-			stop("matrices having unequal number of columns")
+			stop("matrices have unequal numbers of columns")
 		lapply(x, function(y) lapply(y, is_numeric_matrix))
-		NotClosed = function(y) any(head(y, 1) != tail(y, 1))
+		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(unlist(lapply(x, function(y) vapply(y, NotClosed, TRUE)))))
 			stop("polygons not (all) closed")
-		structure(x, class = getClassDim(x, nc, dim, type))
-	} else
-		structure(x, class = getClassDim(x, nchar(dim), dim, type))
+		class(x) = getClassDim(x, nc, dim, type)
+		return(x)
+	} else {
+		class(x) = getClassDim(x, nchar(dim), dim, type)
+		return(x)
+	}
 }
 
 #return "XY", "XYZ", "XYM", or "XYZM"

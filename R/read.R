@@ -227,15 +227,15 @@ abbreviate_shapefile_names = function(x) {
 #' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-#' folder or contain a database name) or or a Database Connection (currently
+#' folder or contain a database name) or a Database Connection (currently
 #' official support is for RPostgreSQL connections)
 #' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the
 #' \link{basename} of \code{dsn} is taken.
-#' @param driver character; driver name to be used, if missing, a driver name is guessed from \code{dsn};
+#' @param driver character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 #' \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 #' are found at \url{http://www.gdal.org/ogr_formats.html}.
 #' @param ... other arguments passed to \link{dbWriteTable} when \code{dsn} is a
-#' Database Connction
+#' Database Connection
 #' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
 #' @param layer_options character; driver dependent layer creation options; multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
@@ -317,9 +317,23 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		else
 			class(geom[[1]])[1]
 
-	CPL_write_ogr(obj, dsn, layer, driver,
+	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update, delete_dsn, delete_layer)
+	if (ret == 1) { # try through temp file:
+		tmp = tempfile() # nocov start
+		if (!quiet)
+			message(paste("writing first to temporary file", tmp))
+		if (CPL_write_ogr(obj, tmp, layer, driver,
+				as.character(dataset_options), as.character(layer_options),
+				geom, dim, quiet, update, delete_dsn, delete_layer) == 1)
+			stop(paste("failed writing to temporary file", tmp))
+		if (!file.copy(tmp, dsn, overwrite = update || delete_dsn || delete_layer))
+			stop(paste("copying", tmp, "to", dsn, "failed"))
+		if (!file.remove(tmp))
+			warning(paste("removing", tmp, "failed"))
+	} # nocov end
+	invisible(NULL)
 }
 
 #' @name st_write

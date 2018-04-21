@@ -476,13 +476,16 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 
 	if (is.raw(x[[1]]))
 		st_as_sfc(structure(x, class = "WKB"), ...)
+	else if (inherits(x[[1]], "sfg"))
+		st_sfc(x, crs = crs)
 	else if (is.character(x[[1]])) { # hex wkb or wkt:
 		ch12 = substr(x[[1]], 1, 2)
 		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
 			st_as_sfc(structure(x, class = "WKB"), ...)
 		else
 			st_as_sfc(unlist(x), ...) # wkt
-	}
+	} else
+		stop(paste("st_as_sfc.list: don't know what to do with list with elements of class", class(x[[1]])))
 }
 
 #' @name st_as_sfc

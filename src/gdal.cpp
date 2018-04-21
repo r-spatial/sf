@@ -13,6 +13,7 @@
 
 #include <Rcpp.h>
 
+#include "gdal.h"
 #include "wkb.h"
 #include "gdal_sf_pkg.h"
 
@@ -43,6 +44,21 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
             break; // #nocov
     }
     return;
+}
+
+static void __err_silent(CPLErr eErrClass, int err_no, const char *msg)
+{
+    return;
+}
+
+void set_error_handler(void) 
+{
+    CPLSetErrorHandler((CPLErrorHandler)__err_handler);
+}
+
+void unset_error_handler(void) 
+{
+    CPLSetErrorHandler((CPLErrorHandler)__err_silent);
 }
 
 // [[Rcpp::export]]

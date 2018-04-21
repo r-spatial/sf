@@ -273,3 +273,5 @@ st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)
 x = nc
 x$geom = NULL
 class(x)
+
+st_as_sfc(list(st_point(0:1)), crs = 4326)

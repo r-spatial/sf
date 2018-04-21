@@ -23,10 +23,11 @@ st_jitter = function(x, amount, factor = 0.002) {
 	else
 		amount
     f = function(z, amount_x, amount_y) {
-		c(runif(1L, -amount_x, amount_x),
-		  runif(1L, -amount_y, amount_y))
+		st_point(c(runif(1L, -amount_x, amount_x),
+		  runif(1L, -amount_y, amount_y)))
 	}
-	geom = st_set_crs(x + lapply(x, f, amount_x = ax, amount_y = ay), st_crs(x))
+	geom = st_geometry(x)
+	geom = st_set_crs(geom + lapply(geom, f, amount_x = ax, amount_y = ay), st_crs(x))
 	if (inherits(x, "sf"))
 		st_set_geometry(x, geom)
 	else
