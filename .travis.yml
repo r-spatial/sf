@@ -72,4 +72,6 @@ deploy:
    script: R -q -e 'tic::deploy()'
    on:
      branch: master
-     condition: $TRAVIS_PULL_REQUEST = false
+     condition:
+       - $TRAVIS_PULL_REQUEST = false
+       - $TRAVIS_EVENT_TYPE != cron
