@@ -106,6 +106,14 @@ ls * 2
 ls - 2
 (ls + 2) %% 3
 ls / ls
+p_ = st_point(0:1)
+ll = st_sfc(ls[[1]], p_)
+ll & st_sfc(p_)
+ll | st_sfc(p_)
+ll %/% st_sfc(p_)
+ll == st_sfc(p_)
+ll != st_sfc(p_)
+
 
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
@@ -197,6 +205,8 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
 st_sample(nc[1:2,], size = c(10,20))
+# try with LINES, LongLat, should generate a warning:
+nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 
 #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
 class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
@@ -259,3 +269,9 @@ st_as_sfc(geo, GeoJSON = TRUE)
 st_as_sfc(geo, GeoJSON = TRUE, crs = 4326)
 
 st_as_sfc(st_as_binary(st_sfc(st_point(0:1)))[[1]], crs = 4326)
+
+x = nc
+x$geom = NULL
+class(x)
+
+st_as_sfc(list(st_point(0:1)), crs = 4326)

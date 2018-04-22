@@ -40,6 +40,7 @@ setOldClass("sfg")
 		# nocov end
 	}
 	CPL_gdal_init()
+	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
 }
 
 .onUnload = function(libname, pkgname) {

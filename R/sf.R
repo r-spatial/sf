@@ -54,7 +54,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				ymin = min(x[[coords[2]]], na.rm = TRUE),
 				xmax = max(x[[coords[1]]], na.rm = TRUE),
 				ymax = max(x[[coords[2]]], na.rm = TRUE)), class = "bbox"),
-			class =  c("sfc_POINT", "sfc" ))
+			class =  c("sfc_POINT", "sfc" ), names = NULL)
 
 		if (is.character(coords))
 			coords = match(coords, names(x))
@@ -335,7 +335,16 @@ st_sf = function(..., agr = NA_agr_, row.names,
 }
 
 #' @export
-"$<-.sf" = function(x, i, value) { x[[i]] = value; x }
+"$<-.sf" = function(x, i, value) { 
+	if (is.null(value) && inherits(x[[i]], "sfc") && 
+			((is.character(i) && i == attr(x, "sf_column")) 
+				|| (is.integer(i) && names(x)[i] == attr(x, "sf_column"))))
+		st_set_geometry(x, NULL)
+	else {
+		x[[i]] = value
+		x 
+	}
+}
 
 #' @export
 "[[<-.sf" = function(x, i, value) {

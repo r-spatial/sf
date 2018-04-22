@@ -355,16 +355,16 @@ Available layers<span class="op">:</span>
 <div id="reading-and-writing-directly-to-and-from-spatial-databases" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-and-writing-directly-to-and-from-spatial-databases" class="anchor"></a>Reading and writing directly to and from spatial databases</h2>
-<p>Package <code>sf</code> has experimental support for directly reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
+<p>Package <code>sf</code> supports reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RPostgreSQL) 
 conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) 
-meuse =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="st">"meuse"</span>)
-meuse_<span class="dv">1</span>_<span class="dv">3</span> =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read_db</a></span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) 
+meuse =<span class="st"> </span><span class="kw">st_read</span>(conn, <span class="st">"meuse"</span>)
+meuse_<span class="dv">1</span>_<span class="dv">3</span> =<span class="st"> </span><span class="kw">st_read</span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) 
 <span class="kw">dbDisconnect</span>(conn) </code></pre></div>
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)
-<span class="kw"><a href="../reference/st_write.html">st_write_db</a></span>(conn, meuse, <span class="dt">drop =</span> <span class="ot">TRUE</span>)
+<span class="kw">st_write</span>(conn, meuse, <span class="dt">drop =</span> <span class="ot">TRUE</span>)
 <span class="kw">dbDisconnect</span>(conn)</code></pre></div>
 <p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>drop</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
 </div>

@@ -19,7 +19,16 @@ head(st_point(0:1), 2)
 # Ops.sfg:
 ls = st_linestring(rbind(c(0,0),c(0,1)))
 pt = st_point(1:0)
+ls | pt
+ls / pt
+ls & pt
+ls %/% pt
+# arith:
 ls + pt
 ls - pt
 ls * pt
 ls / pt
+# unary:
++pt
+-pt
+try(!pt)

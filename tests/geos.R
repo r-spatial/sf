@@ -141,6 +141,8 @@ st_node(st_sf(a = 1, st_sfc(l)))
 dim(lst)
 # as.matrix.sgbp:
 as.matrix(lst)[1:5, 1:5]
+# negate:
+!lst
 
 # snap:
 nc1 = st_transform(nc, 32119)

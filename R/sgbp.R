@@ -59,3 +59,14 @@ as.matrix.sgbp = function(x, ...) {
 dim.sgbp = function(x) {
 	c(length(x), attr(x, "ncol"))
 }
+
+#' @export
+Ops.sgbp = function(e1, e2) {
+	if (.Generic != "!")
+		stop("only ! operator is supported for sgbp objects")
+	nc = 1:attr(e1, "ncol")
+	sgbp(lapply(e1, function(x) setdiff(nc, x)),
+		predicate = paste0("!", attr(e1, "predicate")),
+		region.id = attr(e1, "region.id"),
+		ncol = attr(e1, "ncol"))
+}

@@ -11,7 +11,6 @@
 #' library(dplyr)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc %>% filter(AREA > .1) %>% plot()
-#' @export
 filter.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod())
 	sf_column = attr(.data, "sf_column")
@@ -24,7 +23,6 @@ filter.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @export
 #' @examples
 #' # plot 10 smallest counties in grey:
 #' st_geometry(nc) %>% plot()
@@ -36,7 +34,6 @@ arrange.sf <- function(.data, ..., .dots) {
 
 #' @name dplyr
 #' @param add see corresponding function in dplyr
-#' @export
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc %>% group_by(area_cl) %>% class()
@@ -46,14 +43,12 @@ group_by.sf <- function(.data, ..., add = FALSE) {
 }
 
 #' @name dplyr
-#' @export
 ungroup.sf <- function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	st_as_sf(NextMethod(), sf_column_name = attr(x, "sf_column"))
 }
 
 #' @name dplyr
-#' @export
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate.sf <- function(.data, ..., .dots) {
@@ -63,7 +58,6 @@ mutate.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @export
 #' @examples
 #' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #' nc %>% transmute(AREA = AREA/10) %>% class()
@@ -76,7 +70,6 @@ transmute.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @export
 #' @examples
 #' nc %>% select(SID74, SID79) %>% names()
 #' nc %>% select(SID74, SID79, geometry) %>% names()
@@ -100,7 +93,6 @@ select.sf <- function(.data, ...) {
 
 
 #' @name dplyr
-#' @export
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
 rename.sf <- function(.data, ...) {
@@ -114,7 +106,6 @@ rename.sf <- function(.data, ...) {
 }
 
 #' @name dplyr
-#' @export
 #' @examples
 #' nc %>% slice(1:2)
 slice.sf <- function(.data, ..., .dots) {
@@ -122,9 +113,9 @@ slice.sf <- function(.data, ..., .dots) {
 }
 
 #' @name dplyr
-#' @export
 #' @aliases summarise
-#' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points.
+#' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points; see Details.
+#' @details In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc.g <- nc %>% group_by(area_cl)
@@ -162,7 +153,6 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 
 #' @name dplyr
 #' @param .keep_all see corresponding function in dplyr
-#' @export
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 #' @details \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
@@ -179,7 +169,6 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 ## tidyr methods:
 
 #' @name dplyr
-#' @export
 #' @param data see original function docs
 #' @param key see original function docs
 #' @param value see original function docs
@@ -211,7 +200,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 #' @param convert see original function docs
 #' @param drop see original function docs
 #' @param sep see original function docs
-#' @export
 #' @examples
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
@@ -237,20 +225,17 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 #' @param replace see original function docs
 #' @param weight see original function docs
 #' @param .env see original function docs
-#' @export
 sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
 #' @name dplyr
-#' @export
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
 #' @name dplyr
 #' @param .key see \link[tidyr]{nest}
-#' @export
 #' @examples
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 #' x <- storms.sf %>% group_by(name, year) %>% nest
@@ -279,7 +264,6 @@ nest.sf = function (data, ..., .key = "data") {
 #' @param into see \link[tidyr]{separate}
 #' @param remove see \link[tidyr]{separate}
 #' @param extra see \link[tidyr]{separate}
-#' @export
 separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 	convert = FALSE, extra = "warn", fill = "warn", ...) {
 
@@ -297,7 +281,6 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 }
 
 #' @name dplyr
-#' @export
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
 	if (!requireNamespace("rlang", quietly = TRUE))
@@ -309,7 +292,6 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 
 #' @name dplyr
 #' @param .preserve see \link[tidyr]{unnest}
-#' @export
 unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov start
 	if (!requireNamespace("tidyr", quietly = TRUE) ||
@@ -352,7 +334,6 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @param ... ignored
 #' @name tibble
 #' @details see \link[pillar]{type_sum}
-#' @export
 type_sum.sfc <- function(x, ...) {
 	cls = substring(class(x)[1], 5)
 	if (is.na(st_is_longlat(x)))
@@ -365,13 +346,11 @@ type_sum.sfc <- function(x, ...) {
 #'
 #' Summarize simple feature item for tibble
 #' @name tibble
-#' @export
 obj_sum.sfc <- function(x) {
 	vapply(x, function(sfg) format(sfg, width = 15L), "")
 }
 
 #' @name tibble
-#' @export
 pillar_shaft.sfc <- function(x, ...) {
 	digits = options("pillar.sigfig")$pillar.sigfig
 	if (is.null(digits))
@@ -381,3 +360,56 @@ pillar_shaft.sfc <- function(x, ...) {
 		out <- sub("[A-Z]+ ", "", out)
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
+
+register_all_s3_methods = function() {
+	register_s3_method("dplyr", "filter", "sf")
+	register_s3_method("dplyr", "arrange", "sf")
+	register_s3_method("dplyr", "group_by", "sf")
+	register_s3_method("dplyr", "ungroup", "sf")
+	register_s3_method("dplyr", "mutate", "sf")
+	register_s3_method("dplyr", "transmute", "sf")
+	register_s3_method("dplyr", "select", "sf")
+	register_s3_method("dplyr", "rename", "sf")
+	register_s3_method("dplyr", "slice", "sf")
+	register_s3_method("dplyr", "summarise", "sf")
+	register_s3_method("dplyr", "distinct", "sf")
+	register_s3_method("dplyr", "sample_n", "sf")
+	register_s3_method("dplyr", "sample_frac", "sf")
+	register_s3_method("tidyr", "gather", "sf")
+	register_s3_method("tidyr", "spread", "sf")
+	register_s3_method("tidyr", "nest", "sf")
+	register_s3_method("tidyr", "separate", "sf")
+	register_s3_method("tidyr", "unite", "sf")
+	register_s3_method("tidyr", "unnest", "sf")
+	register_s3_method("pillar", "obj_sum", "sfc")
+	register_s3_method("pillar", "type_sum", "sfc")
+	register_s3_method("pillar", "pillar_shaft", "sfc")
+}
+
+# from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
+# Thu Apr 19 10:53:24 CEST 2018
+#nocov start
+register_s3_method <- function(pkg, generic, class, fun = NULL) {
+  stopifnot(is.character(pkg), length(pkg) == 1)
+  stopifnot(is.character(generic), length(generic) == 1)
+  stopifnot(is.character(class), length(class) == 1)
+
+  if (is.null(fun)) {
+    fun <- get(paste0(generic, ".", class), envir = parent.frame())
+  } else {
+    stopifnot(is.function(fun))
+  }
+
+  if (pkg %in% loadedNamespaces()) {
+    registerS3method(generic, class, fun, envir = asNamespace(pkg))
+  }
+
+  # Always register hook in case package is later unloaded & reloaded
+  setHook(
+    packageEvent(pkg, "onLoad"),
+    function(...) {
+      registerS3method(generic, class, fun, envir = asNamespace(pkg))
+    }
+  )
+}
+# nocov end

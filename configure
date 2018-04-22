@@ -3982,13 +3982,13 @@ fi
 GEOS_VERSION=`${GEOS_CONFIG} --version`
 { $as_echo "$as_me:${as_lineno-$LINENO}: GEOS: ${GEOS_VERSION}" >&5
 $as_echo "$as_me: GEOS: ${GEOS_VERSION}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GEOS version >= 3.3.0" >&5
-$as_echo_n "checking GEOS version >= 3.3.0... " >&6; } # GDAL 2.0.1 requires GEOS 3.1.0
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GEOS version >= 3.4.0" >&5
+$as_echo_n "checking GEOS version >= 3.4.0... " >&6; } # GDAL 2.0.1 requires GEOS 3.1.0
 GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d "."`
-if test ${GEOS_VER_DOT} -lt 330 ; then
+if test ${GEOS_VER_DOT} -lt 340 ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "upgrade GEOS to 3.3.0 or later" "$LINENO" 5
+  as_fn_error $? "upgrade GEOS to 3.4.0 or later" "$LINENO" 5
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }

@@ -34,14 +34,14 @@ void cb(void *item, void *userdata) { // callback function for tree selection
 static void __errorHandler(const char *fmt, ...) { // #nocov start
 
 	char buf[BUFSIZ], *p;
-	va_list(ap);
+	va_list ap;
 	va_start(ap, fmt);
 	vsprintf(buf, fmt, ap);
 	va_end(ap);
 	p = buf + strlen(buf) - 1;
 	if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
-	Rcpp::Function error(".stop_geos");
+	Rcpp::Function error(".stop_geos", Rcpp::Environment::namespace_env("sf"));
 	error(buf);
 
 	return; // #nocov end
@@ -50,7 +50,7 @@ static void __errorHandler(const char *fmt, ...) { // #nocov start
 static void __warningHandler(const char *fmt, ...) {
 
 	char buf[BUFSIZ], *p;
-	va_list(ap);
+	va_list ap;
 	va_start(ap, fmt);
 	vsprintf(buf, fmt, ap);
 	va_end(ap);

@@ -109,7 +109,14 @@ Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) :
 Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
   unknown projection id
 > 
+> if (st_proj_info("have_datum_files")) {
++   "datum files installed"
++ } else {
++   "datum files not installed"
++ }
+[1] "datum files installed"
+> 
 > 
 > proc.time()
    user  system elapsed 
-  0.517   0.254   0.450 
+  0.539   0.259   0.479 

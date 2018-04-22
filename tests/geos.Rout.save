@@ -338,6 +338,20 @@ first 10 elements:
 [3,]  TRUE FALSE FALSE  TRUE  TRUE
 [4,]  TRUE  TRUE  TRUE FALSE  TRUE
 [5,]  TRUE  TRUE  TRUE  TRUE FALSE
+> # negate:
+> !lst
+Sparse geometry binary predicate list of length 100, where the predicate was `!disjoint'
+first 10 elements:
+ 1: 1, 2, 18, 19
+ 2: 1, 2, 3, 18
+ 3: 2, 3, 10, 18, 23, 25
+ 4: 4, 7, 56
+ 5: 5, 6, 9, 16, 28
+ 6: 5, 6, 8, 28
+ 7: 4, 7, 8, 17
+ 8: 6, 7, 8, 17, 20, 21
+ 9: 5, 9, 15, 16, 24, 31
+ 10: 3, 10, 12, 25, 26
 > 
 > # snap:
 > nc1 = st_transform(nc, 32119)
@@ -390,9 +404,6 @@ first 10 elements:
 > sf = st_sf(s)
 > i = st_intersection(sf) # all intersections
 > plot(i["n.overlaps"])
-Warning message:
-In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
-  n same as number of different finite values\neach different finite value is a separate class
 > summary(i$n.overlaps - lengths(i$origins))
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
       0       0       0       0       0       0 
@@ -400,4 +411,4 @@ In classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),  :
 > 
 > proc.time()
    user  system elapsed 
-  4.096   0.260   4.048 
+  4.078   0.227   4.081 

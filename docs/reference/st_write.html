@@ -115,7 +115,8 @@
 
     
     <p>Write simple features object to file or database</p>
-<p>Write simple feature table to a spatial database</p>
+<p>Write <code>sf</code> object to Database</p>
+<p>Write <code>sf</code> object to Database</p>
     
 
     <pre class="usage"><span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
@@ -124,17 +125,23 @@
 <span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='fu'>file_path_sans_ext</span>(<span class='fu'>basename</span>(<span class='no'>dsn</span>)),
-  <span class='no'>...</span>, <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'>st_write</span>(<span class='no'>obj</span>, <span class='no'>dsn</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>,
+  <span class='kw'>driver</span> <span class='kw'>=</span> <span class='fu'>guess_driver_can_write</span>(<span class='no'>dsn</span>), <span class='kw'>dataset_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>update</span> <span class='kw'>=</span> <span class='no'>driver</span> <span class='kw'>%in%</span> <span class='no'>db_drivers</span>, <span class='kw'>delete_dsn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>delete_layer</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>write_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>delete_layer</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_write_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>obj</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='fu'>deparse</span>(<span class='fu'>substitute</span>(<span class='no'>obj</span>)),
-  <span class='kw'>geom_name</span> <span class='kw'>=</span> <span class='st'>"wkb_geometry"</span>, <span class='no'>...</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>debug</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='co'># S4 method for PostgreSQLConnection,character,sf</span>
+<span class='fu'>dbWriteTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>value</span>,
+  <span class='no'>...</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>field.types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S4 method for DBIObject,character,sf</span>
+<span class='fu'>dbWriteTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>value</span>, <span class='no'>...</span>,
+  <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>field.types</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>factorsAsCharacter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -146,7 +153,8 @@
     <tr>
       <th>dsn</th>
       <td><p>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-folder or contain a database name)</p></td>
+folder or contain a database name) or or a Database Connection (currently
+official support is for RPostgreSQL connections)</p></td>
     </tr>
     <tr>
       <th>layer</th>
@@ -155,7 +163,8 @@ basename of <code>dsn</code> is taken.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>ignored for <code>st_write</code>, for <code>st_write_db</code> arguments passed on to <code>dbWriteTable</code></p></td>
+      <td><p>other arguments passed to dbWriteTable when <code>dsn</code> is a
+Database Connction</p></td>
     </tr>
     <tr>
       <th>driver</th>
@@ -197,31 +206,38 @@ to update (append to) the existing data source, e.g. adding a table to an existi
     </tr>
     <tr>
       <th>conn</th>
-      <td><p>open database connection</p></td>
+      <td><p>DBIObject</p></td>
     </tr>
     <tr>
-      <th>table</th>
-      <td><p>character; name for the table in the database, possibly of length 2, <code>c("schema", "name")</code>; default schema is <code>public</code></p></td>
+      <th>name</th>
+      <td><p>character vector of names (table names, fields, keywords).</p></td>
     </tr>
     <tr>
-      <th>geom_name</th>
-      <td><p>name of the geometry column in the database</p></td>
+      <th>value</th>
+      <td><p>a data.frame.</p></td>
     </tr>
     <tr>
-      <th>drop</th>
-      <td><p>logical; should <code>table</code> be dropped first?</p></td>
+      <th>row.names</th>
+      <td><p>Add a <code>row.name</code> column, or a vector of length <code>nrow(obj)</code>
+containing row.names; default <code>FALSE</code>.</p></td>
     </tr>
     <tr>
-      <th>debug</th>
-      <td><p>logical; print SQL statements to screen before executing them.</p></td>
-    </tr>
-    <tr>
-      <th>binary</th>
-      <td><p>logical; use well-known-binary for transfer?</p></td>
+      <th>overwrite</th>
+      <td><p>Will try to <code>drop</code> table before writing; default <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>append</th>
-      <td><p>logical; append to table? (NOTE: experimental, might not work)</p></td>
+      <td><p>Append rows to existing table; default <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>field.types</th>
+      <td><p>default <code>NULL</code>. Allows to override type conversion from R
+to PostgreSQL. See <code>dbDataType()</code> for details.</p></td>
+    </tr>
+    <tr>
+      <th>binary</th>
+      <td><p>Send geometries serialized as Well-Known Binary (WKB);
+if <code>FALSE</code>, uses Well-Known Text (WKT). Defaults to <code>TRUE</code> (WKB).</p></td>
     </tr>
     </table>
     
@@ -230,7 +246,6 @@ to update (append to) the existing data source, e.g. adding a table to an existi
     <p>columns (variables) of a class not supported are dropped with a warning. When deleting layers or
 data sources is not successful, no error is emitted. <code>delete_dsn</code> and <code>delete_layers</code> should be
 handled with care; the former may erase complete directories or databases.</p>
-<p>st_write_db was written with help of Josh London, see <a href='https://github.com/r-spatial/sf/issues/285'>https://github.com/r-spatial/sf/issues/285</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -264,14 +279,6 @@ handled with care; the former may erase complete directories or databases.</p>
      <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"OVERWRITE=yes"</span>, <span class='st'>"LAUNDER=true"</span>)))
  <span class='fu'>demo</span>(<span class='no'>nc</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
  <span class='fu'>try</span>(<span class='fu'>st_write</span>(<span class='no'>nc</span>, <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"sids"</span>, <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>))
-<span class='co'># }</span><span class='co'># NOT RUN {</span>
-  <span class='fu'>library</span>(<span class='no'>sp</span>)
-  <span class='fu'>data</span>(<span class='no'>meuse</span>)
-  <span class='no'>sf</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>meuse</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>28992</span>)
-  <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
-  <span class='fu'>try</span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
-  <span class='kw'>if</span> (<span class='fu'>exists</span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'>inherits</span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>))
-    <span class='fu'>st_write_db</span>(<span class='no'>conn</span>, <span class='no'>sf</span>, <span class='st'>"meuse_tbl"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

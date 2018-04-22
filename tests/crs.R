@@ -24,3 +24,9 @@ st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
 try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 
+if (st_proj_info("have_datum_files")) {
+  "datum files installed"
+} else {
+  "datum files not installed"
+}
+

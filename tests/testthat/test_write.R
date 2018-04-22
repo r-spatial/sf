@@ -55,8 +55,8 @@ test_that("delete and update work (#304) ", {
   expect_output(st_write(x, gpkg, layer = "foo", delete_dsn = TRUE), "Deleting source")
   expect_silent(st_layers(gpkg))
   expect_warning(
-  	expect_error(write_sf(x, shp, "x"), "Feature creation failed") ,
-  	"non-point")# on osx el capitan: "c++ exception (unknown reason)"
+  	expect_error(write_sf(x, shp, "x"), "Feature creation failed"),
+    "non-point")                  # on osx el capitan: "c++ exception (unknown reason)"
   expect_silent(x <- st_read(gpkg, quiet = TRUE))
   x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)),
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))

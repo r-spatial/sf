@@ -114,8 +114,10 @@
     </div>
 
     
-    <p>Read simple features from file or database, or retrieve layer names and their geometry type(s)</p>
-<p>Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary</p>
+    <p>Read simple features from file or database, or retrieve layer names and their
+geometry type(s)</p>
+<p>Read PostGIS table directly through DBI and RPostgreSQL interface, converting
+Well-Know Binary geometries to sfc</p>
     
 
     <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
@@ -128,22 +130,31 @@
 
 <span class='fu'>read_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>st_read_db</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>EWKB</span>, <span class='no'>...</span>)</pre>
+<span class='co'># S3 method for DBIObject</span>
+<span class='fu'>st_read</span>(<span class='kw'>dsn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>geom_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>dsn</th>
-      <td><p>data source name (interpretation varies by driver - for some drivers, <code>dsn</code> is a file name, but may also be a folder,
-or contain the name and access credentials of a database); in case of GeoJSON, <code>dsn</code> may be the character string holding the geojson data</p></td>
+      <td><p>data source name (interpretation varies by driver - for some
+drivers, <code>dsn</code> is a file name, but may also be a folder, or contain
+the name and access credentials of a database); in case of GeoJSON,
+<code>dsn</code> may be the character string holding the geojson data. It can
+also be an open database connection.</p></td>
     </tr>
     <tr>
       <th>layer</th>
-      <td><p>layer name (varies by driver, may be a file name without extension); in case <code>layer</code> is missing,
-<code>st_read</code> will read the first layer of <code>dsn</code>, give a warning and (unless <code>quiet = TRUE</code>) print a
-message when there are multiple layers, or give an error if there are no layers in <code>dsn</code>.</p></td>
+      <td><p>layer name (varies by driver, may be a file name without
+extension); in case <code>layer</code> is missing, <code>st_read</code> will read the
+first layer of <code>dsn</code>, give a warning and (unless <code>quiet = TRUE</code>)
+print a message when there are multiple layers, or give an error if there
+are no layers in <code>dsn</code>. If <code>dsn</code> is a database connection, then
+<code>layer</code> can be a table name or a database identifier (see
+<code><a href='http://www.rdocumentation.org/packages/DBI/topics/Id'>Id</a></code>). It is also possible to omit <code>layer</code> and rather
+use the <code>query</code> argument.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -151,49 +162,50 @@ message when there are multiple layers, or give an error if there are no layers 
     </tr>
     <tr>
       <th>options</th>
-      <td><p>character; driver dependent dataset open options, multiple options supported.</p></td>
+      <td><p>character; driver dependent dataset open options, multiple
+options supported.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
-      <td><p>logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers</p></td>
+      <td><p>logical; suppress info on name, driver, size and spatial
+reference, or signaling no or multiple layers</p></td>
     </tr>
     <tr>
       <th>geometry_column</th>
-      <td><p>integer or character; in case of multiple geometry fields, which one to take?</p></td>
+      <td><p>integer or character; in case of multiple geometry
+fields, which one to take?</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>integer; ISO number of desired simple feature type; see details. If left zero, and <code>promote_to_multi</code>
-is <code>TRUE</code>, in case of mixed feature geometry
-types, conversion to the highest numeric type value found will be attempted. A vector with different values for each geometry column
+      <td><p>integer; ISO number of desired simple feature type; see details.
+If left zero, and <code>promote_to_multi</code> is <code>TRUE</code>, in case of mixed
+feature geometry types, conversion to the highest numeric type value found
+will be attempted. A vector with different values for each geometry column
 can be given.</p></td>
     </tr>
     <tr>
       <th>promote_to_multi</th>
-      <td><p>logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
-Polygon and MultiPolygon, convert all to the Multi variety; defaults to <code>TRUE</code></p></td>
+      <td><p>logical; in case of a mix of Point and MultiPoint, or
+of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
+all to the Multi variety; defaults to <code>TRUE</code></p></td>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
-      <td><p>logical; logical: should character vectors be converted to factors?  The `factory-fresh' default
-is <code>TRUE</code>, but this can be changed by setting <code>options(stringsAsFactors = FALSE)</code>.</p></td>
+      <td><p>logical; logical: should character vectors be
+converted to factors?  The `factory-fresh' default is <code>TRUE</code>, but this
+can be changed by setting <code>options(stringsAsFactors = FALSE)</code>.</p></td>
     </tr>
     <tr>
       <th>int64_as_string</th>
-      <td><p>logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
-and a warning is given when precision is lost (i.e., values are larger than 2^53).</p></td>
+      <td><p>logical; if TRUE, Int64 attributes are returned as
+string; if FALSE, they are returned as double and a warning is given when
+precision is lost (i.e., values are larger than 2^53).</p></td>
     </tr>
     <tr>
       <th>check_ring_dir</th>
-      <td><p>logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)</p></td>
-    </tr>
-    <tr>
-      <th>conn</th>
-      <td><p>open database connection</p></td>
-    </tr>
-    <tr>
-      <th>table</th>
-      <td><p>table name</p></td>
+      <td><p>logical; if TRUE, polygon ring directions are checked
+and if necessary corrected (when seen from above: exterior ring counter
+clockwise, holes clockwise)</p></td>
     </tr>
     <tr>
       <th>query</th>
@@ -205,28 +217,36 @@ and a warning is given when precision is lost (i.e., values are larger than 2^53
     </tr>
     <tr>
       <th>EWKB</th>
-      <td><p>logical; is the WKB is of type EWKB? if missing, defaults to <code>TRUE</code> if <code>conn</code> is of class codePostgreSQLConnection or <code>PqConnection</code>, and to <code>FALSE</code> otherwise</p></td>
+      <td><p>logical; is the WKB is of type EWKB? if missing, defaults to <code>TRUE</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>object of class sf when a layer was successfully read; in case argument <code>layer</code> is missing and
-data source <code>dsn</code> does not contain a single layer, an object of class <code>sf_layers</code> is returned with the
-layer names, each with their geometry type(s). Note that the number of layers may also be zero.</p>
+    <p>object of class sf when a layer was successfully read; in case
+  argument <code>layer</code> is missing and data source <code>dsn</code> does not
+  contain a single layer, an object of class <code>sf_layers</code> is returned
+  with the layer names, each with their geometry type(s). Note that the
+  number of layers may also be zero.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>for <code>geometry_column</code>, see also <a href='https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a>; for <code>type</code>
-values see <a href='https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but note that not every target value
-may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. <code>promote_to_multi</code> is handled on a per-geometry column basis; <code>type</code> may be specified for each geometry column.</p>
-<p>In case of problems reading shapefiles from USB drives on OSX, please see <a href='https://github.com/r-spatial/sf/issues/252'>https://github.com/r-spatial/sf/issues/252</a>.
+    <p>for <code>geometry_column</code>, see also
+<a href='https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields'>https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields</a></p>
+<p>for values for <code>type</code> see
+<a href='https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary'>https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary</a>, but
+note that not every target value may lead to successful conversion. The
+typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the
+other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
+without warnings. <code>promote_to_multi</code> is handled on a per-geometry column
+basis; <code>type</code> may be specified for each geometry column.</p>
+<p>In case of problems reading shapefiles from USB drives on OSX, please see
+<a href='https://github.com/r-spatial/sf/issues/252'>https://github.com/r-spatial/sf/issues/252</a>.
     <code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.
 <code>read_sf</code> and <code>write_sf</code> are quiet by default: they do not print information
-about the data source.
-<code>write_sf</code> delete layers by default: it overwrites existing files.</p>
+about the data source. <code>read_sf</code> returns an sf-tibble rather than an sf-data.frame.
+<code>write_sf</code> delete layers by default: it overwrites existing files without asking or warning.</p>
 <p>if <code>table</code> is not given but <code>query</code> is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)</p>
 <p>in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table <code>geometry_columns</code>, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.</p>
     
@@ -300,8 +320,8 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='fu'>library</span>(<span class='no'>RPostgreSQL</span>)
 <span class='fu'>try</span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
 <span class='kw'>if</span> (<span class='fu'>exists</span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'>inherits</span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read_db</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
   <span class='fu'>print</span>(<span class='fu'>st_crs</span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
   <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
  }

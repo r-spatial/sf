@@ -114,7 +114,7 @@
     </div>
 
     
-    <p>Combine several feature geometries into one, with or without resolving internal boundaries</p>
+    <p>Combine several feature geometries into one, without unioning or resolving internal boundaries</p>
     
 
     <pre class="usage"><span class='fu'>st_combine</span>(<span class='no'>x</span>)
@@ -144,7 +144,7 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>st_combine</code> returns a single, combined geometry, with no resolved boundaries.</p>
+    <p><code>st_combine</code> returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.</p>
 <p>If <code>y</code> is missing, <code>st_union(x)</code> returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j].</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>

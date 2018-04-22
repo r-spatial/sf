@@ -1,19 +1,18 @@
 #' Read PostGIS table directly, using DBI and binary conversion
 #'
-#' Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
-#' @param conn open database connection
-#' @param table table name
+#' Read PostGIS table directly through DBI and RPostgreSQL interface, converting
+#' Well-Know Binary geometries to sfc
 #' @param query SQL query to select records; see details
 #' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
-#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise
+#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}
 #' @details if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
 #' @examples
 #' \dontrun{
 #' library(RPostgreSQL)
 #' try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
 #' if (exists("conn") && !inherits(conn, "try-error")) {
-#'   x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-#'   x = st_read_db(conn, table = "public.meuse")
+#'   x = st_read(conn, "meuse", query = "select * from meuse limit 3;")
+#'   x = st_read(conn, table = "public.meuse")
 #'   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
 #'   dbDisconnect(conn)
 #'  }
@@ -21,24 +20,24 @@
 #' @name st_read
 #' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
 #' @export
-st_read_db = function(conn = NULL, table = NULL, query = NULL,
-					  geom_column = NULL, EWKB, ...) {
-	if (is.null(conn))
+st_read.DBIObject = function(dsn = NULL, layer = NULL, query = NULL,
+					  geom_column = NULL, EWKB = TRUE, ...) {
+	if (is.null(dsn))
 		stop("no connection provided")
 
-	if (!is.null(table)) {
-		table <- schema_table(table)
-		if (!db_exists(conn, table))
-			stop("`", paste0(table, collapse = "."), "` does not exist.", call. = FALSE)
+	if (!is.null(layer)) {
+		layer <- schema_table(dsn, layer)
+		if (!db_exists(dsn, layer))
+			stop("`", paste0(layer, collapse = "."), "` does not exist.", call. = FALSE)
 		if (!is.null(query))
 			warning("Ignoring query argument, only using table")
-		query <- paste("SELECT * FROM", paste0(table, collapse = "."), ";")
+		query <- paste("SELECT * FROM", paste0(layer, collapse = "."), ";")
 	} else if(is.null(query)) {
 		stop("Provide either a table name or a query", call. = FALSE)
 	}
 
 	# suppress warning about unknown type "geometry":
-	suppressWarnings(tbl <- dbGetQuery(conn, query))
+	suppressWarnings(tbl <- dbGetQuery(dsn, query))
 	if (is.null(tbl))
 		stop("`", query, "` returned no results.", call. = FALSE) # nocov
 
@@ -46,126 +45,35 @@ st_read_db = function(conn = NULL, table = NULL, query = NULL,
 		row.names(tbl) = tbl[["row.names"]]
 		tbl = tbl[,setdiff(colnames(tbl), "row.names")]
 	}
-	gc = try(dbReadTable(conn, "geometry_columns"))
+	gc = try(dbReadTable(dsn, "geometry_columns"))
 
 	if (is.null(geom_column)) { # try find the geometry column:
-		geom_column = if (class(gc) == "try-error" || is.null(table))
+		geom_column = if (class(gc) == "try-error" || is.null(layer))
 			tail(which(vapply(tbl, is.character, TRUE)), 1) # guess it's the last character column
 		else
-			gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "f_geometry_column"]
+			gc[gc$f_table_schema == layer[1] & gc$f_table_name == layer[2], "f_geometry_column"]
 	}
-	crs = if (class(gc) == "try-error" || is.null(table))
-			NA_crs_
-		else {
-			srid = gc[gc$f_table_schema == table[1] & gc$f_table_name == table[2], "srid"]
-			if (srid != 0) # srid 0 is used for missing in postgis
-				make_crs(get_postgis_crs(conn, srid))
-			else
-				NA_crs_
-		}
 
-	if (missing(EWKB))
-		EWKB = inherits(conn, "PostgreSQLConnection") || inherits(conn, "PqConnection")
+	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = dsn)
 
-	geom = st_as_sfc(structure(tbl[[geom_column]], class = "WKB"), EWKB = EWKB, crs = crs)
+	st_sf(tbl, ...)
+}
+
+#' @export
+st_read.PostgreSQLConnection <- function(...) {
+    st_read.DBIObject(...)
+}
+
+postgis_as_sfc <- function(x, EWKB, conn) {
+	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {
 		st_crs(geom) = make_crs(get_postgis_crs(conn, attr(geom, "srid")))
 		attr(geom, "srid") = NULL
 	}
-
-	tbl[[geom_column]] = geom
-	st_sf(tbl, ...)
+	return(geom)
 }
 
-#' Write simple feature table to a spatial database
-#'
-#' Write simple feature table to a spatial database
-#' @param conn open database connection
-#' @param table character; name for the table in the database, possibly of length 2, \code{c("schema", "name")}; default schema is \code{public}
-#' @param geom_name name of the geometry column in the database
-#' @param ... ignored for \code{st_write}, for \code{st_write_db} arguments passed on to \code{dbWriteTable}
-#' @param drop logical; should \code{table} be dropped first?
-#' @param append logical; append to table? (NOTE: experimental, might not work)
-#' @param binary logical; use well-known-binary for transfer?
-#' @param debug logical; print SQL statements to screen before executing them.
-#' @name st_write
-#' @export
-#' @examples
-#' \dontrun{
-#'   library(sp)
-#'   data(meuse)
-#'   sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#'   library(RPostgreSQL)
-#'   try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
-#'   if (exists("conn") && !inherits(conn, "try-error"))
-#'     st_write_db(conn, sf, "meuse_tbl", drop = FALSE)
-#' }
-#' @details st_write_db was written with help of Josh London, see \url{https://github.com/r-spatial/sf/issues/285}
-st_write_db = function(conn = NULL, obj, table = deparse(substitute(obj)), geom_name = "wkb_geometry",
-		..., drop = FALSE, debug = FALSE, binary = TRUE, append = FALSE) {
-
-	DEBUG = function(x) { if (debug) message(x); x }
-	if (is.null(conn))
-		stop("No connection provided")
-	table <- schema_table(table)
-
-	if (db_exists(conn, table)) {
-		if (drop)
-			DBI::dbGetQuery(conn, DEBUG(paste("drop table if exists", paste(table, collapse = "."), ";")))
-		else
-			stop("Table ", paste(table, collapse = "."), " exists already, use drop = TRUE",
-					 call. = FALSE)
-	}
-
-	geom = st_geometry(obj)
-	DIM = nchar(class(geom[[1]])[1]) # FIXME: is this correct? XY, XYZ, XYZM
-	crs = st_crs(geom)
-	SRID = crs$epsg
-	if (is.na(SRID)) {
-		SRID = if (is.na(crs$proj4string))
-				0L
-			else {
-				srid = get_possibly_new_srid(conn, crs$proj4string, debug);
-				attr(geom, "crs") = list(epsg = srid, proj4string = crs$proj4string, class = "crs")
-				srid
-			}
-	}
-
-	sfc_name = attr(obj, "sf_column")
-	df = obj
-	st_geometry(df) = NULL # is now data.frame
-	df[[sfc_name]] <- if (binary)
-			st_as_binary(geom, EWKB = TRUE, hex = TRUE)
- 		else
-			st_as_text(geom, EWKT = TRUE)
-
-	if (inherits(conn, "PostgreSQL")) # odbc:
-		dbWriteTable(conn, table[2], clean_columns(df, factorsAsCharacter = TRUE), ...)
-	else
-		dbWriteTable(conn, table, clean_columns(df, factorsAsCharacter = TRUE), ...)
-
-	TYPE = class(geom[[1]])[2]
-	if (! append) {
-		query = DEBUG(paste0("SELECT AddGeometryColumn('", table[1],"','", table[2], "','", geom_name,
-							 "','", SRID, "','", TYPE, "',", DIM, ");"))
-		dbExecute(conn, query)
-	}
-
-	# convert text column `sfc_name' into geometry column `geom_name':
-	query = if (binary)
-		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
-			" set ", geom_name," = ST_GeomFromEWKB(cast(", sfc_name, " as geometry));
-			ALTER TABLE ", paste(table, collapse = "."),
-			" DROP COLUMN IF EXISTS ", sfc_name))
-	  else
-		DEBUG(paste0("UPDATE ", paste(table, collapse = "."),
-			" set ", geom_name," = ST_GeomFromEWKT(", sfc_name, ");
-			ALTER TABLE ", paste(table, collapse = "."),
-			" DROP COLUMN IF EXISTS ", sfc_name))
-	invisible(dbExecute(conn, query))
-}
-
-schema_table <- function(table, public = "public") {
+schema_table <- function(conn, table, public = "public") {
 	if (!is.character(table))
 		stop("table must be a character vector", call. = FALSE)
 
@@ -178,6 +86,10 @@ schema_table <- function(table, public = "public") {
 		stop("table and schema cannot be NA", call. = FALSE)
 
 	return(table)
+}
+
+as_wkb <- function(x) {
+	structure(x, class = "WKB")
 }
 
 db_list_tables_schema <- function(con) {
@@ -213,32 +125,203 @@ db_exists <- function(conn, name, ...) {
 
 get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
 
-	srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
+    srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
 
-	if (class(srs_table) == "try-error")
-		return(0);
+    if (class(srs_table) == "try-error")
+        return(0);
 
-	DEBUG = function(x) { if (debug) message(x); x } # nocov
-	trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
-	srs_table$proj4text = sapply(srs_table$proj4text, trim)
-	eq = srs_table$proj4text == proj4string
-	if (any(eq))
-		srs_table[min(which(eq)) , "srid"]
-	else { # create a new srid in conn if proj4string is not found:
-		srid = max(srs_table$srid) + 1
-		wkt = st_as_text(st_crs(proj4string))
-		query = DEBUG(paste0("INSERT INTO spatial_ref_sys (srid,srtext,proj4text) VALUES (",
-			srid, ",'", wkt, "','",  proj4string, "');"))
-		dbExecute(conn, query)
-		srid
+    DEBUG = function(x) { if (debug) message(x); x } # nocov
+    trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
+    srs_table$proj4text = sapply(srs_table$proj4text, trim)
+    eq = srs_table$proj4text == proj4string
+    if (any(eq))
+        srid <- srs_table[min(which(eq)) , "srid"]
+    else { # create a new srid in conn if proj4string is not found:
+        srid <- get_new_postgis_srid(conn)
+        set_postgis_crs(conn, st_crs(srid, proj4string, valid = FALSE))
+    }
+    return(srid)
+}
+
+get_postgis_crs = function(conn, srid) {
+    if (is.na(srid)) return(st_crs(NA))
+    query = paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
+    proj4text <- dbGetQuery(conn, query)
+    if (nrow(proj4text) != 1)  return(st_crs(NA))
+    crs <-  st_crs(srid, gsub("^\\s+|\\s+$", "", proj4text[[1]]), valid = FALSE)
+    local_crs <- st_crs(srid)
+    if(crs != local_crs & !is.na(local_crs))
+        warning("Local crs different from database crs. You can inspect the ",
+                "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
+                "and compare it to `st_crs(", srid,")`.")
+    return(crs)
+}
+
+set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose = TRUE) {
+    if (is.na(crs[["epsg"]])) {
+        crs[["epsg"]] <- get_new_postgis_srid(conn)
+    } else {
+        get_postgis_crs(conn, crs[["epsg"]])
+    }
+    wkt <- st_as_text(crs)
+    q <- function(x) paste0("'", x, "'")
+    if (update) {
+        query <- paste("UPDATE spatial_ref_sys",
+                       "auth_name =", q(auth_name),
+                       ", srtext =", q(wkt),
+                      ", proj4text =", q(crs[["proj4string"]]),
+                      "WHERE srid =", q(crs[["epsg"]]), ";")
+    } else {
+        query <- paste("INSERT INTO spatial_ref_sys (srid,auth_name,auth_srid,srtext,proj4text)",
+                      "VALUES (",
+                      paste(crs[["epsg"]], q(auth_name), crs[["epsg"]], q(wkt), q(crs[["proj4string"]]), sep = ", "),
+                      ");")
+    }
+    tryCatch(dbExecute(conn, query),
+            error = function(err) {
+                if(grepl("permission denied", err))
+                    stop("Write permission denied on table `spatial_ref_sys`.",
+                        "\n * Local crs is not in the database;",
+                        "\n * Write permission on table `spatial_ref_sys` is denied.",
+                        "\nEither: ",
+                        "\n * Change the crs locally using `st_transform()`;",
+                        "\n * Grant write access on `spatial_sys_ref` for this connection.",
+                        "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", crs[["epsg"]], ")")
+                stop(err)
+            })
+    if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
+                         "` in database as srid:", crs[["epsg"]], ".")
+    return(crs)
+}
+
+delete_postgis_crs = function(conn, crs) {
+    if (is.na(crs[["epsg"]])) stop("missing crs")
+    wkt <- st_as_text(crs)
+    query <- paste0("DELETE FROM spatial_ref_sys ",
+                   "WHERE srid = '", crs[["epsg"]], "' ",
+                   "AND srtext = '", wkt, "' ",
+                   "AND proj4text = '", crs[["proj4string"]], "';")
+    dbExecute(conn, query)
+}
+
+get_new_postgis_srid <- function(conn) {
+	query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
+	dbGetQuery(conn, query)[[1]]
+}
+
+# for RPostgreSQL
+
+#' Write `sf` object to Database
+#' @inheritParams RPostgreSQL::postgresqlWriteTable
+#' @md
+#' @rdname st_write
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbWriteTable
+#' @export
+setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
+          function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              tryCatch({
+                  dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
+                               overwrite = overwrite, append = append,
+                               field.types = field.types)
+              }, warning=function(w) {
+                  stop(conditionMessage(w), call. = FALSE)
+              })
+          }
+)
+
+#' Write `sf` object to Database
+#' @inheritParams DBI::dbWriteTable
+#' @param conn DBIObject
+#' @param binary Send geometries serialized as Well-Known Binary (WKB);
+#' if `FALSE`, uses Well-Known Text (WKT). Defaults to `TRUE` (WKB).
+#' @param row.names Add a `row.name` column, or a vector of length `nrow(obj)`
+#' containing row.names; default `FALSE`.
+#' @param overwrite Will try to `drop` table before writing; default `FALSE`.
+#' @param append Append rows to existing table; default `FALSE`.
+#' @param field.types default `NULL`. Allows to override type conversion from R
+#' to PostgreSQL. See `dbDataType()` for details.
+#' @md
+#' @rdname st_write
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbWriteTable
+#' @export
+setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
+          function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              # DBI cannot set field types with append
+              if (append) field.types <- NULL
+              tryCatch({
+                  dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
+                               overwrite = overwrite, append = append,
+                               field.types = field.types)
+              }, warning=function(w) {
+                  stop(conditionMessage(w), call. = FALSE)
+              })
+          }
+)
+
+
+to_postgis <- function(conn, x, binary) {
+	geom_col <- vapply(x, inherits, TRUE, what = "sfc")
+	x[geom_col] <- lapply(x[geom_col], sync_crs, conn = conn)
+	if (binary) {
+		x[geom_col] <- lapply(x[geom_col], st_as_binary, "", EWKB = TRUE, hex = TRUE)
+	} else {
+		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
 	}
+	x <- as.data.frame(x)
 }
 
-get_postgis_crs = function(conn, srid, debug = FALSE) {
-	DEBUG = function(x) { if (debug) message(x); x }
-	if (srid > 900913) { # query postgis' own table:
-		query = DEBUG(paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";"))
-		st_crs(dbGetQuery(conn, query)[[1]])
-	} else
-		st_crs(srid) # trust native epgs
+sync_crs <- function(conn, geom) {
+    crs <- st_crs(geom)
+    srid <- crs$epsg
+    if (is.na(crs) || is.na(srid)) {
+        if (is.na(crs$proj4string))
+            crs <- st_crs(0, valid = FALSE)
+        else {
+            srid <- get_possibly_new_srid(conn, crs$proj4string)
+            crs <- st_crs(srid, proj4text = crs$proj4string, valid = FALSE)
+        }
+    }
+    st_set_crs(geom, crs)
 }
+
+#' Determine database type for R vector
+#'
+#' @export
+#' @inheritParams RPostgreSQL dbDataType
+#' @rdname dbDataType
+#' @importClassesFrom RPostgreSQL PostgreSQLConnection
+#' @importMethodsFrom DBI dbDataType
+setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
+	dtyp <- vapply(obj, RPostgreSQL::dbDataType, character(1), dbObj =  dbObj)
+	gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
+	dtyp[gtyp] <- "geometry"
+	# explicit cast for units
+	gtyp <- vapply(obj, inherits, TRUE, what = "units")
+	dtyp[gtyp] <- "numeric"
+	return(dtyp)
+})
+
+#' Determine database type for R vector
+#'
+#' @export
+#' @inheritParams DBI dbDataType
+#' @rdname dbDataType
+#' @importClassesFrom DBI DBIObject
+#' @importMethodsFrom DBI dbDataType
+#' @param dbObj DBIObject driver or connection.
+#' @param obj Object to convert
+setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
+    dtyp <- vapply(obj, DBI::dbDataType, character(1), dbObj =  dbObj)
+    gtyp <- vapply(obj, inherits, TRUE, what = "sfc")
+    dtyp[gtyp] <- "geometry"
+    # explicit cast for units
+    gtyp <- vapply(obj, inherits, TRUE, what = "units")
+    dtyp[gtyp] <- "numeric"
+    return(dtyp)
+})
