@@ -45,9 +45,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (na.fail && any(is.na(x[coords])))
 			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( lapply(split(as.vector(t(as.matrix(x[, coords]))),
-				rep(seq_len(nrow(x)), each = length(coords))),
-				function(vec) structure(vec, class = classdim)),
+		x$geometry = structure( points_rcpp(as.matrix(x[ , coords]), dim),
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(x[[coords[1]]], na.rm = TRUE),
@@ -80,7 +78,7 @@ st_geometry = function(obj, ...) UseMethod("st_geometry")
 
 #' @name st_geometry
 #' @export
-st_geometry.sf = function(obj, ...) { 
+st_geometry.sf = function(obj, ...) {
 	ret =  obj[[attr(obj, "sf_column")]]
 	if (!inherits(ret, "sfc")) # corrupt!
 		stop('attr(obj, "sf_column") does not point to a geometry column.\nDid you rename it, without setting st_geometry(obj) <- "newname"?')
@@ -336,14 +334,14 @@ st_sf = function(..., agr = NA_agr_, row.names,
 }
 
 #' @export
-"$<-.sf" = function(x, i, value) { 
-	if (is.null(value) && inherits(x[[i]], "sfc") && 
-			((is.character(i) && i == attr(x, "sf_column")) 
+"$<-.sf" = function(x, i, value) {
+	if (is.null(value) && inherits(x[[i]], "sfc") &&
+			((is.character(i) && i == attr(x, "sf_column"))
 				|| (is.integer(i) && names(x)[i] == attr(x, "sf_column"))))
 		st_set_geometry(x, NULL)
 	else {
 		x[[i]] = value
-		x 
+		x
 	}
 }
 
