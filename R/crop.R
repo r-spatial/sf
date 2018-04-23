@@ -22,6 +22,8 @@ st_crop = function(x, y, ..., xmin, ymin, xmax, ymax) {
 	if (!missing(xmin) && !missing(ymin) && !missing(xmax) && !missing(ymax))
 		y = c(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax)
 	if (! inherits(y, "bbox"))
-		y = st_bbox(y, crs = st_crs(x))
+		y = st_bbox(y)
+	if (is.na(st_crs(y)))
+		y = structure(y, crs = st_crs(x))
 	st_intersection(x, st_as_sfc(y))
 }
