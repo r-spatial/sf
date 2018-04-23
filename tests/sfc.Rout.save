@@ -1067,6 +1067,47 @@ epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 POINT (0 1)
 > 
+> # crop:
+> box = c(xmin = 0, ymin = 0, xmax = 1, ymax = 1)
+> 
+> pol = st_sfc(st_buffer(st_point(c(.5, .5)), .65))
+> pol_sf = st_sf(a=1, geom=pol)
+> 
+> st_crop(pol, box)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+> st_crop(pol, st_bbox(box))
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+> st_crop(pol_sf, box)
+Simple feature collection with 1 feature and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a                           geom
+1 1 POLYGON ((1 0.0849179, 0.98...
+> st_crop(pol_sf, st_bbox(box))
+Simple feature collection with 1 feature and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a                           geom
+1 1 POLYGON ((1 0.0849179, 0.98...
+> 
 > proc.time()
    user  system elapsed 
-  2.599   0.283   2.575 
+  2.604   0.300   2.579 

@@ -275,3 +275,14 @@ x$geom = NULL
 class(x)
 
 st_as_sfc(list(st_point(0:1)), crs = 4326)
+
+# crop:
+box = c(xmin = 0, ymin = 0, xmax = 1, ymax = 1)
+
+pol = st_sfc(st_buffer(st_point(c(.5, .5)), .65))
+pol_sf = st_sf(a=1, geom=pol)
+
+st_crop(pol, box)
+st_crop(pol, st_bbox(box))
+st_crop(pol_sf, box)
+st_crop(pol_sf, st_bbox(box))
