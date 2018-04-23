@@ -189,7 +189,7 @@ st_bbox.Extent = function(obj, ...) {
 #' st_bbox(c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9), crs = st_crs(4326))
 #' @export
 st_bbox.numeric = function(obj, ..., crs = NA_crs_) {
-	structure(bb_wrap(c(obj["xmin"], obj["ymin"], obj["xmax"], obj["ymax"])), crs = st_crs(crs))
+	structure(bb_wrap(obj[c("xmin", "ymin", "xmax", "ymax")]), crs = st_crs(crs))
 }
 
 #' @export

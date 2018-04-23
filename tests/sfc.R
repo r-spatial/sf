@@ -230,6 +230,7 @@ demo(meuse, ask = FALSE, echo = FALSE)
 st_bbox(meuse)
 library(raster)
 st_bbox(raster(meuse.grid))
+st_bbox(extent(raster()))
 
 # st_to_s2
 x = sf:::st_to_s2(nc)
@@ -286,3 +287,4 @@ st_crop(pol, box)
 st_crop(pol, st_bbox(box))
 st_crop(pol_sf, box)
 st_crop(pol_sf, st_bbox(box))
+

@@ -921,6 +921,9 @@ The following object is masked from 'package:dplyr':
 > st_bbox(raster(meuse.grid))
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
+> st_bbox(extent(raster()))
+xmin ymin xmax ymax 
+-180  -90  180   90 
 > 
 > # st_to_s2
 > x = sf:::st_to_s2(nc)
@@ -1108,6 +1111,7 @@ proj4string:    NA
   a                           geom
 1 1 POLYGON ((1 0.0849179, 0.98...
 > 
+> 
 > proc.time()
    user  system elapsed 
-  2.604   0.300   2.579 
+  2.620   0.283   2.582 
