@@ -127,10 +127,12 @@ sfg_is_empty = function(x) {
 
 
 #' @export
-"[<-.sfc" = function (x, i, j, value) {
+#"[<-.sfc" = function (x, i, j, value) {
+"[<-.sfc" = function (x, i, value) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
-	class(x) = setdiff(class(x), "sfc")
+	#class(x) = setdiff(class(x), "sfc")
+	x = unclass(x) # becomes a list, but keeps attributes
 	st_sfc(NextMethod())
 }
 

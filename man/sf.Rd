@@ -11,7 +11,7 @@
 \usage{
 st_sf(..., agr = NA_agr_, row.names,
   stringsAsFactors = default.stringsAsFactors(), crs, precision,
-  sf_column_name = NULL, check_ring_dir = FALSE)
+  sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE)
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
 
@@ -34,6 +34,8 @@ st_sf(..., agr = NA_agr_, row.names,
 there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
 
 \item{check_ring_dir}{see \link{st_read}}
+
+\item{sfc_last}{logical; if \code{TRUE}, \code{sfc} columns are always put last, otherwise column order is left unmodified.}
 
 \item{x}{object of class \code{sf}}
 
