@@ -1101,6 +1101,8 @@ epsg (SRID):    NA
 proj4string:    NA
   a                           geom
 1 1 POLYGON ((1 0.0849179, 0.98...
+Warning message:
+attribute variables are assumed to be spatially constant throughout all geometries 
 > st_crop(pol_sf, st_bbox(box))
 Simple feature collection with 1 feature and 1 field
 geometry type:  POLYGON
@@ -1110,8 +1112,10 @@ epsg (SRID):    NA
 proj4string:    NA
   a                           geom
 1 1 POLYGON ((1 0.0849179, 0.98...
+Warning message:
+attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  2.620   0.283   2.582 
+  2.661   0.268   2.605 

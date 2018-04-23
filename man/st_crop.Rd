@@ -4,7 +4,7 @@
 \alias{st_crop}
 \title{crop an sf object to a specific rectangle}
 \usage{
-st_crop(x, y, ...)
+st_crop(x, y, ..., xmin, ymin, xmax, ymax)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -12,7 +12,27 @@ st_crop(x, y, ...)
 \item{y}{numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}}
 
 \item{...}{ignored}
+
+\item{xmin}{minimum x extent of cropping area}
+
+\item{ymin}{minimum y extent of cropping area}
+
+\item{xmax}{maximum x extent of cropping area}
+
+\item{ymax}{maximum y extent of cropping area}
 }
 \description{
 crop an sf object to a specific rectangle
+}
+\details{
+setting arguments \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax} implies that argument \code{y} gets ignored.
+}
+\examples{
+box = c(xmin = 0, ymin = 0, xmax = 1, ymax = 1)
+pol = st_sfc(st_buffer(st_point(c(.5, .5)), .6))
+pol_sf = st_sf(a=1, geom=pol)
+plot(st_crop(pol, box))
+plot(st_crop(pol_sf, st_bbox(box)))
+# alternative:
+plot(st_crop(pol, xmin = 0, ymin = 0, xmax = 1, ymax = 1))
 }

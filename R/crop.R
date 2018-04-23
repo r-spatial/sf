@@ -2,14 +2,6 @@
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param y numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}
 #' @param ... ignored
-#' @export
-st_crop = function(x, y, ...) UseMethod("st_crop")
-
-#' @export
-st_crop.sf = function(x, y, ...) {
-	st_set_geometry(x, st_crop(st_geometry(x), y, ...))
-}
-
 #' @param xmin minimum x extent of cropping area
 #' @param ymin minimum y extent of cropping area
 #' @param xmax maximum x extent of cropping area
@@ -25,7 +17,8 @@ st_crop.sf = function(x, y, ...) {
 #' plot(st_crop(pol_sf, st_bbox(box)))
 #' # alternative:
 #' plot(st_crop(pol, xmin = 0, ymin = 0, xmax = 1, ymax = 1))
-st_crop.sfc = function(x, y, ..., xmin, ymin, xmax, ymax) {
+#' @export
+st_crop = function(x, y, ..., xmin, ymin, xmax, ymax) {
 	if (!missing(xmin) && !missing(ymin) && !missing(xmax) && !missing(ymax))
 		y = c(xmin = xmin, ymin = ymin, xmax = xmax, ymax = ymax)
 	if (! inherits(y, "bbox"))
