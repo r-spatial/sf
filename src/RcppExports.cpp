@@ -751,6 +751,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// points_cpp
+List points_cpp(NumericMatrix pts, CharacterVector gdim);
+RcppExport SEXP _sf_points_cpp(SEXP ptsSEXP, SEXP gdimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type pts(ptsSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type gdim(gdimSEXP);
+    rcpp_result_gen = Rcpp::wrap(points_cpp(pts, gdim));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_signed_area
 double CPL_signed_area(NumericMatrix pts);
 RcppExport SEXP _sf_CPL_signed_area(SEXP ptsSEXP) {
@@ -976,6 +988,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
+    {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},
