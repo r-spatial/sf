@@ -188,8 +188,6 @@ clean_columns = function(obj, factorsAsCharacter) {
 		}
 		if (is.character(obj[[i]]))
 			obj[[i]] = enc2utf8(obj[[i]])
-		if (is.logical(obj[[i]]))
-			obj[[i]] = as.integer(obj[[i]])
 	}
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
