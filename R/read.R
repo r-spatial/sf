@@ -172,7 +172,7 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
-	permitted = c("character", "integer", "numeric", "Date", "POSIXct")
+	permitted = c("character", "integer", "numeric", "Date", "POSIXct", "logical")
 	for (i in seq_along(obj)) {
 		if (is.factor(obj[[i]])) {
 			obj[[i]] = if (factorsAsCharacter)
@@ -188,6 +188,8 @@ clean_columns = function(obj, factorsAsCharacter) {
 		}
 		if (is.character(obj[[i]]))
 			obj[[i]] = enc2utf8(obj[[i]])
+		if (is.logical(obj[[i]]))
+			obj[[i]] = as.integer(obj[[i]])
 	}
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {

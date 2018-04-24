@@ -14,7 +14,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	for (int i = 0; i < obj.size(); i++) {
 		if (strcmp(cls[i], "character") == 0)
 			ret[i] = OFTString;
-		else if (strcmp(cls[i], "integer") == 0)
+		else if (strcmp(cls[i], "integer") == 0 || strcmp(cls[i], "logical") == 0)
 			ret[i] = OFTInteger;
 		else if (strcmp(cls[i], "numeric") == 0)
 			ret[i] = OFTReal;
@@ -27,6 +27,8 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			Rcpp::stop("Layer creation failed.\n");
 		}      // #nocov end
 		OGRFieldDefn oField(nm[i], ret[i]);
+		if (strcmp(cls[i], "logical") == 0)
+			oField.SetSubType(OFSTBoolean);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			Rcpp::stop("Layer creation failed.\n");
