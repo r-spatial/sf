@@ -5,7 +5,7 @@ r:
   - oldrel
 #  - devel
 
-cache: packages
+# cache: packages
 
 sudo: required
 
