@@ -31,15 +31,15 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 driver `foo' not available.
-Dataset /tmp/RtmpYtWD1Q/file4e32e8da863.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/Rtmprf3xkY/file3ccf7ba51ccf.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 ══ testthat results  ═══════════════════════════════════════════════════════════
-OK: 851 SKIPPED: 18 FAILED: 0
+OK: 884 SKIPPED: 15 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  7.780   0.468   9.666 
+  7.952   0.489  10.046 
