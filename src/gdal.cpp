@@ -46,10 +46,12 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
     return;
 }
 
+// #nocov start
 static void __err_silent(CPLErr eErrClass, int err_no, const char *msg)
 {
     return;
 }
+// #nocov end
 
 void set_error_handler(void) 
 {

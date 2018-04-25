@@ -271,7 +271,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
 		    // delete layer when  failing to  create feature
-		    OGRErr err = poDS->DeleteLayer(0);
+			OGRErr err = poDS->DeleteLayer(0);
 			GDALClose(poDS);
 			if (err != OGRERR_NONE) { // #nocov start
 			    if (err == OGRERR_UNSUPPORTED_OPERATION)
@@ -281,7 +281,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			} // #nocov end
 			OGRFeature::DestroyFeature(poFeature);
 			if (transaction)
-				return 1; // try once more, writing to tmp file and copy
+				return 1; // try once more, writing to tmp file and copy #nocov
 			else
 				Rcpp::stop("Feature creation failed.\n");
 		}
