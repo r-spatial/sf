@@ -1,6 +1,6 @@
 #' crop an sf object to a specific rectangle
 #' @param x object of class \code{sf} or \code{sfc}
-#' @param y numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}
+#' @param y numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}, or object for which there is an \link{st_bbox} method to convert it to a \code{bbox} object
 #' @param ... ignored
 #' @param xmin minimum x extent of cropping area
 #' @param ymin minimum y extent of cropping area

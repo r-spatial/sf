@@ -9,7 +9,7 @@ st_crop(x, y, ..., xmin, ymin, xmax, ymax)
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
 
-\item{y}{numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}}
+\item{y}{numeric vector with named elements \code{xmin}, \code{ymin}, \code{xmax} and \code{ymax}, or object of class \code{bbox}, or object for which there is an \link{st_bbox} method to convert it to a \code{bbox} object}
 
 \item{...}{ignored}
 
