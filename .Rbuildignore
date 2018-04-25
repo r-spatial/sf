@@ -15,3 +15,4 @@ CONDUCT.md
 rdev
 ^codecov\.yml$
 hub
+tic.R
