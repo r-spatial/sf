@@ -123,7 +123,7 @@ if ("GML" %in% st_drivers()$name) {
 # logical:
 if ("GPKG" %in% st_drivers()$name) {
 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
-	tst$bool = tst$AREA > 0.5 # logical
+	tst$bool = tst$NWBIR79 > 800 # logical
 	tst$bool[1:3] = NA
 	st_write(tst, "tst__.gpkg")
 	tst2 = st_read("tst__.gpkg")
