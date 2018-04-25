@@ -6,13 +6,13 @@ Description: Support for simple features, a standardized way to encode spatial v
 	conversions and datum transformations.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Roger", "Bivand", role = "ctb", comment = c(ORCID = "0000-0003-2392-6140")),
+	person("Etienne", "Racine", role = "ctb"),
+	person("Michael", "Sumner", role = "ctb"),
 	person("Ian", "Cook", role = "ctb"),
 	person("Tim", "Keitt", role = "ctb"),
-	person("Michael", "Sumner", role = "ctb"),
 	person("Robin", "Lovelace", role = "ctb"),
 	person("Hadley", "Wickham", role = "ctb"),
 	person("Jeroen", "Ooms", role = "ctb", comment = c(ORCID = "0000-0002-4035-0289")),
-	person("Etienne", "Racine", role = "ctb"),
 	person("Kirill", "Müller", role = "ctb"))
 Depends:
 	R (>= 3.3.0), methods
@@ -26,7 +26,7 @@ Imports:
 	Rcpp,
 	RPostgreSQL,
 	DBI (>= 0.8),
-	units (>= 0.4-6),
+	units (>= 0.5-1),
 	classInt,
 	magrittr
 Suggests:
@@ -95,6 +95,7 @@ Collate:
 	sgbp.R
 	spatstat.R
 	stars.R
+	crop.R
 	gdal_utils.R
 	deprecated.R
 RoxygenNote: 6.0.1

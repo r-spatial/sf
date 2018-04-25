@@ -14,7 +14,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 	for (int i = 0; i < obj.size(); i++) {
 		if (strcmp(cls[i], "character") == 0)
 			ret[i] = OFTString;
-		else if (strcmp(cls[i], "integer") == 0)
+		else if (strcmp(cls[i], "integer") == 0 || strcmp(cls[i], "logical") == 0)
 			ret[i] = OFTInteger;
 		else if (strcmp(cls[i], "numeric") == 0)
 			ret[i] = OFTReal;
@@ -27,6 +27,8 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 			Rcpp::stop("Layer creation failed.\n");
 		}      // #nocov end
 		OGRFieldDefn oField(nm[i], ret[i]);
+		if (strcmp(cls[i], "logical") == 0)
+			oField.SetSubType(OFSTBoolean);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			Rcpp::stop("Layer creation failed.\n");
@@ -269,7 +271,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
 		    // delete layer when  failing to  create feature
-		    OGRErr err = poDS->DeleteLayer(0);
+			OGRErr err = poDS->DeleteLayer(0);
 			GDALClose(poDS);
 			if (err != OGRERR_NONE) { // #nocov start
 			    if (err == OGRERR_UNSUPPORTED_OPERATION)
@@ -279,7 +281,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			} // #nocov end
 			OGRFeature::DestroyFeature(poFeature);
 			if (transaction)
-				return 1; // try once more, writing to tmp file and copy
+				return 1; // try once more, writing to tmp file and copy #nocov
 			else
 				Rcpp::stop("Feature creation failed.\n");
 		}

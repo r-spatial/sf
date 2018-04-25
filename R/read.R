@@ -172,7 +172,7 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
-	permitted = c("character", "integer", "numeric", "Date", "POSIXct")
+	permitted = c("character", "integer", "numeric", "Date", "POSIXct", "logical")
 	for (i in seq_along(obj)) {
 		if (is.factor(obj[[i]])) {
 			obj[[i]] = if (factorsAsCharacter)

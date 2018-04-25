@@ -15,8 +15,12 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
 		OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn(i);
 		switch (poFieldDefn->GetType()) {
-			case OFTInteger:
-				out[i] = Rcpp::IntegerVector(n_features);
+			case OFTInteger: {
+					if (poFieldDefn->GetSubType() == OFSTBoolean)
+						out[i] = Rcpp::LogicalVector(n_features);
+					else
+						out[i] = Rcpp::IntegerVector(n_features);
+				}
 				break;
 			case OFTDate: {
 				Rcpp::NumericVector ret(n_features);
@@ -261,12 +265,24 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 #endif
 			switch(poFieldDefn->GetType()) {
 				case OFTInteger: {
-					Rcpp::IntegerVector iv;
-					iv = out[iField];
-					if (not_NA)
-						iv[i] = poFeature->GetFieldAsInteger(iField);
-					else
-						iv[i] = NA_INTEGER;
+					if (poFieldDefn->GetSubType() == OFSTBoolean) {
+						Rcpp::LogicalVector lv;
+						lv = out[iField];
+						if (not_NA) {
+							if (poFeature->GetFieldAsInteger(iField))
+								lv[i] = true;
+							else
+								lv[i] = false;
+						} else
+							lv[i] = NA_LOGICAL;
+					} else {
+						Rcpp::IntegerVector iv;
+						iv = out[iField];
+						if (not_NA)
+							iv[i] = poFeature->GetFieldAsInteger(iField);
+						else
+							iv[i] = NA_INTEGER;
+					}
 					}
 					break;
 				case OFTInteger64: {

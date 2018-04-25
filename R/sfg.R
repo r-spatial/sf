@@ -63,6 +63,16 @@ Dimension = function(x) {
 	class(x)[1]
 }
 
+## internal function to get a list of sfg POINT for st_as_sf(, coords = ...)
+## src/sfg.cpp
+## https://github.com/r-spatial/sf/issues/700
+points_rcpp <- function(pts, gdim = "XY", ...) {
+	stopifnot(gdim %in% c("XY", "XYZ", "XYZM", "XYM"))
+	if (dim(pts)[2L] == 2L && nchar(gdim) > 2L) gdim = "XY"
+	stopifnot(dim(pts)[2] == nchar(gdim))
+	points_cpp(pts, gdim)
+}
+
 #' Create simple feature from a numeric vector, matrix or list
 #'
 #' Create simple feature from a numeric vector, matrix or list

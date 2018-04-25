@@ -1,12 +1,12 @@
 ## dplyr methods:
 
-#' Dplyr verb methods for sf objects
+#' Tidyverse methods for sf objects
 #'
-#' Dplyr verb methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' library(dplyr)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -22,7 +22,7 @@ filter.sf <- function(.data, ..., .dots) {
 	st_as_sf(ret, sf_column_name = sf_column)
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' # plot 10 smallest counties in grey:
 #' st_geometry(nc) %>% plot()
@@ -32,7 +32,7 @@ arrange.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @param add see corresponding function in dplyr
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -42,13 +42,13 @@ group_by.sf <- function(.data, ..., add = FALSE) {
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 ungroup.sf <- function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	st_as_sf(NextMethod(), sf_column_name = attr(x, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate.sf <- function(.data, ..., .dots) {
@@ -57,7 +57,7 @@ mutate.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #' nc %>% transmute(AREA = AREA/10) %>% class()
@@ -69,7 +69,7 @@ transmute.sf <- function(.data, ..., .dots) {
 		ret
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' nc %>% select(SID74, SID79) %>% names()
 #' nc %>% select(SID74, SID79, geometry) %>% names()
@@ -92,7 +92,7 @@ select.sf <- function(.data, ...) {
 }
 
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' nc2 <- nc %>% rename(area = AREA)
 rename.sf <- function(.data, ...) {
@@ -105,14 +105,14 @@ rename.sf <- function(.data, ...) {
 	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @examples
 #' nc %>% slice(1:2)
 slice.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @aliases summarise
 #' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points; see Details.
 #' @details In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
@@ -151,7 +151,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 		sf_column_name = attr(.data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
@@ -168,7 +168,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 
 ## tidyr methods:
 
-#' @name dplyr
+#' @name tidyverse
 #' @param data see original function docs
 #' @param key see original function docs
 #' @param value see original function docs
@@ -195,7 +195,7 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 
-#' @name dplyr
+#' @name tidyverse
 #' @param fill see original function docs
 #' @param convert see original function docs
 #' @param drop see original function docs
@@ -219,7 +219,7 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 		drop = drop, sep = sep), sf_column_name = attr(data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @param tbl see original function docs
 #' @param size see original function docs
 #' @param replace see original function docs
@@ -229,12 +229,12 @@ sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @param .key see \link[tidyr]{nest}
 #' @examples
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
@@ -259,7 +259,7 @@ nest.sf = function (data, ..., .key = "data") {
 }
 
 
-#' @name dplyr
+#' @name tidyverse
 #' @param col see \link[tidyr]{separate}
 #' @param into see \link[tidyr]{separate}
 #' @param remove see \link[tidyr]{separate}
@@ -280,7 +280,7 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 			sf_column_name = attr(data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
 	if (!requireNamespace("rlang", quietly = TRUE))
@@ -290,7 +290,7 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 		sf_column_name = attr(data, "sf_column"))
 }
 
-#' @name dplyr
+#' @name tidyverse
 #' @param .preserve see \link[tidyr]{unnest}
 unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov start
@@ -375,6 +375,12 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "distinct", "sf")
 	register_s3_method("dplyr", "sample_n", "sf")
 	register_s3_method("dplyr", "sample_frac", "sf")
+	register_s3_method("dplyr", "anti_join", "sf")
+	register_s3_method("dplyr", "full_join", "sf")
+	register_s3_method("dplyr", "inner_join", "sf")
+	register_s3_method("dplyr", "left_join", "sf")
+	register_s3_method("dplyr", "right_join", "sf")
+	register_s3_method("dplyr", "semi_join", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "spread", "sf")
 	register_s3_method("tidyr", "nest", "sf")

@@ -119,3 +119,13 @@ if ("GML" %in% st_drivers()$name) {
   print(st_read(gml, layer = "Parcely"), n = 0)
   print(st_read(gml, layer = "Parcely", int64_as_string=TRUE), n = 0)
 }
+
+# logical:
+if ("GPKG" %in% st_drivers()$name) {
+	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
+	tst$bool = tst$NWBIR79 > 800 # logical
+	tst$bool[1:3] = NA
+	st_write(tst, "tst__.gpkg")
+	tst2 = st_read("tst__.gpkg")
+	print(identical(tst$bool, tst2$bool))
+}

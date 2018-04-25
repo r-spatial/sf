@@ -921,6 +921,9 @@ The following object is masked from 'package:dplyr':
 > st_bbox(raster(meuse.grid))
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
+> st_bbox(extent(raster()))
+xmin ymin xmax ymax 
+-180  -90  180   90 
 > 
 > # st_to_s2
 > x = sf:::st_to_s2(nc)
@@ -1067,6 +1070,52 @@ epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 POINT (0 1)
 > 
+> # crop:
+> box = c(xmin = 0, ymin = 0, xmax = 1, ymax = 1)
+> 
+> pol = st_sfc(st_buffer(st_point(c(.5, .5)), .65))
+> pol_sf = st_sf(a=1, geom=pol)
+> 
+> st_crop(pol, box)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+> st_crop(pol, st_bbox(box))
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+> st_crop(pol_sf, box)
+Simple feature collection with 1 feature and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a                           geom
+1 1 POLYGON ((1 0.0849179, 0.98...
+Warning message:
+attribute variables are assumed to be spatially constant throughout all geometries 
+> st_crop(pol_sf, st_bbox(box))
+Simple feature collection with 1 feature and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
+epsg (SRID):    NA
+proj4string:    NA
+  a                           geom
+1 1 POLYGON ((1 0.0849179, 0.98...
+Warning message:
+attribute variables are assumed to be spatially constant throughout all geometries 
+> 
+> 
 > proc.time()
    user  system elapsed 
-  2.599   0.283   2.575 
+  2.661   0.268   2.605 
