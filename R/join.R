@@ -10,53 +10,42 @@ sf_join = function(g, sf_column) {
 	st_sf(g)
 }
 
-#' @name dplyr
-#' @export
+#' @name tidyverse
+#' @inheritParams dplyr::inner_join
 inner_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
 
-#' @name dplyr
-#' @param x see \link[dplyr]{left_join}
-#' @param y see \link[dplyr]{left_join}
-#' @param by see \link[dplyr]{left_join}
-#' @param copy see \link[dplyr]{left_join}
-#' @param suffix see \link[dplyr]{left_join}
-#' @export
+#' @name tidyverse
 left_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
 
-#' @name dplyr
-#' @export
+#' @name tidyverse
 right_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
 
-#' @name dplyr
-#' @export
+#' @name tidyverse
 full_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
 
-#' @name dplyr
-#' @export
+#' @name tidyverse
 semi_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
 
-#' @name dplyr
-#' @export
+#' @name tidyverse
 anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"))
 }
-
 
 #' spatial left or inner join
 #'

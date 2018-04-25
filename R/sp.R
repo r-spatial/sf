@@ -184,7 +184,7 @@ setAs("sf", "Spatial", function(from) {
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 # create empy class
-setClass("XY")
+setOldClass("XY")
 setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 
 #' Methods to coerce simple features to `Spatial*` and `Spatial*DataFrame` objects
