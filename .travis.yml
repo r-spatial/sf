@@ -3,36 +3,41 @@ language: r
 r:
   - release
   - oldrel
-#  - devel
-
-# cache: packages
+  - devel
 
 sudo: required
-
 dist: trusty
+cache:
+  - packages
+  - ccache
+latex: false
 
-r_github_packages: 
+r_github_packages:
   - r-dbi/DBI
   - r-dbi/RPostgres
 
 addons:
   postgresql: "9.6"
+  apt:
+    sources:
+      - sourceline: 'ppa:opencpu/jq'
+      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+        key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+    packages:
+      - libprotobuf-dev
+      - protobuf-compiler
+      - libv8-3.14-dev
+      - libjq-dev
+      - libudunits2-dev
+      - libproj-dev
+      - libgeos-dev
+      - libspatialite-dev
+      - libgdal-dev
+      - libjson-c-dev
+      - postgresql-server-dev-9.6
 
 before_install:
-  # install tmap dependencies
-  - sudo apt-get install --yes libprotobuf-dev protobuf-compiler libv8-3.14-dev
-  # install tmap dependencies; for 16.04 libjq-dev this ppa is needed:
-  - sudo add-apt-repository -y ppa:opencpu/jq
-  - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install libjq-dev
-  # units/udunits2 dependency:
-  - sudo apt-get install --yes libudunits2-dev
-  # sf dependencies/spatial stack:
-  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-  - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev
-  # postgis source compile dependencies:
-  - sudo apt-get --yes install libjson-c-dev postgresql-server-dev-9.6
   # install postgis from source:
   - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
   - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
@@ -48,12 +53,24 @@ before_install:
   - psql -d postgis -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-
-warnings_are_errors: true
+  - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
 
 after_success:
   - dropdb postgis
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
-  - Rscript -e 'covr::codecov()'
+  - R -q -e 'covr::codecov(quiet = FALSE)'
+
+install: R -q -e 'tic::install()'
+script: R -q -e 'tic::script()'
+before_deploy: R -q -e 'tic::before_deploy()'
+deploy:
+   provider: script
+   script: R -q -e 'tic::deploy()'
+   on:
+     branch: master
+     condition:
+       - $TRAVIS_PULL_REQUEST = false
+       - $TRAVIS_EVENT_TYPE != cron
+       - $TRAVIS_R_VERSION_STRING = release
