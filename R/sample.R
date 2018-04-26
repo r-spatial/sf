@@ -84,15 +84,23 @@ st_multipoints_sample = function(x, size, ..., type = "random") {
 	st_sfc(st_multipoint(m[sample(nrow(m), size, ...),]), crs = st_crs(x))
 }
 
-st_ll_sample = function(x, size, ..., type = "random") {
-	if (isTRUE(st_is_longlat(x))) {
-		message_longlat("st_sample")
-		st_crs(x) = NA_crs_
-	}
-	l = st_length(x)
-	d = runif(size, 0, sum(l))
-	lcs = c(0, cumsum(l))
-	grp = split(d, cut(d, lcs, include.lowest = TRUE))
-	grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
-	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
+st_ll_sample = function (x, size, ..., type = "random") 
+{
+  if (isTRUE(st_is_longlat(x))) {
+    message_longlat("st_sample")
+    st_crs(x) = NA_crs_
+  }
+  l = drop_units(st_length(x))
+  if (type == "random") {
+    d = runif(size, 0, sum(l))
+  } else if (type == "regular") {
+    offset = runif(1)
+    d = ((1:size) - (1-offset))/size * sum(l)
+  } else {
+    stop(paste("type", type, "not available for LINESTRING"))
+  }
+  lcs = c(0, cumsum(l))
+  grp = split(d, cut(d, lcs, include.lowest = TRUE))
+  grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
+  st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
 }
