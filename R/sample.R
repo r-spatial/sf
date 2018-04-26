@@ -87,7 +87,7 @@ st_multipoints_sample = function(x, size, ..., type = "random") {
 st_ll_sample = function (x, size, ..., type = "random") {
 	if (isTRUE(st_is_longlat(x))) {
 		message_longlat("st_sample")
-	st_crs(x) = NA_crs_
+		st_crs(x) = NA_crs_
 	}
 	l = drop_units(st_length(x))
 	if (type == "random") {
