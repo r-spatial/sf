@@ -1,7 +1,7 @@
 #include "cpl_port.h"
 #include "cpl_conv.h" // CPLFree()
 
-#if !(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1)
+#if GDAL_VERSION_MAJOR > 2 || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 1)
 # include "gdal_utils.h" // requires >= 2.1
 
 #include "Rcpp.h"
