@@ -2,15 +2,13 @@
 
 * support read/write of logical variables through GDAL; #722
 
-* add temp file copying workaround for writing GPKG files to network drives; #628
-
 * add `st_crop` to simplify cropping objects with a rectangular area; #720
 
 * fix bug in `[<-` when columns are added to an `sf` object; #718
 
 * use dynamic registration of S3 methods, similar to how hms does this; #710 by Kirill Mueller
 
-* (partially) address writing GPKG to network drive; #628
+* (partially) address writing GPKG to network drive, writing to temp file first; #628
 
 * add Kirill Mueller as contributor
 
