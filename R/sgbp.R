@@ -70,3 +70,15 @@ Ops.sgbp = function(e1, e2) {
 		region.id = attr(e1, "region.id"),
 		ncol = attr(e1, "ncol"))
 }
+
+#nocov start
+as.igraph.sgbp = function(x, ...) {
+	m = cbind(
+		rep(seq_along(x), lengths(x)),
+		unlist(x)
+	)
+	if (! requireNamespace("igraph", quietly = TRUE))
+		stop("package igraph required, please install it first")
+	igraph::graph_from_edgelist(m)
+}
+#nocov end

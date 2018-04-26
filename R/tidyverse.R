@@ -390,6 +390,7 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "obj_sum", "sfc")
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
+	register_s3_method("igraph", "as.igraph", "sgbp")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
