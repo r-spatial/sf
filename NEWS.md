@@ -1,3 +1,7 @@
+# version 0.6-3
+
+* add `as.data.frame` method for `sgbp` objects; #715
+
 # version 0.6-2
 
 * support read/write of logical variables through GDAL; #722
