@@ -143,6 +143,8 @@ dim(lst)
 as.matrix(lst)[1:5, 1:5]
 # negate:
 !lst
+# as.data.frame:
+head(as.data.frame(lst), 10)
 
 # snap:
 nc1 = st_transform(nc, 32119)

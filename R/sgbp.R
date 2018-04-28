@@ -71,14 +71,7 @@ Ops.sgbp = function(e1, e2) {
 		ncol = attr(e1, "ncol"))
 }
 
-#nocov start
-as.igraph.sgbp = function(x, ...) {
-	m = cbind(
-		rep(seq_along(x), lengths(x)),
-		unlist(x)
-	)
-	if (! requireNamespace("igraph", quietly = TRUE))
-		stop("package igraph required, please install it first")
-	igraph::graph_from_edgelist(m)
+#' @export
+as.data.frame.sgbp = function(x, ...) {
+	data.frame(row.id = rep(seq_along(x), lengths(x)), col.id = unlist(x))
 }
-#nocov end

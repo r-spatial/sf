@@ -48,7 +48,6 @@ Suggests:
 	RPostgres (>= 1.1.0),
 	tidyselect,
 	ggplot2,
-	igraph,
 	mapview,
 	testthat,
 	knitr,
