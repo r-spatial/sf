@@ -228,7 +228,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				if (length(main) && inherits(x[[main]], "units"))
 					main = make_unit_label(main, x[[main]])
 			}
-			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, border) # absorb
+			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, border, graticule) # absorb
 				title(...)
 			localTitle(main, ...)
 		}
