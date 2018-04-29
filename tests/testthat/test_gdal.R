@@ -45,6 +45,11 @@ test_that("st_wrap_dateline works", {
 	expect_silent(x <- st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)))
 })
 
+test_that('gdal_subdatasets works', {
+  fname = system.file("nc/cropped.nc", package = "sf")
+  sd2 = gdal_subdatasets(fname)[[2]]
+})
+
 # context("gdal utils")
 test_that('gdal_utils work', {
   #skip_on_appveyor() # FIXME:
@@ -53,7 +58,6 @@ test_that('gdal_utils work', {
   fname = system.file("nc/cropped.nc", package = "sf")
   #fname = system.file("tif/geomatrix.tif", package = "sf")
   info = gdal_utils("info", fname, quiet = TRUE)
-  sd2 = gdal_subdatasets(fname)[[2]]
   info = gdal_utils("info", sd2, quiet = TRUE)
   tf = tempfile()
   tf2 = tempfile()
