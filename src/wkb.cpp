@@ -174,7 +174,7 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 			ret(i) = swap_endian<double>(d); // #nocov
 		else
 			ret(i) = d;
-		if (empty != NULL && std::isnan(d))
+		if (i == 0 && empty != NULL && std::isnan(d))
 			*empty = true;
 	}
 	if (cls.size() == 3)
