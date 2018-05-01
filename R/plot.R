@@ -92,7 +92,6 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		#key.pos = get_key_pos(x, ...), key.length = .618, key.width = 0.08, reset = TRUE) {
 		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
 
 	stopifnot(missing(y))
@@ -206,19 +205,19 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
 
+				k.l = if (is.character(key.length))
+						c(1, key.length, 1)
+					else
+						c((1 - key.length)/2, key.length, (1 - key.length)/2)
 				switch(key.pos,
 					layout(matrix(c(2,2,2,0,1,0), nrow = 2, ncol = 3, byrow = TRUE),
-						widths = c((1 - key.length)/2, key.length,(1 - key.length)/2),
-						heights = c(1, key.width)),                                      # 1 bottom
+						widths = k.l, heights = c(1, key.width)), # 1 bottom
 					layout(matrix(c(0,1,0,2,2,2), nrow = 3, ncol = 2, byrow = FALSE),
-						widths = c(key.width, 1),
-						heights = c((1 - key.length)/2, key.length,(1 - key.length)/2)), # 2 left
+						widths = c(key.width, 1), heights = k.l), # 2 left
 					layout(matrix(c(0,1,0,2,2,2), nrow = 2, ncol = 3, byrow = TRUE),
-						widths = c((1 - key.length)/2, key.length,(1 - key.length)/2),
-						heights = c(key.width, 1)),                                      # 3 top
+						widths = k.l, heights = c(key.width, 1)), # 3 top
 					layout(matrix(c(2,2,2,0,1,0), nrow = 3, ncol = 2, byrow = FALSE),
-						widths = c(1, key.width),
-						heights = c((1 - key.length)/2, key.length,(1 - key.length)/2))  # 4 right
+						widths = c(1, key.width), heights = k.l)  # 4 right
 				)
 
 				if (is.factor(values)) {
