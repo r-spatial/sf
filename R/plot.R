@@ -224,7 +224,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					.image_scale_factor(levels(values), colors, key.pos = key.pos,
 						axes = isTRUE(dots$axes), key.width = key.width)
 				} else
-					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
+					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+						axes = isTRUE(dots$axes))
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
