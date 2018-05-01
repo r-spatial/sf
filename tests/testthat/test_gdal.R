@@ -46,7 +46,7 @@ test_that("st_wrap_dateline works", {
 })
 
 test_that('gdal_subdatasets works', {
-  skip_if_not(unname(sf_extSoftVersion()["GDAL"]) >= "2.1.0")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
   fname = system.file("nc/cropped.nc", package = "sf")
   sd2 = gdal_subdatasets(fname)[[2]]
 })
@@ -54,7 +54,7 @@ test_that('gdal_subdatasets works', {
 # context("gdal utils")
 test_that('gdal_utils work', {
   skip_on_appveyor() # FIXME:
-  skip_if_not(unname(sf_extSoftVersion()["GDAL"]) >= "2.1.0")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
 
   fname = system.file("nc/cropped.nc", package = "sf")
   #fname = system.file("tif/geomatrix.tif", package = "sf")
