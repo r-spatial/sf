@@ -286,15 +286,16 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
 	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection"))) {
-		if(is.null(layer)) layer <- deparse(substitute(obj))
+		if (is.null(layer)) 
+			layer = deparse(substitute(obj))
 		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
 	}
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
-	if (is.null(layer))
-		layer <- file_path_sans_ext(basename(dsn))
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
+	if (is.null(layer))
+		layer <- file_path_sans_ext(basename(dsn))
 
 	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
