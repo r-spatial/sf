@@ -571,9 +571,9 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, 
-		Rcpp::NumericVector bufferDist, int nQuadSegs = 30,
-		double dTolerance = 0.0, bool preserveTopology = false, 
-		int bOnlyEdges = 1, double dfMaxLength = 0.0) {
+		Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
+		Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology, 
+		int bOnlyEdges = 1) {
 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init(); 
@@ -585,7 +585,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		if (bufferDist.size() != (int) g.size())
 			Rcpp::stop("invalid dist argument"); // #nocov
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs));
+			out[i] = chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs[i]));
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i]));
@@ -597,8 +597,9 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 //			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i]));
 	} else if (op == "simplify") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = preserveTopology ? chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance)) :
-					chkNULL(GEOSSimplify_r(hGEOSCtxt, g[i], dTolerance));
+			out[i] = preserveTopology[i] ?
+					chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i], dTolerance[i])) :
+					chkNULL(GEOSSimplify_r(hGEOSCtxt, g[i], dTolerance[i]));
 	} else if (op == "linemerge") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = chkNULL(GEOSLineMerge_r(hGEOSCtxt, g[i]));
@@ -621,7 +622,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 #if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 4
 	if (op == "triangulate") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i], dTolerance, bOnlyEdges));
+			out[i] = chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i], dTolerance[i], bOnlyEdges));
 	} else
 #endif
 		Rcpp::stop("invalid operation"); // would leak g and out // #nocov

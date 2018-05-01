@@ -544,20 +544,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
-RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs, Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology, int bOnlyEdges);
+RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type bufferDist(bufferDistSEXP);
-    Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
-    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
-    Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type nQuadSegs(nQuadSegsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type dTolerance(dToleranceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type preserveTopology(preserveTopologySEXP);
     Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
-    Rcpp::traits::input_parameter< double >::type dfMaxLength(dfMaxLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -971,7 +970,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_normalize", (DL_FUNC) &_sf_CPL_geos_normalize, 1},
     {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
-    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 8},
+    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 7},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
