@@ -92,7 +92,8 @@
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = 0.08, reset = TRUE) {
+		#key.pos = get_key_pos(x, ...), key.length = .618, key.width = 0.08, reset = TRUE) {
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -206,23 +207,23 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					length(col) > 1) { # plot key?
 
 				switch(key.pos,
-					layout(matrix(c(2,2,2,0,1,0), nrow = 2, ncol = 3, byrow = T),
+					layout(matrix(c(2,2,2,0,1,0), nrow = 2, ncol = 3, byrow = TRUE),
 						widths = c((1 - key.length)/2, key.length,(1 - key.length)/2),
-						heights = c(1, key.width)),                                  # 1 bottom
-					layout(matrix(c(0,1,0,2,2,2), nrow = 3, ncol = 2, byrow = F),
+						heights = c(1, key.width)),                                      # 1 bottom
+					layout(matrix(c(0,1,0,2,2,2), nrow = 3, ncol = 2, byrow = FALSE),
 						widths = c(key.width, 1),
-						heights = c((1-key.length)/2, key.length,(1-key.length)/2)), # 2 left
-					layout(matrix(c(0,1,0,2,2,2), nrow = 2, ncol = 3, byrow = T),
+						heights = c((1 - key.length)/2, key.length,(1 - key.length)/2)), # 2 left
+					layout(matrix(c(0,1,0,2,2,2), nrow = 2, ncol = 3, byrow = TRUE),
 						widths = c((1 - key.length)/2, key.length,(1 - key.length)/2),
-						heights = c(key.width, 1)),                                  # 3 top
-					layout(matrix(c(2,2,2,0,1,0), nrow = 3, ncol = 2, byrow = F),
+						heights = c(key.width, 1)),                                      # 3 top
+					layout(matrix(c(2,2,2,0,1,0), nrow = 3, ncol = 2, byrow = FALSE),
 						widths = c(1, key.width),
 						heights = c((1 - key.length)/2, key.length,(1 - key.length)/2))  # 4 right
 				)
 
 				if (is.factor(values)) {
 					.image_scale_factor(levels(values), colors, key.pos = key.pos,
-						axes = isTRUE(dots$axes), key.length = key.length)
+						axes = isTRUE(dots$axes), key.width = key.width)
 				} else
 					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
 			}
@@ -645,6 +646,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param bb ignore
 #' @param n ignore
 #' @param total_size ignore
+#' @param key.length ignore
 .get_layout = function(bb, n, total_size, key.pos, key.length) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1, it will be a return value, "optimally" placed
@@ -792,12 +794,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 #' @name stars
 #' @export
-#' @param key.length ignore
+#' @param key.width ignore
 .image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.length) {
+	at = NULL, ..., axes = FALSE, key.width) {
 
 	n = length(z)
-	ksz = as.numeric(gsub(" cm", "", key.length)) * 2
+	# TODO:
+	ksz = as.numeric(gsub(" cm", "", key.width)) * 2
 	breaks = (0:n) + 0.5
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
@@ -809,7 +812,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 		#mar[key.pos] = 2.1
-		mar[key.pos] = ksz - 1.3
+		mar[key.pos] = max(ksz - 1.3, 0.0)
 	}
 	par(mar = mar)
 

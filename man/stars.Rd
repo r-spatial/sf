@@ -11,7 +11,7 @@
 \alias{.image_scale_factor}
 \title{functions only exported to be used internally by stars}
 \usage{
-.get_layout(bb, n, total_size, key.pos, key.size)
+.get_layout(bb, n, total_size, key.pos, key.length)
 
 .degAxis(side, at, labels, ..., lon, lat, ndiscr, reset)
 
@@ -19,7 +19,7 @@
   ..., axes = FALSE)
 
 .image_scale_factor(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-  at = NULL, ..., axes = FALSE, key.size)
+  at = NULL, ..., axes = FALSE, key.width)
 }
 \arguments{
 \item{bb}{ignore}
@@ -30,7 +30,7 @@
 
 \item{key.pos}{ignore}
 
-\item{key.size}{ignore}
+\item{key.length}{ignore}
 
 \item{side}{ignore}
 
@@ -57,6 +57,8 @@
 \item{add.axis}{ignore}
 
 \item{axes}{ignore}
+
+\item{key.width}{ignore}
 }
 \description{
 functions only exported to be used internally by stars
