@@ -112,12 +112,18 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, sparse, prepared)
-	if (sparse) {
-		if (is.null(id <- row.names(x)))
-			id = as.character(1:length(ret))
-		sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-	} else
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+	if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+		id = if (is.null(row.names(x)))
+				as.character(1:length(ret))
+			else
+				row.names(x)
+		sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
+		if (! sparse)
+			as.matrix(sgbp)
+		else
+			sgbp
+	} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
 		ret[[1]]
 }
 

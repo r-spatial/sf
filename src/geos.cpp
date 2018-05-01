@@ -216,7 +216,7 @@ Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
-		std::string pattern = "", bool sparse = true, bool prepared = false) {
+		std::string pattern = "", bool prepared = false) {
 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -226,7 +226,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 	Rcpp::List ret_list;
 
 	using namespace Rcpp; // so that later on the (i,_) works
-	if (op == "relate") { // character return matrix:
+	if (op == "relate") { // return character matrix:
 		Rcpp::CharacterVector out(sfc0.length() * sfc1.length());
 		for (int i = 0; i < sfc0.length(); i++) {
 			for (int j = 0; j < sfc1.length(); j++) {
@@ -287,9 +287,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 		}
 		ret_list = Rcpp::List::create(out);
-	} else if (op == "is_within_distance") { // return sparse matrix:
-		if (! sparse) // taken care of at R level, use st_distance(x,y) <= z
-			Rcpp::stop("is_within_distance: shouldn't happen"); // #nocov
+	} else if (op == "is_within_distance") {
 		Rcpp::List sparsemat(sfc0.length());
 		for (size_t i = 0; i < gmv0.size(); i++) {
 			std::vector<size_t> sel;
@@ -305,10 +303,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		}
 		ret_list = sparsemat;
 	} else if (gmv1.size()) {
-		// other cases: boolean return matrix, either dense or sparse
-		Rcpp::LogicalMatrix densemat;
-		if (! sparse)  // allocate:
-			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
+		// other cases: sparse matrix
 		Rcpp::List sparsemat(sfc0.length());
 
 		std::vector<size_t> items(gmv1.size());
@@ -324,10 +319,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				Rcpp::LogicalVector rowi(sfc1.length()); 
 				for (int j = 0; j < sfc1.length(); j++) 
 					rowi(j) = chk_(GEOSEqualsExact_r(hGEOSCtxt, gmv0[i], gmv1[j], par));
-				if (! sparse)
-					densemat(i,_) = rowi;
-				else
-					sparsemat[i] = get_which(rowi);
+				sparsemat[i] = get_which(rowi);
 				R_CheckUserInterrupt();
 			}
 		} else if (op == "relate_pattern") { // needing pattern
@@ -342,11 +334,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				for (size_t j = 0; j < tree_sel.size(); j++)
 					if (chk_(GEOSRelatePattern_r(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]], pattern.c_str())))
 						sel.push_back(tree_sel[j] + 1); // 1-based
-				if (sparse) {
-					std::sort(sel.begin(), sel.end());
-					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-				} else // dense
-					densemat(i,_) = get_dense(sel, sfc1.length());
+				std::sort(sel.begin(), sel.end());
+				sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
 				R_CheckUserInterrupt();
 			}
 		} else if (op == "disjoint")
@@ -363,11 +352,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					for (size_t j = 0; j < tree_sel.size(); j++)
 						if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
 							sel.push_back(tree_sel[j] + 1); // 1-based
-					if (sparse) {
-						std::sort(sel.begin(), sel.end());
-						sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					} else // dense
-						densemat(i,_) = get_dense(sel, sfc1.length());
+					std::sort(sel.begin(), sel.end());
+					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
 					GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
 					R_CheckUserInterrupt();
 				}
@@ -381,32 +367,21 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					for (size_t j = 0; j < tree_sel.size(); j++)
 						if (chk_(logical_fn(hGEOSCtxt, gmv0[i], gmv1[tree_sel[j]])))
 							sel.push_back(tree_sel[j] + 1); // 1-based
-					if (sparse) {
-						std::sort(sel.begin(), sel.end());
-						sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					} else // dense
-						densemat(i,_) = get_dense(sel, sfc1.length());
+					std::sort(sel.begin(), sel.end());
+					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
 					R_CheckUserInterrupt();
 				}
 			}
 		}
 		GEOSSTRtree_destroy_r(hGEOSCtxt, tree1);
-		if (sparse)
-			ret_list = sparsemat;
-		else
-			ret_list = Rcpp::List::create(densemat);
+		ret_list = sparsemat;
 	} else { // gmv1.size() == 0:
-		if (! sparse) { // allocate:
-			Rcpp::LogicalMatrix densemat;
-			densemat = Rcpp::LogicalMatrix(sfc0.length(), sfc1.length());
-			ret_list = Rcpp::List::create(densemat);
-		} else {
-			Rcpp::List sparsemat(sfc0.length());
-			for (size_t i = 0; i < gmv0.size(); i++)
-				sparsemat[i] = Rcpp::IntegerVector();
-			ret_list = sparsemat;
-		}
+		Rcpp::List sparsemat(sfc0.length());
+		for (size_t i = 0; i < gmv0.size(); i++)
+			sparsemat[i] = Rcpp::IntegerVector();
+		ret_list = sparsemat;
 	}
+	// clean up:
 	for (size_t i = 0; i < gmv0.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
 	for (size_t i = 0; i < gmv1.size(); i++)
@@ -776,12 +751,6 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 		Rcpp::CharacterVector which, double par) {
 	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, Rcpp::as<std::string>(which), par, "", false)[0];
 	return out;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1) {
-	Rcpp::CharacterVector out = CPL_geos_binop(sfc0, sfc1, "relate", 0.0, "", false)[0];
-	return out;	
 }
 
 // [[Rcpp::export]]
