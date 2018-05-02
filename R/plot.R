@@ -205,27 +205,23 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
 
-				k.l = if (is.character(key.length))
-						c(1, key.length, 1)
-					else
-						c((1 - key.length)/2, key.length, (1 - key.length)/2)
 				switch(key.pos,
-					layout(matrix(c(2,2,2,0,1,0), nrow = 2, ncol = 3, byrow = TRUE),
-						widths = k.l, heights = c(1, key.width)), # 1 bottom
-					layout(matrix(c(0,1,0,2,2,2), nrow = 3, ncol = 2, byrow = FALSE),
-						widths = c(key.width, 1), heights = k.l), # 2 left
-					layout(matrix(c(0,1,0,2,2,2), nrow = 2, ncol = 3, byrow = TRUE),
-						widths = k.l, heights = c(key.width, 1)), # 3 top
-					layout(matrix(c(2,2,2,0,1,0), nrow = 3, ncol = 2, byrow = FALSE),
-						widths = c(1, key.width), heights = k.l)  # 4 right
+					layout(matrix(c(2,1), nrow = 2, ncol = 1),
+						widths = 1, heights = c(1, key.width)), # 1 bottom
+					layout(matrix(c(1,2), nrow = 1, ncol = 2),
+						widths = c(key.width, 1), heights = 1), # 2 left
+					layout(matrix(c(1,2), nrow = 2, ncol = 1),
+						widths = 1, heights = c(key.width, 1)), # 3 top
+					layout(matrix(c(2,1), nrow = 1, ncol = 2),
+						widths = c(1, key.width), heights = 1)  # 4 right
 				)
 
 				if (is.factor(values)) {
 					.image_scale_factor(levels(values), colors, key.pos = key.pos,
-						axes = isTRUE(dots$axes), key.width = key.width)
+						key.width = key.width, key.length = key.length, ...)
 				} else
 					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
-						axes = isTRUE(dots$axes))
+						key.length = key.length, ...)
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -240,8 +236,9 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				if (length(main) && inherits(x[[main]], "units"))
 					main = make_unit_label(main, x[[main]])
 			}
-			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, border, graticule,
-					xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, expandBB, col_graticule) # absorb
+			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, 
+					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, 
+					expandBB, col_graticule, at) # absorb
 				title(...)
 			localTitle(main, ...)
 		}
@@ -744,19 +741,33 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param axes ignore
 #' @param ... ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE) {
+	at = NULL, ..., axes = FALSE, key.length) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
-	zlim = range(z, na.rm=TRUE)
+	zlim = range(z, na.rm = TRUE)
 	if (is.null(breaks))
 		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	if (is.character(key.length)) {
+		kl = as.numeric(gsub(" cm", "", key.length))
+		sz = if (key.pos %in% c(1,3))
+				dev.size("cm")[1]
+			else
+				dev.size("cm")[2]
+		key.length = kl/sz
+	}
+	if (is.null(at)) {
+		br = range(breaks)
+		at = pretty(br)
+		at = at[at > br[1] & at < br[2]]
+	}
+	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = range(breaks)
+		xlim = kl_lim(range(breaks), key.length)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 	}
 	if (key.pos %in% c(2,4)) {
-		ylim = range(breaks)
+		ylim = kl_lim(range(breaks), key.length)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 	}
@@ -767,7 +778,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	offset = 0.2
 	offs = switch(key.pos,
 		c(0,0,-offset,-offset),
@@ -820,7 +831,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
