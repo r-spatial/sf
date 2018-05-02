@@ -1,5 +1,7 @@
 # version 0.6-3
 
+* improve control over legend keys, using `key.length` and `key.width`; #731
+
 * add `as.data.frame` method for `sgbp` objects; #715
 
 # version 0.6-2
