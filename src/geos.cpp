@@ -205,6 +205,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 	Rcpp::stop("wrong value for op"); // unlikely to happen unless user wants to #nocov
 }
 
+/*
 Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
 	Rcpp::LogicalVector rowi(length);
 	for (int j = 0; j < length; j++)
@@ -213,6 +214,7 @@ Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
 		rowi(items[j] - 1) = true; // items is 1-based
 	return rowi;
 }
+*/
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0, 
