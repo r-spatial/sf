@@ -89,6 +89,10 @@
 #' gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
+#' # to add a custom legend to an arbitray plot:
+#' layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
+#' plot(1)
+#' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
