@@ -807,19 +807,28 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @export
 #' @param key.width ignore
 .image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.width) {
+	..., axes = FALSE, key.width, key.length) {
 
 	n = length(z)
 	# TODO:
 	ksz = as.numeric(gsub(" cm", "", key.width)) * 2
 	breaks = (0:n) + 0.5
+	if (is.character(key.length)) {
+		kl = as.numeric(gsub(" cm", "", key.length))
+		sz = if (key.pos %in% c(1,3))
+				dev.size("cm")[1]
+			else
+				dev.size("cm")[2]
+		key.length = kl/sz
+	}
+	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = range(breaks)
+		xlim = kl_lim(range(breaks), key.length)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 		mar[key.pos] = 2.1
 	} else {
-		ylim = range(breaks)
+		ylim = kl_lim(range(breaks), key.length)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 		#mar[key.pos] = 2.1
@@ -839,7 +848,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 			polygon(c(0, 0, 1, 1), poly[[i]], col = col[i], border = NA)
 	}
 
-	box()
+	# box() now would draw around [0,1]:
+	bx = c(breaks[1], rep(tail(breaks, 1), 2), breaks[1])
+	if (key.pos %in% c(1,3))
+		polygon(bx, c(0, 0, 1, 1), col = NA, border = 'black')
+	if (key.pos %in% c(2,4))
+		polygon(c(0, 0, 1, 1), bx, col = NA, border = 'black')
+
 	if (add.axis) {
 		opar = par(las = 1)
 		axis(key.pos, at = 1:n, labels = z)
