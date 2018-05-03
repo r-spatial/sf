@@ -4,7 +4,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param main title for plot (\code{NULL} to remove)
-#' @param pal palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used
+#' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
@@ -16,8 +16,8 @@
 #' @param bg symbol background color
 #' @param lty line type
 #' @param lwd line width
-#' @param col color
-#' @param border color of polygon border
+#' @param col color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.
+#' @param border color of polygon border(s)
 #' @param add logical; add to current plot?
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
@@ -195,14 +195,9 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						colors[cuts]
 					}
 			} else {
-				if (is.factor(values)) {
-					which.first = function(x) which(x)[1]
-					fnum = as.numeric(values)
-					colors = col[ sapply(unique(fnum), function(i) which.first(i == fnum)) ]
-					if (key.pos.missing && nlevels(values) > 30) # doesn't make sense:
-						key.pos = NULL
-				} else # no key:
-					key.pos = NULL
+				if (length(col) != 1 && length(col) != nrow(x))
+					warning("col is not of length 1 or ncol(x): colors will be recycled; use pal to specify a color palette")
+				key.pos = NULL # no key!
 			}
 
 			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&

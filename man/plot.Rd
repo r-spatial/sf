@@ -81,11 +81,11 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{...}{further specifications, see \link{plot_sf} and \link{plot}}
 
-\item{col}{color}
+\item{col}{color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.}
 
 \item{main}{title for plot (\code{NULL} to remove)}
 
-\item{pal}{palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used}
+\item{pal}{palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used}
 
 \item{nbreaks}{number of colors breaks (ignored for \code{factor} or \code{character} variables)}
 
@@ -115,7 +115,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{add}{logical; add to current plot?}
 
-\item{border}{color of polygon border}
+\item{border}{color of polygon border(s)}
 
 \item{rule}{see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions}
 

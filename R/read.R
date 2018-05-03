@@ -114,7 +114,8 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		warning("no simple feature geometries present: returning a data.frame", call. = FALSE)
+		warning("no simple feature geometries present: returning a data.frame or tbl_df",
+			call. = FALSE)
 		return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
 	}
 
