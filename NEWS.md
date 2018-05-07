@@ -24,6 +24,8 @@
 
 * `st_read` and `st_write` are now generic, with methods for directly reading from and writing to database connections; `st_read_db` and `st_write_db` are now deprecated; #558, thanks to Etienne Racine @etiennebr
 
+* Package `RPostgreSQL` moved from Suggests to Imports
+
 * restore compatibility with GDAL 2.0.x versions (which won't have `gdal_utils`); #686
 
 * `read_sf` can now also read tables without geometry; #684, by Andy Teucher
