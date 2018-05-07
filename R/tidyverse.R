@@ -127,29 +127,34 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	crs = st_crs(.data)
 	ret = NextMethod()
 
-	geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-		geom = st_geometry(.data)
-		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
-		# merge geometry:
-		geom = if (do_union)
-			unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
-		else
-			unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
-		if (is.null(geom))
-			st_sfc() #676 #nocov
-		else
-			do.call(st_sfc, geom)
-	} else { # single group:
-		if (do_union)
-			st_union(st_geometry(.data))
-		else
-			st_combine(st_geometry(.data))
+	if (! any(sapply(ret, inherits, what = "sfc"))) {
+		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
+			geom = st_geometry(.data)
+			i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
+			# merge geometry:
+			geom = if (do_union)
+				unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
+			else
+				unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
+			if (is.null(geom))
+				st_sfc() #676 #nocov
+			else
+				do.call(st_sfc, geom)
+		} else { # single group:
+			if (do_union)
+				st_union(st_geometry(.data))
+			else
+				st_combine(st_geometry(.data))
+		}
+		ret[[ sf_column ]] = geom
+		ret$do_union = NULL
+	} else {
+		class(ret)  = setdiff(class(ret), "sf")
+		attr(ret, "sf_column") = NULL
 	}
-	ret[[ sf_column ]] = geom
-	ret$do_union = NULL
-	st_as_sf(ret, crs = crs, precision = st_precision(.data),
-		sf_column_name = attr(.data, "sf_column"))
+	st_as_sf(ret, crs = crs, precision = st_precision(.data))
 }
+
 
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
