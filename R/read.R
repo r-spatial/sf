@@ -323,7 +323,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
-		tmp = tempfile() # nocov start
+		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
