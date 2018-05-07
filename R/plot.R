@@ -134,8 +134,11 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
-		if (is.null(col) && ncol(x) == 1) # no colors, no attributes to choose colors from: plot geometry
-			plot(st_geometry(x), ...)
+		if (ncol(x) == 1) { # no attributes to choose colors from: plot geometry
+			if (is.null(col))
+				col = NA_character_
+			plot(st_geometry(x), col = col, ...)
+		}
 		else { # generate plot with colors and possibly key
 			if (ncol(x) > 2) { # add = TRUE
 				warning("ignoring all but the first attribute")
