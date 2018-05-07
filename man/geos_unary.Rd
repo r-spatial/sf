@@ -58,11 +58,11 @@ st_segmentize(x, dfMaxLength, ...)
 \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise}
 
-\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle)}
+\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature}
 
-\item{preserveTopology}{logical; carry out topology preserving simplification?}
+\item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.}
 
-\item{dTolerance}{numeric; tolerance parameter}
+\item{dTolerance}{numeric; tolerance parameter, specified for all or for each feature geometry.}
 
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 

@@ -1,11 +1,13 @@
 context("sf: gdal tests")
 
 test_that("st_transform works", {
+  skip_if_not_installed("sp")
+  skip_if_not_installed("rgdal")
   library(sp)
-  
+
   s = st_sfc(st_point(c(1,1)), st_point(c(10,10)), st_point(c(5,5)), crs = 4326)
   s1.tr = st_transform(s, 3857)
-  
+
   sp = as(s, "Spatial")
   sp.tr = spTransform(sp, CRS("+init=epsg:3857"))
   s2.tr = st_as_sfc(sp.tr)
@@ -43,9 +45,16 @@ test_that("st_wrap_dateline works", {
 	expect_silent(x <- st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)))
 })
 
+test_that('gdal_subdatasets works', {
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
+  fname = system.file("nc/cropped.nc", package = "sf")
+  sd2 = gdal_subdatasets(fname)[[2]]
+})
+
 # context("gdal utils")
 test_that('gdal_utils work', {
   skip_on_appveyor() # FIXME:
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
 
   fname = system.file("nc/cropped.nc", package = "sf")
   #fname = system.file("tif/geomatrix.tif", package = "sf")

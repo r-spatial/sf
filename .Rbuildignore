@@ -1,9 +1,7 @@
 .travis.yml
-attic
-docs
 PROPOSAL.md
-cov
 config.log
+config.status
 TODO
 ^windows
 ^appveyor\.yml$
@@ -15,3 +13,4 @@ CONDUCT.md
 rdev
 ^codecov\.yml$
 hub
+tic.R

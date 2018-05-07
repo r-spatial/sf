@@ -7,7 +7,7 @@
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
-\alias{st_read_db}
+\alias{st_read.DBIObject}
 \title{Read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ...)
@@ -19,70 +19,92 @@ st_read(dsn, layer, ...)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
-st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
-  EWKB, ...)
+\method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
+  geom_column = NULL, EWKB = TRUE, ...)
 }
 \arguments{
-\item{dsn}{data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a folder,
-or contain the name and access credentials of a database); in case of GeoJSON, \code{dsn} may be the character string holding the geojson data}
+\item{dsn}{data source name (interpretation varies by driver - for some
+drivers, \code{dsn} is a file name, but may also be a folder, or contain
+the name and access credentials of a database); in case of GeoJSON,
+\code{dsn} may be the character string holding the geojson data. It can
+also be an open database connection.}
 
-\item{layer}{layer name (varies by driver, may be a file name without extension); in case \code{layer} is missing,
-\code{st_read} will read the first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE}) print a
-message when there are multiple layers, or give an error if there are no layers in \code{dsn}.}
+\item{layer}{layer name (varies by driver, may be a file name without
+extension); in case \code{layer} is missing, \code{st_read} will read the
+first layer of \code{dsn}, give a warning and (unless \code{quiet = TRUE})
+print a message when there are multiple layers, or give an error if there
+are no layers in \code{dsn}. If \code{dsn} is a database connection, then
+\code{layer} can be a table name or a database identifier (see
+\code{\link[DBI]{Id}}). It is also possible to omit \code{layer} and rather
+use the \code{query} argument.}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 
-\item{options}{character; driver dependent dataset open options, multiple options supported.}
+\item{options}{character; driver dependent dataset open options, multiple
+options supported.}
 
-\item{quiet}{logical; suppress info on name, driver, size and spatial reference, or signaling no or multiple layers}
+\item{quiet}{logical; suppress info on name, driver, size and spatial
+reference, or signaling no or multiple layers}
 
-\item{geometry_column}{integer or character; in case of multiple geometry fields, which one to take?}
+\item{geometry_column}{integer or character; in case of multiple geometry
+fields, which one to take?}
 
-\item{type}{integer; ISO number of desired simple feature type; see details. If left zero, and \code{promote_to_multi}
-is \code{TRUE}, in case of mixed feature geometry
-types, conversion to the highest numeric type value found will be attempted. A vector with different values for each geometry column
+\item{type}{integer; ISO number of desired simple feature type; see details.
+If left zero, and \code{promote_to_multi} is \code{TRUE}, in case of mixed
+feature geometry types, conversion to the highest numeric type value found
+will be attempted. A vector with different values for each geometry column
 can be given.}
 
-\item{promote_to_multi}{logical; in case of a mix of Point and MultiPoint, or of LineString and MultiLineString, or of
-Polygon and MultiPolygon, convert all to the Multi variety; defaults to \code{TRUE}}
+\item{promote_to_multi}{logical; in case of a mix of Point and MultiPoint, or
+of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
+all to the Multi variety; defaults to \code{TRUE}}
 
-\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default
-is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
+\item{stringsAsFactors}{logical; logical: should character vectors be
+converted to factors?  The `factory-fresh' default is \code{TRUE}, but this
+can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
 
-\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as string; if FALSE, they are returned as double
-and a warning is given when precision is lost (i.e., values are larger than 2^53).}
+\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as
+string; if FALSE, they are returned as double and a warning is given when
+precision is lost (i.e., values are larger than 2^53).}
 
-\item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked and if necessary corrected (when seen from above: exterior ring counter clockwise, holes clockwise)}
-
-\item{conn}{open database connection}
-
-\item{table}{table name}
+\item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked
+and if necessary corrected (when seen from above: exterior ring counter
+clockwise, holes clockwise)}
 
 \item{query}{SQL query to select records; see details}
 
 \item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE} if \code{conn} is of class code{PostgreSQLConnection} or \code{PqConnection}, and to \code{FALSE} otherwise}
+\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}}
 }
 \value{
-object of class \link{sf} when a layer was successfully read; in case argument \code{layer} is missing and
-data source \code{dsn} does not contain a single layer, an object of class \code{sf_layers} is returned with the
-layer names, each with their geometry type(s). Note that the number of layers may also be zero.
+object of class \link{sf} when a layer was successfully read; in case
+  argument \code{layer} is missing and data source \code{dsn} does not
+  contain a single layer, an object of class \code{sf_layers} is returned
+  with the layer names, each with their geometry type(s). Note that the
+  number of layers may also be zero.
 }
 \description{
-Read simple features from file or database, or retrieve layer names and their geometry type(s)
+Read simple features from file or database, or retrieve layer names and their
+geometry type(s)
 
-Read PostGIS table directly through DBI and RPostgreSQL interface, converting binary
+Read PostGIS table directly through DBI and RPostgreSQL interface, converting
+Well-Know Binary geometries to sfc
 }
 \details{
-for \code{geometry_column}, see also \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+for \code{geometry_column}, see also
+\url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
 
-for values for \code{type}
-see \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but note that not every target value
-may lead to successful conversion. The typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the other
-way around (type=3), secondary rings from MULTIPOLYGONS may be dropped without warnings. \code{promote_to_multi} is handled on a per-geometry column basis; \code{type} may be specified for each geometry column.
+for values for \code{type} see
+\url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but
+note that not every target value may lead to successful conversion. The
+typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the
+other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
+without warnings. \code{promote_to_multi} is handled on a per-geometry column
+basis; \code{type} may be specified for each geometry column.
 
-In case of problems reading shapefiles from USB drives on OSX, please see \url{https://github.com/r-spatial/sf/issues/252}.
+In case of problems reading shapefiles from USB drives on OSX, please see
+\url{https://github.com/r-spatial/sf/issues/252}.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
@@ -122,8 +144,8 @@ x
 library(RPostgreSQL)
 try(conn <- dbConnect(PostgreSQL(), dbname = "postgis"))
 if (exists("conn") && !inherits(conn, "try-error")) {
-  x = st_read_db(conn, "meuse", query = "select * from meuse limit 3;")
-  x = st_read_db(conn, table = "public.meuse")
+  x = st_read(conn, "meuse", query = "select * from meuse limit 3;")
+  x = st_read(conn, table = "public.meuse")
   print(st_crs(x)) # SRID resolved by the database, not by GDAL!
   dbDisconnect(conn)
  }

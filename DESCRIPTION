@@ -1,18 +1,19 @@
 Package: sf
-Version: 0.6-1
+Version: 0.6-3
 Title: Simple Features for R
 Description: Support for simple features, a standardized way to encode spatial vector data. Binds
 	to 'GDAL' for reading and writing data, to 'GEOS' for geometrical operations, and to 'PROJ' for projection
 	conversions and datum transformations.
 Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
 	person("Roger", "Bivand", role = "ctb", comment = c(ORCID = "0000-0003-2392-6140")),
+	person("Etienne", "Racine", role = "ctb"),
+	person("Michael", "Sumner", role = "ctb"),
 	person("Ian", "Cook", role = "ctb"),
 	person("Tim", "Keitt", role = "ctb"),
-	person("Michael", "Sumner", role = "ctb"),
 	person("Robin", "Lovelace", role = "ctb"),
 	person("Hadley", "Wickham", role = "ctb"),
 	person("Jeroen", "Ooms", role = "ctb", comment = c(ORCID = "0000-0002-4035-0289")),
-	person("Etienne", "Racine", role = "ctb"))
+	person("Kirill", "Müller", role = "ctb"))
 Depends:
 	R (>= 3.3.0), methods
 Imports:
@@ -23,8 +24,9 @@ Imports:
 	grDevices,
 	grid,
 	Rcpp,
-	DBI (>= 0.5),
-	units (>= 0.4-6),
+	RPostgreSQL,
+	DBI (>= 0.8),
+	units (>= 0.5-1),
 	classInt,
 	magrittr
 Suggests:
@@ -38,12 +40,12 @@ Suggests:
 	tmap,
 	maptools,
 	RSQLite,
-	RPostgreSQL,
 	tibble (>= 1.4.1),
 	pillar,
 	rlang,
 	dplyr (>= 0.7-0),
 	tidyr (>= 0.7-2),
+	RPostgres (>= 1.1.0),
 	tidyselect,
 	ggplot2,
 	mapview,
@@ -54,7 +56,7 @@ Suggests:
 	rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
+SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
@@ -93,5 +95,8 @@ Collate:
 	sgbp.R
 	spatstat.R
 	stars.R
+	crop.R
 	gdal_utils.R
+	deprecated.R
 RoxygenNote: 6.0.1
+Encoding: UTF-8

@@ -1,7 +1,7 @@
 context("sf: geos tests")
 
-test_that("CPL_goes_relate works", {
-  r1 = sf:::CPL_geos_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
+test_that("st_relate works", {
+  r1 = st_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
   library(sp)
   p = SpatialPoints(matrix(0,1,2))
   l = Lines(list(Line(rbind(c(0,0),c(1,1)))), "ID")

@@ -17,7 +17,7 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
 
-\item{crs}{object of class \code{crs}}
+\item{crs}{object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
 
 \item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
 }

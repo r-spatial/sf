@@ -25,8 +25,8 @@ format.sfc = function(x, ..., width = 30) {
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
-#' \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type; 
-#' in case of a mix of types or an empty set, \code{TYPE} is set to the 
+#' \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
+#' in case of a mix of types or an empty set, \code{TYPE} is set to the
 #' superclass \code{GEOMETRY}.
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -127,10 +127,12 @@ sfg_is_empty = function(x) {
 
 
 #' @export
-"[<-.sfc" = function (x, i, j, value) {
+#"[<-.sfc" = function (x, i, j, value) {
+"[<-.sfc" = function (x, i, value) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
-	class(x) = setdiff(class(x), "sfc")
+	#class(x) = setdiff(class(x), "sfc")
+	x = unclass(x) # becomes a list, but keeps attributes
 	st_sfc(NextMethod())
 }
 
@@ -345,7 +347,7 @@ st_precision.sfc <- function(x) {
 #'
 #' @name st_precision
 #' @param precision numeric; see \link{st_as_binary} for how to do this.
-#' @details Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write}, \link{write_sf} or \link{st_write_db}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
+#' @details Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
 #'
 #' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
 #' @examples
@@ -476,13 +478,16 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 
 	if (is.raw(x[[1]]))
 		st_as_sfc(structure(x, class = "WKB"), ...)
+	else if (inherits(x[[1]], "sfg"))
+		st_sfc(x, crs = crs)
 	else if (is.character(x[[1]])) { # hex wkb or wkt:
 		ch12 = substr(x[[1]], 1, 2)
 		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
 			st_as_sfc(structure(x, class = "WKB"), ...)
 		else
 			st_as_sfc(unlist(x), ...) # wkt
-	}
+	} else
+		stop(paste("st_as_sfc.list: don't know what to do with list with elements of class", class(x[[1]])))
 }
 
 #' @name st_as_sfc

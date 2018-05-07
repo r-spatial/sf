@@ -125,9 +125,9 @@ st_transform.sfg = function(x, crs , ...) {
 }
 
 #' @name st_transform
-#' @param type character; one of \code{proj}, \code{ellps}, \code{datum} or \code{units}
+#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum} or \code{units}
 #' @export
-#' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library
+#' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library when \code{type} is equal to proj, ellps, datum or units; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 #' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {

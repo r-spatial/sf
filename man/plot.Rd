@@ -34,7 +34,7 @@
 \method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
-  key.size = lcm(1.8), reset = TRUE)
+  key.length = 0.618, key.width = lcm(1.8), reset = TRUE)
 
 get_key_pos(x, ...)
 
@@ -81,11 +81,11 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{...}{further specifications, see \link{plot_sf} and \link{plot}}
 
-\item{col}{color}
+\item{col}{color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.}
 
 \item{main}{title for plot (\code{NULL} to remove)}
 
-\item{pal}{palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used}
+\item{pal}{palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used}
 
 \item{nbreaks}{number of colors breaks (ignored for \code{factor} or \code{character} variables)}
 
@@ -95,7 +95,9 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.}
 
-\item{key.size}{amount of space reserved for the key (labels)}
+\item{key.length}{amount of space reserved for the key along its axis, length of the scale bar}
+
+\item{key.width}{amount of space reserved for the key (incl. labels), thickness/width of the scale bar}
 
 \item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.}
 
@@ -113,7 +115,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{add}{logical; add to current plot?}
 
-\item{border}{color of polygon border}
+\item{border}{color of polygon border(s)}
 
 \item{rule}{see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions}
 
@@ -239,5 +241,9 @@ gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
 gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
 gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
+# to add a custom legend to an arbitray plot:
+layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
+plot(1)
+.image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
 sf.colors(10)
 }

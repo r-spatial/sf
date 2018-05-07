@@ -34,6 +34,10 @@ Ops.crs <- function(e1, e2) {
 #' @name st_crs
 #' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
+#' @param valid default TRUE. This allows to create crs without checking against
+#' the local proj4 database. It can be used to synchronize crs with a remote
+#' database, but avoid it as much as possible.
+#' @param proj4text character. Must be used in conjunction with \code{valid = FALSE}.
 #' @export
 #' @return If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
@@ -54,7 +58,14 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 
 #' @name st_crs
 #' @export
-st_crs.numeric = function(x, ...) make_crs(x)
+st_crs.numeric = function(x, proj4text = "", valid = TRUE, ...) {
+    if (!valid)
+        return(structure(list(epsg = x, proj4string = proj4text), class = "crs"))
+    if (proj4text != "")
+        warning("`proj4text` is not used to validate crs. Remove `proj4text` ",
+                "argument or set `valid = FALSE` to stop warning.")
+    make_crs(x)
+}
 
 #' @name st_crs
 #' @export
@@ -69,7 +80,7 @@ st_crs.character = function(x, ..., wkt) {
 #' @name st_crs
 #' @param parameters logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}
 #' @export
-st_crs.sfc = function(x, ..., parameters = FALSE) { 
+st_crs.sfc = function(x, ..., parameters = FALSE) {
 	crs = attr(x, "crs")
 	if (parameters) {
 		if (is.na(crs))
@@ -332,7 +343,7 @@ print.crs = function(x, ...) {
        cat("  EPSG:", x$epsg, "\n")
     if (is.na(x$proj4string))
       stop("  invalid crs: please report an issue") # nocov
-    else 
+    else
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
   }
 }

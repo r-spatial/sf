@@ -48,15 +48,31 @@ POINT (0 1)
 > # Ops.sfg:
 > ls = st_linestring(rbind(c(0,0),c(0,1)))
 > pt = st_point(1:0)
-> ls + pt
+> ls | pt
 GEOMETRYCOLLECTION (LINESTRING (0 0, 0 1), POINT (1 0))
-> ls - pt
-LINESTRING (0 0, 0 1)
-> ls * pt
-GEOMETRYCOLLECTION EMPTY
 > ls / pt
+LINESTRING (0 0, 0 1)
+> ls & pt
+GEOMETRYCOLLECTION EMPTY
+> ls %/% pt
 GEOMETRYCOLLECTION (LINESTRING (0 0, 0 1), POINT (1 0))
+> # arith:
+> ls + pt
+LINESTRING (1 0, 1 1)
+> ls - pt
+LINESTRING (-1 0, -1 1)
+> ls * pt
+LINESTRING (0 0, 0 0)
+> ls / pt
+LINESTRING (0 0, 0 1)
+> # unary:
+> +pt
+POINT (1 0)
+> -pt
+POINT (-1 0)
+> try(!pt)
+Error in Ops.sfg(pt) : unary ! not defined for "sfg" objects
 > 
 > proc.time()
    user  system elapsed 
-  0.534   0.256   0.464 
+  0.699   0.245   0.657 

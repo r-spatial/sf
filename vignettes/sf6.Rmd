@@ -110,8 +110,3 @@ buf = st_buffer(polygon, 1)
 buf = st_buffer(polygon, units::set_units(1, degree))
 ```
 
-## _both operands of the expression should be "units" objects_ or _Error: $ operator is invalid for atomic vectors"
-
-This message appears if you loaded package `spatstat` _after_ you loaded `sf`. For units objects created by package `units`, methods from `spatstat` are chosen which also implements a `units` class. The solution is to revert the order of loading packages: first `spatstat`, then `units`. Otherwise, spatstat version 1.53-2.012 should [resolve this](https://github.com/spatstat/spatstat/issues/63).
-
-

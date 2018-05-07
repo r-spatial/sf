@@ -176,12 +176,20 @@ st_bbox.Raster = function(obj, ...) {
 }
 
 #' @name st_bbox
+#' @export
+st_bbox.Extent = function(obj, ...) {
+	if (!requireNamespace("raster", quietly = TRUE))
+		stop("package raster required, please install it first")
+	structure(bb_wrap(c(obj@xmin, obj@ymin, obj@xmax, obj@ymax)), crs = NA_crs_)
+}
+
+#' @name st_bbox
 #' @param crs object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.
 #' @examples
 #' st_bbox(c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9), crs = st_crs(4326))
 #' @export
 st_bbox.numeric = function(obj, ..., crs = NA_crs_) {
-	structure(bb_wrap(c(obj["xmin"], obj["ymin"], obj["xmax"], obj["ymax"])), crs = st_crs(crs))
+	structure(bb_wrap(obj[c("xmin", "ymin", "xmax", "ymax")]), crs = st_crs(crs))
 }
 
 #' @export

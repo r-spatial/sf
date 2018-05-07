@@ -4,19 +4,20 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot}
 #' @param main title for plot (\code{NULL} to remove)
-#' @param pal palette function, similar to \link[grDevices]{rainbow}; if omitted, \link{sf.colors} is used
+#' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
 #' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.
-#' @param key.size amount of space reserved for the key (labels)
+#' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
+#' @param key.length amount of space reserved for the key along its axis, length of the scale bar
 #' @param pch plotting symbol
 #' @param cex symbol size
 #' @param bg symbol background color
 #' @param lty line type
 #' @param lwd line width
-#' @param col color
-#' @param border color of polygon border
+#' @param col color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.
+#' @param border color of polygon border(s)
 #' @param add logical; add to current plot?
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
@@ -88,10 +89,14 @@
 #' gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
 #' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
 #' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
+#' # to add a custom legend to an arbitray plot:
+#' layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
+#' plot(1)
+#' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
 #' @export
 plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		key.pos = get_key_pos(x, ...), key.size = lcm(1.8), reset = TRUE) {
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -102,14 +107,14 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.size)
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.length)
 		key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
 		if (isTRUE(dots$axes))
 			par(mar = c(2.1, 2.1, 1.2, 0))
 		else
-			par(mar = c(0,0,1.2,0))
+			par(mar = c(0, 0, 1.2, 0))
 
 		if (max_plot_missing)
 			max.plot = prod(lt$mfrow)
@@ -124,8 +129,8 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (length(cols) > max.plot)
 			cols = cols[1:max.plot]
 		# loop over each map to plot:
-		invisible(lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...)))
+		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...))
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
@@ -190,30 +195,32 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						colors[cuts]
 					}
 			} else {
-				if (is.factor(values)) {
-					which.first = function(x) which(x)[1]
-					fnum = as.numeric(values)
-					colors = col[ sapply(unique(fnum), function(i) which.first(i == fnum)) ]
-					if (key.pos.missing && nlevels(values) > 30) # doesn't make sense:
-						key.pos = NULL
-				} else # no key:
-					key.pos = NULL
+				if (length(col) != 1 && length(col) != nrow(x))
+					warning("col is not of length 1 or ncol(x): colors will be recycled; use pal to specify a color palette")
+				key.pos = NULL # no key!
 			}
 
 			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
+
 				switch(key.pos,
-					layout(matrix(c(2,1), nrow = 2, ncol = 1), widths = 1, heights = c(1, key.size)),  # 1 bottom
-					layout(matrix(c(1,2), nrow = 1, ncol = 2), widths = c(key.size, 1), heights = 1),  # 2 left
-					layout(matrix(c(1,2), nrow = 2, ncol = 1), widths = 1, heights = c(key.size, 1)),  # 3 top
-					layout(matrix(c(2,1), nrow = 1, ncol = 2), widths = c(1, key.size), heights = 1)   # 4 right
+					layout(matrix(c(2,1), nrow = 2, ncol = 1),
+						widths = 1, heights = c(1, key.width)), # 1 bottom
+					layout(matrix(c(1,2), nrow = 1, ncol = 2),
+						widths = c(key.width, 1), heights = 1), # 2 left
+					layout(matrix(c(1,2), nrow = 2, ncol = 1),
+						widths = 1, heights = c(key.width, 1)), # 3 top
+					layout(matrix(c(2,1), nrow = 1, ncol = 2),
+						widths = c(1, key.width), heights = 1)  # 4 right
 				)
+
 				if (is.factor(values)) {
 					.image_scale_factor(levels(values), colors, key.pos = key.pos,
-						axes = isTRUE(dots$axes), key.size = key.size)
+						key.width = key.width, key.length = key.length, ...)
 				} else
-					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, axes = isTRUE(dots$axes))
+					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+						key.length = key.length, ...)
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -228,13 +235,17 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 				if (length(main) && inherits(x[[main]], "units"))
 					main = make_unit_label(main, x[[main]])
 			}
-			title(main)
+			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, 
+					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, 
+					expandBB, col_graticule, at) # absorb
+				title(...)
+			localTitle(main, ...)
 		}
-		if (reset) {
-			layout(matrix(1)) # reset
-			desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
-			par(opar[-desel])
-		}
+	}
+	if (reset) {
+		layout(matrix(1)) # reset
+		desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
+		par(opar[-desel])
 	}
 }
 
@@ -631,7 +642,8 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param bb ignore
 #' @param n ignore
 #' @param total_size ignore
-.get_layout = function(bb, n, total_size, key.pos, key.size) {
+#' @param key.length ignore
+.get_layout = function(bb, n, total_size, key.pos, key.length) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1, it will be a return value, "optimally" placed
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
@@ -665,7 +677,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 
 	m = matrix(1 : (nrow * ncol), nrow, ncol, byrow = TRUE)
 	if (!is.null(ret$key.pos) && ret$key.pos != 0) {
-		k = key.size
+		k = key.length
 		n = nrow * ncol + 1
 		switch(ret$key.pos,
 			{ ret$m = rbind(m, n); ret$widths = c(rep(1, ncol)); ret$heights = c(rep(1, nrow), k) },
@@ -728,19 +740,33 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param axes ignore
 #' @param ... ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE) {
+	at = NULL, ..., axes = FALSE, key.length) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
-	zlim = range(z, na.rm=TRUE)
+	zlim = range(z, na.rm = TRUE)
 	if (is.null(breaks))
 		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	if (is.character(key.length)) {
+		kl = as.numeric(gsub(" cm", "", key.length))
+		sz = if (key.pos %in% c(1,3))
+				dev.size("cm")[1]
+			else
+				dev.size("cm")[2]
+		key.length = kl/sz
+	}
+	if (is.null(at)) {
+		br = range(breaks)
+		at = pretty(br)
+		at = at[at > br[1] & at < br[2]]
+	}
+	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = range(breaks)
+		xlim = kl_lim(range(breaks), key.length)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 	}
 	if (key.pos %in% c(2,4)) {
-		ylim = range(breaks)
+		ylim = kl_lim(range(breaks), key.length)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 	}
@@ -751,7 +777,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	offset = 0.2
 	offs = switch(key.pos,
 		c(0,0,-offset,-offset),
@@ -778,24 +804,34 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 #' @name stars
 #' @export
-#' @param key.size ignore
+#' @param key.width ignore
 .image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.size) {
+	..., axes = FALSE, key.width, key.length) {
 
 	n = length(z)
-	ksz = as.numeric(gsub(" cm", "", key.size)) * 2
+	# TODO:
+	ksz = as.numeric(gsub(" cm", "", key.width)) * 2
 	breaks = (0:n) + 0.5
+	if (is.character(key.length)) {
+		kl = as.numeric(gsub(" cm", "", key.length))
+		sz = if (key.pos %in% c(1,3))
+				dev.size("cm")[1]
+			else
+				dev.size("cm")[2]
+		key.length = kl/sz
+	}
+	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = range(breaks)
+		xlim = kl_lim(range(breaks), key.length)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 		mar[key.pos] = 2.1
 	} else {
-		ylim = range(breaks)
+		ylim = kl_lim(range(breaks), key.length)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 		#mar[key.pos] = 2.1
-		mar[key.pos] = ksz - 1.3
+		mar[key.pos] = max(ksz - 1.3, 0.0)
 	}
 	par(mar = mar)
 
@@ -803,7 +839,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i", ...)
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
@@ -811,7 +847,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 			polygon(c(0, 0, 1, 1), poly[[i]], col = col[i], border = NA)
 	}
 
-	box()
+	# box() now would draw around [0,1]:
+	bx = c(breaks[1], rep(tail(breaks, 1), 2), breaks[1])
+	if (key.pos %in% c(1,3))
+		polygon(bx, c(0, 0, 1, 1), col = NA, border = 'black')
+	if (key.pos %in% c(2,4))
+		polygon(c(0, 0, 1, 1), bx, col = NA, border = 'black')
+
 	if (add.axis) {
 		opar = par(las = 1)
 		axis(key.pos, at = 1:n, labels = z)

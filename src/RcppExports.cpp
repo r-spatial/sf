@@ -227,9 +227,10 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_write_ogr
-void CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet, bool update, bool delete_dsn, bool delete_layer);
+int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, bool quiet, bool update, bool delete_dsn, bool delete_layer);
 RcppExport SEXP _sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP quietSEXP, SEXP updateSEXP, SEXP delete_dsnSEXP, SEXP delete_layerSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type obj(objSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dsn(dsnSEXP);
@@ -243,8 +244,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type update(updateSEXP);
     Rcpp::traits::input_parameter< bool >::type delete_dsn(delete_dsnSEXP);
     Rcpp::traits::input_parameter< bool >::type delete_layer(delete_layerSEXP);
-    CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer));
+    return rcpp_result_gen;
 END_RCPP
 }
 // CPL_gdal_init
@@ -445,8 +446,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_binop
-Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool sparse, bool prepared);
-RcppExport SEXP _sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP sparseSEXP, SEXP preparedSEXP) {
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool prepared);
+RcppExport SEXP _sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP preparedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -455,9 +456,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< double >::type par(parSEXP);
     Rcpp::traits::input_parameter< std::string >::type pattern(patternSEXP);
-    Rcpp::traits::input_parameter< bool >::type sparse(sparseSEXP);
     Rcpp::traits::input_parameter< bool >::type prepared(preparedSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, pattern, sparse, prepared));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, pattern, prepared));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -543,20 +543,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
-RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs, Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology, int bOnlyEdges);
+RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type bufferDist(bufferDistSEXP);
-    Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
-    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
-    Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type nQuadSegs(nQuadSegsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type dTolerance(dToleranceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type preserveTopology(preserveTopologySEXP);
     Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
-    Rcpp::traits::input_parameter< double >::type dfMaxLength(dfMaxLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -609,18 +608,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type which(whichSEXP);
     Rcpp::traits::input_parameter< double >::type par(parSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_geos_dist(sfc0, sfc1, which, par));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_geos_relate
-Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1);
-RcppExport SEXP _sf_CPL_geos_relate(SEXP sfc0SEXP, SEXP sfc1SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_relate(sfc0, sfc1));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -747,6 +734,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type to_points(to_pointsSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type which(whichSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which));
+    return rcpp_result_gen;
+END_RCPP
+}
+// points_cpp
+List points_cpp(NumericMatrix pts, CharacterVector gdim);
+RcppExport SEXP _sf_points_cpp(SEXP ptsSEXP, SEXP gdimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type pts(ptsSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type gdim(gdimSEXP);
+    rcpp_result_gen = Rcpp::wrap(points_cpp(pts, gdim));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -950,7 +949,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
-    {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 7},
+    {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
@@ -958,12 +957,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_normalize", (DL_FUNC) &_sf_CPL_geos_normalize, 1},
     {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
-    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 8},
+    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 7},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
-    {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_nary_difference", (DL_FUNC) &_sf_CPL_nary_difference, 1},
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
@@ -975,6 +973,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
+    {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},

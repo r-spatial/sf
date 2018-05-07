@@ -6,7 +6,7 @@ meuse <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 test_that("sf can write to all writable formats", {
     # write to all formats available
     tf <- tempfile()
-    drvs <- st_drivers()$name[sapply(st_drivers()$name, 
+    drvs <- st_drivers()$name[sapply(st_drivers()$name,
 		function(x) is_driver_can(x, operation = "write"))] %>% as.character()
     excluded_drivers = c("gps", # requires options
                          "gtm", # doesn't handle attributes
@@ -14,12 +14,10 @@ test_that("sf can write to all writable formats", {
                          "map", # doesn't support points
 						 "ods") # generates valgrind error
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]), excluded_drivers)) {
-        st_write(meuse, paste0(tf, ".", ext), quiet = TRUE)
-		cat(paste(ext, "\n"))
+        expect_silent(st_write(meuse, paste0(tf, ".", ext), quiet = TRUE))
 	}
 	if ("netCDF" %in% drvs) {
-		st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"), quiet = TRUE)
-		cat(paste(".nc", "\n"))
+		expect_silent(st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"), quiet = TRUE))
 	}
 })
 
@@ -57,13 +55,13 @@ test_that("delete and update work (#304) ", {
   expect_output(st_write(x, gpkg, layer = "foo", delete_dsn = TRUE), "Deleting source")
   expect_silent(st_layers(gpkg))
   expect_warning(
-  	expect_error(write_sf(x, shp, "x"), "Feature creation failed") ,
-  	"non-point")# on osx el capitan: "c++ exception (unknown reason)"
+  	expect_error(write_sf(x, shp, "x"), "Feature creation failed"),
+    "non-point")                  # on osx el capitan: "c++ exception (unknown reason)"
   expect_silent(x <- st_read(gpkg, quiet = TRUE))
   x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)),
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
   expect_silent(write_sf(x, shp, "x"))
-  expect_silent(write_sf(x, shp))
+  expect_silent(write_sf(x, shp, delete_dsn = TRUE))
   expect_silent(x <- st_read(shp, quiet = TRUE))
   expect_silent(x <- read_sf(shp))
   expect_error(st_write(x, shp, driver = character(0), quiet = TRUE)) # err

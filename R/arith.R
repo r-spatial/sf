@@ -1,10 +1,10 @@
-#' S3 Ops Group Generic Functions (multiply and add/subtract) for affine transformation
+#' S3 Ops Group Generic Functions for simple feature geometries
+#' @name Ops
 #'
-#' Ops functions for simple feature geometry objects (constrained to multiplication and addition)
-#' @name ops
+#' @param e1 object of class \code{sfg} or \code{sfc}
+#' @param e2 numeric, or object of class \code{sfg}; in case \code{e1} is of class \code{sfc} also an object of class \code{sfc} is allowed
 #'
-#' @param e1 object of class \code{sfg}
-#' @param e2 numeric of object of class \code{sfg}; in case of multiplication an n x n matrix, in case of addition or subtraction a vector of length n, with n the number of dimensions of the geometry; if \code{e2} is an \code{sfg} object, \code{+}, \code{-}, \code{*} and \code{/} will result in the geometric union, difference, intersection and symmetric difference respectively; for other operators will lead to \code{e2} being converted to a numeric.
+#' @details in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
 #'
 #' @return object of class \code{sfg}
 #' @export
@@ -28,31 +28,41 @@
 #' a = st_buffer(st_point(c(0,0)), 2)
 #' b = a + c(2, 0) 
 #' p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
-#' lapply(c('a + b', 'a - b', 'a * b', 'a / b'), p)
+#' lapply(c('a | b', 'a / b', 'a & b', 'a %/% b'), p)
 #' par(opar)
 Ops.sfg <- function(e1, e2) {
-	if (nargs() == 1)
-		stop(paste("unary", .Generic, "not defined for \"sfg\" objects"))
+
+	if (nargs() == 1) {
+		switch (.Generic, 
+			"-" = return(e1 * -1.0),
+			"+" = return(e1),
+			stop(paste("unary", .Generic, "not defined for \"sfg\" objects"))
+		)
+	}
 
 	prd <- switch(.Generic, "*" = TRUE, "/" = TRUE, FALSE)
 	pm  <- switch(.Generic, "+" = , "-" = TRUE, FALSE)
-	mod <- switch(.Generic, "%%" = TRUE, FALSE)
+	mod <- switch(.Generic, "%%" = TRUE, "%/%" = TRUE, FALSE)
+	set <- switch(.Generic, "&" = TRUE, "|" = TRUE, FALSE)
+	lgcl <- switch(.Generic, "==" = TRUE, "!=" = TRUE, FALSE)
 
-	if (!(prd || pm || mod))
+	if (!(prd || pm || mod || set || lgcl))
 		stop(paste("operation", .Generic, "not supported for sfg objects"))
 	
 	if (st_is_empty(e1))
 		return(e1)
 
 	if (inherits(e2, "sfg")) {
-		ret = switch(.Generic,
-			"+" = st_union(e1, e2),
-			"-" = st_difference(e1, e2),
-			"*" = st_intersection(e1, e2),
-			"/" = st_sym_difference(e1, e2),
+		e2 = switch(.Generic,
+			"|" = st_union(e1, e2),
+			"/" = st_difference(e1, e2),
+			"&" = st_intersection(e1, e2),
+			"%/%" = st_sym_difference(e1, e2),
+			"==" = length(st_equals(e1, e2)[[1]]) != 0,
+			"!=" = length(st_equals(e1, e2)[[1]]) == 0,
 			unclass(e2))
-		if (inherits(ret, "sfg"))
-			return(ret)
+		if (inherits(e2, "sfg") || is.logical(e2))
+			return(e2)
 	}
 
 	dims = nchar(class(e1)[1])
@@ -73,7 +83,7 @@ Ops.sfg <- function(e1, e2) {
 			Mat = e2
 		if (.Generic == "/")
 			Mat = solve(Mat) # inverse
-	} 
+	}
 
 	if_pt = function(x, y) { if(inherits(x, "POINT")) as.vector(y) else y }
 	fn = if (prd)
@@ -97,11 +107,11 @@ conform = function(vec, m) {
 }
 
 #' @export
-#' @name ops
+#' @name Ops
 #' @examples
 #' nc = st_transform(st_read(system.file("gpkg/nc.gpkg", package="sf")), 32119) # nc state plane, m
 #' b = st_buffer(st_centroid(st_union(nc)), units::set_units(50, km)) # shoot a hole in nc:
-#' plot(st_geometry(nc) - b, col = grey(.9))
+#' plot(st_geometry(nc) / b, col = grey(.9))
 Ops.sfc <- function(e1, e2) {
 
 	if (length(e1) == 0) # empty set
@@ -114,17 +124,24 @@ Ops.sfc <- function(e1, e2) {
 		e2 = list(e2)
 
 	ret = switch(.Generic,
-		"*" =  mapply(function(x, y) { x  * y }, e1, e2, SIMPLIFY = FALSE),
-		"+" =  mapply(function(x, y) { x  + y }, e1, e2, SIMPLIFY = FALSE),
-		"-" =  mapply(function(x, y) { x  - y }, e1, e2, SIMPLIFY = FALSE),
-		"%%" = mapply(function(x, y) { x %% y }, e1, e2, SIMPLIFY = FALSE),
-		"/"  = mapply(function(x, y) { x  / y }, e1, e2, SIMPLIFY = FALSE),
+		"&"   =  mapply(function(x, y) { x  & y }, e1, e2, SIMPLIFY = FALSE),
+		"|"   =  mapply(function(x, y) { x  | y }, e1, e2, SIMPLIFY = FALSE),
+		"%/%" =  mapply(function(x, y) { x %/% y}, e1, e2, SIMPLIFY = FALSE),
+		"/"   =  mapply(function(x, y) { x  / y }, e1, e2, SIMPLIFY = FALSE),
+		"!="  =  mapply(function(x, y) { x != y }, e1, e2, SIMPLIFY = TRUE),
+		"=="  =  mapply(function(x, y) { x == y }, e1, e2, SIMPLIFY = TRUE),
+		"*"   =  mapply(function(x, y) { x  * y }, e1, e2, SIMPLIFY = FALSE),
+		"+"   =  mapply(function(x, y) { x  + y }, e1, e2, SIMPLIFY = FALSE),
+		"-"   =  mapply(function(x, y) { x  - y }, e1, e2, SIMPLIFY = FALSE),
+		"%%"  =  mapply(function(x, y) { x %% y }, e1, e2, SIMPLIFY = FALSE),
 		stop(paste("operation", .Generic, "not supported")))
 
-	crs = if (.Generic %in% c("+", "-") && inherits(e2, c("sfc", "sfg"))) # retain:
-			st_crs(e1)
-		else # geometry got displaced:
-			NA_crs_
-
-	st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
+	if (!(.Generic %in% c("!=", "=="))) {
+		crs = if (.Generic %in% c("&", "|", "%/%", "/") && inherits(e2, c("sfc", "sfg"))) # retain:
+				st_crs(e1)
+			else # geometry got displaced:
+				NA_crs_
+		st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
+	} else
+		ret
 }

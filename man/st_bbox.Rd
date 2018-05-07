@@ -44,6 +44,8 @@
 \alias{st_bbox}
 \alias{st_bbox.Raster}
 \alias{st_bbox}
+\alias{st_bbox.Extent}
+\alias{st_bbox}
 \alias{st_bbox.numeric}
 \alias{st_bbox}
 \alias{NA_bbox_}
@@ -91,6 +93,8 @@ st_bbox(obj, ...)
 \method{st_bbox}{Spatial}(obj, ...)
 
 \method{st_bbox}{Raster}(obj, ...)
+
+\method{st_bbox}{Extent}(obj, ...)
 
 \method{st_bbox}{numeric}(obj, ..., crs = NA_crs_)
 

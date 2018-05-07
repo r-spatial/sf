@@ -4,7 +4,7 @@
 #' @importFrom methods as slotNames new slot
 #' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport nullGrob
 #' @import graphics
-#' @importFrom grDevices rgb
+#' @importFrom grDevices rgb dev.size
 #' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable dbExecute
 #' @importFrom units as_units set_units make_unit_label
@@ -40,6 +40,7 @@ setOldClass("sfg")
 		# nocov end
 	}
 	CPL_gdal_init()
+	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
 }
 
 .onUnload = function(libname, pkgname) {
