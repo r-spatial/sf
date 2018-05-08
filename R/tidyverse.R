@@ -124,7 +124,6 @@ slice.sf <- function(.data, ..., .dots) {
 #' nc %>% as.data.frame %>% summarise(mean(AREA))
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
-	crs = st_crs(.data)
 	ret = NextMethod()
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
@@ -137,9 +136,9 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 			else
 				unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
 			if (is.null(geom))
-				st_sfc() #676 #nocov
+				st_sfc(crs = st_crs(.data), precision = st_precision(.data)) #676 #nocov
 			else
-				do.call(st_sfc, geom)
+				do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
 		} else { # single group:
 			if (do_union)
 				st_union(st_geometry(.data))
@@ -147,12 +146,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 				st_combine(st_geometry(.data))
 		}
 		ret[[ sf_column ]] = geom
-		ret$do_union = NULL
-	} else {
-		class(ret)  = setdiff(class(ret), "sf")
-		attr(ret, "sf_column") = NULL
 	}
-	st_as_sf(ret, crs = crs, precision = st_precision(.data))
+	st_as_sf(structure(ret, class = setdiff(class(ret), "sf"), "sf_column" = NULL))
 }
 
 
