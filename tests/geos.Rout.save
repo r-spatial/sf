@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -136,7 +136,7 @@ Warning message:
 In st_interpolate_aw(nc["BIR74"], g, FALSE) :
   st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
-[1] 1.20742
+[1] 1.436169
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
@@ -424,4 +424,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  4.013   0.247   3.938 
+  4.040   0.263   3.975 

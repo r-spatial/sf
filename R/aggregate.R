@@ -116,9 +116,13 @@ st_interpolate_aw = function(x, to, extensive) {
 	i = st_cast(i, "MULTIPOLYGON")
 	x$...area_s = unclass(st_area(x))
 	st_geometry(x) = NULL # sets back to data.frame
-	x = x[idx[,1], ]			# create st table
+	x = x[idx[,1], ]      # create st table
 	x$...area_st = unclass(st_area(i))
-	x$...area_t = unclass(st_area(to)[idx[,2]])
+
+	target = sapply(split(st_area(i), idx[, 2]), sum)
+	df = data.frame(area = target, idx = as.integer(names(target)))
+	x$...area_t = merge(data.frame(idx = idx[,2]), df)$area
+
 	x = if (extensive)
 		lapply(x, function(v) v * x$...area_st / x$...area_s)
 	else

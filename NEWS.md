@@ -4,7 +4,7 @@
 
 * `summarise` now allows the user to define geometries for summaries; #714, by Kirill Mueller
 
-* `plot.sf` now emits a warning if `col` does not have length 1 or `nrow(x)`, and requires `pal` to set a palette for factors.
+* `plot.sf` now emits a warning if `col` does not have length 1 or `nrow(x)`, and requires `pal` (rather than `col`) to set a palette for factors.
 
 * provide control over legend keys using `key.length` and `key.width`, decrease default key length; #731
 
