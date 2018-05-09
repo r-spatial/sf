@@ -1,5 +1,9 @@
 # version 0.6-3
 
+* `st_centroid.sf` and `st_point_on_surface.sf` now also warn if attributes are not constant over geometries.
+
+* `summarise` now allows the user to define geometries for summaries; #714, by Kirill Mueller
+
 * `plot.sf` now emits a warning if `col` does not have length 1 or `nrow(x)`, and requires `pal` to set a palette for factors.
 
 * provide control over legend keys using `key.length` and `key.width`, decrease default key length; #731

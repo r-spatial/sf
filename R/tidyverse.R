@@ -81,6 +81,7 @@ select.sf <- function(.data, ...) {
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov
 
+	agr <- st_agr(.data)
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
 
@@ -88,7 +89,8 @@ select.sf <- function(.data, ...) {
 		stop("rlang required: install first?")
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
-	st_as_sf(ret)
+	vars <- setdiff(names(ret), sf_column)
+	st_set_agr(st_as_sf(ret), agr[vars])
 }
 
 
@@ -132,17 +134,18 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
 		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
+			if (!requireNamespace("dplyr", quietly = TRUE))
+				stop("dplyr required: install that first") # nocov
+			i = dplyr::group_indices(.data)
 			geom = st_geometry(.data)
-			i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
-			# merge geometry:
 			geom = if (do_union)
-				unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
-			else
-				unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
+					lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
+				else
+					lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
+			geom = unlist(geom, recursive = FALSE)
 			if (is.null(geom))
-				st_sfc(crs = st_crs(.data), precision = st_precision(.data)) #676 #nocov
-			else
-				do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
+				geom = list() #676 #nocov
+			do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
 		} else { # single group:
 			if (do_union)
 				st_union(st_geometry(.data))

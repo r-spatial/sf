@@ -119,11 +119,11 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_that(st_line_merge(glnc), is_a("sfc"))
   expect_that(st_line_merge(glnc[[3]]), is_a("sfg"))
 
-  expect_silent(st_centroid(lnc))
+  expect_warning(st_centroid(lnc)) # was: silent
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
   expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
 
-  expect_silent(st_point_on_surface(lnc))
+  expect_warning(st_point_on_surface(lnc)) # was: silent
   expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
   expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
 

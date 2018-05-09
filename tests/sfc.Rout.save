@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -399,7 +399,7 @@ POINT (-8905533 4300640)
 > 
 > sf_extSoftVersion()[1:3]
    GEOS    GDAL  proj.4 
-"3.5.1" "2.2.1" "4.9.3" 
+"3.6.2" "2.2.3" "4.9.3" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -1118,4 +1118,4 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > proc.time()
    user  system elapsed 
-  2.661   0.268   2.605 
+  2.692   0.264   2.644 

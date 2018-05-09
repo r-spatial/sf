@@ -626,9 +626,15 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 
 #' @export
 st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
-	st_geometry(x) <- st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon)
-	x
+	if (! all_constant(x))
+		warning("st_centroid assumes attributes are constant over geometries of x")
+	ret = st_set_geometry(x, 
+		st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon))
+	agr = st_agr(ret)
+	agr[ agr == "identity" ] = "constant"
+	st_set_agr(ret, agr)
 }
+
 
 #' @name geos_unary
 #' @export
@@ -652,8 +658,9 @@ st_point_on_surface.sfc = function(x) {
 
 #' @export
 st_point_on_surface.sf = function(x) {
-	st_geometry(x) <- st_point_on_surface(st_geometry(x))
-	x
+	if (! all_constant(x))
+		warning("st_point_on_surface assumes attributes are constant over geometries of x")
+	st_set_geometry(x, st_point_on_surface(st_geometry(x)))
 }
 
 #' @name geos_unary
