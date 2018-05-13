@@ -199,15 +199,15 @@ message("can read using driver")
 message("Can safely manipulate crs")
     skip_if_not(can_con(pg), "could not connect to postgis database")
     srid <- 4326
-    expect_true(get_postgis_crs(pg, srid) == st_crs(srid))
-    expect_error(set_postgis_crs(pg, st_crs(srid)))
-    expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
-    new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
-    expect_message(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
-    expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
+    expect_true(sf:::get_postgis_crs(pg, srid) == st_crs(srid))
+    expect_error(sf:::set_postgis_crs(pg, st_crs(srid)))
+    expect_warning(expect_true(is.na(st_crs(sf:::get_new_postgis_srid(pg)))), "not found")
+    new_crs <- st_crs(sf:::get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
+    expect_message(sf:::set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
+    expect_warning(expect_error(sf:::set_postgis_crs(pg, new_crs), "duplicate key"),
                    "not found")
-    expect_equal(delete_postgis_crs(pg, new_crs), 1)
-    expect_equal(delete_postgis_crs(pg, new_crs), 0)
+    expect_equal(sf:::delete_postgis_crs(pg, new_crs), 1)
+    expect_equal(sf:::delete_postgis_crs(pg, new_crs), 0)
 
 message("new SRIDs are handled correctly")
     skip_if_not(can_con(pg), "could not connect to postgis database")
@@ -252,3 +252,4 @@ if (can_con(pg)) {
     try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
     try(DBI::dbDisconnect(pg), silent = TRUE)
 }
+

@@ -244,8 +244,63 @@ can read using driver
 Can safely manipulate crs
 >     skip_if_not(can_con(pg), "could not connect to postgis database")
 >     srid <- 4326
->     expect_true(get_postgis_crs(pg, srid) == st_crs(srid))
-Error in get_postgis_crs(pg, srid) : 
-  could not find function "get_postgis_crs"
-Calls: expect_true -> quasi_label -> eval_bare
-Execution halted
+>     expect_true(sf:::get_postgis_crs(pg, srid) == st_crs(srid))
+>     expect_error(sf:::set_postgis_crs(pg, st_crs(srid)))
+>     expect_warning(expect_true(is.na(st_crs(sf:::get_new_postgis_srid(pg)))), "not found")
+>     new_crs <- st_crs(sf:::get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
+>     expect_message(sf:::set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
+>     expect_warning(expect_error(sf:::set_postgis_crs(pg, new_crs), "duplicate key"),
++                    "not found")
+>     expect_equal(sf:::delete_postgis_crs(pg, new_crs), 1)
+>     expect_equal(sf:::delete_postgis_crs(pg, new_crs), 0)
+> 
+> message("new SRIDs are handled correctly")
+new SRIDs are handled correctly
+>     skip_if_not(can_con(pg), "could not connect to postgis database")
+>     data(meuse, package = "sp")
+>     meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
+> 
+>     crs = st_crs(NA_integer_, paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
++                                     "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
++                                     "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
++                                     "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
+>     st_crs(meuse_sf) = crs
+>     expect_message(st_write(meuse_sf, pg, overwrite = TRUE), "Inserted local crs")
+>     expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
++                    "not found in EPSG support files")
+>     expect_true(st_crs(x)$proj4string == crs$proj4string)
+>     expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+> 
+> 
+> message("schema_table")
+schema_table
+> 	expect_error(sf:::schema_table(pg, NA), "character vector")
+> 	expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
+> 	expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
+> 	expect_error(sf:::schema_table(pg, letters), "longer than 2")
+> 	expect_equal(sf:::schema_table(pg, "a", "b"), c("b", "a"))
+> 	expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
+> 
+> 
+> if (can_con(pg)) {
++     # cleanup
++     try(db_drop_table_schema(pg, "meuse_sf"), silent = TRUE)
++     try(db_drop_table_schema(pg, "meuse_multi"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_meuse__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_meuse2__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_meuse3__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "meuse_multi2"), silent = TRUE)
++     try(db_drop_table_schema(pg, '"sf_test__.meuse__"'), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse2__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse33__"), silent = TRUE)
++     try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
++     try(DBI::dbExecute(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
++     try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
++     try(DBI::dbDisconnect(pg), silent = TRUE)
++ }
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  2.924   0.080   3.520 
