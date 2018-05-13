@@ -694,8 +694,8 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 					out.push_back(geom); // keep
 				} else
 					GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+				R_CheckUserInterrupt();
 			}
-			R_CheckUserInterrupt();
 		}
 		GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
 
@@ -721,8 +721,8 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 					out.push_back(geom); // keep
 				} else
 					GEOSGeom_destroy_r(hGEOSCtxt, geom); // discard
+				R_CheckUserInterrupt();
 			}
-			R_CheckUserInterrupt();
 		}
 	}
 
