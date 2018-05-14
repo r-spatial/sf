@@ -6,13 +6,13 @@
 
 * `plot.sf` now emits a warning if `col` does not have length 1 or `nrow(x)`, and requires `pal` (rather than `col`) to set a palette for factors.
 
-* provide control over legend keys using `key.length` and `key.width`, decrease default key length; #731
+* `plot.sf` provides control over legend keys using `key.length` and `key.width`, decrease default key length; #731
 
-* add `as.data.frame` method for `sgbp` objects; #715
+* `sgbp` objects receive an `as.data.frame` method; #715
 
 # version 0.6-2
 
-* support read/write of logical variables through GDAL; #722
+* GDAL read/write now supports logical variables; #722
 
 * add `st_crop` to simplify cropping objects with a rectangular area; #720
 
@@ -24,7 +24,7 @@
 
 * add Kirill Mueller as contributor
 
-* improve speed of `st_make_grid`; #708, by Dan Baston
+* `st_make_grid` is now faster; #708, by Dan Baston
 
 * `st_read` and `st_write` are now generic, with methods for directly reading from and writing to database connections; `st_read_db` and `st_write_db` are now deprecated; #558, thanks to Etienne Racine @etiennebr
 
