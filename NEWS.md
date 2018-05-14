@@ -44,7 +44,7 @@
 
 * all Rcpp interfaces needed by package `stars` have now been moved into `sf`; pkg `stars` is now R-only, and only `sf` needs linking to GDAL.
 
-* interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`
+* `gdal_utils()` now interfaces the 9 gdal utils using the C++ API
 
 * improve resetting (base) plots; add `reset = FALSE` in a call to `plot` to enable adding to plots that have a legend
 
@@ -72,7 +72,7 @@
 
 * `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` is deprecated as a consequence, and distance calculations are different from those in sf versions 0.5-5 or earlier; #593
 
-* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom` instead of `geosphere`; #593
+* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use package `lwgeom` instead of `geosphere`; #593
 
 * `st_length` now returns zero for polygon-type geometries; #593
 
@@ -224,7 +224,7 @@
 
 * add a `[<-` method for `sfc` objects; automatically replaces `NULL` with an empty geometry; #411
 
-* add `st_point_on_surface` function to return a point that is guaranteed to be on the surface (standard compliance)
+* add `st_point_on_surface()` to return a point that is guaranteed to be on the surface (standard compliance)
 
 * `read_sf` now returns an sf-tibble, an object of class `c("sf", "tbl_df", "tbl", "data.frame")`
 
@@ -320,7 +320,7 @@
 
 * build proper support for `cbind` and `rbind` methods for `sf`, which work (as documented) when _all_ arguments are of class `sf`; `dplyr::bind_cols` or `st_sf(data.frame(sf, df))` work for binding `data.frame`s to an `sf` object.
 
-* units support for function arguments of `st_segmentize` and `st_line_sample`
+* `st_segmentize()` and `st_line_sample()` now accept units arguments
 
 * document problem reading shapefiles from USB drives on OSX; #252
 
