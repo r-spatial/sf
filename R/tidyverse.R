@@ -183,7 +183,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param factor_key see original function docs
 #' @examples
 #' library(tidyr)
-#' nc %>% select(SID74, SID79) %>% gather(VAR, SID, -geometry) %>% summary()
+#' nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
 
 	if (! requireNamespace("rlang", quietly = TRUE))
@@ -211,7 +211,7 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
 #' nc %>% select(SID74, SID79, geometry, row) %>%
-#'		gather(VAR, SID, -geometry, -row) %>%
+#'		gather("VAR", "SID", -geometry, -row) %>%
 #'		spread(VAR, SID) %>% head()
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {

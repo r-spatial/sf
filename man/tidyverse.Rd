@@ -228,11 +228,11 @@ nc.g \%>\% summarise(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
 nc \%>\% as.data.frame \%>\% summarise(mean(AREA))
 nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
 library(tidyr)
-nc \%>\% select(SID74, SID79) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
+nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 library(tidyr)
 nc$row = 1:100 # needed for spread to work
 nc \%>\% select(SID74, SID79, geometry, row) \%>\%
-	gather(VAR, SID, -geometry, -row) \%>\%
+	gather("VAR", "SID", -geometry, -row) \%>\%
 	spread(VAR, SID) \%>\% head()
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 x <- storms.sf \%>\% group_by(name, year) \%>\% nest
