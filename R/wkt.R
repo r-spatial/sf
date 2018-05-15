@@ -17,7 +17,7 @@ WKT_name = function(x, EWKT = TRUE) {
 empty = "EMPTY"
 
 # skip leading white space; ... passes on digits:
-fmt = function(x, ...) sub("^[ ]+", "", sapply(unclass(x), format, ...))
+fmt = function(x, ...) format(as.character(x))
 
 # print helper functions
 prnt.POINT = function(x, ..., EWKT = TRUE) {
@@ -28,26 +28,27 @@ prnt.POINT = function(x, ..., EWKT = TRUE) {
 	paste(WKT_name(x, EWKT = EWKT), pt)
 }
 
+g = function(x) paste0("(", paste0(x, collapse = ", "), ")")
+
 prnt.Matrix = function(x, ...) {
-	pf = function(x, ..., collapse) paste0(fmt(x, ...), collapse = collapse)
 	if (nrow(x) == 0)
 		empty
 	else
-		paste0("(", paste0(apply(x, 1, pf, collapse = " ", ...), collapse = ", "), ")")
+		g(apply(x, 1, paste, collapse = " "))
 }
 
 prnt.MatrixList = function(x, ...) {
 	if (length(x) == 0)
 		empty
 	else
-		paste0("(", paste0(unlist(lapply(x, prnt.Matrix, ...)), collapse = ", "), ")")
+		g(unlist(lapply(x, prnt.Matrix, ...)))
 }
 
 prnt.MatrixListList = function(x, ...) {
 	if (length(x) == 0)
 		empty
 	else
-		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList, ...)), collapse = ", "), ")")
+		g(unlist(lapply(x, prnt.MatrixList, ...)))
 }
 
 prnt.MULTIPOINT = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))

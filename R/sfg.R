@@ -222,13 +222,14 @@ get_head = function(x, n) {
 #' @name st
 #' @export
 format.sfg = function(x, ..., width = 30) {
+	ellipsis <- "\u2026" # ellipsis  (...)
 	if (is.null(width))
 		width = 30
 	if (object.size(x) > 1000 && width > 0 && width <= 30)
 		x = get_head(x, 10)
 	pr = st_as_text(x, ...)
 	if (width > 0 && nchar(pr) > width)
-		paste0(substr(pr, 1, width - 3), "...")
+		paste0(substr(pr, 1, width -nchar(ellipsis)),  ellipsis)
 	else
 		pr
 }
