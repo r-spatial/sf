@@ -1,5 +1,7 @@
 # version 0.6-3
 
+* move dependency `RPostgreSQL` back to Suggests:, from Imports:
+
 * `st_centroid.sf` and `st_point_on_surface.sf` now also warn if attributes are not constant over geometries.
 
 * `summarise` now allows the user to define geometries for summaries; #714, by Kirill Mueller
