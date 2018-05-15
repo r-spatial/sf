@@ -1,5 +1,6 @@
 library(sf)
 library(DBI)
+library(RPostgreSQL)
 library(testthat)
 context("sf: postgis using RPostgres")
 
