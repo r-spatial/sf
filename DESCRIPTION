@@ -46,6 +46,7 @@ Suggests:
 	dplyr (>= 0.7-0),
 	tidyr (>= 0.7-2),
 	RPostgres (>= 1.1.0),
+	odbc,
 	tidyselect,
 	ggplot2,
 	mapview,
