@@ -17,7 +17,7 @@ WKT_name = function(x, EWKT = TRUE) {
 empty = "EMPTY"
 
 # skip leading white space; ... passes on digits:
-fmt = function(x, ...) format(as.character(x))
+fmt = function(x, digits) format(as.character(round(x, digits = digits)))
 
 # print helper functions
 prnt.POINT = function(x, ..., EWKT = TRUE) {
