@@ -508,7 +508,7 @@ void add_int(std::ostringstream& os, unsigned int i) {
 double make_precise(double d, double precision) {
 	if (precision == 0.0)
 		return d;
-	if (precision < 0.0) { // float, 4-byte precision
+	if (precision < 0.0) { // round to float, 4-byte precision
 		float f = d;
 		return (double) f;
 	}
@@ -516,7 +516,7 @@ double make_precise(double d, double precision) {
 }
 
 void add_double(std::ostringstream& os, double d, double prec = 0.0) {
-  d = make_precise(d, prec); // doubles are ALLWAYS coordinates
+  d = make_precise(d, prec); // doubles are ALWAYS coordinates
   const char *cp = (char *)&d;
   os.write((char*) cp, sizeof(double));
 }
