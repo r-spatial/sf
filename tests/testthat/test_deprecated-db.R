@@ -267,5 +267,5 @@ if (can_con(pg)) {
 	try(db_drop_table_schema(pg, "sf_test__", "sf_meuse4__"), silent = TRUE)
 	try(DBI::dbSendQuery(pg, "DROP SCHEMA sf_test__ CASCADE;"), silent = TRUE)
 	try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
-	try(RpostgreSQL::dbDisconnect(pg), silent = TRUE)
+	try(RPostgreSQL::dbDisconnect(pg), silent = TRUE)
 }
