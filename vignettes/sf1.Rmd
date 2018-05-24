@@ -432,14 +432,14 @@ rounding during conversion to WKB, which might help certain
 geometrical operations succeed that would otherwise fail due to
 floating point representation. The model is that of GEOS, which
 copies from the Java Topology Suite
-([JTS](http://tsusiatsoftware.net/jts/main.html)), and works like this:
+([JTS](https://locationtech.github.io/jts/)), and works like this:
 
 * if precision is zero (default, unspecified), nothing is modified
 * negative values convert to float (4-byte real) precision
 * positive values convert to `round(x*precision)/precision`.
 
 For the precion model, see also
-[here](http://tsusiatsoftware.net/jts/javadoc/com/vividsolutions/jts/geom/PrecisionModel.html),
+[here](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html),
 where it is written that: "... to specify 3 decimal places of
 precision, use a scale factor of 1000. To specify -3 decimal places
 of precision (i.e. rounding to the nearest 1000), use a scale
@@ -633,7 +633,7 @@ the CRS is unknown, or when we work with local coordinate systems
 (e.g. inside a building, a body, or an abstract space).
 
 `proj4string` is a generic, string-based description of a CRS,
-understood by the [PROJ.4](http://proj4.org/) library. It defines
+understood by the [PROJ](https://proj4.org/) library. It defines
 projection types and (often) defines parameter values for particular
 projections, and hence can cover an infinite amount of different
 projections.  This library (also used by GDAL) provides functions
