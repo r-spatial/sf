@@ -31,7 +31,7 @@
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10,
+\method{plot}{sf}(x, y, ..., main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
   key.length = 0.618, key.width = lcm(1.8), reset = TRUE)
@@ -81,8 +81,6 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{...}{further specifications, see \link{plot_sf} and \link{plot}}
 
-\item{col}{color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.}
-
 \item{main}{title for plot (\code{NULL} to remove)}
 
 \item{pal}{palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used}
@@ -104,6 +102,8 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 \item{pch}{plotting symbol}
 
 \item{cex}{symbol size}
+
+\item{col}{color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.}
 
 \item{bg}{symbol background color}
 

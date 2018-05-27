@@ -94,7 +94,7 @@
 #' plot(1)
 #' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
 #' @export
-plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, breaks = "pretty",
+plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
 		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
 
@@ -103,6 +103,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 	key.pos.missing = missing(key.pos)
 	max_plot_missing = missing(max.plot)
 	dots = list(...)
+	col_missing = is.null(dots$col)
 
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
@@ -129,16 +130,13 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 		if (length(cols) > max.plot)
 			cols = cols[1:max.plot]
 		# loop over each map to plot:
-		lapply(cols, function(cname) plot(x[, cname], main = cname, col = col,
+		lapply(cols, function(cname) plot(x[, cname], main = cname,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...))
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
-		if (ncol(x) == 1) { # no attributes to choose colors from: plot geometry
-			if (is.null(col))
-				col = NA_character_
-			plot(st_geometry(x), col = col, ...)
-		}
+		if (ncol(x) == 1) # no attributes to choose colors from: plot geometry
+			plot(st_geometry(x), ...)
 		else { # generate plot with colors and possibly key
 			if (ncol(x) > 2) { # add = TRUE
 				warning("ignoring all but the first attribute")
@@ -158,10 +156,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
-			else if (! is.null(col))
+			else if (! col_missing)
 				stop("specify only one of col and pal")
 
-			if (is.null(col)) { # compute colors from values:
+			if (col_missing) { # compute colors from values:
 				col = if (is.factor(values)) {
 						if (key.pos.missing && nlevels(values) > 30) # doesn't make sense:
 							key.pos = NULL
@@ -198,6 +196,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 						colors[cuts]
 					}
 			} else {
+				col = dots$col
 				if (length(col) != 1 && length(col) != nrow(x))
 					warning("col is not of length 1 or ncol(x): colors will be recycled; use pal to specify a color palette")
 				key.pos = NULL # no key!
@@ -230,7 +229,10 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			if (isTRUE(dots$axes))
 				mar[1:2] = 2.1
 			par(mar = mar)
-			plot(st_geometry(x), col = col, ...)
+			if (col_missing)
+				plot(st_geometry(x), col = col, ...)
+			else
+				plot(st_geometry(x), ...)
 		}
 		if (! isTRUE(dots$add)) { # title?
 			if (missing(main)) {
@@ -240,7 +242,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			}
 			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, 
 					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, 
-					expandBB, col_graticule, at, border) # absorb
+					expandBB, col_graticule, at) # absorb
 				title(...)
 			localTitle(main, ...)
 		}
