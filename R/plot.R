@@ -240,7 +240,7 @@ plot.sf <- function(x, y, ..., col = NULL, main, pal = NULL, nbreaks = 10, break
 			}
 			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, 
 					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, 
-					expandBB, col_graticule, at) # absorb
+					expandBB, col_graticule, at, border) # absorb
 				title(...)
 			localTitle(main, ...)
 		}
