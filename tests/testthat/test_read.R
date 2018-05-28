@@ -6,6 +6,15 @@ test_that("we can read a shapefile using st_read", {
   expect_equal(dim(nc), c(100, 15))
 })
 
+test_that("st_read.default gives error messages", {
+  expect_error(st_read(), "dsn should specify a data source or filename")
+  expect_error(st_read(NULL), "no st_read method available for objects of class NULL")
+})
+
+test_that("st_write.sf gives error messages on unknown dsn", {
+  expect_error(st_write(st_sf(st_sfc(st_point())), NULL), "no st_write method available for dsn of class NULL")
+})
+
 test_that("stringsAsFactors = FALSE produces a data.frame with no factors", {
   nc <-  st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267,
                  stringsAsFactors = FALSE, quiet = TRUE)
