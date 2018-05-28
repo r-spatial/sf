@@ -41,10 +41,13 @@ test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
   expect_silent(st_cast(mp, "POINT"))
   expect_warning(st_cast(mp[[1]], "POINT"), "point from first coordinate only")
   expect_is(st_cast(mp, "POLYGON"), "sfc_POLYGON")
+  expect_is(st_cast(mp[[1]], "POLYGON"), "POLYGON")
   expect_is(st_cast(mp, "LINESTRING"), "sfc_LINESTRING")
+  expect_is(st_cast(mp[[1]], "LINESTRING"), "LINESTRING")
   expect_error(st_cast(mp, "MULTIPOLYGON"), "smaller steps")
   expect_is(st_cast(mp[[1]], "MULTIPOLYGON"), "MULTIPOLYGON")
   expect_is(st_cast(mp, "MULTILINESTRING"), "sfc_MULTILINESTRING")
+  expect_is(st_cast(mp[[1]], "MULTILINESTRING"), "MULTILINESTRING")
   expect_error(st_cast(mp, "GEOMETRYCOLLECTION"), "smaller steps")
   expect_is(st_cast(mp[[1]], "GEOMETRYCOLLECTION"), "GEOMETRYCOLLECTION")
   
