@@ -214,7 +214,11 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		// proj4string:
 		OGRSpatialReference *sr = new OGRSpatialReference;
 		char **ppt = (char **) &wkt;
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
 		sr->importFromWkt(ppt);
+#else
+		sr->importFromWkt( (const char**) ppt);
+#endif
 		char *proj4; 
 		if (sr->exportToProj4(&proj4) != OGRERR_NONE) // need to error check?
 			stop("failure to export SRS to proj.4"); // #nocov
