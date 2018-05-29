@@ -280,7 +280,11 @@ Rcpp::List CPL_crs_from_epsg(int epsg) {
 Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt) {
 	char *cp = wkt[0];
 	OGRSpatialReference ref;
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
 	handle_error(ref.importFromWkt(&cp));
+#else
+	handle_error(ref.importFromWkt( (const char*) cp));
+#endif
 	return get_crs(&ref);
 }
 
@@ -450,7 +454,11 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	OGRGeometryFactory f;
 	for (int i = 0; i < wkt.size(); i++) {
 		char *wkt_str = wkt(i);
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
+#else
+		handle_error(f.createFromWkt( (const char*) wkt_str, NULL, &(g[i])));
+#endif
 	}
 	return sfc_from_ogr(g, true);
 }
