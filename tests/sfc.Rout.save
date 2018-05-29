@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -375,7 +375,8 @@ In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
 > pol = st_polygon(list(p))
 > # plot(pol)
 > try(plot(st_polygonize(pol))) # --> breaks
-Error : inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
+Error in st_polygonize.sfc(st_sfc(x)) : 
+  inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING") is not TRUE
 > st_length(st_sfc(st_point(c(0,0))))
 [1] 0
 > 
@@ -471,7 +472,7 @@ GEOMETRYCOLLECTION EMPTY
 > 
 > 
 > str(x)
-sfc_POINT of length 2; first list element: Classes 'XY', 'POINT', 'sfg'  num [1:2] -90 35
+sfc_POINT of length 2; first list element:  'XY' num [1:2] -90 35
 > nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 > str(nc)
 Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
@@ -1118,4 +1119,4 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > proc.time()
    user  system elapsed 
-  2.692   0.264   2.644 
+  1.895   0.279   1.854 

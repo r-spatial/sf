@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -56,9 +56,6 @@ SpatialMultiPoints:
 2                     MULTIPOINT (10.4 -0.583,10.5 -0.313,9.8 -1.05,10.3 -0.719,11.4 -1.05)
 3 MULTIPOINT (-0.844 9.18,1.14 10.8,1.95 10.8,-0.451 10.7,0.67 10.3,0.127 10.5,-0.727 9.23)
 Coordinate Reference System (CRS) arguments: NA 
-Warning message:
-In data.row.names(row.names, rowsi, i) :
-  some row.names duplicated: 2,3,5,6,7,8,10,11,12,13,14,15 --> row.names NOT used
 > m = st_as_sf(mpdf)
 > all.equal(as(m, "Spatial"), mpdf) # TRUE
 [1] TRUE
@@ -180,4 +177,4 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > 
 > proc.time()
    user  system elapsed 
-  3.480   0.275   3.433 
+  3.091   0.259   3.026 

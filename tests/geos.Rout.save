@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -234,7 +234,9 @@ Sparse geometry binary predicate list of length 9, where the predicate was `rela
  [8,] FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE
  [9,] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE
 > 
-> try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
+> if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
++   try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
++ }
 Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
   use st_disjoint for this pattern
 > 
@@ -424,4 +426,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  4.040   0.263   3.975 
+  3.616   0.224   3.551 
