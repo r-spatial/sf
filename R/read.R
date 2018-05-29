@@ -294,10 +294,17 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
-	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection"))) {
+	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection", "Pool"))) {
+		if (inherits(dsn, "Pool")) {
+			if (! requireNamespace("pool", quietly = TRUE))
+				stop("package pool required, please install it first")
+			dsn = pool::poolCheckout(dsn)
+			on.exit(pool::poolReturn(dsn))
+		}
 		if (is.null(layer)) 
 			layer = deparse(substitute(obj))
-		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
+		return(dbWriteTable(dsn, name = layer, value = obj, ..., 
+			factorsAsCharacter = factorsAsCharacter))
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}

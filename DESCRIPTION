@@ -46,6 +46,7 @@ Suggests:
 	tidyr (>= 0.7-2),
 	RPostgreSQL,
 	RPostgres (>= 1.1.0),
+	pool,
 	odbc,
 	tidyselect,
 	ggplot2,

@@ -60,6 +60,16 @@ st_read.DBIObject = function(dsn = NULL, layer = NULL, query = NULL,
 }
 
 #' @export
+st_read.Pool = function(dsn = NULL, layer = NULL, ...) {
+	if (! requireNamespace("pool", quietly = TRUE))
+		stop("package pool required, please install it first")
+	dsn = pool::poolCheckout(dsn)
+	on.exit(pool::poolReturn(dsn))
+	st_read(dsn, layer = layer, ...)
+}
+
+
+#' @export
 st_read.PostgreSQLConnection <- function(...) {
     st_read.DBIObject(...)
 }
