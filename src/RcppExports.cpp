@@ -20,203 +20,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_gdal_init
-void CPL_gdal_init();
-RcppExport SEXP _sf_CPL_gdal_init() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    CPL_gdal_init();
-    return R_NilValue;
-END_RCPP
-}
-// CPL_gdal_cleanup_all
-void CPL_gdal_cleanup_all();
-RcppExport SEXP _sf_CPL_gdal_cleanup_all() {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    CPL_gdal_cleanup_all();
-    return R_NilValue;
-END_RCPP
-}
-// CPL_gdal_version
-const char* CPL_gdal_version(const char* what);
-RcppExport SEXP _sf_CPL_gdal_version(SEXP whatSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const char* >::type what(whatSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_gdal_version(what));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_parameters
-Rcpp::List CPL_crs_parameters(std::string p4s);
-RcppExport SEXP _sf_CPL_crs_parameters(SEXP p4sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type p4s(p4sSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_parameters(p4s));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_equivalent
-Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2);
-RcppExport SEXP _sf_CPL_crs_equivalent(SEXP crs1SEXP, SEXP crs2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type crs1(crs1SEXP);
-    Rcpp::traits::input_parameter< std::string >::type crs2(crs2SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_equivalent(crs1, crs2));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_from_epsg
-Rcpp::List CPL_crs_from_epsg(int epsg);
-RcppExport SEXP _sf_CPL_crs_from_epsg(SEXP epsgSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type epsg(epsgSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_epsg(epsg));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_from_wkt
-Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt);
-RcppExport SEXP _sf_CPL_crs_from_wkt(SEXP wktSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_wkt(wkt));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_roundtrip
-Rcpp::List CPL_roundtrip(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_roundtrip(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_roundtrip(sfc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_circularstring_to_linestring
-Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_circularstring_to_linestring(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_circularstring_to_linestring(sfc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_multisurface_to_multipolygon
-Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_multisurface_to_multipolygon(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_multisurface_to_multipolygon(sfc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_compoundcurve_to_linear
-Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_compoundcurve_to_linear(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_compoundcurve_to_linear(sfc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_curve_to_linestring
-Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_curve_to_linestring(SEXP sfcSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_curve_to_linestring(sfc));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_transform
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
-RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type proj4(proj4SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, proj4));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_wrap_dateline
-Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet);
-RcppExport SEXP _sf_CPL_wrap_dateline(SEXP sfcSEXP, SEXP optSEXP, SEXP quietSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type opt(optSEXP);
-    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_wrap_dateline(sfc, opt, quiet));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_from_proj4string
-Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s);
-RcppExport SEXP _sf_CPL_crs_from_proj4string(SEXP p4sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type p4s(p4sSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_proj4string(p4s));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_get_rgdal_drivers
-Rcpp::List CPL_get_rgdal_drivers(int dummy);
-RcppExport SEXP _sf_CPL_get_rgdal_drivers(SEXP dummySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type dummy(dummySEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_rgdal_drivers(dummy));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_sfc_from_wkt
-Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt);
-RcppExport SEXP _sf_CPL_sfc_from_wkt(SEXP wktSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_sfc_from_wkt(wkt));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_gdal_with_geos
-Rcpp::LogicalVector CPL_gdal_with_geos();
-RcppExport SEXP _sf_CPL_gdal_with_geos() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(CPL_gdal_with_geos());
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_area
 Rcpp::NumericVector CPL_area(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_area(SEXP sfcSEXP) {
@@ -442,6 +245,203 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type delete_dsn(delete_dsnSEXP);
     Rcpp::traits::input_parameter< bool >::type delete_layer(delete_layerSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdal_init
+void CPL_gdal_init();
+RcppExport SEXP _sf_CPL_gdal_init() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    CPL_gdal_init();
+    return R_NilValue;
+END_RCPP
+}
+// CPL_gdal_cleanup_all
+void CPL_gdal_cleanup_all();
+RcppExport SEXP _sf_CPL_gdal_cleanup_all() {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    CPL_gdal_cleanup_all();
+    return R_NilValue;
+END_RCPP
+}
+// CPL_gdal_version
+const char* CPL_gdal_version(const char* what);
+RcppExport SEXP _sf_CPL_gdal_version(SEXP whatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const char* >::type what(whatSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_version(what));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_parameters
+Rcpp::List CPL_crs_parameters(std::string p4s);
+RcppExport SEXP _sf_CPL_crs_parameters(SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_parameters(p4s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_equivalent
+Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2);
+RcppExport SEXP _sf_CPL_crs_equivalent(SEXP crs1SEXP, SEXP crs2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type crs1(crs1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type crs2(crs2SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_equivalent(crs1, crs2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_from_epsg
+Rcpp::List CPL_crs_from_epsg(int epsg);
+RcppExport SEXP _sf_CPL_crs_from_epsg(SEXP epsgSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type epsg(epsgSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_epsg(epsg));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_from_wkt
+Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt);
+RcppExport SEXP _sf_CPL_crs_from_wkt(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_wkt(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_roundtrip
+Rcpp::List CPL_roundtrip(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_roundtrip(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_roundtrip(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_circularstring_to_linestring
+Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_circularstring_to_linestring(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_circularstring_to_linestring(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_multisurface_to_multipolygon
+Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_multisurface_to_multipolygon(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_multisurface_to_multipolygon(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_compoundcurve_to_linear
+Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_compoundcurve_to_linear(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_compoundcurve_to_linear(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_curve_to_linestring
+Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc);
+RcppExport SEXP _sf_CPL_curve_to_linestring(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_curve_to_linestring(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_transform
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4);
+RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP proj4SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type proj4(proj4SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, proj4));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_wrap_dateline
+Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet);
+RcppExport SEXP _sf_CPL_wrap_dateline(SEXP sfcSEXP, SEXP optSEXP, SEXP quietSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type opt(optSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_wrap_dateline(sfc, opt, quiet));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_from_proj4string
+Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s);
+RcppExport SEXP _sf_CPL_crs_from_proj4string(SEXP p4sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type p4s(p4sSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_proj4string(p4s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_get_rgdal_drivers
+Rcpp::List CPL_get_rgdal_drivers(int dummy);
+RcppExport SEXP _sf_CPL_get_rgdal_drivers(SEXP dummySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type dummy(dummySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_rgdal_drivers(dummy));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_sfc_from_wkt
+Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt);
+RcppExport SEXP _sf_CPL_sfc_from_wkt(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_sfc_from_wkt(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdal_with_geos
+Rcpp::LogicalVector CPL_gdal_with_geos();
+RcppExport SEXP _sf_CPL_gdal_with_geos() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_with_geos());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -914,6 +914,23 @@ RcppExport SEXP _sf_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_bbox", (DL_FUNC) &_sf_CPL_get_bbox, 2},
+    {"_sf_CPL_area", (DL_FUNC) &_sf_CPL_area, 1},
+    {"_sf_CPL_gdal_dimension", (DL_FUNC) &_sf_CPL_gdal_dimension, 2},
+    {"_sf_CPL_length", (DL_FUNC) &_sf_CPL_length, 1},
+    {"_sf_CPL_gdal_segmentize", (DL_FUNC) &_sf_CPL_gdal_segmentize, 2},
+    {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
+    {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
+    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 7},
+    {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 2},
+    {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 3},
+    {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 3},
+    {"_sf_CPL_gdaltranslate", (DL_FUNC) &_sf_CPL_gdaltranslate, 3},
+    {"_sf_CPL_gdalvectortranslate", (DL_FUNC) &_sf_CPL_gdalvectortranslate, 3},
+    {"_sf_CPL_gdalbuildvrt", (DL_FUNC) &_sf_CPL_gdalbuildvrt, 3},
+    {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 5},
+    {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 3},
+    {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 3},
+    {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 12},
     {"_sf_CPL_gdal_init", (DL_FUNC) &_sf_CPL_gdal_init, 0},
     {"_sf_CPL_gdal_cleanup_all", (DL_FUNC) &_sf_CPL_gdal_cleanup_all, 0},
     {"_sf_CPL_gdal_version", (DL_FUNC) &_sf_CPL_gdal_version, 1},

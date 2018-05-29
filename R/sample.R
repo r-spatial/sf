@@ -89,7 +89,9 @@ st_ll_sample = function (x, size, ..., type = "random") {
 		message_longlat("st_sample")
 		st_crs(x) = NA_crs_
 	}
-	l = drop_units(st_length(x))
+	l = st_length(x)
+	if (inherits(l, "units"))
+		l = drop_units(l)
 	if (type == "random") {
 		d = runif(size, 0, sum(l))
 	} else if (type == "regular") {
