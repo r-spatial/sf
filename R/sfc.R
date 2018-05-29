@@ -461,8 +461,8 @@ check_ring_dir = function(x) {
 		pol
 	}
 	ret = switch(class(x)[1],
-		sfc_POLYGON= lapply(x, check_polygon),
-		sfc_MULTIPOLYGON= lapply(x, function(y) structure(lapply(y, check_polygon), class = class(y))),
+		sfc_POLYGON = lapply(x, check_polygon),
+		sfc_MULTIPOLYGON = lapply(x, function(y) structure(lapply(y, check_polygon), class = class(y))),
 		stop(paste("check_ring_dir: not supported for class", class(x)[1]))
 	)
 	attributes(ret) = attributes(x)
