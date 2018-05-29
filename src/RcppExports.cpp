@@ -446,8 +446,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_binop
-Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool sparse, bool prepared);
-RcppExport SEXP _sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP sparseSEXP, SEXP preparedSEXP) {
+Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool prepared);
+RcppExport SEXP _sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP preparedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -456,9 +456,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< double >::type par(parSEXP);
     Rcpp::traits::input_parameter< std::string >::type pattern(patternSEXP);
-    Rcpp::traits::input_parameter< bool >::type sparse(sparseSEXP);
     Rcpp::traits::input_parameter< bool >::type prepared(preparedSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, pattern, sparse, prepared));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop(sfc0, sfc1, op, par, pattern, prepared));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -544,20 +543,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op
-Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, int nQuadSegs, double dTolerance, bool preserveTopology, int bOnlyEdges, double dfMaxLength);
-RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP, SEXP dfMaxLengthSEXP) {
+Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc, Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs, Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology, int bOnlyEdges);
+RcppExport SEXP _sf_CPL_geos_op(SEXP opSEXP, SEXP sfcSEXP, SEXP bufferDistSEXP, SEXP nQuadSegsSEXP, SEXP dToleranceSEXP, SEXP preserveTopologySEXP, SEXP bOnlyEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type bufferDist(bufferDistSEXP);
-    Rcpp::traits::input_parameter< int >::type nQuadSegs(nQuadSegsSEXP);
-    Rcpp::traits::input_parameter< double >::type dTolerance(dToleranceSEXP);
-    Rcpp::traits::input_parameter< bool >::type preserveTopology(preserveTopologySEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type nQuadSegs(nQuadSegsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type dTolerance(dToleranceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::LogicalVector >::type preserveTopology(preserveTopologySEXP);
     Rcpp::traits::input_parameter< int >::type bOnlyEdges(bOnlyEdgesSEXP);
-    Rcpp::traits::input_parameter< double >::type dfMaxLength(dfMaxLengthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges, dfMaxLength));
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op(op, sfc, bufferDist, nQuadSegs, dTolerance, preserveTopology, bOnlyEdges));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -610,18 +608,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type which(whichSEXP);
     Rcpp::traits::input_parameter< double >::type par(parSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_geos_dist(sfc0, sfc1, which, par));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_geos_relate
-Rcpp::CharacterVector CPL_geos_relate(Rcpp::List sfc0, Rcpp::List sfc1);
-RcppExport SEXP _sf_CPL_geos_relate(SEXP sfc0SEXP, SEXP sfc1SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_relate(sfc0, sfc1));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -946,24 +932,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
-    {"_sf_CPL_area", (DL_FUNC) &_sf_CPL_area, 1},
-    {"_sf_CPL_gdal_dimension", (DL_FUNC) &_sf_CPL_gdal_dimension, 2},
-    {"_sf_CPL_length", (DL_FUNC) &_sf_CPL_length, 1},
-    {"_sf_CPL_gdal_segmentize", (DL_FUNC) &_sf_CPL_gdal_segmentize, 2},
-    {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
-    {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
-    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 7},
-    {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 2},
-    {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 3},
-    {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 3},
-    {"_sf_CPL_gdaltranslate", (DL_FUNC) &_sf_CPL_gdaltranslate, 3},
-    {"_sf_CPL_gdalvectortranslate", (DL_FUNC) &_sf_CPL_gdalvectortranslate, 3},
-    {"_sf_CPL_gdalbuildvrt", (DL_FUNC) &_sf_CPL_gdalbuildvrt, 3},
-    {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 5},
-    {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 3},
-    {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 3},
-    {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 12},
-    {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 7},
+    {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
@@ -971,12 +940,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_normalize", (DL_FUNC) &_sf_CPL_geos_normalize, 1},
     {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
-    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 8},
+    {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 7},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
-    {"_sf_CPL_geos_relate", (DL_FUNC) &_sf_CPL_geos_relate, 2},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_nary_difference", (DL_FUNC) &_sf_CPL_nary_difference, 1},
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},

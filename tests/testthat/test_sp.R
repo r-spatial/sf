@@ -71,6 +71,7 @@ test_that("Can convert `XY` objects to sp", {
 })
 
 test_that("Can't convert `M` dimension to sp", {
+	skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
 	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"))
 	expect_error(as_Spatial(x), "not supported by sp")
 })

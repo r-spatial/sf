@@ -32,6 +32,24 @@ test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
   expect_error(st_cast(pts, "MULTILINESTRING"), "cannot create MULTILINESTRING from POINT")
   expect_error(st_cast(pts, "POLYGON"), "cannot create POLYGON from POINT")
   expect_error(st_cast(pts, "MULTIPOLYGON"), "cannot create MULTIPOLYGON from POINT")
+
+  # multipoints
+  mp <- st_sfc(st_multipoint(m[1:4,]))
+  expect_is(mp, "sfc_MULTIPOINT")
+  expect_is(st_cast(mp, "MULTIPOINT"), "sfc_MULTIPOINT")
+  expect_is(st_cast(mp, "POINT"), "sfc_POINT")
+  expect_silent(st_cast(mp, "POINT"))
+  expect_warning(st_cast(mp[[1]], "POINT"), "point from first coordinate only")
+  expect_is(st_cast(mp, "POLYGON"), "sfc_POLYGON")
+  expect_is(st_cast(mp[[1]], "POLYGON"), "POLYGON")
+  expect_is(st_cast(mp, "LINESTRING"), "sfc_LINESTRING")
+  expect_is(st_cast(mp[[1]], "LINESTRING"), "LINESTRING")
+  expect_error(st_cast(mp, "MULTIPOLYGON"), "smaller steps")
+  expect_is(st_cast(mp[[1]], "MULTIPOLYGON"), "MULTIPOLYGON")
+  expect_is(st_cast(mp, "MULTILINESTRING"), "sfc_MULTILINESTRING")
+  expect_is(st_cast(mp[[1]], "MULTILINESTRING"), "MULTILINESTRING")
+  expect_error(st_cast(mp, "GEOMETRYCOLLECTION"), "smaller steps")
+  expect_is(st_cast(mp[[1]], "GEOMETRYCOLLECTION"), "GEOMETRYCOLLECTION")
   
   # lines
   ln <- st_sfc(cc$lines$single, cc$lines$single)

@@ -3,7 +3,7 @@
 \name{st_read}
 \alias{st_read}
 \alias{st_read}
-\alias{st_read.default}
+\alias{st_read.character}
 \alias{st_read}
 \alias{read_sf}
 \alias{st_read}
@@ -12,7 +12,7 @@
 \usage{
 st_read(dsn, layer, ...)
 
-\method{st_read}{default}(dsn, layer, ..., options = NULL, quiet = FALSE,
+\method{st_read}{character}(dsn, layer, ..., options = NULL, quiet = FALSE,
   geometry_column = 1L, type = 0, promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE,
   check_ring_dir = FALSE)

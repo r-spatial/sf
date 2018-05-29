@@ -1,8 +1,22 @@
+# version 0.6-4
+
+# version 0.6-3
+
+* move dependency `RPostgreSQL` back to Suggests:, from Imports:
+
+* `st_centroid.sf` and `st_point_on_surface.sf` now also warn if attributes are not constant over geometries.
+
+* `summarise` now allows the user to define geometries for summaries; #714, by Kirill Mueller
+
+* `plot.sf` now emits a warning if `col` does not have length 1 or `nrow(x)`, and requires `pal` (rather than `col`) to set a palette for factors.
+
+* `plot.sf` provides control over legend keys using `key.length` and `key.width`, decrease default key length; #731
+
+* `sgbp` objects receive an `as.data.frame` method; #715
+
 # version 0.6-2
 
-* support read/write of logical variables through GDAL; #722
-
-* add temp file copying workaround for writing GPKG files to network drives; #628
+* GDAL read/write now supports logical variables; #722
 
 * add `st_crop` to simplify cropping objects with a rectangular area; #720
 
@@ -10,13 +24,15 @@
 
 * use dynamic registration of S3 methods, similar to how hms does this; #710 by Kirill Mueller
 
-* (partially) address writing GPKG to network drive; #628
+* (partially) address writing GPKG to network drive, writing to temp file first; #628
 
 * add Kirill Mueller as contributor
 
-* improve speed of `st_make_grid`; #708, by Dan Baston
+* `st_make_grid` is now faster; #708, by Dan Baston
 
 * `st_read` and `st_write` are now generic, with methods for directly reading from and writing to database connections; `st_read_db` and `st_write_db` are now deprecated; #558, thanks to Etienne Racine @etiennebr
+
+* Package `RPostgreSQL` moved from Suggests to Imports
 
 * restore compatibility with GDAL 2.0.x versions (which won't have `gdal_utils`); #686
 
@@ -32,7 +48,7 @@
 
 * all Rcpp interfaces needed by package `stars` have now been moved into `sf`; pkg `stars` is now R-only, and only `sf` needs linking to GDAL.
 
-* interface the 9 gdal utils using the C++ API; see R function `gdal_utils()`
+* `gdal_utils()` now interfaces the 9 gdal utils using the C++ API
 
 * improve resetting (base) plots; add `reset = FALSE` in a call to `plot` to enable adding to plots that have a legend
 
@@ -60,7 +76,7 @@
 
 * `st_distance` for long/lat geographic coordinates now uses `lwgeom`, accepting all geometry types; argument `dist_fun` is deprecated as a consequence, and distance calculations are different from those in sf versions 0.5-5 or earlier; #593
 
-* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use functions from package `lwgeom` instead of `geosphere`; #593
+* add package `lwgeom` to Suggests; `st_area`, `st_length`, `st_distance`, `st_segmentize` for long/lat CRS now use package `lwgeom` instead of `geosphere`; #593
 
 * `st_length` now returns zero for polygon-type geometries; #593
 
@@ -212,7 +228,7 @@
 
 * add a `[<-` method for `sfc` objects; automatically replaces `NULL` with an empty geometry; #411
 
-* add `st_point_on_surface` function to return a point that is guaranteed to be on the surface (standard compliance)
+* add `st_point_on_surface()` to return a point that is guaranteed to be on the surface (standard compliance)
 
 * `read_sf` now returns an sf-tibble, an object of class `c("sf", "tbl_df", "tbl", "data.frame")`
 
@@ -308,7 +324,7 @@
 
 * build proper support for `cbind` and `rbind` methods for `sf`, which work (as documented) when _all_ arguments are of class `sf`; `dplyr::bind_cols` or `st_sf(data.frame(sf, df))` work for binding `data.frame`s to an `sf` object.
 
-* units support for function arguments of `st_segmentize` and `st_line_sample`
+* `st_segmentize()` and `st_line_sample()` now accept units arguments
 
 * document problem reading shapefiles from USB drives on OSX; #252
 

@@ -56,7 +56,7 @@ sanity_check = function(x) {
 		else
 			stop(paste("no check implemented for", class(x)[1]))
     } else
-        x
+        x # nocov
 }
 
 #' @name st_transform
@@ -136,7 +136,8 @@ st_proj_info = function(type = "proj") {
 		return(CPL_have_datum_files(0))
 
     opts <- c("proj", "ellps", "datum", "units")
-    if (!(type %in% opts)) stop("unknown type")
+    if (!(type %in% opts))
+		stop("unknown type") # nocov
     t <- as.integer(match(type[1], opts) - 1)
 	res = CPL_proj_info(as.integer(t))
     if (type == "proj")

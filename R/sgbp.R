@@ -70,3 +70,8 @@ Ops.sgbp = function(e1, e2) {
 		region.id = attr(e1, "region.id"),
 		ncol = attr(e1, "ncol"))
 }
+
+#' @export
+as.data.frame.sgbp = function(x, ...) {
+	data.frame(row.id = rep(seq_along(x), lengths(x)), col.id = unlist(x))
+}

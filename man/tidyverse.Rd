@@ -120,7 +120,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
 
 \item{x}{tbls to join}
 
-\item{do_union}{logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points; see Details.}
+\item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
 \item{.keep_all}{see corresponding function in dplyr}
 
@@ -185,13 +185,18 @@ it is a potentially expensive operation so you must opt into it.}
 \code{y}, these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.}
 }
+\value{
+an object of class \link{sf}
+}
 \description{
 Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
 }
 \details{
 \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 
-In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
+In case one or more of the arguments (expressions) in the \code{summarise} call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of \code{do_union}.
+
+In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 
 \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 
@@ -223,11 +228,11 @@ nc.g \%>\% summarise(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
 nc \%>\% as.data.frame \%>\% summarise(mean(AREA))
 nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
 library(tidyr)
-nc \%>\% select(SID74, SID79) \%>\% gather(VAR, SID, -geometry) \%>\% summary()
+nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 library(tidyr)
 nc$row = 1:100 # needed for spread to work
 nc \%>\% select(SID74, SID79, geometry, row) \%>\%
-	gather(VAR, SID, -geometry, -row) \%>\%
+	gather("VAR", "SID", -geometry, -row) \%>\%
 	spread(VAR, SID) \%>\% head()
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 x <- storms.sf \%>\% group_by(name, year) \%>\% nest

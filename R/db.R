@@ -60,6 +60,16 @@ st_read.DBIObject = function(dsn = NULL, layer = NULL, query = NULL,
 }
 
 #' @export
+st_read.Pool = function(dsn = NULL, layer = NULL, ...) {
+	if (! requireNamespace("pool", quietly = TRUE))
+		stop("package pool required, please install it first")
+	dsn = pool::poolCheckout(dsn)
+	on.exit(pool::poolReturn(dsn))
+	st_read(dsn, layer = layer, ...)
+}
+
+
+#' @export
 st_read.PostgreSQLConnection <- function(...) {
     st_read.DBIObject(...)
 }
@@ -215,7 +225,6 @@ get_new_postgis_srid <- function(conn) {
 #' @inheritParams RPostgreSQL::postgresqlWriteTable
 #' @md
 #' @rdname st_write
-#' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbWriteTable
 #' @export
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
@@ -245,7 +254,6 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 #' to PostgreSQL. See `dbDataType()` for details.
 #' @md
 #' @rdname st_write
-#' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbWriteTable
 #' @export
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
@@ -295,7 +303,6 @@ sync_crs <- function(conn, geom) {
 #' @export
 #' @inheritParams RPostgreSQL dbDataType
 #' @rdname dbDataType
-#' @importClassesFrom RPostgreSQL PostgreSQLConnection
 #' @importMethodsFrom DBI dbDataType
 setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 	dtyp <- vapply(obj, RPostgreSQL::dbDataType, character(1), dbObj =  dbObj)

@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -65,7 +65,13 @@ Error in CPL_gdal_segmentize(x, dfMaxLength) :
 
 > 
 > x = st_centroid(nc_tr)
+Warning message:
+In st_centroid.sf(nc_tr) :
+  st_centroid assumes attributes are constant over geometries of x
 > x = st_point_on_surface(nc_tr)
+Warning message:
+In st_point_on_surface.sf(nc_tr) :
+  st_point_on_surface assumes attributes are constant over geometries of x
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
@@ -337,4 +343,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.980   0.245   0.908 
+  1.005   0.240   0.914 

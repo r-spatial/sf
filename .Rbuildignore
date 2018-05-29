@@ -1,9 +1,7 @@
 .travis.yml
-attic
-docs
 PROPOSAL.md
-cov
 config.log
+config.status
 TODO
 ^windows
 ^appveyor\.yml$

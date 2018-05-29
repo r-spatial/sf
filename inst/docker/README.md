@@ -6,10 +6,11 @@ To allows building `sf` in alternative environments with all
 external system requirements (udunits, proj, gdal, geos, lwgeom),
 this directory has subdirectories with Docker files:
 
-* base: for installing R-release with all system dependencies required by `sf`, 
-* devel: for building R-devel from source (downloaded from svn, without X11) on top of that. 
-* gdal22: for testing with newer gdal versions
-* custom: for testing with libraries (gdal, geos, proj.4) installed in custom, non-standard directories
+* [base](base): for installing R-release with all system dependencies required by `sf`, 
+* [devel](devel): for building R-devel from source (downloaded from svn, without X11) on top of that. 
+* [gdal22](gdal22): for testing with newer gdal versions
+* [custom](custom): for testing with libraries (gdal, geos, proj.4) installed in custom, non-standard directories
+* [lowest](lowest): for checking sf against the lowest required PROJ, GDAL and GEOS versions
 
 The images are built on ubuntu:16.04 (xenial). They use [ubuntugis-unstable](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable) for GIS package system dependencies.
 

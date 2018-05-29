@@ -112,12 +112,18 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, sparse, prepared)
-	if (sparse) {
-		if (is.null(id <- row.names(x)))
-			id = as.character(1:length(ret))
-		sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-	} else
+	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+	if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+		id = if (is.null(row.names(x)))
+				as.character(1:length(ret))
+			else
+				row.names(x)
+		sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
+		if (! sparse)
+			as.matrix(sgbp)
+		else
+			sgbp
+	} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
 		ret[[1]]
 }
 
@@ -358,7 +364,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
-#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle)
+#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 st_buffer = function(x, dist, nQuadSegs = 30)
@@ -384,7 +390,8 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 		units(dist) = crs_parameters(st_crs(x))$ud_unit
 	}
 	dist = rep(dist, length.out = length(x))
-	st_sfc(CPL_geos_op("buffer", x, dist, nQuadSegs))
+	nQ = rep(nQuadSegs, length.out = length(x))
+	st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
 }
 
 #' @export
@@ -404,7 +411,7 @@ st_boundary.sfg = function(x)
 
 #' @export
 st_boundary.sfc = function(x)
-	st_sfc(CPL_geos_op("boundary", x, numeric(0)))
+	st_sfc(CPL_geos_op("boundary", x, numeric(0), integer(0), numeric(0), logical(0)))
 
 #' @export
 st_boundary.sf = function(x) {
@@ -427,7 +434,7 @@ st_convex_hull.sfg = function(x)
 
 #' @export
 st_convex_hull.sfc = function(x)
-	st_sfc(CPL_geos_op("convex_hull", x, numeric(0)))
+	st_sfc(CPL_geos_op("convex_hull", x, numeric(0), integer(0), numeric(0), logical(0)))
 
 #' @export
 st_convex_hull.sf = function(x) {
@@ -437,8 +444,8 @@ st_convex_hull.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @param preserveTopology logical; carry out topology preserving simplification?
-#' @param dTolerance numeric; tolerance parameter
+#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.
+#' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 	UseMethod("st_simplify")
 
@@ -450,7 +457,9 @@ st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
-	st_sfc(CPL_geos_op("simplify", x, numeric(0), preserveTopology = preserveTopology, dTolerance = dTolerance))
+	st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
+		preserveTopology = rep(preserveTopology, length.out = length(x)),
+		dTolerance = rep(dTolerance, length.out = length(x))))
 }
 
 #' @export
@@ -475,7 +484,8 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	if (CPL_geos_version() >= "3.4.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
-		st_sfc(CPL_geos_op("triangulate", x, numeric(0), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
+			dTolerance = rep(as.double(dTolerance), lenght.out = length(x)), logical(0), bOnlyEdges = bOnlyEdges))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
@@ -541,7 +551,7 @@ st_polygonize.sfg = function(x)
 #' @export
 st_polygonize.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_LINESTRING") || inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("polygonize", x, numeric(0)))
+	st_sfc(CPL_geos_op("polygonize", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
@@ -566,7 +576,7 @@ st_line_merge.sfg = function(x)
 #' @export
 st_line_merge.sfc = function(x) {
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("linemerge", x, numeric(0)))
+	st_sfc(CPL_geos_op("linemerge", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
@@ -611,14 +621,20 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 		if (length(multi))
 			x[multi] = largest_ring(x[multi])
 	}
-	st_sfc(CPL_geos_op("centroid", x, numeric(0)))
+	st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
 st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
-	st_geometry(x) <- st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon)
-	x
+	if (! all_constant(x))
+		warning("st_centroid assumes attributes are constant over geometries of x")
+	ret = st_set_geometry(x, 
+		st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon))
+	agr = st_agr(ret)
+	agr[ agr == "identity" ] = "constant"
+	st_set_agr(ret, agr)
 }
+
 
 #' @name geos_unary
 #' @export
@@ -637,13 +653,14 @@ st_point_on_surface.sfg = function(x)
 st_point_on_surface.sfc = function(x) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_point_on_surface may not give correct results for longitude/latitude data")
-	st_sfc(CPL_geos_op("point_on_surface", x, numeric(0)))
+	st_sfc(CPL_geos_op("point_on_surface", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
 st_point_on_surface.sf = function(x) {
-	st_geometry(x) <- st_point_on_surface(st_geometry(x))
-	x
+	if (! all_constant(x))
+		warning("st_point_on_surface assumes attributes are constant over geometries of x")
+	st_set_geometry(x, st_point_on_surface(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -666,7 +683,7 @@ st_node.sfc = function(x) {
 		stop("st_node: all geometries should be linear")
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_node may not give correct results for longitude/latitude data")
-	st_sfc(CPL_geos_op("node", x, numeric(0)))
+	st_sfc(CPL_geos_op("node", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export

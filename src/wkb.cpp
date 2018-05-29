@@ -165,7 +165,7 @@ Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWK
 }
 
 Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
-		Rcpp::CharacterVector cls = "") {
+		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 	Rcpp::NumericVector ret(n);
 	for (int i = 0; i < n; i++) {
 		double d;
@@ -174,6 +174,8 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 			ret(i) = swap_endian<double>(d); // #nocov
 		else
 			ret(i) = d;
+		if (i == 0 && empty != NULL && std::isnan(d))
+			*empty = true;
 	}
 	if (cls.size() == 3)
 		ret.attr("class") = cls;
@@ -307,7 +309,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	switch(sf_type) {
 		case SF_Point: 
 			output[0] = read_numeric_vector(wkb, n_dims, swap, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "POINT", "sfg") : "");
+				Rcpp::CharacterVector::create(dim_str, "POINT", "sfg") : "", &empty);
 			break;
 		case SF_LineString:
 			output[0] = read_numeric_matrix(wkb, n_dims, swap, addclass ?
@@ -506,7 +508,7 @@ void add_int(std::ostringstream& os, unsigned int i) {
 double make_precise(double d, double precision) {
 	if (precision == 0.0)
 		return d;
-	if (precision < 0.0) { // float, 4-byte precision
+	if (precision < 0.0) { // round to float, 4-byte precision
 		float f = d;
 		return (double) f;
 	}
@@ -514,7 +516,7 @@ double make_precise(double d, double precision) {
 }
 
 void add_double(std::ostringstream& os, double d, double prec = 0.0) {
-  d = make_precise(d, prec); // doubles are ALLWAYS coordinates
+  d = make_precise(d, prec); // doubles are ALWAYS coordinates
   const char *cp = (char *)&d;
   os.write((char*) cp, sizeof(double));
 }

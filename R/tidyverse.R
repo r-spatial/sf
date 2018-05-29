@@ -81,6 +81,7 @@ select.sf <- function(.data, ...) {
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov
 
+	agr <- st_agr(.data)
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
 
@@ -88,7 +89,8 @@ select.sf <- function(.data, ...) {
 		stop("rlang required: install first?")
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
-	st_as_sf(ret)
+	vars <- setdiff(names(ret), sf_column)
+	st_set_agr(st_as_sf(ret), agr[vars])
 }
 
 
@@ -114,8 +116,12 @@ slice.sf <- function(.data, ..., .dots) {
 
 #' @name tidyverse
 #' @aliases summarise
-#' @param do_union logical; should geometries be unioned by using \link{st_union}, or simply be combined using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points may also change the order of the points; see Details.
-#' @details In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see \url{https://github.com/r-spatial/sf/issues/681}.
+#' @param do_union logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.
+#' @return an object of class \link{sf}
+#' @details 
+#' In case one or more of the arguments (expressions) in the \code{summarise} call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of \code{do_union}.
+#' 
+#' In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc.g <- nc %>% group_by(area_cl)
@@ -124,32 +130,33 @@ slice.sf <- function(.data, ..., .dots) {
 #' nc %>% as.data.frame %>% summarise(mean(AREA))
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
-	crs = st_crs(.data)
 	ret = NextMethod()
 
-	geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-		geom = st_geometry(.data)
-		i = lapply(attr(.data, "indices"), function(x) x + 1) # they are 0-based!!
-		# merge geometry:
-		geom = if (do_union)
-			unlist(lapply(i, function(x) st_union(geom[x])), recursive = FALSE)
-		else
-			unlist(lapply(i, function(x) st_combine(geom[x])), recursive = FALSE)
-		if (is.null(geom))
-			st_sfc() #676 #nocov
-		else
-			do.call(st_sfc, geom)
-	} else { # single group:
-		if (do_union)
-			st_union(st_geometry(.data))
-		else
-			st_combine(st_geometry(.data))
+	if (! any(sapply(ret, inherits, what = "sfc"))) {
+		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
+			if (!requireNamespace("dplyr", quietly = TRUE))
+				stop("dplyr required: install that first") # nocov
+			i = dplyr::group_indices(.data)
+			geom = st_geometry(.data)
+			geom = if (do_union)
+					lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
+				else
+					lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
+			geom = unlist(geom, recursive = FALSE)
+			if (is.null(geom))
+				geom = list() #676 #nocov
+			do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
+		} else { # single group:
+			if (do_union)
+				st_union(st_geometry(.data))
+			else
+				st_combine(st_geometry(.data))
+		}
+		ret[[ sf_column ]] = geom
 	}
-	ret[[ sf_column ]] = geom
-	ret$do_union = NULL
-	st_as_sf(ret, crs = crs, precision = st_precision(.data),
-		sf_column_name = attr(.data, "sf_column"))
+	st_as_sf(structure(ret, class = setdiff(class(ret), "sf"), "sf_column" = NULL))
 }
+
 
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
@@ -176,7 +183,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param factor_key see original function docs
 #' @examples
 #' library(tidyr)
-#' nc %>% select(SID74, SID79) %>% gather(VAR, SID, -geometry) %>% summary()
+#' nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
 
 	if (! requireNamespace("rlang", quietly = TRUE))
@@ -204,7 +211,7 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
 #' nc %>% select(SID74, SID79, geometry, row) %>%
-#'		gather(VAR, SID, -geometry, -row) %>%
+#'		gather("VAR", "SID", -geometry, -row) %>%
 #'		spread(VAR, SID) %>% head()
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {

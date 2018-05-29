@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.6-3
+Version: 0.6-4
 Title: Simple Features for R
 Description: Support for simple features, a standardized way to encode spatial vector data. Binds
 	to 'GDAL' for reading and writing data, to 'GEOS' for geometrical operations, and to 'PROJ' for projection
@@ -24,7 +24,6 @@ Imports:
 	grDevices,
 	grid,
 	Rcpp,
-	RPostgreSQL,
 	DBI (>= 0.8),
 	units (>= 0.5-1),
 	classInt,
@@ -45,7 +44,10 @@ Suggests:
 	rlang,
 	dplyr (>= 0.7-0),
 	tidyr (>= 0.7-2),
+	RPostgreSQL,
 	RPostgres (>= 1.1.0),
+	pool,
+	odbc,
 	tidyselect,
 	ggplot2,
 	mapview,
@@ -56,7 +58,7 @@ Suggests:
 	rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
+SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/

@@ -48,14 +48,14 @@ library(tidyr)
 # time-wide to long table, using tidyr::gather
 # stack the two SID columns for the July 1, 1974 - June 30, 1978 and July 1, 1979 - June 30, 1984 periods
 # (see https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
-nc %>% select(SID74, SID79, geometry) %>% gather(VAR, SID, -geometry) %>% summary()
+nc %>% select(SID74, SID79, geometry) %>% gather("VAR", "SID", -geometry) %>% summary()
 
 # spread:
 nc$row = 1:100
-nc.g <- nc %>% select(SID74, SID79, row) %>% gather(VAR, SID, -row, -geometry)
+nc.g <- nc %>% select(SID74, SID79, row) %>% gather("VAR", "SID", -row, -geometry)
 nc.g %>% tail()
 nc.g %>% spread(VAR, SID) %>% head()
-nc %>% select(SID74, SID79, geometry, row) %>% gather(VAR, SID, -geometry, -row) %>% spread(VAR, SID) %>% head()
+nc %>% select(SID74, SID79, geometry, row) %>% gather("VAR", "SID", -geometry, -row) %>% spread(VAR, SID) %>% head()
 
 # test st_set_crs in pipe:
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))

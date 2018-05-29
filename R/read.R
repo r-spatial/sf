@@ -84,18 +84,23 @@ set_utf8 = function(x) {
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
 
+#' @export
+st_read.default = function(dsn, layer, ...) {
+	if (missing(dsn))
+		stop("dsn should specify a data source or filename")
+	else
+		stop(paste("no st_read method available for objects of class", class(dsn)[1]))
+}
+
 #' @name st_read
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE) {
-
-	if (missing(dsn))
-		stop("dsn should specify a data source or filename")
 
 	layer = if (missing(layer))
 		character(0)
@@ -114,7 +119,8 @@ st_read.default = function(dsn, layer, ..., options = NULL, quiet = FALSE, geome
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		warning("no simple feature geometries present: returning a data.frame", call. = FALSE)
+		warning("no simple feature geometries present: returning a data.frame or tbl_df",
+			call. = FALSE)
 		return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
 	}
 
@@ -285,16 +291,28 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
-	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection"))) {
-		if(is.null(layer)) layer <- deparse(substitute(obj))
-		return(dbWriteTable(dsn, name = layer, value = obj, ..., factorsAsCharacter = factorsAsCharacter))
+
+	if (missing(dsn))
+		stop("dsn should specify a data source or filename")
+	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection", "Pool"))) {
+		if (inherits(dsn, "Pool")) {
+			if (! requireNamespace("pool", quietly = TRUE))
+				stop("package pool required, please install it first")
+			dsn = pool::poolCheckout(dsn)
+			on.exit(pool::poolReturn(dsn))
+		}
+		if (is.null(layer)) 
+			layer = deparse(substitute(obj))
+		return(dbWriteTable(dsn, name = layer, value = obj, ..., 
+			factorsAsCharacter = factorsAsCharacter))
+	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
+		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}
+
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
 	if (is.null(layer))
 		layer <- file_path_sans_ext(basename(dsn))
-	if (missing(dsn))
-		stop("dsn should specify a data source or filename")
 
 	if (length(dsn) == 1 && file.exists(dsn))
 		dsn = enc2utf8(normalizePath(dsn))
@@ -321,7 +339,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		as.character(dataset_options), as.character(layer_options),
 		geom, dim, quiet, update, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
-		tmp = tempfile() # nocov start
+		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,

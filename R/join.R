@@ -1,6 +1,6 @@
 check_join = function(x, y) {
 	if (inherits(y, "sf"))
-		stop("y should be a data.frame; for spatial joins, use st_join", .call = FALSE)
+		stop("y should be a data.frame; for spatial joins, use st_join", call. = FALSE)
 }
 
 sf_join = function(g, sf_column) {

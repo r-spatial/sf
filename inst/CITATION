@@ -1,0 +1,11 @@
+citHeader("To cite package sf in publications use:")
+
+citEntry(entry="Article",
+  author = "Edzer Pebesma",
+  title = "{Simple Features for R: Standardized Support for Spatial
+          Vector Data}",
+  year = 2018,
+  journal = "{The R Journal}",
+  url = "https://journal.r-project.org/archive/2018/RJ-2018-009/index.html",
+  textVersion = "Pebesma, E., 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal, https://journal.r-project.org/archive/2018/RJ-2018-009/"
+)

@@ -1,7 +1,7 @@
 context("sf: geos tests")
 
-test_that("CPL_goes_relate works", {
-  r1 = sf:::CPL_geos_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
+test_that("st_relate works", {
+  r1 = st_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
   library(sp)
   p = SpatialPoints(matrix(0,1,2))
   l = Lines(list(Line(rbind(c(0,0),c(1,1)))), "ID")
@@ -119,11 +119,11 @@ test_that("geom operations work on sfg or sfc or sf", {
   expect_that(st_line_merge(glnc), is_a("sfc"))
   expect_that(st_line_merge(glnc[[3]]), is_a("sfg"))
 
-  expect_silent(st_centroid(lnc))
+  expect_warning(st_centroid(lnc)) # was: silent
   expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
   expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
 
-  expect_silent(st_point_on_surface(lnc))
+  expect_warning(st_point_on_surface(lnc)) # was: silent
   expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
   expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
 

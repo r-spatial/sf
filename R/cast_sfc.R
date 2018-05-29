@@ -25,6 +25,7 @@ which_sfc_col = function(cls) {
 		POLYGON = 2,
 		MULTIPOLYGON = 3,
 		GEOMETRYCOLLECTION = 4,
+		MULTISURFACE = 4,
 		GEOMETRY = 5,
 		stop(paste("st_cast for", cls, "not supported"))
 	)
