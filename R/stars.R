@@ -52,7 +52,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
-st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE, which = seq_len(prod(dim(x)))) {
+st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x)))) {
 
 	stopifnot(identical(names(x), c("x", "y")))
 	if (is.na(as_points))
@@ -91,7 +91,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = FALSE, which =
 			stop("grid cell sizes not available")
 		expand.grid(x = x$values, y = y$values) # nocov end
 	}
-	dims = c(x$to, y$to) + 1
+	dims = c(x$to - x$from, y$to - y$from) + 1 + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
 			crs = st_crs(x$refsys), n_empty = 0L)
