@@ -10,9 +10,26 @@ fi
 
 RBIN="${R_HOME}/bin/R"
 
+RVER=`"${RBIN}" --version | head -1 | cut -f3 -d" "`
+RVER_MAJOR=`echo ${RVER} | cut  -f1 -d"."`
+RVER_MINOR=`echo ${RVER} | cut  -f2 -d"."`
+RVER_PATCH=`echo ${RVER} | cut  -f3 -d"."`
+
+if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
+    AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
+else
+    if test [$RVER_MINOR -eq 3]; then
+        CXX11=`"${RBIN}" CMD config CXX1X`
+        CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
+    else
+        CXX11=`"${RBIN}" CMD config CXX11`
+        CXX11STD=`"${RBIN}" CMD config CXX11STD`
+    fi
+fi
+
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
-: ${CXX=`"${RBIN}" CMD config CXX`}
+: ${CXX=${CXX11} ${CXX11STD}}
 : ${CPP=`"${RBIN}" CMD config CPP`}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
