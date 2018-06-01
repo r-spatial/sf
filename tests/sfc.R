@@ -233,10 +233,12 @@ st_bbox(raster(meuse.grid))
 st_bbox(extent(raster()))
 
 # st_to_s2
-x = sf:::st_to_s2(nc)
-x1 = st_geometry(x)
-cc = st_coordinates(x1)
-summary(sqrt(cc[,1]^2+cc[,2]^2+cc[,3]^2))
+if (FALSE) { # stops working with GDAL 2.3.0 / PROJ 5.0.1:
+ x = sf:::st_to_s2(nc)
+ x1 = st_geometry(x)
+ cc = st_coordinates(x1)
+ summary(sqrt(cc[,1]^2+cc[,2]^2+cc[,3]^2))
+}
 
 # check_ring_dir
 m = rbind(c(0,0), c(0,1), c(1,1), c(1,0), c(0,0))
