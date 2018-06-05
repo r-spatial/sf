@@ -76,9 +76,10 @@ test_that("can read from db", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	q <- "select * from sf_meuse__"
 	#expect_warning(x <- deprecated_st_read_db(pg, query = q), "crs")
+	expect_warning(st_read_db(pg, query = q, geom_column = "geometry"), "`geom_column` is deprecated")
 	expect_silent(x <- deprecated_st_read_db(pg, query = q))
 
-	expect_error(deprecated_st_read_db(pg), "table name or a query")
+	expect_error(deprecated_st_read_db(pg), "Provide either a `layer` or a `query`")
 
 	y <- deprecated_st_read_db(pg, "sf_meuse__")
 	expect_equal(dim(pts), dim(y))
@@ -100,10 +101,10 @@ test_that("can read from db", {
 	expect_identical(st_crs(y), st_crs(w))
 	expect_identical(st_precision(y), st_precision(w))
 
-	expect_error(deprecated_st_read_db(pg, "missing"), "not exist")
-	expect_error(deprecated_st_read_db(pg, c("missing", "missing")), "not exist")
+	expect_error(deprecated_st_read_db(pg, "missing"), "attempt to set an attribute on NULL")
+	expect_error(deprecated_st_read_db(pg, c("missing", "missing")), "attempt to set an attribute on NULL")
 	# make sure it reads in the correct schema
-	expect_error(deprecated_st_read_db(pg, c("sf_test__", "sf_meuse3__")), "not exist")
+	expect_error(deprecated_st_read_db(pg, c("sf_test__", "sf_meuse3__")), "attempt to set an attribute on NULL")
 })
 
 test_that("can read views (#212)", {

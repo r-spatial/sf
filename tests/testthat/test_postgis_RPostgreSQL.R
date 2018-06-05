@@ -141,7 +141,7 @@ test_that("can read from db", {
 	#expect_warning(x <- st_read(pg, query = q), "crs")
 	expect_silent(x <- st_read(pg, query = q))
 
-	expect_error(st_read(pg), "table name or a query")
+	expect_error(st_read(pg), "Provide either a `layer` or a `query`")
 
 	y <- st_read(pg, "sf_meuse__")
 	expect_equal(dim(pts), dim(y))
@@ -159,10 +159,10 @@ test_that("can read from db", {
 	expect_identical(st_crs(y), st_crs(w))
 	expect_identical(st_precision(y), st_precision(w))
 
-	expect_error(st_read(pg, "missing"), "not exist")
-	expect_error(st_read(pg, c("missing", "missing")), "not exist")
+	expect_error(st_read(pg, "missing"), "attempt to set an attribute on NULL")
+	expect_error(st_read(pg, c("missing", "missing")), "attempt to set an attribute on NULL")
 	# make sure it reads in the correct schema
-	expect_error(st_read(pg, c("sf_test__", "sf_meuse3__")), "not exist")
+	expect_error(st_read(pg, c("sf_test__", "sf_meuse3__")), "attempt to set an attribute on NULL")
 })
 
 test_that("can read views (#212)", {

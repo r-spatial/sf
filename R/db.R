@@ -3,9 +3,12 @@
 #' Read PostGIS table directly through DBI and RPostgreSQL interface, converting
 #' Well-Know Binary geometries to sfc
 #' @param query SQL query to select records; see details
-#' @param geom_column character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen
-#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}
-#' @details if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
+#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to
+#'   \code{TRUE}
+#' @details if \code{table} is not given but \code{query} is, the spatial
+#'   reference system (crs) of the table queried is only available in case it
+#'   has been stored into each geometry record (e.g., by PostGIS, when using
+#'   EWKB)
 #' @examples
 #' \dontrun{
 #' library(RPostgreSQL)
@@ -18,45 +21,91 @@
 #'  }
 #' }
 #' @name st_read
-#' @details in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
+#' @details The function will automatically find the `geometry` type columns for
+#'   drivers that support it. For the other drivers, it will try to cast all the
+#'   character columns, which can be slow for very wide tables.
 #' @export
-st_read.DBIObject = function(dsn = NULL, layer = NULL, query = NULL,
-					  geom_column = NULL, EWKB = TRUE, ...) {
-	if (is.null(dsn))
-		stop("no connection provided")
+st_read.DBIObject = function(dsn = NULL,
+                             layer = NULL,
+                             query = NULL,
+                             EWKB = TRUE,
+                             ...) {
+    if (is.null(dsn))
+        stop("no connection provided")
 
-	if (!is.null(layer)) {
-		layer <- schema_table(dsn, layer)
-		if (!db_exists(dsn, layer))
-			stop("`", paste0(layer, collapse = "."), "` does not exist.", call. = FALSE)
-		if (!is.null(query))
-			warning("Ignoring query argument, only using table")
-		query <- paste("SELECT * FROM", paste0(layer, collapse = "."), ";")
-	} else if(is.null(query)) {
-		stop("Provide either a table name or a query", call. = FALSE)
-	}
+    # check that ellipsis contains only what is needed
+    expe <- setdiff(names(list(...)), names(formals(st_sf)))
+    if(!is.null(expe)) {
+        # error,  these arguments would be passed to st_sf
+        suggest <- NULL
+        if("table" %in% expe){
+            suggest <- c(suggest, "\nMaybe you should use `layer` rather than `table` ?")
+        }
+        pref <- if(length(expe) > 1) "\t *" else  ""
+        stop(
+            "Unused arguments: ",
+            if(length(expe) > 1) "\n" else "",
+            paste(pref, expe, "=", list(...)[expe], collapse = "\n", sep = " "),
+            suggest,
+            "\nCheck arguments for `st_sf()` for details.",
+            call. = FALSE
+        )
+    }
 
-	# suppress warning about unknown type "geometry":
-	suppressWarnings(tbl <- dbGetQuery(dsn, query))
-	if (is.null(tbl))
-		stop("`", query, "` returned no results.", call. = FALSE) # nocov
+    # filter expected warnings (for RPostgreSQL driver)
+    filter_warning <- function(expr, regexp) {
+        wlist <- NULL
+        warning_handler <- function(w) {
+            wlist <<- c(wlist, list(w))
+            invokeRestart("muffleWarning")
+        }
+        msg <- function(x) x$message
+        out <- withCallingHandlers(expr, warning = warning_handler)
+        if(!all(grepl(regexp, wlist))) {
+            lapply(vapply(wlist, msg, character(1)), warning, call. = FALSE)  # nocov
+        }
+        return(out)
+    }
 
-	if("row.names" %in% colnames(tbl)) {
-		row.names(tbl) = tbl[["row.names"]]
-		tbl = tbl[,setdiff(colnames(tbl), "row.names")]
-	}
-	gc = try(dbReadTable(dsn, "geometry_columns"))
+    # Check layer and query conflict
+    if (!is.null(layer)) {
+        if (!is.null(query)) {
+            warning("You provided both `layer` and `query` arguments,",
+                    " will only use `layer`.", call. = FALSE)
+        }
+        # capture warnings from RPostgreSQL package
+        if (inherits(dsn, "PostgreSQLConnection")) {
+            tbl <- filter_warning(dbReadTable(dsn, layer), "unrecognized PostgreSQL field type geometry")
+        } else {
+            tbl <- dbReadTable(dsn, layer)
+        }
+    } else if(is.null(query)) {
+        stop("Provide either a `layer` or a `query`", call. = FALSE)
+    } else {
+        # capture warnings from RPostgreSQL package
+        if (inherits(dsn, "PostgreSQLConnection")) {
+            filter_warning(tbl <- dbGetQuery(dsn, query), "unrecognized PostgreSQL field type geometry")
+        } else {
+            tbl <- dbGetQuery(dsn, query)
+        }
+    }
 
-	if (is.null(geom_column)) { # try find the geometry column:
-		geom_column = if (class(gc) == "try-error" || is.null(layer))
-			tail(which(vapply(tbl, is.character, TRUE)), 1) # guess it's the last character column
-		else
-			gc[gc$f_table_schema == layer[1] & gc$f_table_name == layer[2], "f_geometry_column"]
-	}
+    if (is.null(tbl)) {
+        stop("Query `", query, "` returned no results.", call. = FALSE)  #nocov
+    }
 
-	tbl[geom_column] <- lapply(tbl[geom_column], postgis_as_sfc, EWKB = EWKB, conn = dsn)
+    # check for simple features column
+    geometry_column= is_geometry_column(dsn, tbl)
 
-	st_sf(tbl, ...)
+    tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
+
+    # if there are no simple features geometries, return a data frame
+    if(!any(vapply(tbl, inherits, logical(1), "sfc"))){
+        warning("Could not find a simple features geometry column. Will return a `data.frame`.")
+        return(tbl)
+    }
+
+    st_sf(tbl, ...)
 }
 
 #' @export
@@ -83,6 +132,10 @@ postgis_as_sfc <- function(x, EWKB, conn) {
 	return(geom)
 }
 
+try_postgis_as_sfc <- function(x, EWKB, conn) {
+    tryCatch(postgis_as_sfc(x, EWKB, conn), error = function(...) return(x))
+}
+
 schema_table <- function(conn, table, public = "public") {
 	if (!is.character(table))
 		stop("table must be a character vector", call. = FALSE)
@@ -102,45 +155,16 @@ as_wkb <- function(x) {
 	structure(x, class = "WKB")
 }
 
-db_list_tables_schema <- function(con) {
-	q <- paste("SELECT schemaname AS table_schema, tablename AS table_name",
-			   "FROM pg_tables",
-			   "WHERE schemaname !='information_schema'",
-			   "AND schemaname !='pg_catalog';")
-	DBI::dbGetQuery(con, q)
-}
-
-db_list_views_schema <- function(con) {
-	q <- paste("SELECT table_schema, table_name",
-			   "FROM information_schema.views",
-			   "WHERE table_schema !='information_schema'",
-			   "AND table_schema !='pg_catalog';")
-	DBI::dbGetQuery(con, q)
-}
-
-db_list_mviews_schema <- function(con) {
-	q <- paste("SELECT nspname as table_schema, relname as table_name",
-			   "FROM pg_catalog.pg_class c",
-			   "JOIN pg_namespace n ON n.oid = c.relnamespace",
-			   "WHERE c.relkind = 'm'")
-	DBI::dbGetQuery(con, q)
-}
-
-db_exists <- function(conn, name, ...) {
-	lst <- rbind(db_list_views_schema(conn),
-				 db_list_tables_schema(conn),
-				 db_list_mviews_schema(conn))
-	return(paste0(name, collapse = ".") %in% with(lst, paste0(table_schema, ".", table_name)))
-}
-
-get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
+get_possibly_new_srid <- function(conn, proj4string) {
 
     srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
 
-    if (class(srs_table) == "try-error")
-        return(0);
+    if (class(srs_table) == "try-error") {  # nocov start
+        warning("Could not find table `spatial_ref_sys` on remote connexion; ",
+                "CRS is set to unknown.")
+        return(0)
+    } # nocov end
 
-    DEBUG = function(x) { if (debug) message(x); x } # nocov
     trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
     srs_table$proj4text = sapply(srs_table$proj4text, trim)
     eq = srs_table$proj4text == proj4string
@@ -150,24 +174,29 @@ get_possibly_new_srid = function(conn, proj4string, debug = FALSE) {
         srid <- get_new_postgis_srid(conn)
         set_postgis_crs(conn, st_crs(srid, proj4string, valid = FALSE))
     }
-    return(srid)
+    srid
 }
 
 get_postgis_crs = function(conn, srid) {
     if (is.na(srid)) return(st_crs(NA))
-    query = paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
+    query <- paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
     proj4text <- dbGetQuery(conn, query)
-    if (nrow(proj4text) != 1)  return(st_crs(NA))
-    crs <-  st_crs(srid, gsub("^\\s+|\\s+$", "", proj4text[[1]]), valid = FALSE)
+    if (nrow(proj4text) != 1) return(st_crs(NA))
+    crs <- st_crs(srid, gsub("^\\s+|\\s+$", "", proj4text[[1]]), valid = FALSE)
     local_crs <- st_crs(srid)
-    if(crs != local_crs & !is.na(local_crs))
+    if(crs != local_crs & !is.na(local_crs)) {  # nocov start
         warning("Local crs different from database crs. You can inspect the ",
                 "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
                 "and compare it to `st_crs(", srid,")`.")
-    return(crs)
+    }  # nocov end
+    crs
 }
 
-set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose = TRUE) {
+set_postgis_crs <- function(conn,
+                            crs,
+                            auth_name = "sf",
+                            update = FALSE,
+                            verbose = TRUE) {
     if (is.na(crs[["epsg"]])) {
         crs[["epsg"]] <- get_new_postgis_srid(conn)
     } else {
@@ -176,7 +205,7 @@ set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose 
     wkt <- st_as_text(crs)
     q <- function(x) paste0("'", x, "'")
     if (update) {
-        query <- paste("UPDATE spatial_ref_sys",
+        query <- paste("UPDATE spatial_ref_sys SET",
                        "auth_name =", q(auth_name),
                        ", srtext =", q(wkt),
                       ", proj4text =", q(crs[["proj4string"]]),
@@ -189,23 +218,24 @@ set_postgis_crs = function(conn, crs, auth_name = "sf", update = FALSE, verbose 
     }
     tryCatch(dbExecute(conn, query),
             error = function(err) {
-                if(grepl("permission denied", err))
+                if(grepl("permission denied", err)) {  # nocov start
                     stop("Write permission denied on table `spatial_ref_sys`.",
-                        "\n * Local crs is not in the database;",
-                        "\n * Write permission on table `spatial_ref_sys` is denied.",
-                        "\nEither: ",
-                        "\n * Change the crs locally using `st_transform()`;",
-                        "\n * Grant write access on `spatial_sys_ref` for this connection.",
-                        "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", crs[["epsg"]], ")")
-                stop(err)
+                         "\n * Local crs is not in the database;",
+                         "\n * Write permission on table `spatial_ref_sys` is denied.",
+                         "\nEither: ",
+                         "\n * Change the crs locally using `st_transform()`;",
+                         "\n * Grant write access on `spatial_sys_ref` for this connection.",
+                         "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", crs[["epsg"]], ")")
+                }
+                stop(err) # nocov end
             })
     if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
                          "` in database as srid:", crs[["epsg"]], ".")
     return(crs)
 }
 
-delete_postgis_crs = function(conn, crs) {
-    if (is.na(crs[["epsg"]])) stop("missing crs")
+delete_postgis_crs <- function(conn, crs) {
+    if (is.na(crs[["epsg"]])) stop("Missing SRID")
     wkt <- st_as_text(crs)
     query <- paste0("DELETE FROM spatial_ref_sys ",
                    "WHERE srid = '", crs[["epsg"]], "' ",
@@ -215,8 +245,8 @@ delete_postgis_crs = function(conn, crs) {
 }
 
 get_new_postgis_srid <- function(conn) {
-	query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
-	dbGetQuery(conn, query)[[1]]
+    query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
+    dbGetQuery(conn, query)[[1]]
 }
 
 # for RPostgreSQL
@@ -267,7 +297,7 @@ setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
                                overwrite = overwrite, append = append,
                                field.types = field.types)
               }, warning=function(w) {
-                  stop(conditionMessage(w), call. = FALSE)
+                  stop(conditionMessage(w), call. = FALSE)  # nocov
               })
           }
 )
@@ -332,3 +362,19 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
     dtyp[gtyp] <- "numeric"
     return(dtyp)
 })
+
+#' Check if the columns could be of a coercable type for sf
+#'
+#' @param con database connection
+#' @param x inherits data.frame
+#' @param classes classes inherited
+is_geometry_column <- function(con, x, classes) UseMethod("is_geometry_column")
+
+is_geometry_column.PqConnection <- function(con, x, classes = c("pq_geometry")) {
+    vapply(x, inherits, logical(1), classes)
+}
+
+is_geometry_column.default <- function(con, x, classes = c("character")) {
+    # try all character columns (in conjunction with try_postgis_as_sfc)
+    vapply(x, inherits, logical(1), classes)
+}
