@@ -21,7 +21,7 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
 
 \item{geom_column}{deprecated. Geometry column name}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to
+\item{EWKB}{logical; is the WKB of type EWKB? if missing, defaults to
 \code{TRUE}}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}

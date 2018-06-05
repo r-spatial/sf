@@ -91,6 +91,37 @@ test_that("validates arguments", {
     expect_error(st_read(pg, "sf_meuse__", table = "a", x = 1, y = 2), "`layer` rather than `table`")
 })
 
+test_that("sf can write non-sf tables with geometries", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    df <- as.data.frame(pts)
+    expect_silent(st_write(df, pg, "df"))
+    expect_silent(dfx <- st_read(pg, "df"))
+    expect_equal(df[["geometry"]], dfx[["geometry"]])
+    expect_silent(DBI::dbRemoveTable(pg, "df"))
+})
+
+test_that("sf can write non-sf tables with multiple geometries", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    df <- as.data.frame(pts)
+    df$geography <- st_transform(df$geometry, 4326)
+    expect_silent(st_write(df, pg, "df"))
+    expect_silent(dfx <- st_read(pg, "df"))
+    expect_equal(df[["geometry"]], dfx[["geometry"]])
+    expect_equal(df[["geography"]], dfx[["geography"]])
+    expect_silent(DBI::dbRemoveTable(pg, "df"))
+})
+
+test_that("tidy workflow can write multiple geometries", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    df <- tibble::as_tibble(pts)
+    df <- dplyr::mutate(df, geography = st_transform(geometry, 4326))
+    expect_silent(write_sf(df, pg, "df"))
+    on.exit(DBI::dbRemoveTable(pg, "df"))
+    expect_silent(dfx <- read_sf(pg, "df"))
+    expect_equal(df[["geometry"]], dfx[["geometry"]])
+    expect_equal(df[["geography"]], dfx[["geography"]])
+})
+
 test_that("sf can preserve types (#592)", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     dtypes <- data.frame(

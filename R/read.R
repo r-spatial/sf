@@ -364,6 +364,12 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 #' @name st_write
 #' @export
+st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
+    st_write.sf(obj = st_as_sf(obj), dsn = dsn, layer = layer, ...)
+}
+
+#' @name st_write
+#' @export
 write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
 	st_write(..., quiet = quiet, delete_layer = delete_layer)
 }

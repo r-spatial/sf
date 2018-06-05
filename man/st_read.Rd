@@ -20,7 +20,7 @@ st_read(dsn, layer, ...)
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
 \method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
-  EWKB = TRUE, ...)
+  EWKB = TRUE, quiet = TRUE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some
@@ -73,7 +73,7 @@ clockwise, holes clockwise)}
 
 \item{query}{SQL query to select records; see details}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to
+\item{EWKB}{logical; is the WKB of type EWKB? if missing, defaults to
 \code{TRUE}}
 }
 \value{
