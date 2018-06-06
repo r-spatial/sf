@@ -38,6 +38,7 @@ RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://clo
 #RUN R CMD build rgdal/pkg --no-build-vignettes
 #RUN R CMD INSTALL rgdal_*.tar.gz 
 
+RUN ls
 RUN git clone  https://github.com/r-spatial/sf.git
 RUN R CMD build sf
 RUN R CMD INSTALL sf_*gz

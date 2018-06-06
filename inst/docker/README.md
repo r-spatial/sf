@@ -8,11 +8,12 @@ this directory has subdirectories with Docker files:
 
 * [base](base): for installing R-release with all system dependencies required by `sf`, 
 * [devel](devel): for building R-devel from source (downloaded from svn, without X11) on top of that. 
-* [gdal22](gdal22): for testing with newer gdal versions
+* [gdal230](gdal230): for testing with newer/newst gdal/geos/proj versions
 * [custom](custom): for testing with libraries (gdal, geos, proj.4) installed in custom, non-standard directories
 * [lowest](lowest): for checking sf against the lowest required PROJ, GDAL and GEOS versions
+* [cran](cran): using the debian setup used by several of the CRAN linux servers
 
-The images are built on ubuntu:16.04 (xenial). They use [ubuntugis-unstable](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable) for GIS package system dependencies.
+Except for the cran image, all images are built on ubuntu:16.04 (xenial). They use [ubuntugis-unstable](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable) for GIS package system dependencies.
 
 ## run check under R release
 
@@ -43,3 +44,5 @@ Run a container from this image interactively with
 to start R-devel in the container, use the `Rdevel` command. Building the image checks sf from github.
 
 ## with custom gdal, geos and proj installs
+
+

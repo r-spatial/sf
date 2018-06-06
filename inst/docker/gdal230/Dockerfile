@@ -92,7 +92,8 @@ RUN apt-get install -y \
 	libprotobuf-dev \
 	libxml2-dev \
 	libprotobuf-dev \
-	protobuf-compiler
+	protobuf-compiler \
+	unixodbc-dev
 
 RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
 
@@ -109,11 +110,10 @@ RUN git clone  https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
 
-RUN apt-get install -y unixodbc-dev
-
 RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
 
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
+RUN R CMD check --no-build-vignettes --no-manual sf_*tar.gz
 
 CMD ["/bin/bash"]
