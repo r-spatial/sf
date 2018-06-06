@@ -229,12 +229,12 @@ CPL_have_datum_files <- function(foo) {
     .Call('_sf_CPL_have_datum_files', PACKAGE = 'sf', foo)
 }
 
-CPL_proj_info <- function(type) {
-    .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
-}
-
 CPL_proj_direct <- function(from_to, pts) {
     .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts)
+}
+
+CPL_proj_info <- function(type) {
+    .Call('_sf_CPL_proj_info', PACKAGE = 'sf', type)
 }
 
 CPL_xy2sfc <- function(cc, dim, to_points, which) {

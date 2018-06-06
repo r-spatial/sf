@@ -56,6 +56,70 @@ bool CPL_have_datum_files(SEXP foo) {
 		return false; // #nocov
 }
 
+// [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+
+	using namespace Rcpp;
+
+	if (from_to.size() != 2)
+		stop("from_to should be size 2 character vector"); // #nocov
+	if (pts.ncol() != 2)
+		stop("pts should be 2-column numeric vector"); // #nocov
+
+	projPJ fromPJ, toPJ;
+
+	if (!(fromPJ = pj_init_plus(from_to[0]))) 
+		stop(pj_strerrno(*pj_get_errno_ref()));
+	
+	if (!(toPJ = pj_init_plus(from_to[1])))
+		stop(pj_strerrno(*pj_get_errno_ref()));
+
+	// copy over:
+	std::vector<double> xx(pts.nrow()), yy(pts.nrow());
+	for (int i = 0; i < pts.nrow(); i++) {
+   		 xx[i] = pts(i, 0);
+   		 yy[i] = pts(i, 1);
+	}
+	if (pj_is_latlong(fromPJ)) {
+		for (int i = 0; i < pts.nrow(); i++) {
+       		 xx[i] *= DEG_TO_RAD;
+       		 yy[i] *= DEG_TO_RAD;
+		}
+	}
+
+//	for (int i = 0; i < pts.nrow(); i++)
+//  		 Rcout << xx[i] << " " << yy[i] << std::endl;
+
+	if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
+		pj_free(fromPJ); pj_free(toPJ); // #nocov start
+		Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
+		stop("error"); // #nocov end
+	}
+	pj_free(fromPJ);
+	if (pj_is_latlong(toPJ)) {
+		for (int i = 0; i < pts.nrow(); i++) {
+       			 xx[i] *= RAD_TO_DEG;
+       			 yy[i] *= RAD_TO_DEG;
+		}
+	}
+	// copy to out matrix:
+	NumericMatrix out(pts.nrow(), pts.ncol());
+	for (int i = 0; i < out.nrow(); i++) {
+   		 out(i, 0) = xx[i];
+   		 out(i, 1) = yy[i];
+	}
+	pj_free(toPJ);
+	int nwarn = 0;
+	for (int i = 0; i < out.nrow(); i++) {
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
+		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
+                	    nwarn++; // #nocov
+	}
+	if (nwarn > 0) 
+		warning("one or more projected point(s) not finite"); // #nocov
+	return out;
+}
+
 
 extern "C" {
 // modified from: rgdal/pkg/src/projectit.cpp
@@ -226,68 +290,4 @@ Rcpp::List CPL_proj_info(int type) {
 		break;
 	}
 	return ret;
-}
-
-// [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
-
-	using namespace Rcpp;
-
-	if (from_to.size() != 2)
-		stop("from_to should be size 2 character vector"); // #nocov
-	if (pts.ncol() != 2)
-		stop("pts should be 2-column numeric vector"); // #nocov
-
-	projPJ fromPJ, toPJ;
-
-	if (!(fromPJ = pj_init_plus(from_to[0]))) 
-		stop(pj_strerrno(*pj_get_errno_ref()));
-	
-	if (!(toPJ = pj_init_plus(from_to[1])))
-		stop(pj_strerrno(*pj_get_errno_ref()));
-
-	// copy over:
-	std::vector<double> xx(pts.nrow()), yy(pts.nrow());
-	for (int i = 0; i < pts.nrow(); i++) {
-   		 xx[i] = pts(i, 0);
-   		 yy[i] = pts(i, 1);
-	}
-	if (pj_is_latlong(fromPJ)) {
-		for (int i = 0; i < pts.nrow(); i++) {
-       		 xx[i] *= DEG_TO_RAD;
-       		 yy[i] *= DEG_TO_RAD;
-		}
-	}
-
-//	for (int i = 0; i < pts.nrow(); i++)
-//  		 Rcout << xx[i] << " " << yy[i] << std::endl;
-
-	if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
-		pj_free(fromPJ); pj_free(toPJ); // #nocov start
-		Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
-		stop("error"); // #nocov end
-	}
-	pj_free(fromPJ);
-	if (pj_is_latlong(toPJ)) {
-		for (int i = 0; i < pts.nrow(); i++) {
-       			 xx[i] *= RAD_TO_DEG;
-       			 yy[i] *= RAD_TO_DEG;
-		}
-	}
-	// copy to out matrix:
-	NumericMatrix out(pts.nrow(), pts.ncol());
-	for (int i = 0; i < out.nrow(); i++) {
-   		 out(i, 0) = xx[i];
-   		 out(i, 1) = yy[i];
-	}
-	pj_free(toPJ);
-	int nwarn = 0;
-	for (int i = 0; i < out.nrow(); i++) {
-		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
-		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++; // #nocov
-	}
-	if (nwarn > 0) 
-		warning("one or more projected point(s) not finite"); // #nocov
-	return out;
 }

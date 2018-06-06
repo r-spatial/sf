@@ -3,7 +3,10 @@ title: "5. Plotting Simple Features"
 output:
   html_document:
     toc: true
-    theme: united
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{5. Plotting Simple Features}
   %\VignetteEngine{knitr::rmarkdown}

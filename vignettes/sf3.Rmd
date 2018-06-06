@@ -3,7 +3,10 @@ title: "3. Manipulating Simple Feature Geometries"
 output:
   html_document:
     toc: true
-    theme: united
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{3. Manipulating Simple Feature Geometries}
   %\VignetteEngine{knitr::rmarkdown}
