@@ -58,7 +58,7 @@ Suggests:
 	rmarkdown
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
+SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0)
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
