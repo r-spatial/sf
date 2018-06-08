@@ -49,10 +49,9 @@ CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_ite
 	
 	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL, 
 		create_options(options).data());
-	if (ds == NULL)
-		stop("read failure"); // #nocov
 	CharacterVector ret = get_meta_data(ds, domain_item);
-	GDALClose(ds);
+	if (ds != NULL)
+		GDALClose(ds);
 	return ret;
 }
 
