@@ -296,10 +296,10 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		stop("dsn should specify a data source or filename")
 	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection", "Pool"))) {
 		if (inherits(dsn, "Pool")) {
-			if (! requireNamespace("pool", quietly = TRUE))
+			if (! requireNamespace("pool", quietly = TRUE)) # nocov start
 				stop("package pool required, please install it first")
 			dsn = pool::poolCheckout(dsn)
-			on.exit(pool::poolReturn(dsn))
+			on.exit(pool::poolReturn(dsn)) # nocov end
 		}
 		if (is.null(layer)) 
 			layer = deparse(substitute(obj))

@@ -98,7 +98,7 @@ st_ll_sample = function (x, size, ..., type = "random") {
 		offset = runif(1)
 		d = ((1:size) - (1-offset))/size * sum(l)
 	} else {
-		stop(paste("type", type, "not available for LINESTRING"))
+		stop(paste("type", type, "not available for LINESTRING")) # nocov
 	}
 	lcs = c(0, cumsum(l))
 	grp = split(d, cut(d, lcs, include.lowest = TRUE))
