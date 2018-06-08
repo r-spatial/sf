@@ -20,7 +20,7 @@ st_read(dsn, layer, ...)
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 
 \method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
-  geom_column = NULL, EWKB = TRUE, ...)
+  EWKB = TRUE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some
@@ -73,9 +73,8 @@ clockwise, holes clockwise)}
 
 \item{query}{SQL query to select records; see details}
 
-\item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
-
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}}
+\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to
+\code{TRUE}}
 }
 \value{
 object of class \link{sf} when a layer was successfully read; in case
@@ -112,9 +111,14 @@ modified default arguments.
 about the data source. \code{read_sf} returns an sf-tibble rather than an sf-data.frame.
 \code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 
-if \code{table} is not given but \code{query} is, the spatial reference system (crs) of the table queried is only available in case it has been stored into each geometry record (e.g., by PostGIS, when using EWKB)
+if \code{table} is not given but \code{query} is, the spatial
+  reference system (crs) of the table queried is only available in case it
+  has been stored into each geometry record (e.g., by PostGIS, when using
+  EWKB)
 
-in case geom_column is missing: if table is missing, this function will try to read the name of the geometry column from table \code{geometry_columns}, in other cases, or when this fails, the geom_column is assumed to be the last column of mode character. If table is missing, the SRID cannot be read and resolved into a proj4string by the database, and a warning will be given.
+The function will automatically find the `geometry` type columns for
+  drivers that support it. For the other drivers, it will try to cast all the
+  character columns, which can be slow for very wide tables.
 }
 \note{
 The use of \code{system.file} in examples make sure that examples run regardless where R is installed:

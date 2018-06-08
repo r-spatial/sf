@@ -171,7 +171,7 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
 	tbl = tibble::as_tibble(as.data.frame(
 		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)))
 	has_geom = any(vapply(tbl, function(f) inherits(f, "sfc"), TRUE))
-	if (has_geom) 
+	if (has_geom)
 		st_as_sf(tbl)
 	else
 		tbl
@@ -301,9 +301,9 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 			dsn = pool::poolCheckout(dsn)
 			on.exit(pool::poolReturn(dsn)) # nocov end
 		}
-		if (is.null(layer)) 
+		if (is.null(layer))
 			layer = deparse(substitute(obj))
-		return(dbWriteTable(dsn, name = layer, value = obj, ..., 
+		return(dbWriteTable(dsn, name = layer, value = obj, ...,
 			factorsAsCharacter = factorsAsCharacter))
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))

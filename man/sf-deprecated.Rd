@@ -19,15 +19,22 @@ st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
 
 \item{query}{SQL query to select records; see details}
 
-\item{geom_column}{character or integer: indicator of name or position of the geometry column; if not provided, the last column of type character is chosen}
+\item{geom_column}{deprecated. Geometry column name}
 
-\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to \code{TRUE}}
+\item{EWKB}{logical; is the WKB is of type EWKB? if missing, defaults to
+\code{TRUE}}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
 }
 \description{
 These functions are provided for compatibility with older version of \code{sf}.
 They may eventually be completely removed.
+}
+\details{
+The \code{geom_column} argument is deprecated. The function will
+automatically find the \code{geometry} type columns. For the \code{RPostgreSQL} drivers
+it will try to cast all the character columns, which can be long for very wide
+tables.
 }
 \section{Details}{
 
