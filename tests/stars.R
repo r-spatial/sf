@@ -35,7 +35,7 @@ rc = expand.grid(x=1:3, y = 1:3)
 #xy_from_colrow(xy, gt, inverse = TRUE)
 gdal_crs(tif)
 
-gdal_metadata("foo")
+try(gdal_metadata("foo"))
 gdal_metadata(tif)
 
 m = matrix(runif(100*100), 100, 100)
