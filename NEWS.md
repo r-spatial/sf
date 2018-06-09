@@ -1,5 +1,17 @@
 # version 0.6-4
 
+* test fixes for PROJ 5.0.1
+
+* fixes for GDAL 2.3.0; #759
+
+* `st_sample` supports regular sampling of `LINESTRING`; #725 by @statnmap 
+
+* Support reading and writing of database `Pool` objects; #756
+
+* fix plotting of `sf` objects without attributes; #755
+
+* add reference to [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) to CITATION
+
 # version 0.6-3
 
 * move dependency `RPostgreSQL` back to Suggests:, from Imports:

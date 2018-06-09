@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -80,7 +80,7 @@ $gt_inv
 [6] -5.504587e-02
 
 > 
-> gdal_metadata("foo")
+> try(gdal_metadata("foo"))
 [1] NA
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
@@ -93,4 +93,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.664   0.171   0.645 
+  0.396   0.288   0.355 
