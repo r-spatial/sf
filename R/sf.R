@@ -117,23 +117,22 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 	stopifnot(inherits(value, "sfc") || is.character(value))
 	if (inherits(value, "sfc"))
 		stopifnot(nrow(x) == length(value))
-	a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
-
-	if (any(a)) {
-		w = which(a)
-		sf_col = attr(x, "sf_column")
-		if (! is.null(sf_col))
-			x[[ sf_col ]] = value
-		else {
-			if (length(w) > 1)
-				warning("overwriting first sfc column")
-			x[[ which(a)[1L] ]] = value
-		}
-		st_sf(x)
-	} else {
-		if (is.character(value))
-			x = st_sf(x, sf_column_name = value)
-		else
+	if (is.character(value))
+		st_sf(x, sf_column_name = value)
+	else {
+		a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
+		if (any(a)) {
+			w = which(a)
+			sf_col = attr(x, "sf_column")
+			if (! is.null(sf_col))
+				x[[ sf_col ]] = value
+			else {
+				if (length(w) > 1)
+					warning("overwriting first sfc column")
+				x[[ which(a)[1L] ]] = value
+			}
+			st_sf(x)
+		} else
 			st_sf(x, geometry = value)
 	}
 }

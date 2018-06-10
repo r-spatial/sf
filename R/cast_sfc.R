@@ -189,6 +189,7 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 	crs = st_crs(x)
 	agr = st_agr(x)
 	all_const = all_constant(x)
+	sf_column = attr(x, "sf_column") # keep name
 	st_geometry(x) = NULL
 	ids = attr(geom, "ids")          # e.g. 3 2 4
 	if (!is.null(ids)) { # split:
@@ -200,7 +201,8 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 		stopifnot(nrow(x) == length(geom))
 	}
 	attr(geom, "ids") = NULL # remove
-	st_geometry(x) = geom
+	x[[sf_column]] = geom
+	st_geometry(x) = sf_column
 	st_agr(x) = agr
 	x
 }
