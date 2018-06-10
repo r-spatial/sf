@@ -88,8 +88,15 @@ st_read = function(dsn, layer, ...) UseMethod("st_read")
 st_read.default = function(dsn, layer, ...) {
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
-	else
-		stop(paste("no st_read method available for objects of class", class(dsn)[1]))
+	else {
+		dsn_is_null = is.null(dsn)
+		class_dsn = class(dsn)
+		tr <- try(dsn <- as.character(dsn))
+		if (dsn_is_null || inherits(tr, "try-error"))
+			stop(paste("no st_read method available for objects of class", paste(class_dsn, collapse = ", ")))
+		else
+			st_read.character(dsn, layer, ...)
+	}
 }
 
 #' @name st_read
@@ -151,6 +158,7 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 	else
 		x
 }
+
 
 #' @name st_read
 #' @export
