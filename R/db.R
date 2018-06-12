@@ -31,7 +31,7 @@ st_read.DBIObject = function(dsn = NULL,
                              EWKB = TRUE,
                              ...) {
     if (is.null(dsn))
-        stop("no connection provided")
+        stop("no connection provided") # nocov
 
     # check that ellipsis contains only what is needed
     expe <- setdiff(names(list(...)), names(formals(st_sf)))
@@ -110,11 +110,11 @@ st_read.DBIObject = function(dsn = NULL,
 
 #' @export
 st_read.Pool = function(dsn = NULL, layer = NULL, ...) {
-	if (! requireNamespace("pool", quietly = TRUE))
+	if (! requireNamespace("pool", quietly = TRUE)) # nocov start
 		stop("package pool required, please install it first")
 	dsn = pool::poolCheckout(dsn)
 	on.exit(pool::poolReturn(dsn))
-	st_read(dsn, layer = layer, ...)
+	st_read(dsn, layer = layer, ...)                # nocov end
 }
 
 

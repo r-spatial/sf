@@ -1,15 +1,15 @@
 language: r
 
 r:
-  - release
+#  - release
   - devel
   - oldrel
 
 sudo: required
 dist: trusty
-#cache:
-#  - packages
-#  - ccache
+cache:
+  - packages
+  - ccache
 latex: false
 
 r_github_packages:
