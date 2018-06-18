@@ -151,7 +151,11 @@ c.sfc = function(..., recursive = FALSE) {
 	attributes(ret) = attributes(lst[[1]]) # crs
 	class(ret) = cls
 	attr(ret, "bbox") = compute_bbox(ret) # dispatch on class
-	attr(ret, "n_empty") = sum(sapply(lst, st_is_empty))
+	attr(ret, "n_empty") =
+		sum(unlist(
+			lapply(lapply(lst, attributes),
+				   `[[`, "n_empty"),
+			recursive = FALSE))
 	if (! eq)
 		attr(ret, "classes") = vapply(ret, class, rep("", 3))[2L,]
 	ret
