@@ -103,3 +103,10 @@ test_that("rep.sfc works", {
 	st_sfc(st_point(0:1), st_point(0:1), crs = 4326),
   	rep(st_sfc(st_point(0:1), crs=4326), 2))
 })
+
+test_that("c.sfc n_empty returns sum of st_is_empty(sfg)", {
+	pt1 <- st_point(c(NA_real_, NA_real_))
+	pt2 <- st_point(0:1)
+	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt1)), "n_empty"), 2L)
+	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt2)), "n_empty"), 1L)
+})
