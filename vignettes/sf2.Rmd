@@ -269,7 +269,7 @@ st_point(c(0,1))
 st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 ```
 
-We can create these well-known text strings explicitly using `st_as_wkt`:
+We can create these well-known text strings explicitly using `st_as_text`:
 
 ```{r}
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
