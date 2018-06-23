@@ -10,11 +10,11 @@
 
 * fix plotting of `sf` objects without attributes; #755
 
-* add reference to [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) to CITATION
+* add reference to [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) in CITATION
 
 # version 0.6-3
 
-* move dependency `RPostgreSQL` back to Suggests:, from Imports:
+* move dependency `RPostgreSQL` from Imports: back to Suggests:
 
 * `st_centroid.sf` and `st_point_on_surface.sf` now also warn if attributes are not constant over geometries.
 

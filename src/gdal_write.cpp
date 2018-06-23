@@ -243,7 +243,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	Rcpp::CharacterVector clsv = geom.attr("class");
 	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 	// read geometries:
-	OGRSpatialReference *sref;
+	OGRSpatialReference *sref = NULL;
 	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, &sref);
 
 	// create layer:

@@ -106,10 +106,6 @@ POINT (111319.5 111325.1)
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -121,4 +117,4 @@ Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) :
 > 
 > proc.time()
    user  system elapsed 
-  0.413   0.232   0.321 
+  0.433   0.215   0.326 

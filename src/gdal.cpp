@@ -159,7 +159,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 		Rcpp::CharacterVector cv = crs["proj4string"];
 		local_srs = new OGRSpatialReference;
 		OGRErr err = local_srs->importFromProj4(cv[0]);
-		if (err != 0) {
+		if (err != OGRERR_NONE) {
 			local_srs->Release(); // #nocov
 			handle_error(err);    // #nocov
 		}
