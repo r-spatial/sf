@@ -212,20 +212,22 @@ head.sfg = function(x, n = 10L, ...) {
 	structure(head(unclass(x), n = n, ...), class = class(x))
 }
 
-get_head = function(x, n) {
-	if (is.list(x) && object.size(x[[1]]) > 1000)
-		structure(list(get_head(x[[1]])), class = class(x))
-	else
-		head(x, 10)
+# 
+get_start = function(x, n = 30) {
+	if (is.list(x)) # recurse into first element:
+		structure(lapply(x, get_start, n = n), class = class(x))
+	else # matrix:
+		head(x, round(n/3))
 }
+
 
 #' @name st
 #' @export
 format.sfg = function(x, ..., width = 30) {
 	if (is.null(width))
 		width = 30
-	if (object.size(x) > 1000 && width > 0 && width <= 30)
-		x = get_head(x, 10)
+	if (object.size(x) > 1000 && width > 0)
+		x = get_start(x, n = width)
 	pr = st_as_text(x, ...)
 	if (width > 0 && nchar(pr) > width)
 		paste0(substr(pr, 1, width - 3), "...")
