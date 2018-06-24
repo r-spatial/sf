@@ -193,6 +193,10 @@ st_bbox.numeric = function(obj, ..., crs = NA_crs_) {
 }
 
 #' @export
+st_bbox.bbox = function(obj, ...) obj
+
+
+#' @export
 "$.bbox" = function(x, name) {
 	switch(name,
 		xrange =,
