@@ -210,32 +210,9 @@ st_is_longlat = function(x) {
 }
 
 # a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
-udunits_from_proj = if (utils::packageVersion("units") < "0.5-2") {
+udunits_from_proj = list(
 #   PROJ.4     UDUNITS
-c(  `km` =     "km",
-	`m` =      "m",
-	`dm` =     "dm",
-	`cm` =     "cm",
-	`mm` =     "mm",
-	`kmi` =    "nautical_mile",
-	`in` =     "in",
-	`ft` =     "ft",
-	`yd` =     "yd",
-	`mi` =     "mi",
-	`fath` =   "fathom",
-	`ch` =     "chain",
-#	`link` =   "0.201168 m",
-#	`us-in` =  "1./39.37 m",
-	`us-ft` =  "US_survey_foot",
-	`us-yd` =  "US_survey_yard",
-	`us-ch` =  "chain",
-	`us-mi` =  "US_survey_mile"
-#	`ind-yd` = "0.91439523 m",
-#	`ind-ft` = "0.30479841 m",
-#	`ind-ch` = "20.11669506 m"
-)
-} else {
-list(`km` =    as_units("km"),
+	`km` =    as_units("km"),
 	`m` =      as_units("m"),
 	`dm` =     as_units("dm"),
 	`cm` =     as_units("cm"),
@@ -247,17 +224,16 @@ list(`km` =    as_units("km"),
 	`mi` =     as_units("mi"),
 	`fath` =   as_units("fathom"),
 	`ch` =     as_units("chain"),
-#	`link` =   as_units("link"),
-#	`us-in` =  as_units("us_in"),
+	`link` =   as_units("link", check_is_valid = FALSE), # not (yet) existing; set in .onLoad()
+ 	`us-in` =  as_units("us_in", check_is_valid = FALSE),
 	`us-ft` =  as_units("US_survey_foot"),
 	`us-yd` =  as_units("US_survey_yard"),
 	`us-ch` =  as_units("chain"),
-	`us-mi` =  as_units("US_survey_mile")
-#	`ind-yd` = as_units("ind_yd"),
-#	`ind-ft` = as_units("ind_ft"),
-#	`ind-ch` = as_units("ind_ch")
+	`us-mi` =  as_units("US_survey_mile"),
+	`ind-yd` = as_units("ind_yd", check_is_valid = FALSE),
+	`ind-ft` = as_units("ind_ft", check_is_valid = FALSE),
+	`ind-ch` = as_units("ind_ch", check_is_valid = FALSE)
 )
-}
 
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
