@@ -64,7 +64,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		geom = do.call(st_sfc, lst[!sapply(lst, is.null)])
 
 		if (do_union)
-			geom = st_union(geom, by_feature = TRUE)
+			geom = st_union(st_set_precision(geom, st_precision(x)), by_feature = TRUE)
 
 		st_geometry(x) = NULL
 		x = aggregate(x, by, FUN, ..., simplify = simplify)
