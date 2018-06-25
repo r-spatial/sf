@@ -41,6 +41,11 @@ setOldClass("sfg")
 	}
 	CPL_gdal_init()
 	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
+	#units::install_conversion_constant("m", "link", 0.201168)
+	#units::install_conversion_constant("m", "us_in", 1./39.37)
+	#units::install_conversion_constant("m", "ind_yd", 0.91439523)
+	#units::install_conversion_constant("m", "ind_ft", 0.30479841)
+	#units::install_conversion_constant("m", "ind_ch", 20.11669506)
 }
 
 .onUnload = function(libname, pkgname) {
@@ -51,6 +56,11 @@ setOldClass("sfg")
 		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
 		# nocov end
 	}
+	#units::remove_symbolic_unit("link")
+	#units::remove_symbolic_unit("us_in")
+	#units::remove_symbolic_unit("ind_yd")
+	#units::remove_symbolic_unit("ind_ft")
+	#units::remove_symbolic_unit("ind_ch")
 }
 
 .onAttach = function(libname, pkgname) {

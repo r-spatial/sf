@@ -224,22 +224,17 @@ c(  `km` =     "km",
 	`mi` =     "mi",
 	`fath` =   "fathom",
 	`ch` =     "chain",
-	`link` =   "0.201168 m",
-	`us-in` =  "1./39.37 m",
+#	`link` =   "0.201168 m",
+#	`us-in` =  "1./39.37 m",
 	`us-ft` =  "US_survey_foot",
 	`us-yd` =  "US_survey_yard",
 	`us-ch` =  "chain",
-	`us-mi` =  "US_survey_mile",
-	`ind-yd` = "0.91439523 m",
-	`ind-ft` = "0.30479841 m",
-	`ind-ch` = "20.11669506 m"
+	`us-mi` =  "US_survey_mile"
+#	`ind-yd` = "0.91439523 m",
+#	`ind-ft` = "0.30479841 m",
+#	`ind-ch` = "20.11669506 m"
 )
 } else {
-units::install_conversion_constant("m", "link", 0.201168)
-units::install_conversion_constant("m", "us_in", 1./39.37)
-units::install_conversion_constant("m", "ind_yd", 0.91439523)
-units::install_conversion_constant("m", "ind_ft", 0.30479841)
-units::install_conversion_constant("m", "ind_ch", 20.11669506)
 list(`km` =    as_units("km"),
 	`m` =      as_units("m"),
 	`dm` =     as_units("dm"),
@@ -252,15 +247,15 @@ list(`km` =    as_units("km"),
 	`mi` =     as_units("mi"),
 	`fath` =   as_units("fathom"),
 	`ch` =     as_units("chain"),
-	`link` =   as_units("link"),
-	`us-in` =  as_units("us_in"),
+#	`link` =   as_units("link"),
+#	`us-in` =  as_units("us_in"),
 	`us-ft` =  as_units("US_survey_foot"),
 	`us-yd` =  as_units("US_survey_yard"),
 	`us-ch` =  as_units("chain"),
-	`us-mi` =  as_units("US_survey_mile"),
-	`ind-yd` = as_units("ind_yd"),
-	`ind-ft` = as_units("ind_ft"),
-	`ind-ch` = as_units("ind_ch")
+	`us-mi` =  as_units("US_survey_mile")
+#	`ind-yd` = as_units("ind_yd"),
+#	`ind-ft` = as_units("ind_ft"),
+#	`ind-ch` = as_units("ind_ch")
 )
 }
 
