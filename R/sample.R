@@ -70,6 +70,9 @@ st_poly_sample = function(x, size, ..., type = "random", offset = st_sample(st_a
 		size = round(size * a0 / a1)
 	bb = st_bbox(x)
 
+	if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
+		message_longlat("st_sample")
+
 	pts = if (type == "hexagonal") {
 		dx = sqrt(a0 / size / (sqrt(3)/2))
 		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
