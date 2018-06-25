@@ -1127,7 +1127,11 @@ proj4string:    NA
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
+> # new sample methods:
+> x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+> p <- st_sample(x, 10, type = "regular")
+> p <- st_sample(x, 10, type = "hexagonal")
 > 
 > proc.time()
    user  system elapsed 
-  1.913   0.244   1.826 
+  1.951   0.250   1.877 

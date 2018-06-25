@@ -1025,31 +1025,41 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
-#' Make a rectangular grid over the bounding box of a sf or sfc object
+#' Make a regular grid over the bounding box of an sf or sfc object
 #'
-#' Make a rectangular grid over the bounding box of a sf or sfc object
+#' Make a square or hexagonal grid over the bounding box of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
-#' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
-#' rectangular polygons, corner points of these polygons, or center points of these polygons.
+#' @param square logical; if \code{FALSE}, create hexagonal grid
+#' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what} and \code{square},
+#' square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
 #' @examples
 #' plot(st_make_grid(what = "centers"), axes = TRUE)
 #' plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
+#' sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
+#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE))
+#' plot(sfc, add = TRUE)
+#' # non-default offset:
+#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(.05,.05 / (sqrt(3)/2))))
+#' plot(sfc, add = TRUE)
 #' @export
 st_make_grid = function(x,
 		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n,
-		offset = st_bbox(x)[1:2], n = c(10, 10),
+		offset = st_bbox(x)[c("xmin", "ymin")], n = c(10, 10),
 		crs = if (missing(x)) NA_crs_ else st_crs(x),
-		what = "polygons") {
+		what = "polygons", square = TRUE) {
 
 	if (missing(x) && missing(cellsize) && missing(offset)
 			&& missing(n) && missing(crs)) # create global 10 x 10 degree grid
 		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
 			crs = st_crs(4326), what = what))
+
+	if (! square)
+		return(hex_grid(x, dx = cellsize[1], pt = offset, points = what != "polygons", clip = TRUE))
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)

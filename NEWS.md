@@ -1,5 +1,7 @@
 # version 0.6-4
 
+* add hexagonal tiling to `st_make_grid`, add regular and hexagonal sampling to `st_sample`
+
 * test fixes for PROJ 5.0.1
 
 * fixes for GDAL 2.3.0; #759

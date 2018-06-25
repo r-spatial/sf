@@ -15,11 +15,18 @@ st_sample(x, size, ..., type = "random")
 
 \item{type}{character; indicates the spatial sampling type; only \code{random} is implemented right now}
 }
+\value{
+an \code{sfc} object containing the sampled \code{POINT} geometries
+}
 \description{
 sample points on or in (sets of) spatial features
 }
 \details{
 if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
+
+For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
+
+As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 }
 \examples{
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
@@ -42,6 +49,14 @@ if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
   p = st_sample(x, 1000)
   st_sample(p, 3)
 }
+# hexagonal:
+sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
+plot(sfc)
+h = st_sample(sfc, 100, type = "hexagonal")
+h1 = st_sample(sfc, 100, type = "hexagonal")
+c(length(h), length(h1)) # approximate!
+plot(h, add = TRUE)
+plot(h1, col = 'red', add = TRUE)
 pt = st_multipoint(matrix(1:20,,2))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,0),c(.1,0))),

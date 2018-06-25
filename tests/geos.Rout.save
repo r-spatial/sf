@@ -154,6 +154,12 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 > length(g)
 [1] 703
 > 
+> g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
+> g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
+> 
+> # st_line_merge:
 > mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 > st_line_merge(mls)
 LINESTRING (0 0, 1 1, 2 0)
@@ -424,4 +430,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  3.590   0.264   3.524 
+  3.950   0.263   3.889 

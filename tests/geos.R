@@ -61,6 +61,10 @@ length(g)
 g = st_make_grid(what = "corners")
 length(g)
 
+g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
+g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
+
+# st_line_merge:
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_line_merge(mls)
 

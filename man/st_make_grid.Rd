@@ -2,11 +2,11 @@
 % Please edit documentation in R/geom.R
 \name{st_make_grid}
 \alias{st_make_grid}
-\title{Make a rectangular grid over the bounding box of a sf or sfc object}
+\title{Make a regular grid over the bounding box of an sf or sfc object}
 \usage{
 st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
-  4)]))/n, offset = st_bbox(x)[1:2], n = c(10, 10), crs = if (missing(x))
-  NA_crs_ else st_crs(x), what = "polygons")
+  4)]))/n, offset = st_bbox(x)[c("xmin", "ymin")], n = c(10, 10), crs = if
+  (missing(x)) NA_crs_ else st_crs(x), what = "polygons", square = TRUE)
 }
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
@@ -20,15 +20,23 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
 \item{crs}{object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
 
 \item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
+
+\item{square}{logical; if \code{FALSE}, create hexagonal grid}
 }
 \value{
-Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what},
-rectangular polygons, corner points of these polygons, or center points of these polygons.
+Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what} and \code{square},
+square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{
-Make a rectangular grid over the bounding box of a sf or sfc object
+Make a square or hexagonal grid over the bounding box of an sf or sfc object
 }
 \examples{
 plot(st_make_grid(what = "centers"), axes = TRUE)
 plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
+sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
+plot(st_make_grid(sfc, cellsize = .1, square = FALSE))
+plot(sfc, add = TRUE)
+# non-default offset:
+plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(.05,.05 / (sqrt(3)/2))))
+plot(sfc, add = TRUE)
 }
