@@ -10,4 +10,6 @@ test_that("st_bbox", {
   expect_true(all(names(st_bbox(x)) == c("xmin","ymin","xmax","ymax")))
   x = st_sf(a = 1, geom = st_sfc(x))
   expect_true(all(st_bbox(x) == c(1,2,2,4)))
+  bb = st_bbox(x)
+  expect_identical(st_bbox(bb), bb)
 })

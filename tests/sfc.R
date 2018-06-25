@@ -291,3 +291,7 @@ st_crop(pol, st_bbox(box))
 st_crop(pol_sf, box)
 st_crop(pol_sf, st_bbox(box))
 
+# new sample methods:
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+p <- st_sample(x, 10, type = "regular")
+p <- st_sample(x, 10, type = "hexagonal")
