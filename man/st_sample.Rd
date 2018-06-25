@@ -15,6 +15,9 @@ st_sample(x, size, ..., type = "random")
 
 \item{type}{character; indicates the spatial sampling type; only \code{random} is implemented right now}
 }
+\value{
+an \code{sfc} object containing the sampled \code{POINT} geometries
+}
 \description{
 sample points on or in (sets of) spatial features
 }

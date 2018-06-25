@@ -5,7 +5,7 @@
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
-#' @value an \code{sfc} object containing the sampled \code{POINT} geometries
+#' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 #' 
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
@@ -134,30 +134,34 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 hex_grid = function(obj, pt = bb[c("xmin", "ymin")], dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, 
 	points = TRUE, clip = NA) {
 
-  bb = st_bbox(obj)
-  dy = sqrt(3) * dx / 2
-  xlim = bb[c("xmin", "xmax")]
-  ylim = bb[c("ymin", "ymax")]
-  offset = c(x = (pt[1] - xlim[1]) %% dx, y = (pt[2] - ylim[1]) %% (2 * dy))
-  x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
-  y = seq(ylim[1] - 2 * dy, ylim[2] + dy, dy) + offset[2]
+	bb = st_bbox(obj)
+	dy = sqrt(3) * dx / 2
+	xlim = bb[c("xmin", "xmax")]
+	ylim = bb[c("ymin", "ymax")]
+	offset = c(x = (pt[1] - xlim[1]) %% dx, y = (pt[2] - ylim[1]) %% (2 * dy))
+	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
+	y = seq(ylim[1] - 2 * dy, ylim[2] + dy, dy) + offset[2]
 
-  y <- rep(y, each = length(x))
-  x <- rep(c(x, x + dx / 2), length.out = length(y))
-  ret = if (points) {
-    xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-    st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
-  } else {
-	dy = dx / sqrt(3)
-	dx2 = dx / 2
-	x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
-	y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
-    xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dx2 & y <= ylim[2] + dx2, ]
-	mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
-    st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
-  }
-  if (clip)
-    ret[lengths(st_intersects(ret, obj)) > 0]
-  else
-  	ret
+	y <- rep(y, each = length(x))
+	x <- rep(c(x, x + dx / 2), length.out = length(y))
+	ret = if (points) {
+		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+    	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
+	} else {
+		dy = dx / sqrt(3)
+		dx2 = dx / 2
+		x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
+		y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
+		xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dx2 & y <= ylim[2] + dx2, ]
+		mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
+		st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
+	}
+	i = if (clip) {
+		if (points)
+			lengths(st_intersects(ret, obj)) > 0
+		else
+			lengths(st_relate(ret, obj, "2********")) > 0
+	} else
+		TRUE
+	ret[i]
 }

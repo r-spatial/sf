@@ -155,7 +155,7 @@ In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
 [1] 703
 > 
 > g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 > 
@@ -430,4 +430,4 @@ first 10 elements:
 > 
 > proc.time()
    user  system elapsed 
-  3.838   0.284   3.795 
+  3.950   0.263   3.889 

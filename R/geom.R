@@ -1043,6 +1043,9 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
 #' plot(st_make_grid(sfc, cellsize = .1, square = FALSE))
 #' plot(sfc, add = TRUE)
+#' # non-default offset:
+#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(.05,.05 / (sqrt(3)/2))))
+#' plot(sfc, add = TRUE)
 #' @export
 st_make_grid = function(x,
 		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n,
