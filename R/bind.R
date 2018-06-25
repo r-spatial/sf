@@ -17,6 +17,7 @@
 #' rbind(b,c)
 rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
+	dots = dots[!sapply(dots, is.null)]
 	crs0 = st_crs(dots[[1]])
 	if (length(dots) > 1L) { # check all crs are equal...
 		equal_crs = vapply(dots[-1L], function(x) st_crs(x) == crs0, TRUE)
