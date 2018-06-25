@@ -5,7 +5,12 @@
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
+#' @value an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
+#' 
+#' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
+#' 
+#' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 #' plot(x, axes = TRUE, graticule = TRUE)
@@ -27,6 +32,14 @@
 #'   p = st_sample(x, 1000)
 #'   st_sample(p, 3)
 #' }
+#' # hexagonal:
+#' sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
+#' plot(sfc)
+#' h = st_sample(sfc, 100, type = "hexagonal")
+#' h1 = st_sample(sfc, 100, type = "hexagonal")
+#' c(length(h), length(h1)) # approximate!
+#' plot(h, add = TRUE)
+#' plot(h1, col = 'red', add = TRUE)
 #' pt = st_multipoint(matrix(1:20,,2))
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 #'  st_linestring(rbind(c(0,0),c(.1,0))),
@@ -36,45 +49,50 @@
 #' @export
 st_sample = function(x, size, ..., type = "random") {
 	x = st_geometry(x)
-	if (length(size) > 1) {
+	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
-		st_set_crs(do.call(c, lapply(1:length(x),
-			function(i) st_sample(x[i], size[i], type = type, ...))),
-			st_crs(x))
+		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, ...))
+		st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
-		dim = max(st_dimension(x))
-		if (dim == 0)
-			st_multipoints_sample(do.call(c, x), size, ..., type = type)
-		else if (dim == 1)
-			st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type)
-		else { # 2: -- take care of empty geoms?
-			stopifnot(dim == 2)
-			st_poly_sample(x, size, ..., type = type)
-		}
+		switch(max(st_dimension(x)) + 1,
+			st_multipoints_sample(do.call(c, x), size, ..., type = type),
+			st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
+			st_poly_sample(x, size, ..., type = type))
 	}
 }
 
-st_poly_sample = function(x, size, ..., type = "random") {
-	toRad = pi/180
-	bb = st_bbox(x)
+st_poly_sample = function(x, size, ..., type = "random", offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 	a0 = st_area(st_make_grid(x, n = c(1,1)))
 	a1 = sum(st_area(x))
 	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
 	# for instance has 0 st_area
 	if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
 		size = round(size * a0 / a1)
-	lon = runif(size, bb[1], bb[3])
-	lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-		lat0 = (sin(bb[2] * toRad) + 1)/2
-		lat1 = (sin(bb[4] * toRad) + 1)/2
-		y = runif(size, lat0, lat1)
-		asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-	} else
-		runif(size, bb[2], bb[4])
-	m = cbind(lon, lat)
-	pts = st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-	i = st_intersects(pts, x)
-	pts[lengths(i) > 0]
+	bb = st_bbox(x)
+
+	pts = if (type == "hexagonal") {
+		dx = sqrt(a0 / size / (sqrt(3)/2))
+		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
+	} else if (type == "regular") {
+		dx = sqrt(a0 / size)
+		offset = c((offset[1] - bb["xmin"]) %% dx, (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+	} else if (type == "random") {
+		lon = runif(size, bb[1], bb[3])
+		lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
+			toRad = pi/180
+			lat0 = (sin(bb[2] * toRad) + 1)/2
+			lat1 = (sin(bb[4] * toRad) + 1)/2
+			y = runif(size, lat0, lat1)
+			asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
+		} else
+			runif(size, bb[2], bb[4])
+		m = cbind(lon, lat)
+		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+	} else 
+		stop(paste("sampling type", type, "not implemented for polygons"))
+	pts[lengths(st_intersects(pts, x)) > 0]
 }
 
 st_multipoints_sample = function(x, size, ..., type = "random") {
@@ -84,7 +102,7 @@ st_multipoints_sample = function(x, size, ..., type = "random") {
 	st_sfc(st_multipoint(m[sample(nrow(m), size, ...),]), crs = st_crs(x))
 }
 
-st_ll_sample = function (x, size, ..., type = "random") {
+st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	if (isTRUE(st_is_longlat(x))) {
 		message_longlat("st_sample")
 		st_crs(x) = NA_crs_
@@ -95,13 +113,48 @@ st_ll_sample = function (x, size, ..., type = "random") {
 	if (type == "random") {
 		d = runif(size, 0, sum(l))
 	} else if (type == "regular") {
-		offset = runif(1)
-		d = ((1:size) - (1-offset))/size * sum(l)
+		d = ((1:size) - (1. - (offset %% 1)))/size * sum(l)
 	} else {
-		stop(paste("type", type, "not available for LINESTRING")) # nocov
+		stop(paste("sampling type", type, "not available for LINESTRING")) # nocov
 	}
 	lcs = c(0, cumsum(l))
 	grp = split(d, cut(d, lcs, include.lowest = TRUE))
 	grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
+}
+
+### hex grid that 
+## - covers a bounding box st_bbox(obj)
+## - contains pt
+## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
+## - selects geometries intersecting with obj
+hex_grid = function(obj, pt = bb[c("xmin", "ymin")], dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, 
+	points = TRUE, clip = NA) {
+
+  bb = st_bbox(obj)
+  dy = sqrt(3) * dx / 2
+  xlim = bb[c("xmin", "xmax")]
+  ylim = bb[c("ymin", "ymax")]
+  offset = c(x = (pt[1] - xlim[1]) %% dx, y = (pt[2] - ylim[1]) %% (2 * dy))
+  x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
+  y = seq(ylim[1] - 2 * dy, ylim[2] + dy, dy) + offset[2]
+
+  y <- rep(y, each = length(x))
+  x <- rep(c(x, x + dx / 2), length.out = length(y))
+  ret = if (points) {
+    xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+    st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
+  } else {
+	dy = dx / sqrt(3)
+	dx2 = dx / 2
+	x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
+	y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
+    xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dx2 & y <= ylim[2] + dx2, ]
+	mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
+    st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
+  }
+  if (clip)
+    ret[lengths(st_intersects(ret, obj)) > 0]
+  else
+  	ret
 }
