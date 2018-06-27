@@ -1044,7 +1044,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' plot(st_make_grid(sfc, cellsize = .1, square = FALSE))
 #' plot(sfc, add = TRUE)
 #' # non-default offset:
-#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(.05,.05 / (sqrt(3)/2))))
+#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(0, .05 / (sqrt(3)/2))))
 #' plot(sfc, add = TRUE)
 #' @export
 st_make_grid = function(x,
