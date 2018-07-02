@@ -77,8 +77,9 @@ st_poly_sample = function(x, size, ..., type = "random", offset = st_sample(st_a
 		dx = sqrt(a0 / size / (sqrt(3)/2))
 		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
 	} else if (type == "regular") {
-		dx = sqrt(a0 / size)
-		offset = c((offset[1] - bb["xmin"]) %% dx, (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+		dx = as.numeric(sqrt(a0 / size))
+		offset = c((offset[1] - bb["xmin"]) %% dx, 
+			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
 	} else if (type == "random") {
