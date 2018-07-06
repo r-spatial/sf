@@ -1,8 +1,12 @@
 # version 0.6-4
 
-* add hexagonal tiling to `st_make_grid`, add regular and hexagonal sampling to `st_sample`
+* add `st_nearest_points`, to obtain the (`LINESTRING` connecting the) two nearest points for pairs of geometries; #788
 
-* test fixes for PROJ 5.0.1
+* add hexagonal tiling to `st_make_grid`
+
+* add regular and hexagonal sampling to `st_sample`
+
+* fixes for PROJ 5.0.1
 
 * fixes for GDAL 2.3.0; #759
 
