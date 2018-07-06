@@ -20,15 +20,17 @@ an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pa
 get nearest points between pairs of geometries
 }
 \examples{
+r = sqrt(2)/10
 pt1 = st_point(c(.1,.1))
 pt2 = st_point(c(.9,.9))
-b1 = st_buffer(pt1, 0.1)
-b2 = st_buffer(pt2, 0.1)
-plot(b1, xlim = c(0,1), ylim = c(0,1))
-plot(b2, add = TRUE)
+pt3 = st_point(c(.9,.1))
+b1 = st_buffer(pt1, r)
+b2 = st_buffer(pt2, r)
+b3 = st_buffer(pt3, r)
 (ls0 = st_nearest_points(b1, b2)) # sfg
-(ls = st_nearest_points(st_sfc(b1), st_sfc(b2))) # sfc
-identical(ls0, ls)
+(ls = st_nearest_points(st_sfc(b1), st_sfc(b2, b3))) # sfc
+plot(b1, xlim = c(-.2,1.2), ylim = c(-.2,1.2), col = NA, border = 'green')
+plot(st_sfc(b2, b3), add = TRUE, col = NA, border = 'blue')
 plot(ls, add = TRUE, col = 'red')
 
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
@@ -39,6 +41,6 @@ pts = st_cast(ls, "POINT") # gives all start & end points
 # starting, "from" points, corresponding to x:
 plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
 # ending, "to" points, corresponding to y:
-plot(pts[seq(2, 200, 2)], add = TRUE, col = 'red')
+plot(pts[seq(2, 200, 2)], add = TRUE, col = 'green')
 
 }
