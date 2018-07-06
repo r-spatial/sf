@@ -190,3 +190,24 @@ i = st_intersection(sf) # all intersections
 plot(i["n.overlaps"])
 summary(i$n.overlaps - lengths(i$origins))
 
+# st_nearest_points:
+pt1 = st_point(c(.1,.1))
+pt2 = st_point(c(.9,.9))
+b1 = st_buffer(pt1, 0.1)
+b2 = st_buffer(pt2, 0.1)
+plot(b1, xlim = c(0,1), ylim = c(0,1))
+plot(b2, add = TRUE)
+(ls0 = st_nearest_points(b1, b2)) # sfg
+(ls = st_nearest_points(st_sfc(b1), st_sfc(b2))) # sfc
+identical(ls0, ls)
+plot(ls, add = TRUE, col = 'red')
+
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+plot(st_geometry(nc))
+ls = st_nearest_points(nc[1,], nc)
+plot(ls, col = 'red', add = TRUE)
+pts = st_cast(ls, "POINT") # gives all start & end points
+# starting, "from" points, corresponding to x:
+plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
+# ending, "to" points, corresponding to y:
+plot(pts[seq(2, 200, 2)], add = TRUE, col = 'red')

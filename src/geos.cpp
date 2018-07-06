@@ -756,6 +756,28 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1) { 
+	int dim = 2;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
+	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
+	std::vector<GEOSGeom> ls(sfc0.size() * sfc1.size());
+	for (size_t i = 0; i < gmv0.size(); i++)
+		for (size_t j = 0; j < gmv1.size(); j++)
+			ls[(i * gmv1.size()) + j] =
+				GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i], gmv1[j])); // converts as LINESTRING
+	for (size_t i = 0; i < sfc0.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
+	for (size_t i = 0; i < sfc1.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
+	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, ls, dim));
+	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc0.attr("precision");
+	out.attr("crs") = sfc0.attr("crs");
+	return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n) {
 // transpose a sparse incidence matrix list m that has n columns
 	std::vector<size_t> sizes(n);
