@@ -33,8 +33,10 @@
 st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 
 #' @export
-st_nearest_points.sfc = function(x, y, ...) {
-	st_sfc(CPL_geos_nearest_points(x, st_geometry(y)))
+st_nearest_points.sfc = function(x, y, ..., of_nearest_geometry = FALSE) {
+	if (of_nearest_geometry)
+		y = st_sfc(CPL_geos_nearest_feature(x, y))
+	st_sfc(CPL_geos_nearest_points(x, st_geometry(y), of_nearest_geometry))
 }
  
 #' @export
