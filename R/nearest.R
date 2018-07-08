@@ -84,7 +84,7 @@ st_nearest_points.sf = function(x, y, ...) {
 #' pts = st_sfc(st_point(c(.3,.1)), st_point(c(.6,.2)), st_point(c(.6,.6)), st_point(c(.4,.8)))
 #' plot(pts, add = TRUE, col = 1)
 #' # draw points to nearest circle:
-#' ls = st_nearest_points(pts, circles[st_nearest_features(pts, circles)], pairwise = TRUE)
+#' ls = st_nearest_points(pts, circles[st_nearest_feature(pts, circles)], pairwise = TRUE)
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
 	CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
