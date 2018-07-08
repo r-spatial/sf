@@ -43,7 +43,7 @@ plot(pts, add = TRUE, col = 1)
 # draw points to nearest circle:
 nearest = try(st_nearest_feature(pts, circles))
 if (inherits(nearest, "try-error")) # GEOS 3.6.1 not available
-  nearest = c(1, 2, 3, 3)
+  nearest = c(1, 3, 2, 2)
 ls = st_nearest_points(pts, circles[nearest], pairwise = TRUE)
 plot(ls, col = 5:8, add = TRUE)
 }
