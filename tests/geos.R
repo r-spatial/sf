@@ -211,3 +211,22 @@ pts = st_cast(ls, "POINT") # gives all start & end points
 plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
 # ending, "to" points, corresponding to y:
 plot(pts[seq(2, 200, 2)], add = TRUE, col = 'red')
+
+# points to nearest features
+ls1 = st_linestring(rbind(c(0,0), c(1,0)))
+ls2 = st_linestring(rbind(c(0,0.1), c(1,0.1)))
+ls3 = st_linestring(rbind(c(0,1), c(1,1)))
+(l = st_sfc(ls1, ls2, ls3))
+
+p1 = st_point(c(0.1, -0.1))
+p2 = st_point(c(0.1, 0.11))
+p3 = st_point(c(0.1, 0.09))
+p4 = st_point(c(0.1, 0.9))
+p5 = st_point()
+
+(p = st_sfc(p1, p2, p3, p4, p5))
+st_nearest_feature(p, l)
+st_nearest_feature(p, st_sfc())
+st_nearest_feature(st_sfc(), l)
+st_nearest_points(p, l)
+st_nearest_points(p, l[st_nearest_feature(p,l)], pairwise = TRUE)

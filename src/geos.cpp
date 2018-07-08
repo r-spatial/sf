@@ -5,13 +5,18 @@
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
 # endif
+# if GEOS_VERSION_MINOR == 6 && GEOS_VERSION_PATCH >= 1
+#  define HAVE361
+# endif
 # if GEOS_VERSION_MINOR >= 7
+#  define HAVE361
 #  define HAVE370
 # endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE350
 #  define HAVE370
+#  define HAVE361
 # endif
 #endif
 
@@ -756,55 +761,64 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 	return out;
 }
 
+// helper struct & distance function for STRtree:
+typedef struct { GEOSGeom g; size_t id; } item_g;
+
+int distance_fn(const void *item1, const void *item2, double *distance, void *userdata) {
+	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((item_g *)item1)->g, ((item_g *)item2)->g, distance);
+}
+
+// requires 3.6.1: https://trac.osgeo.org/geos/browser/git/NEWS?rev=3.6.2
+#ifdef HAVE361
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	// for every feature in sf0, find the index (1-based) of the nearest feature in sfc1 
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	int dim = 2;
 	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
 	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
-	std::vector<GEOSGeom> items(gmv1.size());
 	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+	std::vector<item_g> items(gmv1.size());
+	bool tree_is_empty = true;
 	for (size_t i = 0; i < gmv1.size(); i++) {
-		items[i] = gmv1[i];
-		if (! GEOSisEmpty_r(hGEOSCtxt, gmv1[i]))
-			GEOSSTRtree_insert_r(hGEOSCtxt, tree, gmv1[i], items[i]);
+		items[i].id = i + 1; // 1-based
+		items[i].g = gmv1[i];
+		if (!GEOSisEmpty_r(hGEOSCtxt, gmv1[i])) {
+			GEOSSTRtree_insert_r(hGEOSCtxt, tree, gmv1[i], &(items[i]));
+			tree_is_empty = false;
+		}
 	}
-	//std::vector<const GEOSGeometry *> out(gmv0.size());
-	std::vector<GEOSGeom> out(gmv0.size());
+	Rcpp::IntegerVector out(gmv0.size());
 	for (size_t i = 0; i < gmv0.size(); i++) {
-		out[i] = (GEOSGeom) GEOSSTRtree_nearest_r(hGEOSCtxt, tree, gmv0[i]);
+		if (!GEOSisEmpty_r(hGEOSCtxt, gmv0[i]) && !tree_is_empty) {
+			item_g item, *ret_item;
+			item.id = 0; // is irrelevant
+			item.g = gmv0[i];
+			// now query tree for nearest GEOM at item:
+			ret_item = (item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree, &item, gmv0[i], distance_fn, hGEOSCtxt);
+			out[i] = ret_item->id; // the index (1-based) of nearest GEOM
+		} else
+			out[i] = NA_INTEGER;
 	}
-	/*
-	typedef int (*GEOSDistanceCallback)(const void *item1, const void* item2, double* distance, void* userdata);
-	int distance_fn(const void *item1, const void *item2, double *distance, void *userdata) {
-	}
-	*/
-	/*
-	Rcpp::IntegerVector out(sfc0.size());
-	size_t item = gmv1.size(), *nearest;
-	for (size_t i = 0; i < gmv0.size(); i++) {
-		GEOSSTRtree_insert_r(hGEOSCtxt, tree, gmv0[i], &item);
-		nearest = (size_t *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree, &item, gmv0[i], NULL, NULL);
-		GEOSSTRtree_remove_r(hGEOSCtxt, tree, gmv0[i], &item);
-		out[i] = (int) *nearest;
-	}
-	*/
-	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim, false));
-	// clean up x and y:
-	for (size_t i = 0; i < sfc0.size(); i++)
+	// clean up x, y, tree and context:
+	for (size_t i = 0; i < gmv0.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
-	for (size_t i = 0; i < sfc1.size(); i++)
+	for (size_t i = 0; i < gmv1.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
 	GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
-
 	CPL_geos_finish(hGEOSCtxt);
-	return ret;
+
+	return out;
 }
+#else
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::stop("GEOS version 3.6.1 required for selecting nearest features");
+}
+#endif // HAVE_361
 
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwise = false) { 
+Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwise) { 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
@@ -825,9 +839,9 @@ Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwi
 					GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i], gmv1[j])); // converts as LINESTRING
 		out = sfc_from_geometry(hGEOSCtxt, ls, dim);
 	}
-	for (size_t i = 0; i < sfc0.size(); i++)
+	for (size_t i = 0; i < gmv0.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
-	for (size_t i = 0; i < sfc1.size(); i++)
+	for (size_t i = 0; i < gmv1.size(); i++)
 		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
 
 	CPL_geos_finish(hGEOSCtxt);

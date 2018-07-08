@@ -201,7 +201,7 @@ CPL_geos_nearest_feature <- function(sfc0, sfc1) {
     .Call('_sf_CPL_geos_nearest_feature', PACKAGE = 'sf', sfc0, sfc1)
 }
 
-CPL_geos_nearest_points <- function(sfc0, sfc1, pairwise = FALSE) {
+CPL_geos_nearest_points <- function(sfc0, sfc1, pairwise) {
     .Call('_sf_CPL_geos_nearest_points', PACKAGE = 'sf', sfc0, sfc1, pairwise)
 }
 

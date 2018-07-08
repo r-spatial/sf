@@ -2,9 +2,21 @@
 % Please edit documentation in R/nearest.R
 \name{st_nearest_points}
 \alias{st_nearest_points}
+\alias{st_nearest_points}
+\alias{st_nearest_points.sfc}
+\alias{st_nearest_points}
+\alias{st_nearest_points.sfg}
+\alias{st_nearest_points}
+\alias{st_nearest_points.sf}
 \title{get nearest points between pairs of geometries}
 \usage{
 st_nearest_points(x, y, ...)
+
+\method{st_nearest_points}{sfc}(x, y, ..., pairwise = FALSE)
+
+\method{st_nearest_points}{sfg}(x, y, ...)
+
+\method{st_nearest_points}{sf}(x, y, ...)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
@@ -12,6 +24,8 @@ st_nearest_points(x, y, ...)
 \item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
 \item{...}{ignored}
+
+\item{pairwise}{logical; if \code{FALSE} (default) return nearest points between all pairs, if \code{TRUE}, return nearest points between subsequent pairs.}
 }
 \value{
 an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
@@ -43,4 +57,7 @@ plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
 # ending, "to" points, corresponding to y:
 plot(pts[seq(2, 200, 2)], add = TRUE, col = 'green')
 
+}
+\seealso{
+\link{st_nearest_feature} for finding the nearest feature
 }

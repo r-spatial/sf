@@ -612,7 +612,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_nearest_feature
-Rcpp::List CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1);
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1);
 RcppExport SEXP _sf_CPL_geos_nearest_feature(SEXP sfc0SEXP, SEXP sfc1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
