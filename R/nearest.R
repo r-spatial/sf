@@ -72,8 +72,8 @@ st_nearest_points.sf = function(x, y, ...) {
 #' p4 = st_point(c(0.1, 0.9))
 #' 
 #' (p = st_sfc(p1, p2, p3, p4))
-#' st_nearest_feature(p, l)
-#' st_nearest_points(p, l[st_nearest_feature(p,l)], pairwise = TRUE)
+#' try(st_nearest_feature(p, l))
+#' try(st_nearest_points(p, l[st_nearest_feature(p,l)], pairwise = TRUE))
 #' 
 #' r = sqrt(2)/10
 #' b1 = st_buffer(st_point(c(.1,.1)), r)
@@ -84,7 +84,10 @@ st_nearest_points.sf = function(x, y, ...) {
 #' pts = st_sfc(st_point(c(.3,.1)), st_point(c(.6,.2)), st_point(c(.6,.6)), st_point(c(.4,.8)))
 #' plot(pts, add = TRUE, col = 1)
 #' # draw points to nearest circle:
-#' ls = st_nearest_points(pts, circles[st_nearest_feature(pts, circles)], pairwise = TRUE)
+#' nearest = try(st_nearest_feature(pts, circles))
+#' if (inherits(nearest, "try-error")) # GEOS 3.6.1 not available
+#'   nearest = c(1, 2, 3, 3)
+#' ls = st_nearest_points(pts, circles[nearest], pairwise = TRUE)
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
 	CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
