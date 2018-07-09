@@ -518,7 +518,10 @@ LINESTRING (0.1 -0.1, 0.1 0.1)
 LINESTRING (0.1 -0.1, 0.1 1)
 LINESTRING (0.1 0.11, 0.1 0)
 LINESTRING (0.1 0.11, 0.1 0.1)
-> st_nearest_points(p, l[st_nearest_feature(p,l)], pairwise = TRUE)
+> n = try(st_nearest_feature(p,l))
+> if (!inherits(n, "try-error")) {
++   print(st_nearest_points(p, l[n], pairwise = TRUE))
++ }
 Geometry set for 5 features  (with 1 geometry empty)
 geometry type:  LINESTRING
 dimension:      XY
@@ -533,4 +536,4 @@ LINESTRING EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  4.412   0.312   4.407 
+  4.230   0.288   4.191 

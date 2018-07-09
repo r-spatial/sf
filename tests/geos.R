@@ -229,4 +229,7 @@ st_nearest_feature(p, l)
 st_nearest_feature(p, st_sfc())
 st_nearest_feature(st_sfc(), l)
 st_nearest_points(p, l)
-st_nearest_points(p, l[st_nearest_feature(p,l)], pairwise = TRUE)
+n = try(st_nearest_feature(p,l))
+if (!inherits(n, "try-error")) {
+  print(st_nearest_points(p, l[n], pairwise = TRUE))
+}
