@@ -5,7 +5,7 @@ nc_checked = st_transform(nc, 32119, check = TRUE)
 ncm = st_transform(nc, 32119)
 
 x = st_transform(nc[1:10,], 32119)
-#st_distance(x)
+st_distance(x)
 
 st_is_valid(nc)
 

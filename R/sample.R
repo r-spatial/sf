@@ -159,12 +159,12 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 		mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
 		st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
 	}
-	i = if (clip) {
+	sel = if (isTRUE(clip)) {
 		if (points)
 			lengths(st_intersects(ret, obj)) > 0
 		else
 			lengths(st_relate(ret, obj, "2********")) > 0
 	} else
 		TRUE
-	ret[i]
+	ret[sel]
 }

@@ -791,15 +791,19 @@ Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	}
 	Rcpp::IntegerVector out(gmv0.size());
 	for (size_t i = 0; i < gmv0.size(); i++) {
+		out[i] = NA_INTEGER;
 		if (!GEOSisEmpty_r(hGEOSCtxt, gmv0[i]) && !tree_is_empty) {
 			item_g item, *ret_item;
 			item.id = 0; // is irrelevant
 			item.g = gmv0[i];
 			// now query tree for nearest GEOM at item:
-			ret_item = (item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree, &item, gmv0[i], distance_fn, hGEOSCtxt);
-			out[i] = ret_item->id; // the index (1-based) of nearest GEOM
-		} else
-			out[i] = NA_INTEGER;
+			ret_item = (item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree, &item, 
+					gmv0[i], distance_fn, hGEOSCtxt);
+			if (ret_item != NULL)
+				out[i] = ret_item->id; // the index (1-based) of nearest GEOM
+			else
+				Rcpp::stop("st_nearest_feature: GEOS exception");
+		}
 	}
 	// clean up x, y, tree and context:
 	for (size_t i = 0; i < gmv0.size(); i++)
