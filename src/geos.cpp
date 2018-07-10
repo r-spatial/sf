@@ -126,13 +126,34 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 	Rcpp::List out(geom.size());
 	GEOSWKBWriter *wkb_writer = GEOSWKBWriter_create_r(hGEOSCtxt);
 	GEOSWKBWriter_setOutputDimension_r(hGEOSCtxt, wkb_writer, dim);
+// empty point, binary; GEOS can't WKB empty points, so we work around:
+//   1   1   0   0   0 
+// 162   7   0   0   0   0 240 127 
+// 162   7   0   0   0   0 240 127
+	Rcpp::RawVector pte(21); // empty point
+	pte[0] = 1;
+	pte[1] = 1;
+	pte[2] = pte[3] = pte[4] = 0;
+	pte[5] =  pte[13] = 162;
+	pte[6] =  pte[14] =   7;
+	pte[7] =  pte[15] =   0;
+	pte[8] =  pte[16] =   0;
+	pte[9] =  pte[17] =   0;
+	pte[10] = pte[18] =   0;
+	pte[11] = pte[19] = 240;
+	pte[12] = pte[20] = 127;
 	for (size_t i = 0; i < geom.size(); i++) {
-		size_t size;
-		unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
-		Rcpp::RawVector raw(size);
-		memcpy(&(raw[0]), buf, size);
-		GEOSFree_r(hGEOSCtxt, buf);
-		out[i] = raw;
+		if (GEOSisEmpty_r(hGEOSCtxt, geom[i]) == 1 &&
+				strcmp("Point", GEOSGeomType_r(hGEOSCtxt, geom[i])) == 0) {
+			out[i] = pte;
+		} else {
+			size_t size;
+			unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
+			Rcpp::RawVector raw(size);
+			memcpy(&(raw[0]), buf, size);
+			GEOSFree_r(hGEOSCtxt, buf);
+			out[i] = raw;
+		}
 		if (free)
 			GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}

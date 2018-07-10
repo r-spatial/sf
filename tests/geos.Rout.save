@@ -534,6 +534,10 @@ LINESTRING (0.1 0.09, 0.1 0.1)
 LINESTRING (0.1 0.9, 0.1 1)
 LINESTRING EMPTY
 > 
+> # can do centroid of empty geom:
+> st_centroid(st_polygon())
+POINT EMPTY
+> 
 > proc.time()
    user  system elapsed 
-  4.230   0.288   4.191 
+  4.093   0.256   4.021 

@@ -233,3 +233,6 @@ n = try(st_nearest_feature(p,l))
 if (!inherits(n, "try-error")) {
   print(st_nearest_points(p, l[n], pairwise = TRUE))
 }
+
+# can do centroid of empty geom:
+st_centroid(st_polygon())
