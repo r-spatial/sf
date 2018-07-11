@@ -127,10 +127,10 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 	Rcpp::List out(geom.size());
 	GEOSWKBWriter *wkb_writer = GEOSWKBWriter_create_r(hGEOSCtxt);
 	GEOSWKBWriter_setOutputDimension_r(hGEOSCtxt, wkb_writer, dim);
-// empty point, binary, with R NA's (not NaN's); GEOS can't WKB empty points, so we work around:
-// > sf:::CPL_raw_to_hex(st_as_binary(st_point()))
-// [1] "0101000000a20700000000f07fa20700000000f07f"
-// see also https://trac.osgeo.org/postgis/ticket/3031
+	// empty point, binary, with R NA's (not NaN's); GEOS can't WKB empty points, 
+	// so we need to work around; see also https://trac.osgeo.org/postgis/ticket/3031
+	// > sf:::CPL_raw_to_hex(st_as_binary(st_point()))
+	// [1] "0101000000a20700000000f07fa20700000000f07f"
 	Rcpp::RawVector empty_point(CPL_hex_to_raw("0101000000a20700000000f07fa20700000000f07f")[0]);
 	for (size_t i = 0; i < geom.size(); i++) {
 		if (GEOSisEmpty_r(hGEOSCtxt, geom[i]) == 1 &&
