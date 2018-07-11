@@ -23,6 +23,7 @@
 #include <Rcpp.h>
 
 #include "wkb.h"
+#include "hex.h"
 
 typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
 typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
@@ -126,26 +127,15 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom
 	Rcpp::List out(geom.size());
 	GEOSWKBWriter *wkb_writer = GEOSWKBWriter_create_r(hGEOSCtxt);
 	GEOSWKBWriter_setOutputDimension_r(hGEOSCtxt, wkb_writer, dim);
-// empty point, binary; GEOS can't WKB empty points, so we work around:
-//   1   1   0   0   0 
-// 162   7   0   0   0   0 240 127 
-// 162   7   0   0   0   0 240 127
-	Rcpp::RawVector pte(21); // empty point
-	pte[0] = 1;
-	pte[1] = 1;
-	pte[2] = pte[3] = pte[4] = 0;
-	pte[5] =  pte[13] = 162;
-	pte[6] =  pte[14] =   7;
-	pte[7] =  pte[15] =   0;
-	pte[8] =  pte[16] =   0;
-	pte[9] =  pte[17] =   0;
-	pte[10] = pte[18] =   0;
-	pte[11] = pte[19] = 240;
-	pte[12] = pte[20] = 127;
+// empty point, binary, with R NA's (not NaN's); GEOS can't WKB empty points, so we work around:
+// > sf:::CPL_raw_to_hex(st_as_binary(st_point()))
+// [1] "0101000000a20700000000f07fa20700000000f07f"
+// see also https://trac.osgeo.org/postgis/ticket/3031
+	Rcpp::RawVector empty_point(CPL_hex_to_raw("0101000000a20700000000f07fa20700000000f07f")[0]);
 	for (size_t i = 0; i < geom.size(); i++) {
 		if (GEOSisEmpty_r(hGEOSCtxt, geom[i]) == 1 &&
 				strcmp("Point", GEOSGeomType_r(hGEOSCtxt, geom[i])) == 0) {
-			out[i] = pte;
+			out[i] = empty_point;
 		} else {
 			size_t size;
 			unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
