@@ -1025,7 +1025,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
-#' Make a regular grid over the bounding box of an sf or sfc object
+#' Make a regular tesselation over the bounding box of an sf or sfc object
 #'
 #' Make a square or hexagonal grid over the bounding box of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
@@ -1044,7 +1044,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' plot(st_make_grid(sfc, cellsize = .1, square = FALSE))
 #' plot(sfc, add = TRUE)
 #' # non-default offset:
-#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(.05,.05 / (sqrt(3)/2))))
+#' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(0, .05 / (sqrt(3)/2))))
 #' plot(sfc, add = TRUE)
 #' @export
 st_make_grid = function(x,

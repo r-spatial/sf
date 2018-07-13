@@ -99,6 +99,7 @@ Collate:
 	stars.R
 	crop.R
 	gdal_utils.R
+	nearest.R
 	deprecated.R
 RoxygenNote: 6.0.1
 Encoding: UTF-8

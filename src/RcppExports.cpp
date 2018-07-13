@@ -611,6 +611,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_nearest_feature
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1);
+RcppExport SEXP _sf_CPL_geos_nearest_feature(SEXP sfc0SEXP, SEXP sfc1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_nearest_feature(sfc0, sfc1));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_geos_nearest_points
+Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwise);
+RcppExport SEXP _sf_CPL_geos_nearest_points(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP pairwiseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< bool >::type pairwise(pairwiseSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_nearest_points(sfc0, sfc1, pairwise));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transpose_sparse_incidence
 Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n);
 RcppExport SEXP _sf_CPL_transpose_sparse_incidence(SEXP mSEXP, SEXP nSEXP) {
@@ -962,6 +987,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
+    {"_sf_CPL_geos_nearest_feature", (DL_FUNC) &_sf_CPL_geos_nearest_feature, 2},
+    {"_sf_CPL_geos_nearest_points", (DL_FUNC) &_sf_CPL_geos_nearest_points, 3},
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_nary_difference", (DL_FUNC) &_sf_CPL_nary_difference, 1},
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},

@@ -197,6 +197,14 @@ CPL_geos_dist <- function(sfc0, sfc1, which, par) {
     .Call('_sf_CPL_geos_dist', PACKAGE = 'sf', sfc0, sfc1, which, par)
 }
 
+CPL_geos_nearest_feature <- function(sfc0, sfc1) {
+    .Call('_sf_CPL_geos_nearest_feature', PACKAGE = 'sf', sfc0, sfc1)
+}
+
+CPL_geos_nearest_points <- function(sfc0, sfc1, pairwise) {
+    .Call('_sf_CPL_geos_nearest_points', PACKAGE = 'sf', sfc0, sfc1, pairwise)
+}
+
 CPL_transpose_sparse_incidence <- function(m, n) {
     .Call('_sf_CPL_transpose_sparse_incidence', PACKAGE = 'sf', m, n)
 }

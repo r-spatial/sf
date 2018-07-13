@@ -5,19 +5,25 @@
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
 # endif
+# if GEOS_VERSION_MINOR == 6 && GEOS_VERSION_PATCH >= 1
+#  define HAVE361
+# endif
 # if GEOS_VERSION_MINOR >= 7
+#  define HAVE361
 #  define HAVE370
 # endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE350
 #  define HAVE370
+#  define HAVE361
 # endif
 #endif
 
 #include <Rcpp.h>
 
 #include "wkb.h"
+#include "hex.h"
 
 typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
 typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
@@ -116,19 +122,30 @@ std::vector<GEOSGeom> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::L
 	return g;
 }
 
-Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom> geom, int dim = 2) {
+Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GEOSGeom> geom, int dim = 2, bool free = true) {
 
 	Rcpp::List out(geom.size());
 	GEOSWKBWriter *wkb_writer = GEOSWKBWriter_create_r(hGEOSCtxt);
 	GEOSWKBWriter_setOutputDimension_r(hGEOSCtxt, wkb_writer, dim);
+	// empty point, binary, with R NA's (not NaN's); GEOS can't WKB empty points, 
+	// so we need to work around; see also https://trac.osgeo.org/postgis/ticket/3031
+	// > sf:::CPL_raw_to_hex(st_as_binary(st_point()))
+	// [1] "0101000000a20700000000f07fa20700000000f07f"
+	Rcpp::RawVector empty_point(CPL_hex_to_raw("0101000000a20700000000f07fa20700000000f07f")[0]);
 	for (size_t i = 0; i < geom.size(); i++) {
-		size_t size;
-		unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
-		Rcpp::RawVector raw(size);
-		memcpy(&(raw[0]), buf, size);
-		GEOSFree_r(hGEOSCtxt, buf);
-		out[i] = raw;
-		GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
+		if (GEOSisEmpty_r(hGEOSCtxt, geom[i]) == 1 &&
+				strcmp("Point", GEOSGeomType_r(hGEOSCtxt, geom[i])) == 0) {
+			out[i] = empty_point;
+		} else {
+			size_t size;
+			unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i], &size);
+			Rcpp::RawVector raw(size);
+			memcpy(&(raw[0]), buf, size);
+			GEOSFree_r(hGEOSCtxt, buf);
+			out[i] = raw;
+		}
+		if (free)
+			GEOSGeom_destroy_r(hGEOSCtxt, geom[i]);
 	}
 	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
 	return CPL_read_wkb(out, true, false);
@@ -752,6 +769,99 @@ std::string CPL_geos_version(bool b = false) {
 Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1, 
 		Rcpp::CharacterVector which, double par) {
 	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, Rcpp::as<std::string>(which), par, "", false)[0];
+	return out;
+}
+
+// helper struct & distance function for STRtree:
+typedef struct { GEOSGeom g; size_t id; } item_g;
+
+int distance_fn(const void *item1, const void *item2, double *distance, void *userdata) {
+	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((item_g *)item1)->g, ((item_g *)item2)->g, distance);
+}
+
+// requires 3.6.1: https://trac.osgeo.org/geos/browser/git/NEWS?rev=3.6.2
+#ifdef HAVE361
+// [[Rcpp::export]]
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
+	// for every feature in sf0, find the index (1-based) of the nearest feature in sfc1 
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+
+	int dim = 2;
+	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
+	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
+	GEOSSTRtree *tree = GEOSSTRtree_create_r(hGEOSCtxt, 10);
+	std::vector<item_g> items(gmv1.size());
+	bool tree_is_empty = true;
+	for (size_t i = 0; i < gmv1.size(); i++) {
+		items[i].id = i + 1; // 1-based
+		items[i].g = gmv1[i];
+		if (!GEOSisEmpty_r(hGEOSCtxt, gmv1[i])) {
+			GEOSSTRtree_insert_r(hGEOSCtxt, tree, gmv1[i], &(items[i]));
+			tree_is_empty = false;
+		}
+	}
+	Rcpp::IntegerVector out(gmv0.size());
+	for (size_t i = 0; i < gmv0.size(); i++) {
+		out[i] = NA_INTEGER;
+		if (!GEOSisEmpty_r(hGEOSCtxt, gmv0[i]) && !tree_is_empty) {
+			item_g item, *ret_item;
+			item.id = 0; // is irrelevant
+			item.g = gmv0[i];
+			// now query tree for nearest GEOM at item:
+			ret_item = (item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree, &item, 
+					gmv0[i], distance_fn, hGEOSCtxt);
+			if (ret_item != NULL)
+				out[i] = ret_item->id; // the index (1-based) of nearest GEOM
+			else
+				Rcpp::stop("st_nearest_feature: GEOS exception");
+		}
+	}
+	// clean up x, y, tree and context:
+	for (size_t i = 0; i < gmv0.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
+	for (size_t i = 0; i < gmv1.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
+	GEOSSTRtree_destroy_r(hGEOSCtxt, tree);
+	CPL_geos_finish(hGEOSCtxt);
+
+	return out;
+}
+#else
+Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
+	Rcpp::stop("GEOS version 3.6.1 required for selecting nearest features");
+}
+#endif // HAVE_361
+
+// [[Rcpp::export]]
+Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwise) { 
+	int dim = 2;
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	std::vector<GEOSGeom> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
+	std::vector<GEOSGeom> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
+	Rcpp::List out; 
+	if (pairwise) {
+		if (gmv0.size() != gmv1.size())
+			Rcpp::stop("for pairwise nearest points, both arguments need to have the same number of geometries");
+		std::vector<GEOSGeom> ls(sfc0.size());
+		for (size_t i = 0; i < gmv0.size(); i++)
+			ls[i] = GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i], gmv1[i])); // converts as LINESTRING
+		out = sfc_from_geometry(hGEOSCtxt, ls, dim);
+	} else {
+		std::vector<GEOSGeom> ls(sfc0.size() * sfc1.size());
+		for (size_t i = 0; i < gmv0.size(); i++)
+			for (size_t j = 0; j < gmv1.size(); j++)
+				ls[(i * gmv1.size()) + j] =
+					GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i], gmv1[j])); // converts as LINESTRING
+		out = sfc_from_geometry(hGEOSCtxt, ls, dim);
+	}
+	for (size_t i = 0; i < gmv0.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv0[i]);
+	for (size_t i = 0; i < gmv1.size(); i++)
+		GEOSGeom_destroy_r(hGEOSCtxt, gmv1[i]);
+
+	CPL_geos_finish(hGEOSCtxt);
+	out.attr("precision") = sfc0.attr("precision");
+	out.attr("crs") = sfc0.attr("crs");
 	return out;
 }
 

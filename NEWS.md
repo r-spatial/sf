@@ -1,8 +1,14 @@
 # version 0.6-4
 
-* add hexagonal tiling to `st_make_grid`, add regular and hexagonal sampling to `st_sample`
+* `st_centroid` now works for empty geometries, returning an empty point #769
 
-* test fixes for PROJ 5.0.1
+* add `st_nearest_points`, to obtain the (`LINESTRING` connecting the) two nearest points for pairs of geometries; #788
+
+* add hexagonal tiling to `st_make_grid`
+
+* add regular and hexagonal sampling to `st_sample`
+
+* fixes for PROJ 5.0.1; #545
 
 * fixes for GDAL 2.3.0; #759
 

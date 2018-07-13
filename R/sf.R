@@ -253,8 +253,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
 		else
-			data.frame(x[-all_sfc_columns], row.names = row.names,
-					stringsAsFactors = stringsAsFactors)
+			cbind(data.frame(row.names = row.names), 
+				data.frame(x[-all_sfc_columns], stringsAsFactors = stringsAsFactors))
 
 	for (i in seq_along(all_sfc_names))
 		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]], check_ring_dir = check_ring_dir)
