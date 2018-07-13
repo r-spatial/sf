@@ -436,7 +436,7 @@ first 10 elements:
 > b2 = st_buffer(pt2, 0.1)
 > plot(b1, xlim = c(0,1), ylim = c(0,1))
 > plot(b2, add = TRUE)
-> (ls0 = st_nearest_points(b1, b2)) # sfg
+> (ls0 = try(st_nearest_points(b1, b2))) # sfg
 Geometry set for 1 feature 
 geometry type:  LINESTRING
 dimension:      XY
@@ -444,7 +444,7 @@ bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
 epsg (SRID):    NA
 proj4string:    NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
-> (ls = st_nearest_points(st_sfc(b1), st_sfc(b2))) # sfc
+> (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2)))) # sfc
 Geometry set for 1 feature 
 geometry type:  LINESTRING
 dimension:      XY
@@ -454,12 +454,12 @@ proj4string:    NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > identical(ls0, ls)
 [1] TRUE
-> plot(ls, add = TRUE, col = 'red')
+> # plot(ls, add = TRUE, col = 'red')
 > 
 > nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 > plot(st_geometry(nc))
-> ls = st_nearest_points(nc[1,], nc)
-> plot(ls, col = 'red', add = TRUE)
+> ls = try(st_nearest_points(nc[1,], nc))
+> # plot(ls, col = 'red', add = TRUE)
 > pts = st_cast(ls, "POINT") # gives all start & end points
 > # starting, "from" points, corresponding to x:
 > plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
@@ -499,28 +499,13 @@ POINT (0.1 0.11)
 POINT (0.1 0.09)
 POINT (0.1 0.9)
 POINT EMPTY
-> st_nearest_feature(p, l)
-[1]  1  2  2  3 NA
-> st_nearest_feature(p, st_sfc())
-[1] NA NA NA NA NA
-> st_nearest_feature(st_sfc(), l)
-integer(0)
-> st_nearest_points(p, l)
-Geometry set for 15 features  (with 3 geometries empty)
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
-First 5 geometries:
-LINESTRING (0.1 -0.1, 0.1 0)
-LINESTRING (0.1 -0.1, 0.1 0.1)
-LINESTRING (0.1 -0.1, 0.1 1)
-LINESTRING (0.1 0.11, 0.1 0)
-LINESTRING (0.1 0.11, 0.1 0.1)
+> #st_nearest_points(p, l)
 > n = try(st_nearest_feature(p,l))
 > if (!inherits(n, "try-error")) {
 +   print(st_nearest_points(p, l[n], pairwise = TRUE))
++   print(st_nearest_feature(p, l))
++   print(st_nearest_feature(p, st_sfc()))
++   print(st_nearest_feature(st_sfc(), l))
 + }
 Geometry set for 5 features  (with 1 geometry empty)
 geometry type:  LINESTRING
@@ -533,6 +518,9 @@ LINESTRING (0.1 0.11, 0.1 0.1)
 LINESTRING (0.1 0.09, 0.1 0.1)
 LINESTRING (0.1 0.9, 0.1 1)
 LINESTRING EMPTY
+[1]  1  2  2  3 NA
+[1] NA NA NA NA NA
+integer(0)
 > 
 > # can do centroid of empty geom:
 > st_centroid(st_polygon())
@@ -540,4 +528,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  4.093   0.256   4.021 
+  4.010   0.291   3.974 

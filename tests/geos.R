@@ -197,15 +197,15 @@ b1 = st_buffer(pt1, 0.1)
 b2 = st_buffer(pt2, 0.1)
 plot(b1, xlim = c(0,1), ylim = c(0,1))
 plot(b2, add = TRUE)
-(ls0 = st_nearest_points(b1, b2)) # sfg
-(ls = st_nearest_points(st_sfc(b1), st_sfc(b2))) # sfc
+(ls0 = try(st_nearest_points(b1, b2))) # sfg
+(ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2)))) # sfc
 identical(ls0, ls)
-plot(ls, add = TRUE, col = 'red')
+# plot(ls, add = TRUE, col = 'red')
 
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 plot(st_geometry(nc))
-ls = st_nearest_points(nc[1,], nc)
-plot(ls, col = 'red', add = TRUE)
+ls = try(st_nearest_points(nc[1,], nc))
+# plot(ls, col = 'red', add = TRUE)
 pts = st_cast(ls, "POINT") # gives all start & end points
 # starting, "from" points, corresponding to x:
 plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
@@ -225,13 +225,13 @@ p4 = st_point(c(0.1, 0.9))
 p5 = st_point()
 
 (p = st_sfc(p1, p2, p3, p4, p5))
-st_nearest_feature(p, l)
-st_nearest_feature(p, st_sfc())
-st_nearest_feature(st_sfc(), l)
-st_nearest_points(p, l)
+#st_nearest_points(p, l)
 n = try(st_nearest_feature(p,l))
 if (!inherits(n, "try-error")) {
   print(st_nearest_points(p, l[n], pairwise = TRUE))
+  print(st_nearest_feature(p, l))
+  print(st_nearest_feature(p, st_sfc()))
+  print(st_nearest_feature(st_sfc(), l))
 }
 
 # can do centroid of empty geom:
