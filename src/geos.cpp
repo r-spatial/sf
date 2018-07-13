@@ -772,6 +772,8 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 	return out;
 }
 
+// requires 3.6.1: https://trac.osgeo.org/geos/browser/git/NEWS?rev=3.6.2
+#ifdef HAVE361
 // helper struct & distance function for STRtree:
 typedef struct { GEOSGeom g; size_t id; } item_g;
 
@@ -779,8 +781,6 @@ int distance_fn(const void *item1, const void *item2, double *distance, void *us
 	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((item_g *)item1)->g, ((item_g *)item2)->g, distance);
 }
 
-// requires 3.6.1: https://trac.osgeo.org/geos/browser/git/NEWS?rev=3.6.2
-#ifdef HAVE361
 // [[Rcpp::export]]
 Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	// for every feature in sf0, find the index (1-based) of the nearest feature in sfc1 

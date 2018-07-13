@@ -452,6 +452,14 @@ bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
 epsg (SRID):    NA
 proj4string:    NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
+> (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2), pairwise = TRUE))) # sfc
+Geometry set for 1 feature 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
+epsg (SRID):    NA
+proj4string:    NA
+LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > identical(ls0, ls)
 [1] TRUE
 > # plot(ls, add = TRUE, col = 'red')
@@ -528,4 +536,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  4.010   0.291   3.974 
+  4.067   0.272   4.012 

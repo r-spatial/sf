@@ -199,6 +199,7 @@ plot(b1, xlim = c(0,1), ylim = c(0,1))
 plot(b2, add = TRUE)
 (ls0 = try(st_nearest_points(b1, b2))) # sfg
 (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2)))) # sfc
+(ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2), pairwise = TRUE))) # sfc
 identical(ls0, ls)
 # plot(ls, add = TRUE, col = 'red')
 
