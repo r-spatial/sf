@@ -841,7 +841,7 @@ Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwi
 	Rcpp::List out; 
 	if (pairwise) {
 		if (gmv0.size() != gmv1.size())
-			Rcpp::stop("for pairwise nearest points, both arguments need to have the same number of geometries");
+			Rcpp::stop("for pairwise nearest points, both arguments need to have the same number of geometries"); // #nocov
 		std::vector<GEOSGeom> ls(sfc0.size());
 		for (size_t i = 0; i < gmv0.size(); i++)
 			ls[i] = GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i], gmv1[i])); // converts as LINESTRING
