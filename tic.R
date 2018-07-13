@@ -1,4 +1,4 @@
-add_package_checks(build_args = "")
+add_package_checks()
 
 get_stage("install") %>%
 	# install lwgeom with its own library since linking again postgis source install fails sometimes
@@ -13,7 +13,7 @@ if (Sys.getenv("id_rsa") != "") {
     add_step(step_setup_ssh())
 
   get_stage("deploy") %>%
-  	add_code_step(devtools::install_github("pat-s/rcmdcheck@build-args")) %>%
+  	add_code_step(devtools::install_github("pat-s/rcmdcheck@catch-test-errors")) %>%
     add_step(step_build_pkgdown()) %>%
     add_step(step_push_deploy(path = "docs", branch = "gh-pages", orphan = TRUE))
 }
