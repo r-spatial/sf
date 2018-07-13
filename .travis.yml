@@ -53,7 +53,7 @@ before_install:
   - psql -d postgis -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
+  - R -q -e 'install.packages("devtools"); devtools::install_github("pat-s/tic@rcmdcheck-build-args"); tic::prepare_all_stages()'
 
 after_success:
   - dropdb postgis

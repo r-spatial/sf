@@ -13,7 +13,7 @@ if (Sys.getenv("id_rsa") != "") {
     add_step(step_setup_ssh())
 
   get_stage("deploy") %>%
-  	add_code_step(devtools::install_github("ropensci/git2r")) %>%
+  	add_code_step(devtools::install_github("pat-s/rcmdcheck@build-args")) %>%
     add_step(step_build_pkgdown()) %>%
     add_step(step_push_deploy(path = "docs", branch = "gh-pages", orphan = TRUE))
 }
