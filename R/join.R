@@ -56,7 +56,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' @param FUN deprecated;
 #' @param suffix length 2 character vector; see \link[base]{merge}
 #' @param ... arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})
-#' @param left logical; if \code{TRUE} carry out left join, else inner join; 
+#' @param left logical; if \code{TRUE} carry out left join, else inner join;
 #' see also \link[dplyr]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
 #' @details alternative values for argument \code{join} are: \link{st_disjoint}
@@ -76,7 +76,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' library(dplyr)
 #' st_join(a, b) %>% group_by(a.x) %>% summarise(mean(a.y))
 #' # example of largest = TRUE:
-#' nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+#' nc <- st_example("shape/nc.shp") %>% st_transform(2264)
 #' gr = st_sf(
 #'     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
 #'     geom = st_make_grid(nc))
@@ -95,7 +95,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
 #' plot(st_geometry(gr), border = 'green', add = TRUE)
 #' par(opar)
 #' @export
-st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), 
+st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 		..., left = TRUE, largest = FALSE) {
 
 	stopifnot(inherits(x, "sf") && inherits(y, "sf"))
@@ -108,7 +108,7 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 		x$.grp_a = seq_len(nrow(x))
 		y$.grp_b = seq_len(nrow(y))
 		st_intersection(x, y)
-	} else 
+	} else
 		join(x, y, ...)
 
 	st_geometry(y) = NULL

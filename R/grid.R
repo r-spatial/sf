@@ -103,7 +103,7 @@ st_as_grob.COMPOUNDCURVE = st_as_grob.GEOMETRYCOLLECTION
 #' @details If \code{asp} is missing, it is taken as 1, except when \code{isTRUE(st_is_longlat(x))}, in which case it is set to \code{1.0 /cos(y)}, with \code{y} the middle of the latitude bounding box.
 #' @examples
 #' library(grid)
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_example("shape/nc.shp")
 #' grid.newpage()
 #' pushViewport(viewport(width = 0.8, height = 0.8))
 #' pushViewport(st_viewport(nc))

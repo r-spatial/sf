@@ -94,7 +94,7 @@ in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTI
 \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 }
 \examples{
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = st_example("shape/nc.shp")
 plot(st_convex_hull(nc))
 plot(nc, border = grey(.5))
 set.seed(1)

@@ -39,7 +39,7 @@ Other geometries must be two-dimensional (\code{XY}). Dimensions can be dropped 
 For converting simple features (i.e., \code{sf} objects) to their \code{Spatial} counterpart, use \code{as(obj, "Spatial")}
 }
 \examples{
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_example("shape/nc.shp")
 # convert to SpatialPolygonsDataFrame
 spdf <- as_Spatial(nc)
 # identical to

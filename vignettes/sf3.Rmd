@@ -113,7 +113,7 @@ p * rot(pi)
 
 Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:
 ```{r,fig=TRUE}
-nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+nc = st_example("shape/nc.shp", quiet = TRUE)
 ncg = st_geometry(nc)
 plot(ncg, border = 'grey')
 cntrd = st_centroid(ncg)

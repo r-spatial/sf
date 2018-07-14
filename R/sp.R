@@ -208,7 +208,7 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' @return geometry-only object deriving from `Spatial`, of the appropriate class
 #' @export
 #' @examples
-#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' nc <- st_example("shape/nc.shp")
 #' # convert to SpatialPolygonsDataFrame
 #' spdf <- as_Spatial(nc)
 #' # identical to

@@ -69,7 +69,7 @@ set_utf8 = function(x) {
 #'   with the layer names, each with their geometry type(s). Note that the
 #'   number of layers may also be zero.
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_read("sf:shape/nc.shp")
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 #'
 #' \dontrun{
@@ -100,10 +100,11 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 #' @name st_read
-#' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
-#' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
+#' @note You can load data from the examples by using the \code{"sf::"} data source prefix to replace \code{file.system()}. Linking to data from the package allows examples to run regardless of R installation. See \link{st_example} for details.
+#' Users can provide the file name directly to \code{dsn}, either with full or relative paths
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
+#' @seealso \link{st_example}
 #' @export
 st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
@@ -119,7 +120,19 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
-
+	drv <- guess_driver(dsn)
+	if (!is.na(drv) & drv == "sf") {
+		return(st_example(dsn = dsn,
+						  layer = layer, ...,
+						  options = options,
+						  quiet = quiet,
+						  geometry_column = geometry_column,
+						  type = type,
+						  promote_to_multi = promote_to_multi,
+						  stringsAsFactors = stringsAsFactors,
+						  int64_as_string = int64_as_string,
+						  check_ring_dir = check_ring_dir))
+	}
 	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
@@ -159,6 +172,47 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 		x
 }
 
+#' Read data from `sf` examples
+#'
+#' Read examples from the `sf` package. `st_example("x")` replaces `st_read(system.file("x", package="sf"))`.
+#' @inheritParams st_read
+#' @details The path is matched against the files contained in the example directory and resolved using `grep()`. For instance, `"nc.shp"` will match to `"shape/nc.shp"`.
+#' @seealso `st_read()`.
+#' @md
+#' @export
+#' @examples
+#' nc <- st_example("nc.shp")
+#' meuse <- st_example("meuse.sqlite")
+st_example <- function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+										 promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
+										 int64_as_string = FALSE, check_ring_dir = FALSE) {
+	dsn <- gsub("^sf:+", "", dsn)
+	f <- list.files(system.file(package="sf"), recursive = TRUE)
+	sel <- grep(dsn, f, value = TRUE)
+	if (length(sel) < 1) {
+		stop("Could not find ", dsn, " in `sf` examples.",
+			 "\nDid you mean `st_read()`?", call. = FALSE)
+	}
+	if (!quiet && !dsn %in% sel) {
+		message("Example file `", dsn, "` matched to:\n",
+				paste0("\t* `", sel, "`", collapse = "\n"))
+	}
+	dsn <- sel[1]
+	if (length(sel) > 1) {
+		warning("File description matched multiple examples, selected `", dsn, "`")
+	}
+	dsn <- system.file(dsn, package="sf")
+	st_read(dsn = dsn,
+			   layer = layer, ...,
+			   options = options,
+			   quiet = quiet,
+			   geometry_column = geometry_column,
+			   type = type,
+			   promote_to_multi = promote_to_multi,
+			   stringsAsFactors = stringsAsFactors,
+			   int64_as_string = int64_as_string,
+			   check_ring_dir = check_ring_dir)
+}
 
 #' @name st_read
 #' @export
@@ -457,7 +511,9 @@ guess_driver_can_write = function(dns, drv = guess_driver(dns)) {
     stop("Could not guess driver for ", dns, call. = FALSE)
   }
   if(!is_driver_available(drv)) {
-    stop(unlist(drv), " driver not available in supported drivers, see `st_drivers()'", call. = FALSE)
+    stop("`", unlist(drv), "` driver not available.",
+    	 "\nRun `st_drivers()` for a list of supported drivers.",
+    	 call. = FALSE)
   }
   if(!is_driver_can(drv, operation = "write")) {
     stop("Driver ", drv, " cannot write. see `st_drivers()'", call. = FALSE)
@@ -525,6 +581,10 @@ extension_map <- list(
         "xlsx" = "XLSX")
 
 #' Map prefix to driver
+#'
+#' @note The `sf` driver is a special prefix that reads data from
+#' the `sf` examples. See `st_example()` for details.
+#' @md
 #' @docType data
 prefix_map <- list(
         "couchdb" = "CouchDB",
@@ -536,8 +596,11 @@ prefix_map <- list(
         "oci" = "OCI",
         "odbc" = "ODBC",
         "pg" = "PostgreSQL",
-        "sde" = "SDE")
+        "sde" = "SDE",
+        "sf"  = "sf")
 
 #' Drivers for which update should be \code{TRUE} by default
+#'
+#'
 #' @docType data
 db_drivers <- c(unlist(prefix_map), "GPKG", "SQLite")

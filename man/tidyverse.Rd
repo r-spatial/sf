@@ -204,7 +204,7 @@ In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine ge
 }
 \examples{
 library(dplyr)
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = st_example("shape/nc.shp")
 nc \%>\% filter(AREA > .1) \%>\% plot()
 # plot 10 smallest counties in grey:
 st_geometry(nc) \%>\% plot()

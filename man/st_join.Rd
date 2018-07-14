@@ -20,7 +20,7 @@ st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), ...,
 
 \item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
 
-\item{left}{logical; if \code{TRUE} carry out left join, else inner join; 
+\item{left}{logical; if \code{TRUE} carry out left join, else inner join;
 see also \link[dplyr]{left_join}}
 
 \item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
@@ -49,7 +49,7 @@ st_join(a, b) \%>\% aggregate(list(.$a.x), mean)
 library(dplyr)
 st_join(a, b) \%>\% group_by(a.x) \%>\% summarise(mean(a.y))
 # example of largest = TRUE:
-nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+nc <- st_example("shape/nc.shp") \%>\% st_transform(2264)
 gr = st_sf(
     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
     geom = st_make_grid(nc))

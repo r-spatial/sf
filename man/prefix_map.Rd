@@ -4,11 +4,15 @@
 \name{prefix_map}
 \alias{prefix_map}
 \title{Map prefix to driver}
-\format{An object of class \code{list} of length 10.}
+\format{An object of class \code{list} of length 11.}
 \usage{
 prefix_map
 }
 \description{
 Map prefix to driver
+}
+\note{
+The \code{sf} driver is a special prefix that reads data from
+the \code{sf} examples. See \code{st_example()} for details.
 }
 \keyword{datasets}

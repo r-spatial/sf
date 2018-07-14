@@ -1,5 +1,5 @@
 library(sf)
-nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+nc = st_example("shape/nc.shp", quiet = TRUE)
 
 # single map:
 library(ggplot2)

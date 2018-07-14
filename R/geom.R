@@ -422,7 +422,7 @@ st_boundary.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_example("shape/nc.shp")
 #' plot(st_convex_hull(nc))
 #' plot(nc, border = grey(.5))
 st_convex_hull = function(x)
@@ -737,7 +737,7 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 #' @export
 #' @details \code{st_combine} combines geometries without resolving borders, using \link{c.sfg} (analogous to \link[base]{c} for ordinary vectors).
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_example("shape/nc.shp")
 #' st_combine(nc)
 st_combine = function(x)
 	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge

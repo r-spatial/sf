@@ -9,9 +9,9 @@
 #' @param check logical; perform a sanity check on resulting polygons?
 #' @param use_gdal logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)
 #' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
-#' 
+#'
 #' \code{st_transform} uses GDAL for coordinate transformations; internally, GDAL converts the \code{proj4string} into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter \code{+wktext} to the \code{proj4string} definition may resolve this; see \url{https://github.com/edzer/sp/issues/42}.
-#' 
+#'
 #' Some PROJ.4 projections are not supported by GDAL, e.g. \code{"+proj=wintri"} because it does not have an inverse projection. Projecting to unsupported projections can be done by \link[lwgeom]{st_transform_proj}, part of package lwgeom. Note that the unsupported \code{proj4string} cannot be passed as argument to \link{st_crs}, but has to be given as character string.
 #' @examples
 #' p1 = st_point(c(7,52))
@@ -100,7 +100,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 #' @name st_transform
 #' @export
 #' @examples
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_example("shape/nc.shp")
 #' st_area(nc[1,]) # area from long/lat
 #' st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot

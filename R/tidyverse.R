@@ -9,7 +9,7 @@
 #' @name tidyverse
 #' @examples
 #' library(dplyr)
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' nc = st_example("shape/nc.shp")
 #' nc %>% filter(AREA > .1) %>% plot()
 filter.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod())

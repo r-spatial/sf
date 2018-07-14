@@ -26,7 +26,7 @@ Features are represented by records in an `sf` object, and have feature attribut
 
 ```{r}
 library(sf)
-nc <- st_read(system.file("shape/nc.shp", package="sf"))
+nc <- st_example("shape/nc.shp")
 nc <- st_transform(nc, 2264)
 nc[1,]
 ``` 

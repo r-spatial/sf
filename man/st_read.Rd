@@ -121,13 +121,13 @@ The function will automatically find the `geometry` type columns for
   character columns, which can be slow for very wide tables.
 }
 \note{
-The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
-typical users will not use \code{system.file} but give the file name directly, either with full path or relative
+You can load data from the examples by using the \code{"sf::"} data source prefix to replace \code{file.system()}. Linking to data from the package allows examples to run regardless of R installation. See \link{st_example} for details.
+Users can provide the file name directly to \code{dsn}, either with full or relative paths
 to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 that reside in the same directory, only one of them having extension \code{.shp}.
 }
 \examples{
-nc = st_read(system.file("shape/nc.shp", package="sf"))
+nc = st_read("sf:shape/nc.shp")
 summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 
 \dontrun{
@@ -154,4 +154,7 @@ if (exists("conn") && !inherits(conn, "try-error")) {
   dbDisconnect(conn)
  }
 }
+}
+\seealso{
+\link{st_example}
 }
