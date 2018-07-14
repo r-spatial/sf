@@ -146,12 +146,10 @@ test_that("sf can preserve types (#592)", {
 })
 
 test_that("can write to other schema", {
-	# skip_if_not(FALSE) # tmp switch off -- EJP
     skip_if_not(can_con(pg), "could not connect to postgis database")
     try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
     suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
-
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
     expect_error(st_write(pts, pg, Id(schema = "public", table = "sf_meuse__")), "exists")
     expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")))
@@ -335,8 +333,15 @@ test_that("Can safely manipulate crs", {
     # udpate
     expect_message(set_postgis_crs(pg, new_srid), "Inserted local crs")
     new_srid$proj4string <- crs2$proj4string
-    expect_error(set_postgis_crs(pg, new_srid), "already exists")
-    expect_message(set_postgis_crs(pg, new_srid, update = TRUE), "Inserted local crs")
+    expect_warning(
+        expect_error(set_postgis_crs(pg, new_srid), "already exists"),
+        "GDAL Error 6: EPSG"
+    )
+    expect_warning(
+        expect_message(set_postgis_crs(pg, new_srid, update = TRUE), "Inserted local crs"),
+        "GDAL Error 6: EPSG"
+    )
+
 })
 
 
