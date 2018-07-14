@@ -68,7 +68,7 @@ test_that("sf can write units to database (#264)", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	ptsu <- pts
 	ptsu[["u"]] <- ptsu[["cadmium"]]
-	units(ptsu[["u"]]) <- units::make_unit("km")
+	units(ptsu[["u"]]) <- units::as_units("km")
 	expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
 	r <- st_read(pg, "sf_units__")
 	expect_is(r[["u"]], "numeric")
