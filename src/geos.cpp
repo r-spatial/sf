@@ -709,7 +709,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 					index_x.push_back(j + 1);
 					index_y.push_back(i + 1);
 					out.push_back(geom); // keep
-				};
+				}
 				R_CheckUserInterrupt();
 			}
 		}
