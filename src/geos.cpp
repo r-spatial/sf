@@ -703,7 +703,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			for (size_t item = 0; item < sel.size(); item++) {
 				size_t j = sel[item];
 				if (chk_(GEOSIntersects_r(hGEOSCtxt, x[j], y[i]))) {
-					GEOSGeom geom = GEOSIntersection_r(hGEOSCtxt, x[j], y[i])
+					GEOSGeom geom = GEOSIntersection_r(hGEOSCtxt, x[j], y[i]);
 					if (geom == NULL)
 						Rcpp::stop("GEOS exception"); // #nocov
 					index_x.push_back(j + 1);
