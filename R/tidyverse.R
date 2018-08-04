@@ -131,6 +131,8 @@ slice.sf <- function(.data, ..., .dots) {
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
 	ret = NextMethod()
+	if (!missing(do_union))
+		ret$do_union = NULL
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
 		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
