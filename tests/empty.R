@@ -93,9 +93,9 @@ x = st_sfc(st_multipoint(), st_linestring())
 st_intersects(x, x, sparse = FALSE)
 
 # write & read:
-x = st_sf(a = 2:1, geometry = st_sfc(st_linestring(), st_linestring(matrix(1:4,2))))
-write_sf(x, "empty.shp")
-y = st_read("empty.shp", quiet = TRUE)
+x = st_sf(a = 2:1, geom = structure(st_sfc(st_linestring(), st_linestring(matrix(1:4,2))), names=c("2","3")))
+write_sf(x, "empty.gpkg")
+y = st_read("empty.gpkg", quiet = TRUE)
 all.equal(x, y)
 
 # https://github.com/edzer/sfr/issues/398 :

@@ -235,6 +235,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	size_t n = (size_t) n_d; // what is List's max length?
 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
+	Rcpp::CharacterVector fids(n);
 
 	if (! quiet)
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
@@ -254,6 +255,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
 	while((poFeature = poLayer->GetNextFeature()) != NULL) {
+		// getFID:
+		fids[i] = std::to_string(poFeature->GetFID());
 
 		// feature attribute fields:
 		for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
@@ -487,6 +490,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
 		sfc.attr("crs") = get_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
+		sfc.attr("names") = fids;
 		out[iGeom + poFDefn->GetFieldCount()] = sfc;
 	}
 

@@ -1,5 +1,7 @@
 # version 0.6-4
 
+* read and write feature IDs as sfc list column names; #812
+
 * `st_centroid` now works for empty geometries, returning an empty point #769
 
 * add `st_nearest_points`, to obtain the (`LINESTRING` connecting the) two nearest points for pairs of geometries; #788
