@@ -322,8 +322,11 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	if (is.null(layer))
 		layer <- file_path_sans_ext(basename(dsn))
 
-	if (length(dsn) == 1 && file.exists(dsn))
-		dsn = enc2utf8(normalizePath(dsn))
+	if (length(dsn) == 1 && length(grep("~", dsn)) == 1) # resolve ~
+		dsn = normalizePath(dsn, mustWork = FALSE) # nocov
+
+	# this seems to be always a good idea:
+	dsn = enc2utf8(dsn)
 
 	geom = st_geometry(obj)
 	obj[[attr(obj, "sf_column")]] = NULL

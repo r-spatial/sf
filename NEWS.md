@@ -1,5 +1,7 @@
 # version 0.6-4
 
+* `st_write` now resolves `~` correctly; #456
+
 * read and write feature IDs as sfc list column names; #812
 
 * `st_centroid` now works for empty geometries, returning an empty point #769
