@@ -363,17 +363,21 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
 				for (int i = 0; i < sfc0.length(); i++) { // row
-					const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
 					// pre-select sfc1's using tree:
 					std::vector<size_t> tree_sel, sel;
 					if (! GEOSisEmpty_r(hGEOSCtxt, gmv0[i]))
 						GEOSSTRtree_query_r(hGEOSCtxt, tree1, gmv0[i], cb, &tree_sel);
-					for (size_t j = 0; j < tree_sel.size(); j++)
-						if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
-							sel.push_back(tree_sel[j] + 1); // 1-based
-					std::sort(sel.begin(), sel.end());
+
+					if (! tree_sel.empty()) {
+						const GEOSPreparedGeometry *pr = GEOSPrepare_r(hGEOSCtxt, gmv0[i]);
+						for (size_t j = 0; j < tree_sel.size(); j++)
+							if (chk_(logical_fn(hGEOSCtxt, pr, gmv1[tree_sel[j]])))
+								sel.push_back(tree_sel[j] + 1); // 1-based
+						std::sort(sel.begin(), sel.end());
+						GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
+					}
+
 					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					GEOSPreparedGeom_destroy_r(hGEOSCtxt, pr);
 					R_CheckUserInterrupt();
 				}
 			} else {
