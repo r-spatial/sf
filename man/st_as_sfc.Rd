@@ -3,30 +3,17 @@
 \name{st_as_sfc}
 \alias{st_as_sfc}
 \alias{st_as_sfc.list}
-\alias{st_as_sfc}
 \alias{st_as_sfc.blob}
-\alias{st_as_sfc}
 \alias{st_as_sfc.bbox}
-\alias{st_as_sfc}
 \alias{st_as_sfc.WKB}
-\alias{st_as_sfc}
 \alias{st_as_sfc.raw}
-\alias{st_as_sfc}
 \alias{st_as_sfc.character}
-\alias{st_as_sfc}
 \alias{st_as_sfc.factor}
-\alias{st_as_sfc}
-\alias{st_as_sfc}
 \alias{st_as_sfc.SpatialPoints}
-\alias{st_as_sfc}
 \alias{st_as_sfc.SpatialPixels}
-\alias{st_as_sfc}
 \alias{st_as_sfc.SpatialMultiPoints}
-\alias{st_as_sfc}
 \alias{st_as_sfc.SpatialLines}
-\alias{st_as_sfc}
 \alias{st_as_sfc.SpatialPolygons}
-\alias{st_as_sfc}
 \alias{st_as_sfc.map}
 \title{Convert foreign geometry object to an sfc object}
 \usage{
@@ -41,7 +28,8 @@
 
 \method{st_as_sfc}{raw}(x, ...)
 
-\method{st_as_sfc}{character}(x, crs = NA_integer_, ..., GeoJSON = FALSE)
+\method{st_as_sfc}{character}(x, crs = NA_integer_, ...,
+  GeoJSON = FALSE)
 
 \method{st_as_sfc}{factor}(x, ...)
 
@@ -53,7 +41,8 @@ st_as_sfc(x, ...)
 
 \method{st_as_sfc}{SpatialMultiPoints}(x, ..., precision = 0)
 
-\method{st_as_sfc}{SpatialLines}(x, ..., precision = 0, forceMulti = FALSE)
+\method{st_as_sfc}{SpatialLines}(x, ..., precision = 0,
+  forceMulti = FALSE)
 
 \method{st_as_sfc}{SpatialPolygons}(x, ..., precision = 0,
   forceMulti = FALSE)

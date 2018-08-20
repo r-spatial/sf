@@ -3,31 +3,18 @@
 \name{plot}
 \alias{plot}
 \alias{plot.sf}
-\alias{plot}
 \alias{get_key_pos}
-\alias{plot}
 \alias{plot.sfc_POINT}
-\alias{plot}
 \alias{plot.sfc_MULTIPOINT}
-\alias{plot}
 \alias{plot.sfc_LINESTRING}
-\alias{plot}
 \alias{plot.sfc_CIRCULARSTRING}
-\alias{plot}
 \alias{plot.sfc_MULTILINESTRING}
-\alias{plot}
 \alias{plot.sfc_POLYGON}
-\alias{plot}
 \alias{plot.sfc_MULTIPOLYGON}
-\alias{plot}
 \alias{plot.sfc_GEOMETRYCOLLECTION}
-\alias{plot}
 \alias{plot.sfc_GEOMETRY}
-\alias{plot}
 \alias{plot.sfg}
-\alias{plot}
 \alias{plot_sf}
-\alias{plot}
 \alias{sf.colors}
 \title{Plot sf object}
 \usage{
@@ -38,8 +25,8 @@
 
 get_key_pos(x, ...)
 
-\method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0,
-  lwd = 1, lty = 1, type = "p", add = FALSE)
+\method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1,
+  bg = 0, lwd = 1, lty = 1, type = "p", add = FALSE)
 
 \method{plot}{sfc_MULTIPOINT}(x, y, ..., pch = 1, cex = 1, col = 1,
   bg = 0, lwd = 1, lty = 1, type = "p", add = FALSE)
@@ -49,17 +36,17 @@ get_key_pos(x, ...)
 
 \method{plot}{sfc_CIRCULARSTRING}(x, y, ...)
 
-\method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
-  pch = 1, type = "l", add = FALSE)
+\method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1,
+  col = 1, pch = 1, type = "l", add = FALSE)
 
 \method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
   cex = 1, pch = NA, border = 1, add = FALSE, rule = "evenodd")
 
-\method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  border = 1, add = FALSE, rule = "evenodd")
+\method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1,
+  col = NA, border = 1, add = FALSE, rule = "evenodd")
 
-\method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1, bg = 0,
-  lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
+\method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1,
+  bg = 0, lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
 
 \method{plot}{sfc_GEOMETRY}(x, y, ..., pch = 1, cex = 1, bg = 0,
   lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
@@ -156,8 +143,6 @@ or object returned by \link{st_graticule}}
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
 }
 \description{
-Plot sf object
-
 blue-pink-yellow color scale
 }
 \details{

@@ -3,11 +3,8 @@
 \docType{methods}
 \name{st_write}
 \alias{st_write}
-\alias{st_write}
 \alias{st_write.sfc}
-\alias{st_write}
 \alias{st_write.sf}
-\alias{st_write}
 \alias{write_sf}
 \alias{dbWriteTable,PostgreSQLConnection,character,sf-method}
 \alias{dbWriteTable,DBIObject,character,sf-method}
@@ -25,8 +22,8 @@ st_write(obj, dsn, layer, ...)
 
 write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
-\S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(conn, name, value,
-  ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
+\S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(conn, name,
+  value, ..., row.names = FALSE, overwrite = FALSE, append = FALSE,
   field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE)
 
 \S4method{dbWriteTable}{DBIObject,character,sf}(conn, name, value, ...,
@@ -93,10 +90,6 @@ if \code{FALSE}, uses Well-Known Text (WKT). Defaults to \code{TRUE} (WKB).}
 }
 \description{
 Write simple features object to file or database
-
-Write \code{sf} object to Database
-
-Write \code{sf} object to Database
 }
 \details{
 columns (variables) of a class not supported are dropped with a warning. When deleting layers or

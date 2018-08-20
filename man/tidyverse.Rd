@@ -3,54 +3,30 @@
 \name{tidyverse}
 \alias{tidyverse}
 \alias{filter.sf}
-\alias{tidyverse}
 \alias{arrange.sf}
-\alias{tidyverse}
 \alias{group_by.sf}
-\alias{tidyverse}
 \alias{ungroup.sf}
-\alias{tidyverse}
 \alias{mutate.sf}
-\alias{tidyverse}
 \alias{transmute.sf}
-\alias{tidyverse}
 \alias{select.sf}
-\alias{tidyverse}
 \alias{rename.sf}
-\alias{tidyverse}
 \alias{slice.sf}
-\alias{tidyverse}
 \alias{summarise.sf}
 \alias{summarise}
-\alias{tidyverse}
 \alias{distinct.sf}
-\alias{tidyverse}
 \alias{gather.sf}
-\alias{tidyverse}
 \alias{spread.sf}
-\alias{tidyverse}
 \alias{sample_n.sf}
-\alias{tidyverse}
 \alias{sample_frac.sf}
-\alias{tidyverse}
 \alias{nest.sf}
-\alias{tidyverse}
 \alias{separate.sf}
-\alias{tidyverse}
 \alias{unite.sf}
-\alias{tidyverse}
 \alias{unnest.sf}
-\alias{tidyverse}
 \alias{inner_join.sf}
-\alias{tidyverse}
 \alias{left_join.sf}
-\alias{tidyverse}
 \alias{right_join.sf}
-\alias{tidyverse}
 \alias{full_join.sf}
-\alias{tidyverse}
 \alias{semi_join.sf}
-\alias{tidyverse}
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects}
 \usage{
@@ -97,13 +73,17 @@ unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
 
-inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 
-left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 
-right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 
-full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 
 semi_join.sf(x, y, by = NULL, copy = FALSE, ...)
 

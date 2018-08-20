@@ -5,7 +5,8 @@
 \title{Native interface to gdal utils}
 \usage{
 gdal_utils(util = "info", source, destination, options = character(0),
-  quiet = FALSE, processing = character(0), colorfilename = character(0))
+  quiet = FALSE, processing = character(0),
+  colorfilename = character(0))
 }
 \arguments{
 \item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}

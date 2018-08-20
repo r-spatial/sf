@@ -3,7 +3,6 @@
 \name{geos_combine}
 \alias{geos_combine}
 \alias{st_combine}
-\alias{geos_combine}
 \alias{st_union}
 \title{Combine or union feature geometries}
 \usage{

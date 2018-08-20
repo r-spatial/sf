@@ -3,11 +3,8 @@
 \name{geos_query}
 \alias{geos_query}
 \alias{st_dimension}
-\alias{geos_query}
 \alias{st_is_simple}
-\alias{geos_query}
 \alias{st_is_empty}
-\alias{geos_query}
 \alias{st_is_valid}
 \title{Dimension, simplicity, validity or is_empty queries on simple feature geometries}
 \usage{

@@ -2,21 +2,13 @@
 % Please edit documentation in R/transform.R
 \name{st_transform}
 \alias{st_transform}
-\alias{st_transform}
 \alias{st_transform.sfc}
-\alias{st_transform}
 \alias{st_transform.sf}
-\alias{st_transform}
 \alias{st_transform.sfg}
-\alias{st_transform}
 \alias{st_proj_info}
-\alias{st_transform}
 \alias{st_wrap_dateline}
-\alias{st_transform}
 \alias{st_wrap_dateline.sfc}
-\alias{st_transform}
 \alias{st_wrap_dateline.sf}
-\alias{st_transform}
 \alias{st_wrap_dateline.sfg}
 \title{Transform or convert coordinates of simple feature}
 \usage{
@@ -36,7 +28,8 @@ st_wrap_dateline(x, options, quiet)
 \method{st_wrap_dateline}{sfc}(x, options = "WRAPDATELINE=YES",
   quiet = TRUE)
 
-\method{st_wrap_dateline}{sf}(x, options = "WRAPDATELINE=YES", quiet = TRUE)
+\method{st_wrap_dateline}{sf}(x, options = "WRAPDATELINE=YES",
+  quiet = TRUE)
 
 \method{st_wrap_dateline}{sfg}(x, options = "WRAPDATELINE=YES",
   quiet = TRUE)

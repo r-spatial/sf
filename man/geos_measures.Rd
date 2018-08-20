@@ -3,9 +3,7 @@
 \name{geos_measures}
 \alias{geos_measures}
 \alias{st_area}
-\alias{geos_measures}
 \alias{st_length}
-\alias{geos_measures}
 \alias{st_distance}
 \title{Compute geometric measurements}
 \usage{
@@ -13,8 +11,8 @@ st_area(x)
 
 st_length(x)
 
-st_distance(x, y, ..., dist_fun, by_element = FALSE, which = "distance",
-  par = 0, tolerance = 0)
+st_distance(x, y, ..., dist_fun, by_element = FALSE,
+  which = "distance", par = 0, tolerance = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}

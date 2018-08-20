@@ -3,15 +3,10 @@
 \name{gdal}
 \alias{gdal}
 \alias{gdal_read}
-\alias{gdal}
 \alias{gdal_write}
-\alias{gdal}
 \alias{gdal_inv_geotransform}
-\alias{gdal}
 \alias{gdal_crs}
-\alias{gdal}
 \alias{gdal_metadata}
-\alias{gdal}
 \alias{gdal_subdatasets}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{

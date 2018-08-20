@@ -3,27 +3,16 @@
 \name{geos_unary}
 \alias{geos_unary}
 \alias{st_buffer}
-\alias{geos_unary}
 \alias{st_boundary}
-\alias{geos_unary}
 \alias{st_convex_hull}
-\alias{geos_unary}
 \alias{st_simplify}
-\alias{geos_unary}
 \alias{st_triangulate}
-\alias{geos_unary}
 \alias{st_voronoi}
-\alias{geos_unary}
 \alias{st_polygonize}
-\alias{geos_unary}
 \alias{st_line_merge}
-\alias{geos_unary}
 \alias{st_centroid}
-\alias{geos_unary}
 \alias{st_point_on_surface}
-\alias{geos_unary}
 \alias{st_node}
-\alias{geos_unary}
 \alias{st_segmentize}
 \title{Geometric unary operations on simple feature geometry sets}
 \usage{

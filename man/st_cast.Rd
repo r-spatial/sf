@@ -3,32 +3,18 @@
 \name{st_cast}
 \alias{st_cast}
 \alias{st_cast.MULTIPOLYGON}
-\alias{st_cast}
 \alias{st_cast.MULTILINESTRING}
-\alias{st_cast}
 \alias{st_cast.MULTIPOINT}
-\alias{st_cast}
 \alias{st_cast.POLYGON}
-\alias{st_cast}
 \alias{st_cast.LINESTRING}
-\alias{st_cast}
 \alias{st_cast.POINT}
-\alias{st_cast}
 \alias{st_cast.GEOMETRYCOLLECTION}
-\alias{st_cast}
 \alias{st_cast.CIRCULARSTRING}
-\alias{st_cast}
 \alias{st_cast.MULTISURFACE}
-\alias{st_cast}
 \alias{st_cast.COMPOUNDCURVE}
-\alias{st_cast}
 \alias{st_cast.CURVE}
-\alias{st_cast}
-\alias{st_cast}
 \alias{st_cast.sfc}
-\alias{st_cast}
 \alias{st_cast.sf}
-\alias{st_cast}
 \alias{st_cast.sfc_CIRCULARSTRING}
 \title{Cast geometry to another type: either simplify, or cast explicitly}
 \usage{
@@ -56,7 +42,8 @@
 
 st_cast(x, to, ...)
 
-\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x), group_or_split = TRUE)
+\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x),
+  group_or_split = TRUE)
 
 \method{st_cast}{sf}(x, to, ..., warn = TRUE, do_split = TRUE)
 

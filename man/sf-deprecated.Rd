@@ -9,8 +9,8 @@
 \alias{sf-deprecated-package}
 \title{Deprecated functions in \code{sf}}
 \usage{
-st_read_db(conn = NULL, table = NULL, query = NULL, geom_column = NULL,
-  EWKB = TRUE, ...)
+st_read_db(conn = NULL, table = NULL, query = NULL,
+  geom_column = NULL, EWKB = TRUE, ...)
 }
 \arguments{
 \item{conn}{open database connection}

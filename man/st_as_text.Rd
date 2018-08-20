@@ -3,10 +3,7 @@
 \name{st_as_text}
 \alias{st_as_text}
 \alias{st_as_text.crs}
-\alias{st_as_text}
-\alias{st_as_text}
 \alias{st_as_text.sfg}
-\alias{st_as_text}
 \alias{st_as_text.sfc}
 \title{Return Well-known Text representation of simple feature geometry or coordinate reference system}
 \usage{
