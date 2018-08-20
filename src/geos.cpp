@@ -5,8 +5,10 @@
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
 # endif
-# if GEOS_VERSION_MINOR == 6 && GEOS_VERSION_PATCH >= 1
-#  define HAVE361
+# if GEOS_VERSION_MINOR == 6 
+#  if GEOS_VERSION_PATCH >= 1
+#   define HAVE361
+#  endif
 # endif
 # if GEOS_VERSION_MINOR >= 7
 #  define HAVE361
