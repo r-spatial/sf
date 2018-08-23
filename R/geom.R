@@ -367,7 +367,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
-#' @details \code{st_buffer} compute a buffer around this geometry/each geometry
+#' @details \code{st_buffer} computes a buffer around this geometry/each geometry
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
 
@@ -403,7 +403,7 @@ st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_boundary} return the boundary of a geometry
+#' @details \code{st_boundary} returns the boundary of a geometry
 st_boundary = function(x)
 	UseMethod("st_boundary")
 
