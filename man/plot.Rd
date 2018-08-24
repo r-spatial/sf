@@ -16,7 +16,7 @@
 \alias{plot.sfg}
 \alias{plot_sf}
 \alias{sf.colors}
-\title{Plot sf object}
+\title{plot sf object}
 \usage{
 \method{plot}{sf}(x, y, ..., main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
@@ -143,7 +143,8 @@ or object returned by \link{st_graticule}}
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
 }
 \description{
-blue-pink-yellow color scale
+plot one or more attributes of an sf object on a map
+Plot sf object
 }
 \details{
 \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,

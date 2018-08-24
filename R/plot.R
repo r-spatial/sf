@@ -1,3 +1,6 @@
+#' plot sf object
+#'
+#' plot one or more attributes of an sf object on a map
 #' Plot sf object
 #'
 #' @param x object of class sf
@@ -608,9 +611,6 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 }
 
 
-#' blue-pink-yellow color scale
-#'
-#' blue-pink-yellow color scale
 #' @param n integer; number of colors
 #' @param cutoff.tails numeric, in [0,0.5] start and end values
 #' @param alpha numeric, in [0,1], transparency
