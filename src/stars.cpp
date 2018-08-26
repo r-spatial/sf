@@ -100,7 +100,7 @@ NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 }
 
 // formerly: stars/src/gdal.cpp
-NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, NumericVector nodatavalue, 
+NumericVector CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, NumericVector nodatavalue, 
 		double resample = 1.0) {
 
 	IntegerVector x = meta["cols"];
@@ -116,20 +116,23 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 	// and how it interacts with and/or should change or changes geotransform
 
 	// collapse x & y into rows, redim later:
-	NumericMatrix mat( floor(nx / resample) * floor(ny / resample), nbands );
+	NumericVector vec( floor(nx / resample) * floor(ny / resample) * nbands ); 
+	// floor returns double -> no integer overflow
 
 	IntegerVector band_index(nbands);
 	for (int j = 0, i = bands(0); i <= bands(1); i++)
 		band_index(j++) = i;
 	// read the full set of bands:
+	// Rcout << "reading... ";
 	CPLErr err = poDataset->RasterIO( GF_Read,
 			x(0) - 1, y(0) - 1,
 			nx, ny,
-			mat.begin(),
+			vec.begin(),
 			floor(nx / resample), floor(ny / resample),
 			GDT_Float64, nbands, band_index.begin(), 0, 0, 0);
 	if (err == CE_Failure)
 		stop("read failure"); // #nocov
+	// Rcout << "done!" << std::endl;
 
 	for (int band = bands(0); band <= bands(1); band++) { // unlike x & y, band is 1-based
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
@@ -148,29 +151,27 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 			offset = poBand->GetOffset(NULL);
 		// char *units = poBand->GetUnits();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
-			NumericVector nv = mat(_, band - 1);
-			for (int i = 0; i < nv.size(); i++) {
-				if (nv[i] == nodatavalue[0])
-					nv[i] = NA_REAL; // #nocov
+			for (R_xlen_t i = 0; i < Rf_xlength(vec); i++) {
+				if (vec[i] == nodatavalue[0])
+					vec[i] = NA_REAL; // #nocov
 				else
-					nv[i] = (nv[i] * scale) + offset;
+					vec[i] = (vec[i] * scale) + offset;
 			}
-			mat(_, band - 1) = nv;
 		}
 		checkUserInterrupt();
 	}
 
-	// dim:
+	// set dim attr:
 	IntegerVector dims;
 	if (diff(bands)[0] == 0) { // one band:
 		dims = IntegerVector::create(nx / resample, ny / resample);
 		dims.attr("names") = CharacterVector::create("x", "y");
-	} else { // redim:
+	} else { // multiple bands:
 		dims = IntegerVector::create(nx / resample, ny / resample, diff(bands)[0] + 1); // #nocov
 		dims.attr("names") = CharacterVector::create("x", "y", "band"); // #nocov
 	}
-	mat.attr("dim") = dims;
-	return mat;
+	vec.attr("dim") = dims;
+	return vec;
 }
 
 // [[Rcpp::export]]
