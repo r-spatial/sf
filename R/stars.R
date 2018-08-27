@@ -6,10 +6,13 @@
 #' @param driver character; when empty vector, driver is auto-detected.
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
 #' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).
+#' @param RasterIO_parameters list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.
 #' @name gdal
 #' @export
-gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_)
-	CPL_read_gdal(x, options, driver, read_data, NA_value)
+gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
+		RasterIO_parameters = list())
+	CPL_read_gdal(as.character(x), as.character(options), as.character(driver), 
+		as.logical(read_data), as.double(NA_value), RasterIO_parameters)
 
 #' @name gdal
 #' @export

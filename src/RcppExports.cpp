@@ -822,8 +822,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_gdal
-List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver, bool read_data, NumericVector NA_value, double resample);
-RcppExport SEXP _sf_CPL_read_gdal(SEXP fnameSEXP, SEXP optionsSEXP, SEXP driverSEXP, SEXP read_dataSEXP, SEXP NA_valueSEXP, SEXP resampleSEXP) {
+List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver, bool read_data, NumericVector NA_value, List RasterIO_parameters);
+RcppExport SEXP _sf_CPL_read_gdal(SEXP fnameSEXP, SEXP optionsSEXP, SEXP driverSEXP, SEXP read_dataSEXP, SEXP NA_valueSEXP, SEXP RasterIO_parametersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -832,8 +832,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< CharacterVector >::type driver(driverSEXP);
     Rcpp::traits::input_parameter< bool >::type read_data(read_dataSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type NA_value(NA_valueSEXP);
-    Rcpp::traits::input_parameter< double >::type resample(resampleSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal(fname, options, driver, read_data, NA_value, resample));
+    Rcpp::traits::input_parameter< List >::type RasterIO_parameters(RasterIO_parametersSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal(fname, options, driver, read_data, NA_value, RasterIO_parameters));
     return rcpp_result_gen;
 END_RCPP
 }
