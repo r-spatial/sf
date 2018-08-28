@@ -281,7 +281,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				out[j * sfc0.length() + i] = cp;
 				GEOSFree_r(hGEOSCtxt, cp);
 			}
-			R_CheckUserInterrupt();
+			Rcpp::checkUserInterrupt();
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
@@ -308,7 +308,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
 					out(i, j) = dist;
 				}
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		} else {
 			dist_parfn dist_function = NULL;
@@ -328,7 +328,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
 					out(i, j) = dist;
 				}
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		}
 		ret_list = Rcpp::List::create(out);
@@ -344,7 +344,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					sel.push_back(j + 1); // 1-based
 			}
 			sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-			R_CheckUserInterrupt();
+			Rcpp::checkUserInterrupt();
 		}
 		ret_list = sparsemat;
 	} else if (gmv1.size()) {
@@ -365,7 +365,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				for (int j = 0; j < sfc1.length(); j++)
 					rowi(j) = chk_(GEOSEqualsExact_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par));
 				sparsemat[i] = get_which(rowi);
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		} else if (op == "relate_pattern") { // needing pattern
 			if (GEOSRelatePatternMatch_r(hGEOSCtxt, pattern.c_str(), "FF*FF****"))
@@ -381,7 +381,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 						sel.push_back(tree_sel[j] + 1); // 1-based
 				std::sort(sel.begin(), sel.end());
 				sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		} else if (op == "disjoint")
 			Rcpp::stop("disjoint should have been handled in R"); // #nocov
@@ -403,7 +403,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 					}
 
 					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					R_CheckUserInterrupt();
+					Rcpp::checkUserInterrupt();
 				}
 			} else {
 				log_fn logical_fn = which_geom_fn(op);
@@ -417,7 +417,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 							sel.push_back(tree_sel[j] + 1); // 1-based
 					std::sort(sel.begin(), sel.end());
 					sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
-					R_CheckUserInterrupt();
+					Rcpp::checkUserInterrupt();
 				}
 			}
 		}
@@ -575,7 +575,7 @@ Rcpp::List CPL_geos_snap(Rcpp::List sfc0, Rcpp::List sfc1, Rcpp::NumericVector t
 GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	if (value == NULL)
 		Rcpp::stop("GEOS exception"); // #nocov
-	R_CheckUserInterrupt();
+	Rcpp::checkUserInterrupt();
 	return value;
 }
 
@@ -723,7 +723,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 					index_y.push_back(i + 1);
 					out.push_back(std::move(geom)); // keep
 				}
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		}
 
@@ -748,7 +748,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 					index_y.push_back(i + 1);
 					out.push_back(std::move(geom)); // keep
 				}
-				R_CheckUserInterrupt();
+				Rcpp::checkUserInterrupt();
 			}
 		}
 	}
@@ -938,7 +938,7 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 				out.push_back(std::move(geom)); // keep
 			}
 			// check for user interrupt
-			R_CheckUserInterrupt();
+			Rcpp::checkUserInterrupt();
 		}
 	}
 	// prepare output
@@ -1008,7 +1008,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 				index.push_back(idx);
 			}
 			// check for user interrupt
-			R_CheckUserInterrupt();
+			Rcpp::checkUserInterrupt();
 		}
 	} // for i
 	size_t j = 0;
