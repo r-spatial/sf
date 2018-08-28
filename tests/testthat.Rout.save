@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -19,36 +19,6 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(sf))
 > 
 > test_check("sf")
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "missing" does not exist
-LINE 1: SELECT * from "missing"
-                      ^
-)
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "missing.missing" does not exist
-LINE 1: SELECT * from "missing"."missing"
-                      ^
-)
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "sf_test__.sf_meuse3__" does not exist
-LINE 1: SELECT * from "sf_test__"."sf_meuse3__"
-                      ^
-)
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "missing" does not exist
-LINE 1: SELECT * from "missing"
-                      ^
-)
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "missing.missing" does not exist
-LINE 1: SELECT * from "missing"."missing"
-                      ^
-)
-Error in postgresqlExecStatement(conn, statement, ...) : 
-  RS-DBI driver: (could not Retrieve the result : ERROR:  relation "sf_test__.sf_meuse3__" does not exist
-LINE 1: SELECT * from "sf_test__"."sf_meuse3__"
-                      ^
-)
 Cannot open layer foo
 Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nospatial.gpkg' using driver `GPKG'
 Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nospatial.gpkg' using driver `GPKG'
@@ -61,15 +31,15 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 driver `foo' not available.
-Dataset /tmp/Rtmpja4wRj/file4d0c697055f.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/RtmpSUDTks/file671074ed8832.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 ══ testthat results  ═══════════════════════════════════════════════════════════
-OK: 895 SKIPPED: 19 FAILED: 0
+OK: 609 SKIPPED: 49 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  6.658   0.538   8.584 
+  2.834   0.064   3.045 
