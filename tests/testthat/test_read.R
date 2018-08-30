@@ -6,6 +6,12 @@ test_that("we can read a shapefile using st_read", {
   expect_equal(dim(nc), c(100, 15))
 })
 
+test_that("we can read shapefiles with a query string", {
+    nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE)
+    nc_all <- st_read(system.file("shape/nc.shp", package="sf"), "nc", query = "select * from nc", crs = 4267, quiet = TRUE)
+    nc_some <- st_read(system.file("shape/nc.shp", package="sf"), "nc", query = "select * from nc where SID79 > 50", crs = 4267, quiet = TRUE)
+})
+
 test_that("st_read.default gives error messages", {
   expect_error(st_read(), "dsn should specify a data source or filename")
   expect_error(st_read(NULL), "no st_read method available for objects of class NULL")
@@ -178,3 +184,5 @@ test_that("reading non-spatial table works", {
 	expect_is(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
 			  "tbl_df")
 })
+
+

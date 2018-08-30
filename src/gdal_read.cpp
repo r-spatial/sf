@@ -183,12 +183,14 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
+			Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
 		bool promote_to_multi = true, bool int64_as_string = false) {
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
 	GDALDataset *poDS;
+
 	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
 		open_options.data(), NULL );
 	if( poDS == NULL ) {
@@ -196,6 +198,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::stop("Open failed.\n");
 	}
 
+		 
 	if (layer.size() == 0) { // no layer specified
 		switch (poDS->GetLayerCount()) {
 			case 0: { // error:
@@ -220,6 +223,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			}
 		}
 	}
+
+	if(!Rcpp::CharacterVector::is_na(query[0])){
+	  poDS->ExecuteSQL(query[0], NULL, NULL);
+	};
 
 	OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
