@@ -21,7 +21,7 @@
 #' @param lwd line width
 #' @param col color for plotting features; if \code{length(col)} does not equal 1 or \code{nrow(x)}, a warning is emitted that colors will be recycled. Specifying \code{col} suppresses plotting the legend key.
 #' @param border color of polygon border(s)
-#' @param add logical; add to current plot?
+#' @param add logical; add to current plot? Note that when using \code{add=TRUE}, you may have to set \code{reset=FALSE} in the first plot command.
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
 #' @method plot sf
@@ -36,63 +36,20 @@
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 #'
 #' @examples
-#' # plot linestrings:
-#' l1 = st_linestring(matrix(runif(6)-0.5,,2))
-#' l2 = st_linestring(matrix(runif(6)-0.5,,2))
-#' l3 = st_linestring(matrix(runif(6)-0.5,,2))
-#' s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
-#' plot(s, col = s$a, axes = FALSE)
-#' plot(s, col = s$a)
-#' ll = "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-#' st_crs(s) = ll
-#' plot(s, col = s$a, axes = TRUE)
-#' plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
-#' l4 = st_linestring(matrix(runif(6),,2))
-#' plot(st_sf(a=1,b=st_sfc(l4)), add = TRUE)
-#' # plot multilinestrings:
-#' ml1 = st_multilinestring(list(l1, l2))
-#' ml2 = st_multilinestring(list(l3, l4))
-#' ml = st_sf(a = 2:3, b = st_sfc(ml1, ml2))
-#' plot(ml, col = ml$a, lty = ml$a, lwd = ml$a, pch = ml$a, type = 'b')
-#' # plot points:
-#' p1 = st_point(c(1,2))
-#' p2 = st_point(c(3,3))
-#' p3 = st_point(c(3,0))
-#' p = st_sf(a=2:4, b=st_sfc(p1,p2,p3))
-#' plot(p, col = s$a, axes = TRUE)
-#' plot(p, col = s$a)
-#' plot(p, col = p$a, pch = p$a, cex = p$a, bg = s$a, lwd = 2, lty = 2, type = 'b')
-#' p4 = st_point(c(2,2))
-#' plot(st_sf(a=1, st_sfc(p4)), add = TRUE)
-#' # multipoints:
-#' mp1 = st_multipoint(matrix(1:4,2))
-#' mp2 = st_multipoint(matrix(5:8,2))
-#' mp = st_sf(a = 2:3, b = st_sfc(mp1, mp2))
-#' plot(mp)
-#' plot(mp, col = mp$a, pch = mp$a, cex = mp$a, bg = mp$a, lwd = mp$a, lty = mp$a, type = 'b')
-#' # polygon:
-#' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
-#' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
-#' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
-#' pl1 = st_polygon(list(outer, hole1, hole2))
-#' pl2 = st_polygon(list(outer+10, hole1+10, hole2+10))
-#' po = st_sf(a = 2:3, st_sfc(pl1,pl2))
-#' plot(po, col = po$a, border = rev(po$a), lwd=3)
-#' # multipolygon
-#' r10 = matrix(rep(c(0,10),each=5),5)
-#' pl1 = list(outer, hole1, hole2)
-#' pl2 = list(outer+10, hole1+10, hole2+10)
-#' pl3 = list(outer+r10, hole1+r10, hole2+r10)
-#' mpo1 = st_multipolygon(list(pl1,pl2))
-#' mpo2 = st_multipolygon(list(pl3))
-#' mpo = st_sf(a=2:3, b=st_sfc(mpo1,mpo2))
-#' plot(mpo, col = mpo$a, border = rev(mpo$a), lwd = 2)
-#' # geometrycollection:
-#' gc1 = st_geometrycollection(list(mpo1, st_point(c(21,21)), l1 * 2 + 21))
-#' gc2 = st_geometrycollection(list(mpo2, l2 - 2, l3 - 2, st_point(c(-1,-1))))
-#' gc = st_sf(a=2:3, b = st_sfc(gc1,gc2))
-#' plot(gc, cex = gc$a, col = gc$a, border = rev(gc$a) + 2, lwd = 2)
-#' # to add a custom legend to an arbitray plot:
+#' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
+#' # plot single attribute, auto-legend:
+#' plot(nc["SID74"])
+#' # plot multiple:
+#' plot(nc[c("SID74", "SID79")]) # better use ggplot2::geom_sf to facet and get a single legend!
+#' # adding to a plot of an sf object only works when using reset=FALSE in the first plot:
+#' plot(nc["SID74"], reset = FALSE)
+#' plot(st_centroid(st_geometry(nc)), add = TRUE)
+#' # and we need to reset the plotting device after that, e.g. by
+#' layout(1)
+#' # when plotting only geometries, the reset=FALSE is not needed:
+#' plot(st_geometry(nc))
+#' plot(st_geometry(nc)[1], col = 'red', add = TRUE)
+#' # add a custom legend to an arbitray plot:
 #' layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
 #' plot(1)
 #' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
