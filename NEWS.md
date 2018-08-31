@@ -1,5 +1,7 @@
 # version 0.6-4
 
+* `st_area` is now a generic; https://github.com/r-spatial/stars/issues/32
+
 * `st_write` now resolves `~` correctly; #456
 
 * read and write feature IDs as sfc list column names; #812

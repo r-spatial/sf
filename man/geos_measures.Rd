@@ -7,7 +7,7 @@
 \alias{st_distance}
 \title{Compute geometric measurements}
 \usage{
-st_area(x)
+st_area(x, ...)
 
 st_length(x)
 
@@ -17,9 +17,9 @@ st_distance(x, y, ..., dist_fun, by_element = FALSE,
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
-
 \item{...}{ignored}
+
+\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
 \item{dist_fun}{deprecated}
 

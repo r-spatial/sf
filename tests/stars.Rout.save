@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -47,12 +47,13 @@ attr(,"class")
 +         point = TRUE, values = NULL), .Names = c("from", "to", 
 +     "offset", "delta", "geotransform", "refsys", "point", "values"
 +     ), class = "dimension")), .Names = c("x", "y"), class = "dimensions")
-> x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE)
-> x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE)
+> gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
+> x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
+> x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
 > identical(x1, x2)
 [1] FALSE
-> y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE)
-> y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE)
+> y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
+> y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
 > identical(y1, y2)
 [1] FALSE
 > 
@@ -88,9 +89,9 @@ $gt_inv
 > m = matrix(runif(100*100), 100, 100)
 > m[ m > .8 ] = NA
 > st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
-> gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0)
+> gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0, geotransform = c(0, 1.0, 0, 0, 0, 1.0))
 > r = gdal_read(tif, NA_value = 255.0)
 > 
 > proc.time()
    user  system elapsed 
-  0.396   0.288   0.355 
+  0.340   0.019   0.351 

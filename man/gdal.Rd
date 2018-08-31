@@ -15,7 +15,7 @@ gdal_read(x, ..., options = character(0), driver = character(0),
   RasterIO_parameters = list())
 
 gdal_write(x, ..., file, driver = "GTiff", options = character(0),
-  type = "Float32", NA_value = NA_real_)
+  type = "Float32", NA_value = NA_real_, geotransform)
 
 gdal_inv_geotransform(gt)
 
@@ -44,6 +44,8 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 \item{file}{character; file name}
 
 \item{type}{gdal write type}
+
+\item{geotransform}{length 6 numeric vector with GDAL geotransform parameters.}
 
 \item{gt}{double vector of length 6}
 

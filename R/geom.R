@@ -46,18 +46,27 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' b2 = b0 + c(-0.2, 2)
 #' x = st_sfc(b0, b1, b2)
 #' st_area(x)
-st_area = function(x) {
+st_area = function(x, ...) UseMethod("st_area")
+
+#' @export
+st_area.sfc = function(x, ...) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		lwgeom::st_geod_area(x)
 	} else {
-		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
+		a = CPL_area(x) # ignores units: units of coordinates
 		if (! is.na(st_crs(x)))
 			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
 		a
 	}
 }
+
+#' @export
+st_area.sf = function(x, ...) st_area(st_geometry(x, ...))
+
+#' @export
+st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
 
 #' @name geos_measures
 #' @export
