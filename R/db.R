@@ -265,7 +265,7 @@ get_new_postgis_srid <- function(conn) {
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              if (is.null(field.types)) field.types <- dbDataType(conn, value)
               tryCatch({
                   dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
                                overwrite = overwrite, append = append,
@@ -294,7 +294,7 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+          	if (is.null(field.types)) field.types <- dbDataType(conn, value)
               # DBI cannot set field types with append
               if (append) field.types <- NULL
               tryCatch({
