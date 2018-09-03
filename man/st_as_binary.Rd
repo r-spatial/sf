@@ -2,19 +2,18 @@
 % Please edit documentation in R/wkb.R
 \name{st_as_binary}
 \alias{st_as_binary}
-\alias{st_as_binary}
 \alias{st_as_binary.sfc}
-\alias{st_as_binary}
 \alias{st_as_binary.sfg}
 \title{Convert sfc object to an WKB object}
 \usage{
 st_as_binary(x, ...)
 
-\method{st_as_binary}{sfc}(x, ..., EWKB = FALSE, endian = .Platform$endian,
-  pureR = FALSE, precision = attr(x, "precision"), hex = FALSE)
+\method{st_as_binary}{sfc}(x, ..., EWKB = FALSE,
+  endian = .Platform$endian, pureR = FALSE, precision = attr(x,
+  "precision"), hex = FALSE)
 
-\method{st_as_binary}{sfg}(x, ..., endian = .Platform$endian, EWKB = FALSE,
-  pureR = FALSE, hex = FALSE)
+\method{st_as_binary}{sfg}(x, ..., endian = .Platform$endian,
+  EWKB = FALSE, pureR = FALSE, hex = FALSE)
 }
 \arguments{
 \item{x}{object to convert}

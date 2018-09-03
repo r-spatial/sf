@@ -2,26 +2,20 @@
 % Please edit documentation in R/sf.R, R/sp.R, R/maps.R, R/spatstat.R
 \name{st_as_sf}
 \alias{st_as_sf}
-\alias{st_as_sf}
 \alias{st_as_sf.data.frame}
-\alias{st_as_sf}
 \alias{st_as_sf.sf}
-\alias{st_as_sf}
 \alias{st_as_sf.Spatial}
-\alias{st_as_sf}
 \alias{st_as_sf.map}
-\alias{st_as_sf}
 \alias{st_as_sf.ppp}
-\alias{st_as_sf}
 \alias{st_as_sf.psp}
-\alias{st_as_sf}
 \alias{st_as_sf.lpp}
 \title{Convert foreign object to an sf object}
 \usage{
 st_as_sf(x, ...)
 
 \method{st_as_sf}{data.frame}(x, ..., agr = NA_agr_, coords, wkt,
-  dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL)
+  dim = "XYZ", remove = TRUE, na.fail = TRUE,
+  sf_column_name = NULL)
 
 \method{st_as_sf}{sf}(x, ...)
 

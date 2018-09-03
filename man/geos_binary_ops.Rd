@@ -3,17 +3,11 @@
 \name{geos_binary_ops}
 \alias{geos_binary_ops}
 \alias{st_intersection}
-\alias{geos_binary_ops}
 \alias{st_intersection.sfc}
-\alias{geos_binary_ops}
 \alias{st_intersection.sf}
-\alias{geos_binary_ops}
 \alias{st_difference}
-\alias{geos_binary_ops}
 \alias{st_difference.sfc}
-\alias{geos_binary_ops}
 \alias{st_sym_difference}
-\alias{geos_binary_ops}
 \alias{st_snap}
 \title{Geometric operations on pairs of simple feature geometry sets}
 \usage{

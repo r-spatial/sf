@@ -3,11 +3,8 @@
 \name{stars}
 \alias{stars}
 \alias{.get_layout}
-\alias{stars}
 \alias{.degAxis}
-\alias{stars}
 \alias{.image_scale}
-\alias{stars}
 \alias{.image_scale_factor}
 \title{functions only exported to be used internally by stars}
 \usage{
@@ -15,11 +12,11 @@
 
 .degAxis(side, at, labels, ..., lon, lat, ndiscr, reset)
 
-.image_scale(z, col, breaks = NULL, key.pos, add.axis = TRUE, at = NULL,
-  ..., axes = FALSE, key.length)
+.image_scale(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+  at = NULL, ..., axes = FALSE, key.length)
 
-.image_scale_factor(z, col, breaks = NULL, key.pos, add.axis = TRUE, ...,
-  axes = FALSE, key.width, key.length)
+.image_scale_factor(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+  ..., axes = FALSE, key.width, key.length)
 }
 \arguments{
 \item{bb}{ignore}

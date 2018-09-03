@@ -10,7 +10,7 @@ bb_wrap = function(bb) {
 }
 
 bbox.Set = function(obj, ...) {
-	sel = vapply(obj, function(x) length(x) && !all(is.na(x)), TRUE)
+	sel = vapply(obj, function(x) { length(x) && !all(is.na(x)) }, TRUE)
 	if (! any(sel))
 		NA_bbox_
 	else
@@ -177,10 +177,10 @@ st_bbox.Raster = function(obj, ...) {
 
 #' @name st_bbox
 #' @export
-st_bbox.Extent = function(obj, ...) {
+st_bbox.Extent = function(obj, ..., crs = NA_crs_) {
 	if (!requireNamespace("raster", quietly = TRUE))
 		stop("package raster required, please install it first")
-	structure(bb_wrap(c(obj@xmin, obj@ymin, obj@xmax, obj@ymax)), crs = NA_crs_)
+	structure(bb_wrap(c(obj@xmin, obj@ymin, obj@xmax, obj@ymax)), crs = st_crs(crs))
 }
 
 #' @name st_bbox

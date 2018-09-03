@@ -4,9 +4,10 @@
 \alias{st_make_grid}
 \title{Make a regular tesselation over the bounding box of an sf or sfc object}
 \usage{
-st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]), diff(st_bbox(x)[c(2,
-  4)]))/n, offset = st_bbox(x)[c("xmin", "ymin")], n = c(10, 10), crs = if
-  (missing(x)) NA_crs_ else st_crs(x), what = "polygons", square = TRUE)
+st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]),
+  diff(st_bbox(x)[c(2, 4)]))/n, offset = st_bbox(x)[c("xmin", "ymin")],
+  n = c(10, 10), crs = if (missing(x)) NA_crs_ else st_crs(x),
+  what = "polygons", square = TRUE)
 }
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}

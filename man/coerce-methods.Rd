@@ -3,11 +3,8 @@
 \name{as}
 \alias{as}
 \alias{coerce,Spatial,sf-method}
-\alias{as}
 \alias{coerce,Spatial,sfc-method}
-\alias{as}
 \alias{coerce,sf,Spatial-method}
-\alias{as}
 \alias{coerce,sfc,Spatial-method}
 \alias{as_Spatial}
 \title{Methods to coerce simple features to \code{Spatial*} and \code{Spatial*DataFrame} objects}

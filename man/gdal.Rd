@@ -3,23 +3,19 @@
 \name{gdal}
 \alias{gdal}
 \alias{gdal_read}
-\alias{gdal}
 \alias{gdal_write}
-\alias{gdal}
 \alias{gdal_inv_geotransform}
-\alias{gdal}
 \alias{gdal_crs}
-\alias{gdal}
 \alias{gdal_metadata}
-\alias{gdal}
 \alias{gdal_subdatasets}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
 gdal_read(x, ..., options = character(0), driver = character(0),
-  read_data = TRUE, NA_value = NA_real_)
+  read_data = TRUE, NA_value = NA_real_,
+  RasterIO_parameters = list())
 
 gdal_write(x, ..., file, driver = "GTiff", options = character(0),
-  type = "Float32", NA_value = NA_real_)
+  type = "Float32", NA_value = NA_real_, geotransform)
 
 gdal_inv_geotransform(gt)
 
@@ -43,9 +39,13 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 \item{NA_value}{(double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).}
 
+\item{RasterIO_parameters}{list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.}
+
 \item{file}{character; file name}
 
 \item{type}{gdal write type}
+
+\item{geotransform}{length 6 numeric vector with GDAL geotransform parameters.}
 
 \item{gt}{double vector of length 6}
 

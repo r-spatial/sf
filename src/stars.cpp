@@ -100,38 +100,42 @@ NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 }
 
 // formerly: stars/src/gdal.cpp
-NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, NumericVector nodatavalue, 
-		double resample = 1.0) {
-
-	IntegerVector x = meta["cols"];
-	IntegerVector y = meta["rows"];
-	IntegerVector bands = meta["bands"];
-
-	size_t nx = diff(x)[0] + 1, ny = diff(y)[0] + 1, nbands = diff(bands)[0] + 1;
-
-	if (resample < 1.0)
-		warning("resample < 1: trying to oversample"); // #nocov
-	// resample = 1;  --
-	// still need to find out what resample exactly does, 
-	// and how it interacts with and/or should change or changes geotransform
+NumericVector read_gdal_data(GDALDataset *poDataset, 
+			NumericVector nodatavalue, 
+			int nXOff, 
+			int nYOff, 
+			int nXSize, 
+			int nYSize, 
+			int nBufXSize, 
+			int nBufYSize, 
+			IntegerVector bands
+		) {
 
 	// collapse x & y into rows, redim later:
-	NumericMatrix mat( floor(nx / resample) * floor(ny / resample), nbands );
+	NumericVector vec( 1.0 * nBufXSize * nBufYSize * bands.size() ); 
+	// floor returns double -> no integer overflow
 
-	IntegerVector band_index(nbands);
-	for (int j = 0, i = bands(0); i <= bands(1); i++)
-		band_index(j++) = i;
-	// read the full set of bands:
-	CPLErr err = poDataset->RasterIO( GF_Read,
-			x(0) - 1, y(0) - 1,
-			nx, ny,
-			mat.begin(),
-			floor(nx / resample), floor(ny / resample),
-			GDT_Float64, nbands, band_index.begin(), 0, 0, 0);
-	if (err == CE_Failure)
+	// read bands:
+	if (poDataset->RasterIO( GF_Read,
+			nXOff,
+			nYOff,
+			nXSize, 
+			nYSize,
+			vec.begin(),
+			nBufXSize,
+			nBufYSize,
+			GDT_Float64, 
+			bands.size(),
+			bands.begin(), 
+			0, 
+			0, 
+			0, 
+			NULL) == CE_Failure)
 		stop("read failure"); // #nocov
 
-	for (int band = bands(0); band <= bands(1); band++) { // unlike x & y, band is 1-based
+	// scale && set NA:
+	for (int i = 0; i < bands.size(); i++) {
+		int band = bands(i);
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
 		// NumericVector nodatavalue = NumericVector::create(NA_REAL);
 		// int success = 0, 
@@ -148,40 +152,46 @@ NumericMatrix CPL_read_gdal_data(Rcpp::List meta, GDALDataset *poDataset, Numeri
 			offset = poBand->GetOffset(NULL);
 		// char *units = poBand->GetUnits();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
-			NumericVector nv = mat(_, band - 1);
-			for (int i = 0; i < nv.size(); i++) {
-				if (nv[i] == nodatavalue[0])
-					nv[i] = NA_REAL; // #nocov
+			for (R_xlen_t i = 0; i < Rf_xlength(vec); i++) {
+				if (vec[i] == nodatavalue[0])
+					vec[i] = NA_REAL; // #nocov
 				else
-					nv[i] = (nv[i] * scale) + offset;
+					vec[i] = (vec[i] * scale) + offset;
 			}
-			mat(_, band - 1) = nv;
 		}
 		checkUserInterrupt();
 	}
 
-	// dim:
+	// set dim attr:
 	IntegerVector dims;
-	if (diff(bands)[0] == 0) { // one band:
-		dims = IntegerVector::create(nx / resample, ny / resample);
+	if (bands.size() == 1) { // single band:
+		dims = IntegerVector::create(nBufXSize, nBufYSize);
 		dims.attr("names") = CharacterVector::create("x", "y");
-	} else { // redim:
-		dims = IntegerVector::create(nx / resample, ny / resample, diff(bands)[0] + 1); // #nocov
+	} else { // multiple bands:
+		dims = IntegerVector::create(nBufXSize, nBufYSize, bands.size()); // #nocov
 		dims.attr("names") = CharacterVector::create("x", "y", "band"); // #nocov
 	}
-	mat.attr("dim") = dims;
-	return mat;
+	vec.attr("dim") = dims;
+	return vec;
+}
+
+int get_from_list(List lst, const char *name, int otherwise) {
+	if (lst.containsElementNamed(name)) {
+		IntegerVector ret = lst[name];
+		return(ret[0]);
+	} else
+		return(otherwise);
 }
 
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
-		bool read_data, NumericVector NA_value, double resample = 1.0) {
+		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
 // reads and returns data set metadata, and if read_data is true, adds data array
     GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
-    if( poDataset == NULL ) {
+    if (poDataset == NULL) {
 		Rcout << "trying to read file: " << fname[0] << std::endl; // #nocov
         stop("file not found"); // #nocov
 	}
@@ -205,6 +215,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		err == CE_None ? adfGeoTransform[3] : NA_REAL,
 		err == CE_None ? adfGeoTransform[4] : NA_REAL,
 		err == CE_None ? adfGeoTransform[5] : NA_REAL);
+	bool geo_transform_set = (err == CE_None);
 
 	// CRS, projection:
 	const char *wkt = poDataset->GetProjectionRef();
@@ -250,12 +261,30 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			sub = get_meta_data(poDataset, "SUBDATASETS"); // #nocov
 	}
 
+	// image dimension:
+	int nXOff = get_from_list(RasterIO_parameters, "nXOff", 1) - 1;
+	int nYOff = get_from_list(RasterIO_parameters, "nYOff", 1) - 1;
+	int nXSize = get_from_list(RasterIO_parameters, "nXSize", poDataset->GetRasterXSize() - nXOff);
+	int nYSize = get_from_list(RasterIO_parameters, "nYSize", poDataset->GetRasterYSize() - nYOff);
+	int nBufXSize = get_from_list(RasterIO_parameters, "nBufXSize", nXSize);
+	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
+
+	// bands:
+	IntegerVector bands; 
+	if (RasterIO_parameters.containsElementNamed("bands"))
+		bands = RasterIO_parameters["bands"];
+	else {
+		bands = IntegerVector(poDataset->GetRasterCount());
+		for (int j = 0; j < bands.size(); j++)
+			bands(j) = j + 1; // bands is 1-based
+	}
+
 	List ReturnList = List::create(
 		_["filename"] = fname,
 		_["driver"] = Driver,
-		_["cols"] = NumericVector::create(1, poDataset->GetRasterXSize()),
-		_["rows"] = NumericVector::create(1, poDataset->GetRasterYSize()),
-		_["bands"] = NumericVector::create(1, poDataset->GetRasterCount()),
+		_["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize),
+		_["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize),
+		_["bands"] = bands,
 		_["proj_wkt"] = proj,
 		_["proj4string"] = p4,
 		_["geotransform"] = geotransform,
@@ -266,10 +295,27 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
 		_["band_meta"] = get_band_meta_data(poDataset)
 	);
-	if (read_data)
-		ReturnList.attr("data") = CPL_read_gdal_data(ReturnList, poDataset, nodatavalue, resample);
-
+	if (read_data) {
+		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 
+			nXSize, nYSize, nBufXSize, nBufYSize, bands);
+	}
 	GDALClose(poDataset);
+
+	// adjust geotransform & offset if Buf?Size was set:
+	if ((nXSize != nBufXSize || nYSize != nBufYSize) && geo_transform_set) {
+		if (geotransform[2] != 0.0 || geotransform[4] != 0.0)
+			stop("reading affine grids with resampling would result in a wrong geotransform; please file an issue"); // #nocov
+		double ratio_x = (1.0 * nXSize) / nBufXSize;
+		double ratio_y = (1.0 * nYSize) / nBufYSize;
+		geotransform[1] = geotransform[1] * ratio_x;
+		geotransform[5] = geotransform[5] * ratio_y;
+		ReturnList["geotransform"] = geotransform;
+		nXOff = (int) (nXOff / ratio_x);
+		nYOff = (int) (nYOff / ratio_y);
+		ReturnList["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize);
+		ReturnList["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize);
+	}
+
 	return ReturnList;
 }
 

@@ -245,6 +245,9 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	// read geometries:
 	OGRSpatialReference *sref = NULL;
 	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, &sref);
+	Rcpp::CharacterVector names;
+	if (!Rf_isNull(geom.attr("names")))
+		names = geom.attr("names");
 
 	// create layer:
 	options = create_options(lco, quiet);
@@ -264,10 +267,13 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
 		Rcpp::Rcout << "geometry type:  " << OGRGeometryTypeToName(wkbType) << std::endl;
 	}
+
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
 		SetFields(poFeature, fieldTypes, obj, i, driver[0] == "ESRI Shapefile");
 		poFeature->SetGeometryDirectly(geomv[i]);
+		if (names.size() > i)
+			poFeature->SetFID(std::stoll(Rcpp::as<std::string>(names[i]), NULL, 10));
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {
 			Rcpp::Rcout << "Failed to create feature " << i << " in " << layer[0] << std::endl;
 		    // delete layer when  failing to  create feature

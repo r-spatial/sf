@@ -3,9 +3,7 @@
 \name{sf}
 \alias{sf}
 \alias{st_sf}
-\alias{sf}
 \alias{[.sf}
-\alias{sf}
 \alias{print.sf}
 \title{Create sf object}
 \usage{

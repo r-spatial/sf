@@ -2,20 +2,18 @@
 % Please edit documentation in R/read.R, R/db.R
 \name{st_read}
 \alias{st_read}
-\alias{st_read}
 \alias{st_read.character}
-\alias{st_read}
 \alias{read_sf}
-\alias{st_read}
 \alias{st_read.DBIObject}
 \title{Read simple features or layers from file or database}
 \usage{
 st_read(dsn, layer, ...)
 
-\method{st_read}{character}(dsn, layer, ..., options = NULL, quiet = FALSE,
-  geometry_column = 1L, type = 0, promote_to_multi = TRUE,
-  stringsAsFactors = default.stringsAsFactors(), int64_as_string = FALSE,
-  check_ring_dir = FALSE)
+\method{st_read}{character}(dsn, layer, ..., options = NULL,
+  quiet = FALSE, geometry_column = 1L, type = 0,
+  promote_to_multi = TRUE,
+  stringsAsFactors = default.stringsAsFactors(),
+  int64_as_string = FALSE, check_ring_dir = FALSE)
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
 

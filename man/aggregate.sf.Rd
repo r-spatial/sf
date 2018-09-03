@@ -5,8 +5,8 @@
 \alias{aggregate}
 \title{aggregate an \code{sf} object}
 \usage{
-\method{aggregate}{sf}(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
-  join = st_intersects)
+\method{aggregate}{sf}(x, by, FUN, ..., do_union = TRUE,
+  simplify = TRUE, join = st_intersects)
 }
 \arguments{
 \item{x}{object of class \link{sf}}

@@ -2,11 +2,8 @@
 % Please edit documentation in R/collection_extract.R
 \name{st_collection_extract}
 \alias{st_collection_extract}
-\alias{st_collection_extract}
 \alias{st_collection_extract.sfg}
-\alias{st_collection_extract}
 \alias{st_collection_extract.sfc}
-\alias{st_collection_extract}
 \alias{st_collection_extract.sf}
 \title{Given an object with geometries of type \code{GEOMETRY} or \code{GEOMETRYCOLLECTION},
 return an object consisting only of elements of the specified type.}

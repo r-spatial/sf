@@ -3,7 +3,6 @@
 \name{Ops}
 \alias{Ops}
 \alias{Ops.sfg}
-\alias{Ops}
 \alias{Ops.sfc}
 \title{S3 Ops Group Generic Functions for simple feature geometries}
 \usage{

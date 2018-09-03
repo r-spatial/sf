@@ -3,9 +3,7 @@
 \name{tibble}
 \alias{tibble}
 \alias{type_sum.sfc}
-\alias{tibble}
 \alias{obj_sum.sfc}
-\alias{tibble}
 \alias{pillar_shaft.sfc}
 \title{Summarize simple feature type for tibble}
 \usage{

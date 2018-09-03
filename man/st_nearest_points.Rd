@@ -2,11 +2,8 @@
 % Please edit documentation in R/nearest.R
 \name{st_nearest_points}
 \alias{st_nearest_points}
-\alias{st_nearest_points}
 \alias{st_nearest_points.sfc}
-\alias{st_nearest_points}
 \alias{st_nearest_points.sfg}
-\alias{st_nearest_points}
 \alias{st_nearest_points.sf}
 \title{get nearest points between pairs of geometries}
 \usage{

@@ -46,18 +46,27 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' b2 = b0 + c(-0.2, 2)
 #' x = st_sfc(b0, b1, b2)
 #' st_area(x)
-st_area = function(x) {
+st_area = function(x, ...) UseMethod("st_area")
+
+#' @export
+st_area.sfc = function(x, ...) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		lwgeom::st_geod_area(x)
 	} else {
-		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
+		a = CPL_area(x) # ignores units: units of coordinates
 		if (! is.na(st_crs(x)))
 			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
 		a
 	}
 }
+
+#' @export
+st_area.sf = function(x, ...) st_area(st_geometry(x, ...))
+
+#' @export
+st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
 
 #' @name geos_measures
 #' @export
@@ -367,6 +376,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
+#' @details \code{st_buffer} computes a buffer around this geometry/each geometry
 st_buffer = function(x, dist, nQuadSegs = 30)
 	UseMethod("st_buffer")
 
@@ -402,6 +412,7 @@ st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_boundary} returns the boundary of a geometry
 st_boundary = function(x)
 	UseMethod("st_boundary")
 
@@ -421,6 +432,7 @@ st_boundary.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_convex_hull} creates the convex hull of a set of points
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' plot(st_convex_hull(nc))
@@ -444,6 +456,7 @@ st_convex_hull.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_simplify} simplifies lines by removing vertices
 #' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.
 #' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
@@ -471,7 +484,7 @@ st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 #' @name geos_unary
 #' @export
 #' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
-#' @details \code{st_triangulate} requires GEOS version 3.4 or above
+#' @details \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_triangulate")
 
@@ -499,7 +512,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @name geos_unary
 #' @export
 #' @param envelope object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon
-#' @details \code{st_voronoi} requires GEOS version 3.5 or above
+#' @details \code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
 #' @examples
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
@@ -536,7 +549,7 @@ st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdge
 }
 
 #' @name geos_unary
-#' @details in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+#' @details \code{st_polygonize} creates polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @export
 #' @examples
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
@@ -562,7 +575,7 @@ st_polygonize.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @details in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+#' @details \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_line_merge(st_sfc(mls))
@@ -588,6 +601,7 @@ st_line_merge.sf = function(x) {
 #' @name geos_unary
 #' @param of_largest_polygon logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}
 #' @export
+#' @details \code{st_centroid} gives the centroid of a geometry
 #' @examples
 #' plot(nc, axes = TRUE)
 #' plot(st_centroid(nc), add = TRUE, pch = 3)
@@ -628,7 +642,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
 	if (! all_constant(x))
 		warning("st_centroid assumes attributes are constant over geometries of x")
-	ret = st_set_geometry(x, 
+	ret = st_set_geometry(x,
 		st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon))
 	agr = st_agr(ret)
 	agr[ agr == "identity" ] = "constant"
@@ -692,6 +706,7 @@ st_node.sf = function(x) {
 }
 
 #' @name geos_unary
+#' @details \code{st_segmentize} adds points to straight lines
 #' @export
 #' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
 #' @param ... ignored

@@ -3,11 +3,8 @@
 \name{sgbp}
 \alias{sgbp}
 \alias{print.sgbp}
-\alias{sgbp}
 \alias{t.sgbp}
-\alias{sgbp}
 \alias{as.matrix.sgbp}
-\alias{sgbp}
 \alias{dim.sgbp}
 \title{Methods for dealing with sparse geometry binary predicate lists}
 \usage{

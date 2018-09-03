@@ -1,5 +1,11 @@
 # version 0.6-4
 
+* `st_area` is now a generic; https://github.com/r-spatial/stars/issues/32
+
+* `st_write` now resolves `~` correctly; #456
+
+* read and write feature IDs as sfc list column names; #812
+
 * `st_centroid` now works for empty geometries, returning an empty point #769
 
 * add `st_nearest_points`, to obtain the (`LINESTRING` connecting the) two nearest points for pairs of geometries; #788
@@ -18,7 +24,7 @@
 
 * fix plotting of `sf` objects without attributes; #755
 
-* add reference to [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) in CITATION
+* add reference to the [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) in CITATION
 
 # version 0.6-3
 

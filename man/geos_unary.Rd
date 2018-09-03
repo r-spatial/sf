@@ -3,27 +3,16 @@
 \name{geos_unary}
 \alias{geos_unary}
 \alias{st_buffer}
-\alias{geos_unary}
 \alias{st_boundary}
-\alias{geos_unary}
 \alias{st_convex_hull}
-\alias{geos_unary}
 \alias{st_simplify}
-\alias{geos_unary}
 \alias{st_triangulate}
-\alias{geos_unary}
 \alias{st_voronoi}
-\alias{geos_unary}
 \alias{st_polygonize}
-\alias{geos_unary}
 \alias{st_line_merge}
-\alias{geos_unary}
 \alias{st_centroid}
-\alias{geos_unary}
 \alias{st_point_on_surface}
-\alias{geos_unary}
 \alias{st_node}
-\alias{geos_unary}
 \alias{st_segmentize}
 \title{Geometric unary operations on simple feature geometry sets}
 \usage{
@@ -81,17 +70,29 @@ an object of the same class of \code{x}, with manipulated geometry.
 Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
 }
 \details{
-\code{st_triangulate} requires GEOS version 3.4 or above
+\code{st_buffer} computes a buffer around this geometry/each geometry
 
-\code{st_voronoi} requires GEOS version 3.5 or above
+\code{st_boundary} returns the boundary of a geometry
 
-in case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+\code{st_convex_hull} creates the convex hull of a set of points
 
-in case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+\code{st_simplify} simplifies lines by removing vertices
+
+\code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
+
+\code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
+
+\code{st_polygonize} creates polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+
+\code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+
+\code{st_centroid} gives the centroid of a geometry
 
 \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
 
 \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
+
+\code{st_segmentize} adds points to straight lines
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

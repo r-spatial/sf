@@ -3,9 +3,7 @@
 \name{bind}
 \alias{bind}
 \alias{rbind.sf}
-\alias{bind}
 \alias{cbind.sf}
-\alias{bind}
 \alias{st_bind_cols}
 \title{Bind rows (features) of sf objects}
 \usage{

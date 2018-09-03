@@ -3,16 +3,9 @@
 \name{st_geometry}
 \alias{st_geometry}
 \alias{st_geometry.sfc}
-\alias{st_geometry}
-\alias{st_geometry}
 \alias{st_geometry.sf}
-\alias{st_geometry}
-\alias{st_geometry.sfc}
-\alias{st_geometry}
 \alias{st_geometry.sfg}
-\alias{st_geometry}
 \alias{st_geometry<-}
-\alias{st_geometry}
 \alias{st_set_geometry}
 \title{Get, set, or replace geometry from an sf object}
 \usage{

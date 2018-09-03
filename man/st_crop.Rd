@@ -2,9 +2,15 @@
 % Please edit documentation in R/crop.R
 \name{st_crop}
 \alias{st_crop}
+\alias{st_crop.sfc}
+\alias{st_crop.sf}
 \title{crop an sf object to a specific rectangle}
 \usage{
-st_crop(x, y, ..., xmin, ymin, xmax, ymax)
+st_crop(x, y, ...)
+
+\method{st_crop}{sfc}(x, y, ..., xmin, ymin, xmax, ymax)
+
+\method{st_crop}{sf}(x, y, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
