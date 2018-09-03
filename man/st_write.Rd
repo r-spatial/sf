@@ -5,6 +5,7 @@
 \alias{st_write}
 \alias{st_write.sfc}
 \alias{st_write.sf}
+\alias{st_write.data.frame}
 \alias{write_sf}
 \alias{dbWriteTable,PostgreSQLConnection,character,sf-method}
 \alias{dbWriteTable,DBIObject,character,sf-method}
@@ -19,6 +20,8 @@ st_write(obj, dsn, layer, ...)
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
   update = driver \%in\% db_drivers, delete_dsn = FALSE,
   delete_layer = FALSE)
+
+\method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
 write_sf(..., quiet = TRUE, delete_layer = TRUE)
 
