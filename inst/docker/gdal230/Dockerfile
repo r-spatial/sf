@@ -110,20 +110,21 @@ RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite",
 RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
 
 RUN ls
-RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
+
+RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
-#
-#RUN git clone  https://github.com/r-spatial/sf.git
-#RUN R CMD build --no-build-vignettes --no-manual sf
-#RUN R CMD INSTALL sf_*gz
 
-#RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
+RUN git clone  https://github.com/r-spatial/sf.git
+RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD INSTALL sf_*gz
 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
+RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
+
+RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
 #RUN R CMD check --no-build-vignettes --no-manual sf_*tar.gz
 

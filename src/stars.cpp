@@ -284,7 +284,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	GDALRasterIOExtraArg resample;
 	INIT_RASTERIO_EXTRA_ARG(resample);
 
-	if (RasterIO_parameters.containsElementNamed("resample")) {
+	if (RasterIO_parameters.containsElementNamed("resample")) { // #nocov start
 		CharacterVector res = RasterIO_parameters["resample"];
 		if (res[0] == "bilinear")
 			resample.eResampleAlg = GRIORA_Bilinear;
@@ -302,8 +302,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			resample.eResampleAlg = GRIORA_Gauss;
 		else if (res[0] == "nearest_neighbour")
 			resample.eResampleAlg = GRIORA_NearestNeighbour;
-		else stop("unknown method for resample");
-	}
+		else stop("unknown method for resample"); // #nocov end
+	} 
 
 	List ReturnList = List::create(
 		_["filename"] = fname,
