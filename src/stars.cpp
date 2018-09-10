@@ -108,7 +108,8 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			int nYSize, 
 			int nBufXSize, 
 			int nBufYSize, 
-			IntegerVector bands
+			IntegerVector bands,
+			GDALRasterIOExtraArg *resample
 		) {
 
 	// collapse x & y into rows, redim later:
@@ -130,7 +131,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			0, 
 			0, 
 			0, 
-			NULL) == CE_Failure)
+			resample) == CE_Failure)
 		stop("read failure"); // #nocov
 
 	// scale && set NA:
@@ -202,7 +203,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 
 	/*
 	if (poDataset->GetRasterCount() == 0)
-		stop("zero bands");
+		stop("zero bands"); -->> this indicates there are (only) subdatasets
 	*/
 
 	// geotransform:
@@ -279,6 +280,31 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			bands(j) = j + 1; // bands is 1-based
 	}
 
+	// resampling method:
+	GDALRasterIOExtraArg resample;
+	INIT_RASTERIO_EXTRA_ARG(resample);
+
+	if (RasterIO_parameters.containsElementNamed("resample")) {
+		CharacterVector res = RasterIO_parameters["resample"];
+		if (res[0] == "bilinear")
+			resample.eResampleAlg = GRIORA_Bilinear;
+		else if (res[0] == "cubic")
+			resample.eResampleAlg = GRIORA_Cubic;
+		else if (res[0] == "cubic_spline")
+			resample.eResampleAlg = GRIORA_CubicSpline;
+		else if (res[0] == "lanczos")
+			resample.eResampleAlg = GRIORA_Lanczos;
+		else if (res[0] == "average")
+			resample.eResampleAlg = GRIORA_Average;
+		else if (res[0] == "mode")
+			resample.eResampleAlg = GRIORA_Mode;
+		else if (res[0] == "Gauss")
+			resample.eResampleAlg = GRIORA_Gauss;
+		else if (res[0] == "nearest_neighbour")
+			resample.eResampleAlg = GRIORA_NearestNeighbour;
+		else stop("unknown method for resample");
+	}
+
 	List ReturnList = List::create(
 		_["filename"] = fname,
 		_["driver"] = Driver,
@@ -297,7 +323,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 
-			nXSize, nYSize, nBufXSize, nBufYSize, bands);
+			nXSize, nYSize, nBufXSize, nBufYSize, bands, &resample);
 	}
 	GDALClose(poDataset);
 
@@ -409,7 +435,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	}
 
 	// write the whole lot:
-	if (poDstDS->RasterIO( GF_Write, 0, 0, dims[0], dims[1],
+	if (poDstDS->RasterIO(GF_Write, 0, 0, dims[0], dims[1],
 			x.begin(), dims[0], dims[1], GDT_Float64, dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
 		stop("read failure"); // #nocov
 
