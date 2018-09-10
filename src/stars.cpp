@@ -178,8 +178,8 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 
 int get_from_list(List lst, const char *name, int otherwise) {
 	if (lst.containsElementNamed(name)) {
-		IntegerVector ret = lst[name];
-		return(ret[0]);
+		IntegerVector ret = lst[name]; // #nocov
+		return(ret[0]);                // #nocov
 	} else
 		return(otherwise);
 }
@@ -273,7 +273,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	// bands:
 	IntegerVector bands; 
 	if (RasterIO_parameters.containsElementNamed("bands"))
-		bands = RasterIO_parameters["bands"];
+		bands = RasterIO_parameters["bands"]; // #nocov
 	else {
 		bands = IntegerVector(poDataset->GetRasterCount());
 		for (int j = 0; j < bands.size(); j++)
@@ -328,7 +328,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	GDALClose(poDataset);
 
 	// adjust geotransform & offset if Buf?Size was set:
-	if ((nXSize != nBufXSize || nYSize != nBufYSize) && geo_transform_set) {
+	if ((nXSize != nBufXSize || nYSize != nBufYSize) && geo_transform_set) { // #nocov start
 		if (geotransform[2] != 0.0 || geotransform[4] != 0.0)
 			stop("reading affine grids with resampling would result in a wrong geotransform; please file an issue"); // #nocov
 		double ratio_x = (1.0 * nXSize) / nBufXSize;
@@ -340,7 +340,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		nYOff = (int) (nYOff / ratio_y);
 		ReturnList["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize);
 		ReturnList["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize);
-	}
+	} // #nocov end
 
 	return ReturnList;
 }
