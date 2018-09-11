@@ -46,6 +46,7 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_message(st_covered_by(x,y))
 
 	expect_warning(st_buffer(x, .1))
+	expect_warning(st_buffer(x, .1, joinStyle = "BEVEL"))
 	expect_warning(st_simplify(x, .1))
 	expect_warning(st_centroid(x))
 	expect_silent(st_segmentize(l, 1e5))
@@ -89,48 +90,53 @@ suppressWarnings(lnc <- st_cast(pnc, "MULTILINESTRING"))
 glnc <- st_geometry(lnc)
 
 test_that("geom operations work on sfg or sfc or sf", {
-  expect_silent(st_buffer(pnc, 1000))
-  expect_silent(st_buffer(gpnc, 1000))
-  expect_silent(st_buffer(gpnc[[1L]], 1000))
+	expect_silent(st_buffer(pnc, 1000))
+	expect_silent(st_buffer(gpnc, 1000))
+	expect_silent(st_buffer(gpnc[[1L]], 1000))
 
-  expect_silent(st_boundary(pnc))
-  expect_that(st_boundary(gpnc), is_a("sfc_MULTILINESTRING"))
-  expect_that(st_boundary(gpnc[[1L]]), is_a("MULTILINESTRING"))
+	expect_silent(st_buffer(pnc, 1000, endCapStyle = "SQUARE"))
+	expect_silent(st_buffer(gpnc, 1000, joinStyle = "BEVEL"))
+	expect_silent(st_buffer(gpnc[[1L]], 1000, joinStyle = "MITRE", mitreLimit = 0.2))
 
-  expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
-  expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
-  expect_true(inherits(st_convex_hull(gpnc[[1L]]), "POLYGON"))
+	expect_silent(st_boundary(pnc))
+	expect_that(st_boundary(gpnc), is_a("sfc_MULTILINESTRING"))
+	expect_that(st_boundary(gpnc[[1L]]), is_a("MULTILINESTRING"))
 
-  expect_silent(st_simplify(pnc, FALSE, 1e4))
-  expect_silent(st_simplify(gpnc, FALSE, 1e4))
-  expect_silent(st_simplify(gpnc[[1L]], FALSE, 1e4))
+	expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
+	expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
+	expect_true(inherits(st_convex_hull(gpnc[[1L]]), "POLYGON"))
 
-  if (sf:::CPL_geos_version() >= "3.4.0") {
-   expect_silent(st_triangulate(pnc))
-   expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
-   expect_that(st_triangulate(gpnc[[1]]), is_a("GEOMETRYCOLLECTION"))
-  }
+	expect_silent(st_simplify(pnc, FALSE, 1e4))
+	expect_silent(st_simplify(gpnc, FALSE, 1e4))
+	expect_silent(st_simplify(gpnc[[1L]], FALSE, 1e4))
 
-  expect_silent(st_polygonize(lnc))
-  expect_silent(st_polygonize(glnc))
-  expect_silent(st_polygonize(glnc[[1]]))
+	if (sf:::CPL_geos_version() >= "3.4.0") {
+		expect_silent(st_triangulate(pnc))
+		expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
+		expect_that(st_triangulate(gpnc[[1]]), is_a("GEOMETRYCOLLECTION"))
+	}
 
-  expect_that(st_line_merge(lnc), is_a("sf"))
-  expect_that(st_line_merge(glnc), is_a("sfc"))
-  expect_that(st_line_merge(glnc[[3]]), is_a("sfg"))
+	expect_silent(st_polygonize(lnc))
+	expect_silent(st_polygonize(glnc))
+	expect_silent(st_polygonize(glnc[[1]]))
 
-  expect_warning(st_centroid(lnc)) # was: silent
-  expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
-  expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
+	expect_that(st_line_merge(lnc), is_a("sf"))
+	expect_that(st_line_merge(glnc), is_a("sfc"))
+	expect_that(st_line_merge(glnc[[3]]), is_a("sfg"))
 
-  expect_warning(st_point_on_surface(lnc)) # was: silent
-  expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
-  expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
+	expect_warning(st_centroid(lnc)) # was: silent
+	expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
+	expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
 
-  expect_silent(st_segmentize(lnc, 10000))
-  expect_silent(st_segmentize(glnc, 10000))
-  expect_silent(st_segmentize(glnc[[1]], 10000))
+	expect_warning(st_point_on_surface(lnc)) # was: silent
+	expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
+	expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
+
+	expect_silent(st_segmentize(lnc, 10000))
+	expect_silent(st_segmentize(glnc, 10000))
+	expect_silent(st_segmentize(glnc[[1]], 10000))
 })
+
 
 test_that("st_union/difference/sym_difference/intersection work, for all types", {
   p = st_point(0:1)
