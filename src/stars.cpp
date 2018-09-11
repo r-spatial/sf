@@ -399,7 +399,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	for (int i = 0; i < gt.length(); i++)
 		adfGeoTransform[i] = gt[i];
 	if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
-		stop("SetGeoTransform: error"); // #nocov
+		warning("SetGeoTransform() returned an error: not available?"); // #nocov
 
 	// CRS:
 	if (p4s.length() != 1)
