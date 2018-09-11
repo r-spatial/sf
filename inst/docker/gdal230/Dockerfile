@@ -119,7 +119,7 @@ RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN git  clone https://github.com/r-spatial/sf.git
+RUN git   clone https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
 
