@@ -56,7 +56,8 @@ RUN cd /usr/local/share/proj \
   && cd -
 
 # GEOS:
-ENV GEOS_VERSION 3.6.2
+#ENV GEOS_VERSION 3.6.2
+ENV GEOS_VERSION 3.7.0rc2
 
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
