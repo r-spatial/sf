@@ -272,7 +272,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				dist_function = GEOSHausdorffDistance_r;
 #ifdef HAVE370
 			else if (op == "Frechet")
-				dist_function = GEOSFrechetDistance_r;
+				// dist_function = GEOSFrechetDistance_r;
+				stop("Frechet distance not available");
 #endif
 			else
 				Rcpp::stop("distance function not supported"); // #nocov
