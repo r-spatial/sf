@@ -108,7 +108,7 @@ st_read.DBIObject = function(dsn = NULL,
 
     x <- st_sf(tbl, ...)
 
-    if (!quiet) print(x, n = 0)
+    if (!quiet) print(x, n = 0) # nocov
 
     return(x)
 }

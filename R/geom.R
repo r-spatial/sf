@@ -465,10 +465,10 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 		joinStyle = rep(styles$joinStyle, length.out = length(x))
 		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
 		if (any(endCapStyle == 2) && (st_geometry_type(x) == "POINT" || st_geometry_type(x) == "MULTIPOINT")) {
-			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries")
+			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 		}
 		if (dist < 0 && !st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON")) {
-			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries")
+			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
 		}
 
 		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0), endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit))
