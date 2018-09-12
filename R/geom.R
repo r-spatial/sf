@@ -46,18 +46,27 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' b2 = b0 + c(-0.2, 2)
 #' x = st_sfc(b0, b1, b2)
 #' st_area(x)
-st_area = function(x) {
+st_area = function(x, ...) UseMethod("st_area")
+
+#' @export
+st_area.sfc = function(x, ...) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		lwgeom::st_geod_area(x)
 	} else {
-		a = CPL_area(st_geometry(x)) # ignores units: units of coordinates
+		a = CPL_area(x) # ignores units: units of coordinates
 		if (! is.na(st_crs(x)))
 			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
 		a
 	}
 }
+
+#' @export
+st_area.sf = function(x, ...) st_area(st_geometry(x, ...))
+
+#' @export
+st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
 
 #' @name geos_measures
 #' @export
@@ -365,18 +374,76 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
+#' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
+#' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
+#' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
-#' @details \code{st_buffer} computes a buffer around this geometry/each geometry
-st_buffer = function(x, dist, nQuadSegs = 30)
+#' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
+#' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
+#' the underlying 'buffer with style' GEOS function is used.
+#' @examples
+#'
+#' ## st_buffer, style options (taken from rgeos gBuffer)
+#' l1 = st_as_sfc("LINESTRING(0 0,1 5,4 5,5 2,8 2,9 4,4 6.5)")
+#' op = par(mfrow=c(2,3))
+#' plot(st_buffer(l1, dist = 1, endCapStyle="ROUND"), reset = FALSE, main = "endCapStyle: ROUND")
+#' plot(l1,col='blue',add=TRUE)
+#' plot(st_buffer(l1, dist = 1, endCapStyle="FLAT"), reset = FALSE, main = "endCapStyle: FLAT")
+#' plot(l1,col='blue',add=TRUE)
+#' plot(st_buffer(l1, dist = 1, endCapStyle="SQUARE"), reset = FALSE, main = "endCapStyle: SQUARE")
+#' plot(l1,col='blue',add=TRUE)
+#' plot(st_buffer(l1, dist = 1, nQuadSegs=1), reset = FALSE, main = "nQuadSegs: 1")
+#' plot(l1,col='blue',add=TRUE)
+#' plot(st_buffer(l1, dist = 1, nQuadSegs=2), reset = FALSE, main = "nQuadSegs: 2")
+#' plot(l1,col='blue',add=TRUE)
+#' plot(st_buffer(l1, dist = 1, nQuadSegs= 5), reset = FALSE, main = "nQuadSegs: 5")
+#' plot(l1,col='blue',add=TRUE)
+#' par(op)
+#'
+#'
+#' l2 = st_as_sfc("LINESTRING(0 0,1 5,3 2)")
+#' op = par(mfrow = c(2, 3))
+#' plot(st_buffer(l2, dist = 1, joinStyle="ROUND"), reset = FALSE, main = "joinStyle: ROUND")
+#' plot(l2, col = 'blue', add = TRUE)
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE"), reset = FALSE, main = "joinStyle: MITRE")
+#' plot(l2, col= 'blue', add = TRUE)
+#' plot(st_buffer(l2, dist = 1, joinStyle="BEVEL"), reset = FALSE, main = "joinStyle: BEVEL")
+#' plot(l2, col= 'blue', add=TRUE)
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE, main = "mitreLimit: 0.5")
+#' plot(l2, col = 'blue', add = TRUE)
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE, main = "mitreLimit: 1")
+#' plot(l2, col = 'blue', add = TRUE)
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE, main = "mitreLimit: 3")
+#' plot(l2, col = 'blue', add = TRUE)
+#' par(op)
+st_buffer = function(x, dist, nQuadSegs = 30,
+					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0)
 	UseMethod("st_buffer")
 
 #' @export
-st_buffer.sfg = function(x, dist, nQuadSegs = 30)
-	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs))
+st_buffer.sfg = function(x, dist, nQuadSegs = 30,
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0)
+	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs,
+							endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit))
 
+.process_style_opts = function(endCapStyle, joinStyle, mitreLimit) {
+	styls = list(with_styles = FALSE, endCapStyle = NA, joinStyle = NA, mitreLimit = NA)
+	if (endCapStyle == "ROUND" && joinStyle == "ROUND" && mitreLimit == 1) return(styls)
+	ecs = match(endCapStyle, c("ROUND", "FLAT", "SQUARE"))
+	js = match(joinStyle, c("ROUND", "MITRE", "BEVEL"))
+	if (is.na(mitreLimit) || !mitreLimit > 0) stop("mitreLimit must be > 0")
+	if (is.na(ecs)) stop("endCapStyle must be 'ROUND', 'FLAT', or 'SQUARE'")
+	if (is.na(js))  stop("joinStyle must be 'ROUND', 'MITRE', or 'BEVEL'")
+	styls$with_styles = TRUE
+	styls$endCapStyle = ecs
+	styls$joinStyle = js
+	styls$mitreLimit = mitreLimit
+	styls
+}
 #' @export
-st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
+st_buffer.sfc = function(x, dist, nQuadSegs = 30,
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0) {
 	if (isTRUE(st_is_longlat(x))) {
 		warning("st_buffer does not correctly buffer longitude/latitude data")
 		if (inherits(dist, "units"))
@@ -392,12 +459,29 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30) {
 	}
 	dist = rep(dist, length.out = length(x))
 	nQ = rep(nQuadSegs, length.out = length(x))
-	st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
+	styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit)
+	if (styles$with_styles) {
+		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
+		joinStyle = rep(styles$joinStyle, length.out = length(x))
+		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
+		if (any(endCapStyle == 2) && (st_geometry_type(x) == "POINT" || st_geometry_type(x) == "MULTIPOINT")) {
+			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
+		}
+		if (dist < 0 && !st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON")) {
+			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
+		}
+
+		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0), endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit))
+	} else {
+		st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
+	}
 }
 
 #' @export
-st_buffer.sf <- function(x, dist, nQuadSegs = 30) {
-	st_geometry(x) <- st_buffer(st_geometry(x), dist, nQuadSegs)
+st_buffer.sf = function(x, dist, nQuadSegs = 30,
+						endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0) {
+	st_geometry(x) = st_buffer(st_geometry(x), dist, nQuadSegs,
+							   endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit)
 	x
 }
 

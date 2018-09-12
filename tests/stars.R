@@ -20,11 +20,12 @@ d = structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75,
         point = TRUE, values = NULL), .Names = c("from", "to", 
     "offset", "delta", "geotransform", "refsys", "point", "values"
     ), class = "dimension")), .Names = c("x", "y"), class = "dimensions")
-x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE)
-x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE)
+gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
+x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
+x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
 identical(x1, x2)
-y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE)
-y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE)
+y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
+y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
 identical(y1, y2)
 
 r = gdal_read(tif)
@@ -41,5 +42,5 @@ gdal_metadata(tif)
 m = matrix(runif(100*100), 100, 100)
 m[ m > .8 ] = NA
 st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
-gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0)
+gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0, geotransform = c(0, 1.0, 0, 0, 0, 1.0))
 r = gdal_read(tif, NA_value = 255.0)

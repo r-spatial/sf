@@ -4,7 +4,7 @@
 \alias{is_geometry_column}
 \title{Check if the columns could be of a coercable type for sf}
 \usage{
-is_geometry_column(con, x, classes)
+is_geometry_column(con, x, classes = "")
 }
 \arguments{
 \item{con}{database connection}

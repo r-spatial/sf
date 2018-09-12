@@ -1,4 +1,10 @@
+# version 0.7-0
+
+* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Mike Sumner
+
 # version 0.6-4
+
+* `st_area` is now a generic; https://github.com/r-spatial/stars/issues/32
 
 * `st_write` now resolves `~` correctly; #456
 

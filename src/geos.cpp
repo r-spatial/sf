@@ -1,11 +1,11 @@
 #define GEOS_USE_ONLY_R_API // prevents using non-thread-safe GEOSxx functions without _r extension.
 #include <geos_c.h>
 
-#if GEOS_VERSION_MAJOR == 3 
+#if GEOS_VERSION_MAJOR == 3
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
 # endif
-# if GEOS_VERSION_MINOR == 6 
+# if GEOS_VERSION_MINOR == 6
 #  if GEOS_VERSION_PATCH >= 1
 #   define HAVE361
 #  endif
@@ -30,7 +30,7 @@
 typedef int (* dist_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double *);
 typedef int (* dist_parfn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *, double, double *);
 typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeometry *);
-typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *, 
+typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *,
 	const GEOSGeometry *);
 typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
 
@@ -67,7 +67,7 @@ static void __warningHandler(const char *fmt, ...) {
 
 	Rcpp::Function warning("warning");
 	warning(buf);
-	
+
 	return;
 }
 
@@ -297,6 +297,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 #ifdef HAVE370
 			else if (op == "Frechet")
 				dist_function = GEOSFrechetDistance_r;
+				// stop("Frechet distance not available");
 #endif
 			else
 				Rcpp::stop("distance function not supported"); // #nocov
@@ -317,6 +318,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 #ifdef HAVE370
 			else if (op == "Frechet")
 				dist_function = GEOSFrechetDistanceDensify_r;
+				// stop("Frechet distance densify not available");
 #endif
 			else
 				Rcpp::stop("distance function not supported"); // #nocov
@@ -581,10 +583,11 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
-		Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
-		Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology,
-		int bOnlyEdges = 1) {
-
+                       Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
+                       Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology,
+                       int bOnlyEdges = 1,
+                       Rcpp::IntegerVector endCapStyle = 0, Rcpp::IntegerVector joinStyle = 0, Rcpp::NumericVector mitreLimit = 1)
+{
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -596,15 +599,15 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			Rcpp::stop("invalid dist argument"); // #nocov
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i])), hGEOSCtxt);
+	} else if (op == "buffer_with_style") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])));
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 	} else if (op == "convex_hull") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
-//	} else if (op == "unary_union") { // -> done by CPL_geos_union()
-//		for (size_t i = 0; i < g.size(); i++)
-//			out[i] = chkNULL(GEOSUnaryUnion_r(hGEOSCtxt, g[i]));
 	} else if (op == "simplify") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(
@@ -638,7 +641,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(), dTolerance[i], bOnlyEdges)), hGEOSCtxt);
 	} else
 #endif
-		Rcpp::stop("invalid operation"); // would leak g and out // #nocov
+			Rcpp::stop("invalid operation"); #nocov
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim));
 	CPL_geos_finish(hGEOSCtxt);
@@ -646,6 +649,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;
 }
+
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 0.0, int bOnlyEdges = 1) {

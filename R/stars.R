@@ -17,15 +17,15 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @name gdal
 #' @export
 #' @param type gdal write type
+#' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
-		NA_value = NA_real_) {
+		NA_value = NA_real_, geotransform) {
 	mat = x[[1]]
 	dims = dim(mat)
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
 	dim(mat) = c(dims[1], prod(dims[-1])) # flatten to 2-D matrix
-	gt = attr(x, "dimensions")$x$geotransform
-	CPL_write_gdal(mat, file, driver, options, type, dims, gt, st_crs(x)$proj4string, 
+	CPL_write_gdal(mat, file, driver, options, type, dims, geotransform, st_crs(x)$proj4string, 
 		as.double(NA_value))
 }
 
@@ -55,9 +55,9 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
-st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x)))) {
+st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x))),
+		geotransform) {
 
-	stopifnot(identical(names(x), c("x", "y")))
 	if (is.na(as_points))
 		stop("as_points should be set to TRUE (`points') or FALSE (`polygons')")
 
@@ -82,13 +82,12 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 
 	y = x$y
 	x = x$x
-	stopifnot(identical(x$geotransform, y$geotransform))
 	cc = if (!is.na(x$from) && !is.na(y$from)) {
 		xy = if (as_points) # grid cell centres:
 			expand.grid(x = seq(x$from, x$to) - 0.5, y = seq(y$from, y$to) - 0.5)
 		else # grid corners: from 0 to n
 			expand.grid(x = seq(x$from - 1, x$to), y = seq(y$from - 1, y$to))
-		xy_from_colrow(as.matrix(xy), x$geotransform)
+		xy_from_colrow(as.matrix(xy), geotransform)
 	} else {
 		if (!as_points) # nocov start
 			stop("grid cell sizes not available")
@@ -101,6 +100,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	else
 		st_sfc(xy2sfc(cc, dims, as_points), crs = x$refsys)
 }
+
 
 #' @details gdal_crs reads coordinate reference system from GDAL data set
 #' @param file character; file name

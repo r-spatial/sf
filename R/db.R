@@ -3,7 +3,7 @@
 #' Read PostGIS table directly through DBI and RPostgreSQL interface, converting
 #' Well-Know Binary geometries to sfc
 #' @param query SQL query to select records; see details
-#' @param EWKB logical; is the WKB is of type EWKB? if missing, defaults to
+#' @param EWKB logical; is the WKB of type EWKB? if missing, defaults to
 #'   \code{TRUE}
 #' @details if \code{table} is not given but \code{query} is, the spatial
 #'   reference system (crs) of the table queried is only available in case it
@@ -29,13 +29,14 @@ st_read.DBIObject = function(dsn = NULL,
                              layer = NULL,
                              query = NULL,
                              EWKB = TRUE,
+                             quiet = TRUE,
                              ...) {
     if (is.null(dsn))
         stop("no connection provided") # nocov
 
     # check that ellipsis contains only what is needed
     expe <- setdiff(names(list(...)), names(formals(st_sf)))
-    if(!is.null(expe)) {
+    if(length(expe) > 0) {
         # error,  these arguments would be passed to st_sf
         suggest <- NULL
         if("table" %in% expe){
@@ -95,7 +96,7 @@ st_read.DBIObject = function(dsn = NULL,
     }
 
     # check for simple features column
-    geometry_column= is_geometry_column(dsn, tbl)
+    geometry_column = is_geometry_column(dsn, tbl)
 
     tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
 
@@ -105,7 +106,11 @@ st_read.DBIObject = function(dsn = NULL,
         return(tbl)
     }
 
-    st_sf(tbl, ...)
+    x <- st_sf(tbl, ...)
+
+    if (!quiet) print(x, n = 0) # nocov
+
+    return(x)
 }
 
 #' @export
@@ -260,7 +265,7 @@ get_new_postgis_srid <- function(conn) {
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+              if (is.null(field.types)) field.types <- dbDataType(conn, value)
               tryCatch({
                   dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
                                overwrite = overwrite, append = append,
@@ -289,7 +294,7 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
                    append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
-              field.types <- if (is.null(field.types)) dbDataType(conn, value)
+          	if (is.null(field.types)) field.types <- dbDataType(conn, value)
               # DBI cannot set field types with append
               if (append) field.types <- NULL
               tryCatch({
@@ -368,7 +373,7 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
 #' @param con database connection
 #' @param x inherits data.frame
 #' @param classes classes inherited
-is_geometry_column <- function(con, x, classes) UseMethod("is_geometry_column")
+is_geometry_column <- function(con, x, classes = "") UseMethod("is_geometry_column")
 
 is_geometry_column.PqConnection <- function(con, x, classes = c("pq_geometry")) {
     vapply(x, inherits, logical(1), classes)
