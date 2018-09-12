@@ -410,11 +410,14 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' plot(l2, col= 'blue', add = TRUE)
 #' plot(st_buffer(l2, dist = 1, joinStyle="BEVEL"), reset = FALSE, main = "joinStyle: BEVEL")
 #' plot(l2, col= 'blue', add=TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE, main = "mitreLimit: 0.5")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE, 
+#'    main = "mitreLimit: 0.5")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE, main = "mitreLimit: 1")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE, 
+#'    main = "mitreLimit: 1")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE, main = "mitreLimit: 3")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE, 
+#'    main = "mitreLimit: 3")
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
 st_buffer = function(x, dist, nQuadSegs = 30,
