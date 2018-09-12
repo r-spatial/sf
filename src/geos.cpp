@@ -161,10 +161,16 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GeomPtr>
 	// [1] "0101000000a20700000000f07fa20700000000f07f"
 	Rcpp::RawVector empty_point(CPL_hex_to_raw("0101000000a20700000000f07fa20700000000f07f")[0]);
 	for (size_t i = 0; i < geom.size(); i++) {
-		if (GEOSisEmpty_r(hGEOSCtxt, geom[i].get()) == 1 &&
-				strcmp("Point", GEOSGeomType_r(hGEOSCtxt, geom[i].get())) == 0) {
+		bool is_empty_point = false;
+		bool is_empty = GEOSisEmpty_r(hGEOSCtxt, geom[i].get()) == 1;
+		if (is_empty) {
+			char *geom_type = GEOSGeomType_r(hGEOSCtxt, geom[i].get());
+			is_empty_point = strcmp("Point", geom_type) == 0;
+			GEOSFree_r(hGEOSCtxt, geom_type);
+		}
+		if (is_empty_point)
 			out[i] = empty_point;
-		} else {
+		else {
 			size_t size;
 			unsigned char *buf = GEOSWKBWriter_write_r(hGEOSCtxt, wkb_writer, geom[i].get(), &size);
 			Rcpp::RawVector raw(size);
@@ -276,8 +282,11 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		for (int i = 0; i < sfc0.length(); i++) {
 			for (int j = 0; j < sfc1.length(); j++) {
 				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get());
-				if (cp == NULL)
+				if (cp == NULL) {
+					GEOSFree_r(hGEOSCtxt, cp);
+					CPL_geos_finish(hGEOSCtxt);
 					Rcpp::stop("GEOS error in GEOSRelate_r"); // #nocov
+				}
 				out[j * sfc0.length() + i] = cp;
 				GEOSFree_r(hGEOSCtxt, cp);
 			}
@@ -297,16 +306,19 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 #ifdef HAVE370
 			else if (op == "Frechet")
 				dist_function = GEOSFrechetDistance_r;
-				// stop("Frechet distance not available");
 #endif
-			else
+			else {
+				CPL_geos_finish(hGEOSCtxt);
 				Rcpp::stop("distance function not supported"); // #nocov
+			}
 
 			for (size_t i = 0; i < gmv0.size(); i++) {
 				for (size_t j = 0; j < gmv1.size(); j++) {
 					double dist = -1.0;
-					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0)
+					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
+						CPL_geos_finish(hGEOSCtxt);
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					}
 					out(i, j) = dist;
 				}
 				Rcpp::checkUserInterrupt();
@@ -318,16 +330,19 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 #ifdef HAVE370
 			else if (op == "Frechet")
 				dist_function = GEOSFrechetDistanceDensify_r;
-				// stop("Frechet distance densify not available");
 #endif
-			else
+			else {
+				CPL_geos_finish(hGEOSCtxt);
 				Rcpp::stop("distance function not supported"); // #nocov
+			}
 
 			for (size_t i = 0; i < gmv0.size(); i++) {
 				for (size_t j = 0; j < gmv1.size(); j++) {
 					double dist = -1.0;
-					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par, &dist) == 0)
+					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par, &dist) == 0) {
+						CPL_geos_finish(hGEOSCtxt);
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+					}
 					out(i, j) = dist;
 				}
 				Rcpp::checkUserInterrupt();
@@ -340,8 +355,10 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			std::vector<size_t> sel;
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
-				if (GEOSDistance_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0)
+				if (GEOSDistance_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
+					CPL_geos_finish(hGEOSCtxt);
 					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
+				}
 				if (dist <= par)
 					sel.push_back(j + 1); // 1-based
 			}
@@ -370,8 +387,10 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				Rcpp::checkUserInterrupt();
 			}
 		} else if (op == "relate_pattern") { // needing pattern
-			if (GEOSRelatePatternMatch_r(hGEOSCtxt, pattern.c_str(), "FF*FF****"))
+			if (GEOSRelatePatternMatch_r(hGEOSCtxt, pattern.c_str(), "FF*FF****")) {
+				CPL_geos_finish(hGEOSCtxt);
 				Rcpp::stop("use st_disjoint for this pattern");
+			}
 			// all remaining can use tree:
 			for (int i = 0; i < sfc0.length(); i++) { // row
 				// pre-select sfc1's using tree:
@@ -385,8 +404,10 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				sparsemat[i] = Rcpp::IntegerVector(sel.begin(), sel.end());
 				Rcpp::checkUserInterrupt();
 			}
-		} else if (op == "disjoint")
+		} else if (op == "disjoint") {
+			CPL_geos_finish(hGEOSCtxt);
 			Rcpp::stop("disjoint should have been handled in R"); // #nocov
+		}
 		else { // anything else:
 			if (prepared) {
 				log_prfn logical_fn = which_prep_geom_fn(op);
