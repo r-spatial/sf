@@ -23,6 +23,8 @@
 #endif
 
 #include <Rcpp.h>
+#include <memory>
+#include <vector>
 
 #include "wkb.h"
 #include "hex.h"
