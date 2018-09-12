@@ -601,7 +601,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i])), hGEOSCtxt);
 	} else if (op == "buffer_with_style") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i], bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])));
+			out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])), hGEOSCtxt);
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
@@ -641,7 +641,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(), dTolerance[i], bOnlyEdges)), hGEOSCtxt);
 	} else
 #endif
-			Rcpp::stop("invalid operation"); #nocov
+			Rcpp::stop("invalid operation"); // nocov
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim));
 	CPL_geos_finish(hGEOSCtxt);
