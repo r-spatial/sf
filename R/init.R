@@ -71,7 +71,7 @@ setOldClass("sfg")
 .onAttach = function(libname, pkgname) {
 	m = paste0("Linking to GEOS ", CPL_geos_version(), ", GDAL ", CPL_gdal_version(), ", proj.4 ", CPL_proj_version())
 	packageStartupMessage(m)
-	if (grep(sf:::CPL_geos_version(FALSE, TRUE), sf:::CPL_geos_version(TRUE)) != 1)
+	if (length(grep(sf:::CPL_geos_version(FALSE, TRUE), sf:::CPL_geos_version(TRUE))) != 1)
 		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS")
 }
 
