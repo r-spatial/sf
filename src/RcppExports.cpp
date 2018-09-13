@@ -590,13 +590,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_version
-std::string CPL_geos_version(bool b);
-RcppExport SEXP _sf_CPL_geos_version(SEXP bSEXP) {
+std::string CPL_geos_version(bool runtime, bool capi);
+RcppExport SEXP _sf_CPL_geos_version(SEXP runtimeSEXP, SEXP capiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_version(b));
+    Rcpp::traits::input_parameter< bool >::type runtime(runtimeSEXP);
+    Rcpp::traits::input_parameter< bool >::type capi(capiSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_version(runtime, capi));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -996,7 +997,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 10},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
-    {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 1},
+    {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 2},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
     {"_sf_CPL_geos_nearest_feature", (DL_FUNC) &_sf_CPL_geos_nearest_feature, 2},
     {"_sf_CPL_geos_nearest_points", (DL_FUNC) &_sf_CPL_geos_nearest_points, 3},

@@ -792,8 +792,15 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 }
 
 // [[Rcpp::export]]
-std::string CPL_geos_version(bool b = false) {
-	return GEOS_VERSION;
+std::string CPL_geos_version(bool runtime = false, bool capi = false) {
+	if (runtime)
+		return GEOSversion();
+	else {
+		if (capi)
+			return GEOS_CAPI_VERSION;
+		else
+			return GEOS_VERSION;
+	}
 }
 
 // [[Rcpp::export]]

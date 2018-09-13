@@ -189,8 +189,8 @@ CPL_geos_op2 <- function(op, sfcx, sfcy) {
     .Call('_sf_CPL_geos_op2', PACKAGE = 'sf', op, sfcx, sfcy)
 }
 
-CPL_geos_version <- function(b = FALSE) {
-    .Call('_sf_CPL_geos_version', PACKAGE = 'sf', b)
+CPL_geos_version <- function(runtime = FALSE, capi = FALSE) {
+    .Call('_sf_CPL_geos_version', PACKAGE = 'sf', runtime, capi)
 }
 
 CPL_geos_dist <- function(sfc0, sfc1, which, par) {
