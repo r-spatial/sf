@@ -520,7 +520,7 @@ fi
 AC_MSG_CHECKING(geos-config usability)
 if test `${GEOS_CONFIG} --version`
 then
-  GEOS_CLIBS="`${GEOS_CONFIG} --libs` `${GEOS_CONFIG} --clibs`"
+  GEOS_CLIBS="`${GEOS_CONFIG} --clibs`"
   #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
   # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
   GEOS_DEP_CLIBS=`${GEOS_CONFIG} --static-clibs | sed 's/-m/-lm/g'`
