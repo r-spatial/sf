@@ -119,8 +119,9 @@ RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN git   clone https://github.com/r-spatial/sf.git
+RUN git clone https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD INSTALL sf_*gz
 RUN ldconfig
 
 RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
@@ -128,7 +129,6 @@ RUN R CMD build rgeos/pkg --no-build-vignettes
 RUN R CMD INSTALL rgeos_*tar.gz
 RUN geos-config --libs
 
-#RUN R CMD INSTALL sf_*gz
 
 #RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
 
