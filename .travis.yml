@@ -3,7 +3,7 @@ language: r
 r:
   - release
   - devel
-#   - oldrel # breaks on lacking isFALSE in some dependent package (vignette 5)
+  #- oldrel # breaks on lacking isFALSE in some dependent package (vignette 5)
 
 sudo: required
 dist: trusty
