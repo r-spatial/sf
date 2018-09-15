@@ -100,9 +100,9 @@ st_relate(grd, pattern = "****0****")
 st_rook = function(a, b = a, ...) st_relate(a, b, pattern = "F***1****", ...)
 st_rook(grd, sparse = FALSE)
 
-if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
+#if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
   try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
-}
+#}
 
 a = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], 100000, sparse = FALSE)
 b = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], units::set_units(100000, m), sparse = FALSE)
