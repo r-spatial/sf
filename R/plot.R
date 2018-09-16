@@ -158,7 +158,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			} else {
 				col = dots$col
 				if (length(col) != 1 && length(col) != nrow(x))
-					warning("col is not of length 1 or ncol(x): colors will be recycled; use pal to specify a color palette")
+					warning("col is not of length 1 or nrow(x): colors will be recycled; use pal to specify a color palette")
 				key.pos = NULL # no key!
 			}
 
