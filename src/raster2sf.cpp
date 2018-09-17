@@ -4,6 +4,8 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which) {
+	if (cc.nrow() != dim[0] * dim[1])
+		stop("xy2sfc: wrong dimensions");
 	NumericVector bb(4);
 	bb(0) = cc(0, 0);
 	bb(3) = cc(0, 1);

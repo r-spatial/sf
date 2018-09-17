@@ -80,25 +80,36 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 		}
 	}
 
-	y = x$y
-	x = x$x
-	cc = if (!is.na(x$from) && !is.na(y$from)) {
+	raster = attr(x, "raster")
+	xy_names = raster$dimensions
+	xd = x[[ xy_names[1] ]]
+	yd = x[[ xy_names[2] ]]
+	cc = if (! is.na(xd$offset) && !is.na(yd$offset)) {
 		xy = if (as_points) # grid cell centres:
-			expand.grid(x = seq(x$from, x$to) - 0.5, y = seq(y$from, y$to) - 0.5)
+			expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
 		else # grid corners: from 0 to n
-			expand.grid(x = seq(x$from - 1, x$to), y = seq(y$from - 1, y$to))
+			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
-	} else {
-		if (!as_points) # nocov start
-			stop("grid cell sizes not available")
-		expand.grid(x = x$values, y = y$values) # nocov end
+	} else { # get from values:
+		if (raster$curvilinear) {
+			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
+				expand = function(x) { # might fail on the poles or dateline
+					d = diff(x)
+					c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
+				}
+				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
+				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
+			}
+			cbind(as.vector(xd$values), as.vector(yd$values))
+		} else 
+			as.matrix(expand.grid(x = xd$values, y = yd$values)) # nocov end
 	}
-	dims = c(x$to - x$from, y$to - y$from) + 1 + !as_points
+	dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
-			crs = st_crs(x$refsys), n_empty = 0L)
+			crs = st_crs(xd$refsys), n_empty = 0L)
 	else
-		st_sfc(xy2sfc(cc, dims, as_points), crs = x$refsys)
+		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
 }
 
 

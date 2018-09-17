@@ -72,7 +72,7 @@ setOldClass("sfg")
 	m = paste0("Linking to GEOS ", strsplit(CPL_geos_version(TRUE), "-")[[1]][1],
 		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version())
 	packageStartupMessage(m)
-	if (length(grep(CPL_geos_version(FALSE, TRUE), sf:::CPL_geos_version(TRUE))) != 1) {
+	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) {
 		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
 		packageStartupMessage(paste(
 			"Linked against:", CPL_geos_version(TRUE, TRUE), 
