@@ -5,6 +5,8 @@ r:
   - devel
   #- oldrel # breaks on lacking isFALSE in some dependent package (vignette 5)
 
+deploy.skip_cleanup: true
+
 sudo: required
 dist: trusty
 cache:
