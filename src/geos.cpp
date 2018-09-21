@@ -285,8 +285,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (int j = 0; j < sfc1.length(); j++) {
 				char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get());
 				if (cp == NULL) {
-					GEOSFree_r(hGEOSCtxt, cp);
-					CPL_geos_finish(hGEOSCtxt);
+					GEOSFree_r(hGEOSCtxt, cp); // #nocov
+					CPL_geos_finish(hGEOSCtxt); // #nocov
 					Rcpp::stop("GEOS error in GEOSRelate_r"); // #nocov
 				}
 				out[j * sfc0.length() + i] = cp;
@@ -310,7 +310,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				dist_function = GEOSFrechetDistance_r;
 #endif
 			else {
-				CPL_geos_finish(hGEOSCtxt);
+				CPL_geos_finish(hGEOSCtxt); // #nocov
 				Rcpp::stop("distance function not supported"); // #nocov
 			}
 
@@ -318,7 +318,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				for (size_t j = 0; j < gmv1.size(); j++) {
 					double dist = -1.0;
 					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
-						CPL_geos_finish(hGEOSCtxt);
+						CPL_geos_finish(hGEOSCtxt); // #nocov
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
 					}
 					out(i, j) = dist;
@@ -334,7 +334,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				dist_function = GEOSFrechetDistanceDensify_r;
 #endif
 			else {
-				CPL_geos_finish(hGEOSCtxt);
+				CPL_geos_finish(hGEOSCtxt); // #nocov
 				Rcpp::stop("distance function not supported"); // #nocov
 			}
 
@@ -342,7 +342,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				for (size_t j = 0; j < gmv1.size(); j++) {
 					double dist = -1.0;
 					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par, &dist) == 0) {
-						CPL_geos_finish(hGEOSCtxt);
+						CPL_geos_finish(hGEOSCtxt); // #nocov
 						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
 					}
 					out(i, j) = dist;
@@ -358,7 +358,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			for (size_t j = 0; j < gmv1.size(); j++) {
 				double dist = -1.0;
 				if (GEOSDistance_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
-					CPL_geos_finish(hGEOSCtxt);
+					CPL_geos_finish(hGEOSCtxt); // #nocov
 					Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
 				}
 				if (dist <= par)
@@ -407,7 +407,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 				Rcpp::checkUserInterrupt();
 			}
 		} else if (op == "disjoint") {
-			CPL_geos_finish(hGEOSCtxt);
+			CPL_geos_finish(hGEOSCtxt); // #nocov
 			Rcpp::stop("disjoint should have been handled in R"); // #nocov
 		}
 		else { // anything else:
@@ -664,7 +664,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(), dTolerance[i], bOnlyEdges)), hGEOSCtxt);
 	} else
 #endif
-			Rcpp::stop("invalid operation"); // nocov
+			Rcpp::stop("invalid operation"); // #nocov
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim));
 	CPL_geos_finish(hGEOSCtxt);
