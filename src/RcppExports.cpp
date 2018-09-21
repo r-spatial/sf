@@ -714,6 +714,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_rasterize
+Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector raster_driver, Rcpp::List sfc, Rcpp::NumericVector values, Rcpp::CharacterVector options, Rcpp::NumericVector NA_value);
+RcppExport SEXP _sf_CPL_rasterize(SEXP rasterSEXP, SEXP raster_driverSEXP, SEXP sfcSEXP, SEXP valuesSEXP, SEXP optionsSEXP, SEXP NA_valueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type raster(rasterSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type raster_driver(raster_driverSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type values(valuesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type NA_value(NA_valueSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_rasterize(raster, raster_driver, sfc, values, options, NA_value));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
@@ -1025,6 +1041,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 8},
+    {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},

@@ -198,3 +198,11 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	names(out)[1] = names(x)[1]
 	out
 }
+
+#' @param sf object of class \code{sf}
+#' @name gdal
+#' @export
+gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character()) {
+	gdal_write(x, file = file, driver = driver, geotransform = gt)
+	CPL_rasterize(file, driver, st_geometry(sf), as.double(as.data.frame(sf)[[1]]), options, NA_real_);
+}

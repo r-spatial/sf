@@ -229,6 +229,10 @@ CPL_polygonize <- function(raster, mask_name, raster_driver, vector_driver, vect
     .Call('_sf_CPL_polygonize', PACKAGE = 'sf', raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, use_integer)
 }
 
+CPL_rasterize <- function(raster, raster_driver, sfc, values, options, NA_value) {
+    .Call('_sf_CPL_rasterize', PACKAGE = 'sf', raster, raster_driver, sfc, values, options, NA_value)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

@@ -114,3 +114,41 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		GDALClose(maskDataset); // mask
 	return lst;
 }
+
+// [[Rcpp::export]]
+Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector raster_driver,
+		Rcpp::List sfc, Rcpp::NumericVector values,
+		Rcpp::CharacterVector options,
+		Rcpp::NumericVector NA_value) {
+
+    GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(raster[0], GDAL_OF_UPDATE,
+		raster_driver.size() ? create_options(raster_driver).data() : NULL,
+		// options.size() ? create_options(options).data() : NULL,
+		NULL, NULL);
+    if (poDataset == NULL) {
+		Rcpp::Rcout << "trying to read file: " << raster[0] << std::endl; // #nocov
+        Rcpp::stop("file not found"); // #nocov
+	}
+	
+	std::vector<OGRGeometry *> geoms = ogr_from_sfc(sfc, NULL);
+
+	int bandlist = 1;
+	CPLErr err = GDALRasterizeGeometries((GDALDatasetH) poDataset, // hDS,
+		1, // int 	nBandCount,
+		&bandlist, // int * 	panBandList,
+		geoms.size(), // int 	nGeomCount,
+		(OGRGeometryH *) geoms.data(), // OGRGeometryH * 	pahGeometries,
+		NULL, // GDALTransformerFunc 	pfnTransformer,
+		NULL, // void * 	pTransformArg,
+		(double *) &(values[0]), // double * 	padfGeomBurnValue,
+		options.size() ? create_options(options).data() : NULL, // char ** 	papszOptions,
+		NULL, // GDALProgressFunc 	pfnProgress,
+		NULL  //void * 	pProgressArg 
+	);
+	if (err != OGRERR_NONE)
+		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl;
+	GDALClose(poDataset); // raster
+	// return CPL_read_gdal(raster, Rcpp::CharacterVector::create(), raster_driver,
+    //    true, NA_value, Rcpp::List::create());
+	Rcpp::List::create();
+}

@@ -8,6 +8,7 @@
 
 #include <Rcpp.h>
 
+#include "gdal_read.h"
 #include "gdal_sf_pkg.h"
 
 using namespace Rcpp;
@@ -188,7 +189,7 @@ int get_from_list(List lst, const char *name, int otherwise) {
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
 		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
 // reads and returns data set metadata, and if read_data is true, adds data array
-    GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
+    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
