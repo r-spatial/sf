@@ -159,6 +159,15 @@ test_that("can read from db", {
 	expect_identical(st_crs(y), st_crs(w))
 	expect_identical(st_precision(y), st_precision(w))
 
+	#Make sure it doesn't set column with all NAs to geometry:
+	sf_meuseNA__ <- pts
+	sf_meuseNA__$dummy <- rep(NA_character_, nrow(sf_meuseNA__))
+	st_write(sf_meuseNA__, pg, c("sf_test__", "sf_meuse_na__"), quiet = TRUE)
+	z <- st_read(pg, query = "SELECT * FROM sf_test__.sf_meuse_na__", quiet = TRUE)
+	expect_equal(sum(vapply(z, inherits, logical(1), "sfc")), 1)
+	expect_equal(attr(z, "sf_column"), "geometry")
+
+
 	expect_error(st_read(pg, "missing"), "attempt to set an attribute on NULL")
 	expect_error(st_read(pg, c("missing", "missing")), "attempt to set an attribute on NULL")
 	# make sure it reads in the correct schema
