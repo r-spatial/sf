@@ -148,7 +148,5 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 	if (err != OGRERR_NONE)
 		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl;
 	GDALClose(poDataset); // raster
-	// return CPL_read_gdal(raster, Rcpp::CharacterVector::create(), raster_driver,
-    //    true, NA_value, Rcpp::List::create());
-	Rcpp::List::create();
+	return Rcpp::List::create();
 }
