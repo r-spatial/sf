@@ -8,6 +8,7 @@
 \alias{gdal_crs}
 \alias{gdal_metadata}
 \alias{gdal_subdatasets}
+\alias{gdal_polygonize}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
 gdal_read(x, ..., options = character(0), driver = character(0),
@@ -25,6 +26,9 @@ gdal_metadata(file, domain_item = character(0), options = character(0),
   parse = TRUE)
 
 gdal_subdatasets(file, options = character(0), name = TRUE)
+
+gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
+  use_integer = TRUE, geotransform)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -54,6 +58,10 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 \item{parse}{logical; should metadata be parsed into a named list (\code{TRUE}) or returned as character data?}
 
 \item{name}{logical; retrieve name of subdataset? If \code{FALSE}, retrieve description}
+
+\item{mask}{stars object with NA mask (0 where NA), or NULL}
+
+\item{use_integer}{boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.}
 }
 \value{
 object of class \code{crs}, see \link[sf]{st_crs}.

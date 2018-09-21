@@ -696,6 +696,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_polygonize
+Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector mask_name, Rcpp::CharacterVector raster_driver, Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn, Rcpp::CharacterVector options, Rcpp::IntegerVector iPixValField, bool use_integer);
+RcppExport SEXP _sf_CPL_polygonize(SEXP rasterSEXP, SEXP mask_nameSEXP, SEXP raster_driverSEXP, SEXP vector_driverSEXP, SEXP vector_dsnSEXP, SEXP optionsSEXP, SEXP iPixValFieldSEXP, SEXP use_integerSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type raster(rasterSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type mask_name(mask_nameSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type raster_driver(raster_driverSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type vector_driver(vector_driverSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type vector_dsn(vector_dsnSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type iPixValField(iPixValFieldSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_integer(use_integerSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_polygonize(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, use_integer));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_proj_version
 std::string CPL_proj_version(bool b);
 RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
@@ -1006,6 +1024,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
+    {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 8},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},

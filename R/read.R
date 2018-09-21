@@ -99,28 +99,8 @@ st_read.default = function(dsn, layer, ...) {
 	}
 }
 
-#' @name st_read
-#' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
-#' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
-#' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
-#' that reside in the same directory, only one of them having extension \code{.shp}.
-#' @export
-st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
-		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
-		int64_as_string = FALSE, check_ring_dir = FALSE) {
-
-	layer = if (missing(layer))
-		character(0)
-	else
-		enc2utf8(layer)
-
-	if (length(dsn) == 1 && file.exists(dsn))
-		dsn = enc2utf8(normalizePath(dsn))
-
-	if (length(promote_to_multi) > 1)
-		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
-
-	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
+		stringsAsFactors = default.stringsAsFactors(), geometry_column = 1) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 
@@ -157,6 +137,32 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 		print(x, n = 0)
 	else
 		x
+}
+
+#' @name st_read
+#' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
+#' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
+#' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
+#' that reside in the same directory, only one of them having extension \code{.shp}.
+#' @export
+st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
+		int64_as_string = FALSE, check_ring_dir = FALSE) {
+
+	layer = if (missing(layer))
+		character(0)
+	else
+		enc2utf8(layer)
+
+	if (length(dsn) == 1 && file.exists(dsn))
+		dsn = enc2utf8(normalizePath(dsn))
+
+	if (length(promote_to_multi) > 1)
+		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
+
+	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir, 
+		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
 
 

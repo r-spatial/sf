@@ -177,3 +177,24 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 			md[seq(2, length(md), by = 2)]
 	}
 }
+
+#' @param use_integer boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.
+#' @param mask stars object with NA mask (0 where NA), or NULL
+#' @name gdal
+#' @export
+gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
+		geotransform) {
+	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
+	on.exit(unlink(file))
+	mask_name = if (!is.null(mask)) {
+			mask_name = tempfile()
+			gdal_write(mask, file = mask_name, driver = driver, geotransform = geotransform)
+			on.exit(unlink(mask_name))
+			mask_name
+		} else
+			character(0)
+	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, use_integer)
+	out = process_cpl_read_ogr(pol, quiet = TRUE)
+	names(out)[1] = names(x)[1]
+	out
+}

@@ -6,6 +6,7 @@
 #include "Rcpp.h"
 
 #include "gdal_sf_pkg.h"
+#include "gdal_read.h"
 
 Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string) {
 
@@ -182,50 +183,8 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	return out;
 }
 
-// [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
-		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
-		bool promote_to_multi = true, bool int64_as_string = false) {
-	// adapted from the OGR tutorial @ www.gdal.org
-	std::vector <char *> open_options = create_options(options, quiet);
-	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
-		open_options.data(), NULL );
-	if( poDS == NULL ) {
-		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
-		Rcpp::stop("Open failed.\n");
-	}
-
-	if (layer.size() == 0) { // no layer specified
-		switch (poDS->GetLayerCount()) {
-			case 0: { // error:
-				Rcpp::stop("No layers in datasource.");
-			}
-			case 1: { // silent:
-				OGRLayer *poLayer = poDS->GetLayer(0);
-				layer = Rcpp::CharacterVector::create(poLayer->GetName());
-				break;
-			}
-			default: { // select first layer: message + warning:
-				OGRLayer *poLayer = poDS->GetLayer(0);
-				layer = Rcpp::CharacterVector::create(poLayer->GetName());
-				if (! quiet) { // #nocov start
-					Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] << ", ";
-					Rcpp::Rcout << "reading layer `" << layer[0] << "'." << std::endl;
-					Rcpp::Rcout << "Use `st_layers' to list all layer names and their type in a data source." << std::endl;
-					Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." << std::endl;
-				} // #nocov end
-				Rcpp::Function warning("warning");
-				warning("automatically selected the first layer in a data source containing more than one.");
-			}
-		}
-	}
-
-	OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
-	if (poLayer == NULL) {
-		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
-		Rcpp::stop("Opening layer failed.\n");
-	}
+Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string, 
+		Rcpp::NumericVector toTypeUser, bool promote_to_multi = true) {
 
 	double n_d = (double) poLayer->GetFeatureCount();
 	if (n_d > INT_MAX)
@@ -236,10 +195,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 	Rcpp::CharacterVector fids(n);
-
-	if (! quiet)
-		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
-			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 
 	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
@@ -504,7 +459,60 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		OGRFeature::DestroyFeature(poFeatureV[i]);
 	for (i = 0; i < to_be_freed.size(); i++)
 		OGRGeometryFactory::destroyGeometry(to_be_freed[i]);
-	GDALClose(poDS);
 
+	return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
+		bool promote_to_multi = true, bool int64_as_string = false) {
+	// adapted from the OGR tutorial @ www.gdal.org
+	std::vector <char *> open_options = create_options(options, quiet);
+	GDALDataset *poDS;
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+		open_options.data(), NULL );
+	if( poDS == NULL ) {
+		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
+		Rcpp::stop("Open failed.\n");
+	}
+
+	if (layer.size() == 0) { // no layer specified
+		switch (poDS->GetLayerCount()) {
+			case 0: { // error:
+				Rcpp::stop("No layers in datasource.");
+			}
+			case 1: { // silent:
+				OGRLayer *poLayer = poDS->GetLayer(0);
+				layer = Rcpp::CharacterVector::create(poLayer->GetName());
+				break;
+			}
+			default: { // select first layer: message + warning:
+				OGRLayer *poLayer = poDS->GetLayer(0);
+				layer = Rcpp::CharacterVector::create(poLayer->GetName());
+				if (! quiet) { // #nocov start
+					Rcpp::Rcout << "Multiple layers are present in data source " << datasource[0] << ", ";
+					Rcpp::Rcout << "reading layer `" << layer[0] << "'." << std::endl;
+					Rcpp::Rcout << "Use `st_layers' to list all layer names and their type in a data source." << std::endl;
+					Rcpp::Rcout << "Set the `layer' argument in `st_read' to read a particular layer." << std::endl;
+				} // #nocov end
+				Rcpp::Function warning("warning");
+				warning("automatically selected the first layer in a data source containing more than one.");
+			}
+		}
+	}
+
+	OGRLayer *poLayer = poDS->GetLayerByName(layer[0]);
+	if (poLayer == NULL) {
+		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
+		Rcpp::stop("Opening layer failed.\n");
+	}
+
+	if (! quiet)
+		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
+			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
+
+	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, promote_to_multi);
+	GDALClose(poDS);
 	return out;
 }
