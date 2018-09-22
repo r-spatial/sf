@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 > 
 > ll = st_crs(4326)
 > sf:::crs_parameters(ll)$ud_unit
-1 arc_degree
+1 [arc_degree]
 > 
 > u = names(sf:::udunits_from_proj)
 > 
@@ -37,31 +37,31 @@ Type 'q()' to quit R.
 +   else
 +     unrecognized = c(unrecognized, x)
 + })
-km : 1 km
-m : 1 m
-dm : 1 dm
-cm : 1 cm
-mm : 1 mm
-kmi : 1 nautical_mile
-in : 1 in
-ft : 1 ft
-yd : 1 yd
-mi : 1 mi
-fath : 1 fathom
-ch : 1 chain
-link : 1 link
-us-in : 1 us_in
-us-ft : 1 US_survey_foot
-us-yd : 1 US_survey_yard
-us-ch : 1 chain
-us-mi : 1 US_survey_mile
-ind-yd : 1 ind_yd
-ind-ft : 1 ind_ft
-ind-ch : 1 ind_ch
+km : 1 [km]
+m : 1 [m]
+dm : 1 [dm]
+cm : 1 [cm]
+mm : 1 [mm]
+kmi : 1 [nautical_mile]
+in : 1 [in]
+ft : 1 [ft]
+yd : 1 [yd]
+mi : 1 [mi]
+fath : 1 [fathom]
+ch : 1 [chain]
+link : 1 [link]
+us-in : 1 [us_in]
+us-ft : 1 [US_survey_foot]
+us-yd : 1 [US_survey_yard]
+us-ch : 1 [chain]
+us-mi : 1 [US_survey_mile]
+ind-yd : 1 [ind_yd]
+ind-ft : 1 [ind_ft]
+ind-ch : 1 [ind_ch]
 > 
 > if (length(unrecognized))
 + 	print(paste("unrecognized units:", paste(unrecognized, collapse = ", "), ": older GDAL version?"))
 > 
 > proc.time()
    user  system elapsed 
-  0.530   0.261   0.491 
+  0.456   0.017   0.464 

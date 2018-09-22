@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -189,8 +189,8 @@ dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
-               mean(dens)                       geometry
-1 2.593234e-06 person/m^2 MULTIPOLYGON (((834893.7 95...
+                 mean(dens)                       geometry
+1 2.593234e-06 [person/m^2] MULTIPOLYGON (((834893.7 95...
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
@@ -200,7 +200,7 @@ epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
   `mean(new_dens)`                                                     geometry
-    <[person/m^2]>                                           <MULTIPOLYGON [m]>
+      [person/m^2]                                           <MULTIPOLYGON [m]>
 1     2.589362e-06 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.72, …
 > 
 > # total densities don't:
@@ -212,7 +212,7 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
   sum(area * dens)                       geometry
-1    329962 person MULTIPOLYGON (((834893.7 95...
+1  329962 [person] MULTIPOLYGON (((834893.7 95...
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
@@ -222,7 +222,7 @@ epsg (SRID):    32119
 proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
   `sum(A * new_dens…                                                   geometry
-          <[person]>                                         <MULTIPOLYGON [m]>
+            [person]                                         <MULTIPOLYGON [m]>
 1             329962 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.72…
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
@@ -270,4 +270,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.154   0.213   2.100 
+  1.863   0.032   1.886 

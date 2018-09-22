@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.6.2, GDAL 2.2.3, proj.4 4.9.3
+Linking to GEOS 3.6.2, GDAL 2.2.3, PROJ 4.9.3
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -115,4 +115,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.755   0.256   0.693 
+  0.388   0.064   0.445 

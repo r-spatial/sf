@@ -1,6 +1,6 @@
 
-R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -40,7 +40,7 @@ Type 'q()' to quit R.
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
 > units(d.sp) = as_units("km")
 > d.sf - d.sp
-Units: m
+Units: [m]
          [,1]          [,2]          [,3]          [,4]         [,5]
 [1,] 11.58615  0.000000e+00  2.910383e-11  0.000000e+00 5.820766e-11
 [2,] 11.76865  0.000000e+00  0.000000e+00 -2.910383e-11 0.000000e+00
@@ -70,7 +70,7 @@ epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
 LINESTRING (0 10, 1 0, 2 0, 3 0, 4 0)
 > (d = st_distance(y, y))
-Units: m
+Units: [m]
         [,1]      [,2]      [,3]      [,4]      [,5]
 [1,]       0 1111387.3 1127821.8 1154692.9 1191294.5
 [2,] 1111387       0.0  111319.5  222639.0  333958.5
@@ -78,9 +78,9 @@ Units: m
 [4,] 1154693  222639.0  111319.5       0.0  111319.5
 [5,] 1191295  333958.5  222639.0  111319.5       0.0
 > st_length(z)
-1445346 m
+1445346 [m]
 > st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5])
-0 m
+0 [m]
 > 
 > # st_line_sample:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
@@ -100,7 +100,7 @@ MULTIPOINT (0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, ...
 + 	st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
 > 
 > st_length(ls)
-Units: m
+Units: [m]
 [1] 110574.39  11131.95
 > try(st_line_sample(ls, density = 1/1000))
 Error in st_line_sample(ls, density = 1/1000) : 
@@ -117,4 +117,4 @@ MULTIPOINT (505.9977 -7.081155e-10, 1517.993 -7...
 > 
 > proc.time()
    user  system elapsed 
-  0.883   0.257   0.812 
+  0.496   0.047   0.535 

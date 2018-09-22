@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -22,7 +22,7 @@ Loading required package: spatstat.data
 Loading required package: nlme
 Loading required package: rpart
 
-spatstat 1.56-0       (nickname: 'Bondi Tram') 
+spatstat 1.56-1       (nickname: 'Invisible Friend') 
 For an introduction to spatstat, type 'beginner' 
 
 > suppressPackageStartupMessages(library(sf))
@@ -90,4 +90,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.144   0.322   1.140 
+  1.101   0.063   1.155 
