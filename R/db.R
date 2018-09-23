@@ -316,7 +316,7 @@ to_postgis <- function(conn, x, binary) {
 	} else {
 		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
 	}
-	x <- as.data.frame(x)
+	as.data.frame(x)
 }
 
 sync_crs <- function(conn, geom) {
@@ -381,5 +381,6 @@ is_geometry_column.PqConnection <- function(con, x, classes = c("pq_geometry")) 
 
 is_geometry_column.default <- function(con, x, classes = c("character")) {
     # try all character columns (in conjunction with try_postgis_as_sfc)
-    vapply(x, inherits, logical(1), classes)
+    vapply(x, function(x) inherits(x, classes) && !all(is.na(x)),
+    	   FUN.VALUE = logical(1))
 }
