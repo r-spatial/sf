@@ -1,67 +1,139 @@
 Package: sf
 Version: 0.7-0
 Title: Simple Features for R
-Description: Support for simple features, a standardized way to encode spatial vector data. Binds
-	to 'GDAL' for reading and writing data, to 'GEOS' for geometrical operations, and to 'PROJ' for projection
-	conversions and datum transformations.
-Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
-	person("Roger", "Bivand", role = "ctb", comment = c(ORCID = "0000-0003-2392-6140")),
-	person("Etienne", "Racine", role = "ctb"),
-	person("Michael", "Sumner", role = "ctb"),
-	person("Ian", "Cook", role = "ctb"),
-	person("Tim", "Keitt", role = "ctb"),
-	person("Robin", "Lovelace", role = "ctb"),
-	person("Hadley", "Wickham", role = "ctb"),
-	person("Jeroen", "Ooms", role = "ctb", comment = c(ORCID = "0000-0002-4035-0289")),
-	person("Kirill", "Müller", role = "ctb"))
-Depends:
-	R (>= 3.3.0), methods
-Imports:
-	utils,
-	stats,
-	tools,
-	graphics,
-	grDevices,
-	grid,
-	Rcpp,
-	DBI (>= 0.8),
-	units (>= 0.6-0),
-	classInt,
-	magrittr
-Suggests:
-	lwgeom (>= 0.1-2),
-	maps,
-	rgdal,
-	rgeos,
-	sp (>= 1.2-4),
-	raster,
-	spatstat,
-	tmap,
-	maptools,
-	RSQLite,
-	tibble (>= 1.4.1),
-	pillar,
-	rlang,
-	dplyr (>= 0.7-0),
-	tidyr (>= 0.7-2),
-	RPostgreSQL,
-	RPostgres (>= 1.1.0),
-	pool,
-	odbc,
-	tidyselect,
-	ggplot2,
-	mapview,
-	testthat,
-	knitr,
-	covr,
-	microbenchmark,
-	rmarkdown
-LinkingTo: Rcpp
-VignetteBuilder: knitr
-SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ (>= 4.8.0)
+Version: 0.6-4
+Authors@R: 
+    c(person(given = "Edzer",
+             family = "Pebesma",
+             role = c("aut", "cre"),
+             email = "edzer.pebesma@uni-muenster.de",
+             comment = c(ORCID = "0000-0001-8049-7069")),
+      person(given = "Roger",
+             family = "Bivand",
+             role = "ctb",
+             comment = c(ORCID = "0000-0003-2392-6140")),
+      person(given = "Etienne",
+             family = "Racine",
+             role = "ctb"),
+      person(given = "Michael",
+             family = "Sumner",
+             role = "ctb"),
+      person(given = "Ian",
+             family = "Cook",
+             role = "ctb"),
+      person(given = "Tim",
+             family = "Keitt",
+             role = "ctb"),
+      person(given = "Robin",
+             family = "Lovelace",
+             role = "ctb"),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "ctb"),
+      person(given = "Jeroen",
+             family = "Ooms",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-4035-0289")),
+      person(given = "Kirill",
+             family = "Müller",
+             role = "ctb"))
+Description: Support for simple features, a standardized way to
+    encode spatial vector data. Binds to 'GDAL' for reading and writing
+    data, to 'GEOS' for geometrical operations, and to 'PROJ' for
+    projection conversions and datum transformations.
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
-Collate: RcppExports.R init.R crs.R bbox.R read.R db.R sfc.R sfg.R sf.R bind.R wkb.R wkt.R plot.R geom.R transform.R sp.R grid.R arith.R tidyverse.R cast_sfg.R cast_sfc.R graticule.R datasets.R aggregate.R agr.R maps.R join.R sample.R valid.R collection_extract.R jitter.R sgbp.R spatstat.R stars.R crop.R gdal_utils.R nearest.R deprecated.R
-RoxygenNote: 6.1.0
+Depends:
+    methods,
+    R (>= 3.3.0)
+Imports:
+    classInt,
+    DBI (>= 0.8),
+    graphics,
+    grDevices,
+    grid,
+    magrittr,
+    Rcpp,
+    stats,
+    tools,
+    units (>= 0.6-0),
+    utils
+Suggests:
+    covr,
+    dplyr (>= 0.7-0),
+    ggplot2,
+    knitr,
+    lwgeom (>= 0.1-2),
+    maps,
+    maptools,
+    mapview,
+    microbenchmark,
+    odbc,
+    pillar,
+    pool,
+    raster,
+    rgdal,
+    rgeos,
+    rlang,
+    rmarkdown,
+    RPostgres (>= 1.1.0),
+    RPostgreSQL,
+    RSQLite,
+    sp (>= 1.2-4),
+    spatstat,
+    testthat,
+    tibble (>= 1.4.1),
+    tidyr (>= 0.7-2),
+    tidyselect,
+    tmap
+LinkingTo: 
+    Rcpp
+VignetteBuilder: 
+    knitr
+Remotes: 
+    r-dbi/DBI,
+    r-dbi/RPostgres
 Encoding: UTF-8
+RoxygenNote: 6.1.0
+SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
+    PROJ (>= 4.8.0)
+Collate: 
+    'RcppExports.R'
+    'init.R'
+    'crs.R'
+    'bbox.R'
+    'read.R'
+    'db.R'
+    'sfc.R'
+    'sfg.R'
+    'sf.R'
+    'bind.R'
+    'wkb.R'
+    'wkt.R'
+    'plot.R'
+    'geom.R'
+    'transform.R'
+    'sp.R'
+    'grid.R'
+    'arith.R'
+    'tidyverse.R'
+    'cast_sfg.R'
+    'cast_sfc.R'
+    'graticule.R'
+    'datasets.R'
+    'aggregate.R'
+    'agr.R'
+    'maps.R'
+    'join.R'
+    'sample.R'
+    'valid.R'
+    'collection_extract.R'
+    'jitter.R'
+    'sgbp.R'
+    'spatstat.R'
+    'stars.R'
+    'crop.R'
+    'gdal_utils.R'
+    'nearest.R'
+    'deprecated.R'
