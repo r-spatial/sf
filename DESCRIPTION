@@ -1,7 +1,6 @@
 Package: sf
 Version: 0.7-0
 Title: Simple Features for R
-Version: 0.6-4
 Authors@R: 
     c(person(given = "Edzer",
              family = "Pebesma",
