@@ -71,7 +71,7 @@ st_bbox(obj, ...)
 
 \method{st_bbox}{Raster}(obj, ...)
 
-\method{st_bbox}{Extent}(obj, ...)
+\method{st_bbox}{Extent}(obj, ..., crs = NA_crs_)
 
 \method{st_bbox}{numeric}(obj, ..., crs = NA_crs_)
 

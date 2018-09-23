@@ -1,3 +1,11 @@
+# version 0.7-0
+
+* check difference between compile-time and run-time GEOS versions; #844
+
+* all GEOS routines are now more robust against memory leaks, by using unique pointers; #822, #845, by Dan Baston
+
+* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Mike Sumner
+
 # version 0.6-4
 
 * `st_area` is now a generic; https://github.com/r-spatial/stars/issues/32

@@ -108,7 +108,8 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			int nYSize, 
 			int nBufXSize, 
 			int nBufYSize, 
-			IntegerVector bands
+			IntegerVector bands,
+			GDALRasterIOExtraArg *resample
 		) {
 
 	// collapse x & y into rows, redim later:
@@ -130,7 +131,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			0, 
 			0, 
 			0, 
-			NULL) == CE_Failure)
+			resample) == CE_Failure)
 		stop("read failure"); // #nocov
 
 	// scale && set NA:
@@ -177,8 +178,8 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 
 int get_from_list(List lst, const char *name, int otherwise) {
 	if (lst.containsElementNamed(name)) {
-		IntegerVector ret = lst[name];
-		return(ret[0]);
+		IntegerVector ret = lst[name]; // #nocov
+		return(ret[0]);                // #nocov
 	} else
 		return(otherwise);
 }
@@ -202,7 +203,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 
 	/*
 	if (poDataset->GetRasterCount() == 0)
-		stop("zero bands");
+		stop("zero bands"); -->> this indicates there are (only) subdatasets
 	*/
 
 	// geotransform:
@@ -272,12 +273,37 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	// bands:
 	IntegerVector bands; 
 	if (RasterIO_parameters.containsElementNamed("bands"))
-		bands = RasterIO_parameters["bands"];
+		bands = RasterIO_parameters["bands"]; // #nocov
 	else {
 		bands = IntegerVector(poDataset->GetRasterCount());
 		for (int j = 0; j < bands.size(); j++)
 			bands(j) = j + 1; // bands is 1-based
 	}
+
+	// resampling method:
+	GDALRasterIOExtraArg resample;
+	INIT_RASTERIO_EXTRA_ARG(resample);
+
+	if (RasterIO_parameters.containsElementNamed("resample")) { // #nocov start
+		CharacterVector res = RasterIO_parameters["resample"];
+		if (res[0] == "bilinear")
+			resample.eResampleAlg = GRIORA_Bilinear;
+		else if (res[0] == "cubic")
+			resample.eResampleAlg = GRIORA_Cubic;
+		else if (res[0] == "cubic_spline")
+			resample.eResampleAlg = GRIORA_CubicSpline;
+		else if (res[0] == "lanczos")
+			resample.eResampleAlg = GRIORA_Lanczos;
+		else if (res[0] == "average")
+			resample.eResampleAlg = GRIORA_Average;
+		else if (res[0] == "mode")
+			resample.eResampleAlg = GRIORA_Mode;
+		else if (res[0] == "Gauss")
+			resample.eResampleAlg = GRIORA_Gauss;
+		else if (res[0] == "nearest_neighbour")
+			resample.eResampleAlg = GRIORA_NearestNeighbour;
+		else stop("unknown method for resample"); // #nocov end
+	} 
 
 	List ReturnList = List::create(
 		_["filename"] = fname,
@@ -297,12 +323,12 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 
-			nXSize, nYSize, nBufXSize, nBufYSize, bands);
+			nXSize, nYSize, nBufXSize, nBufYSize, bands, &resample);
 	}
 	GDALClose(poDataset);
 
 	// adjust geotransform & offset if Buf?Size was set:
-	if ((nXSize != nBufXSize || nYSize != nBufYSize) && geo_transform_set) {
+	if ((nXSize != nBufXSize || nYSize != nBufYSize) && geo_transform_set) { // #nocov start
 		if (geotransform[2] != 0.0 || geotransform[4] != 0.0)
 			stop("reading affine grids with resampling would result in a wrong geotransform; please file an issue"); // #nocov
 		double ratio_x = (1.0 * nXSize) / nBufXSize;
@@ -314,7 +340,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		nYOff = (int) (nYOff / ratio_y);
 		ReturnList["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize);
 		ReturnList["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize);
-	}
+	} // #nocov end
 
 	return ReturnList;
 }
@@ -373,7 +399,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	for (int i = 0; i < gt.length(); i++)
 		adfGeoTransform[i] = gt[i];
 	if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
-		stop("SetGeoTransform: error"); // #nocov
+		warning("SetGeoTransform() returned an error: not available?"); // #nocov
 
 	// CRS:
 	if (p4s.length() != 1)
@@ -409,7 +435,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	}
 
 	// write the whole lot:
-	if (poDstDS->RasterIO( GF_Write, 0, 0, dims[0], dims[1],
+	if (poDstDS->RasterIO(GF_Write, 0, 0, dims[0], dims[1],
 			x.begin(), dims[0], dims[1], GDT_Float64, dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
 		stop("read failure"); // #nocov
 
