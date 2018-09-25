@@ -303,8 +303,17 @@ test_that("can read using driver", {
     expect_true(all(layers$features == 155))
     expect_true(all(layers$fields == 12))
 
-    skip_if_not(can_con(try(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty"), silent=TRUE)),
-                "could not connect to 'empty' database")
+    empty <- try(
+        DBI::dbConnect(
+            RPostgres::Postgres(),
+            host = "localhost",
+            dbname = "empty"),
+        silent=TRUE
+    )
+    skip_if_not(
+        can_con(empty),
+        "could not connect to 'empty' database"
+    )
     expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers") # EJP: removed host=localhost
 })
 
@@ -373,7 +382,7 @@ test_that("schema_table", {
 
 test_that("get_postgis_crs", {
     expect_equal(sf:::get_postgis_crs(pg, NA), st_crs(NA))
-    expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "Missing SRID")
+    expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)")
 })
 
 if (can_con(pg)) {
@@ -393,3 +402,4 @@ if (can_con(pg)) {
     try(DBI::dbExecute(pg, " DELETE FROM spatial_ref_sys WHERE auth_name = 'sf';"), silent = TRUE)
     try(DBI::dbDisconnect(pg), silent = TRUE)
 }
+
