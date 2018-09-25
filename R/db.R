@@ -316,7 +316,8 @@ to_postgis <- function(conn, x, binary) {
 	} else {
 		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
 	}
-	as.data.frame(x)
+	x <- as.data.frame(x)
+	clean_columns(x, factorsAsCharacter = TRUE)
 }
 
 sync_crs <- function(conn, geom) {
