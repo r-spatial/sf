@@ -100,15 +100,21 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
-		stringsAsFactors = default.stringsAsFactors(), geometry_column = 1) {
+		stringsAsFactors = default.stringsAsFactors(), geometry_column = 1, as_tibble = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
+
+	if (as_tibble && !requireNamespace("tibble", quietly = TRUE))
+		stop("package tibble not available: install first?")
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
 		warning("no simple feature geometries present: returning a data.frame or tbl_df",
 			call. = FALSE)
-		return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
+		if (as_tibble)
+			return(tibble::as_tibble(x))
+		else 
+			return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
 	}
 
 	nm = names(x)[which.geom]
@@ -119,10 +125,17 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	list.cols = x[lc.other]
 	nm.lc = names(x)[lc.other]
 
-	x = if (length(x) == length(geom)) # ONLY geometry column(s)
-		data.frame(row.names = seq_along(geom[[1]]))
-	else
-		as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+	x = if (length(x) == length(geom)) { # ONLY geometry column(s)
+		if (as_tibble)
+			tibble::tibble(row.names = seq_along(geom[[1]]))[-1]
+		else
+			data.frame(row.names = seq_along(geom[[1]]))
+	} else {
+		if (as_tibble)
+			tibble::as_tibble(set_utf8(x[-c(lc.other, which.geom)]))
+		else
+			as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+	}
 
 	for (i in seq_along(lc.other))
 		x[[ nm.lc[i] ]] = list.cols[[i]]
@@ -180,15 +193,7 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 #' x = read_sf(geojson_txt)
 #' x
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
-	if (! requireNamespace("tibble", quietly = TRUE))
-		stop("package tibble not available: install first?")
-	tbl = tibble::as_tibble(as.data.frame(
-		st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors)))
-	has_geom = any(vapply(tbl, function(f) inherits(f, "sfc"), TRUE))
-	if (has_geom)
-		st_as_sf(tbl)
-	else
-		tbl
+	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors, as_tibble = TRUE)
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
