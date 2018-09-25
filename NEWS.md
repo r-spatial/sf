@@ -1,5 +1,7 @@
 # version 0.7-0
 
+* `read_sf` no longer first creates tibbles from `data.frame`s, but creates them directly; #853
+
 * check difference between compile-time and run-time GEOS versions; #844
 
 * all GEOS routines are now more robust against memory leaks, by using unique pointers; #822, #845, by Dan Baston
