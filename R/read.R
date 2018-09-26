@@ -63,6 +63,17 @@ set_utf8 = function(x) {
 #'
 #' In case of problems reading shapefiles from USB drives on OSX, please see
 #' \url{https://github.com/r-spatial/sf/issues/252}.
+#'
+#' For \code{query} with a character \code{dsn} the query text is handed to
+#' 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
+#' new layer (and \code{layer} is ignored). See 'OGRSQL'
+#' \url{https://www.gdal.org/ogr_sql.html} for details. Please note that the
+#' 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
+#' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
+#' OGRSQL are also likely to be driver dependent. The available layer names may
+#' be obtained with
+#' \link{st_layers}. Care will be required to properly escape the use of some layer names.
+#'
 #' @return object of class \link{sf} when a layer was successfully read; in case
 #'   argument \code{layer} is missing and data source \code{dsn} does not
 #'   contain a single layer, an object of class \code{sf_layers} is returned
@@ -72,6 +83,10 @@ set_utf8 = function(x) {
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 #'
+#' ## only three fields by select clause
+#' ## only two features by where clause
+#' nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
+#'                      query = "SELECT NAME, SID74, FIPS FROM nc WHERE BIR74 > 20000")
 #' \dontrun{
 #'   library(sp)
 #'   example(meuse, ask = FALSE, echo = FALSE)
@@ -80,6 +95,14 @@ set_utf8 = function(x) {
 #'   try(st_meuse <- st_read("PG:dbname=postgis", "meuse"))
 #'   if (exists("st_meuse"))
 #'     summary(st_meuse)
+#' }
+#'
+#' \dontrun{
+#' ## note that we need special escaping of layer  within single quotes (nc.gpkg)
+#' ## and that geom needs to be included in the select, otherwise we don't detect it
+#' gpkg_layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
+#' nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
+#'         query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM '%s' WHERE BIR74 > 20000", gpkg_layer))
 #' }
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
@@ -158,7 +181,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
+st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE) {
 
@@ -173,7 +196,7 @@ st_read.character = function(dsn, layer, ..., options = NULL, quiet = FALSE, geo
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-	x = CPL_read_ogr(dsn, layer, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, promote_to_multi, int64_as_string)
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir, 
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
