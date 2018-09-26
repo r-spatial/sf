@@ -64,12 +64,15 @@ set_utf8 = function(x) {
 #' In case of problems reading shapefiles from USB drives on OSX, please see
 #' \url{https://github.com/r-spatial/sf/issues/252}.
 #'
-#' for \code{query} with a character \code{dsn} the query is handed to 'ExecuteSQL'
-#' on the GDAL/OGR data set and will result in the creation of a new layer (\code{layer}
-#' is ignored. See 'OGRSQL' \url{https://www.gdal.org/ogr_sql.html} for details. Please
-#' note that the 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
-#' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of OGRSQL are
-#' also likely to be driver dependent. The available layer names may be obtained with
+#' For \code{query} with a character \code{dsn} the query text is handed to
+#' 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
+#' new layer (and \code{layer} is ignored). See 'OGRSQL'
+#' \url{https://www.gdal.org/ogr_sql.html} for details. Please note that the
+#' 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
+#' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
+#' OGRSQL are also likely to be driver dependent. The available layer names may
+#' be obtained with
+#'
 #' \code{st_layers}. Care will be required to properly escape the use of some layer names.
 #' @return object of class \link{sf} when a layer was successfully read; in case
 #'   argument \code{layer} is missing and data source \code{dsn} does not
