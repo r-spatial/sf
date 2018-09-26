@@ -76,6 +76,8 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	m = dbReadTable(dbcon, "meuse.sqlite")
 	m$GEOMETRY = st_as_sfc(m$GEOMETRY, spatialite = FALSE) # ISO wkb
 	print(st_sf(m), n = 3)
+	# or:
+	(s = st_read(dbcon, "meuse.sqlite"))[1:3,]
 	dbDisconnect(dbcon)
 
 	db = system.file("sqlite/nc.sqlite", package = "sf")

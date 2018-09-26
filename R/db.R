@@ -101,9 +101,21 @@ st_read.DBIObject = function(dsn = NULL,
     tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
 
     # if there are no simple features geometries, return a data frame
-    if(!any(vapply(tbl, inherits, logical(1), "sfc"))){
-        warning("Could not find a simple features geometry column. Will return a `data.frame`.")
-        return(tbl)
+    if (! any(vapply(tbl, inherits, logical(1), "sfc"))) {
+		# try reading blob columns:
+    	blob_columns = vapply(tbl, inherits, logical(1), "blob")
+		success = FALSE
+		for (i in which(blob_columns)) {
+			try(sfc <- st_as_sfc(tbl[[i]]), silent = TRUE)
+			if (!inherits(sfc, "try-error")) {
+				tbl[[i]] = sfc
+				success = TRUE
+			}
+		}
+    	if (! success) {
+        	warning("Could not find a simple features geometry column. Will return a `data.frame`.")
+        	return(tbl)
+		} 
     }
 
     x <- st_sf(tbl, ...)
