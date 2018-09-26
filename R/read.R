@@ -63,6 +63,14 @@ set_utf8 = function(x) {
 #'
 #' In case of problems reading shapefiles from USB drives on OSX, please see
 #' \url{https://github.com/r-spatial/sf/issues/252}.
+#'
+#' for \code{query} with a character \code{dsn} the query is handed to 'ExecuteSQL'
+#' on the GDAL/OGR data set and will result in the creation of a new layer (\code{layer}
+#' is ignored. See 'OGRSQL' \url{https://www.gdal.org/ogr_sql.html} for details. Please
+#' note that the 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
+#' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of OGRSQL are
+#' also likely to be driver dependent. The available layer names may be obtained with
+#' \code{st_layers}. Care will be required to properly escape the use of some layer names.
 #' @return object of class \link{sf} when a layer was successfully read; in case
 #'   argument \code{layer} is missing and data source \code{dsn} does not
 #'   contain a single layer, an object of class \code{sf_layers} is returned
@@ -72,6 +80,10 @@ set_utf8 = function(x) {
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 #'
+#' ## only three fields by select clause
+#' ## only two features by where clause
+#' nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
+#'                      query = "SELECT NAME, SID74, FIPS FROM nc WHERE BIR74 > 20000")
 #' \dontrun{
 #'   library(sp)
 #'   example(meuse, ask = FALSE, echo = FALSE)
@@ -80,6 +92,14 @@ set_utf8 = function(x) {
 #'   try(st_meuse <- st_read("PG:dbname=postgis", "meuse"))
 #'   if (exists("st_meuse"))
 #'     summary(st_meuse)
+#' }
+#'
+#' \dontrun{
+#' ## note that we need special escaping of layer  within single quotes (nc.gpkg)
+#' ## and that geom needs to be included in the select, otherwise we don't detect it
+#' gpkg_layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
+#' nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
+#'         query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM '%s' WHERE BIR74 > 20000", gpkg_layer))
 #' }
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
