@@ -5,6 +5,7 @@
 #' @param query SQL query to select records; see details
 #' @param EWKB logical; is the WKB of type EWKB? if missing, defaults to
 #'   \code{TRUE}
+#' @param as_tibble logical; should the returned table be of class tibble or data.frame?
 #' @details if \code{table} is not given but \code{query} is, the spatial
 #'   reference system (crs) of the table queried is only available in case it
 #'   has been stored into each geometry record (e.g., by PostGIS, when using
@@ -30,9 +31,14 @@ st_read.DBIObject = function(dsn = NULL,
                              query = NULL,
                              EWKB = TRUE,
                              quiet = TRUE,
+                             as_tibble = FALSE,
                              ...) {
     if (is.null(dsn))
         stop("no connection provided") # nocov
+
+    if (as_tibble && !requireNamespace("tibble", quietly = TRUE)) {
+        stop("package tibble not available: install first?")
+    }
 
     # check that ellipsis contains only what is needed
     expe <- setdiff(names(list(...)), names(formals(st_sf)))
@@ -115,13 +121,16 @@ st_read.DBIObject = function(dsn = NULL,
     	if (! success) {
         	warning("Could not find a simple features geometry column. Will return a `data.frame`.")
         	return(tbl)
-		} 
+		}
     }
 
     x <- st_sf(tbl, ...)
 
     if (!quiet) print(x, n = 0) # nocov
 
+    if (as_tibble) {
+        x <- tibble::as_tibble(x)
+    }
     return(x)
 }
 
