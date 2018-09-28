@@ -183,7 +183,7 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform) {
+		geotransform, use_contours = FALSE, contour_options = character(0)) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
@@ -193,7 +193,7 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			mask_name
 		} else
 			character(0)
-	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, use_integer)
+	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	out

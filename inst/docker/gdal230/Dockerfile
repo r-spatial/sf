@@ -57,17 +57,17 @@ RUN cd /usr/local/share/proj \
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2
-ENV GEOS_VERSION 3.7.0
-
-RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
-  && bzip2 -d geos-*bz2 \
-  && tar xf geos*tar \
-  && cd geos* \
-  && ./configure \
-  && make \
-  && make install \
-  && cd .. \
-  && ldconfig
+#ENV GEOS_VERSION 3.7.0
+#
+#RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
+#  && bzip2 -d geos-*bz2 \
+#  && tar xf geos*tar \
+#  && cd geos* \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
 # GDAL:
 
@@ -82,6 +82,8 @@ ENV GDAL_VERSION_NAME 2.3.0
 #  && make install \
 #  && cd .. \
 #  && ldconfig
+
+RUN ls
 
 RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
 
@@ -119,16 +121,17 @@ RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
+RUN apt-get install -y libgeos-dev
+
 RUN git clone https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
 RUN ldconfig
 
-RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
-RUN R CMD build rgeos/pkg --no-build-vignettes
-RUN R CMD INSTALL rgeos_*tar.gz
 RUN geos-config --libs
-
+#RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
+#RUN R CMD build rgeos/pkg --no-build-vignettes
+#RUN R CMD INSTALL rgeos_*tar.gz
 
 #RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
 

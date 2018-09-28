@@ -111,8 +111,7 @@ new layer (and \code{layer} is ignored). See 'OGRSQL'
 Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
 OGRSQL are also likely to be driver dependent. The available layer names may
 be obtained with
-
-\code{st_layers}. Care will be required to properly escape the use of some layer names.
+\link{st_layers}. Care will be required to properly escape the use of some layer names.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
