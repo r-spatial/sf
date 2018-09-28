@@ -64,8 +64,8 @@ st_sample = function(x, size, ..., type = "random") {
 st_poly_sample = function(x, size, ..., type = "random", 
 		offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
-	a0 = st_area(st_make_grid(x, n = c(1,1)))
-	a1 = sum(st_area(x))
+	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
+	a1 = as.numeric(sum(st_area(x)))
 	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
 	# for instance has 0 st_area
 	if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
