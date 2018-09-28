@@ -24,6 +24,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		Rcpp::CharacterVector raster_driver, 
 		Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn,
 		Rcpp::CharacterVector options, Rcpp::IntegerVector iPixValField,
+		Rcpp::CharacterVector contour_options, bool use_contours = false,
 		bool use_integer = true) {
 
     GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(raster[0], GA_ReadOnly,
@@ -89,7 +90,16 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
     	Rcpp::stop("Creating attribute field failed.\n");
 
 	CPLErr err;
-	if (use_integer)
+	if (use_contours) {
+#if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
+		err = GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
+                       create_options(contour_options).data(), NULL, NULL);
+		if (err != OGRERR_NONE)
+			Rcpp::Rcout << "GDALContourGenerateEx returned an error" << std::endl;
+#else
+		Rcpp::stop("contour only available in GDAL >= 2.4.0");
+#endif
+	} else if (use_integer)
 		err = GDALPolygonize((GDALRasterBandH) poBand, maskBand,
 			(OGRLayerH) poLayer,
 			iPixValField[0],
@@ -103,7 +113,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 			NULL, NULL);
 
 	if (err != OGRERR_NONE)
-		Rcpp::Rcout << "GDPolygonize returned an error" << std::endl;
+		Rcpp::Rcout << "GDAL[F}Polygonize returned an error" << std::endl;
 
 	Rcpp::NumericVector type(1);
 	type[0] = 0;

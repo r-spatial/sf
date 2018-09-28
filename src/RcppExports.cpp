@@ -698,8 +698,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_polygonize
-Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector mask_name, Rcpp::CharacterVector raster_driver, Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn, Rcpp::CharacterVector options, Rcpp::IntegerVector iPixValField, bool use_integer);
-RcppExport SEXP _sf_CPL_polygonize(SEXP rasterSEXP, SEXP mask_nameSEXP, SEXP raster_driverSEXP, SEXP vector_driverSEXP, SEXP vector_dsnSEXP, SEXP optionsSEXP, SEXP iPixValFieldSEXP, SEXP use_integerSEXP) {
+Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector mask_name, Rcpp::CharacterVector raster_driver, Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn, Rcpp::CharacterVector options, Rcpp::IntegerVector iPixValField, Rcpp::CharacterVector contour_options, bool use_contours, bool use_integer);
+RcppExport SEXP _sf_CPL_polygonize(SEXP rasterSEXP, SEXP mask_nameSEXP, SEXP raster_driverSEXP, SEXP vector_driverSEXP, SEXP vector_dsnSEXP, SEXP optionsSEXP, SEXP iPixValFieldSEXP, SEXP contour_optionsSEXP, SEXP use_contoursSEXP, SEXP use_integerSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -710,8 +710,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type vector_dsn(vector_dsnSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type iPixValField(iPixValFieldSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type contour_options(contour_optionsSEXP);
+    Rcpp::traits::input_parameter< bool >::type use_contours(use_contoursSEXP);
     Rcpp::traits::input_parameter< bool >::type use_integer(use_integerSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_polygonize(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, use_integer));
+    rcpp_result_gen = Rcpp::wrap(CPL_polygonize(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, contour_options, use_contours, use_integer));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1041,7 +1043,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
-    {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 8},
+    {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},

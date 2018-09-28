@@ -225,8 +225,8 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-CPL_polygonize <- function(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, use_integer = TRUE) {
-    .Call('_sf_CPL_polygonize', PACKAGE = 'sf', raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, use_integer)
+CPL_polygonize <- function(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, contour_options, use_contours = FALSE, use_integer = TRUE) {
+    .Call('_sf_CPL_polygonize', PACKAGE = 'sf', raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, contour_options, use_contours, use_integer)
 }
 
 CPL_rasterize <- function(raster, raster_driver, sfc, values, options, NA_value) {
