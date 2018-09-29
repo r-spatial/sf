@@ -197,10 +197,9 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		} else
 			character(0)
 	contour_options = if (use_contours) { # construct contour_options:
-			nbreaks = if (breaks[length(breaks)] == max(x[[1]]))
-					breaks[length(breaks)] = breaks[length(breaks)] * 1.01
-				else
-					breaks
+			nbreaks = breaks
+			if (max(breaks) == max(x[[1]])) # expand, because GDAL will not include interval RHS
+				nbreaks[length(nbreaks)] = breaks[length(breaks)] * 1.01
 			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
 			paste0("ELEV_FIELD=0"),
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
