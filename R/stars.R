@@ -213,7 +213,7 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		m = match(out[[1]], breaks)
 		if (min(m, na.rm = TRUE) < 2)
 			stop("lowest value of breaks should be lower or equal to the minimum cell value")
-		out[[1]] = structure(match(out[[1]], breaks) - 1, 
+		out[[1]] = structure(match(out[[1]], nbreaks) - 1, 
 			levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor")
 	}
 	out
