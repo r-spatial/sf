@@ -180,13 +180,13 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 
 #' @param use_integer boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.
 #' @param mask stars object with NA mask (0 where NA), or NULL
-#' @param cuts cut values for contour polygons (or lines)
+#' @param breaks numeric vector with break values for contour polygons (or lines)
 #' @param use_contours logical;
 #' @param contour_lines logical;
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform, cuts = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE, contour_lines = FALSE) {
+		geotransform, breaks = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE, contour_lines = FALSE) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
@@ -197,11 +197,11 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		} else
 			character(0)
 	contour_options = if (use_contours) { # construct contour_options:
-			ncuts = if (cuts[length(cuts)] == max(x[[1]]))
-					cuts[lenth(cuts)] = cuts[length(cuts)] * 1.01
+			nbreaks = if (breaks[length(breaks)] == max(x[[1]]))
+					breaks[length(breaks)] = breaks[length(breaks)] * 1.01
 				else
-					cuts
-			c(paste0("FIXED_LEVELS=", paste0(ncuts, collapse = ",")),
+					breaks
+			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
 			paste0("ELEV_FIELD=0"),
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
 		} else
@@ -210,11 +210,11 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (use_contours) {
-		m = match(out[[1]], cuts)
+		m = match(out[[1]], breaks)
 		if (min(m, na.rm = TRUE) < 2)
-			stop("lowest value of cuts should be lower or equal to the minimum cell value")
-		out[[1]] = structure(match(out[[1]], cuts) - 1, 
-			levels = levels(cut(cuts, cuts, include.lowest=TRUE)), class = "factor")
+			stop("lowest value of breaks should be lower or equal to the minimum cell value")
+		out[[1]] = structure(match(out[[1]], breaks) - 1, 
+			levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor")
 	}
 	out
 }
