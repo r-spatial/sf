@@ -209,11 +209,10 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (use_contours) {
-		m = match(out[[1]], breaks)
-		if (min(m, na.rm = TRUE) < 2)
-			stop("lowest value of breaks should be lower or equal to the minimum cell value")
-		out[[1]] = structure(match(out[[1]], nbreaks) - 1, 
-			levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor")
+		m = as.integer(cut(out[[1]], breaks = nbreaks))
+		if (any(is.na(m)))
+			warning("range of breaks does not cover range of cell values")
+		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor")
 	}
 	out
 }
