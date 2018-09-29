@@ -30,7 +30,7 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
   use_integer = TRUE, geotransform,
-  cuts = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE,
+  breaks = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE,
   contour_lines = FALSE)
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff",
@@ -69,7 +69,7 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff",
 
 \item{use_integer}{boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.}
 
-\item{cuts}{cut values for contour polygons (or lines)}
+\item{breaks}{numeric vector with break values for contour polygons (or lines)}
 
 \item{use_contours}{logical;}
 
