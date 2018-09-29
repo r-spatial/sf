@@ -196,18 +196,26 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			mask_name
 		} else
 			character(0)
-	contour_options = if (use_contours) # construct contour_options:
-			c(paste0("FIXED_LEVELS=", paste0(cuts, collapse = ",")),
+	contour_options = if (use_contours) { # construct contour_options:
+			ncuts = if (cuts[length(cuts)] == max(x[[1]]))
+					cuts[lenth(cuts)] = cuts[length(cuts)] * 1.01
+				else
+					cuts
+			c(paste0("FIXED_LEVELS=", paste0(ncuts, collapse = ",")),
 			paste0("ELEV_FIELD=0"),
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
-		else
+		} else
 			character(0)
 	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
-	if (use_contours)
+	if (use_contours) {
+		m = match(out[[1]], cuts)
+		if (min(m, na.rm = TRUE) < 2)
+			stop("lowest value of cuts should be lower or equal to the minimum cell value")
 		out[[1]] = structure(match(out[[1]], cuts) - 1, 
 			levels = levels(cut(cuts, cuts, include.lowest=TRUE)), class = "factor")
+	}
 	out
 }
 
