@@ -180,10 +180,13 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 
 #' @param use_integer boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.
 #' @param mask stars object with NA mask (0 where NA), or NULL
+#' @param cuts cut values for contour polygons (or lines)
+#' @param use_contours logical;
+#' @param contour_lines logical;
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform, use_contours = FALSE, contour_options = character(0)) {
+		geotransform, cuts = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE, contour_lines = FALSE) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
@@ -193,9 +196,18 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			mask_name
 		} else
 			character(0)
+	contour_options = if (use_contours) # construct contour_options:
+			c(paste0("FIXED_LEVELS=", paste0(cuts, collapse = ",")),
+			paste0("ELEV_FIELD=0"),
+			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
+		else
+			character(0)
 	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
+	if (use_contours)
+		out[[1]] = structure(match(out[[1]], cuts) - 1, 
+			levels = levels(cut(cuts, cuts, include.lowest=TRUE)), class = "factor")
 	out
 }
 

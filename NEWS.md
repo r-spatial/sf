@@ -1,12 +1,14 @@
 # version 0.7-0
 
-* `read_sf` no longer first creates tibbles from `data.frame`s, but creates them directly; #853
+* `st_read` receives a `query` argument that can run queries against OGR datasets; #834, by Barry Rowlingson and Michael Sumner
+
+* `read_sf` no longer first creates tibbles from `data.frame`s, but creates them directly; #853, db propagation by Etienne Racine
 
 * check difference between compile-time and run-time GEOS versions; #844
 
-* all GEOS routines are now more robust against memory leaks, by using unique pointers; #822, #845, by Dan Baston
+* all GEOS routines are now (more) robust against memory leaks, by using unique pointers; #822, #845, by Dan Baston
 
-* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Mike Sumner
+* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Michael Sumner
 
 # version 0.6-4
 
@@ -447,7 +449,7 @@
 * rename `st_makegrid` to `st_make_grid`, and `st_linemerge` to `st_line_merge`
 * add NEWS.md file (#207)
 
-* faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Mike Sumner)
+* faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Michael Sumner)
 
 * `rbind` method for `sf` objects now keeps coordinate reference system
 

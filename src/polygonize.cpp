@@ -84,42 +84,40 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	OGRLayer *poLayer = poDS->CreateLayer("raster", sr, wkbMultiPolygon, NULL);
 	delete sr;
 
-	// create field:
-	OGRFieldDefn oField("Name", OFTInteger);
-	if (poLayer->CreateField(&oField) != OGRERR_NONE)
-    	Rcpp::stop("Creating attribute field failed.\n");
-
 	CPLErr err;
-	if (use_contours) {
-#if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
-		OGRFieldDefn idField("ID", OFTInteger);
-		if (poLayer->CreateField(&idField) != OGRERR_NONE)
+	if (use_integer) {
+		// create field:
+		OGRFieldDefn oField("Value", OFTInteger);
+		if (poLayer->CreateField(&oField) != OGRERR_NONE)
     		Rcpp::stop("Creating attribute field failed.\n");
-		OGRFieldDefn elevField("ELEV", OFTReal);
-		if (poLayer->CreateField(&elevField) != OGRERR_NONE)
-    		Rcpp::stop("Creating attribute field failed.\n");
-		err = GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
-                       create_options(contour_options).data(), NULL, NULL);
-		if (err != OGRERR_NONE)
-			Rcpp::Rcout << "GDALContourGenerateEx returned an error" << std::endl;
-#else
-		Rcpp::stop("contour only available in GDAL >= 2.4.0");
-#endif
-	} else if (use_integer)
-		err = GDALPolygonize((GDALRasterBandH) poBand, maskBand,
+		if (GDALPolygonize((GDALRasterBandH) poBand, maskBand,
 			(OGRLayerH) poLayer,
 			iPixValField[0],
 			NULL, // create_options(options, true),
-			NULL, NULL);
-	else
-		err = GDALFPolygonize((GDALRasterBandH) poBand, maskBand,
-			(OGRLayerH) poLayer,
-			iPixValField[0],
-			NULL, // create_options(options, true),
-			NULL, NULL);
+			NULL, NULL) != OGRERR_NONE)
+				Rcpp::Rcout << "GDALPolygonize returned an error" << std::endl;
+	} else {
+		OGRFieldDefn oField("Value", OFTReal);
+		if (poLayer->CreateField(&oField) != OGRERR_NONE)
+    		Rcpp::stop("Creating attribute field failed.\n");
 
-	if (err != OGRERR_NONE)
-		Rcpp::Rcout << "GDAL[F}Polygonize returned an error" << std::endl;
+		if (!use_contours) {
+			if (GDALFPolygonize((GDALRasterBandH) poBand, maskBand,
+				(OGRLayerH) poLayer,
+				iPixValField[0],
+				NULL, // create_options(options, true),
+				NULL, NULL) != OGRERR_NONE)
+					Rcpp::Rcout << "GDALFPolygonize returned an error" << std::endl;
+		} else {
+#if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
+			if (GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
+                       	create_options(contour_options).data(), NULL, NULL) != OGRERR_NONE)
+				Rcpp::stop("GDALContourGenerateEx returned an error");
+#else
+			Rcpp::stop("contour only available in GDAL >= 2.4.0");
+#endif
+		} 
+	}
 
 	Rcpp::NumericVector type(1);
 	type[0] = 0;

@@ -144,7 +144,7 @@ summary(nc) # note that AREA was computed using Euclidian area on lon/lat degree
 ## only three fields by select clause
 ## only two features by where clause
 nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
-                     query = "SELECT NAME, SID74, FIPS FROM nc WHERE BIR74 > 20000")
+                     query = "SELECT NAME, SID74, FIPS FROM \\"nc\\" WHERE BIR74 > 20000")
 \dontrun{
   library(sp)
   example(meuse, ask = FALSE, echo = FALSE)
@@ -160,7 +160,7 @@ nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
 ## and that geom needs to be included in the select, otherwise we don't detect it
 gpkg_layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
 nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
-        query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM '\%s' WHERE BIR74 > 20000", gpkg_layer))
+        query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", gpkg_layer))
 }
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
