@@ -33,6 +33,8 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	valgrind \
 	vim
 
+RUN apt-get install -y libgeos-dev
+
 # PROJ:
 # was: ENV PROJ_VERSION 4.9.3
 # http://download.osgeo.org/proj/proj-5.0.0RC3.tar.gz
@@ -121,14 +123,19 @@ RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN apt-get install -y libgeos-dev
-
-RUN git clone https://github.com/r-spatial/sf.git
+RUN geos-config --libs
+RUN git clone --depth 1 https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
-RUN ldconfig
 
-RUN geos-config --libs
+RUN apt-get install -y \
+	libssh2-1-dev \
+	libgit2-dev \
+	libnetcdf-dev
+
+RUN Rscript -e 'install.packages("devtools")'
+RUN Rscript -e 'devtools::install_github("r-spatial/stars")'
+
 #RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
 #RUN R CMD build rgeos/pkg --no-build-vignettes
 #RUN R CMD INSTALL rgeos_*tar.gz
