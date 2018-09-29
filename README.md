@@ -97,6 +97,10 @@ pacaur/yaourt/whatever -S udunits
 #### Other
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/master/inst/docker).
 
+### Multiple GDAL, GEOS and/or PROJ versions on your system
+
+In case you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in `/usr/local/lib`) then this will in general not work, even when setting `LD_LIBRARY_PATH` manually. See [here](https://github.com/r-spatial/sf/issues/844) for the reason why. 
+
 ### lwgeom
 
 Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
