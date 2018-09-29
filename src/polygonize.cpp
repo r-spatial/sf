@@ -92,6 +92,13 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	CPLErr err;
 	if (use_contours) {
 #if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
+		OGRFieldDefn idField("ID", OFTInteger);
+		if (poLayer->CreateField(&idField) != OGRERR_NONE)
+    		Rcpp::stop("Creating attribute field failed.\n");
+		OGRFieldDefn elevField("ELEV", OFTReal);
+		if (poLayer->CreateField(&elevField) != OGRERR_NONE)
+    		Rcpp::stop("Creating attribute field failed.\n");
+    	Rcpp::stop("Creating attribute field failed.\n");
 		err = GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
                        create_options(contour_options).data(), NULL, NULL);
 		if (err != OGRERR_NONE)
