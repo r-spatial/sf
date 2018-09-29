@@ -15,10 +15,11 @@ st_read(dsn, layer, ...)
   stringsAsFactors = default.stringsAsFactors(),
   int64_as_string = FALSE, check_ring_dir = FALSE)
 
-read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
+read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
+  as_tibble = TRUE)
 
 \method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
-  EWKB = TRUE, quiet = TRUE, ...)
+  EWKB = TRUE, quiet = TRUE, as_tibble = FALSE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some
@@ -70,6 +71,8 @@ precision is lost (i.e., values are larger than 2^53).}
 \item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)}
+
+\item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
 \item{EWKB}{logical; is the WKB of type EWKB? if missing, defaults to
 \code{TRUE}}

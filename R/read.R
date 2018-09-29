@@ -136,7 +136,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 			call. = FALSE)
 		if (as_tibble)
 			return(tibble::as_tibble(x))
-		else 
+		else
 			return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
 	}
 
@@ -197,7 +197,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
 	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, promote_to_multi, int64_as_string)
-	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir, 
+	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
 
@@ -215,8 +215,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 #'    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
 #' x = read_sf(geojson_txt)
 #' x
-read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE) {
-	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors, as_tibble = TRUE)
+read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE) {
+	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors, as_tibble = as_tibble)
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
