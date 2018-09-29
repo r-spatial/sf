@@ -98,7 +98,6 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		OGRFieldDefn elevField("ELEV", OFTReal);
 		if (poLayer->CreateField(&elevField) != OGRERR_NONE)
     		Rcpp::stop("Creating attribute field failed.\n");
-    	Rcpp::stop("Creating attribute field failed.\n");
 		err = GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
                        create_options(contour_options).data(), NULL, NULL);
 		if (err != OGRERR_NONE)
