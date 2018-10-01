@@ -158,9 +158,9 @@ nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
 \dontrun{
 ## note that we need special escaping of layer  within single quotes (nc.gpkg)
 ## and that geom needs to be included in the select, otherwise we don't detect it
-gpkg_layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
+layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
 nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
-        query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", gpkg_layer))
+   query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", layer))
 }
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
