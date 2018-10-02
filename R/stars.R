@@ -102,7 +102,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			}
 			cbind(as.vector(xd$values), as.vector(yd$values))
 		} else 
-			as.matrix(expand.grid(x = xd$values, y = yd$values)) # nocov end
+			as.matrix(expand.grid(x = xd$values, y = yd$values))
 	}
 	dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
 	if (use_cpp)
