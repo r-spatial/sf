@@ -17,6 +17,7 @@ latex: false
 r_github_packages:
   - r-dbi/DBI
   - r-dbi/RPostgres
+  - r-lib/covr
 
 addons:
   postgresql: "9.6"
