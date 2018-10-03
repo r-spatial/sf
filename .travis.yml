@@ -39,6 +39,8 @@ addons:
       - libspatialite-dev
       - libgdal-dev
       - libjson-c-dev
+      - libnetcdf-dev
+      - netcdf-bin
       - postgresql-server-dev-9.6
 
 before_install:
