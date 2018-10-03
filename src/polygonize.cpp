@@ -88,13 +88,13 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		// create field:
 		OGRFieldDefn oField("Value", OFTInteger);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE)
-    		Rcpp::stop("Creating attribute field failed.\n");
+    		Rcpp::stop("Creating attribute field failed.\n"); // #nocov
 		if (GDALPolygonize((GDALRasterBandH) poBand, maskBand,
 			(OGRLayerH) poLayer,
 			iPixValField[0],
 			NULL, // create_options(options, true),
 			NULL, NULL) != OGRERR_NONE)
-				Rcpp::Rcout << "GDALPolygonize returned an error" << std::endl;
+				Rcpp::Rcout << "GDALPolygonize returned an error" << std::endl; // #nocov
 	} else {
 		OGRFieldDefn oField("Value", OFTReal);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE)
