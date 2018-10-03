@@ -215,10 +215,10 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (use_contours) {
-		m = as.integer(cut(out[[1]], breaks = nbreaks))
+		m = as.integer(cut(out[[1]], breaks = nbreaks)) # nocov start FIXME: add coverage when GDAL 2.4.0 is here
 		if (any(is.na(m)))
 			warning("range of breaks does not cover range of cell values")
-		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor")
+		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor") # nocov end
 	}
 	out
 }

@@ -169,7 +169,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
 			r.length(), wkbVariantIso);
 		if (err != OGRERR_NONE) {
-			if (g[i] != NULL) // release:
+			if (g[i] != NULL) // release: #nocov
 				OGRGeometryFactory::destroyGeometry(g[i]); // #nocov
 			if (local_srs != NULL)      // #nocov start
 				local_srs->Release();

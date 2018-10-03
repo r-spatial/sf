@@ -506,8 +506,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	OGRLayer *poLayer;
 	if (! Rcpp::CharacterVector::is_na(query[0])) {
 		poLayer = poDS->ExecuteSQL(query[0], NULL, NULL);
-		if (poLayer == NULL) 
-			Rcpp::stop("SQL execution failed, cannot open layer.\n");
+		if (poLayer == NULL)
+			Rcpp::stop("SQL execution failed, cannot open layer.\n"); // #nocov
 	} else 
 		poLayer = 	poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {

@@ -5,7 +5,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which) {
 	if (cc.nrow() != dim[0] * dim[1])
-		stop("xy2sfc: wrong dimensions");
+		stop("xy2sfc: wrong dimensions"); // #nocov
 	if (to_points) {
 		List ret(which.length());
 		NumericVector point(2);

@@ -41,7 +41,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	if (poDataset->GetRasterCount() > 0)
 		poBand = poDataset->GetRasterBand( 1 );
 	else
-		Rcpp::Rcout << "No bands in raster file." << std::endl;
+		Rcpp::Rcout << "No bands in raster file." << std::endl; // #nocov
 
 	// mask:
     GDALDataset  *maskDataset = NULL;
@@ -59,20 +59,20 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		if (maskDataset->GetRasterCount() > 0)
 			maskBand = maskDataset->GetRasterBand( 1 );
 		else
-			Rcpp::Rcout << "No bands in mask file." << std::endl;
+			Rcpp::Rcout << "No bands in mask file." << std::endl; // #nocov
 	}
 
 
 	// output: vector layer
 	GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(vector_driver[0]);
 	if (poDriver == NULL) {
-		Rcpp::Rcout << "driver `" << vector_driver[0] << "' not available." << std::endl;
-		Rcpp::stop("Driver not available.\n");
+		Rcpp::Rcout << "driver `" << vector_driver[0] << "' not available." << std::endl; // #nocov
+		Rcpp::stop("Driver not available.\n"); // #nocov
 	}
 	GDALDataset *poDS; 
 	if ((poDS = poDriver->Create(vector_dsn[0], 0, 0, 0, GDT_Unknown, NULL)) == NULL) {
-		Rcpp::Rcout << "Creating dataset " <<  vector_dsn[0] << " failed." << std::endl;
-		Rcpp::stop("Creation failed.\n");
+		Rcpp::Rcout << "Creating dataset " <<  vector_dsn[0] << " failed." << std::endl; // #nocov
+		Rcpp::stop("Creation failed.\n"); // #nocov
 	}
 	OGRSpatialReference *sr = new OGRSpatialReference;
 	char **ppt = (char **) &wkt;
@@ -98,7 +98,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	} else {
 		OGRFieldDefn oField("Value", OFTReal);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE)
-    		Rcpp::stop("Creating attribute field failed.\n");
+    		Rcpp::stop("Creating attribute field failed.\n"); // #nocov
 
 		if (!use_contours) {
 			if (GDALFPolygonize((GDALRasterBandH) poBand, maskBand,
@@ -106,7 +106,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 				iPixValField[0],
 				NULL, // create_options(options, true),
 				NULL, NULL) != OGRERR_NONE)
-					Rcpp::Rcout << "GDALFPolygonize returned an error" << std::endl;
+					Rcpp::Rcout << "GDALFPolygonize returned an error" << std::endl; // #nocov
 		} else {
 #if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
 			if (GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
@@ -159,7 +159,7 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 		NULL  //void * 	pProgressArg 
 	);
 	if (err != OGRERR_NONE)
-		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl;
+		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl; // #nocov
 	GDALClose(poDataset); // raster
 	return Rcpp::List::create();
 }
