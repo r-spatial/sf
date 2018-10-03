@@ -89,6 +89,7 @@ Suggests:
 	stars
 LinkingTo: 
     Rcpp
+Remotes: r-spatial/stars
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
