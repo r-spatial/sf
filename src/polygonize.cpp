@@ -84,7 +84,6 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	OGRLayer *poLayer = poDS->CreateLayer("raster", sr, wkbMultiPolygon, NULL);
 	delete sr;
 
-	CPLErr err;
 	if (use_integer) {
 		// create field:
 		OGRFieldDefn oField("Value", OFTInteger);

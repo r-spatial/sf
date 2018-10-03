@@ -18,6 +18,7 @@ r_github_packages:
   - r-dbi/DBI
   - r-dbi/RPostgres
   - r-lib/covr
+  - r-spatial/stars
 
 addons:
   postgresql: "9.6"

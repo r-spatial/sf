@@ -35,29 +35,138 @@ attr(,"class")
 > try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 [1] 2
 > 
-> ## dumped by: 
-> # library(stars)
-> # tif = system.file("tif/geomatrix.tif", package = "sf")
-> # r = read_stars(tif)
-> # d = (st_dimensions(r))
-> # dump("d") # gives:
-> d <-
-+ structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75,
-+     delta = 1.5, refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ",
-+     point = TRUE, values = NULL), class = "dimension"), y = structure(list(
-+     from = 1, to = 20, offset = 1144003.25, delta = -1.5, refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ",
-+     point = TRUE, values = NULL), class = "dimension")), raster = structure(list(
-+     affine = c(-5, -5), dimensions = c("x", "y"), curvilinear = FALSE), class = "stars_raster"), class = "dimensions")
-> 
-> gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
-> x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
-> x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
-> identical(x1, x2)
-[1] FALSE
-> y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
-> y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
-> identical(y1, y2)
-[1] FALSE
+> if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
++   tif = system.file("tif/geomatrix.tif", package = "sf")
++   r = read_stars(tif)
++   d = (st_dimensions(r))
++   gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
++   x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
++   x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
++   print(identical(x1, x2))
++   y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
++   y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
++   print(identical(y1, y2))
++ 
++   # rectilinear grid:
++   m = matrix(1:20, nrow = 5, ncol = 4)
++   x = c(0,0.5,1,2,4,5)
++   y = c(0.3,0.5,1,2,2.2)
++   r = st_as_stars(list(m = m), dimensions = st_dimensions(x = x, y = y, .raster = c("x", "y")))
++   print(st_as_sfc(st_dimensions(r), as_points = TRUE))
++   print(st_as_sfc(st_dimensions(r), as_points = FALSE))
++ 
++   # curvilinear grid:
++   lon = st_as_stars(matrix(1:5, 4, 5, byrow = TRUE))
++   lat = st_as_stars(matrix(1:4, 4, 5))
++   ll = c(X1 = lon, X2 = lat)
++   curv = st_as_stars(st_as_stars(t(m)), curvilinear = setNames(ll, c("X1", "X2")))
++   print(st_as_sfc(st_dimensions(curv), as_points = TRUE))
++   print(st_as_sfc(st_dimensions(curv), as_points = FALSE))
++ 
++   demo(nc, echo = FALSE, ask = FALSE)
++   print(x <- stars:::st_rasterize(nc)) # default grid:
++   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
++   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
++ }
+Loading required package: stars
+Loading required package: abind
+[1] TRUE
+[1] TRUE
+Geometry set for 30 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0 ymin: 0.3 xmax: 5 ymax: 2.2
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT (0 0.3)
+POINT (0.5 0.3)
+POINT (1 0.3)
+POINT (2 0.3)
+POINT (4 0.3)
+Geometry set for 30 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -0.25 ymin: 0.2 xmax: 5.5 ymax: 2.3
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POLYGON ((-0.25 0.2, 0.25 0.2, 0.25 0.4, -0.25 ...
+POLYGON ((0.25 0.2, 0.75 0.2, 0.75 0.4, 0.25 0....
+POLYGON ((0.75 0.2, 1.5 0.2, 1.5 0.4, 0.75 0.4,...
+POLYGON ((1.5 0.2, 3 0.2, 3 0.4, 1.5 0.4, 1.5 0...
+POLYGON ((3 0.2, 4.5 0.2, 4.5 0.4, 3 0.4, 3 0.2))
+Geometry set for 20 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT (1 1)
+POINT (1 2)
+POINT (1 3)
+POINT (1 4)
+POINT (2 1)
+Geometry set for 20 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0.5 ymin: 0.5 xmax: 5.5 ymax: 4.5
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POLYGON ((0.5 0.5, 0.5 1.5, 1.5 1.5, 1.5 0.5, 0...
+POLYGON ((0.5 1.5, 0.5 2.5, 1.5 2.5, 1.5 1.5, 0...
+POLYGON ((0.5 2.5, 0.5 3.5, 1.5 3.5, 1.5 2.5, 0...
+POLYGON ((0.5 3.5, 0.5 4.5, 1.5 4.5, 1.5 3.5, 0...
+POLYGON ((1.5 0.5, 1.5 1.5, 2.5 1.5, 2.5 0.5, 1...
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+Simple feature collection with 100 features and 14 fields
+Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+stars object with 2 dimensions and 1 attribute
+attribute(s):
+     AREA       
+ Min.   :0.042  
+ 1st Qu.:0.108  
+ Median :0.142  
+ Mean   :0.145  
+ 3rd Qu.:0.181  
+ Max.   :0.241  
+ NA's   :30726  
+dimension(s):
+  from  to   offset      delta                       refsys point values    
+x    1 360 -84.3239  0.0246302 +proj=longlat +datum=NAD2... FALSE   NULL [x]
+y    1 180  36.5896 -0.0150425 +proj=longlat +datum=NAD2... FALSE   NULL [y]
+Simple feature collection with 135 features and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    NA
+proj4string:    +proj=longlat +ellps=clrk66 +no_defs
+First 10 features:
+    AREA                       geometry
+1  0.070 POLYGON ((-75.90032 36.5595...
+2  0.070 POLYGON ((-76.02347 36.5595...
+3  0.070 POLYGON ((-75.87569 36.5144...
+4  0.061 POLYGON ((-81.3436 36.57461...
+5  0.091 POLYGON ((-76.93479 36.5595...
+6  0.070 POLYGON ((-75.85106 36.4392...
+7  0.070 POLYGON ((-75.82643 36.3640...
+8  0.062 POLYGON ((-76.56534 36.5595...
+9  0.153 POLYGON ((-80.01357 36.5445...
+10 0.114 POLYGON ((-79.52096 36.5445...
+Error in CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0),  : 
+  contour only available in GDAL >= 2.4.0
+[1] "Error in CPL_polygonize(file, mask_name, \"GTiff\", \"Memory\", \"foo\", character(0),  : \n  contour only available in GDAL >= 2.4.0\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<Rcpp::exception in CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0),     0, contour_options, use_contours, use_integer): contour only available in GDAL >= 2.4.0>
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -96,4 +205,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.356   0.032   0.380 
+  0.626   0.036   0.654 

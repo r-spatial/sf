@@ -37,7 +37,7 @@ st_read.DBIObject = function(dsn = NULL,
         stop("no connection provided") # nocov
 
     if (as_tibble && !requireNamespace("tibble", quietly = TRUE)) {
-        stop("package tibble not available: install first?")
+        stop("package tibble not available: install first?") # nocov
     }
 
     # check that ellipsis contains only what is needed

@@ -85,14 +85,12 @@ Suggests:
     tibble (>= 1.4.1),
     tidyr (>= 0.7-2),
     tidyselect,
-    tmap
+    tmap,
+	stars
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
     knitr
-Remotes: 
-    r-dbi/DBI,
-    r-dbi/RPostgres
 Encoding: UTF-8
 RoxygenNote: 6.1.0
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),

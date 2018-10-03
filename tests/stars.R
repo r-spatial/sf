@@ -8,27 +8,39 @@ try(gdal_metadata(tif, "wrongDomain"))
 gdal_metadata(tif, c("IMAGE_STRUCTURE"))
 try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 
-## dumped by: 
-# library(stars)
-# tif = system.file("tif/geomatrix.tif", package = "sf")
-# r = read_stars(tif)
-# d = (st_dimensions(r))
-# dump("d") # gives:
-d <-
-structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75,
-    delta = 1.5, refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ",
-    point = TRUE, values = NULL), class = "dimension"), y = structure(list(
-    from = 1, to = 20, offset = 1144003.25, delta = -1.5, refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ",
-    point = TRUE, values = NULL), class = "dimension")), raster = structure(list(
-    affine = c(-5, -5), dimensions = c("x", "y"), curvilinear = FALSE), class = "stars_raster"), class = "dimensions")
+if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
+  tif = system.file("tif/geomatrix.tif", package = "sf")
+  r = read_stars(tif)
+  d = (st_dimensions(r))
+  gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
+  x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
+  x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
+  print(identical(x1, x2))
+  y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
+  y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
+  print(identical(y1, y2))
 
-gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
-x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
-x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
-identical(x1, x2)
-y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
-y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
-identical(y1, y2)
+  # rectilinear grid:
+  m = matrix(1:20, nrow = 5, ncol = 4)
+  x = c(0,0.5,1,2,4,5)
+  y = c(0.3,0.5,1,2,2.2)
+  r = st_as_stars(list(m = m), dimensions = st_dimensions(x = x, y = y, .raster = c("x", "y")))
+  print(st_as_sfc(st_dimensions(r), as_points = TRUE))
+  print(st_as_sfc(st_dimensions(r), as_points = FALSE))
+
+  # curvilinear grid:
+  lon = st_as_stars(matrix(1:5, 4, 5, byrow = TRUE))
+  lat = st_as_stars(matrix(1:4, 4, 5))
+  ll = c(X1 = lon, X2 = lat)
+  curv = st_as_stars(st_as_stars(t(m)), curvilinear = setNames(ll, c("X1", "X2")))
+  print(st_as_sfc(st_dimensions(curv), as_points = TRUE))
+  print(st_as_sfc(st_dimensions(curv), as_points = FALSE))
+
+  demo(nc, echo = FALSE, ask = FALSE)
+  print(x <- stars:::st_rasterize(nc)) # default grid:
+  print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
+  print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
+}
 
 r = gdal_read(tif)
 gt = c(0,1,0,0,0,1)

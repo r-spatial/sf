@@ -63,7 +63,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 
 	xy2sfc = function(cc, dm, as_points) { # form points or polygons from a matrix with corner points
 		if (as_points)
-			unlist(apply(cc, 1, function(x) list(sf::st_point(x))), recursive = FALSE)[which]
+			unlist(apply(cc, 1, function(x) list(st_point(x))), recursive = FALSE)[which]
 		else {
 			stopifnot(prod(dm) == nrow(cc))
 			lst = vector("list", length = prod(dm - 1))
@@ -73,7 +73,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 					i2 = (y - 1) * dm[1] + x + 1  # top-right
 					i3 = (y - 0) * dm[1] + x + 1  # bottom-right
 					i4 = (y - 0) * dm[1] + x      # bottlom-left
-					lst[[ (y-1)*(dm[1]-1) + x ]] = sf::st_polygon(list(cc[c(i1,i2,i3,i4,i1),]))
+					lst[[ (y-1)*(dm[1]-1) + x ]] = st_polygon(list(cc[c(i1,i2,i3,i4,i1),]))
 				}
 			}
 			lst[which]
@@ -91,23 +91,28 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
 	} else { # get from values:
+		expand = function(x) { # might fail on the poles or dateline
+			d = diff(x)
+			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
+		}
 		if (raster$curvilinear) {
 			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
-				expand = function(x) { # might fail on the poles or dateline
-					d = diff(x)
-					c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
-				}
 				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
 				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
 			}
 			cbind(as.vector(xd$values), as.vector(yd$values))
-		} else 
+		} else {
+			if (!as_points) {
+				xd$values = expand(xd$values)
+				yd$values = expand(yd$values)
+			}
 			as.matrix(expand.grid(x = xd$values, y = yd$values))
+		}
 	}
 	dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
-			crs = st_crs(xd$refsys), n_empty = 0L)
+			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
 	else
 		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
 }
@@ -120,7 +125,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 #' @export
 gdal_crs = function(file, options = character(0)) {
 	ret = CPL_get_crs(file, options)
-	ret$crs = sf::st_crs(wkt = ret$crs)
+	ret$crs = st_crs(wkt = ret$crs)
 	ret
 }
 
@@ -186,7 +191,8 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform, breaks = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE, contour_lines = FALSE) {
+		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
+		use_contours = FALSE, contour_lines = FALSE) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
@@ -198,7 +204,7 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			character(0)
 	contour_options = if (use_contours) { # construct contour_options:
 			nbreaks = breaks
-			if (max(breaks) == max(x[[1]])) # expand, because GDAL will not include interval RHS
+			if (max(breaks) == max(x[[1]], na.rm = TRUE)) # expand, because GDAL will not include interval RHS
 				nbreaks[length(nbreaks)] = breaks[length(breaks)] * 1.01
 			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
 			paste0("ELEV_FIELD=0"),

@@ -30,8 +30,8 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
   use_integer = TRUE, geotransform,
-  breaks = classInt::classIntervals(x[[1]])$brks, use_contours = FALSE,
-  contour_lines = FALSE)
+  breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
+  use_contours = FALSE, contour_lines = FALSE)
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff",
   options = character())
