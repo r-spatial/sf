@@ -42,10 +42,11 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		if (na.fail && any(is.na(x[coords])))
+		cc = as.data.frame(lapply(x[coords], as.numeric))
+		if (na.fail && any(is.na(cc)))
 			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( points_rcpp(as.matrix(x[ , coords]), dim),
+		x$geometry = structure( points_rcpp(as.matrix(cc), dim),
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(x[[coords[1]]], na.rm = TRUE),
