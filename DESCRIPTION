@@ -85,8 +85,7 @@ Suggests:
     tibble (>= 1.4.1),
     tidyr (>= 0.7-2),
     tidyselect,
-    tmap,
-	stars
+    tmap
 LinkingTo: 
     Rcpp
 Remotes: r-spatial/stars
