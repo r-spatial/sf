@@ -37,7 +37,7 @@ if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
   print(st_as_sfc(st_dimensions(curv), as_points = FALSE))
 
   demo(nc, echo = FALSE, ask = FALSE)
-  print(x <- stars:::st_rasterize(nc)) # default grid:
+  print(x <- st_rasterize(nc)) # default grid:
   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
 }
