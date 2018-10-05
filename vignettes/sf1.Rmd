@@ -441,7 +441,7 @@ copies from the Java Topology Suite
 * negative values convert to float (4-byte real) precision
 * positive values convert to `round(x*precision)/precision`.
 
-For the precion model, see also
+For the precision model, see also
 [here](https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html),
 where it is written that: "... to specify 3 decimal places of
 precision, use a scale factor of 1000. To specify -3 decimal places

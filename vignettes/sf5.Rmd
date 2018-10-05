@@ -74,7 +74,7 @@ but this can be controlled, and set to a particular side (1=below, 2=left, 3=abo
 plot(nc["AREA"], key.pos = 4)
 ```
 
-The size of a color key can be controlled, using either relative units (a number between 0 and 1) or absolut units (like `lcm(2)` for 2 cm):
+The size of a color key can be controlled, using either relative units (a number between 0 and 1) or absolute units (like `lcm(2)` for 2 cm):
 ```{r}
 plot(nc["AREA"], key.pos = 1, axes = TRUE, key.width = lcm(1.3), key.length = 1.0)
 ```

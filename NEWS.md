@@ -396,7 +396,7 @@
 
 * `st_read` now respects time that is read as UTC
 
-* `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unkown" or "local"
+* `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unknown" or "local"
 
 * `st_length` now works for POINT and MULTIPOINT (returning 0); POLYGON and MULTIPOLYGON are converted to MULTILINESTRING before computing length, thus giving polygon perimeter (#268)
 
