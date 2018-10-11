@@ -33,8 +33,8 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libxml2-dev \
 	libpq-dev \
 	libssh2-1-dev \
+    unixodbc-dev \
 	r-base-dev
-
 
 RUN export DEBIAN_FRONTEND=noninteractive; \
     add-apt-repository -y ppa:opencpu/jq; \
@@ -82,7 +82,7 @@ RUN R -e 'install.packages("devtools", , repos = "https://cran.uni-muenster.de")
 RUN R -e 'devtools::install_github("r-spatial/sf", repos = "https://cran.uni-muenster.de")'
 
 # no rgdal:
-RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "lwgeom", "maps", "rgeos", "sp", "raster", "spatstat", "tmap", "maptools", "RSQLite", "tibble", "pillar", "rlang", "dplyr", "tidyr", "RPostgres", "tidyselect", "ggplot2", "mapview", "testthat", "knitr", "covr", "microbenchmark", "rmarkdown", "RPostgreSQL", "devtools") , repos = "https://cran.uni-muenster.de")'
+RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "lwgeom", "maps", "rgeos", "sp", "raster", "spatstat", "tmap", "maptools", "RSQLite", "tibble", "pillar", "rlang", "dplyr", "tidyr", "RPostgres", "tidyselect", "ggplot2", "mapview", "testthat", "knitr", "covr", "microbenchmark", "rmarkdown", "RPostgreSQL", "devtools", "odbc", "pool"), repos = "https://cran.uni-muenster.de")'
 
 RUN R -e 'library(sf)'
 
