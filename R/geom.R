@@ -1118,9 +1118,9 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
-#' Make a regular tesselation over the bounding box of an sf or sfc object
+#' Create a regular tesselation over the bounding box of an sf or sfc object
 #'
-#' Make a square or hexagonal grid over the bounding box of an sf or sfc object
+#' Create a square or hexagonal grid over the bounding box of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
