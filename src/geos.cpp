@@ -1047,11 +1047,12 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	} // for i
 	size_t j = 0;
 	for (size_t i = 0; i < out.size(); i++) {
-	if (! GEOSisEmpty_r(hGEOSCtxt, out[i].get()))
-		out[j] = std::move(out[i]);
-		index[j] = index[i];
-		std::sort(index[j].begin(), index[j].end());
-		j++;
+		if (! GEOSisEmpty_r(hGEOSCtxt, out[i].get())) {
+			out[j] = std::move(out[i]);
+			index[j] = index[i];
+			std::sort(index[j].begin(), index[j].end());
+			j++;
+		}
 	}
 	out.resize(j);
 	index.resize(j);

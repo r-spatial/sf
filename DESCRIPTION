@@ -89,7 +89,6 @@ Suggests:
     tmap
 LinkingTo: 
     Rcpp
-Remotes: r-spatial/stars
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

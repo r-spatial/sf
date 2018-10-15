@@ -1,5 +1,7 @@
 # version 0.7-0
 
+* adds several interfaces to GDAL functions, meant to be used by package `stars`
+
 * `st_read` receives a `query` argument that can run queries against OGR datasets; #834, by Barry Rowlingson and Michael Sumner
 
 * `read_sf` no longer first creates tibbles from `data.frame`s, but creates them directly; #853, db propagation by Etienne Racine

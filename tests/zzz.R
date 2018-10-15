@@ -1,5 +1,5 @@
 # put this test last, because of spatstat side effect on units:
-require(spatstat)
+suppressPackageStartupMessages(library(spatstat))
 suppressPackageStartupMessages(library(sf))
 data(chicago)
 st_as_sf(chicago)
