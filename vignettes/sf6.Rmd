@@ -27,7 +27,7 @@ EPSG stands for a maintained, well-understood set of spatial
 reference systems, maintained by the International Association of
 Oil \& Gass Producers (IOGP).
 From R, we can get access to the EPSG
-dataset programatically (as a `data.frame`) by:
+dataset programmatically (as a `data.frame`) by:
 ```{r, eval=FALSE}
 rgdal::make_EPSG()
 ```
