@@ -576,7 +576,8 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
-			dTolerance = rep(as.double(dTolerance), lenght.out = length(x)), logical(0), bOnlyEdges = bOnlyEdges))
+			dTolerance = rep(as.double(dTolerance), lenght.out = length(x)), logical(0), 
+			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
@@ -615,7 +616,8 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
-		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, 
+			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
 		stop("for voronoi, GEOS version 3.5.0 or higher is required")
 }
