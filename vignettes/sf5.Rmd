@@ -225,7 +225,3 @@ ttm()
 last_map()
 ```
 
-Unlike `mapview`, `tmap` currently converts `sf` objects first to `Spatial*` objects using `as(obj, "Spatial")`. For sf objects that do not have an equivalent representation in `sp`, this fails. Examples of this are objects with `GEOMETRYCOLLECTION` geometries, or mixed geometries such as obtained by
-```{r}
-st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_linestring(rbind(c(1,1), c(2,2)))))
-```
