@@ -959,7 +959,7 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 					// test if the items overlap with geom
 					if (chk_(GEOSOverlaps_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()))) {
 						// if they do then erase overlapping parts from geom
-						geom = std::move(geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()), hGEOSCtxt));
+						geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()), hGEOSCtxt);
 						if (geom == nullptr)
 							Rcpp::stop("GEOS exception"); // #nocov
 						// ensure that geom is valid
@@ -1021,7 +1021,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 					if (inters == nullptr)
 						Rcpp::stop("GEOS exception"); // #nocov
 					if (! chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
-						geom = std::move(geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt)); // cut out inters from geom
+						geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt); // cut out inters from geom
 						if (geom == nullptr)
 							Rcpp::stop("GEOS exception"); // #nocov
 						GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); // cut out inters from out[k]
