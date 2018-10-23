@@ -96,9 +96,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
 		}
 		if (raster$curvilinear) {
-# 			uncomment motivated by https://github.com/r-spatial/stars/pull/69 : to be FIXME: -ed ??
-#			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
-			if (!as_points) {
+			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
 				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
 				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
 			}
