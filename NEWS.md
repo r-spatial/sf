@@ -1,3 +1,7 @@
+# version 0.7-1
+
+* fix bug that broke n-ary `st_intersection` on platforms using clang; #867
+
 # version 0.7-0
 
 * adds several interfaces to GDAL functions, meant to be used by package `stars`
