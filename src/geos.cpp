@@ -1048,8 +1048,10 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	size_t j = 0;
 	for (size_t i = 0; i < out.size(); i++) {
 		if (! GEOSisEmpty_r(hGEOSCtxt, out[i].get())) {
-			out[j] = std::move(out[i]);
-			index[j] = index[i];
+			if (i != j) {
+				out[j] = std::move(out[i]);
+				index[j] = index[i];
+			}
 			std::sort(index[j].begin(), index[j].end());
 			j++;
 		}
