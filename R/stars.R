@@ -95,13 +95,13 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			d = diff(x)
 			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
 		}
-		if (raster$curvilinear) {
+		if (raster$curvilinear) { # expand jointly:
 			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
 				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
 				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
 			}
 			cbind(as.vector(xd$values), as.vector(yd$values))
-		} else {
+		} else { # rectlinear: expand independently
 			if (!as_points) {
 				xd$values = expand(xd$values)
 				yd$values = expand(yd$values)
