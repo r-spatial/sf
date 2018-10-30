@@ -123,7 +123,7 @@ st_cast_sfc_default = function(x) {
 	structure(st_sfc(x), ids = ids)
 }
 
-copy_sf_attributes_from = function(x, ret) {
+copy_sfc_attributes_from = function(x, ret) {
 	structure(ret, precision = attr(x, "precision"),
 		bbox = attr(x, "bbox"), crs = attr(x, "crs"), n_empty = attr(x, "n_empty"))
 }
@@ -156,7 +156,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			st_cast(st_cast(x, "MULTIPOINT"), "POINT")
 		else if (to == "MULTIPOINT") {
 			ret = lapply(x, function(y) structure(as.matrix(y), class = c(class(y)[1], to, "sfg")))
-			ret = copy_sf_attributes_from(x, ret)
+			ret = copy_sfc_attributes_from(x, ret)
 			reclass(ret, to, FALSE)
 		} else
 			#st_cast(st_cast(x, "MULTILINESTRING"), to)
@@ -166,13 +166,13 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			lapply(unname(split(x, ids)), function(y) structure(do.call(rbind, y), class = class(x[[1]])))
 		else
 			lapply(unname(split(x, ids)), function(y) structure(y, class = class(x[[1]])))
-		ret = copy_sf_attributes_from(x, ret)
+		ret = copy_sfc_attributes_from(x, ret)
 		reclass(ret, to, need_close(to))
 	} else if (from_col == 3 && to == "MULTILINESTRING") {
 		ret = lapply(x, unlist, recursive = FALSE) # unlist one level deeper; one MULTIPOLYGON -> one MULTILINESTRING
 		if (length(ret))
 			class(ret[[1]]) = class(x[[1]]) # got dropped
-		ret = copy_sf_attributes_from(x, ret)
+		ret = copy_sfc_attributes_from(x, ret)
 		structure(reclass(ret, to, FALSE))
 	} else { # "horizontal", to the left: split
 		ret = if (from_col == 1) # LINESTRING or MULTIPOINT to POINT
@@ -180,7 +180,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			else
 				unlist(x, recursive = FALSE)
 		ret = lapply(ret, function(y) structure(y, class = class(x[[1]]))) # will be reset by reclass()
-		ret = copy_sf_attributes_from(x, ret)
+		ret = copy_sfc_attributes_from(x, ret)
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
 }
