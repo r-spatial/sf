@@ -1,3 +1,7 @@
+# version 0.7-2
+
+* `st_write` (and `write_sf`) now returns its first argument, invisibly; #889
+
 # version 0.7-1
 
 * fix bug that broke n-ary `st_intersection` on platforms using clang; #867

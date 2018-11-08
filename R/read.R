@@ -299,6 +299,7 @@ abbreviate_shapefile_names = function(x) {
 #' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 #' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
+#' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, it is returned as an  \code{sf} object.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, "nc.shp")
@@ -345,8 +346,9 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		}
 		if (is.null(layer))
 			layer = deparse(substitute(obj))
-		return(dbWriteTable(dsn, name = layer, value = obj, ...,
-			factorsAsCharacter = factorsAsCharacter))
+		dbWriteTable(dsn, name = layer, value = obj, ...,
+			factorsAsCharacter = factorsAsCharacter)
+		return(invisible(obj))
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}
@@ -396,7 +398,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		if (!file.remove(tmp))
 			warning(paste("removing", tmp, "failed"))
 	} # nocov end
-	invisible(NULL)
+	invisible(obj)
 }
 
 #' @name st_write
