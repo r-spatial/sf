@@ -177,10 +177,16 @@ graticule_attributes = function(df) {
 	if (nrow(df) == 0)
 		return(df)
 
-	xy = cbind(
-		do.call(rbind, lapply(object, function(x) { y = x[[1]]; y[1,] } )),
-		do.call(rbind, lapply(object, function(x) { y = x[[length(x)]]; y[nrow(y),] } ))
-	)
+	xy = matrix(NA, nrow = length(object), ncol = 4)
+	for (i in seq_along(object)) {
+		o = object[[i]]
+		if (length(o) == 1) {
+			pts = o[[1]]
+			xy[i, 1:2] = pts[1,] # start
+			xy[i, 3:4] = pts[nrow(pts),] # end
+		} else
+			xy[i, ] = st_bbox(o)
+	}
 	df$x_start = xy[,1]
 	df$y_start = xy[,2]
 	df$x_end   = xy[,3]

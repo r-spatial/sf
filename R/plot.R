@@ -27,8 +27,9 @@
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
-#' one map per attribute. It uses \code{sf.colors} for default colors. For more control over individual maps,
-#' set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single maps one by one.
+#' one map per attribute. It uses \code{sf.colors} for default colors. For more control over placement of individual maps,
+#' set parameter \code{mfrow} with \link{par} prior to plotting, and plot single maps one by one; note that this only works
+#' in combination with setting parameters \code{key.pos=NULL} (no legend) and \code{reset=FALSE}.
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.

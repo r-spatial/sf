@@ -91,6 +91,9 @@ to PostgreSQL. See \code{dbDataType()} for details.}
 \item{binary}{Send geometries serialized as Well-Known Binary (WKB);
 if \code{FALSE}, uses Well-Known Text (WKT). Defaults to \code{TRUE} (WKB).}
 }
+\value{
+\code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, it is returned as an  \code{sf} object.
+}
 \description{
 Write simple features object to file or database
 }

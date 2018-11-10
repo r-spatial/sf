@@ -527,9 +527,12 @@ void write_vector(std::ostringstream& os, Rcpp::NumericVector vec, double prec) 
 }
 
 void write_matrix(std::ostringstream& os, Rcpp::NumericMatrix mat, double prec) {
+	auto nrow = mat.nrow();
+	auto ncol = mat.ncol();
+
 	add_int(os, mat.nrow());
-	for (int i = 0; i < mat.nrow(); i++)
-		for (int j = 0; j < mat.ncol(); j++)
+	for (decltype(nrow) i = 0; i < nrow; i++)
+		for (decltype(ncol) j = 0; j < ncol; j++)
 			add_double(os, mat(i,j), prec);
 }
 

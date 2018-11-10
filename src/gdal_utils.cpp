@@ -56,8 +56,12 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	GDALRasterizeOptions* opt =  GDALRasterizeOptionsNew(options_char.data(), NULL);
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, NULL, NULL);
-        GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
-        GDALDatasetH result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
+	if (src_pt == NULL)
+		Rcpp::stop("source dataset not found");
+	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
+	if (dst_pt == NULL)
+		Rcpp::stop("cannot write to destination dataset");
+	GDALDatasetH result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
 	GDALRasterizeOptionsFree(opt);
 	GDALClose(src_pt);
 	if (result != NULL)
@@ -129,6 +133,8 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 	GDALDEMProcessingOptions* opt =  GDALDEMProcessingOptionsNew(options_char.data(), NULL);
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, NULL, NULL, NULL);
+	if (src_pt == NULL)
+		Rcpp::stop("cannot open source dataset"); // #nocov
 	GDALDatasetH result = GDALDEMProcessing((const char *) dst[0], src_pt, 
 		processing.size() == 0 ? NULL : (const char *) processing[0], 
 		colorfilename.size() == 0 ? NULL : (const char *) colorfilename[0], 
