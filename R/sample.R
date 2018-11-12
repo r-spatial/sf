@@ -7,9 +7,9 @@
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
-#' 
+#'
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
-#' 
+#'
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
@@ -52,17 +52,21 @@ st_sample = function(x, size, ..., type = "random") {
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, ...))
-		st_set_crs(do.call(c, ret), st_crs(x))
+		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
-		switch(max(st_dimension(x)) + 1,
-			st_multipoints_sample(do.call(c, x), size, ..., type = type),
-			st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
-			st_poly_sample(x, size, ..., type = type))
+		res = switch(max(st_dimension(x)) + 1,
+					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
+					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
+					 st_poly_sample(x, size, ..., type = type))
 	}
+	if(length(res) > size) {
+		res = res[1:size]
+	}
+	res
 }
 
-st_poly_sample = function(x, size, ..., type = "random", 
-		offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
+st_poly_sample = function(x, size, ..., type = "random",
+						  offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
 	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
 	a1 = as.numeric(sum(st_area(x)))
@@ -80,8 +84,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
 	} else if (type == "regular") {
 		dx = as.numeric(sqrt(a0 / size))
-		offset = c((offset[1] - bb["xmin"]) %% dx, 
-			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+		offset = c((offset[1] - bb["xmin"]) %% dx,
+				   (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
 	} else if (type == "random") {
@@ -96,7 +100,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 			runif(size, bb[2], bb[4])
 		m = cbind(lon, lat)
 		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-	} else 
+	} else
 		stop(paste("sampling type", type, "not implemented for polygons"))
 	pts[lengths(st_intersects(pts, x)) > 0]
 }
@@ -129,13 +133,13 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
 }
 
-### hex grid that 
+### hex grid that
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
 ## - selects geometries intersecting with obj
-hex_grid = function(obj, pt = bb[c("xmin", "ymin")], 
-		dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
+					dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
@@ -149,7 +153,7 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	x <- rep(c(x, x + dx / 2), length.out = length(y))
 	ret = if (points) {
 		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-    	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
+		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 	} else {
 		dy = dx / sqrt(3)
 		dx2 = dx / 2
