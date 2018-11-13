@@ -43,8 +43,11 @@ if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   plot(p2, add = TRUE)
 }
-x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)
+p_exact = st_sample(x, 1000, exact = TRUE)
+p_not_exact = st_sample(x, 1000, exact = FALSE)
+length(p_exact); length(p_not_exact)
 plot(st_sample(x, 1000), add = TRUE)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
  crs=st_crs(4326))
@@ -57,13 +60,20 @@ sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
 plot(sfc)
 h = st_sample(sfc, 100, type = "hexagonal")
 h1 = st_sample(sfc, 100, type = "hexagonal")
-c(length(h), length(h1)) # approximate!
 plot(h, add = TRUE)
 plot(h1, col = 'red', add = TRUE)
+c(length(h), length(h1)) # approximate!
+h_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
+h1_e = st_sample_exact(sfc, 100, type = "hexagonal")
+c(length(h_e), length(h1_e)) # exact
+plot(sfc)
+plot(h_e, add = TRUE) # may not be evenly distributed
+plot(h1_e, col = 'red', add = TRUE)
 pt = st_multipoint(matrix(1:20,,2))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,0),c(.1,0))),
  st_linestring(rbind(c(0,1),c(.1,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
+
 }
