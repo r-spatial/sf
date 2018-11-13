@@ -5,11 +5,13 @@
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
+#' @param exact logical; should the length of output be exactly
+#' the same as specified by \code{size}?
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
-#' 
+#'
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
-#' 
+#'
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 #' @examples
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
@@ -47,21 +49,31 @@
 #'  st_linestring(rbind(c(2,2),c(2,2.00001))))
 #' st_sample(ls, 80)
 #' @export
-st_sample = function(x, size, ..., type = "random") {
+st_sample = function(x, size, ..., type = "random", exact = FALSE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, ...))
-		st_set_crs(do.call(c, ret), st_crs(x))
+		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
-		switch(max(st_dimension(x)) + 1,
+		res = switch(max(st_dimension(x)) + 1,
 			st_multipoints_sample(do.call(c, x), size, ..., type = type),
 			st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
 			st_poly_sample(x, size, ..., type = type))
 	}
+	if (exact) {
+		diff = size - length(res)
+		if(diff > 0) { # too few points
+			res_additional = st_sample_exact(x = x, size = diff)
+			res = c(res, res_additional)
+		} else if (diff < 0) { # too many points
+			res = res[1:size]
+		}
+	}
+	res
 }
 
-st_poly_sample = function(x, size, ..., type = "random", 
+st_poly_sample = function(x, size, ..., type = "random",
 		offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
 	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
@@ -80,7 +92,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
 	} else if (type == "regular") {
 		dx = as.numeric(sqrt(a0 / size))
-		offset = c((offset[1] - bb["xmin"]) %% dx, 
+		offset = c((offset[1] - bb["xmin"]) %% dx,
 			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
@@ -96,7 +108,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 			runif(size, bb[2], bb[4])
 		m = cbind(lon, lat)
 		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-	} else 
+	} else
 		stop(paste("sampling type", type, "not implemented for polygons"))
 	pts[lengths(st_intersects(pts, x)) > 0]
 }
@@ -129,12 +141,12 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
 }
 
-### hex grid that 
+### hex grid that
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
 ## - selects geometries intersecting with obj
-hex_grid = function(obj, pt = bb[c("xmin", "ymin")], 
+hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 		dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
 
 	bb = st_bbox(obj)
@@ -167,4 +179,17 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	} else
 		TRUE
 	ret[sel]
+}
+
+st_sample_exact <- function(x, size) {
+	random_pt <- st_sample(x , size = size, type = "random")
+	while (length(random_pt) < size) {
+		diff <- size - length(random_pt)
+		random_pt_new <- st_sample(x , size = diff, type = "random")
+		random_pt <- c(random_pt, random_pt_new)
+	}
+	if(length(random_pt ) > size) {
+		random_pt = random_pt[1:size]
+	}
+	random_pt
 }
