@@ -4,7 +4,7 @@
 \alias{st_sample}
 \title{sample points on or in (sets of) spatial features}
 \usage{
-st_sample(x, size, ..., type = "random")
+st_sample(x, size, ..., type = "random", exact = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -14,6 +14,9 @@ st_sample(x, size, ..., type = "random")
 \item{...}{ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling}
 
 \item{type}{character; indicates the spatial sampling type; only \code{random} is implemented right now}
+
+\item{exact}{logical; should the length of output be exactly
+the same as specified by \code{size}?}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
