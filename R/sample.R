@@ -1,6 +1,10 @@
 #' sample points on or in (sets of) spatial features
 #'
-#' sample points on or in (sets of) spatial features
+#' Sample points on or in (sets of) spatial features.
+#' Returns a pre-specified number of points that is equal to
+#' \code{size} if \code{exact = TRUE} or an approximation of
+#' \code{size} if \code{exact = FALSE}.
+#'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
@@ -190,7 +194,6 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 		TRUE
 	ret[sel]
 }
-
 st_sample_exact = function(x, size, ..., type) {
 	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
 	while (length(random_pt) < size) {

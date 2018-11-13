@@ -22,7 +22,10 @@ the same as specified by \code{size}?}
 an \code{sfc} object containing the sampled \code{POINT} geometries
 }
 \description{
-sample points on or in (sets of) spatial features
+Sample points on or in (sets of) spatial features.
+Returns a pre-specified number of points that is equal to
+\code{size} if \code{exact = TRUE} or an approximation of
+\code{size} if \code{exact = FALSE}.
 }
 \details{
 if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
