@@ -46,7 +46,7 @@
 #' plot(h1, col = 'red', add = TRUE)
 #' c(length(h), length(h1)) # approximate!
 #' h_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
-#' h1_e = st_sample_exact(sfc, 100, type = "hexagonal")
+#' h1_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
 #' c(length(h_e), length(h1_e)) # exact
 #' plot(sfc)
 #' plot(h_e, add = TRUE) # may not be evenly distributed
@@ -74,7 +74,7 @@ st_sample = function(x, size, ..., type = "random", exact = FALSE) {
 	if (exact) {
 		diff = size - length(res)
 		if(diff > 0) { # too few points
-			res_additional = st_sample_exact(x, size, ..., type = type)
+			res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
 			res = c(res, res_additional)
 		} else if (diff < 0) { # too many points
 			res = res[1:size]
@@ -191,14 +191,14 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	ret[sel]
 }
 
-st_sample_exact <- function(x, size, ..., type) {
-	random_pt <- st_sample(x = x, size = size, ..., type = type, exact = FALSE)
+st_sample_exact = function(x, size, ..., type) {
+	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
 	while (length(random_pt) < size) {
-		diff <- size - length(random_pt)
-		random_pt_new <- st_sample(x, size, ..., type, exact = FALSE)
-		random_pt <- c(random_pt, random_pt_new)
+		diff = size - length(random_pt)
+		random_pt_new = st_sample(x, size, ..., type, exact = FALSE)
+		random_pt = c(random_pt, random_pt_new)
 	}
-	if(length(random_pt ) > size) {
+	if(length(random_pt) > size) {
 		random_pt = random_pt[1:size]
 	}
 	random_pt

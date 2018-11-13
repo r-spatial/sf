@@ -64,7 +64,7 @@ plot(h, add = TRUE)
 plot(h1, col = 'red', add = TRUE)
 c(length(h), length(h1)) # approximate!
 h_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
-h1_e = st_sample_exact(sfc, 100, type = "hexagonal")
+h1_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
 c(length(h_e), length(h1_e)) # exact
 plot(sfc)
 plot(h_e, add = TRUE) # may not be evenly distributed
