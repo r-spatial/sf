@@ -48,9 +48,8 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-One way to install the dependencies is using `sudo`; the other is using homebrew. For the latter,
-see e.g. [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). Homebrew commands might be:
-
+One way to install the dependencies is using `sudo`; the other is using homebrew. 
+Homebrew commands might be:
 ```
 brew unlink gdal
 brew tap osgeo/osgeo4mac && brew tap --repair
@@ -60,7 +59,7 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2
 ```
-after that, you should be able to install `sf` as a source package.
+after that, you might be able to install `sf` as a source package.
 
 For MacOS Sierra, see
 [these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
