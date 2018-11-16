@@ -318,3 +318,8 @@ print.crs = function(x, ...) {
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
   }
 }
+
+#' @export
+st_crs.Raster = function(x, ...) {
+	st_crs(x@crs@projargs)
+}
