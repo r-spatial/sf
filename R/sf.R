@@ -426,3 +426,12 @@ as.data.frame.sf = function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	NextMethod()
 }
+
+#' @export
+#' @name st_geometry
+#' @details \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
+st_drop_geometry = function(x) {
+	if (!inherits(x, "sf"))
+		stop("st_drop_geometry only works with objects of class sf")
+	st_set_geometry(x, NULL)
+}

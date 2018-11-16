@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -1132,6 +1132,9 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > p <- st_sample(x, 10, type = "regular")
 > p <- st_sample(x, 10, type = "hexagonal")
 > 
+> all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  1.951   0.250   1.877 
+  2.136   0.088   2.216 

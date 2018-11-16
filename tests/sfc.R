@@ -295,3 +295,5 @@ st_crop(pol_sf, st_bbox(box))
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
 p <- st_sample(x, 10, type = "regular")
 p <- st_sample(x, 10, type = "hexagonal")
+
+all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))

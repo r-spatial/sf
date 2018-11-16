@@ -7,6 +7,7 @@
 \alias{st_geometry.sfg}
 \alias{st_geometry<-}
 \alias{st_set_geometry}
+\alias{st_drop_geometry}
 \title{Get, set, or replace geometry from an sf object}
 \usage{
 \method{st_geometry}{sfc}(obj, ...)
@@ -22,6 +23,8 @@ st_geometry(obj, ...)
 st_geometry(x) <- value
 
 st_set_geometry(x, value)
+
+st_drop_geometry(x)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -44,6 +47,8 @@ Get, set, or replace geometry from an sf object
 when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geometry<-} will first check for the existence of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}.
 
 the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
+
+\code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
 }
 \examples{
 df = data.frame(a = 1:2)
