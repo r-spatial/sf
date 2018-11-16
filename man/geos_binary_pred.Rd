@@ -50,7 +50,7 @@ st_is_within_distance(x, y, dist, sparse = TRUE)
 
 \item{sparse}{logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.}
 
-\item{prepared}{logical; prepare geometry for x, before looping over y?}
+\item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 
@@ -63,6 +63,8 @@ If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "interse
 Geometric binary predicates on pairs of simple feature geometry sets
 }
 \details{
+If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
+
 For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
 Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
 
