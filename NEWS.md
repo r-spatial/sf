@@ -1,5 +1,7 @@
 # version 0.7-2
 
+* `st_intersects` etc. will prepare `y` when `y` is polygons and `x` is points; #885 by Dan Baston
+
 * `st_write` (and `write_sf`) now returns its first argument, invisibly; #889
 
 # version 0.7-1
