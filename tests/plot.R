@@ -105,3 +105,7 @@ nc[[10]] = 1
 plot(nc, pal = rainbow, nbreaks = 3)
 plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
 plot(nc, pal = rainbow, breaks = (0:10)/3)
+
+# logz:
+nc$e = 10^(nc$SID74)
+plot(nc["e"], logz = TRUE)

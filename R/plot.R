@@ -5,7 +5,7 @@
 #'
 #' @param x object of class sf
 #' @param y ignored
-#' @param ... further specifications, see \link{plot_sf} and \link{plot}
+#' @param ... further specifications, see \link{plot_sf} and \link{plot} and details.
 #' @param main title for plot (\code{NULL} to remove)
 #' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
@@ -24,6 +24,7 @@
 #' @param add logical; add to current plot? Note that when using \code{add=TRUE}, you may have to set \code{reset=FALSE} in the first plot command.
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
+#' @param logz logical; if \code{TRUE}, use log10-scale for the attribute variable. In that case, \code{breaks} and \code{at} need to be given as log10-values; see examples.
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
@@ -35,6 +36,8 @@
 #' to control color, lines or symbols.
 #'
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
+#' 
+#' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #'
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
@@ -45,6 +48,8 @@
 #' # adding to a plot of an sf object only works when using reset=FALSE in the first plot:
 #' plot(nc["SID74"], reset = FALSE)
 #' plot(st_centroid(st_geometry(nc)), add = TRUE)
+#' # log10 z-scale:
+#' plot(nc["SID74"], logz = TRUE, breaks = c(0,.5,1,1.5,2), at = c(0,.5,1,1.5,2))
 #' # and we need to reset the plotting device after that, e.g. by
 #' layout(1)
 #' # when plotting only geometries, the reset=FALSE is not needed:
@@ -57,7 +62,8 @@
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), 
+		reset = TRUE, logz = FALSE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -92,7 +98,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			cols = cols[1:max.plot]
 		# loop over each map to plot:
 		lapply(cols, function(cname) plot(x[, cname], main = cname,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...))
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, 
+			logz = logz, ...))
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
@@ -114,6 +121,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 			if (is.character(values))
 				values = as.factor(values)
+			else if (logz)
+				values = log10(values)
 
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
@@ -137,10 +146,11 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 								classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
 							else
 								range(values, na.rm = TRUE) # lowest and highest!
-						}
+						} 
 						# this is necessary if breaks were specified either as character or as numeric
 						# "pretty" takes nbreaks as advice only:
 						nbreaks = length(breaks) - 1
+
 						cuts = if (all(is.na(values)))
 								rep(NA_integer_, length(values))
 							else if (diff(range(values, na.rm = TRUE)) == 0)
@@ -180,7 +190,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						key.width = key.width, key.length = key.length, ...)
 				} else
 					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
-						key.length = key.length, ...)
+						key.length = key.length, logz = logz, ...)
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -519,7 +529,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	pl_reg <- par("usr")
 	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2],
 		ytop = pl_reg[4], col = bgc, border = FALSE)
-	linAxis = function(side, ..., lon, lat, ndiscr, reset) axis(side = side, ...)
+	linAxis = function(side, ..., lon, lat, ndiscr, reset, at) axis(side = side, ...)
 	if (! missing(graticule)) {
 		g = if (isTRUE(graticule))
 				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs(4326), ...)
@@ -538,8 +548,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	} else if (axes) {
 		box()
 		if (isTRUE(st_is_longlat(x))) {
-			.degAxis(1, ...)
-			.degAxis(2, ...)
+			local_degAxis = function(side, ..., at) .degAxis(side, ...) # absorb at
+			local_degAxis(1, ...)
+			local_degAxis(2, ...)
 		} else {
 			linAxis(1, ...)
 			linAxis(2, ...)
@@ -698,9 +709,10 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param key.pos ignore
 #' @param add.axis ignore
 #' @param axes ignore
+#' @param logz ignore
 #' @param ... ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.length) {
+	at = NULL, ..., axes = FALSE, key.length, logz = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm = TRUE)
@@ -758,8 +770,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	if (key.pos %in% c(2,4))
 		polygon(c(0, 0, 1, 1) + offs, bx, col = NA, border = 'black')
 
+	labels = if (logz)
+			parse(text = paste0("10^", at))
+		else 
+			TRUE
+
 	if (add.axis)
-		axis(key.pos, at)
+		axis(key.pos, at = at, labels = labels)
 }
 
 #' @name stars
