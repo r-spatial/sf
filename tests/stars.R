@@ -41,6 +41,9 @@ if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
   print(p <- st_as_sf(x, as_points = FALSE, use_integer = TRUE)) # polygonize integers: follow raster boundaries
   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
+  st_write(read_stars(tif), tempfile())
+  st_write(read_stars(tif, proxy = TRUE), tempfile())
+  st_write(read_stars(tif, proxy = TRUE), tempfile(), block_size = c(200,200))
 }
 
 r = gdal_read(tif)
@@ -54,8 +57,3 @@ gdal_crs(tif)
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
 
-m = matrix(runif(100*100), 100, 100)
-m[ m > .8 ] = NA
-st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
-gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0, geotransform = c(0, 1.0, 0, 0, 0, 1.0))
-r = gdal_read(tif, NA_value = 255.0)
