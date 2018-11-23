@@ -36,5 +36,5 @@ st_precision(x) <- 0.01
 st_precision(x)
 }
 \seealso{
-\link{st_as_binary} for an explanation of what setting precision actually does.
+\link{st_as_binary} for an explanation of what setting precision does, and the examples therein.
 }

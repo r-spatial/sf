@@ -241,8 +241,11 @@ st_as_binary = function(x, ...) UseMethod("st_as_binary")
 #' For the precision model used, see also \url{https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html}. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.
 #' @export
 #' @examples
-#' x = st_sfc(st_point(c(1/3, 1/6)), precision = 1000)
-#' st_as_sfc(st_as_binary(x)) # rounds
+#' # examples of setting precision:
+#' st_point(c(1/3, 1/6)) %>% st_sfc(precision = 1000) %>% st_as_binary %>% st_as_sfc
+#' st_point(c(1/3, 1/6)) %>% st_sfc(precision =  100) %>% st_as_binary %>% st_as_sfc
+#' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.01) %>% st_as_binary %>% st_as_sfc
+#' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.001) %>% st_as_binary %>% st_as_sfc
 st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
 		precision = attr(x, "precision"), hex = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
