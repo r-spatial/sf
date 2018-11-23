@@ -321,5 +321,5 @@ print.crs = function(x, ...) {
 
 #' @export
 st_crs.Raster = function(x, ...) {
-	st_crs(x@crs@projargs)
+	st_crs(x@crs@projargs) # nocov
 }
