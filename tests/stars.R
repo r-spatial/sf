@@ -8,7 +8,7 @@ try(gdal_metadata(tif, "wrongDomain"))
 gdal_metadata(tif, c("IMAGE_STRUCTURE"))
 try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 
-if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
+if (require(stars)) {
   tif = system.file("tif/geomatrix.tif", package = "sf")
   r = read_stars(tif)
   d = (st_dimensions(r))
@@ -41,9 +41,11 @@ if (require(stars) && utils::packageVersion("stars") >= "0.2-0") {
   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
   print(p <- st_as_sf(x, as_points = FALSE, use_integer = TRUE)) # polygonize integers: follow raster boundaries
   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
-  st_write(read_stars(tif), tempfile())
-  st_write(read_stars(tif, proxy = TRUE), tempfile())
-  st_write(read_stars(tif, proxy = TRUE), tempfile(), block_size = c(200,200))
+  if (require(stars) && utils::packageVersion("stars") >= "0.2-1") {
+    st_write(read_stars(tif), tempfile(fileext = ".tif"))
+    st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
+    st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), block_size = c(200,200))
+  }
 }
 
 r = gdal_read(tif)
@@ -56,4 +58,3 @@ gdal_crs(tif)
 
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
-
