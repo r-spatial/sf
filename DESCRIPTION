@@ -1,5 +1,6 @@
 Package: sf
 Version: 0.7-2
+Date: 2018-11-24
 Title: Simple Features for R
 Authors@R: 
     c(person(given = "Edzer",
