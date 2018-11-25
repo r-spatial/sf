@@ -125,7 +125,8 @@ Ops.sfc <- function(e1, e2) {
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
 
-	if (!is.list(e2) && .Generic %in% c("+", "-") && length(e2) == 2)
+	#if (!is.list(e2) && .Generic %in% c("+", "-") && length(e2) == 2)
+	if (!is.list(e2))
 		e2 = list(e2)
 
 	ret = switch(.Generic,
