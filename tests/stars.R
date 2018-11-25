@@ -44,7 +44,7 @@ if (require(stars)) {
   if (require(stars) && utils::packageVersion("stars") >= "0.2-1") {
     st_write(read_stars(tif), tempfile(fileext = ".tif"))
     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
-    st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), block_size = c(200,200))
+    st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), chunk_size = c(200,200))
   }
 }
 
