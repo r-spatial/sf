@@ -225,7 +225,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	all_sfc_columns = which(unlist(all_sfc_columns))
 
 	# set names if not present:
-	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
+	all_sfc_names = if (!is.null(names(x)) && any(nzchar(names(x)[all_sfc_columns])))
 		names(x)[all_sfc_columns]
 	else {
 		object = as.list(substitute(list(...)))[-1L]
