@@ -85,7 +85,7 @@ st_as_sf.Spatial = function(x, ...) {
 st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 
 handle_bbox = function(sfc, sp) {
-	bb = structure(bb_wrap(as.vector(sp::bbox(sp))), class = "bbox")
+	bb = structure(bb_wrap(as.vector(sp::bbox(sp)[1:2,])), class = "bbox")
 	structure(sfc, "bbox" = bb)
 }
 
