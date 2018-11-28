@@ -399,7 +399,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	GDALDataset *poDstDS;
 	if (create) {
 		if (from[0] != 0 || from[1] != 0)
-			stop("from values should be zero when creating a dataset");
+			stop("from values should be zero when creating a dataset"); // #nocov
 		if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
 				create_options(options).data())) == NULL)
 			stop("creating dataset failed"); // #nocov
