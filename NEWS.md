@@ -1,5 +1,7 @@
 # version 0.7-2
 
+* plot.sf adds a (single, common) key if `key.pos` is set
+
 * allow for setting precision in distance units; #901
 
 * support log-scale in color legend by setting `logz` to `TRUE` in `plot.sf`

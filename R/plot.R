@@ -11,7 +11,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.
+#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}.
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar
 #' @param pch plotting symbol
@@ -75,7 +75,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.length)
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), 
+			if (key.pos.missing) -1 else key.pos, key.width)
 		key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
@@ -87,19 +88,54 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 		if (max_plot_missing)
 			max.plot = prod(lt$mfrow)
 
-		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
-			if (max_plot_missing && is.null(options("sf_max.plot")[[1]]))
-				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
-					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
-		}
+		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot &&
+				max_plot_missing && is.null(options("sf_max.plot")[[1]]))
+			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
+				"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
+
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		if (length(cols) > max.plot)
 			cols = cols[1:max.plot]
+
+		if (!is.null(key.pos)) {
+			values = as.numeric(as.matrix(as.data.frame(x)[cols])) # will kill factors
+			if (logz)
+				values = log10(values)
+			if (is.character(breaks)) { # compute breaks from values:
+				n.unq = length(unique(na.omit(values)))
+				breaks = if (! all(is.na(values)) && n.unq > 1)
+						classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+					else
+						range(values, na.rm = TRUE) # lowest and highest!
+				nbreaks = length(breaks) - 1
+			}
+		}
+
 		# loop over each map to plot:
 		lapply(cols, function(cname) plot(x[, cname], main = cname,
 			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, 
 			logz = logz, ...))
+
+		for (i in seq_len(prod(lt$mfrow) - length(cols))) # empty panels:
+			plot.new()
+
+		# plot key?
+		if (!is.null(key.pos) && col_missing) {
+			if (is.null(pal))
+				pal = function(n) sf.colors(n, categorical = is.factor(values))
+			colors = if (is.function(pal))
+					pal(nbreaks)
+				else
+					pal
+			if (is.factor(values))
+				.image_scale_factor(levels(values), colors, key.pos = key.pos,
+					key.width = key.width, key.length = key.length, ...)
+			else
+				.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+					key.length = key.length, logz = logz, ...)
+		}
+
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
@@ -170,7 +206,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				key.pos = NULL # no key!
 			}
 
-			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&
+			if (!isTRUE(dots$add) && !is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
 
@@ -236,9 +272,9 @@ get_key_pos = function(x, ...) {
 		if (is.null(asp))
 			asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(bb[c(2,4)]) * pi)/180), 1.0)
 		asp_box = asp_box * asp
-		if (!is.finite(asp_box) || asp_box < asp_plt) # wider
+		if (!is.finite(asp_box) || asp_box < asp_plt) # plot is wider than device: below
 			1
-		else # taller
+		else # plot is taller than device: to the right
 			4
 	}
 }
