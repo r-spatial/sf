@@ -75,8 +75,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), 
-			if (key.pos.missing) -1 else key.pos, key.width)
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos, key.width)
 		key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
@@ -99,7 +98,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			cols = cols[1:max.plot]
 
 		if (!is.null(key.pos)) {
-			values = as.numeric(as.matrix(as.data.frame(x)[cols])) # will kill factors
+			values = as.numeric(as.matrix(as.data.frame(x)[cols])) # will kill factors, and also units
 			if (logz)
 				values = log10(values)
 			if (is.character(breaks)) { # compute breaks from values:
@@ -158,7 +157,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.character(values))
 				values = as.factor(values)
 			else if (logz)
-				values = log10(values)
+				values = log10(as.numeric(values))
 
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
@@ -748,7 +747,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param logz ignore
 #' @param ... ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.length, logz = FALSE) {
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm = TRUE)
