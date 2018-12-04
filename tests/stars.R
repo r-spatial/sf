@@ -41,10 +41,14 @@ if (require(stars)) {
   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
   print(p <- st_as_sf(x, as_points = FALSE, use_integer = TRUE)) # polygonize integers: follow raster boundaries
   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
-  if (require(stars) && utils::packageVersion("stars") >= "0.2-1") {
+  if (utils::packageVersion("stars") >= "0.2-1") {
     st_write(read_stars(tif), tempfile(fileext = ".tif"))
     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), chunk_size = c(200,200))
+  	na.tif = read_stars(system.file("tif/na.tif", package = "stars"))
+  	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999)
+  	st_write(na.tif, "na.tif")
+  	st_write(na.tif, "na.tif", NA_value = -999)
   }
 }
 
