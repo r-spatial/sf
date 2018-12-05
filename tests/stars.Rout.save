@@ -73,7 +73,12 @@ attr(,"class")
 +     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
 +     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), chunk_size = c(200,200))
 +   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"))
++   	st_write(na.tif, "na.tif")
++   	st_write(na.tif, "na.tif", NA_value = -999)
 +   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999)
++   	st_write(na.tif, "na.tif")
++   	st_write(na.tif, "na.tif", NA_value = -999)
++   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999, proxy = TRUE)
 +   	st_write(na.tif, "na.tif")
 +   	st_write(na.tif, "na.tif", NA_value = -999)
 +   }
@@ -197,6 +202,8 @@ attr(,"condition")
 <Rcpp::exception in CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0),     0, contour_options, use_contours, use_integer): contour only available in GDAL >= 2.4.0>
 ================================================================================
 ================================================================================
+================================================================================
+================================================================================
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -229,4 +236,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.637   0.048   0.677 
+  0.802   0.068   0.861 
