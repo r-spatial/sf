@@ -158,6 +158,10 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 		NULL, // GDALProgressFunc 	pfnProgress,
 		NULL  //void * 	pProgressArg 
 	);
+
+	for (size_t i = 0; i < geoms.size(); i++)
+		OGRGeometryFactory::destroyGeometry(geoms[i]);
+
 	if (err != OGRERR_NONE)
 		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl; // #nocov
 	GDALClose(poDataset); // raster
