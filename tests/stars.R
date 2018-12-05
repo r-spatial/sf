@@ -46,7 +46,12 @@ if (require(stars)) {
     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
     st_write(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), chunk_size = c(200,200))
   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"))
+  	st_write(na.tif, "na.tif")
+  	st_write(na.tif, "na.tif", NA_value = -999)
   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999)
+  	st_write(na.tif, "na.tif")
+  	st_write(na.tif, "na.tif", NA_value = -999)
+  	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999, proxy = TRUE)
   	st_write(na.tif, "na.tif")
   	st_write(na.tif, "na.tif", NA_value = -999)
   }
