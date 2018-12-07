@@ -19,6 +19,7 @@ r_github_packages:
   - r-dbi/RPostgres
   - r-lib/covr
   - r-spatial/stars
+  - r-spatial/lwgeom
 
 addons:
   postgresql: "9.6"
