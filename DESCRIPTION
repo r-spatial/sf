@@ -64,7 +64,7 @@ Suggests:
     dplyr (>= 0.7-0),
     ggplot2,
     knitr,
-    lwgeom (>= 0.1-2),
+    lwgeom (>= 0.1-5),
     maps,
     maptools,
     mapview,
