@@ -45,18 +45,17 @@ addons:
       - libnetcdf-dev
       - netcdf-bin
       - postgresql-server-dev-9.6
-      - postgis
 
 before_install:
-  # install postgis from source:
-  #- wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
-  #- (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
-  #- (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
+  # install postgis from source, to avoid dependency conflict with GDAL >= 2.0:
+  - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
+  - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
 
   # activate liblwgeom by:
-  #- sudo ldconfig
+  - sudo ldconfig
   # create postgis databases:
-  #- sudo service postgresql restart
+  - sudo service postgresql restart
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
