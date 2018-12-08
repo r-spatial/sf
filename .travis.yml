@@ -48,9 +48,9 @@ addons:
 
 before_install:
   # install postgis from source, to avoid dependency conflict with GDAL >= 2.0:
-  - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
-  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
-  - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
+  - wget http://download.osgeo.org/postgis/source/postgis-2.4.3.tar.gz
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.4.3.tar.gz)
+  - (cd /tmp/postgis-2.4.3 ; ./configure; make; sudo make install)
 
   # activate liblwgeom by:
   - sudo ldconfig
