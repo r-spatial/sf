@@ -45,7 +45,7 @@ addons:
       - libnetcdf-dev
       - netcdf-bin
       - postgresql-server-dev-9.6
-	  - postgis
+      - postgis
 
 before_install:
   # install postgis from source:
