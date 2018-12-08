@@ -44,6 +44,7 @@ Description: Support for simple features, a standardized way to
 License: GPL-2 | MIT + file LICENSE
 URL: https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
+Remotes: r-spatial/lwgeom
 Depends:
     methods,
     R (>= 3.3.0)
