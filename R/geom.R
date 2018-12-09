@@ -372,7 +372,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 
 #' Geometric unary operations on simple feature geometry sets
 #'
-#' Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
+#' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
@@ -540,7 +540,7 @@ st_convex_hull.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_simplify} simplifies lines by removing vertices
-#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.
+#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.
 #' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 	UseMethod("st_simplify")
