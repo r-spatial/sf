@@ -61,6 +61,7 @@ Imports:
     units (>= 0.6-0),
     utils
 Suggests:
+    blob,
     covr,
     dplyr (>= 0.7-0),
     ggplot2,
