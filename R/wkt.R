@@ -110,7 +110,7 @@ st_as_text.sfg = function(x, ...) {
 #' @name st_as_text
 #' @param digits integer; Number of digits to use.
 #' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if `epsg` is available
-#' @importFrom lwgeom `st_as_text.sfg`
+#' @importFrom lwgeom st_astext
 #' @md
 #' @export
 st_as_text.sfc = function(x, digits, ..., EWKT = FALSE) {
