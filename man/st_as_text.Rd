@@ -13,7 +13,7 @@ st_as_text(x, ...)
 
 \method{st_as_text}{sfg}(x, ...)
 
-\method{st_as_text}{sfc}(x, ..., EWKT = FALSE)
+\method{st_as_text}{sfc}(x, digits, ..., EWKT = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{crs}}
@@ -21,6 +21,8 @@ st_as_text(x, ...)
 \item{...}{modifiers; in particular \code{digits} can be passed to control the number of digits used}
 
 \item{pretty}{logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system}
+
+\item{digits}{integer; Number of digits to use.}
 
 \item{EWKT}{logical; if TRUE, print SRID=xxx; before the WKT string if \code{epsg} is available}
 }

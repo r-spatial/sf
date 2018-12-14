@@ -5,7 +5,7 @@ WKT_name = function(x, EWKT = TRUE) {
 
 	retval = if (zm == "")
 		cls[2]
-	else 
+	else
 		paste(cls[2], substr(cls[1], 3, 4))
 
 	if (EWKT && !is.null(attr(x, "epsg")) && !is.na(attr(x, "epsg")))
@@ -23,7 +23,7 @@ fmt = function(x, ...) sub("^[ ]+", "", sapply(unclass(x), format, ...))
 prnt.POINT = function(x, ..., EWKT = TRUE) {
 	pt = if (any(!is.finite(x)))
 		empty
-	else 
+	else
 		paste0("(", paste0(fmt(x, ...), collapse = " "), ")")
 	paste(WKT_name(x, EWKT = EWKT), pt)
 }
@@ -85,7 +85,7 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 st_as_text.sfg = function(x, ...) {
 	if (Sys.getenv("LWGEOM_WKT") == "true" && requireNamespace("lwgeom", quietly = TRUE) && utils::packageVersion("lwgeom") >= "0.1-5")
 		lwgeom::st_astext(x, ...)
-	else 
+	else
 	  switch(class(x)[2],
 		POINT = prnt.POINT(x, ...),
 		MULTIPOINT =        prnt.MULTIPOINT(x, ...),
@@ -108,11 +108,14 @@ st_as_text.sfg = function(x, ...) {
 }
 
 #' @name st_as_text
-#' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if \code{epsg} is available
+#' @param digits integer; Number of digits to use.
+#' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if `epsg` is available
+#' @importFrom lwgeom `st_as_text.sfg`
+#' @md
 #' @export
-st_as_text.sfc = function(x, ..., EWKT = FALSE) {
+st_as_text.sfc = function(x, digits, ..., EWKT = FALSE) {
 	if (Sys.getenv("LWGEOM_WKT") == "true" && requireNamespace("lwgeom", quietly = TRUE) && utils::packageVersion("lwgeom") >= "0.1-5")
-		lwgeom::st_astext(x, ..., EWKT = EWKT)
+		lwgeom::st_astext(x, digits = digits, ..., EWKT = EWKT)
 	else {
 		if (EWKT) {
 			epsg = attr(x, "crs")$epsg
