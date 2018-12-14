@@ -176,6 +176,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 }
 
 #' @name st_read
+#' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
@@ -183,7 +184,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @export
 st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
-		int64_as_string = FALSE, check_ring_dir = FALSE) {
+		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0)) {
 
 	layer = if (missing(layer))
 		character(0)
@@ -196,7 +197,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name, 
+		promote_to_multi, int64_as_string)
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }

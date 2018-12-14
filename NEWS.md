@@ -1,5 +1,7 @@
 # version 0.7-2
 
+* feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812
+
 * plot.sf adds a (single, common) key if `key.pos` is set
 
 * allow for setting precision in distance units; #901

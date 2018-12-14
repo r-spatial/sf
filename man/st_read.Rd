@@ -13,7 +13,8 @@ st_read(dsn, layer, ...)
   options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
   promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
-  int64_as_string = FALSE, check_ring_dir = FALSE)
+  int64_as_string = FALSE, check_ring_dir = FALSE,
+  fid_column_name = character(0))
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
   as_tibble = TRUE)
@@ -71,6 +72,8 @@ precision is lost (i.e., values are larger than 2^53).}
 \item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)}
+
+\item{fid_column_name}{character; name of column to write feature IDs to; defaults to not doing this}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
