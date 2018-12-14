@@ -119,10 +119,9 @@ sfg_is_empty = function(x) {
 
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
-    old = x
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	st_sfc(NextMethod(), crs = st_crs(old), precision = st_precision(old))
+	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x))
 }
 
 

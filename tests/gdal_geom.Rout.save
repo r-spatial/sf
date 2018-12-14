@@ -343,4 +343,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.697   0.020   0.709 
+  0.675   0.025   0.692 
