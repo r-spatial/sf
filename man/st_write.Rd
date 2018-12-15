@@ -68,7 +68,7 @@ to update (append to) the existing data source, e.g. adding a table to an existi
 
 \item{delete_layer}{logical; delete layer \code{layer} before attempting to write? (not yet implemented)}
 
-\item{fid_column_name}{character; name of column with feature IDs}
+\item{fid_column_name}{character, name of column with feature IDs; if specified, this column is no longer written as feature attribute.}
 
 \item{conn}{DBIObject}
 

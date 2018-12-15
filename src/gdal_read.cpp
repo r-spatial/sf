@@ -12,7 +12,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 		Rcpp::CharacterVector fid_column) {
 
 	if (fid_column.size() > 1)
-		Rcpp::stop("FID column name should be a length 1 character vector");
+		Rcpp::stop("FID column name should be a length 1 character vector"); // #nocov
 
 	int n = poFDefn->GetFieldCount() + poFDefn->GetGeomFieldCount() + fid_column.size();
 	Rcpp::List out(n);
