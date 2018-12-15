@@ -297,6 +297,7 @@ abbreviate_shapefile_names = function(x) {
 #' to update (append to) the existing data source, e.g. adding a table to an existing database.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
+#' @param fid_column_name character; name of column with feature IDs
 #' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or
 #' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 #' handled with care; the former may erase complete directories or databases.
@@ -335,7 +336,8 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
+		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE, 
+		fid_column_name = NULL) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
@@ -384,16 +386,21 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		else
 			class(geom[[1]])[1]
 
+	fids = if (!is.null(fid_column_name))
+			as.character(obj[[fid_column_name]])
+		else
+			character(0)
+
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, quiet, update, delete_dsn, delete_layer)
+		geom, dim, fids, quiet, update, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, quiet, update, delete_dsn, delete_layer) == 1)
+				geom, dim, fids, quiet, update, delete_dsn, delete_layer) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = update || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))

@@ -19,7 +19,7 @@ st_write(obj, dsn, layer, ...)
   driver = guess_driver_can_write(dsn), dataset_options = NULL,
   layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
   update = driver \%in\% db_drivers, delete_dsn = FALSE,
-  delete_layer = FALSE)
+  delete_layer = FALSE, fid_column_name = NULL)
 
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
@@ -67,6 +67,8 @@ to update (append to) the existing data source, e.g. adding a table to an existi
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting to write?}
 
 \item{delete_layer}{logical; delete layer \code{layer} before attempting to write? (not yet implemented)}
+
+\item{fid_column_name}{character; name of column with feature IDs}
 
 \item{conn}{DBIObject}
 
