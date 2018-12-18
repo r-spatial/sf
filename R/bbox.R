@@ -218,3 +218,33 @@ NA_bbox_ = structure(rep(NA_real_, 4),
 	names = c("xmin", "ymin", "xmax", "ymax"),
 	crs = NA_crs_,
 	class = "bbox")
+
+#' Update bounding of a simple feature data.frame or column
+#'
+#' Update bounding of a simple feature data.frame or column
+#' @param obj object to update the bounding box of (sf or sfc)
+#' @param ... ignored
+#' @export
+#' @return an object of class(obj) (sf or sfc)
+#' @name st_update_bbox
+#' @examples
+#' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
+#' a = a %>% 
+#'   slice(1)
+#' st_bbox(a)
+#' st_bbox(st_update_bbox(a))
+st_update_bbox = function(obj, ...) UseMethod("st_update_bbox")
+
+#' @name st_update_bbox
+#' @export
+st_update_bbox.sfc = function(obj, ...) {
+  attr(obj, "bbox") <- compute_bbox(obj)
+  obj
+}
+
+#' @name st_update_bbox
+#' @export
+st_update_bbox.sf = function(obj, ...) {
+  st_geometry(obj) <- st_update_bbox.sfc(st_geometry(obj))
+  obj
+}
