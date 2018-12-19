@@ -339,6 +339,18 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' Summarize simple feature type for tibble
 #'
 #' Summarize simple feature type for tibble
+#' @param x object of class sf
+#' @param ... Other arguments passed on to individual methods.
+#' @name tibble
+#' @details see \link[tibble]{as_tibble}
+as_tibble.sf <- function(x){
+  st_as_sf(NextMethod())
+}					       
+
+					    
+#' Summarize simple feature type for tibble
+#'
+#' Summarize simple feature type for tibble
 #' @param x object of class sfc
 #' @param ... ignored
 #' @name tibble
