@@ -137,5 +137,9 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
 		ix = rep(seq_len(nrow(x)), lengths(i))
 	}
-	st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))
+	out = st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))
+	if(inherits(x, "tbl_df") & "tibble" %in% .packages()){
+          out = st_as_sf(tibble::as_tibble(out))
+        }
+        out
 }
