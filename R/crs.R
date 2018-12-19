@@ -323,3 +323,10 @@ print.crs = function(x, ...) {
 st_crs.Raster = function(x, ...) {
 	st_crs(x@crs@projargs) # nocov
 }
+
+#' @export
+st_crs.Spatial = function(x, ...) {
+	if (! requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	st_crs(proj4string(x)) # nocov
+}
