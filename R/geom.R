@@ -475,7 +475,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT")) {
 			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 		}
-		if (dist < 0 && !any(st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"))) {
+		if (any(dist < 0) && !any(st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"))) {
 			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
 		}
 
