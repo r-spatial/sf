@@ -1,3 +1,5 @@
+# version 0.7-3
+
 # version 0.7-2
 
 * feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812
