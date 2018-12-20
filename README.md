@@ -12,12 +12,13 @@
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
 
+* simple features are `data.frames` or `tibbles` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* uses S3 classes: simple features are `data.frame` objects (or `tibbles`) that have a geometry list-column
 * interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
-* interfaces to [GDAL](http://www.gdal.org/) with driver dependent dataset or layer creation options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ](http://proj4.org/)
-* provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++/Rcpp
+* interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ](http://proj4.org/)
+* uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
 * directly reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
+* is extended by pkg [lwgeom](https://github.com/r-spatial/lwgeom/) for further liblwgeom/PostGIS functions, including spherical geometry functions
 
 <a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
 
