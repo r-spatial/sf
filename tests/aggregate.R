@@ -17,7 +17,7 @@ a = aggregate(meuse_sf, list(soil = meuse_sf$soil, ff = meuse_sf$ffreq), mean)
 attributes(a)$agr
 
 # aggregate by sf/sfc
-a = st_polygon(1) * 2
+a = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))) * 2
 b = a + 1
 p = st_sfc(st_point(c(0.1,0.1)), st_point(c(1.5,1.5)), st_point(c(2.9,2.9)))
 x = st_sf(count = 1:3, geom = p)

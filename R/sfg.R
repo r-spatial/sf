@@ -150,9 +150,7 @@ st_linestring = function(x = matrix(numeric(0), 0, 2), dim = "XYZ") Mtrx(x, dim,
 #' @name st
 #' @export
 st_polygon = function(x = list(), dim = if(length(x)) "XYZ" else "XY") {
-	if (identical(x, 1))
-		st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-	else MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
+	MtrxSet(x, dim, type = "POLYGON", needClosed = TRUE)
 }
 #' @name st
 #' @export
