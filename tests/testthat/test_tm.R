@@ -3,7 +3,7 @@ context("sf: date and time")
 test_that("st_read and write handle date and time", {
 	Sys.setenv(TZ="") # local time
     x = st_sf(a = 1:2, b=c(5.6,3), dt = Sys.Date()+1:2, tm = Sys.time()+2:3, 
-              geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2))), names = c("0", "1")))
+              geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2)))))
     shp <- paste0(tempfile(), ".shp")
     gpkg <- paste0(tempfile(), ".gpkg")
     
@@ -20,7 +20,7 @@ test_that("st_read and write handle date and time", {
 
 	Sys.setenv(TZ="UTC") # GMT
     x = st_sf(a = 1:2, b=c(5.6,3), dt = Sys.Date()+1:2, tm = Sys.time()+2:3, 
-              geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2))), names = c("0", "1")))
+              geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2)))))
     shp <- paste0(tempfile(), ".shp")
     gpkg <- paste0(tempfile(), ".gpkg")
     

@@ -1,4 +1,16 @@
+# version 0.7-3
+
 # version 0.7-2
+
+* feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812
+
+* plot.sf adds a (single, common) key if `key.pos` is set
+
+* allow for setting precision in distance units; #901
+
+* support log-scale in color legend by setting `logz` to `TRUE` in `plot.sf`
+
+* `st_intersects` etc. will prepare `y` when `y` is polygons and `x` is points; #885 by Dan Baston
 
 * `st_write` (and `write_sf`) now returns its first argument, invisibly; #889
 

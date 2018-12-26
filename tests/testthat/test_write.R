@@ -87,3 +87,14 @@ test_that("esri shapefiles shorten long field names", {
   expect_warning(st_write(nc, shpy, quiet = TRUE), "Field names abbreviated for ESRI Shapefile driver")
   # expect_error(st_write(nc, shpz, quiet = TRUE), "Non-unique field names")
 })
+
+test_that("FID feature ID gets written and read", {
+  nc <- read_sf(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE, 
+  	fid_column_name = "f_id")
+  f_id = nc$f_id = rev(nc$f_id)
+  tf <- paste0(tempfile(), ".geojson")
+  write_sf(nc, tf, fid_column_name = "f_id")
+  nc2 = read_sf(tf, fid_column_name = "f_id")
+  if (sf_extSoftVersion()["GDAL"] >= "2.3.2")
+  	expect_equal(nc$f_id, nc2$f_id)
+})

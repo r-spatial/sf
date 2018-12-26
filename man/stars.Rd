@@ -13,7 +13,7 @@
 .degAxis(side, at, labels, ..., lon, lat, ndiscr, reset)
 
 .image_scale(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-  at = NULL, ..., axes = FALSE, key.length)
+  at = NULL, ..., axes = FALSE, key.length, logz = FALSE)
 
 .image_scale_factor(z, col, breaks = NULL, key.pos, add.axis = TRUE,
   ..., axes = FALSE, key.width, key.length)
@@ -54,6 +54,8 @@
 \item{add.axis}{ignore}
 
 \item{axes}{ignore}
+
+\item{logz}{ignore}
 
 \item{key.width}{ignore}
 }

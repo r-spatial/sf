@@ -86,9 +86,9 @@ $ud_unit
 > from = st_crs(4326)$proj4string
 > to = st_crs(3857)$proj4string
 > (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
-         [,1]          [,2]
-[1,]      0.0 -7.081155e-10
-[2,] 111319.5  1.113251e+05
+         [,1]     [,2]
+[1,]      0.0      0.0
+[2,] 111319.5 111325.1
 > sf_project(to, from, ret)
      [,1] [,2]
 [1,]    0    0
@@ -97,15 +97,19 @@ $ud_unit
 Geometry set for 2 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
+bbox:           xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-POINT (0 -7.081155e-10)
+POINT (0 0)
 POINT (111319.5 111325.1)
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -117,4 +121,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.382   0.032   0.404 
+  0.320   0.040   0.352 

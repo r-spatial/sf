@@ -171,7 +171,7 @@ for which we see that coordinates are actually modified (projected).
 
 ## Geometrical operations
 
-All geometrical operations `st_op(x)` or or `st_op2(x,y)` work
+All geometrical operations `st_op(x)` or `st_op2(x,y)` work
 both for `sf` objects as well as `sfc` objects `x` and `y`; since
 the operations work on the geometries, the non-geometries parts of
 an `sf` object are simply discarded. Also, all binary operations

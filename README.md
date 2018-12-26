@@ -12,12 +12,17 @@
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
 
+* simple features are `data.frames` or `tibbles` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* uses S3 classes: simple features are `data.frame` objects (or `tibbles`) that have a geometry list-column
 * interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
-* interfaces to [GDAL](http://www.gdal.org/) with driver dependent dataset or layer creation options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ.4](http://proj4.org/)
-* provides fast I/O with GDAL and GEOS using [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) written in C++/Rcpp
+* interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ](http://proj4.org/)
+* uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
 * directly reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
+* is extended by pkg [lwgeom](https://github.com/r-spatial/lwgeom/) for further liblwgeom/PostGIS functions, including spherical geometry functions
+
+<a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
+
+(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
 ### Blogs, presentations, vignettes, sp-sf wiki
 
@@ -48,9 +53,8 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-One way to install the dependencies is using `sudo`; the other is using homebrew. For the latter,
-see e.g. [here](http://www.karambelkar.info/2016/10/gdal-2-on-mac-with-homebrew/). Homebrew commands might be:
-
+One way to install the dependencies is using `sudo`; the other is using homebrew. 
+Homebrew commands might be:
 ```
 brew unlink gdal
 brew tap osgeo/osgeo4mac && brew tap --repair
@@ -60,7 +64,7 @@ brew install udunits
 brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
 brew link --force gdal2
 ```
-after that, you should be able to install `sf` as a source package.
+after that, you might be able to install `sf` as a source package.
 
 For MacOS Sierra, see
 [these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)

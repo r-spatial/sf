@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -400,7 +400,7 @@ POINT (-8905533 4300640)
 > 
 > sf_extSoftVersion()[1:3]
    GEOS    GDAL  proj.4 
-"3.6.2" "2.2.3" "4.9.3" 
+"3.7.0" "2.3.2" "5.2.0" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -922,6 +922,10 @@ POINT (0.0960505 0.924838)
 > st_bbox(meuse)
   xmin   ymin   xmax   ymax 
 178605 329714 181390 333611 
+> st_crs(meuse)
+Coordinate Reference System:
+  No EPSG code
+  proj4string: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs"
 > library(raster)
 
 Attaching package: 'raster'
@@ -1132,6 +1136,9 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > p <- st_sample(x, 10, type = "regular")
 > p <- st_sample(x, 10, type = "hexagonal")
 > 
+> all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  1.951   0.250   1.877 
+  2.268   0.080   2.342 

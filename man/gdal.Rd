@@ -17,7 +17,8 @@ gdal_read(x, ..., options = character(0), driver = character(0),
   RasterIO_parameters = list())
 
 gdal_write(x, ..., file, driver = "GTiff", options = character(0),
-  type = "Float32", NA_value = NA_real_, geotransform)
+  type = "Float32", NA_value = NA_real_, geotransform,
+  update = FALSE)
 
 gdal_inv_geotransform(gt)
 
@@ -56,6 +57,8 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff",
 \item{type}{gdal write type}
 
 \item{geotransform}{length 6 numeric vector with GDAL geotransform parameters.}
+
+\item{update}{logical; \code{TRUE} if in an existing raster file pixel values shall be updated.}
 
 \item{gt}{double vector of length 6}
 

@@ -176,6 +176,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 }
 
 #' @name st_read
+#' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
@@ -183,7 +184,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @export
 st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
 		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
-		int64_as_string = FALSE, check_ring_dir = FALSE) {
+		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0)) {
 
 	layer = if (missing(layer))
 		character(0)
@@ -196,7 +197,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, promote_to_multi, int64_as_string)
+	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name, 
+		promote_to_multi, int64_as_string)
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
@@ -295,6 +297,7 @@ abbreviate_shapefile_names = function(x) {
 #' to update (append to) the existing data source, e.g. adding a table to an existing database.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
+#' @param fid_column_name character, name of column with feature IDs; if specified, this column is no longer written as feature attribute.
 #' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or
 #' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
 #' handled with care; the former may erase complete directories or databases.
@@ -333,7 +336,8 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE) {
+		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE, 
+		fid_column_name = NULL) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
@@ -382,16 +386,23 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		else
 			class(geom[[1]])[1]
 
+	fids = if (!is.null(fid_column_name)) {
+			fids = as.character(obj[[fid_column_name]])
+			obj[[fid_column_name]] = NULL
+			fids
+		} else
+			character(0)
+
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, quiet, update, delete_dsn, delete_layer)
+		geom, dim, fids, quiet, update, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, quiet, update, delete_dsn, delete_layer) == 1)
+				geom, dim, fids, quiet, update, delete_dsn, delete_layer) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = update || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))

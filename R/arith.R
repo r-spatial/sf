@@ -5,6 +5,8 @@
 #' @param e2 numeric, or object of class \code{sfg}; in case \code{e1} is of class \code{sfc} also an object of class \code{sfc} is allowed
 #'
 #' @details in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+#' 
+#' If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
 #'
 #' @return object of class \code{sfg}
 #' @export
@@ -30,6 +32,9 @@
 #' p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
 #' lapply(c('a | b', 'a / b', 'a & b', 'a %/% b'), p)
 #' par(opar)
+#' sfc = st_sfc(st_point(0:1), st_point(2:3))
+#' sfc + c(2,3) # added to EACH geometry
+#' sfc * c(2,3) # first geometry multiplied by 2, second by 3
 Ops.sfg <- function(e1, e2) {
 
 	if (nargs() == 1) {
@@ -120,7 +125,7 @@ Ops.sfc <- function(e1, e2) {
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
 
-	if (!is.list(e2))
+	if (!is.list(e2) && ((.Generic %in% c("+", "-") && length(e2) == 2) || is.matrix(e2)))
 		e2 = list(e2)
 
 	ret = switch(.Generic,

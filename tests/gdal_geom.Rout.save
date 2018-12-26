@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -118,7 +118,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_drivers()
 > cat(paste("GDAL has", nrow(x), "drivers\n"))
-GDAL has 80 drivers
+GDAL has 85 drivers
 > 
 > # GEOS ops:
 > 
@@ -343,4 +343,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.005   0.240   0.914 
+  0.675   0.025   0.692 

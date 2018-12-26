@@ -318,3 +318,15 @@ print.crs = function(x, ...) {
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
   }
 }
+
+#' @export
+st_crs.Raster = function(x, ...) {
+	st_crs(x@crs@projargs) # nocov
+}
+
+#' @export
+st_crs.Spatial = function(x, ...) {
+	if (! requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	st_crs(sp::proj4string(x)) # nocov
+}

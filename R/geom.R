@@ -121,19 +121,23 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-	if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-		id = if (is.null(row.names(x)))
-				as.character(1:length(ret))
+	if (prepared && isTRUE(st_dimension(x) == 0) && isTRUE(st_dimension(y) == 2))
+		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
+	else {
+		ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+		if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+			id = if (is.null(row.names(x)))
+					as.character(1:length(ret))
+				else
+					row.names(x)
+			sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
+			if (! sparse)
+				as.matrix(sgbp)
 			else
-				row.names(x)
-		sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-		if (! sparse)
-			as.matrix(sgbp)
-		else
-			sgbp
-	} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-		ret[[1]]
+				sgbp
+		} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
+			ret[[1]]
+	}
 }
 
 #' Compute geometric measurements
@@ -232,6 +236,8 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
+#' @param prepared logical; prepare geometry for x, before looping over y? See Details.
+#' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
@@ -285,7 +291,6 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
 
 #' @name geos_binary_pred
 #' @export
-#' @param prepared logical; prepare geometry for x, before looping over y?
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
 
@@ -367,7 +372,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 
 #' Geometric unary operations on simple feature geometry sets
 #'
-#' Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
+#' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
@@ -467,10 +472,10 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
 		joinStyle = rep(styles$joinStyle, length.out = length(x))
 		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
-		if (any(endCapStyle == 2) && (st_geometry_type(x) == "POINT" || st_geometry_type(x) == "MULTIPOINT")) {
+		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT")) {
 			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 		}
-		if (dist < 0 && !st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON")) {
+		if (any(dist < 0) && !any(st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"))) {
 			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
 		}
 
@@ -535,7 +540,7 @@ st_convex_hull.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_simplify} simplifies lines by removing vertices
-#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.
+#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.
 #' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 	UseMethod("st_simplify")
@@ -788,7 +793,7 @@ st_node.sf = function(x) {
 #' @name geos_unary
 #' @details \code{st_segmentize} adds points to straight lines
 #' @export
-#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units \code{rad} or \code{degree}; segmentation in the long/lat case takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)

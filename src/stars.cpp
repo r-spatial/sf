@@ -348,7 +348,9 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 
 // [[Rcpp::export]]
 void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options,
-		CharacterVector Type, IntegerVector dims, NumericVector gt, CharacterVector p4s, NumericVector na_val) {
+		CharacterVector Type, IntegerVector dims, IntegerVector from,
+		NumericVector gt, CharacterVector p4s, NumericVector na_val,
+		bool create = true, bool only_create = false) {
 
 	// figure out driver:
 	if (driver.length() != 1)
@@ -383,62 +385,80 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	else
 		stop("unknown data type"); // #nocov
 
-	// create dataset:
+	// sanity checks:
 	if (fname.length() != 1)
 		stop("fname should have length one"); // #nocov
 	if (dims.length() != 3)
 		stop("dims should have length three"); // #nocov
-	GDALDataset *poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
-			create_options(options).data());
-	if (poDstDS == NULL)
-		stop("creating dataset failed"); // #nocov
-
-	// geotransform:
-	double adfGeoTransform[6];
-	if (gt.length() != 6)
-		stop("gt should have length 6"); // #nocov
-	for (int i = 0; i < gt.length(); i++)
-		adfGeoTransform[i] = gt[i];
-	if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
-		warning("SetGeoTransform() returned an error: not available?"); // #nocov
-
-	// CRS:
-	if (p4s.length() != 1)
-		stop("p4s should have length three"); // #nocov
-	OGRSpatialReference oSRS;
-	oSRS.importFromProj4( p4s[0] );
-	char *pszSRS_WKT = NULL;
-	oSRS.exportToWkt( &pszSRS_WKT );
-	if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
-		stop("SetProjection: error"); // #nocov
-	CPLFree( pszSRS_WKT );
-
-	// NA's?
+	if (from.length() != 2)
+		stop("from should have length two"); // #nocov
 	if (na_val.length() != 1)
 		stop("na_val should have length 1"); // #nocov
-	if (! NumericVector::is_na(na_val[0])) {
-		for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
-			GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
-			if (poBand->SetNoDataValue(na_val[0]) != CE_None) {
-				warning("SetNoDataValue not supported by driver"); // #nocov
-				break; // #nocov
+
+	// create dataset:
+	GDALDataset *poDstDS;
+	if (create) {
+		if (from[0] != 0 || from[1] != 0)
+			stop("from values should be zero when creating a dataset"); // #nocov
+		if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
+				create_options(options).data())) == NULL)
+			stop("creating dataset failed"); // #nocov
+
+		// set geotransform:
+		double adfGeoTransform[6];
+		if (gt.length() != 6)
+			stop("gt should have length 6"); // #nocov
+		for (int i = 0; i < gt.length(); i++)
+			adfGeoTransform[i] = gt[i];
+		if (poDstDS->SetGeoTransform( adfGeoTransform ) != CE_None)
+			warning("SetGeoTransform() returned an error: not available?"); // #nocov
+
+		// CRS:
+		if (p4s.length() != 1)
+			stop("p4s should have length three"); // #nocov
+		OGRSpatialReference oSRS;
+		oSRS.importFromProj4( p4s[0] );
+		char *pszSRS_WKT = NULL;
+		oSRS.exportToWkt( &pszSRS_WKT );
+		if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
+			stop("SetProjection: error"); // #nocov
+		CPLFree( pszSRS_WKT );
+
+		// set band NA's
+		if (! NumericVector::is_na(na_val[0])) {
+			for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
+				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+				if (poBand->SetNoDataValue(na_val[0]) != CE_None) {
+					warning("SetNoDataValue not supported by driver"); // #nocov
+					break; // #nocov
+				}
 			}
 		}
-		for (int i = 0; i < x.ncol(); i++) {
-			NumericVector nv = x(_, i);
-			for (int j = 0; j < x.nrow(); j++) {
-				if (NumericVector::is_na(nv[j]))
-					nv[j] = na_val[0];
-			}
-			x(_, i) = nv;
-		}
-		checkUserInterrupt();
+
+	} else { // no create, update:
+		if ((poDstDS = (GDALDataset *) GDALOpen(fname[0], GA_Update)) == NULL)
+			stop("updating dataset failed"); // #nocov
 	}
 
-	// write the whole lot:
-	if (poDstDS->RasterIO(GF_Write, 0, 0, dims[0], dims[1],
-			x.begin(), dims[0], dims[1], GDT_Float64, dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
-		stop("read failure"); // #nocov
+	if (! only_create) {
+		if (! NumericVector::is_na(na_val[0])) { // replace R's NA's with GDAL write NA value
+			for (int i = 0; i < x.ncol(); i++) {
+				NumericVector nv = x(_, i);
+				for (int j = 0; j < x.nrow(); j++) {
+					if (NumericVector::is_na(nv[j]))
+						nv[j] = na_val[0];
+				}
+				x(_, i) = nv;
+			}
+			checkUserInterrupt();
+		}
+		// write values:
+		// write the whole lot:
+		if (poDstDS->RasterIO(GF_Write, from[0], from[1], dims[0] - from[0], dims[1] - from[1],
+				x.begin(), dims[0] - from[0], dims[1] - from[1], GDT_Float64, 
+				dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
+			stop("write failure"); // #nocov
+	}
 
 	/* close: */
 	GDALClose( (GDALDatasetH) poDstDS );

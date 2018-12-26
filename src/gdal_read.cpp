@@ -8,9 +8,13 @@
 #include "gdal_sf_pkg.h"
 #include "gdal_read.h"
 
-Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string) {
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string, 
+		Rcpp::CharacterVector fid_column) {
 
-	int n = poFDefn->GetFieldCount() + poFDefn->GetGeomFieldCount();
+	if (fid_column.size() > 1)
+		Rcpp::stop("FID column name should be a length 1 character vector"); // #nocov
+
+	int n = poFDefn->GetFieldCount() + poFDefn->GetGeomFieldCount() + fid_column.size();
 	Rcpp::List out(n);
 	Rcpp::CharacterVector names(n);
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
@@ -59,6 +63,9 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 		names[i] = poFieldDefn->GetNameRef();
 	}
 
+	if (fid_column.size())
+		names[ poFDefn->GetFieldCount() ] = fid_column[0];
+
 	for (int i = 0; i < poFDefn->GetGeomFieldCount(); i++) {
 		// get the geometry fields:
 		OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
@@ -68,12 +75,12 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 		const char *geom_name = poGFDefn->GetNameRef();
 		if (*geom_name == '\0') {
 			if (i > 0)
-				names[i + poFDefn->GetFieldCount()] = geom + std::to_string(i); // c++11; #nocov
+				names[i + poFDefn->GetFieldCount() + fid_column.size()] = geom + std::to_string(i); // c++11; #nocov
 			else
-				names[i + poFDefn->GetFieldCount()] = geom;
+				names[i + poFDefn->GetFieldCount() + fid_column.size()] = geom;
 		} else
-			names[i + poFDefn->GetFieldCount()] = geom_name;
-		out[i + poFDefn->GetFieldCount()] = Rcpp::List(n_features); // ?
+			names[i + poFDefn->GetFieldCount() + fid_column.size()] = geom_name;
+		out[i + poFDefn->GetFieldCount() + fid_column.size()] = Rcpp::List(n_features); // ?
 	}
 
 	out.attr("names") = names;
@@ -184,7 +191,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 }
 
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string, 
-		Rcpp::NumericVector toTypeUser, bool promote_to_multi = true) {
+		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, bool promote_to_multi = true) {
 
 	double n_d = (double) poLayer->GetFeatureCount();
 	if (n_d > INT_MAX)
@@ -201,7 +208,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 	std::vector<OGRGeometry *> poGeometryV(n * poFDefn->GetGeomFieldCount());
 	// cycles column wise: 2nd el is 1st geometry, 2nd feature
 
-	Rcpp::List out = allocate_out_list(poFDefn, n, int64_as_string);
+	Rcpp::List out = allocate_out_list(poFDefn, n, int64_as_string, fid_column);
 
 	// read all features:
 	poLayer->ResetReading();
@@ -371,7 +378,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 					else
 						cv[i] = NA_STRING;
 					}
-					break;
+				break;
 			}
 		}
 
@@ -386,8 +393,13 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		i++;
 	} // all read...
 
+	// add feature IDs if needed:
+	if (fid_column.size())
+		out[ poFDefn->GetFieldCount() ] = fids;
+
 	std::vector<OGRGeometry *> to_be_freed;
 	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
+
 		std::vector<OGRGeometry *> poGeom(n);
 		for (i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
@@ -445,8 +457,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
 		sfc.attr("crs") = get_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
-		sfc.attr("names") = fids;
-		out[iGeom + poFDefn->GetFieldCount()] = sfc;
+		out[iGeom + poFDefn->GetFieldCount() + fid_column.size()] = sfc;
 	}
 
 	if (warn_int64)
@@ -467,7 +478,9 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
 		Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
+		Rcpp::CharacterVector fid_column_name,
 		bool promote_to_multi = true, bool int64_as_string = false) {
+
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
 	GDALDataset *poDS;
@@ -519,7 +532,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
 			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 
-	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, promote_to_multi);
+	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name, 
+		promote_to_multi);
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
 	if (! Rcpp::CharacterVector::is_na(query[0]))

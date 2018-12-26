@@ -23,6 +23,8 @@ S3 Ops Group Generic Functions for simple feature geometries
 }
 \details{
 in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+
+If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
 }
 \examples{
 st_point(c(1,2,3)) + 4
@@ -45,6 +47,9 @@ b = a + c(2, 0)
 p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
 lapply(c('a | b', 'a / b', 'a & b', 'a \%/\% b'), p)
 par(opar)
+sfc = st_sfc(st_point(0:1), st_point(2:3))
+sfc + c(2,3) # added to EACH geometry
+sfc * c(2,3) # first geometry multiplied by 2, second by 3
 nc = st_transform(st_read(system.file("gpkg/nc.gpkg", package="sf")), 32119) # nc state plane, m
 b = st_buffer(st_centroid(st_union(nc)), units::set_units(50, km)) # shoot a hole in nc:
 plot(st_geometry(nc) / b, col = grey(.9))

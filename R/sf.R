@@ -225,7 +225,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	all_sfc_columns = which(unlist(all_sfc_columns))
 
 	# set names if not present:
-	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
+	all_sfc_names = if (!is.null(names(x)) && any(nzchar(names(x)[all_sfc_columns])))
 		names(x)[all_sfc_columns]
 	else {
 		object = as.list(substitute(list(...)))[-1L]
@@ -255,7 +255,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			x[-all_sfc_columns]
 		else
 			cbind(data.frame(row.names = row.names), 
-				data.frame(x[-all_sfc_columns], stringsAsFactors = stringsAsFactors))
+				as.data.frame(x[-all_sfc_columns], 
+					stringsAsFactors = stringsAsFactors, optional = TRUE))
 
 	for (i in seq_along(all_sfc_names))
 		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]], check_ring_dir = check_ring_dir)
@@ -425,4 +426,13 @@ merge.sf = function(x, y, ...) {
 as.data.frame.sf = function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	NextMethod()
+}
+
+#' @export
+#' @name st_geometry
+#' @details \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
+st_drop_geometry = function(x) {
+	if (!inherits(x, "sf"))
+		stop("st_drop_geometry only works with objects of class sf")
+	st_set_geometry(x, NULL)
 }

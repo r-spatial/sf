@@ -109,12 +109,12 @@ Error in st_line_sample(ls, density = 1/1000) :
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
+bbox:           xmin: 0 ymin: 0 xmax: 10625.95 ymax: 110823.7
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
 MULTIPOINT (0 501.4646, 0 1504.394, 0 2507.323,...
-MULTIPOINT (505.9977 -7.081155e-10, 1517.993 -7...
+MULTIPOINT (505.9977 0, 1517.993 0, 2529.988 0,...
 > 
 > proc.time()
    user  system elapsed 
-  0.496   0.047   0.535 
+  0.507   0.023   0.522 

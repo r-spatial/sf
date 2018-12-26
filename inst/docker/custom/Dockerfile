@@ -21,6 +21,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	make \
 	wget \
 	git \
+	cmake \
 	libudunits2-dev \
 	r-base-dev
 
@@ -46,15 +47,22 @@ RUN	cd \
 	
 RUN	mkdir /opt/geos \
 	&& cd \
-	&& wget http://download.osgeo.org/geos/geos-3.6.1.tar.bz2 \
-	&& bunzip2  geos-3.6.1.tar.bz2  \
-	&& tar xvf geos-3.6.1.tar  \
-	&& cd geos-3.6.1 \
-	&& ./configure --prefix=/opt/geos \
+	&& wget http://download.osgeo.org/geos/geos-3.7.0.tar.bz2 \
+	&& bunzip2 -c geos-3.7.0.tar.bz2 | tar xvf - \
+	&& cd geos-3.7.0 \
+	&& mkdir build \
+	&& cd build \
+	&& cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/geos .. \
 	&& make \
 	&& make install
 	
-RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr"), repos = "https://cran.uni-muenster.de")'
+RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "classInt"), repos = "https://cran.uni-muenster.de")'
+
+#RUN	cd /usr/share \
+#	&& mkdir proj \
+#	&& cd proj \
+#	&& wget https://download.osgeo.org/proj/proj-datumgrid-1.7.zip \
+#	&& unzip proj*zip
 
 RUN	cd / \
 	&& (cd sf; git pull; autoconf) \

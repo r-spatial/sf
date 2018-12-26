@@ -1,5 +1,6 @@
 Package: sf
-Version: 0.7-2
+Version: 0.7-3
+Date: 2018-11-24
 Title: Simple Features for R
 Authors@R: 
     c(person(given = "Edzer",
@@ -59,11 +60,12 @@ Imports:
     units (>= 0.6-0),
     utils
 Suggests:
+    blob,
     covr,
     dplyr (>= 0.7-0),
     ggplot2,
     knitr,
-    lwgeom (>= 0.1-2),
+    lwgeom (>= 0.1-5),
     maps,
     maptools,
     mapview,
@@ -81,7 +83,7 @@ Suggests:
     RSQLite,
     sp (>= 1.2-4),
     spatstat,
-	stars,
+	stars (>= 0.2-0),
     testthat,
     tibble (>= 1.4.1),
     tidyr (>= 0.7-2),
@@ -92,7 +94,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0)
 Collate: 

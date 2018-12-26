@@ -5,74 +5,6 @@ CPL_get_bbox <- function(sf, depth = 0L) {
     .Call('_sf_CPL_get_bbox', PACKAGE = 'sf', sf, depth)
 }
 
-CPL_area <- function(sfc) {
-    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
-    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
-}
-
-CPL_length <- function(sfc) {
-    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
-}
-
-CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
-    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
-}
-
-CPL_gdal_linestring_sample <- function(sfc, distLst) {
-    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
-}
-
-CPL_get_layers <- function(datasource, options, do_count = FALSE) {
-    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
-}
-
-CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, promote_to_multi = TRUE, int64_as_string = FALSE) {
-    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, promote_to_multi, int64_as_string)
-}
-
-CPL_gdalinfo <- function(obj, options) {
-    .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options)
-}
-
-CPL_gdalwarp <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdalrasterize <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdaltranslate <- function(src, dst, options) {
-    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdalvectortranslate <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdalbuildvrt <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename) {
-    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename)
-}
-
-CPL_gdalnearblack <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_gdalgrid <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
-}
-
-CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
-    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, quiet, update, delete_dsn, delete_layer)
-}
-
 CPL_gdal_init <- function() {
     invisible(.Call('_sf_CPL_gdal_init', PACKAGE = 'sf'))
 }
@@ -143,6 +75,74 @@ CPL_sfc_from_wkt <- function(wkt) {
 
 CPL_gdal_with_geos <- function() {
     .Call('_sf_CPL_gdal_with_geos', PACKAGE = 'sf')
+}
+
+CPL_area <- function(sfc) {
+    .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_dimension <- function(sfc, NA_if_empty = TRUE) {
+    .Call('_sf_CPL_gdal_dimension', PACKAGE = 'sf', sfc, NA_if_empty)
+}
+
+CPL_length <- function(sfc) {
+    .Call('_sf_CPL_length', PACKAGE = 'sf', sfc)
+}
+
+CPL_gdal_segmentize <- function(sfc, dfMaxLength = 0.0) {
+    .Call('_sf_CPL_gdal_segmentize', PACKAGE = 'sf', sfc, dfMaxLength)
+}
+
+CPL_gdal_linestring_sample <- function(sfc, distLst) {
+    .Call('_sf_CPL_gdal_linestring_sample', PACKAGE = 'sf', sfc, distLst)
+}
+
+CPL_get_layers <- function(datasource, options, do_count = FALSE) {
+    .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
+}
+
+CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, promote_to_multi = TRUE, int64_as_string = FALSE) {
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, fid_column_name, promote_to_multi, int64_as_string)
+}
+
+CPL_gdalinfo <- function(obj, options) {
+    .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options)
+}
+
+CPL_gdalwarp <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalrasterize <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaltranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalvectortranslate <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalbuildvrt <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename) {
+    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename)
+}
+
+CPL_gdalnearblack <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_gdalgrid <- function(src, dst, options) {
+    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
+}
+
+CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
+    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, update, delete_dsn, delete_layer)
 }
 
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", prepared = FALSE) {
@@ -281,8 +281,8 @@ CPL_read_gdal <- function(fname, options, driver, read_data, NA_value, RasterIO_
     .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data, NA_value, RasterIO_parameters)
 }
 
-CPL_write_gdal <- function(x, fname, driver, options, Type, dims, gt, p4s, na_val) {
-    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, gt, p4s, na_val))
+CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create = TRUE, only_create = FALSE) {
+    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create, only_create))
 }
 
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {

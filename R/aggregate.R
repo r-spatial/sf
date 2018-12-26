@@ -55,7 +55,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 			a_na[a$Group.1,] = a
 			a = a_na
 		}
-		a$Group.1 = NULL
+		a$Group.1 = NULL # remove
 		row.names(a) = row.names(by)
 		st_set_geometry(a, st_geometry(by))
 	} else {

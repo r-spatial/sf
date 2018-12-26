@@ -56,7 +56,7 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
 
-\item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.}
+\item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each feature geometry.}
 
@@ -68,13 +68,13 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 
-\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.}
+\item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units \code{rad} or \code{degree}; segmentation in the long/lat case takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.}
 }
 \value{
 an object of the same class of \code{x}, with manipulated geometry.
 }
 \description{
-Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
+Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 }
 \details{
 \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},

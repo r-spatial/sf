@@ -21,7 +21,8 @@
 \method{plot}{sf}(x, y, ..., main, pal = NULL, nbreaks = 10,
   breaks = "pretty", max.plot = if (is.null(n <-
   options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
-  key.length = 0.618, key.width = lcm(1.8), reset = TRUE)
+  key.length = 0.618, key.width = lcm(1.8), reset = TRUE,
+  logz = FALSE)
 
 get_key_pos(x, ...)
 
@@ -66,7 +67,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{y}{ignored}
 
-\item{...}{further specifications, see \link{plot_sf} and \link{plot}}
+\item{...}{further specifications, see \link{plot_sf} and \link{plot} and details.}
 
 \item{main}{title for plot (\code{NULL} to remove)}
 
@@ -78,13 +79,15 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}}
 
-\item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.}
+\item{key.pos}{integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}.}
 
 \item{key.length}{amount of space reserved for the key along its axis, length of the scale bar}
 
 \item{key.width}{amount of space reserved for the key (incl. labels), thickness/width of the scale bar}
 
 \item{reset}{logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.}
+
+\item{logz}{logical; if \code{TRUE}, use log10-scale for the attribute variable. In that case, \code{breaks} and \code{at} need to be given as log10-values; see examples.}
 
 \item{pch}{plotting symbol}
 
@@ -157,6 +160,8 @@ to control color, lines or symbols.
 
 When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 
+parameter \code{at} can be set to specify where labels are placed along the key; see examples.
+
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.
 
@@ -180,6 +185,8 @@ plot(nc[c("SID74", "SID79")]) # better use ggplot2::geom_sf to facet and get a s
 # adding to a plot of an sf object only works when using reset=FALSE in the first plot:
 plot(nc["SID74"], reset = FALSE)
 plot(st_centroid(st_geometry(nc)), add = TRUE)
+# log10 z-scale:
+plot(nc["SID74"], logz = TRUE, breaks = c(0,.5,1,1.5,2), at = c(0,.5,1,1.5,2))
 # and we need to reset the plotting device after that, e.g. by
 layout(1)
 # when plotting only geometries, the reset=FALSE is not needed:

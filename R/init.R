@@ -77,6 +77,7 @@ setOldClass("sfg")
 		packageStartupMessage(paste(
 			"Linked against:", CPL_geos_version(TRUE, TRUE), 
 			"compiled against:", CPL_geos_version(FALSE, TRUE)))
+		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
 	} # nocov end
 }
 

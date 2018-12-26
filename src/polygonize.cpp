@@ -120,7 +120,8 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 
 	Rcpp::NumericVector type(1);
 	type[0] = 0;
-	Rcpp::List lst = sf_from_ogrlayer(poLayer, false, true, type, true);
+	Rcpp::CharacterVector fid_column; // empty
+	Rcpp::List lst = sf_from_ogrlayer(poLayer, false, true, type, fid_column, true);
 	GDALClose(poDataset); // raster
 	GDALClose(poDS); // vector
 	if (maskDataset != NULL)
@@ -158,6 +159,10 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 		NULL, // GDALProgressFunc 	pfnProgress,
 		NULL  //void * 	pProgressArg 
 	);
+
+	for (size_t i = 0; i < geoms.size(); i++)
+		OGRGeometryFactory::destroyGeometry(geoms[i]);
+
 	if (err != OGRERR_NONE)
 		Rcpp::Rcout << "GDALRasterizeGeometries returned an error" << std::endl; // #nocov
 	GDALClose(poDataset); // raster

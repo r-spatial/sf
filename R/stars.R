@@ -18,15 +18,45 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @export
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
+#' @param update logical; \code{TRUE} if in an existing raster file pixel values shall be updated.
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
-		NA_value = NA_real_, geotransform) {
-	mat = x[[1]]
-	dims = dim(mat)
+		NA_value = NA_real_, geotransform, update = FALSE) {
+
+	if (!requireNamespace("stars", quietly = TRUE))
+		stop("stars required: install that first") # nocov
+
+	d = stars::st_dimensions(x)
+	xydims = attr(d, "raster")$dimensions
+	if (!all.equal(match(xydims, names(d)), 1:2))
+		stop("x and y raster dimensions need to be in place 1 and 2")
+	from = c(d[[1]]$from, d[[2]]$from) - 1
+	dims = c(d[[1]]$to, d[[2]]$to)
+	if (length(d) == 3)
+		dims = c(dims, d[[3]]$to - d[[3]]$from + 1)
+
+	if (inherits(x, "stars_proxy")) {
+		mat = matrix(0, 0, 0)
+		only_create = TRUE # don't write any pixel data
+		if (!all(from == 0))
+			warning("writing raster to original size") # otherwise, geotransform needs to be modified
+		from = c(0, 0)
+	} else {
+		mat = x[[1]]
+		only_create = FALSE # write x too
+		if (! update) {
+			if (!all(from == 0))
+				stop("cannot write sub-rasters only")
+			if (!all(dims == dim(mat)))
+				stop("dimensions don't match")
+		}
+		dm = dim(mat)
+		dim(mat) = c(dm[1], prod(dm[-1])) # flatten to 2-D matrix
+	}
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
-	dim(mat) = c(dims[1], prod(dims[-1])) # flatten to 2-D matrix
-	CPL_write_gdal(mat, file, driver, options, type, dims, geotransform, st_crs(x)$proj4string, 
-		as.double(NA_value))
+
+	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform, st_crs(x)$proj4string, 
+		as.double(NA_value), create = !update, only_create = only_create)
 }
 
 #' @param gt double vector of length 6
