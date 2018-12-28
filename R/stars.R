@@ -86,7 +86,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
 st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x))),
-		geotransform) {
+		geotransform, end_points = rep(FALSE, length(x))) {
 
 	if (is.na(as_points))
 		stop("as_points should be set to TRUE (`points') or FALSE (`polygons')")
@@ -114,7 +114,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	xy_names = raster$dimensions
 	xd = x[[ xy_names[1] ]]
 	yd = x[[ xy_names[2] ]]
-	cc = if (! is.na(xd$offset) && !is.na(yd$offset)) {
+	cc = if (!is.na(xd$offset) && !is.na(yd$offset)) {
 		xy = if (as_points) # grid cell centres:
 			expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
 		else # grid corners: from 0 to n
@@ -133,13 +133,22 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			cbind(as.vector(xd$values), as.vector(yd$values))
 		} else { # rectlinear: expand independently
 			if (!as_points) {
-				xd$values = expand(xd$values)
-				yd$values = expand(yd$values)
+				if (!end_points[1])
+					xd$values = expand(xd$values)
+				if (!end_points[2])
+					yd$values = expand(yd$values)
+			} else {
+				halfway = function(x) (head(x, -1) + tail(x, -1)) / 2
+				if (end_points[1])
+					xd$values = halfway(xd$values)
+				if (end_points[2])
+					yd$values = halfway(yd$values)
 			}
 			as.matrix(expand.grid(x = xd$values, y = yd$values))
 		}
 	}
-	dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
+	#dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
+	dims = dim(x) - end_points + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
 			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
