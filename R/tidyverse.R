@@ -1,8 +1,8 @@
 ## dplyr methods:
 
-#' Tidyverse methods for sf objects
+#' Tidyverse methods for sf objects (remove .sf suffix!)
 #'
-#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -164,7 +164,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 #' @param .keep_all see corresponding function in dplyr
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
-#' @details \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
+#' @details \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
@@ -251,7 +251,7 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
 #' trs.sf = st_sf(x[,1:2], trs)
 #' plot(trs.sf["year"], axes = TRUE)
-#' @details \code{nest.sf} assumes that a simple feature geometry list-column was among the columns that were nested.
+#' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (data, ..., .key = "data") {
 	class(data) <- setdiff(class(data), "sf")
 
