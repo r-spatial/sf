@@ -130,6 +130,5 @@ st_interpolate_aw = function(x, to, extensive) {
 	x = aggregate(x, list(idx[,2]), sum)
 	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
 	df$...area_t = df$...area_st = df$...area_s = NULL
-	st_agr(df) = "aggregate"
-	df
+	st_set_agr(df, "aggregate")
 }

@@ -526,7 +526,7 @@ plot.sfg = function(x, ...) {
 #'
 #' The default aspect for map plots is 1; if however data are not
 #' projected (coordinates are long/lat), the aspect is by default set to
-#' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+#' 1/cos(My * pi/180) with My the y coordinate of the middle of the map
 #' (the mean of \code{ylim}, which defaults to the y range of bounding box). This
 #' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 #'
