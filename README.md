@@ -72,7 +72,7 @@ instruction, using kyngchaos frameworks.
 
 ### Linux
 
-For Unix-alikes, GDAL (>= 2.0.0), GEOS (>= 3.3.0) and Proj.4 (>= 4.8.0) are required.
+For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and Proj.4 (>= 4.8.0) are required.
 
 #### Ubuntu
 To install the dependencies on Ubuntu, either add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories:
