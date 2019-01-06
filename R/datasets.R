@@ -1,7 +1,7 @@
-#' This is data included in sf
+#' North Carolina counties SIDS dataset
 #'
-#' @name bgMap
-#' @aliases g
+#' @name nc
 #' @docType data
 #' @keywords data
+#' @seealso \url{https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf}
 NULL
