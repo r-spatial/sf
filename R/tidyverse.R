@@ -170,7 +170,13 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	geom = st_geometry(.data)
 	.data[[ sf_column ]] = vapply(st_equals(.data), head, NA_integer_, n = 1)
 	class(.data) = setdiff(class(.data), "sf")
-	.data = NextMethod()
+
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+
+	.data = distinct(.data, ..., !! rlang::sym(sf_column))
 	.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
 	st_as_sf(.data)
 }
