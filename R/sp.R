@@ -68,6 +68,8 @@ st_as_sf.Spatial = function(x, ...) {
 		warning("column \"geometry\" will be overwritten by geometry column")
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
+	if (sp::gridded(x) && sp::fullgrid(x))
+		sp::fullgrid(x) = FALSE
 	df$geometry = st_as_sfc(sp::geometry(x), ...)
 	st_as_sf(df)
 }
@@ -103,6 +105,7 @@ st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
 	handle_bbox(st_as_sfc(as(x, "SpatialPoints"), precision = precision), x)
 }
+
 
 #' @name st_as_sfc
 #' @export
