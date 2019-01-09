@@ -176,7 +176,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
 
-	.data = dplyr::distinct(.data, ..., !! rlang::sym(sf_column))
+	.data = dplyr::distinct(.data, ..., !! rlang::sym(sf_column), .keep_all = .keep_all)
 	.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
 	st_as_sf(.data)
 }
