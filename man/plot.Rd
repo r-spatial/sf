@@ -50,7 +50,8 @@ get_key_pos(x, ...)
   bg = 0, lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
 
 \method{plot}{sfc_GEOMETRY}(x, y, ..., pch = 1, cex = 1, bg = 0,
-  lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
+  lty = 1, lwd = 1, col = ifelse(st_dimension(x) == 2, NA, 1),
+  border = 1, add = FALSE)
 
 \method{plot}{sfg}(x, ...)
 

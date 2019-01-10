@@ -1,5 +1,7 @@
 # version 0.7-3
 
+* argument `col` for `plot` of `GEOMETRY` `sfc`'s now is `NA` (open) for (multi) polygon geometries
+
 # version 0.7-2
 
 * feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812

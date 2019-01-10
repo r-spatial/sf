@@ -478,7 +478,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 #' @method plot sfc_GEOMETRY
 #' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1,
-	col = 1, border = 1, add = FALSE) {
+	col = ifelse(st_dimension(x) == 2, NA, 1), border = 1, add = FALSE) {
 	stopifnot(missing(y))
 	if (! add)
 		plot_sf(x, ...)
