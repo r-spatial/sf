@@ -246,7 +246,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #'
 #' Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 #'
-#' @note For intersection on pairs of simple feature geometry sets, use
+#' @note For intersection on pairs of simple feature geometries, use
 #' the function \code{\link{st_intersection}} instead of \code{st_intersects}.
 #'
 #' @examples
@@ -903,7 +903,7 @@ get_first_sfg = function(x) {
 #' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
-#' @note To find whether pairs of simple feature geometry sets intersect, use
+#' @note To find whether pairs of simple feature geometries intersect, use
 #' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 #' @examples
 #' set.seed(131)
