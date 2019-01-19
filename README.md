@@ -32,6 +32,10 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 * presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * wiki page describing [sp-sf migration](https://github.com/r-spatial/sf/wiki/Migrating)
 
+## Cheatsheet
+[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](http://github.com/ryangarnett)  
+
+<a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png" /></a>
 
 ## Installing
 
@@ -109,13 +113,13 @@ In case you use dynamic linking (installation from source) and have multiple ver
 
 Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
-### Contributing
+## Contributing
 
 * Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
 * When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
 * This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-### Acknowledgment
+## Acknowledgment
 
 This project gratefully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 
