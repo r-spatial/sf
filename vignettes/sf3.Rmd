@@ -249,6 +249,8 @@ a sparse matrix.
 
 `st_intersects` returns for every geometry pair whether they
 intersect (dense matrix), or which elements intersect (sparse).
+Note that the function `st_intersection` in this package returns
+a geometry for the intersection instead of logicals as in `st_intersects` (see the next section of this vignette).
 
 Other binary predicates include (using sparse for readability):
 
@@ -307,6 +309,7 @@ plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
+Note that the function `st_intersects` returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).
 
 To get _everything but_ the intersection, use `st_difference` or st_sym_difference`:
 ```{r,fig=TRUE}

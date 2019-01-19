@@ -245,6 +245,10 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
 #'
 #' Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
+#'
+#' @note For intersection on pairs of simple feature geometries, use
+#' the function \code{\link{st_intersection}} instead of \code{st_intersects}.
+#'
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
@@ -415,13 +419,13 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' plot(l2, col= 'blue', add = TRUE)
 #' plot(st_buffer(l2, dist = 1, joinStyle="BEVEL"), reset = FALSE, main = "joinStyle: BEVEL")
 #' plot(l2, col= 'blue', add=TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE, 
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE,
 #'    main = "mitreLimit: 0.5")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE, 
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE,
 #'    main = "mitreLimit: 1")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE, 
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE,
 #'    main = "mitreLimit: 3")
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
@@ -621,7 +625,7 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
-		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, 
+		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance,
 			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
 		stop("for voronoi, GEOS version 3.5.0 or higher is required")
@@ -899,6 +903,8 @@ get_first_sfg = function(x) {
 #' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
+#' @note To find whether pairs of simple feature geometries intersect, use
+#' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 #' @examples
 #' set.seed(131)
 #' library(sf)
