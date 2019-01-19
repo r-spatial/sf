@@ -32,6 +32,11 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 * presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * wiki page describing [sp-sf migration](https://github.com/r-spatial/sf/wiki/Migrating)
 
+## Cheatsheet
+
+<a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png" width="630" height="252"/></a>
+
+[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](http://github.com/ryangarnett)  
 
 ## Installing
 
