@@ -17,13 +17,15 @@ WKT_name = function(x, EWKT = TRUE) {
 empty = "EMPTY"
 
 # skip leading white space; ... passes on digits:
-fmt = function(x, ...) sub("^[ ]+", "", sapply(unclass(x), format, ...))
+fmt = function(x, ..., na.encode = NULL, justify = NULL) {
+	sub("^[ ]+", "", formatC(x, ...))
+}
 
 # print helper functions
 prnt.POINT = function(x, ..., EWKT = TRUE) {
 	pt = if (any(!is.finite(x)))
 		empty
-	else 
+	else
 		paste0("(", paste0(fmt(x, ...), collapse = " "), ")")
 	paste(WKT_name(x, EWKT = EWKT), pt)
 }
@@ -83,10 +85,7 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 #' st_as_text(st_point(1:2))
 #' st_as_text(st_sfc(st_point(c(-90,40)), crs = 4326), EWKT = TRUE)
 st_as_text.sfg = function(x, ...) {
-	if (Sys.getenv("LWGEOM_WKT") == "true" && requireNamespace("lwgeom", quietly = TRUE) && utils::packageVersion("lwgeom") >= "0.1-5")
-		lwgeom::st_astext(x, ...)
-	else 
-	  switch(class(x)[2],
+	switch(class(x)[2],
 		POINT = prnt.POINT(x, ...),
 		MULTIPOINT =        prnt.MULTIPOINT(x, ...),
 		LINESTRING =        prnt.LINESTRING(x, ...),
@@ -111,16 +110,12 @@ st_as_text.sfg = function(x, ...) {
 #' @param EWKT logical; if TRUE, print SRID=xxx; before the WKT string if \code{epsg} is available
 #' @export
 st_as_text.sfc = function(x, ..., EWKT = FALSE) {
-	if (Sys.getenv("LWGEOM_WKT") == "true" && requireNamespace("lwgeom", quietly = TRUE) && utils::packageVersion("lwgeom") >= "0.1-5")
-		lwgeom::st_astext(x, ..., EWKT = EWKT)
-	else {
-		if (EWKT) {
-			epsg = attr(x, "crs")$epsg
-			if (!is.na(epsg) && epsg != 0)
-				x = lapply(x, function(sfg) structure(sfg, epsg = epsg))
-		}
-		vapply(x, st_as_text, "", ..., EWKT = EWKT)
+	if (EWKT) {
+		epsg = attr(x, "crs")$epsg
+		if (!is.na(epsg) && epsg != 0)
+			x = lapply(x, function(sfg) structure(sfg, epsg = epsg))
 	}
+	vapply(x, st_as_text, "", ..., EWKT = EWKT)
 }
 
 #' @name st_as_sfc
