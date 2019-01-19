@@ -34,7 +34,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 
 ## Cheatsheet
 
-<a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png" width="630" height="252"/></a>
+<a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png" /></a>
 
 [CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](http://github.com/ryangarnett)  
 
