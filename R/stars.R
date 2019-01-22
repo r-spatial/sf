@@ -121,9 +121,9 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
 	} else if (is.null(xd$values) || is.null(yd$values)) { # only one of [xd|yd] has $values:
-		if (!requireNamespace("stars", quietly = TRUE))
-			stop("stars required: install that first") # nocov
-		as.matrix(st_coordinates(x))
+		if (!requireNamespace("stars", quietly = TRUE)) # nocov
+			stop("stars required: install that first")
+		as.matrix(st_coordinates(x)) # nocov
 	} else { # both xd and yd have $values:
 		expand = function(x) { # might fail on the poles or dateline
 			d = diff(x)
