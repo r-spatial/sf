@@ -54,7 +54,7 @@ The \code{st_difference.sfc} method with a single argument returns an object wit
 an \code{"idx"} attribute with the orginal index for returned geometries.
 }
 \note{
-To find whether pairs of simple feature geometry sets intersect, use
+To find whether pairs of simple feature geometries intersect, use
 the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 }
 \examples{

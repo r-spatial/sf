@@ -79,7 +79,7 @@ See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a m
 \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 }
 \note{
-For intersection on pairs of simple feature geometry sets, use
+For intersection on pairs of simple feature geometries, use
 the function \code{\link{st_intersection}} instead of \code{st_intersects}.
 }
 \examples{
