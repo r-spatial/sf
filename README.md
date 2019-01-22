@@ -57,22 +57,15 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-One way to install the dependencies is using `sudo`; the other is using homebrew. 
-Homebrew commands might be:
-```
-brew unlink gdal
-brew tap osgeo/osgeo4mac && brew tap --repair
-brew install proj
-brew install geos
-brew install udunits
-brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
-brew link --force gdal2
-```
-after that, you might be able to install `sf` as a source package.
+The easiest way to install `gdal` is using Homebrew. Recent version of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb):
 
-For MacOS Sierra, see
-[these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
-instruction, using kyngchaos frameworks.
+```
+brew install gdal
+```
+
+Once gdal is installed, you will be able to install `sf` package from source in R.
+
+Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
 
 ### Linux
 
