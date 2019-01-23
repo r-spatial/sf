@@ -34,7 +34,7 @@ fi
 
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
-: ${CXX=${CXX11} ${CXX11STD}}
+: ${CXX=`"${RBIN}" CMD config CXX`}
 : ${CPP=`"${RBIN}" CMD config CPP`}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
@@ -43,6 +43,44 @@ fi
 # AC_SUBST([CXX],["clang++"])
 AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
+
+#CXX_11
+
+R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | ${RBIN} --vanilla --slave`
+R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
+
+#if test ${R_MINOR} -ge 4; then
+#: ${CXX=`"${RBIN}" CMD config CXX11`}
+#else
+#: ${CXX=`"${RBIN}" CMD config CXX1X`}
+#fi
+
+if test ${R_MINOR} -ge 4; then
+ CXX11=`"${RBIN}" CMD config CXX11`
+ CXX11STD=`"${RBIN}" CMD config CXX11STD`
+else
+ CXX11=`"${RBIN}" CMD config CXX1X`
+ CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
+fi
+
+CXX="${CXX11} ${CXX11STD}"
+
+if test -n "${CXX11}"; then
+HAVE_CXX11=1
+else
+HAVE_CXX11=0
+fi
+
+#HAVE_CXX11=1
+
+#m4_include([inst/m4/ax_cxx_compile_stdcxx.m4])
+#AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
+if test [${HAVE_CXX11} = 1] ; then
+  AC_MSG_NOTICE([C++11 support available])
+else
+  AC_MSG_NOTICE([C++11 support not available])
+fi
+
 
 # AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
@@ -88,14 +126,16 @@ fi
 AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
+
 	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
-	GDAL_VERSION=`${GDAL_CONFIG} --version`
 	GDAL_LIBS=`${GDAL_CONFIG} --libs`
-	GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
-	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-	AC_MSG_RESULT(yes)
+        GDAL_VERSION=`${GDAL_CONFIG} --version`
+        GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
+        GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+        gdalok=yes
+        AC_MSG_RESULT(yes)
 else
-	AC_MSG_RESULT(no)
+        AC_MSG_RESULT(no)
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
 	echo "If you have not installed the GDAL libraries, you can"
@@ -108,18 +148,34 @@ else
 	echo ""
 
 	exit 1
+
 fi
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 AC_MSG_CHECKING([GDAL version >= 2.0.0])
 
-GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
-if test ${GDAL_MAJ_VER} -lt 2 ; then
+#GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
+GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
+GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
+GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
+
+if test ${GDAL_MAJOR} -lt 2 ; then
   AC_MSG_RESULT(no)
   AC_MSG_ERROR([sf is not compatible with GDAL versions below 2.0.0])
 else
    AC_MSG_RESULT(yes)
 fi
+
+if test ${GDAL_MAJOR} = 2 -a ${GDAL_MINOR} -ge 3 ; then
+  AC_MSG_CHECKING([C++11 support for GDAL >= 2.3.0])
+  if test ${HAVE_CXX11} = 1 ; then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR([provide at least CXX11 compiler support for GDAL >= 2.3.0])
+  fi
+fi
+
 
 INLIBS="${LIBS}"
 INCPPFLAGS="${CPPFLAGS}"
@@ -134,15 +190,10 @@ AC_SUBST([PKG_LIBS], ["${INPKG_LIBS} ${GDAL_LIBS}"])
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
-gdalok=yes
-AC_CHECK_HEADERS(gdal.h,,gdalok=no)
-if test "${gdalok}" = no; then
-   AC_MSG_ERROR([gdal.h not found in given locations.])
-fi
 
 NEED_DEPS=no
 LIBS="${INLIBS} ${PKG_LIBS}"
-[cat > gdal_test.cpp <<_EOCONF
+[cat > gdal_test.cc <<_EOCONF
 #include <gdal.h>
 #ifdef __cplusplus
 extern "C" {
@@ -155,8 +206,8 @@ GDALAllRegister();
 #endif
 _EOCONF]
 
-AC_MSG_CHECKING(GDAL: linking with --libs only)
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
+AC_MSG_CHECKING(gdal: linking with --libs only)
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 AC_MSG_RESULT(no)
@@ -165,10 +216,10 @@ AC_MSG_RESULT(yes)
 fi
 
 if test "${gdalok}" = no; then
-AC_MSG_CHECKING(GDAL: linking with --libs and --dep-libs)
+AC_MSG_CHECKING(gdal: linking with --libs and --dep-libs)
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 fi
@@ -186,8 +237,7 @@ if test "${gdalok}" = no; then
    AC_MSG_ERROR([GDALAllRegister not found in libgdal.])
 fi
 
-rm -f gdal_test errors.txt gdal_test.cpp
-
+rm -f gdal_test errors.txt gdal_test.cc
 
 GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
 AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/pcs.csv readable)
@@ -256,7 +306,7 @@ int main(int argc, char *argv[]) {
 _EOCONF]
 
 AC_MSG_CHECKING(GDAL: checking whether PROJ is available for linking:)
-${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} ${LDFLAGS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no
 AC_MSG_RESULT(no)
@@ -361,7 +411,7 @@ _EOCONF]
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 
 proj_version=`./proj_conf_test`
 
@@ -400,7 +450,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -456,7 +506,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -587,7 +637,7 @@ _EOCONF]
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
 AC_MSG_CHECKING(geos: linking with ${GEOS_CLIBS})
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS}  ${LDFLAGS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
  geosok=no
  AC_MSG_RESULT(no)
@@ -598,7 +648,7 @@ fi
 
 if test "${geosok}" = no; then
   AC_MSG_CHECKING(geos: linking with ${GEOS_DEP_CLIBS})
-  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} ${LDFLAGS} 2> errors.txt
   if test `echo $?` -ne 0 ; then
     geosok=no
     AC_MSG_RESULT(no)

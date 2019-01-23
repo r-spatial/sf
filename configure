@@ -623,7 +623,6 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 GEOS_CONFIG
 PROJ_LIBS
-PROJ_CPPFLAGS
 EGREP
 GREP
 CPP
@@ -634,6 +633,7 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+PROJ_CPPFLAGS
 PKG_LIBS
 PKG_CPPFLAGS
 GDAL_CONFIG
@@ -656,7 +656,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -734,7 +733,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -987,15 +985,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1133,7 +1122,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1286,7 +1275,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2081,7 +2069,7 @@ fi
 
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
-: ${CXX=${CXX11} ${CXX11STD}}
+: ${CXX=`"${RBIN}" CMD config CXX`}
 : ${CPP=`"${RBIN}" CMD config CPP`}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
@@ -2092,6 +2080,46 @@ fi
 $as_echo "$as_me: CC: ${CC}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: CXX: ${CXX}" >&5
 $as_echo "$as_me: CXX: ${CXX}" >&6;}
+
+#CXX_11
+
+R_VERSION=`echo 'cat(unlist(R.Version()$minor))' | ${RBIN} --vanilla --slave`
+R_MINOR=`echo $R_VERSION | cut -f1 -d"."`
+
+#if test ${R_MINOR} -ge 4; then
+#: ${CXX=`"${RBIN}" CMD config CXX11`}
+#else
+#: ${CXX=`"${RBIN}" CMD config CXX1X`}
+#fi
+
+if test ${R_MINOR} -ge 4; then
+ CXX11=`"${RBIN}" CMD config CXX11`
+ CXX11STD=`"${RBIN}" CMD config CXX11STD`
+else
+ CXX11=`"${RBIN}" CMD config CXX1X`
+ CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
+fi
+
+CXX="${CXX11} ${CXX11STD}"
+
+if test -n "${CXX11}"; then
+HAVE_CXX11=1
+else
+HAVE_CXX11=0
+fi
+
+#HAVE_CXX11=1
+
+#m4_include([inst/m4/ax_cxx_compile_stdcxx.m4])
+#AX_CXX_COMPILE_STDCXX([11], [ext], [optional])
+if test ${HAVE_CXX11} = 1 ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: C++11 support available" >&5
+$as_echo "$as_me: C++11 support available" >&6;}
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: C++11 support not available" >&5
+$as_echo "$as_me: C++11 support not available" >&6;}
+fi
+
 
 # AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
@@ -2189,15 +2217,17 @@ fi
 $as_echo_n "checking gdal-config usability... " >&6; }
 if test `${GDAL_CONFIG} --version`;
 then
+
 	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
-	GDAL_VERSION=`${GDAL_CONFIG} --version`
 	GDAL_LIBS=`${GDAL_CONFIG} --libs`
-	GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
-	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+        GDAL_VERSION=`${GDAL_CONFIG} --version`
+        GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
+        GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
+        gdalok=yes
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	echo "Error: gdal-config not found"
 	echo "The gdal-config script distributed with GDAL could not be found."
@@ -2211,6 +2241,7 @@ $as_echo "no" >&6; }
 	echo ""
 
 	exit 1
+
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
@@ -2218,8 +2249,12 @@ $as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL version >= 2.0.0" >&5
 $as_echo_n "checking GDAL version >= 2.0.0... " >&6; }
 
-GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
-if test ${GDAL_MAJ_VER} -lt 2 ; then
+#GDAL_VER_DOT=`echo $GDAL_VERSION | tr -d "."`
+GDAL_MAJOR=`echo $GDAL_VERSION | cut -f1 -d"."`
+GDAL_MINOR=`echo $GDAL_VERSION | cut -f2 -d"."`
+GDAL_PATCH=`echo $GDAL_VERSION | cut -f3 -d"."`
+
+if test ${GDAL_MAJOR} -lt 2 ; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
   as_fn_error $? "sf is not compatible with GDAL versions below 2.0.0" "$LINENO" 5
@@ -2227,6 +2262,20 @@ else
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 fi
+
+if test ${GDAL_MAJOR} = 2 -a ${GDAL_MINOR} -ge 3 ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking C++11 support for GDAL >= 2.3.0" >&5
+$as_echo_n "checking C++11 support for GDAL >= 2.3.0... " >&6; }
+  if test ${HAVE_CXX11} = 1 ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    as_fn_error $? "provide at least CXX11 compiler support for GDAL >= 2.3.0" "$LINENO" 5
+  fi
+fi
+
 
 INLIBS="${LIBS}"
 INCPPFLAGS="${CPPFLAGS}"
@@ -2243,7 +2292,213 @@ PKG_LIBS="${INPKG_LIBS} ${GDAL_LIBS}"
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 
+
+NEED_DEPS=no
+LIBS="${INLIBS} ${PKG_LIBS}"
+cat > gdal_test.cc <<_EOCONF
+#include <gdal.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+int main() {
+GDALAllRegister();
+}
+#ifdef __cplusplus
+}
+#endif
+_EOCONF
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking gdal: linking with --libs only" >&5
+$as_echo_n "checking gdal: linking with --libs only... " >&6; }
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdalok=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+if test "${gdalok}" = no; then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking gdal: linking with --libs and --dep-libs" >&5
+$as_echo_n "checking gdal: linking with --libs and --dep-libs... " >&6; }
+LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cc ${LIBS} 2>> errors.txt
+if test `echo $?` -ne 0 ; then
+gdalok=no
+fi
+if test "${gdalok}" = yes; then
+    NEED_DEPS=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+fi
+
+if test "${gdalok}" = no; then
+   cat errors.txt
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
+   as_fn_error $? "GDALAllRegister not found in libgdal." "$LINENO" 5
+fi
+
+rm -f gdal_test errors.txt gdal_test.cc
+
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/pcs.csv readable" >&5
+$as_echo_n "checking GDAL: ${GDAL_DATADIR}/pcs.csv readable... " >&6; }
+if test -r "${GDAL_DATA_TEST_FILE}" ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
+fi
+
+# Optional local copy of GDAL datadir and PROJ_LIB
+
+data_copy=no
+
+# Check whether --with-data-copy was given.
+if test "${with_data_copy+set}" = set; then :
+  withval=$with_data_copy; data_copy=$withval
+fi
+
+if test "${data_copy}" = "yes" ; then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Copy data for:" >&5
+$as_echo "$as_me: Copy data for:" >&6;}
+  proj_lib0="${PROJ_LIB}"
+
+# Check whether --with-proj-data was given.
+if test "${with_proj_data+set}" = set; then :
+  withval=$with_proj_data; proj_lib1=$withval
+fi
+
+  if test -n "${proj_lib0}" ; then
+    proj_lib="${proj_lib0}"
+  else
+    proj_lib="${proj_lib1}"
+  fi
+  if test -n "${proj_lib}" ; then
+    if test -d "${proj_lib}" ; then
+      cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
+      { $as_echo "$as_me:${as_lineno-$LINENO}:   PROJ: ${proj_lib}" >&5
+$as_echo "$as_me:   PROJ: ${proj_lib}" >&6;}
+    else
+      as_fn_error $? "PROJ data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
+    fi
+  else
+      as_fn_error $? "PROJ data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
+  fi
+
+  if test -d "${GDAL_DATADIR}" ; then
+    cp -r "${GDAL_DATADIR}" "${R_PACKAGE_DIR}"
+    { $as_echo "$as_me:${as_lineno-$LINENO}:   GDAL: ${GDAL_DATADIR}" >&5
+$as_echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
+  else
+    as_fn_error $? "GDAL data files not found." "$LINENO" 5
+  fi
+fi
+
+#
+# test whether PROJ is available to gdal:
+#
+
+gdal_has_proj=no
+cat > gdal_proj.cpp <<_EOCONF
+#include <gdal.h>
+#include <ogr_srs_api.h>
+#include <ogr_spatialref.h>
+int main(int argc, char *argv[]) {
+	OGRSpatialReference *dest = new OGRSpatialReference;
+	OGRSpatialReference *src = new OGRSpatialReference;
+    src->importFromEPSG(4326);
+    dest->importFromEPSG(3857);
+	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(src, dest);
+	return(ct == NULL); // signals PROJ is not available through gdal
+}
+_EOCONF
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available for linking:" >&5
+$as_echo_n "checking GDAL: checking whether PROJ is available for linking:... " >&6; }
+${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} ${LDFLAGS} 2> errors.txt
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_proj=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+
+if test "${gdal_has_proj}" = no; then
+   cat errors.txt
+   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
+$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
+   as_fn_error $? "cannot link projection code" "$LINENO" 5
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available fur running:" >&5
+$as_echo_n "checking GDAL: checking whether PROJ is available fur running:... " >&6; }
+./gdal_proj
+if test `echo $?` -ne 0 ; then
+gdal_has_proj=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+gdal_has_proj=yes
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+fi
+if test "${gdal_has_proj}" = no; then
+   as_fn_error $? "OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?" "$LINENO" 5
+fi
+rm -fr errors.txt gdal_proj.cpp gdal_proj
+
+
+#
+# PROJ
+#
+
+PROJ_CONFIG="pkg-config proj"
+
+if `$PROJ_CONFIG --exists` ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: pkg-config proj exists, will use it" >&5
+$as_echo "$as_me: pkg-config proj exists, will use it" >&6;}
+  proj_config_ok=yes
+else
+  proj_config_ok=no
+fi
+
+
+# Check whether --with-proj-include was given.
+if test "${with_proj_include+set}" = set; then :
+  withval=$with_proj_include; proj_include_path=$withval
+fi
+
+if test  -n "$proj_include_path"  ; then
+   PROJ_CPPFLAGS="-I${proj_include_path}"
+
+else
+  if test "${proj_config_ok}" = yes; then
+    PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
+    PROJ_CPPFLAGS="${PROJ_INCLUDE_PATH}"
+
+  fi
+fi
+
+# honor PKG_xx overrides
+# for CPPFLAGS we will superfluously double R's flags
+# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
+
+proj4ok=yes
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3431,231 +3686,6 @@ fi
 done
 
 
-for ac_header in gdal.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "gdal.h" "ac_cv_header_gdal_h" "$ac_includes_default"
-if test "x$ac_cv_header_gdal_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_GDAL_H 1
-_ACEOF
-
-else
-  gdalok=no
-fi
-
-done
-
-if test "${gdalok}" = no; then
-   as_fn_error $? "gdal.h not found in given locations." "$LINENO" 5
-fi
-
-NEED_DEPS=no
-LIBS="${INLIBS} ${PKG_LIBS}"
-cat > gdal_test.cpp <<_EOCONF
-#include <gdal.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
-int main() {
-GDALAllRegister();
-}
-#ifdef __cplusplus
-}
-#endif
-_EOCONF
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: linking with --libs only" >&5
-$as_echo_n "checking GDAL: linking with --libs only... " >&6; }
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
-if test `echo $?` -ne 0 ; then
-gdalok=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-fi
-
-if test "${gdalok}" = no; then
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: linking with --libs and --dep-libs" >&5
-$as_echo_n "checking GDAL: linking with --libs and --dep-libs... " >&6; }
-LIBS="${LIBS} ${GDAL_DEP_LIBS}"
-gdalok=yes
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
-if test `echo $?` -ne 0 ; then
-gdalok=no
-fi
-if test "${gdalok}" = yes; then
-    NEED_DEPS=yes
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-fi
-
-if test "${gdalok}" = no; then
-   cat errors.txt
-   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
-$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-   as_fn_error $? "GDALAllRegister not found in libgdal." "$LINENO" 5
-fi
-
-rm -f gdal_test errors.txt gdal_test.cpp
-
-
-GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/pcs.csv readable" >&5
-$as_echo_n "checking GDAL: ${GDAL_DATADIR}/pcs.csv readable... " >&6; }
-if test -r "${GDAL_DATA_TEST_FILE}" ; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-  as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
-fi
-
-# Optional local copy of GDAL datadir and PROJ_LIB
-
-data_copy=no
-
-# Check whether --with-data-copy was given.
-if test "${with_data_copy+set}" = set; then :
-  withval=$with_data_copy; data_copy=$withval
-fi
-
-if test "${data_copy}" = "yes" ; then
-{ $as_echo "$as_me:${as_lineno-$LINENO}: Copy data for:" >&5
-$as_echo "$as_me: Copy data for:" >&6;}
-  proj_lib0="${PROJ_LIB}"
-
-# Check whether --with-proj-data was given.
-if test "${with_proj_data+set}" = set; then :
-  withval=$with_proj_data; proj_lib1=$withval
-fi
-
-  if test -n "${proj_lib0}" ; then
-    proj_lib="${proj_lib0}"
-  else
-    proj_lib="${proj_lib1}"
-  fi
-  if test -n "${proj_lib}" ; then
-    if test -d "${proj_lib}" ; then
-      cp -r "${proj_lib}" "${R_PACKAGE_DIR}"
-      { $as_echo "$as_me:${as_lineno-$LINENO}:   PROJ: ${proj_lib}" >&5
-$as_echo "$as_me:   PROJ: ${proj_lib}" >&6;}
-    else
-      as_fn_error $? "PROJ data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
-    fi
-  else
-      as_fn_error $? "PROJ data files not found; set environment variable PROJ_LIB=DIR or --with-proj-data=DIR." "$LINENO" 5
-  fi
-
-  if test -d "${GDAL_DATADIR}" ; then
-    cp -r "${GDAL_DATADIR}" "${R_PACKAGE_DIR}"
-    { $as_echo "$as_me:${as_lineno-$LINENO}:   GDAL: ${GDAL_DATADIR}" >&5
-$as_echo "$as_me:   GDAL: ${GDAL_DATADIR}" >&6;}
-  else
-    as_fn_error $? "GDAL data files not found." "$LINENO" 5
-  fi
-fi
-
-#
-# test whether PROJ is available to gdal:
-#
-
-gdal_has_proj=no
-cat > gdal_proj.cpp <<_EOCONF
-#include <gdal.h>
-#include <ogr_srs_api.h>
-#include <ogr_spatialref.h>
-int main(int argc, char *argv[]) {
-	OGRSpatialReference *dest = new OGRSpatialReference;
-	OGRSpatialReference *src = new OGRSpatialReference;
-    src->importFromEPSG(4326);
-    dest->importFromEPSG(3857);
-	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(src, dest);
-	return(ct == NULL); // signals PROJ is not available through gdal
-}
-_EOCONF
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available for linking:" >&5
-$as_echo_n "checking GDAL: checking whether PROJ is available for linking:... " >&6; }
-${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
-if test `echo $?` -ne 0 ; then
-gdal_has_proj=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-gdal_has_proj=yes
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-fi
-
-if test "${gdal_has_proj}" = no; then
-   cat errors.txt
-   { $as_echo "$as_me:${as_lineno-$LINENO}: Install failure: compilation and/or linkage problems." >&5
-$as_echo "$as_me: Install failure: compilation and/or linkage problems." >&6;}
-   as_fn_error $? "cannot link projection code" "$LINENO" 5
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available fur running:" >&5
-$as_echo_n "checking GDAL: checking whether PROJ is available fur running:... " >&6; }
-./gdal_proj
-if test `echo $?` -ne 0 ; then
-gdal_has_proj=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-gdal_has_proj=yes
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-fi
-if test "${gdal_has_proj}" = no; then
-   as_fn_error $? "OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?" "$LINENO" 5
-fi
-rm -fr errors.txt gdal_proj.cpp gdal_proj
-
-
-#
-# PROJ
-#
-
-PROJ_CONFIG="pkg-config proj"
-
-if `$PROJ_CONFIG --exists` ; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: pkg-config proj exists, will use it" >&5
-$as_echo "$as_me: pkg-config proj exists, will use it" >&6;}
-  proj_config_ok=yes
-else
-  proj_config_ok=no
-fi
-
-
-# Check whether --with-proj-include was given.
-if test "${with_proj_include+set}" = set; then :
-  withval=$with_proj_include; proj_include_path=$withval
-fi
-
-if test  -n "$proj_include_path"  ; then
-   PROJ_CPPFLAGS="-I${proj_include_path}"
-
-else
-  if test "${proj_config_ok}" = yes; then
-    PROJ_INCLUDE_PATH=`${PROJ_CONFIG} --cflags`
-    PROJ_CPPFLAGS="${PROJ_INCLUDE_PATH}"
-
-  fi
-fi
-
-# honor PKG_xx overrides
-# for CPPFLAGS we will superfluously double R's flags
-# since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
-CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-
-proj4ok=yes
 for ac_header in proj_api.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "proj_api.h" "ac_cv_header_proj_api_h" "$ac_includes_default"
@@ -3763,7 +3793,7 @@ _EOCONF
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 
 proj_version=`./proj_conf_test`
 
@@ -3805,7 +3835,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -3864,7 +3894,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS} ${LDFLAGS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -4073,7 +4103,7 @@ _EOCONF
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_CLIBS}" >&5
 $as_echo_n "checking geos: linking with ${GEOS_CLIBS}... " >&6; }
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS}  ${LDFLAGS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
  geosok=no
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -4088,7 +4118,7 @@ fi
 if test "${geosok}" = no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_DEP_CLIBS}" >&5
 $as_echo_n "checking geos: linking with ${GEOS_DEP_CLIBS}... " >&6; }
-  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} ${LDFLAGS} 2> errors.txt
   if test `echo $?` -ne 0 ; then
     geosok=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
