@@ -3,5 +3,5 @@
 #' @name nc
 #' @docType data
 #' @keywords data
-#' @seealso \url{https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf}
+#' @seealso \url{https://r-spatial.github.io/spdep/articles/sids.html}
 NULL

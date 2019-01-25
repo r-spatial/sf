@@ -8,6 +8,6 @@
 North Carolina counties SIDS dataset
 }
 \seealso{
-\url{https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf}
+\url{https://r-spatial.github.io/spdep/articles/sids.html}
 }
 \keyword{data}
