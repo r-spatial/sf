@@ -7,10 +7,10 @@
 \description{
 Sudden Infant Death Syndrome (SIDS) sample data for North Carolina counties,
 two time periods (1974-78 and 1979-84). The details of the columns can be
-found on the seealso URL, spdep package's vignette. Please note that,
-though this is basically the same as \code{nc.sids} dataset in spData
-package, \code{nc} only contains a subset of variables. The differences are
-also discussed on the vignette.
+found on the seealso URL, a spdep package vignette. Please note that,
+though this is basically the same as \code{nc.sids} dataset in package spData,
+\code{nc} only contains a subset of variables. The differences are
+also discussed in the vignette mentioned.
 }
 \seealso{
 \url{https://r-spatial.github.io/spdep/articles/sids.html}
