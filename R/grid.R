@@ -116,8 +116,8 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 	# from rgdal2/R/graphics.R:
 	current.viewport.size = function(units = "inches") {
     	vp = current.viewport()
-    	vi = convertUnit(vp$height, units)
-    	wi = convertUnit(vp$width, units)
+		vi = convertHeight(vp$height, units, valueOnly = TRUE)
+		wi = convertWidth(vp$width, units, valueOnly = TRUE)
     	c(width = wi, height = vi)
 	}
 	current.viewport.aspect = function() {
