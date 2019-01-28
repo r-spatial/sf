@@ -122,7 +122,7 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 	}
 	current.viewport.aspect = function() {
     	sz = current.viewport.size()
-    	unclass(sz[2]) / unclass(sz[1])
+    	sz[2] / sz[1]
 	}
 	vp.asp = current.viewport.aspect()
 	if (missing(asp))
