@@ -86,7 +86,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
 st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x))),
-		geotransform, end_points = rep(FALSE, length(x))) {
+		geotransform) {
 
 	if (is.na(as_points))
 		stop("as_points should be set to TRUE (`points') or FALSE (`polygons')")
@@ -136,23 +136,25 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			}
 			cbind(as.vector(xd$values), as.vector(yd$values))
 		} else { # rectlinear: expand independently
-			if (!as_points) {
-				if (!end_points[1])
-					xd$values = expand(xd$values)
-				if (!end_points[2])
-					yd$values = expand(yd$values)
+			if (! as_points) {
+				xd$values = if (inherits(xd$values, "intervals"))
+						c(xd$values$start, tail(xd$values$end, 1))
+					else
+						expand(xd$values)
+				yd$values = if (inherits(yd$values, "intervals"))
+						c(yd$values$start, tail(yd$values$end, 1))
+					else
+						expand(yd$values)
 			} else {
-				halfway = function(x) (head(x, -1) + tail(x, -1)) / 2
-				if (end_points[1])
-					xd$values = halfway(xd$values)
-				if (end_points[2])
-					yd$values = halfway(yd$values)
+				if (inherits(xd$values, "intervals"))
+					0.5 * (xd$values$start + xd$values$end)
+				if (inherits(yd$values, "intervals"))
+					0.5 * (yd$values$start + yd$values$end)
 			}
 			as.matrix(expand.grid(x = xd$values, y = yd$values))
 		}
 	}
-	#dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
-	dims = dim(x) - end_points + !as_points
+	dims = dim(x) + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
 			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
