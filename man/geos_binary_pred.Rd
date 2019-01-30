@@ -78,6 +78,10 @@ See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a m
 
 \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 }
+\note{
+For intersection on pairs of simple feature geometries, use
+the function \code{\link{st_intersection}} instead of \code{st_intersects}.
+}
 \examples{
 pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))

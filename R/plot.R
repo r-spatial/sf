@@ -478,7 +478,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 #' @method plot sfc_GEOMETRY
 #' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1,
-	col = 1, border = 1, add = FALSE) {
+	col = ifelse(st_dimension(x) == 2, NA, 1), border = 1, add = FALSE) {
 	stopifnot(missing(y))
 	if (! add)
 		plot_sf(x, ...)
@@ -526,7 +526,7 @@ plot.sfg = function(x, ...) {
 #'
 #' The default aspect for map plots is 1; if however data are not
 #' projected (coordinates are long/lat), the aspect is by default set to
-#' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+#' 1/cos(My * pi/180) with My the y coordinate of the middle of the map
 #' (the mean of \code{ylim}, which defaults to the y range of bounding box). This
 #' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 #'

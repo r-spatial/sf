@@ -114,13 +114,17 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	xy_names = raster$dimensions
 	xd = x[[ xy_names[1] ]]
 	yd = x[[ xy_names[2] ]]
-	cc = if (! is.na(xd$offset) && !is.na(yd$offset)) {
+	cc = if (!is.na(xd$offset) && !is.na(yd$offset)) {
 		xy = if (as_points) # grid cell centres:
 			expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
 		else # grid corners: from 0 to n
 			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
-	} else { # get from values:
+	} else if (is.null(xd$values) || is.null(yd$values)) { # only one of [xd|yd] has $values:
+		if (!requireNamespace("stars", quietly = TRUE)) # nocov start
+			stop("stars required: install that first")
+		as.matrix(st_coordinates(x)) # nocov end
+	} else { # both xd and yd have $values:
 		expand = function(x) { # might fail on the poles or dateline
 			d = diff(x)
 			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
@@ -132,14 +136,25 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			}
 			cbind(as.vector(xd$values), as.vector(yd$values))
 		} else { # rectlinear: expand independently
-			if (!as_points) {
-				xd$values = expand(xd$values)
-				yd$values = expand(yd$values)
+			if (! as_points) {
+				xd$values = if (inherits(xd$values, "intervals"))
+						c(xd$values$start, tail(xd$values$end, 1))
+					else
+						expand(xd$values)
+				yd$values = if (inherits(yd$values, "intervals"))
+						c(yd$values$start, tail(yd$values$end, 1))
+					else
+						expand(yd$values)
+			} else {
+				if (inherits(xd$values, "intervals"))
+					0.5 * (xd$values$start + xd$values$end)
+				if (inherits(yd$values, "intervals"))
+					0.5 * (yd$values$start + yd$values$end)
 			}
 			as.matrix(expand.grid(x = xd$values, y = yd$values))
 		}
 	}
-	dims = c(xd$to - xd$from, yd$to - yd$from) + 1 + !as_points
+	dims = dim(x) + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
 			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))

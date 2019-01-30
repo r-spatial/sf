@@ -32,6 +32,10 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 * presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * wiki page describing [sp-sf migration](https://github.com/r-spatial/sf/wiki/Migrating)
 
+## Cheatsheet
+[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](http://github.com/ryangarnett)  
+
+<a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png" /></a>
 
 ## Installing
 
@@ -53,22 +57,15 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-One way to install the dependencies is using `sudo`; the other is using homebrew. 
-Homebrew commands might be:
-```
-brew unlink gdal
-brew tap osgeo/osgeo4mac && brew tap --repair
-brew install proj
-brew install geos
-brew install udunits
-brew install gdal2 --with-armadillo --with-complete --with-libkml --with-unsupported
-brew link --force gdal2
-```
-after that, you might be able to install `sf` as a source package.
+The easiest way to install `gdal` is using Homebrew. Recent version of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb):
 
-For MacOS Sierra, see
-[these](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
-instruction, using kyngchaos frameworks.
+```
+brew install gdal
+```
+
+Once gdal is installed, you will be able to install `sf` package from source in R.
+
+Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
 
 ### Linux
 
@@ -109,13 +106,13 @@ In case you use dynamic linking (installation from source) and have multiple ver
 
 Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
-### Contributing
+## Contributing
 
 * Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
 * When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
 * This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-### Acknowledgment
+## Acknowledgment
 
 This project gratefully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 

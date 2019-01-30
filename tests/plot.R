@@ -76,7 +76,7 @@ plot(nc["f"], key.pos = 1)
 plot(nc[1],   key.pos = 1)
 
 # test background map plotting:
-data(bgmap)
+load("bgmap.rda")
 merc = st_crs(3857)
 WGS84 = st_crs(4326)
 nc = st_transform(nc, WGS84)

@@ -68,6 +68,8 @@ st_as_sf.Spatial = function(x, ...) {
 		warning("column \"geometry\" will be overwritten by geometry column")
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
+	if (sp::gridded(x) && sp::fullgrid(x))
+		sp::fullgrid(x) = FALSE
 	df$geometry = st_as_sfc(sp::geometry(x), ...)
 	st_as_sf(df)
 }
@@ -103,6 +105,7 @@ st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
 	handle_bbox(st_as_sfc(as(x, "SpatialPoints"), precision = precision), x)
 }
+
 
 #' @name st_as_sfc
 #' @export
@@ -234,10 +237,10 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	zm = class(from[[1]])[1]
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp\n",
-			 'use `drop_zm(..., what = "M")`')
+			 'use `st_zm(..., what = "M")`')
 	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM"))
 		stop("sp supports Z dimension only for POINT and MULTIPOINT.\n",
-			 'use `drop_zm(...)` to coerce to XY dimensions') }
+			 'use `st_zm(...)` to coerce to XY dimensions') }
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
 		"sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),

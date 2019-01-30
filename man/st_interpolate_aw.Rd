@@ -22,8 +22,9 @@ g = st_make_grid(nc, n = c(20,10))
 a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
+# verify mass preservation (pycnophylactic) property:
 sum(a2$BIR74) / sum(nc$BIR74)
 a1$intensive = a1$BIR74
 a1$extensive = a2$BIR74
-plot(a1[c("intensive", "extensive")])
+plot(a1[c("intensive", "extensive")], key.pos = 4)
 }

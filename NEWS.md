@@ -1,12 +1,14 @@
 # version 0.7-3
 
+* argument `col` for `plot` of `GEOMETRY` `sfc`'s now is `NA` (open) for (multi) polygon geometries
+
 # version 0.7-2
 
 * feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812
 
-* plot.sf adds a (single, common) key if `key.pos` is set
+* when plotting multiple attributes, plot.sf now adds a (single, common) key if `key.pos` is set
 
-* allow for setting precision in distance units; #901
+* precision can now be specified in distance units; #901
 
 * support log-scale in color legend by setting `logz` to `TRUE` in `plot.sf`
 

@@ -101,10 +101,11 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 #' sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 #' a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
+#' # verify mass preservation (pycnophylactic) property:
 #' sum(a2$BIR74) / sum(nc$BIR74)
 #' a1$intensive = a1$BIR74
 #' a1$extensive = a2$BIR74
-#' plot(a1[c("intensive", "extensive")])
+#' plot(a1[c("intensive", "extensive")], key.pos = 4)
 #' @export
 st_interpolate_aw = function(x, to, extensive) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
@@ -130,6 +131,5 @@ st_interpolate_aw = function(x, to, extensive) {
 	x = aggregate(x, list(idx[,2]), sum)
 	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
 	df$...area_t = df$...area_st = df$...area_s = NULL
-	st_agr(df) = "aggregate"
-	df
+	st_set_agr(df, "aggregate")
 }

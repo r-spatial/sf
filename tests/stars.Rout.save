@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -161,8 +161,8 @@ Simple feature collection with 135 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    NA
-proj4string:    +proj=longlat +ellps=clrk66 +no_defs
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
 First 10 features:
     AREA                       geometry
 1  0.070 POLYGON ((-75.90032 36.5595...
@@ -179,8 +179,8 @@ Simple feature collection with 32 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    NA
-proj4string:    +proj=longlat +ellps=clrk66 +no_defs
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
 First 10 features:
    AREA                       geometry
 1     0 POLYGON ((-75.90032 36.5595...
@@ -236,4 +236,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.802   0.068   0.861 
+  0.665   0.036   0.692 

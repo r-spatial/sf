@@ -117,3 +117,7 @@ test_that("c.sfc n_empty returns sum of st_is_empty(sfg)", {
 	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt1)), "n_empty"), 2L)
 	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt2)), "n_empty"), 1L)
 })
+
+test_that("st_is_longlat warns on invalid bounding box", {
+	expect_warning(st_is_longlat(st_sfc(st_point(c(0,-95)), crs = 4326)))
+})

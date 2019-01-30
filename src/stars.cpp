@@ -135,6 +135,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			resample) == CE_Failure)
 		stop("read failure"); // #nocov
 
+	CharacterVector units(bands.size());
 	// scale && set NA:
 	for (int i = 0; i < bands.size(); i++) {
 		int band = bands(i);
@@ -152,7 +153,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		poBand->GetOffset(&has_offset);
 		if (has_offset)
 			offset = poBand->GetOffset(NULL);
-		// char *units = poBand->GetUnits();
+		units[i] = poBand->GetUnitType();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
 			for (R_xlen_t i = 0; i < Rf_xlength(vec); i++) {
 				if (vec[i] == nodatavalue[0])
@@ -163,6 +164,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		}
 		checkUserInterrupt();
 	}
+	vec.attr("units") = units;
 
 	// set dim attr:
 	IntegerVector dims;

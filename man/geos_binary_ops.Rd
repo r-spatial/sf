@@ -53,6 +53,10 @@ or contained fully inside geometries with higher priority are removed entirely.
 The \code{st_difference.sfc} method with a single argument returns an object with
 an \code{"idx"} attribute with the orginal index for returned geometries.
 }
+\note{
+To find whether pairs of simple feature geometries intersect, use
+the function \code{\link{st_intersects}} instead of \code{st_intersection}.
+}
 \examples{
 set.seed(131)
 library(sf)

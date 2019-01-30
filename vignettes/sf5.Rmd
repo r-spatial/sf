@@ -214,14 +214,14 @@ qtm(nc)
 `tmap` also has interactive leaflet maps:
 ```{r}
 tmap_mode("view")
-# if (Sys.getenv("USER") != "CRAN")
-tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
+if (Sys.getenv("USER") != "CRAN")
+  tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 replotting the last map in non-interactive mode is as simple as:
 ```{r}
 ttm()
-#if (Sys.getenv("USER") != "CRAN")
-last_map()
+if (Sys.getenv("USER") != "CRAN")
+   last_map()
 ```
 
