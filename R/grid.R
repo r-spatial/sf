@@ -160,7 +160,7 @@ st_as_grob.sfc_LINESTRING <- function(x, arrow = NULL, default.units = "native",
 	x <- unclass(x)
 	n_points <- vapply(x, nrow, integer(1))
 	x <- do.call(rbind, x)
-	linesGrob(x[1, ], x[2, ], id.lengths = n_points, arrow = arrow, default.units = default.units, name = name, gp = gp, vp = vp)
+	polylineGrob(x[, 1], x[, 2], id.lengths = n_points, arrow = arrow, default.units = default.units, name = name, gp = gp, vp = vp)
 }
 #' @export
 st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
@@ -171,31 +171,30 @@ st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "nat
 	x <- unlist(x, recursive = FALSE)
 	n_points <- vapply(x, nrow, integer(1))
 	x <- do.call(rbind, x)
-	linesGrob(x[1, ], x[2, ], id.lengths = n_points, arrow = arrow, default.units = default.units, name = name, gp = gp, vp = vp)
+	polylineGrob(x[, 1], x[, 2], id.lengths = n_points, arrow = arrow, default.units = default.units, name = name, gp = gp, vp = vp)
 }
 #' @export
 st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
 	x <- unclass(x)
 	n_poly <- vapply(x, length, integer(1))
-	gp <- expand_gp(gp, n_poly)
 	x <- unlist(x, recursive = FALSE)
 	n_points <- vapply(x, nrow, integer(1))
 	n_paths <- tapply(n_points, rep(seq_along(n_poly), n_poly), sum)
 	x <- do.call(rbind, x)
-	pathGrob(x[1, ], x[2, ], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
+	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
 }
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
 	x <- unclass(x)
 	n_poly <- vapply(x, length, integer(1))
-	x <- unlist(x, recursive = FALSE)
-	n_poly2 <- vapply(x, length, integer(1))
-	n_poly <- tapply(n_poly2, rep(seq_along(n_poly), n_poly), sum)
 	gp <- expand_gp(gp, n_poly)
+	x <- unlist(x, recursive = FALSE)
+	n_poly <- vapply(x, length, integer(1))
+	x <- unlist(x, recursive = FALSE)
 	n_points <- vapply(x, nrow, integer(1))
-	n_paths <- tapply(n_points, rep(seq_along(n_poly2), n_poly2), sum)
+	n_paths <- tapply(n_points, rep(seq_along(n_poly), n_poly), sum)
 	x <- do.call(rbind, x)
-	pathGrob(x[1, ], x[2, ], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
+	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
 }
 #' @export
 st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
@@ -219,9 +218,10 @@ st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp 
 
 expand_gp <- function(gp, n) {
 	if (length(gp) == 0) return(gp)
-	n_gp <- vapply(unclass(gp), length, integer(1))
+	gp <- unclass(gp)
+	n_gp <- vapply(gp, length, integer(1))
 	gp[n_gp > 1] <- lapply(gp[n_gp > 1], rep, n)
-	gp
+	`class<-`(gp, 'gpar')
 }
 split_gp <- function(gp, n) {
 	gp <- unclass(gp)
