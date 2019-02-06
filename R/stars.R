@@ -147,9 +147,9 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 						expand(yd$values)
 			} else {
 				if (inherits(xd$values, "intervals"))
-					0.5 * (xd$values$start + xd$values$end)
+					xd$values = 0.5 * (xd$values$start + xd$values$end)
 				if (inherits(yd$values, "intervals"))
-					0.5 * (yd$values$start + yd$values$end)
+					yd$values = 0.5 * (yd$values$start + yd$values$end)
 			}
 			as.matrix(expand.grid(x = xd$values, y = yd$values))
 		}
