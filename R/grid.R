@@ -1,4 +1,6 @@
 # grid graphics utilities
+grid_has_multipath <- packageVersion("grid") >= "3.6"
+
 
 #' Convert sf* object to a grob
 #'
@@ -175,6 +177,9 @@ st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "nat
 }
 #' @export
 st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
+	if (!grid_has_multipath) {
+		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
+	}
 	x <- unclass(x)
 	n_poly <- vapply(x, length, integer(1))
 	x <- unlist(x, recursive = FALSE)
@@ -185,6 +190,9 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 }
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
+	if (!grid_has_multipath) {
+		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
+	}
 	x <- unclass(x)
 	n_poly <- vapply(x, length, integer(1))
 	gp <- expand_gp(gp, n_poly)
@@ -207,6 +215,10 @@ st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp 
 	if (class(x)[1] %in% c('sfc_MULTIPOINT', 'sfc_MULTILINESTRING', 'sfc_MULTIPOLYGON')) {
 		return(st_as_grob(x, gp = gp, ...))
 	}
+	scalar_grobs(x, pch, size, arrow, gp, ...)
+}
+
+scalar_grobs <- function(x, pch, size, arrow, gp, ...) {
 	gp <- split_gp(gp, length(x))
 	pch <- rep(pch, length.out = length(x))
 	size <- rep(size,  length.out = length(x))
@@ -229,12 +241,4 @@ split_gp <- function(gp, n) {
 	lapply(seq_len(n), function(i) {
 		`class<-`(lapply(gp, `[`, i), 'gpar')
 	})
-}
-make_grob <- function(grob_fun, ..., defaults = NULL) {
-	pos_args <- names(formals(grob_fun))
-	dots <- list(...)
-	if (!is.null(defaults)) {
-		dots <- c(dots, defaults[!names(defaults) %in% names(dots)])
-	}
-	do.call(grob_fun, dots[pos_args])
 }
