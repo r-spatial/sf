@@ -233,11 +233,12 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @param breaks numeric vector with break values for contour polygons (or lines)
 #' @param use_contours logical;
 #' @param contour_lines logical;
+#' @param connect8 logical; if \code{TRUE} use 8 connection algorithm, rather than 4
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
 		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
-		use_contours = FALSE, contour_lines = FALSE) {
+		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
@@ -256,7 +257,13 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
 		} else
 			character(0)
-	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", character(0), 0, contour_options, use_contours, use_integer)
+
+	options = if (connect8)
+			"8CONNECTED=8"
+		else
+			character(0)
+
+	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (use_contours) {
