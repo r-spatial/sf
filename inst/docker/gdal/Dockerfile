@@ -73,29 +73,29 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 2.3.0
-ENV GDAL_VERSION_NAME 2.3.0
+ENV GDAL_VERSION 2.4.0
+ENV GDAL_VERSION_NAME 2.4.0
 
-#RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && cd gdal* \
-#  && ./configure \
-#  && make \
-#  && make install \
-#  && cd .. \
-#  && ldconfig
-
-RUN ls
-
-RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
-
-RUN cd gdal/gdal \
-  && ls -l \
+RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && cd gdal* \
   && ./configure \
   && make \
   && make install \
   && cd .. \
   && ldconfig
+
+#RUN ls
+#
+#RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+#
+#RUN cd gdal/gdal \
+#  && ls -l \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
 # for tmap:
 RUN add-apt-repository -y ppa:opencpu/jq
