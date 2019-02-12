@@ -125,13 +125,18 @@ Ops.sfc <- function(e1, e2) {
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
 
-	if (!is.matrix(e2) && .Generic %in% c("+", "-", "*", "/")) {
+	if (!is.matrix(e2) && length(e2) <= 2 && .Generic %in% c("+", "-")) {
 		if (.Generic == "-")
 			e2 <- -e2
+		ret <- opp_sfg(e1, as.numeric(e2), 0L)
+		attr(ret, "bbox") <- compute_bbox(ret)
+		attr(ret, "crs") <- NA_crs_
+		return(ret)
+	} else if (.Generic %in% c("*", "/") && (length(e2) == 1 || is_only_diag(e2))) {
+		if (is.matrix(e2)) e2 <- diag(e2)
 		if (.Generic == "/")
 			e2 <- 1 / e2
-		mult <- if (.Generic %in% c("*", "/")) 1L else 0L
-		ret <- opp_sfg(e1, as.numeric(e2), mult)
+		ret <- opp_sfg(e1, as.numeric(e2), 1L)
 		attr(ret, "bbox") <- compute_bbox(ret)
 		attr(ret, "crs") <- NA_crs_
 		return(ret)
@@ -161,4 +166,7 @@ Ops.sfc <- function(e1, e2) {
 		st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
 	} else
 		ret
+}
+is_only_diag <- function(x) {
+	all(`diag<-`(x, 0) == 0)
 }
