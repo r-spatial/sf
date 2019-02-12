@@ -125,10 +125,22 @@ Ops.sfc <- function(e1, e2) {
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
 
+	if (!is.matrix(e2) && .Generic %in% c("+", "-", "*", "/")) {
+		if (.Generic == "-")
+			e2 <- -e2
+		if (.Generic == "/")
+			e2 <- 1 / e2
+		mult <- if (.Generic %in% c("*", "/")) 1L else 0L
+		ret <- opp_sfg(e1, as.numeric(e2), mult)
+		attr(ret, "bbox") <- compute_bbox(ret)
+		attr(ret, "crs") <- NA_crs_
+		return(ret)
+	}
 	if (!is.list(e2) && ((.Generic %in% c("+", "-") && length(e2) == 2) || is.matrix(e2)))
 		e2 = list(e2)
 
-	ret = switch(.Generic,
+	ret = switch(
+		.Generic,
 		"&"   =  mapply(function(x, y) { x  & y }, e1, e2, SIMPLIFY = FALSE),
 		"|"   =  mapply(function(x, y) { x  | y }, e1, e2, SIMPLIFY = FALSE),
 		"%/%" =  mapply(function(x, y) { x %/% y}, e1, e2, SIMPLIFY = FALSE),
@@ -143,9 +155,9 @@ Ops.sfc <- function(e1, e2) {
 
 	if (!(.Generic %in% c("!=", "=="))) {
 		crs = if (.Generic %in% c("&", "|", "%/%", "/") && inherits(e2, c("sfc", "sfg"))) # retain:
-				st_crs(e1)
-			else # geometry got displaced:
-				NA_crs_
+			st_crs(e1)
+		else # geometry got displaced:
+			NA_crs_
 		st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
 	} else
 		ret
