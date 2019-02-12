@@ -32,7 +32,7 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
   use_integer = TRUE, geotransform,
   breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
-  use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE)
+  use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...)
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff",
   options = character())
@@ -81,6 +81,8 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff",
 \item{connect8}{logical; if \code{TRUE} use 8 connection algorithm, rather than 4}
 
 \item{sf}{object of class \code{sf}}
+
+\item{...}{ignored}
 }
 \value{
 object of class \code{crs}, see \link[sf]{st_crs}.
