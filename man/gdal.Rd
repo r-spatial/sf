@@ -81,8 +81,6 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff",
 \item{connect8}{logical; if \code{TRUE} use 8 connection algorithm, rather than 4}
 
 \item{sf}{object of class \code{sf}}
-
-\item{...}{ignored}
 }
 \value{
 object of class \code{crs}, see \link[sf]{st_crs}.

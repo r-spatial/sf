@@ -234,7 +234,6 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @param use_contours logical;
 #' @param contour_lines logical;
 #' @param connect8 logical; if \code{TRUE} use 8 connection algorithm, rather than 4
-#' @param ... ignored
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
