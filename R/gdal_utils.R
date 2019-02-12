@@ -14,6 +14,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options),
 			warp = CPL_gdalwarp(source, destination, options),
+			warper = CPL_gdal_warper(source, destination), # nocov
 			rasterize = CPL_gdalrasterize(source, destination, options),
 			translate = CPL_gdaltranslate(source, destination, options),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options),

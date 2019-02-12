@@ -425,6 +425,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdal_warper
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile);
+RcppExport SEXP _sf_CPL_gdal_warper(SEXP infileSEXP, SEXP outfileSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type infile(infileSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type outfile(outfileSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_warper(infile, outfile));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_write_ogr
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids, bool quiet, bool update, bool delete_dsn, bool delete_layer);
 RcppExport SEXP _sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP fidsSEXP, SEXP quietSEXP, SEXP updateSEXP, SEXP delete_dsnSEXP, SEXP delete_layerSEXP) {
@@ -1027,6 +1039,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 5},
     {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 3},
     {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 3},
+    {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 2},
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 13},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},

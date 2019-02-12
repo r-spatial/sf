@@ -234,11 +234,12 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @param use_contours logical;
 #' @param contour_lines logical;
 #' @param connect8 logical; if \code{TRUE} use 8 connection algorithm, rather than 4
+#' @param ... ignored
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
 		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
-		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE) {
+		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
