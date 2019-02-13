@@ -1,7 +1,3 @@
-# grid graphics utilities
-grid_has_multipath <- packageVersion("grid") >= "3.6"
-
-
 #' Convert sf* object to a grob
 #'
 #' Convert sf* object to an grid graphics object (grob)
@@ -177,7 +173,7 @@ st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "nat
 }
 #' @export
 st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (!grid_has_multipath) {
+	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
 	}
 	x <- unclass(x)
@@ -190,7 +186,7 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 }
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (!grid_has_multipath) {
+	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
 	}
 	x <- unclass(x)
