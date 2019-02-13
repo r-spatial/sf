@@ -699,16 +699,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// opp_sfg
-SEXP opp_sfg(SEXP geom, SEXP value, SEXP mult);
-RcppExport SEXP _sf_opp_sfg(SEXP geomSEXP, SEXP valueSEXP, SEXP multSEXP) {
+// opp_sfc
+SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs);
+RcppExport SEXP _sf_opp_sfc(SEXP geomSEXP, SEXP valueSEXP, SEXP multSEXP, SEXP crsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type geom(geomSEXP);
     Rcpp::traits::input_parameter< SEXP >::type value(valueSEXP);
     Rcpp::traits::input_parameter< SEXP >::type mult(multSEXP);
-    rcpp_result_gen = Rcpp::wrap(opp_sfg(geom, value, mult));
+    Rcpp::traits::input_parameter< SEXP >::type crs(crsSEXP);
+    rcpp_result_gen = Rcpp::wrap(opp_sfc(geom, value, mult, crs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// normalize_sfc
+SEXP normalize_sfc(SEXP geom, SEXP min, SEXP range, SEXP crs);
+RcppExport SEXP _sf_normalize_sfc(SEXP geomSEXP, SEXP minSEXP, SEXP rangeSEXP, SEXP crsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type geom(geomSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type min(minSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type range(rangeSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type crs(crsSEXP);
+    rcpp_result_gen = Rcpp::wrap(normalize_sfc(geom, min, range, crs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1061,7 +1076,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
-    {"_sf_opp_sfg", (DL_FUNC) &_sf_opp_sfg, 3},
+    {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
+    {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},

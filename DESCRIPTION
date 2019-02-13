@@ -135,4 +135,5 @@ Collate:
     'crop.R'
     'gdal_utils.R'
     'nearest.R'
+    'normalize.R'
     'deprecated.R'
