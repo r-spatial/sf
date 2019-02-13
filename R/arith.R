@@ -122,11 +122,11 @@ Ops.sfc <- function(e1, e2) {
 	if (length(e1) == 0) # empty set
 		return(e1)
 
-	if (!is.matrix(e2) && length(e2) <= 2 && .Generic %in% c("+", "-")) {
+	if (is.numeric(e2) && !is.matrix(e2) && length(e2) <= 2 && .Generic %in% c("+", "-")) {
 		if (.Generic == "-")
 			e2 <- -e2
 		return(opp_sfc(e1, as.numeric(e2), 0L, NA_crs_))
-	} else if (.Generic %in% c("*", "/") && (length(e2) == 1 || is_only_diag(e2))) {
+	} else if (.Generic %in% c("*", "/") && is.numeric(e2) && (length(e2) == 1 || is_only_diag(e2))) {
 		if (is.matrix(e2)) e2 <- diag(e2)
 		if (.Generic == "/")
 			e2 <- 1 / e2
