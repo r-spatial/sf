@@ -2,15 +2,15 @@
 #'
 #' Sample points on or in (sets of) spatial features.
 #' Returns a pre-specified number of points that is equal to
-#' \code{size} if \code{exact = TRUE} or an approximation of
-#' \code{size} if \code{exact = FALSE}.
+#' \code{size} if \code{type = "random"} or an approximation of
+#' \code{size} for other sampling types or if \code{exact = FALSE}.
 #'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
 #' @param exact logical; should the length of output be exactly
-#' the same as specified by \code{size}?
+#' the same as specified by \code{size}? \code{TRUE} by default. Only applies if \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 #'
@@ -31,7 +31,7 @@
 #' }
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 #' plot(x)
-#' p_exact = st_sample(x, 1000, exact = TRUE)
+#' p_exact = st_sample(x, 1000)
 #' p_not_exact = st_sample(x, 1000, exact = FALSE)
 #' length(p_exact); length(p_not_exact)
 #' plot(st_sample(x, 1000), add = TRUE)
@@ -49,21 +49,14 @@
 #' plot(h, add = TRUE)
 #' plot(h1, col = 'red', add = TRUE)
 #' c(length(h), length(h1)) # approximate!
-#' h_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
-#' h1_e = st_sample(sfc, 100, type = "hexagonal", exact = TRUE)
-#' c(length(h_e), length(h1_e)) # exact
-#' plot(sfc)
-#' plot(h_e, add = TRUE) # may not be evenly distributed
-#' plot(h1_e, col = 'red', add = TRUE)
 #' pt = st_multipoint(matrix(1:20,,2))
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 #'  st_linestring(rbind(c(0,0),c(.1,0))),
 #'  st_linestring(rbind(c(0,1),c(.1,1))),
 #'  st_linestring(rbind(c(2,2),c(2,2.00001))))
 #' st_sample(ls, 80)
-#'
 #' @export
-st_sample = function(x, size, ..., type = "random", exact = FALSE) {
+st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
@@ -75,7 +68,7 @@ st_sample = function(x, size, ..., type = "random", exact = FALSE) {
 					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
 					 st_poly_sample(x, size, ..., type = type))
 	}
-	if (exact) {
+	if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 		diff = size - length(res)
 		if(diff > 0) { # too few points
 			res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
