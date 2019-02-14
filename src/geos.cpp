@@ -956,8 +956,8 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 					contained = chk_(GEOSContains_r(hGEOSCtxt, out[tree_sel[j]].get(), geom.get()));
 					if (contained)
 						break;
-					// test if the items overlap with geom
-					if (chk_(GEOSOverlaps_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()))) {
+					// test if the items intersect with geom
+					if (chk_(GEOSIntersects_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()))) {
 						// if they do then erase overlapping parts from geom
 						geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()), hGEOSCtxt);
 						if (geom == nullptr)
