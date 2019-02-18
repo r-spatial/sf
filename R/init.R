@@ -28,7 +28,13 @@ setOldClass("sfg")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 
+pathGrob <- NULL
 .onLoad = function(libname, pkgname) {
+	if (getRversion() < 3.6) {
+		pathGrob <<- function(..., pathId.lengths) {
+			grid::pathGrob(...)
+		}
+	}
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
   		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
@@ -75,14 +81,14 @@ setOldClass("sfg")
 	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) { # nocov start
 		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
 		packageStartupMessage(paste(
-			"Linked against:", CPL_geos_version(TRUE, TRUE), 
+			"Linked against:", CPL_geos_version(TRUE, TRUE),
 			"compiled against:", CPL_geos_version(FALSE, TRUE)))
 		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
 	} # nocov end
 }
 
 #' Provide the external dependencies versions of the libraries linked to sf
-#' 
+#'
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
