@@ -1,5 +1,7 @@
 # version 0.7-3
 
+* fixed n-ary `st_difference` for cases where geometries are entirely contained in others; #975, by Jonathan Marshall
+
 * faster `Ops.sfc`, added `st_normalize`; #973 by Thomas Lin Pedersen (now contributor)
 
 * add `group_split` and `group_map` methods for `sf` objects; #969
