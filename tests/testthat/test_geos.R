@@ -240,6 +240,12 @@ test_that("st_difference works with fully contained geometries", {
 	#expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
 	#expect_equal(out2[[1]][[1]], correct_geom[[1]][[1]])
 	#expect_equal(out2[[2]][[1]], correct_geom[[2]][[1]])
+	# check change in order
+	in3 = st_sfc(list(pl2, pl1))
+	correct_geom = list(pl2, st_difference(pl1, pl2))
+	out3 = st_difference(in3)
+	expect_equal(correct_geom[[1]], out3[[1]])
+	expect_equal(correct_geom[[2]], out3[[2]])
 })
 
 test_that("binary operations work on sf objects with common column names", {

@@ -118,7 +118,15 @@ st_cast.MULTIPOINT <- function(x, to, ...) {
          POLYGON = st_polygon(list(unclass(ClosePol(x)))), 
          LINESTRING = st_linestring(unclass(x)),
          ## loss, drop to first coordinate
-         POINT = {warning("point from first coordinate only"); st_point(unclass(x)[1L, , drop = TRUE])},
+         POINT = {
+             if (st_is_empty(x)) {
+                 row <- NA_integer_
+             } else {
+	             warning("point from first coordinate only")
+                 row <- 1L
+             }
+             st_point(unclass(x)[row, , drop = TRUE])
+         },
 		 GEOMETRYCOLLECTION = st_geometrycollection(list(x))
   )
 }

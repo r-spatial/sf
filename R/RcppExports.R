@@ -141,6 +141,10 @@ CPL_gdalgrid <- function(src, dst, options) {
     .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
 }
 
+CPL_gdal_warper <- function(infile, outfile, options) {
+    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options)
+}
+
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
     .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, update, delete_dsn, delete_layer)
 }
@@ -223,6 +227,14 @@ CPL_hex_to_raw <- function(cx) {
 
 CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
+}
+
+opp_sfc <- function(geom, value, mult, crs) {
+    .Call('_sf_opp_sfc', PACKAGE = 'sf', geom, value, mult, crs)
+}
+
+normalize_sfc <- function(geom, min, range, crs) {
+    .Call('_sf_normalize_sfc', PACKAGE = 'sf', geom, min, range, crs)
 }
 
 CPL_polygonize <- function(raster, mask_name, raster_driver, vector_driver, vector_dsn, options, iPixValField, contour_options, use_contours = FALSE, use_integer = TRUE) {

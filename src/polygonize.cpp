@@ -104,7 +104,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 			if (GDALFPolygonize((GDALRasterBandH) poBand, maskBand,
 				(OGRLayerH) poLayer,
 				iPixValField[0],
-				NULL, // create_options(options, true),
+				create_options(options, true).data(),
 				NULL, NULL) != OGRERR_NONE)
 					Rcpp::Rcout << "GDALFPolygonize returned an error" << std::endl; // #nocov
 		} else {

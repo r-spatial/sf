@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -383,7 +383,7 @@ Error in st_polygonize.sfc(st_sfc(x)) :
 > try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 Error in StopZ(zm) : 
   sp supports Z dimension only for POINT and MULTIPOINT.
-use `drop_zm(...)` to coerce to XY dimensions
+use `st_zm(...)` to coerce to XY dimensions
 > 
 > # check conus is present:
 > x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
@@ -1141,4 +1141,4 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > proc.time()
    user  system elapsed 
-  2.268   0.080   2.342 
+  1.960   0.063   2.015 

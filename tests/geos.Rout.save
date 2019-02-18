@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -133,14 +133,14 @@ MULTIPOINT (0.2986488 0, 2.48417 0, 2.567813 0,...
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
-In st_interpolate_aw(nc["BIR74"], g, FALSE) :
+In st_interpolate_aw.sf(nc["BIR74"], g, FALSE) :
   st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 [1] 1.436169
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
-In st_interpolate_aw(nc["BIR74"], g, extensive = TRUE) :
+In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
   st_interpolate_aw assumes attributes are constant over areas of x
 > sum(a2$BIR74) / sum(nc$BIR74)
 [1] 1.000013
@@ -536,4 +536,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  3.971   0.039   4.003 
+  4.190   0.073   4.254 
