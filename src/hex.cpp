@@ -7,7 +7,7 @@ inline unsigned char char2int(char c) {
 		return c - 'a' + 10;
 	if (c >= 'A' && c <= 'F')
 		return c - 'A' + 10;
-	Rcpp::stop("char2int: false character in hex string");
+	Rcpp::stop("char2int: unrecognized character in hex string");
 }
 
 // [[Rcpp::export]]
@@ -20,11 +20,11 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 		for (int i = 0; i < raw.size(); i++) {
 			raw[i] = (char2int(cp[0]) << 4) + char2int(cp[1]);
 			cp += 2;
-			if (i % 100000 == 0)
+			if (i % 131072 == 0) // 2^17, see https://www.jottr.org/2015/06/05/checkuserinterrupt/
 				Rcpp::checkUserInterrupt();
 		}
 		output[j] = raw;
-		if (j % 1000 == 0)
+		if (j % 1024 == 0)
 			Rcpp::checkUserInterrupt();
 	}
 	return output;

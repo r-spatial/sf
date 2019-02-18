@@ -50,3 +50,14 @@ test_that("Reading of truncated buffers results in a proper error", {
   expect_error(st_as_sfc(wkb, EWKB = TRUE), "WKB buffer too small. Input file corrupt?")
 })
 
+test_that("st_as_sfc() honors crs argument", {
+  raw = st_as_binary(st_point(c(26e5, 12e5)))
+
+  list = list(raw)
+  blob = blob::blob(raw)
+  wkb = as_wkb(list)
+
+  expect_identical(st_as_sfc(raw, crs = 2056), st_as_sfc(wkb, crs = 2056))
+  expect_identical(st_as_sfc(list, crs = 2056), st_as_sfc(wkb, crs = 2056))
+  expect_identical(st_as_sfc(blob, crs = 2056), st_as_sfc(wkb, crs = 2056))
+})

@@ -33,6 +33,8 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	valgrind \
 	vim
 
+RUN apt-get install -y libgeos-dev
+
 # PROJ:
 # was: ENV PROJ_VERSION 4.9.3
 # http://download.osgeo.org/proj/proj-5.0.0RC3.tar.gz
@@ -57,41 +59,43 @@ RUN cd /usr/local/share/proj \
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2
-ENV GEOS_VERSION 3.7.0
-
-RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
-  && bzip2 -d geos-*bz2 \
-  && tar xf geos*tar \
-  && cd geos* \
-  && ./configure \
-  && make \
-  && make install \
-  && cd .. \
-  && ldconfig
-
-# GDAL:
-
-ENV GDAL_VERSION 2.3.0
-ENV GDAL_VERSION_NAME 2.3.0
-
-#RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && cd gdal* \
+#ENV GEOS_VERSION 3.7.0
+#
+#RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
+#  && bzip2 -d geos-*bz2 \
+#  && tar xf geos*tar \
+#  && cd geos* \
 #  && ./configure \
 #  && make \
 #  && make install \
 #  && cd .. \
 #  && ldconfig
 
-RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+# GDAL:
 
-RUN cd gdal/gdal \
-  && ls -l \
+ENV GDAL_VERSION 2.4.0
+ENV GDAL_VERSION_NAME 2.4.0
+
+RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && cd gdal* \
   && ./configure \
   && make \
   && make install \
   && cd .. \
   && ldconfig
+
+#RUN ls
+#
+#RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+#
+#RUN cd gdal/gdal \
+#  && ls -l \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
 # for tmap:
 RUN add-apt-repository -y ppa:opencpu/jq
@@ -119,16 +123,22 @@ RUN R CMD build rgdal/pkg --no-build-vignettes
 
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN git   clone https://github.com/r-spatial/sf.git
-RUN R CMD build --no-build-vignettes --no-manual sf
-RUN ldconfig
-
-RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
-RUN R CMD build rgeos/pkg --no-build-vignettes
-RUN R CMD INSTALL rgeos_*tar.gz
 RUN geos-config --libs
+RUN git clone --depth 1 https://github.com/r-spatial/sf.git
+RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD INSTALL sf_*gz
 
-#RUN R CMD INSTALL sf_*gz
+RUN apt-get install -y \
+	libssh2-1-dev \
+	libgit2-dev \
+	libnetcdf-dev
+
+RUN Rscript -e 'install.packages("devtools")'
+RUN Rscript -e 'devtools::install_github("r-spatial/stars")'
+
+#RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
+#RUN R CMD build rgeos/pkg --no-build-vignettes
+#RUN R CMD INSTALL rgeos_*tar.gz
 
 #RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
 

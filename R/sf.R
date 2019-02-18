@@ -42,10 +42,11 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		if (na.fail && any(is.na(x[coords])))
+		cc = as.data.frame(lapply(x[coords], as.numeric))
+		if (na.fail && any(is.na(cc)))
 			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( points_rcpp(as.matrix(x[ , coords]), dim),
+		x$geometry = structure( points_rcpp(as.matrix(cc), dim),
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(x[[coords[1]]], na.rm = TRUE),
@@ -215,16 +216,17 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	# find the sfc column(s):
 	all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
 	if (! any(all_sfc_columns)) { # try to create sfc from list-columns:
-		x = lapply(x, list_column_to_sfc)
-		all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
+		xlst = lapply(x, list_column_to_sfc)
+		all_sfc_columns = vapply(xlst, function(x) inherits(x, "sfc"), TRUE)
 		if (! any(all_sfc_columns))
 			stop("no simple features geometry column present")
+		x[all_sfc_columns] = xlst[all_sfc_columns]
 	}
 
 	all_sfc_columns = which(unlist(all_sfc_columns))
 
 	# set names if not present:
-	all_sfc_names = if (!is.null(names(x)) && nzchar(names(x)[all_sfc_columns]))
+	all_sfc_names = if (!is.null(names(x)) && any(nzchar(names(x)[all_sfc_columns])))
 		names(x)[all_sfc_columns]
 	else {
 		object = as.list(substitute(list(...)))[-1L]
@@ -254,7 +256,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			x[-all_sfc_columns]
 		else
 			cbind(data.frame(row.names = row.names), 
-				data.frame(x[-all_sfc_columns], stringsAsFactors = stringsAsFactors))
+				as.data.frame(x[-all_sfc_columns], 
+					stringsAsFactors = stringsAsFactors, optional = TRUE))
 
 	for (i in seq_along(all_sfc_names))
 		df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]], check_ring_dir = check_ring_dir)
@@ -424,4 +427,13 @@ merge.sf = function(x, y, ...) {
 as.data.frame.sf = function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	NextMethod()
+}
+
+#' @export
+#' @name st_geometry
+#' @details \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
+st_drop_geometry = function(x) {
+	if (!inherits(x, "sf"))
+		stop("st_drop_geometry only works with objects of class sf")
+	st_set_geometry(x, NULL)
 }

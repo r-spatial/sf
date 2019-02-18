@@ -8,6 +8,8 @@
 \alias{gdal_crs}
 \alias{gdal_metadata}
 \alias{gdal_subdatasets}
+\alias{gdal_polygonize}
+\alias{gdal_rasterize}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
 gdal_read(x, ..., options = character(0), driver = character(0),
@@ -15,7 +17,8 @@ gdal_read(x, ..., options = character(0), driver = character(0),
   RasterIO_parameters = list())
 
 gdal_write(x, ..., file, driver = "GTiff", options = character(0),
-  type = "Float32", NA_value = NA_real_, geotransform)
+  type = "Float32", NA_value = NA_real_, geotransform,
+  update = FALSE)
 
 gdal_inv_geotransform(gt)
 
@@ -25,6 +28,14 @@ gdal_metadata(file, domain_item = character(0), options = character(0),
   parse = TRUE)
 
 gdal_subdatasets(file, options = character(0), name = TRUE)
+
+gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
+  use_integer = TRUE, geotransform,
+  breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
+  use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...)
+
+gdal_rasterize(sf, x, gt, file, driver = "GTiff",
+  options = character())
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -47,6 +58,8 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 
 \item{geotransform}{length 6 numeric vector with GDAL geotransform parameters.}
 
+\item{update}{logical; \code{TRUE} if in an existing raster file pixel values shall be updated.}
+
 \item{gt}{double vector of length 6}
 
 \item{domain_item}{character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.}
@@ -54,6 +67,20 @@ gdal_subdatasets(file, options = character(0), name = TRUE)
 \item{parse}{logical; should metadata be parsed into a named list (\code{TRUE}) or returned as character data?}
 
 \item{name}{logical; retrieve name of subdataset? If \code{FALSE}, retrieve description}
+
+\item{mask}{stars object with NA mask (0 where NA), or NULL}
+
+\item{use_integer}{boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.}
+
+\item{breaks}{numeric vector with break values for contour polygons (or lines)}
+
+\item{use_contours}{logical;}
+
+\item{contour_lines}{logical;}
+
+\item{connect8}{logical; if \code{TRUE} use 8 connection algorithm, rather than 4}
+
+\item{sf}{object of class \code{sf}}
 }
 \value{
 object of class \code{crs}, see \link[sf]{st_crs}.

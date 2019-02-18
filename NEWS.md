@@ -1,6 +1,46 @@
+# version 0.7-3
+
+* fixed n-ary `st_difference` for cases where geometries are entirely contained in others; #975, by Jonathan Marshall
+
+* faster `Ops.sfc`, added `st_normalize`; #973 by Thomas Lin Pedersen (now contributor)
+
+* add `group_split` and `group_map` methods for `sf` objects; #969
+
+* make `st_interpolate_aw` a generic;
+
+* argument `col` for `plot` of `GEOMETRY` `sfc`'s now is `NA` (open) for (multi) polygon geometries
+
+# version 0.7-2
+
+* feature IDs are no longer returned as names on the geometry list column, but optionally returned by `st_read` as attribute column; #812
+
+* when plotting multiple attributes, plot.sf now adds a (single, common) key if `key.pos` is set
+
+* precision can now be specified in distance units; #901
+
+* support log-scale in color legend by setting `logz` to `TRUE` in `plot.sf`
+
+* `st_intersects` etc. will prepare `y` when `y` is polygons and `x` is points; #885 by Dan Baston
+
+* `st_write` (and `write_sf`) now returns its first argument, invisibly; #889
+
+# version 0.7-1
+
+* fix bug that broke n-ary `st_intersection` on platforms using clang; #867
+
 # version 0.7-0
 
-* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Mike Sumner
+* adds several interfaces to GDAL functions, meant to be used by package `stars`
+
+* `st_read` receives a `query` argument that can run queries against OGR datasets; #834, by Barry Rowlingson and Michael Sumner
+
+* `read_sf` no longer first creates tibbles from `data.frame`s, but creates them directly; #853, db propagation by Etienne Racine
+
+* check difference between compile-time and run-time GEOS versions; #844
+
+* all GEOS routines are now (more) robust against memory leaks, by using unique pointers; #822, #845, by Dan Baston
+
+* `st_buffer` receives the buffer styles `endCapStyle`, `joinStyle` and `mitreLimit`; #833, #842 by Michael Sumner
 
 # version 0.6-4
 
@@ -388,7 +428,7 @@
 
 * `st_read` now respects time that is read as UTC
 
-* `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unkown" or "local"
+* `st_write` now writes time always as UTC, since GDAL does not have a mechanism to define local timezones other than "unknown" or "local"
 
 * `st_length` now works for POINT and MULTIPOINT (returning 0); POLYGON and MULTIPOLYGON are converted to MULTILINESTRING before computing length, thus giving polygon perimeter (#268)
 
@@ -441,7 +481,7 @@
 * rename `st_makegrid` to `st_make_grid`, and `st_linemerge` to `st_line_merge`
 * add NEWS.md file (#207)
 
-* faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Mike Sumner)
+* faster conversion of `data.frame` into `POINT` `sf` object, using `st_as_sf` (Michael Sumner)
 
 * `rbind` method for `sf` objects now keeps coordinate reference system
 

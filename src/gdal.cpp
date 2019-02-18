@@ -169,6 +169,8 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
 			r.length(), wkbVariantIso);
 		if (err != OGRERR_NONE) {
+			if (g[i] != NULL) // release: #nocov
+				OGRGeometryFactory::destroyGeometry(g[i]); // #nocov
 			if (local_srs != NULL)      // #nocov start
 				local_srs->Release();
 			handle_error(err);          // #nocov end
@@ -369,7 +371,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
 		dest->Release(); // #nocov
-		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ.4 available?"); // #nocov
+		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov
 	}
 	for (size_t i = 0; i < g.size(); i++) {
 		CPLPushErrorHandler(CPLQuietErrorHandler);

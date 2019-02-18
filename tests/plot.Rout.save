@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -117,7 +117,7 @@ Warning messages:
 > plot(nc[1],   key.pos = 1)
 > 
 > # test background map plotting:
-> data(bgmap)
+> load("bgmap.rda")
 > merc = st_crs(3857)
 > WGS84 = st_crs(4326)
 > nc = st_transform(nc, WGS84)
@@ -159,6 +159,14 @@ Warning messages:
 Warning message:
 plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all 
 > 
+> # logz:
+> nc$e = 10^(nc$SID74)
+> plot(nc["e"], logz = TRUE)
+> 
+> # shared key:
+> plot(nc[c("SID74", "SID79")], key.pos = -1)
+> plot(nc[c("BIR74", "BIR79")], key.pos = 1, logz=TRUE)
+> 
 > proc.time()
    user  system elapsed 
-  4.460   0.261   4.400 
+  3.486   0.076   3.560 

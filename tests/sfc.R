@@ -20,7 +20,7 @@ st_as_sfc(c("POINT(0 0)", "POINT(1 1)"))
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"))
 st_as_sfc(character(0))
 st_as_sfc(character(0), 4326)
-st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
+st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
 print(dg, n = 1)
@@ -80,9 +80,9 @@ st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POL
 st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
 
 
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast() 
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
-	st_cast() %>% 
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast()
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>%
+	st_cast() %>%
 	st_cast("POINT")
 
 p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
@@ -94,7 +94,7 @@ st_length(st_sfc(st_point(c(0,0))))
 try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 
 # check conus is present:
-x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
+x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 	crs = "+proj=longlat +datum=NAD27")
 st_transform(x, 3857)
 
@@ -170,7 +170,7 @@ st_join(a, b, left = FALSE)
 # deprecated:
 try(x <- st_join(a, b, FUN = mean))
 # st_join, largest = TRUE:
-nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
 gr = st_sf(
     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
     geom = st_make_grid(nc))
@@ -208,6 +208,13 @@ st_sample(nc[1:2,], size = c(10,20))
 # try with LINES, LongLat, should generate a warning:
 nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 st_sample(ls, 80, type = "regular")
+p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100))
+lengths(p_sample)
+p_sample_exact = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = TRUE))
+lengths(p_sample_exact)
+#plot(nc$geometry[1])
+#plot(p_sample[[1]], add = TRUE)
+#plot(p_sample_exact[[1]], add = TRUE)
 
 #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
 class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
@@ -229,6 +236,7 @@ st_jitter(st_sfc(st_point(0:1)), amount = .1)
 library(sp)
 demo(meuse, ask = FALSE, echo = FALSE)
 st_bbox(meuse)
+st_crs(meuse)
 library(raster)
 st_bbox(raster(meuse.grid))
 st_bbox(extent(raster()))
@@ -295,3 +303,5 @@ st_crop(pol_sf, st_bbox(box))
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
 p <- st_sample(x, 10, type = "regular")
 p <- st_sample(x, 10, type = "hexagonal")
+
+all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))

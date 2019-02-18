@@ -7,7 +7,7 @@ sf_join = function(g, sf_column) {
 	attr(g[[ sf_column ]], "bbox") = NULL # remove, so that st_sfc() recomputes:
 	g[[ sf_column ]] = st_sfc(g[[ sf_column ]])
 	class(g) = setdiff(class(g), "sf")
-	st_sf(g)
+	st_sf(g, sf_column_name = sf_column)
 }
 
 #' @name tidyverse
@@ -137,5 +137,8 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
 		ix = rep(seq_len(nrow(x)), lengths(i))
 	}
-	st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))
+	if (inherits(x, "tbl_df") & requireNamespace("dplyr", quietly = TRUE))
+		st_sf(dplyr::bind_cols(x[ix,], y[unlist(i), , drop = FALSE]))
+  	else
+		st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))	
 }

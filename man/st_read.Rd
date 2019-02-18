@@ -9,16 +9,18 @@
 \usage{
 st_read(dsn, layer, ...)
 
-\method{st_read}{character}(dsn, layer, ..., options = NULL,
-  quiet = FALSE, geometry_column = 1L, type = 0,
+\method{st_read}{character}(dsn, layer, ..., query = NA,
+  options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
   promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
-  int64_as_string = FALSE, check_ring_dir = FALSE)
+  int64_as_string = FALSE, check_ring_dir = FALSE,
+  fid_column_name = character(0))
 
-read_sf(..., quiet = TRUE, stringsAsFactors = FALSE)
+read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
+  as_tibble = TRUE)
 
 \method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
-  EWKB = TRUE, quiet = TRUE, ...)
+  EWKB = TRUE, quiet = TRUE, as_tibble = FALSE, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some
@@ -37,6 +39,8 @@ are no layers in \code{dsn}. If \code{dsn} is a database connection, then
 use the \code{query} argument.}
 
 \item{...}{parameter(s) passed on to \link{st_as_sf}}
+
+\item{query}{SQL query to select records; see details}
 
 \item{options}{character; driver dependent dataset open options, multiple
 options supported.}
@@ -69,7 +73,9 @@ precision is lost (i.e., values are larger than 2^53).}
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)}
 
-\item{query}{SQL query to select records; see details}
+\item{fid_column_name}{character; name of column to write feature IDs to; defaults to not doing this}
+
+\item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
 \item{EWKB}{logical; is the WKB of type EWKB? if missing, defaults to
 \code{TRUE}}
@@ -103,6 +109,16 @@ basis; \code{type} may be specified for each geometry column.
 In case of problems reading shapefiles from USB drives on OSX, please see
 \url{https://github.com/r-spatial/sf/issues/252}.
 
+For \code{query} with a character \code{dsn} the query text is handed to
+'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
+new layer (and \code{layer} is ignored). See 'OGRSQL'
+\url{https://www.gdal.org/ogr_sql.html} for details. Please note that the
+'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
+Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
+OGRSQL are also likely to be driver dependent. The available layer names may
+be obtained with
+\link{st_layers}. Care will be required to properly escape the use of some layer names.
+
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
 \code{read_sf} and \code{write_sf} are quiet by default: they do not print information
@@ -128,6 +144,10 @@ that reside in the same directory, only one of them having extension \code{.shp}
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
 
+## only three fields by select clause
+## only two features by where clause
+nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
+                     query = "SELECT NAME, SID74, FIPS FROM \\"nc\\" WHERE BIR74 > 20000")
 \dontrun{
   library(sp)
   example(meuse, ask = FALSE, echo = FALSE)
@@ -136,6 +156,14 @@ summary(nc) # note that AREA was computed using Euclidian area on lon/lat degree
   try(st_meuse <- st_read("PG:dbname=postgis", "meuse"))
   if (exists("st_meuse"))
     summary(st_meuse)
+}
+
+\dontrun{
+## note that we need special escaping of layer  within single quotes (nc.gpkg)
+## and that geom needs to be included in the select, otherwise we don't detect it
+layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
+nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
+   query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", layer))
 }
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",

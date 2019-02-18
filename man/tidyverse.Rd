@@ -28,7 +28,7 @@
 \alias{full_join.sf}
 \alias{semi_join.sf}
 \alias{anti_join.sf}
-\title{Tidyverse methods for sf objects}
+\title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
 filter.sf(.data, ..., .dots)
 
@@ -169,7 +169,7 @@ Should be a character vector of length 2.}
 an object of class \link{sf}
 }
 \description{
-Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
 }
 \details{
 \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
@@ -178,9 +178,9 @@ In case one or more of the arguments (expressions) in the \code{summarise} call 
 
 In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 
-\code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
+\code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 
-\code{nest.sf} assumes that a simple feature geometry list-column was among the columns that were nested.
+\code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 }
 \examples{
 library(dplyr)

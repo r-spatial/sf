@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -59,10 +59,10 @@ list()
 > st_crs(x) = 4326
 > st_crs(x, parameters = TRUE)
 $SemiMajor
-6378137 m
+6378137 [m]
 
 $SemiMinor
-6356752 m
+6356752 [m]
 
 $InvFlattening
 [1] 298.2572
@@ -80,15 +80,15 @@ $Wkt
 [1] "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]"
 
 $ud_unit
-1 °
+1 [°]
 
 > 
 > from = st_crs(4326)$proj4string
 > to = st_crs(3857)$proj4string
 > (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
-         [,1]          [,2]
-[1,]      0.0 -7.081155e-10
-[2,] 111319.5  1.113251e+05
+         [,1]     [,2]
+[1,]      0.0      0.0
+[2,] 111319.5 111325.1
 > sf_project(to, from, ret)
      [,1] [,2]
 [1,]    0    0
@@ -97,15 +97,19 @@ $ud_unit
 Geometry set for 2 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
+bbox:           xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
 epsg (SRID):    3857
 proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-POINT (0 -7.081155e-10)
+POINT (0 0)
 POINT (111319.5 111325.1)
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -117,4 +121,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.433   0.215   0.326 
+  0.320   0.040   0.352 

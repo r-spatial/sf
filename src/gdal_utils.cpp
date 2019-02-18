@@ -1,6 +1,7 @@
 #include "cpl_port.h"
 #include "cpl_conv.h" // CPLFree()
 #include "gdal_version.h"
+#include "gdalwarper.h"
 
 #if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
 # include "gdal_utils.h" // requires >= 2.1
@@ -56,8 +57,12 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	GDALRasterizeOptions* opt =  GDALRasterizeOptionsNew(options_char.data(), NULL);
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, NULL, NULL);
-        GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
-        GDALDatasetH result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
+	if (src_pt == NULL)
+		Rcpp::stop("source dataset not found");
+	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
+	if (dst_pt == NULL)
+		Rcpp::stop("cannot write to destination dataset");
+	GDALDatasetH result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
 	GDALRasterizeOptionsFree(opt);
 	GDALClose(src_pt);
 	if (result != NULL)
@@ -129,6 +134,8 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 	GDALDEMProcessingOptions* opt =  GDALDEMProcessingOptionsNew(options_char.data(), NULL);
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, NULL, NULL, NULL);
+	if (src_pt == NULL)
+		Rcpp::stop("cannot open source dataset"); // #nocov
 	GDALDatasetH result = GDALDEMProcessing((const char *) dst[0], src_pt, 
 		processing.size() == 0 ? NULL : (const char *) processing[0], 
 		colorfilename.size() == 0 ? NULL : (const char *) colorfilename[0], 
@@ -222,3 +229,55 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 #endif
+
+// #nocov start
+// https://www.gdal.org/warptut.html :
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
+		Rcpp::IntegerVector options)
+{
+    GDALDatasetH  hSrcDS, hDstDS;
+    // Open input and output files.
+    GDALAllRegister();
+    hSrcDS = GDALOpen( infile[0], GA_ReadOnly );
+	if (hSrcDS == NULL)
+		Rcpp::stop("input file not found");
+    hDstDS = GDALOpen( outfile[0], GA_Update );
+	if (hDstDS == NULL)
+		Rcpp::stop("could not open output file for writing");
+    // Setup warp options.
+    GDALWarpOptions *psWarpOptions = GDALCreateWarpOptions();
+    psWarpOptions->hSrcDS = hSrcDS;
+    psWarpOptions->hDstDS = hDstDS;
+    psWarpOptions->nBandCount = 1;
+    psWarpOptions->panSrcBands =
+        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->panSrcBands[0] = 1;
+    psWarpOptions->panDstBands =
+        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->panDstBands[0] = 1;
+    // psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
+    psWarpOptions->pfnProgress = GDALDummyProgress;
+    // Establish reprojection transformer.
+	if (options.size() == 1)
+		psWarpOptions->eResampleAlg = (GDALResampleAlg) options[0];
+    psWarpOptions->pTransformerArg =
+        GDALCreateGenImgProjTransformer( hSrcDS,
+                                         GDALGetProjectionRef(hSrcDS),
+                                         hDstDS,
+                                         GDALGetProjectionRef(hDstDS),
+                                         FALSE, 0.0, 1 );
+    psWarpOptions->pfnTransformer = GDALGenImgProjTransform;
+    // Initialize and execute the warp operation.
+    GDALWarpOperation oOperation;
+    oOperation.Initialize( psWarpOptions );
+    oOperation.ChunkAndWarpImage( 0, 0,
+                                  GDALGetRasterXSize( hDstDS ),
+                                  GDALGetRasterYSize( hDstDS ) );
+    GDALDestroyGenImgProjTransformer( psWarpOptions->pTransformerArg );
+    GDALDestroyWarpOptions( psWarpOptions );
+    GDALClose( hDstDS );
+    GDALClose( hSrcDS );
+    return false;
+}
+// #nocov end

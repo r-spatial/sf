@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom.R
 \name{st_make_grid}
 \alias{st_make_grid}
-\title{Make a regular tesselation over the bounding box of an sf or sfc object}
+\title{Create a regular tesselation over the bounding box of an sf or sfc object}
 \usage{
 st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]),
   diff(st_bbox(x)[c(2, 4)]))/n, offset = st_bbox(x)[c("xmin", "ymin")],
@@ -29,7 +29,7 @@ Object of class \code{sfc} (simple feature geometry list column) with, depending
 square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{
-Make a square or hexagonal grid over the bounding box of an sf or sfc object
+Create a square or hexagonal grid over the bounding box of an sf or sfc object
 }
 \examples{
 plot(st_make_grid(what = "centers"), axes = TRUE)

@@ -271,7 +271,7 @@ POLYGON EMPTY
 [2,] FALSE FALSE
 > 
 > # write & read:
-> x = st_sf(a = 2:1, geom = structure(st_sfc(st_linestring(), st_linestring(matrix(1:4,2))), names=c("2","3")))
+> x = st_sf(a = 2:1, geom = structure(st_sfc(st_linestring(), st_linestring(matrix(1:4,2)))))
 > write_sf(x, "empty.gpkg")
 > y = st_read("empty.gpkg", quiet = TRUE)
 > all.equal(x, y)
@@ -292,4 +292,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  0.506   0.168   0.509 
+  0.359   0.024   0.374 

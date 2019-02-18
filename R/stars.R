@@ -18,15 +18,45 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @export
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
+#' @param update logical; \code{TRUE} if in an existing raster file pixel values shall be updated.
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
-		NA_value = NA_real_, geotransform) {
-	mat = x[[1]]
-	dims = dim(mat)
+		NA_value = NA_real_, geotransform, update = FALSE) {
+
+	if (!requireNamespace("stars", quietly = TRUE))
+		stop("stars required: install that first") # nocov
+
+	d = stars::st_dimensions(x)
+	xydims = attr(d, "raster")$dimensions
+	if (!all.equal(match(xydims, names(d)), 1:2))
+		stop("x and y raster dimensions need to be in place 1 and 2")
+	from = c(d[[1]]$from, d[[2]]$from) - 1
+	dims = c(d[[1]]$to, d[[2]]$to)
+	if (length(d) == 3)
+		dims = c(dims, d[[3]]$to - d[[3]]$from + 1)
+
+	if (inherits(x, "stars_proxy")) {
+		mat = matrix(0, 0, 0)
+		only_create = TRUE # don't write any pixel data
+		if (!all(from == 0))
+			warning("writing raster to original size") # otherwise, geotransform needs to be modified
+		from = c(0, 0)
+	} else {
+		mat = x[[1]]
+		only_create = FALSE # write x too
+		if (! update) {
+			if (!all(from == 0))
+				stop("cannot write sub-rasters only")
+			if (!all(dims == dim(mat)))
+				stop("dimensions don't match")
+		}
+		dm = dim(mat)
+		dim(mat) = c(dm[1], prod(dm[-1])) # flatten to 2-D matrix
+	}
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
-	dim(mat) = c(dims[1], prod(dims[-1])) # flatten to 2-D matrix
-	CPL_write_gdal(mat, file, driver, options, type, dims, geotransform, st_crs(x)$proj4string, 
-		as.double(NA_value))
+
+	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform, st_crs(x)$proj4string, 
+		as.double(NA_value), create = !update, only_create = only_create)
 }
 
 #' @param gt double vector of length 6
@@ -63,7 +93,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 
 	xy2sfc = function(cc, dm, as_points) { # form points or polygons from a matrix with corner points
 		if (as_points)
-			unlist(apply(cc, 1, function(x) list(sf::st_point(x))), recursive = FALSE)[which]
+			unlist(apply(cc, 1, function(x) list(st_point(x))), recursive = FALSE)[which]
 		else {
 			stopifnot(prod(dm) == nrow(cc))
 			lst = vector("list", length = prod(dm - 1))
@@ -73,32 +103,63 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 					i2 = (y - 1) * dm[1] + x + 1  # top-right
 					i3 = (y - 0) * dm[1] + x + 1  # bottom-right
 					i4 = (y - 0) * dm[1] + x      # bottlom-left
-					lst[[ (y-1)*(dm[1]-1) + x ]] = sf::st_polygon(list(cc[c(i1,i2,i3,i4,i1),]))
+					lst[[ (y-1)*(dm[1]-1) + x ]] = st_polygon(list(cc[c(i1,i2,i3,i4,i1),]))
 				}
 			}
 			lst[which]
 		}
 	}
 
-	y = x$y
-	x = x$x
-	cc = if (!is.na(x$from) && !is.na(y$from)) {
+	raster = attr(x, "raster")
+	xy_names = raster$dimensions
+	xd = x[[ xy_names[1] ]]
+	yd = x[[ xy_names[2] ]]
+	cc = if (!is.na(xd$offset) && !is.na(yd$offset)) {
 		xy = if (as_points) # grid cell centres:
-			expand.grid(x = seq(x$from, x$to) - 0.5, y = seq(y$from, y$to) - 0.5)
+			expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
 		else # grid corners: from 0 to n
-			expand.grid(x = seq(x$from - 1, x$to), y = seq(y$from - 1, y$to))
+			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
-	} else {
-		if (!as_points) # nocov start
-			stop("grid cell sizes not available")
-		expand.grid(x = x$values, y = y$values) # nocov end
+	} else if (is.null(xd$values) || is.null(yd$values)) { # only one of [xd|yd] has $values:
+		if (!requireNamespace("stars", quietly = TRUE)) # nocov start
+			stop("stars required: install that first")
+		as.matrix(st_coordinates(x)) # nocov end
+	} else { # both xd and yd have $values:
+		expand = function(x) { # might fail on the poles or dateline
+			d = diff(x)
+			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
+		}
+		if (raster$curvilinear) { # expand jointly:
+			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
+				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
+				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
+			}
+			cbind(as.vector(xd$values), as.vector(yd$values))
+		} else { # rectlinear: expand independently
+			if (! as_points) {
+				xd$values = if (inherits(xd$values, "intervals"))
+						c(xd$values$start, tail(xd$values$end, 1))
+					else
+						expand(xd$values)
+				yd$values = if (inherits(yd$values, "intervals"))
+						c(yd$values$start, tail(yd$values$end, 1))
+					else
+						expand(yd$values)
+			} else {
+				if (inherits(xd$values, "intervals"))
+					xd$values = 0.5 * (xd$values$start + xd$values$end)
+				if (inherits(yd$values, "intervals"))
+					yd$values = 0.5 * (yd$values$start + yd$values$end)
+			}
+			as.matrix(expand.grid(x = xd$values, y = yd$values))
+		}
 	}
-	dims = c(x$to - x$from, y$to - y$from) + 1 + !as_points
+	dims = dim(x) + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
-			crs = st_crs(x$refsys), n_empty = 0L)
+			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
 	else
-		st_sfc(xy2sfc(cc, dims, as_points), crs = x$refsys)
+		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
 }
 
 
@@ -109,7 +170,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 #' @export
 gdal_crs = function(file, options = character(0)) {
 	ret = CPL_get_crs(file, options)
-	ret$crs = sf::st_crs(wkt = ret$crs)
+	ret$crs = st_crs(wkt = ret$crs)
 	ret
 }
 
@@ -165,4 +226,59 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 		else
 			md[seq(2, length(md), by = 2)]
 	}
+}
+
+#' @param use_integer boolean; if \code{TRUE}, raster values are read as (and rounded to) unsigned 32-bit integers values; if \code{FALSE} they are read as 32-bit floating points numbers. The former is supposedly faster.
+#' @param mask stars object with NA mask (0 where NA), or NULL
+#' @param breaks numeric vector with break values for contour polygons (or lines)
+#' @param use_contours logical;
+#' @param contour_lines logical;
+#' @param connect8 logical; if \code{TRUE} use 8 connection algorithm, rather than 4
+#' @name gdal
+#' @export
+gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
+		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
+		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...) {
+	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
+	on.exit(unlink(file))
+	mask_name = if (!is.null(mask)) {
+			mask_name = tempfile()
+			gdal_write(mask, file = mask_name, driver = driver, geotransform = geotransform)
+			on.exit(unlink(mask_name))
+			mask_name
+		} else
+			character(0)
+	contour_options = if (use_contours) { # construct contour_options:
+			nbreaks = breaks
+			if (max(breaks) == max(x[[1]], na.rm = TRUE)) # expand, because GDAL will not include interval RHS
+				nbreaks[length(nbreaks)] = breaks[length(breaks)] * 1.01
+			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
+			paste0("ELEV_FIELD=0"),
+			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
+		} else
+			character(0)
+
+	options = if (connect8)
+			"8CONNECTED=8"
+		else
+			character(0)
+
+	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, contour_options, use_contours, use_integer)
+	out = process_cpl_read_ogr(pol, quiet = TRUE)
+	names(out)[1] = names(x)[1]
+	if (use_contours) {
+		m = as.integer(cut(out[[1]], breaks = nbreaks)) # nocov start FIXME: add coverage when GDAL 2.4.0 is here
+		if (any(is.na(m)))
+			warning("range of breaks does not cover range of cell values")
+		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor") # nocov end
+	}
+	out
+}
+
+#' @param sf object of class \code{sf}
+#' @name gdal
+#' @export
+gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character()) {
+	gdal_write(x, file = file, driver = driver, geotransform = gt)
+	CPL_rasterize(file, driver, st_geometry(sf), as.double(as.data.frame(sf)[[1]]), options, NA_real_);
 }

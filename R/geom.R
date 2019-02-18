@@ -121,19 +121,23 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-	if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-		id = if (is.null(row.names(x)))
-				as.character(1:length(ret))
+	if (prepared && isTRUE(st_dimension(x) == 0) && isTRUE(st_dimension(y) == 2))
+		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
+	else {
+		ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+		if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+			id = if (is.null(row.names(x)))
+					as.character(1:length(ret))
+				else
+					row.names(x)
+			sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
+			if (! sparse)
+				as.matrix(sgbp)
 			else
-				row.names(x)
-		sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-		if (! sparse)
-			as.matrix(sgbp)
-		else
-			sgbp
-	} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-		ret[[1]]
+				sgbp
+		} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
+			ret[[1]]
+	}
 }
 
 #' Compute geometric measurements
@@ -232,6 +236,8 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
+#' @param prepared logical; prepare geometry for x, before looping over y? See Details.
+#' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
@@ -239,6 +245,10 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
 #'
 #' Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
+#'
+#' @note For intersection on pairs of simple feature geometries, use
+#' the function \code{\link{st_intersection}} instead of \code{st_intersects}.
+#'
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
@@ -285,7 +295,6 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
 
 #' @name geos_binary_pred
 #' @export
-#' @param prepared logical; prepare geometry for x, before looping over y?
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
 
@@ -367,7 +376,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 
 #' Geometric unary operations on simple feature geometry sets
 #'
-#' Geometric unary operations on simple feature geometry sets. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class.
+#' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
@@ -410,11 +419,14 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' plot(l2, col= 'blue', add = TRUE)
 #' plot(st_buffer(l2, dist = 1, joinStyle="BEVEL"), reset = FALSE, main = "joinStyle: BEVEL")
 #' plot(l2, col= 'blue', add=TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE, main = "mitreLimit: 0.5")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE" , mitreLimit=0.5), reset = FALSE,
+#'    main = "mitreLimit: 0.5")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE, main = "mitreLimit: 1")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=1), reset = FALSE,
+#'    main = "mitreLimit: 1")
 #' plot(l2, col = 'blue', add = TRUE)
-#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE, main = "mitreLimit: 3")
+#' plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE,
+#'    main = "mitreLimit: 3")
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
 st_buffer = function(x, dist, nQuadSegs = 30,
@@ -464,10 +476,10 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
 		joinStyle = rep(styles$joinStyle, length.out = length(x))
 		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
-		if (any(endCapStyle == 2) && (st_geometry_type(x) == "POINT" || st_geometry_type(x) == "MULTIPOINT")) {
+		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT")) {
 			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 		}
-		if (dist < 0 && !st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON")) {
+		if (any(dist < 0) && !any(st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"))) {
 			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
 		}
 
@@ -532,7 +544,7 @@ st_convex_hull.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_simplify} simplifies lines by removing vertices
-#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries.
+#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.
 #' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
 st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 	UseMethod("st_simplify")
@@ -573,7 +585,8 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
-			dTolerance = rep(as.double(dTolerance), lenght.out = length(x)), logical(0), bOnlyEdges = bOnlyEdges))
+			dTolerance = rep(as.double(dTolerance), length.out = length(x)), logical(0),
+			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
 		stop("for triangulate, GEOS version 3.4.0 or higher is required")
 }
@@ -612,7 +625,8 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
-		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance, bOnlyEdges = bOnlyEdges))
+		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance,
+			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
 		stop("for voronoi, GEOS version 3.5.0 or higher is required")
 }
@@ -783,7 +797,7 @@ st_node.sf = function(x) {
 #' @name geos_unary
 #' @details \code{st_segmentize} adds points to straight lines
 #' @export
-#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units or unit \code{rad} or \code{degree}; segmentation takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
+#' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units \code{rad} or \code{degree}; segmentation in the long/lat case takes place along the great circle, using \link[lwgeom]{st_geod_segmentize}.
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
@@ -889,6 +903,8 @@ get_first_sfg = function(x) {
 #' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
+#' @note To find whether pairs of simple feature geometries intersect, use
+#' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 #' @examples
 #' set.seed(131)
 #' library(sf)
@@ -1115,9 +1131,9 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	st_sfc(CPL_gdal_linestring_sample(x, distList), crs = st_crs(x))
 }
 
-#' Make a regular tesselation over the bounding box of an sf or sfc object
+#' Create a regular tesselation over the bounding box of an sf or sfc object
 #'
-#' Make a square or hexagonal grid over the bounding box of an sf or sfc object
+#' Create a square or hexagonal grid over the bounding box of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid

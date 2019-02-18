@@ -5,13 +5,13 @@
 #'
 #' @param x object of class sf
 #' @param y ignored
-#' @param ... further specifications, see \link{plot_sf} and \link{plot}
+#' @param ... further specifications, see \link{plot_sf} and \link{plot} and details.
 #' @param main title for plot (\code{NULL} to remove)
 #' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key. Ignored if multiple columns are plotted in a single function call. Default depends on plot size, map aspect, and, if set, parameter \code{asp}.
+#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}.
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar
 #' @param pch plotting symbol
@@ -24,16 +24,20 @@
 #' @param add logical; add to current plot? Note that when using \code{add=TRUE}, you may have to set \code{reset=FALSE} in the first plot command.
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
 #' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
+#' @param logz logical; if \code{TRUE}, use log10-scale for the attribute variable. In that case, \code{breaks} and \code{at} need to be given as log10-values; see examples.
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
-#' one map per attribute. It uses \code{sf.colors} for default colors. For more control over individual maps,
-#' set parameter \code{mfrow} with \code{par} prior to plotting,  and plot single maps one by one.
+#' one map per attribute. It uses \code{sf.colors} for default colors. For more control over placement of individual maps,
+#' set parameter \code{mfrow} with \link{par} prior to plotting, and plot single maps one by one; note that this only works
+#' in combination with setting parameters \code{key.pos=NULL} (no legend) and \code{reset=FALSE}.
 #'
 #' \code{plot.sfc} plots the geometry, additional parameters can be passed on
 #' to control color, lines or symbols.
 #'
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
+#' 
+#' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #'
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
@@ -44,6 +48,8 @@
 #' # adding to a plot of an sf object only works when using reset=FALSE in the first plot:
 #' plot(nc["SID74"], reset = FALSE)
 #' plot(st_centroid(st_geometry(nc)), add = TRUE)
+#' # log10 z-scale:
+#' plot(nc["SID74"], logz = TRUE, breaks = c(0,.5,1,1.5,2), at = c(0,.5,1,1.5,2))
 #' # and we need to reset the plotting device after that, e.g. by
 #' layout(1)
 #' # when plotting only geometries, the reset=FALSE is not needed:
@@ -56,7 +62,8 @@
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), reset = TRUE) {
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), 
+		reset = TRUE, logz = FALSE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -68,7 +75,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), NULL, key.length)
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos, key.width)
 		key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
@@ -80,18 +87,54 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 		if (max_plot_missing)
 			max.plot = prod(lt$mfrow)
 
-		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot) {
-			if (max_plot_missing && is.null(options("sf_max.plot")[[1]]))
-				warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
-					"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
-		}
+		if (isTRUE(is.finite(max.plot)) && ncol(x) - 1 > max.plot &&
+				max_plot_missing && is.null(options("sf_max.plot")[[1]]))
+			warning(paste("plotting the first", max.plot, "out of", ncol(x)-1,
+				"attributes; use max.plot =", ncol(x) - 1, "to plot all"), call. = FALSE)
+
 		# col selection may have changed; set cols again:
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		if (length(cols) > max.plot)
 			cols = cols[1:max.plot]
+
+		if (!is.null(key.pos)) {
+			values = as.numeric(as.matrix(as.data.frame(x)[cols])) # will kill factors, and also units
+			if (logz)
+				values = log10(values)
+			if (is.character(breaks)) { # compute breaks from values:
+				n.unq = length(unique(na.omit(values)))
+				breaks = if (! all(is.na(values)) && n.unq > 1)
+						classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+					else
+						range(values, na.rm = TRUE) # lowest and highest!
+				nbreaks = length(breaks) - 1
+			}
+		}
+
 		# loop over each map to plot:
 		lapply(cols, function(cname) plot(x[, cname], main = cname,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, ...))
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, 
+			logz = logz, ...))
+
+		for (i in seq_len(prod(lt$mfrow) - length(cols))) # empty panels:
+			plot.new()
+
+		# plot key?
+		if (!is.null(key.pos) && col_missing) {
+			if (is.null(pal))
+				pal = function(n) sf.colors(n, categorical = is.factor(values))
+			colors = if (is.function(pal))
+					pal(nbreaks)
+				else
+					pal
+			if (is.factor(values))
+				.image_scale_factor(levels(values), colors, key.pos = key.pos,
+					key.width = key.width, key.length = key.length, ...)
+			else
+				.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+					key.length = key.length, logz = logz, ...)
+		}
+
 	} else { # single map, or dots$add=TRUE:
 		if (!identical(TRUE, dots$add) && reset)
 			layout(matrix(1)) # reset
@@ -113,6 +156,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 			if (is.character(values))
 				values = as.factor(values)
+			else if (logz)
+				values = log10(as.numeric(values))
 
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
@@ -132,17 +177,15 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						values = as.numeric(values) # drop units, if any
 						if (is.character(breaks)) { # compute breaks from values:
 							n.unq = length(unique(na.omit(values)))
-							breaks = if (! all(is.na(values)) && n.unq > 1) {
-								if (utils::packageVersion("classInt") > "0.2-1")
-									classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
-								else
-									classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks)$brks
-							} else
+							breaks = if (! all(is.na(values)) && n.unq > 1)
+								classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+							else
 								range(values, na.rm = TRUE) # lowest and highest!
-						}
+						} 
 						# this is necessary if breaks were specified either as character or as numeric
 						# "pretty" takes nbreaks as advice only:
 						nbreaks = length(breaks) - 1
+
 						cuts = if (all(is.na(values)))
 								rep(NA_integer_, length(values))
 							else if (diff(range(values, na.rm = TRUE)) == 0)
@@ -158,11 +201,11 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			} else {
 				col = dots$col
 				if (length(col) != 1 && length(col) != nrow(x))
-					warning("col is not of length 1 or ncol(x): colors will be recycled; use pal to specify a color palette")
+					warning("col is not of length 1 or nrow(x): colors will be recycled; use pal to specify a color palette")
 				key.pos = NULL # no key!
 			}
 
-			if (! isTRUE(dots$add) && ! is.null(key.pos) && !all(is.na(values)) &&
+			if (!isTRUE(dots$add) && !is.null(key.pos) && !all(is.na(values)) &&
 					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
 					length(col) > 1) { # plot key?
 
@@ -182,7 +225,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						key.width = key.width, key.length = key.length, ...)
 				} else
 					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
-						key.length = key.length, ...)
+						key.length = key.length, logz = logz, ...)
 			}
 			# plot the map:
 			mar = c(1, 1, 1.2, 1)
@@ -228,9 +271,9 @@ get_key_pos = function(x, ...) {
 		if (is.null(asp))
 			asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(bb[c(2,4)]) * pi)/180), 1.0)
 		asp_box = asp_box * asp
-		if (!is.finite(asp_box) || asp_box < asp_plt) # wider
+		if (!is.finite(asp_box) || asp_box < asp_plt) # plot is wider than device: below
 			1
-		else # taller
+		else # plot is taller than device: to the right
 			4
 	}
 }
@@ -248,9 +291,9 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	col = rep(col, length.out = npts)
 	bg = rep(bg, length.out = npts)
 	cex = rep(cex, length.out = npts)
-	mat = do.call(rbind, x)
+	mat = t(matrix(unlist(x, use.names = FALSE), ncol = length(x))) #933
 	if (!is.null(mat)) {
-		ne = apply(mat, 1, function(x) all(is.finite(x))) # ne: not empty
+		ne = !is.na(rowMeans(mat))  ## faster than apply; #933
 		points(mat[ne,, drop = FALSE], pch = pch[ne], col = col[ne], bg = bg[ne],
 			cex = cex[ne], lwd = lwd, lty = lty, type = type)
 	}
@@ -435,7 +478,7 @@ plot.sfc_GEOMETRYCOLLECTION = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty 
 #' @method plot sfc_GEOMETRY
 #' @export
 plot.sfc_GEOMETRY = function(x, y, ..., pch = 1, cex = 1, bg = 0, lty = 1, lwd = 1,
-	col = 1, border = 1, add = FALSE) {
+	col = ifelse(st_dimension(x) == 2, NA, 1), border = 1, add = FALSE) {
 	stopifnot(missing(y))
 	if (! add)
 		plot_sf(x, ...)
@@ -483,7 +526,7 @@ plot.sfg = function(x, ...) {
 #'
 #' The default aspect for map plots is 1; if however data are not
 #' projected (coordinates are long/lat), the aspect is by default set to
-#' 1/cos(My * pi)/180) with My the y coordinate of the middle of the map
+#' 1/cos(My * pi/180) with My the y coordinate of the middle of the map
 #' (the mean of \code{ylim}, which defaults to the y range of bounding box). This
 #' implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 #'
@@ -521,7 +564,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	pl_reg <- par("usr")
 	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2],
 		ytop = pl_reg[4], col = bgc, border = FALSE)
-	linAxis = function(side, ..., lon, lat, ndiscr, reset) axis(side = side, ...)
+	linAxis = function(side, ..., lon, lat, ndiscr, reset, at) axis(side = side, ...)
 	if (! missing(graticule)) {
 		g = if (isTRUE(graticule))
 				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs(4326), ...)
@@ -540,8 +583,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	} else if (axes) {
 		box()
 		if (isTRUE(st_is_longlat(x))) {
-			.degAxis(1, ...)
-			.degAxis(2, ...)
+			local_degAxis = function(side, ..., at) .degAxis(side, ...) # absorb at
+			local_degAxis(1, ...)
+			local_degAxis(2, ...)
 		} else {
 			linAxis(1, ...)
 			linAxis(2, ...)
@@ -700,9 +744,10 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param key.pos ignore
 #' @param add.axis ignore
 #' @param axes ignore
+#' @param logz ignore
 #' @param ... ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-	at = NULL, ..., axes = FALSE, key.length) {
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	zlim = range(z, na.rm = TRUE)
@@ -760,8 +805,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	if (key.pos %in% c(2,4))
 		polygon(c(0, 0, 1, 1) + offs, bx, col = NA, border = 'black')
 
+	labels = if (logz)
+			parse(text = paste0("10^", at))
+		else 
+			TRUE
+
 	if (add.axis)
-		axis(key.pos, at)
+		axis(key.pos, at = at, labels = labels)
 }
 
 #' @name stars

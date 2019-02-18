@@ -3,18 +3,25 @@ language: r
 r:
   - release
   - devel
-#   - oldrel # breaks on lacking isFALSE in some dependent package (vignette 5)
+#  - oldrel # breaks on sf_0.7-2 not available
+
+deploy.skip_cleanup: true
 
 sudo: required
 dist: trusty
+
 cache:
   - packages
   - ccache
+
 latex: false
 
 r_github_packages:
   - r-dbi/DBI
   - r-dbi/RPostgres
+  - r-lib/covr
+  - r-spatial/lwgeom
+  - r-spatial/stars
 
 addons:
   postgresql: "9.6"
@@ -35,13 +42,15 @@ addons:
       - libspatialite-dev
       - libgdal-dev
       - libjson-c-dev
+      - libnetcdf-dev
+      - netcdf-bin
       - postgresql-server-dev-9.6
 
 before_install:
-  # install postgis from source:
-  - wget http://download.osgeo.org/postgis/source/postgis-2.3.2.tar.gz
-  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.3.2.tar.gz)
-  - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
+  # install postgis from source, to avoid dependency conflict with GDAL >= 2.0:
+  - wget http://download.osgeo.org/postgis/source/postgis-2.4.3.tar.gz
+  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-2.4.3.tar.gz)
+  - (cd /tmp/postgis-2.4.3 ; ./configure; make; sudo make install)
 
   # activate liblwgeom by:
   - sudo ldconfig
@@ -53,13 +62,17 @@ before_install:
   - psql -d postgis -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - R -q -e 'install.packages("devtools"); devtools::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
+  - R -q -e 'install.packages("remotes"); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
 
 after_success:
   - dropdb postgis
+  - dropdb empty
   - createdb postgis
   - psql -d postgis -c "CREATE EXTENSION postgis;"
   - psql -d postgis -c "GRANT CREATE ON DATABASE postgis TO travis"
+  - psql -d postgis -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO travis"
+  - createdb empty
+  - psql -d empty -c "CREATE EXTENSION postgis;"
   - R -q -e 'covr::codecov(quiet = FALSE)'
 
 install: R -q -e 'tic::install()'
@@ -73,4 +86,4 @@ deploy:
      condition:
        - $TRAVIS_PULL_REQUEST = false
        - $TRAVIS_EVENT_TYPE != cron
-       - $TRAVIS_R_VERSION_STRING = devel
+       - $TRAVIS_R_VERSION_STRING = release

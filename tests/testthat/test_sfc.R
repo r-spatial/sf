@@ -53,7 +53,7 @@ test_that("st_crs<- gives warnings on changing crs", {
 })
 
 test_that("st_precision()", {
-    x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4)
+    x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4, crs = 3857) # units m
     expect_equal(st_precision(x), 1e-4)
     expect_error(st_set_precision(x, NULL))
     expect_error(st_set_precision(x, NA), "numeric")
@@ -63,6 +63,13 @@ test_that("st_precision()", {
     expect_error(st_set_precision(x, NA_real_), "numeric")
     st_precision(x) <- 1e-2
     expect_identical(st_set_precision(x, 1e-2), x)
+
+	expect_identical(x, st_set_precision(x, units::set_units(100, m)))
+	expect_error(st_set_precision(x, units::set_units(100, kg)))
+	x <- st_transform(x, 4326)
+	expect_silent(st_set_precision(x, units::set_units(0.001, rad)))
+	expect_silent(st_set_precision(x, units::set_units(0.1, degree)))
+	expect_error(st_set_precision(x, units::set_units(0.001, degree_C)))
 })
 
 test_that("st_precision() works for sf", {
@@ -109,4 +116,8 @@ test_that("c.sfc n_empty returns sum of st_is_empty(sfg)", {
 	pt2 <- st_point(0:1)
 	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt1)), "n_empty"), 2L)
 	expect_equal(attr(c(st_sfc(pt1), st_sfc(pt2)), "n_empty"), 1L)
+})
+
+test_that("st_is_longlat warns on invalid bounding box", {
+	expect_warning(st_is_longlat(st_sfc(st_point(c(0,-95)), crs = 4326)))
 })

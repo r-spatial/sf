@@ -1,5 +1,5 @@
 
-R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,15 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > # put this test last, because of spatstat side effect on units:
-> require(spatstat)
-Loading required package: spatstat
-Loading required package: spatstat.data
-Loading required package: nlme
-Loading required package: rpart
-
-spatstat 1.56-0       (nickname: 'Bondi Tram') 
-For an introduction to spatstat, type 'beginner' 
-
+> suppressPackageStartupMessages(library(spatstat))
 > suppressPackageStartupMessages(library(sf))
 > data(chicago)
 > st_as_sf(chicago)
@@ -90,4 +82,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.144   0.322   1.140 
+  1.095   0.068   1.154 

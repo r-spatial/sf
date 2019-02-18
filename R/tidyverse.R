@@ -1,8 +1,16 @@
 ## dplyr methods:
+group_map.sf <- function(.tbl, .f, ...) {
+	 st_as_sf(NextMethod())
+}
 
-#' Tidyverse methods for sf objects
+group_split.sf <- function(.tbl, ..., keep = TRUE) {
+	 class(.tbl) = setdiff(class(.tbl), "sf")
+     lapply(dplyr::group_split(.tbl, ..., keep = keep), st_as_sf)
+}
+
+#' Tidyverse methods for sf objects (remove .sf suffix!)
 #'
-#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -164,13 +172,19 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 #' @param .keep_all see corresponding function in dplyr
 #' @examples
 #' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
-#' @details \code{distinct.sf} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
+#' @details \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
 	.data[[ sf_column ]] = vapply(st_equals(.data), head, NA_integer_, n = 1)
 	class(.data) = setdiff(class(.data), "sf")
-	.data = NextMethod()
+
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+
+	.data = dplyr::distinct(.data, ..., !! rlang::sym(sf_column), .keep_all = .keep_all)
 	.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
 	st_as_sf(.data)
 }
@@ -251,7 +265,7 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
 #' trs.sf = st_sf(x[,1:2], trs)
 #' plot(trs.sf["year"], axes = TRUE)
-#' @details \code{nest.sf} assumes that a simple feature geometry list-column was among the columns that were nested.
+#' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (data, ..., .key = "data") {
 	class(data) <- setdiff(class(data), "sf")
 
@@ -348,7 +362,7 @@ type_sum.sfc <- function(x, ...) {
 	if (is.na(st_is_longlat(x)))
 		cls
 	else
-		paste0(cls, " [", as.character(units(st_crs(x, parameters = TRUE)$ud_unit)), "]")
+		paste0(cls, " [", enc2utf8(as.character(units(st_crs(x, parameters = TRUE)$ud_unit))), "]")
 }
 
 #' Summarize simple feature item for tibble
@@ -371,25 +385,27 @@ pillar_shaft.sfc <- function(x, ...) {
 }
 
 register_all_s3_methods = function() {
-	register_s3_method("dplyr", "filter", "sf")
-	register_s3_method("dplyr", "arrange", "sf")
-	register_s3_method("dplyr", "group_by", "sf")
-	register_s3_method("dplyr", "ungroup", "sf")
-	register_s3_method("dplyr", "mutate", "sf")
-	register_s3_method("dplyr", "transmute", "sf")
-	register_s3_method("dplyr", "select", "sf")
-	register_s3_method("dplyr", "rename", "sf")
-	register_s3_method("dplyr", "slice", "sf")
-	register_s3_method("dplyr", "summarise", "sf")
-	register_s3_method("dplyr", "distinct", "sf")
-	register_s3_method("dplyr", "sample_n", "sf")
-	register_s3_method("dplyr", "sample_frac", "sf")
 	register_s3_method("dplyr", "anti_join", "sf")
+	register_s3_method("dplyr", "arrange", "sf")
+	register_s3_method("dplyr", "distinct", "sf")
+	register_s3_method("dplyr", "filter", "sf")
 	register_s3_method("dplyr", "full_join", "sf")
+	register_s3_method("dplyr", "group_by", "sf")
+	register_s3_method("dplyr", "group_map", "sf")
+	register_s3_method("dplyr", "group_split", "sf")
 	register_s3_method("dplyr", "inner_join", "sf")
 	register_s3_method("dplyr", "left_join", "sf")
+	register_s3_method("dplyr", "mutate", "sf")
+	register_s3_method("dplyr", "rename", "sf")
 	register_s3_method("dplyr", "right_join", "sf")
+	register_s3_method("dplyr", "sample_frac", "sf")
+	register_s3_method("dplyr", "sample_n", "sf")
+	register_s3_method("dplyr", "select", "sf")
 	register_s3_method("dplyr", "semi_join", "sf")
+	register_s3_method("dplyr", "slice", "sf")
+	register_s3_method("dplyr", "summarise", "sf")
+	register_s3_method("dplyr", "transmute", "sf")
+	register_s3_method("dplyr", "ungroup", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "spread", "sf")
 	register_s3_method("tidyr", "nest", "sf")

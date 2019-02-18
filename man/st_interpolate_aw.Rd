@@ -4,7 +4,7 @@
 \alias{st_interpolate_aw}
 \title{Areal-weighted interpolation of polygon data}
 \usage{
-st_interpolate_aw(x, to, extensive)
+st_interpolate_aw(x, to, extensive, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}, for which we want to aggregate attributes}
@@ -12,6 +12,8 @@ st_interpolate_aw(x, to, extensive)
 \item{to}{object of class \code{sf} or \code{sfc}, with the target geometries}
 
 \item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.}
+
+\item{...}{ignored}
 }
 \description{
 Areal-weighted interpolation of polygon data
@@ -22,8 +24,9 @@ g = st_make_grid(nc, n = c(20,10))
 a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
+# verify mass preservation (pycnophylactic) property:
 sum(a2$BIR74) / sum(nc$BIR74)
 a1$intensive = a1$BIR74
 a1$extensive = a2$BIR74
-plot(a1[c("intensive", "extensive")])
+plot(a1[c("intensive", "extensive")], key.pos = 4)
 }

@@ -33,8 +33,8 @@ test_that("can write to db", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
 	expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
-	expect_true(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
-	expect_true(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
+	expect_silent(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
+	expect_silent(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
 	expect_warning(z <- st_set_crs(pts, epsg_31370))
 	expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
 	expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
@@ -159,6 +159,15 @@ test_that("can read from db", {
 	expect_identical(st_crs(y), st_crs(w))
 	expect_identical(st_precision(y), st_precision(w))
 
+	#Make sure it doesn't set column with all NAs to geometry:
+	sf_meuseNA__ <- pts
+	sf_meuseNA__$dummy <- rep(NA_character_, nrow(sf_meuseNA__))
+	st_write(sf_meuseNA__, pg, c("sf_test__", "sf_meuse_na__"), quiet = TRUE)
+	z <- st_read(pg, query = "SELECT * FROM sf_test__.sf_meuse_na__", quiet = TRUE)
+	expect_equal(sum(vapply(z, inherits, logical(1), "sfc")), 1)
+	expect_equal(attr(z, "sf_column"), "geometry")
+	expect_true(dbRemoveTable(pg, c("sf_test__", "sf_meuse_na__")))
+
 	expect_error(st_read(pg, "missing"), "attempt to set an attribute on NULL")
 	expect_error(st_read(pg, c("missing", "missing")), "attempt to set an attribute on NULL")
 	# make sure it reads in the correct schema
@@ -260,9 +269,18 @@ test_that("can read using driver", {
 	expect_true(all(layers$features == 155))
 	expect_true(all(layers$fields == 12))
 
-	skip_if_not(can_con(try(DBI::dbConnect(RPostgres::Postgres(), dbname = "empty"), silent=TRUE)),
-				"could not connect to 'empty' database")
-	expect_error(st_read("PG:host=localhost dbname=empty", quiet = TRUE), "No layers")
+    empty <- try(
+        DBI::dbConnect(
+            RPostgres::Postgres(),
+            host = "localhost",
+            dbname = "empty"),
+        silent=TRUE
+    )
+    skip_if_not(
+        can_con(empty),
+        "could not connect to 'empty' database"
+    )
+    expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers")
 })
 
 test_that("Can safely manipulate crs", {

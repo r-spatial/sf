@@ -1,10 +1,16 @@
 #' sample points on or in (sets of) spatial features
 #'
-#' sample points on or in (sets of) spatial features
+#' Sample points on or in (sets of) spatial features.
+#' Returns a pre-specified number of points that is equal to
+#' \code{size} if \code{type = "random"} or an approximation of
+#' \code{size} for other sampling types or if \code{exact = FALSE}.
+#'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
+#' @param exact logical; should the length of output be exactly
+#' the same as specified by \code{size}? \code{TRUE} by default. Only applies if \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 #'
@@ -23,8 +29,11 @@
 #'   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #'   plot(p2, add = TRUE)
 #' }
-#' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+#' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 #' plot(x)
+#' p_exact = st_sample(x, 1000)
+#' p_not_exact = st_sample(x, 1000, exact = FALSE)
+#' length(p_exact); length(p_not_exact)
 #' plot(st_sample(x, 1000), add = TRUE)
 #' x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
 #'	 crs=st_crs(4326))
@@ -37,9 +46,9 @@
 #' plot(sfc)
 #' h = st_sample(sfc, 100, type = "hexagonal")
 #' h1 = st_sample(sfc, 100, type = "hexagonal")
-#' c(length(h), length(h1)) # approximate!
 #' plot(h, add = TRUE)
 #' plot(h1, col = 'red', add = TRUE)
+#' c(length(h), length(h1)) # approximate!
 #' pt = st_multipoint(matrix(1:20,,2))
 #' ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 #'  st_linestring(rbind(c(0,0),c(.1,0))),
@@ -47,25 +56,35 @@
 #'  st_linestring(rbind(c(2,2),c(2,2.00001))))
 #' st_sample(ls, 80)
 #' @export
-st_sample = function(x, size, ..., type = "random") {
+st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, ...))
-		st_set_crs(do.call(c, ret), st_crs(x))
+		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
-		switch(max(st_dimension(x)) + 1,
-			st_multipoints_sample(do.call(c, x), size, ..., type = type),
-			st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
-			st_poly_sample(x, size, ..., type = type))
+		res = switch(max(st_dimension(x)) + 1,
+					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
+					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
+					 st_poly_sample(x, size, ..., type = type))
 	}
+	if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
+		diff = size - length(res)
+		if(diff > 0) { # too few points
+			res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
+			res = c(res, res_additional)
+		} else if (diff < 0) { # too many points
+			res = res[1:size]
+		}
+	}
+	res
 }
 
-st_poly_sample = function(x, size, ..., type = "random",
-		offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
+st_poly_sample = function(x, size, ..., type = "random", 
+                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
-	a0 = st_area(st_make_grid(x, n = c(1,1)))
-	a1 = sum(st_area(x))
+	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
+	a1 = as.numeric(sum(st_area(x)))
 	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
 	# for instance has 0 st_area
 	if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
@@ -140,7 +159,7 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
 ## - selects geometries intersecting with obj
 hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
-		dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+                    dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
@@ -154,7 +173,7 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	x <- rep(c(x, x + dx / 2), length.out = length(y))
 	ret = if (points) {
 		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-    	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
+		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 	} else {
 		dy = dx / sqrt(3)
 		dx2 = dx / 2
@@ -172,4 +191,16 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	} else
 		TRUE
 	ret[sel]
+}
+st_sample_exact = function(x, size, ..., type) {
+	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
+	while (length(random_pt) < size) {
+		diff = size - length(random_pt)
+		random_pt_new = st_sample(x, size, ..., type, exact = FALSE)
+		random_pt = c(random_pt, random_pt_new)
+	}
+	if(length(random_pt) > size) {
+		random_pt = random_pt[1:size]
+	}
+	random_pt
 }

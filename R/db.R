@@ -5,6 +5,7 @@
 #' @param query SQL query to select records; see details
 #' @param EWKB logical; is the WKB of type EWKB? if missing, defaults to
 #'   \code{TRUE}
+#' @param as_tibble logical; should the returned table be of class tibble or data.frame?
 #' @details if \code{table} is not given but \code{query} is, the spatial
 #'   reference system (crs) of the table queried is only available in case it
 #'   has been stored into each geometry record (e.g., by PostGIS, when using
@@ -30,9 +31,14 @@ st_read.DBIObject = function(dsn = NULL,
                              query = NULL,
                              EWKB = TRUE,
                              quiet = TRUE,
+                             as_tibble = FALSE,
                              ...) {
     if (is.null(dsn))
         stop("no connection provided") # nocov
+
+    if (as_tibble && !requireNamespace("tibble", quietly = TRUE)) {
+        stop("package tibble not available: install first?") # nocov
+    }
 
     # check that ellipsis contains only what is needed
     expe <- setdiff(names(list(...)), names(formals(st_sf)))
@@ -101,15 +107,30 @@ st_read.DBIObject = function(dsn = NULL,
     tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
 
     # if there are no simple features geometries, return a data frame
-    if(!any(vapply(tbl, inherits, logical(1), "sfc"))){
-        warning("Could not find a simple features geometry column. Will return a `data.frame`.")
-        return(tbl)
+    if (! any(vapply(tbl, inherits, logical(1), "sfc"))) {
+		# try reading blob columns:
+    	blob_columns = vapply(tbl, inherits, logical(1), "blob")
+		success = FALSE
+		for (i in which(blob_columns)) {
+			try(sfc <- st_as_sfc(tbl[[i]]), silent = TRUE)
+			if (!inherits(sfc, "try-error")) {
+				tbl[[i]] = sfc
+				success = TRUE
+			}
+		}
+    	if (! success) {
+        	warning("Could not find a simple features geometry column. Will return a `data.frame`.")
+        	return(tbl)
+		}
     }
 
     x <- st_sf(tbl, ...)
 
     if (!quiet) print(x, n = 0) # nocov
 
+    if (as_tibble) {
+        x <- tibble::as_tibble(x)
+    }
     return(x)
 }
 
@@ -317,6 +338,7 @@ to_postgis <- function(conn, x, binary) {
 		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
 	}
 	x <- as.data.frame(x)
+	clean_columns(x, factorsAsCharacter = TRUE)
 }
 
 sync_crs <- function(conn, geom) {
@@ -381,5 +403,6 @@ is_geometry_column.PqConnection <- function(con, x, classes = c("pq_geometry")) 
 
 is_geometry_column.default <- function(con, x, classes = c("character")) {
     # try all character columns (in conjunction with try_postgis_as_sfc)
-    vapply(x, inherits, logical(1), classes)
+    vapply(x, function(x) inherits(x, classes) && !all(is.na(x)),
+    	   FUN.VALUE = logical(1))
 }

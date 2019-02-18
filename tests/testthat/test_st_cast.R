@@ -5,7 +5,8 @@ s <- matrix(c(2, 0), 5, 2, byrow = TRUE)
 cc <- list(
   points = list(
     single = m[1, ] %>% st_point(),
-    multi = m %>% st_multipoint()
+    multi = m %>% st_multipoint(),
+    multi_empty = st_multipoint()
   ),
   lines = list(
     single = m %>% st_linestring(), 
@@ -23,7 +24,7 @@ test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
   # points
   pt <- st_sfc(cc$points$single, cc$points$single)
   expect_is(st_cast(pt), "sfc_POINT")
-  pts <- st_sfc(cc$points$single, cc$points$multi)
+  pts <- st_sfc(cc$points$single, cc$points$multi, cc$points$multi_empty)
   expect_is(st_cast(pts), "sfc_MULTIPOINT")
   expect_warning(pt <- st_cast(pts, "POINT"), "first coordinate")
   expect_is(pt, "sfc_POINT")

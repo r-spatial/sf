@@ -168,7 +168,8 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	if (! missing(x)) # cut out box:
 		df = suppressMessages(st_intersection(df, st_polygonize(box[1])))
 
-	graticule_attributes(st_cast(df, "MULTILINESTRING"))
+	df = st_cast(st_cast(df, "MULTILINESTRING"), "LINESTRING", warn = FALSE)
+	graticule_attributes(df)
 }
 
 graticule_attributes = function(df) {
@@ -177,18 +178,20 @@ graticule_attributes = function(df) {
 	if (nrow(df) == 0)
 		return(df)
 
-	xy = cbind(
-		do.call(rbind, lapply(object, function(x) { y = x[[1]]; y[1,] } )),
-		do.call(rbind, lapply(object, function(x) { y = x[[length(x)]]; y[nrow(y),] } ))
-	)
+	xy = matrix(NA, nrow = length(object), ncol = 4)
+	for (i in seq_along(object)) {
+		pts = unclass(object[[i]])
+		xy[i, 1:2] = pts[1,] # start
+		xy[i, 3:4] = pts[nrow(pts),] # end
+	}
 	df$x_start = xy[,1]
 	df$y_start = xy[,2]
 	df$x_end   = xy[,3]
 	df$y_end   = xy[,4]
-	dxdy = do.call(rbind, lapply(object, function(x) { y = x[[1]]; apply(y[1:2,], 2, diff) } ))
+	dxdy = do.call(rbind, lapply(object, function(x) { apply(x[1:2,], 2, diff) } ))
 	df$angle_start = apply(dxdy, 1, function(x) atan2(x[2], x[1])*180/pi)
 	dxdy = do.call(rbind, lapply(object,
-		function(x) { y = x[[length(x)]]; n = nrow(y); apply(y[(n-1):n,], 2, diff) } ))
+		function(x) { n = nrow(x); apply(x[(n-1):n,], 2, diff) } ))
 	df$angle_end = apply(dxdy, 1, function(x) atan2(x[2], x[1])*180/pi)
 	bb = st_bbox(df)
 	selE = df$type == "E" & df$y_start < min(df$y_start) + 0.001 * (bb[3] - bb[1])

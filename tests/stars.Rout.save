@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -35,27 +35,186 @@ attr(,"class")
 > try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 [1] 2
 > 
-> # library(stars)
-> d = structure(list(x = structure(list(from = 1, to = 20, offset = 1841001.75, 
-+     delta = 1.5, geotransform = c(1841001.75, 1.5, -5, 1144003.25, 
-+     -5, -1.5), refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ", 
-+     point = TRUE, values = NULL), .Names = c("from", "to", "offset", 
-+ "delta", "geotransform", "refsys", "point", "values"), class = "dimension"), 
-+     y = structure(list(from = 1, to = 20, offset = 1144003.25, 
-+         delta = -1.5, geotransform = c(1841001.75, 1.5, -5, 1144003.25, 
-+         -5, -1.5), refsys = "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs ", 
-+         point = TRUE, values = NULL), .Names = c("from", "to", 
-+     "offset", "delta", "geotransform", "refsys", "point", "values"
-+     ), class = "dimension")), .Names = c("x", "y"), class = "dimensions")
-> gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
-> x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
-> x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
-> identical(x1, x2)
-[1] FALSE
-> y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
-> y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
-> identical(y1, y2)
-[1] FALSE
+> if (require(stars)) {
++   tif = system.file("tif/geomatrix.tif", package = "sf")
++   r = read_stars(tif)
++   d = (st_dimensions(r))
++   gt =  c(1841001.75, 1.5, -5, 1144003.25, -5, -1.5)
++   x1 = st_as_sfc(d, as_points = TRUE, use_cpp = TRUE, geotransform = gt)
++   x2 = st_as_sfc(d, as_points = TRUE, use_cpp = FALSE, geotransform = gt)
++   print(identical(x1, x2))
++   y1 = st_as_sfc(d, as_points = FALSE, use_cpp = TRUE, geotransform = gt)
++   y2 = st_as_sfc(d, as_points = FALSE, use_cpp = FALSE, geotransform = gt)
++   print(identical(y1, y2))
++ 
++   # rectilinear grid:
++   m = matrix(1:20, nrow = 5, ncol = 4)
++   x = c(0,0.5,1,2,4,5)
++   y = c(0.3,0.5,1,2,2.2)
++   r = st_as_stars(list(m = m), dimensions = st_dimensions(x = x, y = y, .raster = c("x", "y")))
++   print(st_as_sfc(st_dimensions(r), as_points = TRUE))
++   print(st_as_sfc(st_dimensions(r), as_points = FALSE))
++ 
++   # curvilinear grid:
++   lon = st_as_stars(matrix(1:5, 4, 5, byrow = TRUE))
++   lat = st_as_stars(matrix(1:4, 4, 5))
++   ll = c(X1 = lon, X2 = lat)
++   curv = st_as_stars(st_as_stars(t(m)), curvilinear = setNames(ll, c("X1", "X2")))
++   print(st_as_sfc(st_dimensions(curv), as_points = TRUE))
++   print(st_as_sfc(st_dimensions(curv), as_points = FALSE))
++ 
++   demo(nc, echo = FALSE, ask = FALSE)
++   print(x <- st_rasterize(nc)) # default grid:
++   print(p <- st_as_sf(x, as_points = FALSE)) # polygonize: follow raster boundaries
++   print(p <- st_as_sf(x, as_points = FALSE, use_integer = TRUE)) # polygonize integers: follow raster boundaries
++   print(try(p <- st_as_sf(x, as_points = TRUE))) # polygonize: contour, requies GDAL >= 2.4.0
++   if (utils::packageVersion("stars") >= "0.2-1") {
++     write_stars(read_stars(tif), tempfile(fileext = ".tif"))
++     write_stars(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"))
++     write_stars(read_stars(tif, proxy = TRUE), tempfile(fileext = ".tif"), chunk_size = c(200,200))
++   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"))
++   	write_stars(na.tif, "na.tif")
++   	write_stars(na.tif, "na.tif", NA_value = -999)
++   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999)
++   	write_stars(na.tif, "na.tif")
++   	write_stars(na.tif, "na.tif", NA_value = -999)
++   	na.tif = read_stars(system.file("tif/na.tif", package = "stars"), NA_value = -999, proxy = TRUE)
++   	write_stars(na.tif, "na.tif")
++   	write_stars(na.tif, "na.tif", NA_value = -999)
++   }
++ }
+Loading required package: stars
+Loading required package: abind
+[1] TRUE
+[1] TRUE
+Geometry set for 20 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 0.25 ymin: 0.4 xmax: 4.5 ymax: 2.1
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POINT (0.25 0.4)
+POINT (0.75 0.4)
+POINT (1.5 0.4)
+POINT (3 0.4)
+POINT (4.5 0.4)
+Geometry set for 20 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0.3 xmax: 5 ymax: 2.2
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POLYGON ((0 0.3, 0.5 0.3, 0.5 0.5, 0 0.5, 0 0.3))
+POLYGON ((0.5 0.3, 1 0.3, 1 0.5, 0.5 0.5, 0.5 0...
+POLYGON ((1 0.3, 2 0.3, 2 0.5, 1 0.5, 1 0.3))
+POLYGON ((2 0.3, 4 0.3, 4 0.5, 2 0.5, 2 0.3))
+POLYGON ((4 0.3, 5 0.3, 5 0.5, 4 0.5, 4 0.3))
+Geometry set for 20 features 
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 4
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 5 geometries:
+POINT (1 1)
+POINT (1 2)
+POINT (1 3)
+POINT (1 4)
+POINT (2 1)
+Geometry set for 20 features 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0.5 ymin: 0.5 xmax: 5.5 ymax: 4.5
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+First 5 geometries:
+POLYGON ((0.5 0.5, 0.5 1.5, 1.5 1.5, 1.5 0.5, 0...
+POLYGON ((0.5 1.5, 0.5 2.5, 1.5 2.5, 1.5 1.5, 0...
+POLYGON ((0.5 2.5, 0.5 3.5, 1.5 3.5, 1.5 2.5, 0...
+POLYGON ((0.5 3.5, 0.5 4.5, 1.5 4.5, 1.5 3.5, 0...
+POLYGON ((1.5 0.5, 1.5 1.5, 2.5 1.5, 2.5 0.5, 1...
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+Simple feature collection with 100 features and 14 fields
+Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +datum=NAD27 +no_defs
+stars object with 2 dimensions and 1 attribute
+attribute(s):
+     AREA       
+ Min.   :0.042  
+ 1st Qu.:0.108  
+ Median :0.142  
+ Mean   :0.145  
+ 3rd Qu.:0.181  
+ Max.   :0.241  
+ NA's   :30726  
+dimension(s):
+  from  to   offset      delta                       refsys point values    
+x    1 360 -84.3239  0.0246302 +proj=longlat +datum=NAD2... FALSE   NULL [x]
+y    1 180  36.5896 -0.0150425 +proj=longlat +datum=NAD2... FALSE   NULL [y]
+Simple feature collection with 34074 features and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+First 10 features:
+    AREA                       geometry
+1  0.114 POLYGON ((-81.66379 36.5896...
+2  0.114 POLYGON ((-81.63916 36.5896...
+3  0.114 POLYGON ((-81.61453 36.5896...
+4  0.114 POLYGON ((-81.5899 36.58965...
+5  0.114 POLYGON ((-81.56527 36.5896...
+6  0.114 POLYGON ((-81.54064 36.5896...
+7  0.114 POLYGON ((-81.68842 36.5746...
+8  0.114 POLYGON ((-81.66379 36.5746...
+9  0.114 POLYGON ((-81.63916 36.5746...
+10 0.114 POLYGON ((-81.61453 36.5746...
+Simple feature collection with 34074 features and 1 field
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+First 10 features:
+    AREA                       geometry
+1  0.114 POLYGON ((-81.66379 36.5896...
+2  0.114 POLYGON ((-81.63916 36.5896...
+3  0.114 POLYGON ((-81.61453 36.5896...
+4  0.114 POLYGON ((-81.5899 36.58965...
+5  0.114 POLYGON ((-81.56527 36.5896...
+6  0.114 POLYGON ((-81.54064 36.5896...
+7  0.114 POLYGON ((-81.68842 36.5746...
+8  0.114 POLYGON ((-81.66379 36.5746...
+9  0.114 POLYGON ((-81.63916 36.5746...
+10 0.114 POLYGON ((-81.61453 36.5746...
+Simple feature collection with 34074 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -84.31154 ymin: 33.88951 xmax: -75.46929 ymax: 36.58213
+epsg (SRID):    4267
+proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+First 10 features:
+    AREA                   geometry
+1  0.114 POINT (-81.65148 36.58213)
+2  0.114 POINT (-81.62684 36.58213)
+3  0.114 POINT (-81.60221 36.58213)
+4  0.114 POINT (-81.57758 36.58213)
+5  0.114 POINT (-81.55295 36.58213)
+6  0.114 POINT (-81.52832 36.58213)
+7  0.114 POINT (-81.67611 36.56709)
+8  0.114 POINT (-81.65148 36.56709)
+9  0.114 POINT (-81.62684 36.56709)
+10 0.114 POINT (-81.60221 36.56709)
+================================================================================
+================================================================================
+================================================================================
+================================================================================
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -86,12 +245,6 @@ $gt_inv
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
-> m = matrix(runif(100*100), 100, 100)
-> m[ m > .8 ] = NA
-> st = structure(list(m), dimensions = list(x = list(geotransform = c(0, 1.0, 0, 0, 0, 1.0))))
-> gdal_write(st, file = tempfile(), driver = "GTiff", NA_value = -1.0, geotransform = c(0, 1.0, 0, 0, 0, 1.0))
-> r = gdal_read(tif, NA_value = 255.0)
-> 
 > proc.time()
    user  system elapsed 
-  0.340   0.019   0.351 
+  1.283   0.039   1.314 

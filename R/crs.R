@@ -205,8 +205,17 @@ st_is_longlat = function(x) {
 	crs = st_crs(x)
 	if (is.na(crs))
 		NA
-	else
-		isTRUE(crs$proj == "longlat")
+	else {
+		ret = isTRUE(crs$proj == "longlat")
+		if (ret && inherits(x, c("sf", "sfc", "stars"))) {
+			bb = st_bbox(x)
+			# check for potentially meaningless value range:
+			if (all(!is.na(unclass(bb))) && 
+					(bb["xmin"] < -180 || bb["xmax"] > 360 || bb["ymin"] < -90 || bb["ymax"] > 90))
+				warning("bounding box has potentially an invalid value range for longlat data")
+		}
+		ret
+	}
 }
 
 # a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
@@ -317,4 +326,16 @@ print.crs = function(x, ...) {
     else
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
   }
+}
+
+#' @export
+st_crs.Raster = function(x, ...) {
+	st_crs(x@crs@projargs) # nocov
+}
+
+#' @export
+st_crs.Spatial = function(x, ...) {
+	if (! requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	st_crs(sp::proj4string(x)) # nocov
 }
