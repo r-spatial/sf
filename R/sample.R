@@ -80,8 +80,8 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	res
 }
 
-st_poly_sample = function(x, size, ..., type = "random",
-						  offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
+st_poly_sample = function(x, size, ..., type = "random", 
+                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
 	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
 	a1 = as.numeric(sum(st_area(x)))
@@ -100,7 +100,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 	} else if (type == "regular") {
 		dx = as.numeric(sqrt(a0 / size))
 		offset = c((offset[1] - bb["xmin"]) %% dx,
-				   (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
 	} else if (type == "random") {
@@ -143,8 +143,13 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 		stop(paste("sampling type", type, "not available for LINESTRING")) # nocov
 	}
 	lcs = c(0, cumsum(l))
-	grp = split(d, cut(d, lcs, include.lowest = TRUE))
-	grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
+	if (l == 0) {
+		grp = list(0)
+		message("line is of length zero, only one point is sampled")
+	} else {
+		grp = split(d, cut(d, lcs, include.lowest = TRUE))
+		grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
+	}
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = st_crs(x))
 }
 
@@ -154,7 +159,7 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
 ## - selects geometries intersecting with obj
 hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
-					dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+                    dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
