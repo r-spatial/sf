@@ -62,7 +62,7 @@ Imports:
 Suggests:
     blob,
     covr,
-    dplyr (>= 0.7-0),
+    dplyr (>= 0.8-0),
     ggplot2,
     knitr,
     lwgeom (>= 0.1-5),
