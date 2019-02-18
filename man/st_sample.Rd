@@ -4,7 +4,7 @@
 \alias{st_sample}
 \title{sample points on or in (sets of) spatial features}
 \usage{
-st_sample(x, size, ..., type = "random")
+st_sample(x, size, ..., type = "random", exact = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -14,12 +14,18 @@ st_sample(x, size, ..., type = "random")
 \item{...}{ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling}
 
 \item{type}{character; indicates the spatial sampling type; only \code{random} is implemented right now}
+
+\item{exact}{logical; should the length of output be exactly
+the same as specified by \code{size}? \code{TRUE} by default. Only applies if \code{type = "random"}.}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
 }
 \description{
-sample points on or in (sets of) spatial features
+Sample points on or in (sets of) spatial features.
+Returns a pre-specified number of points that is equal to
+\code{size} if \code{type = "random"} or an approximation of
+\code{size} for other sampling types or if \code{exact = FALSE}.
 }
 \details{
 if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
@@ -40,8 +46,11 @@ if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   plot(p2, add = TRUE)
 }
-x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
+x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)
+p_exact = st_sample(x, 1000)
+p_not_exact = st_sample(x, 1000, exact = FALSE)
+length(p_exact); length(p_not_exact)
 plot(st_sample(x, 1000), add = TRUE)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
  crs=st_crs(4326))
@@ -54,9 +63,9 @@ sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
 plot(sfc)
 h = st_sample(sfc, 100, type = "hexagonal")
 h1 = st_sample(sfc, 100, type = "hexagonal")
-c(length(h), length(h1)) # approximate!
 plot(h, add = TRUE)
 plot(h1, col = 'red', add = TRUE)
+c(length(h), length(h1)) # approximate!
 pt = st_multipoint(matrix(1:20,,2))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,0),c(.1,0))),
