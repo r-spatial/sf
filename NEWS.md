@@ -1,5 +1,7 @@
 # version 0.7-3
 
+* faster `Ops.sfc`, added `st_normalize`; #973 by Thomas Lin Pedersen (now contributor)
+
 * add `group_split` and `group_map` methods for `sf` objects; #969
 
 * make `st_interpolate_aw` a generic;
