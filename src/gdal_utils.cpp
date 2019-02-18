@@ -233,7 +233,8 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 // #nocov start
 // https://www.gdal.org/warptut.html :
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile)
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
+		Rcpp::IntegerVector options)
 {
     GDALDatasetH  hSrcDS, hDstDS;
     // Open input and output files.
@@ -242,8 +243,8 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 	if (hSrcDS == NULL)
 		Rcpp::stop("input file not found");
     hDstDS = GDALOpen( outfile[0], GA_Update );
-	if (hSrcDS == NULL)
-		Rcpp::stop("output file not existing");
+	if (hDstDS == NULL)
+		Rcpp::stop("could not open output file for writing");
     // Setup warp options.
     GDALWarpOptions *psWarpOptions = GDALCreateWarpOptions();
     psWarpOptions->hSrcDS = hSrcDS;
@@ -258,6 +259,8 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     // psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
     psWarpOptions->pfnProgress = GDALDummyProgress;
     // Establish reprojection transformer.
+	if (options.size() == 1)
+		psWarpOptions->eResampleAlg = (GDALResampleAlg) options[0];
     psWarpOptions->pTransformerArg =
         GDALCreateGenImgProjTransformer( hSrcDS,
                                          GDALGetProjectionRef(hSrcDS),

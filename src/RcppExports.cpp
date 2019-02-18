@@ -426,14 +426,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_gdal_warper
-Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile);
-RcppExport SEXP _sf_CPL_gdal_warper(SEXP infileSEXP, SEXP outfileSEXP) {
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile, Rcpp::IntegerVector options);
+RcppExport SEXP _sf_CPL_gdal_warper(SEXP infileSEXP, SEXP outfileSEXP, SEXP optionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type infile(infileSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type outfile(outfileSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_gdal_warper(infile, outfile));
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type options(optionsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_warper(infile, outfile, options));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1039,7 +1040,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 5},
     {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 3},
     {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 3},
-    {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 2},
+    {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 3},
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 13},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},

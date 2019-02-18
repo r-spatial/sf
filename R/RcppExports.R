@@ -141,8 +141,8 @@ CPL_gdalgrid <- function(src, dst, options) {
     .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options)
 }
 
-CPL_gdal_warper <- function(infile, outfile) {
-    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile)
+CPL_gdal_warper <- function(infile, outfile, options) {
+    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options)
 }
 
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
