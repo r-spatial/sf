@@ -38,7 +38,7 @@ st_normalize.sfc <- function(x, domain = st_bbox(x), ...) {
 	min <- -domain[c(1, 2)]
 	range <- 1 / c(domain[3] - domain[1], domain[4] - domain[2])
 	if (any(is.infinite(range)) || any(range < 0)) {
-		stop("domain must have a positive range")
+		stop("domain must have a positive range") # nocov
 	}
 	normalize_sfc(x, min, range, NA_crs_)
 }

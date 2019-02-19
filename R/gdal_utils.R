@@ -1,3 +1,4 @@
+# nocov start
 resampling_method = function(option = "near") {
 	if (length(option) != 1)
 		stop("warper options should have length 1")
@@ -17,6 +18,8 @@ resampling_method = function(option = "near") {
 		stop(paste("unknown option:", options))
 	)
 }
+# nocov end
+
 
 #' Native interface to gdal utils
 #' @name gdal_utils

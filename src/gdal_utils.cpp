@@ -249,13 +249,34 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     GDALWarpOptions *psWarpOptions = GDALCreateWarpOptions();
     psWarpOptions->hSrcDS = hSrcDS;
     psWarpOptions->hDstDS = hDstDS;
-    psWarpOptions->nBandCount = 1;
-    psWarpOptions->panSrcBands =
-        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
-    psWarpOptions->panSrcBands[0] = 1;
-    psWarpOptions->panDstBands =
-        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
-    psWarpOptions->panDstBands[0] = 1;
+
+    psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
+    psWarpOptions->panSrcBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->panDstBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+    psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+    GDALRasterBandH poBand;
+	int success;
+	double d = 0xffffffff;
+	for (int i = 0; i < psWarpOptions->nBandCount; i++) {
+    	psWarpOptions->panSrcBands[i] = i + 1;
+    	psWarpOptions->panDstBands[i] = i + 1;
+    	poBand = GDALGetRasterBand(hSrcDS, i + 1);
+    	GDALGetRasterNoDataValue(poBand, &success);
+		if (success) {
+    		psWarpOptions->padfSrcNoDataReal[i] = GDALGetRasterNoDataValue(poBand, &success);
+    		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		} else
+			memcpy(psWarpOptions->padfSrcNoDataReal+i, &d, sizeof(d));
+    	poBand = GDALGetRasterBand(hDstDS, i + 1);
+    	GDALGetRasterNoDataValue(poBand, &success);
+		if (success) {
+    		psWarpOptions->padfDstNoDataReal[0] = GDALGetRasterNoDataValue(poBand, &success);
+    		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		} else // NaN:
+			memcpy(psWarpOptions->padfDstNoDataReal+i, &d, sizeof(d));
+	}
+
     // psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
     psWarpOptions->pfnProgress = GDALDummyProgress;
     // Establish reprojection transformer.
