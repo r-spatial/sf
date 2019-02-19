@@ -35,43 +35,11 @@ pathGrob <- NULL
 			grid::pathGrob(...)
 		}
 	}
-	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		# nocov start
-  		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
-		prj = system.file("proj", package = "sf")[1]
-		Sys.setenv("PROJ_LIB" = prj)
-		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
-		gdl = system.file("gdal", package = "sf")[1]
-		Sys.setenv("GDAL_DATA" = gdl)
-		# nocov end
-	}
-	CPL_gdal_init()
-	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
-	if (inherits(try(units::as_units("link"), silent = TRUE), "try-error"))
-		units::install_conversion_constant("m", "link", 0.201168)
-	if (inherits(try(units::as_units("us_in"), silent = TRUE), "try-error"))
-		units::install_conversion_constant("m", "us_in", 1./39.37)
-	if (inherits(try(units::as_units("ind_yd"), silent = TRUE), "try-error"))
-		units::install_conversion_constant("m", "ind_yd", 0.91439523)
-	if (inherits(try(units::as_units("ind_ft"), silent = TRUE), "try-error"))
-		units::install_conversion_constant("m", "ind_ft", 0.30479841)
-	if (inherits(try(units::as_units("ind_ch"), silent = TRUE), "try-error"))
-		units::install_conversion_constant("m", "ind_ch", 20.11669506)
+	load_gdal()
 }
 
 .onUnload = function(libname, pkgname) {
-	CPL_gdal_cleanup_all()
-	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		# nocov start
-		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
-		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
-		# nocov end
-	}
-	units::remove_symbolic_unit("link")
-	units::remove_symbolic_unit("us_in")
-	units::remove_symbolic_unit("ind_yd")
-	units::remove_symbolic_unit("ind_ft")
-	units::remove_symbolic_unit("ind_ch")
+	unload_gdal()
 }
 
 .onAttach = function(libname, pkgname) {
@@ -95,4 +63,43 @@ sf_extSoftVersion = function() {
 	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(),
 		ifelse(CPL_gdal_with_geos(), "true", "false")),
 		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS"))
+}
+
+load_gdal <- function() {
+	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+		# nocov start
+		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
+		prj = system.file("proj", package = "sf")[1]
+		Sys.setenv("PROJ_LIB" = prj)
+		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
+		gdl = system.file("gdal", package = "sf")[1]
+		Sys.setenv("GDAL_DATA" = gdl)
+		# nocov end
+	}
+	CPL_gdal_init()
+	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
+	if (inherits(try(units::as_units("link"), silent = TRUE), "try-error"))
+		units::install_conversion_constant("m", "link", 0.201168)
+	if (inherits(try(units::as_units("us_in"), silent = TRUE), "try-error"))
+		units::install_conversion_constant("m", "us_in", 1./39.37)
+	if (inherits(try(units::as_units("ind_yd"), silent = TRUE), "try-error"))
+		units::install_conversion_constant("m", "ind_yd", 0.91439523)
+	if (inherits(try(units::as_units("ind_ft"), silent = TRUE), "try-error"))
+		units::install_conversion_constant("m", "ind_ft", 0.30479841)
+	if (inherits(try(units::as_units("ind_ch"), silent = TRUE), "try-error"))
+		units::install_conversion_constant("m", "ind_ch", 20.11669506)
+}
+unload_gdal <- function() {
+	CPL_gdal_cleanup_all()
+	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+		# nocov start
+		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
+		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
+		# nocov end
+	}
+	units::remove_symbolic_unit("link")
+	units::remove_symbolic_unit("us_in")
+	units::remove_symbolic_unit("ind_yd")
+	units::remove_symbolic_unit("ind_ft")
+	units::remove_symbolic_unit("ind_ch")
 }
