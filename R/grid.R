@@ -214,7 +214,7 @@ st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp 
 	scalar_grobs(x, pch, size, arrow, gp, ...)
 }
 
-scalar_grobs <- function(x, pch, size, arrow, gp, ...) {
+scalar_grobs <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp = gpar(), ...) {
 	gp <- split_gp(gp, length(x))
 	pch <- rep(pch, length.out = length(x))
 	size <- rep(size,  length.out = length(x))
