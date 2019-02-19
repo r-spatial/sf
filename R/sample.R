@@ -144,8 +144,8 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	}
 	lcs = c(0, cumsum(l))
 	if (sum(l) == 0) {
-		grp = list(0)
-		message("line is of length zero, only one point is sampled")
+		grp = list(0) # nocov
+		message("line is of length zero, only one point is sampled") # nocov
 	} else {
 		grp = split(d, cut(d, lcs, include.lowest = TRUE))
 		grp = lapply(seq_along(x), function(i) grp[[i]] - lcs[i])
