@@ -251,10 +251,15 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     psWarpOptions->hDstDS = hDstDS;
 
     psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
+
+	if (psWarpOptions->nBandCount > GDALGetRasterCount(hDstDS))
+		Rcpp::stop("warper: source has more bands than destination");
+
     psWarpOptions->panSrcBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
     psWarpOptions->panDstBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
     psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
     psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+
     GDALRasterBandH poBand;
 	int success;
 	double d = 0xffffffff;
@@ -263,18 +268,18 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     	psWarpOptions->panDstBands[i] = i + 1;
     	poBand = GDALGetRasterBand(hSrcDS, i + 1);
     	GDALGetRasterNoDataValue(poBand, &success);
-		if (success) {
+		if (success)
     		psWarpOptions->padfSrcNoDataReal[i] = GDALGetRasterNoDataValue(poBand, &success);
     		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
-		} else
-			memcpy(psWarpOptions->padfSrcNoDataReal+i, &d, sizeof(d));
+		else
+			memcpy(&(psWarpOptions->padfSrcNoDataReal[i]), &d, sizeof(double));
     	poBand = GDALGetRasterBand(hDstDS, i + 1);
     	GDALGetRasterNoDataValue(poBand, &success);
-		if (success) {
+		if (success)
     		psWarpOptions->padfDstNoDataReal[0] = GDALGetRasterNoDataValue(poBand, &success);
     		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
-		} else // NaN:
-			memcpy(psWarpOptions->padfDstNoDataReal+i, &d, sizeof(d));
+		else // NaN:
+			memcpy(&(psWarpOptions->padfDstNoDataReal[i]), &d, sizeof(double));
 	}
 
     // psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
