@@ -208,7 +208,7 @@ st_sample(nc[1:2,], size = c(10,20))
 # try with LINES, LongLat, should generate a warning:
 nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 st_sample(ls, 80, type = "regular")
-p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100))
+p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = FALSE))
 lengths(p_sample)
 p_sample_exact = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = TRUE))
 lengths(p_sample_exact)

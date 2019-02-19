@@ -60,21 +60,21 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
-		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, ...))
+		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
 		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,
 					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
 					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
 					 st_poly_sample(x, size, ..., type = type))
-	}
-	if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
-		diff = size - length(res)
-		if(diff > 0) { # too few points
-			res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
-			res = c(res, res_additional)
-		} else if (diff < 0) { # too many points
-			res = res[1:size]
+		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
+			diff = size - length(res)
+			if(diff > 0) { # too few points
+				res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
+				res = c(res, res_additional)
+			} else if (diff < 0) { # too many points
+				res = res[1:size]
+			}
 		}
 	}
 	res
@@ -143,7 +143,7 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 		stop(paste("sampling type", type, "not available for LINESTRING")) # nocov
 	}
 	lcs = c(0, cumsum(l))
-	if (l == 0) {
+	if (sum(l) == 0) {
 		grp = list(0)
 		message("line is of length zero, only one point is sampled")
 	} else {
