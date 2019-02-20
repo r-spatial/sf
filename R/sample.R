@@ -1,9 +1,14 @@
 #' sample points on or in (sets of) spatial features
 #'
 #' Sample points on or in (sets of) spatial features.
-#' Returns a pre-specified number of points that is equal to
-#' \code{size} if \code{type = "random"} or an approximation of
-#' \code{size} for other sampling types or if \code{exact = FALSE}.
+#' By default, returns a pre-specified number of points that is equal to
+#' \code{size} (if \code{type = "random"}) or an approximation of
+#' \code{size} (for other sampling types).
+#'
+#' The function is vectorised: it samples \code{size} points across all geometries in
+#' the object if \code{size} is a single number, or the specified number of points
+#' in each feature if \code{size} is a vector of integers equal in length to the geometry
+#' of \code{x}.
 #'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
@@ -20,9 +25,11 @@
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' p = st_sample(nc[1:3, ], 1:3)
+#' p1 = st_sample(nc[1:3, ], 6)
+#' p2 = st_sample(nc[1:3, ], 1:3)
 #' plot(st_geometry(nc)[1:3])
-#' plot(p, add = TRUE)
+#' plot(p1, add = TRUE)
+#' plot(p2, add = TRUE, pch = 2)
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 #' plot(x, axes = TRUE, graticule = TRUE)
 #' if (sf_extSoftVersion()["proj.4"] >= "4.9.0")

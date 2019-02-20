@@ -24,11 +24,16 @@ an \code{sfc} object containing the sampled \code{POINT} geometries
 }
 \description{
 Sample points on or in (sets of) spatial features.
-Returns a pre-specified number of points that is equal to
-\code{size} if \code{type = "random"} or an approximation of
-\code{size} for other sampling types or if \code{exact = FALSE}.
+By default, returns a pre-specified number of points that is equal to
+\code{size} (if \code{type = "random"}) or an approximation of
+\code{size} (for other sampling types).
 }
 \details{
+The function is vectorised: it samples \code{size} points across all geometries in
+the object if \code{size} is a single number, or the specified number of points
+in each feature if \code{size} is a vector of integers equal in length to the geometry
+of \code{x}.
+
 if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 
 For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
@@ -37,9 +42,11 @@ As parameter called \code{offset} can be passed to control ("fix") regular or he
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-p = st_sample(nc[1:3, ], 1:3)
+p1 = st_sample(nc[1:3, ], 6)
+p2 = st_sample(nc[1:3, ], 1:3)
 plot(st_geometry(nc)[1:3])
-plot(p, add = TRUE)
+plot(p1, add = TRUE)
+plot(p2, add = TRUE, pch = 2)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 plot(x, axes = TRUE, graticule = TRUE)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
