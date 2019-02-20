@@ -16,7 +16,8 @@ st_sample(x, size, ..., type = "random", exact = TRUE)
 \item{type}{character; indicates the spatial sampling type; only \code{random} is implemented right now}
 
 \item{exact}{logical; should the length of output be exactly
-the same as specified by \code{size}? \code{TRUE} by default. Only applies if \code{type = "random"}.}
+the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
+when \code{type = "random"}.}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -35,6 +36,10 @@ For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size 
 As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 }
 \examples{
+nc = st_read(system.file("shape/nc.shp", package="sf"))
+p = st_sample(nc[1:3, ], 1:3)
+plot(st_geometry(nc)[1:3])
+plot(p, add = TRUE)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 plot(x, axes = TRUE, graticule = TRUE)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
@@ -72,4 +77,5 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,1),c(.1,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
+plot(st_sample(ls, 80))
 }
