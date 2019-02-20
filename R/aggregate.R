@@ -88,13 +88,13 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 	}
 }
 
-
 #' Areal-weighted interpolation of polygon data
 #'
 #' Areal-weighted interpolation of polygon data
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
+#' @param ... ignored
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc, n = c(20,10))
@@ -107,7 +107,10 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' a1$extensive = a2$BIR74
 #' plot(a1[c("intensive", "extensive")], key.pos = 4)
 #' @export
-st_interpolate_aw = function(x, to, extensive) {
+st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw")
+
+#' @export
+st_interpolate_aw.sf = function(x, to, extensive, ...) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc"))
 		stop("st_interpolate_aw requires geometries in argument to")
 	if (! all_constant(x))

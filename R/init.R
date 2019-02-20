@@ -2,7 +2,7 @@
 #' @importFrom stats runif aggregate na.omit
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as slotNames new slot
-#' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport nullGrob
+#' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport nullGrob convertHeight convertWidth
 #' @import graphics
 #' @importFrom grDevices rgb dev.size
 #' @importFrom Rcpp evalCpp
@@ -28,10 +28,47 @@ setOldClass("sfg")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 
+pathGrob <- NULL
 .onLoad = function(libname, pkgname) {
+	if (getRversion() < 3.6) {
+		pathGrob <<- function(..., pathId.lengths) {
+			grid::pathGrob(...)
+		}
+	}
+	load_gdal()
+}
+
+.onUnload = function(libname, pkgname) {
+	unload_gdal()
+}
+
+.onAttach = function(libname, pkgname) {
+	m = paste0("Linking to GEOS ", strsplit(CPL_geos_version(TRUE), "-")[[1]][1],
+		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version())
+	packageStartupMessage(m)
+	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) { # nocov start
+		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
+		packageStartupMessage(paste(
+			"Linked against:", CPL_geos_version(TRUE, TRUE),
+			"compiled against:", CPL_geos_version(FALSE, TRUE)))
+		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
+	} # nocov end
+}
+
+#' Provide the external dependencies versions of the libraries linked to sf
+#'
+#' Provide the external dependencies versions of the libraries linked to sf
+#' @export
+sf_extSoftVersion = function() {
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(),
+		ifelse(CPL_gdal_with_geos(), "true", "false")),
+		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS"))
+}
+
+load_gdal <- function() {
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
-  		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
+		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
 		prj = system.file("proj", package = "sf")[1]
 		Sys.setenv("PROJ_LIB" = prj)
 		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
@@ -52,8 +89,7 @@ setOldClass("sfg")
 	if (inherits(try(units::as_units("ind_ch"), silent = TRUE), "try-error"))
 		units::install_conversion_constant("m", "ind_ch", 20.11669506)
 }
-
-.onUnload = function(libname, pkgname) {
+unload_gdal <- function() {
 	CPL_gdal_cleanup_all()
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
@@ -66,27 +102,4 @@ setOldClass("sfg")
 	units::remove_symbolic_unit("ind_yd")
 	units::remove_symbolic_unit("ind_ft")
 	units::remove_symbolic_unit("ind_ch")
-}
-
-.onAttach = function(libname, pkgname) {
-	m = paste0("Linking to GEOS ", strsplit(CPL_geos_version(TRUE), "-")[[1]][1],
-		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version())
-	packageStartupMessage(m)
-	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) { # nocov start
-		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
-		packageStartupMessage(paste(
-			"Linked against:", CPL_geos_version(TRUE, TRUE), 
-			"compiled against:", CPL_geos_version(FALSE, TRUE)))
-		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
-	} # nocov end
-}
-
-#' Provide the external dependencies versions of the libraries linked to sf
-#' 
-#' Provide the external dependencies versions of the libraries linked to sf
-#' @export
-sf_extSoftVersion = function() {
-	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(),
-		ifelse(CPL_gdal_with_geos(), "true", "false")),
-		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS"))
 }

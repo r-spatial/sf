@@ -216,10 +216,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	# find the sfc column(s):
 	all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
 	if (! any(all_sfc_columns)) { # try to create sfc from list-columns:
-		x = lapply(x, list_column_to_sfc)
-		all_sfc_columns = vapply(x, function(x) inherits(x, "sfc"), TRUE)
+		xlst = lapply(x, list_column_to_sfc)
+		all_sfc_columns = vapply(xlst, function(x) inherits(x, "sfc"), TRUE)
 		if (! any(all_sfc_columns))
 			stop("no simple features geometry column present")
+		x[all_sfc_columns] = xlst[all_sfc_columns]
 	}
 
 	all_sfc_columns = which(unlist(all_sfc_columns))

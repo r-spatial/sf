@@ -43,7 +43,7 @@ plot(st_set_crs(w3, 4326), axes = TRUE)
 mp - st_point(c(3,4)) # POINT (1 2)
 opar = par(mfrow = c(2,2), mar = c(0, 0, 1, 0))
 a = st_buffer(st_point(c(0,0)), 2)
-b = a + c(2, 0) 
+b = a + c(2, 0)
 p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
 lapply(c('a | b', 'a / b', 'a & b', 'a \%/\% b'), p)
 par(opar)

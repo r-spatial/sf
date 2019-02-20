@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -132,7 +132,7 @@ Geometry set for 0 features
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-> st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"), 
+> st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 + 	"+proj=longlat +datum=WGS84")
 Geometry set for 3 features 
 geometry type:  GEOMETRY
@@ -348,7 +348,7 @@ MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)))
 MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)))
 > 
 > 
-> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast() 
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast()
 Geometry set for 2 features 
 geometry type:  GEOMETRY
 dimension:      XY
@@ -357,8 +357,8 @@ epsg (SRID):    NA
 proj4string:    NA
 POINT (0 1)
 MULTIPOINT (0 1)
-> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% 
-+ 	st_cast() %>% 
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>%
++ 	st_cast() %>%
 + 	st_cast("POINT")
 Geometry set for 2 features 
 geometry type:  POINT
@@ -383,10 +383,10 @@ Error in st_polygonize.sfc(st_sfc(x)) :
 > try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 Error in StopZ(zm) : 
   sp supports Z dimension only for POINT and MULTIPOINT.
-use `drop_zm(...)` to coerce to XY dimensions
+use `st_zm(...)` to coerce to XY dimensions
 > 
 > # check conus is present:
-> x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)), 
+> x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 + 	crs = "+proj=longlat +datum=NAD27")
 > st_transform(x, 3857)
 Geometry set for 2 features 
@@ -713,7 +713,7 @@ In addition: Warning message:
 Use 'aggregate' instead.
 See help("Deprecated") 
 > # st_join, largest = TRUE:
-> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
+> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
 Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
@@ -843,7 +843,7 @@ MULTIPOINT (0.0914728 0, 0.073852 0, 0.00320272...
 MULTIPOINT (0.0488222 1, 0.0716508 1, 0.0897947...
 MULTIPOINT EMPTY
 > st_sample(nc[1:2,], size = c(10,20))
-Geometry set for 29 features 
+Geometry set for 30 features 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1215230 ymin: 935867 xmax: 1428880 ymax: 1031900
@@ -862,22 +862,31 @@ although coordinates are longitude/latitude, st_sample assumes that they are pla
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: -81.7023 ymin: 36.238 xmax: -80.9089 ymax: 36.578
+bbox:           xmin: -81.6893 ymin: 36.2492 xmax: -80.914 ymax: 36.583
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-MULTIPOINT (-81.7023 36.4641, -81.6845 36.3652,...
-MULTIPOINT (-80.9639 36.469, -80.9089 36.5654, ...
+MULTIPOINT (-81.2458 36.3857, -81.4101 36.2735,...
+MULTIPOINT (-81.068 36.4224, -81.1772 36.5701, ...
 > st_sample(ls, 80, type = "regular")
 Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 0.0945466 ymax: 1
+bbox:           xmin: 0 ymin: 0 xmax: 0.0992168 ymax: 1
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT (0 0.0095367, 0 0.0245368, 0 0.03953...
-MULTIPOINT (0.0145451 0, 0.0295452 0, 0.0445453...
-MULTIPOINT (0.00454582 1, 0.0195459 1, 0.034546...
+MULTIPOINT (0 0.0142069, 0 0.0292071, 0 0.04420...
+MULTIPOINT (0.00421518 0, 0.0192153 0, 0.034215...
+MULTIPOINT (0.00921605 1, 0.0242162 1, 0.039216...
 MULTIPOINT EMPTY
+> p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = FALSE))
+> lengths(p_sample)
+ [1] 104 106 109  96  97 120  87 106 103  99
+> p_sample_exact = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = TRUE))
+> lengths(p_sample_exact)
+ [1] 100 100 100 100 100 100 100 100 100 100
+> #plot(nc$geometry[1])
+> #plot(p_sample[[1]], add = TRUE)
+> #plot(p_sample_exact[[1]], add = TRUE)
 > 
 > #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
 > class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
@@ -911,10 +920,10 @@ POINT EMPTY
 Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 0.0960505 ymin: 0.924838 xmax: 0.0960505 ymax: 0.924838
+bbox:           xmin: -0.0070472 ymin: 1.09548 xmax: -0.0070472 ymax: 1.09548
 epsg (SRID):    NA
 proj4string:    NA
-POINT (0.0960505 0.924838)
+POINT (-0.0070472 1.09548)
 > 
 > # st_bbox:
 > library(sp)
@@ -1141,4 +1150,4 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > proc.time()
    user  system elapsed 
-  2.268   0.080   2.342 
+  2.852   0.120   2.966 

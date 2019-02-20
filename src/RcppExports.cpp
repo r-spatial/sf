@@ -425,6 +425,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdal_warper
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile, Rcpp::IntegerVector options);
+RcppExport SEXP _sf_CPL_gdal_warper(SEXP infileSEXP, SEXP outfileSEXP, SEXP optionsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type infile(infileSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type outfile(outfileSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type options(optionsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdal_warper(infile, outfile, options));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_write_ogr
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids, bool quiet, bool update, bool delete_dsn, bool delete_layer);
 RcppExport SEXP _sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP fidsSEXP, SEXP quietSEXP, SEXP updateSEXP, SEXP delete_dsnSEXP, SEXP delete_layerSEXP) {
@@ -696,6 +709,34 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_raw_to_hex(raw));
+    return rcpp_result_gen;
+END_RCPP
+}
+// opp_sfc
+SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs);
+RcppExport SEXP _sf_opp_sfc(SEXP geomSEXP, SEXP valueSEXP, SEXP multSEXP, SEXP crsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type geom(geomSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type mult(multSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type crs(crsSEXP);
+    rcpp_result_gen = Rcpp::wrap(opp_sfc(geom, value, mult, crs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// normalize_sfc
+SEXP normalize_sfc(SEXP geom, SEXP min, SEXP range, SEXP crs);
+RcppExport SEXP _sf_normalize_sfc(SEXP geomSEXP, SEXP minSEXP, SEXP rangeSEXP, SEXP crsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type geom(geomSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type min(minSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type range(rangeSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type crs(crsSEXP);
+    rcpp_result_gen = Rcpp::wrap(normalize_sfc(geom, min, range, crs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1027,6 +1068,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 5},
     {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 3},
     {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 3},
+    {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 3},
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 13},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
@@ -1048,6 +1090,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
+    {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
+    {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},

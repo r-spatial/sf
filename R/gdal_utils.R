@@ -1,3 +1,26 @@
+# nocov start
+resampling_method = function(option = "near") {
+	if (length(option) != 1)
+		stop("warper options should have length 1")
+	switch(option,
+		near = 0,
+		bilinear = 1,
+		cubic = 2,
+		cubicspline = 3,
+		lanczos = 4,
+		average = 5,
+		mode = 6,
+		max = 8,
+		min = 9,
+		med = 10,
+		q1 = 11,
+		q3 = 12,
+		stop(paste("unknown option:", options))
+	)
+}
+# nocov end
+
+
 #' Native interface to gdal utils
 #' @name gdal_utils
 #' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
@@ -14,6 +37,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options),
 			warp = CPL_gdalwarp(source, destination, options),
+			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
 			rasterize = CPL_gdalrasterize(source, destination, options),
 			translate = CPL_gdaltranslate(source, destination, options),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options),
@@ -21,7 +45,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename),
 			nearblack = CPL_gdalnearblack(source, destination, options),
 			grid = CPL_gdalgrid(source, destination, options),
-			stop(paste("unknown value for util:", util))
+			stop(paste("unknown util value for gdal_utils:", util))
 		)
 
 	if (util == "info") {
@@ -31,7 +55,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	} else {
 		# ret indicates error:
 		if (ret)
-			stop("gdal_utils: an error occured")
+			stop(paste0("gdal_utils ", util, ": an error occured"))
 		invisible(! ret) # success
 	}
 }

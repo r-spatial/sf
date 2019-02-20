@@ -1,6 +1,7 @@
 #include "cpl_port.h"
 #include "cpl_conv.h" // CPLFree()
 #include "gdal_version.h"
+#include "gdalwarper.h"
 
 #if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
 # include "gdal_utils.h" // requires >= 2.1
@@ -228,3 +229,81 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 #endif
+
+// #nocov start
+// https://www.gdal.org/warptut.html :
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
+		Rcpp::IntegerVector options)
+{
+    GDALDatasetH  hSrcDS, hDstDS;
+    // Open input and output files.
+    GDALAllRegister();
+    hSrcDS = GDALOpen( infile[0], GA_ReadOnly );
+	if (hSrcDS == NULL)
+		Rcpp::stop("input file not found");
+    hDstDS = GDALOpen( outfile[0], GA_Update );
+	if (hDstDS == NULL)
+		Rcpp::stop("could not open output file for writing");
+    // Setup warp options.
+    GDALWarpOptions *psWarpOptions = GDALCreateWarpOptions();
+    psWarpOptions->hSrcDS = hSrcDS;
+    psWarpOptions->hDstDS = hDstDS;
+
+    psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
+
+	if (psWarpOptions->nBandCount > GDALGetRasterCount(hDstDS))
+		Rcpp::stop("warper: source has more bands than destination");
+
+    psWarpOptions->panSrcBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->panDstBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+    psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+
+    GDALRasterBandH poBand;
+	int success;
+	double d = 0xffffffff;
+	for (int i = 0; i < psWarpOptions->nBandCount; i++) {
+    	psWarpOptions->panSrcBands[i] = i + 1;
+    	psWarpOptions->panDstBands[i] = i + 1;
+    	poBand = GDALGetRasterBand(hSrcDS, i + 1);
+    	GDALGetRasterNoDataValue(poBand, &success);
+		if (success)
+    		psWarpOptions->padfSrcNoDataReal[i] = GDALGetRasterNoDataValue(poBand, &success);
+    		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		else
+			memcpy(&(psWarpOptions->padfSrcNoDataReal[i]), &d, sizeof(double));
+    	poBand = GDALGetRasterBand(hDstDS, i + 1);
+    	GDALGetRasterNoDataValue(poBand, &success);
+		if (success)
+    		psWarpOptions->padfDstNoDataReal[0] = GDALGetRasterNoDataValue(poBand, &success);
+    		// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		else // NaN:
+			memcpy(&(psWarpOptions->padfDstNoDataReal[i]), &d, sizeof(double));
+	}
+
+    // psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
+    psWarpOptions->pfnProgress = GDALDummyProgress;
+    // Establish reprojection transformer.
+	if (options.size() == 1)
+		psWarpOptions->eResampleAlg = (GDALResampleAlg) options[0];
+    psWarpOptions->pTransformerArg =
+        GDALCreateGenImgProjTransformer( hSrcDS,
+                                         GDALGetProjectionRef(hSrcDS),
+                                         hDstDS,
+                                         GDALGetProjectionRef(hDstDS),
+                                         FALSE, 0.0, 1 );
+    psWarpOptions->pfnTransformer = GDALGenImgProjTransform;
+    // Initialize and execute the warp operation.
+    GDALWarpOperation oOperation;
+    oOperation.Initialize( psWarpOptions );
+    oOperation.ChunkAndWarpImage( 0, 0,
+                                  GDALGetRasterXSize( hDstDS ),
+                                  GDALGetRasterYSize( hDstDS ) );
+    GDALDestroyGenImgProjTransformer( psWarpOptions->pTransformerArg );
+    GDALDestroyWarpOptions( psWarpOptions );
+    GDALClose( hDstDS );
+    GDALClose( hSrcDS );
+    return false;
+}
+// #nocov end

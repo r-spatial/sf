@@ -36,6 +36,9 @@ Authors@R:
              comment = c(ORCID = "0000-0002-4035-0289")),
       person(given = "Kirill",
              family = "Müller",
+             role = "ctb"),
+      person(given = "Thomas Lin",
+             family = "Pedersen",
              role = "ctb"))
 Description: Support for simple features, a standardized way to
     encode spatial vector data. Binds to 'GDAL' for reading and writing
@@ -62,7 +65,7 @@ Imports:
 Suggests:
     blob,
     covr,
-    dplyr (>= 0.7-0),
+    dplyr (>= 0.8-0),
     ggplot2,
     knitr,
     lwgeom (>= 0.1-5),
@@ -135,4 +138,5 @@ Collate:
     'crop.R'
     'gdal_utils.R'
     'nearest.R'
+    'normalize.R'
     'deprecated.R'
