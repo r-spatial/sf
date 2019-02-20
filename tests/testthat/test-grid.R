@@ -1,4 +1,4 @@
-context("test-grid")
+context("sf: grid")
 
 test_that("point grob constructors work", {
 	p1 <- st_point(c(0, 1))
