@@ -219,7 +219,7 @@ scalar_grobs <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp = 
 	pch <- rep(pch, length.out = length(x))
 	size <- rep(size,  length.out = length(x))
 	if (!is.null(arrow)) arrow <- rep(arrow, length.out = length(x))
-	gList(lapply(seq_along(x), function(i) {
+	do.call(gList, lapply(seq_along(x), function(i) {
 		st_as_grob(x[[i]], pch = pch[i], size = size[i], arrow = arrow[i], gp = gp[[i]], ...)
 	}))
 }
