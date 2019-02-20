@@ -34,8 +34,8 @@ test_that("st_transform works", {
 
 test_that("gdal can be loaded, unloaded, and loaded", {
   expect_silent({
-  sf:::.onUnload()
-  sf:::.onLoad()
+  unload_gdal()
+  load_gdal()
   }
   )
 })

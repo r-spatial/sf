@@ -4,14 +4,12 @@
 \alias{st_as_grob}
 \title{Convert sf* object to a grob}
 \usage{
-st_as_grob(x, ..., units = "native")
+st_as_grob(x, ...)
 }
 \arguments{
 \item{x}{object to be converted into an object class \code{grob}}
 
 \item{...}{passed on to the xxxGrob function, e.g. \code{gp = gpar(col = 'red')}}
-
-\item{units}{units; see \link[grid]{unit}}
 }
 \description{
 Convert sf* object to an grid graphics object (grob)
