@@ -2,9 +2,11 @@
 
 * fixed n-ary `st_difference` for cases where geometries are entirely contained in others; #975, by Jonathan Marshall
 
-* faster `Ops.sfc`, added `st_normalize`; #973 by Thomas Lin Pedersen (now contributor)
+* faster `Ops.sfc`, added `st_normalize`; #973 by Thomas Lin Pedersen
 
-* add `group_split` and `group_map` methods for `sf` objects; #969
+* new grob constructor for sfc objects; #971 by Thomas Lin Pedersen (now contributor)
+
+* add `group_split` and `group_map` methods for `sf` objects (experimental); #969
 
 * make `st_interpolate_aw` a generic;
 

@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -106,10 +106,6 @@ POINT (111319.5 111325.1)
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -121,4 +117,4 @@ Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) :
 > 
 > proc.time()
    user  system elapsed 
-  0.320   0.040   0.352 
+  0.327   0.045   0.363 
