@@ -762,9 +762,9 @@ plot(i, add = TRUE, col = 'green', lwd = 2)
 par(opar)
 ```
 
-## Non-valid geometries
+## Non-simple and non-valid geometries
 
-Invalid geometries are for instance self-intersecting lines (left) or polygons with slivers (middle) or self-intersections (right).
+Non-simple geometries are for instance self-intersecting lines (left); non-valid geometries are for instance polygons with slivers (middle) or self-intersections (right).
 
 ```{r}
 library(sf)
