@@ -217,7 +217,3 @@ st_sample_exact = function(x, size, ..., type) {
 	}
 	random_pt
 }
-
-# library(sf)
-# nc = read_sf(system.file("shape/nc.shp", package="sf"))
-# system.time({p = st_sample(x = nc, size = 1:nrow(nc))})
