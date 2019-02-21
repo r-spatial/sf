@@ -209,7 +209,7 @@ st_sample_exact = function(x, size, ..., type) {
 	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
 	while (length(random_pt) < size) {
 		diff = size - length(random_pt)
-		random_pt_new = st_sample(x, size, ..., type, exact = FALSE)
+		random_pt_new = st_sample(x, size = diff, ..., type, exact = FALSE)
 		random_pt = c(random_pt, random_pt_new)
 	}
 	if(length(random_pt) > size) {
