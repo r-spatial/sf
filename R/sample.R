@@ -69,7 +69,7 @@
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
 #' @export
-st_sample = function(x, size, ..., type = "random", exact = TRUE) {
+st_sample = function(x, size, ..., type = "random", exact = FALSE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
