@@ -13,7 +13,7 @@
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
-#' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
+#' @param type character; indicates the spatial sampling type; one of \code{regular}, \code{hexagonal} and \code{regular}.
 #' @param exact logical; should the length of output be exactly
 #' the same as specified by \code{size}? \code{FALSE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
