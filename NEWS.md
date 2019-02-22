@@ -1,4 +1,8 @@
+# version 0.7-4
+
 # version 0.7-3
+
+* add argument `exact` to `st_sample`, for now defaulting to `FALSE`; #896
 
 * fixed n-ary `st_difference` for cases where geometries are entirely contained in others; #975, by Jonathan Marshall
 
