@@ -15,7 +15,7 @@
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; only \code{random} is implemented right now
 #' @param exact logical; should the length of output be exactly
-#' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
+#' the same as specified by \code{size}? \code{FALSE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
