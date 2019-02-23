@@ -1,6 +1,10 @@
 context("normalize")
 set.seed(1)
 test_that("normalize", {
+  p0 <- st_point(c(0,1))
+  p0_norm <- st_normalize(p0, c(0,0,10,10))
+  expect_equal(p0_norm, st_point(c(0,0.1)))
+
   p1 <- st_multipoint(matrix(runif(20, max = 25), ncol = 2))
   p1_norm <- st_normalize(p1)
   expect_true(all(st_bbox(p1_norm) == c(0,0,1,1)))
