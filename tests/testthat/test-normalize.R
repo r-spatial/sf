@@ -24,10 +24,10 @@ test_that("normalize", {
 test_that("ops", {
   p0 <- st_point(c(0,1))
   p1 <- p0 * 0.1
-  expect_equal(p0_norm, st_point(c(0, 0.1)))
+  expect_equal(p1, st_point(c(0, 0.1)))
   expect_equal(st_sfc(p0) * 2, st_sfc(p0 * 2))
   expect_equal(st_sfc(p0) - 2, st_sfc(p0 - 2))
-}
+})
 
 test_that("grob stuff", {
   p0 <- st_point(c(0,1))
@@ -36,4 +36,4 @@ test_that("grob stuff", {
   g <- st_as_grob(st_sfc(p1))
   p2 <- st_polygon(list(matrix(runif(10, max = 100), ncol = 2)[c(1:5, 1), ]))
   g <- st_as_grob(st_sfc(p2))
-}
+})
