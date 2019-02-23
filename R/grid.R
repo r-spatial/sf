@@ -32,7 +32,7 @@ st_as_grob.LINESTRING = function(x, arrow = NULL, default.units = "native", name
 
 #' @export
 st_as_grob.CIRCULARSTRING = function(x, y, ...) {
-	st_as_grob(st_cast(x, "LINESTRING"),  ...) # nocov
+	st_as_grob(st_cast(x, "LINESTRING"),  ...)
 }
 
 #' @export
@@ -202,7 +202,7 @@ st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "na
 }
 #' @export
 st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
-	st_as_grob(st_cast(x, 'LINESTRING'), ...)
+	st_as_grob(st_cast(x, 'LINESTRING'), ...) # nocov
 }
 #' @export
 #' @importFrom grid gList

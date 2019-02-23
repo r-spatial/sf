@@ -22,11 +22,9 @@ test_that("normalize", {
 })
 
 test_that("ops", {
-  p0 <- st_point(c(0,1))
-  p1 <- p0 * 0.1
-  expect_equal(p1, st_point(c(0, 0.1)))
-  expect_equal(st_sfc(p0) * 2, st_sfc(p0 * 2))
-  expect_equal(st_sfc(p0) - 2, st_sfc(p0 - 2))
+  p0 <- st_point(c(0, 1, 2))
+  expect_equal(st_sfc(p0) * 0.1, st_sfc(st_point(c(0, 0.1, 0.2))))
+  expect_equal(st_sfc(p0) - 1,   st_sfc(st_point(c(-1, 0, 1))))
 })
 
 test_that("grob stuff", {
