@@ -23,7 +23,7 @@ test_that("normalize", {
 
 test_that("ops", {
   p0 <- st_point(c(0, 1, 2))
-  expect_equal(st_sfc(p0) + st_sfc(st_point(c(1,2,3))), st_sfc(st_point(c(1,3,5))))
+  expect_equal(st_sfc(p0) - st_sfc(st_point(c(1,2,3))), st_sfc(st_point(c(-1,-1,-1))))
   expect_equal(st_sfc(p0) * st_sfc(st_point(c(1,2,3))), st_sfc(st_point(c(0,2,6))))
 })
 
