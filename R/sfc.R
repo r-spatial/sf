@@ -138,20 +138,22 @@ sfg_is_empty = function(x) {
 #' @export
 c.sfc = function(..., recursive = FALSE) {
 	lst = list(...)
-	cls = class(lst[[1]])
-	eq = if (length(lst) > 1)
-			all(vapply(lst[-1], function(x) identical(class(x), cls), TRUE))
+	classes = sapply(lst, function(x) class(x)[1])
+	le = lengths(lst)
+	if (any(le > 0))
+		classes = classes[le > 0] # removes the empty set GEOMETRY objects
+	ucls = unique(classes)
+	cls = if (length(ucls) > 1) # a mix:
+			c("sfc_GEOMETRY", "sfc")
 		else
-			TRUE
-	if (! eq)
-		cls = c("sfc_GEOMETRY", "sfc")
+			c(ucls, "sfc")
 
 	ret = unlist(lapply(lst, unclass), recursive = FALSE)
 	attributes(ret) = attributes(lst[[1]]) # crs
 	class(ret) = cls
 	attr(ret, "bbox") = compute_bbox(ret) # dispatch on class
 	attr(ret, "n_empty") = sum(sapply(lst, attr, which = "n_empty"))
-	if (! eq)
+	if (inherits(ret, "sfc_GEOMETRY"))
 		attr(ret, "classes") = vapply(ret, class, rep("", 3))[2L,]
 	ret
 }
