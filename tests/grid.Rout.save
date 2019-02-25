@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,7 +39,6 @@ Type 'q()' to quit R.
 > invisible(lapply(st_geometry(meuse_sf), 
 + 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
-> 
 > # MULTIPOINTS
 > mp = st_multipoint(cbind(runif(100), runif(100)))
 > grid.newpage()
@@ -77,4 +76,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  0.992   0.244   0.961 
+  0.620   0.035   0.647 

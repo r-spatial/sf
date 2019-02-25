@@ -4,7 +4,7 @@
 \alias{st_sample}
 \title{sample points on or in (sets of) spatial features}
 \usage{
-st_sample(x, size, ..., type = "random", exact = FALSE)
+st_sample(x, size, ..., type = "random", exact = TRUE)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -60,7 +60,7 @@ if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
 }
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)
-p_exact = st_sample(x, 1000)
+p_exact = st_sample(x, 1000, exact = TRUE)
 p_not_exact = st_sample(x, 1000, exact = FALSE)
 length(p_exact); length(p_not_exact)
 plot(st_sample(x, 1000), add = TRUE)
