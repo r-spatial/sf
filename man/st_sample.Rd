@@ -16,7 +16,7 @@ st_sample(x, size, ..., type = "random", exact = TRUE)
 \item{type}{character; indicates the spatial sampling type; one of \code{regular}, \code{hexagonal} and \code{regular}.}
 
 \item{exact}{logical; should the length of output be exactly
-the same as specified by \code{size}? \code{FALSE} by default. Only applies to polygons, and
+the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
 }
 \value{
