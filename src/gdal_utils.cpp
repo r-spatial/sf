@@ -250,22 +250,18 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     psWarpOptions->hSrcDS = hSrcDS;
     psWarpOptions->hDstDS = hDstDS;
 
-    psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
+    psWarpOptions->nBandCount = 0;
 
-	if (psWarpOptions->nBandCount > GDALGetRasterCount(hDstDS))
+	if (GDALGetRasterCount(hSrcDS) > GDALGetRasterCount(hDstDS))
 		Rcpp::stop("warper: source has more bands than destination");
 
-    psWarpOptions->panSrcBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
-    psWarpOptions->panDstBands = (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
-    psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
-    psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * psWarpOptions->nBandCount );
+    psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * GDALGetRasterCount(hSrcDS));
+    psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * GDALGetRasterCount(hSrcDS));
 
     GDALRasterBandH poBand;
 	int success;
 	double d = 0xffffffff;
-	for (int i = 0; i < psWarpOptions->nBandCount; i++) {
-    	psWarpOptions->panSrcBands[i] = i + 1;
-    	psWarpOptions->panDstBands[i] = i + 1;
+	for (int i = 0; i < GDALGetRasterCount(hSrcDS); i++) {
     	poBand = GDALGetRasterBand(hSrcDS, i + 1);
     	GDALGetRasterNoDataValue(poBand, &success);
 		if (success)
