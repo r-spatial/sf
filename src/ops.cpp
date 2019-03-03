@@ -61,7 +61,7 @@ void recursive_opp(SEXP &feature, SEXP &value, int mult) {
 }
 
 void transform_bbox(SEXP &feature, SEXP &value, int mult) {
-	double* p_bbox = REAL(Rf_getAttrib(feature, Rf_mkString("bbox")));
+	double* p_bbox = REAL(Rf_getAttrib(feature, Rf_install("bbox")));
 	double* p_value = REAL(value);
 	if (mult) {
 		p_bbox[0] = p_bbox[0] * p_value[0];
