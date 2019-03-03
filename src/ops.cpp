@@ -84,7 +84,7 @@ SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs) {
 
 	recursive_opp(new_geom, value, multiply);
 	transform_bbox(new_geom, value, multiply);
-	Rf_setAttrib(new_geom, Rf_mkString("crs"), crs);
+	Rf_setAttrib(new_geom, Rf_install("crs"), crs);
 
 	UNPROTECT(1);
 	return new_geom;
@@ -98,7 +98,7 @@ SEXP normalize_sfc(SEXP geom, SEXP min, SEXP range, SEXP crs) {
 	recursive_opp(new_geom, range, 1);
 	transform_bbox(new_geom, min, 0);
 	transform_bbox(new_geom, range, 1);
-	Rf_setAttrib(new_geom, Rf_mkString("crs"), crs);
+	Rf_setAttrib(new_geom, Rf_install("crs"), crs);
 
 	UNPROTECT(1);
 	return new_geom;
