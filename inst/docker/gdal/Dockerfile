@@ -38,8 +38,13 @@ RUN apt-get install -y libgeos-dev
 # PROJ:
 # was: ENV PROJ_VERSION 4.9.3
 # http://download.osgeo.org/proj/proj-5.0.0RC3.tar.gz
-ENV PROJ_VERSION 5.1.0
+ENV PROJ_VERSION=6.0.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
+  && apt-get install -y \
+  libsqlite3-dev \
+  sqlite3
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
   && tar zxf proj-*tar.gz \
@@ -52,8 +57,8 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
 
 # install proj-datumgrid:
 RUN cd /usr/local/share/proj \
-  && wget http://download.osgeo.org/proj/proj-datumgrid-1.7.zip \
-  && unzip proj-datumgrid*zip \
+  && wget http://download.osgeo.org/proj/proj-datumgrid-1.8.zip \
+  && unzip -o proj-datumgrid*zip \
   && rm proj-datumgrid*zip \
   && cd -
 
@@ -108,7 +113,10 @@ RUN apt-get install -y \
 	libxml2-dev \
 	libprotobuf-dev \
 	protobuf-compiler \
-	unixodbc-dev
+	unixodbc-dev \
+	libssh2-1-dev \
+	libgit2-dev \
+	libnetcdf-dev
 
 RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
 
@@ -127,11 +135,6 @@ RUN geos-config --libs
 RUN git clone --depth 1 https://github.com/r-spatial/sf.git
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
-
-RUN apt-get install -y \
-	libssh2-1-dev \
-	libgit2-dev \
-	libnetcdf-dev
 
 RUN Rscript -e 'install.packages("devtools")'
 RUN Rscript -e 'devtools::install_github("r-spatial/stars")'
