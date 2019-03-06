@@ -158,6 +158,7 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
 > 
 > # st_line_merge:
 > mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
@@ -534,6 +535,23 @@ integer(0)
 > st_centroid(st_polygon())
 POINT EMPTY
 > 
+> #999:
+> pt = data.frame(x=1:2, y=1:2,a=letters[1:2])
+> pt = st_as_sf(pt, coords=c("x","y"))
+> 
+> bf =st_buffer(pt, dist=0.3)
+> 
+> st_within(pt,bf, sparse=FALSE)
+      [,1]  [,2]
+[1,]  TRUE FALSE
+[2,] FALSE  TRUE
+> st_within(pt[1,], bf[1,], sparse = FALSE)
+     [,1]
+[1,] TRUE
+> st_relate(pt[1,], bf[1,], pattern = "T*F**F***", sparse = FALSE)
+     [,1]
+[1,] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  4.190   0.073   4.254 
+  4.128   0.052   4.173 

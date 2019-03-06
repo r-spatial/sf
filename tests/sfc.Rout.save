@@ -787,6 +787,7 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 >   (p <- st_sample(x, 10))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 geometry type:  POINT
 dimension:      XY
@@ -805,6 +806,7 @@ POINT (76.1712 32.1029)
 +  crs=st_crs(4326))
 > if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
 +   (p <- st_sample(x, 10))
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 geometry type:  POINT
@@ -843,7 +845,7 @@ MULTIPOINT (0.0914728 0, 0.073852 0, 0.00320272...
 MULTIPOINT (0.0488222 1, 0.0716508 1, 0.0897947...
 MULTIPOINT EMPTY
 > st_sample(nc[1:2,], size = c(10,20))
-Geometry set for 29 features 
+Geometry set for 30 features 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1215230 ymin: 935867 xmax: 1428880 ymax: 1031900
@@ -862,25 +864,25 @@ although coordinates are longitude/latitude, st_sample assumes that they are pla
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: -81.7023 ymin: 36.238 xmax: -80.9089 ymax: 36.578
+bbox:           xmin: -81.6893 ymin: 36.2492 xmax: -80.914 ymax: 36.583
 epsg (SRID):    4326
 proj4string:    +proj=longlat +datum=WGS84 +no_defs
-MULTIPOINT (-81.7023 36.4641, -81.6845 36.3652,...
-MULTIPOINT (-80.9639 36.469, -80.9089 36.5654, ...
+MULTIPOINT (-81.3189 36.4974, -81.4017 36.5759,...
+MULTIPOINT (-80.9809 36.3787, -81.1251 36.4256,...
 > st_sample(ls, 80, type = "regular")
 Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 0.0945466 ymax: 1
+bbox:           xmin: 0 ymin: 0 xmax: 0.0967604 ymax: 1
 epsg (SRID):    NA
 proj4string:    NA
-MULTIPOINT (0 0.0095367, 0 0.0245368, 0 0.03953...
-MULTIPOINT (0.0145451 0, 0.0295452 0, 0.0445453...
-MULTIPOINT (0.00454582 1, 0.0195459 1, 0.034546...
+MULTIPOINT (0 0.00175127, 0 0.0167514, 0 0.0317...
+MULTIPOINT (0.00675965 0, 0.0217598 0, 0.036759...
+MULTIPOINT (0.0117605 1, 0.0267606 1, 0.0417608...
 MULTIPOINT EMPTY
 > p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = FALSE))
 > lengths(p_sample)
- [1] 104 108 109  95  94 119  88 105 104 100
+ [1] 103 107 109  97  97 119  87 106 103 100
 > p_sample_exact = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = TRUE))
 > lengths(p_sample_exact)
  [1] 100 100 100 100 100 100 100 100 100 100
@@ -920,10 +922,10 @@ POINT EMPTY
 Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: -0.0245579 ymin: 0.949908 xmax: -0.0245579 ymax: 0.949908
+bbox:           xmin: -0.0070472 ymin: 1.09548 xmax: -0.0070472 ymax: 1.09548
 epsg (SRID):    NA
 proj4string:    NA
-POINT (-0.0245579 0.949908)
+POINT (-0.0070472 1.09548)
 > 
 > # st_bbox:
 > library(sp)
@@ -1150,4 +1152,4 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > proc.time()
    user  system elapsed 
-  2.336   0.087   2.414 
+  2.564   0.064   2.621 
