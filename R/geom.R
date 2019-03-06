@@ -109,6 +109,15 @@ message_longlat = function(caller) {
 	message(paste("although coordinates are longitude/latitude,",
 		caller, "assumes that they are planar"))
 }
+
+is_symmetric = function(operation, pattern) {
+	if (!is.na(pattern)) {
+		m = matrix(sapply(1:9, function(i) substr(pattern, i, i)), 3, 3)
+		isTRUE(all(m == t(m)))
+	} else 
+		isTRUE(operation %in% c("intersects", "touches", "overlaps", "disjoint", "equals"))
+}
+
 # binary, interfaced through GEOS:
 
 # returning matrix, distance or relation string -- the work horse is:
@@ -121,9 +130,11 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	if (prepared && isTRUE(st_dimension(x) == 0) && isTRUE(st_dimension(y) == 2))
+	if (prepared && is_symmetric(op, pattern) && 
+			length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
+			isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
 		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
-	else {
+	} else {
 		ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
 		if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
 			id = if (is.null(row.names(x)))
