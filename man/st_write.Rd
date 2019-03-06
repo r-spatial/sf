@@ -72,10 +72,13 @@ to update (append to) the existing data source, e.g. adding a table to an existi
 
 \item{conn}{DBIObject}
 
-\item{name}{A character string specifying the unquoted DBMS table name,
-or the result of a call to \code{\link[=dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
+\item{name}{
+   character vector of names (table names, fields, keywords).
+}
 
-\item{value}{a \link{data.frame} (or coercible to data.frame).}
+\item{value}{
+   a data.frame.
+}
 
 \item{row.names}{Add a \code{row.name} column, or a vector of length \code{nrow(obj)}
 containing row.names; default \code{FALSE}.}

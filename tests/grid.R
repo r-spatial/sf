@@ -22,7 +22,6 @@ pushViewport(st_viewport(meuse_sf))
 invisible(lapply(st_geometry(meuse_sf), 
 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 
-
 # MULTIPOINTS
 mp = st_multipoint(cbind(runif(100), runif(100)))
 grid.newpage()

@@ -1,4 +1,12 @@
+# version 0.7-4
+
+* fix bug in `gdal_utils` warper on certain GDAL/OS combinations; https://github.com/r-spatial/stars/issues/117
+
+* `c.sfc` now ignores the type (class) of empty `sfc` objects; #985, #982
+
 # version 0.7-3
+
+* add argument `exact` to `st_sample`, for now defaulting to `FALSE`; #896
 
 * fixed n-ary `st_difference` for cases where geometries are entirely contained in others; #975, by Jonathan Marshall
 

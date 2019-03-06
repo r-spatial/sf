@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.7-3
+Version: 0.7-4
 Title: Simple Features for R
 Authors@R: 
     c(person(given = "Edzer",
@@ -56,7 +56,7 @@ Imports:
     grDevices,
     grid,
     magrittr,
-    Rcpp,
+    Rcpp (>= 0.12.18),
     stats,
     tools,
     units (>= 0.6-0),

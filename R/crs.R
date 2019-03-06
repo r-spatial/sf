@@ -210,8 +210,9 @@ st_is_longlat = function(x) {
 		if (ret && inherits(x, c("sf", "sfc", "stars"))) {
 			bb = st_bbox(x)
 			# check for potentially meaningless value range:
+			eps = sqrt(.Machine$double.eps)
 			if (all(!is.na(unclass(bb))) && 
-					(bb["xmin"] < -180 || bb["xmax"] > 360 || bb["ymin"] < -90 || bb["ymax"] > 90))
+					(bb["xmin"] < (-180-eps) || bb["xmax"] > (360+eps) || bb["ymin"] < (-90-eps) || bb["ymax"] > (90+eps)))
 				warning("bounding box has potentially an invalid value range for longlat data")
 		}
 		ret

@@ -15,7 +15,7 @@
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
 #' @param type character; indicates the spatial sampling type; one of \code{regular}, \code{hexagonal} and \code{regular}.
 #' @param exact logical; should the length of output be exactly
-#' the same as specified by \code{size}? \code{FALSE} by default. Only applies to polygons, and
+#' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
@@ -43,7 +43,7 @@
 #' }
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 #' plot(x)
-#' p_exact = st_sample(x, 1000)
+#' p_exact = st_sample(x, 1000, exact = TRUE)
 #' p_not_exact = st_sample(x, 1000, exact = FALSE)
 #' length(p_exact); length(p_not_exact)
 #' plot(st_sample(x, 1000), add = TRUE)
@@ -69,7 +69,7 @@
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
 #' @export
-st_sample = function(x, size, ..., type = "random", exact = FALSE) {
+st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))

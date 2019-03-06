@@ -176,20 +176,20 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
 	}
-	x <- unclass(x)
+	x <- unclass(x) # nocov start
 	n_poly <- vapply(x, length, integer(1))
 	x <- unlist(x, recursive = FALSE)
 	n_points <- vapply(x, nrow, integer(1))
 	n_paths <- tapply(n_points, rep(seq_along(n_poly), n_poly), sum)
 	x <- do.call(rbind, x)
-	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
+	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp) # nocov end
 }
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
 	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
 	}
-	x <- unclass(x)
+	x <- unclass(x) # nocov start
 	n_poly <- vapply(x, length, integer(1))
 	gp <- expand_gp(gp, n_poly)
 	x <- unlist(x, recursive = FALSE)
@@ -198,11 +198,11 @@ st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "na
 	n_points <- vapply(x, nrow, integer(1))
 	n_paths <- tapply(n_points, rep(seq_along(n_poly), n_poly), sum)
 	x <- do.call(rbind, x)
-	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp)
+	pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp) # nocov end
 }
 #' @export
 st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
-	st_as_grob(st_cast(x, 'LINESTRING'), ...)
+	st_as_grob(st_cast(x, 'LINESTRING'), ...) # nocov
 }
 #' @export
 #' @importFrom grid gList
