@@ -1,5 +1,7 @@
 # version 0.7-4
 
+* fix regression in binary predicates introduced in #855; #999 reported by Barry Rowlingson
+
 * fix bug in `gdal_utils` warper on certain GDAL/OS combinations; https://github.com/r-spatial/stars/issues/117
 
 * `c.sfc` now ignores the type (class) of empty `sfc` objects; #985, #982
