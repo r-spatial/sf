@@ -118,21 +118,22 @@ RUN apt-get install -y \
 	libgit2-dev \
 	libnetcdf-dev
 
-RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
-
-RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
-
-RUN ls
+RUN Rscript -e 'install.packages(c("sp"), repos = "https://cloud.r-project.org")'
 
 RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 RUN R CMD build rgdal/pkg --no-build-vignettes
-
 RUN R CMD INSTALL rgdal_*.tar.gz 
 
+RUN Rscript -e 'install.packages(c("sp","rgeos","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
+#RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
+
+#RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://cloud.r-project.org")'
+
 RUN geos-config --libs
-RUN git clone --depth 1 https://github.com/r-spatial/sf.git
+RUN git clone --depth 10 https://github.com/r-spatial/sf.git
+RUN (cd sf; git checkout -b rsbivand-master master; git pull https://github.com/rsbivand/sf.git master)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
 
