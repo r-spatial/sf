@@ -12,7 +12,7 @@ st_area(x, ...)
 st_length(x)
 
 st_distance(x, y, ..., dist_fun, by_element = FALSE,
-  which = "distance", par = 0, tolerance = 0)
+  which = "Euclidean", par = 0, tolerance = 0)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -25,9 +25,9 @@ st_distance(x, y, ..., dist_fun, by_element = FALSE,
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 
-\item{which}{character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned}
+\item{which}{character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorf} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details}
 
-\item{par}{for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry}
+\item{par}{for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value for this to densify the geometry}
 
 \item{tolerance}{ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.}
 }
@@ -44,7 +44,7 @@ If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric 
 Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
 \details{
-great circle distance calculations use function \code{geod_inverse} from proj.4 if proj.4 is at version larger than 4.8.0, or else the Vincenty method implemented in liblwgeom (this should correspond to what PostGIS does).
+great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
 }
 \examples{
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))

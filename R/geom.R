@@ -160,17 +160,17 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @param ... ignored
 #' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
-#' @param which character; if equal to \code{Haussdorf} or \code{Frechet}, Hausdorff resp. Frechet distances are returned
-#' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value this to densify the geometry
+#' @param which character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorf} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
+#' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, use a positive value for this to densify the geometry
 #' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
 #' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled.
-#' @details great circle distance calculations use function \code{geod_inverse} from proj.4 if proj.4 is at version larger than 4.8.0, or else the Vincenty method implemented in liblwgeom (this should correspond to what PostGIS does).
+#' @details great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
 #' @examples
 #' p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "distance", par = 0.0, tolerance = 0.0) {
+st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "Euclidean", par = 0.0, tolerance = 0.0) {
 	if (missing(y))
 		y = x
 	else

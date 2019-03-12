@@ -296,12 +296,12 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 		}
 		out.attr("dim") = get_dim(sfc0.length(), sfc1.length());
 		ret_list = Rcpp::List::create(out);
-	} else if (op == "distance" || op == "Hausdorff" || op == "Frechet") { // return double matrix:
+	} else if (op == "Euclidean" || op == "distance" || op == "Hausdorff" || op == "Frechet") { // return double matrix:
 		// dist_fn, dist_parfn
 		Rcpp::NumericMatrix out(sfc0.length(), sfc1.length());
 		if (par <= 0.0) {
 			dist_fn dist_function;
-			if (op == "distance")
+			if (op == "Euclidean" || op == "distance")
 				dist_function = GEOSDistance_r;
 			else if (op == "Hausdorff")
 				dist_function = GEOSHausdorffDistance_r;
