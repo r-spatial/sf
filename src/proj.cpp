@@ -1,6 +1,11 @@
 #include <iostream>
 #include <proj_api.h>
 
+#if PJ_VERSION >= 600
+# define PROJ6 1
+#endif
+
+
 #if PJ_VERSION == 480
 extern "C" {
 FILE *pj_open_lib(projCtx, const char *, const char *);
@@ -120,6 +125,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	return out;
 }
 
+#ifndef PROJ6
 
 extern "C" {
 // modified from: rgdal/pkg/src/projectit.cpp
@@ -291,3 +297,4 @@ Rcpp::List CPL_proj_info(int type) {
 	}
 	return ret;
 }
+#endif
