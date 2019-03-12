@@ -1,4 +1,118 @@
 #include <iostream>
+
+#ifdef PROJH
+#include <proj.h>
+#include "Rcpp.h"
+
+
+// [[Rcpp::export]]
+std::string CPL_proj_version(bool b = false) {
+
+	std::stringstream buffer;
+	buffer << PROJ_VERSION_MAJOR << "." << PROJ_VERSION_MINOR << "." << PROJ_VERSION_PATCH;
+	return buffer.str();
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_proj_is_valid(std::string proj4string) {
+	Rcpp::List out(2);
+
+	PJ *P = proj_create(PJ_DEFAULT_CTX, proj4string.c_str());
+	if (P == NULL) {
+		out(0) = Rcpp::LogicalVector::create(false);
+		out(1) = Rcpp::CharacterVector::create( proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+	} else {
+		out(0) = Rcpp::LogicalVector::create(true);
+		PJ_PROJ_INFO pi;
+		pi = proj_pj_info(P);
+		char *def = pi.description; // or .definition?
+		out(1) = Rcpp::CharacterVector::create(def);
+		proj_destroy(P);
+		// free(def); // ???
+	}
+	return out;
+}
+
+// [[Rcpp::export]]
+bool CPL_have_datum_files(SEXP foo) {
+
+	// TODO:
+	// create a PJ with conus, check success
+	return true;
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+
+	using namespace Rcpp;
+
+	if (from_to.size() != 2)
+		stop("from_to should be size 2 character vector"); // #nocov
+	if (pts.ncol() != 2)
+		stop("pts should be 2-column numeric vector"); // #nocov
+	
+	PJ *P;
+	// copy over:
+	std::vector<PJ_COORD> x(pts.nrow());
+	for (int i = 0; i < pts.nrow(); i++) {
+   		 x[i].data().lp.lam = pts(i, 0);
+   		 x[i].data().lp.lam = pts(i, 1);
+	}
+
+	// deg2rad?
+	P = proj_create(PJ_DEFAULT_CTX, from_to[0]);
+	if (proj_angular_output(P)) {
+		for (int i = 0; i < pts.nrow(); i++) {
+			x[i].lp.lam = proj_torad(x[i].lp.lam);
+			x[i].lp.phi = proj_torad(x[i].lp.phi);
+		}
+	}
+	proj_destroy(P);
+
+	P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
+	if (P == NULL)
+		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+
+//	for (int i = 0; i < pts.nrow(); i++)
+//  		 Rcout << xx[i] << " " << yy[i] << std::endl;
+
+	if (proj_trans_array(P, PJ_FWD, x.size(), x.data())) {
+		proj_destroy(P);
+		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+	}
+	proj_destroy(P);
+
+	// rad2deg?
+	P = proj_create(PJ_DEFAULT_CTX, from_to[1]);
+	if (proj_angular_output(P)) {
+		for (int i = 0; i < pts.nrow(); i++) {
+			x[i].lp.lam = proj_todeg(x[i].lp.lam);
+			x[i].lp.phi = proj_todeg(x[i].lp.phi);
+		}
+	}
+	proj_destroy(P);
+
+	// copy to out matrix:
+	NumericMatrix out(pts.nrow(), pts.ncol());
+	for (int i = 0; i < out.nrow(); i++) {
+   		 out(i, 0) = x[i].data().lp.lam;
+   		 out(i, 1) = x[i].data().lp.phi;
+	}
+	proj_destroy(toPJ);
+
+	int nwarn = 0;
+	for (int i = 0; i < out.nrow(); i++) {
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
+		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
+                	    nwarn++; // #nocov
+	}
+	if (nwarn > 0) 
+		warning("one or more projected point(s) not finite"); // #nocov
+	return out;
+}
+
+#else // proj_api.h:
+
 #include <proj_api.h>
 
 #if PJ_VERSION == 480
@@ -291,3 +405,4 @@ Rcpp::List CPL_proj_info(int type) {
 	}
 	return ret;
 }
+#endif
