@@ -62,8 +62,8 @@ before_install:
   - psql -d postgis -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO travis"
   - createdb empty
   - psql -d empty -c "CREATE EXTENSION postgis;"
-  - R -q -e 'install.packages("remotes"); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
   - R -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
+  - R -q -e 'install.packages("remotes"); remotes::install_github("ropenscilabs/tic"); tic::prepare_all_stages()'
 
 after_success:
   - dropdb postgis
