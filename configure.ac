@@ -315,6 +315,18 @@ fi
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
+
+PROJ6="no"
+if test "${proj_config_ok}" = yes; then
+  PROJ_VERSION=`${PROJ_CONFIG} --modversion`
+  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
+  if test "${PROJV1}" = "6"; then
+    AC_MSG_NOTICE([Support for PROJ >= 6.0.0 not yet available, deprecated API defined])
+    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    PROJ6="yes"
+  fi
+fi
+
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 proj4ok=yes
@@ -373,6 +385,7 @@ if test [ -n "$proj_share_path" ] ; then
     AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
 fi
 
+if test ${PROJ6} = "no"; then
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -429,6 +442,52 @@ if test "$STOP" = "stop" ; then
     exit 1
 fi
 
+else # proj >= 6
+
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <proj_api.h>
+
+int main() {
+    PAFile fp;
+    projCtx ctx;
+    ctx = pj_get_default_ctx();
+    fp = pj_open_lib(ctx, "proj.db", "rb");
+    if (fp == NULL) exit(1);
+    pj_ctx_fclose(ctx, fp);
+    exit(0);
+}
+_EOCONF]
+
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+if test [ -n "$proj_share_path" ] ; then
+  PROJ_LIB="${proj_share_path}" ./proj_conf_test
+  proj_share=`echo $?`
+else
+  ./proj_conf_test
+  proj_share=`echo $?`
+fi
+
+AC_MSG_CHECKING(PROJ: proj.db found and readable)
+if test ${proj_share} -eq 1 ; then
+    AC_MSG_RESULT(no)
+    STOP="stop"
+else
+    AC_MSG_RESULT(yes)
+fi
+
+rm -f proj_conf_test.c proj_conf_test
+
+if test "$STOP" = "stop" ; then
+    echo "Error: proj/proj.db not found"
+    echo "Either install missing proj support files, set PROJ_LIB to the"
+    echo "correct path, and if need be use the --with-proj-share="
+    echo "configure argument."
+    exit 1
+fi
+
+
+fi
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
