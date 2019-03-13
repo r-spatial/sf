@@ -568,6 +568,8 @@ st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
+	stopifnot(mode(preserveTopology) == 'logical')
+
 	st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
 		preserveTopology = rep(preserveTopology, length.out = length(x)),
 		dTolerance = rep(dTolerance, length.out = length(x))))
