@@ -1,5 +1,5 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -49,7 +49,7 @@ Type 'q()' to quit R.
 > 
 > x = st_convex_hull(nc)
 > 
-> x = st_simplify(nc_tr, 1e4)
+> x = st_simplify(nc_tr, dTolerance = 1e4)
 > 
 > if (sf:::CPL_geos_version() >= "3.4.0")
 + 	x = st_triangulate(nc_tr)
@@ -343,4 +343,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.675   0.025   0.692 
+  0.799   0.020   0.811 

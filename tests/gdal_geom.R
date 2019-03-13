@@ -18,7 +18,7 @@ x = st_boundary(nc)
 
 x = st_convex_hull(nc)
 
-x = st_simplify(nc_tr, 1e4)
+x = st_simplify(nc_tr, dTolerance = 1e4)
 
 if (sf:::CPL_geos_version() >= "3.4.0")
 	x = st_triangulate(nc_tr)
