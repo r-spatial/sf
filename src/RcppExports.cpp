@@ -821,51 +821,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_proj_version
-std::string CPL_proj_version(bool b);
-RcppExport SEXP _sf_CPL_proj_version(SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj_version(b));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_proj_is_valid
-Rcpp::List CPL_proj_is_valid(std::string proj4string);
-RcppExport SEXP _sf_CPL_proj_is_valid(SEXP proj4stringSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type proj4string(proj4stringSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj_is_valid(proj4string));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_have_datum_files
-bool CPL_have_datum_files(SEXP foo);
-RcppExport SEXP _sf_CPL_have_datum_files(SEXP fooSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type foo(fooSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_have_datum_files(foo));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_proj_direct
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts);
-RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type from_to(from_toSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type pts(ptsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_proj_info
 Rcpp::List CPL_proj_info(int type);
 RcppExport SEXP _sf_CPL_proj_info(SEXP typeSEXP) {
@@ -1139,10 +1094,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
-    {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
-    {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
-    {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
-    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 2},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
