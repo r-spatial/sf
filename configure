@@ -656,6 +656,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -682,6 +683,7 @@ with_gdal_config
 with_data_copy
 with_proj_data
 with_proj_include
+with_proj_api
 with_proj_lib
 with_proj_share
 with_geos_config
@@ -733,6 +735,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -985,6 +988,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1122,7 +1134,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1275,6 +1287,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1307,6 +1320,8 @@ Optional Packages:
                           no
   --with-proj-data=DIR    location of PROJ data directory
   --with-proj-include=DIR location of proj header files
+  --with-proj-api=no      use the deprecated proj_api.h when PROJ 6 is
+                          available
   --with-proj-lib=LIB_PATH
                           the location of proj libraries
   --with-proj-share=SHARE_PATH
@@ -3642,22 +3657,52 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
+
+# Check whether --with-proj-api was given.
+if test "${with_proj_api+set}" = set; then :
+  withval=$with_proj_api; proj_api=$withval
+fi
+
 PROJ6="no"
+PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
   if test "${PROJV1}" = "6"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: Support for PROJ >= 6.0.0 not yet available, deprecated API defined" >&5
-$as_echo "$as_me: Support for PROJ >= 6.0.0 not yet available, deprecated API defined" >&6;}
-    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
     PROJ6="yes"
+    if test "${proj_api}" = yes; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: using proj_api.h even with PROJ 6" >&5
+$as_echo "$as_me: using proj_api.h even with PROJ 6" >&6;}
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    else
+        for ac_header in proj.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
+if test "x$ac_cv_header_proj_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PROJ_H 1
+_ACEOF
+ PROJH=yes
+else
+  PROJH=no
+fi
+
+done
+
+        if test "${PROJH}" = no; then
+           as_fn_error $? "proj.h not found in standard or given locations." "$LINENO" 5
+        fi
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    fi
   fi
 fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
-proj4ok=yes
-for ac_header in proj_api.h
+if test "${PROJH}" = no
+then
+  proj4ok=yes
+  for ac_header in proj_api.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "proj_api.h" "ac_cv_header_proj_api_h" "$ac_includes_default"
 if test "x$ac_cv_header_proj_api_h" = xyes; then :
@@ -3671,8 +3716,9 @@ fi
 
 done
 
-if test "${proj4ok}" = no; then
-   as_fn_error $? "proj_api.h not found in standard or given locations." "$LINENO" 5
+  if test "${proj4ok}" = no; then
+     as_fn_error $? "proj_api.h not found in standard or given locations." "$LINENO" 5
+  fi
 fi
 
 # dnl ditto for a library path
@@ -3700,8 +3746,9 @@ fi
 
 LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
-proj4ok=yes
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
+if test "${PROJH}" = no; then
+  proj4ok=yes
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pj_init_plus in -lproj" >&5
 $as_echo_n "checking for pj_init_plus in -lproj... " >&6; }
 if ${ac_cv_lib_proj_pj_init_plus+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -3748,12 +3795,12 @@ else
   proj4ok=no
 fi
 
-if test "${proj4ok}" = no; then
-   as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
-fi
-
+  if test "${proj4ok}" = no; then
+     as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
+  fi
 cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 
 int main() {
@@ -3761,6 +3808,68 @@ int main() {
     exit(0);
 }
 _EOCONF
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for proj_context_create in -lproj" >&5
+$as_echo_n "checking for proj_context_create in -lproj... " >&6; }
+if ${ac_cv_lib_proj_proj_context_create+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lproj  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char proj_context_create ();
+int
+main ()
+{
+return proj_context_create ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_proj_proj_context_create=yes
+else
+  ac_cv_lib_proj_proj_context_create=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_proj_proj_context_create" >&5
+$as_echo "$ac_cv_lib_proj_proj_context_create" >&6; }
+if test "x$ac_cv_lib_proj_proj_context_create" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPROJ 1
+_ACEOF
+
+  LIBS="-lproj $LIBS"
+
+else
+  proj6ok=no
+fi
+
+  if test "${proj6ok}" = no; then
+     as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
+  fi
+cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <stdlib.h>
+#include <proj.h>
+
+int main() {
+    printf("%d.%d.%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    exit(0);
+}
+_EOCONF
+fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
@@ -3841,6 +3950,8 @@ fi
 
 else # proj >= 6
 
+if test "${PROJH}" = no; then
+
 cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
@@ -3884,9 +3995,6 @@ if test "$STOP" = "stop" ; then
     echo "correct path, and if need be use the --with-proj-share="
     echo "configure argument."
     exit 1
-fi
-
-
 fi
 
 cat > proj_conf_test.c <<_EOCONF
@@ -3943,6 +4051,13 @@ if test "$WARN" = "warn" ; then
     echo "If required, consider re-installing from source with the contents"
     echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
 fi
+
+fi # PROJH = no
+
+fi # proj >= 6
+
+
+
 
 #
 # GEOS:

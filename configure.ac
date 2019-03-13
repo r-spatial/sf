@@ -316,23 +316,39 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
+AC_ARG_WITH([proj-api],
+    AC_HELP_STRING([--with-proj-api=no],
+               [use the deprecated proj_api.h when PROJ 6 is available]),
+               [proj_api=$withval])
 PROJ6="no"
+PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
   if test "${PROJV1}" = "6"; then
-    AC_MSG_NOTICE([Support for PROJ >= 6.0.0 not yet available, deprecated API defined])
-    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
     PROJ6="yes"
+    if test "${proj_api}" = yes; then
+        AC_MSG_NOTICE([using proj_api.h even with PROJ 6])
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+    else
+        AC_CHECK_HEADERS(proj.h,PROJH=yes,PROJH=no)
+        if test "${PROJH}" = no; then
+           AC_MSG_ERROR([proj.h not found in standard or given locations.])
+        fi
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    fi
   fi
 fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
-proj4ok=yes
-AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
+if test "${PROJH}" = no
+then
+  proj4ok=yes
+  AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
+  if test "${proj4ok}" = no; then
+     AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
+  fi
 fi
 
 # dnl ditto for a library path
@@ -355,14 +371,15 @@ fi
 
 LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
-proj4ok=yes
-AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
-if test "${proj4ok}" = no; then
-   AC_MSG_ERROR([libproj not found in standard or given locations.])
-fi
-
+if test "${PROJH}" = no; then
+  proj4ok=yes
+  AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
+  if test "${proj4ok}" = no; then
+     AC_MSG_ERROR([libproj not found in standard or given locations.])
+  fi
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
+#include <stdlib.h>
 #include <proj_api.h>
 
 int main() {
@@ -370,6 +387,22 @@ int main() {
     exit(0);
 }
 _EOCONF]
+else
+  AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
+  if test "${proj6ok}" = no; then
+     AC_MSG_ERROR([libproj not found in standard or given locations.])
+  fi
+[cat > proj_conf_test.c <<_EOCONF
+#include <stdio.h>
+#include <stdlib.h>
+#include <proj.h>
+
+int main() {
+    printf("%d.%d.%d\n", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, PROJ_VERSION_PATCH);
+    exit(0);
+}
+_EOCONF]
+fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
@@ -444,6 +477,8 @@ fi
 
 else # proj >= 6
 
+if test "${PROJH}" = no; then
+
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <proj_api.h>
@@ -484,9 +519,6 @@ if test "$STOP" = "stop" ; then
     echo "correct path, and if need be use the --with-proj-share="
     echo "configure argument."
     exit 1
-fi
-
-
 fi
 
 [cat > proj_conf_test.c <<_EOCONF
@@ -540,6 +572,13 @@ if test "$WARN" = "warn" ; then
     echo "If required, consider re-installing from source with the contents"
     echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
 fi
+
+fi # PROJH = no
+
+fi # proj >= 6
+
+
+
 
 #
 # GEOS:
