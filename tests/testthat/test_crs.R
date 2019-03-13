@@ -35,7 +35,9 @@ test_that("st_proj_info works", {
   expect_silent(x <- st_proj_info("ellps"))
   expect_silent(x <- st_proj_info("datum"))
   expect_silent(x <- st_proj_info("units"))
-  expect_silent(x <- st_proj_info("have_datum_files"))
+  if (sf_extSoftVersion()["proj.4"] < "6.0.0") {
+  	expect_silent(x <- st_proj_info("have_datum_files"))
+  }
 })
 
 test_that("$.crs works", {
