@@ -15,6 +15,7 @@ std::string CPL_proj_version(bool b = false) {
 Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	Rcpp::List out(2);
 
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create(PJ_DEFAULT_CTX, proj4string.c_str());
 	if (P == NULL) {
 		out(0) = Rcpp::LogicalVector::create(false);
@@ -47,6 +48,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
 	
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
 	if (P == NULL)
 		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
@@ -54,7 +56,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	std::vector<PJ_COORD> x(pts.nrow());
 	for (int i = 0; i < pts.nrow(); i++) {
    		 x.data()[i].lp.lam = pts(i, 0);
-   		 x.data()[i].lp.lam = pts(i, 1);
+   		 x.data()[i].lp.phi = pts(i, 1);
 	}
 
 	// deg2rad?
