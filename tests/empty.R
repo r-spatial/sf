@@ -101,5 +101,6 @@ all.equal(x, y)
 # https://github.com/edzer/sfr/issues/398 :
 pt = st_sfc(st_point(c(0,92)), crs = 4267)
 robin_crs <- "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
-india_crs <- "+init=epsg:24383"  # India-centered Lambert conformal conic projection
+# india_crs <- "+init=epsg:24383"  # India-centered Lambert conformal conic projection
+india_crs <- "+proj=lcc +lat_1=12 +lat_0=12 +lon_0=80 +k_0=0.99878641 +x_0=2743195.5 +y_0=914398.5 +a=6377299.151 +b=6356098.145120132 +towgs84=295,736,257,0,0,0,0 +units=m +no_defs"
 st_transform(st_transform(pt, robin_crs), india_crs)
