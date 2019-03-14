@@ -133,12 +133,18 @@ RUN Rscript -e 'install.packages(c("sp","rgeos","RPostgreSQL","RSQLite","testtha
 
 RUN geos-config --libs
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
-RUN (cd sf; git checkout -b rsbivand-master master; git pull https://github.com/rsbivand/sf.git master)
+#RUN (cd sf; git checkout -b PROJH master; git pull https://github.com/rsbivand/sf.git master)
+RUN (cd sf; git checkout -b PROJH; git pull https://github.com/r-spatial/sf.git PROJH)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*gz
 
 RUN Rscript -e 'install.packages("devtools")'
 RUN Rscript -e 'devtools::install_github("r-spatial/stars")'
+
+# lwgeom with PROJ6 patch
+RUN Rscript -e 'devtools::install_github("r-spatial/lwgeom")' 
+RUN Rscript -e 'install.packages(c("mapview","odbc","pool","rmarkdown","RPostgres","spatstat","tmap"))'
+RUN R CMD check --no-build-vignettes sf_*gz 
 
 #RUN svn checkout svn://svn.r-forge.r-project.org/svnroot/rgeos/
 #RUN R CMD build rgeos/pkg --no-build-vignettes
