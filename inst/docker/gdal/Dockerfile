@@ -81,26 +81,26 @@ RUN cd /usr/local/share/proj \
 ENV GDAL_VERSION 2.4.0
 ENV GDAL_VERSION_NAME 2.4.0
 
-RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
-  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
-  && cd gdal* \
-  && ./configure \
-  && make \
-  && make install \
-  && cd .. \
-  && ldconfig
-
-#RUN ls
-#
-#RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
-#
-#RUN cd gdal/gdal \
-#  && ls -l \
+#RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+#  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
+#  && cd gdal* \
 #  && ./configure \
 #  && make \
 #  && make install \
 #  && cd .. \
 #  && ldconfig
+
+#RUN ls
+#
+RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+
+RUN cd gdal/gdal \
+  && ls -l \
+  && ./configure \
+  && make \
+  && make install \
+  && cd .. \
+  && ldconfig
 
 # for tmap:
 RUN add-apt-repository -y ppa:opencpu/jq
@@ -119,12 +119,13 @@ RUN apt-get install -y \
 	libnetcdf-dev
 
 RUN Rscript -e 'install.packages(c("sp"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("rgdal"), repos = "https://cloud.r-project.org")'
 
-RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
+# RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
-RUN R CMD build rgdal/pkg --no-build-vignettes
-RUN R CMD INSTALL rgdal_*.tar.gz 
+# RUN R CMD build rgdal/pkg --no-build-vignettes
+# RUN R CMD INSTALL rgdal_*.tar.gz 
 
 RUN Rscript -e 'install.packages(c("sp","rgeos","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
 #RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
@@ -133,6 +134,7 @@ RUN Rscript -e 'install.packages(c("sp","rgeos","RPostgreSQL","RSQLite","testtha
 
 RUN geos-config --libs
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
+RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 #RUN (cd sf; git checkout -b PROJH master; git pull https://github.com/rsbivand/sf.git master)
 RUN (cd sf; git checkout -b PROJH; git pull https://github.com/r-spatial/sf.git PROJH)
 RUN R CMD build --no-build-vignettes --no-manual sf
