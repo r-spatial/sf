@@ -110,7 +110,7 @@ x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
 st_crs("+init=epsg:3857")$epsg
 st_crs("+init=epsg:3857")$proj4string
-st_crs("+init=epsg:3857 +units=km")$b     # numeric
-st_crs("+init=epsg:3857 +units=km")$units # character
+st_crs("+init=epsg:3857 +units=m")$b     # numeric
+st_crs("+init=epsg:3857 +units=m")$units # character
 }
 \keyword{datasets}
