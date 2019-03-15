@@ -331,8 +331,8 @@ fi
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
 AC_ARG_WITH([proj-api],
-    AC_HELP_STRING([--with-proj-api=no],
-               [use the deprecated proj_api.h when PROJ 6 is available]),
+    AC_HELP_STRING([--with-proj-api=yes/no],
+               [use the deprecated proj_api.h even when PROJ 6 is available; default no]),
                [proj_api=$withval])
 PROJ6="no"
 PROJH="no"

@@ -1320,8 +1320,8 @@ Optional Packages:
                           no
   --with-proj-data=DIR    location of PROJ data directory
   --with-proj-include=DIR location of proj header files
-  --with-proj-api=no      use the deprecated proj_api.h when PROJ 6 is
-                          available
+  --with-proj-api=yes/no  use the deprecated proj_api.h even when PROJ 6 is
+                          available; default no
   --with-proj-lib=LIB_PATH
                           the location of proj libraries
   --with-proj-share=SHARE_PATH
