@@ -46,6 +46,7 @@ test_that("st_wrap_dateline works", {
 
 test_that('gdal_subdatasets works', {
   skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] < "2.5.0") # FIXME:
   fname = system.file("nc/cropped.nc", package = "sf")
   sd2 = gdal_subdatasets(fname)[[2]]
 })

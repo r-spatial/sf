@@ -295,8 +295,8 @@ is.na.crs = function(x) {
 #' @examples
 #' st_crs("+init=epsg:3857")$epsg
 #' st_crs("+init=epsg:3857")$proj4string
-#' st_crs("+init=epsg:3857 +units=km")$b     # numeric
-#' st_crs("+init=epsg:3857 +units=km")$units # character
+#' st_crs("+init=epsg:3857 +units=m")$b     # numeric
+#' st_crs("+init=epsg:3857 +units=m")$units # character
 #' @export
 `$.crs` = function(x, name) {
 	if (is.numeric(name) || name %in% names(x))
