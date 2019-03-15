@@ -4,7 +4,6 @@
 
 #include "Rcpp.h"
 
-// [[Rcpp::export]]
 Rcpp::List CPL_proj_info(int type) {
 
 	Rcpp::List ret;
