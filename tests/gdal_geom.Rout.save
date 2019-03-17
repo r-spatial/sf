@@ -51,6 +51,8 @@ Type 'q()' to quit R.
 > 
 > x = st_simplify(nc_tr, dTolerance = 1e4)
 > 
+> x = st_simplify(nc_tr, preserveTopology = TRUE)
+> 
 > if (sf:::CPL_geos_version() >= "3.4.0")
 + 	x = st_triangulate(nc_tr)
 > 
@@ -343,4 +345,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.799   0.020   0.811 
+  0.660   0.037   0.688 

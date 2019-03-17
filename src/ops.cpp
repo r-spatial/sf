@@ -31,11 +31,11 @@ void mult_feature(SEXP &feature, SEXP &value) {
 			p_feature[i] = p_feature[i] * p_value[(i / nrow) % nval];
 		}
 	} else {
-		int nfeat = LENGTH(feature);
+		int nfeat = LENGTH(feature); // # nocov start
 		nfeat = nfeat > 2 ? 2 : nfeat;
 		for (int i = 0; i < nfeat; i ++) {
 			p_feature[i] = p_feature[i] * p_value[i % nval];
-		}
+		} // # nocov end
 	}
 }
 

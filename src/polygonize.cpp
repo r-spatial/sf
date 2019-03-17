@@ -27,6 +27,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		Rcpp::CharacterVector contour_options, bool use_contours = false,
 		bool use_integer = true) {
 
+	// # nocov start
     GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(raster[0], GA_ReadOnly,
 		raster_driver.size() ? create_options(raster_driver).data() : NULL,
 		// options.size() ? create_options(options).data() : NULL,
@@ -126,7 +127,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	GDALClose(poDS); // vector
 	if (maskDataset != NULL)
 		GDALClose(maskDataset); // mask
-	return lst;
+	return lst; // # nocov end
 }
 
 // [[Rcpp::export]]

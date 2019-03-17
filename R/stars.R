@@ -239,7 +239,7 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
 		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
 		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...) {
-	gdal_write(x, file = file, driver = driver, geotransform = geotransform)
+	gdal_write(x, file = file, driver = driver, geotransform = geotransform) # nocov start
 	on.exit(unlink(file))
 	mask_name = if (!is.null(mask)) {
 			mask_name = tempfile()
@@ -267,12 +267,12 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (use_contours) {
-		m = as.integer(cut(out[[1]], breaks = nbreaks)) # nocov start FIXME: add coverage when GDAL 2.4.0 is here
+		m = as.integer(cut(out[[1]], breaks = nbreaks)) # FIXME: add coverage when GDAL 2.4.0 is here
 		if (any(is.na(m)))
 			warning("range of breaks does not cover range of cell values")
-		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest=TRUE)), class = "factor") # nocov end
+		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest = TRUE)), class = "factor")
 	}
-	out
+	out # nocov end
 }
 
 #' @param sf object of class \code{sf}

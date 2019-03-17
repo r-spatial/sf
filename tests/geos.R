@@ -247,3 +247,6 @@ bf =st_buffer(pt, dist=0.3)
 st_within(pt,bf, sparse=FALSE)
 st_within(pt[1,], bf[1,], sparse = FALSE)
 st_relate(pt[1,], bf[1,], pattern = "T*F**F***", sparse = FALSE)
+
+sf:::is_symmetric(pattern = "010121010")
+sf:::is_symmetric(pattern = "010121021")
