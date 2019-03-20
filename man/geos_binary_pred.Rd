@@ -17,7 +17,7 @@
 \alias{st_is_within_distance}
 \title{Geometric binary predicates on pairs of simple feature geometry sets}
 \usage{
-st_intersects(x, y, sparse = TRUE, prepared = TRUE)
+st_intersects(x, y, sparse = TRUE, ...)
 
 st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE)
 
@@ -49,6 +49,8 @@ st_is_within_distance(x, y, dist, sparse = TRUE)
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used}
 
 \item{sparse}{logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.}
+
+\item{...}{ignored}
 
 \item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
 

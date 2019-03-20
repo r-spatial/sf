@@ -247,6 +247,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used
 #' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
+#' @param ... ignored
 #' @param prepared logical; prepare geometry for x, before looping over y? See Details.
 #' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
@@ -271,8 +272,20 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' # which points fall inside the first polygon?
 #' st_intersects(pol, pts)[[1]]
 #' @export
-st_intersects	= function(x, y, sparse = TRUE, prepared = TRUE)
+st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
+
+#' @export
+st_intersects.sfc = function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+
+#' @export
+st_intersects.sf = function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+
+#' @export
+st_intersects.sfg = function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+
 
 #' @name geos_binary_pred
 #' @export

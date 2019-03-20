@@ -552,6 +552,11 @@ POINT EMPTY
      [,1]
 [1,] TRUE
 > 
+> sf:::is_symmetric(pattern = "010121010")
+[1] TRUE
+> sf:::is_symmetric(pattern = "010121021")
+[1] FALSE
+> 
 > proc.time()
    user  system elapsed 
-  4.128   0.052   4.173 
+  3.821   0.048   3.861 
