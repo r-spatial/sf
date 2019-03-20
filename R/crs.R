@@ -102,6 +102,10 @@ st_crs.bbox = function(x, ...) {
 
 #' @name st_crs
 #' @export
+st_crs.CRS = function(x, ...) st_crs(x@projargs)
+
+#' @name st_crs
+#' @export
 st_crs.crs = function(x, ...) x
 
 #' @export
@@ -140,6 +144,10 @@ valid_proj4string = function(p4s) {
 
 # return crs object from crs, integer, or character string
 make_crs = function(x, wkt = FALSE) {
+
+	if (inherits(x, "CRS"))
+		x = x@projargs
+
 	if (wkt)
 		CPL_crs_from_wkt(x)
 	else if (is.na(x))

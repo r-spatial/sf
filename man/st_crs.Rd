@@ -8,6 +8,7 @@
 \alias{st_crs.character}
 \alias{st_crs.sfc}
 \alias{st_crs.bbox}
+\alias{st_crs.CRS}
 \alias{st_crs.crs}
 \alias{st_crs<-}
 \alias{st_crs<-.sf}
@@ -30,6 +31,8 @@ st_crs(x, ...)
 \method{st_crs}{sfc}(x, ..., parameters = FALSE)
 
 \method{st_crs}{bbox}(x, ...)
+
+\method{st_crs}{CRS}(x, ...)
 
 \method{st_crs}{crs}(x, ...)
 

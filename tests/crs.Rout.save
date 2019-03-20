@@ -106,6 +106,10 @@ POINT (111319.5 111325.1)
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
+Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
+  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -114,7 +118,11 @@ POINT (111319.5 111325.1)
 + }
 [1] "datum files installed"
 > 
+> st_crs(sp::CRS('+init=epsg:4326'))
+Coordinate Reference System:
+  EPSG: 4326 
+  proj4string: "+proj=longlat +datum=WGS84 +no_defs"
 > 
 > proc.time()
    user  system elapsed 
-  0.327   0.045   0.363 
+  0.468   0.037   0.496 

@@ -32,3 +32,4 @@ if (st_proj_info("have_datum_files")) {
   "datum files not installed"
 }
 
+st_crs(sp::CRS('+init=epsg:4326'))
