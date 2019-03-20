@@ -136,7 +136,7 @@ RUN geos-config --libs
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
 RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 #RUN (cd sf; git checkout -b PROJH master; git pull https://github.com/rsbivand/sf.git master)
-RUN (cd sf; git checkout  -b PROJH; git pull https://github.com/r-spatial/sf.git PROJH)
+RUN (cd sf; git pull https://github.com/r-spatial/sf.git)
 RUN R CMD build --no-build-vignettes --no-manual sf
 # RUN R CMD INSTALL sf_*gz
 
@@ -147,7 +147,7 @@ RUN Rscript -e 'install.packages("devtools")'
 # lwgeom with PROJ6 patch
 RUN Rscript -e 'devtools::install_github("r-spatial/lwgeom")' 
 RUN Rscript -e 'install.packages(c("mapview","odbc","pool","rmarkdown","RPostgres","spatstat"))'
-#RUN Rscript -e 'install.packages(c("tmap"))'
+#RUN Rscript -e 'install.packages(c("rgdal", "tmap", "stars"))'
 #RUN R CMD build --no-build-vignettes --no-manual sf
 #RUN R CMD check --no-build-vignettes --no-manual sf_*gz 
 
