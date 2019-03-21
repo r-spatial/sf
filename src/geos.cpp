@@ -560,8 +560,22 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
 			gmv_out[i] = geos_ptr(GEOSUnaryUnion_r(hGEOSCtxt, gmv[i].get()), hGEOSCtxt);
 		}
 	} else {
-		GeomPtr gc = geos_ptr(GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, to_raw(gmv).data(), gmv.size()), hGEOSCtxt);
-		gmv_out[0] = geos_ptr(GEOSUnaryUnion_r(hGEOSCtxt, gc.get()), hGEOSCtxt);
+		bool all_inputs_same = true;
+
+		// check to see if all geometries are identical, as in a call to summarize(..., do_union=TRUE)
+		for (size_t i = 1; i < gmv.size(); i++) {
+			if (!GEOSEqualsExact_r(hGEOSCtxt, gmv[0].get(), gmv[i].get(), 0.0)) {
+				all_inputs_same = false;
+				break;
+			}
+		}
+
+		if (all_inputs_same) {
+			gmv_out[0] = std::move(gmv[0]);
+		} else {
+			GeomPtr gc = geos_ptr(GEOSGeom_createCollection_r(hGEOSCtxt, GEOS_GEOMETRYCOLLECTION, to_raw(gmv).data(), gmv.size()), hGEOSCtxt);
+			gmv_out[0] = geos_ptr(GEOSUnaryUnion_r(hGEOSCtxt, gc.get()), hGEOSCtxt);
+		}
 	}
 
 	Rcpp::List out(sfc_from_geometry(hGEOSCtxt, gmv_out, dim));
