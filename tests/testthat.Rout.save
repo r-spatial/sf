@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.5.3 (2019-03-11) -- "Great Truth"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -31,15 +31,15 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 driver `foo' not available.
-Dataset /tmp/Rtmpqy1Eav/file3d17054db2a.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/RtmphcWyG8/file6b627ea46399.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
 Creating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 ══ testthat results  ═══════════════════════════════════════════════════════════
-OK: 619 SKIPPED: 53 FAILED: 0
+OK: 663 SKIPPED: 54 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  2.821   0.152   3.113 
+  3.091   0.112   3.348 

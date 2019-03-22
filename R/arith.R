@@ -54,7 +54,12 @@ Ops.sfg <- function(e1, e2) {
 	if (!(prd || pm || mod || set || lgcl))
 		stop(paste("operation", .Generic, "not supported for sfg objects"))
 
-	if (st_is_empty(e1))
+	e1_empty = st_is_empty(e1)
+	e2_empty = inherits(e2, "sfg") && st_is_empty(e2)
+	if (lgcl && (e1_empty || e2_empty))
+		return(NA)
+
+	if (e1_empty && (.Generic %in% c("*", "+", "-", "%%")))
 		return(e1)
 
 	if (inherits(e2, "sfg")) {

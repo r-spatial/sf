@@ -260,3 +260,8 @@ test_that("binary operations work on sf objects with common column names", {
 	sf2 <- st_as_sf(tibble::as_tibble(sf2))
 	expect_is(st_intersection(sf1, sf2), c("sf", "tbl_df"))
 })
+
+test_that("binary operations on empty sfg objects return NA", {
+  x = st_point() == st_linestring()
+  expect_true(is.na(x))
+})

@@ -1,12 +1,18 @@
 # version 0.7-4
 
-* drop requiring `proj_api.h` in favor of `proj.h`; compatibility to PROJ 6.0.0 and GDAL 2.5.0-dev; #988
+* `==` and `!=` now return `NA` when one of the operands is an empty geometry; #1013
+
+* `st_intersects` is now a generic
+
+* drop requiring `proj_api.h` in favor of `proj.h`, this enables compatibility to PROJ 6.0.0 and GDAL 2.5.0-dev; #988
 
 * fix regression in binary predicates introduced in #855; #999 reported by Barry Rowlingson
 
-* fix bug in `gdal_utils` warper on certain GDAL/OS combinations; https://github.com/r-spatial/stars/issues/117
+* fix bug in `gdal_utils` util `warper` on certain GDAL/OS combinations; https://github.com/r-spatial/stars/issues/117
 
 * `c.sfc` now ignores the type (class) of empty `sfc` objects when choosing the result type; #985, #982
+
+* rename the default value for `distance` to `"Eucledian"`, rather than  `"distance"` in `st_distance`
 
 # version 0.7-3
 
