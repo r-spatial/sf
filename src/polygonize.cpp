@@ -108,7 +108,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 				NULL, NULL) != OGRERR_NONE)
 					Rcpp::Rcout << "GDALFPolygonize returned an error" << std::endl; // #nocov
 		} else {
-#if ((GDAL_VERSION_MAJOR > 3) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
+#if ((GDAL_VERSION_MAJOR > 2) || (GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR >= 4)) 
 			if (GDALContourGenerateEx((GDALRasterBandH) poBand, (void *) poLayer,
                        	create_options(contour_options).data(), NULL, NULL) != OGRERR_NONE)
 				Rcpp::stop("GDALContourGenerateEx returned an error");
