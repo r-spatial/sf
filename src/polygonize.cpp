@@ -19,13 +19,14 @@
 #include "gdal_read.h"
 #include "gdal_sf_pkg.h"
 
+// # nocov start
 // [[Rcpp::export]]
 Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector mask_name,
 		Rcpp::CharacterVector raster_driver, 
 		Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn,
 		Rcpp::CharacterVector options, Rcpp::IntegerVector iPixValField,
 		Rcpp::CharacterVector contour_options, bool use_contours = false,
-		bool use_integer = true) { // # nocov start
+		bool use_integer = true) {
 
     GDALDataset  *poDataset = (GDALDataset *) GDALOpenEx(raster[0], GA_ReadOnly,
 		raster_driver.size() ? create_options(raster_driver).data() : NULL,
@@ -127,7 +128,8 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	if (maskDataset != NULL)
 		GDALClose(maskDataset); // mask
 	return lst; 
-} // # nocov end
+} 
+// # nocov end
 
 // [[Rcpp::export]]
 Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector raster_driver,

@@ -250,3 +250,5 @@ st_relate(pt[1,], bf[1,], pattern = "T*F**F***", sparse = FALSE)
 
 sf:::is_symmetric(pattern = "010121010")
 sf:::is_symmetric(pattern = "010121021")
+
+st_intersects(st_point(0:1), st_point(2:3)) # sfg method
