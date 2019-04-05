@@ -56,13 +56,26 @@ ungroup.sf <- function(x, ...) {
 	st_as_sf(NextMethod(), sf_column_name = attr(x, "sf_column"))
 }
 
+.re_sf = function(x, sf_column_name, agr) {
+	stopifnot(!inherits(x, "sf"), !missing(sf_column_name), !missing(agr))
+	# non-geom attribute names
+	att = names(x)[!sapply(x, inherits, what = "sfc")]
+	agr = setNames(agr[att], att) # NA's new columns
+	structure(x, 
+		sf_column = sf_column_name,
+		agr = agr,
+		class = c("sf", class(x))) 
+}
+
+
 #' @name tidyverse
 #' @examples
 #' nc2 <- nc %>% mutate(area10 = AREA/10)
 mutate.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	agr = st_agr(.data)
 	class(.data) <- setdiff(class(.data), "sf")
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
 }
 
 #' @name tidyverse
@@ -72,7 +85,8 @@ mutate.sf <- function(.data, ..., .dots) {
 transmute.sf <- function(.data, ..., .dots) {
 	ret = NextMethod()
 	if (attr(ret, "sf_column") %in% names(ret))
-		st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+		.re_sf(structure(ret, class = setdiff(class(ret), "sf")), # un-sf'd
+			sf_column_name = attr(.data, "sf_column"), st_agr(.data))
 	else
 		ret
 }
@@ -112,7 +126,6 @@ rename.sf <- function(.data, ...) {
 
 	class(.data) <- setdiff(class(.data), "sf")
 	st_as_sf(dplyr::rename(.data, ...))
-	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 }
 
 #' @name tidyverse
@@ -144,26 +157,27 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
 		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-			if (!requireNamespace("dplyr", quietly = TRUE))
-				stop("dplyr required: install that first") # nocov
-			i = dplyr::group_indices(.data)
-			geom = st_geometry(.data)
-			geom = if (do_union)
-					lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
+				if (!requireNamespace("dplyr", quietly = TRUE))
+					stop("dplyr required: install that first") # nocov
+				i = dplyr::group_indices(.data)
+				geom = st_geometry(.data)
+				geom = if (do_union)
+						lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
+					else
+						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
+				geom = unlist(geom, recursive = FALSE)
+				if (is.null(geom))
+					geom = list() #676 #nocov
+				do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
+			} else { # single group:
+				if (do_union)
+					st_union(st_geometry(.data))
 				else
-					lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
-			geom = unlist(geom, recursive = FALSE)
-			if (is.null(geom))
-				geom = list() #676 #nocov
-			do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
-		} else { # single group:
-			if (do_union)
-				st_union(st_geometry(.data))
-			else
-				st_combine(st_geometry(.data))
-		}
+					st_combine(st_geometry(.data))
+			}
 		ret[[ sf_column ]] = geom
 	}
+	# need to re-sort out the geometry column class now:
 	st_as_sf(structure(ret, class = setdiff(class(ret), "sf"), "sf_column" = NULL))
 }
 

@@ -161,4 +161,10 @@ RUN Rscript -e 'install.packages(c("mapview","odbc","pool","rmarkdown","RPostgre
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
 #RUN R CMD check --no-build-vignettes --no-manual sf_*tar.gz
 
+RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
+# or:
+# svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
+RUN R CMD build rgdal/pkg --no-build-vignettes
+RUN R CMD INSTALL rgdal_*.tar.gz 
+
 CMD ["/bin/bash"]

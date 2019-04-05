@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.5.3 (2019-03-11) -- "Great Truth"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -557,6 +557,10 @@ POINT EMPTY
 > sf:::is_symmetric(pattern = "010121021")
 [1] FALSE
 > 
+> st_intersects(st_point(0:1), st_point(2:3)) # sfg method
+Sparse geometry binary predicate list of length 1, where the predicate was `intersects'
+ 1: (empty)
+> 
 > proc.time()
    user  system elapsed 
-  3.821   0.048   3.861 
+  3.886   0.032   3.911 
