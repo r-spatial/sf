@@ -114,7 +114,7 @@ is_symmetric = function(operation, pattern) {
 	if (!is.na(pattern)) {
 		m = matrix(sapply(1:9, function(i) substr(pattern, i, i)), 3, 3)
 		isTRUE(all(m == t(m)))
-	} else 
+	} else
 		isTRUE(operation %in% c("intersects", "touches", "overlaps", "disjoint", "equals"))
 }
 
@@ -130,7 +130,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(st_crs(x) == st_crs(y))
 	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
 		message_longlat(paste0("st_", op))
-	if (prepared && is_symmetric(op, pattern) && 
+	if (prepared && is_symmetric(op, pattern) &&
 			length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
 			isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
 		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
@@ -415,6 +415,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
 #' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 #' the underlying 'buffer with style' GEOS function is used.
+#' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 #' @examples
 #'
 #' ## st_buffer, style options (taken from rgeos gBuffer)
