@@ -112,7 +112,7 @@ select.sf <- function(.data, ...) {
 
 	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
 	vars <- setdiff(names(ret), sf_column)
-	st_set_agr(st_as_sf(ret), agr[vars])
+	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr[vars])
 }
 
 
