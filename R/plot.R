@@ -250,8 +250,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			localTitle(main, ...)
 		}
 	}
-	if (reset) {
-		layout(matrix(1)) # reset
+	if (!isTRUE(dots$add) && reset) { # reset device:
+		layout(matrix(1))
 		desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
 		par(opar[-desel])
 	}

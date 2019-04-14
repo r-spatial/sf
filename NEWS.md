@@ -1,5 +1,7 @@
 # version 0.7-4
 
+* don't reset (base) plot device when `add = TRUE`
+
 * `==` and `!=` now return `NA` when one of the operands is an empty geometry; #1013
 
 * `st_intersects` is now a generic
