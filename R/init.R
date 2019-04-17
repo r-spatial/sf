@@ -30,7 +30,7 @@ setOldClass("sfg")
 
 pathGrob <- NULL
 .onLoad = function(libname, pkgname) {
-	if (getRversion() < 3.6) { # nocov start
+	if (getRversion() < as.numeric_version("3.6")) { # nocov start
 		pathGrob <<- function(..., pathId.lengths) {
 			grid::pathGrob(...)
 		}
