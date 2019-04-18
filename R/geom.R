@@ -639,6 +639,18 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #'  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
 #'  plot(st_intersection(st_cast(v), box)) # clip to smaller box
 #'  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+#'  # matching Voronoi polygons to data points:
+#'  # https://github.com/r-spatial/sf/issues/1030
+#'  # generate 50 random unif points:
+#'  n = 100
+#'  pts = st_as_sf(data.frame(matrix(runif(n), , 2), id = 1:(n/2)), coords = c("X1", "X2"))
+#'  # compute Voronoi polygons:
+#'  pols = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts))))
+#'  # match them to points:
+#'  pts$pols = pols[unlist(st_intersects(pts, pols))]
+#'  plot(pts["id"], pch = 16) # ID is color
+#'  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
+#'  plot(st_geometry(pts), add = TRUE)
 #' }
 st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_voronoi")
