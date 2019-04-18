@@ -747,7 +747,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	if (isTRUE(st_is_longlat(x)))
 		warning("st_centroid does not give correct centroids for longitude/latitude data")
 	if (of_largest_polygon) {
-		multi = which(st_dimension(x) == 2 & lengths(x) > 1)
+		multi = which(sapply(x, inherits, what = "MULTIPOLYGON") & lengths(x) > 1)
 		if (length(multi))
 			x[multi] = largest_ring(x[multi])
 	}
