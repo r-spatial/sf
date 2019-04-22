@@ -98,7 +98,7 @@ Rcpp::List CPL_proj_info(int type) {
 			Rcpp::CharacterVector ans0(n);
 			Rcpp::CharacterVector ans1(n);
 			n = 0;
-			for (lpm = proj_list_prime_merdiance(); lpm->id ; ++lpm) {
+			for (lpm = proj_list_prime_meridians(); lpm->id ; ++lpm) {
 				ans0(n) = lpm->id;
 				ans1(n) = lpm->defn;
 				n++;
