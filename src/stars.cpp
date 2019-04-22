@@ -8,6 +8,7 @@
 
 #include <Rcpp.h>
 
+#include "gdal.h"
 #include "gdal_read.h"
 #include "gdal_sf_pkg.h"
 
@@ -229,6 +230,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		proj = CharacterVector::create(wkt);
 		// proj4string:
 		OGRSpatialReference *sr = new OGRSpatialReference;
+		sr = handle_axis_order(sr);
 		char **ppt = (char **) &wkt;
 #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
 		sr->importFromWkt(ppt);

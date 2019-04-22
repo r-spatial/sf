@@ -246,6 +246,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	// read geometries:
 	OGRSpatialReference *sref = NULL;
 	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, &sref);
+	sref = handle_axis_order(sref);
 
 	// create layer:
 	options = create_options(lco, quiet);

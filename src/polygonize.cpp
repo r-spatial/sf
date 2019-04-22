@@ -76,6 +76,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		Rcpp::stop("Creation failed.\n"); // #nocov
 	}
 	OGRSpatialReference *sr = new OGRSpatialReference;
+	sr = handle_axis_order(sr);
 	char **ppt = (char **) &wkt;
 #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
 	sr->importFromWkt(ppt);
