@@ -125,9 +125,11 @@ st_transform.sfg = function(x, crs , ...) {
 }
 
 #' @name st_transform
-#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum} or \code{units}
+#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
 #' @export
 #' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library when \code{type} is equal to proj, ellps, datum or units; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
+#' 
+#' PROJ >= 6 does not provide option \code{type = "datums"}. PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
 #' @examples
 #' st_proj_info("datum")
 st_proj_info = function(type = "proj") {
@@ -135,7 +137,7 @@ st_proj_info = function(type = "proj") {
 	if (type == "have_datum_files")
 		return(CPL_have_datum_files(0))
 
-    opts <- c("proj", "ellps", "datum", "units")
+    opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
     if (!(type %in% opts))
 		stop("unknown type") # nocov
     t <- as.integer(match(type[1], opts) - 1)
