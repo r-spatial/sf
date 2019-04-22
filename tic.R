@@ -1,4 +1,4 @@
-add_package_checks()
+do_package_checks()
 
 get_stage("install") %>%
 	# install lwgeom with its own library since linking again postgis source install fails sometimes
