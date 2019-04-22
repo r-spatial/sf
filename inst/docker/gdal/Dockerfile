@@ -78,29 +78,28 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 2.4.0
-ENV GDAL_VERSION_NAME 2.4.0
+ENV GDAL_VERSION 2.5.0
+ENV GDAL_VERSION_NAME 2.5.0beta1
 
-#RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && cd gdal* \
-#  && ./configure \
-#  && make \
-#  && make install \
-#  && cd .. \
-#  && ldconfig
-
-#RUN ls
-#
-RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
-
-RUN cd gdal/gdal \
-  && ls -l \
+RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && cd gdal* \
   && ./configure \
   && make \
   && make install \
   && cd .. \
   && ldconfig
+
+#RUN ls
+#
+#RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+#RUN cd gdal/gdal \
+#  && ls -l \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
 # for tmap:
 RUN add-apt-repository -y ppa:opencpu/jq
@@ -155,8 +154,6 @@ RUN Rscript -e 'install.packages(c("mapview","odbc","pool","rmarkdown","RPostgre
 #RUN R CMD build rgeos/pkg --no-build-vignettes
 #RUN R CMD INSTALL rgeos_*tar.gz
 
-#RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
-
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran --run-dontrun sf_*tar.gz
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*tar.gz
 #RUN R CMD check --no-build-vignettes --no-manual sf_*tar.gz
@@ -166,5 +163,9 @@ RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
 RUN R CMD build rgdal/pkg --no-build-vignettes
 RUN R CMD INSTALL rgdal_*.tar.gz 
+#RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
+#RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 CMD ["/bin/bash"]
