@@ -25,6 +25,7 @@ all.equal(b, b1)
 
 # SpatialMultiPoints
 library(sp)
+suppressWarnings(RNGversion("3.5.3"))
 set.seed(1331)
 example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
 m = st_as_sf(mpdf)

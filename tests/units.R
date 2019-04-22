@@ -11,7 +11,7 @@ u = names(sf:::udunits_from_proj)
 
 unrecognized = NULL
 out = sapply(u, function(x) { 
-  p4s = paste0("+proj=aea +units=", x)
+  p4s = paste0("+proj=laea +units=", x)
   cat(x, ": ")
   ret = try(sf:::crs_parameters(st_crs(p4s))$ud_unit, silent = TRUE)
   if (! inherits(ret, "try-error"))

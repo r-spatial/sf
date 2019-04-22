@@ -43,7 +43,8 @@ x = st_intersection(g, nc)
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 st_linestring(rbind(c(0,0),c(10,0))))
 
-set.seed(13531) # make reproducible
+suppressWarnings(RNGversion("3.5.3"))
+set.seed(13531)
 
 st_line_sample(ls, density = 1, type = "random")
 
@@ -70,7 +71,7 @@ st_line_merge(mls)
 
 if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  # voronoi:
- set.seed(1)
+ set.seed(1, "Mersenne-Twister")
  x = st_multipoint(matrix(runif(10),,2))
  box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
  v = st_sfc(st_voronoi(x, st_sfc(box)))

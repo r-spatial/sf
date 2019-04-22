@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.5.3 (2019-03-11) -- "Great Truth"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -29,7 +29,7 @@ Type 'q()' to quit R.
 > 
 > unrecognized = NULL
 > out = sapply(u, function(x) { 
-+   p4s = paste0("+proj=aea +units=", x)
++   p4s = paste0("+proj=laea +units=", x)
 +   cat(x, ": ")
 +   ret = try(sf:::crs_parameters(st_crs(p4s))$ud_unit, silent = TRUE)
 +   if (! inherits(ret, "try-error"))
@@ -64,4 +64,4 @@ ind-ch : 1 [ind_ch]
 > 
 > proc.time()
    user  system elapsed 
-  0.456   0.017   0.464 
+  0.426   0.012   0.429 

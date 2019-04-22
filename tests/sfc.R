@@ -186,6 +186,7 @@ nc2 = rbind(nc[1:50, ], nc[51:100, ])
 all.equal(nc, nc2)
 
 # st_sample:
+suppressWarnings(RNGversion("3.5.3"))
 set.seed(131)
 options(digits=6)
 x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))

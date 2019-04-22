@@ -41,7 +41,7 @@ st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5])
 # st_line_sample:
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 	st_linestring(rbind(c(0,0),c(10,0))))
-set.seed(135)
+# set.seed(135)
 st_line_sample(ls, density = 1)
 
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
