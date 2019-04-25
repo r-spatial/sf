@@ -71,7 +71,7 @@ st_line_merge(mls)
 
 if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  # voronoi:
- set.seed(1, "Mersenne-Twister")
+ set.seed(1)
  x = st_multipoint(matrix(runif(10),,2))
  box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
  v = st_sfc(st_voronoi(x, st_sfc(box)))

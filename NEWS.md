@@ -1,5 +1,9 @@
 # version 0.7-4
 
+* add example on how voronoi polygons can be tied back to the points they contain; #1030
+
+* `st_difference(x, y)`, with `x` an `sfc` with zero feature geometries, now returns `x`; #1024
+
 * don't reset (base) plot device when `add = TRUE`
 
 * `==` and `!=` now return `NA` when one of the operands is an empty geometry; #1013
