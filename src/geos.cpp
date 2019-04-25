@@ -798,10 +798,15 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	m(_, 0) = Rcpp::NumericVector(index_x.begin(), index_x.end());
 	m(_, 1) = Rcpp::NumericVector(index_y.begin(), index_y.end());
 
-	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim));
+	Rcpp::List ret;
+	if (y.size() == 0 && op != "intersection")
+		ret = sfcx;
+	else {
+		ret = sfc_from_geometry(hGEOSCtxt, out, dim);
+		ret.attr("crs") = sfcx.attr("crs");
+		ret.attr("idx") = m;
+	}
 	CPL_geos_finish(hGEOSCtxt);
-	ret.attr("crs") = sfcx.attr("crs");
-	ret.attr("idx") = m;
 	return ret;
 }
 
