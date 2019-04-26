@@ -799,9 +799,15 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	m(_, 1) = Rcpp::NumericVector(index_y.begin(), index_y.end());
 
 	Rcpp::List ret;
-	if (y.size() == 0 && op != "intersection")
-		ret = sfcx;
-	else {
+	if ((x.size() == 0 || y.size() == 0) && op != "intersection") {
+		if (op == "union" || op == "sym_difference") { // return "the other"
+			if (y.size() == 0)
+				ret = sfcx;
+			else
+				ret = sfcy;
+		} else // "difference" is asymmetric: x - 0 -> return x
+			ret = sfcx;
+	} else {
 		ret = sfc_from_geometry(hGEOSCtxt, out, dim);
 		ret.attr("crs") = sfcx.attr("crs");
 		ret.attr("idx") = m;
