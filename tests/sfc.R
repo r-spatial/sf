@@ -306,3 +306,16 @@ p <- st_sample(x, 10, type = "regular")
 p <- st_sample(x, 10, type = "hexagonal")
 
 all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))
+
+# https://github.com/r-spatial/sf/issues/1024
+shape1 <-st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0)))))
+shape2 <- st_sfc(st_polygon())
+shape3 <- st_sfc(st_polygon())
+
+shape4 = st_intersection(shape2, shape3) # has zero features
+
+st_difference(shape1, shape4)
+st_difference(shape4, shape1)
+st_sym_difference(shape1, shape4)
+st_union(shape1, shape4)
+st_union(shape4, shape1)

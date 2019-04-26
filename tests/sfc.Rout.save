@@ -1151,6 +1151,51 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > all.equal(st_drop_geometry(pol_sf), st_set_geometry(pol_sf, NULL))
 [1] TRUE
 > 
+> # https://github.com/r-spatial/sf/issues/1024
+> shape1 <-st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(3,2), c(2,4), c(1,4), c(0,0)))))
+> shape2 <- st_sfc(st_polygon())
+> shape3 <- st_sfc(st_polygon())
+> 
+> shape4 = st_intersection(shape2, shape3) # has zero features
+> 
+> st_difference(shape1, shape4)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
+> st_difference(shape4, shape1)
+Geometry set for 0 features 
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    NA
+proj4string:    NA
+> st_sym_difference(shape1, shape4)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
+> st_union(shape1, shape4)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
+> st_union(shape4, shape1)
+Geometry set for 1 feature 
+geometry type:  POLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 3 ymax: 4
+epsg (SRID):    NA
+proj4string:    NA
+POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
+> 
 > proc.time()
    user  system elapsed 
-  2.591   0.073   2.653 
+  2.475   0.092 872.330 
