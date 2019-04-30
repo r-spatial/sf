@@ -102,6 +102,8 @@ NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 }
 
 bool equals_na(double value, double na, GDALDataType dt) {
+	if (ISNAN(value))
+		return true;
 	if (dt == GDT_Float32)
 		return value == (double) ((float) na);
 	else
