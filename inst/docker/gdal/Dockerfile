@@ -79,7 +79,7 @@ RUN cd /usr/local/share/proj \
 # GDAL:
 
 ENV GDAL_VERSION 2.5.0
-ENV GDAL_VERSION_NAME 2.5.0beta1
+ENV GDAL_VERSION_NAME 2.5.0rc1
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
