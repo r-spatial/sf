@@ -101,6 +101,13 @@ NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 	return gt_r_inv;
 }
 
+bool equals_na(double value, double na, GDALDataType dt) {
+	if (dt == GDT_Float32)
+		return value == (double) ((float) na);
+	else
+		return value == na;
+}
+
 // formerly: stars/src/gdal.cpp
 NumericVector read_gdal_data(GDALDataset *poDataset, 
 			NumericVector nodatavalue, 
@@ -157,7 +164,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		units[i] = poBand->GetUnitType();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
 			for (R_xlen_t i = 0; i < Rf_xlength(vec); i++) {
-				if (vec[i] == nodatavalue[0])
+				if (equals_na(vec[i], nodatavalue[0], poBand->GetRasterDataType()))
 					vec[i] = NA_REAL; // #nocov
 				else
 					vec[i] = (vec[i] * scale) + offset;
