@@ -994,11 +994,13 @@ st_intersection.sf = function(x, y) {
 		geom = st_intersection(st_geometry(x))
 		idx = attr(geom, "idx")
 		i = sapply(idx, function(i) i[1])
+		sf_column = attr(x, "sf_column")
 		st_geometry(x) = NULL
-		ret = st_set_geometry(x[i, , drop = FALSE], structure(geom, idx = NULL))
-		ret$n.overlaps = lengths(idx)
-		ret$origins = idx
-		ret
+		x = x[i, , drop = FALSE]
+		x$n.overlaps = lengths(idx)
+		x$origins = idx
+		x[[ sf_column ]] = structure(geom, idx = NULL)
+		st_sf(x)
 	} else
 		geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
 }
@@ -1034,8 +1036,11 @@ st_difference.sfc = function(x, y) {
 st_difference.sf = function(x, y) {
 	if (missing(y)) {
 		geom = st_difference(st_geometry(x))
+		sf_column = attr(x, "sf_column")
 		st_geometry(x) = NULL
-		st_set_geometry(x[attr(geom, "idx"), , drop=FALSE], structure(geom, idx = NULL))
+		x = x[attr(geom, "idx"), , drop=FALSE]
+		x[[ sf_column ]] = structure(geom, idx = NULL)
+		st_sf(x)
 	} else
 		geos_op2_df(x, y, geos_op2_geom("difference", x, y))
 }

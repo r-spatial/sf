@@ -132,11 +132,12 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 					warning("overwriting first sfc column")
 				x[[ which(a)[1L] ]] = value
 			}
-			st_sf(x)
 		} else
-			st_sf(x, geometry = value)
+			x$geometry = value
+		st_sf(x)
 	}
 }
+
 
 #' @export
 `st_geometry<-.sf` = function(x, value) {
