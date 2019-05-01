@@ -14,7 +14,7 @@ st_make_grid(x, cellsize = c(diff(st_bbox(x)[c(1, 3)]),
 
 \item{cellsize}{target cellsize}
 
-\item{offset}{numeric of lengt 2; lower left corner coordinates (x, y) of the grid}
+\item{offset}{numeric of length 2; lower left corner coordinates (x, y) of the grid}
 
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
 
