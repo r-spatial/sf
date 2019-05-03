@@ -343,7 +343,7 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 	# vector of variable names, using any valid dplyr (i.e. rlang)
 	# variable selection syntax. By default, with .preserve = NULL, this will be
 	# empty. Note: the !!! is from rlang.
-	preserve = tidyselect::vars_select(names(data), !!! rlang::enquo(.preserve))
+	preserve = tidyselect::vars_select(names(data), !!rlang::enquo(.preserve))
 	# Get the name of the geometry column(s)
 	sf_column_name = attr(data, "sf_column", exact = TRUE)
 	preserve_incl_sf = c(preserve, sf_column_name)
