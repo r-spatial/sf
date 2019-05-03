@@ -249,7 +249,9 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
 
-	df = if (length(x) == 1) # ONLY one sfc
+	df = if (inherits(x, "tbl_df")) # no worries:
+			x
+		else if (length(x) == 1) # ONLY one sfc
 			data.frame(row.names = row.names)
 		else if (!sfc_last & inherits(x, "data.frame"))
 			x
