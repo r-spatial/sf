@@ -64,7 +64,7 @@ RUN cd /usr/local/share/proj \
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2
-#ENV GEOS_VERSION 3.7.0
+ENV GEOS_VERSION 3.7.0
 #
 #RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 #  && bzip2 -d geos-*bz2 \
@@ -78,8 +78,8 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 2.5.0
-ENV GDAL_VERSION_NAME 2.5.0rc1
+ENV GDAL_VERSION 3.0.0
+ENV GDAL_VERSION_NAME 3.0.0rc1
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -118,13 +118,14 @@ RUN apt-get install -y \
 	libnetcdf-dev
 
 RUN Rscript -e 'install.packages(c("sp"), repos = "https://cloud.r-project.org")'
-RUN Rscript -e 'install.packages(c("rgdal"), repos = "https://cloud.r-project.org")'
 
-# RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
+#RUN Rscript -e 'install.packages(c("rgdal"), repos = "https://cloud.r-project.org")'
+
+RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
 # svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
-# RUN R CMD build rgdal/pkg --no-build-vignettes
-# RUN R CMD INSTALL rgdal_*.tar.gz 
+RUN R CMD build rgdal/pkg --no-build-vignettes
+RUN R CMD INSTALL rgdal_*.tar.gz 
 
 RUN Rscript -e 'install.packages(c("sp","rgeos","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
 #RUN Rscript -e 'install.packages(c("sp","rgeos","rgdal","RPostgreSQL","RSQLite","testthat","knitr","tidyr","geosphere","maptools","maps","microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview"), repos = "https://cloud.r-project.org")'
@@ -166,6 +167,7 @@ RUN R CMD INSTALL rgdal_*.tar.gz
 #RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
 #RUN Rscript -e 'install.packages(c("lwgeom", "tmap", "pool", "odbc", "mapview"), repos = "https://cloud.r-project.org")'
 RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
+RUN locale-gen en_US.UTF-8
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 CMD ["/bin/bash"]
