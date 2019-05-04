@@ -129,7 +129,7 @@ st_read.DBIObject = function(dsn = NULL,
     if (!quiet) print(x, n = 0) # nocov
 
     if (as_tibble) {
-        x <- tibble::as_tibble(x)
+        x <- tibble::new_tibble(x, nrow = nrow(x), class = "sf")
     }
     return(x)
 }

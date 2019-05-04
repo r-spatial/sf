@@ -123,7 +123,7 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
-		stringsAsFactors = default.stringsAsFactors(), geometry_column = 1, as_tibble = FALSE) {
+		stringsAsFactors = ifelse(as_tibble, FALSE, default.stringsAsFactors()), geometry_column = 1, as_tibble = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 
@@ -134,10 +134,10 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	if (length(which.geom) == 0) {
 		warning("no simple feature geometries present: returning a data.frame or tbl_df",
 			call. = FALSE)
+		x <- as.data.frame(x , stringsAsFactors = stringsAsFactors)
 		if (as_tibble)
-			return(tibble::as_tibble(x))
-		else
-			return(as.data.frame(x , stringsAsFactors = stringsAsFactors))
+			x <- tibble::new_tibble(x, nrow = nrow(x))
+		return(x)
 	}
 
 	nm = names(x)[which.geom]
@@ -148,16 +148,17 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	list.cols = x[lc.other]
 	nm.lc = names(x)[lc.other]
 
-	x = if (length(x) == length(geom)) { # ONLY geometry column(s)
+	if (length(x) == length(geom)) { # ONLY geometry column(s)
 		if (as_tibble)
-			tibble::tibble(row.names = seq_along(geom[[1]]))[-1]
+			x <- tibble::tibble(row.names = seq_along(geom[[1]]))[-1]
 		else
-			data.frame(row.names = seq_along(geom[[1]]))
+			x <- data.frame(row.names = seq_along(geom[[1]]))
 	} else {
-		if (as_tibble)
-			tibble::as_tibble(set_utf8(x[-c(lc.other, which.geom)]))
-		else
-			as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+		x <- as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+		if (as_tibble) {
+			# "sf" class is added later by `st_as_sf` (and sets all the attributes)
+			x <- tibble::new_tibble(x, attributes(x), nrow = nrow(x))
+		}
 	}
 
 	for (i in seq_along(lc.other))

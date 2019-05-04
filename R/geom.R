@@ -907,7 +907,7 @@ geos_op2_df = function(x, y, geoms) {
 	if (inherits(x, "tbl_df")) {
 		if (!requireNamespace("tibble", quietly = TRUE))
 			stop("package tibble required: install first?")
-		df = tibble::as_tibble(df)
+		df = tibble::new_tibble(df, nrow = nrow(df), class = "sf")
 	}
 	df[[ attr(x, "sf_column") ]] = geoms
 	st_sf(df, sf_column_name = attr(x, "sf_column"))
