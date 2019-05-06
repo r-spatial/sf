@@ -82,6 +82,13 @@ test_that("sf can read non-sf tables with geometries", {
     expect_silent(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry as a, 'POINT(2 2)'::geometry as b"))
 })
 
+test_that("returns an `sf` object (#1039)", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
+    expect_is(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
+    expect_is(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry", as_tibble = TRUE), "sf")
+    expect_is(read_sf(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
+})
+
 test_that("validates arguments", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_error(st_read(pg), "Provide either a `layer` or a `query`")
