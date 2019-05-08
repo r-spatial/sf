@@ -105,6 +105,11 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
 		if (length(u <- unique(sfg_classes[1L,])) > 1)
 			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
+
+		# compute zbox, if dims permit and not set
+		if( u == "XYZ" )
+			attr(lst, "zbox") = compute_zbox(lst)
+
 	}
 	lst
 }
@@ -350,11 +355,11 @@ st_precision.sfc <- function(x) {
 #' @name st_precision
 #' @param precision numeric, or object of class \code{units} with distance units (but see details); see \link{st_as_binary} for how to do this.
 #' @details If \code{precision} is a \code{units} object, the object on which we set precision must have a coordinate reference system with compatible distance units.
-#' 
+#'
 #' Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
 #'
 #' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
-#' 
+#'
 #' @seealso \link{st_as_binary} for an explanation of what setting precision does, and the examples therein.
 #' @examples
 #' x <- st_sfc(st_point(c(pi, pi)))

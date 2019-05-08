@@ -139,3 +139,4 @@ Collate:
     'nearest.R'
     'normalize.R'
     'deprecated.R'
+    'zbox.R'
