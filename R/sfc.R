@@ -186,13 +186,13 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	if( !is.null( attr(x, "z_range"))) {
-		cat(paste0("z_range:           "))
+		cat(paste0("z_range:        "))
 		zb = signif(attr(x, "z_range"), options("digits")$digits)
 		cat(paste(paste(names(zb), zb[], sep = ": "), collapse = " "))
 		cat("\n")
 	}
 	if( !is.null( attr(x, "m_range"))) {
-		cat(paste0("m_range:           "))
+		cat(paste0("m_range:        "))
 		mb = signif(attr(x, "m_range"), options("digits")$digits)
 		cat(paste(paste(names(mb), mb[], sep = ": "), collapse = " "))
 		cat("\n")
