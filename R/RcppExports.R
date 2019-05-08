@@ -305,8 +305,12 @@ CPL_write_wkb <- function(sfc, EWKB = FALSE) {
     .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB)
 }
 
-CPL_get_zbox <- function(sf, depth = 0L) {
-    .Call('_sf_CPL_get_zbox', PACKAGE = 'sf', sf, depth)
+CPL_get_z_range <- function(sf, depth = 0L) {
+    .Call('_sf_CPL_get_z_range', PACKAGE = 'sf', sf, depth)
+}
+
+CPL_get_m_range <- function(sf, depth = 0L) {
+    .Call('_sf_CPL_get_m_range', PACKAGE = 'sf', sf, depth)
 }
 
 # Register entry points for exported C++ functions

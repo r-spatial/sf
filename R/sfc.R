@@ -106,10 +106,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		if (length(u <- unique(sfg_classes[1L,])) > 1)
 			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 
-		# compute zbox, if dims permit and not set
-		if( u == "XYZ" )
-			attr(lst, "zbox") = compute_zbox(lst)
-
+		# compute z_range, if dims permit and not set
+		if( u == "XYZ" ) {
+			attr(lst, "z_range") = compute_z_range(lst)
+		} else if ( u == "XYZM" ) {
+			attr(lst, "z_range") = compute_z_range(lst)
+			attr(lst, "m_range") = compute_m_range(lst)
+		}
 	}
 	lst
 }
@@ -182,6 +185,18 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	bb = signif(attr(x, "bbox"), options("digits")$digits)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
+	if( !is.null( attr(x, "z_range"))) {
+		cat(paste0("z_range:           "))
+		zb = signif(attr(x, "z_range"), options("digits")$digits)
+		cat(paste(paste(names(zb), zb[], sep = ": "), collapse = " "))
+		cat("\n")
+	}
+	if( !is.null( attr(x, "m_range"))) {
+		cat(paste0("m_range:           "))
+		mb = signif(attr(x, "m_range"), options("digits")$digits)
+		cat(paste(paste(names(mb), mb[], sep = ": "), collapse = " "))
+		cat("\n")
+	}
 	# attributes: epsg, proj4string, precision
 	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
 	cat(paste0("proj4string:    ", attr(x, "crs")$proj4string, "\n"))
