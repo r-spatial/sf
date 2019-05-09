@@ -87,6 +87,15 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 	if (is.null(bb) || any(is.na(bb)))
 		attr(lst, "bbox") = compute_bbox(lst)
 
+	# compute z_range, if dims permit and not set
+	u <- unique(sfg_classes[1L,])
+	if( "XYZM" %in% u ) {
+		attr(lst, "z_range") = compute_z_range(lst)
+		attr(lst, "m_range") = compute_m_range(lst)
+	} else if ( "XYZ" %in% u ) {
+		attr(lst, "z_range") = compute_z_range(lst)
+	}
+
 	# check ring directions:
 	if (check_ring_dir) # also GEOMETRYCOLLECTION?
 		lst = check_ring_dir(lst)
@@ -105,14 +114,6 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
 		if (length(u <- unique(sfg_classes[1L,])) > 1)
 			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
-
-		# compute z_range, if dims permit and not set
-		if( u == "XYZ" ) {
-			attr(lst, "z_range") = compute_z_range(lst)
-		} else if ( u == "XYZM" ) {
-			attr(lst, "z_range") = compute_z_range(lst)
-			attr(lst, "m_range") = compute_m_range(lst)
-		}
 	}
 	lst
 }

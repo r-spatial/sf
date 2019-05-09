@@ -87,3 +87,43 @@ test_that("sf::st_z_range and sf::st_z_range returns correct value from sfc obje
 
 })
 
+test_that("zmrange works on more compliated examples", {
+
+	set.seed(123)
+	m <- matrix(rnorm(300), ncol = 3)
+	expected <- c(min(m[,3]), max(m[,3]))
+
+	ls <- sf::st_linestring(x = m )
+	expect_true( all( sf::st_z_range(ls) == expected ) )
+
+	ls <- sf::st_sfc( ls )
+	expect_true( all( sf::st_z_range(ls) == expected ) )
+	expect_true( all( attr(ls, "z_range") == expected ) )
+
+	ls <- sf::st_sf( geometry = ls )
+	expect_true( all( sf::st_z_range(ls) == expected ) )
+    expect_true( all( attr(ls$geometry, "z_range") == expected ) )
+
+})
+
+test_that("transform includes zm in output", {
+
+	p1 = st_point(c(7,52,52))
+	p2 = st_point(c(-30,20,20))
+	sfc = st_sfc(p1, p2, crs = 4326)
+
+	res <- st_transform(sfc, 3857)
+	expect_true( "z_range" %in% names( attributes(res) ) )
+	expect_equal( sf::st_z_range(res[[1]]), sf::st_z_range(sfc[[1]]) )
+
+	p1 = st_point(c(7,52,52,7))
+	p2 = st_point(c(-30,20,20,-30))
+	sfc = st_sfc(p1, p2, crs = 4326)
+
+	res <- st_transform(sfc, 3857)
+	expect_true( "z_range" %in% names( attributes(res) ) )
+	expect_equal( sf::st_z_range(res[[1]]), sf::st_z_range(sfc[[1]]) )
+	expect_true( "m_range" %in% names( attributes(res) ) )
+	expect_equal( sf::st_m_range(res[[1]]), sf::st_m_range(sfc[[1]]) )
+
+})
