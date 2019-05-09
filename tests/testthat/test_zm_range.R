@@ -1,9 +1,3 @@
-## tests:
-## zbox is transformed under st_transform / st_crs
-
-## needs to return nice error if no zbox exists
-a <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_point(1:2)), crs = 4326)
-sf::st_z_range( a )
 
 test_that("sf::st_z_range and sf::st_z_range returns correct value from sfg objects", {
 
