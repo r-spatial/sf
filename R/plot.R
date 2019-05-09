@@ -104,7 +104,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.character(breaks)) { # compute breaks from values:
 				n.unq = length(unique(na.omit(values)))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
-						classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+						classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), 
+							breaks, warnSmallN = FALSE)$brks
 					else
 						range(values, na.rm = TRUE) # lowest and highest!
 				nbreaks = length(breaks) - 1
@@ -178,7 +179,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						if (is.character(breaks)) { # compute breaks from values:
 							n.unq = length(unique(na.omit(values)))
 							breaks = if (! all(is.na(values)) && n.unq > 1)
-								classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), breaks, warnSmallN = FALSE)$brks
+								classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),
+									breaks, warnSmallN = FALSE)$brks
 							else
 								range(values, na.rm = TRUE) # lowest and highest!
 						} 
