@@ -104,6 +104,24 @@ test_that("zmrange works on more compliated examples", {
 	expect_true( all( sf::st_z_range(ls) == expected ) )
     expect_true( all( attr(ls$geometry, "z_range") == expected ) )
 
+    n <- 100
+    lst <- list()
+    min_z <- numeric(n)
+    max_z <- numeric(n)
+
+    set.seed(123)
+
+    for(i in 1:n) {
+    	m <- matrix(rnorm(sample(seq(3,300,by=3), size = 1)), ncol = 3)
+    	min_z[i] <- min(m[,3])
+    	max_z[i] <- max(m[,3])
+    	lst[[i]] <- sf::st_linestring( m )
+    }
+
+    sfc <- sf::st_sfc( lst )
+
+    expect_true( all (sf::st_z_range( sfc ) == c(min(min_z), max(max_z)) ) )
+
 })
 
 test_that("transform includes zm in output", {
