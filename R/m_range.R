@@ -41,23 +41,20 @@ m_range.MtrxSetSetSet = function(obj, ...) {
 		mb_wrap(CPL_get_m_range(obj, 3))
 }
 
-#' Return 'z' bounding of a simple feature or simple feature set
+#' Return 'm' range of a simple feature or simple feature set
 #'
-#' Return 'z' bounding of a simple feature or simple feature set
-#' @param obj object to compute the z-bounding box from
+#' Return 'm' range of a simple feature or simple feature set
+#' @param obj object to compute the m range from
 #' @param ... ignored
 #' @export
 #' @return a numeric vector of length two, with \code{mmin} and \code{mmax} values;
 #' if \code{obj} is of class \code{sf} or \code{sfc} the object
-#' returned has a class \code{m_range}, an attribute \code{crs} and a method to print the
-#' m_range and an \code{st_crs} method to retrieve the coordinate reference system
-#' corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
-#' methods for \code{m_range} objects to generate a polygon around the four bounding box points.
+#' if \code{obj} is of class \code{sf} or \code{sfc} the object
+#' returned has a class \code{m_range}
 #' @name st_m_range
 #' @examples
-#' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:2), st_point(1:3)), crs = 4326)
+#' a = st_sf(a = 1:2, geom = st_sfc(st_point(0:3), st_point(1:4)), crs = 4326)
 #' st_m_range(a)
-#' st_as_sfc(st_m_range(a))
 st_m_range = function(obj, ...) UseMethod("st_m_range")
 
 #' @export

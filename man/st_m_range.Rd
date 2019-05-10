@@ -23,7 +23,7 @@
 \alias{st_m_range.sf}
 \alias{st_m_range.numeric}
 \alias{NA_m_range_}
-\title{Return 'z' bounding of a simple feature or simple feature set}
+\title{Return 'm' range of a simple feature or simple feature set}
 \format{An object of class \code{m_range} of length 2.}
 \usage{
 \method{is.na}{m_range}(x)
@@ -71,7 +71,7 @@ NA_m_range_
 \arguments{
 \item{x}{object of class \code{m_range}}
 
-\item{obj}{object to compute the z-bounding box from}
+\item{obj}{object to compute the m range from}
 
 \item{...}{ignored}
 
@@ -80,21 +80,18 @@ NA_m_range_
 \value{
 a numeric vector of length two, with \code{mmin} and \code{mmax} values;
 if \code{obj} is of class \code{sf} or \code{sfc} the object
-returned has a class \code{m_range}, an attribute \code{crs} and a method to print the
-m_range and an \code{st_crs} method to retrieve the coordinate reference system
-corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
-methods for \code{m_range} objects to generate a polygon around the four bounding box points.
+if \code{obj} is of class \code{sf} or \code{sfc} the object
+returned has a class \code{m_range}
 }
 \description{
-Return 'z' bounding of a simple feature or simple feature set
+Return 'm' range of a simple feature or simple feature set
 }
 \details{
 \code{NA_m_range_} represents the missing value for a \code{m_range} object
 }
 \examples{
-a = st_sf(a = 1:2, geom = st_sfc(st_point(0:2), st_point(1:3)), crs = 4326)
+a = st_sf(a = 1:2, geom = st_sfc(st_point(0:3), st_point(1:4)), crs = 4326)
 st_m_range(a)
-st_as_sfc(st_m_range(a))
 st_m_range(c(mmin = 16.1, mmax = 16.6), crs = st_crs(4326))
 }
 \keyword{datasets}

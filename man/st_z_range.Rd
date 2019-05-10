@@ -23,7 +23,7 @@
 \alias{st_z_range.sf}
 \alias{st_z_range.numeric}
 \alias{NA_z_range_}
-\title{Return 'z' bounding of a simple feature or simple feature set}
+\title{Return 'z' range of a simple feature or simple feature set}
 \format{An object of class \code{z_range} of length 2.}
 \usage{
 \method{is.na}{z_range}(x)
@@ -71,7 +71,7 @@ NA_z_range_
 \arguments{
 \item{x}{object of class \code{z_range}}
 
-\item{obj}{object to compute the z-bounding box from}
+\item{obj}{object to compute the z range from}
 
 \item{...}{ignored}
 
@@ -80,13 +80,10 @@ NA_z_range_
 \value{
 a numeric vector of length two, with \code{zmin} and \code{zmax} values;
 if \code{obj} is of class \code{sf} or \code{sfc} the object
-returned has a class \code{z_range}, an attribute \code{crs} and a method to print the
-z_range and an \code{st_crs} method to retrieve the coordinate reference system
-corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
-methods for \code{z_range} objects to generate a polygon around the four bounding box points.
+returned has a class \code{z_range}
 }
 \description{
-Return 'z' bounding of a simple feature or simple feature set
+Return 'z' range of a simple feature or simple feature set
 }
 \details{
 \code{NA_z_range_} represents the missing value for a \code{z_range} object
@@ -94,7 +91,6 @@ Return 'z' bounding of a simple feature or simple feature set
 \examples{
 a = st_sf(a = 1:2, geom = st_sfc(st_point(0:2), st_point(1:3)), crs = 4326)
 st_z_range(a)
-st_as_sfc(st_z_range(a))
 st_z_range(c(zmin = 16.1, zmax = 16.6), crs = st_crs(4326))
 }
 \keyword{datasets}
