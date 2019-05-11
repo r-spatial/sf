@@ -88,7 +88,6 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		attr(lst, "bbox") = compute_bbox(lst)
 
 	# compute z_range, if dims permit and not set
-	# no need to test for m_range because if z_range doesn't exist, m_range can't/shouldn't exist
 	zr = attr(lst, "z_range")
 	if (is.null(zr) || any(is.na(zr))) {
 		u <- unique(sfg_classes[1L,])
@@ -97,6 +96,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 			attr(lst, "m_range") = compute_m_range(lst)
 		} else if ( "XYZ" %in% u ) {
 			attr(lst, "z_range") = compute_z_range(lst)
+		} else if ("XYM" %in% u ) {
+			attr(lst, "m_range") = compute_m_range(lst)
 		}
 	}
 
