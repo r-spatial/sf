@@ -97,7 +97,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		} else if ( "XYZ" %in% u ) {
 			attr(lst, "z_range") = compute_z_range(lst)
 		} else if ("XYM" %in% u ) {
-			attr(lst, "m_range") = compute_m_range(lst)
+			attr(lst, "m_range") = compute_z_range(lst) ## because it's the 3rd element
 		}
 	}
 

@@ -139,3 +139,14 @@ test_that("transform includes zm in output", {
 	expect_equal( sf::st_m_range(res[[1]]), sf::st_m_range(sfc[[1]]) )
 
 })
+
+
+test_that("XYM-only objects correctly calculate M (and not Z)", {
+
+	sf <- sf::st_read(system.file("/shape/storms_xyzm.shp", package = "sf"))
+	m <- sf::st_coordinates( sf )
+
+	mmin <- min( m[, 3] ); mmax <- max( m[, 3] )
+	expect_true( all( sf::st_m_range( sf ) == c(mmin, mmax) ) )
+
+})
