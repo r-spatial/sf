@@ -20,7 +20,8 @@ read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
   as_tibble = TRUE)
 
 \method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
-  EWKB = TRUE, quiet = TRUE, as_tibble = FALSE, ...)
+  EWKB = TRUE, quiet = TRUE, as_tibble = FALSE,
+  geometry_column = NULL, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some

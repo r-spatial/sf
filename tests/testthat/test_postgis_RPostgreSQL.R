@@ -25,7 +25,7 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- RPostgreSQL::dbConnect(RPostgreSQL::PostgreSQL(), host = "localhost", dbname = "postgis"), silent=TRUE)
+try(pg <- DBI::dbConnect(RPostgreSQL::PostgreSQL(), host = "localhost", dbname = "postgis"), silent=TRUE)
 
 
 # tests ------------------------------------------------------------------------
@@ -63,6 +63,20 @@ test_that("can handle multiple geom columns", {
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi2", quiet = TRUE))
 	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
 	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+})
+
+test_that("RPostgreSQL driver can use `geometry_column` (#1045)", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	query <- "SELECT 'POINT(0 0)'::geometry as a, 'POINT(1 0)'::geometry as b"
+	x <- st_read(pg, query = query)
+	expect_equal(x$a, st_sfc(st_point(c(0, 0))))
+	expect_equal(x$b, st_sfc(st_point(c(1, 0))))
+	x <- st_read(pg, query = query, geometry_column = c("a", "b"))
+	expect_equal(x$a, st_sfc(st_point(c(0, 0))))
+	expect_equal(x$b, st_sfc(st_point(c(1, 0))))
+	x <- st_read(pg, query = query, geometry_column = c("b"))
+	expect_equal(x$a, "010100000000000000000000000000000000000000")
+	expect_equal(x$b, st_sfc(st_point(c(1, 0))))
 })
 
 test_that("sf can write units to database (#264)", {

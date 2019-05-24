@@ -32,6 +32,7 @@ st_read.DBIObject = function(dsn = NULL,
                              EWKB = TRUE,
                              quiet = TRUE,
                              as_tibble = FALSE,
+                             geometry_column = NULL,
                              ...) {
     if (is.null(dsn))
         stop("no connection provided") # nocov
@@ -101,10 +102,27 @@ st_read.DBIObject = function(dsn = NULL,
         stop("Query `", query, "` returned no results.", call. = FALSE)  #nocov
     }
 
-    # check for simple features column
-    geometry_column = is_geometry_column(dsn, tbl)
-
-    tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
+    if (is.null(geometry_column)) {
+        # scan table for simple features column
+        geometry_column = is_geometry_column(dsn, tbl)
+        tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
+    } else {
+        if (!all(geometry_column %in% names(tbl))) {
+            nm <- names(tbl)
+            prefix <- ""
+            new_line <- ""
+            if(length(nm) > 1) {
+                prefix <- "\t *"
+                new_line <- "\n"
+            }
+            stop("Could not find `geometry_column` (", geometry_column, ") ",
+                "in column names. Available names are:",
+                new_line,
+                paste(prefix, nm, collapse = "\n", sep = " "),
+                call. = FALSE)
+        }
+        tbl[geometry_column] <- lapply(tbl[geometry_column], postgis_as_sfc, EWKB = EWKB, conn = dsn)
+    }
 
     # if there are no simple features geometries, return a data frame
     if (! any(vapply(tbl, inherits, logical(1), "sfc"))) {
