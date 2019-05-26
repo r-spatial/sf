@@ -243,6 +243,7 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 			 'use `st_zm(...)` to coerce to XY dimensions') }
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
+#		"sfc_POINT" = sfc2SpatialPoints(from, IDs),
 		"sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),
 		"sfc_LINESTRING" = , "sfc_MULTILINESTRING" = { StopZ(zm); sfc2SpatialLines(from, IDs) },
 		"sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from, IDs) },
@@ -250,9 +251,12 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	)
 }
 
-sfc2SpatialPoints = function(from) {
+sfc2SpatialPoints = function(from, IDs) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
+#	cc = do.call(rbind, from)
+#	row.names(cc) = IDs
+#	sp::SpatialPoints(cc, proj4string = sp::CRS(attr(from, "crs")$proj4string))
 	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "crs")$proj4string))
 }
 
