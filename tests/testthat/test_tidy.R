@@ -8,6 +8,18 @@ test_that("select works", {
   expect_true(nc %>% select(AREA) %>% inherits("sf"))
 })
 
+test_that("filter to sfc works", {
+  tbl = tibble(a = c("A", "B", "C"),
+              geometry = st_sfc(st_point(c(1, 1)),
+                                st_point(),
+                                st_linestring()))
+  d = st_sf(tbl)
+  expect_identical(d %>% filter(!st_is_empty(geometry)),
+                   d[1, ])
+  expect_identical(d %>% filter(st_is(geometry, "POINT")),
+                   d[1:2, ])
+})
+
 suppressMessages(library(tidyr))
 test_that("separate and unite work", {
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
