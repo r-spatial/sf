@@ -191,7 +191,7 @@
     <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href='https://www.rdocumentation.org/packages/units/topics/set_units'>set_units</a>.</p>
 <p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href='https://www.rdocumentation.org/packages/lwgeom/topics/geod'>st_geod_area</a> is used for area calculation.</p>
 <p>st_length returns the length of a <code>LINESTRING</code> or <code>MULTILINESTRING</code> geometry, using the coordinate reference system.  <code>POINT</code>, <code>MULTIPOINT</code>, <code>POLYGON</code> or <code>MULTIPOLYGON</code> geometries return zero.</p>
-<p>If <code>by_element</code> is <code>FALSE</code> <code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled.</p>
+<p>If <code>by_element</code> is <code>FALSE</code> <code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled. Distances involving empty geometries are <code>NA</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
