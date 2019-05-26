@@ -20,14 +20,9 @@ group_split.sf <- function(.tbl, ..., keep = TRUE) {
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc %>% filter(AREA > .1) %>% plot()
 filter.sf <- function(.data, ..., .dots) {
-	#st_as_sf(NextMethod())
-	sf_column = attr(.data, "sf_column")
-	geom = .data[[sf_column]]
-	.data[[sf_column]] = seq_len(nrow(.data))
-	ret = NextMethod()
-	sel = ret[[sf_column]]
-	ret[[sf_column]] = geom[sel]
-	st_as_sf(ret, sf_column_name = sf_column)
+	agr = st_agr(.data)
+	class(.data) <- setdiff(class(.data), "sf")
+	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
 }
 
 #' @name tidyverse
