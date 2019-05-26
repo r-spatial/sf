@@ -120,8 +120,10 @@ x = st_is_within_distance(nc_3857, nc_3857, 100000)
 y = st_is_within_distance(nc_3857, nc_3857, units::set_units(100, km))
 all.equal(x, y)
 
+pe = st_sfc(st_point())
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
+st_distance(p, pe)
 st_distance(p, p, by_element = TRUE)
 st_crs(p) = 4326
 st_distance(p, p[c(2,3,1)], by_element = TRUE)
@@ -166,7 +168,8 @@ B = st_as_sfc("LINESTRING (0 100, 0 10, 80 10)")
 st_distance(c(A,B))
 st_distance(c(A,B), which = "Hausdorff")
 st_distance(c(A,B), which = "Hausdorff", par = 0.001)
-
+LE = st_as_sfc("LINESTRING EMPTY")
+st_distance(c(A, LE), which = "Hausdorff", par = 0.001)
 
 # one-argument st_intersection and st_difference:
 set.seed(131)

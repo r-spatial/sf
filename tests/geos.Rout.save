@@ -1,5 +1,5 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -267,12 +267,18 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 > all.equal(x, y)
 [1] TRUE
 > 
+> pe = st_sfc(st_point())
 > p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 > st_distance(p, p)
      [,1] [,2] [,3]
 [1,]    0    1    2
 [2,]    1    0    1
 [3,]    2    1    0
+> st_distance(p, pe)
+     [,1]
+[1,]   NA
+[2,]   NA
+[3,]   NA
 > st_distance(p, p, by_element = TRUE)
 [1] 0 0 0
 > st_crs(p) = 4326
@@ -398,7 +404,11 @@ first 10 elements:
              [,1]         [,2]
 [1,] 2.929643e-14 4.789000e+01
 [2,] 4.789000e+01 2.131628e-14
-> 
+> LE = st_as_sfc("LINESTRING EMPTY")
+> st_distance(c(A, LE), which = "Hausdorff", par = 0.001)
+             [,1] [,2]
+[1,] 2.929643e-14   NA
+[2,]           NA   NA
 > 
 > # one-argument st_intersection and st_difference:
 > set.seed(131)
@@ -564,4 +574,4 @@ Sparse geometry binary predicate list of length 1, where the predicate was `inte
 > 
 > proc.time()
    user  system elapsed 
-  3.946   0.028   3.966 
+  3.535   0.051   3.585 

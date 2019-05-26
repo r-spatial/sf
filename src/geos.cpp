@@ -315,13 +315,20 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 
 			for (size_t i = 0; i < gmv0.size(); i++) {
-				for (size_t j = 0; j < gmv1.size(); j++) {
-					double dist = -1.0;
-					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
-						CPL_geos_finish(hGEOSCtxt); // #nocov
-						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+				if (GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get())) {
+					for (size_t j = 0; j < gmv1.size(); j++)
+						out(i, j) = NA_REAL;
+				} else for (size_t j = 0; j < gmv1.size(); j++) {
+					if (GEOSisEmpty_r(hGEOSCtxt, gmv1[j].get()))
+						out(i, j) = NA_REAL;
+					else {
+						double dist = -1.0;
+						if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), &dist) == 0) {
+							CPL_geos_finish(hGEOSCtxt); // #nocov
+							Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+						}
+						out(i, j) = dist;
 					}
-					out(i, j) = dist;
 				}
 				Rcpp::checkUserInterrupt();
 			}
@@ -339,13 +346,20 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 			}
 
 			for (size_t i = 0; i < gmv0.size(); i++) {
-				for (size_t j = 0; j < gmv1.size(); j++) {
-					double dist = -1.0;
-					if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par, &dist) == 0) {
-						CPL_geos_finish(hGEOSCtxt); // #nocov
-						Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+				if (GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get())) {
+					for (size_t j = 0; j < gmv1.size(); j++)
+						out(i, j) = NA_REAL;
+				} else for (size_t j = 0; j < gmv1.size(); j++) {
+					if (GEOSisEmpty_r(hGEOSCtxt, gmv1[j].get()))
+						out(i, j) = NA_REAL;
+					else {
+						double dist = -1.0;
+						if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[j].get(), par, &dist) == 0) {
+							CPL_geos_finish(hGEOSCtxt); // #nocov
+							Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+						}
+						out(i, j) = dist;
 					}
-					out(i, j) = dist;
 				}
 				Rcpp::checkUserInterrupt();
 			}

@@ -1,3 +1,7 @@
+# version 0.7-5
+
+* `st_distance` returns `NA` for empty geometries, rather than 0; #1055
+
 # version 0.7-4
 
 * add example on how voronoi polygons can be tied back to the points they contain; #1030
