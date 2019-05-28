@@ -316,8 +316,8 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 
 			for (size_t i = 0; i < gmv0.size(); i++) {
 				if (GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get())) {
-					for (size_t j = 0; j < gmv1.size(); j++)
-						out(i, j) = NA_REAL;
+					for (size_t j = 0; j < gmv1.size(); j++) // #nocov
+						out(i, j) = NA_REAL;                 // #nocov
 				} else for (size_t j = 0; j < gmv1.size(); j++) {
 					if (GEOSisEmpty_r(hGEOSCtxt, gmv1[j].get()))
 						out(i, j) = NA_REAL;

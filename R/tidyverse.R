@@ -1,6 +1,6 @@
 ## dplyr methods:
 group_map.sf <- function(.tbl, .f, ...) {
-	 st_as_sf(NextMethod())
+	 st_as_sf(NextMethod()) # nocov
 }
 
 group_split.sf <- function(.tbl, ..., keep = TRUE) {
