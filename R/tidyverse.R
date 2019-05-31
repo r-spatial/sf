@@ -316,6 +316,8 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 #' @param sep see \link[tidyr]{separate_rows}
 #' @param convert see \link[tidyr]{separate_rows}
 separate_rows.sf <- function(data, ..., sep = "[^[:alnum:]]+", convert = FALSE) {
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
 	class(data) <- setdiff(class(data), "sf")
 	ret = tidyr::separate_rows(data, ..., sep = sep, convert = convert)
 	st_as_sf(ret, sf_column_name = attr(data, "sf_column"))
