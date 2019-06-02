@@ -171,13 +171,15 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			Rcpp::Rcout << "Deleting source `" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
 	}
 
-	// data set:
 	std::vector <char *> options = create_options(dco, quiet);
+	std::vector <char *> drivers = create_options(driver, true);
+
+	// data set:
 	GDALDataset *poDS; 
 
 	// delete layer:
-	if (delete_layer && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
-				options.data(), NULL)) != NULL) { // don't complain if the layer is not present
+	if (delete_layer && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
+				drivers.data(), options.data(), NULL)) != NULL) { // don't complain if the layer is not present
 		// find & delete layer:
 		bool deleted = false;
 		for (int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
@@ -203,8 +205,8 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	}
 	
 	// update ds:
-	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, 
-				options.data(), NULL)) != NULL) {
+	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
+				drivers.data(), options.data(), NULL)) != NULL) {
 		if (! quiet)
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
