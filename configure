@@ -3826,56 +3826,33 @@ int main() {
 }
 _EOCONF
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for proj_context_create in -lproj" >&5
-$as_echo_n "checking for proj_context_create in -lproj... " >&6; }
-if ${ac_cv_lib_proj_proj_context_create+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lproj  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+cat > proj_conf_test.cpp <<_EOCONF
+#include <stdio.h>
+#include <stdlib.h>
+#include <proj.h>
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char proj_context_create ();
-int
-main ()
-{
-return proj_context_create ();
-  ;
-  return 0;
+int main() {
+	proj_context_create();
+    exit(0);
 }
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_proj_proj_context_create=yes
-else
-  ac_cv_lib_proj_proj_context_create=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_proj_proj_context_create" >&5
-$as_echo "$ac_cv_lib_proj_proj_context_create" >&6; }
-if test "x$ac_cv_lib_proj_proj_context_create" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBPROJ 1
-_ACEOF
-
-  LIBS="-lproj $LIBS"
-
-else
-  proj6ok=no
-fi
-
+_EOCONF
+  #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ: checking whether PROJ and sqlite3 are available for linking:" >&5
+$as_echo_n "checking PROJ: checking whether PROJ and sqlite3 are available for linking:... " >&6; }
+  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  if test `echo $?` -ne 0 ; then
+    proj6ok=no
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  else
+    proj6ok=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  fi
   if test "${proj6ok}" = no; then
      as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
   fi
+
 cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
 #include <stdlib.h>
