@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -211,10 +211,6 @@ First 10 features:
 8  0.114 POINT (-81.65148 36.56709)
 9  0.114 POINT (-81.62684 36.56709)
 10 0.114 POINT (-81.60221 36.56709)
-================================================================================
-================================================================================
-================================================================================
-================================================================================
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -247,4 +243,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  1.283   0.039   1.314 
+  1.408   0.029   1.438 
