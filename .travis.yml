@@ -28,7 +28,6 @@ addons:
   apt:
     sources:
       - sourceline: 'ppa:opencpu/jq'
-      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
       - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
     packages:
