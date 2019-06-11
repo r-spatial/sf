@@ -382,7 +382,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	if (g.size() == 0) {
 		dest->Release(); // #nocov
-		Rcpp::stop("CPL_transform: zero length geometry list"); // #nocov
+		return sfc_from_ogr(g, true); // destroys g;
 	}
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
