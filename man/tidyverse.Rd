@@ -85,9 +85,11 @@ right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
 full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
   ...)
 
-semi_join.sf(x, y, by = NULL, copy = FALSE, ...)
+semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 
-anti_join.sf(x, y, by = NULL, copy = FALSE, ...)
+anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ...)
 }
 \arguments{
 \item{.data}{data object of class \link{sf}}

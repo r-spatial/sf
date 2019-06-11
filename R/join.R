@@ -40,13 +40,13 @@ full_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 }
 
 #' @name tidyverse
-semi_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
+semi_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
 #' @name tidyverse
-anti_join.sf = function(x, y, by = NULL, copy = FALSE, ...) {
+anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
