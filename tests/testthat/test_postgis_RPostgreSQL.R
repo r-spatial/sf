@@ -77,6 +77,7 @@ test_that("RPostgreSQL driver can use `geometry_column` (#1045)", {
 	x <- st_read(pg, query = query, geometry_column = c("b"))
 	expect_equal(x$a, "010100000000000000000000000000000000000000")
 	expect_equal(x$b, st_sfc(st_point(c(1, 0))))
+	expect_error(st_read(pg, query = query, geometry_column = c("b", "c")), "Could not find")
 })
 
 test_that("sf can write units to database (#264)", {
