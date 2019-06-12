@@ -68,9 +68,11 @@ sf_extSoftVersion = function() {
 load_gdal <- function() {
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
-		assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
 		prj = system.file("proj", package = "sf")[1]
-		Sys.setenv("PROJ_LIB" = prj)
+		if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB alone
+			assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
+			Sys.setenv("PROJ_LIB" = prj)
+		}
 		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
 		gdl = system.file("gdal", package = "sf")[1]
 		Sys.setenv("GDAL_DATA" = gdl)
@@ -94,7 +96,9 @@ unload_gdal <- function() {
 	CPL_gdal_cleanup_all()
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
-		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
+		if (! CPL_set_data_dir(system.file("proj", package = "sf")[1])) # set back:
+			Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
+
 		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
 		# nocov end
 	}

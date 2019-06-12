@@ -3,7 +3,12 @@
 #include "Rcpp.h"
 
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
-#include <proj.h>
+# include <proj.h>
+
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir) {
+  proj_context_set_search_paths(data_dir[0]);
+  return true;
+}
 
 std::string CPL_proj_version(bool b = false) {
 
@@ -104,11 +109,16 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 
 #else // if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
-#include <proj_api.h>
+# include <proj_api.h>
 
 #if PJ_VERSION >= 600
 # define PROJ6 1
 #endif
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir) {
+  return false;
+}
 
 #if PJ_VERSION == 480
 extern "C" {
