@@ -5,9 +5,10 @@
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
-Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir) {
-  proj_context_set_search_paths(data_dir[0]);
-  return true;
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
+	const char *cp = data_dir.c_str();
+	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+	return true;
 }
 
 std::string CPL_proj_version(bool b = false) {
@@ -116,7 +117,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #endif
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir) {
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
   return false;
 }
 

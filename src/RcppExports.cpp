@@ -777,12 +777,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_set_data_dir
-Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir);
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
 RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type data_dir(data_dirSEXP);
+    Rcpp::traits::input_parameter< std::string >::type data_dir(data_dirSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir));
     return rcpp_result_gen;
 END_RCPP
