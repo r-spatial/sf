@@ -159,6 +159,7 @@ right_join(a, b)
 full_join(a, b)
 semi_join(a, b)
 anti_join(a, b)
+left_join(a, data.frame(b, geometry = 1), by = "b")
 
 # st_joins:
 a = st_sf(a = 1:3,
