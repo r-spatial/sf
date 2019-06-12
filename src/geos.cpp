@@ -565,10 +565,15 @@ Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false) {
+
+	if (sfc.size() == 0)
+		return sfc; // #nocov
+
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GeomPtr> gmv_out(by_feature ? sfc.size() : 1);
+
 	if (by_feature) {
 		for (int i = 0; i < sfc.size(); i++) {
 			gmv_out[i] = geos_ptr(GEOSUnaryUnion_r(hGEOSCtxt, gmv[i].get()), hGEOSCtxt);
