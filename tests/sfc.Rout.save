@@ -1207,6 +1207,16 @@ epsg (SRID):    NA
 proj4string:    NA
 POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
 > 
+> # transform empty:
+> st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+Simple feature collection with 0 features and 0 fields
+bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+[1] geom
+<0 rows> (or 0-length row.names)
+> 
+> 
 > proc.time()
    user  system elapsed 
-  2.333   0.121   2.445 
+  2.407   0.091   2.489 

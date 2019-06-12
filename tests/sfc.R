@@ -320,3 +320,7 @@ st_difference(shape4, shape1)
 st_sym_difference(shape1, shape4)
 st_union(shape1, shape4)
 st_union(shape4, shape1)
+
+# transform empty:
+st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+

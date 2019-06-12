@@ -174,7 +174,7 @@ st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "nat
 #' @export
 st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
 	if (utils::packageVersion("grid") < "3.6") {
-		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
+		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...)) # nocov
 	}
 	x <- unclass(x) # nocov start
 	n_poly <- vapply(x, length, integer(1))
@@ -187,7 +187,7 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
 	if (utils::packageVersion("grid") < "3.6") {
-		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...))
+		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...)) # nocov
 	}
 	x <- unclass(x) # nocov start
 	n_poly <- vapply(x, length, integer(1))

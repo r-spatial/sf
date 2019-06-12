@@ -109,7 +109,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 }
 
 
-#else // if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
+#else // if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) i.e., old proj_api:
 # include <proj_api.h>
 
 #if PJ_VERSION >= 600
@@ -117,9 +117,9 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #endif
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
+Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
   return false;
-}
+}                                                            // #nocov end
 
 #if PJ_VERSION == 480
 extern "C" {
