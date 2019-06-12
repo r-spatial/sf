@@ -108,14 +108,15 @@ st_read.DBIObject = function(dsn = NULL,
         tbl[geometry_column] <- lapply(tbl[geometry_column], try_postgis_as_sfc, EWKB = EWKB, conn = dsn)
     } else {
         if (!all(geometry_column %in% names(tbl))) {
+            # prepare error message
             nm <- names(tbl)
             prefix <- ""
             new_line <- ""
             if(length(nm) > 1) {
-                prefix <- "\t *"
+                prefix <- "  *"
                 new_line <- "\n"
             }
-            stop("Could not find `geometry_column` (", geometry_column, ") ",
+            stop("Could not find `geometry_column` (\"", paste(geometry_column, collapse = "\", \""), "\") ",
                 "in column names. Available names are:",
                 new_line,
                 paste(prefix, nm, collapse = "\n", sep = " "),
