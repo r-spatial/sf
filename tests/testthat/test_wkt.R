@@ -13,6 +13,12 @@ test_that("well-known text", {
   expect_equal(st_sfc(gcol), st_as_sfc(list("GEOMETRYCOLLECTION (POINT (1 2), LINESTRING (1 3, 2 4))")))
 })
 
+test_that("Can read wkt with newlines", {
+	x <- st_as_sfc('POINT(-71.1776585052917\n\r42.3902909739571)')
+	expect_is(x, "sfc")
+	expect_is(x, "sfc_POINT")
+})
+
 test_that("detect ewkt", {
 	expect_equal(is_ewkt(c("LINESTRING(1663106 -105415,1664320 -104617)",
 			  "SRID=4326;POLYGON(1.0 -2.5,3.2 -5.70000)")),

@@ -160,6 +160,9 @@ st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 			}
 			x = ewkt_to_wkt(x)
 		}
+		# sanitize WKT to remove newlines
+		x <- gsub("\r?\n|\r", " ", x)
+
 		ret = st_sfc(CPL_sfc_from_wkt(x))
 		st_crs(ret) = crs
 		ret
