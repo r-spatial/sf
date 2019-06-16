@@ -134,12 +134,12 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	if (length(which.geom) == 0) {
 		warning("no simple feature geometries present: returning a data.frame or tbl_df",
 			call. = FALSE)
-		if ("list" %in% sapply(x, class) && !as_tibble)
-			warning("list-column present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
-		x = if (as_tibble)
-				tibble::as_tibble(x)
-			else
+		x = if (!as_tibble) {
+				if (any(sapply(x, is.list)))
+					warning("list-column(s) present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
 				as.data.frame(x , stringsAsFactors = stringsAsFactors)
+			} else
+				tibble::as_tibble(x)
 		return(x)
 	}
 
