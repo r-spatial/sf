@@ -1,11 +1,10 @@
 # version 0.7-5
 
-
 * `st_union` no longer segfaults on zero row `sf` objects; #1077
 
 * `st_transform` no longer breaks on zero row `sf` objects; #1075
 
-* when PROJ >= 6.1.0 is available and sf comes with datum files (as is the case with statically linked Windows and OSX CRAN binaries), `PROJ_LIB` is no longer temporarily overwritten, but the PROJ C api is used to set the datum path; #1074
+* when PROJ >= 6.1.0 is available and sf comes with datum files (as is the case with statically linked Windows and OSX CRAN binaries), `PROJ_LIB` is no longer temporarily overwritten, but the PROJ C api is used to set the datum path; #1074, suggested by Jeroen Ooms
 
 * sf now compiles against GDAL 3.x and PROJ 6.1.0, using the `proj.h` interface; #1070
 
