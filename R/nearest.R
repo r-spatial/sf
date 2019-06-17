@@ -37,6 +37,9 @@ st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 #' @export
 #' @name st_nearest_points
 st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
+	stopifnot(st_crs(x) == st_crs(y))
+	if (isTRUE(st_is_longlat(x)))
+		message_longlat("st_nearest_points")
 	st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
 }
  
@@ -90,5 +93,8 @@ st_nearest_points.sf = function(x, y, ...) {
 #' ls = st_nearest_points(pts, circles[nearest], pairwise = TRUE)
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
+	stopifnot(st_crs(x) == st_crs(y))
+	if (isTRUE(st_is_longlat(x)))
+		message_longlat("st_nearest_feature")
 	CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
 }
