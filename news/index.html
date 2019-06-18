@@ -432,7 +432,7 @@
 <li><p>fix bug reading and writing dates (months 1 off): <a href='https://github.com/r-spatial/sf/issues/358'>#358</a></p></li>
 <li><p>[.sf and [.sfc now also select on i when i is an <code>sfg</code> object, and accept a geometric predicate function with optional arguments; <a href='https://github.com/r-spatial/sf/issues/352'>#352</a></p></li>
 <li><p>on reading through GDAL, empty (NULL) geometries no longer result in an error; on creation, they no longer automatically give a <code>GEOMETRY</code> object; <a href='https://github.com/r-spatial/sf/issues/351'>#351</a></p></li>
-<li><p>on plotting with <code><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggsf">ggplot2::geom_sf</a></code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; <a href='https://github.com/r-spatial/sf/issues/351'>#351</a></p></li>
+<li><p>on plotting with <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">ggplot2::geom_sf</a></code>, empty geometries no longer break; grid functions return <code>nullGrob()</code> for them; <a href='https://github.com/r-spatial/sf/issues/351'>#351</a></p></li>
 <li><p>arith operations on empty geometries no longer break or give warnings; <a href='https://github.com/r-spatial/sf/issues/351'>#351</a></p></li>
 <li><p>have <code>st_as_sf.data.frame</code> by default break on <code>NA</code> values in coordinates; <a href='https://github.com/r-spatial/sf/issues/342'>#342</a></p></li>
 <li><p>have <code>st_join</code> accept further arguments, to be passed on to the <code>join</code> function (e.g. a pattern for <code>st_relate</code>)</p></li>
