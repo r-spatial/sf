@@ -105,7 +105,7 @@ bool equals_na(double value, double na, GDALDataType dt) {
 	if (ISNAN(value))
 		return true;
 	if (dt == GDT_Float32)
-		return (float) value == ((float) na);
+		return (float) value == (float) na;
 	else
 		return value == na;
 }
