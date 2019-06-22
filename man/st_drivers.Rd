@@ -7,20 +7,20 @@
 st_drivers(what = "vector")
 }
 \arguments{
-\item{what}{character: "vector" or "raster", anything else will return all drivers.}
+\item{what}{character: \code{"vector"} or \code{"raster"}, anything else will return all
+drivers.}
 }
 \value{
-a \code{data.frame} with driver metadata
+A \code{data.frame} with driver metadata.
 }
 \description{
 Get a list of the available GDAL drivers
 }
 \details{
-The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{st_drivers()}
-function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
-files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.
-
-field \code{vsi} refers to the driver's capability to read/create datasets through the VSI*L API.
+The drivers available will depend on the installation of GDAL/OGR,
+and can vary; the \code{st_drivers()} function shows all the drivers that are
+readable, and which may be written. The field \code{vsi} refers to the driver's
+capability to read/create datasets through the VSI*L API. \href{https://gdal.org/drivers/vector/index.html}{See GDAL website for additional details on driver support}.
 }
 \examples{
 st_drivers()

@@ -191,4 +191,16 @@ test_that("reading non-spatial table works", {
     )
 })
 
+test_that("Missing data sources have useful error message (#967)", {
+	# write temporary file
+	x <- tempfile(fileext = ".kml")
+	cat("empty", file = x)
 
+	expect_error(st_read(tempfile(fileext = ".csv")), "The file doesn't seem to exist.")
+	expect_error(st_read("PG:host=wrong"), "Check connection parameters.")
+	expect_error(st_read(x), "The source could be corrupt or not supported.")
+	expect_error(st_read(""), "not an empty string.")
+
+	# delete temp file
+	file.remove(x)
+})

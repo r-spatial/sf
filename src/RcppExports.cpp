@@ -289,8 +289,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_ogr
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column_name, bool promote_to_multi, bool int64_as_string);
-RcppExport SEXP _sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP toTypeUserSEXP, SEXP fid_column_nameSEXP, SEXP promote_to_multiSEXP, SEXP int64_as_stringSEXP) {
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column_name, bool promote_to_multi, bool int64_as_string, bool dsn_exists, bool dsn_isdb);
+RcppExport SEXP _sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP toTypeUserSEXP, SEXP fid_column_nameSEXP, SEXP promote_to_multiSEXP, SEXP int64_as_stringSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -303,7 +303,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fid_column_name(fid_column_nameSEXP);
     Rcpp::traits::input_parameter< bool >::type promote_to_multi(promote_to_multiSEXP);
     Rcpp::traits::input_parameter< bool >::type int64_as_string(int64_as_stringSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, promote_to_multi, int64_as_string));
+    Rcpp::traits::input_parameter< bool >::type dsn_exists(dsn_existsSEXP);
+    Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1069,7 +1071,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_segmentize", (DL_FUNC) &_sf_CPL_gdal_segmentize, 2},
     {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
-    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 9},
+    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 11},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 2},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 3},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 3},
