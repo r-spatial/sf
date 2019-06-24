@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
@@ -7,7 +7,7 @@ MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 RUN apt-get update && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/  " >> /etc/apt/sources.list
+RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu bionic-cran35/  " >> /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
 RUN apt-get update
@@ -33,10 +33,6 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	vim \
 	wget
 
-# for tmap:
-RUN add-apt-repository -y ppa:opencpu/jq
-RUN apt-get update
-RUN apt-get upgrade -y
 RUN apt-get install -y \
 	libv8-3.14-dev \
 	libjq-dev \
@@ -47,12 +43,13 @@ RUN apt-get install -y \
 	unixodbc-dev \
 	libssh2-1-dev \
 	libgit2-dev \
-	libnetcdf-dev
+	libnetcdf-dev \
+	locales \
+	libssl-dev
 
-# PROJ:
-# was: ENV PROJ_VERSION 4.9.3
-# http://download.osgeo.org/proj/proj-5.0.0RC3.tar.gz
-ENV PROJ_VERSION=6.1.0RC2
+RUN locale-gen en_US.UTF-8
+
+ENV PROJ_VERSION=6.1.1RC1
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
@@ -66,10 +63,10 @@ RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
 
 # install proj-datumgrid:
 RUN cd /usr/local/share/proj \
-  && wget http://download.osgeo.org/proj/proj-datumgrid-1.8.zip \
+  && wget http://download.osgeo.org/proj/proj-datumgrid-latest.zip \
   && unzip -o proj-datumgrid*zip \
   && rm proj-datumgrid*zip \
-  && wget https://download.osgeo.org/proj/proj-datumgrid-europe-1.3RC1.zip \
+  && wget https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip \
   && unzip -o proj-datumgrid*zip \
   && rm proj-datumgrid*zip \
   && cd -
@@ -138,14 +135,18 @@ RUN R CMD INSTALL stars
 #RUN R CMD INSTALL rgdal_*.tar.gz 
 #RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
 #RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
-RUN apt-get install locales
-RUN locale-gen en_US.UTF-8
 
 RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
+# after rgdal:
 RUN Rscript -e 'install.packages(c("tmaptools", "tmap"))'
 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+
+RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
+RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
+RUN (  cd stars; git pull)
+RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 CMD ["/bin/bash"]
