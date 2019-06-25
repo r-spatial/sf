@@ -75,3 +75,11 @@ test_that("Can't convert `M` dimension to sp", {
 	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"))
 	expect_error(as_Spatial(x), "not supported by sp")
 })
+
+test_that("conversion to sp breaks on empty geometries", {
+  mysfc <- st_sfc(list(
+    st_polygon(list(matrix(c(1,3,2,1,0,0,1,0), 4, 2))),
+    st_polygon()  # empty polygon
+  ))
+  expect_error(as_Spatial(mysfc), "conversion failed")
+})

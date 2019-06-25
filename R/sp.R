@@ -238,9 +238,13 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	if (zm %in% c("XYM", "XYZM"))
 		stop("geometries containing M not supported by sp\n",
 			 'use `st_zm(..., what = "M")`')
-	StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM"))
-		stop("sp supports Z dimension only for POINT and MULTIPOINT.\n",
-			 'use `st_zm(...)` to coerce to XY dimensions') }
+	if (any(st_is_empty(from)))
+		stop("empty geometries are not supported by sp classes: conversion failed")
+	StopZ = function(zm) { 
+		if (zm == "XYZ")
+			stop("sp supports Z dimension only for POINT and MULTIPOINT.\n",
+				 'use `st_zm(...)` to coerce to XY dimensions')
+	}
 	switch(class(from)[1],
 		"sfc_POINT" = sfc2SpatialPoints(from),
 #		"sfc_POINT" = sfc2SpatialPoints(from, IDs),
