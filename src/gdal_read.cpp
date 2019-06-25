@@ -3,6 +3,7 @@
 
 #include <ogrsf_frmts.h>
 
+#define RCPP_DEFAULT_INCLUDE_CALL false
 #include "Rcpp.h"
 
 #include "gdal_sf_pkg.h"
