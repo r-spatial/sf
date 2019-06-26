@@ -189,6 +189,9 @@ LINESTRING2MULTILINESTRING = function(x, dim = "XYZ") {
 	st_multilinestring(list(unclass(x)), dim = dim)
 }
 POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
+	if (st_is_empty(x)) {
+		return(st_multipolygon(dim = class(x)[1]))
+	}
 	if (ncol(x[[1]]) == 3) # disambiguate Z/M:
 		dim = class(x)[1]
 	st_multipolygon(list(unclass(x)), dim = dim)

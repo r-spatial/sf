@@ -122,3 +122,8 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   expect_is(sfc2 %>% st_cast, "sfc_GEOMETRY")
   expect_equal(sapply(sfc2 %>% st_cast, class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
 })
+
+test_that("can cast empty polygon (#1094)", {
+  poly <- st_as_sfc(c('MULTIPOLYGON(((3 1,3 5,6 5,3 1)))', 'POLYGON EMPTY'))
+  expect_is(st_cast(poly), "sfc_MULTIPOLYGON")
+})
