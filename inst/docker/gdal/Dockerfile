@@ -145,8 +145,6 @@ RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz
 
 RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
 RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-RUN (  cd stars; git pull)
-RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 CMD ["/bin/bash"]
