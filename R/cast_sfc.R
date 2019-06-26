@@ -197,6 +197,7 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 	all_const = all_constant(x)
 	sf_column = attr(x, "sf_column") # keep name
 	st_geometry(x) = NULL
+	# class(x) = setdiff(class(x), "sf")
 	ids = attr(geom, "ids")          # e.g. 3 2 4
 	if (!is.null(ids)) { # split:
 		if (warn && ! all_const)

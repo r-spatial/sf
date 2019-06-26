@@ -167,5 +167,5 @@ Ops.sfc <- function(e1, e2) {
 		ret
 }
 is_only_diag <- function(x) {
-	is.matrix(x) && all(`diag<-`(x, 0) == 0)
+	is.matrix(x) && all(`diag<-`(x, 0) == 0) # nocov
 }
