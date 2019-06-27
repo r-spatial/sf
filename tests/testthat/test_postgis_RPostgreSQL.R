@@ -44,9 +44,9 @@ test_that("can write to db", {
 
 test_that("can handle multiple geom columns", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
-	multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
+	multi <- cbind(geometry_2 = pts[["geometry"]], st_transform(pts, 4326))
 	expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
-	multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
+	multi2 <- cbind(geometry_2 = pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
 	expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
 	skip_on_travis()
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
@@ -55,14 +55,14 @@ test_that("can handle multiple geom columns", {
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
-	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
+	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry_2"))
 	x <- st_layers("PG:host=localhost dbname=postgis")
 	expect_silent(x <- st_read(pg, "meuse_multi2"))
 	# expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]])) #-->> not generally the case, this CRS varies accross installations (EPSG db versions)
-	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+	expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi2", quiet = TRUE))
 	#expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
-	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
+	expect_equal(st_crs(x[["geometry_2"]]), st_crs(multi2[["geometry_2"]]))
 })
 
 test_that("RPostgreSQL driver can use `geometry_column` (#1045)", {

@@ -222,8 +222,8 @@ summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 #' @export
 as.data.frame.sfc = function(x, ...) {
 	ret = data.frame(row.names = seq_along(x))
-	ret$geometry = x
-	ret
+	ret[["geometry"]] = x
+	setNames(ret, NULL)
 }
 
 

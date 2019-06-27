@@ -121,3 +121,13 @@ test_that("c.sfc n_empty returns sum of st_is_empty(sfg)", {
 test_that("st_is_longlat warns on invalid bounding box", {
 	expect_warning(st_is_longlat(st_sfc(st_point(c(0,-95)), crs = 4326)))
 })
+
+test_that("Geometry column name is preserved (#1097)", {
+	# automatically renamed to geometry
+	x <- data.frame(
+		a = st_sfc(st_point(c(0, 0)))
+	)
+	expect_equal(names(x), "a")
+	y <- st_sf(x)
+	expect_equal(attributes(y)[["sf_column"]], "a")
+})
