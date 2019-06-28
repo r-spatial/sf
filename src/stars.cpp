@@ -165,11 +165,16 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			offset = poBand->GetOffset(NULL);
 		units[i] = poBand->GetUnitType();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
-			for (R_xlen_t i = 0; i < Rf_xlength(vec); i++) {
-				if (equals_na(vec[i], nodatavalue[0], poBand->GetRasterDataType()))
-					vec[i] = NA_REAL; // #nocov
+
+
+			// for (R_xlen_t j = 0; j < Rf_xlength(vec); j++) {
+			for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
+					j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
+					j++) {
+				if (equals_na(vec[j], nodatavalue[0], poBand->GetRasterDataType()))
+					vec[j] = NA_REAL; // #nocov
 				else
-					vec[i] = (vec[i] * scale) + offset;
+					vec[j] = (vec[j] * scale) + offset;
 			}
 		}
 		checkUserInterrupt();
