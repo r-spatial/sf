@@ -138,10 +138,13 @@
 <a href="#version-0-7-5" class="anchor"></a>version 0.7-5<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code><a href="../reference/coerce-methods.html">as(x, "Spatial")</a></code> now gives a proper error message on empty geometries; <a href='https://github.com/r-spatial/sf/issues/1093'>#1093</a></p></li>
+<li><p><code>st_cast</code> now takes care of empty polygons; <a href='https://github.com/r-spatial/sf/issues/1094'>#1094</a></p></li>
+<li><p><code>st_nearest_*</code> functions now warn in case they are used with geographic coordinates; <a href='https://github.com/r-spatial/sf/issues/1081'>#1081</a></p></li>
 <li><p><code>st_union</code> no longer segfaults on zero row <code>sf</code> objects; <a href='https://github.com/r-spatial/sf/issues/1077'>#1077</a></p></li>
 <li><p><code>st_transform</code> no longer breaks on zero row <code>sf</code> objects; <a href='https://github.com/r-spatial/sf/issues/1075'>#1075</a></p></li>
 <li><p>when PROJ &gt;= 6.1.0 is available and sf comes with datum files (as is the case with statically linked Windows and OSX CRAN binaries), <code>PROJ_LIB</code> is no longer temporarily overwritten, but the PROJ C api is used to set the datum path; <a href='https://github.com/r-spatial/sf/issues/1074'>#1074</a>, suggested by Jeroen Ooms</p></li>
-<li><p>sf now compiles against GDAL 3.x and PROJ 6.1.0, using the <code>proj.h</code> interface; <a href='https://github.com/r-spatial/sf/issues/1070'>#1070</a></p></li>
+<li><p>sf now compiles against GDAL 3.x and PROJ 6.1.0, using the new <code>proj.h</code> interface; <a href='https://github.com/r-spatial/sf/issues/1070'>#1070</a></p></li>
 <li><p><code>st_distance</code> returns <code>NA</code> for empty geometries, rather than 0; <a href='https://github.com/r-spatial/sf/issues/1055'>#1055</a></p></li>
 </ul>
 </div>
