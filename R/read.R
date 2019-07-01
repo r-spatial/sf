@@ -67,7 +67,7 @@ set_utf8 = function(x) {
 #' For \code{query} with a character \code{dsn} the query text is handed to
 #' 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 #' new layer (and \code{layer} is ignored). See 'OGRSQL'
-#' \url{https://www.gdal.org/ogr_sql.html} for details. Please note that the
+#' \url{https://gdal.org/user/ogr_sql_dialect.html} for details. Please note that the
 #' 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
 #' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
 #' OGRSQL are also likely to be driver dependent. The available layer names may
