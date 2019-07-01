@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.7.0, GDAL 2.3.2, PROJ 5.2.0
+Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -115,4 +115,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.360   0.024   0.377 
+  0.475   0.051   0.533 
