@@ -106,12 +106,14 @@ handled with care; the former may erase complete directories or databases.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-st_write(nc, "nc.shp")
-st_write(nc, "nc.shp", delete_layer = TRUE) # overwrites
+st_write(nc, paste0(tempdir(), "nc.shp"))
+st_write(nc, paste0(tempdir(), "nc.shp"), delete_layer = TRUE) # overwrites
 data(meuse, package = "sp") # loads data.frame from sp
 meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_XY") # writes X and Y as columns
-st_write(meuse_sf, "meuse.csv", layer_options = "GEOMETRY=AS_WKT", delete_dsn=TRUE) # overwrites
+# writes X and Y as columns:
+st_write(meuse_sf, paste0(tempdir(), "meuse.csv"), layer_options = "GEOMETRY=AS_XY") 
+st_write(meuse_sf, paste0(tempdir(), "meuse.csv"), layer_options = "GEOMETRY=AS_WKT",
+  delete_dsn=TRUE) # overwrites
 \dontrun{
  library(sp)
  example(meuse, ask = FALSE, echo = FALSE)

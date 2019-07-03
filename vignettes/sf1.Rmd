@@ -505,7 +505,7 @@ first layer, giving a warning in case there are more.
 `st_read` typically reads the coordinate reference system as
 `proj4string`, but not the EPSG (SRID).  GDAL cannot retrieve SRID
 (EPSG code) from `proj4string` strings, and, when needed, it has
-to be set by the user. See also the section on [crs](crs).
+to be set by the user. See also the section on [coordinate reference systems](#crs).
 
 `st_drivers()` returns a `data.frame` listing available drivers,
 and their metadata: names, whether a driver can write, and whether
