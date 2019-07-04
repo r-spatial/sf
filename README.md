@@ -61,6 +61,7 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 The easiest way to install `gdal` is using Homebrew. Recent version of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb):
 
 ```
+brew install pkg-config
 brew install gdal
 ```
 
