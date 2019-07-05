@@ -1,3 +1,9 @@
+# version 0.7-7
+
+# version 0.7-6
+
+* have examples of `st_write` write only to the temporary R session directory
+
 # version 0.7-5
 
 * `as(x, "Spatial")` now gives a proper error message on empty geometries; #1093
