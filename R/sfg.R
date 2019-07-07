@@ -11,8 +11,11 @@ getClassDim = function(x, d, dim = "XYZ", type) {
 	else stop(paste(d, "is an illegal number of columns for a", type))
 }
 
-is_numeric_matrix = function(x)
-	stopifnot(is.numeric(x) && is.matrix(x)  && !anyNA(x))
+is_numeric_matrix = function(x) {
+	stopifnot(is.numeric(x))
+	stopifnot(is.matrix(x))
+	stopifnot(!anyNA(x))
+}
 
 Mtrx = function(x, dim = "XYZ", type) {
 	is_numeric_matrix(x)
