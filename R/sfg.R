@@ -12,7 +12,7 @@ getClassDim = function(x, d, dim = "XYZ", type) {
 }
 
 is_numeric_matrix = function(x)
-	stopifnot(is.numeric(x) && is.matrix(x))
+	stopifnot(is.numeric(x) && is.matrix(x)  && !anyNA(x))
 
 Mtrx = function(x, dim = "XYZ", type) {
 	is_numeric_matrix(x)
@@ -213,7 +213,7 @@ head.sfg = function(x, n = 10L, ...) {
 	structure(head(unclass(x), n = n, ...), class = class(x))
 }
 
-# 
+#
 get_start = function(x, n = 30) {
 	if (is.list(x)) # recurse into first element:
 		structure(lapply(x, get_start, n = n), class = class(x))
