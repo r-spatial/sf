@@ -479,6 +479,7 @@ LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 > plot(st_geometry(nc))
 > ls = try(st_nearest_points(nc[1,], nc))
+although coordinates are longitude/latitude, st_nearest_points assumes that they are planar
 > # plot(ls, col = 'red', add = TRUE)
 > pts = st_cast(ls, "POINT") # gives all start & end points
 > # starting, "from" points, corresponding to x:
@@ -574,4 +575,4 @@ Sparse geometry binary predicate list of length 1, where the predicate was `inte
 > 
 > proc.time()
    user  system elapsed 
-  3.535   0.051   3.585 
+  3.722   0.073   3.789 

@@ -58,7 +58,7 @@ get_key_pos(x, ...)
 plot_sf(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE,
   bgc = par("bg"), ..., xaxs, yaxs, lab, setParUsrBB = FALSE,
   bgMap = NULL, expandBB = c(0, 0, 0, 0), graticule = NA_crs_,
-  col_graticule = "grey")
+  col_graticule = "grey", border)
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
   categorical = FALSE)
