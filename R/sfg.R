@@ -11,14 +11,12 @@ getClassDim = function(x, d, dim = "XYZ", type) {
 	else stop(paste(d, "is an illegal number of columns for a", type))
 }
 
-is_numeric_matrix = function(x) {
-	stopifnot(is.numeric(x))
-	stopifnot(is.matrix(x))
-	stopifnot(!anyNA(x))
+valid_numeric_matrix = function(x) {
+	stopifnot(is.numeric(x), is.matrix(x), !anyNA(x))
 }
 
 Mtrx = function(x, dim = "XYZ", type) {
-	is_numeric_matrix(x)
+	valid_numeric_matrix(x)
 	structure(x, class = getClassDim(x, ncol(x), dim, type))
 }
 
@@ -29,7 +27,7 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		nc = unique(vapply(x, ncol, 0L))
 		if (length(nc) != 1)
 			stop("matrices have unequal numbers of columns")
-		lapply(x, is_numeric_matrix)
+		lapply(x, valid_numeric_matrix)
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(vapply(x, NotClosed, TRUE)))
 			stop("polygons not (all) closed")
@@ -48,7 +46,7 @@ MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		nc = unique(unlist(lapply(x, function(y) vapply(y, ncol, 0L))))
 		if (length(nc) != 1)
 			stop("matrices have unequal numbers of columns")
-		lapply(x, function(y) lapply(y, is_numeric_matrix))
+		lapply(x, function(y) lapply(y, valid_numeric_matrix))
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(unlist(lapply(x, function(y) vapply(y, NotClosed, TRUE)))))
 			stop("polygons not (all) closed")
