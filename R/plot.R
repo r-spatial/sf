@@ -534,7 +534,7 @@ plot.sfg = function(x, ...) {
 #'
 plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ...,
     xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_,
-	col_graticule = 'grey') {
+	col_graticule = 'grey', border) {
 
 # sp's bbox: matrix
 #   min max
@@ -795,9 +795,9 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 		c(offset,offset,0,0)) 
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
-			polygon(poly[[i]], c(0, 0, 1, 1) + offs, col=col[i], border=NA)
+			polygon(poly[[i]], c(0, 0, 1, 1) + offs, col = col[i], border = NA)
 		if (key.pos %in% c(2,4))
-			polygon(c(0, 0, 1, 1) + offs, poly[[i]], col=col[i], border=NA)
+			polygon(c(0, 0, 1, 1) + offs, poly[[i]], col = col[i], border = NA)
 	}
 
 	# box() now would draw around [0,1]:
