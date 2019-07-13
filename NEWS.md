@@ -1,5 +1,7 @@
 # version 0.7-7
 
+* constructor functions like `st_linestring()` now check and break on `NA` coordinates; #1101
+
 # version 0.7-6
 
 * have examples of `st_write` write only to the temporary R session directory
