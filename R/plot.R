@@ -102,12 +102,15 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (logz)
 				values = log10(values)
 			if (is.character(breaks)) { # compute breaks from values:
-				n.unq = length(unique(na.omit(values)))
+				v0 = na.omit(as.numeric(values))
+				n.unq = length(unique(v0))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
-						classInt::classIntervals(na.omit(values), min(nbreaks, n.unq), 
+						classInt::classIntervals(v0, min(nbreaks, n.unq), 
 							breaks, warnSmallN = FALSE)$brks
 					else
 						range(values, na.rm = TRUE) # lowest and highest!
+				if (inherits(values, "POSIXct"))
+					breaks = as.POSIXct(breaks, origin = as.POSIXct("1970-01-01"))
 				nbreaks = length(breaks) - 1
 			}
 		}
@@ -152,8 +155,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.list(values))
 				stop("plotting list-columns not supported") # nocov
 
-			if (inherits(values, "POSIXt"))
-				values = as.numeric(values)
+#			if (inherits(values, "POSIXt"))
+#				values = as.numeric(values)
 
 			if (is.character(values))
 				values = as.factor(values)
@@ -175,15 +178,19 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 								pal
 						colors[as.numeric(values)]
 					} else {
-						values = as.numeric(values) # drop units, if any
+						if (! inherits(values, "POSIXt"))
+							values = as.numeric(values) # drop units, if any
 						if (is.character(breaks)) { # compute breaks from values:
-							n.unq = length(unique(na.omit(values)))
+							v0 = na.omit(as.numeric(values))
+							n.unq = length(unique(v0))
 							breaks = if (! all(is.na(values)) && n.unq > 1)
-								classInt::classIntervals(na.omit(values), min(nbreaks, n.unq),
+								classInt::classIntervals(v0, min(nbreaks, n.unq),
 									breaks, warnSmallN = FALSE)$brks
 							else
 								range(values, na.rm = TRUE) # lowest and highest!
-						} 
+							if (inherits(values, "POSIXt"))
+								breaks = as.POSIXct(breaks, origin = as.POSIXct("1970-01-01"))
+						}
 						# this is necessary if breaks were specified either as character or as numeric
 						# "pretty" takes nbreaks as advice only:
 						nbreaks = length(breaks) - 1
@@ -809,7 +816,9 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 	labels = if (logz)
 			parse(text = paste0("10^", at))
-		else 
+		else if (inherits(breaks, "POSIXt"))
+			format(at)
+		else
 			TRUE
 
 	if (add.axis)
