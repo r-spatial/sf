@@ -1,6 +1,8 @@
 # version 0.7-7
 
-* constructor functions like `st_linestring()` now check and break on `NA` coordinates; #1101
+* `plot()` handles `POSIXct` values in legend
+
+* constructor functions like `st_linestring()` check and break on `NA` coordinates; #1101
 
 # version 0.7-6
 
