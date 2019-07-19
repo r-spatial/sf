@@ -170,7 +170,9 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "Euclidean", par = 0.0, tolerance = 0.0) {
+st_distance = function(x, y, ..., dist_fun, by_element = FALSE, 
+		which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"), 
+		par = 0.0, tolerance = 0.0) {
 	if (missing(y))
 		y = x
 	else
@@ -185,6 +187,8 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE, which = "Euclide
 	if (isTRUE(st_is_longlat(x))) {
 		if (! requireNamespace("lwgeom", quietly = TRUE))
 			stop("lwgeom required: install first?")
+		if (which != "Great Circle")
+			stop("for non-great circle distances, data should be projected; see st_transform()")
 		units(tolerance) = as_units("m")
 		if (by_element) {
 			crs = st_crs(x)
