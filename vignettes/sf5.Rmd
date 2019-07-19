@@ -208,7 +208,7 @@ qtm(nc)
 ```
 
 `tmap` also has interactive leaflet maps:
-```{r,eval=off_cran}
+```{r,eval=FALSE}
 tmap_mode("view")
 tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
