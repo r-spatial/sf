@@ -107,6 +107,9 @@ other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
 without warnings. \code{promote_to_multi} is handled on a per-geometry column
 basis; \code{type} may be specified for each geometry column.
 
+Note that stray files in data source directories (such as \code{*.dbf}) may
+lead to spurious errors that accompanying \code{*.shp} are missing.
+
 In case of problems reading shapefiles from USB drives on OSX, please see
 \url{https://github.com/r-spatial/sf/issues/252}.
 
@@ -181,4 +184,7 @@ if (exists("conn") && !inherits(conn, "try-error")) {
   dbDisconnect(conn)
  }
 }
+}
+\seealso{
+\link{st_layers}, \link{st_drivers}
 }

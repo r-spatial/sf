@@ -3,12 +3,13 @@
 
 #include <ogrsf_frmts.h>
 
+#define RCPP_DEFAULT_INCLUDE_CALL false
 #include "Rcpp.h"
 
 #include "gdal_sf_pkg.h"
 #include "gdal_read.h"
 
-Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string, 
+Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64_as_string,
 		Rcpp::CharacterVector fid_column) {
 
 	if (fid_column.size() > 1)
@@ -190,7 +191,7 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	return out;
 }
 
-Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string, 
+Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, bool promote_to_multi = true) {
 
 	double n_d = (double) poLayer->GetFeatureCount();
@@ -475,20 +476,31 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, 
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
 		Rcpp::CharacterVector fid_column_name,
-		bool promote_to_multi = true, bool int64_as_string = false) {
+		bool promote_to_multi = true, bool int64_as_string = false,
+		bool dsn_exists = true,
+		bool dsn_isdb = false) {
 
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
 		open_options.data(), NULL );
 	if( poDS == NULL ) {
-		Rcpp::Rcout << "Cannot open data source " << datasource[0] << std::endl;
-		Rcpp::stop("Open failed.\n");
+		// could not open dsn
+		if( dsn_isdb ) {
+			Rcpp::stop("Cannot open %s; Check connection parameters.", datasource);
+		}
+		if( dsn_exists ) {
+			Rcpp::stop("Cannot open %s; %s %s",
+              datasource,
+              "The source could be corrupt or not supported.",
+              "See `st_drivers()` for a list of supported formats.");
+		}
+		Rcpp::stop("Cannot open %s; The file doesn't seem to exist.", datasource);
 	}
 
 	if (layer.size() == 0) { // no layer specified
@@ -520,8 +532,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (! Rcpp::CharacterVector::is_na(query[0])) {
 		poLayer = poDS->ExecuteSQL(query[0], NULL, NULL);
 		if (poLayer == NULL)
-			Rcpp::stop("SQL execution failed, cannot open layer.\n"); // #nocov
-	} else 
+			Rcpp::stop("Query execution failed, cannot open layer.\n"); // #nocov
+	} else
 		poLayer = 	poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
 		Rcpp::Rcout << "Cannot open layer " << layer[0] << std::endl;
@@ -532,7 +544,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
 			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 
-	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name, 
+	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
 		promote_to_multi);
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0

@@ -61,6 +61,9 @@ set_utf8 = function(x) {
 #' without warnings. \code{promote_to_multi} is handled on a per-geometry column
 #' basis; \code{type} may be specified for each geometry column.
 #'
+#' Note that stray files in data source directories (such as \code{*.dbf}) may
+#' lead to spurious errors that accompanying \code{*.shp} are missing.
+#'
 #' In case of problems reading shapefiles from USB drives on OSX, please see
 #' \url{https://github.com/r-spatial/sf/issues/252}.
 #'
@@ -79,6 +82,7 @@ set_utf8 = function(x) {
 #'   contain a single layer, an object of class \code{sf_layers} is returned
 #'   with the layer names, each with their geometry type(s). Note that the
 #'   number of layers may also be zero.
+#' @seealso \link{st_layers}, \link{st_drivers}
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
@@ -194,19 +198,22 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		character(0)
 	else
 		enc2utf8(layer)
-
-	if (length(dsn) == 1 && file.exists(dsn))
+	if (nchar(dsn) < 1) {
+		stop("`dsn` must point to a source, not an empty string.", call. = FALSE)
+	}
+	dsn_exists = file.exists(dsn)
+	dsn_isdb = is_db_driver(dsn)
+	if (length(dsn) == 1 && dsn_exists && !dsn_isdb)
 		dsn = enc2utf8(normalizePath(dsn))
 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name, 
-		promote_to_multi, int64_as_string)
+	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
+		promote_to_multi, int64_as_string, dsn_exists, dsn_isdb)
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
-
 
 #' @name st_read
 #' @export
@@ -342,7 +349,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE, 
+		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE,
 		fid_column_name = NULL) {
 
 	if (missing(dsn))
@@ -433,13 +440,17 @@ write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
 #' Get GDAL drivers
 #'
 #' Get a list of the available GDAL drivers
-#' @param what character: "vector" or "raster", anything else will return all drivers.
-#' @details The drivers available will depend on the installation of GDAL/OGR, and can vary; the \code{st_drivers()}
-#' function shows which are available, and which may be written (but all are assumed to be readable). Note that stray
-#' files in data source directories (such as *.dbf) may lead to spurious errors that accompanying *.shp are missing.
-#' @return a \code{data.frame} with driver metadata
-#' @details field \code{vsi} refers to the driver's capability to read/create datasets through the VSI*L API.
+#' @param what character: `"vector"` or `"raster"`, anything else will return all
+#'   drivers.
+#' @details The drivers available will depend on the installation of GDAL/OGR,
+#'   and can vary; the `st_drivers()` function shows all the drivers that are
+#'   readable, and which may be written. The field `vsi` refers to the driver's
+#'   capability to read/create datasets through the VSI*L API. [See GDAL website
+#'   for additional details on driver
+#'   support](https://gdal.org/drivers/vector/index.html).
+#' @return A `data.frame` with driver metadata.
 #' @export
+#' @md
 #' @examples
 #' st_drivers()
 st_drivers = function(what = "vector") {
@@ -502,7 +513,7 @@ guess_driver = function(dsn) {
 
 	# find match: try extension first
 	drv = extension_map[tolower(tools::file_ext(dsn))]
-	if (any(grep(":", gsub(":[/\\]", "/", dsn))))
+	if (is_db_driver(dsn))
 		drv = prefix_map[tolower(strsplit(dsn, ":")[[1]][1])]
 
 	drv <- unlist(drv)
@@ -512,6 +523,10 @@ guess_driver = function(dsn) {
 	  return(NA)
 	}
 	drv
+}
+
+is_db_driver = function(dsn) {
+	any(grep(":", gsub(":[/\\]", "/", dsn)))
 }
 
 guess_driver_can_write = function(dns, drv = guess_driver(dns)) {
