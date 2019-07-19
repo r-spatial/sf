@@ -277,6 +277,8 @@ typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the
 other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
 without warnings. <code>promote_to_multi</code> is handled on a per-geometry column
 basis; <code>type</code> may be specified for each geometry column.</p>
+<p>Note that stray files in data source directories (such as <code>*.dbf</code>) may
+lead to spurious errors that accompanying <code>*.shp</code> are missing.</p>
 <p>In case of problems reading shapefiles from USB drives on OSX, please see
 <a href='https://github.com/r-spatial/sf/issues/252'>https://github.com/r-spatial/sf/issues/252</a>.</p>
 <p>For <code>query</code> with a character <code>dsn</code> the query text is handed to
@@ -307,6 +309,10 @@ about the data source. <code>read_sf</code> returns an sf-tibble rather than an 
 typical users will not use <code>system.file</code> but give the file name directly, either with full path or relative
 to the current working directory (see <a href='https://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a>). "Shapefiles" consist of several files with the same basename
 that reside in the same directory, only one of them having extension <code>.shp</code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='st_layers.html'>st_layers</a>, <a href='st_drivers.html'>st_drivers</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -406,6 +412,8 @@ that reside in the same directory, only one of them having extension <code>.shp<
       <li><a href="#details">Details</a></li>
 
       <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
