@@ -15,6 +15,7 @@ vignette: >
 
 ```{r echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
+off_cran = Sys.getenv("USER") != "CRAN"
 ```
 This vignette describes the functions in `sf` that can help to plot 
 simple features. It tries to be complete about the plot methods 
@@ -161,23 +162,18 @@ which convert simple simple feature objects into `grob` ("graphics objects") obj
 
 ## ggplot2
 
-The `ggplot2` version to be released after 2.2.1 (on CRAN), which currently has to be installed by
-```{r, eval=FALSE}
-devtools::install_github("tidyverse/ggplot2")
-```
-
 contains a geom specially for simple feature objects, with support for graticule white lines in the background using `sf::st_graticule`. Support is currently good for polygons; for lines or points your milage may vary.
 
 ```{r}
 library(ggplot2)
-if (utils::packageVersion("ggplot2") > "2.2.1")
-  ggplot() + geom_sf(data = usa)
+ggplot() + geom_sf(data = usa)
 ```
 
 polygons can be colored using `aes`:
 ```{r}
-if (utils::packageVersion("ggplot2") > "2.2.1")
-  ggplot() + geom_sf(data = nc, aes(fill = BIR74)) + scale_y_continuous(breaks = 34:36)
+ggplot() + 
+  geom_sf(data = nc, aes(fill = BIR74)) + 
+  scale_y_continuous(breaks = 34:36)
 ```
 
 and sets of maps can be plotted as facet plots after rearranging the `sf` object, e.g. by
@@ -185,19 +181,19 @@ and sets of maps can be plotted as facet plots after rearranging the `sf` object
 library(dplyr)
 library(tidyr)
 nc2 <- nc %>% select(SID74, SID79, geom) %>% gather(VAR, SID, -geom)
-if (utils::packageVersion("ggplot2") > "2.2.1")
-  ggplot() + geom_sf(data = nc2, aes(fill = SID)) + facet_wrap(~VAR, ncol = 1) +
-	scale_y_continuous(breaks = 34:36)
+ggplot() + 
+  geom_sf(data = nc2, aes(fill = SID)) + 
+  facet_wrap(~VAR, ncol = 1) +
+  scale_y_continuous(breaks = 34:36)
 ```
 
 ## mapview
 
 Package `mapview` creates interactive maps in html pages, using package `leaflet` as a work horse. Extensive examples are found [here](https://r-spatial.github.io/mapview/).
 
-```{r}
+```{r,eval=off_cran}
 library(mapview)
-if (Sys.getenv("USER") %in% c("edzer", "travis"))
-  mapview(nc["BIR74"], col.regions = sf.colors(10))
+mapview(nc["BIR74"], col.regions = sf.colors(10))
 ```
 
 gives a map which is interactive: you can zoom and pan, and query features by clicking on them.
@@ -212,16 +208,13 @@ qtm(nc)
 ```
 
 `tmap` also has interactive leaflet maps:
-```{r}
+```{r,eval=off_cran}
 tmap_mode("view")
-if (Sys.getenv("USER") != "CRAN")
-  tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
+tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 replotting the last map in non-interactive mode is as simple as:
-```{r}
+```{r,eval=off_cran}
 ttm()
-if (Sys.getenv("USER") != "CRAN")
-   last_map()
+last_map()
 ```
-
