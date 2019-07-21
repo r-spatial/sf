@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -140,15 +140,9 @@ Cannot open data source foo
 Error in CPL_get_layers(dsn, options, do_count) : Open failed.
 
 > try(st_read("foo")) # cannot open datasource
-Cannot open data source foo
-Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  : 
-  Open failed.
-
+Error : Cannot open "foo"; The file doesn't seem to exist.
 > try(st_read("x.gpkg", "xyz")) # cannot open layer
-Cannot open data source x.gpkg
-Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  : 
-  Open failed.
-
+Error : Cannot open "x.gpkg"; The file doesn't seem to exist.
 > try(st_write(c("foo", "bar")))
 Error in UseMethod("st_write") : 
   no applicable method for 'st_write' applied to an object of class "character"
@@ -410,4 +404,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  1.006   0.072   1.070 
+  0.913   0.053   0.973 

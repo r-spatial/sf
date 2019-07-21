@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -985,6 +985,7 @@ epsg (SRID):    NA
 proj4string:    NA
 POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (0.5 0....
 > x = st_sfc(pol, check_ring_dir=TRUE)
+> y = st_sf(a = 1, geom = st_sfc(pol), check_ring_dir=TRUE)
 > str(x)
 sfc_POLYGON of length 1; first list element: List of 6
  $ : num [1:5, 1:2] 0 10 10 0 0 0 0 10 10 0
@@ -1219,4 +1220,4 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  2.407   0.091   2.489 
+  2.207   0.125   2.324 

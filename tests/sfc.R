@@ -257,6 +257,7 @@ mi = m[nrow(m):1,]
 pol = st_polygon(list(m * 10, m + .5, mi + 1.5, mi + 3.5, m + 5, mi + 6.5))
 st_sfc(pol)
 x = st_sfc(pol, check_ring_dir=TRUE)
+y = st_sf(a = 1, geom = st_sfc(pol), check_ring_dir=TRUE)
 str(x)
 x = st_sfc(st_polygon(), st_polygon(), check_ring_dir=TRUE)
 str(x)
