@@ -59,10 +59,12 @@ cbind.sf = function(..., deparse.level = 1, sf_column_name = NULL) {
 #' @export
 #' @details \code{st_bind_cols} is deprecated; use \code{cbind} instead.
 st_bind_cols = function(...) {
+	# nocov start
 	.Deprecated("cbind",
 				msg = paste0("Use 'cbind' instead when all arguments",
 				             " to be binded are of class sf.\n",
 				             "If you need to cbind a data.frame to an sf,",
-				             " use 'st_sf' or 'dplyr::bind_cols' (see the examples).")) # nocov
-	cbind.sf(...)        # nocov
+				             " use 'st_sf' or 'dplyr::bind_cols' (see the examples)."))
+	cbind.sf(...)
+	# nocov end
 }
