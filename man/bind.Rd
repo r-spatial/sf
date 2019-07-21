@@ -41,7 +41,7 @@ a = st_sf(a=1, geom = st_sfc(st_point(0:1)), crs = crs)
 b = st_sf(a=1, geom = st_sfc(st_linestring(matrix(1:4,2))), crs = crs)
 c = st_sf(a=4, geom = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 rbind(a,b,c)
-rbind(a,b) 
+rbind(a,b)
 rbind(a,b)
 rbind(b,c)
 cbind(a,b,c) # warns

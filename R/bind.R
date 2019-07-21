@@ -4,7 +4,7 @@
 #' @param ... objects to bind; note that for the rbind and cbind methods, all objects have to be of class \code{sf}; see \link{dotsMethods}
 #' @param deparse.level integer; see \link[base]{rbind}
 #' @name bind
-#' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}. 
+#' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}.
 #' @export
 #' @examples
 #' crs = st_crs(3857)
@@ -12,7 +12,7 @@
 #' b = st_sf(a=1, geom = st_sfc(st_linestring(matrix(1:4,2))), crs = crs)
 #' c = st_sf(a=4, geom = st_sfc(st_multilinestring(list(matrix(1:4,2)))), crs = crs)
 #' rbind(a,b,c)
-#' rbind(a,b) 
+#' rbind(a,b)
 #' rbind(a,b)
 #' rbind(b,c)
 rbind.sf = function(..., deparse.level = 1) {
@@ -27,7 +27,7 @@ rbind.sf = function(..., deparse.level = 1) {
 	ret = st_sf(rbind.data.frame(...), crs = crs0)
 	st_geometry(ret) = st_sfc(st_geometry(ret)) # might need to reclass to GEOMETRY
 	bb = do.call(rbind, lapply(dots, st_bbox))
-	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE), 
+	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE),
 		  max(bb[,3L], na.rm = TRUE), max(bb[,4L], na.rm = TRUE)))
 	attr(ret[[ attr(ret, "sf_column") ]], "bbox") = bb
 	ret
@@ -59,6 +59,10 @@ cbind.sf = function(..., deparse.level = 1, sf_column_name = NULL) {
 #' @export
 #' @details \code{st_bind_cols} is deprecated; use \code{cbind} instead.
 st_bind_cols = function(...) {
-	.Deprecated("cbind") # nocov
+	.Deprecated("cbind",
+				msg = paste0("Use 'cbind' instead when all arguments",
+				             " to be binded are of class sf.\n",
+				             "If you need to cbind a data.frame to an sf,",
+				             " use 'st_sf' or 'dplyr::bind_cols' (see the examples).")) # nocov
 	cbind.sf(...)        # nocov
 }
