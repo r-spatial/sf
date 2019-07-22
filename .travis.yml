@@ -22,6 +22,7 @@ r_github_packages:
   - r-lib/covr
   - r-spatial/lwgeom
   - r-spatial/stars
+  - mtennekes/tmap
 
 addons:
   postgresql: "9.6"
