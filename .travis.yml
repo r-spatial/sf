@@ -10,9 +10,9 @@ deploy.skip_cleanup: true
 sudo: required
 dist: trusty
 
-#cache:
-#  - packages
-#  - ccache
+cache:
+  - packages
+  - ccache
 
 latex: false
 
@@ -22,7 +22,6 @@ r_github_packages:
   - r-lib/covr
   - r-spatial/lwgeom
   - r-spatial/stars
-  - mtennekes/tmap
 
 addons:
   postgresql: "9.6"
