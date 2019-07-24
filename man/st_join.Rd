@@ -35,12 +35,24 @@ an object of class \code{sf}, joined based on geometry
 spatial join
 }
 \details{
-alternative values for argument \code{join} are: \link{st_disjoint},
-\link{st_touches}, \link{st_crosses}, \link{st_within}, \link{st_contains},
-\link{st_overlaps}, \link{st_covers}, \link{st_covered_by}, \link{st_equals}, or
-\link{st_equals_exact}, or user-defined functions with the same profile
-
-A left join returns all records of the \code{x} object, filling \code{y} fields for non-matched records with \code{NA} values; an inner join return only records that spatially match.
+alternative values for argument \code{join} are:
+\itemize{
+  \item \link{st_contains_properly}
+  \item \link{st_contains}
+  \item \link{st_covered_by}
+  \item \link{st_covers}
+  \item \link{st_crosses}
+  \item \link{st_disjoint}
+  \item \link{st_equals_exact}
+  \item \link{st_equals}
+  \item \link{st_is_within_distance}
+  \item \link{st_nearest_feature}
+  \item \link{st_overlaps}
+  \item \link{st_touches}
+  \item \link{st_within}
+  \item any user-defined function of the same profile as the above
+}
+A left join returns all records of the \code{x} object with \code{y} fields for non-matched records filled with \code{NA} values; an inner join returns only records that spatially match.
 }
 \examples{
 a = st_sf(a = 1:3,

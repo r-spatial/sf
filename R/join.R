@@ -69,12 +69,26 @@ st_join = function(x, y, ...) UseMethod("st_join")
 #' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
 #' see also \link[dplyr]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
-#' @details alternative values for argument \code{join} are: \link{st_disjoint},
-#' \link{st_touches}, \link{st_crosses}, \link{st_within}, \link{st_contains},
-#' \link{st_overlaps}, \link{st_covers}, \link{st_covered_by}, \link{st_equals}, or
-#' \link{st_equals_exact}, or user-defined functions with the same profile
 #' 
-#' A left join returns all records of the \code{x} object, filling \code{y} fields for non-matched records with \code{NA} values; an inner join return only records that spatially match.
+#' @details alternative values for argument \code{join} are:
+#' \itemize{
+#'   \item \link{st_contains_properly}
+#'   \item \link{st_contains}
+#'   \item \link{st_covered_by}
+#'   \item \link{st_covers}
+#'   \item \link{st_crosses}
+#'   \item \link{st_disjoint}
+#'   \item \link{st_equals_exact}
+#'   \item \link{st_equals}
+#'   \item \link{st_is_within_distance}
+#'   \item \link{st_nearest_feature}
+#'   \item \link{st_overlaps}
+#'   \item \link{st_touches}
+#'   \item \link{st_within}
+#'   \item any user-defined function of the same profile as the above
+#' }
+#' A left join returns all records of the \code{x} object with \code{y} fields for non-matched records filled with \code{NA} values; an inner join returns only records that spatially match.
+#' 
 #' @return an object of class \code{sf}, joined based on geometry
 #' @examples
 #' a = st_sf(a = 1:3,
