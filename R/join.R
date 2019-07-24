@@ -63,10 +63,23 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 #' @param left logical; if \code{TRUE} carry out left join, else inner join; 
 #' see also \link[dplyr]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
-#' @details alternative values for argument \code{join} are: \link{st_disjoint}
-#' \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
-#' \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
-#' \link{st_equals_exact}, or user-defined functions of the same profile
+#' @details alternative values for argument \code{join} are:
+#' \itemize{
+#'   \item \link{st_contains_properly}
+#'   \item \link{st_contains}
+#'   \item \link{st_covered_by}
+#'   \item \link{st_covers}
+#'   \item \link{st_crosses}
+#'   \item \link{st_disjoint}
+#'   \item \link{st_equals_exact}
+#'   \item \link{st_equals}
+#'   \item \link{st_is_within_distance}
+#'   \item \link{st_nearest_feature}
+#'   \item \link{st_overlaps}
+#'   \item \link{st_touches}
+#'   \item \link{st_within}
+#'   \item any user-defined function of the same profile as the above
+#' }
 #' @return an object of class \code{sf}, joined based on geometry
 #' @examples
 #' a = st_sf(a = 1:3,
