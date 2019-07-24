@@ -2,15 +2,20 @@
 % Please edit documentation in R/join.R
 \name{st_join}
 \alias{st_join}
-\title{spatial left or inner join}
+\alias{st_join.sf}
+\title{spatial join}
 \usage{
-st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), ...,
-  left = TRUE, largest = FALSE)
+st_join(x, y, ...)
+
+\method{st_join}{sf}(x, y, ..., join = st_intersects, FUN,
+  suffix = c(".x", ".y"), left = TRUE, largest = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}}
 
 \item{y}{object of class \code{sf}}
+
+\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
 
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
 
@@ -18,9 +23,7 @@ st_join(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), ...,
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
-\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
-
-\item{left}{logical; if \code{TRUE} carry out left join, else inner join; 
+\item{left}{logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
 see also \link[dplyr]{left_join}}
 
 \item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
@@ -29,13 +32,15 @@ see also \link[dplyr]{left_join}}
 an object of class \code{sf}, joined based on geometry
 }
 \description{
-spatial left or inner join
+spatial join
 }
 \details{
-alternative values for argument \code{join} are: \link{st_disjoint}
-\link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
-\link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
-\link{st_equals_exact}, or user-defined functions of the same profile
+alternative values for argument \code{join} are: \link{st_disjoint},
+\link{st_touches}, \link{st_crosses}, \link{st_within}, \link{st_contains},
+\link{st_overlaps}, \link{st_covers}, \link{st_covered_by}, \link{st_equals}, or
+\link{st_equals_exact}, or user-defined functions with the same profile
+
+A left join returns all records of the \code{x} object, filling \code{y} fields for non-matched records with \code{NA} values; an inner join return only records that spatially match.
 }
 \examples{
 a = st_sf(a = 1:3,

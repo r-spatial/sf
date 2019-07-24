@@ -51,22 +51,30 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
-#' spatial left or inner join
+
+#' spatial join
 #'
-#' spatial left or inner join
+#' spatial join
+#' @name st_join
+#' @export
+st_join = function(x, y, ...) UseMethod("st_join")
+
+#' @name st_join
 #' @param x object of class \code{sf}
 #' @param y object of class \code{sf}
 #' @param join geometry predicate function with the same profile as \link{st_intersects}; see details
 #' @param FUN deprecated;
 #' @param suffix length 2 character vector; see \link[base]{merge}
 #' @param ... arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})
-#' @param left logical; if \code{TRUE} carry out left join, else inner join; 
+#' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
 #' see also \link[dplyr]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
-#' @details alternative values for argument \code{join} are: \link{st_disjoint}
-#' \link{st_touches} \link{st_crosses} \link{st_within} \link{st_contains}
-#' \link{st_overlaps} \link{st_covers} \link{st_covered_by} \link{st_equals} or
-#' \link{st_equals_exact}, or user-defined functions of the same profile
+#' @details alternative values for argument \code{join} are: \link{st_disjoint},
+#' \link{st_touches}, \link{st_crosses}, \link{st_within}, \link{st_contains},
+#' \link{st_overlaps}, \link{st_covers}, \link{st_covered_by}, \link{st_equals}, or
+#' \link{st_equals_exact}, or user-defined functions with the same profile
+#' 
+#' A left join returns all records of the \code{x} object, filling \code{y} fields for non-matched records with \code{NA} values; an inner join return only records that spatially match.
 #' @return an object of class \code{sf}, joined based on geometry
 #' @examples
 #' a = st_sf(a = 1:3,
@@ -99,10 +107,12 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 #' plot(st_geometry(gr), border = 'green', add = TRUE)
 #' par(opar)
 #' @export
-st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"), 
-		..., left = TRUE, largest = FALSE) {
+st_join.sf = function(x, y, ..., join = st_intersects, FUN, suffix = c(".x", ".y"), 
+		left = TRUE, largest = FALSE) {
 
-	stopifnot(inherits(x, "sf") && inherits(y, "sf"))
+	if (!inherits(y, "sf"))
+		stop("second argument should be of class sf: maybe revert the first two arguments?") # nocov
+
 	if (!missing(FUN)) {
 		.Deprecated("aggregate")
 		stop("for aggregation/summarising after st_join, see examples in ?st_join")
@@ -141,7 +151,7 @@ st_join = function(x, y, join = st_intersects, FUN, suffix = c(".x", ".y"),
 			i = lapply(i, function(x) { if (length(x) == 0) NA_integer_ else x })
 		ix = rep(seq_len(nrow(x)), lengths(i))
 	}
-	if (inherits(x, "tbl_df") & requireNamespace("dplyr", quietly = TRUE))
+	if (inherits(x, "tbl_df") && requireNamespace("dplyr", quietly = TRUE))
 		st_sf(dplyr::bind_cols(x[ix,], y[unlist(i), , drop = FALSE]))
   	else
 		st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))	

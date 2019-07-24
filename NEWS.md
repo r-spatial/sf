@@ -1,3 +1,7 @@
+# version 0.8-0
+
+* `st_join` is a generic
+
 # version 0.7-7
 
 * `plot()` handles `POSIXct` values in legend
