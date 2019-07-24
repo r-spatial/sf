@@ -63,7 +63,6 @@ st_join = function(x, y, ...) UseMethod("st_join")
 #' @param x object of class \code{sf}
 #' @param y object of class \code{sf}
 #' @param join geometry predicate function with the same profile as \link{st_intersects}; see details
-#' @param FUN deprecated;
 #' @param suffix length 2 character vector; see \link[base]{merge}
 #' @param ... arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})
 #' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
@@ -121,16 +120,11 @@ st_join = function(x, y, ...) UseMethod("st_join")
 #' plot(st_geometry(gr), border = 'green', add = TRUE)
 #' par(opar)
 #' @export
-st_join.sf = function(x, y, ..., join = st_intersects, FUN, suffix = c(".x", ".y"), 
+st_join.sf = function(x, y, ..., join = st_intersects, suffix = c(".x", ".y"), 
 		left = TRUE, largest = FALSE) {
 
 	if (!inherits(y, "sf"))
 		stop("second argument should be of class sf: maybe revert the first two arguments?") # nocov
-
-	if (!missing(FUN)) {
-		.Deprecated("aggregate")
-		stop("for aggregation/summarising after st_join, see examples in ?st_join")
-	}
 
 	i = if (largest) {
 		x$.grp_a = seq_len(nrow(x))

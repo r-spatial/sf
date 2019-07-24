@@ -715,14 +715,6 @@ proj4string:    NA
 2     2  12 POINT (2 2)
 2.1   2  13 POINT (2 2)
 3     3  14 POINT (3 3)
-> # deprecated:
-> try(x <- st_join(a, b, FUN = mean))
-Error in st_join(a, b, FUN = mean) : 
-  for aggregation/summarising after st_join, see examples in ?st_join
-In addition: Warning message:
-'st_join' is deprecated.
-Use 'aggregate' instead.
-See help("Deprecated") 
 > # st_join, largest = TRUE:
 > nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
 Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
@@ -1220,4 +1212,4 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  2.207   0.125   2.324 
+  2.494   0.099   2.586 

@@ -7,8 +7,8 @@
 \usage{
 st_join(x, y, ...)
 
-\method{st_join}{sf}(x, y, ..., join = st_intersects, FUN,
-  suffix = c(".x", ".y"), left = TRUE, largest = FALSE)
+\method{st_join}{sf}(x, y, ..., join = st_intersects, suffix = c(".x",
+  ".y"), left = TRUE, largest = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}}
@@ -18,8 +18,6 @@ st_join(x, y, ...)
 \item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
 
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
-
-\item{FUN}{deprecated;}
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
