@@ -323,3 +323,10 @@ st_union(shape4, shape1)
 # transform empty:
 st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
 
+# NA values are converted to empty; #1114:
+x <- data.frame(name=LETTERS)
+y <- data.frame(name=LETTERS[1:13], letters[14:26])
+y$geometry <- st_sfc(st_point(c(0,0)))
+y <- st_sf(y)
+out = merge(x, y, all.x=TRUE)
+class(out)

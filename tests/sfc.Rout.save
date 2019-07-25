@@ -1209,7 +1209,15 @@ proj4string:    +proj=longlat +datum=WGS84 +no_defs
 [1] geom
 <0 rows> (or 0-length row.names)
 > 
+> # NA values are converted to empty; #1114:
+> x <- data.frame(name=LETTERS)
+> y <- data.frame(name=LETTERS[1:13], letters[14:26])
+> y$geometry <- st_sfc(st_point(c(0,0)))
+> y <- st_sf(y)
+> out = merge(x, y, all.x=TRUE)
+> class(out)
+[1] "data.frame"
 > 
 > proc.time()
    user  system elapsed 
-  2.494   0.099   2.586 
+  2.293   0.131   2.416 
