@@ -46,7 +46,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 
 	# check for NULLs:
 	a = attributes(lst)
-	is_null = vapply(lst, is.null, TRUE)
+	is_null = vapply(lst, function(x) is.null(x) || isTRUE(is.na(x)), NA)
 	lst = unclass(lst)
 	lst = lst[! is_null]
 	attributes(lst) = a

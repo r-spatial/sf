@@ -1,5 +1,7 @@
 # version 0.8-0
 
+* in addition to `NULL`, `st_sfc()` also converts `NA` values into empty geometries; #1114.
+
 * `st_join` is a generic
 
 # version 0.7-7
