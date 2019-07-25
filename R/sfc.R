@@ -130,9 +130,9 @@ sfg_is_empty = function(x) {
 "[<-.sfc" = function (x, i, value) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
-	#class(x) = setdiff(class(x), "sfc")
 	x = unclass(x) # becomes a list, but keeps attributes
-	st_sfc(NextMethod())
+	ret = st_sfc(NextMethod())
+	structure(ret, n_empty = sum(vapply(ret, sfg_is_empty, TRUE)))
 }
 
 #' @export
