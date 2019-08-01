@@ -26,20 +26,28 @@ typedef struct {
 	size_t size;
 } wkb_buf;
 
-void wkb_read(wkb_buf *wkb, void *dst, size_t n);
-
 Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian, 
 	bool addclass, int *type, uint32_t *srid);
 void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
-void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
+static inline void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
 	if (n > wkb->size)
 		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
 	if (dst != NULL)
 		memcpy(dst, wkb->pt, n);
 	wkb->pt += n;
 	wkb->size -= n;
+}
+
+template<typename T>
+inline T wkb_read(wkb_buf *wkb) {
+	if (sizeof(T) > wkb->size)
+		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
+	T ret = *(reinterpret_cast<const T*>(wkb->pt));
+	wkb->pt += sizeof(T);
+	wkb->size -= sizeof(T);
+	return ret;
 }
 
 // https://stackoverflow.com/questions/105252/how-do-i-convert-between-big-endian-and-little-endian-values-in-c
@@ -58,7 +66,7 @@ T swap_endian(T u) {
 
 void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	// we're at byte 3 now:
-	wkb_read(wkb, srid, sizeof(uint32_t));
+	*srid = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		*srid = swap_endian<uint32_t>(*srid); // #nocov
@@ -83,7 +91,7 @@ void read_gpkg_header(wkb_buf *wkb, uint32_t *srid, int endian) {
 	bool swap = ((flag & 0x01) != (int) endian); // endian check
 
 	// read srid, if needed, swap:
-	wkb_read(wkb, srid, 4);
+	*srid = wkb_read<uint32_t>(wkb);
 	if (swap)
 		*srid = swap_endian<uint32_t>(*srid); // #nocov
 
@@ -104,8 +112,7 @@ Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 		bool EWKB = 0, bool spatialite = false, int endian = 0, Rcpp::CharacterVector cls = "",
 		bool *empty = NULL) {
 
-	uint32_t npts;
-	wkb_read(wkb, &npts, 4);
+	uint32_t npts = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		npts = swap_endian<uint32_t>(npts); // #nocov
@@ -137,8 +144,7 @@ Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWK
 		bool spatialite = false, int endian = 0, Rcpp::CharacterVector cls = "", bool isGC = true, 
 		bool *empty = NULL) {
 
-	uint32_t nlst;
-	wkb_read(wkb, &nlst, 4);
+	uint32_t nlst = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		nlst = swap_endian<uint32_t>(nlst); // #nocov
@@ -168,8 +174,7 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 	Rcpp::NumericVector ret(n);
 	for (int i = 0; i < n; i++) {
-		double d;
-		wkb_read(wkb, &d, 8);
+		double d = wkb_read<double>(wkb);
 		if (swap)
 			ret(i) = swap_endian<double>(d); // #nocov
 		else
@@ -185,17 +190,15 @@ Rcpp::NumericVector read_numeric_vector(wkb_buf *wkb, int n, bool swap,
 Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 
-	uint32_t npts;
-	wkb_read(wkb, &npts, 4);
+	uint32_t npts = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		npts = swap_endian<uint32_t>(npts); // #nocov
 
-	Rcpp::NumericMatrix ret(npts, n_dims);
+	Rcpp::NumericMatrix ret = Rcpp::no_init(npts, n_dims);
 	for (size_t i = 0; i < npts; i++)
 		for (int j = 0; j< n_dims; j++) {
-			double d;
-			wkb_read(wkb, &d, 8);
+			double d = wkb_read<double>(wkb);
 			if (swap)
 				ret(i, j) = swap_endian<double>(d); // #nocov
 			else
@@ -211,8 +214,7 @@ Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 Rcpp::List read_matrix_list(wkb_buf *wkb, int n_dims, bool swap, 
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 
-	uint32_t nlst;
-	wkb_read(wkb, &nlst, 4);
+	uint32_t nlst = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		nlst = swap_endian<uint32_t>(nlst); // #nocov
@@ -264,8 +266,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	}
 	
 	// read type:
-	uint32_t wkbType;
-	wkb_read(wkb, &wkbType, 4);
+	uint32_t wkbType = wkb_read<uint32_t>(wkb);
 
 	if (swap)
 		wkbType = swap_endian<uint32_t>(wkbType); // #nocov
