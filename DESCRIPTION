@@ -38,6 +38,9 @@ Authors@R:
              role = "ctb"),
       person(given = "Thomas Lin",
              family = "Pedersen",
+             role = "ctb"),
+      person(given = "Dan",
+             family = "Baston",
              role = "ctb"))
 Description: Support for simple features, a standardized way to
     encode spatial vector data. Binds to 'GDAL' for reading and writing
