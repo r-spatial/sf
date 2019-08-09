@@ -44,6 +44,8 @@ Run a container from this image interactively with
 
 to start R-devel in the container, use the `Rdevel` command. Building the image checks sf from github.
 
+If you want to run R with `gdb` in a container, use e.g.
+
+    docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -ti gdal3
+
 ## with custom gdal, geos and proj installs
-
-
