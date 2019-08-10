@@ -33,7 +33,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
 
 static inline void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
 	if (n > wkb->size)
-		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
+		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?"); // #nocov
 	if (dst != NULL)
 		memcpy(dst, wkb->pt, n);
 	wkb->pt += n;
