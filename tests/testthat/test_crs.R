@@ -39,7 +39,7 @@ test_that("st_proj_info works", {
 
 
 test_that("st_proj_info works for datum files", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
+  skip_if_not(sf_extSoftVersion()[["PROJ"]] < "6.0.0")
   expect_silent(x <- st_proj_info("have_datum_files"))
 })
 

@@ -15,7 +15,7 @@ test_that("st_transform works", {
   #attr(s2.tr, "crs")$proj4string = ""
   st_crs(s1.tr) = NA_crs_
   st_crs(s2.tr) = NA_crs_
-  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
+  if (sf_extSoftVersion()["PROJ"] < "5.0.0") # FIXME:
     expect_equal(s1.tr, s2.tr)
 
   toCrs = 3857
@@ -23,7 +23,7 @@ test_that("st_transform works", {
   #attr(s1.tr, "crs")$proj4string = ""
   st_crs(s1.tr) = NA_crs_
   st_crs(s2.tr) = NA_crs_
-  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
+  if (sf_extSoftVersion()["PROJ"] < "5.0.0") # FIXME:
     expect_equal(s1.tr, s2.tr)
 
   expect_silent({

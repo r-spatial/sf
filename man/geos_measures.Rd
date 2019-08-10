@@ -26,9 +26,9 @@ st_distance(x, y, ..., dist_fun, by_element = FALSE,
 
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.}
 
-\item{which}{character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorf} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details}
+\item{which}{character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details}
 
-\item{par}{for \code{which} equal to \code{Haussdorf} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry}
+\item{par}{for \code{which} equal to \code{Haussdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry}
 
 \item{tolerance}{ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.}
 }
