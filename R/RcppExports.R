@@ -245,6 +245,10 @@ CPL_rasterize <- function(raster, raster_driver, sfc, values, options, NA_value)
     .Call('_sf_CPL_rasterize', PACKAGE = 'sf', raster, raster_driver, sfc, values, options, NA_value)
 }
 
+CPL_proj_h <- function(b = FALSE) {
+    .Call('_sf_CPL_proj_h', PACKAGE = 'sf', b)
+}
+
 CPL_set_data_dir <- function(data_dir) {
     .Call('_sf_CPL_set_data_dir', PACKAGE = 'sf', data_dir)
 }

@@ -2,6 +2,15 @@
 
 #include "Rcpp.h"
 
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_proj_h(bool b = false) {
+#if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H)
+	return true;
+#else
+	return false;
+#endif
+}
+
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 

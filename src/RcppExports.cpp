@@ -778,6 +778,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_proj_h
+Rcpp::LogicalVector CPL_proj_h(bool b);
+RcppExport SEXP _sf_CPL_proj_h(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_h(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_set_data_dir
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
 RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
@@ -1107,6 +1118,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
+    {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
     {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
