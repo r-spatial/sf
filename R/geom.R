@@ -160,8 +160,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @param ... ignored
 #' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
-#' @param which character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorf} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
-#' @param par for \code{which} equal to \code{Haussdorf} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
+#' @param which character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
+#' @param par for \code{which} equal to \code{Haussdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
 #' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
 #' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled. Distances involving empty geometries are \code{NA}.
 #' @details great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
