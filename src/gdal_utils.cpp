@@ -3,6 +3,10 @@
 #include "gdal_version.h"
 #include "gdalwarper.h"
 
+#include <ogr_srs_api.h>
+#include <ogr_spatialref.h>
+#include "gdal.h" // local
+
 #if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
 # include "gdal_utils.h" // requires >= 2.1
 
@@ -59,10 +63,14 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, NULL, NULL);
 	if (src_pt == NULL)
 		Rcpp::stop("source dataset not found");
+	unset_error_handler();
 	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
+	set_error_handler();
+	GDALDatasetH result = NULL;
 	if (dst_pt == NULL)
-		Rcpp::stop("cannot write to destination dataset");
-	GDALDatasetH result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
+		result = GDALRasterize((const char *) dst[0], NULL, src_pt, opt, &err);
+	else
+		result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
 	GDALRasterizeOptionsFree(opt);
 	GDALClose(src_pt);
 	if (result != NULL)
