@@ -271,7 +271,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
-			g[i] = OGRGeometryFactory::createGeometry(type);
+			g[i] = OGRGeometryFactory::createGeometry(type); // #nocov
 		else
 			type = g[i]->getGeometryType();
 		Rcpp::RawVector raw(g[i]->WkbSize());
