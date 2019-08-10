@@ -1,5 +1,7 @@
 # version 0.8-0
 
+* `gdal_utils('rasterize', ...)` also accepts non-existing destinations, defined by e.g. resolution and extent options; see #1116 for an example
+
 * add Dan Baston as contributor; #1120 and many others
 
 * in addition to `NULL`, `st_sfc()` also converts `NA` values into empty geometries; #1114.

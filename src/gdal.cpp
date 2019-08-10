@@ -266,11 +266,14 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 }
 
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
+	OGRwkbGeometryType type = wkbGeometryCollection;
 	Rcpp::List lst(g.size());
 	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
-			Rcpp::stop("NULL error in sfc_from_ogr"); // #nocov
+			g[i] = OGRGeometryFactory::createGeometry(type);
+		else
+			type = g[i]->getGeometryType();
 		Rcpp::RawVector raw(g[i]->WkbSize());
 		handle_error(g[i]->exportToWkb(wkbNDR, &(raw[0]), wkbVariantIso));
 		lst[i] = raw;
