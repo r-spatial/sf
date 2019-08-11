@@ -1,5 +1,7 @@
 # version 0.8-0
 
+* improve plotting of `POSIXct` and `Date` attributes (`Date` requiring classInt >= 0.4-2)
+
 * `NULL` geometries read by GDAL are returned as empty geometries; #1119
 
 * `gdal_utils('rasterize', ...)` also accepts non-existing destinations, defined by e.g. resolution and extent options; see #1116 for an example

@@ -98,19 +98,17 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			cols = cols[1:max.plot]
 
 		if (!is.null(key.pos)) {
-			values = as.numeric(as.matrix(as.data.frame(x)[cols])) # will kill factors, and also units
+			values = do.call(c, as.data.frame(x)[cols])
 			if (logz)
 				values = log10(values)
 			if (is.character(breaks)) { # compute breaks from values:
-				v0 = na.omit(as.numeric(values))
+				v0 = values[!is.na(values)]
 				n.unq = length(unique(v0))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
 						classInt::classIntervals(v0, min(nbreaks, n.unq), 
 							breaks, warnSmallN = FALSE)$brks
 					else
 						range(values, na.rm = TRUE) # lowest and highest!
-				if (inherits(values, "POSIXct"))
-					breaks = as.POSIXct(breaks, origin = as.POSIXct("1970-01-01"))
 				nbreaks = length(breaks) - 1
 			}
 		}
@@ -155,9 +153,6 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.list(values))
 				stop("plotting list-columns not supported") # nocov
 
-#			if (inherits(values, "POSIXt"))
-#				values = as.numeric(values)
-
 			if (is.character(values))
 				values = as.factor(values)
 			else if (logz)
@@ -178,18 +173,16 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 								pal
 						colors[as.numeric(values)]
 					} else {
-						if (! inherits(values, "POSIXt"))
+						if (! inherits(values, c("POSIXt", "Date")))
 							values = as.numeric(values) # drop units, if any
 						if (is.character(breaks)) { # compute breaks from values:
-							v0 = na.omit(as.numeric(values))
+							v0 = values[!is.na(values)]
 							n.unq = length(unique(v0))
 							breaks = if (! all(is.na(values)) && n.unq > 1)
 								classInt::classIntervals(v0, min(nbreaks, n.unq),
 									breaks, warnSmallN = FALSE)$brks
 							else
 								range(values, na.rm = TRUE) # lowest and highest!
-							if (inherits(values, "POSIXt"))
-								breaks = as.POSIXct(breaks, origin = as.POSIXct("1970-01-01"))
 						}
 						# this is necessary if breaks were specified either as character or as numeric
 						# "pretty" takes nbreaks as advice only:
@@ -198,7 +191,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						cuts = if (all(is.na(values)))
 								rep(NA_integer_, length(values))
 							else if (diff(range(values, na.rm = TRUE)) == 0)
-								values * 0 + 1  # preserves NA's
+								ifelse(is.na(values), NA_integer_, 1L)
 							else
 								cut(values, breaks, include.lowest = TRUE)
 						colors = if (is.function(pal))
@@ -816,7 +809,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 	labels = if (logz)
 			parse(text = paste0("10^", at))
-		else if (inherits(breaks, "POSIXt"))
+		else if (inherits(breaks, c("POSIXt", "Date")))
 			format(at)
 		else
 			TRUE
