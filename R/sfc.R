@@ -203,7 +203,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 #' @param object object of class \code{sfc}
 #' @param ... ignored
 #' @param maxsum maximum number of classes to summarize the simple feature column to
-#' @param maxp4s maximum number of characters to print from the PROJ.4 string
+#' @param maxp4s maximum number of characters to print from the PROJ string
 #' @method summary sfc
 #' @export
 summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {

@@ -13,7 +13,7 @@
 
 \item{maxsum}{maximum number of classes to summarize the simple feature column to}
 
-\item{maxp4s}{maximum number of characters to print from the PROJ.4 string}
+\item{maxp4s}{maximum number of characters to print from the PROJ string}
 }
 \description{
 Summarize simple feature column
