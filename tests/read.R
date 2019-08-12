@@ -48,6 +48,10 @@ try(st_write(x, c("foo", "bar")))
 try(st_write(x, "foo", driver = "foo"))
 if (Sys.getenv("USER") == "travis") {
 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
+	st_write(x, "xxx.gpkg")
+	st_write(x, "xxx.gpkg", quiet = FALSE) # appends to layer
+	y <- st_sf(b = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
+	try(st_write(y, "xxx.gpkg"))
 }
 
 geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))

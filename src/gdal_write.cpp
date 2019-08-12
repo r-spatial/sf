@@ -59,10 +59,10 @@ void SetNull(OGRFeature *poFeature, size_t field) {
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i, bool shape) {
 	Rcpp::CharacterVector nm  = obj.attr("names");
 	for (size_t j = 0; j < tp.size(); j++) {
-		if (poFeature->GetFieldIndex(nm[j]) == -1) {
+		if (i == 0 && poFeature->GetFieldIndex(nm[j]) == -1) {
 			Rcpp::Rcout << "Unknown field name `" << nm[j] << 
-				"': updating a layer with improper field name(s)?" << std::endl; // #nocov
-			Rcpp::stop("Write error\n"); // #nocov
+				"': updating a layer with improper field name(s)?" << std::endl;
+			Rcpp::stop("Write error\n");
 		}
 		if (j == (size_t) poFeature->GetFieldCount())
 			Rcpp::stop("Impossible: field count reached\n"); // #nocov
