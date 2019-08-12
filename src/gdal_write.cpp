@@ -7,7 +7,7 @@
 #include "gdal.h"
 #include "gdal_sf_pkg.h"
 
-std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
+std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj, bool update_layer) {
 	std::vector<OGRFieldType> ret(obj.size());
 	Rcpp::CharacterVector cls = obj.attr("colclasses");
 	Rcpp::CharacterVector nm  = obj.attr("names");
@@ -29,7 +29,7 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj) {
 		OGRFieldDefn oField(nm[i], ret[i]);
 		if (strcmp(cls[i], "logical") == 0)
 			oField.SetSubType(OFSTBoolean);
-		if (poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
+		if (!update_layer && poLayer->CreateField(&oField) != OGRERR_NONE) { // #nocov start
 			Rcpp::Rcout << "Creating field " << nm[i] << " failed." << std::endl;
 			Rcpp::stop("Layer creation failed.\n");
 		} // #nocov end
@@ -252,17 +252,24 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 
 	// create layer:
 	options = create_options(lco, quiet);
-	OGRLayer *poLayer = poDS->CreateLayer(layer[0], sref, wkbType, options.data());
+	OGRLayer *poLayer = NULL;
+	bool update_layer = false;
+	if ((poLayer = poDS->GetLayerByName(layer[0])) != NULL) {
+		if (!quiet)
+			Rcpp::Rcout << "Updating existing layer " << layer[0] << std::endl;
+		update_layer = true;
+	} else
+		poLayer = poDS->CreateLayer(layer[0], sref, wkbType, options.data());
 	if (sref != NULL)
 		sref->Release();
 	if (poLayer == NULL)  {
-		Rcpp::Rcout << "Creating layer " << layer[0]  <<  " failed." << std::endl;
+		Rcpp::Rcout << "Creating or updating layer " << layer[0]  <<  " failed." << std::endl;
 		GDALClose(poDS);
 		Rcpp::stop("Layer creation failed.\n");
 	}
 
 	// write feature attribute fields & geometries:
-	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj);
+	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj, update_layer);
 	if (! quiet) {
 		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
 		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
