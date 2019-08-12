@@ -268,9 +268,9 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	if (sref != NULL)
 		sref->Release();
 	if (poLayer == NULL)  {
-		Rcpp::Rcout << "Creating or updating layer " << layer[0]  <<  " failed." << std::endl;
+		Rcpp::Rcout << "Creating or updating layer " << layer[0] << " failed." << std::endl;
 		GDALClose(poDS);
-		Rcpp::stop("Layer creation failed.\n");
+		Rcpp::stop("Write error.\n");
 	}
 
 	// write feature attribute fields & geometries:

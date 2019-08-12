@@ -305,7 +305,8 @@ abbreviate_shapefile_names = function(x) {
 #' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
 #' as defined by \code{db_drivers}.
 #' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try
-#' to update (append to) the existing data source, e.g. adding a table to an existing database.
+#' to update (append to) the existing data source, e.g. adding a table to an existing database, 
+#' or adding records to a layer.  See also the next two arguments.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
 #' @param fid_column_name character, name of column with feature IDs; if specified, this column is no longer written as feature attribute.
