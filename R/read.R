@@ -371,7 +371,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	}
 
 	if (length(list(...)))
-		stop(paste("unrecognized argument(s)", unlist(list(...)), "\n"))
+		stop(paste("unrecognized argument(s)", names(list(...)), "\n"))
 	if (is.null(layer))
 		layer <- file_path_sans_ext(basename(dsn))
 
