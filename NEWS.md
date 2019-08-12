@@ -1,5 +1,7 @@
 # version 0.8-0
 
+* allow `st_write` to append to existing layer in an existing dataset; #1126
+
 * improve plotting of `POSIXct` and `Date` attributes (`Date` requiring classInt >= 0.4-2)
 
 * `NULL` geometries read by GDAL are returned as empty geometries; #1119
