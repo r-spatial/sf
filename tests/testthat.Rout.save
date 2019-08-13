@@ -1,5 +1,5 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -31,15 +31,15 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
 driver `foo' not available.
-Dataset /tmp/RtmphcWyG8/file6b627ea46399.gpkg already exists: remove first, use update=TRUE to append,
+Dataset /tmp/RtmpTVc5hc/file50e5b5e927c.gpkg already exists: remove first, use update=TRUE to append,
 delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
-Creating layer . failed.
+Creating or updating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 Failed to create feature 1 in x
 ══ testthat results  ═══════════════════════════════════════════════════════════
-OK: 663 SKIPPED: 54 FAILED: 0
+OK: 671 SKIPPED: 56 WARNINGS: 4 FAILED: 0
 > 
 > proc.time()
    user  system elapsed 
-  3.091   0.112   3.348 
+  2.915   0.116   3.190 

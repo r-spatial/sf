@@ -210,8 +210,23 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	}
 	
 	// update ds:
-	if (update && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
-				drivers.data(), options.data(), NULL)) != NULL) {
+	if (update) { 
+		poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
+				drivers.data(), options.data(), NULL);
+		if (poDS == NULL) {
+			if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
+						options.data(), NULL)) != NULL) { // exists read-only:
+				GDALClose(poDS);
+				Rcpp::Rcout << "Dataset " <<  dsn[0] << 
+					" cannot be updated: do you have write permission?" << std::endl;
+				Rcpp::stop("Existing dataset cannot be updated.\n");
+			} else { // doesn't exist: create
+				if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
+					Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
+					Rcpp::stop("Creation failed.\n");
+				}
+			}
+		}
 		if (! quiet)
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
@@ -222,8 +237,8 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			GDALClose(poDS);
 			Rcpp::Rcout << "Dataset " <<  dsn[0] << 
 				" already exists: remove first, use update=TRUE to append," << std::endl <<  
-				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing." 
-				<< std::endl;
+				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE " <<
+				"to remove the entire data source before writing." << std::endl;
 			Rcpp::stop("Dataset already exists.\n");
 		}
 		// create:
@@ -275,11 +290,10 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj, update_layer);
-	if (! quiet) {
-		Rcpp::Rcout << "features:       " << geomv.size() << std::endl;
-		Rcpp::Rcout << "fields:         " << fieldTypes.size() << std::endl;
-		Rcpp::Rcout << "geometry type:  " << OGRGeometryTypeToName(wkbType) << std::endl;
-	}
+	if (! quiet)
+		Rcpp::Rcout << "Writing " << geomv.size() << " features with " << 
+			fieldTypes.size() << " fields and geometry type " << 
+			OGRGeometryTypeToName(wkbType) << "." << std::endl;
 
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
