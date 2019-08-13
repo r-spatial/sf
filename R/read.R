@@ -297,24 +297,39 @@ abbreviate_shapefile_names = function(x) {
 #' are found at \url{http://www.gdal.org/ogr_formats.html}.
 #' @param ... other arguments passed to \link{dbWriteTable} when \code{dsn} is a
 #' Database Connection
-#' @param dataset_options character; driver dependent dataset creation options; multiple options supported.
-#' @param layer_options character; driver dependent layer creation options; multiple options supported.
+#' @param dataset_options character; driver dependent dataset creation options; 
+#' multiple options supported.
+#' @param layer_options character; driver dependent layer creation options; 
+#' multiple options supported.
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
-#' @param factorsAsCharacter logical; convert \code{factor} objects into character strings (default), else into numbers by
-#' \code{as.numeric}.
-#' @param update logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-#' as defined by \code{db_drivers}.
-#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try
-#' to update (append to) the existing data source, e.g. adding a table to an existing database, 
-#' or adding records to a layer.  See also the next two arguments.
-#' @param delete_dsn logical; delete data source \code{dsn} before attempting to write?
-#' @param delete_layer logical; delete layer \code{layer} before attempting to write? (not yet implemented)
-#' @param fid_column_name character, name of column with feature IDs; if specified, this column is no longer written as feature attribute.
-#' @details columns (variables) of a class not supported are dropped with a warning. When deleting layers or
-#' data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
+#' @param factorsAsCharacter logical; convert \code{factor} objects into 
+#' character strings (default), else into numbers by \code{as.numeric}.
+#' @param update logical; \code{FALSE} by default for single-layer drivers but 
+#' \code{TRUE} by default for database drivers as defined by \code{db_drivers}.
+#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make 
+#' \code{GDAL} try to update (append to) the existing data source, e.g. adding
+#' a table to an existing database, or adding records to a layer. See also the
+#' next two arguments and Details.
+#' @param delete_dsn logical; delete data source \code{dsn} before attempting 
+#' to write?
+#' @param delete_layer logical; delete layer \code{layer} before attempting to
+#' write?
+#' @param fid_column_name character, name of column with feature IDs; if
+#' specified, this column is no longer written as feature attribute.
+#' @details 
+#' Columns (variables) of a class not supported are dropped with a warning. 
+#' 
+#' When updating an existing layer, records are appended to it if the updating
+#' object has the right variable names and types. If names don't match an 
+#' error is raised. If types don't match, behaviour is undefined: GDAL may
+#' raise warnings or errors or fail silently.
+#' 
+#' When deleting layers or data sources is not successful, no error is emitted. 
+#' \code{delete_dsn} and \code{delete_layers} should be
 #' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
-#' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, it is returned as an  \code{sf} object.
+#' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, 
+#' it is returned as an \code{sf} object.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, paste0(tempdir(), "/", "nc.shp"))

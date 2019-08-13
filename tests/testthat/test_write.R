@@ -49,7 +49,7 @@ test_that("delete and update work (#304) ", {
   expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Updating layer `foo' to data source")
   expect_warning(
   	expect_error(st_write(x, gpkg, layer = ".", quiet = TRUE),
-  				 "Layer creation failed"),
+  				 "Write error"),
   	"special characters")
   expect_silent(st_layers(gpkg))
   expect_output(st_write(x, gpkg, layer = "foo", delete_dsn = TRUE), "Deleting source")

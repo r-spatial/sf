@@ -1,6 +1,6 @@
 # version 0.8-0
 
-* rather than replacing, `st_write` and `write_sf` append to an existing layer; #1126
+* rather than replacing, `st_write` and `write_sf` append to an existing layer if `update=TRUE`; #1126
 
 * improve plotting of `POSIXct` and `Date` attributes (`Date` requiring classInt >= 0.4-2)
 

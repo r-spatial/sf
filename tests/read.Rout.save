@@ -155,6 +155,10 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 
 > if (Sys.getenv("USER") == "travis") {
 + 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
++ 	st_write(x, "xxx.gpkg")
++ 	st_write(x, "xxx.gpkg", quiet = FALSE) # appends to layer
++ 	y <- st_sf(b = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
++ 	try(st_write(y, "xxx.gpkg"))
 + }
 > 
 > geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
@@ -404,4 +408,4 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > 
 > proc.time()
    user  system elapsed 
-  0.913   0.053   0.973 
+  0.943   0.043   0.978 

@@ -50,25 +50,32 @@ Database Connection}
 \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 are found at \url{http://www.gdal.org/ogr_formats.html}.}
 
-\item{dataset_options}{character; driver dependent dataset creation options; multiple options supported.}
+\item{dataset_options}{character; driver dependent dataset creation options; 
+multiple options supported.}
 
-\item{layer_options}{character; driver dependent layer creation options; multiple options supported.}
+\item{layer_options}{character; driver dependent layer creation options; 
+multiple options supported.}
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial reference}
 
-\item{factorsAsCharacter}{logical; convert \code{factor} objects into character strings (default), else into numbers by
-\code{as.numeric}.}
+\item{factorsAsCharacter}{logical; convert \code{factor} objects into 
+character strings (default), else into numbers by \code{as.numeric}.}
 
-\item{update}{logical; \code{FALSE} by default for single-layer drivers but \code{TRUE} by default for database drivers
-as defined by \code{db_drivers}.
-For database-type drivers (e.g. GPKG) \code{TRUE} values will make \code{GDAL} try
-to update (append to) the existing data source, e.g. adding a table to an existing database.}
+\item{update}{logical; \code{FALSE} by default for single-layer drivers but 
+\code{TRUE} by default for database drivers as defined by \code{db_drivers}.
+For database-type drivers (e.g. GPKG) \code{TRUE} values will make 
+\code{GDAL} try to update (append to) the existing data source, e.g. adding
+a table to an existing database, or adding records to a layer. See also the
+next two arguments and Details.}
 
-\item{delete_dsn}{logical; delete data source \code{dsn} before attempting to write?}
+\item{delete_dsn}{logical; delete data source \code{dsn} before attempting 
+to write?}
 
-\item{delete_layer}{logical; delete layer \code{layer} before attempting to write? (not yet implemented)}
+\item{delete_layer}{logical; delete layer \code{layer} before attempting to
+write?}
 
-\item{fid_column_name}{character, name of column with feature IDs; if specified, this column is no longer written as feature attribute.}
+\item{fid_column_name}{character, name of column with feature IDs; if
+specified, this column is no longer written as feature attribute.}
 
 \item{conn}{DBIObject}
 
@@ -94,14 +101,22 @@ to PostgreSQL. See \code{dbDataType()} for details.}
 if \code{FALSE}, uses Well-Known Text (WKT). Defaults to \code{TRUE} (WKB).}
 }
 \value{
-\code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, it is returned as an  \code{sf} object.
+\code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, 
+it is returned as an \code{sf} object.
 }
 \description{
 Write simple features object to file or database
 }
 \details{
-columns (variables) of a class not supported are dropped with a warning. When deleting layers or
-data sources is not successful, no error is emitted. \code{delete_dsn} and \code{delete_layers} should be
+Columns (variables) of a class not supported are dropped with a warning. 
+
+When updating an existing layer, records are appended to it if the updating
+object has the right variable names and types. If names don't match an 
+error is raised. If types don't match, behaviour is undefined: GDAL may
+raise warnings or errors or fail silently.
+
+When deleting layers or data sources is not successful, no error is emitted. 
+\code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 }
 \examples{

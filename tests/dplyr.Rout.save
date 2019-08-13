@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -274,8 +274,8 @@ First 10 features:
 > nc_gp_cent <- nc %>%
 +                 group_by(gp) %>%
 +                 group_map(st_centroid)
-There were 16 warnings (use warnings() to see them)
+There were 14 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-  2.374   0.069   2.435 
+  1.600   0.055   1.645 
