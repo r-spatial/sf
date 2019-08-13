@@ -189,9 +189,7 @@
 <p>The file name is taken as the data source name. The default for the layer name is the basename (filename without path) of the the data source name. For this, <code>st_write</code> needs to guess the driver. The above command is, for instance, equivalent to:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="dt">dsn =</span> <span class="st">"nc1.shp"</span>, <span class="dt">layer =</span> <span class="st">"nc.shp"</span>, <span class="dt">driver =</span> <span class="st">"ESRI Shapefile"</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">## features:       100</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">## fields:         14</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">## geometry type:  Multi Polygon</a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3">## Writing 100 features with 14 fields and geometry type Multi Polygon.</a></code></pre></div>
 <p>How the guessing of drivers works is explained in the next section.</p>
 </div>
 <div id="guessing-a-driver-for-output" class="section level3">

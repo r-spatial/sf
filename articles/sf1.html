@@ -555,16 +555,12 @@
 <p>Writing takes place in the same fashion, using <code>st_write</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc.shp"</span>)</a>
 <a class="sourceLine" id="cb25-2" data-line-number="2">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">## features:       100</a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">## fields:         14</a>
-<a class="sourceLine" id="cb25-5" data-line-number="5">## geometry type:  Multi Polygon</a></code></pre></div>
+<a class="sourceLine" id="cb25-3" data-line-number="3">## Writing 100 features with 14 fields and geometry type Multi Polygon.</a></code></pre></div>
 <p>If we repeat this, we get an error message that the file already exists, and we can overwrite by</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(nc, <span class="st">"nc.shp"</span>, <span class="dt">delete_layer =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb26-2" data-line-number="2">## Deleting layer `nc' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb26-3" data-line-number="3">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">## features:       100</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5">## fields:         14</a>
-<a class="sourceLine" id="cb26-6" data-line-number="6">## geometry type:  Multi Polygon</a></code></pre></div>
+<a class="sourceLine" id="cb26-4" data-line-number="4">## Writing 100 features with 14 fields and geometry type Multi Polygon.</a></code></pre></div>
 <p>or its quiet alternative that does this by default,</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw"><a href="../reference/st_write.html">write_sf</a></span>(nc, <span class="st">"nc.shp"</span>) <span class="co"># silently overwrites</span></a></code></pre></div>
 <div id="driver-specific-options" class="section level3">
