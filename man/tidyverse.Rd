@@ -20,6 +20,7 @@
 \alias{sample_frac.sf}
 \alias{nest.sf}
 \alias{separate.sf}
+\alias{separate_rows.sf}
 \alias{unite.sf}
 \alias{unnest.sf}
 \alias{inner_join.sf}
@@ -68,6 +69,8 @@ nest.sf(data, ..., .key = "data")
 
 separate.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
   convert = FALSE, extra = "warn", fill = "warn", ...)
+
+separate_rows.sf(data, ..., sep = "[^[:alnum:]]+", convert = FALSE)
 
 unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
@@ -166,6 +169,10 @@ it is a potentially expensive operation so you must opt into it.}
 \item{suffix}{If there are non-joined duplicate variables in \code{x} and
 \code{y}, these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.}
+
+\item{sep}{see \link[tidyr]{separate_rows}}
+
+\item{convert}{see \link[tidyr]{separate_rows}}
 }
 \value{
 an object of class \link{sf}

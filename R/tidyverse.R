@@ -313,6 +313,17 @@ separate.sf = function(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
 }
 
 #' @name tidyverse
+#' @param sep see \link[tidyr]{separate_rows}
+#' @param convert see \link[tidyr]{separate_rows}
+separate_rows.sf <- function(data, ..., sep = "[^[:alnum:]]+", convert = FALSE) {
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+	class(data) <- setdiff(class(data), "sf")
+	ret = tidyr::separate_rows(data, ..., sep = sep, convert = convert)
+	st_as_sf(ret, sf_column_name = attr(data, "sf_column"))
+}
+
+#' @name tidyverse
 unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 	class(data) <- setdiff(class(data), "sf")
 	if (!requireNamespace("rlang", quietly = TRUE))
@@ -419,6 +430,7 @@ register_all_s3_methods = function() {
 	register_s3_method("tidyr", "spread", "sf")
 	register_s3_method("tidyr", "nest", "sf")
 	register_s3_method("tidyr", "separate", "sf")
+	register_s3_method("tidyr", "separate_rows", "sf")
 	register_s3_method("tidyr", "unite", "sf")
 	register_s3_method("tidyr", "unnest", "sf")
 	register_s3_method("pillar", "obj_sum", "sfc")
