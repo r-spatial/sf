@@ -117,7 +117,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
 
 \item{na.rm}{see original function docs}
 
-\item{convert}{see original function docs}
+\item{convert}{see \link[tidyr]{separate_rows}}
 
 \item{factor_key}{see original function docs}
 
@@ -125,7 +125,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
 
 \item{drop}{see original function docs}
 
-\item{sep}{see original function docs}
+\item{sep}{see \link[tidyr]{separate_rows}}
 
 \item{tbl}{see original function docs}
 
@@ -169,10 +169,6 @@ it is a potentially expensive operation so you must opt into it.}
 \item{suffix}{If there are non-joined duplicate variables in \code{x} and
 \code{y}, these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.}
-
-\item{sep}{see \link[tidyr]{separate_rows}}
-
-\item{convert}{see \link[tidyr]{separate_rows}}
 }
 \value{
 an object of class \link{sf}

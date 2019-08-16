@@ -229,9 +229,7 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 
 #' @name tidyverse
 #' @param fill see original function docs
-#' @param convert see original function docs
 #' @param drop see original function docs
-#' @param sep see original function docs
 #' @examples
 #' library(tidyr)
 #' nc$row = 1:100 # needed for spread to work
