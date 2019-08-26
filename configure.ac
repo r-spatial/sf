@@ -344,15 +344,12 @@ if test "${proj_config_ok}" = yes; then
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
   if test "${PROJV1}" = "6"; then
     PROJ6="yes"
+    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
     if test "${proj_api}" = yes; then
         AC_MSG_NOTICE([using proj_api.h even with PROJ 6])
-        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
+        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
     else
-        AC_CHECK_HEADERS(proj.h,PROJH=yes,PROJH=no)
-        if test "${PROJH}" = no; then
-           AC_MSG_ERROR([proj.h not found in standard or given locations.])
-        fi
-        PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+        AC_MSG_NOTICE([using proj.h.])
     fi
   fi
 fi
