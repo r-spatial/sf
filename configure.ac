@@ -350,6 +350,7 @@ if test "${proj_config_ok}" = yes; then
         PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
     else
         AC_MSG_NOTICE([using proj.h.])
+        PROJH="yes"
     fi
   fi
 fi

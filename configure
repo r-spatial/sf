@@ -3695,6 +3695,7 @@ $as_echo "$as_me: using proj_api.h even with PROJ 6" >&6;}
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: using proj.h." >&5
 $as_echo "$as_me: using proj.h." >&6;}
+        PROJH="yes"
     fi
   fi
 fi
