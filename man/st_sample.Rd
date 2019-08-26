@@ -13,7 +13,7 @@ st_sample(x, size, ..., type = "random", exact = TRUE)
 
 \item{...}{ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling}
 
-\item{type}{character; indicates the spatial sampling type; one of \code{regular}, \code{hexagonal} and \code{regular}.}
+\item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} and \code{regular}.}
 
 \item{exact}{logical; should the length of output be exactly
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
