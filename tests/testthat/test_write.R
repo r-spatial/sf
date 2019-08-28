@@ -98,3 +98,24 @@ test_that("FID feature ID gets written and read", {
   if (sf_extSoftVersion()["GDAL"] >= "2.3.2")
   	expect_equal(nc$f_id, nc2$f_id)
 })
+
+test_that("update errors work", {
+  skip_if_not(Sys.getenv("USER") %in% c("edzer", "travis"))
+
+  # update to non-writable, non-existing file:
+  x = st_sf(a = 1, geom = st_sfc(st_point(0:1)))
+  expect_error(
+    expect_message(st_write(x, "/x.gpkg", update = TRUE), "Creating dataset /x.gpkg failed."),
+    "Creation failed.")
+
+  # update to non-writable, existing file:
+  f = paste0(tempfile(), ".gpkg")
+  st_write(x, f, update = FALSE)
+  system(paste("chmod -w", f))
+  expect_error(
+  expect_message(st_write(x, f, update = TRUE),
+    "cannot be updated: do you have write permission?"),
+    "Existing dataset cannot be updated.")
+  
+  system(paste("chmod +w", f))
+})
