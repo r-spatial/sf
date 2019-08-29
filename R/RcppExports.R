@@ -113,8 +113,8 @@ CPL_gdalwarp <- function(src, dst, options) {
     .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options)
 }
 
-CPL_gdalrasterize <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options)
+CPL_gdalrasterize <- function(src, dst, options, overwrite = FALSE) {
+    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options, overwrite)
 }
 
 CPL_gdaltranslate <- function(src, dst, options) {

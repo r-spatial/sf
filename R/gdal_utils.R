@@ -34,11 +34,16 @@ resampling_method = function(option = "near") {
 #' @export
 gdal_utils = function(util = "info", source, destination, options = character(0), 
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
+
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options),
 			warp = CPL_gdalwarp(source, destination, options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
-			rasterize = CPL_gdalrasterize(source, destination, options),
+			rasterize = { 
+				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co", 
+						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
+				CPL_gdalrasterize(source, destination, options, overwrite)
+			},
 			translate = CPL_gdaltranslate(source, destination, options),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options),
 			buildvrt = CPL_gdalbuildvrt(source, destination, options),

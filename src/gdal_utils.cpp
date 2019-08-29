@@ -54,7 +54,7 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options) {
+		Rcpp::CharacterVector options, bool overwrite = false) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
@@ -64,7 +64,9 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	if (src_pt == NULL)
 		Rcpp::stop("source dataset not found");
 	unset_error_handler();
-	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
+	GDALDatasetH dst_pt = NULL;
+	if (! overwrite)
+		dst_pt = GDALOpen((const char *) dst[0], GA_Update);
 	set_error_handler();
 	GDALDatasetH result = NULL;
 	if (dst_pt == NULL)
