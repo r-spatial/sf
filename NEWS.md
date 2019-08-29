@@ -6,7 +6,7 @@
 
 * `NULL` geometries read by GDAL are returned as empty geometries; #1119
 
-* `gdal_utils('rasterize', ...)` also accepts non-existing destinations, defined by e.g. resolution and extent options; see #1116 for an example
+* `gdal_utils('rasterize', ...)` accepts non-existing destinations, defined by e.g. resolution and extent options (see #1116 for an example), and overwrites if needed (see #1136 for an example)
 
 * add Dan Baston as contributor; #1120 and many others
 
