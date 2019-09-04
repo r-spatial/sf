@@ -2088,7 +2088,6 @@ fi
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
 : ${CXX=${CXX11} ${CXX11STD}}
-: ${CPP=`"${RBIN}" CMD config CPP`}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
 : ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
