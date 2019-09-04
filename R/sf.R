@@ -68,6 +68,11 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 #' @export
 st_as_sf.sf = function(x, ...) x
 
+#' @name st_as_sf
+#' @export
+st_as_sf.sfc = function(x, ...) st_sf(x, ...)
+
+
 #' Get, set, or replace geometry from an sf object
 #'
 #' Get, set, or replace geometry from an sf object

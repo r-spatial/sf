@@ -4,6 +4,7 @@
 \alias{st_as_sf}
 \alias{st_as_sf.data.frame}
 \alias{st_as_sf.sf}
+\alias{st_as_sf.sfc}
 \alias{st_as_sf.Spatial}
 \alias{st_as_sf.map}
 \alias{st_as_sf.ppp}
@@ -18,6 +19,8 @@ st_as_sf(x, ...)
   sf_column_name = NULL)
 
 \method{st_as_sf}{sf}(x, ...)
+
+\method{st_as_sf}{sfc}(x, ...)
 
 \method{st_as_sf}{Spatial}(x, ...)
 

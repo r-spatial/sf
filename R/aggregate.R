@@ -117,7 +117,13 @@ st_interpolate_aw.sf = function(x, to, extensive, ...) {
 		warning("st_interpolate_aw assumes attributes are constant over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
-	i = st_cast(i, "MULTIPOLYGON")
+
+	# https://stackoverflow.com/questions/57767022/how-do-you-use-st-interpolate-aw-with-polygon-layers-that-legitimately-include-p
+	gc = which(st_is(i, "GEOMETRYCOLLECTION"))
+	i[gc] = st_collection_extract(i[gc], "POLYGON")
+	two_d = which(st_dimension(i) == 2)
+	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
+
 	x$...area_s = unclass(st_area(x))
 	st_geometry(x) = NULL # sets back to data.frame
 	x = x[idx[,1], ]      # create st table

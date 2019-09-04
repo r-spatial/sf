@@ -106,6 +106,9 @@ st_collection_extract.sfc = function(x, type = c("POLYGON", "POINT", "LINESTRING
 	type = match.arg(type)
 	types = c(type, paste0("MULTI", type))
 
+	if (length(x) == 0)
+		return(x)
+
 	# Check it's not already what user is asking for
 	if (inherits(st_geometry(x), paste0("sfc_", types))) {
 		warning("x is already of type ", type, ".") # nocov
