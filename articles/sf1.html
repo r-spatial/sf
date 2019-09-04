@@ -375,20 +375,21 @@
 <a class="sourceLine" id="cb13-4" data-line-number="4">##  [7] identify              initialize            Ops                  </a>
 <a class="sourceLine" id="cb13-5" data-line-number="5">## [10] print                 rep                   show                 </a>
 <a class="sourceLine" id="cb13-6" data-line-number="6">## [13] slotsFromS3           st_area               st_as_binary         </a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">## [16] st_as_grob            st_as_text            st_bbox              </a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">## [19] st_boundary           st_buffer             st_cast              </a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">## [22] st_centroid           st_collection_extract st_convex_hull       </a>
-<a class="sourceLine" id="cb13-10" data-line-number="10">## [25] st_coordinates        st_crop               st_crs               </a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">## [28] st_crs&lt;-              st_difference         st_geometry          </a>
-<a class="sourceLine" id="cb13-12" data-line-number="12">## [31] st_intersection       st_intersects         st_is                </a>
-<a class="sourceLine" id="cb13-13" data-line-number="13">## [34] st_line_merge         st_nearest_points     st_node              </a>
-<a class="sourceLine" id="cb13-14" data-line-number="14">## [37] st_normalize          st_point_on_surface   st_polygonize        </a>
-<a class="sourceLine" id="cb13-15" data-line-number="15">## [40] st_precision          st_segmentize         st_set_precision     </a>
-<a class="sourceLine" id="cb13-16" data-line-number="16">## [43] st_simplify           st_snap               st_sym_difference    </a>
-<a class="sourceLine" id="cb13-17" data-line-number="17">## [46] st_transform          st_triangulate        st_union             </a>
-<a class="sourceLine" id="cb13-18" data-line-number="18">## [49] st_voronoi            st_wrap_dateline      st_write             </a>
-<a class="sourceLine" id="cb13-19" data-line-number="19">## [52] st_zm                 str                   summary              </a>
-<a class="sourceLine" id="cb13-20" data-line-number="20">## see '?methods' for accessing help and source code</a></code></pre></div>
+<a class="sourceLine" id="cb13-7" data-line-number="7">## [16] st_as_grob            st_as_sf              st_as_text           </a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">## [19] st_bbox               st_boundary           st_buffer            </a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">## [22] st_cast               st_centroid           st_collection_extract</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">## [25] st_convex_hull        st_coordinates        st_crop              </a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">## [28] st_crs                st_crs&lt;-              st_difference        </a>
+<a class="sourceLine" id="cb13-12" data-line-number="12">## [31] st_geometry           st_intersection       st_intersects        </a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">## [34] st_is                 st_line_merge         st_nearest_points    </a>
+<a class="sourceLine" id="cb13-14" data-line-number="14">## [37] st_node               st_normalize          st_point_on_surface  </a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">## [40] st_polygonize         st_precision          st_segmentize        </a>
+<a class="sourceLine" id="cb13-16" data-line-number="16">## [43] st_set_precision      st_simplify           st_snap              </a>
+<a class="sourceLine" id="cb13-17" data-line-number="17">## [46] st_sym_difference     st_transform          st_triangulate       </a>
+<a class="sourceLine" id="cb13-18" data-line-number="18">## [49] st_union              st_voronoi            st_wrap_dateline     </a>
+<a class="sourceLine" id="cb13-19" data-line-number="19">## [52] st_write              st_zm                 str                  </a>
+<a class="sourceLine" id="cb13-20" data-line-number="20">## [55] summary              </a>
+<a class="sourceLine" id="cb13-21" data-line-number="21">## see '?methods' for accessing help and source code</a></code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(nc_geom)</a>
@@ -687,7 +688,7 @@
 <a class="sourceLine" id="cb35-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/methods">methods</a></span>(st_as_sf)</a>
 <a class="sourceLine" id="cb35-6" data-line-number="6">## [1] st_as_sf.data.frame* st_as_sf.lpp*        st_as_sf.map*       </a>
 <a class="sourceLine" id="cb35-7" data-line-number="7">## [4] st_as_sf.ppp*        st_as_sf.psp*        st_as_sf.sf*        </a>
-<a class="sourceLine" id="cb35-8" data-line-number="8">## [7] st_as_sf.Spatial*   </a>
+<a class="sourceLine" id="cb35-8" data-line-number="8">## [7] st_as_sf.sfc*        st_as_sf.Spatial*   </a>
 <a class="sourceLine" id="cb35-9" data-line-number="9">## see '?methods' for accessing help and source code</a>
 <a class="sourceLine" id="cb35-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/methods">methods</a></span>(st_as_sfc)</a>
 <a class="sourceLine" id="cb35-11" data-line-number="11">##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              </a>
