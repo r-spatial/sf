@@ -20,6 +20,9 @@ RUN apt-get update
 RUN apt-get upgrade -y
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y libv8-dev pdftk
+RUN apt-get -y clean
+RUN apt-get -y autoclean
+RUN apt-get install -y  kdelibs-bin kdelibs5-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y \
      rcheckserver
@@ -39,7 +42,7 @@ RUN Rscript -e 'install.packages("sf", dependencies = TRUE, repos = "https://clo
 #RUN R CMD INSTALL rgdal_*.tar.gz 
 
 RUN ls
-RUN git clone  https://github.com/r-spatial/sf.git
+RUN git clone --depth 1 https://github.com/r-spatial/sf.git
 RUN R CMD build sf
 RUN R CMD INSTALL sf_*gz
 
