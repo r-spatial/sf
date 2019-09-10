@@ -77,7 +77,8 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	else
 		result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
 	GDALRasterizeOptionsFree(opt);
-	GDALClose(src_pt);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
 	return result == NULL || err;
@@ -97,7 +98,8 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 	if (src_pt == NULL)
 		return 1;
 	GDALDatasetH result = GDALTranslate((const char *) dst[0], src_pt, opt, &err);
-	GDALClose(src_pt);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
 	GDALTranslateOptionsFree(opt);
 	if (result != NULL)
 		GDALClose(result);
@@ -117,7 +119,8 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 		return 1;
 	// GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
 	GDALDatasetH result = GDALVectorTranslate((const char *) dst[0], NULL, 1, &src_pt, opt, &err);
-	GDALClose(src_pt);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
 	GDALVectorTranslateOptionsFree(opt);
 	if (result != NULL)
 		GDALClose(result);
@@ -162,7 +165,8 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 	GDALDEMProcessingOptionsFree(opt);
 	if (result != NULL)
 		GDALClose(result);
-	GDALClose(src_pt);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
 	return result == NULL || err;
 }
 
@@ -179,8 +183,10 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
 	GDALDatasetH result = GDALNearblack(NULL, dst_pt, src_pt, opt, &err);
 	GDALNearblackOptionsFree(opt);
-	GDALClose(src_pt);
-	GDALClose(dst_pt);
+	if (src_pt != NULL) 
+		GDALClose(src_pt);
+/*	if (dst_pt != NULL) // don't: result == dst_pt
+		GDALClose(dst_pt); */
 	if (result != NULL)
 		GDALClose(result);
 	return result == NULL || err;
@@ -197,7 +203,8 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_ALL | GA_ReadOnly, NULL, NULL, NULL);
 	GDALDatasetH result = GDALGrid((const char *) dst[0], src_pt, opt, &err);
 	GDALGridOptionsFree(opt);
-	GDALClose(src_pt);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
 	return result == NULL || err;
@@ -319,8 +326,10 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
                                   GDALGetRasterYSize( hDstDS ) );
     GDALDestroyGenImgProjTransformer( psWarpOptions->pTransformerArg );
     GDALDestroyWarpOptions( psWarpOptions );
-    GDALClose( hDstDS );
-    GDALClose( hSrcDS );
+    if (hDstDS)
+		GDALClose( hDstDS );
+    if (hSrcDS)
+		GDALClose( hSrcDS );
     return false;
 }
 // #nocov end
