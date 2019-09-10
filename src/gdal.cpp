@@ -201,7 +201,7 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet) {
 	if (lco.size() == 0)
 		quiet = true; // nothing to report
 	if (! quiet)
-		Rcpp::Rcout << "options:        "; // #nocov
+		Rcpp::Rcout <<  "options:        "; // #nocov
 	std::vector<char *> ret(lco.size() + 1);
 	for (int i = 0; i < lco.size(); i++) {
 		ret[i] = (char *) (lco[i]);

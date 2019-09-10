@@ -479,16 +479,17 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
-		Rcpp::CharacterVector fid_column_name,
+		Rcpp::CharacterVector fid_column_name, Rcpp::CharacterVector drivers,
 		bool promote_to_multi = true, bool int64_as_string = false,
 		bool dsn_exists = true,
 		bool dsn_isdb = false) {
 
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
+	std::vector <char *> drivers_v = create_options(drivers, quiet);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL,
-		open_options.data(), NULL );
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, 
+		drivers.size() ? drivers_v.data() : NULL, open_options.data(), NULL );
 	if( poDS == NULL ) {
 		// could not open dsn
 		if( dsn_isdb ) {
