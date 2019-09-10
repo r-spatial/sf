@@ -69,7 +69,7 @@
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
 #' @export
-st_sample = function(x, size, ..., type = "random", exact = TRUE) {
+st_sample = function(x, size, ..., type = "random", exact = TRUE, nclusters = 1) {
 	x = st_geometry(x)
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
@@ -79,7 +79,7 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 		res = switch(max(st_dimension(x)) + 1,
 					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
 					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
-					 st_poly_sample(x, size, ..., type = type))
+					 st_poly_sample(x, size, ..., type = type, nclusters = nclusters))
 		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if(diff > 0) { # too few points
@@ -94,7 +94,7 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 }
 
 st_poly_sample = function(x, size, ..., type = "random",
-                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
+                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]], nclusters = 1) {
 
 	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
 	a1 = as.numeric(sum(st_area(x)))
@@ -116,6 +116,29 @@ st_poly_sample = function(x, size, ..., type = "random",
 			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+	} else if (type == "stratified") {
+		dx = as.numeric(sqrt(a0 / size))
+		offset = c((offset[1] - bb["xmin"]) %% dx,
+				   (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+		new_grid = st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+		m = st_coordinates(new_grid)[, c(1, 2)]
+		move_mat = matrix(c((runif(length(new_grid)) - 0.5) * dx,
+							(runif(length(new_grid)) - 0.5) * dx), ncol = 2)
+		m = m + move_mat
+		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+	} else if (type == "clustered") {
+		dx = as.numeric(sqrt(a0 / size))
+		offset = c((offset[1] - bb["xmin"]) %% dx,
+				   (offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+		new_grid = st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+		clus = rep(sample(1:length(new_grid), nclusters, replace = FALSE), length = length(new_grid))
+		m = st_coordinates(new_grid[clus])[, c(1, 2)]
+		move_mat = matrix(c((runif(length(new_grid)) - 0.5) * dx,
+							(runif(length(new_grid)) - 0.5) * dx), ncol = 2)
+		m = m + move_mat
+		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 	} else if (type == "random") {
 		lon = runif(size, bb[1], bb[3])
 		lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:

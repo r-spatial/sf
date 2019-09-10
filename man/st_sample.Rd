@@ -4,7 +4,7 @@
 \alias{st_sample}
 \title{sample points on or in (sets of) spatial features}
 \usage{
-st_sample(x, size, ..., type = "random", exact = TRUE)
+st_sample(x, size, ..., type = "random", exact = TRUE, nclusters = 1)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
