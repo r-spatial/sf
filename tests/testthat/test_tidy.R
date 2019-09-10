@@ -79,7 +79,6 @@ test_that("unnest works", {
     slice(1:2) %>%
     transmute(y = list(c("a"), c("b", "c")))
   unnest_explicit = unnest(nc, y)
-  unnest_implicit = unnest(nc)
   # The second row is duplicated because the "b" and "c" become separate rows
   expected = nc[c(1,2,2), ] %>% mutate(y = c("a", "b", "c"))
   expected = expected[2:1]
