@@ -156,7 +156,7 @@ Well-Know Binary geometries to sfc</p>
   <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>default.stringsAsFactors</a></span>(),
   <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fid_column_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>))
+  <span class='kw'>fid_column_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>drivers</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>))
 
 <span class='fu'>read_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>as_tibble</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -246,6 +246,10 @@ clockwise, holes clockwise)</p></td>
     <tr>
       <th>fid_column_name</th>
       <td><p>character; name of column to write feature IDs to; defaults to not doing this</p></td>
+    </tr>
+    <tr>
+      <th>drivers</th>
+      <td><p>character; limited set of driver short names to be tried (default: try all)</p></td>
     </tr>
     <tr>
       <th>as_tibble</th>
