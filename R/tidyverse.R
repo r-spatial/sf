@@ -401,6 +401,10 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+vec_proxy.sfc <- function(x, ...) {
+	x
+}
+
 register_all_s3_methods = function() {
 	register_s3_method("dplyr", "anti_join", "sf")
 	register_s3_method("dplyr", "arrange", "sf")
@@ -433,6 +437,7 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "obj_sum", "sfc")
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
+	register_s3_method("vctrs", "vec_proxy", "sfc")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
