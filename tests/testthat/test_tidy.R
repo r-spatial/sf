@@ -81,7 +81,6 @@ test_that("unnest works", {
   unnest_explicit = unnest(nc, y)
   # The second row is duplicated because the "b" and "c" become separate rows
   expected = nc[c(1,2,2), ] %>% mutate(y = c("a", "b", "c"))
-  expected = expected[2:1]
   # Would use expect_equal, but doesn't work with geometry cols
   expect_identical(unnest_explicit, expected)
 })
