@@ -270,9 +270,9 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 #' # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
 #' # x <- storms.sf %>% group_by(name, year) %>% nest
-#' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
-#' trs.sf = st_sf(x[,1:2], trs)
-#' plot(trs.sf["year"], axes = TRUE)
+#' # trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
+#' # trs.sf = st_sf(x[,1:2], trs)
+#' # plot(trs.sf["year"], axes = TRUE)
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (data, ..., .key = "data") {
 	class(data) <- setdiff(class(data), "sf")
