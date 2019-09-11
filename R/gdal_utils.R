@@ -39,11 +39,11 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			info = CPL_gdalinfo(source, options),
 			warp = CPL_gdalwarp(source, destination, options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
-			rasterize = { 
+			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co", 
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
 				CPL_gdalrasterize(source, destination, options, overwrite)
-			},
+			}, # nocov end
 			translate = CPL_gdaltranslate(source, destination, options),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options),
 			buildvrt = CPL_gdalbuildvrt(source, destination, options),
