@@ -268,7 +268,8 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' @param .key see \link[tidyr]{nest}
 #' @examples
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-#' x <- storms.sf %>% group_by(name, year) %>% nest
+#' # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
+#' # x <- storms.sf %>% group_by(name, year) %>% nest
 #' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
 #' trs.sf = st_sf(x[,1:2], trs)
 #' plot(trs.sf["year"], axes = TRUE)
