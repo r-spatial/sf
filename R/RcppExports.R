@@ -253,6 +253,10 @@ CPL_set_data_dir <- function(data_dir) {
     .Call('_sf_CPL_set_data_dir', PACKAGE = 'sf', data_dir)
 }
 
+CPL_use_proj4_init_rules <- function(v) {
+    .Call('_sf_CPL_use_proj4_init_rules', PACKAGE = 'sf', v)
+}
+
 CPL_proj_version <- function(b = FALSE) {
     .Call('_sf_CPL_proj_version', PACKAGE = 'sf', b)
 }

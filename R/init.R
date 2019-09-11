@@ -74,6 +74,7 @@ load_gdal <- function() {
 			assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
 			Sys.setenv("PROJ_LIB" = prj)
 		}
+		CPL_use_proj4_init_rules(1L)
 		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
 		gdl = system.file("gdal", package = "sf")[1]
 		Sys.setenv("GDAL_DATA" = gdl)
