@@ -84,5 +84,4 @@ test_that("unnest works", {
   expected = expected[2:1]
   # Would use expect_equal, but doesn't work with geometry cols
   expect_identical(unnest_explicit, expected)
-  expect_identical(unnest_implicit, expected)
 })
