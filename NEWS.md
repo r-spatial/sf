@@ -1,5 +1,9 @@
 # version 0.8-0
 
+* `gdal_utils` now better closes connections after use; #1143
+
+* `st_write` gains a `drivers` options, to limit the drivers attempted; #1142
+
 * rather than replacing, `st_write` and `write_sf` append to an existing layer if `update=TRUE`; #1126
 
 * improve plotting of `POSIXct` and `Date` attributes (`Date` requiring classInt >= 0.4-2)
