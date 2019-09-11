@@ -93,7 +93,8 @@ Suggests:
     tibble (>= 1.4.1),
     tidyr (>= 0.7-2),
     tidyselect,
-    tmap (>= 2.0)
+    tmap (>= 2.0),
+    vctrs
 LinkingTo: 
     Rcpp
 Remotes:
