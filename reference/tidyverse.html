@@ -425,7 +425,8 @@ Should be a character vector of length 2.</p></td>
 #&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='co'># TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged</span>
 <span class='co'># x &lt;- storms.sf %&gt;% group_by(name, year) %&gt;% nest</span>
-<span class='co'># trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %&gt;% st_sfc(crs = 4326)</span>
+<span class='co'># trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %&gt;%</span>
+<span class='co'>#     st_sfc(crs = 4326)</span>
 <span class='co'># trs.sf = st_sf(x[,1:2], trs)</span>
 <span class='co'># plot(trs.sf["year"], axes = TRUE)</span></div></pre>
   </div>
