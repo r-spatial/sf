@@ -88,14 +88,17 @@ Suggests:
     RSQLite,
     sp (>= 1.2-4),
     spatstat,
-	stars (>= 0.2-0),
+    stars (>= 0.2-0),
     testthat,
     tibble (>= 1.4.1),
     tidyr (>= 0.7-2),
     tidyselect,
-    tmap (>= 2.0)
+    tmap (>= 2.0),
+    vctrs
 LinkingTo: 
     Rcpp
+Remotes:
+    tidyverse/tidyr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

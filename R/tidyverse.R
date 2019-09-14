@@ -268,10 +268,11 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #' @param .key see \link[tidyr]{nest}
 #' @examples
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-#' x <- storms.sf %>% group_by(name, year) %>% nest
-#' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
-#' trs.sf = st_sf(x[,1:2], trs)
-#' plot(trs.sf["year"], axes = TRUE)
+#' # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
+#' # x <- storms.sf %>% group_by(name, year) %>% nest
+#' # trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>% st_sfc(crs = 4326)
+#' # trs.sf = st_sf(x[,1:2], trs)
+#' # plot(trs.sf["year"], axes = TRUE)
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (data, ..., .key = "data") {
 	class(data) <- setdiff(class(data), "sf")
@@ -402,6 +403,10 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+vec_proxy.sfc <- function(x, ...) {
+	x
+}
+
 register_all_s3_methods = function() {
 	register_s3_method("dplyr", "anti_join", "sf")
 	register_s3_method("dplyr", "arrange", "sf")
@@ -434,6 +439,7 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "obj_sum", "sfc")
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
+	register_s3_method("vctrs", "vec_proxy", "sfc")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R

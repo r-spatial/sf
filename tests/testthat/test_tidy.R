@@ -61,7 +61,9 @@ test_that("sample_n etc work", {
  d = st_sf(tbl)
  sample_n(d, 2)
  sample_frac(d, .5)
- d %>% group_by(a) %>% nest
+
+ # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
+ # d %>% group_by(a) %>% nest
 })
 
 test_that("st_intersection of tbl returns tbl", {
@@ -79,11 +81,8 @@ test_that("unnest works", {
     slice(1:2) %>%
     transmute(y = list(c("a"), c("b", "c")))
   unnest_explicit = unnest(nc, y)
-  unnest_implicit = unnest(nc)
   # The second row is duplicated because the "b" and "c" become separate rows
   expected = nc[c(1,2,2), ] %>% mutate(y = c("a", "b", "c"))
-  expected = expected[2:1]
   # Would use expect_equal, but doesn't work with geometry cols
   expect_identical(unnest_explicit, expected)
-  expect_identical(unnest_implicit, expected)
 })
