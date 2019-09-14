@@ -162,7 +162,7 @@ make_crs = function(x, wkt = FALSE) {
 			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
 		u = `$.crs`(list(proj4string = x), "units")
 		crs = CPL_crs_from_proj4string(x)
-		if (! is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
+		if (!is.na(crs) && !is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
 			stop(paste0("units ", u, " not recognized: older GDAL version?"), call. = FALSE) # nocov
 		crs
 	} else

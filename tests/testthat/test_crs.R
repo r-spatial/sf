@@ -46,12 +46,16 @@ test_that("st_proj_info works for datum files", {
 test_that("$.crs works", {
   expect_true(is.numeric(st_crs("+init=epsg:3857")$epsg))
   expect_true(is.character(st_crs("+init=epsg:3857")$proj4string))
+})
+
+test_that("$.crs works with +units", {
+  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
   expect_true(is.numeric(st_crs("+init=epsg:3857 +units=m")$b)) 
   expect_true(is.character(st_crs("+init=epsg:3857 +units=m")$units))
 })
 
 test_that("$.crs works 2", {
-  skip_if_not(sf_extSoftVersion()[["GDAL"]] < "2.5.0")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] < "2.5.0" && sf_extSoftVersion()[["proj.4"]] < "6.0.0")
   expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) 
   expect_true(is.character(st_crs("+init=epsg:3857 +units=km")$units))
 })

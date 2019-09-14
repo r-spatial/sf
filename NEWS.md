@@ -1,6 +1,8 @@
 # version 0.8-0
 
-* `gdal_utils` now better closes connections after use; #1143
+* fixes for tidyr 1.0-0 release, but `nest.sf` remains broken; #1068, #1145
+
+* `gdal_utils` better closes connections after use; #1143
 
 * `st_write` gains a `drivers` options, to limit the drivers attempted; #1142
 
