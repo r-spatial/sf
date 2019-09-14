@@ -222,7 +222,8 @@ nc \%>\% select(SID74, SID79, geometry, row) \%>\%
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
 # x <- storms.sf \%>\% group_by(name, year) \%>\% nest
-# trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) \%>\% st_sfc(crs = 4326)
+# trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) \%>\%
+#     st_sfc(crs = 4326)
 # trs.sf = st_sf(x[,1:2], trs)
 # plot(trs.sf["year"], axes = TRUE)
 }
