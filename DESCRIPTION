@@ -97,8 +97,6 @@ Suggests:
     vctrs
 LinkingTo: 
     Rcpp
-Remotes:
-    tidyverse/tidyr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
