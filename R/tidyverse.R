@@ -265,28 +265,24 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 }
 
 #' @name tidyverse
-#' @param .key see \link[tidyr]{nest}
 #' @examples
 #' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-#' # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
-#' # x <- storms.sf %>% group_by(name, year) %>% nest
-#' # trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>%
-#' #     st_sfc(crs = 4326)
-#' # trs.sf = st_sf(x[,1:2], trs)
-#' # plot(trs.sf["year"], axes = TRUE)
+#' x <- storms.sf %>% group_by(name, year) %>% nest
+#' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>%
+#'     st_sfc(crs = 4326)
+#' trs.sf = st_sf(x[,1:2], trs)
+#' plot(trs.sf["year"], axes = TRUE)
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
-nest.sf = function (data, ..., .key = "data") {
-	class(data) <- setdiff(class(data), "sf")
+nest.sf = function (.data, ...) {
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
-	key = rlang::enquo(.key)
-
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("tidyr required: install first?")
-	ret = tidyr::nest(data, ..., .key = !! key)
-	# should find out first if geometry column was in ... !
-	ret[[.key]] = lapply(ret[[.key]], st_as_sf, sf_column_name = attr(data, "sf_column"))
+
+	class(.data) <- setdiff(class(.data), "sf")
+	ret = tidyr::nest(.data, ...)
+	ret[["data"]] = lapply(ret[["data"]], st_as_sf, sf_column_name = attr(.data, "sf_column"))
 	ret
 }
 
@@ -337,36 +333,13 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 #' @param .preserve see \link[tidyr]{unnest}
 unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov start
-	if (!requireNamespace("tidyr", quietly = TRUE) ||
-			utils::packageVersion("tidyr") <= "0.7.2")
-		stop("unnest requires tidyr > 0.7.2; install that first")
-	if (! requireNamespace("tidyselect", quietly = TRUE))
-		stop("unnest requires tidyselect; install that first")
-	if (! requireNamespace("rlang", quietly = TRUE))
-		stop("unnest requires rlang; install that first")
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("unnest requires tidyr; install that first")
 
-	# The user might want to preserve other columns. Get these as a character
-	# vector of variable names, using any valid dplyr (i.e. rlang)
-	# variable selection syntax. By default, with .preserve = NULL, this will be
-	# empty. Note: the !!! is from rlang.
-	preserve = tidyselect::vars_select(names(data), !!rlang::enquo(.preserve))
-	# Get the name of the geometry column(s)
-	sf_column_name = attr(data, "sf_column", exact = TRUE)
-	preserve_incl_sf = c(preserve, sf_column_name)
-
-	# Drop the "sf" class and call unnest again, providing the updated .preserve.
-	# (Normally it wouldn't be necessary to drop the class, but tidyr calls
-	# dplyr::transmute (not sf::transmute.sf), so the geometry column is
-	# inadvertantly included in some of the unnest.data.frame code.
-	# The .preserve argument will go through the vars_select/enquo
-	# process again in unnest.data.frame, but that's fine.
 	class(data) = setdiff(class(data), "sf")
-	ret = st_sf(NextMethod(.preserve = preserve_incl_sf),
-		sf_column_name = sf_column_name)
-	ret # nocov end
+	st_sf(NextMethod(), sf_column_name = attr(data, "sf_column", exact = TRUE))
+	# nocov end
 }
-
-
 
 ## tibble methods:
 

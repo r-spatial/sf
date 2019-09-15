@@ -63,7 +63,7 @@ test_that("sample_n etc work", {
  sample_frac(d, .5)
 
  # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
- # d %>% group_by(a) %>% nest
+ d %>% group_by(a) %>% nest
 })
 
 test_that("st_intersection of tbl returns tbl", {

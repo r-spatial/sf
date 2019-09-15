@@ -2,7 +2,7 @@
 
 * fix tests for PROJ 6.2.0 not accepting +units=
 
-* fixes for tidyr 1.0-0 release, but `nest.sf` remains broken; #1068, #1145
+* fixes for tidyr 1.0-0 release; attempt to port `nest.sf` and `unnest.sf`; #1068, #1145
 
 * `gdal_utils` better closes connections after use; #1143
 
