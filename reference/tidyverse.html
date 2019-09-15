@@ -176,7 +176,7 @@
 <span class='fu'>sample_frac.sf</span>(<span class='no'>tbl</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())
 
-<span class='fu'>nest.sf</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>.key</span> <span class='kw'>=</span> <span class='st'>"data"</span>)
+<span class='fu'>nest.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
 
 <span class='fu'>separate.sf</span>(<span class='no'>data</span>, <span class='no'>col</span>, <span class='no'>into</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"[^[:alnum:]]+"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>convert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>extra</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"warn"</span>, <span class='no'>...</span>)
@@ -291,10 +291,6 @@
     <tr>
       <th>.env</th>
       <td><p>see original function docs</p></td>
-    </tr>
-    <tr>
-      <th>.key</th>
-      <td><p>see <a href='https://tidyr.tidyverse.org/reference/nest.html'>nest</a></p></td>
     </tr>
     <tr>
       <th>col</th>
@@ -423,12 +419,11 @@ Should be a character vector of length 2.</p></td>
 #&gt; 4   4     1     2 MULTIPOLYGON (((-76.00897 3...
 #&gt; 5   5     9     3 MULTIPOLYGON (((-77.21767 3...
 #&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='co'># TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged</span>
-<span class='co'># x &lt;- storms.sf %&gt;% group_by(name, year) %&gt;% nest</span>
-<span class='co'># trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %&gt;%</span>
-<span class='co'>#     st_sfc(crs = 4326)</span>
-<span class='co'># trs.sf = st_sf(x[,1:2], trs)</span>
-<span class='co'># plot(trs.sf["year"], axes = TRUE)</span></div></pre>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>storms.sf</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>name</span>, <span class='no'>year</span>) <span class='kw'>%&gt;%</span> <span class='no'>nest</span>
+<span class='no'>trs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>x</span>$<span class='no'>data</span>, <span class='kw'>function</span>(<span class='no'>tr</span>) <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>tr</span>), <span class='st'>"LINESTRING"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]) <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='no'>trs.sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='no'>x</span>[,<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='no'>trs</span>)
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>trs.sf</span>[<span class='st'>"year"</span>], <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='tidyverse-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
