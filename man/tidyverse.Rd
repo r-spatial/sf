@@ -16,6 +16,7 @@
 \alias{distinct.sf}
 \alias{gather.sf}
 \alias{spread.sf}
+\alias{pivot_longer.sf}
 \alias{sample_n.sf}
 \alias{sample_frac.sf}
 \alias{nest.sf}
@@ -58,6 +59,11 @@ gather.sf(data, key, value, ..., na.rm = FALSE, convert = FALSE,
 
 spread.sf(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
   sep = NULL)
+
+pivot_longer.sf(data, cols, names_to = "name", names_prefix = NULL,
+  names_sep = NULL, names_pattern = NULL, names_ptypes = list(),
+  names_repair = "check_unique", values_to = "value",
+  values_drop_na = FALSE, values_ptypes = list())
 
 sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
   .env = parent.frame())
@@ -217,6 +223,8 @@ nc$row = 1:100 # needed for spread to work
 nc \%>\% select(SID74, SID79, geometry, row) \%>\%
 	gather("VAR", "SID", -geometry, -row) \%>\%
 	spread(VAR, SID) \%>\% head()
+library(tidyr)
+nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
 x <- storms.sf \%>\% group_by(name, year) \%>\% nest
 trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) \%>\%

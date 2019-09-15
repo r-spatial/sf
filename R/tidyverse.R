@@ -56,10 +56,10 @@ ungroup.sf <- function(x, ...) {
 	# non-geom attribute names
 	att = names(x)[!sapply(x, inherits, what = "sfc")]
 	agr = setNames(agr[att], att) # NA's new columns
-	structure(x, 
+	structure(x,
 		sf_column = sf_column_name,
 		agr = agr,
-		class = c("sf", class(x))) 
+		class = c("sf", class(x)))
 }
 
 
@@ -134,9 +134,9 @@ slice.sf <- function(.data, ..., .dots) {
 #' @aliases summarise
 #' @param do_union logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.
 #' @return an object of class \link{sf}
-#' @details 
+#' @details
 #' In case one or more of the arguments (expressions) in the \code{summarise} call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of \code{do_union}.
-#' 
+#'
 #' In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -247,6 +247,34 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	class(data) <- setdiff(class(data), "sf")
     st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert,
 		drop = drop, sep = sep), sf_column_name = attr(data, "sf_column"))
+}
+
+#' @name tidyverse
+#' @export
+#' @examples
+#' library(tidyr)
+#' nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
+pivot_longer.sf <- function(data, cols, names_to = "name", names_prefix = NULL,
+							names_sep = NULL, names_pattern = NULL, names_ptypes = list(),
+							names_repair = "check_unique", values_to = "value",
+							values_drop_na = FALSE,
+							values_ptypes = list()) {
+
+	if (! requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install first?")
+
+	cols = rlang::enquo(cols)
+
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+
+	class(data) <- setdiff(class(data), "sf")
+	st_as_sf(tidyr::pivot_longer(data, !!cols,
+								 names_to = names_to, names_prefix = names_prefix,
+								 names_sep = names_sep, names_pattern = names_pattern, names_ptypes = names_ptypes,
+								 names_repair = names_repair, values_to = values_to, values_drop_na = values_drop_na,
+								 values_ptypes = values_ptypes),
+			 sf_column_name = attr(data, "sf_column"))
 }
 
 #' @name tidyverse
@@ -405,6 +433,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "ungroup", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "spread", "sf")
+	register_s3_method("tidyr", "pivot_longer", "sf")
 	register_s3_method("tidyr", "nest", "sf")
 	register_s3_method("tidyr", "separate", "sf")
 	register_s3_method("tidyr", "separate_rows", "sf")
