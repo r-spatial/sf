@@ -91,8 +91,7 @@ Suggests:
     stars (>= 0.2-0),
     testthat,
     tibble (>= 1.4.1),
-    tidyr (>= 0.7-2),
-    tidyselect,
+    tidyr (>= 1.0-0),
     tmap (>= 2.0),
     vctrs
 LinkingTo: 

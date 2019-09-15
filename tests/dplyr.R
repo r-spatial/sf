@@ -93,8 +93,7 @@ dbReadTable(con, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
 
 # nest:
 storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-# TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
-# x <- storms.sf %>% group_by(name, year) %>% nest
+x <- storms.sf %>% group_by(name, year) %>% nest
 
 nrow(distinct(nc[c(1,1,1,2,2,3:100),]))
 

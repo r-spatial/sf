@@ -21,7 +21,7 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	GDALInfoOptions* opt = GDALInfoOptionsNew(options_char.data(), NULL);
 	GDALDatasetH ds = GDALOpen((const char *) obj[0], GA_ReadOnly);
 	if (ds == NULL)
-		return 1;
+		return 1; // #nocov
 	char *ret_val = GDALInfo(ds, opt);
 	Rcpp::CharacterVector ret = ret_val; // copies
 	CPLFree(ret_val);
@@ -96,7 +96,7 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, NULL, NULL, NULL);
 	if (src_pt == NULL)
-		return 1;
+		return 1; // #nocov
 	GDALDatasetH result = GDALTranslate((const char *) dst[0], src_pt, opt, &err);
 	if (src_pt != NULL)
 		GDALClose(src_pt);
@@ -116,7 +116,7 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, NULL, NULL);
 	if (src_pt == NULL)
-		return 1;
+		return 1; // #nocov
 	// GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
 	GDALDatasetH result = GDALVectorTranslate((const char *) dst[0], NULL, 1, &src_pt, opt, &err);
 	if (src_pt != NULL)

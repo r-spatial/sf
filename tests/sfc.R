@@ -330,3 +330,5 @@ y$geometry <- st_sfc(st_point(c(0,0)))
 y <- st_sf(y)
 out = merge(x, y, all.x=TRUE)
 class(out)
+
+st_as_sf(st_sfc(st_point(0:1)))
