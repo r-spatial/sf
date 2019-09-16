@@ -57,7 +57,7 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 #' spatial join
 #' @name st_join
 #' @export
-st_join = function(x, y, ...) UseMethod("st_join")
+st_join = function(x, y, join, ...) UseMethod("st_join")
 
 #' @name st_join
 #' @param x object of class \code{sf}
@@ -120,7 +120,7 @@ st_join = function(x, y, ...) UseMethod("st_join")
 #' plot(st_geometry(gr), border = 'green', add = TRUE)
 #' par(opar)
 #' @export
-st_join.sf = function(x, y, ..., join = st_intersects, suffix = c(".x", ".y"), 
+st_join.sf = function(x, y, join = st_intersects, ..., suffix = c(".x", ".y"), 
 		left = TRUE, largest = FALSE) {
 
 	if (!inherits(y, "sf"))

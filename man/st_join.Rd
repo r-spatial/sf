@@ -5,9 +5,9 @@
 \alias{st_join.sf}
 \title{spatial join}
 \usage{
-st_join(x, y, ...)
+st_join(x, y, join, ...)
 
-\method{st_join}{sf}(x, y, ..., join = st_intersects, suffix = c(".x",
+\method{st_join}{sf}(x, y, join = st_intersects, ..., suffix = c(".x",
   ".y"), left = TRUE, largest = FALSE)
 }
 \arguments{
@@ -15,9 +15,9 @@ st_join(x, y, ...)
 
 \item{y}{object of class \code{sf}}
 
-\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
-
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
+
+\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
