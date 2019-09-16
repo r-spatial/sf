@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -106,10 +106,6 @@ POINT (111319.5 111325.1)
 +   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
 +   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 + }
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
-Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) : 
-  unknown projection id
 > 
 > if (st_proj_info("have_datum_files")) {
 +   "datum files installed"
@@ -118,11 +114,11 @@ Error in CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts)) :
 + }
 [1] "datum files installed"
 > 
-> st_crs(sp::CRS('+init=epsg:4326'))
+> st_crs(sp::CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 Coordinate Reference System:
   EPSG: 4326 
-  proj4string: "+proj=longlat +datum=WGS84 +no_defs"
+  proj4string: "+proj=longlat +ellps=WGS84 +no_defs"
 > 
 > proc.time()
    user  system elapsed 
-  0.468   0.037   0.496 
+  0.502   0.027   0.519 
