@@ -274,8 +274,8 @@ First 10 features:
 > nc_gp_cent <- nc %>%
 +                 group_by(gp) %>%
 +                 group_map(st_centroid)
-There were 14 warnings (use warnings() to see them)
+There were 12 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-  1.600   0.055   1.645 
+  1.554   0.077   1.623 

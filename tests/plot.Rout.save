@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -36,7 +36,7 @@ The following objects are masked from 'package:base':
 > s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
 > plot(s, col = s$a, axes = FALSE)
 > plot(s, col = s$a)
-> attr(s$b, "proj4string") = sp::CRS("+init=epsg:4326")@projargs
+> attr(s$b, "proj4string") = sp::CRS("+proj=longlat +ellps=WGS84 +no_defs")@projargs
 > plot(s, col = s$a, axes = TRUE)
 > plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 > l4 = st_linestring(matrix(runif(6),,2))
@@ -169,4 +169,4 @@ plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all
 > 
 > proc.time()
    user  system elapsed 
-  3.486   0.076   3.560 
+  4.010   0.091   4.093 

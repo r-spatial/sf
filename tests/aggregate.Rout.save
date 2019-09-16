@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
+Linking to GEOS 3.7.1, GDAL 2.4.2, PROJ 5.2.0
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -115,4 +115,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  0.475   0.051   0.533 
+  0.423   0.018   0.432 

@@ -9,7 +9,7 @@ test_that("st_transform works", {
   s1.tr = st_transform(s, 3857)
 
   sp = as(s, "Spatial")
-  sp.tr = spTransform(sp, CRS("+init=epsg:3857"))
+  sp.tr = spTransform(sp, CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +nadgrids=@null +no_defs")) # web mercator
   s2.tr = st_as_sfc(sp.tr)
   #attr(s1.tr, "crs")$proj4string = ""
   #attr(s2.tr, "crs")$proj4string = ""

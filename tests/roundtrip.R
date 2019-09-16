@@ -32,12 +32,12 @@ m = st_as_sf(mpdf)
 all.equal(as(m, "Spatial"), mpdf) # TRUE
 
 demo(meuse, ask = FALSE, echo = FALSE)
-meuse = spTransform(meuse, CRS("+init=epsg:4326"))
+meuse = spTransform(meuse, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
-meuse.grd = spTransform(meuse.grid, CRS("+init=epsg:4326"))
-pol.grd = spTransform(pol.grd, CRS("+init=epsg:4326"))
-meuse.area = spTransform(meuse.area, CRS("+init=epsg:4326"))
-meuse.riv = spTransform(meuse.riv, CRS("+init=epsg:4326"))
+meuse.grd = spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+pol.grd = spTransform(pol.grd, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+meuse.area = spTransform(meuse.area, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+meuse.riv = spTransform(meuse.riv, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 summary(st_as_sf(meuse))
 summary(st_as_sf(meuse.grd))
 x <- st_as_sf(meuse.grid) # don't print: CRS variations.

@@ -44,6 +44,7 @@ test_that("st_proj_info works for datum files", {
 })
 
 test_that("$.crs works", {
+  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
   expect_true(is.numeric(st_crs("+init=epsg:3857")$epsg))
   expect_true(is.character(st_crs("+init=epsg:3857")$proj4string))
 })

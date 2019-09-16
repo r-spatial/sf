@@ -1,5 +1,5 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -62,15 +62,15 @@ Coordinate Reference System (CRS) arguments: NA
 [1] TRUE
 > 
 > demo(meuse, ask = FALSE, echo = FALSE)
-> meuse = spTransform(meuse, CRS("+init=epsg:4326"))
+> meuse = spTransform(meuse, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 > pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
-> meuse.grd = spTransform(meuse.grid, CRS("+init=epsg:4326"))
+> meuse.grd = spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 Warning message:
-In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
+In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
   Grid warping not available, coercing to points
-> pol.grd = spTransform(pol.grd, CRS("+init=epsg:4326"))
-> meuse.area = spTransform(meuse.area, CRS("+init=epsg:4326"))
-> meuse.riv = spTransform(meuse.riv, CRS("+init=epsg:4326"))
+> pol.grd = spTransform(pol.grd, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+> meuse.area = spTransform(meuse.area, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+> meuse.riv = spTransform(meuse.riv, CRS("+proj=longlat +ellps=WGS84 +no_defs"))
 > summary(st_as_sf(meuse))
     cadmium           copper            lead            zinc       
  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
@@ -178,4 +178,4 @@ In spTransform(meuse.grid, CRS("+init=epsg:4326")) :
 > 
 > proc.time()
    user  system elapsed 
-  3.368   0.084   3.464 
+  2.728   0.072   2.792 
