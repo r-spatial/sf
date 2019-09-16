@@ -31,7 +31,7 @@ test_that("sf can write units (#264)", {
     expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
 })
 
-test_that("delete and update work (#304) ", {
+test_that("delete and update work (#304) 1", {
   skip_if_not("GPKG" %in% st_drivers()$name)  # shapefiles can't write point+multipoint mix:
   skip_on_os("mac")
 
@@ -41,6 +41,9 @@ test_that("delete and update work (#304) ", {
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
   expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
+})
+
+test_that("delete and update work (#304) 2", {
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Deleting source")
   expect_error(st_write(x, gpkg, update = FALSE, quiet = TRUE), "Dataset already exists")
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
