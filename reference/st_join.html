@@ -142,10 +142,10 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>join</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>,
+<span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>...</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>,
   <span class='st'>".y"</span>), <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -160,12 +160,12 @@
       <td><p>object of class <code>sf</code></p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed on to the <code>join</code> function (e.g. <code>prepared</code>, or a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
-    </tr>
-    <tr>
       <th>join</th>
       <td><p>geometry predicate function with the same profile as <a href='geos_binary_pred.html'>st_intersects</a>; see details</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to the <code>join</code> function (e.g. <code>prepared</code>, or a pattern for <a href='st_relate.html'>st_relate</a>)</p></td>
     </tr>
     <tr>
       <th>suffix</th>
