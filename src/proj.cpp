@@ -133,12 +133,12 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
   return false;
-}                                                            // #nocov end
+}
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
 	return false;
-}
+}                                                            // #nocov end
 
 #if PJ_VERSION == 480
 extern "C" {

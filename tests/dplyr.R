@@ -103,3 +103,5 @@ nc$gp <- sample(1:10, replace=T)
 nc_gp_cent <- nc %>%
                 group_by(gp) %>%
                 group_map(st_centroid)
+
+nc %>% st_filter(nc[1,]) %>% nrow

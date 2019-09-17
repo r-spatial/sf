@@ -276,6 +276,10 @@ First 10 features:
 +                 group_map(st_centroid)
 There were 12 warnings (use warnings() to see them)
 > 
+> nc %>% st_filter(nc[1,]) %>% nrow
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
+[1] 4
+> 
 > proc.time()
    user  system elapsed 
-  1.554   0.077   1.623 
+  1.472   0.068   1.531 
