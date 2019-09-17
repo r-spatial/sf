@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
       </span>
     </div>
 
@@ -305,15 +305,15 @@
 <a class="sourceLine" id="cb5-10" data-line-number="10">## [25] st_cast               st_centroid           st_collection_extract</a>
 <a class="sourceLine" id="cb5-11" data-line-number="11">## [28] st_convex_hull        st_coordinates        st_crop              </a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">## [31] st_crs                st_crs&lt;-              st_difference        </a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">## [34] st_geometry           st_geometry&lt;-         st_interpolate_aw    </a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">## [37] st_intersection       st_intersects         st_is                </a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">## [40] st_join               st_line_merge         st_nearest_points    </a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">## [43] st_node               st_normalize          st_point_on_surface  </a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">## [46] st_polygonize         st_precision          st_segmentize        </a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">## [49] st_set_precision      st_simplify           st_snap              </a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">## [52] st_sym_difference     st_transform          st_triangulate       </a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">## [55] st_union              st_voronoi            st_wrap_dateline     </a>
-<a class="sourceLine" id="cb5-21" data-line-number="21">## [58] st_write              st_zm                </a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">## [34] st_filter             st_geometry           st_geometry&lt;-        </a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">## [37] st_interpolate_aw     st_intersection       st_intersects        </a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">## [40] st_is                 st_join               st_line_merge        </a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">## [43] st_nearest_points     st_node               st_normalize         </a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">## [46] st_point_on_surface   st_polygonize         st_precision         </a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">## [49] st_segmentize         st_set_precision      st_simplify          </a>
+<a class="sourceLine" id="cb5-19" data-line-number="19">## [52] st_snap               st_sym_difference     st_transform         </a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">## [55] st_triangulate        st_union              st_voronoi           </a>
+<a class="sourceLine" id="cb5-21" data-line-number="21">## [58] st_wrap_dateline      st_write              st_zm                </a>
 <a class="sourceLine" id="cb5-22" data-line-number="22">## see '?methods' for accessing help and source code</a></code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">nc.no_sf &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.data.frame">as.data.frame</a></span>(nc)</a>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>spatial join — st_join • sf</title>
+<title>spatial join, spatial filter — st_join • sf</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="spatial join — st_join" />
+<meta property="og:title" content="spatial join, spatial filter — st_join" />
 
-<meta property="og:description" content="spatial join" />
+<meta property="og:description" content="spatial join, spatial filter" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.1</span>
       </span>
     </div>
 
@@ -131,14 +131,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>spatial join</h1>
+    <h1>spatial join, spatial filter</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/join.R'><code>R/join.R</code></a></small>
     <div class="hidden name"><code>st_join.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>spatial join</p>
+    <p>spatial join, spatial filter</p>
     
     </div>
 
@@ -146,7 +146,12 @@
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>, <span class='no'>...</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>,
-  <span class='st'>".y"</span>), <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='st'>".y"</span>), <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>st_filter</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_filter</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>.predicate</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,6 +184,10 @@ see also <a href='https://dplyr.tidyverse.org/reference/join.html'>left_join</a>
     <tr>
       <th>largest</th>
       <td><p>logical; if <code>TRUE</code>, return <code>x</code> features augmented with the fields of <code>y</code> that have the largest overlap with each of the features of <code>x</code>; see https://github.com/r-spatial/sf/issues/578</p></td>
+    </tr>
+    <tr>
+      <th>.predicate</th>
+      <td><p>geometry predicate function with the same profile as <a href='geos_binary_pred.html'>st_intersects</a>; see details</p></td>
     </tr>
     </table>
     
