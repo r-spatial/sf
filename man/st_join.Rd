@@ -3,12 +3,18 @@
 \name{st_join}
 \alias{st_join}
 \alias{st_join.sf}
-\title{spatial join}
+\alias{st_filter}
+\alias{st_filter.sf}
+\title{spatial join, spatial filter}
 \usage{
 st_join(x, y, join, ...)
 
 \method{st_join}{sf}(x, y, join = st_intersects, ..., suffix = c(".x",
   ".y"), left = TRUE, largest = FALSE)
+
+st_filter(x, y, ...)
+
+\method{st_filter}{sf}(x, y, ..., .predicate = st_intersects)
 }
 \arguments{
 \item{x}{object of class \code{sf}}
@@ -25,12 +31,14 @@ st_join(x, y, join, ...)
 see also \link[dplyr]{left_join}}
 
 \item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
+
+\item{.predicate}{geometry predicate function with the same profile as \link{st_intersects}; see details}
 }
 \value{
 an object of class \code{sf}, joined based on geometry
 }
 \description{
-spatial join
+spatial join, spatial filter
 }
 \details{
 alternative values for argument \code{join} are:

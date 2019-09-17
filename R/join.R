@@ -52,9 +52,9 @@ anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), .
 }
 
 
-#' spatial join
+#' spatial join, spatial filter
 #'
-#' spatial join
+#' spatial join, spatial filter
 #' @name st_join
 #' @export
 st_join = function(x, y, join, ...) UseMethod("st_join")
@@ -163,4 +163,18 @@ st_join.sf = function(x, y, join = st_intersects, ..., suffix = c(".x", ".y"),
 		st_sf(dplyr::bind_cols(x[ix,], y[unlist(i), , drop = FALSE]))
   	else
 		st_sf(cbind(as.data.frame(x)[ix,], y[unlist(i), , drop = FALSE]))	
+}
+
+#' @export
+#' @name st_join
+st_filter = function(x, y, ...) UseMethod("st_filter")
+
+#' @export
+#' @name st_join
+#' @param .predicate geometry predicate function with the same profile as \link{st_intersects}; see details
+st_filter.sf = function(x, y, ..., .predicate = st_intersects) {
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr is not installed: install first?")
+
+    dplyr::filter(x, lengths(.predicate(x, y)) > 0) # will call filter.sf
 }

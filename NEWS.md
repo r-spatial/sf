@@ -1,3 +1,7 @@
+# version 0.8-1
+
+* add `st_filter` generic for filtering on spatial features only; #1148
+
 # version 0.8-0
 
 * fix tests for PROJ 6.2.0 not accepting +units=
