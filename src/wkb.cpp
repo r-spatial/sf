@@ -44,10 +44,12 @@ template<typename T>
 inline T wkb_read(wkb_buf *wkb) {
 	if (sizeof(T) > wkb->size)
 		Rcpp::stop("range check error: WKB buffer too small. Input file corrupt?");
-	T ret = *(reinterpret_cast<const T*>(wkb->pt));
+
+	T dst;
+	memcpy(&dst, wkb->pt, sizeof(T));
 	wkb->pt += sizeof(T);
 	wkb->size -= sizeof(T);
-	return ret;
+	return dst;
 }
 
 // https://stackoverflow.com/questions/105252/how-do-i-convert-between-big-endian-and-little-endian-values-in-c
