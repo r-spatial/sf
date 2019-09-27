@@ -28,7 +28,9 @@ set_utf8 = function(x) {
 #'   use the \code{query} argument.
 #' @param ... parameter(s) passed on to \link{st_as_sf}
 #' @param options character; driver dependent dataset open options, multiple
-#'   options supported.
+#'   options supported. For possible values, see the "Open options" section
+#'   of the GDAL documentation of the corresponding driver, and 
+#'   https://github.com/r-spatial/sf/issues/1157 for an example.
 #' @param quiet logical; suppress info on name, driver, size and spatial
 #'   reference, or signaling no or multiple layers
 #' @param geometry_column integer or character; in case of multiple geometry
@@ -42,8 +44,9 @@ set_utf8 = function(x) {
 #'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 #'   all to the Multi variety; defaults to \code{TRUE}
 #' @param stringsAsFactors logical; logical: should character vectors be
-#'   converted to factors?  The `factory-fresh' default is \code{TRUE}, but this
-#'   can be changed by setting \code{options(stringsAsFactors = FALSE)}.
+#'   converted to factors?  The `factory-fresh' default is \code{TRUE} for 
+#'   \code{st_read} and \code{FALSE} for \code{read_sf}, but this can be changed 
+#'   globally by e.g. the R command \code{options(stringsAsFactors = FALSE)}.
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
 #'   string; if FALSE, they are returned as double and a warning is given when
 #'   precision is lost (i.e., values are larger than 2^53).
