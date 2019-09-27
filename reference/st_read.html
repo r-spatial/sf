@@ -199,7 +199,9 @@ use the <code>query</code> argument.</p></td>
     <tr>
       <th>options</th>
       <td><p>character; driver dependent dataset open options, multiple
-options supported.</p></td>
+options supported. For possible values, see the "Open options" section
+of the GDAL documentation of the corresponding driver, and 
+https://github.com/r-spatial/sf/issues/1157 for an example.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -228,8 +230,9 @@ all to the Multi variety; defaults to <code>TRUE</code></p></td>
     <tr>
       <th>stringsAsFactors</th>
       <td><p>logical; logical: should character vectors be
-converted to factors?  The `factory-fresh' default is <code>TRUE</code>, but this
-can be changed by setting <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
+converted to factors?  The `factory-fresh' default is <code>TRUE</code> for 
+<code>st_read</code> and <code>FALSE</code> for <code>read_sf</code>, but this can be changed 
+globally by e.g. the R command <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>int64_as_string</th>
