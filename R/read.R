@@ -258,6 +258,10 @@ clean_columns = function(obj, factorsAsCharacter) {
 	ccls.ok = vapply(obj, function(x) inherits(x, permitted), TRUE)
 	if (any(!ccls.ok)) {
 		# nocov start
+                nms <- names(obj)[!ccls.ok]
+                cls <- sapply(obj, function(x) paste(class(x), collapse=";"))[!ccls.ok]
+                warning("Dropping column(s) ", paste(nms, collapse=","),
+                    " of class(es) ", paste(cls, collapse=","))
 		obj = obj[ccls.ok]
 		# nocov end
 	}
