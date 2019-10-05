@@ -76,7 +76,8 @@ Cast geometry to another type: either simplify, or cast explicitly
 the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf]{aggregate} or \link[sf]{summarise}.
 }
 \examples{
-example(st_read)
+# example(st_read)
+nc = st_read(system.file("shape/nc.shp", package="sf"))
 mpl <- nc$geometry[[4]]
 #st_cast(x) ## error 'argument "to" is missing, with no default'
 cast_all <- function(xg) {

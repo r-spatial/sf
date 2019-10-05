@@ -41,7 +41,8 @@ ClosePol <- function(mtrx) {
 #' @name st_cast
 #' @export
 #' @examples 
-#' example(st_read)
+#' # example(st_read)
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' mpl <- nc$geometry[[4]]
 #' #st_cast(x) ## error 'argument "to" is missing, with no default'
 #' cast_all <- function(xg) {
