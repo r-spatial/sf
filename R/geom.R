@@ -56,8 +56,11 @@ st_area.sfc = function(x, ...) {
 		lwgeom::st_geod_area(x)
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
-		if (! is.na(st_crs(x)))
+		if (! is.na(st_crs(x))) {
 			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
+			if (!is.null(to_m <- st_crs(x)$to_meter))
+				a = a * to_m^2
+		}
 		a
 	}
 }
@@ -99,8 +102,11 @@ st_length = function(x) {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
 		crs = st_crs(x)
-		if (! is.na(crs))
+		if (! is.na(crs)) {
 			units(ret) = crs_parameters(crs)$ud_unit
+			if (!is.null(to_m <- st_crs(x)$to_meter))
+				ret = ret * to_m
+		}
 		ret
 	}
 }

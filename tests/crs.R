@@ -33,3 +33,9 @@ if (st_proj_info("have_datum_files")) {
 }
 
 st_crs(sp::CRS("+proj=longlat +ellps=WGS84 +no_defs"))
+
+# https://github.com/r-spatial/sf/issues/1170
+g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.77654, -61.40721 10.60681, -61.66957 10.69214))")
+d = st_as_sf(data.frame(id=1, geometry=g), crs=4326)
+st_area(d)
+st_area(st_transform(d, 2314))
