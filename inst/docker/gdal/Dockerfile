@@ -96,7 +96,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2
-ENV GEOS_VERSION 3.7.2
+ENV GEOS_VERSION 3.8.0beta1
 #
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -145,7 +145,7 @@ RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz
 
 RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
 RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-RUN Rscript -e 'install.packages(c("tidync"))'
+RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom"))'
 RUN R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 CMD ["/bin/bash"]
