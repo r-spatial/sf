@@ -64,7 +64,7 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' @param y object of class \code{sf}
 #' @param join geometry predicate function with the same profile as \link{st_intersects}; see details
 #' @param suffix length 2 character vector; see \link[base]{merge}
-#' @param ... arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})
+#' @param ... arguments passed on to the \code{join} or \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}
 #' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
 #' see also \link[dplyr]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
@@ -176,5 +176,5 @@ st_filter.sf = function(x, y, ..., .predicate = st_intersects) {
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr is not installed: install first?")
 
-    dplyr::filter(x, lengths(.predicate(x, y)) > 0) # will call filter.sf
+    dplyr::filter(x, lengths(.predicate(x, y, ...)) > 0) # will call filter.sf
 }

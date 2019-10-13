@@ -23,7 +23,7 @@ st_filter(x, y, ...)
 
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
 
-\item{...}{arguments passed on to the \code{join} function (e.g. \code{prepared}, or a pattern for \link{st_relate})}
+\item{...}{arguments passed on to the \code{join} or \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}}
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 

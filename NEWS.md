@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* `st_area()` and `st_length()` handle `+to_meter` argument in PROJ strings; #1170
+
 * add `st_filter` generic for filtering on spatial features only; #1148
 
 # version 0.8-0
