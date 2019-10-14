@@ -6,9 +6,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>6. Miscellaneous • sf</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="6. Miscellaneous">
 <meta property="og:description" content="">
 <meta property="og:image" content="/logo.png">
@@ -39,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -80,7 +87,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -93,6 +100,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -111,17 +119,17 @@
 <h1 class="hasAnchor">
 <a href="#what-is-this-epsg-code-all-about" class="anchor"></a>What is this EPSG code all about?</h1>
 <p>EPSG stands for a maintained, well-understood set of spatial reference systems, maintained by the International Association of Oil &amp; Gass Producers (IOGP). From R, we can get access to the EPSG dataset programmatically (as a <code>data.frame</code>) by:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">rgdal<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/rgdal/topics/make_EPSG">make_EPSG</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">rgdal<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/rgdal/man/make_EPSG.html">make_EPSG</a></span>()</a></code></pre></div>
 <p>see also the first vignette.</p>
 </div>
 <div id="how-does-sf-deal-with-secondary-geometry-columns" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-does-sf-deal-with-secondary-geometry-columns" class="anchor"></a>How does <code>sf</code> deal with secondary geometry columns?</h1>
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/demo">demo</a></span>(nc, <span class="dt">ask =</span> <span class="ot">FALSE</span>, <span class="dt">echo =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">## Reading layer `nc.gpkg' from data source `/home/travis/R/Library/sf/gpkg/nc.gpkg' using driver `GPKG'</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span>(nc, <span class="dt">ask =</span> <span class="ot">FALSE</span>, <span class="dt">echo =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">## Reading layer `nc.gpkg' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/gpkg/nc.gpkg' using driver `GPKG'</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</a>
 <a class="sourceLine" id="cb2-7" data-line-number="7">## geometry type:  MULTIPOLYGON</a>
@@ -132,7 +140,7 @@
 <a class="sourceLine" id="cb2-12" data-line-number="12">nc<span class="op">$</span>geom2 =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc))</a>
 <a class="sourceLine" id="cb2-13" data-line-number="13">## Warning in st_centroid.sfc(st_geometry(nc)): st_centroid does not give</a>
 <a class="sourceLine" id="cb2-14" data-line-number="14">## correct centroids for longitude/latitude data</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(nc, <span class="dt">n =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(nc, <span class="dt">n =</span> <span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb2-16" data-line-number="16">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb2-17" data-line-number="17">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity, 1 NA's</a>
 <a class="sourceLine" id="cb2-18" data-line-number="18">## Active geometry column: geom</a>
@@ -167,9 +175,9 @@
 <h1 class="hasAnchor">
 <a href="#why-do-dplyr-verbs-not-work-for-sf-objects" class="anchor"></a>Why do dplyr verbs not work for <code>sf</code> objects?</h1>
 <p>They do! However, many developers like to write scripts that never load packages but address all functions by the <code>sf::</code> prefix, as in</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">i =<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/geos_binary_pred">st_intersects</a></span>(sf1, sf2)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">i =<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sf/man/geos_binary_pred.html">st_intersects</a></span>(sf1, sf2)</a></code></pre></div>
 <p>This works up to the moment that a <code>dplyr</code> generic like <code>select</code> for an <code>sf</code> object is needed: should one call <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select</a></code> (won’t know it should search in package <code>sf</code>) or <code>sf::select</code> (which doesn’t exist)? Neither works. One should in this case simply load <code>sf</code>, e.g. by</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a></code></pre></div>
 </div>
 <div id="what-is-this-errorwarningmessage-about" class="section level1">
 <h1 class="hasAnchor">
@@ -179,9 +187,9 @@
 <a href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar" class="anchor"></a><em>although coordinates are longitude/latitude, xxx assumes that they are planar</em>
 </h2>
 <p>Most (but not all) of the geometry calculating routines used by <code>sf</code> come from the <a href="https://trac.osgeo.org/geos/">GEOS</a> library. This library considers coordinates in a two-dimensional, flat, Euclidian space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">polygon =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">rbind</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">80</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">120</span>,<span class="dv">80</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">240</span>,<span class="dv">80</span>), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">80</span>)))), </a>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">polygon =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_polygon</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">80</span>), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">120</span>,<span class="dv">80</span>), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">240</span>,<span class="dv">80</span>), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">80</span>)))), </a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">        <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">pole =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">90</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">pole =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">90</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(polygon, pole)</a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</a>
 <a class="sourceLine" id="cb7-6" data-line-number="6">## Sparse geometry binary predicate list of length 1, where the predicate was `intersects'</a>
@@ -204,12 +212,12 @@
 <a href="#dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-" class="anchor"></a><em>dist is assumed to be in decimal degrees (arc_degrees).</em>
 </h2>
 <p>This message indicates that <code>sf</code> assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">pt =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">0</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">pt =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">0</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">buf =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(polygon, <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">## Warning in st_buffer.sfc(polygon, 1): st_buffer does not correctly buffer</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">## longitude/latitude data</a>
 <a class="sourceLine" id="cb9-5" data-line-number="5">## dist is assumed to be in decimal degrees (arc_degrees).</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">buf =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(polygon, units<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/units/topics/set_units">set_units</a></span>(<span class="dv">1</span>, degree))</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">buf =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_buffer</a></span>(polygon, units<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/units/man/set_units.html">set_units</a></span>(<span class="dv">1</span>, degree))</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">## Warning in st_buffer.sfc(polygon, units::set_units(1, degree)): st_buffer</a>
 <a class="sourceLine" id="cb9-8" data-line-number="8">## does not correctly buffer longitude/latitude data</a></code></pre></div>
 </div>
@@ -239,17 +247,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

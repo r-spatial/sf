@@ -8,6 +8,13 @@
 
 <title>Create viewport from sf, sfc or sfg object — st_viewport • sf</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -16,13 +23,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -49,6 +58,7 @@
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -73,7 +83,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +125,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,6 +136,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -153,7 +164,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>parameters passed on to <a href='https://www.rdocumentation.org/packages/grid/topics/viewport'>viewport</a></p></td>
+      <td><p>parameters passed on to <a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></p></td>
     </tr>
     <tr>
       <th>bbox</th>
@@ -167,24 +178,24 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The output of the call to <a href='https://www.rdocumentation.org/packages/grid/topics/viewport'>viewport</a></p>
+    <p>The output of the call to <a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>parameters <code>width</code>, <code>height</code>, <code>xscale</code> and <code>yscale</code> are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as <code>...</code></p>
-<p>If <code>asp</code> is missing, it is taken as 1, except when <code><a href='https://www.rdocumentation.org/packages/base/topics/Logic'>isTRUE(st_is_longlat(x))</a></code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
+<p>If <code>asp</code> is missing, it is taken as 1, except when <code><a href='https://rdrr.io/r/base/Logic.html'>isTRUE(st_is_longlat(x))</a></code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>grid</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/travis/build/r-spatial/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>grid</span>)
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/grid.newpage'>grid.newpage</a></span>()
-<span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/viewports'>pushViewport</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/viewport'>viewport</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.8</span>))</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/viewports'>pushViewport</a></span>(<span class='fu'>st_viewport</span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/invisible'>invisible</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/grid.draw'>grid.draw</a></span>(<span class='fu'><a href='st_as_grob.html'>st_as_grob</a></span>(<span class='no'>x</span>, <span class='kw'>gp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grid/topics/gpar'>gpar</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>'red'</span>)))))</div><div class='img'><img src='st_viewport-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span>()
+<span class='fu'><a href='https://rdrr.io/r/grid/viewports.html'>pushViewport</a></span>(<span class='fu'><a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.8</span>))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/viewports.html'>pushViewport</a></span>(<span class='fu'>st_viewport</span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/invisible.html'>invisible</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='fu'><a href='st_as_grob.html'>st_as_grob</a></span>(<span class='no'>x</span>, <span class='kw'>gp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grid/gpar.html'>gpar</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>'red'</span>)))))</div><div class='img'><img src='st_viewport-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -201,19 +212,23 @@
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

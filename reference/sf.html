@@ -8,6 +8,13 @@
 
 <title>Create sf object — sf • sf</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -16,13 +23,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -49,6 +58,7 @@
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -73,7 +83,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +125,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,6 +136,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -169,7 +180,7 @@ print(x, ..., n = getOption("sf_max_print", default = 10))</pre>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
-      <td><p>logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is <code>TRUE</code>, but this can be changed by setting <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
+      <td><p>logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is <code>TRUE</code>, but this can be changed by setting <code><a href='https://rdrr.io/r/base/options.html'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>crs</th>
@@ -198,11 +209,11 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     </tr>
     <tr>
       <th>i</th>
-      <td><p>record selection, see <a href='https://www.rdocumentation.org/packages/base/topics/Extract.data.frame'>[.data.frame</a></p></td>
+      <td><p>record selection, see <a href='https://rdrr.io/r/base/Extract.data.frame.html'>[.data.frame</a></p></td>
     </tr>
     <tr>
       <th>j</th>
-      <td><p>variable selection, see <a href='https://www.rdocumentation.org/packages/base/topics/Extract.data.frame'>[.data.frame</a></p></td>
+      <td><p>variable selection, see <a href='https://rdrr.io/r/base/Extract.data.frame.html'>[.data.frame</a></p></td>
     </tr>
     <tr>
       <th>drop</th>
@@ -214,7 +225,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     </tr>
     <tr>
       <th>n</th>
-      <td><p>maximum number of features to print; can be set globally by <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(sf_max_print=...)</a></code></p></td>
+      <td><p>maximum number of features to print; can be set globally by <code><a href='https://rdrr.io/r/base/options.html'>options(sf_max_print=...)</a></code></p></td>
     </tr>
     </table>
     
@@ -222,7 +233,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 
     <p><code>agr</code>, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, <code>NA_agr_</code>, implies we don't know.</p>
 <p>When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using <a href='st_as_sfc.html'>st_as_sfc</a>.</p>
-<p><code>[.sf</code> will return a <code>data.frame</code> or vector if the geometry column (of class <code>sfc</code>) is dropped (<code>drop=TRUE</code>), an <code>sfc</code> object if only the geometry column is selected, and otherwise return an <code>sf</code> object; see also <a href='https://www.rdocumentation.org/packages/base/topics/Extract.data.frame'>[.data.frame</a>; for <code>[.sf</code> <code>...</code> arguments are passed to <code>op</code>.</p>
+<p><code>[.sf</code> will return a <code>data.frame</code> or vector if the geometry column (of class <code>sfc</code>) is dropped (<code>drop=TRUE</code>), an <code>sfc</code> object if only the geometry column is selected, and otherwise return an <code>sf</code> object; see also <a href='https://rdrr.io/r/base/Extract.data.frame.html'>[.data.frame</a>; for <code>[.sf</code> <code>...</code> arguments are passed to <code>op</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -250,7 +261,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;   a st_sfc.st_point.1.2..
 #&gt; 1 3           POINT (1 2)</div><div class='input'><span class='co'># create empty structure with preallocated empty geometries:</span>
 <span class='no'>nrows</span> <span class='kw'>&lt;-</span> <span class='fl'>10</span>
-<span class='no'>geometry</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='fl'>1</span>:<span class='no'>nrows</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='st.html'>st_geometrycollection</a></span>()))
+<span class='no'>geometry</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fl'>1</span>:<span class='no'>nrows</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='st.html'>st_geometrycollection</a></span>()))
 <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>st_sf</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='no'>nrows</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>)
 <span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>3</span>:<span class='fl'>4</span>))
 <span class='no'>s</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>3</span>:<span class='fl'>4</span>, <span class='no'>g</span>)
@@ -261,7 +272,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; epsg (SRID):    NA
 #&gt; proj4string:    NA
 #&gt;   a           g
-#&gt; 1 3 POINT (1 2)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; 1 3 POINT (1 2)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>s</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>s</span>[,<span class='fl'>1</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 3 ymax: 4
@@ -269,7 +280,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; proj4string:    NA
 #&gt;   a           g
 #&gt; 1 3 POINT (1 2)
-#&gt; 2 4 POINT (3 4)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 0 fields
+#&gt; 2 4 POINT (3 4)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>s</span>[,<span class='fl'>1</span>])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>s</span>[,<span class='fl'>2</span>]</div><div class='output co'>#&gt; Simple feature collection with 2 features and 0 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 2 xmax: 3 ymax: 4
@@ -277,8 +288,8 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; proj4string:    NA
 #&gt;             g
 #&gt; 1 POINT (1 2)
-#&gt; 2 POINT (3 4)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
-<span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>)))))
+#&gt; 2 POINT (3 4)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>s</span>[,<span class='fl'>2</span>])</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>3</span>, <span class='no'>g</span>)
+<span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>0</span>)))))
 <span class='no'>h</span> <span class='kw'>=</span> <span class='fu'>st_sf</span>(<span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='no'>pol</span>)
 <span class='no'>g</span>[<span class='no'>h</span>,]</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
 #&gt; geometry type:  POINT
@@ -309,19 +320,23 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

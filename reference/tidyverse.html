@@ -8,6 +8,13 @@
 
 <title>Tidyverse methods for sf objects (remove .sf suffix!) — tidyverse • sf</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -16,13 +23,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -49,6 +58,7 @@
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -73,7 +83,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +125,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,6 +136,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -138,7 +149,7 @@
 
     <div class="ref-description">
     
-    <p>Tidyverse methods for sf objects. Geometries are sticky, use <a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>as.data.frame</a> to let <code>dplyr</code>'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).</p>
+    <p>Tidyverse methods for sf objects. Geometries are sticky, use <a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a> to let <code>dplyr</code>'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).</p>
     
     </div>
 
@@ -171,10 +182,10 @@
   <span class='kw'>sep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>sample_n.sf</span>(<span class='no'>tbl</span>, <span class='no'>size</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())
+  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>())
 
 <span class='fu'>sample_frac.sf</span>(<span class='no'>tbl</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sys.parent'>parent.frame</a></span>())
+  <span class='kw'>.env</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>())
 
 <span class='fu'>nest.sf</span>(<span class='no'>.data</span>, <span class='no'>...</span>)
 
@@ -187,22 +198,22 @@
 
 <span class='fu'>unnest.sf</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>.preserve</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>inner_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>left_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>left_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>right_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>right_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>full_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>full_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>semi_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>semi_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>anti_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+<span class='fu'>anti_join.sf</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>copy</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
   <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -356,17 +367,17 @@ Should be a character vector of length 2.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/travis/build/r-spatial/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
 #&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>AREA</span> <span class='kw'>&gt;</span> <span class='fl'>.1</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='img'><img src='tidyverse-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot 10 smallest counties in grey:</span>
-<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/title'>title</a></span>(<span class='st'>"the ten counties with smallest area"</span>)</div><div class='img'><img src='tidyverse-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cut'>cut</a></span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
-<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>area_cl</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>area10</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>)
-<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>rename</a></span>(<span class='kw'>area</span> <span class='kw'>=</span> <span class='no'>AREA</span>)
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>AREA</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'grey'</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='st'>"the ten counties with smallest area"</span>)</div><div class='img'><img src='tidyverse-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
+<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>area_cl</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>area10</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>)
+<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>, <span class='kw'>geometry</span> <span class='kw'>=</span> <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(<span class='kw'>AREA</span> <span class='kw'>=</span> <span class='no'>AREA</span>/<span class='fl'>10</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>()</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='no'>nc2</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>rename</a></span>(<span class='kw'>area</span> <span class='kw'>=</span> <span class='no'>AREA</span>)
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -378,9 +389,9 @@ Should be a character vector of length 2.</p></td>
 #&gt; 2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0
 #&gt;   NWBIR74 BIR79 SID79 NWBIR79    area_cl                       geometry
 #&gt; 1      10  1364     0      19 (0.1,0.12] MULTIPOLYGON (((-81.47276 3...
-#&gt; 2      10   542     3      12    (0,0.1] MULTIPOLYGON (((-81.23989 3...</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cut'>cut</a></span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
+#&gt; 2      10   542     3      12    (0,0.1] MULTIPOLYGON (((-81.23989 3...</div><div class='input'><span class='no'>nc</span>$<span class='no'>area_cl</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='no'>nc</span>$<span class='no'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
 <span class='no'>nc.g</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>area_cl</span>)
-<span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
+<span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
@@ -392,21 +403,19 @@ Should be a character vector of length 2.</p></td>
 #&gt; 1 (0,0.1]          0.0760 (((-77.96073 34.18924, -77.96587 34.24229, -77.97528 …
 #&gt; 2 (0.1,0.12]       0.112  (((-84.29104 35.21054, -84.22594 35.2616, -84.17973 3…
 #&gt; 3 (0.12,0.1…       0.134  (((-76.54427 34.58783, -76.55515 34.61066, -76.53775 …
-#&gt; 4 (0.15,0.2…       0.190  (((-76.64705 34.90633, -76.62562 34.89065, -76.75021 …</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/gray'>grey</a></span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><div class='img'><img src='tidyverse-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='no'>as.data.frame</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt;   mean(AREA)
-#&gt; 1    0.12626</div><div class='input'><span class='no'>nc</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>10</span>), ] <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>()</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>tidyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘tidyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    matches</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, -<span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>()</div><div class='output co'>#&gt;      VAR                 SID                  geometry  
+#&gt; 4 (0.15,0.2…       0.190  (((-76.64705 34.90633, -76.62562 34.89065, -76.75021 …</div><div class='input'><span class='no'>nc.g</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>AREA</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>3</span>:<span class='fl'>6</span> / <span class='fl'>7</span>))</div><div class='img'><img src='tidyverse-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='no'>as.data.frame</span> <span class='kw'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>AREA</span>))</div><div class='output co'>#&gt;   mean(AREA)
+#&gt; 1    0.12626</div><div class='input'><span class='no'>nc</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>100</span>, <span class='fl'>1</span>:<span class='fl'>10</span>), ] <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>()</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)
+<span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, -<span class='no'>geometry</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>()</div><div class='output co'>#&gt;      VAR                 SID                  geometry  
 #&gt;  Length:200         Min.   : 0.000   MULTIPOLYGON :200  
 #&gt;  Class :character   1st Qu.: 2.000   epsg:4267    :  0  
 #&gt;  Mode  :character   Median : 5.000   +proj=long...:  0  
 #&gt;                     Mean   : 7.515                      
 #&gt;                     3rd Qu.: 9.000                      
-#&gt;                     Max.   :57.000                      </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>tidyr</span>)
+#&gt;                     Max.   :57.000                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)
 <span class='no'>nc</span>$<span class='no'>row</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span> <span class='co'># needed for spread to work</span>
 <span class='no'>nc</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>SID74</span>, <span class='no'>SID79</span>, <span class='no'>geometry</span>, <span class='no'>row</span>) <span class='kw'>%&gt;%</span>
         <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, -<span class='no'>geometry</span>, -<span class='no'>row</span>) <span class='kw'>%&gt;%</span>
-        <span class='fu'><a href='https://tidyr.tidyverse.org/reference/spread.html'>spread</a></span>(<span class='no'>VAR</span>, <span class='no'>SID</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>()</div><div class='output co'>#&gt; Simple feature collection with 6 features and 3 fields
+        <span class='fu'><a href='https://tidyr.tidyverse.org/reference/spread.html'>spread</a></span>(<span class='no'>VAR</span>, <span class='no'>SID</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>()</div><div class='output co'>#&gt; Simple feature collection with 6 features and 3 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
@@ -418,9 +427,9 @@ Should be a character vector of length 2.</p></td>
 #&gt; 3   3     5     6 MULTIPOLYGON (((-80.45634 3...
 #&gt; 4   4     1     2 MULTIPOLYGON (((-76.00897 3...
 #&gt; 5   5     9     3 MULTIPOLYGON (((-77.21767 3...
-#&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+#&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='no'>storms.sf</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>storms</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>storms.sf</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>name</span>, <span class='no'>year</span>) <span class='kw'>%&gt;%</span> <span class='no'>nest</span>
-<span class='no'>trs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='no'>x</span>$<span class='no'>data</span>, <span class='kw'>function</span>(<span class='no'>tr</span>) <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>tr</span>), <span class='st'>"LINESTRING"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]) <span class='kw'>%&gt;%</span>
+<span class='no'>trs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='no'>x</span>$<span class='no'>data</span>, <span class='kw'>function</span>(<span class='no'>tr</span>) <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='no'>tr</span>), <span class='st'>"LINESTRING"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]) <span class='kw'>%&gt;%</span>
     <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 <span class='no'>trs.sf</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='no'>x</span>[,<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='no'>trs</span>)
 <span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>trs.sf</span>[<span class='st'>"year"</span>], <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='tidyverse-4.png' alt='' width='700' height='433' /></div></pre>
@@ -440,19 +449,23 @@ Should be a character vector of length 2.</p></td>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -6,9 +6,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2. Reading, Writing and Converting Simple Features • sf</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="2. Reading, Writing and Converting Simple Features">
 <meta property="og:description" content="">
 <meta property="og:image" content="/logo.png">
@@ -39,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -80,7 +87,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -93,6 +100,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -123,20 +131,20 @@
 <h3 class="hasAnchor">
 <a href="#using-st_read" class="anchor"></a>Using st_read</h3>
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">fname &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">fname &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">fname</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">## [1] "/home/travis/R/Library/sf/shape/nc.shp"</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">## [1] "/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp"</a>
 <a class="sourceLine" id="cb1-6" data-line-number="6">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">## Reading layer `nc' from data source `/home/travis/R/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">## Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10">## dimension:      XY</a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
 <a class="sourceLine" id="cb1-12" data-line-number="12">## epsg (SRID):    4267</a>
 <a class="sourceLine" id="cb1-13" data-line-number="13">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a></code></pre></div>
-<p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://www.rdocumentation.org/packages/base/topics/getwd">setwd()</a></code> and use file name without path.</p>
+<p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html">setwd()</a></code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">Multiple layers are present <span class="cf">in</span> data source PG<span class="op">:</span>dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span></a>
@@ -171,9 +179,9 @@
 <p><code>st_read</code> follows the conventions of base R, similar to how it reads tabular data into <code>data.frame</code>s. This means that character data are read, by default as <code>factor</code>s. For those who insist on retrieving character data as character vectors, the argument <code>stringsAsFactors</code> can be set to <code>FALSE</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>Alternatively, a user can set the global option <code>stringsAsFactors</code>, and this will have the same effect:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">## Reading layer `nc' from data source `/home/travis/R/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6">## dimension:      XY</a>
@@ -360,14 +368,14 @@
 <h2 class="hasAnchor">
 <a href="#reading-and-writing-directly-to-and-from-spatial-databases" class="anchor"></a>Reading and writing directly to and from spatial databases</h2>
 <p>Package <code>sf</code> supports reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(RPostgreSQL) </a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) </a>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RPostgreSQL) </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>) </a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">meuse =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(conn, <span class="st">"meuse"</span>)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">meuse_<span class="dv">1</span>_<span class="dv">3</span> =<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(conn, <span class="dt">query =</span> <span class="st">"select * from meuse limit 3;"</span>) </a>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">dbDisconnect</span>(conn) </a></code></pre></div>
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">conn =<span class="st"> </span><span class="kw">dbConnect</span>(<span class="kw"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span>(), <span class="dt">dbname =</span> <span class="st">"postgis"</span>)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="../reference/st_write.html">st_write</a></span>(conn, meuse, <span class="dt">drop =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">dbDisconnect</span>(conn)</a></code></pre></div>
 <p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>drop</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
@@ -379,12 +387,12 @@
 <h3 class="hasAnchor">
 <a href="#conversion-to-and-from-well-known-text" class="anchor"></a>Conversion to and from well-known text</h3>
 <p>The usual form in which we see simple features printed is well-known text:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>))</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">## POINT (0 1)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</a></code></pre></div>
 <p>We can create these well-known text strings explicitly using <code>st_as_text</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">str =<span class="st"> </span><span class="kw"><a href="../reference/st_as_text.html">st_as_text</a></span>(x)</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">x</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</a></code></pre></div>
@@ -402,13 +410,13 @@
 <h3 class="hasAnchor">
 <a href="#conversion-to-and-from-well-known-binary" class="anchor"></a>Conversion to and from well-known binary</h3>
 <p>Well-known binary is created from simple features by <code>st_as_binary</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">9</span>,<span class="dt">ncol=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">(<span class="dt">x =</span> <span class="kw"><a href="../reference/st_as_binary.html">st_as_binary</a></span>(x))</a>
 <a class="sourceLine" id="cb15-3" data-line-number="3">##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4">## [24] f0 3f 00 00 00 00 00 00 00 40 00 00 00 00 00 00 08 40 00 00 00 00 00</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">## [47] 00 10 40 00 00 00 00 00 00 14 40 00 00 00 00 00 00 18 40 00 00 00 00</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6">## [70] 00 00 1c 40 00 00 00 00 00 00 20 40 00 00 00 00 00 00 22 40</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(x)</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(x)</a>
 <a class="sourceLine" id="cb15-8" data-line-number="8">## [1] "raw"</a></code></pre></div>
 <p>The object returned by <code>st_as_binary</code> is of class <code>WKB</code> and is either a list with raw vectors, or a single raw vector. These can be converted into a hexadecimal character vector using <code>rawToHex</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="../reference/rawToHex.html">rawToHex</a></span>(x)</a>
@@ -429,12 +437,12 @@
 <h3 class="hasAnchor">
 <a href="#conversion-to-and-from-sp" class="anchor"></a>Conversion to and from sp</h3>
 <p>Spatial objects as maintained by package <code>sp</code> can be converted into simple feature objects or geometries by <code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/methods">methods</a></span>(st_as_sf)</a>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/methods.html">methods</a></span>(st_as_sf)</a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">## [1] st_as_sf.data.frame* st_as_sf.lpp*        st_as_sf.map*       </a>
 <a class="sourceLine" id="cb18-3" data-line-number="3">## [4] st_as_sf.ppp*        st_as_sf.psp*        st_as_sf.sf*        </a>
 <a class="sourceLine" id="cb18-4" data-line-number="4">## [7] st_as_sf.sfc*        st_as_sf.Spatial*   </a>
 <a class="sourceLine" id="cb18-5" data-line-number="5">## see '?methods' for accessing help and source code</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/methods">methods</a></span>(st_as_sfc)</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/utils/methods.html">methods</a></span>(st_as_sfc)</a>
 <a class="sourceLine" id="cb18-7" data-line-number="7">##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              </a>
 <a class="sourceLine" id="cb18-8" data-line-number="8">##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        </a>
 <a class="sourceLine" id="cb18-9" data-line-number="9">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </a>
@@ -444,17 +452,17 @@
 <a class="sourceLine" id="cb18-13" data-line-number="13">## [13] st_as_sfc.SpatialPolygons*    st_as_sfc.WKB*               </a>
 <a class="sourceLine" id="cb18-14" data-line-number="14">## see '?methods' for accessing help and source code</a></code></pre></div>
 <p>An example would be:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sp)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(meuse)</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/sp/topics/coordinates">coordinates</a></span>(meuse) =<span class="st"> </span><span class="er">~</span>x<span class="op">+</span>y</a>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sp)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(meuse)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/pkg/sp/man/coordinates.html">coordinates</a></span>(meuse) =<span class="st"> </span><span class="er">~</span>x<span class="op">+</span>y</a>
 <a class="sourceLine" id="cb19-4" data-line-number="4">m.sf =<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse)</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">opar =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="dv">0</span>,<span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">opar =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">0</span>,<span class="dv">4</span>))</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6"><span class="kw"><a href="../reference/plot.html">plot</a></span>(m.sf)</a>
 <a class="sourceLine" id="cb19-7" data-line-number="7">## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to</a>
 <a class="sourceLine" id="cb19-8" data-line-number="8">## plot all</a></code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <p>Conversion of simple feature objects of class <code>sf</code> or <code>sfc</code> into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">x =<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">5</span>,<span class="dv">5</span>)), <span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">6</span>,<span class="dv">9</span>)), <span class="dt">crs =</span> <span class="dv">4326</span>)</a>
 <a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="../reference/coerce-methods.html">as</a></span>(x, <span class="st">"Spatial"</span>)</a>
 <a class="sourceLine" id="cb20-3" data-line-number="3">## SpatialPoints:</a>
 <a class="sourceLine" id="cb20-4" data-line-number="4">##      coords.x1 coords.x2</a>
@@ -481,17 +489,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -8,6 +8,13 @@
 
 <title>Read simple features or layers from file or database — st_read • sf</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -16,13 +23,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -52,6 +61,7 @@ Well-Know Binary geometries to sfc" />
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -76,7 +86,7 @@ Well-Know Binary geometries to sfc" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +128,7 @@ Well-Know Binary geometries to sfc" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,6 +139,7 @@ Well-Know Binary geometries to sfc" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -154,9 +165,9 @@ Well-Know Binary geometries to sfc</p>
 <span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>default.stringsAsFactors</a></span>(),
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors</a></span>(),
   <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fid_column_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>drivers</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>))
+  <span class='kw'>fid_column_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>drivers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>))
 
 <span class='fu'>read_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>as_tibble</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -185,7 +196,7 @@ first layer of <code>dsn</code>, give a warning and (unless <code>quiet = TRUE</
 print a message when there are multiple layers, or give an error if there
 are no layers in <code>dsn</code>. If <code>dsn</code> is a database connection, then
 <code>layer</code> can be a table name or a database identifier (see
-<code><a href='https://www.rdocumentation.org/packages/DBI/topics/Id'>Id</a></code>). It is also possible to omit <code>layer</code> and rather
+<code><a href='https://rdrr.io/pkg/DBI/man/Id.html'>Id</a></code>). It is also possible to omit <code>layer</code> and rather
 use the <code>query</code> argument.</p></td>
     </tr>
     <tr>
@@ -232,7 +243,7 @@ all to the Multi variety; defaults to <code>TRUE</code></p></td>
       <td><p>logical; logical: should character vectors be
 converted to factors?  The `factory-fresh' default is <code>TRUE</code> for 
 <code>st_read</code> and <code>FALSE</code> for <code>read_sf</code>, but this can be changed 
-globally by e.g. the R command <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
+globally by e.g. the R command <code><a href='https://rdrr.io/r/base/options.html'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>int64_as_string</th>
@@ -314,7 +325,7 @@ about the data source. <code>read_sf</code> returns an sf-tibble rather than an 
 
     <p>The use of <code>system.file</code> in examples make sure that examples run regardless where R is installed:
 typical users will not use <code>system.file</code> but give the file name directly, either with full path or relative
-to the current working directory (see <a href='https://www.rdocumentation.org/packages/base/topics/getwd'>getwd</a>). "Shapefiles" consist of several files with the same basename
+to the current working directory (see <a href='https://rdrr.io/r/base/getwd.html'>getwd</a>). "Shapefiles" consist of several files with the same basename
 that reside in the same directory, only one of them having extension <code>.shp</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -323,13 +334,13 @@ that reside in the same directory, only one of them having extension <code>.shp<
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/travis/build/r-spatial/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span></div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span></div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Alamance : 1  
 #&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   Alexander: 1  
 #&gt;  Median :0.1205   Median :1.609   Median :1982   Median :1982   Alleghany: 1  
@@ -363,30 +374,32 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;                     </div><div class='input'>
 <span class='co'>## only three fields by select clause</span>
 <span class='co'>## only two features by where clause</span>
-<span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
-                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/home/travis/build/r-spatial/sf/inst/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
+                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpMMVN2K/temp_libpath17752c64705/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.06555 ymin: 34.82742 xmax: -78.49929 ymax: 35.50912
 #&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><span class='co'># NOT RUN {</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>sp</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/example'>example</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
        <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>))
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='no'>st_meuse</span> <span class='kw'>&lt;-</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
-  <span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/exists'>exists</a></span>(<span class='st'>"st_meuse"</span>))
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>st_meuse</span>)
-<span class='co'># }</span><div class='input'>
-</div><span class='co'># NOT RUN {</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>st_meuse</span> <span class='kw'>&lt;-</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
+  <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"st_meuse"</span>))
+    <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>st_meuse</span>)
+}
+
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## note that we need special escaping of layer  within single quotes (nc.gpkg)</span>
 <span class='co'>## and that geom needs to be included in the select, otherwise we don't detect it</span>
-<span class='no'>layer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_layers.html'>st_layers</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>))$<span class='no'>name</span>[<span class='fl'>1</span>]
-<span class='no'>nc_gpkg_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>),
-   <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sprintf'>sprintf</a></span>(<span class='st'>"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class='no'>layer</span>))
-<span class='co'># }</span><div class='input'><span class='co'># read geojson from string:</span>
-<span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
+<span class='no'>layer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_layers.html'>st_layers</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>))$<span class='no'>name</span>[<span class='fl'>1</span>]
+<span class='no'>nc_gpkg_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>),
+   <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class='no'>layer</span>))
+}
+<span class='co'># read geojson from string:</span>
+<span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>read_sf</span>(<span class='no'>geojson_txt</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Simple feature collection with 1 feature and 0 fields
@@ -398,16 +411,16 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; # A tibble: 1 x 1
 #&gt;                                             geometry
 #&gt;                                     &lt;MULTIPOINT [°]&gt;
-#&gt; 1 (3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5)</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>RPostgreSQL</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/RPostgreSQL/topics/PostgreSQL'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/exists'>exists</a></span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>inherits</a></span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
+#&gt; 1 (3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5)</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RPostgreSQL</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
   <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
   <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
   <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
  }
-<span class='co'># }</span></pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -428,19 +441,23 @@ that reside in the same directory, only one of them having extension <code>.shp<
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
