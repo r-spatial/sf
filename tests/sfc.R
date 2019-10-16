@@ -199,6 +199,7 @@ if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
   (p <- st_sample(x, 10))
 pt = st_multipoint(matrix(1:20,,2))
 st_sample(p, 3)
+try(st_sample(p, 3.3))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,0),c(.1,0))),
  st_linestring(rbind(c(0,1),c(.1,1))),

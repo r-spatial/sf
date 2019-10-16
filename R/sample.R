@@ -71,6 +71,8 @@
 #' @export
 st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
+	if (any(size %% 1 != 0))
+		stop("size should be an integer")
 	if (length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
@@ -206,6 +208,7 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 		TRUE
 	ret[sel]
 }
+
 st_sample_exact = function(x, size, ..., type) {
 	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
 	while (length(random_pt) < size) {

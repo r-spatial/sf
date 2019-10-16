@@ -833,6 +833,8 @@ bbox:           xmin: -15.7773 ymin: -22.4681 xmax: 143.823 ymax: 27.1614
 epsg (SRID):    NA
 proj4string:    NA
 MULTIPOINT (48.8473 9.37328, 143.823 27.1614, -...
+> try(st_sample(p, 3.3))
+Error in st_sample(p, 3.3) : size should be an integer
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 +  st_linestring(rbind(c(0,0),c(.1,0))),
 +  st_linestring(rbind(c(0,1),c(.1,1))),
@@ -1230,4 +1232,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  2.690   0.155   2.836 
+  2.326   0.084   2.403 
