@@ -454,7 +454,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		}
 
 	} else { // no create, update:
-		if ((poDstDS = (GDALDataset *) GDALOpen(fname[0], GA_Update)) == NULL)
+		if ((poDstDS = (GDALDataset *) GDALOpen(fname[0], GA_Update)) == NULL) // #nocov
 			stop("updating dataset failed"); // #nocov
 	}
 

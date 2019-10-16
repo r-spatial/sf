@@ -35,11 +35,11 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 		dims = c(dims, d[[3]]$to - d[[3]]$from + 1)
 
 	if (inherits(x, "stars_proxy")) {
-		mat = matrix(0, 0, 0)
+		mat = matrix(0, 0, 0) # nocov start
 		only_create = TRUE # don't write any pixel data
 		if (!all(from == 0))
 			warning("writing raster to original size") # otherwise, geotransform needs to be modified
-		from = c(0, 0)
+		from = c(0, 0) # nocov end
 	} else {
 		mat = x[[1]]
 		only_create = FALSE # write x too
