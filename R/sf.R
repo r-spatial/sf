@@ -430,11 +430,11 @@ merge.sf = function(x, y, ...) {
 	if (inherits(y, "sf"))
 		stop("merge on two sf objects not supported")
 	sf_column = attr(x, "sf_column")
-	ret = NextMethod()
+	ret = NextMethod() # if data.table, drops sf_column attribute;
+	class(ret) = setdiff(class(ret), "sf")
 	g = ret[[sf_column]] # may have NULL values in it
 	ret[[sf_column]] = NULL
-	st_geometry(ret) = st_sfc(g)
-	ret
+	st_set_geometry(ret, st_sfc(g)) # FIXME: set agr
 }
 
 #' @export
