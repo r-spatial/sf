@@ -32,6 +32,7 @@ addons:
       - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
     packages:
+      - devscripts # checkbashisms
       - libprotobuf-dev
       - protobuf-compiler
       - libv8-3.14-dev
