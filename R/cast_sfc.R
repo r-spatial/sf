@@ -177,10 +177,15 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	} else { # "horizontal", to the left: split
 		ret = if (from_col == 1) # LINESTRING or MULTIPOINT to POINT
 				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), function(i) m[i,])), recursive = FALSE)
-			else
-				unlist(x, recursive = FALSE)
+			else {
+				if (from_cls == "POLYGON")
+					lapply(x, function(y) do.call(rbind, y))
+				else
+					unlist(x, recursive = FALSE)
+			}
 		ret = lapply(ret, function(y) structure(y, class = class(x[[1]]))) # will be reset by reclass()
 		ret = copy_sfc_attributes_from(x, ret)
+		# EJP: FIXME:
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
 }
