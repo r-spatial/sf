@@ -381,6 +381,26 @@ vec_proxy.sfc <- function(x, ...) {
 	x
 }
 
+# minimal vec_cast implementation: https://github.com/r-spatial/sf/issues/1068
+#' @name tidyverse
+#' @export
+#' @param to character; target class
+vec_cast.sfc <- function(x, to, ...) UseMethod("vec_cast.sfc")
+
+#' @name tidyverse
+#' @export
+vec_cast.sfc.sfc <- function(x, to, ...) {
+	st_cast(x, gsub("sfc_", "", class(to)[1]))
+}
+
+#' @name tidyverse
+#' @export
+vec_cast.sfc.default <- function(x, to, ...) {
+	if (!requireNamespace("vctrs", quietly = TRUE))
+		stop("vctrs not available: install first?")
+	vctrs::vec_default_cast(x, to)
+}
+
 register_all_s3_methods = function() {
 	register_s3_method("dplyr", "anti_join", "sf")
 	register_s3_method("dplyr", "arrange", "sf")

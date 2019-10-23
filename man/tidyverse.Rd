@@ -23,6 +23,9 @@
 \alias{separate_rows.sf}
 \alias{unite.sf}
 \alias{unnest.sf}
+\alias{vec_cast.sfc}
+\alias{vec_cast.sfc.sfc}
+\alias{vec_cast.sfc.default}
 \alias{inner_join.sf}
 \alias{left_join.sf}
 \alias{right_join.sf}
@@ -75,6 +78,12 @@ separate_rows.sf(data, ..., sep = "[^[:alnum:]]+", convert = FALSE)
 unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
+
+vec_cast.sfc(x, to, ...)
+
+\method{vec_cast.sfc}{sfc}(x, to, ...)
+
+\method{vec_cast.sfc}{default}(x, to, ...)
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
   ...)
@@ -146,6 +155,8 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
 \item{extra}{see \link[tidyr]{separate}}
 
 \item{.preserve}{see \link[tidyr]{unnest}}
+
+\item{to}{character; target class}
 
 \item{y}{tbls to join}
 
