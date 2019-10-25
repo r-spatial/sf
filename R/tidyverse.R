@@ -385,20 +385,20 @@ vec_proxy.sfc <- function(x, ...) {
 #' @name tidyverse
 #' @export
 #' @param to character; target class
-vec_cast.sfc <- function(x, to, ...) UseMethod("vec_cast.sfc")
+vec_cast.sfc <- function(x, to, ...) UseMethod("vec_cast.sfc") # nocov
 
 #' @name tidyverse
 #' @export
 vec_cast.sfc.sfc <- function(x, to, ...) {
-	st_cast(x, gsub("sfc_", "", class(to)[1]))
+	st_cast(x, gsub("sfc_", "", class(to)[1])) # nocov
 }
 
 #' @name tidyverse
 #' @export
 vec_cast.sfc.default <- function(x, to, ...) {
-	if (!requireNamespace("vctrs", quietly = TRUE))
+	if (!requireNamespace("vctrs", quietly = TRUE)) # nocov start
 		stop("vctrs not available: install first?")
-	vctrs::vec_default_cast(x, to)
+	vctrs::vec_default_cast(x, to) # nocov end
 }
 
 register_all_s3_methods = function() {
