@@ -76,7 +76,7 @@
 
 * `c.sfc` now ignores the type (class) of empty `sfc` objects when choosing the result type; #985, #982
 
-* rename the default value for `distance` to `"Eucledian"`, rather than  `"distance"` in `st_distance`
+* rename the default value for `distance` to `"Euclidean"`, rather than  `"distance"` in `st_distance`
 
 # version 0.7-3
 
