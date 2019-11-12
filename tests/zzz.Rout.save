@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -80,6 +80,39 @@ First 10 features:
 9   point      POINT (583584.5 677207.1)
 10  point      POINT (583117.8 676850.3)
 > 
+> # multipolygon: https://github.com/r-spatial/sf/issues/1161
+> if (require(maptools)) {
++ #> Loading required package: sp
++ #> Checking rgeos availability: TRUE
++   window = read_sf(system.file("shape/nc.shp", package = "sf"))
++ 
++   win = spatstat::as.owin(as(window, "Spatial"))
++ 
++   pp2a = runifpoint(n = 50, win = win)
++   print(st_as_sf(pp2a))
++ }
+Loading required package: maptools
+Loading required package: sp
+Checking rgeos availability: TRUE
+Simple feature collection with 51 features and 1 field
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+epsg (SRID):    NA
+proj4string:    NA
+First 10 features:
+    label                           geom
+1  window MULTIPOLYGON (((-81.67 36.5...
+2   point     POINT (-79.46651 35.09392)
+3   point     POINT (-76.10884 35.62205)
+4   point     POINT (-83.11966 35.65677)
+5   point     POINT (-78.49703 36.16795)
+6   point     POINT (-76.77644 35.91648)
+7   point     POINT (-80.03411 36.04325)
+8   point     POINT (-76.80152 36.41453)
+9   point     POINT (-77.60016 35.97268)
+10  point     POINT (-76.88457 36.08595)
+> 
 > proc.time()
    user  system elapsed 
-  1.095   0.068   1.154 
+  1.412   0.105   1.510 

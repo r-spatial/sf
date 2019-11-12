@@ -8,3 +8,15 @@ g = gorillas
 st_as_sf(g)
 marks(g) = NULL
 st_as_sf(g)
+
+# multipolygon: https://github.com/r-spatial/sf/issues/1161
+if (require(maptools)) {
+#> Loading required package: sp
+#> Checking rgeos availability: TRUE
+  window = read_sf(system.file("shape/nc.shp", package = "sf"))
+
+  win = spatstat::as.owin(as(window, "Spatial"))
+
+  pp2a = runifpoint(n = 50, win = win)
+  print(st_as_sf(pp2a))
+}

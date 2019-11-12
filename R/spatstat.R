@@ -14,7 +14,7 @@ st_as_sf.ppp = function(x, ...) {
   mw = as.matrix(w$ends)
   lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
   p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
-  pol = if (inherits(p0, "GEOMETRYCOLLECTION"))
+  pol = if (length(p0) > 1) # multiple POLYGONs, returned as sfc_
   		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
   	else
   		st_cast(p0, "POLYGON")
