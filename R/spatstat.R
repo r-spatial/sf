@@ -13,7 +13,11 @@ st_as_sf.ppp = function(x, ...) {
   w = spatstat::edges(x$window)
   mw = as.matrix(w$ends)
   lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
-  pol = st_cast(st_polygonize(do.call(c, do.call(st_sfc, lst1))), "POLYGON")
+  p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
+  pol = if (inherits(p0, "GEOMETRYCOLLECTION"))
+  		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
+  	else
+  		st_cast(p0, "POLYGON")
   label = c("window")
   winwork_sf = st_sf(label = label, geom = st_sfc(c(list(pol))))
   m = as.matrix(data.frame(x$x, x$y))
