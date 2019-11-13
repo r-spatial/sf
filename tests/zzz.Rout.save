@@ -84,7 +84,8 @@ First 10 features:
 > if (require(maptools)) {
 + #> Loading required package: sp
 + #> Checking rgeos availability: TRUE
-+   window = read_sf(system.file("shape/nc.shp", package = "sf"))
++   window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
++   	st_transform(32119)
 + 
 +   win = spatstat::as.owin(as(window, "Spatial"))
 + 
@@ -97,22 +98,22 @@ Checking rgeos availability: TRUE
 Simple feature collection with 51 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    NA
 proj4string:    NA
 First 10 features:
     label                           geom
-1  window MULTIPOLYGON (((-81.67 36.5...
-2   point     POINT (-79.46651 35.09392)
-3   point     POINT (-76.10884 35.62205)
-4   point     POINT (-83.11966 35.65677)
-5   point     POINT (-78.49703 36.16795)
-6   point     POINT (-76.77644 35.91648)
-7   point     POINT (-80.03411 36.04325)
-8   point     POINT (-76.80152 36.41453)
-9   point     POINT (-77.60016 35.97268)
-10  point     POINT (-76.88457 36.08595)
+1  window MULTIPOLYGON (((370678.2 31...
+2   point        POINT (851127.6 267054)
+3   point      POINT (667313.2 227694.1)
+4   point        POINT (549901.1 157268)
+5   point      POINT (425945.3 304603.5)
+6   point      POINT (676658.4 210329.4)
+7   point      POINT (334376.3 207525.4)
+8   point      POINT (823301.8 291662.5)
+9   point        POINT (548512 235130.2)
+10  point      POINT (547040.1 205847.6)
 > 
 > proc.time()
    user  system elapsed 
-  1.412   0.105   1.510 
+  1.698   0.134   1.825 

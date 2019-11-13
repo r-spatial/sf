@@ -13,7 +13,8 @@ st_as_sf(g)
 if (require(maptools)) {
 #> Loading required package: sp
 #> Checking rgeos availability: TRUE
-  window = read_sf(system.file("shape/nc.shp", package = "sf"))
+  window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
+  	st_transform(32119)
 
   win = spatstat::as.owin(as(window, "Spatial"))
 
