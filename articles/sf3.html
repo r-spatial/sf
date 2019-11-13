@@ -265,8 +265,8 @@
 <a class="sourceLine" id="cb7-2" data-line-number="2">ncg =<span class="st"> </span><span class="kw"><a href="../reference/st_geometry.html">st_geometry</a></span>(nc)</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg, <span class="dt">border =</span> <span class="st">'grey'</span>)</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">cntrd =<span class="st"> </span><span class="kw"><a href="../reference/geos_unary.html">st_centroid</a></span>(ncg)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">## Warning in st_centroid.sfc(ncg): st_centroid does not give correct</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">## centroids for longitude/latitude data</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">## Warning in st_centroid.sfc(ncg): st_centroid does not give correct centroids for</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">## longitude/latitude data</a>
 <a class="sourceLine" id="cb7-7" data-line-number="7">ncg2 =<span class="st"> </span>(ncg <span class="op">-</span><span class="st"> </span>cntrd) <span class="op">*</span><span class="st"> </span><span class="kw">rot</span>(pi<span class="op">/</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="fl">.75</span> <span class="op">+</span><span class="st"> </span>cntrd</a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="kw"><a href="../reference/plot.html">plot</a></span>(ncg2, <span class="dt">add =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw"><a href="../reference/plot.html">plot</a></span>(cntrd, <span class="dt">col =</span> <span class="st">'red'</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">cex =</span> <span class="fl">.5</span>)</a></code></pre></div>
@@ -311,8 +311,8 @@
 <a href="#coordinate-reference-system-transformations" class="anchor"></a>Coordinate reference system transformations</h3>
 <p>If we change the coordinate reference system from one non-missing value into another non-missing value, the crs is is changed without modifying any coordinates, but a warning is issued that this did not reproject values:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">s3 &lt;-<span class="st"> </span>s1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">4326</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">## for that</a></code></pre></div>
+<a class="sourceLine" id="cb10-2" data-line-number="2">## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">## that</a></code></pre></div>
 <p>A cleaner way to do this that better expresses intention and does not generate this warning is to first wipe the CRS by assigning it a missing value, and then setting it to the intended value.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">s3 &lt;-<span class="st"> </span>s1  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="ot">NA</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="dv">3857</span>)</a></code></pre></div>
 <p>To carry out a coordinate conversion or transformation, we use <code>st_transform</code></p>
