@@ -544,9 +544,14 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	// set spatial filter?
 	if (wkt_filter.size()) {
-		const char *wkt = wkt_filter[0];
+		char *wkt = wkt_filter[0];
 		OGRGeometry *new_geom;
-		if (OGRGeometryFactory::createFromWkt(&wkt, poLayer->GetSpatialRef(), &new_geom) != OGRERR_NONE) {
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+		OGRErr err = OGRGeometryFactory::createFromWkt(&wkt, poLayer->GetSpatialRef(), &new_geom);
+#else
+		OGRErr err = OGRGeometryFactory::createFromWkt((const char *) wkt, poLayer->GetSpatialRef(), &new_geom);
+#endif
+		if (err != OGRERR_NONE) {
 			Rcpp::Rcout << "Cannot read geometry from" << wkt_filter[0] << std::endl;
 			Rcpp::stop("wkt read error.\n");
 		}
