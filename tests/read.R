@@ -135,3 +135,10 @@ if ("GPKG" %in% st_drivers()$name) {
 	tst2 = st_read("tst__.gpkg")
 	print(identical(tst$bool, tst2$bool))
 }
+
+# spatial filter:
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+wkt = st_as_text(st_geometry(nc[1,]))
+wkt
+nc_filtered = read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
+nc_filtered$NAME

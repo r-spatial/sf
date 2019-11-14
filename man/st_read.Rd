@@ -14,7 +14,8 @@ st_read(dsn, layer, ...)
   promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
   int64_as_string = FALSE, check_ring_dir = FALSE,
-  fid_column_name = character(0), drivers = character(0))
+  fid_column_name = character(0), drivers = character(0),
+  wkt_filter = character(0))
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
   as_tibble = TRUE)
@@ -80,6 +81,8 @@ clockwise, holes clockwise)}
 \item{fid_column_name}{character; name of column to write feature IDs to; defaults to not doing this}
 
 \item{drivers}{character; limited set of driver short names to be tried (default: try all)}
+
+\item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries)}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
