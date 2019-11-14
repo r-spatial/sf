@@ -89,6 +89,7 @@ First 10 features:
 + 
 +   win = spatstat::as.owin(as(window, "Spatial"))
 + 
++   set.seed(1331)
 +   pp2a = runifpoint(n = 50, win = win)
 +   print(st_as_sf(pp2a))
 + }
@@ -104,16 +105,16 @@ proj4string:    NA
 First 10 features:
     label                           geom
 1  window MULTIPOLYGON (((370678.2 31...
-2   point        POINT (851127.6 267054)
-3   point      POINT (667313.2 227694.1)
-4   point        POINT (549901.1 157268)
-5   point      POINT (425945.3 304603.5)
-6   point      POINT (676658.4 210329.4)
-7   point      POINT (334376.3 207525.4)
-8   point      POINT (823301.8 291662.5)
-9   point        POINT (548512 235130.2)
-10  point      POINT (547040.1 205847.6)
+2   point      POINT (339121.3 257815.9)
+3   point      POINT (827443.1 246572.7)
+4   point          POINT (451340 207948)
+5   point      POINT (268749.6 203327.8)
+6   point      POINT (516677.7 198560.6)
+7   point        POINT (692368 238647.5)
+8   point        POINT (843281.2 287246)
+9   point        POINT (648479.4 235471)
+10  point      POINT (852595.8 267252.6)
 > 
 > proc.time()
    user  system elapsed 
-  1.698   0.134   1.825 
+  1.539   0.092   1.624 

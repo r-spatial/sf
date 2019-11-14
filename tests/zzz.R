@@ -18,6 +18,7 @@ if (require(maptools)) {
 
   win = spatstat::as.owin(as(window, "Spatial"))
 
+  set.seed(1331)
   pp2a = runifpoint(n = 50, win = win)
   print(st_as_sf(pp2a))
 }

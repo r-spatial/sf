@@ -10,6 +10,7 @@
 st_as_sf.ppp = function(x, ...) {
   if (!requireNamespace("spatstat", quietly = TRUE))
     stop("package spatstat required, please install it first") # nocov
+  # window:
   w = spatstat::edges(x$window)
   mw = as.matrix(w$ends)
   lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
@@ -18,13 +19,18 @@ st_as_sf.ppp = function(x, ...) {
   		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
   	else
   		st_cast(p0, "POLYGON")
+
+  # points:
   label = c("window")
   winwork_sf = st_sf(label = label, geom = st_sfc(c(list(pol))))
   m = as.matrix(data.frame(x$x, x$y))
   pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
   points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
+
+  # merge window and points:
   ret = rbind(winwork_sf, points_sf)
   if (spatstat::is.marked(x)) {
+	# add marks:
     m = as.data.frame(spatstat::marks(x))
 	cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
   } else
