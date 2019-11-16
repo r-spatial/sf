@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* `st_read` gains a parameter `wkt_filter` for spatially filtering the features to be read; #1192
+
 * `st_area()` and `st_length()` handle `+to_meter` argument in PROJ strings; #1170
 
 * add `st_filter` generic for filtering on spatial features only; #1148

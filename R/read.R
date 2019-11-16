@@ -111,6 +111,10 @@ set_utf8 = function(x) {
 #' nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
 #'    query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 > 20000", layer))
 #' }
+#' # spatial filter, as wkt:
+#' wkt = st_as_text(st_geometry(nc[1,])) 
+#' # filter by (bbox overlaps of) first feature geometry:
+#' read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
 
@@ -189,7 +193,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @name st_read
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
-#' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries)
+#' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename

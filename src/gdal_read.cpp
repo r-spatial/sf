@@ -552,8 +552,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		OGRErr err = OGRGeometryFactory::createFromWkt((const char *) wkt, poLayer->GetSpatialRef(), &new_geom);
 #endif
 		if (err != OGRERR_NONE) {
-			Rcpp::Rcout << "Cannot read geometry from" << wkt_filter[0] << std::endl;
-			Rcpp::stop("wkt read error.\n");
+			Rcpp::Rcout << "Cannot create geometry from: " << wkt_filter[0] << std::endl;
+			Rcpp::stop("wkt parse error.\n");
 		}
 		poLayer->SetSpatialFilter(new_geom);
 		OGRGeometryFactory::destroyGeometry(new_geom);

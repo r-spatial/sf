@@ -82,7 +82,7 @@ clockwise, holes clockwise)}
 
 \item{drivers}{character; limited set of driver short names to be tried (default: try all)}
 
-\item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries)}
+\item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
@@ -177,6 +177,10 @@ layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
 nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
    query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", layer))
 }
+# spatial filter, as wkt:
+wkt = st_as_text(st_geometry(nc[1,])) 
+# filter by (bbox overlaps of) first feature geometry:
+read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 # read geojson from string:
 geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")

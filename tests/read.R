@@ -141,4 +141,5 @@ nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 wkt = st_as_text(st_geometry(nc[1,]))
 wkt
 nc_filtered = read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
+try(read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = "wrong"))
 nc_filtered$NAME

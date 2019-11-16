@@ -406,9 +406,14 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > wkt
 [1] "MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))"
 > nc_filtered = read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
+> try(read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = "wrong"))
+Cannot create geometry from: wrong
+Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  : 
+  wkt parse error.
+
 > nc_filtered$NAME
 [1] "Watauga"   "Ashe"      "Wilkes"    "Alleghany"
 > 
 > proc.time()
    user  system elapsed 
-  1.158   0.037   1.187 
+  1.062   0.033   1.084 
