@@ -12,6 +12,7 @@
 \alias{st_cast.CIRCULARSTRING}
 \alias{st_cast.MULTISURFACE}
 \alias{st_cast.COMPOUNDCURVE}
+\alias{st_cast.MULTICURVE}
 \alias{st_cast.CURVE}
 \alias{st_cast.sfc}
 \alias{st_cast.sf}
@@ -37,6 +38,8 @@
 \method{st_cast}{MULTISURFACE}(x, to, ...)
 
 \method{st_cast}{COMPOUNDCURVE}(x, to, ...)
+
+\method{st_cast}{MULTICURVE}(x, to, ...)
 
 \method{st_cast}{CURVE}(x, to, ...)
 

@@ -218,11 +218,20 @@ st_cast.MULTISURFACE <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 st_cast.COMPOUNDCURVE <- function(x, to, ...) {
-	if (! missing(to))
-		stop("to should be missing")
+	if (! missing(to) && to != "LINESTRING")
+		stop("to should be missing or LINESTRING")
 	CPL_compoundcurve_to_linear(structure(list(x), crs = NA_crs_, precision = 0.0, 
 		class = c("sfc_COMPOUNDCURVE", "sfc")))[[1]]
 }
+
+#' @name st_cast
+#' @export
+st_cast.MULTICURVE <- function(x, to, ...) {
+	if (! missing(to))
+		stop("to should be missing")
+	st_multilinestring(lapply(x, st_cast, to = "LINESTRING"))
+}
+
 
 #' @name st_cast
 #' @export

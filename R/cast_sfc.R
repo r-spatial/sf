@@ -24,6 +24,7 @@ which_sfc_col = function(cls) {
 		MULTILINESTRING = 2,
 		POLYGON = 2,
 		MULTIPOLYGON = 3,
+		MULTICURVE = 3,
 		GEOMETRYCOLLECTION = 4,
 		MULTISURFACE = 4,
 		GEOMETRY = 5,
