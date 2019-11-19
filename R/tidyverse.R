@@ -394,12 +394,20 @@ vec_restore.sfc <- function(x, to, ...) {
 	ret
 }
 
+#' vctrs methods for sf objects
+#' @name vctrs
+#' @export
+#' @inheritParams vctrs::vec_ptype2
 vec_ptype2.sfc <- function(x, y, ...) {
 	UseMethod("vec_ptype2.sfc", y)
 }
+#' @name vctrs
+#' @export
 vec_ptype2.sfc.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 	vctrs::vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
 }
+#' @name vctrs
+#' @export
 vec_ptype2.sfc.sfc <- function(x, y, ...) {
 	ucls = unique(c(class(x)[1], class(y)[1]))
 	cls =
@@ -412,18 +420,18 @@ vec_ptype2.sfc.sfc <- function(x, y, ...) {
 
 
 # minimal vec_cast implementation: https://github.com/r-spatial/sf/issues/1068
-#' @name tidyverse
+#' @name vctrs
 #' @export
-#' @param to character; target class
+#' @inheritParams vctrs::vec_cast
 vec_cast.sfc <- function(x, to, ...) UseMethod("vec_cast.sfc") # nocov
 
-#' @name tidyverse
+#' @name vctrs
 #' @export
 vec_cast.sfc.sfc <- function(x, to, ...) {
 	st_cast(x, gsub("sfc_", "", class(to)[1])) # nocov
 }
 
-#' @name tidyverse
+#' @name vctrs
 #' @export
 vec_cast.sfc.default <- function(x, to, ...) {
 	if (!requireNamespace("vctrs", quietly = TRUE)) # nocov start
@@ -466,8 +474,7 @@ register_all_s3_methods = function() {
 	register_s3_method("vctrs", "vec_proxy", "sfc")
 	register_s3_method("vctrs", "vec_restore", "sfc")
 	register_s3_method("vctrs", "vec_ptype2", "sfc")
-	register_s3_method("vctrs", "vec_ptype2.sfc", "default")
-	register_s3_method("vctrs", "vec_ptype2.sfc", "sfc")
+	register_s3_method("vctrs", "vec_cast", "sfc")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
