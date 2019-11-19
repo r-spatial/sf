@@ -425,3 +425,12 @@ is_geometry_column.default <- function(con, x, classes = c("character")) {
     vapply(x, function(x) inherits(x, classes) && !all(is.na(x)),
     	   FUN.VALUE = logical(1))
 }
+
+# https://github.com/r-spatial/sf/issues/1195 :
+# RPostgres::dbGetQuery returns geometry columns of class pq_geometry:
+#' @name st_as_sfc
+#' @export
+sf_as_sfc.pq_geometry <- function(x, ..., EWKB = TRUE, spatialite = FALSE, 
+		pureR = FALSE, crs = NA_crs_) { # nocov start
+  st_as_sfc.WKB(x, ..., EWKB = EWKB, spatiallite = spatialite, pureR = pureR, crs = crs) 
+} # nocov end
