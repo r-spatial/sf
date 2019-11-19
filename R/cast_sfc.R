@@ -170,9 +170,13 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = copy_sfc_attributes_from(x, ret)
 		reclass(ret, to, need_close(to))
 	} else if (from_col == 3 && to == "MULTILINESTRING") {
-		ret = lapply(x, unlist, recursive = FALSE) # unlist one level deeper; one MULTIPOLYGON -> one MULTILINESTRING
-		if (length(ret))
-			class(ret[[1]]) = class(x[[1]]) # got dropped
+		if (from_cls == "MULTICURVE") {
+			ret = lapply(x, st_cast, to = "MULTILINESTRING")
+		} else {
+			ret = lapply(x, unlist, recursive = FALSE) # unlist one level deeper; one MULTIPOLYGON -> one MULTILINESTRING
+			if (length(ret))
+				class(ret[[1]]) = class(x[[1]]) # got dropped
+		}
 		ret = copy_sfc_attributes_from(x, ret)
 		structure(reclass(ret, to, FALSE))
 	} else { # "horizontal", to the left: split

@@ -227,8 +227,8 @@ st_cast.COMPOUNDCURVE <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 st_cast.MULTICURVE <- function(x, to, ...) {
-	if (! missing(to))
-		stop("to should be missing")
+	if (! missing(to) && to != "MULTILINESTRING")
+		stop("to should be missing or MULTILINESTRING")
 	st_multilinestring(lapply(x, st_cast, to = "LINESTRING"))
 }
 

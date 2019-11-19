@@ -245,16 +245,10 @@ POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > wkt <- "MULTICURVE (COMPOUNDCURVE (LINESTRING (-83.62333 35.55244, -83.62328 35.55232, -83.62323 35.55223, -83.62319 35.55216, -83.62312 35.55209, -83.6231 35.55207), CIRCULARSTRING (-83.6231 35.55207, -83.62307 35.55205, -83.62302 35.55204), LINESTRING (-83.62302 35.55204, -83.62299 35.55203, -83.62289 35.55198, -83.62281 35.55189, -83.62271 35.55182)))"
 > g <- st_as_sfc(wkt)
 > g <- st_sf(demo = "test", geom = g, crs = 4326)
-> st_cast(g, "MULTILINESTRING")
-Simple feature collection with 1 feature and 1 field
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: -83.62333 ymin: 35.55182 xmax: -83.62271 ymax: 35.55244
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
-  demo                           geom
-1 test MULTILINESTRING ((-83.62333...
+> m = st_cast(g, "MULTILINESTRING")
+> identical(m$geom[[1]], st_cast(g$geom[[1]], "MULTILINESTRING"))
+[1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  0.380   0.024   0.394 
+  0.401   0.050   0.448 
