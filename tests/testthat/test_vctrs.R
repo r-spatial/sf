@@ -5,12 +5,16 @@ test_that("`sfc` vectors are treated as vectors", {
 })
 
 test_that("`n_empty` attribute of `sfc` vectors is restored", {
-	x <- st_sfc(
-		st_point(c(NA_real_, NA_real_)),
-		st_point(0:1)
-	)
+	pt1 <- st_sfc(st_point(c(NA_real_, NA_real_)))
+	pt2 <- st_sfc(st_point(0:1))
+
+	x <- c(pt1, pt2)
 	expect_identical(attr(vctrs::vec_slice(x, 1), "n_empty"), 1L)
 	expect_identical(attr(vctrs::vec_slice(x, 2), "n_empty"), 0L)
+
+	combined <- vctrs::vec_c(pt1, pt2, pt1)
+	expect_length(combined, 3)
+	expect_identical(attr(combined, "n_empty"), 2L)
 })
 
 test_that("`precision` and `crs` attributes of `sfc` vectors are restored", {
