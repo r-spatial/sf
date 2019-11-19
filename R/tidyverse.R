@@ -389,7 +389,9 @@ vec_proxy.sfc <- function(x, ...) {
 # restoration method is still necessary if the attributes are
 # dependent on the data.
 vec_restore.sfc <- function(x, to, ...) {
-	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
+	attr(x, "n_empty") = NULL # Ensure restoration by `st_sfc()`
+	ret = st_sfc(x, crs = st_crs(to), precision = st_precision(to))
+	ret
 }
 
 vec_ptype2.sfc <- function(x, y, ...) {
