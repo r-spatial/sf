@@ -19,3 +19,11 @@ test_that("`precision` and `crs` attributes of `sfc` vectors are restored", {
 	expect_identical(st_precision(x), st_precision(out))
 	expect_identical(st_crs(x), st_crs(out))
 })
+
+test_that("`sfc` vectors have a common type", {
+	pt <- st_sfc(st_point())
+	ln <- st_sfc(st_linestring())
+	expect_identical(class(vctrs::vec_ptype2(pt, pt)), c("sfc_POINT", "sfc"))
+	expect_identical(class(vctrs::vec_ptype2(ln, ln)), c("sfc_LINESTRING", "sfc"))
+	expect_identical(class(vctrs::vec_ptype2(pt, ln)), c("sfc_GEOMETRY", "sfc"))
+})

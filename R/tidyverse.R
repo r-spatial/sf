@@ -392,6 +392,23 @@ vec_restore.sfc <- function(x, to, ...) {
 	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
 }
 
+vec_ptype2.sfc <- function(x, y, ...) {
+	UseMethod("vec_ptype2.sfc", y)
+}
+vec_ptype2.sfc.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+	vctrs::vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+vec_ptype2.sfc.sfc <- function(x, y, ...) {
+	ucls = unique(c(class(x)[1], class(y)[1]))
+	cls =
+		if (length(ucls) > 1) # a mix:
+			c("sfc_GEOMETRY", "sfc")
+		else
+			c(ucls, "sfc")
+	structure(st_sfc(), class = cls)
+}
+
+
 # minimal vec_cast implementation: https://github.com/r-spatial/sf/issues/1068
 #' @name tidyverse
 #' @export
@@ -446,6 +463,9 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "pillar_shaft", "sfc")
 	register_s3_method("vctrs", "vec_proxy", "sfc")
 	register_s3_method("vctrs", "vec_restore", "sfc")
+	register_s3_method("vctrs", "vec_ptype2", "sfc")
+	register_s3_method("vctrs", "vec_ptype2.sfc", "default")
+	register_s3_method("vctrs", "vec_ptype2.sfc", "sfc")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
