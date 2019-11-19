@@ -377,8 +377,19 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+# This returns the memory representation of `sfc` vectors. At the same
+# time, this declares `sfc` lists as vectors which is necessary
+# because vctrs generally treats S3 lists are otherwise treated as
+# scalars.
 vec_proxy.sfc <- function(x, ...) {
 	x
+}
+# This restores `sfc` attributes after manipulation of the
+# proxy. Attributes are automatically restored by vctrs, but a
+# restoration method is still necessary if the attributes are
+# dependent on the data.
+vec_restore.sfc <- function(x, to, ...) {
+	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
 }
 
 # minimal vec_cast implementation: https://github.com/r-spatial/sf/issues/1068
@@ -434,6 +445,7 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
 	register_s3_method("vctrs", "vec_proxy", "sfc")
+	register_s3_method("vctrs", "vec_restore", "sfc")
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
