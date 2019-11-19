@@ -143,7 +143,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert foreign geometry object to an sfc object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/sfc.R'><code>R/sfc.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/wkb.R'><code>R/wkb.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/wkt.R'><code>R/wkt.R</code></a>, and 3 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/db.R'><code>R/db.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/sfc.R'><code>R/sfc.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/wkb.R'><code>R/wkb.R</code></a>, and 4 more</small>
     <div class="hidden name"><code>st_as_sfc.Rd</code></div>
     </div>
 
@@ -153,7 +153,10 @@
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for list</span>
+    <pre class="usage"><span class='fu'>sf_as_sfc.pq_geometry</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+
+<span class='co'># S3 method for list</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
 
 <span class='co'># S3 method for blob</span>
@@ -210,10 +213,6 @@
       <td><p>further arguments</p></td>
     </tr>
     <tr>
-      <th>crs</th>
-      <td><p>integer or character; coordinate reference system for the</p></td>
-    </tr>
-    <tr>
       <th>EWKB</th>
       <td><p>logical; if TRUE, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)</p></td>
     </tr>
@@ -224,6 +223,10 @@
     <tr>
       <th>pureR</th>
       <td><p>logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (<code>.Platform$endian</code>).</p></td>
+    </tr>
+    <tr>
+      <th>crs</th>
+      <td><p>integer or character; coordinate reference system for the</p></td>
     </tr>
     <tr>
       <th>GeoJSON</th>
