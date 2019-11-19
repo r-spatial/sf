@@ -17,6 +17,18 @@ test_that("`n_empty` attribute of `sfc` vectors is restored", {
 	expect_identical(attr(combined, "n_empty"), 2L)
 })
 
+test_that("bbox attributes of `sfc` vectors are restored", {
+	pt1 <- st_sfc(st_point(c(1L, 2L)))
+	pt2 <- st_sfc(st_point(c(10L, 20L)))
+
+	x <- c(pt1, pt2)
+	expect_identical(st_bbox(vctrs::vec_slice(x, 1)), st_bbox(pt1))
+	expect_identical(st_bbox(vctrs::vec_slice(x, 2)), st_bbox(pt2))
+
+	combined <- vctrs::vec_c(pt1, pt2)
+	expect_identical(st_bbox(x), st_bbox(combined))
+})
+
 test_that("`precision` and `crs` attributes of `sfc` vectors are restored", {
 	x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4, crs = 3857)
 	out <- vctrs::vec_slice(x, 1)
