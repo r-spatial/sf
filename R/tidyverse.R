@@ -423,6 +423,7 @@ vec_ptype2.sfc.sfc <- function(x, y, ...) {
 #' @name vctrs
 #' @export
 #' @inheritParams vctrs::vec_cast
+#' @param x_arg,y_arg Argument names for \code{x} and \code{y}.
 vec_cast.sfc <- function(x, to, ...) UseMethod("vec_cast.sfc") # nocov
 
 #' @name vctrs
