@@ -29,13 +29,7 @@ vec_cast.sfc(x, to, ...)
 
 \item{...}{These dots are for future extensions and must be empty.}
 
-\item{x_arg}{Argument names for \code{x} and \code{y}. These are used
-in error messages to inform the user about the locations of
-incompatible types (see \code{\link[=stop_incompatible_type]{stop_incompatible_type()}}).}
-
-\item{y_arg}{Argument names for \code{x} and \code{y}. These are used
-in error messages to inform the user about the locations of
-incompatible types (see \code{\link[=stop_incompatible_type]{stop_incompatible_type()}}).}
+\item{x_arg, y_arg}{Argument names for \code{x} and \code{y}.}
 
 \item{to}{Type to cast to. If \code{NULL}, \code{x} will be returned as is.}
 }
