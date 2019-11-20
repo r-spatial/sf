@@ -379,19 +379,17 @@ pillar_shaft.sfc <- function(x, ...) {
 
 # This returns the memory representation of `sfc` vectors. At the same
 # time, this declares `sfc` lists as vectors which is necessary
-# because vctrs generally treats S3 lists are otherwise treated as
-# scalars.
+# because vctrs generally treats S3 lists as scalars.
 vec_proxy.sfc <- function(x, ...) {
 	x
 }
-# This restores `sfc` attributes after manipulation of the
-# proxy. Attributes are automatically restored by vctrs, but a
-# restoration method is still necessary if the attributes are
-# dependent on the data.
+# This restores `sfc` attributes after manipulation of the proxy
+# (e.g. slicing or combination)
 vec_restore.sfc <- function(x, to, ...) {
-	attr(x, "n_empty") = NULL # Ensure restoration by `st_sfc()`
-	ret = st_sfc(x, crs = st_crs(to), precision = st_precision(to))
-	ret
+	# Ensure restoration of `n_empty` by `st_sfc()`
+	attr(x, "n_empty") = NULL
+
+	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
 }
 
 #' vctrs methods for sf objects
