@@ -29,13 +29,38 @@ vec_ptype2.sfc.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 #' @name vctrs
 #' @export
 vec_ptype2.sfc.sfc <- function(x, y, ...) {
+	crs = common_crs(x, y)
+	prec = common_prec(x, y)
+	ret = st_sfc(crs = crs, precision = prec)
+
 	ucls = unique(c(class(x)[1], class(y)[1]))
-	cls =
+	class(ret) =
 		if (length(ucls) > 1) # a mix:
 			c("sfc_GEOMETRY", "sfc")
 		else
 			c(ucls, "sfc")
-	structure(st_sfc(), class = cls)
+
+	ret
+}
+
+# take conservative approach of requiring equal CRS and precision
+common_crs = function(x, y) {
+	lhs = st_crs(x)
+	rhs = st_crs(y)
+
+	if (lhs != rhs)
+		stop("can't combine geometry list-columns with different CRS")
+
+	lhs
+}
+common_prec = function(x, y) {
+	lhs = st_precision(x)
+	rhs = st_precision(y)
+
+	if (lhs != rhs)
+		stop("can't combine geometry list-columns with different precisions")
+
+	lhs
 }
 
 

@@ -36,6 +36,21 @@ test_that("`precision` and `crs` attributes of `sfc` vectors are restored", {
 	expect_identical(st_crs(x), st_crs(out))
 })
 
+test_that("`precision` and `crs` attributes of `sfc` vectors are combined", {
+	x <- st_sfc(st_point(c(pi, pi)), precision = 1e-4, crs = 3857)
+	y <- st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 3857)
+
+	out <- vctrs::vec_c(x, y)
+	expect_identical(st_precision(x), st_precision(out))
+	expect_identical(st_crs(x), st_crs(out))
+
+	y <- st_sfc(st_point(c(0, 0)), precision = 1e-2, crs = 3857)
+	expect_error(vctrs::vec_c(x, y), "different precisions")
+
+	y <- st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 4326)
+	expect_error(vctrs::vec_c(x, y), "different CRS")
+})
+
 test_that("`sfc` vectors have a common type", {
 	pt <- st_sfc(st_point())
 	ln <- st_sfc(st_linestring())
