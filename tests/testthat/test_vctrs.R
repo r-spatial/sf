@@ -45,10 +45,10 @@ test_that("`precision` and `crs` attributes of `sfc` vectors are combined", {
 	expect_identical(st_crs(x), st_crs(out))
 
 	y = st_sfc(st_point(c(0, 0)), precision = 1e-2, crs = 3857)
-	expect_error(vctrs::vec_c(x, y), "different precisions")
+	expect_error(vctrs::vec_c(x, y), "precisions not equal")
 
 	y = st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 4326)
-	expect_error(vctrs::vec_c(x, y), "different CRS")
+	expect_error(vctrs::vec_c(x, y), "coordinate reference systems not equal")
 })
 
 test_that("`sfc` vectors have a common type", {

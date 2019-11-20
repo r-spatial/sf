@@ -49,7 +49,7 @@ common_crs = function(x, y) {
 	rhs = st_crs(y)
 
 	if (lhs != rhs)
-		stop("can't combine geometry list-columns with different CRS")
+		stop("coordinate reference systems not equal: use st_transform() first?")
 
 	lhs
 }
@@ -58,7 +58,7 @@ common_prec = function(x, y) {
 	rhs = st_precision(y)
 
 	if (lhs != rhs)
-		stop("can't combine geometry list-columns with different precisions")
+		stop("precisions not equal")
 
 	lhs
 }
