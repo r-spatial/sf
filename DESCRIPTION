@@ -122,6 +122,7 @@ Collate:
     'grid.R'
     'arith.R'
     'tidyverse.R'
+    'tidyverse-vctrs.R'
     'cast_sfg.R'
     'cast_sfc.R'
     'graticule.R'
