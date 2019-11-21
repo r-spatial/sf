@@ -49,7 +49,7 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=6.2.0
+ENV PROJ_VERSION=6.2.1
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
@@ -74,7 +74,7 @@ RUN cd /usr/local/share/proj \
 # GDAL:
 
 ENV GDAL_VERSION 3.0.2
-ENV GDAL_VERSION_NAME 3.0.2rc1
+ENV GDAL_VERSION_NAME 3.0.2
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -96,7 +96,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2
-ENV GEOS_VERSION 3.8.0beta1
+ENV GEOS_VERSION 3.8.0
 #
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
