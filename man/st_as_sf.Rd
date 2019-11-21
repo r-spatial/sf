@@ -108,17 +108,14 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
-\dontrun{
-  require(spatstat)
+if (require(spatstat)) {
   g = st_as_sf(gorillas)
   # select only the points:
   g[st_is(g, "POINT"),]
 }
-\dontrun{ # because of spatstat interfering with units
 if (require(spatstat)) {
  data(chicago)
  plot(st_as_sf(chicago)["label"])
  plot(st_as_sf(chicago)[-1,"label"])
-}
 }
 }

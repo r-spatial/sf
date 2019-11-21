@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* support `vctrs` methods for geometry list columns; this makes `unnest` work again (#1172); #1196 by Lionel Henry
+
 * `st_as_sf.pq_geometry` converts binary geom columns from RPostgres::dbGetQuery; #1195
 
 * `st_cast` can convert `MULTICURVE` to `MULTILINESTRING`; #1194
