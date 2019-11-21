@@ -31,6 +31,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	subversion \
 	valgrind \
 	vim \
+	tk-dev \
 	wget
 
 RUN apt-get install -y \
