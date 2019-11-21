@@ -149,6 +149,7 @@
 <a href="#version-0-8-1" class="anchor"></a>version 0.8-1<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>support <code>vctrs</code> methods for geometry list columns; this makes <code>unnest</code> work again (<a href='https://github.com/r-spatial/sf/issues/1172'>#1172</a>); <a href='https://github.com/r-spatial/sf/issues/1196'>#1196</a> by Lionel Henry</p></li>
 <li><p><code>st_as_sf.pq_geometry</code> converts binary geom columns from RPostgres::dbGetQuery; <a href='https://github.com/r-spatial/sf/issues/1195'>#1195</a></p></li>
 <li><p><code>st_cast</code> can convert <code>MULTICURVE</code> to <code>MULTILINESTRING</code>; <a href='https://github.com/r-spatial/sf/issues/1194'>#1194</a></p></li>
 <li><p><code>st_read</code> gains a parameter <code>wkt_filter</code> for spatially filtering the features to be read; <a href='https://github.com/r-spatial/sf/issues/1192'>#1192</a></p></li>

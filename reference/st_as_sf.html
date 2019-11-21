@@ -392,18 +392,40 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
-#&gt;                      </div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)
+#&gt;                      </div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
   <span class='no'>g</span> <span class='kw'>=</span> <span class='fu'>st_as_sf</span>(<span class='no'>gorillas</span>)
   <span class='co'># select only the points:</span>
   <span class='no'>g</span>[<span class='fu'><a href='st_is.html'>st_is</a></span>(<span class='no'>g</span>, <span class='st'>"POINT"</span>),]
-}
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>)  <span class='co'># because of spatstat interfering with units</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.data</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘nlme’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:dplyr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    collapse</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rpart</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'spatstat':</span>
+#&gt; <span class='message'>  method     from</span>
+#&gt; <span class='message'>  print.boxx cli </span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>spatstat 1.61-0       (nickname: ‘Puppy zoomies’) </span>
+#&gt; <span class='message'>For an introduction to spatstat, type ‘beginner’ </span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Note: R version 3.6.1 (2017-01-27) is more than 9 months old; we strongly recommend upgrading to the latest version</span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA
+#&gt; First 10 features:
+#&gt;    label group season       date                      geom
+#&gt; 1  point major    dry 2006-01-06 POINT (582518.4 676886.2)
+#&gt; 2  point major    dry 2006-01-10   POINT (581823 677422.7)
+#&gt; 3  point major    dry 2006-01-15   POINT (582131 676937.9)
+#&gt; 4  point major    dry 2006-01-24   POINT (582111.9 677420)
+#&gt; 5  point minor    dry 2006-01-27 POINT (582585.1 677509.7)
+#&gt; 6  point major    dry 2006-01-28 POINT (582302.3 677521.6)
+#&gt; 7  point major    dry 2006-02-01 POINT (583167.2 676730.5)
+#&gt; 8  point major    dry 2006-02-03 POINT (583584.5 677207.1)
+#&gt; 9  point major    dry 2006-02-13 POINT (583117.8 676850.3)
+#&gt; 10 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>chicago</span>)
  <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[<span class='st'>"label"</span>])
  <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='no'>chicago</span>)[-<span class='fl'>1</span>,<span class='st'>"label"</span>])
-}</div></pre>
+}</div><div class='img'><img src='st_as_sf-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='st_as_sf-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
