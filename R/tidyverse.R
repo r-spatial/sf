@@ -354,12 +354,8 @@ type_sum.sfc <- function(x, ...) {
 	cls = substring(class(x)[1], 5)
 	if (is.na(st_is_longlat(x)))
 		cls
-	else {
-		#paste0(cls, " [", enc2utf8(as.character(units(st_crs(x, parameters = TRUE)$ud_unit))), "]")
-		u = as.character(units(st_crs(x, parameters = TRUE)$ud_unit))
-		# Encoding(u) = "UTF-8"
-		paste0(cls, " [", enc2native(u), "]")
-	}
+	else
+		paste0(cls, " [", enc2utf8(as.character(units(st_crs(x, parameters = TRUE)$ud_unit))), "]")
 }
 
 #' Summarize simple feature item for tibble
