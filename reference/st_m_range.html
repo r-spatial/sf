@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create viewport from sf, sfc or sfg object — st_viewport • sf</title>
+<title>Return 'm' range of a simple feature or simple feature set — st_m_range • sf</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Create viewport from sf, sfc or sfg object — st_viewport" />
+<meta property="og:title" content="Return 'm' range of a simple feature or simple feature set — st_m_range" />
 
-<meta property="og:description" content="Create viewport from sf, sfc or sfg object" />
+<meta property="og:description" content="Return 'm' range of a simple feature or simple feature set" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -142,66 +142,128 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create viewport from sf, sfc or sfg object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/grid.R'><code>R/grid.R</code></a></small>
-    <div class="hidden name"><code>st_viewport.Rd</code></div>
+    <h1>Return 'm' range of a simple feature or simple feature set</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/m_range.R'><code>R/m_range.R</code></a></small>
+    <div class="hidden name"><code>st_m_range.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create viewport from sf, sfc or sfg object</p>
+    <p>Return 'm' range of a simple feature or simple feature set</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>st_viewport</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>), <span class='no'>asp</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for m_range</span>
+<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>x</span>)
+
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for POINT</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTIPOINT</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for LINESTRING</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for POLYGON</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTILINESTRING</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTIPOLYGON</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for GEOMETRYCOLLECTION</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTISURFACE</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for MULTICURVE</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for CURVEPOLYGON</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for COMPOUNDCURVE</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for POLYHEDRALSURFACE</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for TIN</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for TRIANGLE</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for CIRCULARSTRING</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>st_m_range</span>(<span class='no'>obj</span>, <span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+
+<span class='no'>NA_m_range_</span></pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>object of class sf, sfc or sfg object</p></td>
+      <td><p>object of class <code>m_range</code></p></td>
+    </tr>
+    <tr>
+      <th>obj</th>
+      <td><p>object to compute the m range from</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>parameters passed on to <a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></p></td>
+      <td><p>ignored</p></td>
     </tr>
     <tr>
-      <th>bbox</th>
-      <td><p>the bounding box used for aspect ratio</p></td>
-    </tr>
-    <tr>
-      <th>asp</th>
-      <td><p>numeric; target aspect ratio (y/x), see Details</p></td>
+      <th>crs</th>
+      <td><p>object of class <code>crs</code>, or argument to <a href='st_crs.html'>st_crs</a>, specifying the CRS of this bounding box.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>An object of class <code>m_range</code> of length 2.</p>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The output of the call to <a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></p>
+    <p>a numeric vector of length two, with <code>mmin</code> and <code>mmax</code> values;
+if <code>obj</code> is of class <code>sf</code> or <code>sfc</code> the object
+if <code>obj</code> is of class <code>sf</code> or <code>sfc</code> the object
+returned has a class <code>m_range</code></p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>parameters <code>width</code>, <code>height</code>, <code>xscale</code> and <code>yscale</code> are set such that aspect ratio is honoured and plot size is maximized in the current viewport; others can be passed as <code>...</code></p>
-<p>If <code>asp</code> is missing, it is taken as 1, except when <code><a href='https://rdrr.io/r/base/Logic.html'>isTRUE(st_is_longlat(x))</a></code>, in which case it is set to <code>1.0 /cos(y)</code>, with <code>y</code> the middle of the latitude bounding box.</p>
+    <p><code>NA_m_range_</code> represents the missing value for a <code>m_range</code> object</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>grid</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp4qxSZE/temp_libpath7fa27b8640b9/sf/shape/nc.shp' using driver `ESRI Shapefile'
-#&gt; Simple feature collection with 100 features and 14 fields
-#&gt; geometry type:  MULTIPOLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span>()
-<span class='fu'><a href='https://rdrr.io/r/grid/viewports.html'>pushViewport</a></span>(<span class='fu'><a href='https://rdrr.io/r/grid/viewport.html'>viewport</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>height</span> <span class='kw'>=</span> <span class='fl'>0.8</span>))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/viewports.html'>pushViewport</a></span>(<span class='fu'>st_viewport</span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/invisible.html'>invisible</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='fu'><a href='st_as_grob.html'>st_as_grob</a></span>(<span class='no'>x</span>, <span class='kw'>gp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grid/gpar.html'>gpar</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>'red'</span>)))))</div><div class='img'><img src='st_viewport-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>3</span>), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='fu'>st_m_range</span>(<span class='no'>a</span>)</div><div class='output co'>#&gt; mmin mmax 
+#&gt;    3    4 </div><div class='input'><span class='fu'>st_m_range</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>mmin</span> <span class='kw'>=</span> <span class='fl'>16.1</span>, <span class='kw'>mmax</span> <span class='kw'>=</span> <span class='fl'>16.6</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>4326</span>))</div><div class='output co'>#&gt; mmin mmax 
+#&gt; 16.1 16.6 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#format">Format</a></li>
+
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
