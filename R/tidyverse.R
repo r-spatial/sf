@@ -357,7 +357,7 @@ type_sum.sfc <- function(x, ...) {
 	else {
 		#paste0(cls, " [", enc2utf8(as.character(units(st_crs(x, parameters = TRUE)$ud_unit))), "]")
 		u = as.character(units(st_crs(x, parameters = TRUE)$ud_unit))
-		Encoding(u) = "UTF-8"
+		# Encoding(u) = "UTF-8"
 		paste0(cls, " [", enc2native(u), "]")
 	}
 }
