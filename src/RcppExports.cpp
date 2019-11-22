@@ -1051,6 +1051,30 @@ RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// CPL_get_z_range
+Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth);
+RcppExport SEXP _sf_CPL_get_z_range(SEXP sfSEXP, SEXP depthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sf(sfSEXP);
+    Rcpp::traits::input_parameter< int >::type depth(depthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_z_range(sf, depth));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_get_m_range
+Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth);
+RcppExport SEXP _sf_CPL_get_m_range(SEXP sfSEXP, SEXP depthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sf(sfSEXP);
+    Rcpp::traits::input_parameter< int >::type depth(depthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_m_range(sf, depth));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _sf_RcppExport_validate(const char* sig) { 
@@ -1150,6 +1174,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 12},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
+    {"_sf_CPL_get_z_range", (DL_FUNC) &_sf_CPL_get_z_range, 2},
+    {"_sf_CPL_get_m_range", (DL_FUNC) &_sf_CPL_get_m_range, 2},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
