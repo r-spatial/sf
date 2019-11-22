@@ -12,6 +12,8 @@
 
 * add `st_filter` generic for filtering on spatial features only; #1148
 
+* a new UBSAN error in `wkb_read` was resolved; #1154, #1152
+
 # version 0.8-0
 
 * fix tests for PROJ 6.2.0 not accepting +units=
