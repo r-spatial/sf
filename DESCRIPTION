@@ -143,3 +143,5 @@ Collate:
     'nearest.R'
     'normalize.R'
     'deprecated.R'
+    'z_range.R'
+    'm_range.R'

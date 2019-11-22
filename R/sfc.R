@@ -87,6 +87,20 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 	if (is.null(bb) || any(is.na(bb)))
 		attr(lst, "bbox") = compute_bbox(lst)
 
+	# compute z_range, if dims permit and not set
+	zr = attr(lst, "z_range")
+	if (is.null(zr) || any(is.na(zr))) {
+		u <- unique(sfg_classes[1L,])
+		if( "XYZM" %in% u ) {
+			attr(lst, "z_range") = compute_z_range(lst)
+			attr(lst, "m_range") = compute_m_range(lst)
+		} else if ( "XYZ" %in% u ) {
+			attr(lst, "z_range") = compute_z_range(lst)
+		} else if ("XYM" %in% u ) {
+			attr(lst, "m_range") = compute_z_range(lst) ## because it's the 3rd element
+		}
+	}
+
 	# check ring directions:
 	if (check_ring_dir) # also GEOMETRYCOLLECTION?
 		lst = check_ring_dir(lst)
@@ -177,6 +191,18 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	bb = signif(attr(x, "bbox"), options("digits")$digits)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
+	if( !is.null( attr(x, "z_range"))) {
+		cat(paste0("z_range:        "))
+		zb = signif(attr(x, "z_range"), options("digits")$digits)
+		cat(paste(paste(names(zb), zb[], sep = ": "), collapse = " "))
+		cat("\n")
+	}
+	if( !is.null( attr(x, "m_range"))) {
+		cat(paste0("m_range:        "))
+		mb = signif(attr(x, "m_range"), options("digits")$digits)
+		cat(paste(paste(names(mb), mb[], sep = ": "), collapse = " "))
+		cat("\n")
+	}
 	# attributes: epsg, proj4string, precision
 	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
 	cat(paste0("proj4string:    ", attr(x, "crs")$proj4string, "\n"))
@@ -350,11 +376,11 @@ st_precision.sfc <- function(x) {
 #' @name st_precision
 #' @param precision numeric, or object of class \code{units} with distance units (but see details); see \link{st_as_binary} for how to do this.
 #' @details If \code{precision} is a \code{units} object, the object on which we set precision must have a coordinate reference system with compatible distance units.
-#' 
+#'
 #' Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
 #'
 #' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
-#' 
+#'
 #' @seealso \link{st_as_binary} for an explanation of what setting precision does, and the examples therein.
 #' @examples
 #' x <- st_sfc(st_point(c(pi, pi)))
