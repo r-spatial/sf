@@ -30,7 +30,7 @@ Rcpp::NumericVector CPL_get_zm_range(Rcpp::List sf, int pos, int depth) {
 
 			if (i == 0) { // initialize:
 				if (rows == 0)
-					return bb;
+					return bb; // #nocov
 				// Rcpp::stop("CPL_get_zbox: invalid geometry");
 				bb[0] = m(0,pos);
 				bb[1] = m(0,pos);

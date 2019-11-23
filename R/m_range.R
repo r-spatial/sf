@@ -2,7 +2,7 @@
 #' @name st_m_range
 #' @param x object of class \code{m_range}
 #' @export
-is.na.m_range = function(x) identical(x, NA_m_range_)
+is.na.m_range = function(x) identical(x, NA_m_range_) # nocov
 
 mb_wrap = function(mb) {
 	stopifnot(is.numeric(mb) && length(mb) == 2)
@@ -120,13 +120,13 @@ st_m_range.TRIANGLE = m_range.MtrxSet
 #' @export
 st_m_range.CIRCULARSTRING = function(obj, ...) {
 	# this is of course wrong:
-	st_m_range(st_cast(obj, "LINESTRING"))
+	st_m_range(st_cast(obj, "LINESTRING")) # nocov
 }
 
 #' @export
 print.m_range = function(x, ...) {
-	x = structure(x, crs = NULL, class = NULL)
-	print(set_units(x, attr(x, "units"), mode = "standard"))
+	x = structure(x, crs = NULL, class = NULL) # nocov
+	print(set_units(x, attr(x, "units"), mode = "standard")) # nocov
 }
 
 compute_m_range = function(obj) {
@@ -158,21 +158,21 @@ st_m_range.sf = function(obj, ...) st_m_range(st_geometry(obj))
 #' st_m_range(c(mmin = 16.1, mmax = 16.6), crs = st_crs(4326))
 #' @export
 st_m_range.numeric = function(obj, ..., crs = NA_crs_) {
-	structure(mb_wrap(obj[c("mmin", "mmax")]), crs = st_crs(crs))
+	structure(mb_wrap(obj[c("mmin", "mmax")]), crs = st_crs(crs)) # nocov
 }
 
 #' @export
-st_m_range.m_range = function(obj, ...) obj
+st_m_range.m_range = function(obj, ...) obj # nocov
 
 
 #' @export
-"$.m_range" = function(x, name) {
+"$.m_range" = function(x, name) { # nocov start
 	switch(name,
 		   mmin = x["mmin"],
 		   mmax = x["mmax"],
 		   stop("unsupported name")
 	)
-}
+} # nocov end
 
 #' @name st_m_range
 #' @details \code{NA_m_range_} represents the missing value for a \code{m_range} object

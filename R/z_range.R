@@ -119,13 +119,13 @@ st_z_range.TRIANGLE = z_range.MtrxSet
 #' @export
 st_z_range.CIRCULARSTRING = function(obj, ...) {
 	# this is of course wrong:
-	st_z_range(st_cast(obj, "LINESTRING"))
+	st_z_range(st_cast(obj, "LINESTRING")) # nocov
 }
 
 #' @export
 print.z_range = function(x, ...) {
-	x = structure(x, crs = NULL, class = NULL)
-	print(set_units(x, attr(x, "units"), mode = "standard"))
+	x = structure(x, crs = NULL, class = NULL) # nocov
+	print(set_units(x, attr(x, "units"), mode = "standard")) # nocov
 }
 
 compute_z_range = function(obj) {
@@ -157,21 +157,21 @@ st_z_range.sf = function(obj, ...) st_z_range(st_geometry(obj))
 #' st_z_range(c(zmin = 16.1, zmax = 16.6), crs = st_crs(4326))
 #' @export
 st_z_range.numeric = function(obj, ..., crs = NA_crs_) {
-	structure(zb_wrap(obj[c("zmin", "zmax")]), crs = st_crs(crs))
+	structure(zb_wrap(obj[c("zmin", "zmax")]), crs = st_crs(crs)) # nocov
 }
 
 #' @export
-st_z_range.z_range = function(obj, ...) obj
+st_z_range.z_range = function(obj, ...) obj # nocov
 
 
 #' @export
-"$.z_range" = function(x, name) {
+"$.z_range" = function(x, name) { # nocov end
 	switch(name,
 		   zmin = x["zmin"],
 		   zmax = x["zmax"],
 		   stop("unsupported name")
 	)
-}
+} # nocov end
 
 #' @name st_z_range
 #' @details \code{NA_z_range_} represents the missing value for a \code{z_range} object
