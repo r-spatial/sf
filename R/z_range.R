@@ -165,7 +165,7 @@ st_z_range.z_range = function(obj, ...) obj # nocov
 
 
 #' @export
-"$.z_range" = function(x, name) { # nocov end
+"$.z_range" = function(x, name) { # nocov start
 	switch(name,
 		   zmin = x["zmin"],
 		   zmax = x["zmax"],
