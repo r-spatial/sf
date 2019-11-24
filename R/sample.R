@@ -130,6 +130,20 @@ st_poly_sample = function(x, size, ..., type = "random",
 			runif(size, bb[2], bb[4])
 		m = cbind(lon, lat)
 		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+	} else if (type == "runifpoint"){
+		if (!requireNamespace("spatstat", quietly = TRUE)){
+			stop("package spatstat required, please install it first")
+		}
+		if (!requireNamespace("maptools", quietly = TRUE)){
+			stop("package maptools required, please install it first")
+		}
+		window_spatstat = maptools::as.owin.SpatialPolygons(as(x, "Spatial"))
+
+		pp = spatstat::runifpoint(n = size, win = window_spatstat, ...)
+		pp = st_as_sf(pp)
+		pp = st_collection_extract(pp, "POINT")
+		pp = st_geometry(pp)
+		return(pp)
 	} else
 		stop(paste("sampling type", type, "not implemented for polygons"))
 	pts[lengths(st_intersects(pts, x)) > 0]
