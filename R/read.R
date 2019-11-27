@@ -339,7 +339,7 @@ abbreviate_shapefile_names = function(x) {
 #' raise warnings or errors or fail silently.
 #' 
 #' When deleting layers or data sources is not successful, no error is emitted. 
-#' \code{delete_dsn} and \code{delete_layers} should be
+#' \code{delete_dsn} and \code{delete_layer} should be
 #' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
 #' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc}, 
