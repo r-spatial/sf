@@ -116,7 +116,7 @@ error is raised. If types don't match, behaviour is undefined: GDAL may
 raise warnings or errors or fail silently.
 
 When deleting layers or data sources is not successful, no error is emitted. 
-\code{delete_dsn} and \code{delete_layer} should be
+\code{delete_dsn} and \code{delete_layers} should be
 handled with care; the former may erase complete directories or databases.
 }
 \examples{
