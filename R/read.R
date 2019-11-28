@@ -281,10 +281,11 @@ abbreviate_shapefile_names = function(x) {
 #       fld_names <- iconv(fld_names, from=encoding, to="UTF-8")
 #   }
 	if (any(nchar(fld_names) > 10)) {
-		fld_names <- abbreviate(fld_names, minlength = 7)
+		w = which(nchar(fld_names) > 10)
+		fld_names[w] <- abbreviate(fld_names[w], minlength = 7)
 		warning("Field names abbreviated for ESRI Shapefile driver")
-		if (any(nchar(fld_names) > 10))
-			fld_names <- abbreviate(fld_names, minlength = 5) # nocov
+		if (any(nchar(fld_names[w]) > 10))
+			fld_names[w] <- abbreviate(fld_names[w], minlength = 5) # nocov
 	}
 # fix for dots in DBF field names 121124
 	if (length(wh. <- grep("\\.", fld_names) > 0))
