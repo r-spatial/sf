@@ -171,13 +171,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	return out;
 }
 
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_wkt2_from_epsg(Rcpp::IntegerVector epsg) {
+Rcpp::CharacterVector wkt2_from_spatial_reference(OGRSpatialReference *srs) { // FIXME: add options?
 #if GDAL_VERSION_MAJOR >= 3
-	OGRSpatialReference *srs = new OGRSpatialReference;
-	srs = handle_axis_order(srs);
-	handle_error(srs->importFromEPSG(epsg[0]));
-	// const char **options = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
 	char *cp;
 	const char *options[3];
 	options[0] = "MULTILINE=YES";
@@ -187,6 +182,20 @@ Rcpp::CharacterVector CPL_wkt2_from_epsg(Rcpp::IntegerVector epsg) {
 		Rcpp::stop("OGR error: cannot export to WKT2");
 	Rcpp::CharacterVector out(cp);
 	CPLFree(cp);
+	return out;
+#else
+	return Rcpp::CharacterVector::create(NA_STRING);
+#endif
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_wkt2_from_epsg(Rcpp::IntegerVector epsg) {
+#if GDAL_VERSION_MAJOR >= 3
+	OGRSpatialReference *srs = new OGRSpatialReference;
+	srs = handle_axis_order(srs);
+	handle_error(srs->importFromEPSG(epsg[0]));
+	// const char **options = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
+	Rcpp::CharacterVector out = wkt2_from_spatial_reference(srs);
 	delete srs;
 	return(out);
 #else
@@ -293,10 +302,13 @@ Rcpp::List create_crs(OGRSpatialReference *ref) {
 		} else
 			crs(0) = NA_INTEGER;
 		crs(1) = p4s_from_spatial_reference(ref);
+		/*
 		if (epsg_is_na)
 			crs(2) = Rcpp::CharacterVector::create(NA_STRING);
 		else
 			crs(2) = CPL_wkt2_from_epsg(crs(0));
+		*/
+		crs(2) = wkt2_from_spatial_reference(ref);
 	}
 	Rcpp::CharacterVector nms(3);
 	nms(0) = "epsg";
