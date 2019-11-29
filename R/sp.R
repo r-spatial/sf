@@ -258,17 +258,14 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 sfc2SpatialPoints = function(from, IDs) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-#	cc = do.call(rbind, from)
-#	row.names(cc) = IDs
-#	sp::SpatialPoints(cc, proj4string = sp::CRS(attr(from, "crs")$proj4string))
-	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialPoints(do.call(rbind, from), proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialMultiPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialMultiPoints(lapply(from, unclass), proj4string =
-		sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialMultiPoints(lapply(from, unclass), 
+		proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -280,7 +277,7 @@ sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
-	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialLines(l, proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -304,7 +301,7 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 			comm = c(0, rep(1, length(from[[i]])-1))
 		comment(l[[i]]) = paste(as.character(comm), collapse = " ")
 	}
-	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialPolygons(l, proj4string = as(st_crs(from), "CRS"))
 }
 
 get_comment = function(mp) { # for MULTIPOLYGON
@@ -316,4 +313,17 @@ get_comment = function(mp) { # for MULTIPOLYGON
 		l[[i]][1] = 0
 	}
 	unlist(l)
+}
+
+#' @name as
+#' @rdname coerce-methods
+#' @aliases coerce,crs,CRS-method
+setAs("crs", "CRS", function(from) CRS_from_crs(from))
+CRS_from_crs = function(from) {
+	if (! requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	ret = sp::CRS(from$proj4string)
+	if (!is.null(from$wkt2) && !is.na(from$wkt2))
+		comment(ret) = from$wkt2
+	ret
 }
