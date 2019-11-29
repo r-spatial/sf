@@ -130,8 +130,14 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = handle_axis_order(dest);
 		if (Rcpp::CharacterVector::is_na(wkt2[0])) // then use proj4string
 			handle_error(dest->importFromProj4((const char *) (p4s[0])));
-		else
-			handle_error(dest->importFromWkt((const char *) (wkt2[0])));
+		else {
+			char *cp = wkt2[0];
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+			handle_error(dest->importFromWkt(&cp));
+#else
+			handle_error(dest->importFromWkt((const char *) cp));
+#endif
+		}
 	}
 	return dest;
 }
