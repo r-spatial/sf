@@ -8,7 +8,7 @@ test_that("st_crs works", {
   expect_equal(st_crs(nc2)[1:2], crs_4267[1:2])
   expect_equal(st_crs(nc3), NA_crs_)
   expect_equal(st_set_crs(nc3, 4267) %>% st_crs, crs_4267)
-  expect_equal(nc1[1:2], nc2[1:2])
+  expect_equal(st_crs(nc1)[1:2], st_crs(nc2)[1:2])
 
   expect_warning(st_crs(nc2) <- 3857, "replacing crs does not reproject data")
   expect_silent(st_crs(nc2) <- 3857)
