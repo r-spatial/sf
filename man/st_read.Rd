@@ -9,36 +9,20 @@
 \usage{
 st_read(dsn, layer, ...)
 
-\method{st_read}{character}(
-  dsn,
-  layer,
-  ...,
-  query = NA,
-  options = NULL,
-  quiet = FALSE,
-  geometry_column = 1L,
-  type = 0,
+\method{st_read}{character}(dsn, layer, ..., query = NA,
+  options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
   promote_to_multi = TRUE,
   stringsAsFactors = default.stringsAsFactors(),
-  int64_as_string = FALSE,
-  check_ring_dir = FALSE,
-  fid_column_name = character(0),
-  drivers = character(0),
-  wkt_filter = character(0)
-)
+  int64_as_string = FALSE, check_ring_dir = FALSE,
+  fid_column_name = character(0), drivers = character(0),
+  wkt_filter = character(0))
 
-read_sf(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE)
+read_sf(..., quiet = TRUE, stringsAsFactors = FALSE,
+  as_tibble = TRUE)
 
-\method{st_read}{DBIObject}(
-  dsn = NULL,
-  layer = NULL,
-  query = NULL,
-  EWKB = TRUE,
-  quiet = TRUE,
-  as_tibble = FALSE,
-  geometry_column = NULL,
-  ...
-)
+\method{st_read}{DBIObject}(dsn = NULL, layer = NULL, query = NULL,
+  EWKB = TRUE, quiet = TRUE, as_tibble = FALSE,
+  geometry_column = NULL, ...)
 }
 \arguments{
 \item{dsn}{data source name (interpretation varies by driver - for some
@@ -175,7 +159,7 @@ summary(nc) # note that AREA was computed using Euclidian area on lon/lat degree
 ## only three fields by select clause
 ## only two features by where clause
 nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
-                     query = "SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 > 20000")
+                     query = "SELECT NAME, SID74, FIPS FROM \\"nc\\" WHERE BIR74 > 20000")
 \dontrun{
   library(sp)
   example(meuse, ask = FALSE, echo = FALSE)
@@ -191,14 +175,14 @@ nc_sql = st_read(system.file("shape/nc.shp", package="sf"),
 ## and that geom needs to be included in the select, otherwise we don't detect it
 layer <- st_layers(system.file("gpkg/nc.gpkg", package = "sf"))$name[1]
 nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
-   query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \"\%s\" WHERE BIR74 > 20000", layer))
+   query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \\"\%s\\" WHERE BIR74 > 20000", layer))
 }
 # spatial filter, as wkt:
 wkt = st_as_text(st_geometry(nc[1,])) 
 # filter by (bbox overlaps of) first feature geometry:
 read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 # read geojson from string:
-geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
+geojson_txt <- paste("{\\"type\\":\\"MultiPoint\\",\\"coordinates\\":",
    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
 x = read_sf(geojson_txt)
 x

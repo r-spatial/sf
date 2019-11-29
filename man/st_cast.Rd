@@ -45,7 +45,8 @@
 
 st_cast(x, to, ...)
 
-\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x), group_or_split = TRUE)
+\method{st_cast}{sfc}(x, to, ..., ids = seq_along(x),
+  group_or_split = TRUE)
 
 \method{st_cast}{sf}(x, to, ..., warn = TRUE, do_split = TRUE)
 
