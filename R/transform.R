@@ -75,6 +75,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 
 	crs = make_crs(crs)
 
+	# FIXME: check for wkt2 here too?
 	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
 		x = st_zm(x, drop = FALSE, what = "Z")
 
@@ -86,7 +87,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 	}
 
 	if (crs != st_crs(x)) { # transform:
-		ret = structure(CPL_transform(x, crs$proj4string),
+		ret = structure(CPL_transform(x, crs),
 			single_type = NULL, crs = crs)
 		ret = st_sfc(ret)
 		if (check)

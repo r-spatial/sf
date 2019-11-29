@@ -457,7 +457,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		// convert to R:
 		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
 		OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
-		sfc.attr("crs") = get_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
+		sfc.attr("crs") = create_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
 		out[iGeom + poFDefn->GetFieldCount() + fid_column.size()] = sfc;
 	}
 

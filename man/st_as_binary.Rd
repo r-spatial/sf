@@ -8,12 +8,24 @@
 \usage{
 st_as_binary(x, ...)
 
-\method{st_as_binary}{sfc}(x, ..., EWKB = FALSE,
-  endian = .Platform$endian, pureR = FALSE, precision = attr(x,
-  "precision"), hex = FALSE)
+\method{st_as_binary}{sfc}(
+  x,
+  ...,
+  EWKB = FALSE,
+  endian = .Platform$endian,
+  pureR = FALSE,
+  precision = attr(x, "precision"),
+  hex = FALSE
+)
 
-\method{st_as_binary}{sfg}(x, ..., endian = .Platform$endian,
-  EWKB = FALSE, pureR = FALSE, hex = FALSE)
+\method{st_as_binary}{sfg}(
+  x,
+  ...,
+  endian = .Platform$endian,
+  EWKB = FALSE,
+  pureR = FALSE,
+  hex = FALSE
+)
 }
 \arguments{
 \item{x}{object to convert}

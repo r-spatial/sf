@@ -7,7 +7,7 @@
 \alias{coerce,sf,Spatial-method}
 \alias{coerce,sfc,Spatial-method}
 \alias{as_Spatial}
-\title{Methods to coerce simple features to \code{Spatial*} and \code{Spatial*DataFrame} objects}
+\title{Methods to coerce simple features to \verb{Spatial*} and \code{Spatial*DataFrame} objects}
 \usage{
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
 }
@@ -18,18 +18,18 @@ as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
 \item{cast}{logical; if \code{TRUE}, \code{\link[=st_cast]{st_cast()}} \code{from} before converting, so that e.g.
 \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.}
 
-\item{IDs}{character vector with IDs for the \code{Spatial*} geometries}
+\item{IDs}{character vector with IDs for the \verb{Spatial*} geometries}
 }
 \value{
 geometry-only object deriving from \code{Spatial}, of the appropriate class
 }
 \description{
 \code{\link[=as_Spatial]{as_Spatial()}} allows to convert \code{sf} and \code{sfc} to \code{Spatial*DataFrame} and
-\code{Spatial*} for \code{sp} compatibility. You can also use \code{as(x, "Spatial")} To transform
+\verb{Spatial*} for \code{sp} compatibility. You can also use \code{as(x, "Spatial")} To transform
 \code{sp} objects to \code{sf} and \code{sfc} with \code{as(x, "sf")}.
 }
 \details{
-\link[sp:sp]{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\code{SpatialPoint*}).
+\link[sp:sp]{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\verb{SpatialPoint*}).
 Other geometries must be two-dimensional (\code{XY}). Dimensions can be dropped using
 \code{\link[=st_zm]{st_zm()}} with \code{what = "M"} or \code{what = "ZM"}.
 

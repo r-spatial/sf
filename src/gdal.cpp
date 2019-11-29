@@ -116,16 +116,34 @@ void handle_error(OGRErr err) {
 	}
 }
 
+bool crs_is_na(Rcpp::List crs) {
+}
+
+OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
+	OGRSpatialReference *dest = NULL;
+	Rcpp::CharacterVector p4s = crs[1];
+	Rcpp::CharacterVector wkt2 = crs[2];
+	if (!(Rcpp::CharacterVector::is_na(p4s[0]) && Rcpp::CharacterVector::is_na(wkt2[0]))) {
+		dest = new OGRSpatialReference;
+		dest = handle_axis_order(dest);
+		if (Rcpp::CharacterVector::is_na(wkt2[0])) // then use proj4string
+			handle_error(dest->importFromProj4((const char *) (p4s[0])));
+		else
+			handle_error(dest->importFromWkt((const char *) (wkt2[0])));
+	}
+	return dest;
+}
+
 // [[Rcpp::export]]
-Rcpp::List CPL_crs_parameters(std::string p4s) {
+Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
+
+	OGRSpatialReference *srs = OGRSrs_from_crs(crs);
+
 	Rcpp::List out(7);
-	OGRErr Err;
-	OGRSpatialReference *srs = new OGRSpatialReference;
-	srs = handle_axis_order(srs);
-	handle_error(srs->importFromProj4(p4s.c_str()));
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
 	Rcpp::NumericVector InvFlattening(1);
+	OGRErr Err;
 	srs->GetInvFlattening(&Err);
 	if (Err == OGRERR_FAILURE)
 		InvFlattening(0) = NA_REAL; // #nocov
@@ -146,38 +164,46 @@ Rcpp::List CPL_crs_parameters(std::string p4s) {
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_crs_equivalent(std::string crs1, std::string crs2) {
-	Rcpp::LogicalVector out(1);
-	OGRSpatialReference *srs1 = new OGRSpatialReference;
-	srs1 = handle_axis_order(srs1);
-	handle_error(srs1->importFromProj4(crs1.c_str()));
-	OGRSpatialReference *srs2 = new OGRSpatialReference;
-	srs2 = handle_axis_order(srs2);
-	handle_error(srs2->importFromProj4(crs2.c_str()));
-	out(0) = (bool) srs1->IsSame(srs2);
+Rcpp::CharacterVector CPL_wkt2_from_epsg(Rcpp::IntegerVector epsg) {
+#if GDAL_VERSION_MAJOR >= 3
+	OGRSpatialReference *srs = new OGRSpatialReference;
+	srs = handle_axis_order(srs);
+	handle_error(srs->importFromEPSG(epsg[0]));
+	// const char **options = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
+	char *cp;
+	const char *options[3];
+	options[0] = "MULTILINE=YES";
+	options[1] = "FORMAT=WKT2";
+	options[2] = NULL;
+	if (srs->exportToWkt(&cp, options) != OGRERR_NONE)
+		Rcpp::stop("OGR error: cannot export to WKT2");
+	Rcpp::CharacterVector out(cp);
+	CPLFree(cp);
+	delete srs;
+	return(out);
+#else
+	return(Rcpp::CharacterVector::create(NA_STRING));
+	// Rcpp::stop("OGR error: export to WKT2 requires GDAL >= 3.0.0");
+#endif
+}
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
+
+	OGRSpatialReference *srs1 = OGRSrs_from_crs(crs1);
+	OGRSpatialReference *srs2 = OGRSrs_from_crs(crs2);
+	bool b = (bool) srs1->IsSame(srs2);
 	delete srs1;
 	delete srs2;
-	return out;
+	return Rcpp::LogicalVector::create(b);
 }
 
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref) {
+
 	Rcpp::List wkblst = CPL_write_wkb(sfc, false);
 	std::vector<OGRGeometry *> g(sfc.length());
-	OGRSpatialReference *local_srs = NULL;
-	Rcpp::List crs = sfc.attr("crs");
-	Rcpp::IntegerVector epsg(1);
-	epsg[0] = crs["epsg"];
-	Rcpp::String p4s = crs["proj4string"];
-	if (p4s != NA_STRING) {
-		Rcpp::CharacterVector cv = crs["proj4string"];
-		local_srs = new OGRSpatialReference;
-		local_srs = handle_axis_order(local_srs);
-		OGRErr err = local_srs->importFromProj4(cv[0]);
-		if (err != OGRERR_NONE) {
-			local_srs->Release(); // #nocov
-			handle_error(err);    // #nocov
-		}
-	}
+	OGRSpatialReference *local_srs = OGRSrs_from_crs(sfc.attr("crs"));
+
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
 		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
@@ -243,11 +269,12 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 	return proj4string;
 }
 
-Rcpp::List get_crs(OGRSpatialReference *ref) {
-	Rcpp::List crs(2);
+Rcpp::List create_crs(OGRSpatialReference *ref) {
+	Rcpp::List crs(3);
 	if (ref == NULL) {
 		crs(0) = NA_INTEGER;
 		crs(1) = Rcpp::CharacterVector::create(NA_STRING);
+		crs(2) = Rcpp::CharacterVector::create(NA_STRING);
 	} else {
 		const char *cp;
 		if (ref->AutoIdentifyEPSG() == OGRERR_NONE &&
@@ -256,10 +283,12 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 		else
 			crs(0) = NA_INTEGER;
 		crs(1) = p4s_from_spatial_reference(ref);
+		crs(2) = CPL_wkt2_from_epsg(crs(0));
 	}
-	Rcpp::CharacterVector nms(2);
+	Rcpp::CharacterVector nms(3);
 	nms(0) = "epsg";
 	nms(1) = "proj4string";
+	nms(2) = "wkt2";
 	crs.attr("names") = nms;
 	crs.attr("class") = "crs";
 	return crs;
@@ -268,7 +297,7 @@ Rcpp::List get_crs(OGRSpatialReference *ref) {
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	OGRwkbGeometryType type = wkbGeometryCollection;
 	Rcpp::List lst(g.size());
-	Rcpp::List crs = get_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
+	Rcpp::List crs = create_crs(g.size() && g[0] != NULL ? g[0]->getSpatialReference() : NULL);
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i] == NULL)
 			g[i] = OGRGeometryFactory::createGeometry(type); // #nocov
@@ -291,9 +320,9 @@ Rcpp::List CPL_crs_from_epsg(int epsg) {
 	OGRSpatialReference ref;
 	handle_axis_order(&ref);
 	if (ref.importFromEPSG(epsg) == OGRERR_NONE)
-		return get_crs(&ref);
+		return create_crs(&ref);
 	else
-		return get_crs(NULL);
+		return create_crs(NULL);
 }
 
 // [[Rcpp::export]]
@@ -306,7 +335,7 @@ Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt) {
 #else
 	handle_error(ref.importFromWkt( (const char*) cp));
 #endif
-	return get_crs(&ref);
+	return create_crs(&ref);
 }
 
 // [[Rcpp::export]]
@@ -374,12 +403,10 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 } // #nocov end
 
 // [[Rcpp::export]]
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs) {
 
-	// import proj4string:
-	OGRSpatialReference *dest = new OGRSpatialReference;
-	dest = handle_axis_order(dest);
-	handle_error(dest->importFromProj4((const char *) (proj4[0])));
+	// import crs:
+	OGRSpatialReference *dest = OGRSrs_from_crs(crs);
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
@@ -432,11 +459,11 @@ Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 	OGRSpatialReference ref;
 	handle_axis_order(&ref);
 	if (ref.importFromProj4(p4s[0]) == OGRERR_NONE)
-		return get_crs(&ref);
+		return create_crs(&ref);
 	else {
 		const char *cp = p4s[0];
 		Rf_warning("GDAL cannot import PROJ.4 string `%s': returning missing CRS\n", cp);
-		return get_crs(NULL);
+		return create_crs(NULL);
 	}
 }
 

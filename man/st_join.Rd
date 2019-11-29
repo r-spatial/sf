@@ -9,8 +9,15 @@
 \usage{
 st_join(x, y, join, ...)
 
-\method{st_join}{sf}(x, y, join = st_intersects, ..., suffix = c(".x",
-  ".y"), left = TRUE, largest = FALSE)
+\method{st_join}{sf}(
+  x,
+  y,
+  join = st_intersects,
+  ...,
+  suffix = c(".x", ".y"),
+  left = TRUE,
+  largest = FALSE
+)
 
 st_filter(x, y, ...)
 

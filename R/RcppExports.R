@@ -17,8 +17,12 @@ CPL_gdal_version <- function(what = "RELEASE_NAME") {
     .Call('_sf_CPL_gdal_version', PACKAGE = 'sf', what)
 }
 
-CPL_crs_parameters <- function(p4s) {
-    .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', p4s)
+CPL_crs_parameters <- function(crs) {
+    .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', crs)
+}
+
+CPL_wkt2_from_epsg <- function(epsg) {
+    .Call('_sf_CPL_wkt2_from_epsg', PACKAGE = 'sf', epsg)
 }
 
 CPL_crs_equivalent <- function(crs1, crs2) {
@@ -53,8 +57,8 @@ CPL_curve_to_linestring <- function(sfc) {
     .Call('_sf_CPL_curve_to_linestring', PACKAGE = 'sf', sfc)
 }
 
-CPL_transform <- function(sfc, proj4) {
-    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, proj4)
+CPL_transform <- function(sfc, crs) {
+    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs)
 }
 
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {

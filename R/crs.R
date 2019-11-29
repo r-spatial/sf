@@ -24,7 +24,7 @@ Ops.crs <- function(e1, e2) {
 			TRUE
 		else if (is.na(e1) || is.na(e2)) # only one of them is NA_crs_
 			FALSE
-		else CPL_crs_equivalent(e1$proj4string, e2$proj4string) # use GDAL's srs1->IsSame(srs2)
+		else CPL_crs_equivalent(e1, e2) # use GDAL's srs1->IsSame(srs2)
 	}
 }
 
@@ -43,10 +43,6 @@ Ops.crs <- function(e1, e2) {
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 #' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
 #' code) and \code{proj4string} (character).
-#' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
-#' (2) they have identical proj4string but one of them has a missing EPSG ID. As a consequence, equivalent
-#' but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
-#' are considered different.
 #' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
 #' @return Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 #' \code{proj4string} (length-1 character).
@@ -145,8 +141,12 @@ valid_proj4string = function(p4s) {
 # return crs object from crs, integer, or character string
 make_crs = function(x, wkt = FALSE) {
 
-	if (inherits(x, "CRS"))
-		x = x@projargs
+	if (inherits(x, "CRS")) {
+		x = if (!is.null(comment(x)))
+				comment(x) # WKT2
+			else
+				x@projargs
+	}
 
 	if (wkt)
 		CPL_crs_from_wkt(x)
@@ -255,7 +255,7 @@ udunits_from_proj = list(
 
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
-	ret = structure(CPL_crs_parameters(x$proj4string),
+	ret = structure(CPL_crs_parameters(x),
 		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal", 
 			"IsVertical", "WktPretty", "Wkt"))
 	units(ret$SemiMajor) = as_units("m")
@@ -288,7 +288,11 @@ st_as_text.crs = function(x, ..., pretty = FALSE) {
 #' @details
 #' \code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
 #' @export
-NA_crs_ = structure(list(epsg = NA_integer_, proj4string = NA_character_), class = "crs")
+NA_crs_ = structure(
+	list(epsg = NA_integer_, 
+		proj4string = NA_character_,
+		wkt2 = NA_character_),
+	class = "crs")
 
 #' @name st_crs
 #' @export
@@ -326,25 +330,30 @@ print.crs = function(x, ...) {
     cat(" NA\n")
   } else {
     cat("\n")
+	# print EPSG code:
     if (is.na(x$epsg))
        cat("  No EPSG code\n")
     else
        cat("  EPSG:", x$epsg, "\n")
-    if (is.na(x$proj4string))
-      stop("  invalid crs: please report an issue") # nocov
-    else
+
+	# print proj4string:
+    if (! is.na(x$proj4string))
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
+
+	# print wkt2:
+    if (! is.na(x$wkt2))
+      cat("  wkt2:\n", x$wkt2, "\n", sep = "")
   }
 }
 
 #' @export
 st_crs.Raster = function(x, ...) {
-	st_crs(x@crs@projargs) # nocov
+	st_crs(x@crs) # nocov
 }
 
 #' @export
 st_crs.Spatial = function(x, ...) {
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	st_crs(sp::proj4string(x)) # nocov
+	st_crs(x@proj4string) # nocov
 }

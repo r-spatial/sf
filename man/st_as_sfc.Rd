@@ -19,8 +19,14 @@
 \alias{st_as_sfc.map}
 \title{Convert foreign geometry object to an sfc object}
 \usage{
-sf_as_sfc.pq_geometry(x, ..., EWKB = TRUE, spatialite = FALSE,
-  pureR = FALSE, crs = NA_crs_)
+sf_as_sfc.pq_geometry(
+  x,
+  ...,
+  EWKB = TRUE,
+  spatialite = FALSE,
+  pureR = FALSE,
+  crs = NA_crs_
+)
 
 \method{st_as_sfc}{list}(x, ..., crs = NA_crs_)
 
@@ -28,13 +34,18 @@ sf_as_sfc.pq_geometry(x, ..., EWKB = TRUE, spatialite = FALSE,
 
 \method{st_as_sfc}{bbox}(x, ...)
 
-\method{st_as_sfc}{WKB}(x, ..., EWKB = FALSE, spatialite = FALSE,
-  pureR = FALSE, crs = NA_crs_)
+\method{st_as_sfc}{WKB}(
+  x,
+  ...,
+  EWKB = FALSE,
+  spatialite = FALSE,
+  pureR = FALSE,
+  crs = NA_crs_
+)
 
 \method{st_as_sfc}{raw}(x, ...)
 
-\method{st_as_sfc}{character}(x, crs = NA_integer_, ...,
-  GeoJSON = FALSE)
+\method{st_as_sfc}{character}(x, crs = NA_integer_, ..., GeoJSON = FALSE)
 
 \method{st_as_sfc}{factor}(x, ...)
 
@@ -46,11 +57,9 @@ st_as_sfc(x, ...)
 
 \method{st_as_sfc}{SpatialMultiPoints}(x, ..., precision = 0)
 
-\method{st_as_sfc}{SpatialLines}(x, ..., precision = 0,
-  forceMulti = FALSE)
+\method{st_as_sfc}{SpatialLines}(x, ..., precision = 0, forceMulti = FALSE)
 
-\method{st_as_sfc}{SpatialPolygons}(x, ..., precision = 0,
-  forceMulti = FALSE)
+\method{st_as_sfc}{SpatialPolygons}(x, ..., precision = 0, forceMulti = FALSE)
 
 \method{st_as_sfc}{map}(x, ...)
 }
