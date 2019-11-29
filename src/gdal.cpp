@@ -294,20 +294,12 @@ Rcpp::List create_crs(OGRSpatialReference *ref) {
 		crs(2) = Rcpp::CharacterVector::create(NA_STRING);
 	} else {
 		const char *cp;
-		bool epsg_is_na = true;
 		if (ref->AutoIdentifyEPSG() == OGRERR_NONE &&
-				(cp = ref->GetAuthorityCode(NULL)) != NULL) {
+				(cp = ref->GetAuthorityCode(NULL)) != NULL)
 			crs(0) = atoi(cp);
-			epsg_is_na = false;
-		} else
+		else
 			crs(0) = NA_INTEGER;
 		crs(1) = p4s_from_spatial_reference(ref);
-		/*
-		if (epsg_is_na)
-			crs(2) = Rcpp::CharacterVector::create(NA_STRING);
-		else
-			crs(2) = CPL_wkt2_from_epsg(crs(0));
-		*/
 		crs(2) = wkt2_from_spatial_reference(ref);
 	}
 	Rcpp::CharacterVector nms(3);
