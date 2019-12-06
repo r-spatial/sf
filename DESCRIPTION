@@ -34,7 +34,7 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0002-4035-0289")),
       person(given = "Kirill",
-             family = "Müller",
+             family = "M<U+00FC>ller",
              role = "ctb"),
       person(given = "Thomas Lin",
              family = "Pedersen",
@@ -99,7 +99,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0)
 Collate: 
