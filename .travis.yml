@@ -3,7 +3,7 @@ language: r
 r:
   - release
   - devel
-  - oldrel # breaks on sf_0.7-2 not available
+#  - oldrel # breaks on sf_0.7-2 not available
 
 deploy.skip_cleanup: true
 
