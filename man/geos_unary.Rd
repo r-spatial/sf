@@ -16,8 +16,14 @@
 \alias{st_segmentize}
 \title{Geometric unary operations on simple feature geometry sets}
 \usage{
-st_buffer(x, dist, nQuadSegs = 30, endCapStyle = "ROUND",
-  joinStyle = "ROUND", mitreLimit = 1)
+st_buffer(
+  x,
+  dist,
+  nQuadSegs = 30,
+  endCapStyle = "ROUND",
+  joinStyle = "ROUND",
+  mitreLimit = 1
+)
 
 st_boundary(x)
 

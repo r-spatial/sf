@@ -14,9 +14,17 @@
 \usage{
 st_as_sf(x, ...)
 
-\method{st_as_sf}{data.frame}(x, ..., agr = NA_agr_, coords, wkt,
-  dim = "XYZ", remove = TRUE, na.fail = TRUE,
-  sf_column_name = NULL)
+\method{st_as_sf}{data.frame}(
+  x,
+  ...,
+  agr = NA_agr_,
+  coords,
+  wkt,
+  dim = "XYZ",
+  remove = TRUE,
+  na.fail = TRUE,
+  sf_column_name = NULL
+)
 
 \method{st_as_sf}{sf}(x, ...)
 

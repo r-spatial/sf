@@ -8,17 +8,29 @@
 \title{Given an object with geometries of type \code{GEOMETRY} or \code{GEOMETRYCOLLECTION},
 return an object consisting only of elements of the specified type.}
 \usage{
-st_collection_extract(x, type = c("POLYGON", "POINT", "LINESTRING"),
-  warn = FALSE)
+st_collection_extract(
+  x,
+  type = c("POLYGON", "POINT", "LINESTRING"),
+  warn = FALSE
+)
 
-\method{st_collection_extract}{sfg}(x, type = c("POLYGON", "POINT",
-  "LINESTRING"), warn = FALSE)
+\method{st_collection_extract}{sfg}(
+  x,
+  type = c("POLYGON", "POINT", "LINESTRING"),
+  warn = FALSE
+)
 
-\method{st_collection_extract}{sfc}(x, type = c("POLYGON", "POINT",
-  "LINESTRING"), warn = FALSE)
+\method{st_collection_extract}{sfc}(
+  x,
+  type = c("POLYGON", "POINT", "LINESTRING"),
+  warn = FALSE
+)
 
-\method{st_collection_extract}{sf}(x, type = c("POLYGON", "POINT",
-  "LINESTRING"), warn = FALSE)
+\method{st_collection_extract}{sf}(
+  x,
+  type = c("POLYGON", "POINT", "LINESTRING"),
+  warn = FALSE
+)
 }
 \arguments{
 \item{x}{an object of class \code{sf}, \code{sfc} or \code{sfg} that has

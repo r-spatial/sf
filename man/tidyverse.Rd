@@ -53,22 +53,49 @@ summarise.sf(.data, ..., .dots, do_union = TRUE)
 
 distinct.sf(.data, ..., .keep_all = FALSE)
 
-gather.sf(data, key, value, ..., na.rm = FALSE, convert = FALSE,
-  factor_key = FALSE)
+gather.sf(
+  data,
+  key,
+  value,
+  ...,
+  na.rm = FALSE,
+  convert = FALSE,
+  factor_key = FALSE
+)
 
-spread.sf(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
-  sep = NULL)
+spread.sf(
+  data,
+  key,
+  value,
+  fill = NA,
+  convert = FALSE,
+  drop = TRUE,
+  sep = NULL
+)
 
-sample_n.sf(tbl, size, replace = FALSE, weight = NULL,
-  .env = parent.frame())
+sample_n.sf(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame())
 
-sample_frac.sf(tbl, size = 1, replace = FALSE, weight = NULL,
-  .env = parent.frame())
+sample_frac.sf(
+  tbl,
+  size = 1,
+  replace = FALSE,
+  weight = NULL,
+  .env = parent.frame()
+)
 
 nest.sf(.data, ...)
 
-separate.sf(data, col, into, sep = "[^[:alnum:]]+", remove = TRUE,
-  convert = FALSE, extra = "warn", fill = "warn", ...)
+separate.sf(
+  data,
+  col,
+  into,
+  sep = "[^[:alnum:]]+",
+  remove = TRUE,
+  convert = FALSE,
+  extra = "warn",
+  fill = "warn",
+  ...
+)
 
 separate_rows.sf(data, ..., sep = "[^[:alnum:]]+", convert = FALSE)
 
@@ -76,23 +103,17 @@ unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
 
-inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+right_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+full_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
-anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
-  ...)
+anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
 \item{.data}{data object of class \link{sf}}
