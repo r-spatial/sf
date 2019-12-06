@@ -24,7 +24,8 @@ Ops.crs <- function(e1, e2) {
 			TRUE
 		else if (is.na(e1) || is.na(e2)) # only one of them is NA_crs_
 			FALSE
-		else CPL_crs_equivalent(e1, e2) # use GDAL's srs1->IsSame(srs2)
+		else 
+			isTRUE(try(CPL_crs_equivalent(e1, e2), silent = TRUE)) # use GDAL's srs1->IsSame(srs2)
 	}
 }
 

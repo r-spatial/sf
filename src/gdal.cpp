@@ -287,6 +287,7 @@ Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref) {
 }
 
 Rcpp::List create_crs(OGRSpatialReference *ref) {
+	handle_axis_order(ref);
 	Rcpp::List crs(3);
 	if (ref == NULL) {
 		crs(0) = NA_INTEGER;
@@ -475,10 +476,8 @@ Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool qui
 Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s) {
 	OGRSpatialReference ref;
 	handle_axis_order(&ref);
-	if (ref.importFromProj4((const char *) p4s[0]) == OGRERR_NONE) {
-		// Rcpp::Rcout << "got here" << std::endl;
+	if (ref.importFromProj4((const char *) p4s[0]) == OGRERR_NONE)
 		return create_crs(&ref);
-	}
 	else {
 		const char *cp = p4s[0];
 		Rf_warning("GDAL cannot import PROJ.4 string `%s': returning missing CRS\n", cp);
