@@ -14,8 +14,7 @@
 \usage{
 st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE,
-  use_gdal = TRUE)
+\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE, use_gdal = TRUE)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -25,14 +24,11 @@ st_proj_info(type = "proj")
 
 st_wrap_dateline(x, options, quiet)
 
-\method{st_wrap_dateline}{sfc}(x, options = "WRAPDATELINE=YES",
-  quiet = TRUE)
+\method{st_wrap_dateline}{sfc}(x, options = "WRAPDATELINE=YES", quiet = TRUE)
 
-\method{st_wrap_dateline}{sf}(x, options = "WRAPDATELINE=YES",
-  quiet = TRUE)
+\method{st_wrap_dateline}{sf}(x, options = "WRAPDATELINE=YES", quiet = TRUE)
 
-\method{st_wrap_dateline}{sfg}(x, options = "WRAPDATELINE=YES",
-  quiet = TRUE)
+\method{st_wrap_dateline}{sfg}(x, options = "WRAPDATELINE=YES", quiet = TRUE)
 }
 \arguments{
 \item{x}{object of class sf, sfc or sfg}

@@ -12,11 +12,30 @@
 
 .degAxis(side, at, labels, ..., lon, lat, ndiscr, reset)
 
-.image_scale(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-  at = NULL, ..., axes = FALSE, key.length, logz = FALSE)
+.image_scale(
+  z,
+  col,
+  breaks = NULL,
+  key.pos,
+  add.axis = TRUE,
+  at = NULL,
+  ...,
+  axes = FALSE,
+  key.length,
+  logz = FALSE
+)
 
-.image_scale_factor(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-  ..., axes = FALSE, key.width, key.length)
+.image_scale_factor(
+  z,
+  col,
+  breaks = NULL,
+  key.pos,
+  add.axis = TRUE,
+  ...,
+  axes = FALSE,
+  key.width,
+  key.length
+)
 }
 \arguments{
 \item{bb}{ignore}

@@ -12,30 +12,56 @@
 \alias{gdal_rasterize}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
 \usage{
-gdal_read(x, ..., options = character(0), driver = character(0),
-  read_data = TRUE, NA_value = NA_real_,
-  RasterIO_parameters = list())
+gdal_read(
+  x,
+  ...,
+  options = character(0),
+  driver = character(0),
+  read_data = TRUE,
+  NA_value = NA_real_,
+  RasterIO_parameters = list()
+)
 
-gdal_write(x, ..., file, driver = "GTiff", options = character(0),
-  type = "Float32", NA_value = NA_real_, geotransform,
-  update = FALSE)
+gdal_write(
+  x,
+  ...,
+  file,
+  driver = "GTiff",
+  options = character(0),
+  type = "Float32",
+  NA_value = NA_real_,
+  geotransform,
+  update = FALSE
+)
 
 gdal_inv_geotransform(gt)
 
 gdal_crs(file, options = character(0))
 
-gdal_metadata(file, domain_item = character(0), options = character(0),
-  parse = TRUE)
+gdal_metadata(
+  file,
+  domain_item = character(0),
+  options = character(0),
+  parse = TRUE
+)
 
 gdal_subdatasets(file, options = character(0), name = TRUE)
 
-gdal_polygonize(x, mask = NULL, file = tempfile(), driver = "GTiff",
-  use_integer = TRUE, geotransform,
+gdal_polygonize(
+  x,
+  mask = NULL,
+  file = tempfile(),
+  driver = "GTiff",
+  use_integer = TRUE,
+  geotransform,
   breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
-  use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...)
+  use_contours = FALSE,
+  contour_lines = FALSE,
+  connect8 = FALSE,
+  ...
+)
 
-gdal_rasterize(sf, x, gt, file, driver = "GTiff",
-  options = character())
+gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}

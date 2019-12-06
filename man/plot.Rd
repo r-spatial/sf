@@ -18,50 +18,134 @@
 \alias{sf.colors}
 \title{plot sf object}
 \usage{
-\method{plot}{sf}(x, y, ..., main, pal = NULL, nbreaks = 10,
-  breaks = "pretty", max.plot = if (is.null(n <-
-  options("sf_max.plot")[[1]])) 9 else n, key.pos = get_key_pos(x, ...),
-  key.length = 0.618, key.width = lcm(1.8), reset = TRUE,
-  logz = FALSE)
+\method{plot}{sf}(
+  x,
+  y,
+  ...,
+  main,
+  pal = NULL,
+  nbreaks = 10,
+  breaks = "pretty",
+  max.plot = if (is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
+  key.pos = get_key_pos(x, ...),
+  key.length = 0.618,
+  key.width = lcm(1.8),
+  reset = TRUE,
+  logz = FALSE
+)
 
 get_key_pos(x, ...)
 
-\method{plot}{sfc_POINT}(x, y, ..., pch = 1, cex = 1, col = 1,
-  bg = 0, lwd = 1, lty = 1, type = "p", add = FALSE)
+\method{plot}{sfc_POINT}(
+  x,
+  y,
+  ...,
+  pch = 1,
+  cex = 1,
+  col = 1,
+  bg = 0,
+  lwd = 1,
+  lty = 1,
+  type = "p",
+  add = FALSE
+)
 
-\method{plot}{sfc_MULTIPOINT}(x, y, ..., pch = 1, cex = 1, col = 1,
-  bg = 0, lwd = 1, lty = 1, type = "p", add = FALSE)
+\method{plot}{sfc_MULTIPOINT}(
+  x,
+  y,
+  ...,
+  pch = 1,
+  cex = 1,
+  col = 1,
+  bg = 0,
+  lwd = 1,
+  lty = 1,
+  type = "p",
+  add = FALSE
+)
 
-\method{plot}{sfc_LINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1,
-  pch = 1, type = "l", add = FALSE)
+\method{plot}{sfc_LINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = "l", add = FALSE)
 
 \method{plot}{sfc_CIRCULARSTRING}(x, y, ...)
 
-\method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1,
-  col = 1, pch = 1, type = "l", add = FALSE)
+\method{plot}{sfc_MULTILINESTRING}(x, y, ..., lty = 1, lwd = 1, col = 1, pch = 1, type = "l", add = FALSE)
 
-\method{plot}{sfc_POLYGON}(x, y, ..., lty = 1, lwd = 1, col = NA,
-  cex = 1, pch = NA, border = 1, add = FALSE, rule = "evenodd")
+\method{plot}{sfc_POLYGON}(
+  x,
+  y,
+  ...,
+  lty = 1,
+  lwd = 1,
+  col = NA,
+  cex = 1,
+  pch = NA,
+  border = 1,
+  add = FALSE,
+  rule = "evenodd"
+)
 
-\method{plot}{sfc_MULTIPOLYGON}(x, y, ..., lty = 1, lwd = 1,
-  col = NA, border = 1, add = FALSE, rule = "evenodd")
+\method{plot}{sfc_MULTIPOLYGON}(
+  x,
+  y,
+  ...,
+  lty = 1,
+  lwd = 1,
+  col = NA,
+  border = 1,
+  add = FALSE,
+  rule = "evenodd"
+)
 
-\method{plot}{sfc_GEOMETRYCOLLECTION}(x, y, ..., pch = 1, cex = 1,
-  bg = 0, lty = 1, lwd = 1, col = 1, border = 1, add = FALSE)
+\method{plot}{sfc_GEOMETRYCOLLECTION}(
+  x,
+  y,
+  ...,
+  pch = 1,
+  cex = 1,
+  bg = 0,
+  lty = 1,
+  lwd = 1,
+  col = 1,
+  border = 1,
+  add = FALSE
+)
 
-\method{plot}{sfc_GEOMETRY}(x, y, ..., pch = 1, cex = 1, bg = 0,
-  lty = 1, lwd = 1, col = ifelse(st_dimension(x) == 2, NA, 1),
-  border = 1, add = FALSE)
+\method{plot}{sfc_GEOMETRY}(
+  x,
+  y,
+  ...,
+  pch = 1,
+  cex = 1,
+  bg = 0,
+  lty = 1,
+  lwd = 1,
+  col = ifelse(st_dimension(x) == 2, NA, 1),
+  border = 1,
+  add = FALSE
+)
 
 \method{plot}{sfg}(x, ...)
 
-plot_sf(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE,
-  bgc = par("bg"), ..., xaxs, yaxs, lab, setParUsrBB = FALSE,
-  bgMap = NULL, expandBB = c(0, 0, 0, 0), graticule = NA_crs_,
-  col_graticule = "grey", border)
+plot_sf(
+  x,
+  xlim = NULL,
+  ylim = NULL,
+  asp = NA,
+  axes = FALSE,
+  bgc = par("bg"),
+  ...,
+  xaxs,
+  yaxs,
+  lab,
+  setParUsrBB = FALSE,
+  bgMap = NULL,
+  expandBB = c(0, 0, 0, 0),
+  graticule = NA_crs_,
+  col_graticule = "grey",
+  border
+)
 
-sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1,
-  categorical = FALSE)
+sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}

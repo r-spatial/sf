@@ -35,6 +35,6 @@ st_relate(grd, pattern = "****1****") # sides, not corners, internals
 st_relate(grd, pattern = "****0****") # only corners touch
 st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
 st_rook(grd)
-# queen neighbours, see \\url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
+# queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
 st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 }

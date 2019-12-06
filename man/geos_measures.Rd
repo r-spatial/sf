@@ -11,9 +11,16 @@ st_area(x, ...)
 
 st_length(x)
 
-st_distance(x, y, ..., dist_fun, by_element = FALSE,
+st_distance(
+  x,
+  y,
+  ...,
+  dist_fun,
+  by_element = FALSE,
   which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"),
-  par = 0, tolerance = 0)
+  par = 0,
+  tolerance = 0
+)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}

@@ -4,9 +4,16 @@
 \alias{st_graticule}
 \title{Compute graticules and their parameters}
 \usage{
-st_graticule(x = c(-180, -90, 180, 90), crs = st_crs(x),
-  datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
-  margin = 0.001)
+st_graticule(
+  x = c(-180, -90, 180, 90),
+  crs = st_crs(x),
+  datum = st_crs(4326),
+  ...,
+  lon = NULL,
+  lat = NULL,
+  ndiscr = 100,
+  margin = 0.001
+)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box given as (minx, miny, maxx, maxy).}

@@ -7,9 +7,17 @@
 \alias{print.sf}
 \title{Create sf object}
 \usage{
-st_sf(..., agr = NA_agr_, row.names,
-  stringsAsFactors = default.stringsAsFactors(), crs, precision,
-  sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE)
+st_sf(
+  ...,
+  agr = NA_agr_,
+  row.names,
+  stringsAsFactors = default.stringsAsFactors(),
+  crs,
+  precision,
+  sf_column_name = NULL,
+  check_ring_dir = FALSE,
+  sfc_last = TRUE
+)
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
 
