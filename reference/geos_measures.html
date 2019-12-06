@@ -157,9 +157,16 @@
 
 <span class='fu'>st_length</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='no'>dist_fun</span>, <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='fu'>st_distance</span>(
+  <span class='no'>x</span>,
+  <span class='no'>y</span>,
+  <span class='no'>...</span>,
+  <span class='no'>dist_fun</span>,
+  <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>which</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span>(<span class='fu'><a href='st_is_longlat.html'>st_is_longlat</a></span>(<span class='no'>x</span>)), <span class='st'>"Great Circle"</span>, <span class='st'>"Euclidean"</span>),
-  <span class='kw'>par</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+  <span class='kw'>par</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

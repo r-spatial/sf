@@ -156,9 +156,17 @@
     <pre class="usage"><span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>, <span class='no'>coords</span>, <span class='no'>wkt</span>,
-  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>, <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>sf_column_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>st_as_sf</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>agr</span> <span class='kw'>=</span> <span class='no'>NA_agr_</span>,
+  <span class='no'>coords</span>,
+  <span class='no'>wkt</span>,
+  <span class='kw'>dim</span> <span class='kw'>=</span> <span class='st'>"XYZ"</span>,
+  <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>na.fail</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>sf_column_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)

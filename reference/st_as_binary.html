@@ -156,13 +156,25 @@
     <pre class="usage"><span class='fu'>st_as_binary</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_binary</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>, <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>x</span>,
-  <span class='st'>"precision"</span>), <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_binary</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>x</span>, <span class='st'>"precision"</span>),
+  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_as_binary</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
-  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_as_binary</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
+  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

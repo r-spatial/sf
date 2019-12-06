@@ -180,9 +180,9 @@ brew install gdal</code></pre>
 <div id="ubuntu" class="section level4">
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
-<p>Dependencies for recent versions of Ubuntu are available in the official repositories.</p>
+<p>Dependencies for recent (non-LTS, later than bionic) versions of Ubuntu are available in the official repositories; install them with</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
-<p>To install the dependencies on older versions of Ubuntu, either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories:</p>
+<p>To install the dependencies on LTS versions of Ubuntu (xenial, bionic), either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories and use:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="fu">sudo</span> apt-get update</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>

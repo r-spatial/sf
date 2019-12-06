@@ -153,8 +153,14 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>sf_as_sfc.pq_geometry</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+    <pre class="usage"><span class='fu'>sf_as_sfc.pq_geometry</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>
+)
 
 <span class='co'># S3 method for list</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
@@ -166,15 +172,20 @@
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for WKB</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>)
+<span class='fu'>st_as_sfc</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>spatialite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>
+)
 
 <span class='co'># S3 method for raw</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for character</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='no'>...</span>,
-  <span class='kw'>GeoJSON</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>, <span class='no'>...</span>, <span class='kw'>GeoJSON</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for factor</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -191,12 +202,10 @@
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='co'># S3 method for SpatialLines</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for SpatialPolygons</span>
-<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>forceMulti</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for map</span>
 <span class='fu'>st_as_sfc</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
