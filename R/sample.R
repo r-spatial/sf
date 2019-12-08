@@ -71,17 +71,17 @@
 #' @export
 st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
-	if (any(size %% 1 != 0))
+	if (!missing(size) && any(size %% 1 != 0))
 		stop("size should be an integer")
-	if (length(size) > 1) { # recurse:
+	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
 		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,
-					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
-					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
-					 st_poly_sample(x, size, ..., type = type))
+					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
+					 st_ll_sample(st_cast(x, "LINESTRING"), size = size, ..., type = type),
+					 st_poly_sample(x, size = size, ..., type = type))
 		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if(diff > 0) { # too few points
@@ -98,41 +98,64 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
-	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
-	a1 = as.numeric(sum(st_area(x)))
-	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
-	# for instance has 0 st_area
-	if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
-		size = round(size * a0 / a1)
-	bb = st_bbox(x)
+	if (type %in% c("hexagonal", "regular", "random")) {
 
-	if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
-		message_longlat("st_sample")
+		if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
+			message_longlat("st_sample")
 
-	pts = if (type == "hexagonal") {
-		dx = sqrt(a0 / size / (sqrt(3)/2))
-		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
-	} else if (type == "regular") {
-		dx = as.numeric(sqrt(a0 / size))
-		offset = c((offset[1] - bb["xmin"]) %% dx,
-			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
-		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
-		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
-	} else if (type == "random") {
-		lon = runif(size, bb[1], bb[3])
-		lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-			toRad = pi/180
-			lat0 = (sin(bb[2] * toRad) + 1)/2
-			lat1 = (sin(bb[4] * toRad) + 1)/2
-			y = runif(size, lat0, lat1)
-			asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-		} else
-			runif(size, bb[2], bb[4])
-		m = cbind(lon, lat)
-		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-	} else
-		stop(paste("sampling type", type, "not implemented for polygons"))
-	pts[lengths(st_intersects(pts, x)) > 0]
+		area_adjust = function(x, size) {
+			a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
+			a1 = as.numeric(sum(st_area(x)))
+			# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
+			# for instance has 0 st_area
+			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
+				round(size * a0 / a1)
+			else
+				size
+		}
+		bb = st_bbox(x)
+
+		pts = if (type == "hexagonal") {
+			size = area_adjust(x, size)
+			dx = sqrt(a0 / size / (sqrt(3)/2))
+			hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
+		} else if (type == "regular") {
+			size = area_adjust(x, size)
+			dx = as.numeric(sqrt(a0 / size))
+			offset = c((offset[1] - bb["xmin"]) %% dx,
+				(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+			n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+			st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+		} else if (type == "random") {
+			size = area_adjust(x, size)
+			lon = runif(size, bb[1], bb[3])
+			lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
+				toRad = pi/180
+				lat0 = (sin(bb[2] * toRad) + 1)/2
+				lat1 = (sin(bb[4] * toRad) + 1)/2
+				y = runif(size, lat0, lat1)
+				asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
+			} else
+				runif(size, bb[2], bb[4])
+			m = cbind(lon, lat)
+			st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+		}
+		pts[lengths(st_intersects(pts, x)) > 0]
+	} else { # try to go into spatstat
+		if (!requireNamespace("spatstat", quietly = TRUE))
+			stop("package spatstat required, please install it first")
+		if (!requireNamespace("maptools", quietly = TRUE))
+			stop("package maptools required, please install it first")
+		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat")), silent = TRUE)
+		if (inherits(spatstat_fun, "try-error"))
+			stop(paste0("r", type), " is not an exported function from spatstat.")
+		pts = try(spatstat_fun(..., win = maptools::as.owin.SpatialPolygons(as(x, "Spatial"))), silent = TRUE)
+		if (inherits(pts, "try-error"))
+			stop("The spatstat function ", paste0("r", type),
+             " did not return a valid result. Consult the help file.\n",
+             "Error message from spatstat:\n", pts)
+		st_as_sf(pts)[-1,]
+	}
 }
 
 st_multipoints_sample = function(x, size, ..., type = "random") {
