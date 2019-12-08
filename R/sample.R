@@ -103,31 +103,24 @@ st_poly_sample = function(x, size, ..., type = "random",
 		if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
 			message_longlat("st_sample")
 
-		area_adjust = function(x, size) {
-			a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
-			a1 = as.numeric(sum(st_area(x)))
-			# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
-			# for instance has 0 st_area
-			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
-				round(size * a0 / a1)
-			else
-				size
-		}
+		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
+		a1 = as.numeric(sum(st_area(x)))
+		# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
+		# for instance has 0 st_area
+		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
+			size = round(size * a0 / a1)
 		bb = st_bbox(x)
 
 		pts = if (type == "hexagonal") {
-			size = area_adjust(x, size)
 			dx = sqrt(a0 / size / (sqrt(3)/2))
 			hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
 		} else if (type == "regular") {
-			size = area_adjust(x, size)
 			dx = as.numeric(sqrt(a0 / size))
 			offset = c((offset[1] - bb["xmin"]) %% dx,
 				(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 			n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 			st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
 		} else if (type == "random") {
-			size = area_adjust(x, size)
 			lon = runif(size, bb[1], bb[3])
 			lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
 				toRad = pi/180
@@ -140,7 +133,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 			m = cbind(lon, lat)
 			st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 		}
-		pts[lengths(st_intersects(pts, x)) > 0]
+		pts[x]
 	} else { # try to go into spatstat
 		if (!requireNamespace("spatstat", quietly = TRUE))
 			stop("package spatstat required, please install it first")
