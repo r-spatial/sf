@@ -17,6 +17,7 @@
 \alias{NA_crs_}
 \alias{is.na.crs}
 \alias{$.crs}
+\alias{st_axis_order}
 \title{Retrieve coordinate reference system from object}
 \format{An object of class \code{crs} of length 3.}
 \usage{
@@ -49,6 +50,8 @@ NA_crs_
 \method{is.na}{crs}(x)
 
 \method{$}{crs}(x, name)
+
+st_axis_order(authority_compliant = logical(0))
 }
 \arguments{
 \item{x}{numeric, character, or object of class \link{sf} or \link{sfc}}
@@ -68,12 +71,18 @@ database, but avoid it as much as possible.}
 \item{value}{one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).}
 
 \item{name}{element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
+
+\item{authority_compliant}{logical; specify whether axis order should be
+handled compliant to the authority; if omitted, the current value is returned.}
 }
 \value{
 If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
 Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 \code{proj4string} (length-1 character).
+
+\code{st_axis_order} returns the (logical) value, indicating whether 
+coordinate axes are interpreted authority compliant.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
@@ -94,6 +103,13 @@ and +datum=WGS84, literally.
 If both \code{epsg} and \code{proj4string} are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when \code{epsg} is not consistent with a proj4string that is already present.
 
 \code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
+
+\code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
+indicates axes order according to the authority 
+(e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
+indicates the usual GIS (display) order (longitude,latitude). This can be useful
+when data are read, or have to be written, with coordinates in authority compliant order.
+The return value is the current state of this (\code{FALSE}, by default).
 }
 \examples{
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
@@ -111,5 +127,11 @@ st_crs("+init=epsg:3857")$epsg
 st_crs("+init=epsg:3857")$proj4string
 st_crs("+init=epsg:3857 +units=m")$b     # numeric
 st_crs("+init=epsg:3857 +units=m")$units # character
+pt = st_sfc(st_point(c(0, 60)), crs = 4326)
+(old = st_axis_order()) # query default: FALSE means interpret pt as (longitude latitude)
+st_transform(pt, 3857)[[1]]
+st_axis_order(TRUE) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+st_transform(pt, 3857)[[1]]
+st_axis_order(old)
 }
 \keyword{datasets}

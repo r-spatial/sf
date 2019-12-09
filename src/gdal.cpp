@@ -537,10 +537,21 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 	return Rcpp::LogicalVector::create(withGEOS);
 }
 
-OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr, bool traditional) {
+bool axis_order_authority_compliant = false;
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
+	if (authority_compliant.size() > 1)
+		Rcpp::stop("axis_order_authority_compliant should have length 0 or 1");
+	if (authority_compliant.size() == 1)
+		axis_order_authority_compliant = authority_compliant[0];
+	return Rcpp::LogicalVector::create(axis_order_authority_compliant);
+}
+
+OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
 #ifdef HAVE250
 	if (sr != NULL) {
-		if (traditional)
+		if (!axis_order_authority_compliant)
 			sr->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
 		else
 			sr->SetAxisMappingStrategy(OAMS_AUTHORITY_COMPLIANT);

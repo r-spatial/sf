@@ -358,3 +358,27 @@ st_crs.Spatial = function(x, ...) {
 		stop("package sp required, please install it first")
 	st_crs(x@proj4string) # nocov
 }
+
+#' @name st_crs
+#' @param authority_compliant logical; specify whether axis order should be
+#' handled compliant to the authority; if omitted, the current value is returned.
+#' @details 
+#' \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
+#' indicates axes order according to the authority 
+#' (e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
+#' indicates the usual GIS (display) order (longitude,latitude). This can be useful
+#' when data are read, or have to be written, with coordinates in authority compliant order.
+#' The return value is the current state of this (\code{FALSE}, by default).
+#' @return \code{st_axis_order} returns the (logical) value, indicating whether 
+#' coordinate axes are interpreted authority compliant. 
+#' @export
+#' @examples
+#' pt = st_sfc(st_point(c(0, 60)), crs = 4326)
+#' (old = st_axis_order()) # query default: FALSE means interpret pt as (longitude latitude)
+#' st_transform(pt, 3857)[[1]]
+#' st_axis_order(TRUE) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+#' st_transform(pt, 3857)[[1]]
+#' st_axis_order(old)
+st_axis_order = function(authority_compliant = logical(0)) {
+	CPL_axis_order_authority_compliant(authority_compliant)
+}

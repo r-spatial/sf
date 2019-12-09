@@ -81,6 +81,10 @@ CPL_gdal_with_geos <- function() {
     .Call('_sf_CPL_gdal_with_geos', PACKAGE = 'sf')
 }
 
+CPL_axis_order_authority_compliant <- function(authority_compliant) {
+    .Call('_sf_CPL_axis_order_authority_compliant', PACKAGE = 'sf', authority_compliant)
+}
+
 CPL_area <- function(sfc) {
     .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
 }
