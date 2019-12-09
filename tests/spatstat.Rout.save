@@ -114,7 +114,47 @@ First 10 features:
 8   point        POINT (843281.2 287246)
 9   point        POINT (648479.4 235471)
 10  point      POINT (852595.8 267252.6)
+Warning message:
+In showSRID(uprojargs, format = "PROJ", multiline = "NO") :
+  Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,
+ but +towgs84= values preserved
+> 
+> # st_sample going the spatstat way
+> x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
+> try(pts <- st_sample(x, type = "thomas"))
+Error in st_poly_sample(x, size = size, ..., type = type) : 
+  rthomas is not an exported function from spatstat.
+> try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
+Error in st_poly_sample(x, size = size, ..., type = type) : 
+  The spatstat function rThomas did not return a valid result. Consult the help file.
+Error message from spatstat:
+Error : 'scale' should be a single number
+
+> # points expected
+> set.seed(1331)
+> pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas")
+> #plot(x)
+> #plot(pts, add = TRUE)
+> pts
+Simple feature collection with 597 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: 1.213108 ymin: 0.02200954 xmax: 9.994943 ymax: 8.82534
+epsg (SRID):    NA
+proj4string:    NA
+First 10 features:
+   label                      geom
+2  point POINT (9.076646 8.661168)
+3  point POINT (9.347089 8.800523)
+4  point  POINT (9.207624 8.82534)
+5  point POINT (9.403886 8.666932)
+6  point  POINT (9.437082 8.63911)
+7  point POINT (9.254756 8.573871)
+8  point  POINT (9.29172 8.678031)
+9  point POINT (9.735812 1.621866)
+10 point POINT (9.853825 1.616409)
+11 point POINT (9.665138 1.593111)
 > 
 > proc.time()
    user  system elapsed 
-  1.539   0.092   1.624 
+  1.830   0.138   1.957 
