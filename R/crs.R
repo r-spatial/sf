@@ -369,16 +369,17 @@ st_crs.Spatial = function(x, ...) {
 #' indicates the usual GIS (display) order (longitude,latitude). This can be useful
 #' when data are read, or have to be written, with coordinates in authority compliant order.
 #' The return value is the current state of this (\code{FALSE}, by default).
-#' @return \code{st_axis_order} returns the (logical) value, indicating whether 
-#' coordinate axes are interpreted authority compliant. 
+#' @return \code{st_axis_order} returns the (logical) current value, before setting
+#' it to a new value.
 #' @export
 #' @examples
 #' pt = st_sfc(st_point(c(0, 60)), crs = 4326)
-#' (old = st_axis_order()) # query default: FALSE means interpret pt as (longitude latitude)
+#' st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 #' st_transform(pt, 3857)[[1]]
-#' st_axis_order(TRUE) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+#' (old_value = st_axis_order(TRUE)) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+#' st_axis_order() # query current value
 #' st_transform(pt, 3857)[[1]]
-#' st_axis_order(old)
+#' st_axis_order(old_value) # set back to old value
 st_axis_order = function(authority_compliant = logical(0)) {
 	CPL_axis_order_authority_compliant(authority_compliant)
 }

@@ -81,8 +81,8 @@ If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} 
 Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 \code{proj4string} (length-1 character).
 
-\code{st_axis_order} returns the (logical) value, indicating whether 
-coordinate axes are interpreted authority compliant.
+\code{st_axis_order} returns the (logical) current value, before setting
+it to a new value.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
@@ -128,10 +128,11 @@ st_crs("+init=epsg:3857")$proj4string
 st_crs("+init=epsg:3857 +units=m")$b     # numeric
 st_crs("+init=epsg:3857 +units=m")$units # character
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)
-(old = st_axis_order()) # query default: FALSE means interpret pt as (longitude latitude)
+st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 st_transform(pt, 3857)[[1]]
-st_axis_order(TRUE) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+(old_value = st_axis_order(TRUE)) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+st_axis_order() # query current value
 st_transform(pt, 3857)[[1]]
-st_axis_order(old)
+st_axis_order(old_value) # set back to old value
 }
 \keyword{datasets}

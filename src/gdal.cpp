@@ -543,9 +543,10 @@ bool axis_order_authority_compliant = false;
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
 		Rcpp::stop("axis_order_authority_compliant should have length 0 or 1");
+	bool old_value = axis_order_authority_compliant;
 	if (authority_compliant.size() == 1)
 		axis_order_authority_compliant = authority_compliant[0];
-	return Rcpp::LogicalVector::create(axis_order_authority_compliant);
+	return Rcpp::LogicalVector::create(old_value);
 }
 
 OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
