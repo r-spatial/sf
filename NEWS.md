@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* `st_sample` directly interfaces `spatstat` sampling methods, e.g. `type = "Thomas"` calls `spatstat::rThomas` after converting input arguments (window) and converts returned `ppp` object to `sf`'s `POINT` geometries; #1204 with help from Ege Rubak and Jakub Nowosad
+
 * support `vctrs` methods for geometry list columns; this makes `unnest` work again (#1172); #1196 by Lionel Henry
 
 * `st_as_sf.pq_geometry` converts binary geom columns from RPostgres::dbGetQuery; #1195
