@@ -35,3 +35,22 @@ gdal_utils(
 \description{
 Native interface to gdal utils
 }
+\examples{
+
+\dontrun{
+# vectortranslate utils used to convert .shp into .gpkg
+storms_path <- system.file("shape/storms_xyz.shp", package="sf")
+gdal_utils(
+  util = "vectortranslate",
+  source = storms_path,
+  destination = "storms.gpkg",
+  options = c("-f", "GPKG")
+)
+storms_shp <- st_read(storms_path)
+storms_gpkg <- st_read("storms.gpkg")
+all(storms_shp == storms_gpkg)
+
+# more info for vectortranslate at: https://gdal.org/programs/ogr2ogr.html
+# the ogr2ogr options should be specified as c("name", "value")
+}
+}

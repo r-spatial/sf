@@ -20,7 +20,6 @@ resampling_method = function(option = "near") {
 }
 # nocov end
 
-
 #' Native interface to gdal utils
 #' @name gdal_utils
 #' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
@@ -32,7 +31,25 @@ resampling_method = function(option = "near") {
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
 #' @export
-gdal_utils = function(util = "info", source, destination, options = character(0), 
+#' @examples
+#'
+#' \dontrun{
+#' # vectortranslate utils used to convert .shp into .gpkg
+#' storms_path <- system.file("shape/storms_xyz.shp", package="sf")
+#' gdal_utils(
+#'   util = "vectortranslate",
+#'   source = storms_path,
+#'   destination = "storms.gpkg",
+#'   options = c("-f", "GPKG")
+#' )
+#' storms_shp <- st_read(storms_path)
+#' storms_gpkg <- st_read("storms.gpkg")
+#' all(storms_shp == storms_gpkg)
+#'
+#' # more info for vectortranslate at: https://gdal.org/programs/ogr2ogr.html
+#' # the ogr2ogr options should be specified as c("name", "value")
+#' }
+gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
 
 	ret = switch(util,
@@ -40,7 +57,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			warp = CPL_gdalwarp(source, destination, options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
 			rasterize = {  # nocov start
-				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co", 
+				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
 				CPL_gdalrasterize(source, destination, options, overwrite)
 			}, # nocov end
