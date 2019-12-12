@@ -15,7 +15,7 @@ gdal_utils(
 )
 }
 \arguments{
-\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}
+\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}
 
 \item{source}{character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one}
 
@@ -34,4 +34,10 @@ gdal_utils(
 }
 \description{
 Native interface to gdal utils
+}
+\examples{
+in_file = system.file("gpkg/nc.gpkg", package="sf")
+out_file = paste0(tempfile(), ".gpkg")
+# ogr2ogr:
+gdal_utils("vectortranslate", in_file, out_file, options = c("-t_srs", 'EPSG:2264'))
 }

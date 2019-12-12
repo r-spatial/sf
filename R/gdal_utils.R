@@ -23,7 +23,7 @@ resampling_method = function(option = "near") {
 
 #' Native interface to gdal utils
 #' @name gdal_utils
-#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
+#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
 #' @param source character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; raster layer read options
@@ -32,6 +32,11 @@ resampling_method = function(option = "near") {
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
 #' @export
+#' @examples
+#' in_file = system.file("gpkg/nc.gpkg", package="sf")
+#' out_file = paste0(tempfile(), ".gpkg")
+#' # ogr2ogr:
+#' gdal_utils("vectortranslate", in_file, out_file, options = c("-t_srs", 'EPSG:2264'))
 gdal_utils = function(util = "info", source, destination, options = character(0), 
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
 
