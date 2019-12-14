@@ -201,6 +201,95 @@
     <p><code>info</code> returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., <code>TRUE</code>); in case of failure, an error is raised.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># info utils can be used to list information about about a raster</span>
+<span class='co'># dataset. More info: https://gdal.org/programs/gdalinfo.html</span>
+<span class='no'>in_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"tif/geomatrix.tif"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>)
+<span class='fu'>gdal_utils</span>(<span class='st'>"info"</span>, <span class='no'>in_file</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"-mm"</span>, <span class='st'>"-proj4"</span>))</div><div class='output co'>#&gt; Driver: GTiff/GeoTIFF
+#&gt; Files: /tmp/RtmpKVgTfa/temp_libpath39064ed6510/sf/tif/geomatrix.tif
+#&gt; Size is 20, 20
+#&gt; Coordinate System is:
+#&gt; PROJCS["WGS 84 / UTM zone 11N",
+#&gt;     GEOGCS["WGS 84",
+#&gt;         DATUM["WGS_1984",
+#&gt;             SPHEROID["WGS 84",6378137,298.257223563,
+#&gt;                 AUTHORITY["EPSG","7030"]],
+#&gt;             AUTHORITY["EPSG","6326"]],
+#&gt;         PRIMEM["Greenwich",0,
+#&gt;             AUTHORITY["EPSG","8901"]],
+#&gt;         UNIT["degree",0.0174532925199433,
+#&gt;             AUTHORITY["EPSG","9122"]],
+#&gt;         AUTHORITY["EPSG","4326"]],
+#&gt;     PROJECTION["Transverse_Mercator"],
+#&gt;     PARAMETER["latitude_of_origin",0],
+#&gt;     PARAMETER["central_meridian",-117],
+#&gt;     PARAMETER["scale_factor",0.9996],
+#&gt;     PARAMETER["false_easting",500000],
+#&gt;     PARAMETER["false_northing",0],
+#&gt;     UNIT["metre",1,
+#&gt;         AUTHORITY["EPSG","9001"]],
+#&gt;     AXIS["Easting",EAST],
+#&gt;     AXIS["Northing",NORTH],
+#&gt;     AUTHORITY["EPSG","32611"]]
+#&gt; PROJ.4 string is:
+#&gt; '+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs '
+#&gt; GeoTransform =
+#&gt;   1841001.75, 1.5, -5
+#&gt;   1144003.25, -5, -1.5
+#&gt; Metadata:
+#&gt;   AREA_OR_POINT=Point
+#&gt; Image Structure Metadata:
+#&gt;   INTERLEAVE=BAND
+#&gt; Corner Coordinates:
+#&gt; Upper Left  ( 1841001.750, 1144003.250) (104d50'47.45"W, 10d 7'13.55"N)
+#&gt; Lower Left  ( 1840901.750, 1143973.250) (104d50'50.69"W, 10d 7'12.72"N)
+#&gt; Upper Right ( 1841031.750, 1143903.250) (104d50'46.60"W, 10d 7'10.33"N)
+#&gt; Lower Right ( 1840931.750, 1143873.250) (104d50'49.85"W, 10d 7' 9.50"N)
+#&gt; Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)
+#&gt; Band 1 Block=20x20 Type=Byte, ColorInterp=Gray
+#&gt;     Computed Min/Max=74.000,255.000</div><div class='input'>
+<span class='co'># vectortranslate utils can be used to convert simple features data between</span>
+<span class='co'># file formats. More info: https://gdal.org/programs/ogr2ogr.html</span>
+<span class='no'>in_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/storms_xyz.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)
+<span class='no'>out_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(), <span class='st'>".gpkg"</span>)
+<span class='fu'>gdal_utils</span>(
+  <span class='kw'>util</span> <span class='kw'>=</span> <span class='st'>"vectortranslate"</span>,
+  <span class='kw'>source</span> <span class='kw'>=</span> <span class='no'>in_file</span>,
+  <span class='kw'>destination</span> <span class='kw'>=</span> <span class='no'>out_file</span>, <span class='co'># output format must be specified for GDAL &lt; 2.3</span>
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"-f"</span>, <span class='st'>"GPKG"</span>)
+)
+<span class='co'># The parameters can be specified as c("name") or c("name", "value"). The</span>
+<span class='co'># vectortranslate utils can perform also various operations during the</span>
+<span class='co'># conversion process. For example we can reproject the features during the</span>
+<span class='co'># translation.</span>
+<span class='fu'>gdal_utils</span>(
+  <span class='kw'>util</span> <span class='kw'>=</span> <span class='st'>"vectortranslate"</span>,
+  <span class='kw'>source</span> <span class='kw'>=</span> <span class='no'>in_file</span>,
+  <span class='kw'>destination</span> <span class='kw'>=</span> <span class='no'>out_file</span>,
+  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
+  <span class='st'>"-f"</span>, <span class='st'>"GPKG"</span>, <span class='co'># output file format for GDAL &lt; 2.3</span>
+  <span class='st'>"-s_srs"</span>, <span class='st'>"EPSG:4326"</span>, <span class='co'># input file SRS</span>
+  <span class='st'>"-t_srs"</span>, <span class='st'>"EPSG:2264"</span> <span class='co'># output file SRS</span>
+  )
+)
+<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='no'>out_file</span>)</div><div class='output co'>#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpjJhEHU/fileb70bbf2692.gpkg' using driver `GPKG'
+#&gt; Simple feature collection with 71 features and 0 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XYZ
+#&gt; bbox:           xmin: -5785269 ymin: -8509454 xmax: 25097160 ymax: 15846560
+#&gt; z_range:        zmin: 3031.49 zmax: 3336.608
+#&gt; epsg (SRID):    2264
+#&gt; proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs</div><div class='input'><span class='co'># The parameter s_srs had to be specified because, in this case, the in_file</span>
+<span class='co'># has no associated SRS.</span>
+<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='no'>in_file</span>)</div><div class='output co'>#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpKVgTfa/temp_libpath39064ed6510/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+#&gt; Simple feature collection with 71 features and 0 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XYZ
+#&gt; bbox:           xmin: -102.2 ymin: 8.3 xmax: 0 ymax: 59.5
+#&gt; z_range:        zmin: 924 zmax: 1017
+#&gt; epsg (SRID):    NA
+#&gt; proj4string:    NA</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -208,7 +297,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
