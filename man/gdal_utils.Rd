@@ -40,10 +40,7 @@ Native interface to gdal utils
 # info utils can be used to list information about about a raster
 # dataset. More info: https://gdal.org/programs/gdalinfo.html
 in_file <- system.file("tif/geomatrix.tif", package = "sf")
-
-\dontrun{
 gdal_utils("info", in_file, options = c("-mm", "-proj4"))
-}
 
 # vectortranslate utils can be used to convert simple features data between
 # file formats. More info: https://gdal.org/programs/ogr2ogr.html
