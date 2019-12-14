@@ -33,22 +33,43 @@ resampling_method = function(option = "near") {
 #' @export
 #' @examples
 #'
+#' # info utils can be used to list information about about a raster
+#' # dataset. More info: https://gdal.org/programs/gdalinfo.html
+#' in_file <- system.file("tif/geomatrix.tif", package = "sf")
+#'
 #' \dontrun{
-#' # vectortranslate utils used to convert .shp into .gpkg
-#' storms_path <- system.file("shape/storms_xyz.shp", package="sf")
+#' gdal_utils("info", in_file, options = c("-mm", "-proj4"))
+#' }
+#'
+#' # vectortranslate utils can be used to convert simple features data between
+#' # file formats. More info: https://gdal.org/programs/ogr2ogr.html
+#' in_file <- system.file("shape/storms_xyz.shp", package="sf")
+#' out_file <- paste0(tempfile(), ".gpkg")
 #' gdal_utils(
 #'   util = "vectortranslate",
-#'   source = storms_path,
-#'   destination = "storms.gpkg",
+#'   source = in_file,
+#'   destination = out_file, # output format must be specified for GDAL < 2.3
 #'   options = c("-f", "GPKG")
 #' )
-#' storms_shp <- st_read(storms_path)
-#' storms_gpkg <- st_read("storms.gpkg")
-#' all(storms_shp == storms_gpkg)
-#'
-#' # more info for vectortranslate at: https://gdal.org/programs/ogr2ogr.html
-#' # the ogr2ogr options should be specified as c("name", "value")
-#' }
+#' # The parameters can be specified as c("name") or c("name", "value"). The
+#' # vectortranslate utils can perform also various operations during the
+#' # conversion process. For example we can reproject the features during the
+#' # translation.
+#' gdal_utils(
+#'   util = "vectortranslate",
+#'   source = in_file,
+#'   destination = out_file,
+#'   options = c(
+#'   "-f", "GPKG", # output file format for GDAL < 2.3
+#'   "-s_srs", "EPSG:4326", # input file SRS
+#'   "-t_srs", "EPSG:2264" # output file SRS
+#'   )
+#' )
+#' st_read(out_file)
+#' # The parameter s_srs had to be specified because, in this case, the in_file
+#' # has no associated SRS.
+#' st_read(in_file)
+
 gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
 
