@@ -14,6 +14,8 @@
 
 * a new UBSAN error in `wkb_read` was resolved; #1154, #1152
 
+* new method `st_shift_longitude` to re-center data for a Pacific view. #1218
+
 # version 0.8-0
 
 * fix tests for PROJ 6.2.0 not accepting +units=
