@@ -215,7 +215,7 @@ st_is_longlat = function(x) {
 	if (is.na(crs))
 		NA
 	else {
-		ret = isTRUE(crs$proj == "longlat")
+		ret = crs_parameters(crs)$IsGeographic
 		if (ret && inherits(x, c("sf", "sfc", "stars"))) {
 			bb = st_bbox(x)
 			# check for potentially meaningless value range:
@@ -257,12 +257,12 @@ udunits_from_proj = list(
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x),
-		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal", 
-			"IsVertical", "WktPretty", "Wkt"))
+		names = c("SemiMajor", "SemiMinor", "InvFlattening", "IsGeographic", 
+			"units_gdal", "IsVertical", "WktPretty", "Wkt"))
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
-	ret$ud_unit = if (isTRUE(st_is_longlat(x)))
-			as_units("arc_degree")
+	ret$ud_unit = if (isTRUE(ret$IsGeographic))
+			as_units("arc_degree") # FIXME: is this always true?
 		else if (is.null(x$units))
 			as_units("m")
 		else {
@@ -299,7 +299,7 @@ NA_crs_ = structure(
 #' @export
 #' @method is.na crs
 is.na.crs = function(x) {
-  is.na(x$epsg) && is.na(x$proj4string)
+  is.na(x$epsg) && is.na(x$proj4string) && is.na(x$wkt2)
 }
 
 #' @name st_crs
@@ -342,7 +342,7 @@ print.crs = function(x, ...) {
       cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
 
 	# print wkt2:
-    if (! is.na(x$wkt2))
+    if (!is.null(x$wkt2) && !is.na(x$wkt2))
       cat("  wkt2:\n", x$wkt2, "\n", sep = "")
   }
 }
@@ -361,7 +361,7 @@ st_crs.Spatial = function(x, ...) {
 
 #' @name st_crs
 #' @param authority_compliant logical; specify whether axis order should be
-#' handled compliant to the authority; if omitted, the current value is returned.
+#' handled compliant to the authority; if omitted, the current value is printed.
 #' @details 
 #' \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
 #' indicates axes order according to the authority 
@@ -369,8 +369,8 @@ st_crs.Spatial = function(x, ...) {
 #' indicates the usual GIS (display) order (longitude,latitude). This can be useful
 #' when data are read, or have to be written, with coordinates in authority compliant order.
 #' The return value is the current state of this (\code{FALSE}, by default).
-#' @return \code{st_axis_order} returns the (logical) current value, before setting
-#' it to a new value.
+#' @return \code{st_axis_order} returns the (logical) current value, invisibly if it is
+#' being set.
 #' @export
 #' @examples
 #' pt = st_sfc(st_point(c(0, 60)), crs = 4326)
@@ -381,5 +381,9 @@ st_crs.Spatial = function(x, ...) {
 #' st_transform(pt, 3857)[[1]]
 #' st_axis_order(old_value) # set back to old value
 st_axis_order = function(authority_compliant = logical(0)) {
-	CPL_axis_order_authority_compliant(authority_compliant)
+	ret = CPL_axis_order_authority_compliant(authority_compliant)
+	if (length(authority_compliant))
+		invisible(ret)
+	else
+		ret
 }

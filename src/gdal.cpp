@@ -147,7 +147,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
 	OGRSpatialReference *srs = OGRSrs_from_crs(crs);
 
-	Rcpp::List out(7);
+	Rcpp::List out(8);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
 	Rcpp::NumericVector InvFlattening(1);
@@ -158,14 +158,15 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	else
 		InvFlattening(0) = srs->GetInvFlattening(NULL); // for +ellps=sphere, still zero :-(
 	out(2) = InvFlattening;
-	out(3) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
-	out(4) = Rcpp::LogicalVector::create(srs->IsVertical());
+	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
+	out(4) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	out(5) = Rcpp::LogicalVector::create(srs->IsVertical());
 	char *cp;
 	srs->exportToPrettyWkt(&cp);
-	out(5) = Rcpp::CharacterVector::create(cp);
+	out(6) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	srs->exportToWkt(&cp);
-	out(6) = Rcpp::CharacterVector::create(cp);
+	out(7) = Rcpp::CharacterVector::create(cp);
 	CPLFree(cp);
 	delete srs;
 	return out;
