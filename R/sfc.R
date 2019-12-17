@@ -204,8 +204,20 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat("\n")
 	}
 	# attributes: epsg, proj4string, precision
-	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
-	cat(paste0("reference sys.: ", crs_parameters(attr(x, "crs"))$Name, "\n"))
+	crs = st_crs(x)
+	if (is.na(crs))
+		cat(paste0("CRS:            NA\n"))
+	else {
+		p = crs_parameters(crs)
+		if (p$Name == "unknown") # print as a proj4string?
+			cat(paste0("proj4string:    ", crs$proj4string, "\n"))
+		else if (p$IsGeographic)
+			cat(paste0("geographic CRS: ", p$Name, "\n"))
+		else
+			cat(paste0("projected CRS:  ", p$Name, "\n"))
+		if (!is.na(crs$epsg))
+			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
+	}
 	if (attr(x, "precision") != 0.0) {
 		cat(paste0("precision:      "))
 		if (attr(x, "precision") < 0.0)
