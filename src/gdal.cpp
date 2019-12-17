@@ -167,7 +167,11 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	CPLFree(cp);
 	srs->exportToWkt(&cp);
 	out(7) = Rcpp::CharacterVector::create(cp);
+#if GDAL_VERSION_MAJOR >= 3
 	out(8) = Rcpp::CharacterVector::create(srs->GetName());
+#else
+	out(8) = Rcpp::CharacterVector::create("unknown");
+#endif
 	CPLFree(cp);
 	delete srs;
 	return out;
