@@ -258,7 +258,7 @@ crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x),
 		names = c("SemiMajor", "SemiMinor", "InvFlattening", "IsGeographic", 
-			"units_gdal", "IsVertical", "WktPretty", "Wkt"))
+			"units_gdal", "IsVertical", "WktPretty", "Wkt", "Name"))
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
 	ret$ud_unit = if (isTRUE(ret$IsGeographic))

@@ -205,7 +205,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	}
 	# attributes: epsg, proj4string, precision
 	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
-	cat(paste0("proj4string:    ", attr(x, "crs")$proj4string, "\n"))
+	cat(paste0("reference sys.: ", crs_parameters(attr(x, "crs"))$Name, "\n"))
 	if (attr(x, "precision") != 0.0) {
 		cat(paste0("precision:      "))
 		if (attr(x, "precision") < 0.0)

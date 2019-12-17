@@ -147,7 +147,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
 	OGRSpatialReference *srs = OGRSrs_from_crs(crs);
 
-	Rcpp::List out(8);
+	Rcpp::List out(9);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	out(1) = Rcpp::NumericVector::create(srs->GetSemiMinor());
 	Rcpp::NumericVector InvFlattening(1);
@@ -167,6 +167,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	CPLFree(cp);
 	srs->exportToWkt(&cp);
 	out(7) = Rcpp::CharacterVector::create(cp);
+	out(8) = Rcpp::CharacterVector::create(srs->GetName());
 	CPLFree(cp);
 	delete srs;
 	return out;

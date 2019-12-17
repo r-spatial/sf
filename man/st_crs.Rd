@@ -73,7 +73,7 @@ database, but avoid it as much as possible.}
 \item{name}{element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
 
 \item{authority_compliant}{logical; specify whether axis order should be
-handled compliant to the authority; if omitted, the current value is returned.}
+handled compliant to the authority; if omitted, the current value is printed.}
 }
 \value{
 If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
@@ -81,8 +81,8 @@ If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} 
 Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 \code{proj4string} (length-1 character).
 
-\code{st_axis_order} returns the (logical) current value, before setting
-it to a new value.
+\code{st_axis_order} returns the (logical) current value, invisibly if it is
+being set.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
