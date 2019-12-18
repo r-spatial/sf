@@ -5,7 +5,7 @@ WKT_name = function(x, EWKT = TRUE) {
 
 	retval = if (zm == "")
 		cls[2]
-	else 
+	else
 		paste(cls[2], substr(cls[1], 3, 4))
 
 	if (EWKT && !is.null(attr(x, "epsg")) && !is.na(attr(x, "epsg")))
@@ -23,7 +23,7 @@ fmt = function(x, ...) sub("^[ ]+", "", sapply(unclass(x), format, ...))
 prnt.POINT = function(x, ..., EWKT = TRUE) {
 	pt = if (any(!is.finite(x)))
 		empty
-	else 
+	else
 		paste0("(", paste0(fmt(x, ...), collapse = " "), ")")
 	paste(WKT_name(x, EWKT = EWKT), pt)
 }
@@ -52,7 +52,10 @@ prnt.MatrixListList = function(x, ...) {
 		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList, ...)), collapse = ", "), ")")
 }
 
-prnt.MULTIPOINT = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, nested_parens = TRUE, ...))
+prnt.MULTIPOINT = function(x, ..., EWKT = TRUE, nested_parens = FALSE) {
+	paste(WKT_name(x, EWKT = EWKT),
+		  prnt.Matrix(x, nested_parens = nested_parens, ...))
+}
 prnt.LINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
 prnt.POLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
 prnt.MULTILINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
@@ -90,7 +93,7 @@ st_as_text.sfg = function(x, ...) {
 	else
 	  switch(class(x)[2],
 		POINT = prnt.POINT(x, ...),
-		MULTIPOINT =        prnt.MULTIPOINT(x, ...),
+		MULTIPOINT =        prnt.MULTIPOINT(x, ..., nested_parens = TRUE),
 		LINESTRING =        prnt.LINESTRING(x, ...),
 		POLYGON =           prnt.POLYGON(x, ...),
 		MULTILINESTRING =   prnt.MULTILINESTRING(x, ...),
