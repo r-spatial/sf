@@ -28,10 +28,12 @@ prnt.POINT = function(x, ..., EWKT = TRUE) {
 	paste(WKT_name(x, EWKT = EWKT), pt)
 }
 
-prnt.Matrix = function(x, ...) {
+prnt.Matrix = function(x, nested_parens = FALSE, ...) {
 	pf = function(x, ..., collapse) paste0(fmt(x, ...), collapse = collapse)
 	if (nrow(x) == 0)
 		empty
+	else if (nested_parens)
+		paste0("((", paste0(apply(x, 1, pf, collapse = " ", ...), collapse = "), ("), "))")
 	else
 		paste0("(", paste0(apply(x, 1, pf, collapse = " ", ...), collapse = ", "), ")")
 }
@@ -50,7 +52,7 @@ prnt.MatrixListList = function(x, ...) {
 		paste0("(", paste0(unlist(lapply(x, prnt.MatrixList, ...)), collapse = ", "), ")")
 }
 
-prnt.MULTIPOINT = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
+prnt.MULTIPOINT = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, nested_parens = TRUE, ...))
 prnt.LINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
 prnt.POLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
 prnt.MULTILINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
@@ -85,7 +87,7 @@ st_as_text = function(x, ...) UseMethod("st_as_text")
 st_as_text.sfg = function(x, ...) {
 	if (Sys.getenv("LWGEOM_WKT") == "true" && requireNamespace("lwgeom", quietly = TRUE) && utils::packageVersion("lwgeom") >= "0.1-5")
 		lwgeom::st_astext(x, ...)
-	else 
+	else
 	  switch(class(x)[2],
 		POINT = prnt.POINT(x, ...),
 		MULTIPOINT =        prnt.MULTIPOINT(x, ...),
