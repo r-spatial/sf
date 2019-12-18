@@ -117,6 +117,8 @@ void handle_error(OGRErr err) {
 }
 
 bool crs_is_na(Rcpp::List crs) {
+	bool b = false; //FIXME
+	return Rcpp::LogicalVector::create(b);
 }
 
 OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
