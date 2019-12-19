@@ -139,7 +139,7 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 
 #' @export
 st_as_grob.sfc_POINT <- function(x, pch = 1, size = unit(1, "char"), default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	x <- matrix(unlist(x), nrow = 2)
+	x <- matrix(unlist(x, use.names = FALSE), ncol = length(x))
 	pointsGrob(x[1, ], x[2, ], pch = pch, size = size, default.units = default.units, name = name, gp = gp, vp = vp)
 }
 #' @export
