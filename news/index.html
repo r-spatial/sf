@@ -156,6 +156,7 @@
 <li><p><code><a href="../reference/geos_measures.html">st_area()</a></code> and <code><a href="../reference/geos_measures.html">st_length()</a></code> handle <code>+to_meter</code> argument in PROJ strings; <a href='https://github.com/r-spatial/sf/issues/1170'>#1170</a></p></li>
 <li><p>add <code>st_filter</code> generic for filtering on spatial features only; <a href='https://github.com/r-spatial/sf/issues/1148'>#1148</a></p></li>
 <li><p>a new UBSAN error in <code>wkb_read</code> was resolved; <a href='https://github.com/r-spatial/sf/issues/1154'>#1154</a>, <a href='https://github.com/r-spatial/sf/issues/1152'>#1152</a></p></li>
+<li><p>output of <code><a href="../reference/st_as_text.html">st_as_text()</a></code> with <code>MULTIPOINT</code> now has nested parentheses around points. E.g., <code>MULTIPOINT ((0 0), (1 1))</code> instead of <code>MULTIPOINT (0 0, 1 1)</code>; <a href='https://github.com/r-spatial/sf/issues/1219'>#1219</a>, <a href='https://github.com/r-spatial/sf/issues/1221'>#1221</a></p></li>
 </ul>
 </div>
     <div id="version-0-8-0" class="section level1">
