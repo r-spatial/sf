@@ -213,7 +213,7 @@ first layer of <code>dsn</code>, give a warning and (unless <code>quiet = TRUE</
 print a message when there are multiple layers, or give an error if there
 are no layers in <code>dsn</code>. If <code>dsn</code> is a database connection, then
 <code>layer</code> can be a table name or a database identifier (see
-<code><a href='https://rdrr.io/pkg/DBI/man/Id.html'>Id</a></code>). It is also possible to omit <code>layer</code> and rather
+<code><a href='https://dbi.r-dbi.org/reference/Id.html'>Id</a></code>). It is also possible to omit <code>layer</code> and rather
 use the <code>query</code> argument.</p></td>
     </tr>
     <tr>
@@ -355,7 +355,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpKVgTfa/temp_libpath39064ed6510/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpx0bNDj/temp_libpath3ce78da4990/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -396,7 +396,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='co'>## only three fields by select clause</span>
 <span class='co'>## only two features by where clause</span>
 <span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
-                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpKVgTfa/temp_libpath39064ed6510/sf/shape/nc.shp' using driver `ESRI Shapefile'
+                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpx0bNDj/temp_libpath3ce78da4990/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
@@ -447,9 +447,9 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
 #&gt; # A tibble: 1 x 1
-#&gt;                                             geometry
-#&gt;                                     &lt;MULTIPOINT [°]&gt;
-#&gt; 1 (3.2 4, 3 4.6, 3.8 4.4, 3.5 3.8, 3.4 3.6, 3.9 4.5)</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+#&gt;                                                         geometry
+#&gt;                                                 &lt;MULTIPOINT [°]&gt;
+#&gt; 1 ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RPostgreSQL</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
