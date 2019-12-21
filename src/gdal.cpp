@@ -138,7 +138,8 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 			handle_error(dest->importFromWkt((const char *) cp));
 #endif
 		}
-	}
+	} else
+		Rcpp::stop("crs not found");
 	return dest;
 }
 
