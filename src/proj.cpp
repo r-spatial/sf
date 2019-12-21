@@ -58,7 +58,8 @@ bool CPL_have_datum_files(SEXP foo) {
 	return true;
 }
 
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
+		bool warn = true) {
 
 	using namespace Rcpp;
 
@@ -113,11 +114,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 	int nwarn = 0;
 	for (int i = 0; i < out.nrow(); i++) {
-		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
-		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++; // #nocov
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL) {
+			out(i, 0) = NA_REAL;
+			out(i, 1) = NA_REAL;
+			nwarn++; // #nocov
+		}
 	}
-	if (nwarn > 0) 
+	if (warn && nwarn > 0)
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }
@@ -196,7 +199,8 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts,
+		bool warn = true) {
 
 	using namespace Rcpp;
 
@@ -250,11 +254,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	pj_free(toPJ);
 	int nwarn = 0;
 	for (int i = 0; i < out.nrow(); i++) {
-		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
-		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++; // #nocov
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL) {
+			out(i, 0) = NA_REAL;
+			out(i, 1) = NA_REAL;
+			nwarn++; // #nocov
+		}
 	}
-	if (nwarn > 0) 
+	if (warn && nwarn > 0) 
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }

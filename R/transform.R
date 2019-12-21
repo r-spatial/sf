@@ -196,9 +196,11 @@ st_to_s2 = function(x) {
 #' @param from character; proj4string of pts
 #' @param to character; target coordinate reference system
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
+#' @param warn logical; warn if invalid (NA) values are generated
+#' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{NA}
 #' @export
-sf_project = function(from, to, pts) {
+sf_project = function(from, to, pts, warn = TRUE) {
 	#.Deprecated("lwgeom::st_transform_proj")
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts))
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), warn)
 }
 

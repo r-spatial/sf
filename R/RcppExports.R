@@ -277,8 +277,8 @@ CPL_have_datum_files <- function(foo) {
     .Call('_sf_CPL_have_datum_files', PACKAGE = 'sf', foo)
 }
 
-CPL_proj_direct <- function(from_to, pts) {
-    .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts)
+CPL_proj_direct <- function(from_to, pts, warn = TRUE) {
+    .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts, warn)
 }
 
 CPL_proj_info <- function(type) {

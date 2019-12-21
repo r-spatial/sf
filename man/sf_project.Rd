@@ -4,7 +4,7 @@
 \alias{sf_project}
 \title{directly transform a set of coordinates}
 \usage{
-sf_project(from, to, pts)
+sf_project(from, to, pts, warn = TRUE)
 }
 \arguments{
 \item{from}{character; proj4string of pts}
@@ -12,6 +12,11 @@ sf_project(from, to, pts)
 \item{to}{character; target coordinate reference system}
 
 \item{pts}{two-column numeric matrix, or object that can be coerced into a matrix}
+
+\item{warn}{logical; warn if invalid (NA) values are generated}
+}
+\value{
+two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{NA}
 }
 \description{
 directly transform a set of coordinates
