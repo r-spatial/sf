@@ -78,8 +78,10 @@ handled compliant to the authority; if omitted, the current value is printed.}
 \value{
 If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
-Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
-\code{proj4string} (length-1 character).
+Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer),
+\code{proj4string} (length-1 character) and \code{wkt2} (length-1 character; only for GDAL >= 3 and PROJ >= 6).
+Elements may have \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
+assumed to relate to an arbitrary Cartesian coordinate system.
 
 \code{st_axis_order} returns the (logical) current value, invisibly if it is
 being set.
