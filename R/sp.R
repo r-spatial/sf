@@ -322,8 +322,11 @@ setAs("crs", "CRS", function(from) CRS_from_crs(from))
 CRS_from_crs = function(from) {
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	ret = sp::CRS(from$proj4string)
-	if (!is.null(from$wkt2) && !is.na(from$wkt2))
-		comment(ret) = from$wkt2
+	ret = if (is.na(from))
+			sp::CRS(NA_character_)
+		else
+			sp::CRS(from$proj4string)
+	if (!is.null(from$wkt) && !is.na(from$wkt))
+		comment(ret) = from$wkt
 	ret
 }

@@ -10,7 +10,7 @@ st_is_longlat(x)
 \item{x}{object of class \link{sf} or \link{sfc}}
 }
 \value{
-TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
+TRUE if x has geographic coordinates
 }
 \description{
 Assert whether simple feature coordinates are longlat degrees

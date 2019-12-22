@@ -169,9 +169,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 #' @name gdal
 #' @export
 gdal_crs = function(file, options = character(0)) {
-	ret = CPL_get_crs(file, options)
-	ret$crs = st_crs(wkt = ret$crs)
-	ret
+	st_crs(CPL_get_crs(file, options)$crs)
 }
 
 #' @details get_metadata gets metadata of a raster layer

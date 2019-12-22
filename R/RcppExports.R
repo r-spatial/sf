@@ -21,20 +21,16 @@ CPL_crs_parameters <- function(crs) {
     .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', crs)
 }
 
-CPL_wkt2_from_epsg <- function(epsg) {
-    .Call('_sf_CPL_wkt2_from_epsg', PACKAGE = 'sf', epsg)
+CPL_wkt_from_user_input <- function(input) {
+    .Call('_sf_CPL_wkt_from_user_input', PACKAGE = 'sf', input)
 }
 
 CPL_crs_equivalent <- function(crs1, crs2) {
     .Call('_sf_CPL_crs_equivalent', PACKAGE = 'sf', crs1, crs2)
 }
 
-CPL_crs_from_epsg <- function(epsg) {
-    .Call('_sf_CPL_crs_from_epsg', PACKAGE = 'sf', epsg)
-}
-
-CPL_crs_from_wkt <- function(wkt) {
-    .Call('_sf_CPL_crs_from_wkt', PACKAGE = 'sf', wkt)
+CPL_crs_from_input <- function(input) {
+    .Call('_sf_CPL_crs_from_input', PACKAGE = 'sf', input)
 }
 
 CPL_roundtrip <- function(sfc) {
@@ -63,10 +59,6 @@ CPL_transform <- function(sfc, crs) {
 
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
     .Call('_sf_CPL_wrap_dateline', PACKAGE = 'sf', sfc, opt, quiet)
-}
-
-CPL_crs_from_proj4string <- function(p4s) {
-    .Call('_sf_CPL_crs_from_proj4string', PACKAGE = 'sf', p4s)
 }
 
 CPL_get_rgdal_drivers <- function(dummy) {

@@ -7,8 +7,8 @@
 #}
 
 # this function establishes whether two crs objects are semantically identical. This is
-# the case when: (1) they are completely identical, or (2) they have identical proj4string
-# but one of them has a missing epsg ID.
+# the case when: (1) they are completely identical (including NA), or (2) GDAL considers 
+# them equivalent
 #' @export
 Ops.crs <- function(e1, e2) {
 	if (nargs() == 1)
@@ -35,19 +35,13 @@ Ops.crs <- function(e1, e2) {
 #' @name st_crs
 #' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
-#' @param valid default TRUE. This allows to create crs without checking against
-#' the local proj4 database. It can be used to synchronize crs with a remote
-#' database, but avoid it as much as possible.
-#' @param proj4text character. Must be used in conjunction with \code{valid = FALSE}.
 #' @export
-#' @return If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+#' @return If \code{x} is numeric, return \code{crs} object for EPSG:\code{x}; if \code{x} is character, return \code{crs} object for \code{x}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
-#' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
-#' code) and \code{proj4string} (character).
+#' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84" or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
 #' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
-#' @return Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer),
-#' \code{proj4string} (length-1 character) and \code{wkt2} (length-1 character; only for GDAL >= 3 and PROJ >= 6).
-#' Elements may have \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
+#' @return Object of class \code{crs}, which is a list with elements \code{input} (length-1 character) and \code{wkt} (length-1 character.
+#' Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 #' assumed to relate to an arbitrary Cartesian coordinate system.
 st_crs = function(x, ...) UseMethod("st_crs")
 
@@ -57,23 +51,21 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 
 #' @name st_crs
 #' @export
-st_crs.numeric = function(x, proj4text = "", valid = TRUE, ...) {
-    if (!valid)
-        return(structure(list(epsg = x, proj4string = proj4text), class = "crs"))
-    if (proj4text != "")
-        warning("`proj4text` is not used to validate crs. Remove `proj4text` ",
-                "argument or set `valid = FALSE` to stop warning.")
-    make_crs(x)
+st_crs.numeric = function(x, ...) {
+    make_crs(paste0("EPSG:", x))
 }
 
 #' @name st_crs
 #' @export
-#' @param wkt character well-known-text representation of the crs
-st_crs.character = function(x, ..., wkt) {
-	if (missing(wkt))
-		make_crs(x)
-	else
-		make_crs(wkt, wkt = TRUE)
+st_crs.character = function(x, ...) {
+	if (is.na(x))
+		NA_crs_
+	else {
+		crs = make_crs(x)
+		if (is.na(crs))
+			stop(paste("invalid crs:", crs))
+		crs
+	}
 }
 
 #' @name st_crs
@@ -93,10 +85,11 @@ st_crs.sfc = function(x, ..., parameters = FALSE) {
 #' @name st_crs
 #' @export
 st_crs.bbox = function(x, ...) {
-	if (is.null(attr(x, "crs")))
+	crs = attr(x, "crs")
+	if (is.null(crs))
 		NA_crs_
 	else
-		attr(x, "crs")
+		crs
 }
 
 #' @name st_crs
@@ -114,13 +107,10 @@ st_crs.default = function(x, ...) NA_crs_
 #'
 #' Set or replace retrieve coordinate reference system from object
 #' @name st_crs
-#' @param value one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).
+#' @param value one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class \code{crs}. 
 #' @details In case a coordinate reference system is replaced, no transformation takes
-#' place and a warning is raised to stress this. EPSG values are either read from proj4strings
-#' that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
-#' and +datum=WGS84, literally.
+#' place and a warning is raised to stress this. 
 #'
-#' If both \code{epsg} and \code{proj4string} are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when \code{epsg} is not consistent with a proj4string that is already present.
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
 
@@ -136,13 +126,8 @@ st_crs.default = function(x, ...) NA_crs_
 	x
 }
 
-valid_proj4string = function(p4s) {
-	stopifnot(is.character(p4s))
-	structure(CPL_proj_is_valid(p4s), names = c("valid", "result"))
-}
-
 # return crs object from crs, integer, or character string
-make_crs = function(x, wkt = FALSE) {
+make_crs = function(x) {
 
 	if (inherits(x, "CRS")) {
 		x = if (!is.null(comment(x)))
@@ -150,25 +135,16 @@ make_crs = function(x, wkt = FALSE) {
 			else
 				x@projargs
 	}
-
-	if (wkt)
-		CPL_crs_from_wkt(x)
-	else if (is.na(x))
+	if (is.numeric(x))
+		x = paste0("EPSG:", x)
+	# return:
+	if (is.na(x))
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
-	else if (is.numeric(x))
-		CPL_crs_from_epsg(as.integer(x))
-	else if (is.character(x)) {
-		is_valid = valid_proj4string(x)
-		if (! is_valid$valid)
-			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
-		u = `$.crs`(list(proj4string = x), "units")
-		crs = CPL_crs_from_proj4string(x)
-		if (!is.na(crs) && !is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
-			stop(paste0("units ", u, " not recognized: older GDAL version?"), call. = FALSE) # nocov
-		crs
-	} else
+	else if (is.character(x))
+		CPL_crs_from_input(x)
+	else
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }
 
@@ -210,7 +186,7 @@ st_set_crs = function(x, value) {
 #'
 #' Assert whether simple feature coordinates are longlat degrees
 #' @param x object of class \link{sf} or \link{sfc}
-#' @return TRUE if \code{+proj=longlat} is part of the proj4string, NA if this string is missing, FALSE otherwise
+#' @return TRUE if x has geographic coordinates
 #' @export
 st_is_longlat = function(x) {
 	crs = st_crs(x)
@@ -256,23 +232,20 @@ udunits_from_proj = list(
 	`ind-ch` = as_units("ind_ch", check_is_valid = FALSE)
 )
 
-crs_parameters = function(x) {
+crs_parameters = function(x, with_units = TRUE) {
 	stopifnot(!is.na(x))
-	ret = structure(CPL_crs_parameters(x),
-		names = c("SemiMajor", "SemiMinor", "InvFlattening", "IsGeographic", 
-			"units_gdal", "IsVertical", "WktPretty", "Wkt", "Name"))
+	ret = CPL_crs_parameters(x)
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
-	ret$ud_unit = if (isTRUE(ret$IsGeographic))
-			as_units("arc_degree") # FIXME: is this always true?
-		else if (is.null(x$units))
-			as_units("m")
-		else {
-			if (is.character(udunits_from_proj[[x$units]]))
+	if (with_units)
+		ret$ud_unit = if (isTRUE(ret$IsGeographic))
+				as_units("arc_degree") # FIXME: is this always true?
+			else if (is.null(x$units))
+				as_units("m")
+			else if (is.character(udunits_from_proj[[x$units]]))
 				as_units(udunits_from_proj[[x$units]])
 			else
 				udunits_from_proj[[x$units]]
-		}
 	ret
 }
 
@@ -289,40 +262,51 @@ st_as_text.crs = function(x, ..., pretty = FALSE) {
 
 #' @name st_crs
 #' @details
-#' \code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
+#' \code{NA_crs_} is the \code{crs} object with missing values for \code{input} and \code{wkt}.
 #' @export
 NA_crs_ = structure(
-	list(epsg = NA_integer_, 
-		proj4string = NA_character_,
-		wkt2 = NA_character_),
+	list(input = NA_character_,
+		wkt = NA_character_),
 	class = "crs")
 
 #' @name st_crs
 #' @export
 #' @method is.na crs
 is.na.crs = function(x) {
-  is.na(x$epsg) && is.na(x$proj4string) && is.na(x$wkt2)
+	identical(x, NA_crs_)
 }
 
 #' @name st_crs
-#' @param name element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples
+#' @param name element name
 #' @export
 #' @examples
-#' st_crs("+init=epsg:3857")$epsg
+#' st_crs("EPSG:3857")$input
 #' st_crs("+init=epsg:3857")$proj4string
 #' st_crs("+init=epsg:3857 +units=m")$b     # numeric
 #' st_crs("+init=epsg:3857 +units=m")$units # character
 #' @export
 `$.crs` = function(x, name) {
-	if (is.numeric(name) || name %in% names(x))
+
+	if (!is.null(x[["proj4string"]])) { # old-style object:
+		warning("old-style crs object found: please update code")
+		x = st_crs(x[["proj4string"]]) # FIXME: should this be only for some transition period? Add test?
+	}
+	if (is.na(x))
+		NA
+	else if (is.numeric(name) || name %in% names(x))
 		x[[name]]
 	else {
-		tryNum = function(x) { n = suppressWarnings(as.numeric(x)); if (is.na(n)) x else n }
-		p4s = strsplit(x$proj4string, " ")[[1]]
-		p4s2 = strsplit(p4s, "=")
-		vals = lapply(p4s2, function(x) if (length(x) == 1) TRUE else tryNum(x[2]))
-		names(vals) = substring(sapply(p4s2, function(x) x[1]), 2)
-		vals[[name]]
+		p = crs_parameters(x, with_units = FALSE)
+		if (name %in% names(p)) 
+			p[[name]]
+		else {
+			tryNum = function(x) { n = suppressWarnings(as.numeric(x)); if (is.na(n)) x else n }
+			p4s = strsplit(p$proj4string, " ")[[1]]
+			p4s2 = strsplit(p4s, "=")
+			vals = lapply(p4s2, function(x) if (length(x) == 1) TRUE else tryNum(x[2]))
+			names(vals) = substring(sapply(p4s2, function(x) x[1]), 2)
+			vals[[name]]
+		}
 	}
 }
 
@@ -334,18 +318,14 @@ print.crs = function(x, ...) {
   } else {
     cat("\n")
 	# print EPSG code:
-    if (is.na(x$epsg))
-       cat("  No EPSG code\n")
+    if (is.na(x$input))
+       cat("  No user input\n")
     else
-       cat("  EPSG:", x$epsg, "\n")
+       cat("  User input:", x$input, "\n")
 
-	# print proj4string:
-    if (! is.na(x$proj4string))
-      cat("  proj4string: \"", x$proj4string, "\"\n", sep = "")
-
-	# print wkt2:
-    if (!is.null(x$wkt2) && !is.na(x$wkt2))
-      cat("  wkt2:\n", x$wkt2, "\n", sep = "")
+	# print wkt:
+    if (!is.na(x$wkt))
+      cat("  wkt:\n", x$wkt, "\n", sep = "")
   }
 }
 

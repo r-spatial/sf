@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225)
+
 * support `vctrs` methods for geometry list columns; this makes `unnest` work again (#1172); #1196 by Lionel Henry
 
 * `st_as_sf.pq_geometry` converts binary geom columns from RPostgres::dbGetQuery; #1195

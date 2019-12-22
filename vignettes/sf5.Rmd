@@ -15,7 +15,8 @@ vignette: >
 
 ```{r echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
-tmap_fixed = utils::packageVersion("tmap") >= "2.3-1"
+#tmap_fixed = utils::packageVersion("tmap") >= "2.3-1"
+tmap_fixed = FALSE
 user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
 ```
 This vignette describes the functions in `sf` that can help to plot 

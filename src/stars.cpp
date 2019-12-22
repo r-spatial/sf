@@ -67,7 +67,7 @@ List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 
 	ret(0) = GDALGetRasterCount(ds);
 
-	ret(1) = GDALGetProjectionRef(ds);
+	ret(1) = GDALGetProjectionRef(ds); // wkt
 
 	double gt[6];
 	GDALGetGeoTransform(ds, gt);

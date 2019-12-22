@@ -677,10 +677,15 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 			Rcpp::stop("sfc_GEOMETRY has no classes attribute; please file an issue"); // #nocov
 	}
 
-	Rcpp::List crs = sfc.attr("crs"); 
-	int srid = crs(0);
-	if (srid == NA_INTEGER)
-		srid = 0; // non-zero now means: we have an srid
+	// get SRID from crs:
+	int srid = 0;
+	Rcpp::List crs = sfc.attr("crs");
+	Rcpp::CharacterVector wkb = crs(1);
+	if (! Rcpp::CharacterVector::is_na(wkb[0])) {
+		srid = epsg_from_crs(crs);
+		if (srid == NA_INTEGER)
+			srid = 0; // non-zero now means: we have an srid
+	}
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();

@@ -60,14 +60,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_wkt2_from_epsg
-Rcpp::CharacterVector CPL_wkt2_from_epsg(Rcpp::IntegerVector epsg);
-RcppExport SEXP _sf_CPL_wkt2_from_epsg(SEXP epsgSEXP) {
+// CPL_wkt_from_user_input
+Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input);
+RcppExport SEXP _sf_CPL_wkt_from_user_input(SEXP inputSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type epsg(epsgSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_wkt2_from_epsg(epsg));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_wkt_from_user_input(input));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -83,25 +83,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_crs_from_epsg
-Rcpp::List CPL_crs_from_epsg(int epsg);
-RcppExport SEXP _sf_CPL_crs_from_epsg(SEXP epsgSEXP) {
+// CPL_crs_from_input
+Rcpp::List CPL_crs_from_input(Rcpp::CharacterVector input);
+RcppExport SEXP _sf_CPL_crs_from_input(SEXP inputSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type epsg(epsgSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_epsg(epsg));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_from_wkt
-Rcpp::List CPL_crs_from_wkt(Rcpp::CharacterVector wkt);
-RcppExport SEXP _sf_CPL_crs_from_wkt(SEXP wktSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt(wktSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_wkt(wkt));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_input(input));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -182,17 +171,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type opt(optSEXP);
     Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_wrap_dateline(sfc, opt, quiet));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_crs_from_proj4string
-Rcpp::List CPL_crs_from_proj4string(Rcpp::CharacterVector p4s);
-RcppExport SEXP _sf_CPL_crs_from_proj4string(SEXP p4sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type p4s(p4sSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_from_proj4string(p4s));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1123,10 +1101,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_cleanup_all", (DL_FUNC) &_sf_CPL_gdal_cleanup_all, 0},
     {"_sf_CPL_gdal_version", (DL_FUNC) &_sf_CPL_gdal_version, 1},
     {"_sf_CPL_crs_parameters", (DL_FUNC) &_sf_CPL_crs_parameters, 1},
-    {"_sf_CPL_wkt2_from_epsg", (DL_FUNC) &_sf_CPL_wkt2_from_epsg, 1},
+    {"_sf_CPL_wkt_from_user_input", (DL_FUNC) &_sf_CPL_wkt_from_user_input, 1},
     {"_sf_CPL_crs_equivalent", (DL_FUNC) &_sf_CPL_crs_equivalent, 2},
-    {"_sf_CPL_crs_from_epsg", (DL_FUNC) &_sf_CPL_crs_from_epsg, 1},
-    {"_sf_CPL_crs_from_wkt", (DL_FUNC) &_sf_CPL_crs_from_wkt, 1},
+    {"_sf_CPL_crs_from_input", (DL_FUNC) &_sf_CPL_crs_from_input, 1},
     {"_sf_CPL_roundtrip", (DL_FUNC) &_sf_CPL_roundtrip, 1},
     {"_sf_CPL_circularstring_to_linestring", (DL_FUNC) &_sf_CPL_circularstring_to_linestring, 1},
     {"_sf_CPL_multisurface_to_multipolygon", (DL_FUNC) &_sf_CPL_multisurface_to_multipolygon, 1},
@@ -1134,7 +1111,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
     {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 2},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
-    {"_sf_CPL_crs_from_proj4string", (DL_FUNC) &_sf_CPL_crs_from_proj4string, 1},
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},

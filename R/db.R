@@ -283,9 +283,9 @@ delete_postgis_crs <- function(conn, crs) {
     if (is.na(crs[["epsg"]])) stop("Missing SRID")
     wkt <- st_as_text(crs)
     query <- paste0("DELETE FROM spatial_ref_sys ",
-                   "WHERE srid = '", crs[["epsg"]], "' ",
+                   "WHERE srid = '", crs$epsg, "' ",
                    "AND srtext = '", wkt, "' ",
-                   "AND proj4text = '", crs[["proj4string"]], "';")
+                   "AND proj4text = '", crs$proj4string, "';")
     dbExecute(conn, query)
 }
 
