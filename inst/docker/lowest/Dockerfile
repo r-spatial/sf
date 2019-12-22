@@ -91,6 +91,8 @@ RUN git clone https://github.com/r-spatial/sf.git
 
 RUN	R CMD build sf
 
+RUN apt-get install -y libssl-dev
+RUN R -e 'install.packages(c("covr", "stars"))'
 RUN	R CMD check --no-manual sf_*.tar.gz
 
 CMD ["/bin/bash"]
