@@ -93,6 +93,8 @@ RUN	R CMD build sf
 
 RUN apt-get install -y libssl-dev
 RUN R -e 'install.packages(c("covr", "stars"))'
+RUN (cd sf; git pull)
+RUN R CMD build sf
 RUN	R CMD check --no-manual sf_*.tar.gz
 
 CMD ["/bin/bash"]
