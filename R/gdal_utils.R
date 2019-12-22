@@ -33,6 +33,7 @@ resampling_method = function(option = "near") {
 #' @export
 #' @examples
 #'
+#' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
 #' # info utils can be used to list information about about a raster
 #' # dataset. More info: https://gdal.org/programs/gdalinfo.html
 #' in_file <- system.file("tif/geomatrix.tif", package = "sf")
@@ -66,6 +67,7 @@ resampling_method = function(option = "near") {
 #' # The parameter s_srs had to be specified because, in this case, the in_file
 #' # has no associated SRS.
 #' st_read(in_file)
+#' }
 
 gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
