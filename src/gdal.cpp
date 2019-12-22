@@ -164,7 +164,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (unit == NULL)
 		out(4) = Rcpp::CharacterVector::create(NA_STRING);
 	else
-		out(4) = Rcpp::CharacterVector::create(cp);
+		out(4) = Rcpp::CharacterVector::create(unit);
 	names(4) = "units_gdal"; 
 
 	out(5) = Rcpp::LogicalVector::create(srs->IsVertical());
