@@ -14,6 +14,8 @@
 
 * a new UBSAN error in `wkb_read` was resolved; #1154, #1152
 
+* output of `st_as_text()` with `MULTIPOINT` now has nested parentheses around points. E.g., `MULTIPOINT ((0 0), (1 1))` instead of `MULTIPOINT (0 0, 1 1)`; #1219, #1221
+
 # version 0.8-0
 
 * fix tests for PROJ 6.2.0 not accepting +units=
