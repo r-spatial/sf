@@ -116,9 +116,6 @@ void handle_error(OGRErr err) {
 	}
 }
 
-bool crs_is_na(Rcpp::List crs) {
-}
-
 OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 	OGRSpatialReference *dest = NULL;
 	Rcpp::CharacterVector wkt = crs[1];
@@ -163,7 +160,11 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
 
-	out(4) = Rcpp::CharacterVector::create(srs->GetAttrValue("UNIT", 0));
+	const char *unit = srs->GetAttrValue("UNIT", 0);
+	if (unit == NULL)
+		out(4) = Rcpp::CharacterVector::create(NA_STRING);
+	else
+		out(4) = Rcpp::CharacterVector::create(cp);
 	names(4) = "units_gdal"; 
 
 	out(5) = Rcpp::LogicalVector::create(srs->IsVertical());
@@ -222,16 +223,13 @@ int epsg_from_crs(Rcpp::List crs) {
 Rcpp::CharacterVector wkt_from_spatial_reference(OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
 #if GDAL_VERSION_MAJOR >= 3
-	const char *options[3];
-	options[0] = "MULTILINE=YES";
-	options[1] = "FORMAT=WKT2";
-	options[2] = NULL;
-	if (srs->exportToWkt(&cp, options) != OGRERR_NONE)
-		Rcpp::stop("OGR error: cannot export to WKT2");
+	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
+	OGRErr err = srs->exportToWkt(&cp, options);
 #else
-	if (srs->exportToWkt(&cp) != OGRERR_NONE)
-		Rcpp::stop("OGR error: cannot export to WKT");
+	OGRErr err = srs->exportToPrettyWkt(&cp);
 #endif
+	if (err != OGRERR_NONE)
+		Rcpp::stop("OGR error: cannot export to WKT");
 	Rcpp::CharacterVector out(cp);
 	CPLFree(cp);
 	return out;
