@@ -1,5 +1,5 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -28,13 +28,36 @@ Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+geographic CRS: NAD27
 epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+driver `foo' not available.
+Dataset /tmp/RtmpTuk0Tq/file5d37606216c3.gpkg already exists: remove first, use update=TRUE to append,
+delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
+Creating or updating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
+Failed to create feature 1 in x
+Creating dataset /x.gpkg failed.
+Writing layer `file5d375bfcec8d' to data source `/tmp/RtmpTuk0Tq/file5d375bfcec8d.gpkg' using driver `GPKG'
+Writing 1 features with 1 fields and geometry type Point.
+Dataset /tmp/RtmpTuk0Tq/file5d375bfcec8d.gpkg cannot be updated: do you have write permission?
+Reading layer `storms_xyzm' from data source `/home/edzer/git/sf.Rcheck/sf/shape/storms_xyzm.shp' using driver `ESRI Shapefile'
+Simple feature collection with 71 features and 0 fields
+geometry type:  LINESTRING
+dimension:      XYM
+bbox:           xmin: -102.2 ymin: 8.3 xmax: 0 ymax: 59.5
+m_range:        zmin: 924 zmax: 1017
+CRS:            NA
+Reading layer `storms_xyz' from data source `/home/edzer/git/sf.Rcheck/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+Simple feature collection with 71 features and 0 fields
+geometry type:  LINESTRING
+dimension:      XYZ
+bbox:           xmin: -102.2 ymin: 8.3 xmax: 0 ymax: 59.5
+z_range:        zmin: 924 zmax: 1017
+CRS:            NA
 ══ testthat results  ═══════════════════════════════════════════════════════════
-[ OK: 645 | SKIPPED: 59 | WARNINGS: 4 | FAILED: 0 ]
+[ OK: 731 | SKIPPED: 61 | WARNINGS: 11 | FAILED: 0 ]
 > 
 > proc.time()
    user  system elapsed 
-  2.967   0.156   3.167 
+  3.892   0.134   4.183 

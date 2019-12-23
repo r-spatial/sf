@@ -1,5 +1,5 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -24,8 +24,7 @@ Simple feature collection with 620 features and 4 fields
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 0.3893523 ymin: 153.1034 xmax: 1281.986 ymax: 1276.56
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
      label seg tp marks                           geom
 1   window  NA NA  <NA> POLYGON ((1281.986 153.1035...
@@ -45,8 +44,7 @@ Simple feature collection with 648 features and 4 fields
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label group season       date                           geom
 NA window  <NA>   <NA>       <NA> POLYGON ((585391.9 675110, ...
@@ -65,8 +63,7 @@ Simple feature collection with 648 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label                           geom
 1  window POLYGON ((585391.9 675110, ...
@@ -100,8 +97,7 @@ Simple feature collection with 51 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label                           geom
 1  window MULTIPOLYGON (((370678.2 31...
@@ -114,7 +110,11 @@ First 10 features:
 8   point        POINT (843281.2 287246)
 9   point        POINT (648479.4 235471)
 10  point      POINT (852595.8 267252.6)
+Warning message:
+In showSRID(uprojargs, format = "PROJ", multiline = "NO") :
+  Discarded datum Unknown_based_on_GRS80_ellipsoid in CRS definition,
+ but +towgs84= values preserved
 > 
 > proc.time()
    user  system elapsed 
-  1.539   0.092   1.624 
+  1.535   0.081   1.606 
