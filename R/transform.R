@@ -20,8 +20,10 @@
 #' sfc
 #' st_transform(sfc, 3857)
 #' @export
-st_transform = function(x, crs, ...) UseMethod("st_transform")
-
+st_transform = function(x, crs, ...) {
+	setprojpath()
+	UseMethod("st_transform")
+}
 chk_pol = function(x, dim = class(x)[1]) {
 	PolClose = function(y) {
 		if (any(head(y[[1]], 1) != tail(y[[1]], 1))) # close
@@ -39,24 +41,24 @@ chk_pol = function(x, dim = class(x)[1]) {
 chk_mpol = function(x) {
 	cln = lapply(x, function(y) unclass(chk_pol(y, class(x)[1])))
 	empty = if (length(cln))
-			lengths(cln) == 0
-		else
-			TRUE
+		lengths(cln) == 0
+	else
+		TRUE
 	# print(empty)
 	st_multipolygon(cln[!empty], dim = class(x)[1])
 }
 
 sanity_check = function(x) {
-    d = st_dimension(x) # flags empty geoms as NA
-    if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+	d = st_dimension(x) # flags empty geoms as NA
+	if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
 		if (inherits(x, "sfc_POLYGON"))
-        	st_sfc(lapply(x, chk_pol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_pol), crs = st_crs(x))
 		else if (inherits(x, "sfc_MULTIPOLYGON"))
-        	st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
 		else
 			stop(paste("no check implemented for", class(x)[1]))
-    } else
-        x # nocov
+	} else
+		x # nocov
 }
 
 #' @name st_transform
@@ -71,7 +73,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 
 	if (! use_gdal)
 		.Deprecated("lwgeom::st_transform_proj", "lwgeom",
-			'install with devtools::install_github("r-spatial/lwgeom")')
+					'install with devtools::install_github("r-spatial/lwgeom")')
 
 	crs = make_crs(crs)
 
@@ -87,7 +89,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 
 	if (crs != st_crs(x)) { # transform:
 		ret = structure(CPL_transform(x, crs$proj4string),
-			single_type = NULL, crs = crs)
+						single_type = NULL, crs = crs)
 		ret = st_sfc(ret)
 		if (check)
 			sanity_check(ret)
@@ -137,15 +139,15 @@ st_proj_info = function(type = "proj") {
 	if (type == "have_datum_files")
 		return(CPL_have_datum_files(0))
 
-    opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
-    if (!(type %in% opts))
+	opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
+	if (!(type %in% opts))
 		stop("unknown type") # nocov
-    t <- as.integer(match(type[1], opts) - 1)
+	t <- as.integer(match(type[1], opts) - 1)
 	res = CPL_proj_info(as.integer(t))
-    if (type == "proj")
+	if (type == "proj")
 		res$description <- sapply(strsplit(as.character(res$description), "\n"),
-			function(x) x[1])
-    data.frame(res)
+								  function(x) x[1])
+	data.frame(res)
 }
 
 #' @name st_transform
