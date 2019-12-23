@@ -5,16 +5,18 @@
 #' values of the two variables on load.
 #' @name setprojpath
 setprojpath <- function() {
-	prj = system.file("proj", package = "sf")[1]
-	curprojpath <- Sys.getenv("PROJ_LIB")
-	if (! CPL_set_data_dir(prj)) {
-		Sys.setenv("PROJ_LIB" = prj)
+	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+		prj = system.file("proj", package = "sf")[1]
+		curprojpath <- Sys.getenv("PROJ_LIB")
+		if (! CPL_set_data_dir(prj)) {
+			Sys.setenv("PROJ_LIB" = prj)
+		}
+		curgdalpath <- Sys.getenv("GDAL_DATA")
+		Sys.setenv("GDAL_DATA" = system.file("gdal", package = "sf")[1])
+		do.call(on.exit,
+				list(substitute(Sys.setenv("PROJ_LIB"  = curprojpath)),
+					 substitute(Sys.setenv("GDAL_DATA" = curgdalpath))),
+				envir = parent.frame()
+		)
 	}
-	curgdalpath <- Sys.getenv("GDAL_DATA")
-	Sys.setenv("GDAL_DATA" = system.file("gdal", package = "sf")[1])
-	do.call(on.exit,
-			list(substitute(Sys.setenv("PROJ_LIB"  = curprojpath)),
-				 substitute(Sys.setenv("GDAL_DATA" = curgdalpath))),
-			envir = parent.frame()
-	)
 }
