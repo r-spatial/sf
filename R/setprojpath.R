@@ -6,8 +6,8 @@
 #' @name setprojpath
 setprojpath <- function() {
 	prj = system.file("proj", package = "sf")[1]
+	curprojpath <- Sys.getenv("PROJ_LIB")
 	if (! CPL_set_data_dir(prj)) {
-		curprojpath <- Sys.getenv("PROJ_LIB")
 		Sys.setenv("PROJ_LIB" = prj)
 	}
 	curgdalpath <- Sys.getenv("GDAL_DATA")
