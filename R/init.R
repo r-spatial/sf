@@ -69,15 +69,15 @@ sf_extSoftVersion = function() {
 load_gdal <- function() {
 	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
 		# nocov start
-		prj = system.file("proj", package = "sf")[1]
-		if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB alone
-			assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
-			Sys.setenv("PROJ_LIB" = prj)
-		}
+		# prj = system.file("proj", package = "sf")[1]
+		# if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB alone
+		# 	assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
+		# 	# Sys.setenv("PROJ_LIB" = system.file("proj", package = "sf")[1])
+		# }
 		CPL_use_proj4_init_rules(1L)
-		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
-		gdl = system.file("gdal", package = "sf")[1]
-		Sys.setenv("GDAL_DATA" = gdl)
+		# assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
+		# gdl = system.file("gdal", package = "sf")[1]
+		# Sys.setenv("GDAL_DATA" = gdl)
 		# nocov end
 	}
 	CPL_gdal_init()
@@ -96,14 +96,14 @@ load_gdal <- function() {
 
 unload_gdal <- function() {
 	CPL_gdal_cleanup_all()
-	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		# nocov start
-		if (! CPL_set_data_dir(system.file("proj", package = "sf")[1])) # set back:
-			Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
-
-		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
-		# nocov end
-	}
+	# if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
+	# 	# nocov start
+	# 	if (! CPL_set_data_dir(system.file("proj", package = "sf")[1])) # set back:
+	# 		Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
+	#
+	# 	Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
+	# 	# nocov end
+	# }
 	units::remove_symbolic_unit("link")
 	units::remove_symbolic_unit("us_in")
 	units::remove_symbolic_unit("ind_yd")

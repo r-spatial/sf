@@ -43,11 +43,14 @@ Ops.crs <- function(e1, e2) {
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 #' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
 #' code) and \code{proj4string} (character).
-#' Comparison of two objects of class \code{crs} uses the GDAL function 
+#' Comparison of two objects of class \code{crs} uses the GDAL function
 #' \code{OGRSpatialReference::IsSame}.
 #' @return Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 #' \code{proj4string} (length-1 character).
-st_crs = function(x, ...) UseMethod("st_crs")
+st_crs = function(x, ...) {
+	setprojpath()
+	UseMethod("st_crs")
+}
 
 #' @name st_crs
 #' @export
@@ -216,7 +219,7 @@ st_is_longlat = function(x) {
 			bb = st_bbox(x)
 			# check for potentially meaningless value range:
 			eps = sqrt(.Machine$double.eps)
-			if (all(!is.na(unclass(bb))) && 
+			if (all(!is.na(unclass(bb))) &&
 					(bb["xmin"] < (-180-eps) || bb["xmax"] > (360+eps) || bb["ymin"] < (-90-eps) || bb["ymax"] > (90+eps)))
 				warning("bounding box has potentially an invalid value range for longlat data")
 		}
@@ -253,7 +256,7 @@ udunits_from_proj = list(
 crs_parameters = function(x) {
 	stopifnot(!is.na(x))
 	ret = structure(CPL_crs_parameters(x$proj4string),
-		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal", 
+		names = c("SemiMajor", "SemiMinor", "InvFlattening", "units_gdal",
 			"IsVertical", "WktPretty", "Wkt"))
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
