@@ -14,8 +14,8 @@ setprojpath <- function() {
 		curgdalpath <- Sys.getenv("GDAL_DATA")
 		Sys.setenv("GDAL_DATA" = system.file("gdal", package = "sf")[1])
 		do.call(on.exit,
-				list(substitute(Sys.setenv("PROJ_LIB"  = curprojpath)),
-					 substitute(Sys.setenv("GDAL_DATA" = curgdalpath))),
+				list(substitute(Sys.setenv("PROJ_LIB"  = curprojpath,
+										   "GDAL_DATA" = curgdalpath))),
 				envir = parent.frame()
 		)
 	}
