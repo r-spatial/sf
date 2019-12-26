@@ -39,3 +39,13 @@ g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.7765
 d = st_as_sf(data.frame(id=1, geometry=g), crs=4326)
 st_area(d)
 st_area(st_transform(d, 2314))
+
+p1 = st_point(c(7,52))
+p2 = st_point(c(-30,20))
+sfc = st_sfc(p1, p2, crs = 4326)
+st_transform(sfc, 3857, aoi = c(-180,-90,180,90))
+try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90))) # error
+st_transform(sfc, pipeline =
+	"+proj=pipeline +step +proj=axisswap +order=2,1") # swaps axes
+st_transform(sfc, pipeline =
+	"+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE) # swaps axes too

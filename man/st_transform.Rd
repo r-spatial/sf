@@ -14,7 +14,16 @@
 \usage{
 st_transform(x, crs, ...)
 
-\method{st_transform}{sfc}(x, crs, ..., partial = TRUE, check = FALSE, use_gdal = TRUE)
+\method{st_transform}{sfc}(
+  x,
+  crs = st_crs(x),
+  ...,
+  aoi = numeric(0),
+  pipeline = character(0),
+  reverse = FALSE,
+  partial = TRUE,
+  check = FALSE
+)
 
 \method{st_transform}{sf}(x, crs, ...)
 
@@ -37,17 +46,24 @@ st_wrap_dateline(x, options, quiet)
 
 \item{...}{ignored}
 
+\item{aoi}{area of interest, in degrees: 
+WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}
+
+\item{pipeline}{character; proj4 or WKT coordinate operation, to override the default operation}
+
+\item{reverse}{boolean; if \code{TRUE}, the inverse operation of the pipeline is applied}
+
 \item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
 
 \item{check}{logical; perform a sanity check on resulting polygons?}
-
-\item{use_gdal}{logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)}
 
 \item{type}{character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.}
 
 \item{options}{character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)}
 
 \item{quiet}{logical; print options after they have been parsed?}
+
+\item{use_gdal}{logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)}
 }
 \description{
 Transform or convert coordinates of simple feature

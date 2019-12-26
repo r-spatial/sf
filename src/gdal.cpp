@@ -446,7 +446,8 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 } // #nocov end
 
 // [[Rcpp::export]]
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs) {
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, 
+		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false) {
 
 	// import crs:
 	OGRSpatialReference *dest = OGRSrs_from_crs(crs);
@@ -459,8 +460,25 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs) {
 		dest->Release();
 		return sfc_from_ogr(g, true); // destroys g
 	}
+#if GDAL_VERSION_MAJOR >= 3
+	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
+	if (pipeline.size() || AOI.size()) {
+		if (AOI.size() && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3])) // and pray!
+			Rcpp::stop("values for area of interest not accepted");
+		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
+			Rcpp::stop("pipeline value not accepted");
+	}
+	OGRCoordinateTransformation *ct = 
+		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, 
+			// (const OGRCoordinateTransformationOptions *) 
+			*options);
+	delete options;
+#else
+	if (pipeline.size() || AOI.size())
+		Rcpp::stop("pipeline or area of interest require GDAL >= 3");
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
+#endif
 	if (ct == NULL) {
 		dest->Release(); // #nocov
 		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov
