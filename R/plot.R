@@ -72,6 +72,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	dots = list(...)
 	col_missing = is.null(dots$col)
 
+	x = swap_axes_if_needed(x)
+
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
@@ -258,6 +260,15 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 		par(opar[-desel])
 	}
 }
+
+swap_axes_if_needed = function(x) {
+	crs = st_crs(x)
+	if (!is.na(crs) && crs_parameters(crs)$yx)
+		st_transform(x, pipeline = "+proj=pipeline +step +proj=axisswap +order=2,1")
+	else
+		x
+}
+
 
 #' @name plot
 #' @export
@@ -540,6 +551,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 #   min max
 # x
 # y
+
 	bbox = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	# expandBB: 1=below, 2=left, 3=above and 4=right.
 	expBB = function(lim, expand) c(lim[1] - expand[1] * diff(lim), lim[2] + expand[2] * diff(lim))

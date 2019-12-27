@@ -117,7 +117,7 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 #' library(units)
 #' set_units(st_area(st_transform(nc[1,], 2264)), m^2)
-st_transform.sf = function(x, crs, ...) {
+st_transform.sf = function(x, crs = st_crs(x), ...) {
 	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
 	x
 }
@@ -127,7 +127,7 @@ st_transform.sf = function(x, crs, ...) {
 #' @details The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_transform.sfg = function(x, crs , ...) {
+st_transform.sfg = function(x, crs = st_crs(x), ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")

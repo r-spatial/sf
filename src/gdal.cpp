@@ -139,8 +139,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found");
 
-	Rcpp::List out(11);
-	Rcpp::CharacterVector names(11);
+	Rcpp::List out(12);
+	Rcpp::CharacterVector names(12);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -202,6 +202,10 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	else
 		out(10) = Rcpp::CharacterVector::create(NA_STRING);
 	names(10) = "epsg";
+
+	bool yx = srs->EPSGTreatsAsLatLong() || srs->EPSGTreatsAsNorthingEasting();
+	out(11) = Rcpp::LogicalVector(yx);
+	names(11) = "yx";
 
 	delete srs;
 	out.attr("names") = names;
