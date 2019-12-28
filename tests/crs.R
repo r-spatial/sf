@@ -43,7 +43,7 @@ st_area(st_transform(d, 2314))
 p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = 4326)
-if (sf_extSoftVersion()[["GDAL"]] > "2.2.2") {
+if (sf_extSoftVersion()[["GDAL"]] >= "3.0.2") {
   print(st_transform(sfc, 3857, aoi = c(-180,-90,180,90)))
   print(try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))) # error
   print(st_transform(sfc, pipeline =
