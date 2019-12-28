@@ -58,7 +58,7 @@ bool CPL_have_datum_files(SEXP foo) {
 	return true;
 }
 
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep) {
 
 	using namespace Rcpp;
 
@@ -66,7 +66,9 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-	
+        if (keep.size() != 1)
+                stop("keep should be a single integer"); // #nocov
+
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
 	if (P == NULL)
@@ -90,9 +92,22 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
 
 	// transform:
-	if (proj_trans_array(P, PJ_FWD, x.size(), x.data())) {
-		proj_destroy(P);
-		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+        if (keep[0] == 1) {
+            // use proj_trans() on individual points, making unprojectable points be NA
+            PJ_COORD row, projected;
+            for (int i = 0; i < pts.nrow(); i++) {
+                row.lp.lam = x.data()[i].lp.lam;
+                row.lp.phi = x.data()[i].lp.phi;
+                projected = proj_trans(P, PJ_FWD, row);
+                x.data()[i].lp.lam = projected.lp.lam;
+                x.data()[i].lp.phi = projected.lp.phi;
+            }
+        } else {
+            // DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
+            if (proj_trans_array(P, PJ_FWD, x.size(), x.data())) {
+                proj_destroy(P);
+                stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+            }
 	}
 
 	// rad2deg?
@@ -117,7 +132,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
                 	    nwarn++; // #nocov
 	}
-	if (nwarn > 0) 
+	if (nwarn > 0)
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }
@@ -150,7 +165,7 @@ FILE *pj_open_lib(projCtx, const char *, const char *);
 
 // [[Rcpp::export]]
 std::string CPL_proj_version(bool b = false) {
-	int v = PJ_VERSION;	
+	int v = PJ_VERSION;
 	std::stringstream buffer;
 	buffer << v / 100 << "." << (v / 10) % 10 << "." << v % 10;
 	return buffer.str();
@@ -196,7 +211,7 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep) {
 
 	using namespace Rcpp;
 
@@ -204,12 +219,14 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
+        if (na.size() != 1)
+                stop("na should be a single integer"); // #nocov
 
 	projPJ fromPJ, toPJ;
 
-	if (!(fromPJ = pj_init_plus(from_to[0]))) 
+	if (!(fromPJ = pj_init_plus(from_to[0])))
 		stop(pj_strerrno(*pj_get_errno_ref()));
-	
+
 	if (!(toPJ = pj_init_plus(from_to[1])))
 		stop(pj_strerrno(*pj_get_errno_ref()));
 
@@ -228,12 +245,30 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 //	for (int i = 0; i < pts.nrow(); i++)
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
-
-	if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
-		pj_free(fromPJ); pj_free(toPJ); // #nocov start
-		Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
-		stop("error"); // #nocov end
-	}
+        if (keep[0] == 1) {
+            // use proj_trans() on individual points, making unprojectable points be NA
+            // FIXME: not tested, since author has no access to the old proj API.
+            PJ_COORD row;
+            double thisx, thisy;
+            for (int i = 0; i < pts.nrow(); i++) {
+                thisx = xx[i];
+                thisy = yy[i];
+                if (pj_transform(fromPJ, toPJ, 1, 0, &thisx, &thisy, NULL) != 0) {
+                    xx[i] = NA_REAL;
+                    yy[i] = NA_REAL;
+                } else {
+                    xx[i] = thisx;
+                    yy[i] = thisy;
+                }
+            }
+        } else {
+            // DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
+            if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
+                pj_free(fromPJ); pj_free(toPJ); // #nocov start
+                Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
+                stop("error"); // #nocov end
+            }
+        }
 	pj_free(fromPJ);
 	if (pj_is_latlong(toPJ)) {
 		for (int i = 0; i < pts.nrow(); i++) {
@@ -254,7 +289,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
                 	    nwarn++; // #nocov
 	}
-	if (nwarn > 0) 
+	if (nwarn > 0)
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }
