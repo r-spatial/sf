@@ -20,7 +20,7 @@ test_that("st_crs works", {
 
   expect_error(st_crs("+proj=ll"), "invalid crs")
   if (sf_extSoftVersion()[["GDAL"]] > "2.2.2")
-  	expect_error(st_crs("+proj=longlat +datum=NAD26"), "invalid crs")
+  	expect_error(st_crs("+proj=longlat +datum=NAD26"))
   expect_silent(st_crs("+proj=longlat"))
   expect_silent(st_crs("+proj=longlat +datum=NAD27"))
   a <- st_crs(4326)

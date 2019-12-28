@@ -43,9 +43,11 @@ st_area(st_transform(d, 2314))
 p1 = st_point(c(7,52))
 p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = 4326)
-st_transform(sfc, 3857, aoi = c(-180,-90,180,90))
-try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90))) # error
-st_transform(sfc, pipeline =
-	"+proj=pipeline +step +proj=axisswap +order=2,1") # swaps axes
-st_transform(sfc, pipeline =
-	"+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE) # swaps axes too
+if (sf_extSoftVersion()[["GDAL"]] > "2.2.2") {
+  print(st_transform(sfc, 3857, aoi = c(-180,-90,180,90)))
+  print(try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))) # error
+  print(st_transform(sfc, pipeline =
+	"+proj=pipeline +step +proj=axisswap +order=2,1")) # swaps axes
+  print(st_transform(sfc, pipeline =
+	"+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE)) # swaps axes too
+}
