@@ -1,5 +1,7 @@
 # version 0.8-1
 
+* `sf_project` gains an option `keep = TRUE` to return `Inf` values for points not projectable; #1228
+
 * support `vctrs` methods for geometry list columns; this makes `unnest` work again (#1172); #1196 by Lionel Henry
 
 * `st_as_sf.pq_geometry` converts binary geom columns from RPostgres::dbGetQuery; #1195
