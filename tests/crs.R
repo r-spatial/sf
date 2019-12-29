@@ -19,6 +19,10 @@ st_crs(x, parameters = TRUE)
 from = st_crs(4326)$proj4string
 to = st_crs(3857)$proj4string
 (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
+# create Inf points: #1227/#1228
+suppressWarnings(
+  sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
+)
 sf_project(to, from, ret)
 st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
 if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
