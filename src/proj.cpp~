@@ -219,8 +219,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-        if (keep.size() != 1)
-                stop("keep should be a single integer"); // #nocov
+        if (na.size() != 1)
+                stop("na should be a single integer"); // #nocov
 
 	projPJ fromPJ, toPJ;
 

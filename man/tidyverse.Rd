@@ -124,8 +124,6 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 \item{add}{see corresponding function in dplyr}
 
-\item{x}{tbls to join}
-
 \item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
 \item{.keep_all}{see corresponding function in dplyr}
@@ -167,27 +165,6 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 \item{extra}{see \link[tidyr]{separate}}
 
 \item{.preserve}{see \link[tidyr]{unnest}}
-
-\item{y}{tbls to join}
-
-\item{by}{a character vector of variables to join by.  If \code{NULL}, the
-default, \code{*_join()} will do a natural join, using all variables with
-common names across the two tables. A message lists the variables so
-that you can check they're right (to suppress the message, simply
-explicitly list the variables that you want to join).
-
-To join by different variables on x and y use a named vector.
-For example, \code{by = c("a" = "b")} will match \code{x.a} to
-\code{y.b}.}
-
-\item{copy}{If \code{x} and \code{y} are not from the same data source,
-and \code{copy} is \code{TRUE}, then \code{y} will be copied into the
-same src as \code{x}.  This allows you to join tables across srcs, but
-it is a potentially expensive operation so you must opt into it.}
-
-\item{suffix}{If there are non-joined duplicate variables in \code{x} and
-\code{y}, these suffixes will be added to the output to disambiguate them.
-Should be a character vector of length 2.}
 }
 \value{
 an object of class \link{sf}
