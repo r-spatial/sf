@@ -248,7 +248,6 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
         if (keep[0] == 1) {
             // use proj_trans() on individual points, making unprojectable points be NA
             // FIXME: not tested, since author has no access to the old proj API.
-            PJ_COORD row;
             double thisx, thisy;
             for (int i = 0; i < pts.nrow(); i++) {
                 thisx = xx[i];
