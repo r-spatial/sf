@@ -199,10 +199,10 @@ st_to_s2 = function(x) {
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.
 #' @export
-sf_project = function(from, to, pts, keep=FALSE) {
+sf_project = function(from, to, pts, keep = FALSE) {
 	#.Deprecated("lwgeom::st_transform_proj")
-        if (!is.logical(keep) || 1 != length(keep))
-            stop("'keep' must be single-length logical value")
+	if (!is.logical(keep) || 1 != length(keep))
+		stop("'keep' must be single-length logical value")
 	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0)
 }
 
