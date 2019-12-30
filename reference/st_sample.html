@@ -44,7 +44,8 @@
 <meta property="og:description" content="Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
 size (if type = &quot;random&quot;) or an approximation of
-size (for other sampling types)." />
+size (for other sampling types). spatstat methods are
+interfaced and do not use the size argument." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -155,7 +156,8 @@ size (for other sampling types)." />
     <p>Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
 <code>size</code> (if <code>type = "random"</code>) or an approximation of
-<code>size</code> (for other sampling types).</p>
+<code>size</code> (for other sampling types). <code>spatstat</code> methods are
+interfaced and do not use the <code>size</code> argument.</p>
     
     </div>
 
@@ -174,11 +176,12 @@ By default, returns a pre-specified number of points that is equal to
     </tr>
     <tr>
       <th>...</th>
-      <td><p>ignored, or passed on to <a href='https://rdrr.io/r/base/sample.html'>sample</a> for <code>multipoint</code> sampling</p></td>
+      <td><p>passed on to <a href='https://rdrr.io/r/base/sample.html'>sample</a> for <code>multipoint</code> sampling, or to <code>spatstat</code> functions for spatstat sampling types (see details)</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), and <code>regular</code>.</p></td>
+      <td><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), <code>regular</code>,
+or one of the <code>spatstat</code> methods such as <code>Thomas</code> for calling <code><a href='https://rdrr.io/pkg/spatstat/man/rThomas.html'>spatstat::rThomas</a></code> (see Details).</p></td>
     </tr>
     <tr>
       <th>exact</th>
@@ -201,10 +204,12 @@ of <code>x</code>.</p>
 <p>if <code>x</code> has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. <a href='http://mathworld.wolfram.com/SpherePointPicking.html'>http://mathworld.wolfram.com/SpherePointPicking.html</a></p>
 <p>For <code>regular</code> or <code>hexagonal</code> sampling of polygons, the resulting size is only an approximation.</p>
 <p>As parameter called <code>offset</code> can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from <code><a href='st_bbox.html'>st_bbox(x)</a></code>); for lines use a number like <code><a href='https://rdrr.io/r/stats/Uniform.html'>runif(1)</a></code>.</p>
+<p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set. 
+For instance, to use <code><a href='https://rdrr.io/pkg/spatstat/man/rThomas.html'>spatstat::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpz6ml02/temp_libpath7d86515e0518/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpGJAziu/temp_libpath7c7f28b7fc24/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -242,7 +247,12 @@ of <code>x</code>.</p>
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 0.09485929 ymax: 1
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0.9131502), (0 0.6170275), (0 0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.08146043 0), (0.02502268 0), (0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.07894482 1), (0.07237983 1), (0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT EMPTY</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_sample</span>(<span class='no'>ls</span>, <span class='fl'>80</span>))</div><div class='img'><img src='st_sample-6.png' alt='' width='700' height='433' /></div></pre>
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0.9131502), (0 0.6170275), (0 0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.08146043 0), (0.02502268 0), (0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.07894482 1), (0.07237983 1), (0....</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT EMPTY</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_sample</span>(<span class='no'>ls</span>, <span class='fl'>80</span>))</div><div class='img'><img src='st_sample-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># spatstat example:</span>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>spatstat</span>)) {
+ <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sf/man/sfc.html'>st_sfc</a></span>(<span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sf/man/st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>10</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>)))))
+ <span class='co'># for spatstat::rThomas(), set type = "Thomas":</span>
+ <span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>st_sample</span>(<span class='no'>x</span>, <span class='kw'>kappa</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"Thomas"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

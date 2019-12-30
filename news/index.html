@@ -149,6 +149,7 @@
 <a href="#version-0-8-1" class="anchor"></a>version 0.8-1<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>st_sample</code> directly interfaces <code>spatstat</code> sampling methods, e.g. <code>type = "Thomas"</code> calls <code><a href="https://rdrr.io/pkg/spatstat/man/rThomas.html">spatstat::rThomas</a></code> after converting input arguments (window) and converts returned <code>ppp</code> object to <code>sf</code>’s <code>POINT</code> geometries; <a href='https://github.com/r-spatial/sf/issues/1204'>#1204</a> with help from Ege Rubak and Jakub Nowosad</p></li>
 <li><p><code>sf_project</code> gains an option <code>keep = TRUE</code> to return <code>Inf</code> values for points not projectable; <a href='https://github.com/r-spatial/sf/issues/1228'>#1228</a></p></li>
 <li><p>support <code>vctrs</code> methods for geometry list columns; this makes <code>unnest</code> work again (<a href='https://github.com/r-spatial/sf/issues/1172'>#1172</a>); <a href='https://github.com/r-spatial/sf/issues/1196'>#1196</a> by Lionel Henry</p></li>
 <li><p><code>st_as_sf.pq_geometry</code> converts binary geom columns from RPostgres::dbGetQuery; <a href='https://github.com/r-spatial/sf/issues/1195'>#1195</a></p></li>
