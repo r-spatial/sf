@@ -14,7 +14,7 @@
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)
-#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} and \code{regular}, 
+#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
 #' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
@@ -196,13 +196,11 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = crs)
 }
 
-### hex grid that
+### return points on a triangular grid that
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
-## - selects geometries intersecting with obj
-hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
-                    dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+hex_grid_points = function(obj, pt, dx) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
@@ -212,28 +210,10 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
 	y = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
 
-	y <- rep(y, each = length(x))
-	x <- rep(c(x, x + dx / 2), length.out = length(y))
-	ret = if (points) {
-		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
-	} else {
-		dy = dx / sqrt(3)
-		dx2 = dx / 2
-		x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
-		y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
-		xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dy & y <= ylim[2] + dy, ]
-		mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
-	}
-	sel = if (isTRUE(clip)) {
-		if (points)
-			lengths(st_intersects(ret, obj)) > 0
-		else
-			lengths(st_relate(ret, obj, "2********")) > 0
-	} else
-		TRUE
-	ret[sel]
+	y  <- rep(y, each = length(x))
+	x  <- rep(c(x, x + dx / 2), length.out = length(y))
+	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }
 
 st_sample_exact = function(x, size, ..., type) {

@@ -223,7 +223,7 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 }
 
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options) {
+		Rcpp::CharacterVector options, bool overwrite = false) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 

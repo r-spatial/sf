@@ -43,11 +43,8 @@ Ops.crs <- function(e1, e2) {
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 #' list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
 #' code) and \code{proj4string} (character).
-#' Two objects of class \code{crs} are semantically identical when: (1) they are completely identical, or
-#' (2) they have identical proj4string but one of them has a missing EPSG ID. As a consequence, equivalent
-#' but different proj4strings, e.g. \code{ "+proj=longlat +datum=WGS84" } and \code{ "+datum=WGS84 +proj=longlat" },
-#' are considered different.
-#' The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
+#' Comparison of two objects of class \code{crs} uses the GDAL function 
+#' \code{OGRSpatialReference::IsSame}.
 #' @return Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
 #' \code{proj4string} (length-1 character).
 st_crs = function(x, ...) UseMethod("st_crs")

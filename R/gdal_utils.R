@@ -20,7 +20,6 @@ resampling_method = function(option = "near") {
 }
 # nocov end
 
-
 #' Native interface to gdal utils
 #' @name gdal_utils
 #' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
@@ -32,7 +31,45 @@ resampling_method = function(option = "near") {
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
 #' @export
-gdal_utils = function(util = "info", source, destination, options = character(0), 
+#' @examples
+#'
+#' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
+#' # info utils can be used to list information about about a raster
+#' # dataset. More info: https://gdal.org/programs/gdalinfo.html
+#' in_file <- system.file("tif/geomatrix.tif", package = "sf")
+#' gdal_utils("info", in_file, options = c("-mm", "-proj4"))
+#'
+#' # vectortranslate utils can be used to convert simple features data between
+#' # file formats. More info: https://gdal.org/programs/ogr2ogr.html
+#' in_file <- system.file("shape/storms_xyz.shp", package="sf")
+#' out_file <- paste0(tempfile(), ".gpkg")
+#' gdal_utils(
+#'   util = "vectortranslate",
+#'   source = in_file,
+#'   destination = out_file, # output format must be specified for GDAL < 2.3
+#'   options = c("-f", "GPKG")
+#' )
+#' # The parameters can be specified as c("name") or c("name", "value"). The
+#' # vectortranslate utils can perform also various operations during the
+#' # conversion process. For example we can reproject the features during the
+#' # translation.
+#' gdal_utils(
+#'   util = "vectortranslate",
+#'   source = in_file,
+#'   destination = out_file,
+#'   options = c(
+#'   "-f", "GPKG", # output file format for GDAL < 2.3
+#'   "-s_srs", "EPSG:4326", # input file SRS
+#'   "-t_srs", "EPSG:2264" # output file SRS
+#'   )
+#' )
+#' st_read(out_file)
+#' # The parameter s_srs had to be specified because, in this case, the in_file
+#' # has no associated SRS.
+#' st_read(in_file)
+#' }
+
+gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
 
 	ret = switch(util,
@@ -40,7 +77,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			warp = CPL_gdalwarp(source, destination, options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
 			rasterize = {  # nocov start
-				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co", 
+				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
 				CPL_gdalrasterize(source, destination, options, overwrite)
 			}, # nocov end

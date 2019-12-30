@@ -4,7 +4,7 @@
 \alias{sf_project}
 \title{directly transform a set of coordinates}
 \usage{
-sf_project(from, to, pts)
+sf_project(from, to, pts, keep = FALSE)
 }
 \arguments{
 \item{from}{character; proj4string of pts}
@@ -12,6 +12,10 @@ sf_project(from, to, pts)
 \item{to}{character; target coordinate reference system}
 
 \item{pts}{two-column numeric matrix, or object that can be coerced into a matrix}
+
+\item{keep}{logical value controlling the handling of unprojectable points. If
+`keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
+return value; otherwise an error is reported and nothing is returned.}
 }
 \description{
 directly transform a set of coordinates

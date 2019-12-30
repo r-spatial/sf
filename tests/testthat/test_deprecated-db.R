@@ -154,7 +154,7 @@ test_that("round trips", {
 	round_trip(pg, "POINT ZM (0 0 0 0)")
 	round_trip(pg, "POINT (0 0)")
 	round_trip(pg, "LINESTRING (0 0, 1 1, 2 2)")
-	round_trip(pg, "MULTIPOINT (0 0, 1 1, 2 2)")
+	round_trip(pg, "MULTIPOINT ((0 0), (1 1), (2 2))")
 	round_trip(pg, "POLYGON ((0 0, 1 0, 1 1, 0 0))")
 	round_trip(pg, "MULTIPOLYGON (((0 0, 1 0, 1 1, 0 0)), ((2 2, 3 2, 3 3, 2 2)))")
 	round_trip(pg, paste("MULTIPOLYGON (((0 0, 1 0, 1 1, 0 0),",

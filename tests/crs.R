@@ -20,8 +20,11 @@ from = st_crs(4326)$proj4string
 to = st_crs(3857)$proj4string
 (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
 sf_project(to, from, ret)
+suppressWarnings(
+  sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
+)
 st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
-if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
+if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 }
@@ -39,3 +42,5 @@ g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.7765
 d = st_as_sf(data.frame(id=1, geometry=g), crs=4326)
 st_area(d)
 st_area(st_transform(d, 2314))
+
+
