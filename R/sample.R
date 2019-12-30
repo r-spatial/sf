@@ -124,7 +124,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 
 		pts = if (type == "hexagonal") {
 			dx = sqrt(a0 / size / (sqrt(3)/2))
-			hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
+			hex_grid_points(x, pt = offset, dx = dx)
 		} else if (type == "regular") {
 			dx = as.numeric(sqrt(a0 / size))
 			offset = c((offset[1] - bb["xmin"]) %% dx,
