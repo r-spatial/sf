@@ -1,5 +1,9 @@
 # version 0.8-1
 
+* `st_sample` directly interfaces `spatstat` sampling methods, e.g. `type = "Thomas"` calls `spatstat::rThomas` after converting input arguments (window) and converts returned `ppp` object to `sf`'s `POINT` geometries; #1204 with help from Ege Rubak and Jakub Nowosad
+
+* `sf_project` gains an option `keep = TRUE` to return `Inf` values for points not projectable; #1228
+
 * support `vctrs` methods for geometry list columns; this makes `unnest` work again (#1172); #1196 by Lionel Henry
 
 * `st_as_sf.pq_geometry` converts binary geom columns from RPostgres::dbGetQuery; #1195
@@ -15,6 +19,8 @@
 * a new UBSAN error in `wkb_read` was resolved; #1154, #1152
 
 * new method `st_shift_longitude` to re-center data for a Pacific view. #1218
+
+* output of `st_as_text()` with `MULTIPOINT` now has nested parentheses around points. E.g., `MULTIPOINT ((0 0), (1 1))` instead of `MULTIPOINT (0 0, 1 1)`; #1219, #1221
 
 # version 0.8-0
 

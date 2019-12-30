@@ -3,7 +3,8 @@
 #' Sample points on or in (sets of) spatial features.
 #' By default, returns a pre-specified number of points that is equal to
 #' \code{size} (if \code{type = "random"}) or an approximation of
-#' \code{size} (for other sampling types).
+#' \code{size} (for other sampling types). \code{spatstat} methods are
+#' interfaced and do not use the \code{size} argument.
 #'
 #' The function is vectorised: it samples \code{size} points across all geometries in
 #' the object if \code{size} is a single number, or the specified number of points
@@ -12,8 +13,9 @@
 #'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
-#' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
-#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} and \code{regular}.
+#' @param ... passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)
+#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
+#' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
@@ -23,6 +25,9 @@
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 #'
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
+#'
+#' Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
+#' For instance, to use \code{spatstat::rThomas()}, set \code{type = "Thomas"}.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' p1 = st_sample(nc[1:3, ], 6)
@@ -68,20 +73,26 @@
 #'  st_linestring(rbind(c(2,2),c(2,2.00001))))
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
+#' # spatstat example:
+#' if (require(spatstat)) {
+#'  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
+#'  # for spatstat::rThomas(), set type = "Thomas":
+#'  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
+#' }
 #' @export
 st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 	x = st_geometry(x)
-	if (any(size %% 1 != 0))
+	if (!missing(size) && any(size %% 1 != 0))
 		stop("size should be an integer")
-	if (length(size) > 1) { # recurse:
+	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
 		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,
-					 st_multipoints_sample(do.call(c, x), size, ..., type = type),
-					 st_ll_sample(st_cast(x, "LINESTRING"), size, ..., type = type),
-					 st_poly_sample(x, size, ..., type = type))
+					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
+					 st_ll_sample(st_cast(x, "LINESTRING"), size = size, ..., type = type),
+					 st_poly_sample(x, size = size, ..., type = type))
 		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if(diff > 0) { # too few points
@@ -98,41 +109,57 @@ st_sample = function(x, size, ..., type = "random", exact = TRUE) {
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
-	a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
-	a1 = as.numeric(sum(st_area(x)))
-	# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
-	# for instance has 0 st_area
-	if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
-		size = round(size * a0 / a1)
-	bb = st_bbox(x)
+	if (type %in% c("hexagonal", "regular", "random")) {
 
-	if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
-		message_longlat("st_sample")
+		if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
+			message_longlat("st_sample")
 
-	pts = if (type == "hexagonal") {
-		dx = sqrt(a0 / size / (sqrt(3)/2))
-		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
-	} else if (type == "regular") {
-		dx = as.numeric(sqrt(a0 / size))
-		offset = c((offset[1] - bb["xmin"]) %% dx,
-			(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
-		n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
-		st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
-	} else if (type == "random") {
-		lon = runif(size, bb[1], bb[3])
-		lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-			toRad = pi/180
-			lat0 = (sin(bb[2] * toRad) + 1)/2
-			lat1 = (sin(bb[4] * toRad) + 1)/2
-			y = runif(size, lat0, lat1)
-			asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-		} else
-			runif(size, bb[2], bb[4])
-		m = cbind(lon, lat)
-		st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-	} else
-		stop(paste("sampling type", type, "not implemented for polygons"))
-	pts[lengths(st_intersects(pts, x)) > 0]
+		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
+		a1 = as.numeric(sum(st_area(x)))
+		# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
+		# for instance has 0 st_area
+		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
+			size = round(size * a0 / a1)
+		bb = st_bbox(x)
+
+		pts = if (type == "hexagonal") {
+			dx = sqrt(a0 / size / (sqrt(3)/2))
+			hex_grid_points(x, pt = offset, dx = dx)
+		} else if (type == "regular") {
+			dx = as.numeric(sqrt(a0 / size))
+			offset = c((offset[1] - bb["xmin"]) %% dx,
+				(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+			n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+			st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+		} else if (type == "random") {
+			lon = runif(size, bb[1], bb[3])
+			lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
+				toRad = pi/180
+				lat0 = (sin(bb[2] * toRad) + 1)/2
+				lat1 = (sin(bb[4] * toRad) + 1)/2
+				y = runif(size, lat0, lat1)
+				asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
+			} else
+				runif(size, bb[2], bb[4])
+			m = cbind(lon, lat)
+			st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+		}
+		pts[x]
+	} else { # try to go into spatstat
+		if (!requireNamespace("spatstat", quietly = TRUE))
+			stop("package spatstat required, please install it first")
+		if (!requireNamespace("maptools", quietly = TRUE))
+			stop("package maptools required, please install it first")
+		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat")), silent = TRUE)
+		if (inherits(spatstat_fun, "try-error"))
+			stop(paste0("r", type), " is not an exported function from spatstat.")
+		pts = try(spatstat_fun(..., win = maptools::as.owin.SpatialPolygons(as(x, "Spatial"))), silent = TRUE)
+		if (inherits(pts, "try-error"))
+			stop("The spatstat function ", paste0("r", type),
+             " did not return a valid result. Consult the help file.\n",
+             "Error message from spatstat:\n", pts)
+		st_as_sf(pts)[-1,]
+	}
 }
 
 st_multipoints_sample = function(x, size, ..., type = "random") {
@@ -169,13 +196,11 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = crs)
 }
 
-### hex grid that
+### return points on a triangular grid that
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
-## - selects geometries intersecting with obj
-hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
-                    dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+hex_grid_points = function(obj, pt, dx) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
@@ -185,28 +210,10 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
 	y = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
 
-	y <- rep(y, each = length(x))
-	x <- rep(c(x, x + dx / 2), length.out = length(y))
-	ret = if (points) {
-		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
-	} else {
-		dy = dx / sqrt(3)
-		dx2 = dx / 2
-		x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
-		y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
-		xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dy & y <= ylim[2] + dy, ]
-		mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
-	}
-	sel = if (isTRUE(clip)) {
-		if (points)
-			lengths(st_intersects(ret, obj)) > 0
-		else
-			lengths(st_relate(ret, obj, "2********")) > 0
-	} else
-		TRUE
-	ret[sel]
+	y  <- rep(y, each = length(x))
+	x  <- rep(c(x, x + dx / 2), length.out = length(y))
+	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }
 
 st_sample_exact = function(x, size, ..., type) {
