@@ -13,7 +13,7 @@
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param ... ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling
-#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} and \code{regular}.
+#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), and \code{regular}.
 #' @param exact logical; should the length of output be exactly
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
@@ -111,7 +111,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 
 	pts = if (type == "hexagonal") {
 		dx = sqrt(a0 / size / (sqrt(3)/2))
-		hex_grid(x, pt = offset, dx = dx, points = TRUE, clip = FALSE)
+		hex_grid_points(x, pt = offset, dx = dx)
 	} else if (type == "regular") {
 		dx = as.numeric(sqrt(a0 / size))
 		offset = c((offset[1] - bb["xmin"]) %% dx,
@@ -169,53 +169,24 @@ st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
 	st_sfc(CPL_gdal_linestring_sample(x, grp), crs = crs)
 }
 
-### hex grid that
+### return points on a triangular grid that
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
-## - selects geometries intersecting with obj
-hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
-                    dx = diff(st_bbox(obj)[c("xmin", "xmax")])/10.1, points = TRUE, clip = NA) {
+hex_grid_points = function(obj, pt, dx) {
 
 	bb = st_bbox(obj)
 	dy = sqrt(3) * dx / 2
 	xlim = bb[c("xmin", "xmax")]
 	ylim = bb[c("ymin", "ymax")]
 	offset = c(x = (pt[1] - xlim[1]) %% dx, y = (pt[2] - ylim[1]) %% (2 * dy))
-	x0 = seq(xlim[1] - dx, xlim[2] + 2 * dx, dx) + offset[1]
-	y0 = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
+	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
+	y = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
 
-	y  <- rep(y0, each = length(x0))
-	x  <- rep(c(x0, x0 + dx / 2), length.out = length(y))
-	xy = cbind(x, y)
-	ret = if (points) { # called by st_sample():
-		xy = xy[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
-	} else { # called by st_make_grid():
-		odd  <- seq(1, by = 2, length.out = length(x0))
-		even <- seq(2, by = 2, length.out = length(x0))
-		xi <- rep(c(odd, even), length.out = length(y))
-		yi <- rep(seq_along(y0), each = length(x0))
-		centers = cbind(xi,yi)[xi %in% seq(3, max(xi) - 2, by = 3) & yi > 1 & yi < max(yi),]
-
-		# relative offset in double coordinates, https://www.redblobgames.com/grids/hexagons/
-		nx = length(x0)
-		xy_pattern = rbind(c(-2,0), c(-1,-1), c(1,-1), c(2,0), c(1,1), c(-1,1), c(-2,0))
-		i_from_x = function(x) ((x[,1] - 1) %/% 2 + 1) + (x[,2] - 1) * nx
-		mk_pol = function(center) {
-			m = matrix(center, ncol=2, nrow = 7, byrow=TRUE) + xy_pattern
-			st_polygon(list(xy[i_from_x(m),]))
-		}
-		st_sfc(lapply(seq_len(nrow(centers)), function(i) mk_pol(centers[i,])), crs = st_crs(bb))
-	}
-	sel = if (isTRUE(clip)) {
-		if (points)
-			lengths(st_intersects(ret, obj)) > 0
-		else
-			lengths(st_relate(ret, obj, "2********")) > 0
-	} else
-		TRUE
-	ret[sel]
+	y  <- rep(y, each = length(x))
+	x  <- rep(c(x, x + dx / 2), length.out = length(y))
+	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }
 
 st_sample_exact = function(x, size, ..., type) {
