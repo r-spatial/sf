@@ -178,7 +178,7 @@ By default, returns a pre-specified number of points that is equal to
     </tr>
     <tr>
       <th>type</th>
-      <td><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> and <code>regular</code>.</p></td>
+      <td><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), and <code>regular</code>.</p></td>
     </tr>
     <tr>
       <th>exact</th>
@@ -204,7 +204,7 @@ of <code>x</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpB7jTGT/temp_libpath7efe4271dc5f/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpz6ml02/temp_libpath7d86515e0518/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

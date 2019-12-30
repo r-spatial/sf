@@ -143,7 +143,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a regular tesselation over the bounding box of an sf or sfc object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/make_grid.R'><code>R/make_grid.R</code></a></small>
     <div class="hidden name"><code>st_make_grid.Rd</code></div>
     </div>
 
@@ -160,7 +160,8 @@
   <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>10</span>),
   <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span>(<span class='no'>x</span>)) <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
   <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"polygons"</span>,
-  <span class='kw'>square</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>square</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>flat_topped</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -193,6 +194,10 @@
     <tr>
       <th>square</th>
       <td><p>logical; if <code>FALSE</code>, create hexagonal grid</p></td>
+    </tr>
+    <tr>
+      <th>flat_topped</th>
+      <td><p>logical; if <code>TRUE</code> generate flat topped hexagons, else generate pointy topped</p></td>
     </tr>
     </table>
     
