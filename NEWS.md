@@ -18,6 +18,8 @@
 
 * a new UBSAN error in `wkb_read` was resolved; #1154, #1152
 
+* new method `st_shift_longitude` to re-center data for a Pacific view. #1218
+
 * output of `st_as_text()` with `MULTIPOINT` now has nested parentheses around points. E.g., `MULTIPOINT ((0 0), (1 1))` instead of `MULTIPOINT (0 0, 1 1)`; #1219, #1221
 
 # version 0.8-0
