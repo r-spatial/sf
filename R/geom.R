@@ -1219,7 +1219,8 @@ st_make_grid = function(x,
 			crs = st_crs(4326), what = what))
 
 	if (! square)
-		return(hex_grid(x, dx = cellsize[1], pt = offset, points = what != "polygons", clip = TRUE))
+		return(hex_grid(x, dx = cellsize[1]/sqrt(3), pt = offset, 
+			points = what != "polygons", clip = TRUE))
 
 	bb = if (!missing(n) && !missing(offset) && !missing(cellsize)) {
 		cellsize = rep(cellsize, length.out = 2)

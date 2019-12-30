@@ -182,22 +182,31 @@ hex_grid = function(obj, pt = bb[c("xmin", "ymin")],
 	xlim = bb[c("xmin", "xmax")]
 	ylim = bb[c("ymin", "ymax")]
 	offset = c(x = (pt[1] - xlim[1]) %% dx, y = (pt[2] - ylim[1]) %% (2 * dy))
-	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
-	y = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
+	x0 = seq(xlim[1] - dx, xlim[2] + 2 * dx, dx) + offset[1]
+	y0 = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
 
-	y <- rep(y, each = length(x))
-	x <- rep(c(x, x + dx / 2), length.out = length(y))
-	ret = if (points) {
-		xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	y  <- rep(y0, each = length(x0))
+	x  <- rep(c(x0, x0 + dx / 2), length.out = length(y))
+	xy = cbind(x, y)
+	ret = if (points) { # called by st_sample():
+		xy = xy[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
 		st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
-	} else {
-		dy = dx / sqrt(3)
-		dx2 = dx / 2
-		x.offset = c(-dx / 2, 0, dx / 2, dx / 2, 0, -dx / 2, -dx / 2)
-		y.offset = c(dy / 2, dy, dy / 2, -dy / 2, -dy, -dy / 2, dy / 2)
-		xy = cbind(x, y)[x >= xlim[1] - dx2 & x <= xlim[2] + dx2 & y >= ylim[1] - dy & y <= ylim[2] + dy, ]
-		mk_pol = function(pt) { st_polygon(list(cbind(pt[1] + x.offset, pt[2] + y.offset))) }
-		st_sfc(lapply(seq_len(nrow(xy)), function(i) mk_pol(xy[i,])), crs = st_crs(bb))
+	} else { # called by st_make_grid():
+		odd  <- seq(1, by = 2, length.out = length(x0))
+		even <- seq(2, by = 2, length.out = length(x0))
+		xi <- rep(c(odd, even), length.out = length(y))
+		yi <- rep(seq_along(y0), each = length(x0))
+		centers = cbind(xi,yi)[xi %in% seq(3, max(xi) - 2, by = 3) & yi > 1 & yi < max(yi),]
+
+		# relative offset in double coordinates, https://www.redblobgames.com/grids/hexagons/
+		nx = length(x0)
+		xy_pattern = rbind(c(-2,0), c(-1,-1), c(1,-1), c(2,0), c(1,1), c(-1,1), c(-2,0))
+		i_from_x = function(x) ((x[,1] - 1) %/% 2 + 1) + (x[,2] - 1) * nx
+		mk_pol = function(center) {
+			m = matrix(center, ncol=2, nrow = 7, byrow=TRUE) + xy_pattern
+			st_polygon(list(xy[i_from_x(m),]))
+		}
+		st_sfc(lapply(seq_len(nrow(centers)), function(i) mk_pol(centers[i,])), crs = st_crs(bb))
 	}
 	sel = if (isTRUE(clip)) {
 		if (points)
