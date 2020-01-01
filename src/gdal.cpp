@@ -391,6 +391,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
 		dest->Release(); // #nocov
+		sfc_from_ogr(g, true); // destroy g;
 		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov
 	}
 	for (size_t i = 0; i < g.size(); i++) {
@@ -403,7 +404,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 			OGRwkbGeometryType geomType = g[i]->getGeometryType();
 			OGRGeometryFactory f;
 			f.destroyGeometry(g[i]);
-			g[i] = f.createGeometry(geomType);
+			g[i] = f.createGeometry(geomType); // return empty geometry of this type
 		} else
 			handle_error(err);
 	}
