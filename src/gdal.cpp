@@ -402,9 +402,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 		CPLPopErrorHandler();
 		if (err == 1 || err == 6) {
 			OGRwkbGeometryType geomType = g[i]->getGeometryType();
-			OGRGeometryFactory f;
-			f.destroyGeometry(g[i]);
-			g[i] = f.createGeometry(geomType); // return empty geometry of this type
+			OGRGeometryFactory::destroyGeometry(g[i]);
+			g[i] = OGRGeometryFactory::createGeometry(geomType); // return empty geometry of this type
 		} else
 			handle_error(err);
 	}
