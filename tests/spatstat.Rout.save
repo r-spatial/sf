@@ -15,9 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # put this test last, because of spatstat side effect on units:
 > suppressPackageStartupMessages(library(spatstat))
 > suppressPackageStartupMessages(library(sf))
+> 
 > data(chicago)
 > st_as_sf(chicago)
 Simple feature collection with 620 features and 4 fields
@@ -226,18 +226,6 @@ marks are numeric, of storage type  'double'
 window: polygonal boundary
 enclosing rectangle: [-1, 1] x [1, 2] units
 > 
-> library(stars)
-Loading required package: abind
-> tif = system.file("tif/L7_ETMs.tif", package = "stars")
-> s = adrop(read_stars(tif)[,,,1]) > 70
-> plot(s)
-> m = as.owin(s)
-> plot(m)
-> table(m$m)
-
-FALSE  TRUE 
-39494 83354 
-> 
 > # as.owin.sf, as.owin.sfc_*
 > nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
 Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
@@ -293,4 +281,4 @@ POLYGON ((0.5 0.5, -0.5 0.5, -0.5 -0.5, 0.5 -0.5, 0.5 0.5), (-0.45 -0.45, -0.45 
 > 
 > proc.time()
    user  system elapsed 
-  2.220   0.064   2.275 
+  2.032   0.114   2.138 
