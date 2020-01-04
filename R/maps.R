@@ -1,3 +1,4 @@
+
 #' @export
 #' @name st_as_sf
 st_as_sf.map = function(x, ...) {

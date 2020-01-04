@@ -10,18 +10,14 @@ marks(g) = NULL
 st_as_sf(g)
 
 # multipolygon: https://github.com/r-spatial/sf/issues/1161
-if (require(maptools)) {
-#> Loading required package: sp
-#> Checking rgeos availability: TRUE
-  window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
-  	st_transform(32119)
+window = read_sf(system.file("shape/nc.shp", package = "sf"), check_ring_dir = TRUE) %>%
+  st_transform(32119)
 
-  win = spatstat::as.owin(as(window, "Spatial"))
+win = spatstat::as.owin(window)
 
-  set.seed(1331)
-  pp2a = runifpoint(n = 50, win = win)
-  print(st_as_sf(pp2a))
-}
+set.seed(1331)
+pp2a = runifpoint(n = 50, win = win)
+print(st_as_sf(pp2a))
 
 # st_sample going the spatstat way
 x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
