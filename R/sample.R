@@ -148,12 +148,10 @@ st_poly_sample = function(x, size, ..., type = "random",
 	} else { # try to go into spatstat
 		if (!requireNamespace("spatstat", quietly = TRUE))
 			stop("package spatstat required, please install it first")
-		if (!requireNamespace("maptools", quietly = TRUE))
-			stop("package maptools required, please install it first")
 		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat")), silent = TRUE)
 		if (inherits(spatstat_fun, "try-error"))
 			stop(paste0("r", type), " is not an exported function from spatstat.")
-		pts = try(spatstat_fun(..., win = maptools::as.owin.SpatialPolygons(as(x, "Spatial"))), silent = TRUE)
+		pts = try(spatstat_fun(..., win = spatstat::as.owin(x)), silent = TRUE)
 		if (inherits(pts, "try-error"))
 			stop("The spatstat function ", paste0("r", type),
              " did not return a valid result. Consult the help file.\n",

@@ -158,15 +158,15 @@ as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = FALSE) {
 as.owin.sfc_MULTIPOLYGON = function(W, ..., fatal, check_polygons = FALSE) {
 	if (isTRUE(st_is_longlat(W)))
 		stop("Only projected coordinates may be converted to spatstat class objects")
-	as.owin(st_cast(W, "POLYGON"))
+	as.owin.sfc_POLYGON(st_cast(W, "POLYGON"))
 }
 
 as.owin.sfc = function(W, ...) {
-	as.owin(st_cast(W, "MULTIPOLYGON"), ...)
+	as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...)
 }
 
 as.owin.sf = function(W, ...) {
-	as.owin(st_geometry(W), ...)
+	as.owin.sfc(st_geometry(W), ...)
 }
 
 #' @export
@@ -263,7 +263,7 @@ as.psp.sfc_MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL,
 }
 
 as.psp.sfc = function(from, ...) {
-	as.psp(st_cast(from, "MULTILINESTRING"))
+	as.psp.sfc_MULTILINESTRING(st_cast(from, "MULTILINESTRING"))
 }
 
 as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
@@ -295,11 +295,11 @@ as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
 
 # 111117 from psp to SpatialLines, Rolf Turner, Adrian Baddeley, Mathieu Rajerison
 #' @export
-st_as_sfc.psp <- function(from) {
+st_as_sfc.psp <- function(x, ...) {
 
 	ends2line <- function(x) matrix(x, ncol=2, byrow=TRUE)
 	munch <- function(z) { list(ends2line(as.numeric(z[1:4]))) }
-	ends <- as.data.frame(from)[,1:4]
+	ends <- as.data.frame(x)[,1:4]
 	y <- lapply(seq_len(nrow(ends)), function(i) munch(ends[i,]))
 	st_sfc(st_multilinestring(y))
 }
