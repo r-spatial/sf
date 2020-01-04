@@ -1,6 +1,6 @@
-# put this test last, because of spatstat side effect on units:
 suppressPackageStartupMessages(library(spatstat))
 suppressPackageStartupMessages(library(sf))
+
 data(chicago)
 st_as_sf(chicago)
 # ppp:
@@ -60,14 +60,6 @@ w = st_as_sfc(st_bbox(p))
 sf = st_sf(a = 1:3, geom = p)
 (p0 = rbind(st_sf(a = 0, geom = w), sf))
 as.ppp(p0)
-
-library(stars)
-tif = system.file("tif/L7_ETMs.tif", package = "stars")
-s = adrop(read_stars(tif)[,,,1]) > 70
-plot(s)
-m = as.owin(s)
-plot(m)
-table(m$m)
 
 # as.owin.sf, as.owin.sfc_*
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)

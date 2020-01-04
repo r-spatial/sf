@@ -411,7 +411,6 @@ register_all_s3_methods = function() {
 	register_s3_method("pillar", "pillar_shaft", "sfc")
 	register_s3_method("spatstat", "as.ppp", "sfc")
 	register_s3_method("spatstat", "as.ppp", "sf")
-	register_s3_method("spatstat", "as.owin", "stars")
 	register_s3_method("spatstat", "as.owin", "POLYGON")
 	register_s3_method("spatstat", "as.owin", "MULTIPOLYGON")
 	register_s3_method("spatstat", "as.owin", "sfc_POLYGON")
