@@ -88,6 +88,7 @@ Suggests:
     RSQLite,
     sp (>= 1.2-4),
     spatstat,
+    spatstat.utils,
     stars (>= 0.2-0),
     testthat,
     tibble (>= 1.4.1),
