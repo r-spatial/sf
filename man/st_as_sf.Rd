@@ -32,7 +32,7 @@ st_as_sf(x, ...)
 
 \method{st_as_sf}{Spatial}(x, ...)
 
-\method{st_as_sf}{map}(x, ...)
+\method{st_as_sf}{map}(x, ..., fill = TRUE, group = TRUE)
 
 \method{st_as_sf}{ppp}(x, ...)
 
@@ -59,6 +59,10 @@ st_as_sf(x, ...)
 
 \item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
 there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
+
+\item{fill}{logical; the value for \code{fill} that was used in the call to \link[maps]{map}.}
+
+\item{group}{logical; if \code{TRUE}, group id labels from \link[maps]{map} by their prefix before \code{:}}
 }
 \description{
 Convert foreign object to an sf object

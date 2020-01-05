@@ -140,6 +140,7 @@ as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = FALSE) {
 as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = FALSE) {
 	if (isTRUE(st_is_longlat(W)))
 		stop("Only projected coordinates may be converted to spatstat class objects")
+	W = check_ring_dir(W)
 	as.owin.MULTIPOLYGON(W) # I know, this looks wrong, but isn't: sfc_POLYGON is a logically a MULTIPOLYGON
 }
 
@@ -150,6 +151,8 @@ as.owin.sfc_MULTIPOLYGON = function(W, ..., fatal, check_polygons = FALSE) {
 }
 
 as.owin.sfc = function(W, ...) {
+	if (!all(st_dimension(W) == 2))
+		stop("as.owin.sfc needs polygonal geometries")
 	as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...)
 }
 
