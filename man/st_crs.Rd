@@ -95,7 +95,8 @@ Set or replace retrieve coordinate reference system from object
 The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
 list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
 code) and \code{proj4string} (character).
-The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
+Comparison of two objects of class \code{crs} uses the GDAL function 
+\code{OGRSpatialReference::IsSame}.
 
 In case a coordinate reference system is replaced, no transformation takes
 place and a warning is raised to stress this. EPSG values are either read from proj4strings

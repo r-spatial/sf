@@ -120,6 +120,8 @@ test_that("zmrange works on more compliated examples", {
 
 test_that("transform includes zm in output", {
 
+	skip_if_not(sf_extSoftVersion()["GDAL"] > "2.1.0")
+
 	p1 = st_point(c(7,52,52))
 	p2 = st_point(c(-30,20,20))
 	sfc = st_sfc(p1, p2, crs = 4326)
@@ -142,6 +144,8 @@ test_that("transform includes zm in output", {
 
 
 test_that("XYM-only objects correctly calculate M (and not Z)", {
+
+	skip_if_not(sf_extSoftVersion()["GDAL"] > "2.1.0")
 
 	sf_m <- sf::st_read(system.file("/shape/storms_xyzm.shp", package = "sf"))
 	m <- sf::st_coordinates( sf_m )

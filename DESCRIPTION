@@ -145,3 +145,5 @@ Collate:
     'deprecated.R'
     'z_range.R'
     'm_range.R'
+    'shift_longitude.R'
+    'make_grid.R'

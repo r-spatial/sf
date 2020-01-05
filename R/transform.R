@@ -196,11 +196,14 @@ st_to_s2 = function(x) {
 #' @param from character; proj4string of pts
 #' @param to character; target coordinate reference system
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
-#' @param warn logical; warn if invalid (NA) values are generated
-#' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{NA}
+#' @param keep logical value controlling the handling of unprojectable points. If
+#' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
+#' return value; otherwise an error is reported and nothing is returned.
+#' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
+#' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from, to, pts, warn = TRUE) {
-	#.Deprecated("lwgeom::st_transform_proj")
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), warn)
+sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
+	if (!is.logical(keep) || 1 != length(keep))
+		stop("'keep' must be single-length logical value")
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn)
 }
-
