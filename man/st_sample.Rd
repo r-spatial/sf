@@ -11,9 +11,10 @@ st_sample(x, size, ..., type = "random", exact = TRUE)
 
 \item{size}{sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.}
 
-\item{...}{ignored, or passed on to \link[base]{sample} for \code{multipoint} sampling}
+\item{...}{passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)}
 
-\item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} and \code{regular}.}
+\item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
+or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).}
 
 \item{exact}{logical; should the length of output be exactly
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
@@ -26,7 +27,8 @@ an \code{sfc} object containing the sampled \code{POINT} geometries
 Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
 \code{size} (if \code{type = "random"}) or an approximation of
-\code{size} (for other sampling types).
+\code{size} (for other sampling types). \code{spatstat} methods are
+interfaced and do not use the \code{size} argument.
 }
 \details{
 The function is vectorised: it samples \code{size} points across all geometries in
@@ -39,6 +41,9 @@ if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), 
 For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 
 As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
+
+Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
+For instance, to use \code{spatstat::rThomas()}, set \code{type = "Thomas"}.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -85,4 +90,10 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(2,2),c(2,2.00001))))
 st_sample(ls, 80)
 plot(st_sample(ls, 80))
+# spatstat example:
+if (require(spatstat)) {
+ x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
+ # for spatstat::rThomas(), set type = "Thomas":
+ pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
+}
 }

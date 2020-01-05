@@ -73,7 +73,7 @@ if \code{x} is character, return \code{crs} object for \code{x};
 if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
 Object of class \code{crs}, which is a list with elements \code{input} (length-1 character) 
-and \code{wkt} (length-1 character.
+and \code{wkt} (length-1 character).
 Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 assumed to relate to an arbitrary Cartesian coordinate system.
 
@@ -90,7 +90,9 @@ The *crs functions create, get, set or replace the \code{crs} attribute
 of a simple feature geometry list-column. This attribute is of class \code{crs}, 
 and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84" 
 or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
-The operators \code{==} and \code{!=} are overloaded for \code{crs} objects to establish semantical identity.
+
+Comparison of two objects of class \code{crs} uses the GDAL function 
+\code{OGRSpatialReference::IsSame}.
 
 In case a coordinate reference system is replaced, no transformation takes
 place and a warning is raised to stress this.

@@ -24,8 +24,11 @@ suppressWarnings(
   sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
 )
 sf_project(to, from, ret)
+suppressWarnings(
+  sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
+)
 st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
-if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
+if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
   try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)))
   try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)))
 }

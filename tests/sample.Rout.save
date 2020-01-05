@@ -1,0 +1,56 @@
+
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> suppressPackageStartupMessages(library(sf))
+> bb = st_bbox(c(xmin=0, ymin=1, xmax=3, ymax=2))
+> xx <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "polygons")
+> plot(xx, border = 'green', main = "pointy topped")
+> x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "points")
+> plot(x, add = TRUE)
+> x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners")
+> plot(x, col = 'orange', add = TRUE)
+> plot(st_as_sfc(bb), add = TRUE, border = 'red')
+> st_overlaps(xx) %>% 
++ 	lengths() %>% 
++ 	sum()
+[1] 0
+> 
+> st_as_sfc(bb) %>%
++ 	st_difference(st_union(xx)) %>%
++ 	st_area()
+numeric(0)
+> 
+> xx <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "polygons", flat_topped = TRUE)
+> plot(xx, border = 'green', main = "flat topped")
+> x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "points", flat_topped = TRUE)
+> plot(x, add = TRUE)
+> x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners", flat_topped = TRUE)
+> plot(x, col = 'orange', add = TRUE)
+> plot(st_as_sfc(bb), add = TRUE, border = 'red')
+> st_overlaps(xx) %>% 
++ 	lengths() %>% 
++ 	sum()
+[1] 0
+> 
+> st_as_sfc(bb) %>%
++ 	st_difference(st_union(xx)) %>%
++ 	st_area()
+numeric(0)
+> 
+> proc.time()
+   user  system elapsed 
+  0.433   0.028   0.450 
