@@ -1,5 +1,9 @@
 # version 0.8-1
 
+* `st_as_sf.map` no longer requires `maptools` and `sp`; dropped dependency on maptools.
+
+* conversion between `spatstat` classes `owin`, `ppp` and `psp` and `sf` classes no longer use `maptools`; #1204
+
 * `st_sample` directly interfaces `spatstat` sampling methods, e.g. `type = "Thomas"` calls `spatstat::rThomas` after converting input arguments (window) and converts returned `ppp` object to `sf`'s `POINT` geometries; #1204 with help from Ege Rubak and Jakub Nowosad
 
 * `sf_project` gains an option `keep = TRUE` to return `Inf` values for points not projectable; #1228
