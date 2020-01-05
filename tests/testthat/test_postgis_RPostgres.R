@@ -379,6 +379,7 @@ test_that("new SRIDs are handled correctly", {
 })
 
 test_that("schema_table", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
 	expect_error(sf:::schema_table(pg, NA), "character vector")
 	expect_error(sf:::schema_table(pg, NA_character_), "cannot be NA")
 	expect_error(sf:::schema_table(pg, "a", NA), "cannot be NA")
@@ -388,11 +389,13 @@ test_that("schema_table", {
 })
 
 test_that("get_postgis_crs", {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_equal(sf:::get_postgis_crs(pg, NA), st_crs(NA))
     expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)") # FIXME: wkt2
 })
 
 if (can_con(pg)) {
+    skip_if_not(can_con(pg), "could not connect to postgis database")
     # cleanup
     try(db_drop_table_schema(pg, "meuse_sf"), silent = TRUE)
     try(db_drop_table_schema(pg, "meuse_multi"), silent = TRUE)
