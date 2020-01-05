@@ -375,14 +375,16 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_from_input(Rcpp::CharacterVector input) {
-	OGRSpatialReference ref;
-	handle_axis_order(&ref);
-	if (ref.SetFromUserInput(input[0]) == OGRERR_NONE) {
-		Rcpp::List crs = create_crs(&ref, false);
+	OGRSpatialReference *ref = new OGRSpatialReference;
+	handle_axis_order(ref);
+	Rcpp::List crs;
+	if (ref->SetFromUserInput(input[0]) == OGRERR_NONE) {
+		crs = create_crs(ref, false);
 		crs(0) = input;
-		return crs;
 	} else
-		return create_crs(NULL);
+		crs = create_crs(NULL);
+	delete ref;
+	return crs;
 }
 
 // [[Rcpp::export]]

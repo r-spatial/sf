@@ -66,10 +66,12 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
 #' try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))
-#' st_transform(sfc, pipeline =
-#' 	"+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
-#' st_transform(sfc, pipeline =
-#' 	"+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE) # also reverse axes
+#' if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
+#'   st_transform(sfc, pipeline =
+#' 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
+#'   st_transform(sfc, pipeline =
+#' 	  "+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE) # also reverse axes
+#' }
 st_transform.sfc = function(x, crs = st_crs(x), ..., 
 		aoi = numeric(0), pipeline = character(0), reverse = FALSE,
 		partial = TRUE, check = FALSE) {

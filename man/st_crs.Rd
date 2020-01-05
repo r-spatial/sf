@@ -123,9 +123,11 @@ st_crs("+init=epsg:3857")$proj4string
 st_crs("+init=epsg:3857 +units=m")$b     # numeric
 st_crs("+init=epsg:3857 +units=m")$units # character
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)
+# st_axis_order() only has effect in GDAL >= 2.5.0:
 st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 st_transform(pt, 3857)[[1]]
-(old_value = st_axis_order(TRUE)) # now interpret pt as (latitude longitude), as EPSG:4326 prescribes
+(old_value = st_axis_order(TRUE)) 
+# now interpret pt as (latitude longitude), as EPSG:4326 prescribes:
 st_axis_order() # query current value
 st_transform(pt, 3857)[[1]]
 st_axis_order(old_value) # set back to old value
