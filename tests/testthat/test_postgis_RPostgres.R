@@ -29,7 +29,6 @@ try(pg <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", dbname = "po
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
-	skip_on_travis() # wkt2
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
     expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
@@ -43,7 +42,6 @@ test_that("can write to db", {
 })
 
 test_that("can handle multiple geom columns", {
-	skip_on_travis() # wkt2
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
     expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
@@ -391,7 +389,7 @@ test_that("schema_table", {
 
 test_that("get_postgis_crs", {
     expect_equal(sf:::get_postgis_crs(pg, NA), st_crs(NA))
-    # expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)") # FIXME: wkt2
+    expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)") # FIXME: wkt2
 })
 
 if (can_con(pg)) {

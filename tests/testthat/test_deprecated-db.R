@@ -54,7 +54,6 @@ test_that("sf can write units to database (#264)", {
 })
 
 test_that("can write to other schema", {
-	skip_on_travis() # wkt2
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
 	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
@@ -75,7 +74,6 @@ test_that("can write to other schema", {
 })
 
 test_that("can read from db", {
-	skip_on_travis() # wkt2
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	q <- "select * from sf_meuse__"
 	#expect_warning(x <- deprecated_st_read_db(pg, query = q), "crs")
@@ -197,7 +195,6 @@ test_that("round trips", {
 })
 
 test_that("can read using driver", {
-	skip_on_travis() # wkt2
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	layers <- st_layers("PG:host=localhost dbname=postgis")
 	lyr_expect <- sort(c("sf_meuse__", "sf_meuse2__", "sf_meuse3__",
@@ -237,7 +234,6 @@ test_that("multi geom columns work", {
 })
 
 test_that("new SRIDs are handled correctly", {
-	skip_on_travis() # wkt2
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	data(meuse, package = "sp")
 	meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
