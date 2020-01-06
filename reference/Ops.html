@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,12 +41,12 @@
 
 
 
+
 <meta property="og:title" content="S3 Ops Group Generic Functions for simple feature geometries — Ops" />
-
 <meta property="og:description" content="S3 Ops Group Generic Functions for simple feature geometries" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -121,7 +123,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -148,9 +149,7 @@
     </div>
 
     <div class="ref-description">
-    
     <p>S3 Ops Group Generic Functions for simple feature geometries</p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for sfg</span>
@@ -158,7 +157,7 @@
 
 <span class='co'># S3 method for sfc</span>
 <span class='fu'>Ops</span>(<span class='no'>e1</span>, <span class='no'>e2</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -171,16 +170,14 @@
       <td><p>numeric, or object of class <code>sfg</code>; in case <code>e1</code> is of class <code>sfc</code> also an object of class <code>sfc</code> is allowed</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>object of class <code>sfg</code></p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>in case <code>e2</code> is numeric, +, -, *, /, <!-- %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, &amp; and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}. --></p>
 <p>If <code>e1</code> is of class <code>sfc</code>, and <code>e2</code> is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations <code>+</code> and <code>-</code>, in other cases the individual numbers are repeated; see commented examples.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) + <span class='fl'>4</span></div><div class='output co'>#&gt; <span class='message'>POINT Z (5 6 7)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span>)) * <span class='fl'>3</span> + <span class='fl'>4</span></div><div class='output co'>#&gt; <span class='message'>POINT Z (7 10 13)</span></div><div class='input'><span class='no'>m</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
@@ -217,7 +214,7 @@
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 2 xmax: 6 ymax: 9
 #&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 2)</span></div><div class='output co'>#&gt; <span class='message'>POINT (6 9)</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>32119</span>) <span class='co'># nc state plane, m</span></div><div class='output co'>#&gt; Reading layer `nc.gpkg' from data source `/tmp/Rtmp20Y1HC/temp_libpath7e4623db36fb/sf/gpkg/nc.gpkg' using driver `GPKG'
+#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 2)</span></div><div class='output co'>#&gt; <span class='message'>POINT (6 9)</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>32119</span>) <span class='co'># nc state plane, m</span></div><div class='output co'>#&gt; Reading layer `nc.gpkg' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/gpkg/nc.gpkg' using driver `GPKG'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -230,11 +227,8 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

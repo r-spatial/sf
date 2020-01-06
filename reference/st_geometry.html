@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,12 +41,12 @@
 
 
 
+
 <meta property="og:title" content="Get, set, or replace geometry from an sf object — st_geometry" />
-
 <meta property="og:description" content="Get, set, or replace geometry from an sf object" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -121,7 +123,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -148,9 +149,7 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Get, set, or replace geometry from an sf object</p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for sfc</span>
@@ -172,7 +171,7 @@
 <span class='fu'>st_set_geometry</span>(<span class='no'>x</span>, <span class='no'>value</span>)
 
 <span class='fu'>st_drop_geometry</span>(<span class='no'>x</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -193,18 +192,16 @@
       <td><p>object of class <code>sfc</code>, or <code>character</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>st_geometry returns an object of class <a href='sfc.html'>sfc</a>, a list-column with geometries</p>
 <p><code>st_geometry</code> returns an object of class <a href='sfc.html'>sfc</a>. Assigning geometry to a <code>data.frame</code> creates an <a href='sf.html'>sf</a> object, assigning it to an <a href='sf.html'>sf</a> object replaces the geometry list-column.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>when applied to a <code>data.frame</code> and when <code>value</code> is an object of class <code>sfc</code>, <code>st_set_geometry</code> and <code>st_geometry&lt;-</code> will first check for the existence of an attribute <code>sf_column</code> and overwrite that, or else look for list-columns of class <code>sfc</code> and overwrite the first of that, or else write the geometry list-column to a column named <code>geometry</code>.  In case <code>value</code> is character and <code>x</code> is of class <code>sf</code>, the "active" geometry column is set to <code>x[[value]]</code>.</p>
 <p>the replacement function applied to <code>sf</code> objects will overwrite the geometry list-column, if <code>value</code> is <code>NULL</code>, it will remove it and coerce <code>x</code> to a <code>data.frame</code>.</p>
 <p><code>st_drop_geometry</code> drops the geometry of its argument, and reclasses it accordingly</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
@@ -231,11 +228,8 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

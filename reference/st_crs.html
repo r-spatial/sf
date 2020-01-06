@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,13 +41,13 @@
 
 
 
-<meta property="og:title" content="Retrieve coordinate reference system from object — st_crs" />
 
+<meta property="og:title" content="Retrieve coordinate reference system from object — st_crs" />
 <meta property="og:description" content="Retrieve coordinate reference system from sf or sfc object
 Set or replace retrieve coordinate reference system from object" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -122,7 +124,6 @@ Set or replace retrieve coordinate reference system from object" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -149,10 +150,8 @@ Set or replace retrieve coordinate reference system from object" />
     </div>
 
     <div class="ref-description">
-    
     <p>Retrieve coordinate reference system from sf or sfc object</p>
 <p>Set or replace retrieve coordinate reference system from object</p>
-    
     </div>
 
     <pre class="usage">st_crs(x, ...)
@@ -195,7 +194,7 @@ is.na(x)
 
 # S3 method for crs
 $(x, name)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -234,17 +233,15 @@ database, but avoid it as much as possible.</p></td>
       <td><p>element name; <code>epsg</code> or <code>proj4string</code>, or one of <code>proj4strings</code> named components without the <code>+</code>; see examples</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An object of class <code>crs</code> of length 2.</p>
-    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If <code>x</code> is numeric, return <code>crs</code> object for SRID <code>x</code>; if <code>x</code> is character, return <code>crs</code> object for proj4string <code>x</code>; if <code>wkt</code> is given, return <code>crs</code> object for well-known-text representation <code>wkt</code>; if <code>x</code> is of class <code>sf</code> or <code>sfc</code>, return its <code>crs</code> object.</p>
 <p>Object of class <code>crs</code>, which is a list with elements <code>epsg</code> (length-1 integer) and
 <code>proj4string</code> (length-1 character).</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The *crs functions create, get, set or replace the <code>crs</code> attribute of a simple feature geometry
@@ -258,7 +255,6 @@ that contain <code>+init=epsg:...</code> or set to 4326 in case the proj4string 
 and +datum=WGS84, literally.</p>
 <p>If both <code>epsg</code> and <code>proj4string</code> are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when <code>epsg</code> is not consistent with a proj4string that is already present.</p>
 <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for <code>epsg</code> and <code>proj4string</code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
@@ -290,13 +286,9 @@ and +datum=WGS84, literally.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#format">Format</a></li>
-
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

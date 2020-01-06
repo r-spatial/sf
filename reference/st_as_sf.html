@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,12 +41,12 @@
 
 
 
+
 <meta property="og:title" content="Convert foreign object to an sf object — st_as_sf" />
-
 <meta property="og:description" content="Convert foreign object to an sf object" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -121,7 +123,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -148,9 +149,7 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Convert foreign object to an sf object</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -188,7 +187,7 @@
 
 <span class='co'># S3 method for lpp</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -230,11 +229,10 @@
 there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>setting argument <code>wkt</code> annihilates the use of argument <code>coords</code>. If <code>x</code> contains a column called "geometry", <code>coords</code> will result in overwriting of this column by the <a href='sfc.html'>sfc</a> geometry list-column.  Setting <code>wkt</code> will replace this column with the geometry list-column, unless <code>remove_coordinates</code> is <code>FALSE</code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>pt1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))
@@ -324,7 +322,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
   <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>a</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-2, (SVN revision 621)</span>
 #&gt; <span class='message'> GEOS runtime version: 3.5.0-CAPI-1.9.0 </span>
-#&gt; <span class='message'> Linking to sp version: 1.3-1 </span>
+#&gt; <span class='message'> Linking to sp version: 1.3-2 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
 #&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -412,7 +410,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; <span class='message'>  print.boxx cli </span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>spatstat 1.62-2       (nickname: ‘Shape-shifting lizard’) </span>
 #&gt; <span class='message'>For an introduction to spatstat, type ‘beginner’ </span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Note: R version 3.6.1 (2017-01-27) is more than a year old; we strongly recommend upgrading to the latest version</span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
+#&gt; <span class='message'>Note: R version 3.6.2 (2017-01-27) is more than a year old; we strongly recommend upgrading to the latest version</span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5
@@ -439,9 +437,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

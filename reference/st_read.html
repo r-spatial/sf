@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,15 +41,15 @@
 
 
 
-<meta property="og:title" content="Read simple features or layers from file or database — st_read" />
 
+<meta property="og:title" content="Read simple features or layers from file or database — st_read" />
 <meta property="og:description" content="Read simple features from file or database, or retrieve layer names and their
 geometry type(s)
 Read PostGIS table directly through DBI and RPostgreSQL interface, converting
 Well-Know Binary geometries to sfc" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -124,7 +126,6 @@ Well-Know Binary geometries to sfc" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -151,12 +152,10 @@ Well-Know Binary geometries to sfc" />
     </div>
 
     <div class="ref-description">
-    
     <p>Read simple features from file or database, or retrieve layer names and their
 geometry type(s)</p>
 <p>Read PostGIS table directly through DBI and RPostgreSQL interface, converting
 Well-Know Binary geometries to sfc</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
@@ -193,7 +192,7 @@ Well-Know Binary geometries to sfc</p>
   <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -296,7 +295,7 @@ clockwise, holes clockwise)</p></td>
 <code>TRUE</code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>object of class <a href='sf.html'>sf</a> when a layer was successfully read; in case
@@ -304,7 +303,6 @@ clockwise, holes clockwise)</p></td>
   contain a single layer, an object of class <code>sf_layers</code> is returned
   with the layer names, each with their geometry type(s). Note that the
   number of layers may also be zero.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>for <code>geometry_column</code>, see also
@@ -341,21 +339,18 @@ about the data source. <code>read_sf</code> returns an sf-tibble rather than an 
 <p>The function will automatically find the `geometry` type columns for
   drivers that support it. For the other drivers, it will try to cast all the
   character columns, which can be slow for very wide tables.</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The use of <code>system.file</code> in examples make sure that examples run regardless where R is installed:
 typical users will not use <code>system.file</code> but give the file name directly, either with full path or relative
 to the current working directory (see <a href='https://rdrr.io/r/base/getwd.html'>getwd</a>). "Shapefiles" consist of several files with the same basename
 that reside in the same directory, only one of them having extension <code>.shp</code>.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='st_layers.html'>st_layers</a>, <a href='st_drivers.html'>st_drivers</a></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp20Y1HC/temp_libpath7e4623db36fb/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -396,7 +391,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='co'>## only three fields by select clause</span>
 <span class='co'>## only two features by where clause</span>
 <span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
-                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp20Y1HC/temp_libpath7e4623db36fb/sf/shape/nc.shp' using driver `ESRI Shapefile'
+                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
@@ -464,15 +459,10 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

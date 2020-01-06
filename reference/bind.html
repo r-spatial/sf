@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,13 +41,13 @@
 
 
 
-<meta property="og:title" content="Bind rows (features) of sf objects — bind" />
 
+<meta property="og:title" content="Bind rows (features) of sf objects — bind" />
 <meta property="og:description" content="Bind rows (features) of sf objects
 Bind columns (variables) of sf objects" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -122,7 +124,6 @@ Bind columns (variables) of sf objects" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -149,10 +150,8 @@ Bind columns (variables) of sf objects" />
     </div>
 
     <div class="ref-description">
-    
     <p>Bind rows (features) of sf objects</p>
 <p>Bind columns (variables) of sf objects</p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for sf</span>
@@ -162,7 +161,7 @@ Bind columns (variables) of sf objects" />
 <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>...</span>, <span class='kw'>deparse.level</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>sf_column_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>st_bind_cols</span>(<span class='no'>...</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -179,17 +178,15 @@ Bind columns (variables) of sf objects" />
       <td><p>character; specifies active geometry; passed on to <a href='sf.html'>st_sf</a></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>cbind</code> called with multiple <code>sf</code> objects warns about multiple geometry columns present when the geometry column to use is not specified by using argument <code>sf_column_name</code>; see also <a href='sf.html'>st_sf</a>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>both <code>rbind</code> and <code>cbind</code> have non-standard method dispatch (see <a href='https://rdrr.io/r/base/cbind.html'>cbind</a>): the <code>rbind</code> or <code>cbind</code> method for <code>sf</code> objects is only called when all arguments to be binded are of class <code>sf</code>.</p>
 <p>If you need to <code>cbind</code> e.g. a <code>data.frame</code> to an <code>sf</code>, use <a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a> directly and use <a href='sf.html'>st_sf</a> on its result, or use <a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_cols</a>; see examples.</p>
 <p><code>st_bind_cols</code> is deprecated; use <code>cbind</code> instead.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='fl'>3857</span>)
@@ -281,11 +278,8 @@ Bind columns (variables) of sf objects" />
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,16 +41,16 @@
 
 
 
-<meta property="og:title" content="sample points on or in (sets of) spatial features — st_sample" />
 
+<meta property="og:title" content="sample points on or in (sets of) spatial features — st_sample" />
 <meta property="og:description" content="Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
 size (if type = &quot;random&quot;) or an approximation of
 size (for other sampling types). spatstat methods are
 interfaced and do not use the size argument." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -125,7 +127,6 @@ interfaced and do not use the size argument." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -152,17 +153,15 @@ interfaced and do not use the size argument." />
     </div>
 
     <div class="ref-description">
-    
     <p>Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
 <code>size</code> (if <code>type = "random"</code>) or an approximation of
 <code>size</code> (for other sampling types). <code>spatstat</code> methods are
 interfaced and do not use the <code>size</code> argument.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>st_sample</span>(<span class='no'>x</span>, <span class='no'>size</span>, <span class='no'>...</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"random"</span>, <span class='kw'>exact</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -190,11 +189,10 @@ the same as specified by <code>size</code>? <code>TRUE</code> by default. Only a
 when <code>type = "random"</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an <code>sfc</code> object containing the sampled <code>POINT</code> geometries</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function is vectorised: it samples <code>size</code> points across all geometries in
@@ -206,10 +204,9 @@ of <code>x</code>.</p>
 <p>As parameter called <code>offset</code> can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from <code><a href='st_bbox.html'>st_bbox(x)</a></code>); for lines use a number like <code><a href='https://rdrr.io/r/stats/Uniform.html'>runif(1)</a></code>.</p>
 <p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set. 
 For instance, to use <code><a href='https://rdrr.io/pkg/spatstat/man/rThomas.html'>spatstat::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp20Y1HC/temp_libpath7e4623db36fb/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -258,11 +255,8 @@ For instance, to use <code><a href='https://rdrr.io/pkg/spatstat/man/rThomas.htm
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

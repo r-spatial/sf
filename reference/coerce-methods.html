@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,14 +41,14 @@
 
 
 
-<meta property="og:title" content="Methods to coerce simple features to <code>Spatial*</code> and <code>Spatial*DataFrame</code> objects — as" />
 
+<meta property="og:title" content="Methods to coerce simple features to <code>Spatial*</code> and <code>Spatial*DataFrame</code> objects — as" />
 <meta property="og:description" content="as_Spatial() allows to convert sf and sfc to Spatial*DataFrame and
 Spatial* for sp compatibility. You can also use as(x, &quot;Spatial&quot;) To transform
 sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -123,7 +125,6 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -150,15 +151,13 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
     </div>
 
     <div class="ref-description">
-    
     <p><code>as_Spatial()</code> allows to convert <code>sf</code> and <code>sfc</code> to <code>Spatial*DataFrame</code> and
 <code>Spatial*</code> for <code>sp</code> compatibility. You can also use <code>as(x, "Spatial")</code> To transform
 <code>sp</code> objects to <code>sf</code> and <code>sfc</code> with <code>as(x, "sf")</code>.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>as_Spatial</span>(<span class='no'>from</span>, <span class='kw'>cast</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>IDs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"ID"</span>, <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>from</span>)))</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -177,21 +176,19 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
       <td><p>character vector with IDs for the <code>Spatial*</code> geometries</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>geometry-only object deriving from <code>Spatial</code>, of the appropriate class</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><a href='https://rdrr.io/pkg/sp/man/00sp.html'>sp</a> supports three dimensions for <code>POINT</code> and <code>MULTIPOINT</code> (<code>SpatialPoint*</code>).
 Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dropped using
 <code><a href='st_zm.html'>st_zm()</a></code> with <code>what = "M"</code> or <code>what = "ZM"</code>.</p>
 <p>For converting simple features (i.e., <code>sf</code> objects) to their <code>Spatial</code> counterpart, use <code>as(obj, "Spatial")</code></p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp20Y1HC/temp_libpath7e4623db36fb/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -6430,11 +6427,8 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

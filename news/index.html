@@ -15,11 +15,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,10 +41,11 @@
 
 
 
-<meta property="og:title" content="Changelog" />
 
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -119,7 +122,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf">
@@ -149,6 +151,7 @@
 <a href="#version-0-8-1" class="anchor"></a>version 0.8-1<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>gdal_utils</code> processes <code>-oo</code> open options properly; <a href="https://github.com/ITSLeeds/geofabric/issues/12" class="uri">https://github.com/ITSLeeds/geofabric/issues/12</a></p></li>
 <li><p><code>st_sample</code> directly interfaces <code>spatstat</code> sampling methods, e.g. <code>type = "Thomas"</code> calls <code><a href="https://rdrr.io/pkg/spatstat/man/rThomas.html">spatstat::rThomas</a></code> after converting input arguments (window) and converts returned <code>ppp</code> object to <code>sf</code>’s <code>POINT</code> geometries; <a href='https://github.com/r-spatial/sf/issues/1204'>#1204</a> with help from Ege Rubak and Jakub Nowosad</p></li>
 <li><p><code>sf_project</code> gains an option <code>keep = TRUE</code> to return <code>Inf</code> values for points not projectable; <a href='https://github.com/r-spatial/sf/issues/1228'>#1228</a></p></li>
 <li><p>support <code>vctrs</code> methods for geometry list columns; this makes <code>unnest</code> work again (<a href='https://github.com/r-spatial/sf/issues/1172'>#1172</a>); <a href='https://github.com/r-spatial/sf/issues/1196'>#1196</a> by Lionel Henry</p></li>
