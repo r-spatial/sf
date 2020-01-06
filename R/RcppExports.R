@@ -121,8 +121,8 @@ CPL_gdaltranslate <- function(src, dst, options) {
     .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options)
 }
 
-CPL_gdalvectortranslate <- function(src, dst, options) {
-    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options)
+CPL_gdalvectortranslate <- function(src, dst, options, oo) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options, oo)
 }
 
 CPL_gdalbuildvrt <- function(src, dst, options) {

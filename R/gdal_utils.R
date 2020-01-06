@@ -68,9 +68,15 @@ resampling_method = function(option = "near") {
 #' # has no associated SRS.
 #' st_read(in_file)
 #' }
-
 gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
+
+	if ("-oo" %in% options) { # -oo indicating opening options
+		ooi = which("-oo" == options)
+		oo = options[ooi + 1]
+		options = options[-c(ooi, ooi+1)]
+	} else
+		oo = character(0)
 
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options),
@@ -82,7 +88,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 				CPL_gdalrasterize(source, destination, options, overwrite)
 			}, # nocov end
 			translate = CPL_gdaltranslate(source, destination, options),
-			vectortranslate = CPL_gdalvectortranslate(source, destination, options),
+			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo),
 			buildvrt = CPL_gdalbuildvrt(source, destination, options),
 			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename),
 			nearblack = CPL_gdalnearblack(source, destination, options),

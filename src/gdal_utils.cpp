@@ -108,13 +108,15 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
+	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALVectorTranslateOptions* opt =  GDALVectorTranslateOptionsNew(options_char.data(), NULL);
 
-	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, NULL, NULL);
+	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, 
+		oo_char.data(), NULL);
 	if (src_pt == NULL)
 		return 1; // #nocov
 	// GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
