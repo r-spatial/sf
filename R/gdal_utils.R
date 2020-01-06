@@ -78,21 +78,24 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	} else
 		oo = character(0)
 
+	if ("-doo" %in% options) # -oo indicating opening options
+		stop("-doo options not (yet) supported; consider raising an issue") # nocov
+
 	ret = switch(util,
-			info = CPL_gdalinfo(source, options),
-			warp = CPL_gdalwarp(source, destination, options),
-			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
+			info = CPL_gdalinfo(source, options, oo),
+			warp = CPL_gdalwarp(source, destination, options, oo),
+			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)), oo), # nocov
 			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
-				CPL_gdalrasterize(source, destination, options, overwrite)
+				CPL_gdalrasterize(source, destination, options, oo, overwrite)
 			}, # nocov end
-			translate = CPL_gdaltranslate(source, destination, options),
+			translate = CPL_gdaltranslate(source, destination, options, oo),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo),
-			buildvrt = CPL_gdalbuildvrt(source, destination, options),
-			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename),
-			nearblack = CPL_gdalnearblack(source, destination, options),
-			grid = CPL_gdalgrid(source, destination, options),
+			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo),
+			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo),
+			nearblack = CPL_gdalnearblack(source, destination, options, oo),
+			grid = CPL_gdalgrid(source, destination, options, oo),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 
