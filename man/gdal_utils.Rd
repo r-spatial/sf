@@ -64,7 +64,8 @@ gdal_utils(
   options = c(
   "-f", "GPKG", # output file format for GDAL < 2.3
   "-s_srs", "EPSG:4326", # input file SRS
-  "-t_srs", "EPSG:2264" # output file SRS
+  "-t_srs", "EPSG:2264", # output file SRS
+  "-overwrite"
   )
 )
 st_read(out_file)
