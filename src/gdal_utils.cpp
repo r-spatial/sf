@@ -36,7 +36,7 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 
 	int err = 0;
 
@@ -45,10 +45,14 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	for (int i = 0; i < src.size(); i++)
 		src_pt[i] = GDALOpenEx((const char *) src[i], GA_ReadOnly, NULL, oo_char.data(), NULL);
 
+	std::vector <char *> doo_char = create_options(doo, true); // open options
+	GDALDatasetH dst_ds = GDALOpenEx((const char *) dst[0], GDAL_OF_RASTER | GA_Update, NULL, doo_char.data(), NULL);
+
 	std::vector <char *> options_char = create_options(options, true);
 	GDALWarpAppOptions* opt = GDALWarpAppOptionsNew(options_char.data(), NULL);
 
-	GDALDatasetH result = GDALWarp((const char *) dst[0], NULL, src.size(), src_pt.data(), opt, &err);
+	GDALDatasetH result = GDALWarp(dst_ds == NULL ? (const char *) dst[0] : NULL, dst_ds, 
+		src.size(), src_pt.data(), opt, &err);
 	GDALWarpAppOptionsFree(opt);
 	for (int i = 0; i < src.size(); i++)
 		if (src_pt[i] != NULL)
@@ -60,7 +64,8 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool overwrite = false) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		bool overwrite = false) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
@@ -73,14 +78,13 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 		Rcpp::stop("source dataset not found");
 	unset_error_handler();
 	GDALDatasetH dst_pt = NULL;
-	if (! overwrite)
-		dst_pt = GDALOpen((const char *) dst[0], GA_Update);
+	if (! overwrite) {
+		std::vector <char *> doo_char = create_options(doo, true); // open options
+		dst_pt = GDALOpenEx((const char *) dst[0], GDAL_OF_RASTER | GA_Update, NULL, doo_char.data(), NULL);
+	}
 	set_error_handler();
-	GDALDatasetH result = NULL;
-	if (dst_pt == NULL)
-		result = GDALRasterize((const char *) dst[0], NULL, src_pt, opt, &err);
-	else
-		result = GDALRasterize(NULL, dst_pt, src_pt, opt, &err);
+	GDALDatasetH result = 
+		GDALRasterize(dst_pt == NULL ? (const char *) dst[0] : NULL, dst_pt, src_pt, opt, &err);
 	GDALRasterizeOptionsFree(opt);
 	if (src_pt != NULL)
 		GDALClose(src_pt);
@@ -115,22 +119,25 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
-	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALVectorTranslateOptions* opt =  GDALVectorTranslateOptionsNew(options_char.data(), NULL);
 
+	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, 
 		oo_char.data(), NULL);
 	if (src_pt == NULL)
 		return 1; // #nocov
-	// GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
-	GDALDatasetH result = GDALVectorTranslate((const char *) dst[0], NULL, 1, &src_pt, opt, &err);
-	if (src_pt != NULL)
-		GDALClose(src_pt);
+	std::vector <char *> doo_char = create_options(doo, true); // open options
+	unset_error_handler();
+	GDALDatasetH dst_pt = GDALOpenEx((const char *) dst[0], GDAL_OF_VECTOR | GA_Update, NULL, doo_char.data(), NULL);
+	set_error_handler();
+	GDALDatasetH result = 
+		GDALVectorTranslate(dst_pt == NULL ? (const char *) dst[0] : NULL, dst_pt, 1, &src_pt, opt, &err);
 	GDALVectorTranslateOptionsFree(opt);
+	GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
 	return result == NULL || err;
@@ -193,22 +200,21 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
+	std::vector <char *> doo_char = create_options(doo, true); // open options
 	GDALNearblackOptions* opt =  GDALNearblackOptionsNew(options_char.data(), NULL);
 
 	// GDALDatasetH src_pt = GDALOpen((const char *) src[0], GA_ReadOnly);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, NULL, oo_char.data(), NULL);
-	GDALDatasetH dst_pt = GDALOpen((const char *) dst[0], GA_Update);
-	GDALDatasetH result = GDALNearblack(NULL, dst_pt, src_pt, opt, &err);
+	GDALDatasetH dst_pt = GDALOpenEx((const char *) dst[0], GDAL_OF_RASTER | GA_Update, NULL, doo_char.data(), NULL);
+	GDALDatasetH result = GDALNearblack(dst_pt == NULL ? (const char *) dst[0] : NULL, dst_pt, src_pt, opt, &err);
 	GDALNearblackOptionsFree(opt);
 	if (src_pt != NULL) 
 		GDALClose(src_pt);
-/*	if (dst_pt != NULL) // don't: result == dst_pt
-		GDALClose(dst_pt); */
 	if (result != NULL)
 		GDALClose(result);
 	return result == NULL || err;
@@ -243,13 +249,13 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 }
 
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool overwrite = false) {
-
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		bool overwrite = false) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
@@ -259,7 +265,7 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 }
 
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
@@ -275,7 +281,7 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 }
 
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
@@ -289,7 +295,7 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 // https://www.gdal.org/warptut.html :
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
-		Rcpp::IntegerVector options, Rcpp::CharacterVector oo) {
+		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
     GDALDatasetH  hSrcDS, hDstDS;
@@ -298,7 +304,8 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     hSrcDS = GDALOpenEx( infile[0], GA_ReadOnly, NULL, oo_char.data(), NULL );
 	if (hSrcDS == NULL)
 		Rcpp::stop("input file not found");
-    hDstDS = GDALOpenEx( outfile[0], GA_Update, NULL, NULL, NULL ); // TODO: destination open options?
+	std::vector <char *> doo_char = create_options(doo, true); // open options
+    hDstDS = GDALOpenEx(outfile[0], GA_Update, NULL, doo_char.data(), NULL);
 	if (hDstDS == NULL)
 		Rcpp::stop("could not open output file for writing");
     // Setup warp options.
