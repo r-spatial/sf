@@ -228,7 +228,8 @@
   <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
   <span class='st'>"-f"</span>, <span class='st'>"GPKG"</span>, <span class='co'># output file format for GDAL &lt; 2.3</span>
   <span class='st'>"-s_srs"</span>, <span class='st'>"EPSG:4326"</span>, <span class='co'># input file SRS</span>
-  <span class='st'>"-t_srs"</span>, <span class='st'>"EPSG:2264"</span> <span class='co'># output file SRS</span>
+  <span class='st'>"-t_srs"</span>, <span class='st'>"EPSG:2264"</span>, <span class='co'># output file SRS</span>
+  <span class='st'>"-overwrite"</span>
   )
 )
 <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='no'>out_file</span>)
@@ -236,7 +237,7 @@
 <span class='co'># has no associated SRS.</span>
 <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='no'>in_file</span>)
 }</div><div class='output co'>#&gt; Driver: GTiff/GeoTIFF
-#&gt; Files: /tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/tif/geomatrix.tif
+#&gt; Files: /tmp/RtmpC3ELhm/temp_libpath7d544b2b2798/sf/tif/geomatrix.tif
 #&gt; Size is 20, 20
 #&gt; Coordinate System is:
 #&gt; PROJCS["WGS 84 / UTM zone 11N",
@@ -278,7 +279,7 @@
 #&gt; Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)
 #&gt; Band 1 Block=20x20 Type=Byte, ColorInterp=Gray
 #&gt;     Computed Min/Max=74.000,255.000
-#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpLMeAN7/file208a610a1cb8.gpkg' using driver `GPKG'
+#&gt; Reading layer `storms_xyz' from data source `/tmp/Rtmp99mYaz/file64261ebc5df.gpkg' using driver `GPKG'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ
@@ -286,7 +287,7 @@
 #&gt; z_range:        zmin: 3031.49 zmax: 3336.608
 #&gt; epsg (SRID):    2264
 #&gt; proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.2192024384 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
-#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpTwnHt9/temp_libpath18f026daef3b/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpC3ELhm/temp_libpath7d544b2b2798/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ
