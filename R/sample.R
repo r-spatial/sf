@@ -132,6 +132,10 @@ st_poly_sample = function(x, size, ..., type = "random",
 			}
 			hex_grid_points(x, pt = offset, dx = dx)
 		} else if (type == "regular") {
+			if (isTRUE(st_is_longlat(x))){
+				bb_longlat=as.double(bb)
+				a0=as.double(bb_longlat[3]-bb_longlat[1])*(bb_longlat[4]-bb_longlat[2])
+			}
 			dx = as.numeric(sqrt(a0 / size))
 			offset = c((offset[1] - bb["xmin"]) %% dx,
 				(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
