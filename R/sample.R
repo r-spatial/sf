@@ -123,7 +123,13 @@ st_poly_sample = function(x, size, ..., type = "random",
 		bb = st_bbox(x)
 
 		pts = if (type == "hexagonal") {
-			dx = sqrt(a0 / size / (sqrt(3)/2))
+			if (isTRUE(st_is_longlat(x))){
+				bb=as.double(bb)
+				a0=as.double(bb[3]-bb[1])*(bb[4]-bb[2])
+				dx = sqrt(a0 / size / (sqrt(3)/2))
+			} else {
+				dx = sqrt(a0 / size / (sqrt(3)/2))
+			}
 			hex_grid_points(x, pt = offset, dx = dx)
 		} else if (type == "regular") {
 			dx = as.numeric(sqrt(a0 / size))
