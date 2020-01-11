@@ -18,9 +18,10 @@ test_that("st_crs works", {
   #expect_warning(st_crs(nc2) <- 1000, "not found in EPSG") -> changes in gdal 2.5.0
   expect_silent(st_crs(nc1) <- st_crs(nc1))
 
-  expect_error(st_crs("+proj=ll"), "invalid crs")
-  if (sf_extSoftVersion()[["GDAL"]] > "2.2.2")
+  if (sf_extSoftVersion()[["GDAL"]] > "2.2.3") {
+    expect_error(st_crs("+proj=ll"), "invalid crs")
   	expect_error(st_crs("+proj=longlat +datum=NAD26"))
+  }
   expect_silent(st_crs("+proj=longlat"))
   expect_silent(st_crs("+proj=longlat +datum=NAD27"))
   a <- st_crs(4326)
