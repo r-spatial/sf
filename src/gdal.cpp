@@ -116,7 +116,51 @@ void handle_error(OGRErr err) {
 	}
 }
 
+Rcpp::CharacterVector wkt_from_spatial_reference(OGRSpatialReference *srs) { // FIXME: add options?
+	char *cp;
+#if GDAL_VERSION_MAJOR >= 3
+	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
+	OGRErr err = srs->exportToWkt(&cp, options);
+#else
+	OGRErr err = srs->exportToPrettyWkt(&cp);
+#endif
+	if (err != OGRERR_NONE)
+		Rcpp::stop("OGR error: cannot export to WKT");
+	Rcpp::CharacterVector out(cp);
+	CPLFree(cp);
+	return out;
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input) {
+	OGRSpatialReference *srs = new OGRSpatialReference;
+	srs = handle_axis_order(srs);
+	handle_error(srs->SetFromUserInput((const char *) input[0]));
+	Rcpp::CharacterVector out = wkt_from_spatial_reference(srs);
+	delete srs;
+	return(out);
+}
+
+Rcpp::List fix_old_style(Rcpp::List crs) {
+	Rcpp::CharacterVector n = crs.attr("names");
+	if (n[0] == "epsg") { // create new:
+		Rcpp::List ret(2);
+		Rcpp::CharacterVector proj4string = crs[1];
+		ret[0] = proj4string[0];
+		ret[1] = CPL_wkt_from_user_input(proj4string);
+		Rcpp::CharacterVector names(2);
+		names(0) = "input";
+		names(1) = "wkt";
+		ret.attr("names") = names;
+		ret.attr("class") = "crs";
+		return ret;
+	} else
+		return crs;
+}
+
 OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
+	// fix old-style crs:
+	crs = fix_old_style(crs);
 	OGRSpatialReference *dest = NULL;
 	Rcpp::CharacterVector wkt = crs[1];
 	if (! Rcpp::CharacterVector::is_na(wkt[0])) {
@@ -222,31 +266,6 @@ int epsg_from_crs(Rcpp::List crs) {
 		return(atoi(cp));
 	} else
 		return(NA_INTEGER);
-}
-
-Rcpp::CharacterVector wkt_from_spatial_reference(OGRSpatialReference *srs) { // FIXME: add options?
-	char *cp;
-#if GDAL_VERSION_MAJOR >= 3
-	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
-	OGRErr err = srs->exportToWkt(&cp, options);
-#else
-	OGRErr err = srs->exportToPrettyWkt(&cp);
-#endif
-	if (err != OGRERR_NONE)
-		Rcpp::stop("OGR error: cannot export to WKT");
-	Rcpp::CharacterVector out(cp);
-	CPLFree(cp);
-	return out;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input) {
-	OGRSpatialReference *srs = new OGRSpatialReference;
-	srs = handle_axis_order(srs);
-	handle_error(srs->SetFromUserInput((const char *) input[0]));
-	Rcpp::CharacterVector out = wkt_from_spatial_reference(srs);
-	delete srs;
-	return(out);
 }
 
 // [[Rcpp::export]]

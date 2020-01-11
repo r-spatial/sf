@@ -215,8 +215,8 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 			cat(paste0("geographic CRS: ", p$Name, "\n"))
 		else
 			cat(paste0("projected CRS:  ", p$Name, "\n"))
-		if (!is.na(crs$epsg))
-			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
+#		if (!is.na(crs$epsg))
+#			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
 	}
 	if (attr(x, "precision") != 0.0) {
 		cat(paste0("precision:      "))

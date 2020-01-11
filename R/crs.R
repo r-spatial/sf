@@ -75,11 +75,24 @@ st_crs.character = function(x, ...) {
 	}
 }
 
+fix_crs = function(x) {
+	if (all(c("epsg", "proj4string") %in% names(x))) {
+		# warning("old-style crs object detected; please recreate object with a modern sf::st_crs()")
+		x = unclass(x)
+		if (!is.na(x$epsg))
+			st_crs(x$epsg)
+		else
+			st_crs(x$proj4string)
+	} else
+		x
+}
+
+
 #' @name st_crs
 #' @param parameters logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}
 #' @export
 st_crs.sfc = function(x, ..., parameters = FALSE) {
-	crs = attr(x, "crs")
+	crs = fix_crs(attr(x, "crs"))
 	if (parameters) {
 		if (is.na(crs))
 			list()
@@ -299,7 +312,7 @@ is.na.crs = function(x) {
 		x = st_crs(x[["proj4string"]]) # FIXME: should this be only for some transition period? Add test?
 	}
 	if (is.na(x))
-		NA
+		NA_character_
 	else if (is.numeric(name) || name %in% names(x))
 		x[[name]]
 	else {

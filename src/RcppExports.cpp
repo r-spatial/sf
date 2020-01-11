@@ -49,17 +49,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_crs_parameters
-Rcpp::List CPL_crs_parameters(Rcpp::List crs);
-RcppExport SEXP _sf_CPL_crs_parameters(SEXP crsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::List >::type crs(crsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_crs_parameters(crs));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_wkt_from_user_input
 Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input);
 RcppExport SEXP _sf_CPL_wkt_from_user_input(SEXP inputSEXP) {
@@ -68,6 +57,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_wkt_from_user_input(input));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_crs_parameters
+Rcpp::List CPL_crs_parameters(Rcpp::List crs);
+RcppExport SEXP _sf_CPL_crs_parameters(SEXP crsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type crs(crsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_crs_parameters(crs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1119,8 +1119,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_init", (DL_FUNC) &_sf_CPL_gdal_init, 0},
     {"_sf_CPL_gdal_cleanup_all", (DL_FUNC) &_sf_CPL_gdal_cleanup_all, 0},
     {"_sf_CPL_gdal_version", (DL_FUNC) &_sf_CPL_gdal_version, 1},
-    {"_sf_CPL_crs_parameters", (DL_FUNC) &_sf_CPL_crs_parameters, 1},
     {"_sf_CPL_wkt_from_user_input", (DL_FUNC) &_sf_CPL_wkt_from_user_input, 1},
+    {"_sf_CPL_crs_parameters", (DL_FUNC) &_sf_CPL_crs_parameters, 1},
     {"_sf_CPL_crs_equivalent", (DL_FUNC) &_sf_CPL_crs_equivalent, 2},
     {"_sf_CPL_crs_from_input", (DL_FUNC) &_sf_CPL_crs_from_input, 1},
     {"_sf_CPL_roundtrip", (DL_FUNC) &_sf_CPL_roundtrip, 1},
