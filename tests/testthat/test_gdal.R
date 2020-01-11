@@ -74,6 +74,11 @@ test_that('gdal_utils work', {
   #expect_true(gdal_utils("rasterize", sd2, tf))
   expect_true(gdal_utils("translate", sd2, tf))
   expect_true(gdal_utils("vectortranslate", sd2, tf2))
+  shp = system.file("shape/nc.shp", package="sf")
+  gpkg = paste0(tempfile(), ".gpkg")
+  options = c("-f", "GPKG", "-overwrite", "-nlt", "PROMOTE_TO_MULTI", 
+  	"-oo", "ADJUST_TYPE=NO", "-doo", "FLATTEN_NESTED_ATTRIBUTES=NO")
+  expect_true(gdal_utils("vectortranslate", shp, gpkg, options = options))
   expect_warning(gdal_utils("nearblack", sd2, tf))
   # create point geom:
   points = system.file("gpkg/nc.gpkg", package="sf")

@@ -60,7 +60,8 @@ resampling_method = function(option = "near") {
 #'   options = c(
 #'   "-f", "GPKG", # output file format for GDAL < 2.3
 #'   "-s_srs", "EPSG:4326", # input file SRS
-#'   "-t_srs", "EPSG:2264" # output file SRS
+#'   "-t_srs", "EPSG:2264", # output file SRS
+#'   "-overwrite"
 #'   )
 #' )
 #' st_read(out_file)
@@ -68,25 +69,42 @@ resampling_method = function(option = "near") {
 #' # has no associated SRS.
 #' st_read(in_file)
 #' }
-
 gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
 
+	if ("-co" %in% options)
+		options["-co" == options] = "-oo"
+	if ("-oo" %in% options) { # -oo indicating opening options
+		ooi = which("-oo" == options)
+		oo = options[ooi + 1]
+		options = options[-c(ooi, ooi+1)]
+	} else
+		oo = character(0)
+	if ("-doo" %in% options) { # -oo indicating destination opening options
+		ooi = which("-doo" == options)
+		doo = options[ooi + 1]
+		options = options[-c(ooi, ooi+1)]
+	} else
+		doo = character(0)
+
+	if ("-doo" %in% options) # -oo indicating opening options
+		stop("-doo options not (yet) supported; consider raising an issue") # nocov
+
 	ret = switch(util,
-			info = CPL_gdalinfo(source, options),
-			warp = CPL_gdalwarp(source, destination, options),
-			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options))), # nocov
+			info = CPL_gdalinfo(source, options, oo),
+			warp = CPL_gdalwarp(source, destination, options, oo, doo),
+			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)), oo, doo), # nocov
 			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
-				CPL_gdalrasterize(source, destination, options, overwrite)
+				CPL_gdalrasterize(source, destination, options, oo, doo, overwrite)
 			}, # nocov end
-			translate = CPL_gdaltranslate(source, destination, options),
-			vectortranslate = CPL_gdalvectortranslate(source, destination, options),
-			buildvrt = CPL_gdalbuildvrt(source, destination, options),
-			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename),
-			nearblack = CPL_gdalnearblack(source, destination, options),
-			grid = CPL_gdalgrid(source, destination, options),
+			translate = CPL_gdaltranslate(source, destination, options, oo),
+			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo),
+			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo),
+			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo),
+			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo),
+			grid = CPL_gdalgrid(source, destination, options, oo),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 

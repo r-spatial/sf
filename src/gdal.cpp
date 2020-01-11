@@ -390,7 +390,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::CharacterVector proj4) {
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 	if (ct == NULL) {
-		dest->Release(); // #nocov begin
+		dest->Release(); // #nocov start
 		sfc_from_ogr(g, true); // to destroy g
 		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov end
 	}
