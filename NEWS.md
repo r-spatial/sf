@@ -2,6 +2,10 @@
 
 * reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225)
 
+* `st_as_sf.map` no longer requires `maptools` and `sp`; dropped dependency on maptools.
+
+* conversion between `spatstat` classes `owin`, `ppp` and `psp` and `sf` classes no longer use `maptools`; #1204
+
 * `gdal_utils` processes open options `-oo` and `-doo` properly; https://github.com/ITSLeeds/geofabric/issues/12
 
 * `st_sample` directly interfaces `spatstat` sampling methods, e.g. `type = "Thomas"` calls `spatstat::rThomas` after converting input arguments (window) and converts returned `ppp` object to `sf`'s `POINT` geometries; #1204 with help from Ege Rubak and Jakub Nowosad

@@ -1,9 +1,11 @@
 # see https://gist.github.com/edzer/9c5c24434ffcaf42917796a98c4dd9a6
 library(sf)
-library(maptools)
+# library(maptools)
 library(animation)
-data(wrld_simpl)
+data(wrld_simpl, package = "maptools")
 w <- st_as_sf(wrld_simpl)
+w = lwgeom::st_make_valid(w)
+st_crs(w) = st_crs(4326)
 set.seed(131)
 w$f = factor(sample(1:12, nrow(w), replace = TRUE))
 
@@ -40,7 +42,8 @@ circ = function(l = c(-180:180), lon0 = 0, lat0 = 30) {
 m = st_make_grid()
 m = st_segmentize(m, 4e5)
 saveGIF(
-for (i in 0:200) {
+#for (i in 0:200) {
+for (i in 0:100) {
 	par(mar = rep(0,4))
 	lat=30+(i/2)
 	lon=-10-(i/2)
