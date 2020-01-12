@@ -7,13 +7,13 @@
 #include <ogr_spatialref.h>
 #include "gdal.h" // local
 
-#if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
-# include "gdal_utils.h" // requires >= 2.1
-
 #include "Rcpp.h"
 
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"
+
+#if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
+# include "gdal_utils.h" // requires >= 2.1
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
