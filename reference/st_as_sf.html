@@ -177,7 +177,7 @@
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for map</span>
-<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for ppp</span>
 <span class='fu'>st_as_sf</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -227,6 +227,14 @@
       <th>sf_column_name</th>
       <td><p>character; name of the active list-column with simple feature geometries; in case
 there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>logical; the value for <code>fill</code> that was used in the call to <a href='https://rdrr.io/pkg/maps/man/map.html'>map</a>.</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>logical; if <code>TRUE</code>, group id labels from <a href='https://rdrr.io/pkg/maps/man/map.html'>map</a> by their prefix before <code>:</code></p></td>
     </tr>
     </table>
 
