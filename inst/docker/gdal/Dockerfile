@@ -75,26 +75,26 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 3.0.2
-ENV GDAL_VERSION_NAME 3.0.2
+ENV GDAL_VERSION 3.0.3
+ENV GDAL_VERSION_NAME 3.0.3
 
-#RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
-#  && cd gdal* \
-#  && ./configure \
-#  && make \
-#  && make install \
-#  && cd .. \
-#  && ldconfig
-
-RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
-RUN cd gdal/gdal \
-  && ls -l \
+RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
+  && cd gdal* \
   && ./configure \
   && make \
   && make install \
   && cd .. \
   && ldconfig
+
+#RUN git clone --depth 1 https://github.com/OSGeo/gdal.git
+#RUN cd gdal/gdal \
+#  && ls -l \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
 # GEOS:
 #ENV GEOS_VERSION 3.6.2

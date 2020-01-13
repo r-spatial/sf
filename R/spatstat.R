@@ -1,11 +1,11 @@
 window_polygons_from_edges = function (w) {
-  mw = as.matrix(w$ends)
-  lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
-  p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
-  if (length(p0) > 1) # multiple POLYGONs, returned as sfc_
-  	do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
-  else
-  	st_cast(p0, "POLYGON")
+	mw = as.matrix(w$ends)
+	lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
+	p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
+	if (length(p0) > 1) # multiple POLYGONs, returned as sfc_
+		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
+	else
+		st_cast(p0, "POLYGON")
 }
 
 #' @name st_as_sf
@@ -53,7 +53,11 @@ st_as_sf.psp = function(x, ...) {
 	pol = window_polygons_from_edges(spatstat::edges(x))
 
 	label = c("window", rep("segment", NROW(m)))
-	st_sf(label = label, geom = st_sfc(c(list(pol), lst1)))
+	if (spatstat::is.marked(x))
+		st_sf(label = label, mark = c(NA, spatstat::marks(x)),
+			geom = st_sfc(c(list(pol), lst1)))
+	else
+		st_sf(label = label, geom = st_sfc(c(list(pol), lst1)))
 }
 
 
@@ -280,7 +284,7 @@ as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
 		nseg.MULTILINESTRING <- function(x) { sum(unlist(lapply(x, nseg.LINESTRING))) }
 		nrep <- unlist(lapply(y, nseg.MULTILINESTRING))
 		spatstat::setmarks(z, rep(marx, nrep))
-  } else
+	} else
 		z
 }
 

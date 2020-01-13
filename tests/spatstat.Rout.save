@@ -268,6 +268,35 @@ POLYGON ((0.5 0.5, -0.5 0.5, -0.5 -0.5, 0.5 -0.5, 0.5 0.5), (-0.45 -0.45, -0.45 
 > plot(as.psp(st_sfc(mls)))
 > plot(as.psp(st_sfc(ls, mls)))
 > 
+> sf = st_sf(st_cast(st_sfc(ls, mls), "MULTILINESTRING"), marks = 1:2, foo = 2:1)
+> as.psp(sf) # picks marks itself
+marked planar line segment pattern: 5 line segments
+marks are numeric, of type 'integer'
+window: rectangle = [0, 4] x [0, 3] units
+Warning message:
+In as.psp.sf(sf) : 1 columns of data frame discarded
+> as.psp(sf, marks = 5:1)
+marked planar line segment pattern: 5 line segments
+marks are numeric, of type 'integer'
+window: rectangle = [0, 4] x [0, 3] units
+> 
+> st_as_sf(as.psp(sf))
+Simple feature collection with 6 features and 2 fields
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 3
+epsg (SRID):    NA
+proj4string:    NA
+    label mark                           geom
+1  window   NA POLYGON ((4 0, 0 0, 0 3, 4 ...
+2 segment    1          LINESTRING (0 0, 1 1)
+3 segment    1          LINESTRING (1 1, 2 0)
+4 segment    2          LINESTRING (0 0, 1 1)
+5 segment    2          LINESTRING (1 1, 2 0)
+6 segment    2          LINESTRING (3 3, 4 2)
+Warning message:
+In as.psp.sf(sf) : 1 columns of data frame discarded
+> 
 > proc.time()
    user  system elapsed 
-  1.621   0.074   1.685 
+  1.866   0.084   2.012 
