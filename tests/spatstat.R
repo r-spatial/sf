@@ -75,11 +75,8 @@ plot(as.owin(mpol), col = 'grey')
 plot(as.owin(st_sfc(mpol)), col = 'grey')
 plot(as.owin(st_sfc(pol, mpol)), col = 'grey')
 plot(as.owin(st_sf(a=1:2, st_sfc(pol, mpol))), col = 'grey')
-o = as.owin(st_sf(a=1:2, st_sfc(pol, mpol)))
-
-st_as_sfc(o)[[1]]
-st_as_sfc(o)[[2]]
-st_as_sfc(o)[[3]]
+(o = as.owin(st_sf(a=1:2, st_sfc(pol, mpol))))
+st_as_sfc(o)
 
 plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
 plot(st_as_sf(o), col = 'blue', main = 'st_as_sf(o)')

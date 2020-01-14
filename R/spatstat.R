@@ -20,9 +20,7 @@ st_as_sf.ppp = function(x, ...) {
   if (!requireNamespace("spatstat", quietly = TRUE))
     stop("package spatstat required, please install it first") # nocov
   # window:
-  pol = window_polygons_from_edges(spatstat::edges(x$window))
-  label = c("window")
-  winwork_sf = st_sf(label = label, geom = st_sfc(c(list(pol))))
+  win = st_sf(label = "window", geom = st_as_sfc(spatstat::as.owin(x)))
 
   # points:
   m = as.matrix(data.frame(x$x, x$y))
@@ -30,7 +28,7 @@ st_as_sf.ppp = function(x, ...) {
   points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
 
   # merge window and points:
-  ret = rbind(winwork_sf, points_sf)
+  ret = rbind(win, points_sf)
   if (spatstat::is.marked(x)) {
 	# add marks:
     m = as.data.frame(spatstat::marks(x))
@@ -50,14 +48,14 @@ st_as_sf.psp = function(x, ...) {
 	lst1 = lapply(seq_len(NROW(m)), function(i) st_linestring(matrix(m[i,], 2, byrow = TRUE)))
 
 	# window:
-	pol = window_polygons_from_edges(spatstat::edges(x))
+	win = st_as_sfc(spatstat::as.owin(x))[[1]]
 
 	label = c("window", rep("segment", NROW(m)))
 	if (spatstat::is.marked(x))
 		st_sf(label = label, mark = c(NA, spatstat::marks(x)),
-			geom = st_sfc(c(list(pol), lst1)))
+			geom = st_sfc(c(list(win), lst1)))
 	else
-		st_sf(label = label, geom = st_sfc(c(list(pol), lst1)))
+		st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 }
 
 
@@ -184,7 +182,10 @@ st_as_sfc.owin = function(x, ...) {
 		w = which.min(st_area(exteriors[ cb[[i]] ]))
 		pieces[[w]] = st_polygon(c(unclass(pieces[[w]]), unclass(holes[[i]])))
 	}
-	pieces
+	if (length(pieces) > 1) # multiple POLYGONs, collapse:
+		st_sfc(do.call(c, pieces))
+	else
+		pieces
 }
 
 #' @export
