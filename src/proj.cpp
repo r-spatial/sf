@@ -67,8 +67,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-        if (keep.size() != 1)
-                stop("keep should be a single integer"); // #nocov
+	if (keep.size() != 1)
+		stop("keep should be a single integer"); // #nocov
 
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);

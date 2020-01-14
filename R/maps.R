@@ -1,14 +1,14 @@
 NAmat2xyList <- function(xy) {
 	NAs <- unclass(attr(na.omit(xy), "na.action"))
 	if ((length(NAs) == 1L) && (NAs == nrow(xy))) {
-		xy <- xy[-nrow(xy)]
-		NAs <- NULL
+		xy <- xy[-nrow(xy)] # nocov
+		NAs <- NULL # nocov
 	}
 # NA problem found by Edzer Pebesma, 24/8-06
 	diffNAs <- diff(NAs)
 	if (any(diffNAs == 1)) {
-		xy <- xy[-(NAs[which(diffNAs == 1)] + 1), ]
-		NAs <- unclass(attr(na.omit(xy), "na.action"))
+		xy <- xy[-(NAs[which(diffNAs == 1)] + 1), ] # nocov
+		NAs <- unclass(attr(na.omit(xy), "na.action")) # nocov
 	}
 	nParts <- length(NAs) + 1L
 # two NAs at end of file 070905 RSB
@@ -34,7 +34,6 @@ NAmat2xyList <- function(xy) {
 		res[[i]] <- xy[from[i]:to[i],, drop = FALSE]
 	res
 }
-
 
 map2pol = function(xyList, ID) {
 	# close rings:
