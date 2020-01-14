@@ -1,5 +1,5 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -19,6 +19,8 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(sf))
 > 
 > test_check("sf")
+proj_create: Error -5: unknown projection id
+proj_create: Error -9: unknown elliptical parameter name
 Cannot open layer foo
 Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nospatial.gpkg' using driver `GPKG'
 Reading layer `nospatial' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nospatial.gpkg' using driver `GPKG'
@@ -30,11 +32,36 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 epsg (SRID):    4267
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
+driver `foo' not available.
+Dataset /tmp/RtmpAyFXjy/file5f135fd56834.gpkg already exists: remove first, use update=TRUE to append,
+delete_layer=TRUE to delete layer, or delete_dsn=TRUE to remove the entire data source before writing.
+Creating or updating layer . failed.
 Failed to create feature 1 in x
 Failed to create feature 1 in x
+Failed to create feature 1 in x
+Creating dataset /x.gpkg failed.
+Writing layer `file5f131203442a' to data source `/tmp/RtmpAyFXjy/file5f131203442a.gpkg' using driver `GPKG'
+Writing 1 features with 1 fields and geometry type Point.
+Dataset /tmp/RtmpAyFXjy/file5f131203442a.gpkg cannot be updated: do you have write permission?
+Reading layer `storms_xyzm' from data source `/home/edzer/git/sf.Rcheck/sf/shape/storms_xyzm.shp' using driver `ESRI Shapefile'
+Simple feature collection with 71 features and 0 fields
+geometry type:  LINESTRING
+dimension:      XYM
+bbox:           xmin: -102.2 ymin: 8.3 xmax: 0 ymax: 59.5
+m_range:        zmin: 924 zmax: 1017
+epsg (SRID):    NA
+proj4string:    NA
+Reading layer `storms_xyz' from data source `/home/edzer/git/sf.Rcheck/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+Simple feature collection with 71 features and 0 fields
+geometry type:  LINESTRING
+dimension:      XYZ
+bbox:           xmin: -102.2 ymin: 8.3 xmax: 0 ymax: 59.5
+z_range:        zmin: 924 zmax: 1017
+epsg (SRID):    NA
+proj4string:    NA
 ══ testthat results  ═══════════════════════════════════════════════════════════
-[ OK: 645 | SKIPPED: 59 | WARNINGS: 4 | FAILED: 0 ]
+[ OK: 743 | SKIPPED: 61 | WARNINGS: 5 | FAILED: 0 ]
 > 
 > proc.time()
    user  system elapsed 
-  2.967   0.156   3.167 
+   4.55    0.21    4.92 

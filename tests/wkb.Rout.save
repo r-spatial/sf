@@ -1,6 +1,6 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -80,7 +80,7 @@ LINESTRING (1 7 13,2 8 14,3 9 15,4 10 16,5 11 17,6 12 18)
 [1] "LINESTRING Z (1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
 > st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_multipoint(matrix(1:18,6,3),dim="XYZ")))))
 MULTIPOINT (1 7 13,2 8 14,3 9 15,4 10 16,5 11 17,6 12 18)
-[1] "MULTIPOINT Z (1 7 13, 2 8 14, 3 9 15, 4 10 16, 5 11 17, 6 12 18)"
+[1] "MULTIPOINT Z ((1 7 13), (2 8 14), (3 9 15), (4 10 16), (5 11 17), (6 12 18))"
 > st_as_text(st_sfc(sf:::CPL_roundtrip(st_sfc(st_point(c(0,0,0), dim="XYZ")))))
 POINT (0 0 0)
 [1] "POINT Z (0 0 0)"
@@ -99,4 +99,4 @@ POINT (0 0)
 > 
 > proc.time()
    user  system elapsed 
-  0.668   0.240   0.646 
+  0.505   0.036   0.532 
