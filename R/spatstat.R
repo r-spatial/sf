@@ -51,11 +51,12 @@ st_as_sf.psp = function(x, ...) {
 	win = st_as_sfc(spatstat::as.owin(x))[[1]]
 
 	label = c("window", rep("segment", NROW(m)))
-	if (spatstat::is.marked(x))
-		st_sf(label = label, mark = c(NA, spatstat::marks(x)),
-			geom = st_sfc(c(list(win), lst1)))
-	else
-		st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
+	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
+	if (spatstat::is.marked(x)) { # add marks:
+    	m = as.data.frame(spatstat::marks(x))
+		cbind.sf(sf, m[c(NA, seq_len(nrow(m))),])
+	} else
+		ret
 }
 
 
