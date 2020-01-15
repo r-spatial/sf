@@ -54,7 +54,7 @@ st_as_sf.psp = function(x, ...) {
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 	if (spatstat::is.marked(x)) { # add marks:
     	m = as.data.frame(spatstat::marks(x))
-		cbind.sf(sf, m[c(NA, seq_len(nrow(m))),])
+		cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
 	} else
 		ret
 }
@@ -276,16 +276,10 @@ as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
 	if(is.null(marks)) {
 		# extract marks from first column of data frame
 		st_geometry(from) = NULL # remove geometry column
-		nc = ncol(from)
-		if (nc == 0)
-			return(z)
-		if(nc > 1) 
-			warning(paste(nc-1, "columns of data frame discarded"))
-		marx <- from[,1]
 		nseg.LINESTRING  <- function(x) { nrow(x) - 1 }
 		nseg.MULTILINESTRING <- function(x) { sum(unlist(lapply(x, nseg.LINESTRING))) }
 		nrep <- unlist(lapply(y, nseg.MULTILINESTRING))
-		spatstat::setmarks(z, rep(marx, nrep))
+		spatstat::setmarks(z, from[rep(seq_len(nrow(from)), nrep),])
 	} else
 		z
 }
