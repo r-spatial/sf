@@ -27,3 +27,41 @@ st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
 		ret
 	}
 }
+
+#' Make an invalid geometry valid
+#'
+#' Make an invalid geometry valid
+#' @name valid
+#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @return Object of the same class as \code{x}
+#' @details \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid}.
+#' @examples
+#' library(sf)
+#' x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
+#' suppressWarnings(st_is_valid(x))
+#' y = st_make_valid(x)
+#' st_is_valid(y)
+#' y %>% st_cast()
+#' @export
+st_make_valid = function(x) UseMethod("st_make_valid")
+
+#' @export
+st_make_valid.sfg = function(x) {
+	st_make_valid(st_geometry(x))[[1]]
+}
+
+#' @export
+st_make_valid.sfc = function(x) {
+	x = if (sf_extSoftVersion()["GEOS"] < "3.8.0") {
+			if (!requireNamespace("lwgeom", quietly = TRUE))
+				stop("lwgeom required: install that first") # nocov
+			lwgeom::CPL_make_valid(x)
+		} else
+			CPL_geos_make_valid(x)
+	st_sfc(x, crs = st_crs(x))
+}
+
+#' @export
+st_make_valid.sf = function(x) {
+	st_set_geometry(x, st_make_valid(st_geometry(x)))
+}

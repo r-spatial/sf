@@ -492,6 +492,19 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
+Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+
+	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	std::vector<GeomPtr> out(gmv.size());
+	for (int i = 0; i < gmv.size(); i++)
+		gmv[i] = geos_ptr(GEOSMakeValid_r(hGEOSCtxt, gmv[i].get()), hGEOSCtxt);
+	Rcpp::List ret = sfc_from_geometry(hGEOSCtxt, gmv);
+	CPL_geos_finish(hGEOSCtxt);
+	return ret;
+}
+
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
