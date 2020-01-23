@@ -1,12 +1,13 @@
-window_polygons_from_edges = function (w) {
-	mw = as.matrix(w$ends)
-	lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
-	p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
-	if (length(p0) > 1) # multiple POLYGONs, returned as sfc_
-		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
-	else
-		st_cast(p0, "POLYGON")
-}
+# window_polygons_from_edges = function (w) {
+#	mw = as.matrix(w$ends)
+#	lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
+#	p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))
+#	if (length(p0) > 1) # multiple POLYGONs, returned as sfc_
+#		do.call(c, st_collection_extract(p0, "POLYGON")) # MULTIPOLYGON
+#	else
+#		st_cast(p0, "POLYGON")
+# }
+
 
 #' @name st_as_sf
 #' @export
@@ -53,10 +54,22 @@ st_as_sf.psp = function(x, ...) {
 	label = c("window", rep("segment", NROW(m)))
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 	if (spatstat::is.marked(x)) { # add marks:
-    	m = as.data.frame(spatstat::marks(x))
+		m = as.data.frame(spatstat::marks(x))
 		cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
 	} else
 		ret
+}
+
+# 111117 from psp to SpatialLines, Rolf Turner, Adrian Baddeley, Mathieu Rajerison
+#' @export
+st_as_sfc.psp <- function(x, ...) {
+
+#	ends2line <- function(x) matrix(x, ncol=2, byrow=TRUE)
+#	munch <- function(z) { list(ends2line(as.numeric(z[1:4]))) }
+#	ends <- as.data.frame(x)[,1:4]
+#	y <- lapply(seq_len(nrow(ends)), function(i) munch(ends[i,]))
+#	st_sfc(st_multilinestring(y))
+	st_geometry(st_as_sf(x, ...))
 }
 
 
@@ -282,15 +295,4 @@ as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
 		spatstat::setmarks(z, from[rep(seq_len(nrow(from)), nrep),])
 	} else
 		z
-}
-
-# 111117 from psp to SpatialLines, Rolf Turner, Adrian Baddeley, Mathieu Rajerison
-#' @export
-st_as_sfc.psp <- function(x, ...) {
-
-	ends2line <- function(x) matrix(x, ncol=2, byrow=TRUE)
-	munch <- function(z) { list(ends2line(as.numeric(z[1:4]))) }
-	ends <- as.data.frame(x)[,1:4]
-	y <- lapply(seq_len(nrow(ends)), function(i) munch(ends[i,]))
-	st_sfc(st_multilinestring(y))
 }

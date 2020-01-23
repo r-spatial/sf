@@ -99,4 +99,6 @@ sf = st_sf(st_cast(st_sfc(ls, mls), "MULTILINESTRING"), marks = 1:2, foo = 2:1)
 as.psp(sf) # picks marks itself
 as.psp(sf, marks = 5:1)
 
-st_as_sf(as.psp(sf))
+(x = st_as_sf(as.psp(sf)))
+(y = st_as_sfc(as.psp(sf)))
+all.equal(st_geometry(x), y)

@@ -51,7 +51,7 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=6.2.0
+ENV PROJ_VERSION=6.3.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
