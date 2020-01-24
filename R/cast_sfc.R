@@ -183,7 +183,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = if (from_col == 1) # LINESTRING or MULTIPOINT to POINT
 				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), function(i) m[i,])), recursive = FALSE)
 			else {
-				if (from_cls == "POLYGON")
+				if (to_col == 0 && from_cls == "POLYGON") # POLYGON -> POINT
 					lapply(x, function(y) do.call(rbind, y))
 				else
 					unlist(x, recursive = FALSE)
