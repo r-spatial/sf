@@ -155,7 +155,7 @@ make_crs = function(x, wkt = FALSE) {
 	else if (is.numeric(x))
 		CPL_crs_from_epsg(as.integer(x))
 	else if (is.character(x)) {
-		if (grepl("+init=epsg:", x))
+		if (grepl("+init=epsg:", x) && sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
 			CPL_crs_from_epsg(as.integer(substr(x, 12, 20)))
 		else {
 			is_valid = valid_proj4string(x)
