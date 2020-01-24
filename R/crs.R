@@ -64,6 +64,7 @@ st_crs.numeric = function(x, proj4text = "", valid = TRUE, ...) {
     make_crs(x)
 }
 
+
 #' @name st_crs
 #' @export
 #' @param wkt character well-known-text representation of the crs
@@ -154,14 +155,18 @@ make_crs = function(x, wkt = FALSE) {
 	else if (is.numeric(x))
 		CPL_crs_from_epsg(as.integer(x))
 	else if (is.character(x)) {
-		is_valid = valid_proj4string(x)
-		if (! is_valid$valid)
-			stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
-		u = `$.crs`(list(proj4string = x), "units")
-		crs = CPL_crs_from_proj4string(x)
-		if (!is.na(crs) && !is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
-			stop(paste0("units ", u, " not recognized: older GDAL version?"), call. = FALSE) # nocov
-		crs
+		if (grepl("+init=epsg:", x))
+			CPL_crs_from_epsg(as.integer(substr(x, 12, 20)))
+		else {
+			is_valid = valid_proj4string(x)
+			if (! is_valid$valid)
+				stop(paste0("invalid crs: ", x, ", reason: ", is_valid$result), call. = FALSE)
+			u = `$.crs`(list(proj4string = x), "units")
+			crs = CPL_crs_from_proj4string(x)
+			if (!is.na(crs) && !is.null(u) && crs$units != u) # gdal converts unrecognized units into m...
+				stop(paste0("units ", u, " not recognized: older GDAL version?"), call. = FALSE) # nocov
+			crs
+		}
 	} else
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }
