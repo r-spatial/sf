@@ -151,7 +151,8 @@
 <a href="#version-0-8-1" class="anchor"></a>version 0.8-1<small> Unreleased </small>
 </h1>
 <ul>
-<li><p><code>st_as_sf.map</code> no longer requires <code>maptools</code> and <code>sp</code>; dropped dependency on maptools.</p></li>
+<li><p>conditional to PROJ &gt;= 6.0.0: replace <code>+init=epsg:XXXX ...</code> strings with the <code>XXXX</code> EPSG integer, to work around a bug in PROJ; see <a href="https://github.com/OSGeo/PROJ/pull/1875" class="uri">https://github.com/OSGeo/PROJ/pull/1875</a> and links therein. If there is a <code>...</code>, raise a warning that this is now ignored.</p></li>
+<li><p><code>st_as_sf.map</code> no longer requires <code>maptools</code> and <code>sp</code>; drop dependency on maptools.</p></li>
 <li><p>conversion between <code>spatstat</code> classes <code>owin</code>, <code>ppp</code> and <code>psp</code> and <code>sf</code> classes no longer use <code>maptools</code>; <a href='https://github.com/r-spatial/sf/issues/1204'>#1204</a></p></li>
 <li><p><code>gdal_utils</code> processes open options <code>-oo</code> and <code>-doo</code> properly; <a href="https://github.com/ITSLeeds/geofabric/issues/12" class="uri">https://github.com/ITSLeeds/geofabric/issues/12</a></p></li>
 <li><p><code>st_sample</code> directly interfaces <code>spatstat</code> sampling methods, e.g. <code>type = "Thomas"</code> calls <code><a href="https://rdrr.io/pkg/spatstat/man/rThomas.html">spatstat::rThomas</a></code> after converting input arguments (window) and converts returned <code>ppp</code> object to <code>sf</code>’s <code>POINT</code> geometries; <a href='https://github.com/r-spatial/sf/issues/1204'>#1204</a> with help from Ege Rubak and Jakub Nowosad</p></li>
