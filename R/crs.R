@@ -62,6 +62,7 @@ st_crs.numeric = function(x, ...) {
     make_crs(paste0("EPSG:", x))
 }
 
+
 #' @name st_crs
 #' @export
 st_crs.character = function(x, ...) {
@@ -155,16 +156,23 @@ make_crs = function(x) {
 			else
 				x@projargs
 	}
-	if (is.numeric(x))
+	if (is.numeric(x) && !is.na(x))
 		x = paste0("EPSG:", x)
 	# return:
 	if (is.na(x))
 		NA_crs_
 	else if (inherits(x, "crs"))
 		x
-	else if (is.character(x))
+	else if (is.character(x)) {
+		if (grepl("+init=epsg:", x) && sf_extSoftVersion()[["proj.4"]] >= "6.0.0") { # nocov start FIXME:
+			x = strsplit(x, " ")[[1]]
+			if (length(x) > 1)
+				warning(paste("the following proj4string elements are ignored:",
+					paste(x[-1], collapse = " "), "; remove the +init=epsg:XXXX to undo this"))
+			x = paste0("EPSG:", as.integer(substr(x[1], 12, 20)))
+		}
 		CPL_crs_from_input(x)
-	else
+	} else
 		stop(paste("cannot create a crs from an object of class", class(x)), call. = FALSE)
 }
 

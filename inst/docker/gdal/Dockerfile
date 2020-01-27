@@ -51,16 +51,32 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=6.3.0
-ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+#ENV PROJ_VERSION=6.3.0
+#ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+#
+#RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
+#  && tar zxf proj-*tar.gz \
+#  && cd proj* \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
-RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
-  && tar zxf proj-*tar.gz \
-  && cd proj* \
-  && ./configure \
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
+  && apt-get install -y \
+	cmake \
+	libtiff5-dev
+
+RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
+RUN cd PROJ \
+  && ls -l \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
   && make \
   && make install \
-  && cd .. \
+  && cd ../.. \
   && ldconfig
 
 # install proj-datumgrid:
