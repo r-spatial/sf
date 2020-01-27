@@ -3684,12 +3684,12 @@ PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
-  if test "${PROJV1}" = "6"; then
+  if test "${PROJV1}" = "6" ; then
     PROJ6="yes"
     PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
     if test "${proj_api}" = yes; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: using proj_api.h even with PROJ 6" >&5
-$as_echo "$as_me: using proj_api.h even with PROJ 6" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: using proj_api.h even with PROJ 5/6" >&5
+$as_echo "$as_me: using proj_api.h even with PROJ 5/6" >&6;}
         PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H"
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: using proj.h." >&5
@@ -3697,14 +3697,10 @@ $as_echo "$as_me: using proj.h." >&6;}
         PROJH="yes"
     fi
   fi
-fi
-
-CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-
-if test "${PROJH}" = no # e.g. not found by pkgconfig:
-then
-  PROJH=yes
-  for ac_header in proj.h
+else
+  if test "${PROJH}" = no ; then
+    PROJH=yes
+    for ac_header in proj.h
 do :
   ac_fn_c_check_header_mongrel "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
 if test "x$ac_cv_header_proj_h" = xyes; then :
@@ -3718,11 +3714,14 @@ fi
 
 done
 
-  if test "${PROJH}" = yes; then
-    PROJ6="yes"
-    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    if test "${PROJH}" = yes; then
+      PROJ6="yes"
+      PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    fi
   fi
 fi
+
+CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
 if test "${PROJH}" = no
 then
