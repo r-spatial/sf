@@ -356,6 +356,12 @@ fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
+if test "${PROJH}" = no # check:
+then
+  PROJH=yes
+  AC_CHECK_HEADERS(proj.h,,PROJH=no)
+fi
+
 if test "${PROJH}" = no
 then
   proj4ok=yes

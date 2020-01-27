@@ -3701,6 +3701,25 @@ fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
+if test "${PROJH}" = no # check:
+then
+  PROJH=yes
+  for ac_header in proj.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
+if test "x$ac_cv_header_proj_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PROJ_H 1
+_ACEOF
+
+else
+  PROJH=no
+fi
+
+done
+
+fi
+
 if test "${PROJH}" = no
 then
   proj4ok=yes
