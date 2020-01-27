@@ -137,8 +137,10 @@ RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
 RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
+RUN ls
 RUN cd sf && git pull && cd ..
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check sf_*gz
 RUN R CMD INSTALL sf
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD INSTALL lwgeom
