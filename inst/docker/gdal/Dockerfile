@@ -137,10 +137,20 @@ RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
 RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
+RUN cd PROJ \
+  && ./autogen.sh \
+  && ./configure \
+  && make \
+  && make install 
+
+#  && cmake --build . \
+
+RUN find / -name proj.pc
+RUN R CMD build --no-build-vignettes --no-manual sf
+RUN pkg-config proj --modversion
+RUN R CMD INSTALL --configure-args='--with-proj-api=no' sf
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD INSTALL lwgeom
-RUN R CMD build --no-build-vignettes --no-manual sf
-RUN R CMD INSTALL sf
 RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD INSTALL stars
 
