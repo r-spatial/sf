@@ -356,10 +356,14 @@ fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
 
-if test "${PROJH}" = no # check:
+if test "${PROJH}" = no # e.g. not found by pkgconfig:
 then
   PROJH=yes
   AC_CHECK_HEADERS(proj.h,,PROJH=no)
+  if test "${PROJH}" = yes; then
+    PROJ6="yes"
+    PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+  fi
 fi
 
 if test "${PROJH}" = no
