@@ -59,7 +59,9 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 Create sf, which extends data.frame-like objects with a simple feature list column
 }
 \details{
-\code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
+\code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.\
+
+When a single value is provided to `agr`, it is cascaded across all input columns; otherwise, a named vector like `c(feature1='constant', ...)` will set `agr` value to `'constant'` for the input column named `feature1`. See `demo(nc)` for a worked example of this.
 
 When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
 

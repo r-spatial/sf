@@ -199,7 +199,9 @@ list_column_to_sfc = function(x) {
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param sfc_last logical; if \code{TRUE}, \code{sfc} columns are always put last, otherwise column order is left unmodified.
 #' @param check_ring_dir see \link{st_read}
-#' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
+#' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.\
+#'
+#' When a single value is provided to `agr`, it is cascaded across all input columns; otherwise, a named vector like `c(feature1='constant', ...)` will set `agr` value to `'constant'` for the input column named `feature1`. See `demo(nc)` for a worked example of this.
 #'
 #' When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
 #' @examples
@@ -213,7 +215,7 @@ list_column_to_sfc = function(x) {
 #' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
-		stringsAsFactors = default.stringsAsFactors(), crs, precision, 
+		stringsAsFactors = default.stringsAsFactors(), crs, precision,
 		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
@@ -263,13 +265,13 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
 		else
-			cbind(data.frame(row.names = row.names), 
-				as.data.frame(x[-all_sfc_columns], 
+			cbind(data.frame(row.names = row.names),
+				as.data.frame(x[-all_sfc_columns],
 					stringsAsFactors = stringsAsFactors, optional = TRUE))
 
 	if (check_ring_dir) { # process:
 		for (i in seq_along(all_sfc_names))
-			df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]], 
+			df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]],
 				check_ring_dir = check_ring_dir)
 	} else { # copy:
 		for (i in seq_along(all_sfc_names))
