@@ -7,7 +7,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot} and details.
 #' @param main title for plot (\code{NULL} to remove)
-#' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \link{sf.colors} is used
+#' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \code{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
@@ -36,7 +36,7 @@
 #' to control color, lines or symbols.
 #'
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
-#' 
+#'
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #'
 #' @examples
@@ -62,7 +62,7 @@
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8), 
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8),
 		reset = TRUE, logz = FALSE) {
 
 	stopifnot(missing(y))
@@ -105,7 +105,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				v0 = values[!is.na(values)]
 				n.unq = length(unique(v0))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
-						classInt::classIntervals(v0, min(nbreaks, n.unq), 
+						classInt::classIntervals(v0, min(nbreaks, n.unq),
 							breaks, warnSmallN = FALSE)$brks
 					else
 						range(values, na.rm = TRUE) # lowest and highest!
@@ -115,7 +115,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 		# loop over each map to plot:
 		lapply(cols, function(cname) plot(x[, cname], main = cname,
-			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE, 
+			pal = pal, nbreaks = nbreaks, breaks = breaks, key.pos = NULL, reset = FALSE,
 			logz = logz, ...))
 
 		for (i in seq_len(prod(lt$mfrow) - length(cols))) # empty panels:
@@ -133,7 +133,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				.image_scale_factor(levels(values), colors, key.pos = key.pos,
 					key.width = key.width, key.length = key.length, ...)
 			else
-				.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+				.image_scale(values, colors, breaks = breaks, key.pos = key.pos,
 					key.length = key.length, logz = logz, ...)
 		}
 
@@ -226,7 +226,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 					.image_scale_factor(levels(values), colors, key.pos = key.pos,
 						key.width = key.width, key.length = key.length, ...)
 				} else
-					.image_scale(values, colors, breaks = breaks, key.pos = key.pos, 
+					.image_scale(values, colors, breaks = breaks, key.pos = key.pos,
 						key.length = key.length, logz = logz, ...)
 			}
 			# plot the map:
@@ -245,8 +245,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				if (length(main) && inherits(x[[main]], "units"))
 					main = make_unit_label(main, x[[main]])
 			}
-			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap, 
-					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB, 
+			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap,
+					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB,
 					expandBB, col_graticule, at, lon, lat, crs, datum, ndiscr, margin) # absorb
 				title(...)
 			localTitle(main, ...)
@@ -792,7 +792,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 		c(0,0,-offset,-offset),
 		c(0,0,-offset,-offset),
 		c(offset,offset,0,0),
-		c(offset,offset,0,0)) 
+		c(offset,offset,0,0))
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1) + offs, col = col[i], border = NA)
