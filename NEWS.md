@@ -1,3 +1,5 @@
+# version 0.8-2
+
 # version 0.8-1
 
 * conditional to PROJ >= 6.0.0: replace `+init=epsg:XXXX ...` strings with the `XXXX` EPSG integer, to work around a bug in PROJ; see https://github.com/OSGeo/PROJ/pull/1875 and links therein. If there is a `...`, raise a warning that this is now ignored. 
