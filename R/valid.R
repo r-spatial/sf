@@ -55,7 +55,7 @@ st_make_valid.sfc = function(x) {
 	x = if (sf_extSoftVersion()["GEOS"] < "3.8.0") {
 			if (!requireNamespace("lwgeom", quietly = TRUE))
 				stop("lwgeom required: install that first") # nocov
-			lwgeom::CPL_make_valid(x)
+			lwgeom::lwgeom_make_valid(x)
 		} else
 			CPL_geos_make_valid(x)
 	st_sfc(x, crs = st_crs(x))
