@@ -70,7 +70,7 @@ Suggests:
     dplyr (>= 0.8-3),
     ggplot2,
     knitr,
-    lwgeom (>= 0.1-5),
+    lwgeom (>= 0.2-0),
     maps,
     mapview,
     microbenchmark,

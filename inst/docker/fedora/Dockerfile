@@ -35,7 +35,7 @@ RUN /usr/local/bin/Rscript -e 'install.packages(c("XML", "Rcpp", "units", "DBI",
 
 # get CRAN version of sf:
 RUN cd ..
-RUN wget https://cran.r-project.org/src/contrib/sf_0.7-0.tar.gz
-RUN /usr/local/bin/R CMD check --as-cran sf_0.7-0.tar.gz
+RUN wget https://cran.r-project.org/src/contrib/sf_0.8-1.tar.gz
+RUN /usr/local/bin/R CMD check --as-cran sf_0.8-1.tar.gz
 
 CMD ["/bin/bash"]
