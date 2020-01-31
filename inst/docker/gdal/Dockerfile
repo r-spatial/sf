@@ -124,6 +124,7 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD INSTALL lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN ls
 RUN R CMD INSTALL sf
 RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD INSTALL stars
