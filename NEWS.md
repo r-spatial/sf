@@ -1,3 +1,7 @@
+# version 0.8-2
+
+* `st_make_valid` is now provided by `sf`, no longer by `lwgeom`, when GEOS 3.8.0 is available; #989
+
 # version 0.8-1
 
 * reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225)
