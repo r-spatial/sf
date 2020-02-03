@@ -495,6 +495,7 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	return out;
 }
 
+// #nocov start - no GEOS 3.8.0 on travis yet
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -511,6 +512,7 @@ Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
 	CPL_geos_finish(hGEOSCtxt);
 	return ret;
 }
+// #nocov end
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) {

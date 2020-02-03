@@ -28,13 +28,14 @@ st_is_valid = function(x, NA_on_exception = TRUE, reason = FALSE) {
 	}
 }
 
+
 #' Make an invalid geometry valid
 #'
 #' Make an invalid geometry valid
 #' @name valid
 #' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
 #' @return Object of the same class as \code{x}
-#' @details \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid}.
+#' @details \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.
 #' @examples
 #' library(sf)
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
@@ -57,7 +58,7 @@ st_make_valid.sfc = function(x) {
 				stop("lwgeom required: install that first") # nocov
 			lwgeom::lwgeom_make_valid(x)
 		} else
-			CPL_geos_make_valid(x)
+			CPL_geos_make_valid(x) # nocov
 	st_sfc(x, crs = st_crs(x))
 }
 
