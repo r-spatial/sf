@@ -242,9 +242,9 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	
 	// epsg
 	if (srs->GetAuthorityCode(NULL) != NULL)
-		out(10) = Rcpp::CharacterVector::create(srs->GetAuthorityCode(NULL));
+		out(10) = Rcpp::IntegerVector::create(atoi(srs->GetAuthorityCode(NULL)));
 	else
-		out(10) = Rcpp::CharacterVector::create(NA_STRING);
+		out(10) = Rcpp::IntegerVector::create(NA_INTEGER);
 	names(10) = "epsg";
 
 	bool yx = srs->EPSGTreatsAsLatLong() || srs->EPSGTreatsAsNorthingEasting();

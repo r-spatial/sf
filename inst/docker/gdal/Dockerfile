@@ -51,16 +51,32 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=6.2.0
-ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+#ENV PROJ_VERSION=6.3.0
+#ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+#
+#RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
+#  && tar zxf proj-*tar.gz \
+#  && cd proj* \
+#  && ./configure \
+#  && make \
+#  && make install \
+#  && cd .. \
+#  && ldconfig
 
-RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
-  && tar zxf proj-*tar.gz \
-  && cd proj* \
-  && ./configure \
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
+  && apt-get install -y \
+	cmake \
+	libtiff5-dev
+
+RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
+RUN cd PROJ \
+  && ls -l \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
   && make \
   && make install \
-  && cd .. \
+  && cd ../.. \
   && ldconfig
 
 # install proj-datumgrid:
@@ -121,10 +137,13 @@ RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
 RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
+RUN ls
+RUN cd sf && git pull && cd ..
+RUN R CMD build --no-build-vignettes --no-manual sf
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check sf_*gz
+RUN R CMD INSTALL sf
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD INSTALL lwgeom
-RUN R CMD build --no-build-vignettes --no-manual sf
-RUN R CMD INSTALL sf
 RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD INSTALL stars
 

@@ -61,7 +61,9 @@ Create sf, which extends data.frame-like objects with a simple feature list colu
 \details{
 \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 
-When confronted with a data.frame-like object, `st_sf` will try to find a geometry column of class `sfc`, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
+When a single value is provided to \code{agr}, it is cascaded across all input columns; otherwise, a named vector like \code{c(feature1='constant', ...)} will set \code{agr} value to \code{'constant'} for the input column named \code{feature1}. See \code{demo(nc)} for a worked example of this.
+
+When confronted with a data.frame-like object, \code{st_sf} will try to find a geometry column of class \code{sfc}, and otherwise try to convert list-columns when available into a geometry column, using \link{st_as_sfc}.
 
 \code{[.sf} will return a \code{data.frame} or vector if the geometry column (of class \code{sfc}) is dropped (\code{drop=TRUE}), an \code{sfc} object if only the geometry column is selected, and otherwise return an \code{sf} object; see also \link{[.data.frame}; for \code{[.sf} \code{...} arguments are passed to \code{op}.
 }

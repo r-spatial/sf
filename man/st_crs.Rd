@@ -99,6 +99,13 @@ place and a warning is raised to stress this.
 
 \code{NA_crs_} is the \code{crs} object with missing values for \code{input} and \code{wkt}.
 
+the \code{$} method for \code{crs} objects retrieves named elements
+using the GDAL interface; named elements include
+\code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
+\code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
+\code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"} and
+\code{"ud_unit"} (this may be subject to changes in future GDAL versions).
+
 \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
 indicates axes order according to the authority 
 (e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
