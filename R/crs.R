@@ -317,6 +317,12 @@ is.na.crs = function(x) {
 #' st_crs("+init=epsg:3857")$proj4string
 #' st_crs("+init=epsg:3857 +units=m")$b     # numeric
 #' st_crs("+init=epsg:3857 +units=m")$units # character
+#' @details the \code{$} method for \code{crs} objects retrieves named elements
+#' using the GDAL interface; named elements include
+#' \code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
+#' \code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
+#' \code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"} and
+#' \code{"ud_unit"} (this may be subject to changes in future GDAL versions).
 #' @export
 `$.crs` = function(x, name) {
 
