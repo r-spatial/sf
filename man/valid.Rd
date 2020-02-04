@@ -17,7 +17,7 @@ Object of the same class as \code{x}
 Make an invalid geometry valid
 }
 \details{
-\code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid}.
+\code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.
 }
 \examples{
 library(sf)
