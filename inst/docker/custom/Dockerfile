@@ -87,7 +87,16 @@ RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 	PROJ_DATA=/opt/proj/share/proj \
 	GDAL_DATA=/opt/gdal/share/gdal/ \
-	R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
+	R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config \
+		--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
+		--with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 	&& LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
+
+RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
+RUN R CMD build --no-build-vignettes lwgeom
+#RUN	R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
+#		--with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+
+PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
 CMD ["/bin/bash"]
