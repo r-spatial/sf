@@ -237,27 +237,16 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	bool geo_transform_set = (err == CE_None);
 
 	// CRS, projection:
-	const char *wkt = poDataset->GetProjectionRef();
-	CharacterVector proj = NA_STRING;
-	CharacterVector p4 = NA_STRING;
-	if (*wkt != '\0') {
-		proj = CharacterVector::create(wkt);
-		// proj4string:
-		OGRSpatialReference *sr = new OGRSpatialReference;
-		sr = handle_axis_order(sr);
-		char **ppt = (char **) &wkt;
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-		sr->importFromWkt(ppt);
+#if GDAL_VERSION_MAJOR >= 3
+	const OGRSpatialReference *sr = poDataset->GetSpatialRef();
+	// sr = handle_axis_order(sr); -- should be done by GDAL; xy
+	Rcpp::List crs = create_crs(sr, true);
 #else
-		sr->importFromWkt( (const char**) ppt);
+	const char *wkt_gdal = poDataset->GetProjectionRef();
+	CharacterVector wkt = NA_STRING;
+	if (*wkt_gdal != '\0')
+		wkt = CharacterVector::create(wkt_gdal);
 #endif
-		char *proj4; 
-		if (sr->exportToProj4(&proj4) != OGRERR_NONE) // need to error check?
-			stop("failure to export SRS to proj.4"); // #nocov
-		p4 = CharacterVector::create(proj4); // need to CPLFree?
-		CPLFree(proj4);
-		delete sr;
-	}
 
 	GDALRasterBand *poBand = NULL;
 	NumericVector nodatavalue = NumericVector::create(NA_REAL);
@@ -330,8 +319,11 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize),
 		_["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize),
 		_["bands"] = bands,
-		_["proj_wkt"] = proj,
-		_["proj4string"] = p4,
+#if GDAL_VERSION_MAJOR >= 3
+		_["crs"] = crs,
+#else
+		_["proj_wkt"] = wkt,
+#endif
 		_["geotransform"] = geotransform,
 		_["datatype"] =	poBand != NULL ? 
 			GDALGetDataTypeName(poBand->GetRasterDataType()) :

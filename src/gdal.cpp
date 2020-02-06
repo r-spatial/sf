@@ -116,7 +116,7 @@ void handle_error(OGRErr err) {
 	}
 }
 
-Rcpp::CharacterVector wkt_from_spatial_reference(OGRSpatialReference *srs) { // FIXME: add options?
+Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
 #if GDAL_VERSION_MAJOR >= 3
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
@@ -342,8 +342,7 @@ Rcpp::CharacterVector charpp2CV(char **cp) {
 	return ret;
 }
 
-Rcpp::List create_crs(OGRSpatialReference *ref, bool set_input) {
-	handle_axis_order(ref);
+Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input) {
 	Rcpp::List crs(2);
 	if (ref == NULL) {
 		crs(0) = Rcpp::CharacterVector::create(NA_STRING);
