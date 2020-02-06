@@ -354,8 +354,8 @@ Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input) {
 			crs(0) = Rcpp::CharacterVector::create(ref->GetName());
 #else
 			OGRSpatialReference ref_cp = *ref;
-			if (ref_cp->AutoIdentifyEPSG() == OGRERR_NONE && // ->AutoIdentifyEPSG() breaks if "this" is const
-					(cp = ref_cp->GetAuthorityCode(NULL)) != NULL)
+			if (ref_cp.AutoIdentifyEPSG() == OGRERR_NONE && // ->AutoIdentifyEPSG() breaks if "this" is const
+					(cp = ref_cp.GetAuthorityCode(NULL)) != NULL)
 				crs(0) = cp;
 			else
 				crs(0) = Rcpp::CharacterVector::create(NA_STRING);
