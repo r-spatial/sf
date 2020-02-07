@@ -168,7 +168,7 @@
     <p>Object of the same class as <code>x</code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code>.</p>
+    <p><code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code> if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sf</span>)
