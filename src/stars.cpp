@@ -433,14 +433,16 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 
 		// CRS:
 		if (p4s.length() != 1)
-			stop("p4s should have length three"); // #nocov
-		OGRSpatialReference oSRS;
-		oSRS.importFromProj4( p4s[0] );
-		char *pszSRS_WKT = NULL;
-		oSRS.exportToWkt( &pszSRS_WKT );
-		if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
-			stop("SetProjection: error"); // #nocov
-		CPLFree( pszSRS_WKT );
+			stop("p4s should have length one"); // #nocov
+		if (p4s[0] != NA_STRING) {
+			OGRSpatialReference oSRS;
+			oSRS.importFromProj4( p4s[0] );
+			char *pszSRS_WKT = NULL;
+			oSRS.exportToWkt( &pszSRS_WKT );
+			if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
+				stop("SetProjection: error"); // #nocov
+			CPLFree( pszSRS_WKT );
+		}
 
 		// set band NA's
 		if (! NumericVector::is_na(na_val[0])) {
