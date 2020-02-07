@@ -357,8 +357,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 }
 
 // [[Rcpp::export]]
-void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options,
-		CharacterVector Type, IntegerVector dims, IntegerVector from,
+void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, 
+		CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from,
 		NumericVector gt, CharacterVector p4s, NumericVector na_val,
 		bool create = true, bool only_create = false) {
 
@@ -428,12 +428,16 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 			stop("p4s should have length one"); // #nocov
 		if (p4s[0] != NA_STRING) {
 			OGRSpatialReference oSRS;
-			oSRS.importFromProj4( p4s[0] );
+			oSRS.SetFromUserInput((const char *) p4s[0]); // handles wkt too
+#if GDAL_VERSION_MAJOR >= 3
+			poDstDS->SetSpatialRef(&oSRS);
+#else
 			char *pszSRS_WKT = NULL;
 			oSRS.exportToWkt( &pszSRS_WKT );
 			if (poDstDS->SetProjection( pszSRS_WKT ) != CE_None)
 				stop("SetProjection: error"); // #nocov
 			CPLFree( pszSRS_WKT );
+#endif
 		}
 
 		// set band NA's

@@ -1,6 +1,8 @@
 # version 0.8-2
 
-* `st_make_valid` is now provided by `sf`, no longer by `lwgeom`, when GEOS 3.8.0 is available; #989
+* write `stars` rasters with wkt info, rather than proj4strings
+
+* when GEOS >= 3.8.0, `st_make_valid` is provided by `sf` rather than by `lwgeom` #989
 
 # version 0.8-1
 
