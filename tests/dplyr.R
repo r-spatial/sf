@@ -1,6 +1,8 @@
 suppressPackageStartupMessages(library(sf))
+
 library(dplyr)
-nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
+	st_transform(3857) -> nc
 nc %>% filter(AREA > .1) %>% plot()
 
 # plot 10 smallest counties in grey:
@@ -62,7 +64,8 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
 x
 
-nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
+	st_transform(3857) -> nc
 nc.merc <- st_transform(nc, 32119) # NC State Plane
 suppressPackageStartupMessages(library(units))
 install_symbolic_unit("person")
@@ -102,6 +105,6 @@ nc$gp <- sample(1:10, replace=T)
 # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
 nc_gp_cent <- nc %>%
                 group_by(gp) %>%
-                group_map(st_centroid)
+                group_map(st_area)
 
 nc %>% st_filter(nc[1,]) %>% nrow

@@ -49,4 +49,4 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 
 st_length(ls)
 try(st_line_sample(ls, density = 1/1000))
-st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
+x = st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
