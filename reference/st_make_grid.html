@@ -43,7 +43,7 @@
 
 
 <meta property="og:title" content="Create a regular tesselation over the bounding box of an sf or sfc object — st_make_grid" />
-<meta property="og:description" content="Create a square or hexagonal grid over the bounding box of an sf or sfc object" />
+<meta property="og:description" content="Create a square or hexagonal grid covering the geometry of an sf or sfc object" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -149,7 +149,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Create a square or hexagonal grid over the bounding box of an sf or sfc object</p>
+    <p>Create a square or hexagonal grid covering the geometry of an sf or sfc object</p>
     </div>
 
     <pre class="usage"><span class='fu'>st_make_grid</span>(
@@ -204,6 +204,10 @@
 
     <p>Object of class <code>sfc</code> (simple feature geometry list column) with, depending on <code>what</code> and <code>square</code>,
 square or hexagonal polygons, corner points of these polygons, or center points of these polygons.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>to obtain a grid covering the bounding box of a set of geometries, 
+pass <code><a href='st_as_sfc.html'>st_as_sfc(st_bbox(x))</a></code> for argument <code>x</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"centers"</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"corners"</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='st_make_grid-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
@@ -215,6 +219,7 @@ square or hexagonal polygons, corner points of these polygons, or center points 
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

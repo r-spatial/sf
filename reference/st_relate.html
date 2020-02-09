@@ -189,44 +189,16 @@
 #&gt; [1,] "0FFFFF212" "FF0FFF212" "FF0FFF212"
 #&gt; [2,] "FF0FFF212" "FF0FFF212" "0FFFFF212"</div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>)))
 <span class='no'>grd</span> <span class='kw'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='no'>sfc</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>))
-<span class='fu'><a href='geos_binary_pred.html'>st_intersects</a></span>(<span class='no'>grd</span>)</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 9, where the predicate was `intersects'
-#&gt;  1: 1, 2, 4, 5
-#&gt;  2: 1, 2, 3, 4, 5, 6
-#&gt;  3: 2, 3, 5, 6
-#&gt;  4: 1, 2, 4, 5, 7, 8
-#&gt;  5: 1, 2, 3, 4, 5, 6, 7, 8, 9
-#&gt;  6: 2, 3, 5, 6, 8, 9
-#&gt;  7: 4, 5, 7, 8
-#&gt;  8: 4, 5, 6, 7, 8, 9
-#&gt;  9: 5, 6, 8, 9</div><div class='input'><span class='fu'>st_relate</span>(<span class='no'>grd</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"****1****"</span>) <span class='co'># sides, not corners, internals</span></div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
-#&gt;  1: 1, 2, 4
-#&gt;  2: 1, 2, 3, 5
-#&gt;  3: 2, 3, 6
-#&gt;  4: 1, 4, 5, 7
-#&gt;  5: 2, 4, 5, 6, 8
-#&gt;  6: 3, 5, 6, 9
-#&gt;  7: 4, 7, 8
-#&gt;  8: 5, 7, 8, 9
-#&gt;  9: 6, 8, 9</div><div class='input'><span class='fu'>st_relate</span>(<span class='no'>grd</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"****0****"</span>) <span class='co'># only corners touch</span></div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
-#&gt;  1: 5
-#&gt;  2: 4, 6
-#&gt;  3: 5
-#&gt;  4: 2, 8
-#&gt;  5: 1, 3, 7, 9
-#&gt;  6: 2, 8
-#&gt;  7: 5
-#&gt;  8: 4, 6
-#&gt;  9: 5</div><div class='input'><span class='no'>st_rook</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>a</span>, <span class='no'>b</span> <span class='kw'>=</span> <span class='no'>a</span>) <span class='fu'>st_relate</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"F***1****"</span>)
-<span class='fu'>st_rook</span>(<span class='no'>grd</span>)</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
-#&gt;  1: 2, 4
-#&gt;  2: 1, 3, 5
-#&gt;  3: 2, 6
-#&gt;  4: 1, 5, 7
-#&gt;  5: 2, 4, 6, 8
-#&gt;  6: 3, 5, 9
-#&gt;  7: 4, 8
-#&gt;  8: 5, 7, 9
-#&gt;  9: 6, 8</div><div class='input'><span class='co'># queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}</span>
+<span class='fu'><a href='geos_binary_pred.html'>st_intersects</a></span>(<span class='no'>grd</span>)</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 2, where the predicate was `intersects'
+#&gt;  1: 1
+#&gt;  2: 2</div><div class='input'><span class='fu'>st_relate</span>(<span class='no'>grd</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"****1****"</span>) <span class='co'># sides, not corners, internals</span></div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 2, where the predicate was `relate_pattern'
+#&gt;  1: 1
+#&gt;  2: 2</div><div class='input'><span class='fu'>st_relate</span>(<span class='no'>grd</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"****0****"</span>) <span class='co'># only corners touch</span></div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 2, where the predicate was `relate_pattern'
+#&gt;  1: (empty)
+#&gt;  2: (empty)</div><div class='input'><span class='no'>st_rook</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>a</span>, <span class='no'>b</span> <span class='kw'>=</span> <span class='no'>a</span>) <span class='fu'>st_relate</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"F***1****"</span>)
+<span class='fu'>st_rook</span>(<span class='no'>grd</span>)</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 2, where the predicate was `relate_pattern'
+#&gt;  1: (empty)
+#&gt;  2: (empty)</div><div class='input'><span class='co'># queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}</span>
 <span class='no'>st_queen</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>a</span>, <span class='no'>b</span> <span class='kw'>=</span> <span class='no'>a</span>) <span class='fu'>st_relate</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"F***T****"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
