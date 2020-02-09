@@ -135,7 +135,7 @@ sfg_is_empty = function(x) {
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x))
+	st_sfc(unclass(x)[i], crs = st_crs(x), precision = st_precision(x))
 }
 
 

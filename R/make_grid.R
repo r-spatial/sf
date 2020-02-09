@@ -1,6 +1,6 @@
 #' Create a regular tesselation over the bounding box of an sf or sfc object
 #'
-#' Create a square or hexagonal grid over the bounding box of an sf or sfc object
+#' Create a square or hexagonal grid covering the geometry of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
@@ -11,6 +11,8 @@
 #' @param flat_topped logical; if \code{TRUE} generate flat topped hexagons, else generate pointy topped
 #' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what} and \code{square},
 #' square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
+#' @details to obtain a grid covering the bounding box of a set of geometries, 
+#' pass \code{st_as_sfc(st_bbox(x))} for argument \code{x}
 #' @examples
 #' plot(st_make_grid(what = "centers"), axes = TRUE)
 #' plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
@@ -93,10 +95,15 @@ st_make_grid = function(x,
 	} else
 		stop("unknown value of `what'")
 
+	ret = st_sfc(ret, crs = crs)
+
 	if (missing(x))
-		st_sfc(ret, crs = crs)
+		ret
+	else if (what != "polygons" || min(st_dimension(x)) < 2)
+		ret[x]
 	else
-		st_sfc(ret, crs = st_crs(x))
+		ret[lengths(st_relate(ret, x, "2********")) > 0] 
+			# overlap dim at least equal to the mininmum of that of x geoms
 }
 
 
@@ -159,8 +166,8 @@ make_hex_grid = function(obj, pt, dx, what, flat_topped = TRUE) {
 		else # points:
 			st_sfc(lapply(seq_len(nrow(centers)), function(i) mk_pol(centers[i,])), crs = st_crs(bb))
 
-	if (what == "points")
+	if (what == "points" || min(st_dimension(obj)) < 2)
 		ret[obj]
-	else
+	else 
 		ret[lengths(st_relate(ret, obj, "2********")) > 0] # part or total overlap
 }
