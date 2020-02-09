@@ -333,7 +333,7 @@ print.crs = function(x, ...) {
   } else {
     cat("\n")
     if (is.na(x$epsg))
-       cat("  No EPSG code\n")
+       cat("  No EPSG code\n") # nocov
     else
        cat("  EPSG:", x$epsg, "\n")
     if (is.na(x$proj4string))
