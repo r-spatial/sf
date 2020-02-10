@@ -369,6 +369,20 @@ print.crs = function(x, ...) {
 }
 
 #' @export
+format.crs = function(x, ...) {
+	if (is.na(x))
+		NA_character_
+	else {
+		p = crs_parameters(x)
+		if (p$Name == "unknown")
+			x$input
+		else
+			x$Name
+	}
+}
+
+
+#' @export
 st_crs.Raster = function(x, ...) {
 	st_crs(x@crs) # nocov
 }
