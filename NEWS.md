@@ -1,5 +1,7 @@
 # version 0.8-2
 
+* `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
+
 * `st_make_valid` is now provided by `sf`, no longer by `lwgeom`, when GEOS 3.8.0 is available; #989
 
 # version 0.8-1
