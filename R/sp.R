@@ -71,6 +71,7 @@ st_as_sf.Spatial = function(x, ...) {
 	if (sp::gridded(x) && sp::fullgrid(x))
 		sp::fullgrid(x) = FALSE
 	df$geometry = st_as_sfc(sp::geometry(x), ...)
+        suppressWarnings(st_crs(df$geometry) <- st_crs(slot(x, "proj4string")))
 	st_as_sf(df)
 }
 
