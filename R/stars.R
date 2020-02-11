@@ -55,8 +55,8 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
 
-	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform, st_crs(x)$proj4string, 
-		as.double(NA_value), create = !update, only_create = only_create)
+	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform,
+		st_crs(x)[[2]], as.double(NA_value), create = !update, only_create = only_create)
 }
 
 #' @param gt double vector of length 6
