@@ -281,7 +281,7 @@ marked planar line segment pattern: 5 line segments
 marks are numeric, of type 'integer'
 window: rectangle = [0, 4] x [0, 3] units
 > 
-> st_as_sf(as.psp(sf))
+> (x = st_as_sf(as.psp(sf)))
 Simple feature collection with 6 features and 3 fields
 geometry type:  GEOMETRY
 dimension:      XY
@@ -295,7 +295,22 @@ proj4string:    NA
 4 segment     2   1          LINESTRING (0 0, 1 1)
 5 segment     2   1          LINESTRING (1 1, 2 0)
 6 segment     2   1          LINESTRING (3 3, 4 2)
+> (y = st_as_sfc(as.psp(sf)))
+Geometry set for 6 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 3
+epsg (SRID):    NA
+proj4string:    NA
+First 5 geometries:
+POLYGON ((0 0, 4 0, 4 3, 0 3, 0 0))
+LINESTRING (0 0, 1 1)
+LINESTRING (1 1, 2 0)
+LINESTRING (0 0, 1 1)
+LINESTRING (1 1, 2 0)
+> all.equal(st_geometry(x), y)
+[1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  1.770   0.104   1.864 
+  1.987   0.090   2.076 

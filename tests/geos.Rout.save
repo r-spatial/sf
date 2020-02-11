@@ -105,7 +105,9 @@ MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 + 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
 [1] 0 1 2
 > 
-> g = st_make_grid(nc)
+> ncbb = st_as_sfc(st_bbox(nc))
+> g = st_make_grid(ncbb)
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > x = st_intersection(nc, g)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
@@ -129,7 +131,8 @@ proj4string:    NA
 MULTIPOINT ((0 0.8878369))
 MULTIPOINT ((0.2986488 0), (2.48417 0), (2.5678...
 > 
-> g = st_make_grid(nc, n = c(20,10))
+> g = st_make_grid(ncbb, n = c(20,10))
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
@@ -155,9 +158,9 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 > length(g)
 [1] 703
 > 
-> g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
+> g1 = st_make_grid(ncbb, 0.1, what = "polygons", square = FALSE)
 although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
-> g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
+> g2 = st_make_grid(ncbb, 0.1, what = "points", square = FALSE)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 > 
@@ -194,7 +197,7 @@ LINESTRING (0 0, 1 1, 2 0)
 [1] TRUE
 > 
 > # check use of pattern in st_relate:
-> sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+> sfc = st_as_sfc(st_bbox(st_sfc(st_point(c(0,0)), st_point(c(3,3)))))
 > grd = st_make_grid(sfc, n = c(3,3))
 > st_intersects(grd)
 Sparse geometry binary predicate list of length 9, where the predicate was `intersects'
@@ -575,4 +578,4 @@ Sparse geometry binary predicate list of length 1, where the predicate was `inte
 > 
 > proc.time()
    user  system elapsed 
-  3.608   0.059   3.659 
+  4.160   0.071   4.226 
