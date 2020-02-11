@@ -117,9 +117,10 @@ st_crs.bbox = function(x, ...) {
 #' @export
 #st_crs.CRS = function(x, ...) st_crs(x@projargs)
 st_crs.CRS = function(x, ...) {
-  if (is.null(comment(x))) res <- st_crs(x@projargs)
-  else res <- st_crs(comment(x))
-  res
+	if (is.null(comment(x))) 
+		st_crs(x@projargs)
+	else 
+		st_crs(comment(x))
 }
 
 #' @name st_crs
