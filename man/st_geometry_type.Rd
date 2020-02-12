@@ -4,13 +4,17 @@
 \alias{st_geometry_type}
 \title{Return geometry type of an object}
 \usage{
-st_geometry_type(x)
+st_geometry_type(x, by_geometry = TRUE)
 }
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
+
+\item{by_geometry}{logical; if \code{TRUE}, return geometry type of each geometry, 
+else return geometry type of the set}
 }
 \value{
-a factor with the geometry type of each simple feature in x
+a factor with the geometry type of each simple feature geometry 
+in \code{x}, or that of the whole set
 }
 \description{
 Return geometry type of an object, as a factor
