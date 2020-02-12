@@ -152,7 +152,7 @@
     <p>Return geometry type of an object, as a factor</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_geometry_type</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>st_geometry_type</span>(<span class='no'>x</span>, <span class='kw'>by_geometry</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,11 +161,17 @@
       <th>x</th>
       <td><p>object of class <a href='sf.html'>sf</a> or <a href='sfc.html'>sfc</a></p></td>
     </tr>
+    <tr>
+      <th>by_geometry</th>
+      <td><p>logical; if <code>TRUE</code>, return geometry type of each geometry, 
+else return geometry type of the set</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a factor with the geometry type of each simple feature in x</p>
+    <p>a factor with the geometry type of each simple feature geometry 
+in <code>x</code>, or that of the whole set</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
