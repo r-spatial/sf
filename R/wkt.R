@@ -151,7 +151,7 @@ st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 		else
 			ret
 	} else {
-		if (all(is_ewkt(x)) & is.na(crs)) {
+		if (all(is_ewkt(x)) && is.na(crs)) {
 			# EWKT
 			crs = get_crs_ewkt(x)
 			crs = unique(crs)
