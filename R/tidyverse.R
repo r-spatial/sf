@@ -185,7 +185,10 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
-	.data[[ sf_column ]] = vapply(st_equals(.data), head, NA_integer_, n = 1)
+	eq = sapply(st_equals(.data), head, n = 1)
+	empties = which(lengths(eq) == 0)
+	eq[ empties ] = empties[1] # first empty record
+	.data[[ sf_column ]] = unlist(eq)
 	class(.data) = setdiff(class(.data), "sf")
 
 	if (!requireNamespace("dplyr", quietly = TRUE))

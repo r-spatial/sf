@@ -1,5 +1,5 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> 
 > library(dplyr)
 
 Attaching package: 'dplyr'
@@ -28,7 +29,8 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
-> nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+> read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
++ 	st_transform(3857) -> nc
 > nc %>% filter(AREA > .1) %>% plot()
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
@@ -50,9 +52,9 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > nc %>% select(SID74, SID79, geometry) %>% names()
 [1] "SID74"    "SID79"    "geometry"
 > nc %>% select(SID74, SID79) %>% class()
-[1] "sf"         "data.frame"
+[1] "sf"         "tbl_df"     "tbl"        "data.frame"
 > nc %>% select(SID74, SID79, geometry) %>% class()
-[1] "sf"         "data.frame"
+[1] "sf"         "tbl_df"     "tbl"        "data.frame"
 > 
 > # group_by:
 > nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -64,9 +66,9 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > 
 > # transmute:
 > nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
-[1] "sf"         "data.frame"
+[1] "sf"         "tbl_df"     "tbl"        "data.frame"
 > nc %>% transmute(AREA = AREA/10) %>% class()
-[1] "sf"         "data.frame"
+[1] "sf"         "tbl_df"     "tbl"        "data.frame"
 > 
 > # rename:
 > nc2 <- nc %>% rename(area = AREA)
@@ -82,16 +84,16 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 Simple feature collection with 4 features and 2 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+bbox:           xmin: -9386880 ymin: 4012991 xmax: -8399788 ymax: 4382079
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
 # A tibble: 4 x 3
   area_cl    `mean(AREA)`                                               geometry
-* <fct>             <dbl>                                     <MULTIPOLYGON [°]>
-1 (0,0.1]          0.0760 (((-77.96073 34.18924, -77.96587 34.24229, -77.97528 …
-2 (0.1,0.12]       0.112  (((-84.29104 35.21054, -84.22594 35.2616, -84.17973 3…
-3 (0.12,0.1…       0.134  (((-76.54427 34.58783, -76.55515 34.61066, -76.53775 …
-4 (0.15,0.2…       0.190  (((-76.64705 34.90633, -76.62562 34.89065, -76.75021 …
+* <fct>             <dbl>                                     <MULTIPOLYGON [m]>
+1 (0,0.1]          0.0760 (((-8678517 4054264, -8679088 4061405, -8680136 40615…
+2 (0.1,0.12]       0.112  (((-9383227 4192541, -9375980 4199500, -9370835 41966…
+3 (0.12,0.1…       0.134  (((-8520830 4108031, -8522040 4111119, -8520104 41115…
+4 (0.15,0.2…       0.190  (((-8685774 4073056, -8684147 4070879, -8683670 40671…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -100,13 +102,13 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 > # stack the two SID columns for the July 1, 1974 - June 30, 1978 and July 1, 1979 - June 30, 1984 periods
 > # (see https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
 > nc %>% select(SID74, SID79, geometry) %>% gather("VAR", "SID", -geometry) %>% summary()
-     VAR                 SID                  geometry  
- Length:200         Min.   : 0.000   MULTIPOLYGON :200  
- Class :character   1st Qu.: 2.000   epsg:4267    :  0  
- Mode  :character   Median : 5.000   +proj=long...:  0  
-                    Mean   : 7.515                      
-                    3rd Qu.: 9.000                      
-                    Max.   :57.000                      
+          geometry       VAR                 SID        
+ MULTIPOLYGON :200   Length:200         Min.   : 0.000  
+ epsg:3857    :  0   Class :character   1st Qu.: 2.000  
+ +proj=merc...:  0   Mode  :character   Median : 5.000  
+                                        Mean   : 7.515  
+                                        3rd Qu.: 9.000  
+                                        Max.   :57.000  
 > 
 > # spread:
 > nc$row = 1:100
@@ -115,44 +117,50 @@ proj4string:    +proj=longlat +datum=NAD27 +no_defs
 Simple feature collection with 6 features and 3 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -79.0745 ymin: 33.88199 xmax: -76.2877 ymax: 35.01666
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
-    row   VAR SID                       geometry
-195  95 SID79   4 MULTIPOLYGON (((-77.14896 3...
-196  96 SID79   5 MULTIPOLYGON (((-78.2615 34...
-197  97 SID79   3 MULTIPOLYGON (((-78.02592 3...
-198  98 SID79  17 MULTIPOLYGON (((-78.65572 3...
-199  99 SID79   9 MULTIPOLYGON (((-77.96073 3...
-200 100 SID79   6 MULTIPOLYGON (((-78.65572 3...
+bbox:           xmin: -8802506 ymin: 4012991 xmax: -8492268 ymax: 4166167
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
+# A tibble: 6 x 4
+    row                                                     geometry VAR     SID
+  <int>                                           <MULTIPOLYGON [m]> <chr> <dbl>
+1    95 (((-8588146 4131923, -8589850 4133303, -8589356 4135198, -8… SID79     4
+2    96 (((-8711999 4081959, -8719511 4077863, -8731642 4078864, -8… SID79     5
+3    97 (((-8685774 4073056, -8697387 4077823, -8700120 4077570, -8… SID79     3
+4    98 (((-8755885 4021935, -8802506 4069795, -8798771 4071779, -8… SID79    17
+5    99 (((-8678517 4054264, -8679088 4061405, -8680136 4061550, -8… SID79     9
+6   100 (((-8755885 4021935, -8753548 4025868, -8753052 4030195, -8… SID79     6
 > nc.g %>% spread(VAR, SID) %>% head()
 Simple feature collection with 6 features and 3 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
-  row SID74 SID79                       geometry
-1   1     1     0 MULTIPOLYGON (((-81.47276 3...
-2   2     0     3 MULTIPOLYGON (((-81.23989 3...
-3   3     5     6 MULTIPOLYGON (((-80.45634 3...
-4   4     1     2 MULTIPOLYGON (((-76.00897 3...
-5   5     9     3 MULTIPOLYGON (((-77.21767 3...
-6   6     7     5 MULTIPOLYGON (((-76.74506 3...
+bbox:           xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
+# A tibble: 6 x 4
+    row                                                     geometry SID74 SID79
+  <int>                                           <MULTIPOLYGON [m]> <dbl> <dbl>
+1     1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     0
+2     2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     0     3
+3     3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     5     6
+4     4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     1     2
+5     5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     9     3
+6     6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     7     5
 > nc %>% select(SID74, SID79, geometry, row) %>% gather("VAR", "SID", -geometry, -row) %>% spread(VAR, SID) %>% head()
 Simple feature collection with 6 features and 3 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
-bbox:           xmin: -81.74107 ymin: 36.07282 xmax: -75.77316 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
-  row SID74 SID79                       geometry
-1   1     1     0 MULTIPOLYGON (((-81.47276 3...
-2   2     0     3 MULTIPOLYGON (((-81.23989 3...
-3   3     5     6 MULTIPOLYGON (((-80.45634 3...
-4   4     1     2 MULTIPOLYGON (((-76.00897 3...
-5   5     9     3 MULTIPOLYGON (((-77.21767 3...
-6   6     7     5 MULTIPOLYGON (((-76.74506 3...
+bbox:           xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
+epsg (SRID):    3857
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
+# A tibble: 6 x 4
+                                                      geometry   row SID74 SID79
+                                            <MULTIPOLYGON [m]> <int> <dbl> <dbl>
+1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     1     0
+2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     2     0     3
+3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     3     5     6
+4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     4     1     2
+5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     5     9     3
+6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     6     7     5
 > 
 > # test st_set_crs in pipe:
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
@@ -163,11 +171,12 @@ geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
 epsg (SRID):    3857
-proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
+proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
 POINT (0 0)
 POINT (111319.5 111325.1)
 > 
-> nc = st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+> read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
++ 	st_transform(3857) -> nc
 > nc.merc <- st_transform(nc, 32119) # NC State Plane
 > suppressPackageStartupMessages(library(units))
 > install_symbolic_unit("person")
@@ -188,20 +197,22 @@ geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
-proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
-                 mean(dens)                       geometry
-1 2.593234e-06 [person/m^2] MULTIPOLYGON (((834893.7 95...
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+# A tibble: 1 x 2
+  `mean(dens)`                                                          geometry
+* [person/m^2]                                                <MULTIPOLYGON [m]>
+1 2.593234e-06 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88, 6485…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
-proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
   `mean(new_dens)`                                                      geometry
 *     [person/m^2]                                            <MULTIPOLYGON [m]>
-1     2.589362e-06 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.72, 8…
+1     2.589362e-06 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, 70…
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
@@ -210,20 +221,22 @@ geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
-proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
-  sum(area * dens)                       geometry
-1  329962 [person] MULTIPOLYGON (((834893.7 95...
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+# A tibble: 1 x 2
+  `sum(area * dens)`                                                    geometry
+*           [person]                                          <MULTIPOLYGON [m]>
+1             329962 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88…
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 epsg (SRID):    32119
-proj4string:    +proj=lcc +lat_1=36.16666666666666 +lat_2=34.33333333333334 +lat_0=33.75 +lon_0=-79 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.22 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
 # A tibble: 1 x 2
   `sum(A * new_dens…                                                    geometry
 *           [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((834893.7 95747.49, 833834.2 98254.6, 835420.2 98655.72,…
+1             329962 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, …
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -273,13 +286,11 @@ First 10 features:
 > # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
 > nc_gp_cent <- nc %>%
 +                 group_by(gp) %>%
-+                 group_map(st_centroid)
-There were 12 warnings (use warnings() to see them)
++                 group_map(st_area)
 > 
 > nc %>% st_filter(nc[1,]) %>% nrow
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
 [1] 4
 > 
 > proc.time()
    user  system elapsed 
-  1.472   0.068   1.531 
+  1.953   0.045   1.990 

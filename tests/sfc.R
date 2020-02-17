@@ -19,7 +19,9 @@ st_as_sf(d, wkt = "geom", remove = FALSE)
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)"))
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"))
 st_as_sfc(character(0))
-st_as_sfc(character(0), 4326)
+x = st_as_sfc(character(0), 4326)
+y = st_as_sfc(character(0), crs = 4326)
+all.equal(x, y)
 st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 	"+proj=longlat +datum=WGS84")
 dg = st_as_sf(d, wkt = "geom")
@@ -38,9 +40,9 @@ d
 x = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326)
 # don't warn when replacing crs with identical value:
 st_sfc(x, crs = 4326)
-st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
+y = st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
 # but do when it changes:
-st_sfc(x, crs = 3857)
+y = st_sfc(x, crs = 3857)
 
 p = st_point(0:1)
 st_cast(p, "MULTIPOINT")
@@ -96,7 +98,7 @@ try(as(st_sfc(st_linestring(matrix(1:9,3))), "Spatial"))
 # check conus is present:
 x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 	crs = "+proj=longlat +datum=NAD27")
-st_transform(x, 3857)
+y = st_transform(x, 3857)
 
 sf_extSoftVersion()[1:3]
 
@@ -118,7 +120,7 @@ ll != st_sfc(p_)
 str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 str(nc)
-st_as_sfc(st_bbox(nc))
+bb = st_as_sfc(st_bbox(nc))
 
 st_agr("constant")
 st_agr()
@@ -172,7 +174,7 @@ st_join(a, b, left = FALSE)
 nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
 gr = st_sf(
     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
-    geom = st_make_grid(nc))
+	geom = st_make_grid(st_as_sfc(st_bbox(nc))))
 gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
 # cut, to check, NA's work out:
 gr = gr[-(1:30),]
@@ -236,10 +238,10 @@ st_jitter(st_sfc(st_point(0:1)), amount = .1)
 # st_bbox:
 library(sp)
 demo(meuse, ask = FALSE, echo = FALSE)
-st_bbox(meuse)
-st_crs(meuse)
+suppressWarnings(st_bbox(meuse))
+crs = suppressWarnings(st_crs(meuse))
 library(raster)
-st_bbox(raster(meuse.grid))
+suppressWarnings(st_bbox(raster(meuse.grid)))
 st_bbox(extent(raster()))
 
 # st_to_s2
@@ -322,7 +324,7 @@ st_union(shape1, shape4)
 st_union(shape4, shape1)
 
 # transform empty:
-st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+tr = st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
 
 # NA values are converted to empty; #1114:
 x <- data.frame(name=LETTERS)

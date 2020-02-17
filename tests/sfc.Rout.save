@@ -129,6 +129,7 @@ In CPL_crs_from_input(x) :
 > st_as_sfc(character(0))
 Geometry set for 0 features 
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
+<<<<<<< HEAD
 CRS:            NA
 Warning message:
 In CPL_crs_from_input(x) :
@@ -138,6 +139,14 @@ Geometry set for 0 features
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 geographic CRS: WGS 84
 epsg (SRID):    4326
+=======
+epsg (SRID):    NA
+proj4string:    NA
+> x = st_as_sfc(character(0), 4326)
+> y = st_as_sfc(character(0), crs = 4326)
+> all.equal(x, y)
+[1] TRUE
+>>>>>>> master
 > st_as_sfc(c("POINT(0 0)", "POINT(1 1)", "POLYGON((0 0,1 1,0 1,0 0))"),
 + 	"+proj=longlat +datum=WGS84")
 Geometry set for 3 features 
@@ -205,6 +214,7 @@ geographic CRS: WGS 84
 epsg (SRID):    4326
 POINT (0 1)
 POINT (0 1)
+<<<<<<< HEAD
 > st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
 Geometry set for 2 features 
 geometry type:  POINT
@@ -225,6 +235,11 @@ projected CRS:  WGS 84 / Pseudo-Mercator
 epsg (SRID):    3857
 POINT (0 1)
 POINT (0 1)
+=======
+> y = st_sfc(x, crs = "+proj=longlat +datum=WGS84 +no_defs")
+> # but do when it changes:
+> y = st_sfc(x, crs = 3857)
+>>>>>>> master
 Warning message:
 st_crs<- : replacing crs does not reproject data; use st_transform for that 
 > 
@@ -308,7 +323,12 @@ Geometry set for 2 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
+<<<<<<< HEAD
 CRS:            NA
+=======
+epsg (SRID):    NA
+proj4string:    NA
+>>>>>>> master
 MULTIPOINT ((0 1))
 MULTIPOINT ((0 1))
 > 
@@ -389,6 +409,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > # check conus is present:
 > x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 + 	crs = "+proj=longlat +datum=NAD27")
+<<<<<<< HEAD
 > st_transform(x, 3857)
 Geometry set for 2 features 
 geometry type:  POINT
@@ -398,6 +419,9 @@ projected CRS:  WGS 84 / Pseudo-Mercator
 epsg (SRID):    3857
 POINT (-10018764 4163894)
 POINT (-8905533 4300640)
+=======
+> y = st_transform(x, 3857)
+>>>>>>> master
 > 
 > sf_extSoftVersion()[1:3]
    GEOS    GDAL  proj.4 
@@ -491,6 +515,7 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
   ..- attr(*, "names")= chr  "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...
+<<<<<<< HEAD
 > st_as_sfc(st_bbox(nc))
 Geometry set for 1 feature 
 geometry type:  POLYGON
@@ -499,6 +524,9 @@ bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 geographic CRS: NAD27
 epsg (SRID):    4267
 POLYGON ((-84.32385 33.88199, -75.45698 33.8819...
+=======
+> bb = st_as_sfc(st_bbox(nc))
+>>>>>>> master
 > 
 > st_agr("constant")
 [1] constant
@@ -515,6 +543,10 @@ Attribute-geometry relationship: 2 constant, 0 aggregate, 0 identity
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: -90 ymin: 35 xmax: -80 ymax: 36
+<<<<<<< HEAD
+=======
+epsg (SRID):    4267
+>>>>>>> master
 proj4string:    +proj=longlat +datum=NAD27 +no_defs
   a b           geom
 1 1 3 POINT (-90 35)
@@ -721,7 +753,7 @@ geographic CRS: NAD27
 epsg (SRID):    4267
 > gr = st_sf(
 +     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
-+     geom = st_make_grid(nc))
++ 	geom = st_make_grid(st_as_sfc(st_bbox(nc))))
 > gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
 > # cut, to check, NA's work out:
 > gr = gr[-(1:30),]
@@ -732,6 +764,10 @@ dimension:      XY
 bbox:           xmin: 406262.2 ymin: 48374.87 xmax: 3052887 ymax: 1044158
 projected CRS:  NAD83 / North Carolina (ftUS)
 epsg (SRID):    2264
+<<<<<<< HEAD
+=======
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.219202438 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
+>>>>>>> master
 First 10 features:
     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
@@ -785,6 +821,7 @@ epsg (SRID):    4326
 > x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
 > #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 >   (p <- st_sample(x, 10))
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
@@ -805,6 +842,7 @@ POINT (76.1712 32.1029)
 +  crs=st_crs(4326))
 > if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
 +   (p <- st_sample(x, 10))
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
@@ -825,7 +863,12 @@ Geometry set for 1 feature
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: -15.7773 ymin: -22.4681 xmax: 143.823 ymax: 27.1614
+<<<<<<< HEAD
 CRS:            NA
+=======
+epsg (SRID):    NA
+proj4string:    NA
+>>>>>>> master
 MULTIPOINT ((48.8473 9.37328), (143.823 27.1614...
 > try(st_sample(p, 3.3))
 Error in st_sample(p, 3.3) : size should be an integer
@@ -838,7 +881,12 @@ Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 0.0914728 ymax: 1
+<<<<<<< HEAD
 CRS:            NA
+=======
+epsg (SRID):    NA
+proj4string:    NA
+>>>>>>> master
 MULTIPOINT ((0 0.302591), (0 0.251439), (0 0.22...
 MULTIPOINT ((0.0914728 0), (0.073852 0), (0.003...
 MULTIPOINT ((0.0488222 1), (0.0716508 1), (0.08...
@@ -850,6 +898,10 @@ dimension:      XY
 bbox:           xmin: 1215230 ymin: 935867 xmax: 1428880 ymax: 1031900
 projected CRS:  NAD83 / North Carolina (ftUS)
 epsg (SRID):    2264
+<<<<<<< HEAD
+=======
+proj4string:    +proj=lcc +lat_0=33.75 +lon_0=-79 +lat_1=36.1666666666667 +lat_2=34.3333333333333 +x_0=609601.219202438 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
+>>>>>>> master
 First 5 geometries:
 POINT (1215227 1031901)
 POINT (1271918 979879)
@@ -866,6 +918,10 @@ dimension:      XY
 bbox:           xmin: -81.6893 ymin: 36.2492 xmax: -80.914 ymax: 36.583
 geographic CRS: WGS 84
 epsg (SRID):    4326
+<<<<<<< HEAD
+=======
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+>>>>>>> master
 MULTIPOINT ((-81.3189 36.4974), (-81.4017 36.57...
 MULTIPOINT ((-80.9809 36.3787), (-81.1251 36.42...
 > st_sample(ls, 80, type = "regular")
@@ -873,7 +929,12 @@ Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 0.0967604 ymax: 1
+<<<<<<< HEAD
 CRS:            NA
+=======
+epsg (SRID):    NA
+proj4string:    NA
+>>>>>>> master
 MULTIPOINT ((0 0.00175127), (0 0.0167514), (0 0...
 MULTIPOINT ((0.00675965 0), (0.0217598 0), (0.0...
 MULTIPOINT ((0.0117605 1), (0.0267606 1), (0.04...
@@ -926,6 +987,7 @@ POINT (-0.0070472 1.09548)
 > # st_bbox:
 > library(sp)
 > demo(meuse, ask = FALSE, echo = FALSE)
+<<<<<<< HEAD
 Warning message:
 In showSRID(uprojargs, format = "PROJ", multiline = "NO") :
   Discarded datum Amersfoort in CRS definition
@@ -972,6 +1034,12 @@ PROJCRS["unknown",
             ORDER[2],
             LENGTHUNIT["metre",1,
                 ID["EPSG",9001]]]]
+=======
+> suppressWarnings(st_bbox(meuse))
+  xmin   ymin   xmax   ymax 
+178605 329714 181390 333611 
+> crs = suppressWarnings(st_crs(meuse))
+>>>>>>> master
 > library(raster)
 
 Attaching package: 'raster'
@@ -980,7 +1048,7 @@ The following object is masked from 'package:dplyr':
 
     select
 
-> st_bbox(raster(meuse.grid))
+> suppressWarnings(st_bbox(raster(meuse.grid)))
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
 Warning message:
@@ -1224,6 +1292,7 @@ CRS:            NA
 POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
 > 
 > # transform empty:
+<<<<<<< HEAD
 > st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
 Simple feature collection with 0 features and 0 fields
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
@@ -1231,6 +1300,9 @@ geographic CRS: WGS 84
 epsg (SRID):    4326
 [1] geom
 <0 rows> (or 0-length row.names)
+=======
+> tr = st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+>>>>>>> master
 > 
 > # NA values are converted to empty; #1114:
 > x <- data.frame(name=LETTERS)
@@ -1252,4 +1324,8 @@ CRS:            NA
 > 
 > proc.time()
    user  system elapsed 
+<<<<<<< HEAD
   4.346   0.071   4.411 
+=======
+  3.257   0.111   3.376 
+>>>>>>> master

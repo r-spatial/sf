@@ -357,7 +357,6 @@ print.crs = function(x, ...) {
     cat(" NA\n")
   } else {
     cat("\n")
-	# print EPSG code:
     if (is.na(x$input))
        cat("  No user input\n")
     else

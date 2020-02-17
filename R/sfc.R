@@ -135,7 +135,7 @@ sfg_is_empty = function(x) {
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x))
+	st_sfc(unclass(x)[i], crs = st_crs(x), precision = st_precision(x))
 }
 
 
@@ -276,11 +276,18 @@ st_geometry.sfc = function(obj, ...) obj
 #'
 #' Return geometry type of an object, as a factor
 #' @param x object of class \link{sf} or \link{sfc}
-#' @return a factor with the geometry type of each simple feature in x
+#' @param by_geometry logical; if \code{TRUE}, return geometry type of each geometry, 
+#' else return geometry type of the set
+#' @return a factor with the geometry type of each simple feature geometry 
+#' in \code{x}, or that of the whole set
 #' @export
-st_geometry_type = function(x) {
+st_geometry_type = function(x, by_geometry = TRUE) {
 	x = st_geometry(x)
-	factor(vapply(x, function(y) class(y)[2], ""), levels =
+	f = if (by_geometry)
+			vapply(x, function(y) class(y)[2], "")
+		else
+			substring(class(x)[1], 5)
+	factor(f, levels =
 		c("GEOMETRY",
 		"POINT",
 		"LINESTRING",

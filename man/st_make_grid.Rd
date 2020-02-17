@@ -37,7 +37,11 @@ Object of class \code{sfc} (simple feature geometry list column) with, depending
 square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{
-Create a square or hexagonal grid over the bounding box of an sf or sfc object
+Create a square or hexagonal grid covering the geometry of an sf or sfc object
+}
+\details{
+to obtain a grid covering the bounding box of a set of geometries, 
+pass \code{st_as_sfc(st_bbox(x))} for argument \code{x}
 }
 \examples{
 plot(st_make_grid(what = "centers"), axes = TRUE)
