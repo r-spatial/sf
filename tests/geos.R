@@ -258,7 +258,7 @@ sf:::is_symmetric(pattern = "010121021")
 
 st_intersects(st_point(0:1), st_point(2:3)) # sfg method
 
-if (sf_extSoftVersion()["GEOS"] >= "3.8.0") {
+if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
 	print(st_reverse(ls))
 	print(st_reverse(st_sfc(ls)))

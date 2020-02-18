@@ -191,7 +191,9 @@ plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
-st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+  st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+}
 (l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
 st_polygonize(st_node(l))
 st_node(st_multilinestring(list(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))))

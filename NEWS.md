@@ -1,6 +1,6 @@
 # version 0.8-2
 
-* add `st_reverse` methods to reverse points in a linestring (requires GEOS >= 3.8.0); #1246
+* add `st_reverse` methods to reverse points in a linestring (requires GEOS >= 3.7.0); #1246
 
 * `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
 

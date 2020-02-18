@@ -576,7 +576,7 @@ POINT EMPTY
 Sparse geometry binary predicate list of length 1, where the predicate was `intersects'
  1: (empty)
 > 
-> if (sf_extSoftVersion()["GEOS"] >= "3.8.0") {
+> if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
 + 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
 + 	print(st_reverse(ls))
 + 	print(st_reverse(st_sfc(ls)))
@@ -601,4 +601,4 @@ proj4string:    NA
 > 
 > proc.time()
    user  system elapsed 
-  3.832   0.063   3.889 
+  4.172   0.094   4.259 

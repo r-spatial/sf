@@ -819,7 +819,9 @@ st_point_on_surface.sf = function(x) {
 #' @export
 #' @details \code{st_reverse} reverses the nodes in a line
 #' @examples
-#' st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+#' if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+#'   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+#' }
 st_reverse = function(x)
 	UseMethod("st_reverse")
 
