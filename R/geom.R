@@ -817,6 +817,28 @@ st_point_on_surface.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_reverse} reverses the nodes in a line
+#' @examples
+#' st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+st_reverse = function(x)
+	UseMethod("st_reverse")
+
+#' @export
+st_reverse.sfg = function(x)
+	get_first_sfg(st_reverse(st_sfc(x)))
+
+#' @export
+st_reverse.sfc = function(x) {
+	st_sfc(CPL_geos_op("reverse", x, numeric(0), integer(0), numeric(0), logical(0)))
+}
+
+#' @export
+st_reverse.sf = function(x) {
+	st_set_geometry(x, st_reverse(st_geometry(x)))
+}
+
+#' @name geos_unary
+#' @export
 #' @details \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 #' @examples
 #' (l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
