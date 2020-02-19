@@ -822,6 +822,7 @@ st_point_on_surface.sf = function(x) {
 #' if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
 #'   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 #' }
+#nocov start
 st_reverse = function(x)
 	UseMethod("st_reverse")
 
@@ -838,6 +839,7 @@ st_reverse.sfc = function(x) {
 st_reverse.sf = function(x) {
 	st_set_geometry(x, st_reverse(st_geometry(x)))
 }
+#nocov end
 
 #' @name geos_unary
 #' @export
