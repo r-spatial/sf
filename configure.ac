@@ -300,6 +300,7 @@ if test "${gdal_has_proj}" = no; then
    AC_MSG_ERROR([OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?])
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
+AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 
 
 #
@@ -341,7 +342,7 @@ PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
   PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
-  if test "${PROJV1}" = "6" ; then
+  if test "${PROJV1}" -ge "6" ; then
     PROJ6="yes"
     PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
     if test "${proj_api}" = yes; then

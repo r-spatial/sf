@@ -9,7 +9,7 @@ RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu bionic-cran35/  " >> /etc/apt/sources.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+RUN apt-key  adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -47,11 +47,12 @@ RUN apt-get install -y \
 	libgit2-dev \
 	libnetcdf-dev \
 	locales \
-	libssl-dev
+	libssl-dev \
+	libtiff-dev
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=6.3.0
+ENV PROJ_VERSION=7.0.0RC1
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz \
@@ -75,8 +76,8 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 3.0.3
-ENV GDAL_VERSION_NAME 3.0.3
+ENV GDAL_VERSION 3.0.4
+ENV GDAL_VERSION_NAME 3.0.4
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -122,12 +123,12 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
-RUN R CMD INSTALL lwgeom
+#RUN R CMD INSTALL lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN ls
-RUN R CMD INSTALL sf
-RUN R CMD build --no-build-vignettes --no-manual stars
-RUN R CMD INSTALL stars
+RUN pkg-config proj --modversion
+#RUN R CMD INSTALL sf
+#RUN R CMD build --no-build-vignettes --no-manual stars
+#RUN R CMD INSTALL stars
 
 # RUN rm ./usr/lib/x86_64-linux-gnu/libgeos*
 
@@ -139,9 +140,9 @@ RUN R CMD INSTALL stars
 #RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
 #RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
 
-RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
+#RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 # after rgdal:
-RUN Rscript -e 'install.packages(c("tmaptools", "tmap"))'
+#RUN Rscript -e 'install.packages(c("tmaptools", "tmap"))'
 
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
