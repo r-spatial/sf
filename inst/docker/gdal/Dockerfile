@@ -123,14 +123,14 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
-#RUN R CMD INSTALL lwgeom
+RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN pkg-config proj --modversion
-#RUN R CMD INSTALL sf
-#RUN R CMD build --no-build-vignettes --no-manual stars
-#RUN R CMD INSTALL stars
+# RUN pkg-config proj --modversion
+RUN R CMD INSTALL sf
+RUN R CMD INSTALL lwgeom
+RUN R CMD build --no-build-vignettes --no-manual stars
+RUN R CMD INSTALL stars
 
-# RUN rm ./usr/lib/x86_64-linux-gnu/libgeos*
 
 #RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # or:
@@ -140,16 +140,17 @@ RUN pkg-config proj --modversion
 #RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
 #RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
 
-#RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
+RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 # after rgdal:
-#RUN Rscript -e 'install.packages(c("tmaptools", "tmap"))'
+RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview"))'
 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-#RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-#RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom"))'
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
+RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom"))'
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 CMD ["/bin/bash"]

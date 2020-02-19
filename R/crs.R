@@ -155,7 +155,9 @@ make_crs = function(x, wkt = FALSE) {
 	else if (is.numeric(x))
 		CPL_crs_from_epsg(as.integer(x))
 	else if (is.character(x)) {
-		if (grepl("+init=epsg:", x) && sf_extSoftVersion()[["proj.4"]] >= "6.0.0") { # nocov start FIXME:
+		if (grepl("+init=epsg:", x) && 
+				sf_extSoftVersion()[["proj.4"]] >= "6.0.0" && 
+				sf_extSoftVersion()[["proj.4"]] < "6.3.1") { # nocov start FIXME:
 			x = strsplit(x, " ")[[1]]
 			if (length(x) > 1)
 				warning(paste("the following proj4string elements are ignored:",
