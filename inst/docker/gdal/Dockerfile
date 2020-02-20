@@ -151,6 +151,9 @@ RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz
 RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
 RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom"))'
 RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+
+RUN (cd sf; git pull)
+RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 CMD ["/bin/bash"]
