@@ -3,7 +3,7 @@
 %   R/maps.R
 \name{st_as_sfc}
 \alias{st_as_sfc}
-\alias{sf_as_sfc.pq_geometry}
+\alias{st_as_sfc.pq_geometry}
 \alias{st_as_sfc.list}
 \alias{st_as_sfc.blob}
 \alias{st_as_sfc.bbox}
@@ -19,7 +19,7 @@
 \alias{st_as_sfc.map}
 \title{Convert foreign geometry object to an sfc object}
 \usage{
-sf_as_sfc.pq_geometry(
+\method{st_as_sfc}{pq_geometry}(
   x,
   ...,
   EWKB = TRUE,
