@@ -170,7 +170,9 @@ make_crs = function(x) {
 	else if (inherits(x, "crs"))
 		x
 	else if (is.character(x)) {
-		if (grepl("+init=epsg:", x) && sf_extSoftVersion()[["proj.4"]] >= "6.0.0") { # nocov start FIXME:
+		if (grepl("+init=epsg:", x) && 
+				sf_extSoftVersion()[["proj.4"]] >= "6.0.0" && 
+				sf_extSoftVersion()[["proj.4"]] < "6.3.1") { # nocov start FIXME:
 			x = strsplit(x, " ")[[1]]
 			if (length(x) > 1)
 				warning(paste("the following proj4string elements are ignored:",
@@ -368,15 +370,22 @@ print.crs = function(x, ...) {
   }
 }
 
+#' @name st_crs
 #' @export
+#' @details format.crs returns NA if the crs is missing valued, or else
+#' the name of a crs if it is different from "unknown", or
+#' else the user input if it was set, or else its "proj4string" representation;
 format.crs = function(x, ...) {
 	if (is.na(x))
 		NA_character_
 	else {
 		p = crs_parameters(x)
-		if (p$Name == "unknown")
-			x$input
-		else
+		if (p$Name == "unknown") {
+			if (x$input == "unknown")
+				x$proj4string
+			else
+				x$input
+		} else
 			x$Name
 	}
 }

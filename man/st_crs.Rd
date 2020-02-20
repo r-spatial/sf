@@ -17,6 +17,7 @@
 \alias{NA_crs_}
 \alias{is.na.crs}
 \alias{$.crs}
+\alias{format.crs}
 \alias{st_axis_order}
 \title{Retrieve coordinate reference system from object}
 \format{An object of class \code{crs} of length 2.}
@@ -50,6 +51,8 @@ NA_crs_
 \method{is.na}{crs}(x)
 
 \method{$}{crs}(x, name)
+
+\method{format}{crs}(x, ...)
 
 st_axis_order(authority_compliant = logical(0))
 }
@@ -105,6 +108,10 @@ using the GDAL interface; named elements include
 \code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
 \code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"} and
 \code{"ud_unit"} (this may be subject to changes in future GDAL versions).
+
+format.crs returns NA if the crs is missing valued, or else
+the name of a crs if it is different from "unknown", or
+else the user input if it was set, or else its "proj4string" representation;
 
 \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
 indicates axes order according to the authority 
