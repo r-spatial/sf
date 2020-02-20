@@ -1,22 +1,24 @@
-VERSION = 2.2.3
-COMPILED_BY ?= gcc-4.6.3
-RWINLIB = ../windows/gdal2-$(VERSION)
+VERSION = 3.0.4
+RWINLIB = ../windows/gdal3-$(VERSION)
 TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
 
 PKG_CPPFLAGS =\
-	-I$(RWINLIB)/include/gdal \
-	-I$(RWINLIB)/include/geos \
-	-I$(RWINLIB)/include/proj
+	-I$(RWINLIB)/include/gdal-3.0.4 \
+	-I$(RWINLIB)/include/geos-3.8.0 \
+	-I$(RWINLIB)/include/proj-6.3.1 \
+	-DHAVE_PROJ_H
 
 PKG_LIBS = \
 	-L$(RWINLIB)/$(TARGET) \
 	-L$(RWINLIB)/lib$(R_ARCH) \
 	-lgdal -lsqlite3 -lspatialite -lproj -lgeos_c -lgeos  \
-	-ljson-c -lnetcdf -lmariadbclient -lpq -lintl -lwebp -lcurl -lssh2 -lssl -lcrypto \
-	-lkea -lhdf5_cpp -lhdf5_hl -lhdf5 -lexpat -lfreexl -lcfitsio \
-	-lmfhdf -ldf -lxdr \
-	-lopenjp2 -ljasper -lpng16 -ljpeg -ltiff -lgeotiff -lgif -lxml2 -llzma -lszip -lz \
-	-lodbc32 -lodbccp32 -liconv -lpsapi -lws2_32 -lcrypt32 -lwldap32 -lsecur32 -lgdi32
+	-ljson-c -lnetcdf -lmariadbclient -lpq -lpgport -lpgcommon \
+	-lwebp -lcurl -lssh2 -lssl \
+	-lhdf5_hl -lhdf5 -lexpat -lfreexl -lcfitsio \
+	-lmfhdf -lhdf -lxdr -lpcre \
+	-lopenjp2 -ljasper -lpng -ljpeg -ltiff -lgeotiff -lgif -lxml2 -llzma -lz \
+	-lodbc32 -lodbccp32 -liconv -lpsapi -lwldap32 -lsecur32 -lgdi32 -lnormaliz \
+	-lcrypto -lcrypt32 -lws2_32
 
 all: clean winlibs
 
