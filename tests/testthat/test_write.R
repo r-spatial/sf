@@ -21,6 +21,13 @@ test_that("sf can write to all writable formats", {
 	}
 })
 
+test_that("sf can write to netcdf", {
+	skip_on_os("windows")
+	if ("netCDF" %in% drvs) {
+		expect_silent(st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"), quiet = TRUE))
+	}
+})
+
 test_that("sf can write units (#264)", {
     tf <- tempfile(fileext = ".gpkg")
     meuse[["length"]] <- meuse[["cadmium"]]
