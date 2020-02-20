@@ -16,9 +16,6 @@ test_that("sf can write to all writable formats", {
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]), excluded_drivers)) {
         expect_silent(st_write(meuse, paste0(tf, ".", ext), quiet = TRUE))
 	}
-	if ("netCDF" %in% drvs) {
-		expect_silent(st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"), quiet = TRUE))
-	}
 })
 
 test_that("sf can write to netcdf", {
