@@ -300,6 +300,7 @@ if test "${gdal_has_proj}" = no; then
    AC_MSG_ERROR([OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?])
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
+AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 
 
 #

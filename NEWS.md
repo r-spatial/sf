@@ -4,6 +4,8 @@
 
 * when GEOS >= 3.8.0, `st_make_valid` is provided by `sf` rather than by `lwgeom` #989
 
+* add `st_reverse` methods to reverse points in a linestring (requires GEOS >= 3.7.0); #1246
+
 * `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
 
 * `st_make_valid` is now provided by `sf`, no longer by `lwgeom`, when GEOS 3.8.0 is available; #989

@@ -705,7 +705,15 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
-	} else if (op == "node") {
+	} else 
+#ifdef HAVE370
+	if (op == "reverse") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = geos_ptr(chkNULL(GEOSReverse_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+		}
+	} else 
+#endif
+	if (op == "node") {
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSNode_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
@@ -720,7 +728,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(), dTolerance[i], bOnlyEdges)), hGEOSCtxt);
 	} else
 #endif
-			Rcpp::stop("invalid operation"); // #nocov
+		Rcpp::stop("invalid operation"); // #nocov
 
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, out, dim));
 	CPL_geos_finish(hGEOSCtxt);

@@ -111,8 +111,12 @@ st_poly_sample = function(x, size, ..., type = "random",
 
 	if (type %in% c("hexagonal", "regular", "random")) {
 
-		if (type %in% c("regular", "hexagonal") && isTRUE(st_is_longlat(x)))
-			message_longlat("st_sample")
+		if (isTRUE(st_is_longlat(x))) {
+			if (type == "regular")
+				message_longlat("st_sample")
+			if (type == "hexagonal")
+				stop("hexagonal sampling on geographic coordinates not supported; consider projecting first")
+		}
 
 		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
 		a1 = as.numeric(sum(st_area(x)))

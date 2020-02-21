@@ -3636,6 +3636,8 @@ if test "${gdal_has_proj}" = no; then
    as_fn_error $? "OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?" "$LINENO" 5
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
+{ $as_echo "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
+$as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
 
 
 #
