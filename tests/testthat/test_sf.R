@@ -4,7 +4,7 @@ test_that("we can subset sf objects", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)
   s1 = st_sf(a = c("x", "y"), geom = st_sfc(pt1, pt2))
-  expect_equal(s1[[1]], factor(c("x", "y")))
+  expect_equal(as.character(s1[[1]]), c("x", "y"))
   expect_equal(s1[,1], s1) #data.frame(x = c("x", "y")))
 
   expect_equal(nrow(s1[1,]), 1)
