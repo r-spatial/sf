@@ -152,8 +152,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
-	bool quiet = false, bool update = false,
-	bool delete_dsn = false, bool delete_layer = false) {
+	bool quiet, Rcpp::LogicalVector update, bool delete_dsn = false, bool delete_layer = false) {
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
@@ -210,7 +209,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	}
 	
 	// update ds:
-	if (update) { 
+	if (update[0] == TRUE) { // and not NA_LOGICAL:
 		poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
 				drivers.data(), options.data(), NULL);
 		if (poDS == NULL) {
@@ -231,12 +230,13 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
 	} else { // create new ds: 
-		// error when it already exists:
-		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
-					options.data(), NULL)) != NULL) {
+		// when update==NA, raise error when it already exists:
+		if (update[0] == NA_LOGICAL && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], 
+					GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, options.data(), NULL)) != NULL) {
 			GDALClose(poDS);
 			Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-				" already exists: remove first, use update=TRUE to append," << std::endl <<  
+				" already exists: remove first, use update=TRUE to append, update=FALSE to replace," 
+				<< std::endl <<  
 				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE " <<
 				"to remove the entire data source before writing." << std::endl;
 			Rcpp::stop("Dataset already exists.\n");

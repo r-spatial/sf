@@ -318,12 +318,9 @@ abbreviate_shapefile_names = function(x) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into 
 #' character strings (default), else into numbers by \code{as.numeric}.
-#' @param update logical; \code{FALSE} by default for single-layer drivers but 
-#' \code{TRUE} by default for database drivers as defined by \code{db_drivers}.
-#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make 
-#' \code{GDAL} try to update (append to) the existing data source, e.g. adding
-#' a table to an existing database, or adding records to a layer. See also the
-#' next two arguments and Details.
+#' @param update logical; should an existing layer be augmented or replaced?
+#' if \code{TRUE} append, if \code{FALSE} replace, if \code{NA} an error will
+#' be raised if the layer exists. See also next two arguments.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting 
 #' to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to
@@ -379,8 +376,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE,
-		fid_column_name = NULL) {
+		update = NA, delete_dsn = FALSE, delete_layer = FALSE, fid_column_name = NULL) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
