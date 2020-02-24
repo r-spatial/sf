@@ -257,7 +257,7 @@
 <div id="how-simple-features-in-r-are-organized" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-simple-features-in-r-are-organized" class="anchor"></a>How simple features in R are organized</h1>
-<p>Package <code>sf</code> represents simple features as native R objects. Similar to <a href="http://postgis.net/">PostGIS</a>, all functions and methods in <code>sf</code> that operate on spatial data are prefixed by <code>st_</code>, which refers to <em>spatial and temporal</em>; this makes them easily findable by command-line completion. Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector). Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.</p>
+<p>Package <code>sf</code> represents simple features as native R objects. Similar to <a href="http://postgis.net/">PostGIS</a>, all functions and methods in <code>sf</code> that operate on spatial data are prefixed by <code>st_</code>, which refers to <em>spatial type</em>; this makes them easily findable by command-line completion. Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector). Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.</p>
 <p>As attributes are typically stored in <code>data.frame</code> objects (or the very similar <code>tbl_df</code>), we will also store feature geometries in a <code>data.frame</code> column. Since geometries are not single-valued, they are put in a list-column, a list of length equal to the number of records in the <code>data.frame</code>, with each list element holding the simple feature geometry of that feature. The three classes used to represent simple features are:</p>
 <ul>
 <li>
@@ -275,7 +275,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">## Reading layer `nc' from data source `/tmp/RtmpmahSsZ/temp_libpath26e5af8be6e/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">## Reading layer `nc' from data source `/tmp/RtmpYuuJoD/temp_libpath7f042e169d19/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb1-6" data-line-number="6">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb1-7" data-line-number="7">## dimension:      XY</a>
@@ -556,7 +556,7 @@
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">filename &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)</a>
 <a class="sourceLine" id="cb23-2" data-line-number="2">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpmahSsZ/temp_libpath26e5af8be6e/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpYuuJoD/temp_libpath7f042e169d19/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb23-4" data-line-number="4">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb23-5" data-line-number="5">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb23-6" data-line-number="6">## dimension:      XY</a>
@@ -855,7 +855,7 @@
 <a class="sourceLine" id="cb47-3" data-line-number="3">        <span class="dt">CNTY_ID =</span> <span class="st">"identity"</span>, <span class="dt">NAME =</span> <span class="st">"identity"</span>, <span class="dt">FIPS =</span> <span class="st">"identity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"identity"</span>,</a>
 <a class="sourceLine" id="cb47-4" data-line-number="4">        <span class="dt">CRESS_ID =</span> <span class="st">"identity"</span>, <span class="dt">BIR74 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID74 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"aggregate"</span>,</a>
 <a class="sourceLine" id="cb47-5" data-line-number="5">        <span class="dt">BIR79 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID79 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"aggregate"</span>))</a>
-<a class="sourceLine" id="cb47-6" data-line-number="6">## Reading layer `nc' from data source `/tmp/RtmpmahSsZ/temp_libpath26e5af8be6e/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">## Reading layer `nc' from data source `/tmp/RtmpYuuJoD/temp_libpath7f042e169d19/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb47-7" data-line-number="7">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb47-8" data-line-number="8">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</a>
 <a class="sourceLine" id="cb47-9" data-line-number="9">## geometry type:  MULTIPOLYGON</a>
