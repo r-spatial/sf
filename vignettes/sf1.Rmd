@@ -136,7 +136,7 @@ system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 Package `sf` represents simple features as native R objects.
 Similar to [PostGIS](http://postgis.net/), all functions and methods
 in `sf` that operate on spatial data are prefixed by `st_`, which
-refers to _spatial and temporal_; this makes them easily findable
+refers to _spatial type_; this makes them easily findable
 by command-line completion.  Simple features are implemented as
 R native data, using simple data structures (S3 classes, lists,
 matrix, vector).  Typical use involves reading, manipulating and
