@@ -1,5 +1,7 @@
 # version 0.8-2
 
+* allow for single-sided buffers for linear geometries; #1001
+
 * add `st_reverse` methods to reverse points in a linestring (requires GEOS >= 3.7.0); #1246
 
 * `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
