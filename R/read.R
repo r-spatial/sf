@@ -376,7 +376,8 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = NA, delete_dsn = FALSE, delete_layer = FALSE, fid_column_name = NULL) {
+		update = NA, delete_dsn = FALSE, delete_layer = !is.na(update) && !update, 
+		fid_column_name = NULL) {
 
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
@@ -395,6 +396,9 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}
+
+	if (!is.na(update) && update == FALSE && delete_layer == FALSE)
+		stop("cannot replace a layer if delete_layer is FALSE")
 
 	if (length(list(...)))
 		stop(paste("unrecognized argument(s)", names(list(...)), "\n"))
@@ -459,8 +463,8 @@ st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
 
 #' @name st_write
 #' @export
-write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
-	st_write(..., quiet = quiet, delete_layer = delete_layer)
+write_sf <- function(..., quiet = TRUE, update = FALSE) {
+	st_write(..., quiet = quiet, update = update)
 }
 
 #' Get GDAL drivers

@@ -26,7 +26,7 @@ st_write(obj, dsn, layer, ...)
   factorsAsCharacter = TRUE,
   update = NA,
   delete_dsn = FALSE,
-  delete_layer = FALSE,
+  delete_layer = !is.na(update) && !update,
   fid_column_name = NULL
 )
 

@@ -229,7 +229,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		if (! quiet)
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
-	} else { // create new ds: 
+	} else { // add to existing ds or create new ds: 
 		// when update==NA, raise error when it already exists:
 		if (update[0] == NA_LOGICAL && (poDS = (GDALDataset *) GDALOpenEx(dsn[0], 
 					GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, options.data(), NULL)) != NULL) {
@@ -241,11 +241,18 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 				"to remove the entire data source before writing." << std::endl;
 			Rcpp::stop("Dataset already exists.\n");
 		}
-		// create:
-		if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
-			Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
-			Rcpp::stop("Creation failed.\n");
-		} else if (! quiet)
+
+		bool existing = true;
+		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
+				drivers.data(), options.data(), NULL)) == NULL) {
+			// if dsn does not exist, then create:
+			if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
+				Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
+				Rcpp::stop("Creation failed.\n");
+			}
+			existing = false;
+		}
+		if (! quiet)
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
 				"' using driver `" << driver[0] << "'" << std::endl;
 	}
