@@ -46,7 +46,7 @@ test_that("delete and update work (#304)", {
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Deleting source")
   expect_error(st_write(x, gpkg, update = FALSE, quiet = TRUE), "Dataset already exists")
   expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
-  expect_silent(write_sf(x, gpkg, layer = "foo", delete_layer = TRUE))
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' failed")
   expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
   expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Updating layer `foo' to data source")
   expect_warning(
