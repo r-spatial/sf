@@ -665,7 +665,8 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
                        Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
                        Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology,
                        int bOnlyEdges = 1,
-                       Rcpp::IntegerVector endCapStyle = 0, Rcpp::IntegerVector joinStyle = 0, Rcpp::NumericVector mitreLimit = 1)
+                       Rcpp::IntegerVector endCapStyle = 0, Rcpp::IntegerVector joinStyle = 0, 
+					   Rcpp::NumericVector mitreLimit = 1, Rcpp::LogicalVector singleside = 0)
 {
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -679,8 +680,20 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBuffer_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i])), hGEOSCtxt);
 	} else if (op == "buffer_with_style") {
-		for (size_t i = 0; i < g.size(); i++)
-			out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])), hGEOSCtxt);
+		GEOSBufferParams *bufferparams = GEOSBufferParams_create_r(hGEOSCtxt);
+		for (size_t i = 0; i < g.size(); i++) {
+			if (GEOSBufferParams_setEndCapStyle_r(hGEOSCtxt, bufferparams, endCapStyle[i]) &&
+					GEOSBufferParams_setJoinStyle_r(hGEOSCtxt, bufferparams, joinStyle[i]) &&
+					GEOSBufferParams_setMitreLimit_r(hGEOSCtxt, bufferparams, mitreLimit[i]) &&
+					GEOSBufferParams_setQuadrantSegments_r(hGEOSCtxt, bufferparams, nQuadSegs[i]) &&
+					GEOSBufferParams_setSingleSided_r(hGEOSCtxt, bufferparams, singleside[i]))
+				// out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])), hGEOSCtxt);
+				out[i] = geos_ptr(chkNULL(GEOSBufferWithParams_r(hGEOSCtxt, g[i].get(), 
+					bufferparams, bufferDist[i])), hGEOSCtxt);
+			else
+				Rcpp::stop("invalid buffer parameters"); // #nocov
+		}
+		GEOSBufferParams_destroy_r(hGEOSCtxt, bufferparams);
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
