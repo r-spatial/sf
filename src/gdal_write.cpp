@@ -242,7 +242,6 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			Rcpp::stop("Dataset already exists.\n");
 		}
 
-		bool existing = true;
 		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
 				drivers.data(), options.data(), NULL)) == NULL) {
 			// if dsn does not exist, then create:
@@ -250,7 +249,6 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 				Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
 				Rcpp::stop("Creation failed.\n");
 			}
-			existing = false;
 		}
 		if (! quiet)
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
