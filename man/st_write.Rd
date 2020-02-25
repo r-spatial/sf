@@ -32,7 +32,7 @@ st_write(obj, dsn, layer, ...)
 
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
-write_sf(..., quiet = TRUE, delete_layer = TRUE)
+write_sf(..., quiet = TRUE, update = FALSE)
 
 \S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(
   conn,
@@ -89,8 +89,8 @@ multiple options supported.}
 character strings (default), else into numbers by \code{as.numeric}.}
 
 \item{update}{logical; should an existing layer be augmented or replaced?
-if \code{TRUE} append, if \code{FALSE} replace, if \code{NA} an error will
-be raised if the layer exists. See also next two arguments.}
+if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
+raise an error if the layer exists. See also next two arguments.}
 
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting 
 to write?}

@@ -319,8 +319,8 @@ abbreviate_shapefile_names = function(x) {
 #' @param factorsAsCharacter logical; convert \code{factor} objects into 
 #' character strings (default), else into numbers by \code{as.numeric}.
 #' @param update logical; should an existing layer be augmented or replaced?
-#' if \code{TRUE} append, if \code{FALSE} replace, if \code{NA} an error will
-#' be raised if the layer exists. See also next two arguments.
+#' if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
+#' raise an error if the layer exists. See also next two arguments.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting 
 #' to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to
