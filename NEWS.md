@@ -1,4 +1,4 @@
-# version 0.8-2
+# version 0.9-0
 
 * write `stars` rasters with wkt info, rather than proj4strings
 
@@ -10,13 +10,13 @@
 
 * `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
 
-# version 0.8-1
+* reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225): crs objects now contain two fields, `input` with the user input (if any), and `wkt` with a well-known-text  (or WKT2) representation of the crs.
 
-* reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225)
+# version 0.8-1
 
 * `st_as_sf.map` no longer requires `maptools` and `sp`; dropped dependency on maptools.
 
-* conditional to PROJ >= 6.0.0: replace `+init=epsg:XXXX ...` strings with the `XXXX` EPSG integer, to work around a bug in PROJ; see https://github.com/OSGeo/PROJ/pull/1875 and links therein. If there is a `...`, raise a warning that this is now ignored. 
+* work around a bug in 6.0.0 <= PROJ < 6.3.1: replace `+init=epsg:XXXX ...` strings with the `XXXX` EPSG integer, to work around a bug in PROJ; see https://github.com/OSGeo/PROJ/pull/1875 and links therein. If `...` arguments are present, raise a warning that these are ignored now. 
 
 * `st_as_sf.map` no longer requires `maptools` and `sp`; drop dependency on maptools.
 
