@@ -108,8 +108,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -129,8 +128,7 @@ geometry type:  GEOMETRY
 dimension:      XYZ
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 z_range:        zmin: NA zmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT Z EMPTY
 MULTIPOINT Z EMPTY
@@ -150,8 +148,7 @@ geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 m_range:        zmin: NA zmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT M EMPTY
 MULTIPOINT M EMPTY
@@ -172,8 +169,7 @@ dimension:      XYZM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 z_range:        zmin: NA zmax: NA
 m_range:        mmin: NA mmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT ZM EMPTY
 MULTIPOINT ZM EMPTY
@@ -186,8 +182,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -199,8 +194,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -213,8 +207,7 @@ geometry type:  GEOMETRY
 dimension:      XYZ
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 z_range:        zmin: NA zmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT Z EMPTY
 MULTIPOINT Z EMPTY
@@ -227,8 +220,7 @@ geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 m_range:        zmin: NA zmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT M EMPTY
 MULTIPOINT M EMPTY
@@ -242,8 +234,7 @@ dimension:      XYZM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
 z_range:        zmin: NA zmax: NA
 m_range:        mmin: NA mmax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT ZM EMPTY
 MULTIPOINT ZM EMPTY
@@ -255,8 +246,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -295,4 +285,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  0.428   0.029   0.448 
+  0.413   0.034   0.437 
