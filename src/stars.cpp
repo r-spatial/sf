@@ -167,7 +167,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
 
 
-			// for (R_xlen_t j = 0; j < Rf_xlength(vec); j++) {
+			// for (R_xlen_t j = 0; j < Rf_xlength(vec); j++)
 			for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
 					j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
 					j++) {
@@ -200,6 +200,24 @@ int get_from_list(List lst, const char *name, int otherwise) {
 		return(ret[0]);                // #nocov
 	} else
 		return(otherwise);
+}
+
+NumericMatrix get_color_table(GDALColorTable *tbl) {
+	int n = tbl->GetColorEntryCount();
+	NumericMatrix t(n, 4);
+	for (int i = 0; i < n; i++) {
+		const GDALColorEntry *ce = tbl->GetColorEntry(i);
+		t(i, 0) = ce->c1;
+		t(i, 1) = ce->c2;
+		t(i, 2) = ce->c3;
+		t(i, 3) = ce->c4;
+	}
+//	const char *interp = GDALGetColorInterpretationName(
+//		GDALGetRasterColorInterpretation(tbl->ToHandle(tbl)));
+//	t.attr("interpretation") = CharacterVector::create(interp);
+	int i = (int) tbl->GetPaletteInterpretation();
+	t.attr("interpretation") = IntegerVector::create(i);
+	return t;
 }
 
 // [[Rcpp::export]]
@@ -250,6 +268,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 
 	GDALRasterBand *poBand = NULL;
 	NumericVector nodatavalue = NumericVector::create(NA_REAL);
+
 	if (poDataset->GetRasterCount()) {
 		poBand = poDataset->GetRasterBand( 1 );
 		int set = 0;
@@ -260,6 +279,13 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			nodatavalue[0] = NA_value[0];
 		} else if (set)
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
+	}
+
+	List colorTables(poDataset->GetRasterCount());
+	for (int i; i < poDataset->GetRasterCount(); i++) {
+		poBand = poDataset->GetRasterBand(i + 1);
+		if (poBand->GetColorTable() != NULL)
+			colorTables(i) = get_color_table(poBand->GetColorTable());
 	}
 
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -330,7 +356,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			CharacterVector::create(NA_STRING),
 		_["sub"] = sub,
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
-		_["band_meta"] = get_band_meta_data(poDataset)
+		_["band_meta"] = get_band_meta_data(poDataset),
+		_["color_tables"] = colorTables
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 
