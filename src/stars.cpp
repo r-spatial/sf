@@ -212,9 +212,6 @@ NumericMatrix get_color_table(GDALColorTable *tbl) {
 		t(i, 2) = ce->c3;
 		t(i, 3) = ce->c4;
 	}
-//	const char *interp = GDALGetColorInterpretationName(
-//		GDALGetRasterColorInterpretation(tbl->ToHandle(tbl)));
-//	t.attr("interpretation") = CharacterVector::create(interp);
 	int i = (int) tbl->GetPaletteInterpretation();
 	t.attr("interpretation") = IntegerVector::create(i);
 	return t;
