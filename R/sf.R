@@ -453,3 +453,33 @@ st_drop_geometry = function(x) {
 		stop("st_drop_geometry only works with objects of class sf")
 	st_set_geometry(x, NULL)
 }
+
+#' transform method for sf objects
+#' 
+#' Can be used to create or modify variables.
+#' 
+#' @param _data object of class \code{sf}
+#' @param ... Further arguments of the form tag=value
+#'
+#' @export
+#' @examples
+#' a = data.frame(x1 = 1:3, x2 = 5:7)
+#' st_geometry(a) = st_sfc(st_point(c(0,0)), st_point(c(1,1)), st_point(c(2,2)))
+#' transform(a, x1_sq = x1^2)
+#' transform(a, x1_x2 = x1*x2)
+transform.sf <- function (`_data`, ...) {
+  e = eval(substitute(list(...)), `_data`, parent.frame())
+  tags = names(e)
+  inx = match(tags, names(`_data`))
+  matched = !is.na(inx)
+  crs = sf::st_crs(`_data`)
+  if (any(matched)) {
+    `_data`[inx[matched]] = e[matched]
+    `_data` = sf::st_sf(`_data`,
+                        crs = crs)
+  }
+  if (!all(matched))
+    sf::st_sf(do.call("data.frame", c(list(`_data`), e[!matched])),
+              crs = crs)
+  else `_data`
+}
