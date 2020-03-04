@@ -177,7 +177,7 @@ make_crs = function(x) {
 			if (length(x) > 1)
 				warning(paste("the following proj4string elements are ignored:",
 					paste(x[-1], collapse = " "), "; remove the +init=epsg:XXXX to undo this"))
-			x = paste0("EPSG:", as.integer(substr(x[1], 12, 20)))
+			x = paste0("EPSG:", as.integer(substr(x[1], 12, 20))) # nocov end
 		}
 		CPL_crs_from_input(x)
 	} else

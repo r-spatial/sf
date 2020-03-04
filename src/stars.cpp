@@ -279,7 +279,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	}
 
 	List colorTables(poDataset->GetRasterCount());
-	for (int i; i < poDataset->GetRasterCount(); i++) {
+	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 		poBand = poDataset->GetRasterBand(i + 1);
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
