@@ -13,7 +13,6 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     services:
-      if: runner.os == 'Linux'
       postgres:
         image: kartoza/postgis
         ports:
@@ -33,8 +32,8 @@ jobs:
       matrix:
         config:
           #- {os: windows-latest, r: '3.6'}
-          - {os: macOS-latest, r: '3.6'}
-          - {os: macOS-latest, r: 'devel'}
+          #- {os: macOS-latest, r: '3.6'}
+          #- {os: macOS-latest, r: 'devel'}
           - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-latest, r: 'release'}
