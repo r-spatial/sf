@@ -249,7 +249,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 #' @export
 summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 	u = factor(vapply(object, function(x) WKT_name(x, FALSE), ""))
-    epsg = paste0("epsg:", attr(object, "crs")$epsg)
+    epsg = paste0("epsg:", st_crs(object)$epsg)
 	levels(u) = c(levels(u), epsg)
     p4s = attr(object, "crs")$proj4string
 	if (!is.na(p4s)) {

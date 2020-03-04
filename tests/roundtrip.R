@@ -47,18 +47,9 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 
-# roundtrip nc: sf -> sp -> sf
-# nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
-p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
-suppressWarnings(st_crs(nc) <- p4s)
-names(nc)[15] = "geometry"
-attr(nc, "sf_column") = "geometry"
-attr(nc$geometry, "crs")$epsg = NA_integer_
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
 all.equal(nc, st_as_sf(as(nc, "Spatial")))
+st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 
-sp = as(nc, "Spatial")
-comment(sp) = "FALSE"
-all.equal(nc, st_as_sf(sp))
 detach("package:sp")
 unloadNamespace("rgeos")

@@ -1,6 +1,6 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -90,7 +90,7 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                                     NA's   :2                             
     landuse       dist.m                geometry  
  W      :50   Min.   :  10.0   POINT        :155  
- Ah     :39   1st Qu.:  80.0   epsg:4326    :  0  
+ Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
  Am     :22   Median : 270.0   +proj=long...:  0  
  Fw     :10   Mean   : 290.3                      
  Ab     : 8   3rd Qu.: 450.0                      
@@ -106,26 +106,29 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  POINT        :3103  
- epsg:4326    :   0  
+ epsg:NA      :   0  
  +proj=long...:   0  
                      
                      
                      
 > x <- st_as_sf(meuse.grid) # don't print: CRS variations.
+Warning message:
+In make_crs(x) :
+  the following proj4string elements are ignored: +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs ; remove the +init=epsg:XXXX to undo this
 > summary(st_as_sf(meuse.area))
           geometry
  POLYGON      :1  
- epsg:4326    :0  
+ epsg:NA      :0  
  +proj=long...:0  
 > summary(st_as_sf(meuse.riv))
           geometry
  POLYGON      :1  
- epsg:4326    :0  
+ epsg:NA      :0  
  +proj=long...:0  
 > summary(st_as_sf(as(meuse.riv, "SpatialLines")))
           geometry
  LINESTRING   :1  
- epsg:4326    :0  
+ epsg:NA      :0  
  +proj=long...:0  
 > summary(st_as_sf(pol.grd))
      part.a           part.b            dist        soil     ffreq   
@@ -137,7 +140,7 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  POLYGON      :3103  
- epsg:4326    :   0  
+ epsg:NA      :   0  
  +proj=long...:   0  
                      
                      
@@ -152,30 +155,29 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
           geometry   
  LINESTRING   :3103  
- epsg:4326    :   0  
+ epsg:NA      :   0  
  +proj=long...:   0  
                      
                      
                      
 > 
-> # roundtrip nc: sf -> sp -> sf
-> # nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-> nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
-> p4s = "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
-> suppressWarnings(st_crs(nc) <- p4s)
-> names(nc)[15] = "geometry"
-> attr(nc, "sf_column") = "geometry"
-> attr(nc$geometry, "crs")$epsg = NA_integer_
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+Simple feature collection with 100 features and 14 fields
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+geographic CRS: NAD27
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
+[1] "Names: 1 string mismatch"                                                               
+[2] "Attributes: < Component \"sf_column\": 1 string mismatch >"                             
+[3] "Component 15: Attributes: < Component \"crs\": Component \"input\": 1 string mismatch >"
+> st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 [1] TRUE
 > 
-> sp = as(nc, "Spatial")
-> comment(sp) = "FALSE"
-> all.equal(nc, st_as_sf(sp))
-[1] TRUE
 > detach("package:sp")
 > unloadNamespace("rgeos")
 > 
 > proc.time()
    user  system elapsed 
-  2.728   0.072   2.792 
+  2.454   0.049   2.495 
