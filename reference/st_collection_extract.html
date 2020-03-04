@@ -80,7 +80,7 @@ of the specified type, an empty geometry is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -226,8 +226,7 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0))</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1))</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='no'>i</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='no'>i</span>, <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'>
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0))</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1))</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='no'>i</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='no'>i</span>, <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'>
 <span class='co'>## A GEOMETRYCOLLECTION</span>
 <span class='no'>aa</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>i</span>)),
                         <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>j</span>)))
@@ -237,8 +236,7 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt;     a                           geom
 #&gt; 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...
 #&gt; 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...
@@ -248,16 +246,14 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 0 xmax: 4 ymax: 0
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt;     a                  geom
 #&gt; 1.1 1 LINESTRING (4 0, 3 0)
 #&gt; 2.1 2 LINESTRING (4 0, 3 0)</div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='no'>aa</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 0 xmax: 1 ymax: 0
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt;   a        geom
 #&gt; 1 1 POINT (1 0)
 #&gt; 2 2 POINT (1 0)</div><div class='input'>
@@ -266,18 +262,15 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>aa</span>), <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>aa</span>), <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 0 xmax: 4 ymax: 0
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>aa</span>), <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>aa</span>), <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 0 xmax: 1 ymax: 0
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'>
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'>
 <span class='co'>## A GEOMETRY of single types</span>
 <span class='no'>bb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
         <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>pt</span>)),
@@ -290,8 +283,7 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt;   a                           geom
 #&gt; 3 3 MULTIPOLYGON (((5.5 0, 7 0,...
 #&gt; 4 4 MULTIPOLYGON (((5.5 0, 7 0,...</div><div class='input'>
@@ -302,8 +294,7 @@ input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt;     a                           geom
 #&gt; 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...
 #&gt; 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...

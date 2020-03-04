@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -135,15 +135,14 @@
 <a class="sourceLine" id="cb1-2" data-line-number="2">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">fname &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">fname</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">## [1] "/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp"</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">## [1] "/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp"</a>
 <a class="sourceLine" id="cb1-6" data-line-number="6">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">## Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">## Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10">## dimension:      XY</a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a></code></pre></div>
+<a class="sourceLine" id="cb1-12" data-line-number="12">## CRS:            4267</a></code></pre></div>
 <p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html">setwd()</a></code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="st">"PG:dbname=postgis"</span>)</a>
@@ -181,13 +180,12 @@
 <p>Alternatively, a user can set the global option <code>stringsAsFactors</code>, and this will have the same effect:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(fname)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6">## dimension:      XY</a>
 <a class="sourceLine" id="cb6-7" data-line-number="7">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a></code></pre></div>
+<a class="sourceLine" id="cb6-8" data-line-number="8">## CRS:            4267</a></code></pre></div>
 </div>
 <div id="using-st_write" class="section level3">
 <h3 class="hasAnchor">
@@ -402,9 +400,8 @@
 <a class="sourceLine" id="cb14-3" data-line-number="3">## geometry type:  LINESTRING</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4">## dimension:      XY</a>
 <a class="sourceLine" id="cb14-5" data-line-number="5">## bbox:           xmin: 0 ymin: 1 xmax: 8 ymax: 9</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">## epsg (SRID):    NA</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">## proj4string:    NA</a>
-<a class="sourceLine" id="cb14-8" data-line-number="8">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</a></code></pre></div>
+<a class="sourceLine" id="cb14-6" data-line-number="6">## CRS:            NA</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</a></code></pre></div>
 </div>
 <div id="conversion-to-and-from-well-known-binary" class="section level3">
 <h3 class="hasAnchor">
@@ -428,10 +425,9 @@
 <a class="sourceLine" id="cb17-4" data-line-number="4">## geometry type:  POINT</a>
 <a class="sourceLine" id="cb17-5" data-line-number="5">## dimension:      XY</a>
 <a class="sourceLine" id="cb17-6" data-line-number="6">## bbox:           xmin: 0 ymin: 1 xmax: 5 ymax: 6</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">## epsg (SRID):    NA</a>
-<a class="sourceLine" id="cb17-8" data-line-number="8">## proj4string:    NA</a>
-<a class="sourceLine" id="cb17-9" data-line-number="9">## POINT (0 1)</a>
-<a class="sourceLine" id="cb17-10" data-line-number="10">## POINT (5 6)</a></code></pre></div>
+<a class="sourceLine" id="cb17-7" data-line-number="7">## CRS:            NA</a>
+<a class="sourceLine" id="cb17-8" data-line-number="8">## POINT (0 1)</a>
+<a class="sourceLine" id="cb17-9" data-line-number="9">## POINT (5 6)</a></code></pre></div>
 </div>
 <div id="conversion-to-and-from-sp" class="section level3">
 <h3 class="hasAnchor">
@@ -447,11 +443,11 @@
 <a class="sourceLine" id="cb18-8" data-line-number="8">##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        </a>
 <a class="sourceLine" id="cb18-9" data-line-number="9">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </a>
 <a class="sourceLine" id="cb18-10" data-line-number="10">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </a>
-<a class="sourceLine" id="cb18-11" data-line-number="11">##  [9] st_as_sfc.psp*                st_as_sfc.raw*               </a>
-<a class="sourceLine" id="cb18-12" data-line-number="12">## [11] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*</a>
-<a class="sourceLine" id="cb18-13" data-line-number="13">## [13] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     </a>
-<a class="sourceLine" id="cb18-14" data-line-number="14">## [15] st_as_sfc.SpatialPolygons*    st_as_sfc.tess*              </a>
-<a class="sourceLine" id="cb18-15" data-line-number="15">## [17] st_as_sfc.WKB*               </a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">## [11] st_as_sfc.raw*                st_as_sfc.SpatialLines*      </a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">## [13] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">## [15] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </a>
+<a class="sourceLine" id="cb18-15" data-line-number="15">## [17] st_as_sfc.tess*               st_as_sfc.WKB*               </a>
 <a class="sourceLine" id="cb18-16" data-line-number="16">## see '?methods' for accessing help and source code</a></code></pre></div>
 <p>An example would be:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sp)</a>

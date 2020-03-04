@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -208,19 +208,16 @@
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 2 ymin: 4 xmax: 4 ymax: 6
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (2 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (4 6)</span></div><div class='input'><span class='no'>sfc</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>3</span>) <span class='co'># first geometry multiplied by 2, second by 3</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (2 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (4 6)</span></div><div class='input'><span class='no'>sfc</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>3</span>) <span class='co'># first geometry multiplied by 2, second by 3</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 2 xmax: 6 ymax: 9
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 2)</span></div><div class='output co'>#&gt; <span class='message'>POINT (6 9)</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>32119</span>) <span class='co'># nc state plane, m</span></div><div class='output co'>#&gt; Reading layer `nc.gpkg' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/gpkg/nc.gpkg' using driver `GPKG'
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 2)</span></div><div class='output co'>#&gt; <span class='message'>POINT (6 9)</span></div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>32119</span>) <span class='co'># nc state plane, m</span></div><div class='output co'>#&gt; Reading layer `nc.gpkg' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/gpkg/nc.gpkg' using driver `GPKG'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>b</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='geos_combine.html'>st_union</a></span>(<span class='no'>nc</span>)), <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fl'>50</span>, <span class='no'>km</span>)) <span class='co'># shoot a hole in nc:</span>
+#&gt; CRS:            4267</div><div class='input'><span class='no'>b</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='geos_combine.html'>st_union</a></span>(<span class='no'>nc</span>)), <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fl'>50</span>, <span class='no'>km</span>)) <span class='co'># shoot a hole in nc:</span>
 <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>) / <span class='no'>b</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>.9</span>))</div><div class='img'><img src='Ops-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

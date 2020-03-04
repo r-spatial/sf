@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -152,7 +152,8 @@
     <p>Convert foreign geometry object to an sfc object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sf_as_sfc.pq_geometry</span>(
+    <pre class="usage"><span class='co'># S3 method for pq_geometry</span>
+<span class='fu'>st_as_sfc</span>(
   <span class='no'>x</span>,
   <span class='no'>...</span>,
   <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -266,24 +267,20 @@ GeoJSON representations of a single geometry for each vector element.</p>
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181072 ymin: 333611 xmax: 181072 ymax: 333611
-#&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='no'>wkb</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"0x01010000204071000000000000801A064100000000AC5C1441"</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"WKB"</span>)
+#&gt; CRS:            EPSG:28992</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='no'>wkb</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"0x01010000204071000000000000801A064100000000AC5C1441"</span>), <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"WKB"</span>)
 <span class='fu'>st_as_sfc</span>(<span class='no'>wkb</span>, <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 181072 ymin: 333611 xmax: 181072 ymax: 333611
-#&gt; epsg (SRID):    28992
-#&gt; proj4string:    +proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.2369,50.0087,465.658,-0.406857,0.350733,-1.87035,4.0812 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='fu'>st_as_sfc</span>(<span class='fu'><a href='st_as_binary.html'>st_as_binary</a></span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>)))<span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; CRS:            EPSG:28992</div><div class='output co'>#&gt; <span class='message'>POINT (181072 333611)</span></div><div class='input'><span class='fu'>st_as_sfc</span>(<span class='fu'><a href='st_as_binary.html'>st_as_binary</a></span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>)))<span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='input'><span class='fu'>st_as_sfc</span>(<span class='st'>"SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)"</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='input'><span class='fu'>st_as_sfc</span>(<span class='st'>"SRID=3978;LINESTRING(1663106 -105415,1664320 -104617)"</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1663106 ymin: -105415 xmax: 1664320 ymax: -104617
-#&gt; epsg (SRID):    3978
-#&gt; proj4string:    +proj=lcc +lat_1=49 +lat_2=77 +lat_0=49 +lon_0=-95 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs</div><div class='output co'>#&gt; <span class='message'>LINESTRING (1663106 -105415, 1664320 -104617)</span></div></pre>
+#&gt; CRS:            EPSG:3978</div><div class='output co'>#&gt; <span class='message'>LINESTRING (1663106 -105415, 1664320 -104617)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

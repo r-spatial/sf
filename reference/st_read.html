@@ -80,7 +80,7 @@ Well-Know Binary geometries to sfc" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -350,13 +350,12 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <div class='dont-index'><p><a href='st_layers.html'>st_layers</a>, <a href='st_drivers.html'>st_drivers</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span></div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
+#&gt; CRS:            4267</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span></div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID            NAME   
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Alamance : 1  
 #&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   Alexander: 1  
 #&gt;  Median :0.1205   Median :1.609   Median :1982   Median :1982   Alleghany: 1  
@@ -391,13 +390,12 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='co'>## only three fields by select clause</span>
 <span class='co'>## only two features by where clause</span>
 <span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
-                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'
+                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.06555 ymin: 34.82742 xmax: -78.49929 ymax: 35.50912
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+#&gt; CRS:            4267</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
   <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
   <span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
   <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
@@ -421,8 +419,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs
+#&gt; CRS:            4267
 #&gt; # A tibble: 4 x 15
 #&gt;    AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74
 #&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
@@ -439,8 +436,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt; CRS:            4326
 #&gt; # A tibble: 1 x 1
 #&gt;                                                         geometry
 #&gt;                                                 &lt;MULTIPOINT [°]&gt;

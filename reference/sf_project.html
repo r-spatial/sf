@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@
     <p>directly transform a set of coordinates</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sf_project</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='no'>pts</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>sf_project</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='no'>pts</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,14 +175,22 @@
 `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 return value; otherwise an error is reported and nothing is returned.</p></td>
     </tr>
+    <tr>
+      <th>warn</th>
+      <td><p>logical; if <code>TRUE</code>, warn when non-finite values are generated</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>two-column numeric matrix with transformed/converted coordinates, returning invalid values as <code>Inf</code></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -275,13 +275,12 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">## Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">## Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb1-6" data-line-number="6">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb1-7" data-line-number="7">## dimension:      XY</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a></code></pre></div>
+<a class="sourceLine" id="cb1-9" data-line-number="9">## CRS:            4267</a></code></pre></div>
 <p>(Note that users will not use <code>system.file</code> but give a <code>filename</code> directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.) The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14 fields (attributes, represented as columns). This object is of class</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(nc)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">## [1] "sf"         "data.frame"</a></code></pre></div>
@@ -346,14 +345,13 @@
 <a class="sourceLine" id="cb7-3" data-line-number="3">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">## dimension:      XY</a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">## First 5 geometries:</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">## MULTIPOLYGON (((-81.23989 36.36536, -81.24069 3...</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11">## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...</a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</a>
-<a class="sourceLine" id="cb7-13" data-line-number="13">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</a></code></pre></div>
+<a class="sourceLine" id="cb7-6" data-line-number="6">## CRS:            4267</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">## First 5 geometries:</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">## MULTIPOLYGON (((-81.23989 36.36536, -81.24069 3...</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</a></code></pre></div>
 <p>Geometries are printed in abbreviated form, but we can can view a complete geometry by selecting it, e.g. the first one by</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">nc_geom[[<span class="dv">1</span>]]</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</a></code></pre></div>
@@ -410,18 +408,24 @@
 <a class="sourceLine" id="cb14-4" data-line-number="4">## </a>
 <a class="sourceLine" id="cb14-5" data-line-number="5">## $crs</a>
 <a class="sourceLine" id="cb14-6" data-line-number="6">## Coordinate Reference System:</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7">##   EPSG: 4267 </a>
-<a class="sourceLine" id="cb14-8" data-line-number="8">##   proj4string: "+proj=longlat +datum=NAD27 +no_defs"</a>
-<a class="sourceLine" id="cb14-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb14-10" data-line-number="10">## $class</a>
-<a class="sourceLine" id="cb14-11" data-line-number="11">## [1] "sfc_MULTIPOLYGON" "sfc"             </a>
-<a class="sourceLine" id="cb14-12" data-line-number="12">## </a>
-<a class="sourceLine" id="cb14-13" data-line-number="13">## $precision</a>
-<a class="sourceLine" id="cb14-14" data-line-number="14">## [1] 0</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">##   User input: 4267 </a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">##   wkt:</a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">## GEOGCS["GCS_North_American_1927",</a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">##     DATUM["North_American_Datum_1927",</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">##         SPHEROID["Clarke_1866",6378206.4,294.9786982]],</a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">##     PRIMEM["Greenwich",0],</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13">##     UNIT["Degree",0.017453292519943295],</a>
+<a class="sourceLine" id="cb14-14" data-line-number="14">##     AUTHORITY["EPSG","4267"]]</a>
 <a class="sourceLine" id="cb14-15" data-line-number="15">## </a>
-<a class="sourceLine" id="cb14-16" data-line-number="16">## $bbox</a>
-<a class="sourceLine" id="cb14-17" data-line-number="17">##      xmin      ymin      xmax      ymax </a>
-<a class="sourceLine" id="cb14-18" data-line-number="18">## -84.32385  33.88199 -75.45698  36.58965</a></code></pre></div>
+<a class="sourceLine" id="cb14-16" data-line-number="16">## $class</a>
+<a class="sourceLine" id="cb14-17" data-line-number="17">## [1] "sfc_MULTIPOLYGON" "sfc"             </a>
+<a class="sourceLine" id="cb14-18" data-line-number="18">## </a>
+<a class="sourceLine" id="cb14-19" data-line-number="19">## $precision</a>
+<a class="sourceLine" id="cb14-20" data-line-number="20">## [1] 0</a>
+<a class="sourceLine" id="cb14-21" data-line-number="21">## </a>
+<a class="sourceLine" id="cb14-22" data-line-number="22">## $bbox</a>
+<a class="sourceLine" id="cb14-23" data-line-number="23">##      xmin      ymin      xmax      ymax </a>
+<a class="sourceLine" id="cb14-24" data-line-number="24">## -84.32385  33.88199 -75.45698  36.58965</a></code></pre></div>
 </div>
 <div id="mixed-geometry-types" class="section level2">
 <h2 class="hasAnchor">
@@ -434,12 +438,11 @@
 <a class="sourceLine" id="cb15-4" data-line-number="4">## geometry type:  GEOMETRYCOLLECTION</a>
 <a class="sourceLine" id="cb15-5" data-line-number="5">## dimension:      XY</a>
 <a class="sourceLine" id="cb15-6" data-line-number="6">## bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 4</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">## epsg (SRID):    NA</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">## proj4string:    NA</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9">## GEOMETRYCOLLECTION (POINT (1 2))</a>
-<a class="sourceLine" id="cb15-10" data-line-number="10">## GEOMETRYCOLLECTION (LINESTRING (1 3, 2 4))</a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(mix)</a>
-<a class="sourceLine" id="cb15-12" data-line-number="12">## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</a></code></pre></div>
+<a class="sourceLine" id="cb15-7" data-line-number="7">## CRS:            NA</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">## GEOMETRYCOLLECTION (POINT (1 2))</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">## GEOMETRYCOLLECTION (LINESTRING (1 3, 2 4))</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(mix)</a>
+<a class="sourceLine" id="cb15-11" data-line-number="11">## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</a></code></pre></div>
 <p>Still, the geometries are here of a single type.</p>
 <p>The second <code>GEOMETRY</code>, indicates that the geometries in the geometry list-column are of varying type:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">(mix &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw"><a href="../reference/st.html">st_point</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>), <span class="kw"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dv">2</span>))))</a>
@@ -447,12 +450,11 @@
 <a class="sourceLine" id="cb16-3" data-line-number="3">## geometry type:  GEOMETRY</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4">## dimension:      XY</a>
 <a class="sourceLine" id="cb16-5" data-line-number="5">## bbox:           xmin: 1 ymin: 2 xmax: 2 ymax: 4</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">## epsg (SRID):    NA</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">## proj4string:    NA</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">## POINT (1 2)</a>
-<a class="sourceLine" id="cb16-9" data-line-number="9">## LINESTRING (1 3, 2 4)</a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(mix)</a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">## [1] "sfc_GEOMETRY" "sfc"</a></code></pre></div>
+<a class="sourceLine" id="cb16-6" data-line-number="6">## CRS:            NA</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">## POINT (1 2)</a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">## LINESTRING (1 3, 2 4)</a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(mix)</a>
+<a class="sourceLine" id="cb16-10" data-line-number="10">## [1] "sfc_GEOMETRY" "sfc"</a></code></pre></div>
 <p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example <a href="#geometrycollection">below</a>.</p>
 </div>
 <div id="sfg-simple-feature-geometry" class="section level2">
@@ -556,13 +558,12 @@
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">filename &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="dt">package=</span><span class="st">"sf"</span>)</a>
 <a class="sourceLine" id="cb23-2" data-line-number="2">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">st_read</a></span>(filename)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">## Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb23-4" data-line-number="4">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb23-5" data-line-number="5">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb23-6" data-line-number="6">## dimension:      XY</a>
 <a class="sourceLine" id="cb23-7" data-line-number="7">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb23-8" data-line-number="8">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb23-9" data-line-number="9">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a></code></pre></div>
+<a class="sourceLine" id="cb23-8" data-line-number="8">## CRS:            4267</a></code></pre></div>
 <p>we can suppress the output by adding argument <code>quiet=TRUE</code> or by using the otherwise nearly identical but more quiet</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">nc &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_read.html">read_sf</a></span>(filename)</a></code></pre></div>
 <p>Writing takes place in the same fashion, using <code>st_write</code>:</p>
@@ -707,30 +708,28 @@
 <a class="sourceLine" id="cb35-12" data-line-number="12">##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        </a>
 <a class="sourceLine" id="cb35-13" data-line-number="13">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </a>
 <a class="sourceLine" id="cb35-14" data-line-number="14">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </a>
-<a class="sourceLine" id="cb35-15" data-line-number="15">##  [9] st_as_sfc.psp*                st_as_sfc.raw*               </a>
-<a class="sourceLine" id="cb35-16" data-line-number="16">## [11] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*</a>
-<a class="sourceLine" id="cb35-17" data-line-number="17">## [13] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     </a>
-<a class="sourceLine" id="cb35-18" data-line-number="18">## [15] st_as_sfc.SpatialPolygons*    st_as_sfc.tess*              </a>
-<a class="sourceLine" id="cb35-19" data-line-number="19">## [17] st_as_sfc.WKB*               </a>
+<a class="sourceLine" id="cb35-15" data-line-number="15">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </a>
+<a class="sourceLine" id="cb35-16" data-line-number="16">## [11] st_as_sfc.raw*                st_as_sfc.SpatialLines*      </a>
+<a class="sourceLine" id="cb35-17" data-line-number="17">## [13] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </a>
+<a class="sourceLine" id="cb35-18" data-line-number="18">## [15] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </a>
+<a class="sourceLine" id="cb35-19" data-line-number="19">## [17] st_as_sfc.tess*               st_as_sfc.WKB*               </a>
 <a class="sourceLine" id="cb35-20" data-line-number="20">## see '?methods' for accessing help and source code</a>
 <a class="sourceLine" id="cb35-21" data-line-number="21"><span class="co"># anticipate that sp::CRS will expand proj4strings:</span></a>
 <a class="sourceLine" id="cb35-22" data-line-number="22">p4s &lt;-<span class="st"> "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span></a>
 <a class="sourceLine" id="cb35-23" data-line-number="23"><span class="kw"><a href="../reference/st_crs.html">st_crs</a></span>(nc) &lt;-<span class="st"> </span>p4s</a>
-<a class="sourceLine" id="cb35-24" data-line-number="24">## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</a>
-<a class="sourceLine" id="cb35-25" data-line-number="25">## that</a>
-<a class="sourceLine" id="cb35-26" data-line-number="26"><span class="co"># anticipate geometry column name changes:</span></a>
-<a class="sourceLine" id="cb35-27" data-line-number="27"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(nc)[<span class="dv">15</span>] =<span class="st"> "geometry"</span></a>
-<a class="sourceLine" id="cb35-28" data-line-number="28"><span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(nc, <span class="st">"sf_column"</span>) =<span class="st"> "geometry"</span></a>
-<a class="sourceLine" id="cb35-29" data-line-number="29">nc.sp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/coerce-methods.html">as</a></span>(nc, <span class="st">"Spatial"</span>)</a>
-<a class="sourceLine" id="cb35-30" data-line-number="30"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(nc.sp)</a>
-<a class="sourceLine" id="cb35-31" data-line-number="31">## [1] "SpatialPolygonsDataFrame"</a>
-<a class="sourceLine" id="cb35-32" data-line-number="32">## attr(,"package")</a>
-<a class="sourceLine" id="cb35-33" data-line-number="33">## [1] "sp"</a>
-<a class="sourceLine" id="cb35-34" data-line-number="34">nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(nc.sp)</a>
-<a class="sourceLine" id="cb35-35" data-line-number="35"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(nc, nc2)</a>
-<a class="sourceLine" id="cb35-36" data-line-number="36">## [1] "Attributes: &lt; Component \"class\": Lengths (4, 2) differ (string compare on first 2) &gt;"                                         </a>
-<a class="sourceLine" id="cb35-37" data-line-number="37">## [2] "Attributes: &lt; Component \"class\": 1 string mismatch &gt;"                                                                         </a>
-<a class="sourceLine" id="cb35-38" data-line-number="38">## [3] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"epsg\": 'is.NA' value mismatch: 1 in current 0 in target &gt;"</a></code></pre></div>
+<a class="sourceLine" id="cb35-24" data-line-number="24"><span class="co"># anticipate geometry column name changes:</span></a>
+<a class="sourceLine" id="cb35-25" data-line-number="25"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(nc)[<span class="dv">15</span>] =<span class="st"> "geometry"</span></a>
+<a class="sourceLine" id="cb35-26" data-line-number="26"><span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(nc, <span class="st">"sf_column"</span>) =<span class="st"> "geometry"</span></a>
+<a class="sourceLine" id="cb35-27" data-line-number="27">nc.sp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/coerce-methods.html">as</a></span>(nc, <span class="st">"Spatial"</span>)</a>
+<a class="sourceLine" id="cb35-28" data-line-number="28"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(nc.sp)</a>
+<a class="sourceLine" id="cb35-29" data-line-number="29">## [1] "SpatialPolygonsDataFrame"</a>
+<a class="sourceLine" id="cb35-30" data-line-number="30">## attr(,"package")</a>
+<a class="sourceLine" id="cb35-31" data-line-number="31">## [1] "sp"</a>
+<a class="sourceLine" id="cb35-32" data-line-number="32">nc2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(nc.sp)</a>
+<a class="sourceLine" id="cb35-33" data-line-number="33"><span class="kw"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(nc, nc2)</a>
+<a class="sourceLine" id="cb35-34" data-line-number="34">## [1] "Attributes: &lt; Component \"class\": Lengths (4, 2) differ (string compare on first 2) &gt;"           </a>
+<a class="sourceLine" id="cb35-35" data-line-number="35">## [2] "Attributes: &lt; Component \"class\": 1 string mismatch &gt;"                                           </a>
+<a class="sourceLine" id="cb35-36" data-line-number="36">## [3] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</a></code></pre></div>
 <p>As the <code>Spatial*</code> objects only support <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code>, <code>LINESTRING</code> and <code>POLYGON</code> geometries are automatically coerced into their <code>MULTI</code> form. When converting <code>Spatial*</code> into <code>sf</code>, if all geometries consist of a single <code>POLYGON</code> (possibly with holes), a <code>POLYGON</code> and otherwise all geometries are returned as <code>MULTIPOLYGON</code>: a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> (such as common in shapefiles) is not created. Argument <code>forceMulti=TRUE</code> will override this, and create <code>MULTIPOLYGON</code>s in all cases. For <code>LINES</code> the situation is identical.</p>
 </div>
 <div id="geometrycollection" class="section level2">
@@ -855,28 +854,27 @@
 <a class="sourceLine" id="cb47-3" data-line-number="3">        <span class="dt">CNTY_ID =</span> <span class="st">"identity"</span>, <span class="dt">NAME =</span> <span class="st">"identity"</span>, <span class="dt">FIPS =</span> <span class="st">"identity"</span>, <span class="dt">FIPSNO =</span> <span class="st">"identity"</span>,</a>
 <a class="sourceLine" id="cb47-4" data-line-number="4">        <span class="dt">CRESS_ID =</span> <span class="st">"identity"</span>, <span class="dt">BIR74 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID74 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR74 =</span> <span class="st">"aggregate"</span>,</a>
 <a class="sourceLine" id="cb47-5" data-line-number="5">        <span class="dt">BIR79 =</span> <span class="st">"aggregate"</span>, <span class="dt">SID79 =</span> <span class="st">"aggregate"</span>, <span class="dt">NWBIR79 =</span> <span class="st">"aggregate"</span>))</a>
-<a class="sourceLine" id="cb47-6" data-line-number="6">## Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">## Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'</a>
 <a class="sourceLine" id="cb47-7" data-line-number="7">## Simple feature collection with 100 features and 14 fields</a>
 <a class="sourceLine" id="cb47-8" data-line-number="8">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</a>
 <a class="sourceLine" id="cb47-9" data-line-number="9">## geometry type:  MULTIPOLYGON</a>
 <a class="sourceLine" id="cb47-10" data-line-number="10">## dimension:      XY</a>
 <a class="sourceLine" id="cb47-11" data-line-number="11">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</a>
-<a class="sourceLine" id="cb47-12" data-line-number="12">## epsg (SRID):    4267</a>
-<a class="sourceLine" id="cb47-13" data-line-number="13">## proj4string:    +proj=longlat +datum=NAD27 +no_defs</a>
-<a class="sourceLine" id="cb47-14" data-line-number="14"><span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(nc)</a>
-<a class="sourceLine" id="cb47-15" data-line-number="15">##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO  CRESS_ID </a>
-<a class="sourceLine" id="cb47-16" data-line-number="16">## aggregate aggregate  identity  identity  identity  identity  identity  identity </a>
-<a class="sourceLine" id="cb47-17" data-line-number="17">##     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 </a>
-<a class="sourceLine" id="cb47-18" data-line-number="18">## aggregate aggregate aggregate aggregate aggregate aggregate </a>
-<a class="sourceLine" id="cb47-19" data-line-number="19">## Levels: constant aggregate identity</a>
-<a class="sourceLine" id="cb47-20" data-line-number="20"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(meuse, <span class="dt">package =</span> <span class="st">"sp"</span>)</a>
-<a class="sourceLine" id="cb47-21" data-line-number="21">meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse, <span class="dt">coords =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="dt">crs =</span> <span class="dv">28992</span>, <span class="dt">agr =</span> <span class="st">"constant"</span>)</a>
-<a class="sourceLine" id="cb47-22" data-line-number="22"><span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(meuse_sf)</a>
-<a class="sourceLine" id="cb47-23" data-line-number="23">##  cadmium   copper     lead     zinc     elev     dist       om    ffreq </a>
-<a class="sourceLine" id="cb47-24" data-line-number="24">## constant constant constant constant constant constant constant constant </a>
-<a class="sourceLine" id="cb47-25" data-line-number="25">##     soil     lime  landuse   dist.m </a>
-<a class="sourceLine" id="cb47-26" data-line-number="26">## constant constant constant constant </a>
-<a class="sourceLine" id="cb47-27" data-line-number="27">## Levels: constant aggregate identity</a></code></pre></div>
+<a class="sourceLine" id="cb47-12" data-line-number="12">## CRS:            4267</a>
+<a class="sourceLine" id="cb47-13" data-line-number="13"><span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(nc)</a>
+<a class="sourceLine" id="cb47-14" data-line-number="14">##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO  CRESS_ID </a>
+<a class="sourceLine" id="cb47-15" data-line-number="15">## aggregate aggregate  identity  identity  identity  identity  identity  identity </a>
+<a class="sourceLine" id="cb47-16" data-line-number="16">##     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 </a>
+<a class="sourceLine" id="cb47-17" data-line-number="17">## aggregate aggregate aggregate aggregate aggregate aggregate </a>
+<a class="sourceLine" id="cb47-18" data-line-number="18">## Levels: constant aggregate identity</a>
+<a class="sourceLine" id="cb47-19" data-line-number="19"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(meuse, <span class="dt">package =</span> <span class="st">"sp"</span>)</a>
+<a class="sourceLine" id="cb47-20" data-line-number="20">meuse_sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(meuse, <span class="dt">coords =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="dt">crs =</span> <span class="dv">28992</span>, <span class="dt">agr =</span> <span class="st">"constant"</span>)</a>
+<a class="sourceLine" id="cb47-21" data-line-number="21"><span class="kw"><a href="../reference/st_agr.html">st_agr</a></span>(meuse_sf)</a>
+<a class="sourceLine" id="cb47-22" data-line-number="22">##  cadmium   copper     lead     zinc     elev     dist       om    ffreq </a>
+<a class="sourceLine" id="cb47-23" data-line-number="23">## constant constant constant constant constant constant constant constant </a>
+<a class="sourceLine" id="cb47-24" data-line-number="24">##     soil     lime  landuse   dist.m </a>
+<a class="sourceLine" id="cb47-25" data-line-number="25">## constant constant constant constant </a>
+<a class="sourceLine" id="cb47-26" data-line-number="26">## Levels: constant aggregate identity</a></code></pre></div>
 <p>When not specified, this field is filled with <code>NA</code> values, but if non-<code>NA</code>, it has one of three possibilities</p>
 <table class="table">
 <colgroup>

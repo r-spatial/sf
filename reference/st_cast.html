@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -242,13 +242,12 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># example(st_read)</span>
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='no'>mpl</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]]
+#&gt; CRS:            4267</div><div class='input'><span class='no'>mpl</span> <span class='kw'>&lt;-</span> <span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]]
 <span class='co'>#st_cast(x) ## error 'argument "to" is missing, with no default'</span>
 <span class='no'>cast_all</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>xg</span>) {
   <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"MULTIPOLYGON"</span>, <span class='st'>"MULTILINESTRING"</span>, <span class='st'>"MULTIPOINT"</span>, <span class='st'>"POLYGON"</span>, <span class='st'>"LINESTRING"</span>, <span class='st'>"POINT"</span>),
@@ -258,8 +257,7 @@
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.33025 ymin: 36.07282 xmax: -75.77316 ymax: 36.55716
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt; First 5 geometries:</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-76.00897 36.3196, -76.01735 ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196), (-76.01735 36....</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((-76.00897 36.3196, -76.01735 36.33773...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (-76.00897 36.3196, -76.01735 36.337...</span></div><div class='input'><span class='co'>## no closing coordinates should remain for multipoint</span>
 <span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/duplicated.html'>duplicated</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/class.html'>unclass</a></span>(<span class='fu'>st_cast</span>(<span class='no'>mpl</span>, <span class='st'>"MULTIPOINT"</span>))))  <span class='co'>## should be FALSE</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'>## number of duplicated coordinates in the linestrings should equal the number of polygon rings </span>
 <span class='co'>## (... in this case, won't always be true)</span>
@@ -272,34 +270,29 @@
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.33025 ymin: 36.07282 xmax: -75.77316 ymax: 36.55716
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt; First 5 geometries:</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-76.00897 36.3196, -76.01735 ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196), (-76.01735 36....</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((-76.00897 36.3196, -76.01735 36.33773...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (-76.00897 36.3196, -76.01735 36.337...</span></div><div class='input'><span class='no'>mpt</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"MULTIPOINT"</span>)
 <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>mpt</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='output co'>#&gt; Geometry set for 6 features 
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.33025 ymin: 36.07282 xmax: -75.77316 ymax: 36.55716
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt; First 5 geometries:</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-76.00897 36.3196, -76.01735 ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196), (-76.01735 36....</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((-76.00897 36.3196, -76.01735 36.33773...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (-76.00897 36.3196, -76.01735 36.337...</span></div><div class='input'><span class='no'>pl</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"POLYGON"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: polygon from first part only</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>pl</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='output co'>#&gt; Geometry set for 6 features 
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.33025 ymin: 36.07282 xmax: -75.79885 ymax: 36.55716
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt; First 5 geometries:</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-76.00897 36.3196, -76.01735 ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196), (-76.01735 36....</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((-76.00897 36.3196, -76.01735 36.33773...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (-76.00897 36.3196, -76.01735 36.337...</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"LINESTRING"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: line from first ring only</span></div><div class='input'><span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'>cast_all</span>(<span class='no'>ls</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='output co'>#&gt; Geometry set for 6 features 
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.33025 ymin: 36.07282 xmax: -75.79885 ymax: 36.55716
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA
+#&gt; CRS:            NA
 #&gt; First 5 geometries:</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-76.00897 36.3196, -76.01735 ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196), (-76.01735 36....</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((-76.00897 36.3196, -76.01735 36.33773...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (-76.00897 36.3196, -76.01735 36.337...</span></div><div class='input'><span class='no'>pt</span> <span class='kw'>&lt;-</span> <span class='fu'>st_cast</span>(<span class='no'>nc</span>$<span class='no'>geometry</span><span class='kw'>[[</span><span class='fl'>4</span>]], <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='input'><span class='co'>## st_sfc(cast_all(pt))  ## Error: cannot create MULTIPOLYGON from POINT </span>
 <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"POINT"</span>, <span class='st'>"MULTIPOINT"</span>), <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'>st_cast</span>(<span class='no'>pt</span>, <span class='no'>x</span>)))</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -76.00897 ymin: 36.3196 xmax: -76.00897 ymax: 36.3196
-#&gt; epsg (SRID):    NA
-#&gt; proj4string:    NA</div><div class='output co'>#&gt; <span class='message'>POINT (-76.00897 36.3196)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196))</span></div><div class='input'><span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>)))
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (-76.00897 36.3196)</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((-76.00897 36.3196))</span></div><div class='input'><span class='no'>s</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipoint</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>)))
 <span class='fu'>st_cast</span>(<span class='no'>s</span>, <span class='st'>"POINT"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: point from first coordinate only</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

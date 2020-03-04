@@ -78,7 +78,7 @@ Set or replace retrieve coordinate reference system from object" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -160,10 +160,10 @@ Set or replace retrieve coordinate reference system from object" />
 st_crs(x, ...)
 
 # S3 method for numeric
-st_crs(x, proj4text = "", valid = TRUE, ...)
+st_crs(x, ...)
 
 # S3 method for character
-st_crs(x, ..., wkt)
+st_crs(x, ...)
 
 # S3 method for sfc
 st_crs(x, ..., parameters = FALSE)
@@ -193,7 +193,12 @@ NA_crs_
 is.na(x)
 
 # S3 method for crs
-$(x, name)</pre>
+$(x, name)
+
+# S3 method for crs
+format(x, ...)
+
+st_axis_order(authority_compliant = logical(0))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,30 +212,21 @@ $(x, name)</pre>
       <td><p>ignored</p></td>
     </tr>
     <tr>
-      <th>proj4text</th>
-      <td><p>character. Must be used in conjunction with <code>valid = FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>valid</th>
-      <td><p>default TRUE. This allows to create crs without checking against
-the local proj4 database. It can be used to synchronize crs with a remote
-database, but avoid it as much as possible.</p></td>
-    </tr>
-    <tr>
-      <th>wkt</th>
-      <td><p>character well-known-text representation of the crs</p></td>
-    </tr>
-    <tr>
       <th>parameters</th>
       <td><p>logical; <code>FALSE</code> by default; if <code>TRUE</code> return a list of coordinate reference system parameters, with named elements <code>SemiMajor</code>, <code>InvFlattening</code>, <code>units_gdal</code>, <code>IsVertical</code>, <code>WktPretty</code>, and <code>Wkt</code></p></td>
     </tr>
     <tr>
       <th>value</th>
-      <td><p>one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements <code>proj4string</code> (character) and/or <code>epsg</code> (integer) with (i) and (ii).</p></td>
+      <td><p>one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class <code>crs</code>.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>element name; <code>epsg</code> or <code>proj4string</code>, or one of <code>proj4strings</code> named components without the <code>+</code>; see examples</p></td>
+      <td><p>element name</p></td>
+    </tr>
+    <tr>
+      <th>authority_compliant</th>
+      <td><p>logical; specify whether axis order should be
+handled compliant to the authority; if omitted, the current value is printed.</p></td>
     </tr>
     </table>
 
@@ -239,22 +235,41 @@ database, but avoid it as much as possible.</p></td>
     <p>An object of class <code>crs</code> of length 2.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If <code>x</code> is numeric, return <code>crs</code> object for SRID <code>x</code>; if <code>x</code> is character, return <code>crs</code> object for proj4string <code>x</code>; if <code>wkt</code> is given, return <code>crs</code> object for well-known-text representation <code>wkt</code>; if <code>x</code> is of class <code>sf</code> or <code>sfc</code>, return its <code>crs</code> object.</p>
-<p>Object of class <code>crs</code>, which is a list with elements <code>epsg</code> (length-1 integer) and
-<code>proj4string</code> (length-1 character).</p>
+    <p>If <code>x</code> is numeric, return <code>crs</code> object for EPSG:<code>x</code>; 
+if <code>x</code> is character, return <code>crs</code> object for <code>x</code>; 
+if <code>x</code> is of class <code>sf</code> or <code>sfc</code>, return its <code>crs</code> object.</p>
+<p>Object of class <code>crs</code>, which is a list with elements <code>input</code> (length-1 character) 
+and <code>wkt</code> (length-1 character).
+Elements may be <code>NA</code> valued; if all elements are <code>NA</code> the CRS is missing valued, and coordinates are
+assumed to relate to an arbitrary Cartesian coordinate system.</p>
+<p><code>st_axis_order</code> returns the (logical) current value, invisibly if it is
+being set.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The *crs functions create, get, set or replace the <code>crs</code> attribute of a simple feature geometry
-list-column. This attribute is of class <code>crs</code>, and is a list consisting of <code>epsg</code> (integer EPSG
-code) and <code>proj4string</code> (character).
-Comparison of two objects of class <code>crs</code> uses the GDAL function 
+    <p>The *crs functions create, get, set or replace the <code>crs</code> attribute 
+of a simple feature geometry list-column. This attribute is of class <code>crs</code>, 
+and is a list consisting of <code>input</code> (user input, e.g. "EPSG:4326" or "WGS84" 
+or a proj4string), and <code>wkt</code>, an automatically generated wkt representation of the crs.</p>
+<p>Comparison of two objects of class <code>crs</code> uses the GDAL function 
 <code>OGRSpatialReference::IsSame</code>.</p>
 <p>In case a coordinate reference system is replaced, no transformation takes
-place and a warning is raised to stress this. EPSG values are either read from proj4strings
-that contain <code>+init=epsg:...</code> or set to 4326 in case the proj4string contains +proj=longlat
-and +datum=WGS84, literally.</p>
-<p>If both <code>epsg</code> and <code>proj4string</code> are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when <code>epsg</code> is not consistent with a proj4string that is already present.</p>
-<p><code>NA_crs_</code> is the <code>crs</code> object with missing values for <code>epsg</code> and <code>proj4string</code>.</p>
+place and a warning is raised to stress this.</p>
+<p><code>NA_crs_</code> is the <code>crs</code> object with missing values for <code>input</code> and <code>wkt</code>.</p>
+<p>the <code>$</code> method for <code>crs</code> objects retrieves named elements
+using the GDAL interface; named elements include
+<code>"SemiMajor"</code>, <code>"SemiMinor"</code>, <code>"InvFlattening"</code>, <code>"IsGeographic"</code>,
+<code>"units_gdal"</code>, <code>"IsVertical"</code>, <code>"WktPretty"</code>, <code>"Wkt"</code>,
+<code>"Name"</code>, <code>"proj4string"</code>, <code>"epsg"</code>, <code>"yx"</code> and
+<code>"ud_unit"</code> (this may be subject to changes in future GDAL versions).</p>
+<p>format.crs returns NA if the crs is missing valued, or else
+the name of a crs if it is different from "unknown", or
+else the user input if it was set, or else its "proj4string" representation;</p>
+<p><code>st_axis_order</code> can be used to get and set the axis order: <code>TRUE</code>
+indicates axes order according to the authority 
+(e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), <code>FALSE</code>
+indicates the usual GIS (display) order (longitude,latitude). This can be useful
+when data are read, or have to be written, with coordinates in authority compliant order.
+The return value is the current state of this (<code>FALSE</code>, by default).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
@@ -264,23 +279,23 @@ and +datum=WGS84, literally.</p>
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
+#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
 <span class='fu'>st_crs</span>(<span class='no'>sfc</span>) <span class='kw'>=</span> <span class='fl'>4326</span>
 <span class='no'>sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
+#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)))
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
 <span class='no'>x</span> <span class='kw'>=</span> <span class='no'>sfc</span> <span class='kw'>%&gt;%</span> <span class='fu'>st_set_crs</span>(<span class='fl'>4326</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fl'>3857</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 111319.5 ymax: 111325.1
-#&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (0 -7.081155e-10)</span></div><div class='output co'>#&gt; <span class='message'>POINT (111319.5 111325.1)</span></div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857"</span>)$<span class='no'>epsg</span></div><div class='output co'>#&gt; [1] 3857</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857"</span>)$<span class='no'>proj4string</span></div><div class='output co'>#&gt; [1] "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs"</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=m"</span>)$<span class='no'>b</span>     <span class='co'># numeric</span></div><div class='output co'>#&gt; [1] 6378137</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=m"</span>)$<span class='no'>units</span> <span class='co'># character</span></div><div class='output co'>#&gt; [1] "m"</div></pre>
+#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>POINT (0 -7.081155e-10)</span></div><div class='output co'>#&gt; <span class='message'>POINT (111319.5 111325.1)</span></div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"EPSG:3857"</span>)$<span class='no'>input</span></div><div class='output co'>#&gt; [1] "EPSG:3857"</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857"</span>)$<span class='no'>proj4string</span></div><div class='output co'>#&gt; [1] "+proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs "</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=m"</span>)$<span class='no'>b</span>     <span class='co'># numeric</span></div><div class='output co'>#&gt; [1] 6378137</div><div class='input'><span class='fu'>st_crs</span>(<span class='st'>"+init=epsg:3857 +units=m"</span>)$<span class='no'>units</span> <span class='co'># character</span></div><div class='output co'>#&gt; [1] "m"</div><div class='input'><span class='no'>pt</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>60</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='co'># st_axis_order() only has effect in GDAL &gt;= 2.5.0:</span>
+<span class='fu'>st_axis_order</span>() <span class='co'># query default: FALSE means interpret pt as (longitude latitude)</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>pt</span>, <span class='fl'>3857</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; <span class='message'>POINT (0 8399738)</span></div><div class='input'>(<span class='no'>old_value</span> <span class='kw'>=</span> <span class='fu'>st_axis_order</span>(<span class='fl'>TRUE</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># now interpret pt as (latitude longitude), as EPSG:4326 prescribes:</span>
+<span class='fu'>st_axis_order</span>() <span class='co'># query current value</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>pt</span>, <span class='fl'>3857</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; <span class='message'>POINT (0 8399738)</span></div><div class='input'><span class='fu'>st_axis_order</span>(<span class='no'>old_value</span>) <span class='co'># set back to old value</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

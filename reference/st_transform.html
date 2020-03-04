@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -155,13 +155,22 @@
     <pre class="usage"><span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>, <span class='kw'>partial</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>use_gdal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_transform</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
+  <span class='no'>...</span>,
+  <span class='kw'>aoi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>),
+  <span class='kw'>pipeline</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>partial</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
+<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
+<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='fu'>st_proj_info</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"proj"</span>)
 
@@ -192,16 +201,25 @@
       <td><p>ignored</p></td>
     </tr>
     <tr>
+      <th>aoi</th>
+      <td><p>area of interest, in degrees: 
+WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
+    </tr>
+    <tr>
+      <th>pipeline</th>
+      <td><p>character; proj4 or WKT coordinate operation, to override the default operation</p></td>
+    </tr>
+    <tr>
+      <th>reverse</th>
+      <td><p>boolean; if <code>TRUE</code>, the inverse operation of the pipeline is applied</p></td>
+    </tr>
+    <tr>
       <th>partial</th>
       <td><p>logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable <code>OGR_ENABLE_PARTIAL_REPROJECTION</code> to <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>check</th>
       <td><p>logical; perform a sanity check on resulting polygons?</p></td>
-    </tr>
-    <tr>
-      <th>use_gdal</th>
-      <td><p>logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use <a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a> of package <code>lwgeom</code> (see Details)</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -220,8 +238,7 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.</p>
-<p><code>st_transform</code> uses GDAL for coordinate transformations; internally, GDAL converts the <code>proj4string</code> into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter <code>+wktext</code> to the <code>proj4string</code> definition may resolve this; see <a href='https://github.com/edzer/sp/issues/42'>https://github.com/edzer/sp/issues/42</a>.</p>
-<p>Some PROJ.4 projections are not supported by GDAL, e.g. <code>"+proj=wintri"</code> because it does not have an inverse projection. Projecting to unsupported projections can be done by <a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a>, part of package lwgeom. Note that the unsupported <code>proj4string</code> cannot be passed as argument to <a href='st_crs.html'>st_crs</a>, but has to be given as character string.</p>
+<p>Projecting to projections not supported by GDAL may be done by <a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a>, part of package lwgeom.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
 <p><code>st_proj_info</code> lists the available projections, ellipses, datums or units supported by the Proj.4 library when <code>type</code> is equal to proj, ellps, datum or units; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>).</p>
 <p>PROJ &gt;= 6 does not provide option <code>type = "datums"</code>. PROJ &lt; 6 does not provide the option <code>type = "prime_meridians"</code>.</p>
@@ -235,27 +252,30 @@
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -30 ymin: 20 xmax: 7 ymax: 52
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='fl'>3857</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='fl'>3857</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
-#&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-3339585 2273031)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-3339585 2273031)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
-#&gt; epsg (SRID):    3857
-#&gt; proj4string:    +proj=merc +lon_0=0 +lat_ts=0 +x_0=0 +y_0=0 +a=6378137 +b=6378137 +nadgrids=@null +units=m +no_defs
+#&gt; CRS:            +init=epsg:3857
 #&gt;   a                     geom
 #&gt; 1 2 POINT (779236.4 6800125)
-#&gt; 2 1 POINT (-3339585 2273031)</div><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpTZUh1f/temp_libpath7fb63e19b234/sf/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; 2 1 POINT (-3339585 2273031)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='fl'>3857</span>, <span class='kw'>aoi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>280</span>,-<span class='fl'>90</span>,<span class='fl'>180</span>,<span class='fl'>90</span>)))</div><div class='output co'>#&gt; Error in CPL_transform(x, crs, aoi, pipeline, reverse) : 
+#&gt;   pipeline or area of interest require GDAL &gt;= 3</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"GDAL"</span>] <span class='kw'>&gt;=</span> <span class='st'>"3.0.0"</span>) {
+  <span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='kw'>pipeline</span> <span class='kw'>=</span>
+          <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>) <span class='co'># reverse axes</span>
+  <span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='kw'>pipeline</span> <span class='kw'>=</span>
+          <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># also reverse axes</span>
+}
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpibbHry/temp_libpath6a0960434301/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; epsg (SRID):    4267
-#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area from long/lat</span></div><div class='output co'>#&gt; 1137394863 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 [US_survey_foot^2]</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>units</span>)</div><div class='output co'>#&gt; <span class='message'>udunits system database from /usr/share/xml/udunits</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='no'>m</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name  ellipse
+#&gt; CRS:            4267</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area from long/lat</span></div><div class='output co'>#&gt; 1137394863 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 [US_survey_foot^2]</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>units</span>)</div><div class='output co'>#&gt; <span class='message'>udunits system database from /usr/share/xml/udunits</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='no'>m</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>st_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name  ellipse
 #&gt; 1          WGS84    WGS84
 #&gt; 2         GGRS87    GRS80
 #&gt; 3          NAD83    GRS80
@@ -291,8 +311,7 @@
 #&gt; geometry type:  MULTILINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -180 ymin: 0 xmax: 180 ymax: 0
-#&gt; epsg (SRID):    4326
-#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>maps</span>)
+#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>maps</span>)
 <span class='no'>wrld</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw pkg'>maps</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(<span class='st'>"world"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
 <span class='no'>wrld_wrap</span> <span class='kw'>&lt;-</span> <span class='fu'>st_wrap_dateline</span>(<span class='no'>wrld</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"WRAPDATELINE=YES"</span>, <span class='st'>"DATELINEOFFSET=180"</span>),
    <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='input'><span class='no'>wrld_moll</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='no'>wrld_wrap</span>, <span class='st'>"+proj=moll"</span>)
