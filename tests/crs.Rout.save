@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,7 +39,8 @@ Coordinate Reference System: NA
 > 
 > from = st_crs(4326)$proj4string
 > to = st_crs(3857)$proj4string
-> (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
+> ret = sf_project(from, to, rbind(c(0,0), c(1,1)))
+> round(ret, 7)
          [,1]     [,2]
 [1,]      0.0      0.0
 [2,] 111319.5 111325.1
@@ -92,4 +93,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.555   0.036   0.582 
+  0.564   0.039   0.595 

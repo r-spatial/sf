@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,20 +39,20 @@ Type 'q()' to quit R.
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
 > units(d.sp) = as_units("km")
-> d.sf - d.sp
+> round(d.sf - d.sp, 7)
 Units: [m]
-         [,1]          [,2]          [,3]          [,4]         [,5]
-[1,] 11.58615  0.000000e+00  2.910383e-11  0.000000e+00 5.820766e-11
-[2,] 11.76865  0.000000e+00  0.000000e+00 -2.910383e-11 0.000000e+00
-[3,] 12.28011  0.000000e+00  0.000000e+00 -1.455192e-11 2.910383e-11
-[4,] 13.02504 -2.910383e-11 -1.455192e-11  0.000000e+00 1.455192e-11
+         [,1] [,2] [,3] [,4] [,5]
+[1,] 11.58615    0    0    0    0
+[2,] 11.76865    0    0    0    0
+[3,] 12.28011    0    0    0    0
+[4,] 13.02504    0    0    0    0
 > 
 > #summary(unclass(d.sf) - d.sp)
 > 
 > st_crs(x) = st_crs(y) = NA
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-> d.sf - d.sp
+> round(d.sf - d.sp, 7)
      [,1] [,2] [,3] [,4] [,5]
 [1,]    0    0    0    0    0
 [2,]    0    0    0    0    0
@@ -68,7 +68,8 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 10
 geographic CRS: WGS 84
 LINESTRING (0 10, 1 0, 2 0, 3 0, 4 0)
-> (d = st_distance(y, y))
+> d = st_distance(y, y)
+> round(d, 7)
 Units: [m]
         [,1]      [,2]      [,3]      [,4]      [,5]
 [1,]       0 1111387.3 1127821.8 1154692.9 1191294.5
@@ -107,4 +108,4 @@ Error in st_line_sample(ls, density = 1/1000) :
 > 
 > proc.time()
    user  system elapsed 
-  0.558   0.048   0.596 
+  0.576   0.048   0.615 
