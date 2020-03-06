@@ -1,6 +1,7 @@
 #include <cpl_port.h>
 #include <gdal.h>
 #include <gdal_priv.h>
+#include <gdal_rat.h>
 #include <ogr_api.h>
 #include <ogr_geometry.h>
 #include <ogr_srs_api.h>
@@ -217,6 +218,25 @@ NumericMatrix get_color_table(GDALColorTable *tbl) {
 	return t;
 }
 
+List get_rat(GDALRasterAttributeTable *tbl) {
+	
+	if (tbl == NULL)
+		return(List::create());
+
+	List t(tbl->GetColumnCount());
+	List names(tbl->GetColumnCount());
+	for (int i = 0; i < tbl->GetColumnCount(); i++) {
+		CharacterVector col(tbl->GetRowCount());
+		for (int j = 0; j < tbl->GetRowCount(); j++)
+			col(j) = tbl->GetValueAsString(j, i);
+		t(i) = col;
+		names(i) = tbl->GetNameOfCol(i);
+	}
+	t.attr("names") = names;
+	t.attr("class") = CharacterVector::create("data.frame");
+	return t;
+}
+
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
 		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
@@ -279,10 +299,12 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	}
 
 	List colorTables(poDataset->GetRasterCount());
+	List attributeTables(poDataset->GetRasterCount());
 	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 		poBand = poDataset->GetRasterBand(i + 1);
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
+		attributeTables(i) = get_rat(poBand->GetDefaultRAT());
 	}
 
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -354,6 +376,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["sub"] = sub,
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
 		_["band_meta"] = get_band_meta_data(poDataset),
+		_["attribute_tables"] = attributeTables,
 		_["color_tables"] = colorTables
 	);
 	if (read_data) {
