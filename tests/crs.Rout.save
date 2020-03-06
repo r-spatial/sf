@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,6 @@ Coordinate Reference System: NA
 > suppressWarnings(st_crs(999999))
 Coordinate Reference System: NA
 > inherits(try(st_crs("error"), silent = TRUE), "try-error")
-proj_create: unrecognized format / unknown name
 [1] TRUE
 > str = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957388243134,0.343987817378283,-1.87740163998045,4.0725 +units=m +no_defs"
 > x <- st_crs(str)
@@ -40,10 +39,18 @@ proj_create: unrecognized format / unknown name
 > 
 > from = st_crs(4326)$proj4string
 > to = st_crs(3857)$proj4string
-> (ret = sf_project(from, to, rbind(c(0,0), c(1,1))))
+> ret = sf_project(from, to, rbind(c(0,0), c(1,1)))
+> round(ret, 7)
          [,1]     [,2]
 [1,]      0.0      0.0
 [2,] 111319.5 111325.1
+> # create Inf points: #1227/#1228
+> suppressWarnings(
++   sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
++ )
+     [,1]      [,2]
+[1,]    0 -53554590
+[2,]   NA        NA
 > sf_project(to, from, ret)
      [,1] [,2]
 [1,]    0    0
@@ -53,14 +60,13 @@ proj_create: unrecognized format / unknown name
 + )
      [,1]      [,2]
 [1,]    0 -53554590
-[2,]  Inf       Inf
+[2,]   NA        NA
 > st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
 Geometry set for 2 features 
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
-epsg (SRID):    3857
-proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs
+projected CRS:  WGS 84 / Pseudo-Mercator
 POINT (0 0)
 POINT (111319.5 111325.1)
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
@@ -87,4 +93,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.594   0.041   0.627 
+  0.564   0.039   0.595 

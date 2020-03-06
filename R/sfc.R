@@ -204,8 +204,23 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat("\n")
 	}
 	# attributes: epsg, proj4string, precision
-	cat(paste0("epsg (SRID):    ", attr(x, "crs")$epsg, "\n"))
-	cat(paste0("proj4string:    ", attr(x, "crs")$proj4string, "\n"))
+	crs = st_crs(x)
+	if (is.na(crs))
+		cat(paste0("CRS:            NA\n"))
+	else {
+		p = crs_parameters(crs)
+		if (p$Name == "unknown") {
+			if (!is.character(crs$input) || is.na(crs$input))
+				cat(paste0("proj4string:    ", crs$proj4string, "\n"))
+			else
+				cat(paste0("CRS:            ", crs$input, "\n"))
+		} else if (p$IsGeographic)
+			cat(paste0("geographic CRS: ", p$Name, "\n"))
+		else
+			cat(paste0("projected CRS:  ", p$Name, "\n"))
+#		if (!is.na(crs$epsg))
+#			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
+	}
 	if (attr(x, "precision") != 0.0) {
 		cat(paste0("precision:      "))
 		if (attr(x, "precision") < 0.0)
@@ -234,7 +249,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 #' @export
 summary.sfc = function(object, ..., maxsum = 7L, maxp4s = 10L) {
 	u = factor(vapply(object, function(x) WKT_name(x, FALSE), ""))
-    epsg = paste0("epsg:", attr(object, "crs")$epsg)
+    epsg = paste0("epsg:", st_crs(object)$epsg)
 	levels(u) = c(levels(u), epsg)
     p4s = attr(object, "crs")$proj4string
 	if (!is.na(p4s)) {
@@ -508,7 +523,13 @@ check_ring_dir = function(x) {
 		pol[revert] = lapply(pol[revert], function(m) m[nrow(m):1,])
 		pol
 	}
-	ret = switch(class(x)[1],
+	cls = if (inherits(x, "sfg"))
+			class(x)[2]
+		else
+			class(x)[1]
+	ret = switch(cls,
+		POLYGON = check_polygon(x),
+		MULTIPOLYGON = ,
 		sfc_POLYGON = lapply(x, check_polygon),
 		sfc_MULTIPOLYGON = lapply(x, function(y) structure(lapply(y, check_polygon), class = class(y))),
 		stop(paste("check_ring_dir: not supported for class", class(x)[1]))

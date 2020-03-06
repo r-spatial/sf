@@ -4,7 +4,7 @@
 \alias{sf_project}
 \title{directly transform a set of coordinates}
 \usage{
-sf_project(from, to, pts, keep = FALSE)
+sf_project(from, to, pts, keep = FALSE, warn = TRUE)
 }
 \arguments{
 \item{from}{character; proj4string of pts}
@@ -16,6 +16,11 @@ sf_project(from, to, pts, keep = FALSE)
 \item{keep}{logical value controlling the handling of unprojectable points. If
 `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 return value; otherwise an error is reported and nothing is returned.}
+
+\item{warn}{logical; if \code{TRUE}, warn when non-finite values are generated}
+}
+\value{
+two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 }
 \description{
 directly transform a set of coordinates

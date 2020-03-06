@@ -121,6 +121,7 @@ str(x)
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 str(nc)
 bb = st_as_sfc(st_bbox(nc))
+format(st_bbox(nc))
 
 st_agr("constant")
 st_agr()

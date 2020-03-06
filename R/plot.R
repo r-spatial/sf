@@ -23,7 +23,7 @@
 #' @param border color of polygon border(s)
 #' @param add logical; add to current plot? Note that when using \code{add=TRUE}, you may have to set \code{reset=FALSE} in the first plot command.
 #' @param type plot type: 'p' for points, 'l' for lines, 'b' for both
-#' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting; see details.
+#' @param reset logical; if \code{FALSE}, keep the plot in a mode that allows adding further map elements; if \code{TRUE} restore original mode after plotting \code{sf} objects with attributes; see details.
 #' @param logz logical; if \code{TRUE}, use log10-scale for the attribute variable. In that case, \code{breaks} and \code{at} need to be given as log10-values; see examples.
 #' @method plot sf
 #' @name plot
@@ -71,6 +71,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	max_plot_missing = missing(max.plot)
 	dots = list(...)
 	col_missing = is.null(dots$col)
+
+	x = swap_axes_if_needed(x)
 
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
@@ -137,8 +139,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 					key.length = key.length, logz = logz, ...)
 		}
 
-	} else { # single map, or dots$add=TRUE:
-		if (!identical(TRUE, dots$add) && reset)
+	} else { # single map, or dots$add == TRUE:
+		if (!isTRUE(dots$add) && reset)
 			layout(matrix(1)) # reset
 		if (ncol(x) == 1) # no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), ...)
@@ -252,12 +254,21 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			localTitle(main, ...)
 		}
 	}
-	if (!isTRUE(dots$add) && reset) { # reset device:
+	if (!isTRUE(dots$add) && reset && ncol(x) > 1) { # reset device:
 		layout(matrix(1))
 		desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
 		par(opar[-desel])
 	}
 }
+
+swap_axes_if_needed = function(x) {
+	crs = st_crs(x)
+	if (st_axis_order() && !is.na(crs) && crs_parameters(crs)$yx)
+		st_transform(x, pipeline = "+proj=pipeline +step +proj=axisswap +order=2,1")
+	else
+		x
+}
+
 
 #' @name plot
 #' @export
@@ -540,6 +551,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 #   min max
 # x
 # y
+
 	bbox = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	# expandBB: 1=below, 2=left, 3=above and 4=right.
 	expBB = function(lim, expand) c(lim[1] - expand[1] * diff(lim), lim[2] + expand[2] * diff(lim))

@@ -97,7 +97,8 @@ st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	cc = x@coords
 	dimnames(cc) = NULL
 	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
-	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
+	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string), 
+		precision = precision))), x)
 }
 
 #' @name st_as_sfc
@@ -111,7 +112,8 @@ st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
 #' @export
 st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 	lst = lapply(x@coords, st_multipoint)
-	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
+	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string),
+		precision = precision))), x)
 }
 
 #' @name st_as_sfc
@@ -122,7 +124,8 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
 	else
 		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
-	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
+	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string),
+		precision = precision))), x)
 }
 
 #' @name st_as_sfc
@@ -138,7 +141,8 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
 	} else
 		lapply(x@polygons, function(y) st_polygon(Polygons2POLYGON(y@Polygons)))
-	handle_bbox(do.call(st_sfc, c(lst, crs = x@proj4string@projargs, precision = precision)), x)
+	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string),
+		precision = precision))), x)
 }
 
 moreThanOneOuterRing = function(PolygonsLst) {
@@ -258,17 +262,14 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 sfc2SpatialPoints = function(from, IDs) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-#	cc = do.call(rbind, from)
-#	row.names(cc) = IDs
-#	sp::SpatialPoints(cc, proj4string = sp::CRS(attr(from, "crs")$proj4string))
-	sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialPoints(do.call(rbind, from), proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialMultiPoints = function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialMultiPoints(lapply(from, unclass), proj4string =
-		sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialMultiPoints(lapply(from, unclass), 
+		proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -280,7 +281,7 @@ sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
 		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
 	for (i in 1:length(from))
 		l[[i]]@ID = IDs[i]
-	sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialLines(l, proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
@@ -304,7 +305,7 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 			comm = c(0, rep(1, length(from[[i]])-1))
 		comment(l[[i]]) = paste(as.character(comm), collapse = " ")
 	}
-	sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+	sp::SpatialPolygons(l, proj4string = as(st_crs(from), "CRS"))
 }
 
 get_comment = function(mp) { # for MULTIPOLYGON
@@ -316,4 +317,20 @@ get_comment = function(mp) { # for MULTIPOLYGON
 		l[[i]][1] = 0
 	}
 	unlist(l)
+}
+
+#' @name as
+#' @rdname coerce-methods
+#' @aliases coerce,crs,CRS-method
+setAs("crs", "CRS", function(from) CRS_from_crs(from))
+CRS_from_crs = function(from) {
+	if (! requireNamespace("sp", quietly = TRUE))
+		stop("package sp required, please install it first")
+	ret = if (is.na(from))
+			sp::CRS(NA_character_)
+		else
+			sp::CRS(from$proj4string)
+	if (!is.null(from$wkt) && !is.na(from$wkt))
+		comment(ret) = from$wkt
+	ret
 }

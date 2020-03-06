@@ -92,10 +92,10 @@ RUN	cd \
 	&& make install
 	
 RUN	cd \
-	&& wget http://download.osgeo.org/geos/geos-3.4.0.tar.bz2 \
-	&& bunzip2  geos-3.4.0.tar.bz2  \
-	&& tar xvf geos-3.4.0.tar  \
-	&& cd geos-3.4.0 \
+	&& wget http://download.osgeo.org/geos/geos-3.6.0.tar.bz2 \
+	&& bunzip2  geos-3.6.0.tar.bz2  \
+	&& tar xvf geos-3.6.0.tar  \
+	&& cd geos-3.6.0 \
 	&& ./configure \
 	&& make \
 	&& make install
@@ -109,7 +109,7 @@ RUN R CMD INSTALL rgdal_*.tar.gz
 
 RUN R -e 'install.packages("devtools", , repos = "https://cran.uni-muenster.de")'
 
-RUN R -e 'devtools::install_github("r-spatial/sf", repos = "https://cran.uni-muenster.de")'
+RUN R -e 'remotes::install_github("r-spatial/sf")'
 
 # no rgdal:
 RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "lwgeom", "maps", "rgeos", "sp", "raster", "spatstat", "tmap", "maptools", "RSQLite", "tibble", "pillar", "rlang", "dplyr", "tidyr", "RPostgres", "tidyselect", "ggplot2", "mapview", "testthat", "knitr", "covr", "microbenchmark", "rmarkdown", "RPostgreSQL", "devtools", "odbc", "pool"), repos = "https://cran.uni-muenster.de")'
@@ -120,6 +120,11 @@ RUN git clone https://github.com/r-spatial/sf.git
 
 RUN	R CMD build sf
 
+RUN apt-get install -y libssl-dev
+RUN R -e 'install.packages(c("covr", "stars"))'
+RUN ls
+RUN (cd sf; git pull)
+RUN R CMD build sf
 RUN	R CMD check --no-manual sf_*.tar.gz
 
 CMD ["/bin/bash"]

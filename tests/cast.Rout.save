@@ -25,8 +25,7 @@ Geometry set for 2 features
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0 2, 1 3)
 LINESTRING (10 13, 11 14, 12 15)
 > st_cast(ls, "MULTIPOINT")
@@ -34,8 +33,7 @@ Geometry set for 2 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTIPOINT ((0 2), (1 3))
 MULTIPOINT ((10 13), (11 14), (12 15))
 > 
@@ -48,8 +46,7 @@ Geometry set for 2 features
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5...
 POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))
 > st_cast(pol, "MULTILINESTRING")
@@ -57,8 +54,7 @@ Geometry set for 2 features
 geometry type:  MULTILINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTILINESTRING ((0 0, 10 0, 10 10, 0 10, 0 0),...
 MULTILINESTRING ((0 0, 1 0, 1 1, 0 1, 0 0))
 > 
@@ -69,8 +65,7 @@ Geometry set for 5 features
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 POINT (0 2)
 POINT (1 3)
 POINT (10 13)
@@ -83,8 +78,7 @@ Geometry set for 5 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTIPOINT ((0 2))
 MULTIPOINT ((1 3))
 MULTIPOINT ((10 13))
@@ -95,8 +89,7 @@ Geometry set for 5 features
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0 2)
 LINESTRING (1 3)
 LINESTRING (10 13)
@@ -108,8 +101,7 @@ Geometry set for 5 features
 geometry type:  MULTILINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 2 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTILINESTRING ((0 2))
 MULTILINESTRING ((1 3))
 MULTILINESTRING ((10 13))
@@ -122,8 +114,7 @@ Geometry set for 3 features
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0 0, 10 0, 10 10, 0 10)
 LINESTRING (5 5, 5 6, 6 6, 6 5)
 LINESTRING (0 0, 1 0, 1 1, 0 1)
@@ -133,8 +124,7 @@ Geometry set for 4 features
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTILINESTRING ((0 0, 10 0, 10 10, 0 10), (5 5...
 MULTILINESTRING ((0 0, 1 0, 1 1, 0 1))
 LINESTRING (0 2, 1 3)
@@ -144,8 +134,7 @@ Geometry set for 4 features
 geometry type:  MULTILINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTILINESTRING ((0 0, 10 0, 10 10, 0 10), (5 5...
 MULTILINESTRING ((0 0, 1 0, 1 1, 0 1))
 MULTILINESTRING ((0 2, 1 3))
@@ -156,8 +145,7 @@ Geometry set for 5 features
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 12 ymax: 15
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0 0, 10 0, 10 10, 0 10)
 LINESTRING (5 5, 5 6, 6 6, 6 5)
 LINESTRING (0 0, 1 0, 1 1, 0 1)
@@ -176,8 +164,7 @@ Geometry set for 12 features
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT (0 0)
 POINT (10 0)
@@ -189,8 +176,7 @@ Geometry set for 3 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 10 ymax: 10
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTIPOINT ((0 0), (10 0), (10 10), (0 10))
 MULTIPOINT ((5 5), (5 6), (6 6), (6 5))
 MULTIPOINT ((0 0), (1 0), (1 1), (0 1))
@@ -251,4 +237,4 @@ POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > 
 > proc.time()
    user  system elapsed 
-  0.361   0.039   0.394 
+  0.358   0.052   0.400 

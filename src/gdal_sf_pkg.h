@@ -2,7 +2,7 @@
 Rcpp::CharacterVector p4s_from_spatial_reference(OGRSpatialReference *ref);
 Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *>, bool destroy);
 std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sref);
-Rcpp::List get_crs(OGRSpatialReference *ref);
+Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input = true);
 #endif
 
 void handle_error(OGRErr err);

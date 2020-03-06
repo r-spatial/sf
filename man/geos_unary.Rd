@@ -23,7 +23,8 @@ st_buffer(
   nQuadSegs = 30,
   endCapStyle = "ROUND",
   joinStyle = "ROUND",
-  mitreLimit = 1
+  mitreLimit = 1,
+  singleSide = FALSE
 )
 
 st_boundary(x)
@@ -64,6 +65,9 @@ st_segmentize(x, dfMaxLength, ...)
 \item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'}
 
 \item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
+
+\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
 
 \item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.}
 

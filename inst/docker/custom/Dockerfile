@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/  " >> /etc/apt/sources.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -87,7 +87,16 @@ RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 	PROJ_DATA=/opt/proj/share/proj \
 	GDAL_DATA=/opt/gdal/share/gdal/ \
-	R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
+	R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config \
+		--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
+		--with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 	&& LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
+
+RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
+RUN R CMD build --no-build-vignettes lwgeom
+#RUN	R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
+#		--with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+
+PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
 CMD ["/bin/bash"]
