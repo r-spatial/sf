@@ -523,7 +523,13 @@ check_ring_dir = function(x) {
 		pol[revert] = lapply(pol[revert], function(m) m[nrow(m):1,])
 		pol
 	}
-	ret = switch(class(x)[1],
+	cls = if (inherits(x, "sfg"))
+			class(x)[2]
+		else
+			class(x)[1]
+	ret = switch(cls,
+		POLYGON = check_polygon(x),
+		MULTIPOLYGON = ,
 		sfc_POLYGON = lapply(x, check_polygon),
 		sfc_MULTIPOLYGON = lapply(x, function(y) structure(lapply(y, check_polygon), class = class(y))),
 		stop(paste("check_ring_dir: not supported for class", class(x)[1]))

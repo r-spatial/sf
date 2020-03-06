@@ -136,34 +136,42 @@ as.ppp.sf = function(X) {
 		spatstat::setmarks(pp, X[1])
 }
 
-as.owin.POLYGON = function(W, ..., fatal, check_polygons = FALSE) {
+as.owin.POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 	if (isTRUE(st_is_longlat(W)))
 		stop("Only projected coordinates may be converted to spatstat class objects")
 	if (!requireNamespace("spatstat", quietly = TRUE))
 		stop("package spatstat required: install first?")
+	if (check_polygons)
+		W = check_ring_dir(W)
 	bb = st_bbox(W)
 	spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], poly = W)
 }
 
-as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = FALSE) {
+as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 	if (!requireNamespace("spatstat", quietly = TRUE))
 		stop("package spatstat required: install first?")
+	if (check_polygons)
+		W = check_ring_dir(W)
 	bb = st_bbox(W)
 	spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], 
 		poly = unlist(W, recursive = FALSE))
 }
 
-as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = FALSE) {
+as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 	if (isTRUE(st_is_longlat(W)))
 		stop("Only projected coordinates may be converted to spatstat class objects")
-	W = check_ring_dir(W)
-	as.owin.MULTIPOLYGON(W) # I know, this looks wrong, but isn't: sfc_POLYGON is a logically a MULTIPOLYGON
+	if (check_polygons)
+		W = check_ring_dir(W)
+	as.owin.MULTIPOLYGON(W, check_polygons = FALSE)
+	# I know, this looks wrong, but isn't: sfc_POLYGON is a logically a MULTIPOLYGON
 }
 
-as.owin.sfc_MULTIPOLYGON = function(W, ..., fatal, check_polygons = FALSE) {
+as.owin.sfc_MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 	if (isTRUE(st_is_longlat(W)))
 		stop("Only projected coordinates may be converted to spatstat class objects")
-	as.owin.sfc_POLYGON(st_cast(W, "POLYGON"))
+	if (check_polygons)
+		W = check_ring_dir(W)
+	as.owin.sfc_POLYGON(st_cast(W, "POLYGON"), check_polygons = FALSE)
 }
 
 as.owin.sfc = function(W, ...) {
