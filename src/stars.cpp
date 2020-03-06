@@ -226,13 +226,38 @@ List get_rat(GDALRasterAttributeTable *tbl) {
 	List t(tbl->GetColumnCount());
 	List names(tbl->GetColumnCount());
 	for (int i = 0; i < tbl->GetColumnCount(); i++) {
-		CharacterVector col(tbl->GetRowCount());
-		for (int j = 0; j < tbl->GetRowCount(); j++)
-			col(j) = tbl->GetValueAsString(j, i);
-		t(i) = col;
+		switch (tbl->GetTypeOfCol(i)) {
+			case GFT_Integer: {
+					IntegerVector col(tbl->GetRowCount());
+					for (int j = 0; j < tbl->GetRowCount(); j++)
+						col(j) = tbl->GetValueAsInt(j, i);
+					t(i) = col;
+				}
+				break;
+			case GFT_Real: {
+					NumericVector col(tbl->GetRowCount());
+					for (int j = 0; j < tbl->GetRowCount(); j++)
+						col(j) = tbl->GetValueAsDouble(j, i);
+					t(i) = col;
+				}
+				break;
+			case GFT_String: {
+					CharacterVector col(tbl->GetRowCount());
+					for (int j = 0; j < tbl->GetRowCount(); j++)
+						col(j) = tbl->GetValueAsString(j, i);
+					t(i) = col;
+				}
+				break;
+			default:
+				stop("unknown column type in raster attribute table");
+		}
 		names(i) = tbl->GetNameOfCol(i);
 	}
+	IntegerVector row_names(tbl->GetRowCount());
+	for (int i = 0; i < tbl->GetRowCount(); i++)
+		row_names(i) = i+1;
 	t.attr("names") = names;
+	t.attr("row.names") = row_names;
 	t.attr("class") = CharacterVector::create("data.frame");
 	return t;
 }
