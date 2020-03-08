@@ -1,5 +1,7 @@
 # version 0.9-0
 
+* `st_write` now uses `append` rather than `update`, and fails if a layer already exists and `append` has not been set to `TRUE` (append) or `FALSE` (overwrite) #1266
+
 * write `stars` rasters with wkt info, rather than proj4strings
 
 * when GEOS >= 3.8.0, `st_make_valid` is provided by `sf` rather than by `lwgeom` #989
