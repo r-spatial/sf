@@ -150,13 +150,13 @@ attribute(s):
  NA's   :30904  
 dimension(s):
   from  to   offset      delta refsys point values    
-x    1 461 -84.3239  0.0192484     NA FALSE   NULL [x]
-y    1 141  36.5896 -0.0192484     NA FALSE   NULL [y]
+x    1 461 -84.3239  0.0192484  NAD27 FALSE   NULL [x]
+y    1 141  36.5896 -0.0192484  NAD27 FALSE   NULL [y]
 Simple feature collection with 34097 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.87563 xmax: -75.45034 ymax: 36.58965
-CRS:            NA
+geographic CRS: NAD27
 First 10 features:
     AREA                       geometry
 1  0.114 POLYGON ((-81.66757 36.5896...
@@ -173,7 +173,7 @@ Simple feature collection with 34097 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.87563 xmax: -75.45034 ymax: 36.58965
-CRS:            NA
+geographic CRS: NAD27
 First 10 features:
     AREA                       geometry
 1  0.114 POLYGON ((-81.66757 36.5896...
@@ -190,7 +190,7 @@ Simple feature collection with 34097 features and 1 field
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: -84.31423 ymin: 33.88525 xmax: -75.45997 ymax: 36.58003
-CRS:            NA
+geographic CRS: NAD27
 First 10 features:
     AREA                   geometry
 1  0.114 POINT (-81.65795 36.58003)
@@ -218,6 +218,26 @@ First 10 features:
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
+> # https://github.com/mtennekes/tmap/issues/368
+> lc = system.file('tif/lc.tif', package = 'stars')
+> r = read_stars(lc, RAT = "Land Cover Class")
+> (r = droplevels(r))
+stars object with 2 dimensions and 1 attribute
+attribute(s):
+                        lc.tif     
+                            :2615  
+ Evergreen Forest           : 456  
+ Herbaceuous                : 270  
+ Open Water                 : 252  
+ Developed, Low Intensity   :  81  
+ Developed, Medium Intensity:  48  
+ (Other)                    : 142  
+dimension(s):
+  from to  offset delta                    refsys point values    
+x    1 84 3092415  3000 Albers Conical Equal Area FALSE   NULL [x]
+y    1 46   59415 -3000 Albers Conical Equal Area FALSE   NULL [y]
+> plot(r, key.pos = 4, key.width = lcm(5))
+> 
 > proc.time()
    user  system elapsed 
-  0.920   0.071   0.983 
+  1.167   0.051   1.207 

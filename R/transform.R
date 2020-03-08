@@ -217,5 +217,11 @@ st_to_s2 = function(x) {
 sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
 	if (!is.logical(keep) || 1 != length(keep))
 		stop("'keep' must be single-length logical value")
+	v = CPL_proj_is_valid(from)
+	if (!v[[1]])
+		stop(paste0(v[[2]], ": ", from))
+	v = CPL_proj_is_valid(to)
+	if (!v[[1]])
+		stop(paste0(v[[2]], ": ", to))
 	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn)
 }

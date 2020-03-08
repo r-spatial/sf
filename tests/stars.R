@@ -67,3 +67,9 @@ crs <- gdal_crs(tif)
 
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
+
+# https://github.com/mtennekes/tmap/issues/368
+lc = system.file('tif/lc.tif', package = 'stars')
+r = read_stars(lc, RAT = "Land Cover Class")
+(r = droplevels(r))
+plot(r, key.pos = 4, key.width = lcm(5))

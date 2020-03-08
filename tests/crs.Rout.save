@@ -91,6 +91,10 @@ POINT (111319.5 111325.1)
 > st_area(st_transform(d, 2314))
 349124497 [m^2]
 > 
+> st_axis_order()
+[1] FALSE
+> st_axis_order(FALSE)
+> 
 > proc.time()
    user  system elapsed 
-  0.564   0.039   0.595 
+  0.702   0.051   0.744 
