@@ -43,12 +43,26 @@ test_that("delete and update work (#304)", {
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
   expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
-  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Deleting source")
-  expect_error(st_write(x, gpkg, update = FALSE, quiet = TRUE), "Dataset already exists")
-  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
-  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' failed")
+  expect_warning(st_write(x, gpkg, update = NA, quiet = TRUE), "deprecated")
+  expect_silent(write_sf(x, gpkg, layer = "foo", delete_layer = TRUE))
   expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
-  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Updating layer `foo' to data source")
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo'")
+  expect_silent(st_write(x, gpkg, "bar", quiet = TRUE))
+  expect_error(st_write(x, gpkg, "bar", quiet = TRUE), "Dataset already exists")
+  i = which(st_layers(gpkg)$name == "bar")
+  expect_true(st_layers(gpkg)$features[i] == 2)
+  expect_silent(st_write(x, gpkg, "bar", append = FALSE, quiet = TRUE))
+  expect_true(st_layers(gpkg)$features[i] == 2)
+  expect_silent(st_write(x, gpkg, "bar", append = TRUE, quiet = TRUE))
+  expect_true(st_layers(gpkg)$features[i] == 4)
+  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
+  expect_error(st_write(x, gpkg, quiet = TRUE), "Dataset already exists")
+  expect_silent(st_write(x, gpkg, append = FALSE, quiet = TRUE))
+  expect_silent(st_write(x, gpkg, append = TRUE, quiet = TRUE))
+  expect_silent(write_sf(x, gpkg, layer = "foo", delete_layer = TRUE))
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo'")
+
   expect_warning(
   	expect_error(st_write(x, gpkg, layer = ".", quiet = TRUE),
   				 "Write error"),
@@ -101,7 +115,7 @@ test_that("FID feature ID gets written and read", {
   	expect_equal(nc$f_id, nc2$f_id)
 })
 
-test_that("update errors work", {
+test_that("append errors work", {
   skip_if_not(Sys.getenv("USER") %in% c("edzer", "travis"))
 
   # update to non-writable, non-existing file:
@@ -115,9 +129,9 @@ test_that("update errors work", {
   st_write(x, f, update = FALSE)
   system(paste("chmod -w", f))
   expect_error(
-  expect_message(st_write(x, f, update = TRUE),
-    "cannot be updated: do you have write permission?"),
-    "Existing dataset cannot be updated.")
+  expect_message(st_write(x, f, append = TRUE),
+    "cannot append to do you have write permission?"),
+    "Cannot append to existing dataset.")
   
   system(paste("chmod +w", f))
 })

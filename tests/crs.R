@@ -47,3 +47,6 @@ g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.7765
 d = st_as_sf(data.frame(id=1, geometry=g), crs=4326)
 st_area(d)
 st_area(st_transform(d, 2314))
+
+st_axis_order()
+st_axis_order(FALSE)

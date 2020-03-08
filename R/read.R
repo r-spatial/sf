@@ -318,12 +318,9 @@ abbreviate_shapefile_names = function(x) {
 #' @param quiet logical; suppress info on name, driver, size and spatial reference
 #' @param factorsAsCharacter logical; convert \code{factor} objects into 
 #' character strings (default), else into numbers by \code{as.numeric}.
-#' @param update logical; \code{FALSE} by default for single-layer drivers but 
-#' \code{TRUE} by default for database drivers as defined by \code{db_drivers}.
-#' For database-type drivers (e.g. GPKG) \code{TRUE} values will make 
-#' \code{GDAL} try to update (append to) the existing data source, e.g. adding
-#' a table to an existing database, or adding records to a layer. See also the
-#' next two arguments and Details.
+#' @param append logical; should we append to an existing layer, or replace it?
+#' if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
+#' raise an error if the layer exists. See also next two arguments.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting 
 #' to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to
@@ -379,9 +376,16 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		update = driver %in% db_drivers, delete_dsn = FALSE, delete_layer = FALSE,
+		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && append == FALSE, 
 		fid_column_name = NULL) {
 
+	if (!is.null(list(...)$update)) {
+		.Deprecated("append", old = "update") # deprecated at 0.9-0
+		if (is.na(append))
+			append = list(...)$update
+	}
+	else if (length(list(...)))
+		stop(paste("unrecognized argument(s)", names(list(...)), "\n"))
 	if (missing(dsn))
 		stop("dsn should specify a data source or filename")
 	if (inherits(dsn, c("DBIObject", "PostgreSQLConnection", "Pool"))) {
@@ -400,8 +404,9 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}
 
-	if (length(list(...)))
-		stop(paste("unrecognized argument(s)", names(list(...)), "\n"))
+	if (!is.na(append) && append == FALSE && delete_layer == FALSE)
+		stop("cannot replace a layer if delete_layer is FALSE")
+
 	if (is.null(layer))
 		layer <- file_path_sans_ext(basename(dsn))
 
@@ -438,16 +443,16 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, fids, quiet, update, delete_dsn, delete_layer)
+		geom, dim, fids, quiet, append, delete_dsn, delete_layer)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, fids, quiet, update, delete_dsn, delete_layer) == 1)
+				geom, dim, fids, quiet, append, delete_dsn, delete_layer) == 1)
 			stop(paste("failed writing to temporary file", tmp))
-		if (!file.copy(tmp, dsn, overwrite = update || delete_dsn || delete_layer))
+		if (!file.copy(tmp, dsn, overwrite = append || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))
 		if (!file.remove(tmp))
 			warning(paste("removing", tmp, "failed"))
@@ -463,8 +468,8 @@ st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
 
 #' @name st_write
 #' @export
-write_sf <- function(..., quiet = TRUE, delete_layer = TRUE) {
-	st_write(..., quiet = quiet, delete_layer = delete_layer)
+write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = TRUE) {
+	st_write(..., quiet = quiet, append = append, delete_layer = TRUE)
 }
 
 #' Get GDAL drivers

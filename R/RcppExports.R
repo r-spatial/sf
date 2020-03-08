@@ -17,10 +17,6 @@ CPL_gdal_version <- function(what = "RELEASE_NAME") {
     .Call('_sf_CPL_gdal_version', PACKAGE = 'sf', what)
 }
 
-CPL_wkt_from_user_input <- function(input) {
-    .Call('_sf_CPL_wkt_from_user_input', PACKAGE = 'sf', input)
-}
-
 CPL_crs_parameters <- function(crs) {
     .Call('_sf_CPL_crs_parameters', PACKAGE = 'sf', crs)
 }
@@ -145,8 +141,8 @@ CPL_gdal_warper <- function(infile, outfile, options, oo, doo) {
     .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo)
 }
 
-CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet = FALSE, update = FALSE, delete_dsn = FALSE, delete_layer = FALSE) {
-    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, update, delete_dsn, delete_layer)
+CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, append, delete_dsn = FALSE, delete_layer = FALSE) {
+    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, append, delete_dsn, delete_layer)
 }
 
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", prepared = FALSE) {

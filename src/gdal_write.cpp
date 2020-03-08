@@ -152,8 +152,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
-	bool quiet = false, bool update = false,
-	bool delete_dsn = false, bool delete_layer = false) {
+	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false) {
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
@@ -209,17 +208,17 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		GDALClose(poDS);
 	}
 	
-	// update ds:
-	if (update) { 
+	// append to ds:
+	if (append[0] == TRUE) { // and not NA_LOGICAL:
 		poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
 				drivers.data(), options.data(), NULL);
 		if (poDS == NULL) {
 			if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
 						options.data(), NULL)) != NULL) { // exists read-only:
 				GDALClose(poDS);
-				Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-					" cannot be updated: do you have write permission?" << std::endl;
-				Rcpp::stop("Existing dataset cannot be updated.\n");
+				Rcpp::Rcout << "Cannot append to " <<  dsn[0] << 
+					": do you have write permission?" << std::endl;
+				Rcpp::stop("Cannot append to existing dataset.\n");
 			} else { // doesn't exist: create
 				if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
 					Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
@@ -230,22 +229,27 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		if (! quiet)
 			Rcpp::Rcout << "Updating layer `" << layer[0] << "' to data source `" << dsn[0] <<
 			"' using driver `" << driver[0] << "'" << std::endl;
-	} else { // create new ds: 
-		// error when it already exists:
-		if ((poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, 
-					options.data(), NULL)) != NULL) {
+	} else { // add to existing ds or create new ds: 
+		// when append == NA, raise error when it already exists:
+		if (!delete_dsn && !delete_layer && append[0] == NA_LOGICAL && 
+				(poDS = (GDALDataset *) GDALOpenEx(dsn[0], 
+					GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, options.data(), NULL)) != NULL &&
+				poDS->GetLayerByName(layer[0]) != NULL) {
 			GDALClose(poDS);
-			Rcpp::Rcout << "Dataset " <<  dsn[0] << 
-				" already exists: remove first, use update=TRUE to append," << std::endl <<  
-				"delete_layer=TRUE to delete layer, or delete_dsn=TRUE " <<
-				"to remove the entire data source before writing." << std::endl;
+			Rcpp::Rcout << "Layer " << layer[0] << " in dataset " <<  dsn[0] << " already exists:\n" <<
+				"use either append=TRUE to append to layer or append=FALSE to overwrite layer" << std::endl;
 			Rcpp::stop("Dataset already exists.\n");
 		}
-		// create:
-		if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
-			Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
-			Rcpp::stop("Creation failed.\n");
-		} else if (! quiet)
+
+		if (delete_dsn || (poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, 
+				drivers.data(), options.data(), NULL)) == NULL) {
+			// if dsn does not exist, then create:
+			if ((poDS = poDriver->Create(dsn[0], 0, 0, 0, GDT_Unknown, options.data())) == NULL) {
+				Rcpp::Rcout << "Creating dataset " <<  dsn[0] << " failed." << std::endl;
+				Rcpp::stop("Creation failed.\n");
+			}
+		}
+		if (! quiet)
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
 				"' using driver `" << driver[0] << "'" << std::endl;
 	}

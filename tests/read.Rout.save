@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -154,17 +154,34 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > if (Sys.getenv("USER") == "travis") {
 + 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
 + 	st_write(x, "xxx.gpkg")
-+ 	st_write(x, "xxx.gpkg", quiet = FALSE) # appends to layer
++ 	st_write(x, "xxx.gpkg", append = TRUE, quiet = FALSE) # appends to layer
 + 	y <- st_sf(b = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
 + 	try(st_write(y, "xxx.gpkg"))
 + }
+Creating dataset /x failed.
+Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
+  Creation failed.
+
+In addition: Warning message:
+In CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  :
+  GDAL Error 1: Failed to create directory /x for shapefile datastore.
+Writing layer `xxx' to data source `xxx.gpkg' using driver `GPKG'
+Writing 2 features with 1 fields and geometry type Unknown (any).
+Updating layer `xxx' to data source `xxx.gpkg' using driver `GPKG'
+Updating existing layer xxx
+Writing 2 features with 1 fields and geometry type Unknown (any).
+Layer xxx in dataset xxx.gpkg already exists:
+use either append=TRUE to append to layer or append=FALSE to overwrite layer
+Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
+  Dataset already exists.
+
 > 
 > geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
 > st_write(geom, "geom.gpkg")
-Updating layer `geom' to data source `geom.gpkg' using driver `GPKG'
+Writing layer `geom' to data source `geom.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > st_write(geom, "geom1.gpkg", layer = "foo")
-Updating layer `foo' to data source `geom1.gpkg' using driver `GPKG'
+Writing layer `foo' to data source `geom1.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > 
 > df <- data.frame(
@@ -340,7 +357,7 @@ First 3 features:
 + 	tst2 = st_read("tst__.gpkg")
 + 	print(identical(tst$bool, tst2$bool))
 + }
-Updating layer `tst__' to data source `tst__.gpkg' using driver `GPKG'
+Writing layer `tst__' to data source `tst__.gpkg' using driver `GPKG'
 Writing 100 features with 15 fields and geometry type Multi Polygon.
 Reading layer `tst__' from data source `/home/edzer/git/sf.Rcheck/tests/tst__.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 15 fields
@@ -366,4 +383,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.142   0.043   1.175 
+  1.164   0.075   1.277 

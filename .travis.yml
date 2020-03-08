@@ -2,8 +2,8 @@ language: r
 
 r:
   - release
+  - oldrel # breaks on sf_0.7-2 not available
   - devel
-#  - oldrel # breaks on sf_0.7-2 not available
 
 deploy.skip_cleanup: true
 
@@ -16,12 +16,13 @@ cache:
 
 latex: false
 
-#r_github_packages:
+r_github_packages:
+  - r-spatial/stars
+
 #  - r-dbi/DBI
 #  - r-dbi/RPostgres
 #  - r-lib/covr
 #  - r-spatial/lwgeom
-#  - r-spatial/stars
 
 addons:
   postgresql: "9.6"

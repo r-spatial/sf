@@ -125,13 +125,12 @@ Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs)
 	OGRErr err = srs->exportToPrettyWkt(&cp);
 #endif
 	if (err != OGRERR_NONE)
-		Rcpp::stop("OGR error: cannot export to WKT");
+		Rcpp::stop("OGR error: cannot export to WKT"); // #nocov
 	Rcpp::CharacterVector out(cp);
 	CPLFree(cp);
 	return out;
 }
 
-// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input) {
 	OGRSpatialReference *srs = new OGRSpatialReference;
 	srs = handle_axis_order(srs);
@@ -143,7 +142,7 @@ Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input) {
 
 Rcpp::List fix_old_style(Rcpp::List crs) {
 	Rcpp::CharacterVector n = crs.attr("names");
-	if (n[0] == "epsg") { // create new:
+	if (n[0] == "epsg") { // create new: // #nocov start
 		Rcpp::List ret(2);
 		Rcpp::CharacterVector proj4string = crs[1];
 		ret[0] = proj4string[0];
@@ -153,7 +152,7 @@ Rcpp::List fix_old_style(Rcpp::List crs) {
 		names(1) = "wkt";
 		ret.attr("names") = names;
 		ret.attr("class") = "crs";
-		return ret;
+		return ret; // #nocov end
 	} else
 		return crs;
 }
@@ -181,7 +180,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
 	OGRSpatialReference *srs = OGRSrs_from_crs(crs);
 	if (srs == NULL)
-		Rcpp::stop("crs not found");
+		Rcpp::stop("crs not found"); // #nocov
 
 	Rcpp::List out(12);
 	Rcpp::CharacterVector names(12);
@@ -237,7 +236,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(9) = Rcpp::CharacterVector::create(cp);
 		CPLFree(cp);
 	} else
-		out(9) = Rcpp::CharacterVector::create(NA_STRING);
+		out(9) = Rcpp::CharacterVector::create(NA_STRING); // #nocov
 	names(9) = "proj4string";
 	
 	// epsg
@@ -273,7 +272,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 
 	OGRSpatialReference *srs1 = OGRSrs_from_crs(crs1);
 	OGRSpatialReference *srs2 = OGRSrs_from_crs(crs2);
-	if (srs1 == NULL && srs2 == NULL)
+	if (srs1 == NULL && srs2 == NULL) // #nocov start
 		return Rcpp::LogicalVector::create(true);
 	if (srs1 == NULL) {
 		delete srs2;
@@ -282,7 +281,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 	if (srs2 == NULL) {
 		delete srs1;
 		return Rcpp::LogicalVector::create(false);
-	}
+	} // #nocov end
 	bool b = (bool) srs1->IsSame(srs2);
 	delete srs1;
 	delete srs2;
@@ -477,7 +476,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	// import crs:
 	OGRSpatialReference *dest = OGRSrs_from_crs(crs);
 	if (dest == NULL)
-		Rcpp::stop("crs not found: is it missing?");
+		Rcpp::stop("crs not found: is it missing?"); // #nocov
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
@@ -500,7 +499,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	delete options;
 #else
 	if (pipeline.size() || AOI.size())
-		Rcpp::stop("pipeline or area of interest require GDAL >= 3");
+		Rcpp::stop("pipeline or area of interest require GDAL >= 3"); // #nocov
 	OGRCoordinateTransformation *ct = 
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 #endif

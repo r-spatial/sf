@@ -24,15 +24,15 @@ st_write(obj, dsn, layer, ...)
   layer_options = NULL,
   quiet = FALSE,
   factorsAsCharacter = TRUE,
-  update = driver \%in\% db_drivers,
+  append = NA,
   delete_dsn = FALSE,
-  delete_layer = FALSE,
+  delete_layer = !is.na(append) && append == FALSE,
   fid_column_name = NULL
 )
 
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
-write_sf(..., quiet = TRUE, delete_layer = TRUE)
+write_sf(..., quiet = TRUE, append = FALSE, delete_layer = TRUE)
 
 \S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(
   conn,
@@ -88,12 +88,7 @@ multiple options supported.}
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into 
 character strings (default), else into numbers by \code{as.numeric}.}
 
-\item{update}{logical; \code{FALSE} by default for single-layer drivers but 
-\code{TRUE} by default for database drivers as defined by \code{db_drivers}.
-For database-type drivers (e.g. GPKG) \code{TRUE} values will make 
-\code{GDAL} try to update (append to) the existing data source, e.g. adding
-a table to an existing database, or adding records to a layer. See also the
-next two arguments and Details.}
+\item{append}{Append rows to existing table; default \code{FALSE}.}
 
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting 
 to write?}
@@ -118,8 +113,6 @@ specified, this column is no longer written as feature attribute.}
 containing row.names; default \code{FALSE}.}
 
 \item{overwrite}{Will try to \code{drop} table before writing; default \code{FALSE}.}
-
-\item{append}{Append rows to existing table; default \code{FALSE}.}
 
 \item{field.types}{default \code{NULL}. Allows to override type conversion from R
 to PostgreSQL. See \code{dbDataType()} for details.}
