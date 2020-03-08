@@ -82,6 +82,14 @@ attr(,"class")
 +   	write_stars(na.tif, "na.tif")
 +   	write_stars(na.tif, "na.tif", NA_value = -999)
 +   }
++   # https://github.com/mtennekes/tmap/issues/368
++   if (utils::packageVersion("stars") > "0.4-0") {
++     lc = system.file('tif/lc.tif', package = 'stars')
++     if (lc != "") {
++ 	    r = read_stars(lc, RAT = "Land Cover Class")
++ 	    r <- droplevels(r)
++     }
++   }
 + }
 Loading required package: stars
 Loading required package: abind
@@ -218,26 +226,6 @@ First 10 features:
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
-> # https://github.com/mtennekes/tmap/issues/368
-> lc = system.file('tif/lc.tif', package = 'stars')
-> r = read_stars(lc, RAT = "Land Cover Class")
-> (r = droplevels(r))
-stars object with 2 dimensions and 1 attribute
-attribute(s):
-                        lc.tif     
-                            :2615  
- Evergreen Forest           : 456  
- Herbaceuous                : 270  
- Open Water                 : 252  
- Developed, Low Intensity   :  81  
- Developed, Medium Intensity:  48  
- (Other)                    : 142  
-dimension(s):
-  from to  offset delta                    refsys point values    
-x    1 84 3092415  3000 Albers Conical Equal Area FALSE   NULL [x]
-y    1 46   59415 -3000 Albers Conical Equal Area FALSE   NULL [y]
-> plot(r, key.pos = 4, key.width = lcm(5))
-> 
 > proc.time()
    user  system elapsed 
-  1.167   0.051   1.207 
+  0.958   0.060   1.009 

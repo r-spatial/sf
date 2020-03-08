@@ -55,6 +55,14 @@ if (require(stars)) {
   	write_stars(na.tif, "na.tif")
   	write_stars(na.tif, "na.tif", NA_value = -999)
   }
+  # https://github.com/mtennekes/tmap/issues/368
+  if (utils::packageVersion("stars") > "0.4-0") {
+    lc = system.file('tif/lc.tif', package = 'stars')
+    if (lc != "") {
+	    r = read_stars(lc, RAT = "Land Cover Class")
+	    r <- droplevels(r)
+    }
+  }
 }
 
 r = gdal_read(tif)
@@ -67,9 +75,3 @@ crs <- gdal_crs(tif)
 
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
-
-# https://github.com/mtennekes/tmap/issues/368
-lc = system.file('tif/lc.tif', package = 'stars')
-r = read_stars(lc, RAT = "Land Cover Class")
-(r = droplevels(r))
-plot(r, key.pos = 4, key.width = lcm(5))
