@@ -1,5 +1,5 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -81,8 +81,7 @@ Simple feature collection with 3 features and 25 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -1.556254 ymin: 53.79519 xmax: -1.550716 ymax: 53.80341
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
+geographic CRS: WGS 84
   osm_id osm_way_id name type aeroway amenity admin_level barrier boundary
 1   <NA>  263958111 <NA> <NA>    <NA>    <NA>        <NA>    <NA>     <NA>
 2   <NA>  301461256 <NA> <NA>    <NA>    <NA>        <NA>    <NA>     <NA>
@@ -107,8 +106,7 @@ Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+geographic CRS: NAD27
 First 10 features:
     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
@@ -188,8 +186,7 @@ Simple feature collection with 5 features and 4 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 5
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
      a    b          c                   d        geom
 1    0    a 2001-01-01 2001-01-01 00:00:00 POINT (1 1)
 2    1    b       <NA>                <NA> POINT (2 2)
@@ -239,8 +236,7 @@ Simple feature collection with 155 features and 13 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 3 features:
   ogc_fid cadmium copper lead zinc  elev       dist   om ffreq soil lime
 1       1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1
@@ -254,8 +250,7 @@ Simple feature collection with 100 features and 15 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 3 features:
   ogc_fid  area perimeter cnty_ cnty_id      name  fips fipsno cress_id bir74
 1       1 0.114     1.442  1825    1825      Ashe 37009  37009        5  1091
@@ -271,24 +266,21 @@ Simple feature collection with 1 feature and 2 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
   a       bigint    GEOMETRY
 1 1 4.611686e+18 POINT (0 1)
 Simple feature collection with 1 feature and 2 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 1 xmax: 0 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
   a              bigint    GEOMETRY
 1 1 4611686018427387904 POINT (0 1)
 Simple feature collection with 10 features and 2 fields
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 645003 ymin: 4822568 xmax: 748805.6 ymax: 4992001
-epsg (SRID):    32632
-proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+projected CRS:  WGS 84 / UTM zone 32N
 First 3 features:
   PK_UID    Name                       Geometry
 1      1 Unknown LINESTRING (668540.7 485826...
@@ -298,8 +290,7 @@ Simple feature collection with 8101 features and 6 fields
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 319224 ymin: 3934674 xmax: 1308585 ymax: 5214373
-epsg (SRID):    32632
-proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+projected CRS:  WGS 84 / UTM zone 32N
 First 3 features:
   PK_UID               Name Peoples LocalCounc County Region
 1      1            Brozolo     435          1      0      0
@@ -313,8 +304,7 @@ Simple feature collection with 10 features and 2 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: 378359.8 ymin: 4198234 xmax: 1211486 ymax: 5036803
-epsg (SRID):    32632
-proj4string:    +proj=utm +zone=32 +datum=WGS84 +units=m +no_defs
+projected CRS:  WGS 84 / UTM zone 32N
 First 3 features:
   PK_UID   Name                       Geometry
 1      1 VENETO MULTIPOLYGON (((752912.3 50...
@@ -332,53 +322,14 @@ First 3 features:
 > 
 > if ("GML" %in% st_drivers()$name) {
 +   gml = system.file("gml/fmi_test.gml", package = "sf")
-+   print(st_read(gml, quiet = TRUE), n = 0)
++   print(dim(st_read(gml, quiet = TRUE)))
 +   gml = system.file("gml/20170930_OB_530964_UKSH.xml.gz", package = "sf")
-+   print(st_read(gml, layer = "Parcely"), n = 0)
-+   print(st_read(gml, layer = "Parcely", int64_as_string=TRUE), n = 0)
++   print(dim(st_read(gml, layer = "Parcely", quiet = TRUE)))
++   print(dim(st_read(gml, layer = "Parcely", int64_as_string=TRUE, quiet = TRUE)))
 + }
-Simple feature collection with 22 features and 10 fields
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: 23.57309 ymin: 59.82076 xmax: 26.44457 ymax: 60.64668
-epsg (SRID):    4258
-proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
-Reading layer `Parcely' from data source `/home/edzer/git/sf.Rcheck/sf/gml/20170930_OB_530964_UKSH.xml.gz' using driver `GML'
-replacing null geometries with empty geometries
-replacing null geometries with empty geometries
-replacing null geometries with empty geometries
-Simple feature collection with 644 features and 22 fields
-Active geometry column: DefinicniBod
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
-epsg (SRID):    5514
-proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
-Simple feature collection with 644 features and 22 fields
-Active geometry column: DefinicniBod
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
-epsg (SRID):    5514
-proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
-Reading layer `Parcely' from data source `/home/edzer/git/sf.Rcheck/sf/gml/20170930_OB_530964_UKSH.xml.gz' using driver `GML'
-replacing null geometries with empty geometries
-replacing null geometries with empty geometries
-replacing null geometries with empty geometries
-Simple feature collection with 644 features and 22 fields
-Active geometry column: DefinicniBod
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
-epsg (SRID):    5514
-proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
-Simple feature collection with 644 features and 22 fields
-Active geometry column: DefinicniBod
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -688456.3 ymin: -1082942 xmax: -686849 ymax: -1080660
-epsg (SRID):    5514
-proj4string:    +proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28813972222222 +k=0.9999 +x_0=0 +y_0=0 +ellps=bessel +towgs84=589,76,480,0,0,0,0 +units=m +no_defs
+[1] 22 11
+[1] 644  25
+[1] 644  25
 > 
 > # logical:
 > if ("GPKG" %in% st_drivers()$name) {
@@ -396,8 +347,7 @@ Simple feature collection with 100 features and 15 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+geographic CRS: NAD27
 [1] TRUE
 > 
 > # spatial filter:
@@ -416,4 +366,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.062   0.033   1.084 
+  1.142   0.043   1.175 

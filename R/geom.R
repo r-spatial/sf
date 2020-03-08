@@ -166,8 +166,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @param ... ignored
 #' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
-#' @param which character; for Cartesian coordinates only: one of \code{Euclidian}, \code{Haussdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
-#' @param par for \code{which} equal to \code{Haussdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
+#' @param which character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
+#' @param par for \code{which} equal to \code{Hausdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
 #' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
 #' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled. Distances involving empty geometries are \code{NA}.
 #' @details great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
@@ -420,6 +420,8 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
 #' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
+#' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+#' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
@@ -465,23 +467,26 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
 st_buffer = function(x, dist, nQuadSegs = 30,
-					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0)
+					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
 	UseMethod("st_buffer")
 
 #' @export
 st_buffer.sfg = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0)
-	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs,
-							endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit))
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
+	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle, 
+		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide))
 
-.process_style_opts = function(endCapStyle, joinStyle, mitreLimit) {
+.process_style_opts = function(endCapStyle, joinStyle, mitreLimit, singleSide) {
 	styls = list(with_styles = FALSE, endCapStyle = NA, joinStyle = NA, mitreLimit = NA)
-	if (endCapStyle == "ROUND" && joinStyle == "ROUND" && mitreLimit == 1) return(styls)
+	if (endCapStyle == "ROUND" && joinStyle == "ROUND" && mitreLimit == 1
+			&& all(singleSide == FALSE))
+		return(styls)
 	ecs = match(endCapStyle, c("ROUND", "FLAT", "SQUARE"))
 	js = match(joinStyle, c("ROUND", "MITRE", "BEVEL"))
 	if (is.na(mitreLimit) || !mitreLimit > 0) stop("mitreLimit must be > 0")
 	if (is.na(ecs)) stop("endCapStyle must be 'ROUND', 'FLAT', or 'SQUARE'")
 	if (is.na(js))  stop("joinStyle must be 'ROUND', 'MITRE', or 'BEVEL'")
+	if (any(is.na(singleSide))) stop("singleSide should be TRUE or FALSE")
 	styls$with_styles = TRUE
 	styls$endCapStyle = ecs
 	styls$joinStyle = js
@@ -490,7 +495,8 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 }
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0) {
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, 
+						 singleSide = FALSE) {
 	if (isTRUE(st_is_longlat(x))) {
 		warning("st_buffer does not correctly buffer longitude/latitude data")
 		if (inherits(dist, "units"))
@@ -506,30 +512,31 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 	}
 	dist = rep(dist, length.out = length(x))
 	nQ = rep(nQuadSegs, length.out = length(x))
-	styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit)
+	styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit, singleSide)
 	if (styles$with_styles) {
 		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
 		joinStyle = rep(styles$joinStyle, length.out = length(x))
 		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
-		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT")) {
+		singleSide = rep(as.logical(singleSide), length.out = length(x))
+		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
 			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
-		}
-		if (any(dist < 0) && !any(st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"))) {
-			stop("Negative width values may only be used with POLYGON or MULTIPOLYGON geometries") # nocov
-		}
+		if (any(dist < 0) && any(st_dimension(x) < 1))
+			stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
 
-		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0), endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit))
-	} else {
+		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
+			endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
+			singleside = singleSide))
+	} else
 		st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
-	}
 }
 
 #' @export
 st_buffer.sf = function(x, dist, nQuadSegs = 30,
-						endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0) {
-	st_geometry(x) = st_buffer(st_geometry(x), dist, nQuadSegs,
-							   endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit)
-	x
+						endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
+						singleSide = FALSE) {
+	st_set_geometry(x, st_buffer(st_geometry(x), dist, nQuadSegs,
+							   endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
+							   singleSide = singleSide))
 }
 
 #' @name geos_unary
@@ -814,6 +821,32 @@ st_point_on_surface.sf = function(x) {
 		warning("st_point_on_surface assumes attributes are constant over geometries of x")
 	st_set_geometry(x, st_point_on_surface(st_geometry(x)))
 }
+
+#' @name geos_unary
+#' @export
+#' @details \code{st_reverse} reverses the nodes in a line
+#' @examples
+#' if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+#'   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+#' }
+#nocov start
+st_reverse = function(x)
+	UseMethod("st_reverse")
+
+#' @export
+st_reverse.sfg = function(x)
+	get_first_sfg(st_reverse(st_sfc(x)))
+
+#' @export
+st_reverse.sfc = function(x) {
+	st_sfc(CPL_geos_op("reverse", x, numeric(0), integer(0), numeric(0), logical(0)))
+}
+
+#' @export
+st_reverse.sf = function(x) {
+	st_set_geometry(x, st_reverse(st_geometry(x)))
+}
+#nocov end
 
 #' @name geos_unary
 #' @export

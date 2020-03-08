@@ -26,6 +26,7 @@
 \alias{st_bbox.Extent}
 \alias{st_bbox.numeric}
 \alias{NA_bbox_}
+\alias{format.bbox}
 \title{Return bounding of a simple feature or simple feature set}
 \format{An object of class \code{bbox} of length 4.}
 \usage{
@@ -76,13 +77,15 @@ st_bbox(obj, ...)
 \method{st_bbox}{numeric}(obj, ..., crs = NA_crs_)
 
 NA_bbox_
+
+\method{format}{bbox}(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{bbox}}
 
 \item{obj}{object to compute the bounding box from}
 
-\item{...}{ignored}
+\item{...}{for format.bbox, passed on to \link[base]{format} to format individual numbers}
 
 \item{crs}{object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.}
 }

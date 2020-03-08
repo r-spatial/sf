@@ -63,7 +63,7 @@ gdal_inv_geotransform(gt)
 rc = expand.grid(x=1:3, y = 1:3)
 #(xy = xy_from_colrow(rc, gt))
 #xy_from_colrow(xy, gt, inverse = TRUE)
-gdal_crs(tif)
+crs <- gdal_crs(tif)
 
 try(gdal_metadata("foo"))
 gdal_metadata(tif)

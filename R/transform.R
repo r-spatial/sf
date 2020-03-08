@@ -1,26 +1,3 @@
-#' Transform or convert coordinates of simple feature
-#'
-#' Transform or convert coordinates of simple feature
-#'
-#' @param x object of class sf, sfc or sfg
-#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
-#' @param ... ignored
-#' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
-#' @param check logical; perform a sanity check on resulting polygons?
-#' @param use_gdal logical; this parameter is deprecated. For transformations using PROJ.4 directly rather than indirectly through GDAL, use \link[lwgeom]{st_transform_proj} of package \code{lwgeom} (see Details)
-#' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
-#'
-#' \code{st_transform} uses GDAL for coordinate transformations; internally, GDAL converts the \code{proj4string} into a well-known-text representation, before passing that on to PROJ.4. In this process, some information can get lost. Adding parameter \code{+wktext} to the \code{proj4string} definition may resolve this; see \url{https://github.com/edzer/sp/issues/42}.
-#'
-#' Some PROJ.4 projections are not supported by GDAL, e.g. \code{"+proj=wintri"} because it does not have an inverse projection. Projecting to unsupported projections can be done by \link[lwgeom]{st_transform_proj}, part of package lwgeom. Note that the unsupported \code{proj4string} cannot be passed as argument to \link{st_crs}, but has to be given as character string.
-#' @examples
-#' p1 = st_point(c(7,52))
-#' p2 = st_point(c(-30,20))
-#' sfc = st_sfc(p1, p2, crs = 4326)
-#' sfc
-#' st_transform(sfc, 3857)
-#' @export
-st_transform = function(x, crs, ...) UseMethod("st_transform")
 
 chk_pol = function(x, dim = class(x)[1]) {
 	PolClose = function(y) {
@@ -59,22 +36,56 @@ sanity_check = function(x) {
         x # nocov
 }
 
+#' Transform or convert coordinates of simple feature
+#'
+#' Transform or convert coordinates of simple feature
+#'
+#' @param x object of class sf, sfc or sfg
+#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
+#' @param ... ignored
+#' @param aoi area of interest, in degrees: 
+#' WestLongitude, SouthLatitude, EastLongitude, NorthLatitude
+#' @param pipeline character; proj4 or WKT coordinate operation, to override the default operation
+#' @param reverse boolean; if \code{TRUE}, the inverse operation of the pipeline is applied
+#' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
+#' @param check logical; perform a sanity check on resulting polygons?
+#' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
+#'
+#' Projecting to projections not supported by GDAL may be done by \link[lwgeom]{st_transform_proj}, part of package lwgeom.
+#' @examples
+#' p1 = st_point(c(7,52))
+#' p2 = st_point(c(-30,20))
+#' sfc = st_sfc(p1, p2, crs = 4326)
+#' sfc
+#' st_transform(sfc, 3857)
+#' @export
+st_transform = function(x, crs, ...) UseMethod("st_transform")
+
 #' @name st_transform
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal = TRUE) {
-	if (is.na(st_crs(x)))
-		stop("sfc object should have crs set")
-	if (missing(crs))
-		stop("argument crs cannot be missing")
+#' try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))
+#' if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
+#'   st_transform(sfc, pipeline =
+#' 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
+#'   st_transform(sfc, pipeline =
+#' 	  "+proj=pipeline +step +proj=axisswap +order=2,1", reverse = TRUE) # also reverse axes
+#' }
+st_transform.sfc = function(x, crs = st_crs(x), ..., 
+		aoi = numeric(0), pipeline = character(0), reverse = FALSE,
+		partial = TRUE, check = FALSE) {
 
-	if (! use_gdal)
-		.Deprecated("lwgeom::st_transform_proj", "lwgeom",
-			'install with devtools::install_github("r-spatial/lwgeom")')
+	if (length(pipeline) == 0) {
+		if (is.na(st_crs(x)))
+			stop("cannot transform sfc object with missing crs")
+		if (missing(crs))
+			stop("argument crs cannot be missing")
+	}
 
 	crs = make_crs(crs)
 
+	# FIXME: check for wkt here too WKT TODO:
 	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
 		x = st_zm(x, drop = FALSE, what = "Z")
 
@@ -85,15 +96,17 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	}
 
-	if (crs != st_crs(x)) { # transform:
-		ret = structure(CPL_transform(x, crs$proj4string),
+	if (crs != st_crs(x)) {
+		ret = structure(CPL_transform(x, crs, aoi, pipeline, reverse),
 			single_type = NULL, crs = crs)
 		ret = st_sfc(ret)
 		if (check)
 			sanity_check(ret)
 		else
 			ret
-	} else
+	} else if (length(pipeline))
+		st_sfc(CPL_transform(x, crs, aoi, pipeline, reverse))
+	else
 		x
 }
 
@@ -106,7 +119,7 @@ st_transform.sfc = function(x, crs, ..., partial = TRUE, check = FALSE, use_gdal
 #' st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 #' library(units)
 #' set_units(st_area(st_transform(nc[1,], 2264)), m^2)
-st_transform.sf = function(x, crs, ...) {
+st_transform.sf = function(x, crs = st_crs(x), ...) {
 	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
 	x
 }
@@ -116,7 +129,7 @@ st_transform.sf = function(x, crs, ...) {
 #' @details The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples
 #' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_transform.sfg = function(x, crs , ...) {
+st_transform.sfg = function(x, crs = st_crs(x), ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
 		stop("argument crs cannot be missing")
@@ -198,10 +211,11 @@ st_to_s2 = function(x) {
 #' @param keep logical value controlling the handling of unprojectable points. If
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.
+#' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
+#' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from, to, pts, keep = FALSE) {
+sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
 	if (!is.logical(keep) || 1 != length(keep))
 		stop("'keep' must be single-length logical value")
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0)
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn)
 }
-

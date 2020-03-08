@@ -37,7 +37,8 @@ test_that("can write to db", {
 	expect_silent(deprecated_st_write_db(pg, pts, "sf_meuse2__", binary = FALSE))
 	expect_warning(z <- st_set_crs(pts, epsg_31370))
 	#expect_warning(deprecated_st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "proj4")
-	expect_message(deprecated_st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "Inserted local crs")
+  	if (sf_extSoftVersion()[["GDAL"]] > "2.2.2")
+		expect_message(deprecated_st_write_db(pg, z, "sf_meuse3__",  binary = TRUE), "Inserted local crs")
 })
 
 test_that("sf can write units to database (#264)", {
@@ -83,7 +84,8 @@ test_that("can read from db", {
 
 	y <- deprecated_st_read_db(pg, "sf_meuse__")
 	expect_equal(dim(pts), dim(y))
-	expect_identical(st_crs(pts), st_crs(y))
+  	if (sf_extSoftVersion()[["GDAL"]] > "2.2.2")
+	  expect_identical(st_crs(pts), st_crs(y))
 	expect_identical(st_precision(pts), st_precision(y))
 
 	z <- deprecated_st_read_db(pg, "sf_meuse2__")

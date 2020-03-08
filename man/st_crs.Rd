@@ -17,6 +17,8 @@
 \alias{NA_crs_}
 \alias{is.na.crs}
 \alias{$.crs}
+\alias{format.crs}
+\alias{st_axis_order}
 \title{Retrieve coordinate reference system from object}
 \format{An object of class \code{crs} of length 2.}
 \usage{
@@ -24,9 +26,9 @@ st_crs(x, ...)
 
 \method{st_crs}{sf}(x, ...)
 
-\method{st_crs}{numeric}(x, proj4text = "", valid = TRUE, ...)
+\method{st_crs}{numeric}(x, ...)
 
-\method{st_crs}{character}(x, ..., wkt)
+\method{st_crs}{character}(x, ...)
 
 \method{st_crs}{sfc}(x, ..., parameters = FALSE)
 
@@ -49,31 +51,37 @@ NA_crs_
 \method{is.na}{crs}(x)
 
 \method{$}{crs}(x, name)
+
+\method{format}{crs}(x, ...)
+
+st_axis_order(authority_compliant = logical(0))
 }
 \arguments{
 \item{x}{numeric, character, or object of class \link{sf} or \link{sfc}}
 
 \item{...}{ignored}
 
-\item{proj4text}{character. Must be used in conjunction with \code{valid = FALSE}.}
-
-\item{valid}{default TRUE. This allows to create crs without checking against
-the local proj4 database. It can be used to synchronize crs with a remote
-database, but avoid it as much as possible.}
-
-\item{wkt}{character well-known-text representation of the crs}
-
 \item{parameters}{logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}}
 
-\item{value}{one of (i) character: a valid proj4string (ii) integer, a valid EPSG value (numeric), or (iii) a list containing named elements \code{proj4string} (character) and/or \code{epsg} (integer) with (i) and (ii).}
+\item{value}{one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class \code{crs}.}
 
-\item{name}{element name; \code{epsg} or \code{proj4string}, or one of \code{proj4strings} named components without the \code{+}; see examples}
+\item{name}{element name}
+
+\item{authority_compliant}{logical; specify whether axis order should be
+handled compliant to the authority; if omitted, the current value is printed.}
 }
 \value{
-If \code{x} is numeric, return \code{crs} object for SRID \code{x}; if \code{x} is character, return \code{crs} object for proj4string \code{x}; if \code{wkt} is given, return \code{crs} object for well-known-text representation \code{wkt}; if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
+If \code{x} is numeric, return \code{crs} object for EPSG:\code{x}; 
+if \code{x} is character, return \code{crs} object for \code{x}; 
+if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
-Object of class \code{crs}, which is a list with elements \code{epsg} (length-1 integer) and
-\code{proj4string} (length-1 character).
+Object of class \code{crs}, which is a list with elements \code{input} (length-1 character) 
+and \code{wkt} (length-1 character).
+Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
+assumed to relate to an arbitrary Cartesian coordinate system.
+
+\code{st_axis_order} returns the (logical) current value, invisibly if it is
+being set.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
@@ -81,20 +89,36 @@ Retrieve coordinate reference system from sf or sfc object
 Set or replace retrieve coordinate reference system from object
 }
 \details{
-The *crs functions create, get, set or replace the \code{crs} attribute of a simple feature geometry
-list-column. This attribute is of class \code{crs}, and is a list consisting of \code{epsg} (integer EPSG
-code) and \code{proj4string} (character).
+The *crs functions create, get, set or replace the \code{crs} attribute 
+of a simple feature geometry list-column. This attribute is of class \code{crs}, 
+and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84" 
+or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
+
 Comparison of two objects of class \code{crs} uses the GDAL function 
 \code{OGRSpatialReference::IsSame}.
 
 In case a coordinate reference system is replaced, no transformation takes
-place and a warning is raised to stress this. EPSG values are either read from proj4strings
-that contain \code{+init=epsg:...} or set to 4326 in case the proj4string contains +proj=longlat
-and +datum=WGS84, literally.
+place and a warning is raised to stress this.
 
-If both \code{epsg} and \code{proj4string} are provided, they are assumed to be consistent. In processing them, the EPSG code, if not missing valued, is used and the proj4string is derived from it by a call to GDAL (which in turn will call PROJ.4). Warnings are raised when \code{epsg} is not consistent with a proj4string that is already present.
+\code{NA_crs_} is the \code{crs} object with missing values for \code{input} and \code{wkt}.
 
-\code{NA_crs_} is the \code{crs} object with missing values for \code{epsg} and \code{proj4string}.
+the \code{$} method for \code{crs} objects retrieves named elements
+using the GDAL interface; named elements include
+\code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
+\code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
+\code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"} and
+\code{"ud_unit"} (this may be subject to changes in future GDAL versions).
+
+format.crs returns NA if the crs is missing valued, or else
+the name of a crs if it is different from "unknown", or
+else the user input if it was set, or else its "proj4string" representation;
+
+\code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
+indicates axes order according to the authority 
+(e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
+indicates the usual GIS (display) order (longitude,latitude). This can be useful
+when data are read, or have to be written, with coordinates in authority compliant order.
+The return value is the current state of this (\code{FALSE}, by default).
 }
 \examples{
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
@@ -108,9 +132,18 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 library(dplyr)
 x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
-st_crs("+init=epsg:3857")$epsg
+st_crs("EPSG:3857")$input
 st_crs("+init=epsg:3857")$proj4string
 st_crs("+init=epsg:3857 +units=m")$b     # numeric
 st_crs("+init=epsg:3857 +units=m")$units # character
+pt = st_sfc(st_point(c(0, 60)), crs = 4326)
+# st_axis_order() only has effect in GDAL >= 2.5.0:
+st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
+st_transform(pt, 3857)[[1]]
+(old_value = st_axis_order(TRUE)) 
+# now interpret pt as (latitude longitude), as EPSG:4326 prescribes:
+st_axis_order() # query current value
+st_transform(pt, 3857)[[1]]
+st_axis_order(old_value) # set back to old value
 }
 \keyword{datasets}

@@ -15,7 +15,7 @@ gdal_utils(
 )
 }
 \arguments{
-\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}
+\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}
 
 \item{source}{character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one}
 

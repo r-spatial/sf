@@ -7,6 +7,7 @@
 \alias{coerce,sf,Spatial-method}
 \alias{coerce,sfc,Spatial-method}
 \alias{as_Spatial}
+\alias{coerce,crs,CRS-method}
 \title{Methods to coerce simple features to \verb{Spatial*} and \code{Spatial*DataFrame} objects}
 \usage{
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))

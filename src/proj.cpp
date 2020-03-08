@@ -58,7 +58,8 @@ bool CPL_have_datum_files(SEXP foo) {
 	return true;
 }
 
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
+		Rcpp::IntegerVector keep, bool warn = true) {
 
 	using namespace Rcpp;
 
@@ -66,8 +67,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-        if (keep.size() != 1)
-                stop("keep should be a single integer"); // #nocov
+	if (keep.size() != 1)
+		stop("keep should be a single integer"); // #nocov
 
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
@@ -128,11 +129,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 	int nwarn = 0;
 	for (int i = 0; i < out.nrow(); i++) {
-		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
-		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++; // #nocov
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL) {
+			out(i, 0) = NA_REAL;
+			out(i, 1) = NA_REAL;
+			nwarn++; // #nocov
+		}
 	}
-	if (nwarn > 0)
+	if (warn && nwarn > 0)
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }
@@ -147,7 +150,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
-  return false;
+	return false;
 }
 
 // [[Rcpp::export]]
@@ -211,7 +214,8 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
+		Rcpp::IntegerVector keep, bool warn = true) {
 
 	using namespace Rcpp;
 
@@ -284,11 +288,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	pj_free(toPJ);
 	int nwarn = 0;
 	for (int i = 0; i < out.nrow(); i++) {
-		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL )
-		    // || ISNAN(pts[i,0]) || ISNAN(pts[i,1]))
-                	    nwarn++; // #nocov
+		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL) {
+			out(i, 0) = NA_REAL;
+			out(i, 1) = NA_REAL;
+			nwarn++; // #nocov
+		}
 	}
-	if (nwarn > 0)
+	if (warn && nwarn > 0) 
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }

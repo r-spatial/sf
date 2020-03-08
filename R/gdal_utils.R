@@ -22,7 +22,7 @@ resampling_method = function(option = "near") {
 
 #' Native interface to gdal utils
 #' @name gdal_utils
-#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate}, \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
+#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
 #' @param source character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; raster layer read options

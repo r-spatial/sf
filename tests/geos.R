@@ -36,7 +36,8 @@ st_combine(nc)
 st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
 
-g = st_make_grid(nc)
+ncbb = st_as_sfc(st_bbox(nc))
+g = st_make_grid(ncbb)
 x = st_intersection(nc, g)
 x = st_intersection(g, nc)
 
@@ -48,7 +49,7 @@ set.seed(13531)
 
 st_line_sample(ls, density = 1, type = "random")
 
-g = st_make_grid(nc, n = c(20,10))
+g = st_make_grid(ncbb, n = c(20,10))
 
 a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
@@ -62,8 +63,8 @@ length(g)
 g = st_make_grid(what = "corners")
 length(g)
 
-g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
-g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
+g1 = st_make_grid(ncbb, 0.1, what = "polygons", square = FALSE)
+g2 = st_make_grid(ncbb, 0.1, what = "points", square = FALSE)
 
 # st_line_merge:
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
@@ -93,7 +94,7 @@ i = st_intersects(ncm, ncm[1:88,])
 all.equal(i, t(t(i)))
 
 # check use of pattern in st_relate:
-sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+sfc = st_as_sfc(st_bbox(st_sfc(st_point(c(0,0)), st_point(c(3,3)))))
 grd = st_make_grid(sfc, n = c(3,3))
 st_intersects(grd)
 st_relate(grd, pattern = "****1****")
@@ -256,3 +257,10 @@ sf:::is_symmetric(pattern = "010121010")
 sf:::is_symmetric(pattern = "010121021")
 
 st_intersects(st_point(0:1), st_point(2:3)) # sfg method
+
+if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
+	print(st_reverse(ls))
+	print(st_reverse(st_sfc(ls)))
+	print(st_reverse(st_sf(a = 2, geom = st_sfc(ls))))
+}

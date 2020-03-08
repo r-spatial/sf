@@ -5,9 +5,9 @@
 
 #include <ogr_srs_api.h>
 #include <ogr_spatialref.h>
-#include "gdal.h" // local
 
 #include "Rcpp.h"
+#include "gdal.h" // local
 
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"

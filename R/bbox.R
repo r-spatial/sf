@@ -45,7 +45,7 @@ bbox.MtrxSetSetSet = function(obj, ...) {
 #'
 #' Return bounding of a simple feature or simple feature set
 #' @param obj object to compute the bounding box from
-#' @param ... ignored
+#' @param ... for format.bbox, passed on to \link[base]{format} to format individual numbers
 #' @export
 #' @return a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
 #' and \code{ymax} values; if \code{obj} is of class \code{sf}, \code{sfc}, \code{Spatial} or \code{Raster}, the object
@@ -218,3 +218,11 @@ NA_bbox_ = structure(rep(NA_real_, 4),
 	names = c("xmin", "ymin", "xmax", "ymax"),
 	crs = NA_crs_,
 	class = "bbox")
+
+#' @name st_bbox
+#' @export
+format.bbox = function(x, ...) {
+	p1 = paste0("(",paste0(c(format(x[1], ...), format(x[2], ...)), collapse=","),")")
+	p2 = paste0("(",paste0(c(format(x[3], ...), format(x[4], ...)), collapse=","),")")
+	paste0("(",p1,",",p2,")")
+}

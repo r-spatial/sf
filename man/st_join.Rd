@@ -82,7 +82,7 @@ st_join(a, b) \%>\% group_by(a.x) \%>\% summarise(mean(a.y))
 nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
 gr = st_sf(
     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
-    geom = st_make_grid(nc))
+    geom = st_make_grid(st_as_sfc(st_bbox(nc))))
 gr$col = sf.colors(10, categorical = TRUE, alpha = .3)
 # cut, to check, NA's work out:
 gr = gr[-(1:30),]

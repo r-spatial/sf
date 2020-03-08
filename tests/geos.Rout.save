@@ -97,15 +97,16 @@ Geometry set for 1 feature
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+geographic CRS: NAD27
 MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > 
 > st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
 + 	st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))))
 [1] 0 1 2
 > 
-> g = st_make_grid(nc)
+> ncbb = st_as_sfc(st_bbox(nc))
+> g = st_make_grid(ncbb)
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > x = st_intersection(nc, g)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
@@ -124,12 +125,12 @@ Geometry set for 2 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTIPOINT ((0 0.8878369))
 MULTIPOINT ((0.2986488 0), (2.48417 0), (2.5678...
 > 
-> g = st_make_grid(nc, n = c(20,10))
+> g = st_make_grid(ncbb, n = c(20,10))
+although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
@@ -155,9 +156,9 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 > length(g)
 [1] 703
 > 
-> g1 = st_make_grid(nc, 0.1, what = "polygons", square = FALSE)
+> g1 = st_make_grid(ncbb, 0.1, what = "polygons", square = FALSE)
 although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
-> g2 = st_make_grid(nc, 0.1, what = "points", square = FALSE)
+> g2 = st_make_grid(ncbb, 0.1, what = "points", square = FALSE)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 > 
@@ -194,7 +195,7 @@ LINESTRING (0 0, 1 1, 2 0)
 [1] TRUE
 > 
 > # check use of pattern in st_relate:
-> sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
+> sfc = st_as_sfc(st_bbox(st_sfc(st_point(c(0,0)), st_point(c(3,3)))))
 > grd = st_make_grid(sfc, n = c(3,3))
 > st_intersects(grd)
 Sparse geometry binary predicate list of length 9, where the predicate was `intersects'
@@ -315,16 +316,14 @@ Geometry set for 1 feature
 geometry type:  MULTILINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTILINESTRING ((0 0, 0.5 0.5), (0.5 0.5, 1 1,...
 > st_node(st_sf(a = 1, st_sfc(l)))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTILINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
   a                      st_sfc.l.
 1 1 MULTILINESTRING ((0 0, 0.5 ...
 > 
@@ -453,24 +452,21 @@ Geometry set for 1 feature
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2)))) # sfc
 Geometry set for 1 feature 
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2), pairwise = TRUE))) # sfc
 Geometry set for 1 feature 
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > identical(ls0, ls)
 [1] TRUE
@@ -496,8 +492,7 @@ Geometry set for 3 features
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0 0, 1 0)
 LINESTRING (0 0.1, 1 0.1)
 LINESTRING (0 1, 1 1)
@@ -513,8 +508,7 @@ Geometry set for 5 features  (with 1 geometry empty)
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 0.9
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 POINT (0.1 -0.1)
 POINT (0.1 0.11)
 POINT (0.1 0.09)
@@ -532,8 +526,7 @@ Geometry set for 5 features  (with 1 geometry empty)
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 LINESTRING (0.1 -0.1, 0.1 0)
 LINESTRING (0.1 0.11, 0.1 0.1)
 LINESTRING (0.1 0.09, 0.1 0.1)
@@ -573,6 +566,27 @@ POINT EMPTY
 Sparse geometry binary predicate list of length 1, where the predicate was `intersects'
  1: (empty)
 > 
+> if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
++ 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
++ 	print(st_reverse(ls))
++ 	print(st_reverse(st_sfc(ls)))
++ 	print(st_reverse(st_sf(a = 2, geom = st_sfc(ls))))
++ }
+LINESTRING (3 3, 2 2, 1 1)
+Geometry set for 1 feature 
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
+CRS:            NA
+LINESTRING (3 3, 2 2, 1 1)
+Simple feature collection with 1 feature and 1 field
+geometry type:  LINESTRING
+dimension:      XY
+bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
+CRS:            NA
+  a                       geom
+1 2 LINESTRING (3 3, 2 2, 1 1)
+> 
 > proc.time()
    user  system elapsed 
-  3.608   0.059   3.659 
+  4.369   0.075   4.463 

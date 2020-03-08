@@ -24,8 +24,7 @@ Simple feature collection with 620 features and 4 fields
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 0.3893523 ymin: 153.1034 xmax: 1281.986 ymax: 1276.56
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
      label seg tp marks                           geom
 1   window  NA NA  <NA> POLYGON ((0.3893523 153.103...
@@ -45,8 +44,7 @@ Simple feature collection with 648 features and 4 fields
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label group season       date                           geom
 NA window  <NA>   <NA>       <NA> POLYGON ((584712 674237.1, ...
@@ -65,8 +63,7 @@ Simple feature collection with 648 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label                           geom
 1  window POLYGON ((584712 674237.1, ...
@@ -93,8 +90,7 @@ Simple feature collection with 51 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
     label                           geom
 1  window MULTIPOLYGON (((886136 3141...
@@ -129,8 +125,7 @@ Simple feature collection with 597 features and 1 field
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1.213108 ymin: 0.02200954 xmax: 9.994943 ymax: 8.82534
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 10 features:
    label                      geom
 2  point POINT (9.076646 8.661168)
@@ -182,8 +177,7 @@ Simple feature collection with 4 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: -1 ymin: 1 xmax: 1 ymax: 2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
   a                           geom
 1 0 POLYGON ((0 1, 1 1, 1 2, 0 ...
 2 1                    POINT (0 1)
@@ -202,8 +196,7 @@ Simple feature collection with 4 features and 1 field
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: -1 ymin: 1 xmax: 1 ymax: 2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
   a                           geom
 1 0 POLYGON ((-1 1, 1 1, 1 2, -...
 2 1                    POINT (0 1)
@@ -222,8 +215,7 @@ Simple feature collection with 100 features and 14 fields
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+geographic CRS: NAD27
 > try(as.owin(nc)) # should be projected
 Error in as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...) : 
   Only projected coordinates may be converted to spatstat class objects
@@ -250,8 +242,7 @@ Geometry set for 1 feature
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -2 ymin: -2 xmax: 2 ymax: 2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (...
 > 
 > plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
@@ -281,13 +272,12 @@ marked planar line segment pattern: 5 line segments
 marks are numeric, of type 'integer'
 window: rectangle = [0, 4] x [0, 3] units
 > 
-> st_as_sf(as.psp(sf))
+> (x = st_as_sf(as.psp(sf)))
 Simple feature collection with 6 features and 3 fields
 geometry type:  GEOMETRY
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 3
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
     label marks foo                           geom
 1  window    NA  NA POLYGON ((0 0, 4 0, 4 3, 0 ...
 2 segment     1   2          LINESTRING (0 0, 1 1)
@@ -295,7 +285,21 @@ proj4string:    NA
 4 segment     2   1          LINESTRING (0 0, 1 1)
 5 segment     2   1          LINESTRING (1 1, 2 0)
 6 segment     2   1          LINESTRING (3 3, 4 2)
+> (y = st_as_sfc(as.psp(sf)))
+Geometry set for 6 features 
+geometry type:  GEOMETRY
+dimension:      XY
+bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 3
+CRS:            NA
+First 5 geometries:
+POLYGON ((0 0, 4 0, 4 3, 0 3, 0 0))
+LINESTRING (0 0, 1 1)
+LINESTRING (1 1, 2 0)
+LINESTRING (0 0, 1 1)
+LINESTRING (1 1, 2 0)
+> all.equal(st_geometry(x), y)
+[1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  1.770   0.104   1.864 
+  2.022   0.126   2.145 

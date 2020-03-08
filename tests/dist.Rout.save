@@ -1,6 +1,6 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,20 +39,20 @@ Type 'q()' to quit R.
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
 > units(d.sp) = as_units("km")
-> d.sf - d.sp
+> round(d.sf - d.sp, 7)
 Units: [m]
-         [,1]          [,2]          [,3]          [,4]         [,5]
-[1,] 11.58615  0.000000e+00  2.910383e-11  0.000000e+00 5.820766e-11
-[2,] 11.76865  0.000000e+00  0.000000e+00 -2.910383e-11 0.000000e+00
-[3,] 12.28011  0.000000e+00  0.000000e+00 -1.455192e-11 2.910383e-11
-[4,] 13.02504 -2.910383e-11 -1.455192e-11  0.000000e+00 1.455192e-11
+         [,1] [,2] [,3] [,4] [,5]
+[1,] 11.58615    0    0    0    0
+[2,] 11.76865    0    0    0    0
+[3,] 12.28011    0    0    0    0
+[4,] 13.02504    0    0    0    0
 > 
 > #summary(unclass(d.sf) - d.sp)
 > 
 > st_crs(x) = st_crs(y) = NA
 > d.sf = st_distance(x, y)
 > d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-> d.sf - d.sp
+> round(d.sf - d.sp, 7)
      [,1] [,2] [,3] [,4] [,5]
 [1,]    0    0    0    0    0
 [2,]    0    0    0    0    0
@@ -66,10 +66,10 @@ Geometry set for 1 feature
 geometry type:  LINESTRING
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 10
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
+geographic CRS: WGS 84
 LINESTRING (0 10, 1 0, 2 0, 3 0, 4 0)
-> (d = st_distance(y, y))
+> d = st_distance(y, y)
+> round(d, 7)
 Units: [m]
         [,1]      [,2]      [,3]      [,4]      [,5]
 [1,]       0 1111387.3 1127821.8 1154692.9 1191294.5
@@ -91,10 +91,9 @@ Geometry set for 2 features
 geometry type:  MULTIPOINT
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
-epsg (SRID):    NA
-proj4string:    NA
-MULTIPOINT (0 0.5)
-MULTIPOINT (0.5 0, 1.5 0, 2.5 0, 3.5 0, 4.5 0, ...
+CRS:            NA
+MULTIPOINT ((0 0.5))
+MULTIPOINT ((0.5 0), (1.5 0), (2.5 0), (3.5 0),...
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + 	st_linestring(rbind(c(0,0),c(.1,0))), crs = 4326)
@@ -105,16 +104,8 @@ Units: [m]
 > try(st_line_sample(ls, density = 1/1000))
 Error in st_line_sample(ls, density = 1/1000) : 
   st_line_sample for longitude/latitude not supported; use st_segmentize?
-> st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
-Geometry set for 2 features 
-geometry type:  MULTIPOINT
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 10625.95 ymax: 110823.7
-epsg (SRID):    3857
-proj4string:    +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs
-MULTIPOINT (0 501.4646, 0 1504.394, 0 2507.323,...
-MULTIPOINT (505.9977 0, 1517.993 0, 2529.988 0,...
+> x = st_line_sample(st_transform(ls, 3857), density = 1/1000) # one per km
 > 
 > proc.time()
    user  system elapsed 
-  0.496   0.035   0.522 
+  0.576   0.048   0.615 

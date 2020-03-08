@@ -283,9 +283,9 @@ delete_postgis_crs <- function(conn, crs) {
     if (is.na(crs[["epsg"]])) stop("Missing SRID")
     wkt <- st_as_text(crs)
     query <- paste0("DELETE FROM spatial_ref_sys ",
-                   "WHERE srid = '", crs[["epsg"]], "' ",
+                   "WHERE srid = '", crs$epsg, "' ",
                    "AND srtext = '", wkt, "' ",
-                   "AND proj4text = '", crs[["proj4string"]], "';")
+                   "AND proj4text = '", crs$proj4string, "';")
     dbExecute(conn, query)
 }
 
@@ -430,7 +430,7 @@ is_geometry_column.default <- function(con, x, classes = c("character")) {
 # RPostgres::dbGetQuery returns geometry columns of class pq_geometry:
 #' @name st_as_sfc
 #' @export
-sf_as_sfc.pq_geometry <- function(x, ..., EWKB = TRUE, spatialite = FALSE, 
+st_as_sfc.pq_geometry <- function(x, ..., EWKB = TRUE, spatialite = FALSE, 
 		pureR = FALSE, crs = NA_crs_) { # nocov start
   st_as_sfc.WKB(x, ..., EWKB = EWKB, spatiallite = spatialite, pureR = pureR, crs = crs) 
 } # nocov end

@@ -25,6 +25,7 @@ setOldClass(c("sfc_POLYGON", "sfc"))
 setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass("sfg")
+setOldClass("crs")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 

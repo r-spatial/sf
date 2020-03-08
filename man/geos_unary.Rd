@@ -12,6 +12,7 @@
 \alias{st_line_merge}
 \alias{st_centroid}
 \alias{st_point_on_surface}
+\alias{st_reverse}
 \alias{st_node}
 \alias{st_segmentize}
 \title{Geometric unary operations on simple feature geometry sets}
@@ -22,7 +23,8 @@ st_buffer(
   nQuadSegs = 30,
   endCapStyle = "ROUND",
   joinStyle = "ROUND",
-  mitreLimit = 1
+  mitreLimit = 1,
+  singleSide = FALSE
 )
 
 st_boundary(x)
@@ -43,6 +45,8 @@ st_centroid(x, ..., of_largest_polygon = FALSE)
 
 st_point_on_surface(x)
 
+st_reverse(x)
+
 st_node(x)
 
 st_segmentize(x, dfMaxLength, ...)
@@ -61,6 +65,9 @@ st_segmentize(x, dfMaxLength, ...)
 \item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'}
 
 \item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
+
+\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
 
 \item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.}
 
@@ -105,6 +112,8 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 \code{st_centroid} gives the centroid of a geometry
 
 \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
+
+\code{st_reverse} reverses the nodes in a line
 
 \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 
@@ -186,6 +195,9 @@ plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc, axes = TRUE)
 plot(st_point_on_surface(nc), add = TRUE, pch = 3)
+if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+  st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
+}
 (l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
 st_polygonize(st_node(l))
 st_node(st_multilinestring(list(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))))

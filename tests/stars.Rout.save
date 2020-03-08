@@ -1,6 +1,6 @@
 
-R version 3.6.1 (2019-07-05) -- "Action of the Toes"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -91,8 +91,7 @@ Geometry set for 20 features
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 0.25 ymin: 0.4 xmax: 4.5 ymax: 2.1
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POINT (0.25 0.4)
 POINT (0.75 0.4)
@@ -103,8 +102,7 @@ Geometry set for 20 features
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: 0 ymin: 0.3 xmax: 5 ymax: 2.2
-epsg (SRID):    NA
-proj4string:    NA
+CRS:            NA
 First 5 geometries:
 POLYGON ((0 0.3, 0.5 0.3, 0.5 0.5, 0 0.5, 0 0.3))
 POLYGON ((0.5 0.3, 1 0.3, 1 0.5, 0.5 0.5, 0.5 0...
@@ -115,8 +113,7 @@ Geometry set for 20 features
 geometry type:  POINT
 dimension:      XY
 bbox:           xmin: 1 ymin: 1 xmax: 5 ymax: 4
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
+CRS:            +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
 POINT (1 1)
 POINT (1 2)
@@ -127,8 +124,7 @@ Geometry set for 20 features
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: 0.5 ymin: 0.5 xmax: 5.5 ymax: 4.5
-epsg (SRID):    4326
-proj4string:    +proj=longlat +datum=WGS84 +no_defs
+CRS:            +proj=longlat +datum=WGS84 +no_defs
 First 5 geometries:
 POLYGON ((0.5 0.5, 0.5 1.5, 1.5 1.5, 1.5 0.5, 0...
 POLYGON ((0.5 1.5, 0.5 2.5, 1.5 2.5, 1.5 1.5, 0...
@@ -141,8 +137,7 @@ Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
 geometry type:  MULTIPOLYGON
 dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +datum=NAD27 +no_defs
+geographic CRS: NAD27
 stars object with 2 dimensions and 1 attribute
 attribute(s):
      AREA       
@@ -152,69 +147,62 @@ attribute(s):
  Mean   :0.145  
  3rd Qu.:0.181  
  Max.   :0.241  
- NA's   :30726  
+ NA's   :30904  
 dimension(s):
-  from  to   offset      delta                       refsys point values    
-x    1 360 -84.3239  0.0246302 +proj=longlat +datum=NAD2... FALSE   NULL [x]
-y    1 180  36.5896 -0.0150425 +proj=longlat +datum=NAD2... FALSE   NULL [y]
-Simple feature collection with 34074 features and 1 field
+  from  to   offset      delta refsys point values    
+x    1 461 -84.3239  0.0192484     NA FALSE   NULL [x]
+y    1 141  36.5896 -0.0192484     NA FALSE   NULL [y]
+Simple feature collection with 34097 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+bbox:           xmin: -84.32385 ymin: 33.87563 xmax: -75.45034 ymax: 36.58965
+CRS:            NA
 First 10 features:
     AREA                       geometry
-1  0.114 POLYGON ((-81.66379 36.5896...
-2  0.114 POLYGON ((-81.63916 36.5896...
-3  0.114 POLYGON ((-81.61453 36.5896...
-4  0.114 POLYGON ((-81.5899 36.58965...
-5  0.114 POLYGON ((-81.56527 36.5896...
-6  0.114 POLYGON ((-81.54064 36.5896...
-7  0.114 POLYGON ((-81.68842 36.5746...
-8  0.114 POLYGON ((-81.66379 36.5746...
-9  0.114 POLYGON ((-81.63916 36.5746...
-10 0.114 POLYGON ((-81.61453 36.5746...
-Simple feature collection with 34074 features and 1 field
+1  0.114 POLYGON ((-81.66757 36.5896...
+2  0.114 POLYGON ((-81.64833 36.5896...
+3  0.114 POLYGON ((-81.62908 36.5896...
+4  0.114 POLYGON ((-81.60983 36.5896...
+5  0.114 POLYGON ((-81.59058 36.5896...
+6  0.114 POLYGON ((-81.57133 36.5896...
+7  0.114 POLYGON ((-81.55208 36.5896...
+8  0.114 POLYGON ((-81.53283 36.5896...
+9  0.114 POLYGON ((-81.51359 36.5896...
+10 0.114 POLYGON ((-81.49434 36.5896...
+Simple feature collection with 34097 features and 1 field
 geometry type:  POLYGON
 dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-epsg (SRID):    4267
-proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+bbox:           xmin: -84.32385 ymin: 33.87563 xmax: -75.45034 ymax: 36.58965
+CRS:            NA
 First 10 features:
     AREA                       geometry
-1  0.114 POLYGON ((-81.66379 36.5896...
-2  0.114 POLYGON ((-81.63916 36.5896...
-3  0.114 POLYGON ((-81.61453 36.5896...
-4  0.114 POLYGON ((-81.5899 36.58965...
-5  0.114 POLYGON ((-81.56527 36.5896...
-6  0.114 POLYGON ((-81.54064 36.5896...
-7  0.114 POLYGON ((-81.68842 36.5746...
-8  0.114 POLYGON ((-81.66379 36.5746...
-9  0.114 POLYGON ((-81.63916 36.5746...
-10 0.114 POLYGON ((-81.61453 36.5746...
-Simple feature collection with 34074 features and 1 field
+1  0.114 POLYGON ((-81.66757 36.5896...
+2  0.114 POLYGON ((-81.64833 36.5896...
+3  0.114 POLYGON ((-81.62908 36.5896...
+4  0.114 POLYGON ((-81.60983 36.5896...
+5  0.114 POLYGON ((-81.59058 36.5896...
+6  0.114 POLYGON ((-81.57133 36.5896...
+7  0.114 POLYGON ((-81.55208 36.5896...
+8  0.114 POLYGON ((-81.53283 36.5896...
+9  0.114 POLYGON ((-81.51359 36.5896...
+10 0.114 POLYGON ((-81.49434 36.5896...
+Simple feature collection with 34097 features and 1 field
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: -84.31154 ymin: 33.88951 xmax: -75.46929 ymax: 36.58213
-epsg (SRID):    4267
-proj4string:    +proj=longlat +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat +no_defs
+bbox:           xmin: -84.31423 ymin: 33.88525 xmax: -75.45997 ymax: 36.58003
+CRS:            NA
 First 10 features:
     AREA                   geometry
-1  0.114 POINT (-81.65148 36.58213)
-2  0.114 POINT (-81.62684 36.58213)
-3  0.114 POINT (-81.60221 36.58213)
-4  0.114 POINT (-81.57758 36.58213)
-5  0.114 POINT (-81.55295 36.58213)
-6  0.114 POINT (-81.52832 36.58213)
-7  0.114 POINT (-81.67611 36.56709)
-8  0.114 POINT (-81.65148 36.56709)
-9  0.114 POINT (-81.62684 36.56709)
-10 0.114 POINT (-81.60221 36.56709)
-================================================================================
-================================================================================
-================================================================================
-================================================================================
+1  0.114 POINT (-81.65795 36.58003)
+2  0.114  POINT (-81.6387 36.58003)
+3  0.114 POINT (-81.61945 36.58003)
+4  0.114  POINT (-81.6002 36.58003)
+5  0.114 POINT (-81.58096 36.58003)
+6  0.114 POINT (-81.56171 36.58003)
+7  0.114 POINT (-81.54246 36.58003)
+8  0.114 POINT (-81.52321 36.58003)
+9  0.114 POINT (-81.50396 36.58003)
+10 0.114 POINT (-81.48471 36.58003)
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -223,22 +211,7 @@ First 10 features:
 > rc = expand.grid(x=1:3, y = 1:3)
 > #(xy = xy_from_colrow(rc, gt))
 > #xy_from_colrow(xy, gt, inverse = TRUE)
-> gdal_crs(tif)
-$nbands
-[1] 1
-
-$crs
-Coordinate Reference System:
-  EPSG: 32611 
-  proj4string: "+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs"
-
-$gt
-[1] 1841001.8       1.5      -5.0 1144003.2      -5.0      -1.5
-
-$gt_inv
-[1]  1.085693e+05  5.504587e-02 -1.834862e-01  4.007711e+05 -1.834862e-01
-[6] -5.504587e-02
-
+> crs <- gdal_crs(tif)
 > 
 > try(gdal_metadata("foo"))
 [1] NA
@@ -247,4 +220,4 @@ $gt_inv
 > 
 > proc.time()
    user  system elapsed 
-  0.910   0.051   0.953 
+  0.920   0.071   0.983 
