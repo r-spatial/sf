@@ -379,8 +379,11 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && append == FALSE, 
 		fid_column_name = NULL) {
 
-	if (!is.null(list(...)$update))
-		.Deprecated("append", old = "update")
+	if (!is.null(list(...)$update)) {
+		.Deprecated("append", old = "update") # deprecated at 0.9-0
+		if (is.na(append))
+			append = list(...)$update
+	}
 	else if (length(list(...)))
 		stop(paste("unrecognized argument(s)", names(list(...)), "\n"))
 	if (missing(dsn))
