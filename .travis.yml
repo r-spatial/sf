@@ -16,12 +16,13 @@ cache:
 
 latex: false
 
-#r_github_packages:
+r_github_packages:
+  - r-spatial/stars
+
 #  - r-dbi/DBI
 #  - r-dbi/RPostgres
 #  - r-lib/covr
 #  - r-spatial/lwgeom
-#  - r-spatial/stars
 
 addons:
   postgresql: "9.6"
