@@ -24,15 +24,15 @@ st_write(obj, dsn, layer, ...)
   layer_options = NULL,
   quiet = FALSE,
   factorsAsCharacter = TRUE,
-  update = NA,
+  append = NA,
   delete_dsn = FALSE,
-  delete_layer = !is.na(update) && !update,
+  delete_layer = !is.na(append) && append == FALSE,
   fid_column_name = NULL
 )
 
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
-write_sf(..., quiet = TRUE, update = FALSE)
+write_sf(..., quiet = TRUE, append = FALSE, delete_layer = TRUE)
 
 \S4method{dbWriteTable}{PostgreSQLConnection,character,sf}(
   conn,
@@ -88,9 +88,7 @@ multiple options supported.}
 \item{factorsAsCharacter}{logical; convert \code{factor} objects into 
 character strings (default), else into numbers by \code{as.numeric}.}
 
-\item{update}{logical; should an existing layer be augmented or replaced?
-if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
-raise an error if the layer exists. See also next two arguments.}
+\item{append}{Append rows to existing table; default \code{FALSE}.}
 
 \item{delete_dsn}{logical; delete data source \code{dsn} before attempting 
 to write?}
@@ -115,8 +113,6 @@ specified, this column is no longer written as feature attribute.}
 containing row.names; default \code{FALSE}.}
 
 \item{overwrite}{Will try to \code{drop} table before writing; default \code{FALSE}.}
-
-\item{append}{Append rows to existing table; default \code{FALSE}.}
 
 \item{field.types}{default \code{NULL}. Allows to override type conversion from R
 to PostgreSQL. See \code{dbDataType()} for details.}

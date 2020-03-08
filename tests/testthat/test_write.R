@@ -43,12 +43,26 @@ test_that("delete and update work (#304)", {
   x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
   expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
-  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Deleting source")
-  expect_error(st_write(x, gpkg, update = NA, quiet = TRUE), "Dataset already exists")
-  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
+  expect_warning(st_write(x, gpkg, update = NA, quiet = TRUE), "deprecated")
   expect_silent(write_sf(x, gpkg, layer = "foo", delete_layer = TRUE))
   expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
-  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Updating layer `foo' to data source")
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo'")
+  expect_silent(st_write(x, gpkg, "bar", quiet = TRUE))
+  expect_error(st_write(x, gpkg, "bar", quiet = TRUE), "Dataset already exists")
+  i = which(st_layers(gpkg)$name == "bar")
+  expect_true(st_layers(gpkg)$features[i] == 2)
+  expect_silent(st_write(x, gpkg, "bar", append = FALSE, quiet = TRUE))
+  expect_true(st_layers(gpkg)$features[i] == 2)
+  expect_silent(st_write(x, gpkg, "bar", append = TRUE, quiet = TRUE))
+  expect_true(st_layers(gpkg)$features[i] == 4)
+  expect_output(st_write(x, gpkg, delete_dsn = TRUE), "Writing 2 features")
+  expect_error(st_write(x, gpkg, quiet = TRUE), "Dataset already exists")
+  expect_silent(st_write(x, gpkg, append = FALSE, quiet = TRUE))
+  expect_silent(st_write(x, gpkg, append = TRUE, quiet = TRUE))
+  expect_silent(write_sf(x, gpkg, layer = "foo", delete_layer = TRUE))
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo' using")
+  expect_output(st_write(x, gpkg, layer = "foo", delete_layer = TRUE), "Deleting layer `foo'")
+
   expect_warning(
   	expect_error(st_write(x, gpkg, layer = ".", quiet = TRUE),
   				 "Write error"),
