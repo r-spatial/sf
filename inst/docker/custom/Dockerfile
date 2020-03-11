@@ -33,9 +33,9 @@ RUN apt-get install -y  pkg-config
 
 RUN cd \
 	&& mkdir /opt/proj \
-	&& wget http://download.osgeo.org/proj/proj-6.1.1.tar.gz \
-	&& tar zxvf proj-6.1.1.tar.gz  \
-	&& cd proj-6.1.1/ \
+	&& wget http://download.osgeo.org/proj/proj-6.3.1.tar.gz \
+	&& tar zxvf proj-6.3.1.tar.gz  \
+	&& cd proj-6.3.1/ \
 	&& ./configure --prefix=/opt/proj \
 	&& make \
 	&& make install install-am
@@ -44,14 +44,12 @@ RUN export PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	&& ls -la /opt/proj/lib/pkgconfig \
 	&& pkg-config proj --modversion
 
-RUN	cd \
-	&& wget http://download.osgeo.org/gdal/3.0.1/gdal-3.0.1.tar.gz \
-	&& tar zxvf gdal-3.0.1.tar.gz
-
 	#&& export LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 
-RUN cd \
-	&& cd gdal-3.0.1 \
+RUN	cd \
+	&& wget http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz \
+	&& tar zxvf gdal-3.0.4.tar.gz \
+	&& cd gdal-3.0.4 \
 	&& mkdir /opt/gdal \
 	&& ./configure --prefix=/opt/gdal --with-proj=/opt/proj \
 	&& make \
@@ -59,9 +57,9 @@ RUN cd \
 	
 RUN	mkdir /opt/geos \
 	&& cd \
-	&& wget http://download.osgeo.org/geos/geos-3.7.2.tar.bz2 \
-	&& bunzip2 -c geos-3.7.2.tar.bz2 | tar xvf - \
-	&& cd geos-3.7.2 \
+	&& wget http://download.osgeo.org/geos/geos-3.7.0.tar.bz2 \
+	&& bunzip2 -c geos-3.7.0.tar.bz2 | tar xvf - \
+	&& cd geos-3.7.0 \
 	&& mkdir build \
 	&& cd build \
 	&& cmake -DCMAKE_INSTALL_PREFIX:PATH=/opt/geos .. \
@@ -83,6 +81,8 @@ RUN	cd / \
 # RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-proj-share=/opt/proj/share/proj --with-proj-api=no --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 # LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib 
 
+RUN ls
+
 RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 	PROJ_DATA=/opt/proj/share/proj \
@@ -97,6 +97,6 @@ RUN R CMD build --no-build-vignettes lwgeom
 #RUN	R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
 #		--with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
-PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
 CMD ["/bin/bash"]
