@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Areal-weighted interpolation of polygon data — st_interpolate_aw • sf</title>
+<title>transform method for sf objects — transform.sf • sf</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Areal-weighted interpolation of polygon data — st_interpolate_aw" />
-<meta property="og:description" content="Areal-weighted interpolation of polygon data" />
+<meta property="og:title" content="transform method for sf objects — transform.sf" />
+<meta property="og:description" content="Can be used to create or modify variables." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -143,49 +143,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Areal-weighted interpolation of polygon data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/aggregate.R'><code>R/aggregate.R</code></a></small>
-    <div class="hidden name"><code>st_interpolate_aw.Rd</code></div>
+    <h1>transform method for sf objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/sf.R'><code>R/sf.R</code></a></small>
+    <div class="hidden name"><code>transform.sf.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Areal-weighted interpolation of polygon data</p>
+    <p>Can be used to create or modify variables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_interpolate_aw</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>extensive</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for sf</span>
+<span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>`_data`</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object of class <code>sf</code>, for which we want to aggregate attributes</p></td>
-    </tr>
-    <tr>
-      <th>to</th>
-      <td><p>object of class <code>sf</code> or <code>sfc</code>, with the target geometries</p></td>
-    </tr>
-    <tr>
-      <th>extensive</th>
-      <td><p>logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.</p></td>
+      <th>_data</th>
+      <td><p>object of class <code>sf</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>ignored</p></td>
+      <td><p>Further arguments of the form tag=value</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpYWj0V8/temp_libpath62b95708fd00/sf/shape/nc.shp' using driver `ESRI Shapefile'
-#&gt; Simple feature collection with 100 features and 14 fields
-#&gt; geometry type:  MULTIPOLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='no'>nc</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>,<span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar</span></div><div class='input'><span class='no'>a1</span> <span class='kw'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='no'>nc</span>[<span class='st'>"BIR74"</span>], <span class='no'>g</span>, <span class='kw'>extensive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>a1</span>$<span class='no'>BIR74</span>) / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>nc</span>$<span class='no'>BIR74</span>) <span class='co'># not close to one: property is assumed spatially intensive</span></div><div class='output co'>#&gt; [1] 1.436176</div><div class='input'><span class='no'>a2</span> <span class='kw'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='no'>nc</span>[<span class='st'>"BIR74"</span>], <span class='no'>g</span>, <span class='kw'>extensive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='co'># verify mass preservation (pycnophylactic) property:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>a2</span>$<span class='no'>BIR74</span>) / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>nc</span>$<span class='no'>BIR74</span>)</div><div class='output co'>#&gt; [1] 1.000038</div><div class='input'><span class='no'>a1</span>$<span class='no'>intensive</span> <span class='kw'>=</span> <span class='no'>a1</span>$<span class='no'>BIR74</span>
-<span class='no'>a1</span>$<span class='no'>extensive</span> <span class='kw'>=</span> <span class='no'>a2</span>$<span class='no'>BIR74</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>a1</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"intensive"</span>, <span class='st'>"extensive"</span>)], <span class='kw'>key.pos</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='st_interpolate_aw-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x1</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>x2</span> <span class='kw'>=</span> <span class='fl'>5</span>:<span class='fl'>7</span>)
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>a</span>) <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)))
+<span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>a</span>, <span class='kw'>x1_sq</span> <span class='kw'>=</span> <span class='no'>x1</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt;   x1 x2    geometry x1_sq
+#&gt; 1  1  5 POINT (0 0)     1
+#&gt; 2  2  6 POINT (1 1)     4
+#&gt; 3  3  7 POINT (2 2)     9</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>a</span>, <span class='kw'>x1_x2</span> <span class='kw'>=</span> <span class='no'>x1</span>*<span class='no'>x2</span>)</div><div class='output co'>#&gt;   x1 x2    geometry x1_x2
+#&gt; 1  1  5 POINT (0 0)     5
+#&gt; 2  2  6 POINT (1 1)    12
+#&gt; 3  3  7 POINT (2 2)    21</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
