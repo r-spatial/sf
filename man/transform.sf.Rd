@@ -9,10 +9,11 @@
 \arguments{
 \item{_data}{object of class \code{sf}}
 
-\item{...}{Further arguments of the form tag=value}
+\item{...}{Further arguments of the form new_variable=expression}
 }
 \description{
-Can be used to create or modify variables.
+Can be used to create or modify attribute variables; for transforming geometries see 
+\link{st_transform}, and all other functions starting with \code{st_}.
 }
 \examples{
 a = data.frame(x1 = 1:3, x2 = 5:7)

@@ -456,10 +456,11 @@ st_drop_geometry = function(x) {
 
 #' transform method for sf objects
 #' 
-#' Can be used to create or modify variables.
+#' Can be used to create or modify attribute variables; for transforming geometries see 
+#' \link{st_transform}, and all other functions starting with \code{st_}.
 #' 
 #' @param _data object of class \code{sf}
-#' @param ... Further arguments of the form tag=value
+#' @param ... Further arguments of the form new_variable=expression
 #'
 #' @export
 #' @examples
