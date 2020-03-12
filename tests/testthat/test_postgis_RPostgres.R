@@ -343,50 +343,49 @@ test_that("Can safely manipulate crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     srid <- 4326
     crs <- st_crs(srid)
-    expect_true(get_postgis_crs(pg, srid) == st_crs(srid))
+    expect_true(find_database_srid(pg, srid = srid) == st_crs(srid))
+    expect_true(find_database_srtext(pg, crs) == st_crs(srid))
     expect_error(set_postgis_crs(pg, st_crs(srid)), "already exists")
     expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
-    new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
+    new_crs <- make_empty_crs(
+    	epsg = get_new_postgis_srid(pg),
+    	text = "+proj=longlat +datum=WGS84 +no_defs"
+    )
     expect_message(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
-    expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
-                   "not found")
+    expect_error(set_postgis_crs(pg, new_crs), "duplicate key")
     expect_equal(delete_postgis_crs(pg, new_crs), 1)
     expect_equal(delete_postgis_crs(pg, new_crs), 0)
 
     # set and delete
-    crs$epsg <- NA
-    expect_message(new_srid <- set_postgis_crs(pg, crs), "Inserted local crs")
-    expect_error(delete_postgis_crs(pg, crs), "Missing SRID")
-    crs2 <- st_crs(new_srid$epsg, proj4text = st_crs(3857)$proj4string, valid = FALSE)
+    new_crs <- make_empty_crs(
+    	epsg = NA,
+    	text = st_as_text(st_crs(4326))
+    )
+    expect_message(new_srid <- set_postgis_crs(pg, new_crs), "Inserted local crs")
+    expect_error(delete_postgis_crs(pg, new_crs), "Missing SRID")
+
+    crs2 <- make_empty_crs(epsg(new_srid), st_as_text(st_crs(3857)))
     expect_equal(delete_postgis_crs(pg, crs2), 0)  # crs doesn't match any crs
     expect_equal(delete_postgis_crs(pg, new_srid), 1)
 
     # udpate
     expect_message(set_postgis_crs(pg, new_srid), "Inserted local crs")
-    new_srid$proj4string <- crs2$proj4string
-    expect_warning(
-        expect_error(set_postgis_crs(pg, new_srid), "already exists"),
-        "GDAL Error 6: EPSG"
-    )
-    expect_warning(
-        expect_message(set_postgis_crs(pg, new_srid, update = TRUE), "Inserted local crs"),
-        "GDAL Error 6: EPSG"
-    )
-
+    new_srid[["wkt"]] <- crs2[["wkt"]]
+    expect_error(set_postgis_crs(pg, new_srid), "already exists")
+    expect_message(set_postgis_crs(pg, new_srid, update = TRUE), "Inserted local crs")
 })
 
 
 test_that("new SRIDs are handled correctly", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    data(meuse, package = "sp")
-    meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
+	skip("TODO: Need to produce a locally unknown crs")
+	crs <- make_empty_crs(
+		epsg = NA,
+		wkt = "locally unknown crs"
+	)
+    st_crs(pts) <- crs
 
-    crs = st_crs(NA_integer_, paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
-                                    "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
-                                    "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
-                                    "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
-    st_crs(meuse_sf) = crs
-    expect_message(st_write(meuse_sf, pg, overwrite = TRUE), "Inserted local crs")
+    expect_message(st_write(pts, pg, "meuse_sf", overwrite = TRUE), "Inserted local crs")
     expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
                    "not found in EPSG support files")
     expect_true(st_crs(x)$proj4string == crs$proj4string)

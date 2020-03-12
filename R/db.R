@@ -171,7 +171,7 @@ st_read.PostgreSQLConnection <- function(...) {
 postgis_as_sfc <- function(x, EWKB, conn) {
 	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
 	if (!is.null(attr(geom, "srid"))) {
-		st_crs(geom) = make_crs(get_postgis_crs(conn, attr(geom, "srid")))
+		st_crs(geom) = make_crs(find_database_srid(conn, srid = attr(geom, "srid")))
 		attr(geom, "srid") = NULL
 	}
 	return(geom)
@@ -201,11 +201,15 @@ as_wkb <- function(x) {
 }
 
 get_possibly_new_srid <- function(conn, crs) {
-	# First, we search for a matching projection id
-	try_crs <- get_postgis_crs(conn, epsg(crs))
-	if(is_crs(try_crs)) {
-		return(try_crs)
+
+	# Return if we have a matching srid
+	db_crs <- find_database_srid(conn, crs)
+	if(is_crs(db_crs) & !is.na(db_crs)) {
+		return(db_crs)
 	}
+
+	# No matching SRID, so compare wkt if available
+
     srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
 
     if (class(srs_table) == "try-error") {  # nocov start
@@ -224,26 +228,95 @@ get_possibly_new_srid <- function(conn, crs) {
     }
     srid
 }
-
-get_postgis_crs = function(conn, srid) {
-    if (is.na(srid)) return(st_crs(NA))
+#' Find srid in a database by using the srid
+#' @conn Dababase connection (e.g. `DBI`)
+#' @srid An integer descriing the srid to fetch
+#' @returns a `crs`
+find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_local)) {
+    if (is.na(crs_local)) return(st_crs(NA))
+	if (is.na(srid)) {
+		crs_found <- find_database_srtext(conn, crs_local)
+		srid <- epsg(crs_found)
+	}
     query <- paste0("select srtext from spatial_ref_sys where srid = ", srid)
     db_crs <- dbGetQuery(conn, query)
     if (nrow(db_crs) < 1) {
     	return(st_crs(NA))
     }
     if (nrow(db_crs) > 1) {
+    	# TODO: pretty print db_spatial_ref
     	stop("SRID should be unique, but the database returned ", nrow(db_crs), " matching crs. \n",
     		 db_crs, call. = FALSE)  # nocov
     }
-    crs <- st_crs(srid, db_crs[["srtext"]], valid = FALSE)
-    local_crs <- st_crs(srid)
-    if(crs != local_crs & !is.na(local_crs)) {  # nocov start
+    crs_found <- st_crs(srid, db_crs[["srtext"]], valid = FALSE)
+    if(crs_found != crs_local & !is.na(crs_local)) {
+    	# TODO: pretty print db_spatial_ref
         warning("Local crs different from database crs. You can inspect the ",
                 "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
-                "and compare it to `st_crs(", srid,")`.")
-    }  # nocov end
-    crs
+                "and compare it to `st_crs(", srid,")`.")  # nocov
+    }
+    crs_found
+}
+
+#' Find database projection using srtext (wkt)
+find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(crs_local)) {
+	if (is.na(crs_local)) return(st_crs(NA))
+
+	query <- paste0("select srtext from spatial_ref_sys where srtext = '", wkt, "'")
+	db_spatial_ref <- DBI::dbGetQuery(conn, query)
+	if (nrow(db_spatial_ref) < 1) {
+		# need to relax comparison
+
+		# read table, and find equivalent projections using ==
+		query <- "select * from spatial_ref_sys where srtext is not null and srtext != ''"
+		db_spatial_ref <- DBI::dbGetQuery(conn, query)
+		db_crs <- lapply(db_spatial_ref[["srtext"]], function(string) try(st_crs(string)))
+		reject <- vapply(db_crs, function(x) inherits(x, "try-error"), logical(1))
+		eq <- vapply(db_crs[!reject], function(x) crs_local == x, logical(1))
+		db_spatial_ref <- db_spatial_ref[eq, ]
+	}
+
+	if (nrow(db_spatial_ref) > 1) {  # nocov start
+		# Use the first match, but warn the user.
+		# Only show first 10 matches
+		db_spatial_ref <- db_spatial_ref[seq_len(min(nrow(db_spatial_ref), 10)), ]
+		warning("Found multiple matching projections, will use srid = ",
+				db_spatial_ref[["srid"]][[1]],
+				".\n\tOther database srid matching the projection WKT description: ",
+				paste(db_spatial_ref[["srid"]][-1], collapse = ", "), "\n",
+				"You can suppress this warning by setting the projection to `st_crs(",
+				db_spatial_ref[["srid"]][[1]], ")` (it will also be faster)",
+				call. = FALSE)
+		db_spatial_ref <- db_spatial_ref[1, ]
+	} # nocov end
+
+	if (nrow(db_spatial_ref) < 1) {
+		# TODO: check proj4string, and create an srid if needed
+		stop("Could not find a matching WKT projection in the database.")
+	}
+
+	srid <- db_spatial_ref[["srid"]]
+	crs_found <- st_crs(db_spatial_ref[["srtext"]], valid = FALSE)
+	if(crs_found != crs_local) {  # nocov start
+		warning("Local crs different from database crs. You can inspect the ",
+				"database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
+				"and compare it to `st_crs(", srid,")`.")
+	}  # nocov end
+	crs_found
+}
+
+make_empty_crs <- function(epsg = NA, text = NA, wkt = NA) {
+	if(!is.na(epsg)) {
+		epsg <- paste0("EPSG:", epsg[1])
+	}
+	if(is.na(wkt)) {
+		wkt = st_as_text(st_crs(text))
+	}
+	structure(
+		list(
+			input = epsg,
+			wkt = wkt),
+		class = "crs")
 }
 
 set_postgis_crs <- function(conn,
@@ -251,39 +324,52 @@ set_postgis_crs <- function(conn,
                             auth_name = "sf",
                             update = FALSE,
                             verbose = TRUE) {
-    if (is.na(epsg(crs))) {
-        epsg(crs) <- get_new_postgis_srid(conn)
-    } else {
-        get_postgis_crs(conn, epsg(crs))
-    }
-    wkt <- st_as_text(crs)
+	wkt <- st_as_text(crs)
+	if (is.na(wkt)) {
+		stop("A projection with WKT is required to update postgis's `spatial_ref_sys`.", call. = FALSE)
+	}
+
+	srid <- epsg(crs)
+	if (is.na(srid)) {
+        srid <- get_new_postgis_srid(conn)
+        crs <- make_empty_crs(epsg = srid, text = wkt)
+	}
+
     q <- function(x) paste0("'", x, "'")
     if (update) {
         query <- paste("UPDATE spatial_ref_sys SET",
                        "auth_name =", q(auth_name),
                        ", srtext =", q(wkt),
-                      ", proj4text =", q(crs[["proj4string"]]),
+                      ", proj4text =", q(proj4string(crs)),
                       "WHERE srid =", q(epsg(crs)), ";")
     } else {
-        query <- paste("INSERT INTO spatial_ref_sys (srid,auth_name,auth_srid,srtext,proj4text)",
+        query <- paste("INSERT INTO spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text)",
                       "VALUES (",
-                      paste(epsg(crs), q(auth_name), epsg(crs), q(wkt), q(crs[["proj4string"]]), sep = ", "),
+                      paste(
+                      	epsg(crs),
+                      	q(auth_name),
+                      	epsg(crs),
+                      	q(wkt),
+                      	q(proj4string(crs)), sep = ", "),
                       ");")
     }
     tryCatch(dbExecute(conn, query),
             error = function(err) {
                 if(grepl("permission denied", err)) {  # nocov start
-                    stop("Write permission denied on table `spatial_ref_sys`.",
-                         "\n * Local crs is not in the database;",
+                    stop("Write permission denied on table `spatial_ref_sys` because:",
+                         "\n * Local crs is not in the database; ",
                          "\n * Write permission on table `spatial_ref_sys` is denied.",
                          "\nEither: ",
-                         "\n * Change the crs locally using `st_transform()`;",
-                         "\n * Grant write access on `spatial_sys_ref` for this connection.",
-                         "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", epsg(crs), ")")
+                         "\n * Change the crs locally using `st_transform()` on your `sf` object;",
+                         "\n * Set the crs to NA using `st_set_crs({your_sf}, NA)`.",
+                         "\n * Grant write access on `spatial_sys_ref`.",
+                         "\n * Ask the database administrator to add your projection with :",
+                    	 "\n ``` sql\n", query, "\n ```",
+                    	 call. = FALSE)
                 }
                 stop(err) # nocov end
             })
-    if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
+    if (verbose) message("Inserted local crs: `", st_as_text(crs),
                          "` in database as srid:", epsg(crs), ".")
     return(crs)
 }
