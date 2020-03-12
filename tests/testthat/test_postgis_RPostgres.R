@@ -1,3 +1,14 @@
+#' To run the tests from the database, you can setup a docker container
+#' and run it as needed.
+#' docker run \
+#'   --name "postgis_test" \
+#'   -p 5432:5432 \
+#'   -e POSTGRES_USER=$USER \
+#'   -e POSTGRES_PASS=$USER \
+#'   -e POSTGRES_DBNAME=postgis \
+#'   -d -t kartoza/postgis
+#'  docker start postgis
+
 library(sf)
 library(DBI)
 library(RPostgreSQL)
@@ -25,7 +36,11 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", dbname = "postgis", password = Sys.info()[["user"]]), silent=TRUE)
+try(pg <- DBI::dbConnect(
+	RPostgres::Postgres(),
+	host = "localhost",
+	dbname = "postgis",
+	password = Sys.info()[["user"]]), silent=TRUE)
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
