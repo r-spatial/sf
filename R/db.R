@@ -200,8 +200,12 @@ as_wkb <- function(x) {
 	structure(x, class = "WKB")
 }
 
-get_possibly_new_srid <- function(conn, proj4string) {
-
+get_possibly_new_srid <- function(conn, crs) {
+	# First, we search for a matching projection id
+	try_crs <- get_postgis_crs(conn, epsg(crs))
+	if(is_crs(try_crs)) {
+		return(try_crs)
+	}
     srs_table = try(dbReadTable(conn, "spatial_ref_sys"))
 
     if (class(srs_table) == "try-error") {  # nocov start
@@ -210,7 +214,6 @@ get_possibly_new_srid <- function(conn, proj4string) {
         return(0)
     } # nocov end
 
-    trim <- function (x) gsub("^\\s+|\\s+$", "", x) # https://stackoverflow.com/questions/2261079/how-to-trim-leading-and-trailing-whitespace-in-r
     srs_table$proj4text = sapply(srs_table$proj4text, trim)
     eq = srs_table$proj4text == proj4string
     if (any(eq))
@@ -224,10 +227,16 @@ get_possibly_new_srid <- function(conn, proj4string) {
 
 get_postgis_crs = function(conn, srid) {
     if (is.na(srid)) return(st_crs(NA))
-    query <- paste0("select proj4text from spatial_ref_sys where srid = ", srid, ";")
-    proj4text <- dbGetQuery(conn, query)
-    if (nrow(proj4text) != 1) return(st_crs(NA))
-    crs <- st_crs(srid, gsub("^\\s+|\\s+$", "", proj4text[[1]]), valid = FALSE)
+    query <- paste0("select srtext from spatial_ref_sys where srid = ", srid)
+    db_crs <- dbGetQuery(conn, query)
+    if (nrow(db_crs) < 1) {
+    	return(st_crs(NA))
+    }
+    if (nrow(db_crs) > 1) {
+    	stop("SRID should be unique, but the database returned ", nrow(db_crs), " matching crs. \n",
+    		 db_crs, call. = FALSE)  # nocov
+    }
+    crs <- st_crs(srid, db_crs[["srtext"]], valid = FALSE)
     local_crs <- st_crs(srid)
     if(crs != local_crs & !is.na(local_crs)) {  # nocov start
         warning("Local crs different from database crs. You can inspect the ",
@@ -242,10 +251,10 @@ set_postgis_crs <- function(conn,
                             auth_name = "sf",
                             update = FALSE,
                             verbose = TRUE) {
-    if (is.na(crs[["epsg"]])) {
-        crs[["epsg"]] <- get_new_postgis_srid(conn)
+    if (is.na(epsg(crs))) {
+        epsg(crs) <- get_new_postgis_srid(conn)
     } else {
-        get_postgis_crs(conn, crs[["epsg"]])
+        get_postgis_crs(conn, epsg(crs))
     }
     wkt <- st_as_text(crs)
     q <- function(x) paste0("'", x, "'")
@@ -254,11 +263,11 @@ set_postgis_crs <- function(conn,
                        "auth_name =", q(auth_name),
                        ", srtext =", q(wkt),
                       ", proj4text =", q(crs[["proj4string"]]),
-                      "WHERE srid =", q(crs[["epsg"]]), ";")
+                      "WHERE srid =", q(epsg(crs)), ";")
     } else {
         query <- paste("INSERT INTO spatial_ref_sys (srid,auth_name,auth_srid,srtext,proj4text)",
                       "VALUES (",
-                      paste(crs[["epsg"]], q(auth_name), crs[["epsg"]], q(wkt), q(crs[["proj4string"]]), sep = ", "),
+                      paste(epsg(crs), q(auth_name), epsg(crs), q(wkt), q(crs[["proj4string"]]), sep = ", "),
                       ");")
     }
     tryCatch(dbExecute(conn, query),
@@ -270,22 +279,22 @@ set_postgis_crs <- function(conn,
                          "\nEither: ",
                          "\n * Change the crs locally using `st_transform()`;",
                          "\n * Grant write access on `spatial_sys_ref` for this connection.",
-                         "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", crs[["epsg"]], ")")
+                         "\nLocal crs is:`", crs[["proj4string"]], "` (SRID:", epsg(crs), ")")
                 }
                 stop(err) # nocov end
             })
     if (verbose) message("Inserted local crs: `", crs[["proj4string"]],
-                         "` in database as srid:", crs[["epsg"]], ".")
+                         "` in database as srid:", epsg(crs), ".")
     return(crs)
 }
 
 delete_postgis_crs <- function(conn, crs) {
-    if (is.na(crs[["epsg"]])) stop("Missing SRID")
+    if (is.na(epsg(crs))) stop("Missing SRID")
     wkt <- st_as_text(crs)
     query <- paste0("DELETE FROM spatial_ref_sys ",
-                   "WHERE srid = '", crs$epsg, "' ",
+                   "WHERE srid = '", epsg(crs), "' ",
                    "AND srtext = '", wkt, "' ",
-                   "AND proj4text = '", crs$proj4string, "';")
+                   "AND proj4text = '", proj4string(crs), "';")
     dbExecute(conn, query)
 }
 
@@ -362,13 +371,13 @@ to_postgis <- function(conn, x, binary) {
 
 sync_crs <- function(conn, geom) {
     crs <- st_crs(geom)
-    srid <- crs$epsg
+    srid <- epsg(crs)
     if (is.na(crs) || is.na(srid)) {
-        if (is.na(crs$proj4string))
+        if (is.na(proj4string(crs)))
             crs <- st_crs(0, valid = FALSE)
         else {
-            srid <- get_possibly_new_srid(conn, crs$proj4string)
-            crs <- st_crs(srid, proj4text = crs$proj4string, valid = FALSE)
+            srid <- get_possibly_new_srid(conn, crs)
+            crs <- st_crs(srid, proj4text = proj4string(crs), valid = FALSE)
         }
     }
     st_set_crs(geom, crs)
@@ -430,7 +439,7 @@ is_geometry_column.default <- function(con, x, classes = c("character")) {
 # RPostgres::dbGetQuery returns geometry columns of class pq_geometry:
 #' @name st_as_sfc
 #' @export
-st_as_sfc.pq_geometry <- function(x, ..., EWKB = TRUE, spatialite = FALSE, 
+st_as_sfc.pq_geometry <- function(x, ..., EWKB = TRUE, spatialite = FALSE,
 		pureR = FALSE, crs = NA_crs_) { # nocov start
-  st_as_sfc.WKB(x, ..., EWKB = EWKB, spatiallite = spatialite, pureR = pureR, crs = crs) 
+  st_as_sfc.WKB(x, ..., EWKB = EWKB, spatiallite = spatialite, pureR = pureR, crs = crs)
 } # nocov end
