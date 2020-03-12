@@ -269,7 +269,9 @@ udunits_from_proj = list(
 )
 
 crs_parameters = function(x, with_units = TRUE) {
-	stopifnot(!is.na(x))
+	stopifnot(inherits(x, "crs"))
+	if(is.na(x)) return(list(NA))
+
 	ret = CPL_crs_parameters(x)
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
@@ -286,11 +288,16 @@ crs_parameters = function(x, with_units = TRUE) {
 }
 
 epsg = function(x) {
-	crs_parameters(x)[["epsg"]]
+	if(is.na(x)) return(NA)
+	if(grepl("^EPSG:", x[["input"]])) {
+		return(as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]])))
+	}
+	crs_parameters(x, with_units = FALSE)[["epsg"]]
 }
 
 proj4string = function(x) {
-	crs_parameters(x)[["proj4string"]]
+	if(is.na(x)) return(NA)
+	crs_parameters(x, with_units = FALSE)[["proj4string"]]
 }
 
 is_crs = function(x) {
@@ -301,6 +308,7 @@ is_crs = function(x) {
 #' @param pretty logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system
 #' @export
 st_as_text.crs = function(x, ..., pretty = FALSE) {
+	if (is.na(x)) return(NA)
 	if (pretty)
 		crs_parameters(x)$WktPretty
 	else
