@@ -376,7 +376,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && append == FALSE,
+		append = NA, delete_dsn = FALSE, delete_layer = isFALSE(append),
 		fid_column_name = NULL) {
 
 	if (!is.null(list(...)$update)) {
@@ -395,10 +395,18 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 			dsn = pool::poolCheckout(dsn)
 			on.exit(pool::poolReturn(dsn)) # nocov end
 		}
-		if (is.null(layer))
+
+		if (is.null(layer)) {
 			layer = deparse(substitute(obj))
-		dbWriteTable(dsn, name = layer, value = obj, ...,
-			factorsAsCharacter = factorsAsCharacter)
+		}
+
+		if (is.na(append)) {
+			append = FALSE
+		}
+
+		dbWriteTable(dsn, name = layer, value = obj,
+					 append = append, overwrite = delete_layer,
+					 factorsAsCharacter = factorsAsCharacter, ...)
 		return(invisible(obj))
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
