@@ -1,6 +1,6 @@
 check_join = function(x, y) {
 	if (inherits(y, "sf"))
-		stop("y should be a data.frame; for spatial joins, use st_join", call. = FALSE)
+		stop("y should not have class sf; for spatial joins, use st_join", call. = FALSE)
 }
 
 sf_join = function(g, sf_column, suffix_x = ".x") {
@@ -10,7 +10,6 @@ sf_join = function(g, sf_column, suffix_x = ".x") {
 	}
 	attr(g[[ sf_column ]], "bbox") = NULL # remove, so that st_sfc() recomputes:
 	g[[ sf_column ]] = st_sfc(g[[ sf_column ]])
-	class(g) = setdiff(class(g), "sf")
 	st_sf(g, sf_column_name = sf_column)
 }
 
@@ -24,30 +23,35 @@ inner_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), 
 #' @name tidyverse
 left_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
 #' @name tidyverse
 right_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
 #' @name tidyverse
 full_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
 #' @name tidyverse
 semi_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
 #' @name tidyverse
 anti_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 

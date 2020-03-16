@@ -1,7 +1,7 @@
 ## dplyr methods:
-group_map.sf <- function(.tbl, .f, ...) {
-	 st_as_sf(NextMethod()) # nocov
-}
+#group_map.sf <- function(.tbl, .f, ...) {
+#	 st_as_sf(NextMethod()) # nocov
+#}
 
 group_split.sf <- function(.tbl, ..., keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
@@ -387,7 +387,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "filter", "sf")
 	register_s3_method("dplyr", "full_join", "sf")
 	register_s3_method("dplyr", "group_by", "sf")
-	register_s3_method("dplyr", "group_map", "sf")
+#	register_s3_method("dplyr", "group_map", "sf")
 	register_s3_method("dplyr", "group_split", "sf")
 	register_s3_method("dplyr", "inner_join", "sf")
 	register_s3_method("dplyr", "left_join", "sf")
