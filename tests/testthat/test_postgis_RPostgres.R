@@ -11,7 +11,7 @@
 
 library(sf)
 library(DBI)
-library(RPostgreSQL)
+library(RPostgres)
 library(testthat)
 context("sf: postgis using RPostgres")
 
@@ -46,30 +46,30 @@ try(pg <- DBI::dbConnect(
 test_that("can write to db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
-    expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
-    expect_silent(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
+    expect_error(st_write(pts, pg, "sf_meuse__", append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, "sf_meuse__", delete_layer = TRUE))
     expect_silent(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
     expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2)
-    expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
+    expect_silent(st_write(z, pg, "sf_meuse3__", delete_layer = TRUE))
 })
 
 test_that("can handle multiple geom columns", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
-    expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
+    expect_silent(st_write(multi, pg, "meuse_multi", delete_layer = TRUE))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
     # expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]])) -> fails if EPSG databases differ
-    expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
+    expect_true(st_crs(x[["geometry.1"]]) == st_crs(multi[["geometry.1"]]))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
     x <- st_layers("PG:host=localhost dbname=postgis")
     multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
-    expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
+    expect_silent(st_write(multi2, pg, "meuse_multi2", delete_layer = TRUE))
     expect_silent(x <- st_read(pg, "meuse_multi2"))
     expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
     expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
@@ -83,7 +83,7 @@ test_that("sf can write units to database (#264)", {
     ptsu <- pts
     ptsu[["u"]] <- ptsu[["cadmium"]]
     units(ptsu[["u"]]) <- units::as_units("km")
-    expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
+    expect_silent(st_write(ptsu, pg, "sf_units__", delete_layer = TRUE))
     r <- st_read(pg, "sf_units__")
     expect_is(r[["u"]], "numeric")
     expect_equal(sort(r[["u"]]), sort(as.numeric(ptsu[["u"]])))
@@ -160,7 +160,7 @@ test_that("sf can preserve types (#592)", {
     # cannot write lists
     #dtypes$lst <- c(list(matrix("a")), list(matrix(c("b", "c"))), list(NA))
     dtypes <- st_as_sf(dtypes, coords = c("x", "y"))
-    st_write(dtypes, pg, overwrite = TRUE)
+    st_write(dtypes, pg, delete_layer = TRUE)
     x <- st_read(pg, "dtypes")
     dtypes$fact <- as.character(dtypes$fact)
     expect_equal(x, dtypes)
@@ -173,17 +173,19 @@ test_that("can write to other schema", {
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
     suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_error(st_write(pts, pg, Id(schema = "public", table = "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")))
-    expect_error(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__"), overwrite = TRUE))
+    tbl_meuse_public <- Id(schema = "public", table = "sf_meuse__")
+    tbl_meuse_test <- Id(schema = "sf_test__", table = "sf_meuse__")
+    expect_error(st_write(pts, pg, tbl_meuse_public, append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, tbl_meuse_test))
+    expect_error(st_write(pts, pg, tbl_meuse_test, append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, tbl_meuse_test, delete_layer = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse33__")))
     expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse4__")))
 
     # weird name work
-    expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), overwrite = TRUE))
-    expect_silent(st_write(pts.2 <- pts, pg, overwrite = TRUE))
+    expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), delete_layer = TRUE))
+    expect_silent(st_write(pts.2 <- pts, pg, delete_layer = TRUE))
     expect_true(DBI::dbRemoveTable(pg, "pts.2 <- pts"))
 })
 
@@ -385,11 +387,11 @@ test_that("new SRIDs are handled correctly", {
 	)
     st_crs(pts) <- crs
 
-    expect_message(st_write(pts, pg, "meuse_sf", overwrite = TRUE), "Inserted local crs")
+    expect_message(st_write(pts, pg, "meuse_sf", delete_layer = TRUE), "Inserted local crs")
     expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
                    "not found in EPSG support files")
     expect_true(st_crs(x)$proj4string == crs$proj4string)
-    expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+    expect_silent(st_write(meuse_sf, pg, delete_layer = TRUE))
 })
 
 test_that("schema_table", {
