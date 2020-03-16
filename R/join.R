@@ -17,6 +17,7 @@ sf_join = function(g, sf_column, suffix_x = ".x") {
 #' @inheritParams dplyr::inner_join
 inner_join.sf = function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...) {
 	check_join(x, y)
+	class(x) = setdiff(class(x), "sf")
 	sf_join(NextMethod(), attr(x, "sf_column"), suffix[1])
 }
 
