@@ -323,15 +323,23 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
+	// get color table, attribute table, and min/max values:
 	List colorTables(poDataset->GetRasterCount());
 	List attributeTables(poDataset->GetRasterCount());
+	NumericMatrix ranges(poDataset->GetRasterCount(), 4);
 	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 		poBand = poDataset->GetRasterBand(i + 1);
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
 		attributeTables(i) = get_rat(poBand->GetDefaultRAT());
+		int set = 1;
+		ranges(i, 0) = poBand->GetMinimum(&set);
+		ranges(i, 1) = (double) set;
+		ranges(i, 2) = poBand->GetMaximum(&set);
+		ranges(i, 3) = (double) set;
 	}
 
+	// get metadata items:
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
 	CharacterVector sub = NA_STRING;
 	for (int i = 0; i < items.size(); i++) {
@@ -402,7 +410,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
 		_["band_meta"] = get_band_meta_data(poDataset),
 		_["attribute_tables"] = attributeTables,
-		_["color_tables"] = colorTables
+		_["color_tables"] = colorTables,
+		_["ranges"] = ranges
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 

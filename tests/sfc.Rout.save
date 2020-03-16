@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -768,7 +768,7 @@ bbox:           xmin: -15.7773 ymin: -22.4681 xmax: 143.823 ymax: 27.1614
 CRS:            NA
 MULTIPOINT ((48.8473 9.37328), (143.823 27.1614...
 > try(st_sample(p, 3.3))
-Error in st_sample(p, 3.3) : size should be an integer
+Error in st_sample.sfc(p, 3.3) : size should be an integer
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 +  st_linestring(rbind(c(0,0),c(.1,0))),
 +  st_linestring(rbind(c(0,1),c(.1,1))),
@@ -1133,4 +1133,4 @@ CRS:            NA
 > 
 > proc.time()
    user  system elapsed 
-  5.862   0.089   5.951 
+  5.335   0.062   5.443 

@@ -1,3 +1,7 @@
+#' @export
+#' @name st_sample
+st_sample = function(x, size, ...) UseMethod("st_sample")
+
 #' sample points on or in (sets of) spatial features
 #'
 #' Sample points on or in (sets of) spatial features.
@@ -80,8 +84,13 @@
 #'  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
 #' }
 #' @export
-st_sample = function(x, size, ..., type = "random", exact = TRUE) {
-	x = st_geometry(x)
+#' @name st_sample
+st_sample.sf = function(x, size, ...) st_sample(st_geometry(x), size, ...)
+
+#' @export
+#' @name st_sample
+st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE) {
+
 	if (!missing(size) && any(size %% 1 != 0))
 		stop("size should be an integer")
 	if (!missing(size) && length(size) > 1) { # recurse:
