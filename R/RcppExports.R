@@ -249,6 +249,10 @@ CPL_proj_h <- function(b = FALSE) {
     .Call('_sf_CPL_proj_h', PACKAGE = 'sf', b)
 }
 
+CPL_is_network_enabled <- function(b = FALSE) {
+    .Call('_sf_CPL_is_network_enabled', PACKAGE = 'sf', b)
+}
+
 CPL_get_data_dir <- function(b = FALSE) {
     .Call('_sf_CPL_get_data_dir', PACKAGE = 'sf', b)
 }

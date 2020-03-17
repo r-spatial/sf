@@ -66,6 +66,7 @@ RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "classInt"), re
 #	&& wget https://download.osgeo.org/proj/proj-datumgrid-1.7.zip \
 #	&& unzip proj*zip
 
+RUN ls
 RUN git clone --depth=1 https://github.com/r-spatial/sf.git
 
 RUN	cd / \
@@ -74,7 +75,6 @@ RUN	cd / \
 # RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-proj-share=/opt/proj/share/proj --with-proj-api=no --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 # LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib 
 
-RUN (cd sf; git pull; cd ..)
 RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 	PROJ_DATA=/opt/proj/share/proj \
@@ -84,11 +84,11 @@ RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 		--with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 	&& LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
 
-RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
-RUN R CMD build --no-build-vignettes lwgeom
+#RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
+#RUN R CMD build --no-build-vignettes lwgeom
 #RUN	R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
 #		--with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
-RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+#RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
 
 CMD ["/bin/bash"]

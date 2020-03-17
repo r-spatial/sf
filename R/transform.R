@@ -157,6 +157,9 @@ sf_proj_info = function(type = "proj", path) {
 	if (!missing(path) && is.character(path))
 		return(invisible(CPL_set_data_dir(path)))
 
+	if (type == "network")
+		return(CPL_is_network_enabled(TRUE))
+
     opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
     if (!(type %in% opts))
 		stop("unknown type") # nocov

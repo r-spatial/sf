@@ -811,6 +811,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_is_network_enabled
+Rcpp::LogicalVector CPL_is_network_enabled(bool b);
+RcppExport SEXP _sf_CPL_is_network_enabled(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_is_network_enabled(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_get_data_dir
 Rcpp::CharacterVector CPL_get_data_dir(bool b);
 RcppExport SEXP _sf_CPL_get_data_dir(SEXP bSEXP) {
@@ -1189,6 +1200,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
+    {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},
     {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 1},
     {"_sf_CPL_use_proj4_init_rules", (DL_FUNC) &_sf_CPL_use_proj4_init_rules, 1},
