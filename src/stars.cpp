@@ -218,6 +218,28 @@ NumericMatrix get_color_table(GDALColorTable *tbl) {
 	return t;
 }
 
+List get_cat(char **cat) {
+	if (cat == NULL)
+		return(List::create());
+
+	int n = 0;
+	for (n = 0; cat[n] != NULL; n++)
+		n++; // number of categories
+
+	List t(1);
+	CharacterVector col(n);
+	IntegerVector row_names(n);
+	for (int i = 0; i < n; i++) {
+		col(i) = cat[i];
+		row_names(i) = i+1;
+	}
+	t(0) = col;
+	t.attr("names") = CharacterVector::create("category");
+	t.attr("row.names") = row_names;
+	t.attr("class") = CharacterVector::create("data.frame");
+	return t;
+}
+
 List get_rat(GDALRasterAttributeTable *tbl) {
 	
 	if (tbl == NULL)
@@ -331,7 +353,10 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		poBand = poDataset->GetRasterBand(i + 1);
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
-		attributeTables(i) = get_rat(poBand->GetDefaultRAT());
+		if (poBand->GetCategoryNames() != NULL)
+			attributeTables(i) = get_cat(poBand->GetCategoryNames());
+		else
+			attributeTables(i) = get_rat(poBand->GetDefaultRAT());
 		int set = 1;
 		ranges(i, 0) = poBand->GetMinimum(&set);
 		ranges(i, 1) = (double) set;
