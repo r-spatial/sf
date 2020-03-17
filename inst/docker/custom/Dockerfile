@@ -66,9 +66,9 @@ RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "classInt"), re
 #	&& wget https://download.osgeo.org/proj/proj-datumgrid-1.7.zip \
 #	&& unzip proj*zip
 
-RUN ls
 RUN git clone --depth=1 https://github.com/r-spatial/sf.git
 
+RUN (cd sf; git pull; cd ..)
 RUN	cd / \
 	&& R CMD build sf --no-build-vignettes
 
