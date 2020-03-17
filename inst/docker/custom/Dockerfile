@@ -74,6 +74,7 @@ RUN	cd / \
 # RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-proj-share=/opt/proj/share/proj --with-proj-api=no --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 # LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib 
 
+RUN (cd sf; git pull; cd ..)
 RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
 	PROJ_DATA=/opt/proj/share/proj \
