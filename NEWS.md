@@ -1,5 +1,7 @@
 # version 0.9-0
 
+* `st_proj_info` was renamed into `sf_proj_info`; `sf_proj_info` can now get and set the PROJ data search path; #1277
+
 * addapt to new `dplyr` version; https://github.com/tidyverse/dplyr/issues/4917
 
 * `st_sample` is a generic

@@ -14,6 +14,10 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
+Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+	return Rcpp::CharacterVector(proj_info().searchpath);
+}
+
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
 	const char *cp = data_dir.c_str();
 	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
@@ -147,6 +151,15 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #if PJ_VERSION >= 600
 # define PROJ6 1
 #endif
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+#if PROJ_VERSION_MAJOR >= 7
+	return Rcpp::CharacterVector(proj_info().searchpath);
+#else
+	return Rcpp::CharacterVector(NA_STRING);
+#endif
+}
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
