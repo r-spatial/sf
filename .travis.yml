@@ -47,12 +47,13 @@ addons:
       - libnetcdf-dev
       - netcdf-bin
       - postgresql-server-dev-9.6
+	  - postgis
 
 before_install:
   # install postgis from source, to avoid dependency conflict with GDAL >= 2.0:
-  - wget http://download.osgeo.org/postgis/source/postgis-3.0.1.tar.gz
-  - (mv postgis* /tmp; cd /tmp; tar xzf postgis-3.0.1.tar.gz)
-  - (cd /tmp/postgis-3.0.1 ; ./configure; make; sudo make install)
+  #- wget http://download.osgeo.org/postgis/source/postgis-3.0.1.tar.gz
+  #- (mv postgis* /tmp; cd /tmp; tar xzf postgis-3.0.1.tar.gz)
+  #- (cd /tmp/postgis-3.0.1 ; ./configure; make; sudo make install)
 
   # activate liblwgeom by:
   ## - sudo ldconfig
