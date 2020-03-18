@@ -3,8 +3,8 @@
 #' These functions are provided for compatibility with older version of `sf`.
 #' They may eventually be completely removed.
 #' @md
-#' @rdname sf-deprecated
-#' @name sf-deprecated
+#' @rdname sf-defunct
+#' @name sf-defunct
 #' @param conn open database connection
 #' @param table table name
 #' @param geom_column deprecated. Geometry column name
@@ -25,19 +25,12 @@
 #' @export
 st_read_db <- function(conn = NULL, table = NULL, query = NULL,
 					   geom_column = NULL, EWKB = TRUE, ...) {
-	.Deprecated("st_read")
-    if (!is.null(geom_column)) {
-        warning("The use of `geom_column` is deprecated.\n",
-                "* Make sure the column is stored as `geometry` type",
-                " to allow `st_read_db` to read it.")
-    }
-	st_read(dsn = conn, layer = table, query = query, EWKB = EWKB, ...)
+	.Defunct("st_read")
 }
 
 #' @inheritDotParams dbWriteTable
 #' @export
 st_write_db <- function(conn = NULL, obj, table = deparse(substitute(obj)), ...,
 						drop = FALSE, append = FALSE) {
-	.Deprecated("st_write")
-	st_write(obj = obj, dsn = conn, layer = table, ..., overwrite = drop, append = append)
+	.Defunct("st_write")
 }

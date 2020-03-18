@@ -7,7 +7,7 @@
 #}
 
 # this function establishes whether two crs objects are semantically identical. This is
-# the case when: (1) they are completely identical (including NA), or (2) GDAL considers 
+# the case when: (1) they are completely identical (including NA), or (2) GDAL considers
 # them equivalent
 #' @export
 Ops.crs <- function(e1, e2) {
@@ -24,7 +24,7 @@ Ops.crs <- function(e1, e2) {
 			TRUE
 		else if (is.na(e1) || is.na(e2)) # only one of them is NA_crs_
 			FALSE
-		else 
+		else
 			isTRUE(try(CPL_crs_equivalent(e1, e2), silent = TRUE)) # use GDAL's srs1->IsSame(srs2)
 	}
 }
@@ -36,17 +36,17 @@ Ops.crs <- function(e1, e2) {
 #' @param x numeric, character, or object of class \link{sf} or \link{sfc}
 #' @param ... ignored
 #' @export
-#' @return If \code{x} is numeric, return \code{crs} object for EPSG:\code{x}; 
-#' if \code{x} is character, return \code{crs} object for \code{x}; 
+#' @return If \code{x} is numeric, return \code{crs} object for EPSG:\code{x};
+#' if \code{x} is character, return \code{crs} object for \code{x};
 #' if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
-#' @details The *crs functions create, get, set or replace the \code{crs} attribute 
-#' of a simple feature geometry list-column. This attribute is of class \code{crs}, 
-#' and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84" 
+#' @details The *crs functions create, get, set or replace the \code{crs} attribute
+#' of a simple feature geometry list-column. This attribute is of class \code{crs},
+#' and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84"
 #' or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
-#' 
-#' Comparison of two objects of class \code{crs} uses the GDAL function 
+#'
+#' Comparison of two objects of class \code{crs} uses the GDAL function
 #' \code{OGRSpatialReference::IsSame}.
-#' @return Object of class \code{crs}, which is a list with elements \code{input} (length-1 character) 
+#' @return Object of class \code{crs}, which is a list with elements \code{input} (length-1 character)
 #' and \code{wkt} (length-1 character).
 #' Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 #' assumed to relate to an arbitrary Cartesian coordinate system.
@@ -116,7 +116,7 @@ st_crs.bbox = function(x, ...) {
 #' @name st_crs
 #' @export
 st_crs.CRS = function(x, ...) {
-	if (is.null(comment(x))) 
+	if (is.null(comment(x)))
 		st_crs(x@projargs)
 	else {
 		ret = st_crs(comment(x))
@@ -136,9 +136,9 @@ st_crs.default = function(x, ...) NA_crs_
 #'
 #' Set or replace retrieve coordinate reference system from object
 #' @name st_crs
-#' @param value one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class \code{crs}. 
+#' @param value one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class \code{crs}.
 #' @details In case a coordinate reference system is replaced, no transformation takes
-#' place and a warning is raised to stress this. 
+#' place and a warning is raised to stress this.
 #'
 #' @export
 `st_crs<-` = function(x, value) UseMethod("st_crs<-")
@@ -172,8 +172,8 @@ make_crs = function(x) {
 	else if (inherits(x, "crs"))
 		x
 	else if (is.character(x)) {
-		if (grepl("+init=epsg:", x) && 
-				sf_extSoftVersion()[["proj.4"]] >= "6.0.0" && 
+		if (grepl("+init=epsg:", x) &&
+				sf_extSoftVersion()[["proj.4"]] >= "6.0.0" &&
 				sf_extSoftVersion()[["proj.4"]] < "6.3.1") { # nocov start FIXME:
 			x = strsplit(x, " ")[[1]]
 			if (length(x) > 1)
@@ -236,7 +236,7 @@ st_is_longlat = function(x) {
 			bb = st_bbox(x)
 			# check for potentially meaningless value range:
 			eps = sqrt(.Machine$double.eps)
-			if (all(!is.na(unclass(bb))) && 
+			if (all(!is.na(unclass(bb))) &&
 					(bb["xmin"] < (-180-eps) || bb["xmax"] > (360+eps) || bb["ymin"] < (-90-eps) || bb["ymax"] > (90+eps)))
 				warning("bounding box has potentially an invalid value range for longlat data")
 		}
@@ -271,7 +271,9 @@ udunits_from_proj = list(
 )
 
 crs_parameters = function(x, with_units = TRUE) {
-	stopifnot(!is.na(x))
+	stopifnot(inherits(x, "crs"))
+	if(is.na(x)) return(list(NA))
+
 	ret = CPL_crs_parameters(x)
 	units(ret$SemiMajor) = as_units("m")
 	units(ret$SemiMinor) = as_units("m")
@@ -287,10 +289,28 @@ crs_parameters = function(x, with_units = TRUE) {
 	ret
 }
 
+epsg = function(x) {
+	if(is.na(x)) return(NA)
+	if(grepl("^EPSG:", x[["input"]])) {
+		return(as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]])))
+	}
+	crs_parameters(x, with_units = FALSE)[["epsg"]]
+}
+
+proj4string = function(x) {
+	if(is.na(x)) return(NA)
+	crs_parameters(x, with_units = FALSE)[["proj4string"]]
+}
+
+is_crs = function(x) {
+	inherits(x, "crs")
+}
+
 #' @name st_as_text
 #' @param pretty logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system
 #' @export
 st_as_text.crs = function(x, ..., pretty = FALSE) {
+	if (is.na(x)) return(NA)
 	if (pretty)
 		crs_parameters(x)$WktPretty
 	else
@@ -332,7 +352,7 @@ is.na.crs = function(x) {
 `$.crs` = function(x, name) {
 
 	if (!is.null(x[["proj4string"]])) { # old-style object:
-		warning("old-style crs object found: please update code")
+		warning("CRS uses proj4string, which is deprecated.")
 		x = st_crs(x[["proj4string"]]) # FIXME: should this be only for some transition period? Add test?
 	}
 	if (is.na(x))
@@ -341,7 +361,7 @@ is.na.crs = function(x) {
 		x[[name]]
 	else {
 		p = crs_parameters(x, with_units = FALSE)
-		if (name %in% names(p)) 
+		if (name %in% names(p))
 			p[[name]]
 		else {
 			tryNum = function(x) { n = suppressWarnings(as.numeric(x)); if (is.na(n)) x else n }
@@ -408,9 +428,9 @@ st_crs.Spatial = function(x, ...) {
 #' @name st_crs
 #' @param authority_compliant logical; specify whether axis order should be
 #' handled compliant to the authority; if omitted, the current value is printed.
-#' @details 
+#' @details
 #' \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
-#' indicates axes order according to the authority 
+#' indicates axes order according to the authority
 #' (e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
 #' indicates the usual GIS (display) order (longitude,latitude). This can be useful
 #' when data are read, or have to be written, with coordinates in authority compliant order.
@@ -423,7 +443,7 @@ st_crs.Spatial = function(x, ...) {
 #' # st_axis_order() only has effect in GDAL >= 2.5.0:
 #' st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 #' st_transform(pt, 3857)[[1]]
-#' (old_value = st_axis_order(TRUE)) 
+#' (old_value = st_axis_order(TRUE))
 #' # now interpret pt as (latitude longitude), as EPSG:4326 prescribes:
 #' st_axis_order() # query current value
 #' st_transform(pt, 3857)[[1]]

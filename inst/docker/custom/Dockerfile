@@ -68,7 +68,6 @@ RUN R -e 'install.packages(c("Rcpp", "DBI", "units", "magrittr", "classInt"), re
 
 RUN git clone --depth=1 https://github.com/r-spatial/sf.git
 
-RUN (cd sf; git pull; cd ..)
 RUN	cd / \
 	&& R CMD build sf --no-build-vignettes
 

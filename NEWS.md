@@ -22,6 +22,8 @@
 
 * allow for PROJ >= 7; #1254
 
+* `st_write_db` and `st_read_db` are now defunct. Use `st_write` and `st_read` instead.
+
 # version 0.8-1
 
 * `st_as_sf.map` no longer requires `maptools` and `sp`; dropped dependency on maptools.

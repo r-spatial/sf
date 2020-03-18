@@ -1,0 +1,123 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+name: R-CMD-check
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    services:
+      postgres:
+        image: kartoza/postgis
+        ports:
+        - 5432:5432
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: postgis
+          POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
+          DEFAULT_ENCODING: "UTF8"
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          #- {os: windows-latest, r: '3.6'}
+          #- {os: macOS-latest, r: '3.6'}
+          #- {os: macOS-latest, r: 'devel'}
+          - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-latest, r: '3.6'}
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      CRAN: ${{ matrix.config.cran }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: r-lib/actions/setup-r@master
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-pandoc@master
+
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
+
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+        run: |
+          Rscript -e "remotes::install_github('r-hub/sysreqs')"
+          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo -s eval "$sysreqs"
+
+          # install spatial dependencies
+          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+          sudo apt update
+          sudo apt install \
+            libudunits2-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev
+
+          # install database dependencies
+          sudo apt-get -y install bash-completion wget
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get -y install postgresql-client-12
+
+      - name: Brew
+        if: runner.os == 'macOS'
+        run: |
+          brew install pkg-config
+          brew install udunits
+          brew install gdal
+
+      - name: Install dependencies
+        run: |
+          library(remotes)
+          deps <- readRDS("depends.Rds")
+          deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
+          update(deps)
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Check
+        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          path: check
+
+      - name: Test coverage
+        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == '3.6'
+        run: covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")
+        shell: Rscript {0}
