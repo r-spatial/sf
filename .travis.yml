@@ -25,7 +25,7 @@ r_github_packages:
 #  - r-spatial/lwgeom
 
 addons:
-  postgresql: "9.6"
+  postgresql: "10"
   apt:
     sources:
       - sourceline: 'ppa:opencpu/jq'
