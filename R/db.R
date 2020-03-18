@@ -215,10 +215,11 @@ get_possibly_new_srid <- function(conn, crs) {
 	db_insert_crs(conn, crs)
 }
 
-#' Find srid in a database by using the srid
-#' @param conn Dababase connection (e.g. `DBI`)
-#' @param srid An integer descriing the srid to fetch
-#' @returns a `crs`
+# ' Find srid in a database by using the srid
+# ' @param conn Dababase connection (e.g. `DBI`)
+# ' @param srid An integer describing the srid to fetch
+# ' @param crs_local object of class \code{crs}
+# ' @returns a `crs`
 find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_local)) {
     if (is.na(crs_local)) return(st_crs(NA))
 	if (is.na(srid)) {
@@ -246,7 +247,7 @@ find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_lo
     crs_found
 }
 
-#' Find database projection using srtext (wkt)
+# ' Find database projection using srtext (wkt)
 find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(crs_local)) {
 	if (is.na(crs_local)) return(st_crs(NA))
 	if (is.na(wkt)) {
@@ -293,7 +294,7 @@ find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(
 	if(crs_found != crs_local) {  # nocov start
 		warning("Local crs different from database crs. You can inspect the ",
 				"database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
-				"and compare it to `st_crs(", srid,")`.")
+				"and compare it to `st_crs(", wkt, ")`.")
 	}  # nocov end
 	crs_found
 }
