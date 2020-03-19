@@ -282,9 +282,6 @@ find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(
 	} # nocov end
 
 	if (nrow(db_spatial_ref) < 1) {
-		# TODO: check proj4string, and create an srid if needed
-		# stop("Could not find a matching WKT projection in the database.")
-		#crs_found <- db_insert_crs(conn, crs_local)
 		return(st_crs(NA))
 	} else {
 		crs_found <- make_empty_crs(db_spatial_ref[["srid"]], db_spatial_ref[["srtext"]])
@@ -293,7 +290,7 @@ find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(
 	if(crs_found != crs_local) {  # nocov start
 		warning("Local crs different from database crs. You can inspect the ",
 				"database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
-				"and compare it to `st_crs(", srid,")`.")
+				"and compare it to `st_crs(\"", wkt,"\")`.")
 	}  # nocov end
 	crs_found
 }
@@ -480,17 +477,21 @@ setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
           }
 )
 
-
 to_postgis <- function(conn, x, binary) {
 	geom_col <- vapply(x, inherits, TRUE, what = "sfc")
 	x[geom_col] <- lapply(x[geom_col], sync_crs, conn = conn)
 	if (binary) {
-		x[geom_col] <- lapply(x[geom_col], st_as_binary, "", EWKB = TRUE, hex = TRUE, pureR = TRUE)
+		x[geom_col] <- lapply(x[geom_col], db_binary)
 	} else {
 		x[geom_col] <- lapply(x[geom_col], st_as_text, EWKT = TRUE)
 	}
 	x <- as.data.frame(x)
 	clean_columns(x, factorsAsCharacter = TRUE)
+}
+
+# Version of st_as_binary that allows locally invalid srids
+db_binary <- function(x) {
+	st_as_binary(x, EWKB = TRUE, hex = TRUE, pureR = FALSE, srid = epsg(st_crs(x)))
 }
 
 sync_crs <- function(conn, geom) {

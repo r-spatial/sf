@@ -1038,21 +1038,22 @@ RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatiali
     return rcpp_result_gen;
 }
 // CPL_write_wkb
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
-static SEXP _sf_CPL_write_wkb_try(SEXP sfcSEXP, SEXP EWKBSEXP) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB, int srid);
+static SEXP _sf_CPL_write_wkb_try(SEXP sfcSEXP, SEXP EWKBSEXP, SEXP sridSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, EWKB));
+    Rcpp::traits::input_parameter< int >::type srid(sridSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_write_wkb(sfc, EWKB, srid));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP) {
+RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP, SEXP sridSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_CPL_write_wkb_try(sfcSEXP, EWKBSEXP));
+        rcpp_result_gen = PROTECT(_sf_CPL_write_wkb_try(sfcSEXP, EWKBSEXP, sridSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1102,7 +1103,7 @@ static int _sf_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool)");
-        signatures.insert("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool)");
+        signatures.insert("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool,int)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1194,7 +1195,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 6},
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 12},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
-    {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
+    {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 3},
     {"_sf_CPL_get_z_range", (DL_FUNC) &_sf_CPL_get_z_range, 2},
     {"_sf_CPL_get_m_range", (DL_FUNC) &_sf_CPL_get_m_range, 2},
     {"_sf_RcppExport_registerCCallable", (DL_FUNC) &_sf_RcppExport_registerCCallable, 0},

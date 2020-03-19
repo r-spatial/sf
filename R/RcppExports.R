@@ -313,8 +313,8 @@ CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
     .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }
 
-CPL_write_wkb <- function(sfc, EWKB = FALSE) {
-    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB)
+CPL_write_wkb <- function(sfc, EWKB = FALSE, srid = 0L) {
+    .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB, srid)
 }
 
 CPL_get_z_range <- function(sf, depth = 0L) {

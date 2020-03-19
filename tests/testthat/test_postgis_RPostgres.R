@@ -341,6 +341,21 @@ test_that("can read using driver", {
     expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers") # EJP: removed host=localhost
 })
 
+test_that("Can override local crs", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	ewkb <- c(
+		wgs84 = db_binary(st_set_crs(st_sfc(st_point(1:2)), 4326)),
+		remote = db_binary(st_set_crs(st_sfc(st_point(1:2)), make_empty_crs(123456))),
+		missing = db_binary(st_sfc(st_point(1:2)))
+	)
+
+	queries <- paste0("select st_srid('", ewkb, "'::geometry) as srid")
+
+	expect_equal(dbGetQuery(pg, queries[1])[["srid"]], 4326)
+	expect_equal(dbGetQuery(pg, queries[2])[["srid"]], 123456)
+	expect_equal(dbGetQuery(pg, queries[3])[["srid"]], 0)
+})
+
 test_that("Can safely manipulate crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     srid <- 4326
