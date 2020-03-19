@@ -1,6 +1,10 @@
 # version 0.9-0
 
-* `st_proj_info` was renamed into `sf_proj_info`; `sf_proj_info` can now get and set the PROJ data search path; #1277
+* see r-spatial blog post: https://www.r-spatial.org/r/2020/03/17/wkt.html
+
+* support for PostGIS 3 using WKT and the new-style `crs` objects; #1234, #1303, #1308 by @etiennebr
+
+* `st_proj_info` was renamed into `sf_proj_info`; `sf_proj_info` can now get and set the PROJ data search path and use of CDN; #1277
 
 * addapt to new `dplyr` version; https://github.com/tidyverse/dplyr/issues/4917
 
