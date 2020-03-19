@@ -36,7 +36,7 @@ jobs:
           #- {os: macOS-latest, r: 'devel'}
           - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-latest, r: '3.6'}
+          #- {os: ubuntu-latest, r: '3.6'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
