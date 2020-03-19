@@ -34,7 +34,7 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0002-4035-0289")),
       person(given = "Kirill",
-             family = "M<U+00FC>ller",
+             family = "M\u00fcller",
              role = "ctb"),
       person(given = "Thomas Lin",
              family = "Pedersen",
