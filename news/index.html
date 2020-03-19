@@ -151,7 +151,9 @@
 <a href="#version-0-9-0" class="anchor"></a>version 0.9-0<small> Unreleased </small>
 </h1>
 <ul>
-<li><p><code>st_proj_info</code> was renamed into <code>sf_proj_info</code>; <code>sf_proj_info</code> can now get and set the PROJ data search path; <a href='https://github.com/r-spatial/sf/issues/1277'>#1277</a></p></li>
+<li><p>see r-spatial blog post: <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html" class="uri">https://www.r-spatial.org/r/2020/03/17/wkt.html</a></p></li>
+<li><p>support for PostGIS 3 using WKT and the new-style <code>crs</code> objects; <a href='https://github.com/r-spatial/sf/issues/1234'>#1234</a>, <a href='https://github.com/r-spatial/sf/issues/1303'>#1303</a>, <a href='https://github.com/r-spatial/sf/issues/1308'>#1308</a> by <a href='https://github.com/etiennebr'>@etiennebr</a></p></li>
+<li><p><code>st_proj_info</code> was renamed into <code>sf_proj_info</code>; <code>sf_proj_info</code> can now get and set the PROJ data search path and use of CDN; <a href='https://github.com/r-spatial/sf/issues/1277'>#1277</a></p></li>
 <li><p>addapt to new <code>dplyr</code> version; <a href="https://github.com/tidyverse/dplyr/issues/4917" class="uri">https://github.com/tidyverse/dplyr/issues/4917</a></p></li>
 <li><p><code>st_sample</code> is a generic</p></li>
 <li><p><code>st_write</code> now uses <code>append</code>, replacing (and deprecating) argument <code>update</code>; <code>st_write</code> now fails when a layer already exists and <code>append</code> has not been set explicitly to <code>TRUE</code> (append) or <code>FALSE</code> (overwrite); <a href='https://github.com/r-spatial/sf/issues/1266'>#1266</a></p></li>
