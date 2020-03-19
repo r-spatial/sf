@@ -15,8 +15,7 @@ st_as_binary(x, ...)
   endian = .Platform$endian,
   pureR = FALSE,
   precision = attr(x, "precision"),
-  hex = FALSE,
-  srid = 0
+  hex = FALSE
 )
 
 \method{st_as_binary}{sfg}(

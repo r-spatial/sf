@@ -248,7 +248,7 @@ st_as_binary = function(x, ...) UseMethod("st_as_binary")
 #' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.01) %>% st_as_binary %>% st_as_sfc
 #' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.001) %>% st_as_binary %>% st_as_sfc
 st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
-		precision = attr(x, "precision"), hex = FALSE, srid = 0) {
+		precision = attr(x, "precision"), hex = FALSE) {
 	stopifnot(endian %in% c("big", "little"))
 	if (pureR && precision != 0.0)
 		stop("for non-zero precision values, use pureR = FALSE")
@@ -257,7 +257,7 @@ st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pur
 	else {
 		stopifnot(endian == .Platform$endian)
 		attr(x, "precision") = precision
-		structure(CPL_write_wkb(x, EWKB, srid = srid), class = "WKB")
+		structure(CPL_write_wkb(x, EWKB), class = "WKB")
 	}
 	if (hex)
 		vapply(ret, CPL_raw_to_hex, "")
