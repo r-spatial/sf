@@ -651,7 +651,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int srid = 0) {
+Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 
 	double precision = sfc.attr("precision");
 	Rcpp::CharacterVector cls_attr = sfc.attr("class");
@@ -677,17 +677,18 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int srid = 0) {
 			Rcpp::stop("sfc_GEOMETRY has no classes attribute; please file an issue"); // #nocov
 	}
 
-	// get SRID from crs:
+	// get SRID from crs[["input"]], either of the form "4326" or "XXXX:4326" with arbitrary XXXX string
 	Rcpp::List crs = sfc.attr("crs");
-	Rcpp::CharacterVector wkb = crs(1);
-
-	if (!Rcpp::CharacterVector::is_na(wkb[0]) && srid == 0) {
-		srid = epsg_from_crs(crs);
-	}
-
-	if (srid == NA_INTEGER) {
-		srid = 0; // non-zero now means: we have an srid
-	}
+	Rcpp::CharacterVector input = crs(0);
+	char *inp = input[0];
+	char *remainder = NULL;
+	// check for ":", and move one beyond:
+	if ((remainder = strstr(inp, ":")) != NULL)
+		inp = remainder + 1;
+	int srid = 0;
+	long value = strtol(inp, &remainder, 10);
+	if (*remainder == '\0') // success:
+		srid = (int) value;
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();

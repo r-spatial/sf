@@ -45,17 +45,17 @@ namespace sf {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false, int srid = 0) {
-        typedef SEXP(*Ptr_CPL_write_wkb)(SEXP,SEXP,SEXP);
+    inline Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
+        typedef SEXP(*Ptr_CPL_write_wkb)(SEXP,SEXP);
         static Ptr_CPL_write_wkb p_CPL_write_wkb = NULL;
         if (p_CPL_write_wkb == NULL) {
-            validateSignature("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool,int)");
+            validateSignature("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool)");
             p_CPL_write_wkb = (Ptr_CPL_write_wkb)R_GetCCallable("sf", "_sf_CPL_write_wkb");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_CPL_write_wkb(Shield<SEXP>(Rcpp::wrap(sfc)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(srid)));
+            rcpp_result_gen = p_CPL_write_wkb(Shield<SEXP>(Rcpp::wrap(sfc)), Shield<SEXP>(Rcpp::wrap(EWKB)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
