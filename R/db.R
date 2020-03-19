@@ -170,9 +170,11 @@ st_read.PostgreSQLConnection <- function(...) {
 
 postgis_as_sfc <- function(x, EWKB, conn) {
 	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
-	if (!is.null(attr(geom, "srid"))) {
-		st_crs(geom) = make_crs(find_database_srid(conn, srid = attr(geom, "srid")))
+	srid <- attr(geom, "srid")
+	if (!is.null(srid)) {
+		st_crs(geom) = db_find_srid(conn, srid = srid, validate = FALSE)
 		attr(geom, "srid") = NULL
+		warning("Could not find database srid (", srid, ") locally; using the remote database definition.")
 	}
 	return(geom)
 }
@@ -202,12 +204,12 @@ as_wkb <- function(x) {
 
 get_possibly_new_srid <- function(conn, crs) {
 
-	db_crs <- find_database_srid(conn, crs)
+	db_crs <- db_find_srid(conn, crs)
 	if(!is.na(db_crs)) {
 		return(db_crs)
 	}
 
-	db_crs <- find_database_srtext(conn, crs)
+	db_crs <- db_find_srtext(conn, crs)
 	if (!is.na(db_crs)) {
 		return(db_crs)
 	}
@@ -215,12 +217,15 @@ get_possibly_new_srid <- function(conn, crs) {
 	db_insert_crs(conn, crs)
 }
 
-#' Find srid in a database by using the srid
-#' @param conn Dababase connection (e.g. `DBI`)
-#' @param srid An integer descriing the srid to fetch
-#' @returns a `crs`
-find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_local)) {
-    if (is.na(crs_local)) return(st_crs(NA))
+# Find srid in a database by using the srid
+# @param conn Dababase connection (e.g. `DBI`)
+# @param srid An integer descriing the srid to fetch
+# @param validate if TRUE, then the crs_local is used to validate the remote crs.
+#   Use validate = FALSE when searching for an srid unavailable locally, or when
+#   the wkt is unknown locally.
+# @returns a `crs`
+db_find_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_local), validate = TRUE) {
+    if (validate && is.na(crs_local)) return(st_crs(NA))
 	if (is.na(srid)) {
 		return(st_crs(NA))
 	}
@@ -237,7 +242,7 @@ find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_lo
     }
     crs_found <- st_crs(db_crs[["srtext"]])
     crs_found[["input"]] <- build_epsg(srid)
-    if(crs_found != crs_local & !is.na(crs_local)) {
+    if(validate && crs_found != crs_local & !is.na(crs_local)) {
     	# TODO: pretty print db_spatial_ref
         warning("Local crs different from database crs. You can inspect the ",
                 "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
@@ -246,8 +251,8 @@ find_database_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_lo
     crs_found
 }
 
-#' Find database projection using srtext (wkt)
-find_database_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(crs_local)) {
+# Find database projection using srtext (wkt)
+db_find_srtext = function(conn, crs_local = st_crs(wkt), wkt = st_as_text(crs_local)) {
 	if (is.na(crs_local)) return(st_crs(NA))
 	if (is.na(wkt)) {
 		return(st_crs(NA))
@@ -309,7 +314,9 @@ make_empty_crs <- function(epsg = NA, text = NA, wkt = NA) {
 		class = "crs")
 }
 
-build_epsg <- function(x) paste0("EPSG:", x)
+build_epsg <- function(auth_srid, auth_name = "EPSG") {
+	paste0(auth_name, ":", auth_srid)
+}
 
 db_insert_crs <- function(conn,
 						  crs,
@@ -353,16 +360,16 @@ db_insert_crs <- function(conn,
 	}
 	crs <- make_empty_crs(epsg = srid, text = wkt)
 
-    q <- function(x) paste0("'", x, "'")
-    if (update) {
-        query <- paste("UPDATE spatial_ref_sys SET",
-                       "auth_name =", q(auth_name),
-                       "auth_srid =", auth_srid,
-                       ", srtext =", q(wkt),
-                      ", proj4text =", q(proj4string(crs)),
-                      "WHERE srid =", srid, ";")
-    } else {
-        query <- paste("INSERT INTO spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text)",
+	q <- function(x) paste0("'", x, "'")
+	if (update) {
+		query <- paste("UPDATE spatial_ref_sys SET",
+					   "auth_name =", q(auth_name), ", ",
+					   "auth_srid =", auth_srid, ", ",
+					   "srtext =", q(wkt), ", ",
+					   "proj4text =", q(proj4string(crs)),
+					   "WHERE srid =", srid, ";")
+	} else {
+		query <- paste("INSERT INTO spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text)",
                       "VALUES (",
                       paste(
                       	srid,
@@ -420,8 +427,8 @@ delete_postgis_crs <- function(conn, crs) {
 }
 
 get_new_postgis_srid <- function(conn) {
-    query = paste0("select srid + 1 from spatial_ref_sys order by srid desc limit 1;")
-    dbGetQuery(conn, query)[[1]]
+    query = paste0("select srid + 1 as srid from spatial_ref_sys order by srid desc limit 1;")
+    dbGetQuery(conn, query)[["srid"]]
 }
 
 # for RPostgreSQL
