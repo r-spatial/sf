@@ -172,7 +172,8 @@
   <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
   <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -205,6 +206,10 @@
     <tr>
       <th>hex</th>
       <td><p>logical; return as (unclassed) hexadecimal encoded character vector?</p></td>
+    </tr>
+    <tr>
+      <th>srid</th>
+      <td><p>integer; override srid (can be used when the srid is unavailable locally).</p></td>
     </tr>
     </table>
 

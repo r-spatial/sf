@@ -162,6 +162,8 @@
 <li><p><code>st_make_grid</code> returns grid cells or points that intersect with the target geometry, not its bounding box; <a href='https://github.com/r-spatial/sf/issues/1260'>#1260</a></p></li>
 <li><p>modify <code>crs</code> objects to reflect our post-proj4string world (<a href='https://github.com/r-spatial/sf/issues/1146'>#1146</a>; <a href='https://github.com/r-spatial/sf/issues/1225'>#1225</a>): crs objects now contain two fields, <code>input</code> with the user input (if any), and <code>wkt</code> with a well-known-text (or WKT2) representation of the coordinate reference system. <code>crs</code> objects now have a <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> method to dynamically retrieve the <code>epsg</code> (integer) or <code>proj4string</code> representation, using e.g. <code>x$epsg</code>.</p></li>
 <li><p>allow for PROJ &gt;= 7; <a href='https://github.com/r-spatial/sf/issues/1254'>#1254</a></p></li>
+<li><p><code>st_write_db</code> and <code>st_read_db</code> are now defunct. Use <code>st_write</code> and <code>st_read</code> instead.</p></li>
+<li><p><code>st_write_db</code> and <code>st_read_db</code> are now defunct. Use <code>st_write</code> and <code>st_read</code> instead.</p></li>
 </ul>
 </div>
     <div id="version-0-8-1" class="section level1">
