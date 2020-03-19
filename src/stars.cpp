@@ -309,13 +309,15 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	// geotransform:
 	double adfGeoTransform[6];
 	CPLErr err = poDataset->GetGeoTransform( adfGeoTransform );
+	// return the default geotransform as per the
+	// GetGeoTransform() doc in classGDALDataset
 	NumericVector geotransform = NumericVector::create(
 		err == CE_None ? adfGeoTransform[0] : 0,
 		err == CE_None ? adfGeoTransform[1] : 1,
 		err == CE_None ? adfGeoTransform[2] : 0,
 		err == CE_None ? adfGeoTransform[3] : 0,
 		err == CE_None ? adfGeoTransform[4] : 0,
-		err == CE_None ? adfGeoTransform[5] : -1); // so non-geo is y-up
+		err == CE_None ? adfGeoTransform[5] : 1); // see https://github.com/r-spatial/sf/pull/1307
 	int default_geotransform = 0;
 	if (err != CE_None) {
 		default_geotransform = 1;
