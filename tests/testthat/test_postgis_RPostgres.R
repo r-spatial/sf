@@ -354,7 +354,7 @@ test_that("Can override local crs", {
 	queries <- paste0("select st_srid('", ewkb, "'::geometry) as srid")
 
 	expect_equal(dbGetQuery(pg, queries[1])[["srid"]], 4326)
-	expect_equal(dbGetQuery(pg, queries[2])[["srid"]], 123456)
+	expect_equal(dbGetQuery(pg, queries[2])[["srid"]], 1111)
 	expect_equal(dbGetQuery(pg, queries[3])[["srid"]], 0)
 })
 
