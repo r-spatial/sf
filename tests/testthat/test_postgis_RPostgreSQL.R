@@ -25,7 +25,7 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- DBI::dbConnect(RPostgreSQL::PostgreSQL(), host = "localhost", dbname = "postgis"), silent=TRUE)
+#try(pg <- DBI::dbConnect(RPostgreSQL::PostgreSQL(), host = "localhost", dbname = "postgis"), silent=TRUE)
 
 
 # tests ------------------------------------------------------------------------

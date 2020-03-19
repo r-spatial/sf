@@ -26,7 +26,7 @@ st_write(obj, dsn, layer, ...)
   factorsAsCharacter = TRUE,
   append = NA,
   delete_dsn = FALSE,
-  delete_layer = !is.na(append) && append == FALSE,
+  delete_layer = isFALSE(append),
   fid_column_name = NULL
 )
 
@@ -90,7 +90,7 @@ character strings (default), else into numbers by \code{as.numeric}.}
 
 \item{append}{Append rows to existing table; default \code{FALSE}.}
 
-\item{delete_dsn}{logical; delete data source \code{dsn} before attempting 
+\item{delete_dsn}{logical; delete data source \code{dsn} before attempting
 to write?}
 
 \item{delete_layer}{logical; delete layer \code{layer} before attempting to

@@ -321,7 +321,7 @@ abbreviate_shapefile_names = function(x) {
 #' @param append logical; should we append to an existing layer, or replace it?
 #' if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
 #' raise an error if the layer exists. See also next two arguments.
-#' @param delete_dsn logical; delete data source \code{dsn} before attempting 
+#' @param delete_dsn logical; delete data source \code{dsn} before attempting
 #' to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to
 #' write?
@@ -376,7 +376,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && append == FALSE, 
+		append = NA, delete_dsn = FALSE, delete_layer = isFALSE(append),
 		fid_column_name = NULL) {
 
 	if (!is.null(list(...)$update)) {
