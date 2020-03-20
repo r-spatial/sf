@@ -115,6 +115,12 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE) {
 	res
 }
 
+#' @export
+#' @name st_sample
+st_sample.sfg = function(x, size, ...) {
+	st_sample(st_geometry(x), size, ...)
+}
+
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
 
