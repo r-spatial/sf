@@ -74,20 +74,31 @@ RUN	cd / \
 # RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config --with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-proj-share=/opt/proj/share/proj --with-proj-api=no --with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
 # LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib 
 
-RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
-	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
+RUN export LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib
+
+RUN LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib \
+	PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \
 	PROJ_DATA=/opt/proj/share/proj \
 	GDAL_DATA=/opt/gdal/share/gdal/ \
 	R CMD INSTALL --configure-args='--with-gdal-config=/opt/gdal/bin/gdal-config \
 		--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
-		--with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz  \
-	&& LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
+		--with-geos-config=/opt/geos/bin/geos-config' sf_*.tar.gz 
 
-#RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
-#RUN R CMD build --no-build-vignettes lwgeom
-#RUN	R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib \
-#		--with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+RUN LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(sf)'
 
-#RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+RUN git clone --depth=1 https://github.com/r-spatial/lwgeom.git
+RUN R CMD build --no-build-vignettes lwgeom
+RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig \ 
+	LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz
+
+RUN PKG_CONFIG_PATH=/opt/proj/lib/pkgconfig LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib PROJ_DATA=/opt/proj/share/proj GDAL_DATA=/opt/gdal/share/gdal/ R CMD INSTALL --configure-args='--with-proj-include=/opt/proj/include --with-proj-lib=/opt/proj/lib --with-geos-config=/opt/geos/bin/geos-config' lwgeom_*.tar.gz \
+	
+RUN LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(lwgeom)'
+
+RUN git clone --depth=1 https://github.com/r-spatial/stars.git
+RUN R CMD build --no-build-vignettes stars
+RUN R -e 'install.packages(c("abind", "rlang"))'
+RUN LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R CMD INSTALL stars_*.tar.gz
+RUN LD_LIBRARY_PATH=/opt/gdal/lib:/opt/geos/lib:/opt/proj/lib R -e 'library(stars)'
 
 CMD ["/bin/bash"]
