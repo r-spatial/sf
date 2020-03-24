@@ -32,13 +32,13 @@ test_that("st_transform works", {
   })
 })
 
-test_that("gdal can be loaded, unloaded, and loaded", {
-  expect_silent({
-  unload_gdal()
-  load_gdal()
-  }
-  )
-})
+#test_that("gdal can be loaded, unloaded, and loaded", {
+#  expect_silent({
+#  unload_gdal()
+#  load_gdal()
+#  }
+#  )
+#})
 
 test_that("st_wrap_dateline works", {
 	expect_silent(x <- st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326)))

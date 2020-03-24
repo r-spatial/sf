@@ -7,9 +7,9 @@
 sf_project(from, to, pts, keep = FALSE, warn = TRUE)
 }
 \arguments{
-\item{from}{character; proj4string of pts}
+\item{from}{character description of source CRS, or object of class \code{crs}}
 
-\item{to}{character; target coordinate reference system}
+\item{to}{character description of target CRS, or object of class \code{crs}}
 
 \item{pts}{two-column numeric matrix, or object that can be coerced into a matrix}
 

@@ -215,8 +215,8 @@ st_to_s2 = function(x) {
 #' directly transform a set of coordinates
 #'
 #' directly transform a set of coordinates
-#' @param from character; proj4string of pts
-#' @param to character; target coordinate reference system
+#' @param from character description of source CRS, or object of class \code{crs} 
+#' @param to character description of target CRS, or object of class \code{crs} 
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
 #' @param keep logical value controlling the handling of unprojectable points. If
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
@@ -225,6 +225,10 @@ st_to_s2 = function(x) {
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
 sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
+	if (inherits(from, "crs"))
+		from = from$wkt
+	if (inherits(to, "crs"))
+		to = to$wkt
 	if (!is.logical(keep) || 1 != length(keep))
 		stop("'keep' must be single-length logical value")
 	v = CPL_proj_is_valid(from)
