@@ -1,3 +1,9 @@
+# version 0.9-1
+
+* fix test for Solaris
+
+* fix error reading category table through GDAL; https://github.com/r-spatial/stars/issues/245
+
 # version 0.9-0
 
 * see r-spatial blog post: https://www.r-spatial.org/r/2020/03/17/wkt.html
