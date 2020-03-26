@@ -224,7 +224,7 @@ List get_cat(char **cat) {
 
 	int n = 0;
 	for (n = 0; cat[n] != NULL; n++)
-		n++; // number of categories
+		; // n is number of categories
 
 	List t(1);
 	CharacterVector col(n);
