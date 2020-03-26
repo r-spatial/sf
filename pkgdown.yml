@@ -1,5 +1,5 @@
 pandoc: '2.2'
-pkgdown: 1.4.1
+pkgdown: 1.5.0
 pkgdown_sha: ~
 articles:
   sf1: sf1.html
@@ -8,4 +8,5 @@ articles:
   sf4: sf4.html
   sf5: sf5.html
   sf6: sf6.html
+last_built: 2020-03-26T08:34Z
 
