@@ -32,8 +32,8 @@ jobs:
       matrix:
         config:
           #- {os: windows-latest, r: '3.6'}
-          #- {os: macOS-latest, r: '3.6'}
-          #- {os: macOS-latest, r: 'devel'}
+          - {os: macOS-latest, r: '3.6', args: "--install-args='--configure-args=--with-proj-lib=/usr/local/lib/'", build_args: "--no-build-vignettes"}
+          - {os: macOS-latest, r: 'devel', args: "--install-args='--configure-args=--with-proj-lib=/usr/local/lib/'", build_args: "--no-build-vignettes"}
           - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           #- {os: ubuntu-latest, r: '3.6'}
@@ -97,6 +97,15 @@ jobs:
           brew install udunits
           brew install gdal
 
+      - name: macOS configure.args
+        if: runner.os == 'macOS'
+        run: |
+          r <- options("repos")
+          r["rccp_drat"] <- "https://RcppCore.github.io/drat"
+          rgdal_config <- "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/"
+          options(configure.args = c("rgdal" = rgdal_config), repos = r)
+        shell: Rscript {0}
+
       - name: Install dependencies
         run: |
           library(remotes)
@@ -107,7 +116,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", ${{ matrix.config.args }}), error_on = "warning", check_dir = "check", build_args = ${{ matrix.config.build_args }})
         shell: Rscript {0}
 
       - name: Upload check results
