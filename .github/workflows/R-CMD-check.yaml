@@ -13,8 +13,8 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     services:
-    if: runner.os == "Linux"
-      postgres:
+      - postgres:
+        if: runner.os == "Linux"
         image: kartoza/postgis
         ports:
         - 5432:5432
