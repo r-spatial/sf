@@ -12,19 +12,19 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    - services:
-      if: runner.os == "Linux"
-        postgres:
-          image: kartoza/postgis
-          ports:
-          - 5432:5432
-          env:
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: root
-            POSTGRES_DB: postgis
-            POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
-            DEFAULT_ENCODING: "UTF8"
-          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+    if: runner.os == "Linux"
+      postgres:
+        image: kartoza/postgis
+        ports:
+        - 5432:5432
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: postgis
+          POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
+          DEFAULT_ENCODING: "UTF8"
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
