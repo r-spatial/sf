@@ -238,5 +238,6 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, authority_compli
 	v = CPL_proj_is_valid(to)
 	if (!v[[1]])
 		stop(paste0(v[[2]], ": ", to))
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn, authority_compliant)
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), 
+			if (keep) 1 else 0, warn, authority_compliant)
 }
