@@ -889,8 +889,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_proj_direct
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep, bool warn);
-RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP, SEXP keepSEXP, SEXP warnSEXP) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep, bool warn, bool authority_compliant);
+RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP, SEXP keepSEXP, SEXP warnSEXP, SEXP authority_compliantSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -898,7 +898,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type pts(ptsSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< bool >::type warn(warnSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts, keep, warn));
+    Rcpp::traits::input_parameter< bool >::type authority_compliant(authority_compliantSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts, keep, warn, authority_compliant));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1207,7 +1208,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
-    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 4},
+    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 5},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
     {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},

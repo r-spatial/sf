@@ -71,7 +71,7 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true) {
+		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
@@ -86,6 +86,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
 	if (P == NULL)
 		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+	if (!authority_compliant) // always keep lat/lon as lon/lat
+		P = proj_normalize_for_visualization(PJ_DEFAULT_CTX, P);
 	// copy over:
 	std::vector<PJ_COORD> x(pts.nrow());
 	for (int i = 0; i < pts.nrow(); i++) {
@@ -245,10 +247,12 @@ bool CPL_have_datum_files(SEXP foo) {
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true) {
+		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
+	if (authority_compliant)
+		stop("authority_compliant = TRUE requires the new PROJ (proj.h) interface")
 	if (from_to.size() != 2)
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)

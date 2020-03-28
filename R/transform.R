@@ -222,9 +222,10 @@ st_to_s2 = function(x) {
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.
 #' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
+#' @param vis_order logical; keep visualisation order (x=lon, y=lat); if \code{FALSE}, obey registry order (e.g. EPSG:4326 has x=lat, y=lon)
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
+sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, authority_compliant = st_axis_order()) {
 	if (inherits(from, "crs"))
 		from = from$wkt
 	if (inherits(to, "crs"))
@@ -237,5 +238,5 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
 	v = CPL_proj_is_valid(to)
 	if (!v[[1]])
 		stop(paste0(v[[2]], ": ", to))
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn)
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn, authority_compliant)
 }

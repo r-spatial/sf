@@ -1,5 +1,7 @@
 # version 0.9-1
 
+* `sf_project` has a parameter `authority_compliant` to return coordinates in "visualisation order"; when `FALSE` return coordinates in authority compliant axis order (e.g. EPSG:4326 latitude longitude); defaults to \code{st_axis_order()}.
+
 * fix test for Solaris
 
 * fix error reading category table through GDAL; https://github.com/r-spatial/stars/issues/245
