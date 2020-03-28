@@ -26,7 +26,7 @@ return value; otherwise an error is reported and nothing is returned.}
 
 \item{warn}{logical; if \code{TRUE}, warn when non-finite values are generated}
 
-\item{vis_order}{logical; keep visualisation order (x=lon, y=lat); if \code{FALSE}, obey registry order (e.g. EPSG:4326 has x=lat, y=lon)}
+\item{authority_compliant}{logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)}
 }
 \value{
 two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
