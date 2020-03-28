@@ -8,6 +8,7 @@
 #'   -e POSTGRES_DBNAME=postgis \
 #'   -d -t kartoza/postgis
 #'  docker start postgis
+skip_on_os("solaris")
 
 library(sf)
 library(DBI)
