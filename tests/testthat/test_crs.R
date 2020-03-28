@@ -20,7 +20,7 @@ test_that("st_crs works", {
 
   if (sf_extSoftVersion()[["GDAL"]] > "2.2.3") {
     expect_error(st_crs("+proj=ll"), "invalid crs")
-  	expect_error(st_crs("+proj=longlat +datum=NAD26"))
+  	# expect_error(st_crs("+proj=longlat +datum=NAD26"))
   }
   expect_silent(st_crs("+proj=longlat"))
   expect_silent(st_crs("+proj=longlat +datum=NAD27"))
@@ -32,17 +32,19 @@ test_that("st_crs works", {
   expect_true(st_crs("+proj=longlat +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +no_defs") != st_crs("+proj=longlat +datum=WGS84 +no_defs"))
 })
 
-test_that("st_proj_info works", {
-  expect_silent(x <- st_proj_info("proj"))
-  expect_silent(x <- st_proj_info("ellps"))
-  expect_silent(x <- st_proj_info("datum"))
-  expect_silent(x <- st_proj_info("units"))
+test_that("sf_proj_info works", {
+  expect_silent(x <- sf_proj_info("proj"))
+  expect_silent(x <- sf_proj_info("ellps"))
+  expect_silent(x <- sf_proj_info("datum"))
+  expect_silent(x <- sf_proj_info("units"))
+  expect_silent(path <- sf_proj_info("path"))
+  expect_true(is.logical(sf_proj_info(path = path)))
+  expect_true(is.logical(sf_proj_info("network")))
 })
 
-
-test_that("st_proj_info works for datum files", {
+test_that("sf_proj_info works for datum files", {
   skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
-  expect_silent(x <- st_proj_info("have_datum_files"))
+  expect_silent(x <- sf_proj_info("have_datum_files"))
 })
 
 test_that("$.crs works", {

@@ -71,11 +71,11 @@ st_axis_order(authority_compliant = logical(0))
 handled compliant to the authority; if omitted, the current value is printed.}
 }
 \value{
-If \code{x} is numeric, return \code{crs} object for EPSG:\code{x}; 
-if \code{x} is character, return \code{crs} object for \code{x}; 
+If \code{x} is numeric, return \code{crs} object for EPSG:\code{x};
+if \code{x} is character, return \code{crs} object for \code{x};
 if \code{x} is of class \code{sf} or \code{sfc}, return its \code{crs} object.
 
-Object of class \code{crs}, which is a list with elements \code{input} (length-1 character) 
+Object of class \code{crs}, which is a list with elements \code{input} (length-1 character)
 and \code{wkt} (length-1 character).
 Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 assumed to relate to an arbitrary Cartesian coordinate system.
@@ -89,12 +89,12 @@ Retrieve coordinate reference system from sf or sfc object
 Set or replace retrieve coordinate reference system from object
 }
 \details{
-The *crs functions create, get, set or replace the \code{crs} attribute 
-of a simple feature geometry list-column. This attribute is of class \code{crs}, 
-and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84" 
+The *crs functions create, get, set or replace the \code{crs} attribute
+of a simple feature geometry list-column. This attribute is of class \code{crs},
+and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84"
 or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
 
-Comparison of two objects of class \code{crs} uses the GDAL function 
+Comparison of two objects of class \code{crs} uses the GDAL function
 \code{OGRSpatialReference::IsSame}.
 
 In case a coordinate reference system is replaced, no transformation takes
@@ -114,7 +114,7 @@ the name of a crs if it is different from "unknown", or
 else the user input if it was set, or else its "proj4string" representation;
 
 \code{st_axis_order} can be used to get and set the axis order: \code{TRUE}
-indicates axes order according to the authority 
+indicates axes order according to the authority
 (e.g. EPSG:4326 defining coordinates to be latitude,longitude pairs), \code{FALSE}
 indicates the usual GIS (display) order (longitude,latitude). This can be useful
 when data are read, or have to be written, with coordinates in authority compliant order.
@@ -140,7 +140,7 @@ pt = st_sfc(st_point(c(0, 60)), crs = 4326)
 # st_axis_order() only has effect in GDAL >= 2.5.0:
 st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 st_transform(pt, 3857)[[1]]
-(old_value = st_axis_order(TRUE)) 
+(old_value = st_axis_order(TRUE))
 # now interpret pt as (latitude longitude), as EPSG:4326 prescribes:
 st_axis_order() # query current value
 st_transform(pt, 3857)[[1]]

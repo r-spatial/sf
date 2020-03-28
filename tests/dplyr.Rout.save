@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -88,7 +88,7 @@ bbox:           xmin: -9386880 ymin: 4012991 xmax: -8399788 ymax: 4382079
 projected CRS:  WGS 84 / Pseudo-Mercator
 # A tibble: 4 x 3
   area_cl    `mean(AREA)`                                               geometry
-* <fct>             <dbl>                                     <MULTIPOLYGON [m]>
+  <fct>             <dbl>                                     <MULTIPOLYGON [m]>
 1 (0,0.1]          0.0760 (((-8678517 4054264, -8679088 4061405, -8680136 40615…
 2 (0.1,0.12]       0.112  (((-9383227 4192541, -9375980 4199500, -9370835 41966…
 3 (0.12,0.1…       0.134  (((-8520830 4108031, -8522040 4111119, -8520104 41115…
@@ -194,7 +194,7 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(dens)`                                                          geometry
-* [person/m^2]                                                <MULTIPOLYGON [m]>
+  [person/m^2]                                                <MULTIPOLYGON [m]>
 1 2.593234e-06 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88, 6485…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
@@ -204,7 +204,7 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(new_dens)`                                                      geometry
-*     [person/m^2]                                            <MULTIPOLYGON [m]>
+      [person/m^2]                                            <MULTIPOLYGON [m]>
 1     2.589362e-06 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, 70…
 > 
 > # total densities don't:
@@ -216,7 +216,7 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `sum(area * dens)`                                                    geometry
-*           [person]                                          <MULTIPOLYGON [m]>
+            [person]                                          <MULTIPOLYGON [m]>
 1             329962 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88…
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
@@ -226,7 +226,7 @@ bbox:           xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `sum(A * new_dens…                                                    geometry
-*           [person]                                          <MULTIPOLYGON [m]>
+            [person]                                          <MULTIPOLYGON [m]>
 1             329962 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, …
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
@@ -272,7 +272,7 @@ First 10 features:
 [1] 100
 > 
 > # set.seed(1331)
-> nc$gp <- sample(1:10, replace=T)
+> nc$gp <- sample(10, 100, replace=TRUE)
 > # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
 > nc_gp_cent <- nc %>%
 +                 group_by(gp) %>%
@@ -283,4 +283,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.112   0.077   2.180 
+  2.884   0.048   2.930 

@@ -2,9 +2,18 @@
 % Please edit documentation in R/sample.R
 \name{st_sample}
 \alias{st_sample}
+\alias{st_sample.sf}
+\alias{st_sample.sfc}
+\alias{st_sample.sfg}
 \title{sample points on or in (sets of) spatial features}
 \usage{
-st_sample(x, size, ..., type = "random", exact = TRUE)
+st_sample(x, size, ...)
+
+\method{st_sample}{sf}(x, size, ...)
+
+\method{st_sample}{sfc}(x, size, ..., type = "random", exact = TRUE)
+
+\method{st_sample}{sfg}(x, size, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}

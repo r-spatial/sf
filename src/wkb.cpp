@@ -19,16 +19,16 @@
 #define EWKB_M_BIT    0x40000000
 #define EWKB_SRID_BIT 0x20000000
 
-// [[Rcpp::interfaces(r, cpp)]] 
+// [[Rcpp::interfaces(r, cpp)]]
 
 typedef struct {
 	const unsigned char *pt;
 	size_t size;
 } wkb_buf;
 
-Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian, 
+Rcpp::List read_data(wkb_buf *wkb, bool EWKB, bool spatialite, int endian,
 	bool addclass, int *type, uint32_t *srid);
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB, 
+void write_data(std::ostringstream& os, Rcpp::List sfc, int i, bool EWKB,
 		int endian, const char *cls, const char *dim, double prec, int srid);
 
 static inline void wkb_read(wkb_buf *wkb, void *dst, size_t n) {
@@ -77,7 +77,7 @@ void read_spatialite_header(wkb_buf *wkb, uint32_t *srid, bool swap) {
 	// verify special marker; if not there, raise error:
 	unsigned char marker;
 	wkb_read(wkb, &marker, 1); // skip header
-	if (marker != 0x7c) { 
+	if (marker != 0x7c) {
 		Rcpp::Rcout << "byte 39 should be 0x7c, but is " << marker << std::endl; // #nocov
 		Rcpp::stop("invalid spatialite header"); // #nocov
 	}
@@ -142,8 +142,8 @@ Rcpp::NumericMatrix read_multipoint(wkb_buf *wkb, int n_dims, bool swap,
 	return ret;
 }
 
-Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWKB = 0, 
-		bool spatialite = false, int endian = 0, Rcpp::CharacterVector cls = "", bool isGC = true, 
+Rcpp::List read_geometrycollection(wkb_buf *wkb, int n_dims, bool swap, bool EWKB = 0,
+		bool spatialite = false, int endian = 0, Rcpp::CharacterVector cls = "", bool isGC = true,
 		bool *empty = NULL) {
 
 	uint32_t nlst = wkb_read<uint32_t>(wkb);
@@ -213,7 +213,7 @@ Rcpp::NumericMatrix read_numeric_matrix(wkb_buf *wkb, int n_dims, bool swap,
 	return ret;
 }
 
-Rcpp::List read_matrix_list(wkb_buf *wkb, int n_dims, bool swap, 
+Rcpp::List read_matrix_list(wkb_buf *wkb, int n_dims, bool swap,
 		Rcpp::CharacterVector cls = "", bool *empty = NULL) {
 
 	uint32_t nlst = wkb_read<uint32_t>(wkb);
@@ -261,12 +261,12 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 		swap = ((int) swap_char != (int) endian); // endian check
 	}
 	if (spatialite) {
-		if (swap) 
+		if (swap)
 			Rcpp::stop("reading non-native endian spatialite geometries not supported"); // #nocov
 		if (srid != NULL) // not nested:
 			read_spatialite_header(wkb, srid, swap);
 	}
-	
+
 	// read type:
 	uint32_t wkbType = wkb_read<uint32_t>(wkb);
 
@@ -274,7 +274,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 		wkbType = swap_endian<uint32_t>(wkbType); // #nocov
 
 	int sf_type = 0, n_dims = 0;
-	std::string dim_str = ""; 
+	std::string dim_str = "";
 	if (EWKB) { // EWKB: PostGIS default
 		sf_type =     wkbType & 0x000000ff; // mask the other bits
 		int wkbZ =    wkbType & EWKB_Z_BIT;
@@ -290,7 +290,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 		else
 			dim_str = "XYZM";
 		if (wkbSRID != 0) {
-			if (srid != NULL) { 
+			if (srid != NULL) {
 				wkb_read(wkb, srid, 4);
 				if (swap)
 					*srid = swap_endian<uint32_t>(*srid); // #nocov
@@ -299,10 +299,10 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	} else { // ISO
 		sf_type = wkbType % 1000;
 		switch (wkbType / 1000) { // 0: XY, 1: XYZ, 2: XYM, 3: XYZM
-			case 0: n_dims = 2; dim_str = "XY"; break; 
-			case 1: n_dims = 3; dim_str = "XYZ"; break; 
-			case 2: n_dims = 3; dim_str = "XYM"; break; 
-			case 3: n_dims = 4; dim_str = "XYZM"; break; 
+			case 0: n_dims = 2; dim_str = "XY"; break;
+			case 1: n_dims = 3; dim_str = "XYZ"; break;
+			case 2: n_dims = 3; dim_str = "XYM"; break;
+			case 3: n_dims = 4; dim_str = "XYZM"; break;
 			default:
 				Rcpp::Rcout << "wkbType: " << wkbType << std::endl; // #nocov
 				Rcpp::stop("unsupported wkbType dim in switch"); // #nocov
@@ -310,7 +310,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 	}
 	bool empty = false;
 	switch(sf_type) {
-		case SF_Point: 
+		case SF_Point:
 			output[0] = read_numeric_vector(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "POINT", "sfg") : "", &empty);
 			break;
@@ -318,13 +318,13 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			output[0] = read_numeric_matrix(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "LINESTRING", "sfg") : "", &empty);
 			break;
-		case SF_Polygon: 
+		case SF_Polygon:
 			output[0] = read_matrix_list(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "POLYGON", "sfg") : "", &empty);
 			break;
-		case SF_MultiPoint: 
-			output[0] = read_multipoint(wkb, n_dims, swap, EWKB, spatialite, endian, addclass ?  
-				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfg") : "", &empty); 
+		case SF_MultiPoint:
+			output[0] = read_multipoint(wkb, n_dims, swap, EWKB, spatialite, endian, addclass ?
+				Rcpp::CharacterVector::create(dim_str, "MULTIPOINT", "sfg") : "", &empty);
 			break;
 		case SF_MultiLineString:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
@@ -334,7 +334,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "MULTIPOLYGON", "sfg"), false, &empty);
 			break;
-		case SF_GeometryCollection: 
+		case SF_GeometryCollection:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "GEOMETRYCOLLECTION", "sfg"), true,
 				&empty);
@@ -345,11 +345,11 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			break;
 		case SF_CompoundCurve:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
-				Rcpp::CharacterVector::create(dim_str, "COMPOUNDCURVE", "sfg"), true, &empty); 
+				Rcpp::CharacterVector::create(dim_str, "COMPOUNDCURVE", "sfg"), true, &empty);
 			break;
 		case SF_CurvePolygon:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
-				Rcpp::CharacterVector::create(dim_str, "CURVEPOLYGON", "sfg"), true, &empty); 
+				Rcpp::CharacterVector::create(dim_str, "CURVEPOLYGON", "sfg"), true, &empty);
 			break;
 		case SF_MultiCurve:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
@@ -361,17 +361,17 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 			break;
 		case SF_Curve: // #nocov start
 			output[0] = read_numeric_matrix(wkb, n_dims, swap, addclass ?
-				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : "", &empty); 
+				Rcpp::CharacterVector::create(dim_str, "CURVE", "sfg") : "", &empty);
 			break;
-		case SF_Surface: 
+		case SF_Surface:
 			output[0] = read_matrix_list(wkb, n_dims, swap, addclass ?
 				Rcpp::CharacterVector::create(dim_str, "SURFACE", "sfg") : "", &empty);
 			break; // #nocov end
-		case SF_PolyhedralSurface: 
+		case SF_PolyhedralSurface:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "POLYHEDRALSURFACE", "sfg"), false, &empty);
 			break;
-		case SF_TIN: 
+		case SF_TIN:
 			output[0] = read_geometrycollection(wkb, n_dims, swap, EWKB, spatialite, endian,
 				Rcpp::CharacterVector::create(dim_str, "TIN", "sfg"), false, &empty);
 			break;
@@ -460,9 +460,9 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 	else if (strcmp(cls, "COMPOUNDCURVE") == 0)
 		type = SF_CompoundCurve;
 	else if (strcmp(cls, "CURVEPOLYGON") == 0)
-		type = SF_CurvePolygon; 
+		type = SF_CurvePolygon;
 	else if (strcmp(cls, "MULTICURVE") == 0)
-		type = SF_MultiCurve; 
+		type = SF_MultiCurve;
 	else if (strcmp(cls, "MULTISURFACE") == 0)
 		type = SF_MultiSurface;
 	else if (strcmp(cls, "CURVE") == 0)
@@ -475,7 +475,7 @@ unsigned int make_type(const char *cls, const char *dim, bool EWKB = false, int 
 		type = SF_TIN;
 	else if (strcmp(cls, "TRIANGLE") == 0)
 		type = SF_Triangle;
-	else 
+	else
 		type = SF_Unknown; // a mix: GEOMETRY
 	if (tp != NULL)
 		*tp = type;
@@ -546,7 +546,7 @@ void write_matrix_list(std::ostringstream& os, Rcpp::List lst, double prec) {
 		write_matrix(os, lst[i], prec);
 }
 
-void write_multilinestring(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+void write_multilinestring(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
 		int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
@@ -555,7 +555,7 @@ void write_multilinestring(std::ostringstream& os, Rcpp::List lst, bool EWKB = f
 		write_data(os, lst, i, EWKB, endian, "LINESTRING", dim, prec, 0);
 }
 
-void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
 		int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
@@ -564,7 +564,7 @@ void write_multipolygon(std::ostringstream& os, Rcpp::List lst, bool EWKB = fals
 		write_data(os, lst, i, EWKB, endian, "POLYGON", dim, prec, 0);
 }
 
-void write_triangles(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+void write_triangles(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
 		int endian = 0, double prec = 0.0) {
 	Rcpp::CharacterVector cl_attr = lst.attr("class");
 	const char *dim = cl_attr[0];
@@ -573,18 +573,18 @@ void write_triangles(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
 		write_data(os, lst, i, EWKB, endian, "TRIANGLE", dim, prec, 0);
 }
 
-void write_geometrycollection(std::ostringstream& os, Rcpp::List lst, bool EWKB = false, 
+void write_geometrycollection(std::ostringstream& os, Rcpp::List lst, bool EWKB = false,
 		int endian = 0, double prec = 0.0) {
 	add_int(os, lst.length());
 	Rcpp::Function Rclass("class");
 	for (int i = 0; i < lst.length(); i++) {
-		Rcpp::CharacterVector cl_attr = Rclass(lst[i]); 
+		Rcpp::CharacterVector cl_attr = Rclass(lst[i]);
 		const char *cls = cl_attr[1], *dim = cl_attr[0];
 		write_data(os, lst, i, EWKB, endian, cls, dim, prec, 0);
 	}
 }
 
-void write_multipoint(std::ostringstream& os, Rcpp::NumericMatrix mat, 
+void write_multipoint(std::ostringstream& os, Rcpp::NumericMatrix mat,
 		bool EWKB = false, int endian = 0, double prec = 0.0) {
 	add_int(os, mat.nrow());
 	Rcpp::CharacterVector cl_attr = mat.attr("class");
@@ -598,10 +598,10 @@ void write_multipoint(std::ostringstream& os, Rcpp::NumericMatrix mat,
 }
 
 // write single simple feature object as (E)WKB to stream os
-void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false, 
+void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = false,
 		int endian = 0, const char *cls = NULL, const char *dim = NULL, double prec = 0.0,
 		int srid = 0) {
-	
+
 	add_byte(os, (char) endian);
 	int tp;
 	unsigned int sf_type = make_type(cls, dim, EWKB, &tp, srid);
@@ -630,7 +630,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 		case SF_CurvePolygon: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
 			break;
 		case SF_MultiCurve: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
-			break; 
+			break;
 		case SF_MultiSurface: write_geometrycollection(os, sfc[i], EWKB, endian, prec);
 			break;
 		case SF_Curve: write_matrix(os, sfc[i], prec); // #nocov start
@@ -677,15 +677,18 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 			Rcpp::stop("sfc_GEOMETRY has no classes attribute; please file an issue"); // #nocov
 	}
 
-	// get SRID from crs:
-	int srid = 0;
+	// get SRID from crs[["input"]], either of the form "4326" or "XXXX:4326" with arbitrary XXXX string
 	Rcpp::List crs = sfc.attr("crs");
-	Rcpp::CharacterVector wkb = crs(1);
-	if (! Rcpp::CharacterVector::is_na(wkb[0])) {
-		srid = epsg_from_crs(crs);
-		if (srid == NA_INTEGER)
-			srid = 0; // non-zero now means: we have an srid
-	}
+	Rcpp::CharacterVector input = crs(0);
+	char *inp = input[0];
+	char *remainder = NULL;
+	// check for ":", and move one beyond:
+	if ((remainder = strstr(inp, ":")) != NULL)
+		inp = remainder + 1;
+	int srid = 0;
+	long value = strtol(inp, &remainder, 10);
+	if (*remainder == '\0') // success:
+		srid = (int) value;
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();

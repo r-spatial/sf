@@ -811,6 +811,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_is_network_enabled
+Rcpp::LogicalVector CPL_is_network_enabled(bool b);
+RcppExport SEXP _sf_CPL_is_network_enabled(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_is_network_enabled(b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_get_data_dir
+Rcpp::CharacterVector CPL_get_data_dir(bool b);
+RcppExport SEXP _sf_CPL_get_data_dir(SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_data_dir(b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_set_data_dir
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
 RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
@@ -867,8 +889,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_proj_direct
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep, bool warn);
-RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP, SEXP keepSEXP, SEXP warnSEXP) {
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep, bool warn, bool authority_compliant);
+RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP, SEXP keepSEXP, SEXP warnSEXP, SEXP authority_compliantSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -876,7 +898,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type pts(ptsSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< bool >::type warn(warnSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts, keep, warn));
+    Rcpp::traits::input_parameter< bool >::type authority_compliant(authority_compliantSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts, keep, warn, authority_compliant));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1178,12 +1201,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
+    {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
+    {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},
     {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 1},
     {"_sf_CPL_use_proj4_init_rules", (DL_FUNC) &_sf_CPL_use_proj4_init_rules, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
-    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 4},
+    {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 5},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
     {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},

@@ -37,7 +37,7 @@ CharacterVector get_meta_data(GDALDatasetH ds, CharacterVector domain_item) {
 }
 
 List get_band_meta_data(GDALDataset *poDataset) {
-	int n_bands = poDataset->GetRasterCount(); 
+	int n_bands = poDataset->GetRasterCount();
 	List ret(n_bands);
 	for (int band = 1; band <= n_bands; band++) { // unlike x & y, band is 1-based
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
@@ -49,8 +49,8 @@ List get_band_meta_data(GDALDataset *poDataset) {
 // [[Rcpp::export]]
 CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_item,
 		CharacterVector options) {
-	
-	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL, 
+
+	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL,
 		create_options(options).data());
 	CharacterVector ret = get_meta_data(ds, domain_item);
 	if (ds != NULL)
@@ -61,7 +61,7 @@ CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_ite
 // [[Rcpp::export]]
 List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 	List ret(4);
-	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL, 
+	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL,
 		create_options(options).data());
 	if (ds == NULL)
 		return ret; // #nocov
@@ -112,20 +112,20 @@ bool equals_na(double value, double na, GDALDataType dt) {
 }
 
 // formerly: stars/src/gdal.cpp
-NumericVector read_gdal_data(GDALDataset *poDataset, 
-			NumericVector nodatavalue, 
-			int nXOff, 
-			int nYOff, 
-			int nXSize, 
-			int nYSize, 
-			int nBufXSize, 
-			int nBufYSize, 
+NumericVector read_gdal_data(GDALDataset *poDataset,
+			NumericVector nodatavalue,
+			int nXOff,
+			int nYOff,
+			int nXSize,
+			int nYSize,
+			int nBufXSize,
+			int nBufYSize,
 			IntegerVector bands,
 			GDALRasterIOExtraArg *resample
 		) {
 
 	// collapse x & y into rows, redim later:
-	NumericVector vec( 1.0 * nBufXSize * nBufYSize * bands.size() ); 
+	NumericVector vec( 1.0 * nBufXSize * nBufYSize * bands.size() );
 	// floor returns double -> no integer overflow
 
 	// read bands:
@@ -137,12 +137,12 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			vec.begin(),
 			nBufXSize,
 			nBufYSize,
-			GDT_Float64, 
+			GDT_Float64,
 			bands.size(),
-			bands.begin(), 
-			0, 
-			0, 
-			0, 
+			bands.begin(),
+			0,
+			0,
+			0,
 			resample) == CE_Failure)
 		stop("read failure"); // #nocov
 
@@ -152,7 +152,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		int band = bands(i);
 		GDALRasterBand *poBand = poDataset->GetRasterBand( band );
 		// NumericVector nodatavalue = NumericVector::create(NA_REAL);
-		// int success = 0, 
+		// int success = 0,
 		int has_scale = 0, has_offset = 0;
 		double offset = 0.0, scale = 1.0;
 		// poBand->GetNoDataValue(&success);
@@ -218,8 +218,30 @@ NumericMatrix get_color_table(GDALColorTable *tbl) {
 	return t;
 }
 
+List get_cat(char **cat) {
+	if (cat == NULL)
+		return(List::create());
+
+	int n = 0;
+	for (n = 0; cat[n] != NULL; n++)
+		; // n is number of categories
+
+	List t(1);
+	CharacterVector col(n);
+	IntegerVector row_names(n);
+	for (int i = 0; i < n; i++) {
+		col(i) = cat[i];
+		row_names(i) = i+1;
+	}
+	t(0) = col;
+	t.attr("names") = CharacterVector::create("category");
+	t.attr("row.names") = row_names;
+	t.attr("class") = CharacterVector::create("data.frame");
+	return t;
+}
+
 List get_rat(GDALRasterAttributeTable *tbl) {
-	
+
 	if (tbl == NULL)
 		return(List::create());
 
@@ -287,13 +309,19 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	// geotransform:
 	double adfGeoTransform[6];
 	CPLErr err = poDataset->GetGeoTransform( adfGeoTransform );
+	// return the default geotransform as per the
+	// GetGeoTransform() doc in classGDALDataset
 	NumericVector geotransform = NumericVector::create(
-		err == CE_None ? adfGeoTransform[0] : NA_REAL,
-		err == CE_None ? adfGeoTransform[1] : NA_REAL,
-		err == CE_None ? adfGeoTransform[2] : NA_REAL,
-		err == CE_None ? adfGeoTransform[3] : NA_REAL,
-		err == CE_None ? adfGeoTransform[4] : NA_REAL,
-		err == CE_None ? adfGeoTransform[5] : NA_REAL);
+		err == CE_None ? adfGeoTransform[0] : 0,
+		err == CE_None ? adfGeoTransform[1] : 1,
+		err == CE_None ? adfGeoTransform[2] : 0,
+		err == CE_None ? adfGeoTransform[3] : 0,
+		err == CE_None ? adfGeoTransform[4] : 0,
+		err == CE_None ? adfGeoTransform[5] : 1); // see https://github.com/r-spatial/sf/pull/1307
+	int default_geotransform = 0;
+	if (err != CE_None) {
+		default_geotransform = 1;
+	}
 	bool geo_transform_set = (err == CE_None);
 
 	// CRS, projection:
@@ -323,15 +351,26 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
+	// get color table, attribute table, and min/max values:
 	List colorTables(poDataset->GetRasterCount());
 	List attributeTables(poDataset->GetRasterCount());
+	NumericMatrix ranges(poDataset->GetRasterCount(), 4);
 	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 		poBand = poDataset->GetRasterBand(i + 1);
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
-		attributeTables(i) = get_rat(poBand->GetDefaultRAT());
+		if (poBand->GetCategoryNames() != NULL)
+			attributeTables(i) = get_cat(poBand->GetCategoryNames());
+		else
+			attributeTables(i) = get_rat(poBand->GetDefaultRAT());
+		int set = 1;
+		ranges(i, 0) = poBand->GetMinimum(&set);
+		ranges(i, 1) = (double) set;
+		ranges(i, 2) = poBand->GetMaximum(&set);
+		ranges(i, 3) = (double) set;
 	}
 
+	// get metadata items:
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
 	CharacterVector sub = NA_STRING;
 	for (int i = 0; i < items.size(); i++) {
@@ -349,7 +388,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
 
 	// bands:
-	IntegerVector bands; 
+	IntegerVector bands;
 	if (RasterIO_parameters.containsElementNamed("bands"))
 		bands = RasterIO_parameters["bands"]; // #nocov
 	else {
@@ -381,7 +420,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		else if (res[0] == "nearest_neighbour")
 			resample.eResampleAlg = GRIORA_NearestNeighbour;
 		else stop("unknown method for resample"); // #nocov end
-	} 
+	}
 
 	List ReturnList = List::create(
 		_["filename"] = fname,
@@ -395,17 +434,19 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["proj_wkt"] = wkt,
 #endif
 		_["geotransform"] = geotransform,
-		_["datatype"] =	poBand != NULL ? 
+		_["datatype"] =	poBand != NULL ?
 			GDALGetDataTypeName(poBand->GetRasterDataType()) :
 			CharacterVector::create(NA_STRING),
 		_["sub"] = sub,
 		_["meta"] = get_meta_data(poDataset, CharacterVector::create()),
 		_["band_meta"] = get_band_meta_data(poDataset),
 		_["attribute_tables"] = attributeTables,
-		_["color_tables"] = colorTables
+		_["color_tables"] = colorTables,
+		_["ranges"] = ranges,
+		_["default_geotransform"] = default_geotransform
 	);
 	if (read_data) {
-		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff, 
+		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff,
 			nXSize, nYSize, nBufXSize, nBufYSize, bands, &resample);
 	}
 	GDALClose(poDataset);
@@ -429,7 +470,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 }
 
 // [[Rcpp::export]]
-void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, 
+void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver,
 		CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from,
 		NumericVector gt, CharacterVector p4s, NumericVector na_val,
 		bool create = true, bool only_create = false) {
@@ -543,7 +584,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		// write values:
 		// write the whole lot:
 		if (poDstDS->RasterIO(GF_Write, from[0], from[1], dims[0] - from[0], dims[1] - from[1],
-				x.begin(), dims[0] - from[0], dims[1] - from[1], GDT_Float64, 
+				x.begin(), dims[0] - from[0], dims[1] - from[1], GDT_Float64,
 				dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
 			stop("write failure"); // #nocov
 	}

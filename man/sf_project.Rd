@@ -4,12 +4,19 @@
 \alias{sf_project}
 \title{directly transform a set of coordinates}
 \usage{
-sf_project(from, to, pts, keep = FALSE, warn = TRUE)
+sf_project(
+  from,
+  to,
+  pts,
+  keep = FALSE,
+  warn = TRUE,
+  authority_compliant = st_axis_order()
+)
 }
 \arguments{
-\item{from}{character; proj4string of pts}
+\item{from}{character description of source CRS, or object of class \code{crs}}
 
-\item{to}{character; target coordinate reference system}
+\item{to}{character description of target CRS, or object of class \code{crs}}
 
 \item{pts}{two-column numeric matrix, or object that can be coerced into a matrix}
 
@@ -18,6 +25,8 @@ sf_project(from, to, pts, keep = FALSE, warn = TRUE)
 return value; otherwise an error is reported and nothing is returned.}
 
 \item{warn}{logical; if \code{TRUE}, warn when non-finite values are generated}
+
+\item{authority_compliant}{logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)}
 }
 \value{
 two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}

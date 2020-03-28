@@ -34,7 +34,7 @@ if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
   stopifnot(inherits(try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)), silent = TRUE), "try-error"))
 }
 
-if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || st_proj_info("have_datum_files")) {
+if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_files")) {
   "datum files installed"
 } else {
   "datum files not installed"

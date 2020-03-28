@@ -249,6 +249,14 @@ CPL_proj_h <- function(b = FALSE) {
     .Call('_sf_CPL_proj_h', PACKAGE = 'sf', b)
 }
 
+CPL_is_network_enabled <- function(b = FALSE) {
+    .Call('_sf_CPL_is_network_enabled', PACKAGE = 'sf', b)
+}
+
+CPL_get_data_dir <- function(b = FALSE) {
+    .Call('_sf_CPL_get_data_dir', PACKAGE = 'sf', b)
+}
+
 CPL_set_data_dir <- function(data_dir) {
     .Call('_sf_CPL_set_data_dir', PACKAGE = 'sf', data_dir)
 }
@@ -269,8 +277,8 @@ CPL_have_datum_files <- function(foo) {
     .Call('_sf_CPL_have_datum_files', PACKAGE = 'sf', foo)
 }
 
-CPL_proj_direct <- function(from_to, pts, keep, warn = TRUE) {
-    .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts, keep, warn)
+CPL_proj_direct <- function(from_to, pts, keep, warn = TRUE, authority_compliant = FALSE) {
+    .Call('_sf_CPL_proj_direct', PACKAGE = 'sf', from_to, pts, keep, warn, authority_compliant)
 }
 
 CPL_proj_info <- function(type) {

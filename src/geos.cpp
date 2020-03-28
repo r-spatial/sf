@@ -665,7 +665,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
                        Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
                        Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology,
                        int bOnlyEdges = 1,
-                       Rcpp::IntegerVector endCapStyle = 0, Rcpp::IntegerVector joinStyle = 0, 
+                       Rcpp::IntegerVector endCapStyle = 0, Rcpp::IntegerVector joinStyle = 0,
 					   Rcpp::NumericVector mitreLimit = 1, Rcpp::LogicalVector singleside = 0)
 {
 	int dim = 2;
@@ -688,7 +688,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 					GEOSBufferParams_setQuadrantSegments_r(hGEOSCtxt, bufferparams, nQuadSegs[i]) &&
 					GEOSBufferParams_setSingleSided_r(hGEOSCtxt, bufferparams, singleside[i]))
 				// out[i] = geos_ptr(chkNULL(GEOSBufferWithStyle_r(hGEOSCtxt, g[i].get(), bufferDist[i], nQuadSegs[i], endCapStyle[i], joinStyle[i], mitreLimit[i])), hGEOSCtxt);
-				out[i] = geos_ptr(chkNULL(GEOSBufferWithParams_r(hGEOSCtxt, g[i].get(), 
+				out[i] = geos_ptr(chkNULL(GEOSBufferWithParams_r(hGEOSCtxt, g[i].get(),
 					bufferparams, bufferDist[i])), hGEOSCtxt);
 			else
 				Rcpp::stop("invalid buffer parameters"); // #nocov
@@ -718,13 +718,13 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
-	} else 
+	} else
 #ifdef HAVE370
 	if (op == "reverse") {
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSReverse_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
-	} else 
+	} else
 #endif
 	if (op == "node") {
 		for (size_t i = 0; i < g.size(); i++) {

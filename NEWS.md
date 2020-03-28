@@ -1,6 +1,28 @@
+# version 0.9-1
+
+* `sf_project` has a parameter `authority_compliant` to return coordinates in "visualisation order"; when `FALSE` return coordinates in authority compliant axis order (e.g. EPSG:4326 latitude longitude); defaults to \code{st_axis_order()}.
+
+* fix test for Solaris
+
+* fix error reading category table through GDAL; https://github.com/r-spatial/stars/issues/245
+
 # version 0.9-0
 
-* `st_write` now uses `append` rather than `update`, and fails if a layer already exists and `append` has not been set to `TRUE` (append) or `FALSE` (overwrite) #1266
+* see r-spatial blog post: https://www.r-spatial.org/r/2020/03/17/wkt.html
+
+* modify `crs` objects to reflect our post-proj4string world (#1146; #1225): crs objects now contain two fields, `input` with the user input (if any), and `wkt` with a well-known-text  (or WKT2) representation of the coordinate reference system. `crs` objects now have a `$` method to dynamically retrieve the `epsg` (integer) or `proj4string` representation, using e.g. `x$epsg`.
+
+* support for PostGIS 3 using WKT and the new-style `crs` objects; #1234, #1303, #1308 by @etiennebr
+
+* `st_write_db` and `st_read_db` are now defunct. Use `st_write` and `st_read` instead.
+
+* `st_write` now uses `append`, replacing (and deprecating) argument `update`; `st_write` now fails when a layer already exists and `append` has not been set explicitly to `TRUE` (append) or `FALSE` (overwrite); #1266
+
+* `st_proj_info` was renamed into `sf_proj_info`; `sf_proj_info` can now get and set the PROJ data search path and use of CDN; #1277
+
+* adapt to new `dplyr` version; https://github.com/tidyverse/dplyr/issues/4917
+
+* `st_sample` is a generic
 
 * write `stars` rasters with wkt info, rather than proj4strings
 
@@ -12,7 +34,7 @@
 
 * `st_make_grid` returns grid cells or points that intersect with the target geometry, not its bounding box; #1260
 
-* reorganize `crs` objects to reflect our post-proj4string world (#1146; #1225): crs objects now contain two fields, `input` with the user input (if any), and `wkt` with a well-known-text  (or WKT2) representation of the crs.
+* allow for PROJ >= 7; #1254
 
 # version 0.8-1
 

@@ -1,7 +1,7 @@
 ## dplyr methods:
-group_map.sf <- function(.tbl, .f, ...) {
-	 st_as_sf(NextMethod()) # nocov
-}
+#group_map.sf <- function(.tbl, .f, ...) {
+#	 st_as_sf(NextMethod()) # nocov
+#}
 
 group_split.sf <- function(.tbl, ..., keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
@@ -32,7 +32,9 @@ filter.sf <- function(.data, ..., .dots) {
 #' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
 #' title("the ten counties with smallest area")
 arrange.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	sf_column_name = attr(.data, "sf_column")
+	class(.data) = setdiff(class(.data), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
 #' @name tidyverse
@@ -41,21 +43,27 @@ arrange.sf <- function(.data, ..., .dots) {
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
 #' nc %>% group_by(area_cl) %>% class()
 group_by.sf <- function(.data, ..., add = FALSE) {
+	sf_column_name = attr(.data, "sf_column")
 	class(.data) <- setdiff(class(.data), "sf")
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
 #' @name tidyverse
 ungroup.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
 	class(x) <- setdiff(class(x), "sf")
-	st_as_sf(NextMethod(), sf_column_name = attr(x, "sf_column"))
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
-.re_sf = function(x, sf_column_name, agr) {
+.re_sf = function(x, sf_column_name, agr, geom = NULL) {
 	stopifnot(!inherits(x, "sf"), !missing(sf_column_name), !missing(agr))
 	# non-geom attribute names
 	att = names(x)[!sapply(x, inherits, what = "sfc")]
 	agr = setNames(agr[att], att) # NA's new columns
+	if (!is.null(geom)) {
+		stopifnot(length(geom) == nrow(x))
+		x[[ sf_column_name ]] = geom
+	}
 	structure(x, 
 		sf_column = sf_column_name,
 		agr = agr,
@@ -69,8 +77,9 @@ ungroup.sf <- function(x, ...) {
 mutate.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 	agr = st_agr(.data)
+	sf_column_name = attr(.data, "sf_column")
 	class(.data) <- setdiff(class(.data), "sf")
-	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
+	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
 }
 
 #' @name tidyverse
@@ -78,12 +87,11 @@ mutate.sf <- function(.data, ..., .dots) {
 #' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #' nc %>% transmute(AREA = AREA/10) %>% class()
 transmute.sf <- function(.data, ..., .dots) {
-	ret = NextMethod()
-	if (attr(ret, "sf_column") %in% names(ret))
-		.re_sf(structure(ret, class = setdiff(class(ret), "sf")), # un-sf'd
-			sf_column_name = attr(.data, "sf_column"), st_agr(.data))
-	else
-		ret
+	sf_column_name = attr(.data, "sf_column")
+	agr = st_agr(.data)
+	geom = st_geometry(.data)
+	class(.data) = setdiff(class(.data), "sf")
+	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr, geom)
 }
 
 #' @name tidyverse
@@ -146,6 +154,10 @@ slice.sf <- function(.data, ..., .dots) {
 #' nc %>% as.data.frame %>% summarise(mean(AREA))
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 	sf_column = attr(.data, "sf_column")
+	precision = st_precision(.data)
+	crs = st_crs(.data)
+	geom = st_geometry(.data)
+	class(.data) = setdiff(class(.data), "sf")
 	ret = NextMethod()
 	if (!missing(do_union))
 		ret$do_union = NULL
@@ -155,7 +167,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 				if (!requireNamespace("dplyr", quietly = TRUE))
 					stop("dplyr required: install that first") # nocov
 				i = dplyr::group_indices(.data)
-				geom = st_geometry(.data)
+				# geom = st_geometry(.data)
 				geom = if (do_union)
 						lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
 					else
@@ -163,17 +175,17 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 				geom = unlist(geom, recursive = FALSE)
 				if (is.null(geom))
 					geom = list() #676 #nocov
-				do.call(st_sfc, c(geom, crs = list(st_crs(.data)), precision = st_precision(.data)))
+				do.call(st_sfc, c(geom, crs = list(crs), precision = precision))
 			} else { # single group:
 				if (do_union)
-					st_union(st_geometry(.data))
+					st_union(geom)
 				else
-					st_combine(st_geometry(.data))
+					st_combine(geom)
 			}
 		ret[[ sf_column ]] = geom
 	}
 	# need to re-sort out the geometry column class now:
-	st_as_sf(structure(ret, class = setdiff(class(ret), "sf"), "sf_column" = NULL))
+	st_as_sf(structure(ret, sf_column = NULL))
 }
 
 
@@ -336,11 +348,11 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 #' @param .preserve see \link[tidyr]{unnest}
 unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov start
+	sf_column_name = attr(data, "sf_column", exact = TRUE)
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("unnest requires tidyr; install that first")
-
 	class(data) = setdiff(class(data), "sf")
-	st_sf(NextMethod(), sf_column_name = attr(data, "sf_column", exact = TRUE))
+	st_sf(NextMethod(), sf_column_name = sf_column_name)
 	# nocov end
 }
 
@@ -387,7 +399,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "filter", "sf")
 	register_s3_method("dplyr", "full_join", "sf")
 	register_s3_method("dplyr", "group_by", "sf")
-	register_s3_method("dplyr", "group_map", "sf")
+#	register_s3_method("dplyr", "group_map", "sf")
 	register_s3_method("dplyr", "group_split", "sf")
 	register_s3_method("dplyr", "inner_join", "sf")
 	register_s3_method("dplyr", "left_join", "sf")

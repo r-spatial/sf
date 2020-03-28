@@ -48,7 +48,7 @@ static void __err_handler(CPLErr eErrClass, int err_no, const char *msg)
         case 4:
             Rf_warning("GDAL Error %d: %s\n", err_no, msg); // #nocov
             Rcpp::stop("Unrecoverable GDAL error\n"); // #nocov
-            break;        
+            break;
         default:
             Rf_warning("Received invalid error class %d (errno %d: %s)\n", eErrClass, err_no, msg); // #nocov
             break; // #nocov
@@ -63,12 +63,12 @@ static void __err_silent(CPLErr eErrClass, int err_no, const char *msg)
 }
 // #nocov end
 
-void set_error_handler(void) 
+void set_error_handler(void)
 {
     CPLSetErrorHandler((CPLErrorHandler)__err_handler);
 }
 
-void unset_error_handler(void) 
+void unset_error_handler(void)
 {
     CPLSetErrorHandler((CPLErrorHandler)__err_silent);
 }
@@ -198,7 +198,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	else
 		InvFlattening(0) = srs->GetInvFlattening(NULL); // for +ellps=sphere, still zero :-(
 	out(2) = InvFlattening;
-	names(2) = "InvFlattening"; 
+	names(2) = "InvFlattening";
 
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
@@ -208,11 +208,11 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(4) = Rcpp::CharacterVector::create(NA_STRING);
 	else
 		out(4) = Rcpp::CharacterVector::create(unit);
-	names(4) = "units_gdal"; 
+	names(4) = "units_gdal";
 
 	out(5) = Rcpp::LogicalVector::create(srs->IsVertical());
 	names(5) = "IsVertical";
-	
+
 	char *cp;
 	srs->exportToPrettyWkt(&cp);
 	out(6) = Rcpp::CharacterVector::create(cp);
@@ -238,7 +238,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	} else
 		out(9) = Rcpp::CharacterVector::create(NA_STRING); // #nocov
 	names(9) = "proj4string";
-	
+
 	// epsg
 	if (srs->GetAuthorityCode(NULL) != NULL)
 		out(10) = Rcpp::IntegerVector::create(atoi(srs->GetAuthorityCode(NULL)));
@@ -296,7 +296,7 @@ std::vector<OGRGeometry *> ogr_from_sfc(Rcpp::List sfc, OGRSpatialReference **sr
 
 	for (int i = 0; i < wkblst.length(); i++) {
 		Rcpp::RawVector r = wkblst[i];
-		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]), 
+		OGRErr err = OGRGeometryFactory::createFromWkb(&(r[0]), local_srs, &(g[i]),
 			r.length(), wkbVariantIso);
 		if (err != OGRERR_NONE) {
 			if (g[i] != NULL) // release: #nocov
@@ -470,7 +470,7 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 } // #nocov end
 
 // [[Rcpp::export]]
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, 
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false) {
 
 	// import crs:
@@ -492,15 +492,15 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
 			Rcpp::stop("pipeline value not accepted");
 	}
-	OGRCoordinateTransformation *ct = 
-		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, 
-			// (const OGRCoordinateTransformationOptions *) 
+	OGRCoordinateTransformation *ct =
+		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest,
+			// (const OGRCoordinateTransformationOptions *)
 			*options);
 	delete options;
 #else
 	if (pipeline.size() || AOI.size())
 		Rcpp::stop("pipeline or area of interest require GDAL >= 3"); // #nocov
-	OGRCoordinateTransformation *ct = 
+	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 #endif
 	if (ct == NULL) {
@@ -525,7 +525,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
 	dest->Release();
-	return ret; 
+	return ret;
 }
 
 // [[Rcpp::export]]
@@ -589,7 +589,7 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_with_geos() {
-	bool withGEOS = OGRGeometryFactory::haveGEOS(); 
+	bool withGEOS = OGRGeometryFactory::haveGEOS();
 	return Rcpp::LogicalVector::create(withGEOS);
 }
 

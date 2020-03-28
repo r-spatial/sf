@@ -5,7 +5,7 @@
 \alias{st_transform.sfc}
 \alias{st_transform.sf}
 \alias{st_transform.sfg}
-\alias{st_proj_info}
+\alias{sf_proj_info}
 \alias{st_wrap_dateline}
 \alias{st_wrap_dateline.sfc}
 \alias{st_wrap_dateline.sf}
@@ -29,7 +29,7 @@ st_transform(x, crs, ...)
 
 \method{st_transform}{sfg}(x, crs = st_crs(x), ...)
 
-st_proj_info(type = "proj")
+sf_proj_info(type = "proj", path)
 
 st_wrap_dateline(x, options, quiet)
 
@@ -59,6 +59,8 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}
 
 \item{type}{character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.}
 
+\item{path}{character; PROJ search path to be set}
+
 \item{options}{character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)}
 
 \item{quiet}{logical; print options after they have been parsed?}
@@ -73,7 +75,7 @@ Projecting to projections not supported by GDAL may be done by \link[lwgeom]{st_
 
 The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 
-\code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library when \code{type} is equal to proj, ellps, datum or units; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
+\code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 
 PROJ >= 6 does not provide option \code{type = "datums"}. PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
 
@@ -100,7 +102,7 @@ st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 library(units)
 set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
-st_proj_info("datum")
+sf_proj_info("datum")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
 library(maps)
 wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))

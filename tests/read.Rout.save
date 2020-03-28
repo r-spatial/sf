@@ -158,23 +158,6 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 + 	y <- st_sf(b = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
 + 	try(st_write(y, "xxx.gpkg"))
 + }
-Creating dataset /x failed.
-Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Creation failed.
-
-In addition: Warning message:
-In CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  :
-  GDAL Error 1: Failed to create directory /x for shapefile datastore.
-Writing layer `xxx' to data source `xxx.gpkg' using driver `GPKG'
-Writing 2 features with 1 fields and geometry type Unknown (any).
-Updating layer `xxx' to data source `xxx.gpkg' using driver `GPKG'
-Updating existing layer xxx
-Writing 2 features with 1 fields and geometry type Unknown (any).
-Layer xxx in dataset xxx.gpkg already exists:
-use either append=TRUE to append to layer or append=FALSE to overwrite layer
-Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Dataset already exists.
-
 > 
 > geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
 > st_write(geom, "geom.gpkg")
@@ -383,4 +366,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.164   0.075   1.277 
+  1.161   0.054   1.204 

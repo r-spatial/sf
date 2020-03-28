@@ -14,6 +14,18 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
+Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+	return Rcpp::CharacterVector(proj_info().searchpath);
+}
+
+Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
+#if PROJ_VERSION_MAJOR >= 7
+	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
+#else
+	return Rcpp::LogicalVector::create(false);
+#endif
+}
+
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
 	const char *cp = data_dir.c_str();
 	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
@@ -59,7 +71,7 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true) {
+		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
@@ -74,6 +86,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
 	if (P == NULL)
 		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+	if (!authority_compliant) // always keep lat/lon as lon/lat
+		P = proj_normalize_for_visualization(PJ_DEFAULT_CTX, P);
 	// copy over:
 	std::vector<PJ_COORD> x(pts.nrow());
 	for (int i = 0; i < pts.nrow(); i++) {
@@ -149,6 +163,24 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #endif
 
 // [[Rcpp::export]]
+Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
+#if PROJ_VERSION_MAJOR >= 7
+	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
+#else
+	return Rcpp::LogicalVector::create(false);
+#endif
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+#if PROJ_VERSION_MAJOR >= 7
+	return Rcpp::CharacterVector(proj_info().searchpath);
+#else
+	return Rcpp::CharacterVector(NA_STRING);
+#endif
+}
+
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
 	return false;
 }
@@ -215,10 +247,12 @@ bool CPL_have_datum_files(SEXP foo) {
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true) {
+		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
+	if (authority_compliant)
+		stop("authority_compliant = TRUE requires the new PROJ (proj.h) interface");
 	if (from_to.size() != 2)
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)

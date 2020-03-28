@@ -24,7 +24,8 @@ st_as_binary(x, ...)
   endian = .Platform$endian,
   EWKB = FALSE,
   pureR = FALSE,
-  hex = FALSE
+  hex = FALSE,
+  srid = 0
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ st_as_binary(x, ...)
 \item{precision}{numeric; if zero, do not modify; to reduce precision: negative values convert to float (4-byte real); positive values convert to round(x*precision)/precision. See details.}
 
 \item{hex}{logical; return as (unclassed) hexadecimal encoded character vector?}
+
+\item{srid}{integer; override srid (can be used when the srid is unavailable locally).}
 }
 \description{
 Convert sfc object to an WKB object

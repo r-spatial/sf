@@ -194,6 +194,7 @@ options(digits=6)
 x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
 #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
   (p <- st_sample(x, 10))
+  p <- st_sample(x[[1]], 10) # sfg method
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0))))) # NOT long/lat:
 p <- st_sample(x, 10)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),

@@ -62,7 +62,7 @@ use the \code{query} argument.}
 
 \item{options}{character; driver dependent dataset open options, multiple
 options supported. For possible values, see the "Open options" section
-of the GDAL documentation of the corresponding driver, and 
+of the GDAL documentation of the corresponding driver, and
 https://github.com/r-spatial/sf/issues/1157 for an example.}
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial
@@ -82,8 +82,8 @@ of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be
-converted to factors?  The `factory-fresh' default is \code{TRUE} for 
-\code{st_read} and \code{FALSE} for \code{read_sf}, but this can be changed 
+converted to factors?  The `factory-fresh' default is \code{TRUE} for
+\code{st_read} and \code{FALSE} for \code{read_sf}, but this can be changed
 globally by e.g. the R command \code{options(stringsAsFactors = FALSE)}.}
 
 \item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as
@@ -194,7 +194,7 @@ nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
    query = sprintf("SELECT NAME, SID74, FIPS, geom  FROM \"\%s\" WHERE BIR74 > 20000", layer))
 }
 # spatial filter, as wkt:
-wkt = st_as_text(st_geometry(nc[1,])) 
+wkt = st_as_text(st_geometry(nc[1,]))
 # filter by (bbox overlaps of) first feature geometry:
 read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 # read geojson from string:

@@ -139,16 +139,26 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 
 #' @name st_transform
 #' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
+#' @param path character; PROJ search path to be set
 #' @export
-#' @details \code{st_proj_info} lists the available projections, ellipses, datums or units supported by the Proj.4 library when \code{type} is equal to proj, ellps, datum or units; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
+#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 #'
 #' PROJ >= 6 does not provide option \code{type = "datums"}. PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
 #' @examples
-#' st_proj_info("datum")
-st_proj_info = function(type = "proj") {
+#' sf_proj_info("datum")
+sf_proj_info = function(type = "proj", path) {
 
 	if (type == "have_datum_files")
 		return(CPL_have_datum_files(0))
+
+	if (type == "path")
+		return(CPL_get_data_dir(FALSE))
+	
+	if (!missing(path) && is.character(path))
+		return(invisible(CPL_set_data_dir(path)))
+
+	if (type == "network")
+		return(CPL_is_network_enabled(TRUE))
 
     opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
     if (!(type %in% opts))
@@ -205,16 +215,21 @@ st_to_s2 = function(x) {
 #' directly transform a set of coordinates
 #'
 #' directly transform a set of coordinates
-#' @param from character; proj4string of pts
-#' @param to character; target coordinate reference system
+#' @param from character description of source CRS, or object of class \code{crs} 
+#' @param to character description of target CRS, or object of class \code{crs} 
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
 #' @param keep logical value controlling the handling of unprojectable points. If
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.
 #' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
+#' @param authority_compliant logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
+sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, authority_compliant = st_axis_order()) {
+	if (inherits(from, "crs"))
+		from = from$wkt
+	if (inherits(to, "crs"))
+		to = to$wkt
 	if (!is.logical(keep) || 1 != length(keep))
 		stop("'keep' must be single-length logical value")
 	v = CPL_proj_is_valid(from)
@@ -223,5 +238,5 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE) {
 	v = CPL_proj_is_valid(to)
 	if (!v[[1]])
 		stop(paste0(v[[2]], ": ", to))
-	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn)
+	CPL_proj_direct(as.character(c(from[1], to[1])), as.matrix(pts), if (keep) 1 else 0, warn, authority_compliant)
 }

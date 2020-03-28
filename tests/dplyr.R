@@ -101,7 +101,7 @@ x <- storms.sf %>% group_by(name, year) %>% nest
 nrow(distinct(nc[c(1,1,1,2,2,3:100),]))
 
 # set.seed(1331)
-nc$gp <- sample(1:10, replace=T)
+nc$gp <- sample(10, 100, replace=TRUE)
 # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
 nc_gp_cent <- nc %>%
                 group_by(gp) %>%

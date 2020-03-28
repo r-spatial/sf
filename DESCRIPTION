@@ -1,7 +1,7 @@
 Package: sf
-Version: 0.9-0
+Version: 0.9-1
 Title: Simple Features for R
-Authors@R: 
+Authors@R:
     c(person(given = "Edzer",
              family = "Pebesma",
              role = c("aut", "cre"),
@@ -34,7 +34,7 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0002-4035-0289")),
       person(given = "Kirill",
-             family = "M<U+00FC>ller",
+             family = "M\u00fcller",
              role = "ctb"),
       person(given = "Thomas Lin",
              family = "Pedersen",
@@ -142,7 +142,7 @@ Collate:
     'gdal_utils.R'
     'nearest.R'
     'normalize.R'
-    'deprecated.R'
+    'defunct.R'
     'z_range.R'
     'm_range.R'
     'shift_longitude.R'

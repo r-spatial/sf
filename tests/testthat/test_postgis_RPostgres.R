@@ -1,6 +1,18 @@
+#' To run the tests from the database, you can setup a docker container
+#' and run it as needed.
+#' docker run \
+#'   --name "postgis_test" \
+#'   -p 5432:5432 \
+#'   -e POSTGRES_USER=$USER \
+#'   -e POSTGRES_PASS=$USER \
+#'   -e POSTGRES_DBNAME=postgis \
+#'   -d -t kartoza/postgis
+#'  docker start postgis
+skip_on_os("solaris")
+
 library(sf)
 library(DBI)
-library(RPostgreSQL)
+library(RPostgres)
 library(testthat)
 context("sf: postgis using RPostgres")
 
@@ -25,36 +37,41 @@ epsg_31370 = paste0("+proj=lcc +lat_1=51.16666723333333 +lat_2=49.8333339 ",
 
 pg <- NULL
 test_that("check utils", expect_false(can_con(pg)))
-try(pg <- DBI::dbConnect(RPostgres::Postgres(), host = "localhost", dbname = "postgis"), silent=TRUE)
+try(pg <- DBI::dbConnect(
+	RPostgres::Postgres(),
+	host = "localhost",
+	dbname = "postgis",
+	password = Sys.info()[["user"]]), silent=TRUE)
 
 # tests ------------------------------------------------------------------------
 test_that("can write to db", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     expect_silent(suppressMessages(st_write(pts, pg, "sf_meuse__")))
-    expect_error(st_write(pts, pg, "sf_meuse__"), "exists")
-    expect_silent(st_write(pts, pg, "sf_meuse__", overwrite = TRUE))
+    expect_error(st_write(pts, pg, "sf_meuse__", append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, "sf_meuse__", delete_layer = TRUE))
     expect_silent(st_write(pts, pg, "sf_meuse2__", binary = FALSE))
-    expect_warning(z <- st_set_crs(pts, epsg_31370))
+    suppressWarnings(z <- st_set_crs(pts, epsg_31370))
     expect_message(st_write(z, pg, "sf_meuse3__"), "Inserted local crs")
     expect_silent(st_write(z, pg, "sf_meuse3__", append = TRUE))
     expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2)
-    expect_silent(st_write(z, pg, "sf_meuse3__", overwrite = TRUE))
+    expect_silent(sf3 <- st_write(z, pg, "sf_meuse3__", delete_layer = TRUE))
+    expect_true(st_crs(sf3) == st_crs(epsg_31370))
 })
 
 test_that("can handle multiple geom columns", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
-    expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
+    expect_silent(st_write(multi, pg, "meuse_multi", delete_layer = TRUE))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
     # expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]])) -> fails if EPSG databases differ
-    expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
+    expect_true(st_crs(x[["geometry.1"]]) == st_crs(multi[["geometry.1"]]))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(1,4)))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, type = c(4,4)))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, promote_to_multi = FALSE))
     expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE, geometry_column = "geometry.1"))
     x <- st_layers("PG:host=localhost dbname=postgis")
     multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
-    expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
+    expect_silent(st_write(multi2, pg, "meuse_multi2", delete_layer = TRUE))
     expect_silent(x <- st_read(pg, "meuse_multi2"))
     expect_equal(st_crs(x[["geometry"]]), st_crs(multi2[["geometry"]]))
     expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi2[["geometry.1"]]))
@@ -68,7 +85,7 @@ test_that("sf can write units to database (#264)", {
     ptsu <- pts
     ptsu[["u"]] <- ptsu[["cadmium"]]
     units(ptsu[["u"]]) <- units::as_units("km")
-    expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
+    expect_silent(st_write(ptsu, pg, "sf_units__", delete_layer = TRUE))
     r <- st_read(pg, "sf_units__")
     expect_is(r[["u"]], "numeric")
     expect_equal(sort(r[["u"]]), sort(as.numeric(ptsu[["u"]])))
@@ -145,7 +162,7 @@ test_that("sf can preserve types (#592)", {
     # cannot write lists
     #dtypes$lst <- c(list(matrix("a")), list(matrix(c("b", "c"))), list(NA))
     dtypes <- st_as_sf(dtypes, coords = c("x", "y"))
-    st_write(dtypes, pg, overwrite = TRUE)
+    st_write(dtypes, pg, delete_layer = TRUE)
     x <- st_read(pg, "dtypes")
     dtypes$fact <- as.character(dtypes$fact)
     expect_equal(x, dtypes)
@@ -158,17 +175,19 @@ test_that("can write to other schema", {
     q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
     suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
     skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
-    expect_error(st_write(pts, pg, Id(schema = "public", table = "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")))
-    expect_error(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__")), "exists")
-    expect_silent(st_write(pts, pg, Id(schema = "sf_test__", table = "sf_meuse__"), overwrite = TRUE))
+    tbl_meuse_public <- Id(schema = "public", table = "sf_meuse__")
+    tbl_meuse_test <- Id(schema = "sf_test__", table = "sf_meuse__")
+    expect_error(st_write(pts, pg, tbl_meuse_public, append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, tbl_meuse_test))
+    expect_error(st_write(pts, pg, tbl_meuse_test, append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(st_write(pts, pg, tbl_meuse_test, delete_layer = TRUE))
     expect_warning(z <- st_set_crs(pts, epsg_31370))
     expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse33__")))
     expect_silent(st_write(z, pg, Id(schema = "sf_test__", table = "sf_meuse4__")))
 
     # weird name work
-    expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), overwrite = TRUE))
-    expect_silent(st_write(pts.2 <- pts, pg, overwrite = TRUE))
+    expect_silent(st_write(pts, pg, c(NULL, "sf_test__.meuse__"), delete_layer = TRUE))
+    expect_silent(st_write(pts.2 <- pts, pg, delete_layer = TRUE))
     expect_true(DBI::dbRemoveTable(pg, "pts.2 <- pts"))
 })
 
@@ -198,7 +217,7 @@ test_that("can read from db", {
     expect_identical(st_crs(pts), st_crs(y))
     expect_identical(st_precision(pts), st_precision(y))
 
-    expect_warning(z <- st_read(pg, "sf_meuse3__"), "code \\d+ not found")
+    expect_warning(z <- st_read(pg, "sf_meuse3__"), "Could not find database srid")
     expect_equal(dim(pts), dim(z))
     #expect_identical(st_crs(NA), st_crs(z))
     expect_true(st_crs(epsg_31370) == st_crs(z))
@@ -233,6 +252,7 @@ test_that("can read views (#212)", {
     expect_identical(st_read(pg, "sf_viewm__"), x)
     expect_identical(st_read(pg, DBI::Id(schema = "sf_test__", table = "sf_viewm__")), x)
 
+    # cleanup ------------------------------------------------------------------
     try(DBI::dbExecute(pg, "DROP VIEW sf_view__"), silent = TRUE)
     try(DBI::dbExecute(pg, "DROP VIEW sf_test__.sf_view__"), silent = TRUE)
     try(DBI::dbExecute(pg, "DROP MATERIALIZED VIEW sf_viewm__"), silent = TRUE)
@@ -324,58 +344,70 @@ test_that("can read using driver", {
     expect_error(st_read("PG:dbname=empty", quiet = TRUE), "No layers") # EJP: removed host=localhost
 })
 
+test_that("Can override local crs", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	ewkb <- c(
+		wgs84 =       db_binary(st_set_crs(st_sfc(st_point(1:2)), 4326)),
+		unavailable = db_binary(st_set_crs(st_sfc(st_point(1:2)), make_empty_crs(1111))),
+		missing =     db_binary(st_sfc(st_point(1:2)))
+	)
+
+	queries <- paste0("select st_srid('", ewkb, "'::geometry) as srid")
+
+	expect_equal(dbGetQuery(pg, queries[1])[["srid"]], 4326)
+	expect_equal(dbGetQuery(pg, queries[2])[["srid"]], 1111)
+	expect_equal(dbGetQuery(pg, queries[3])[["srid"]], 0)
+})
+
 test_that("Can safely manipulate crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     srid <- 4326
     crs <- st_crs(srid)
-    expect_true(get_postgis_crs(pg, srid) == st_crs(srid))
-    expect_error(set_postgis_crs(pg, st_crs(srid)), "already exists")
+    expect_true(db_find_srid(pg, srid = srid) == st_crs(srid))
+    expect_true(db_find_srtext(pg, crs) == st_crs(srid))
+    expect_error(db_insert_crs(pg, st_crs(srid)), "already exists")
     expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
-    new_crs <- st_crs(get_new_postgis_srid(pg), "+proj=longlat +datum=WGS84 +no_defs", valid = FALSE)
-    expect_message(set_postgis_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
-    expect_warning(expect_error(set_postgis_crs(pg, new_crs), "duplicate key"),
-                   "not found")
+    new_crs <- make_empty_crs(
+    	epsg = get_new_postgis_srid(pg),
+    	text = "+proj=longlat +datum=WGS84 +no_defs"
+    )
+    expect_message(db_insert_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
+    expect_error(db_insert_crs(pg, new_crs), "duplicate key")
     expect_equal(delete_postgis_crs(pg, new_crs), 1)
     expect_equal(delete_postgis_crs(pg, new_crs), 0)
 
     # set and delete
-    crs$epsg <- NA
-    expect_message(new_srid <- set_postgis_crs(pg, crs), "Inserted local crs")
-    expect_error(delete_postgis_crs(pg, crs), "Missing SRID")
-    crs2 <- st_crs(new_srid$epsg, proj4text = st_crs(3857)$proj4string, valid = FALSE)
+    new_crs <- make_empty_crs(
+    	epsg = NA,
+    	text = st_as_text(st_crs(epsg_31370))
+    )
+    expect_message(new_srid <- db_insert_crs(pg, new_crs), "Inserted local crs")
+    expect_error(delete_postgis_crs(pg, new_crs), "Missing SRID")
+
+    crs2 <- make_empty_crs(epsg(new_srid), st_as_text(st_crs(3857)))
     expect_equal(delete_postgis_crs(pg, crs2), 0)  # crs doesn't match any crs
     expect_equal(delete_postgis_crs(pg, new_srid), 1)
 
     # udpate
-    expect_message(set_postgis_crs(pg, new_srid), "Inserted local crs")
-    new_srid$proj4string <- crs2$proj4string
-    expect_warning(
-        expect_error(set_postgis_crs(pg, new_srid), "already exists"),
-        "GDAL Error 6: EPSG"
-    )
-    expect_warning(
-        expect_message(set_postgis_crs(pg, new_srid, update = TRUE), "Inserted local crs"),
-        "GDAL Error 6: EPSG"
-    )
-
+    expect_message(db_insert_crs(pg, new_srid), "Inserted local crs")
+    new_srid[["wkt"]] <- crs2[["wkt"]]
+    expect_error(db_insert_crs(pg, new_srid), "already exists")
+    expect_message(db_insert_crs(pg, new_srid, update = TRUE), "Inserted local crs")
 })
 
 
 test_that("new SRIDs are handled correctly", {
-    skip_if_not(can_con(pg), "could not connect to postgis database")
-    data(meuse, package = "sp")
-    meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = NA_crs_)
+	skip_if_not(can_con(pg), "could not connect to postgis database")
 
-    crs = st_crs(NA_integer_, paste("+proj=sterea +lat_0=52 +lon_0=5", # creates FALSE, but new one
-                                    "+k=1.0 +x_0=155000 +y_0=463000 +ellps=bessel",
-                                    "+towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,",
-                                    "-1.87740,4.0725 +units=m +no_defs"), valid = FALSE)
-    st_crs(meuse_sf) = crs
-    expect_message(st_write(meuse_sf, pg, overwrite = TRUE), "Inserted local crs")
-    expect_warning(x <- st_read(pg, query = "select * from meuse_sf limit 3;"),
-                   "not found in EPSG support files")
-    expect_true(st_crs(x)$proj4string == crs$proj4string)
-    expect_silent(st_write(meuse_sf, pg, overwrite = TRUE))
+	crs <- make_empty_crs(
+		epsg = NA,
+		wkt = st_as_text(st_crs(epsg_31370))
+	)
+	suppressWarnings(st_crs(pts) <- crs)
+
+	expect_warning(x <- st_read(pg, query = "select * from sf_meuse3__ limit 3;"),
+				   "Could not find database srid")
+	expect_true(st_as_text(st_crs(x)) == st_as_text(crs))
 })
 
 test_that("schema_table", {
@@ -388,10 +420,10 @@ test_that("schema_table", {
 	expect_equal(sf:::schema_table(pg, "a"), c("public", "a"))
 })
 
-test_that("get_postgis_crs", {
+test_that("Can find a crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    expect_equal(sf:::get_postgis_crs(pg, NA), st_crs(NA))
-    expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)") # FIXME: wkt2
+    expect_equal(db_find_srid(pg, st_crs(NA)), st_crs(NA))
+    expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)")
 })
 
 if (can_con(pg)) {
