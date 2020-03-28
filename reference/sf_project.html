@@ -155,7 +155,14 @@
     <p>directly transform a set of coordinates</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sf_project</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='no'>pts</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>sf_project</span>(
+  <span class='no'>from</span>,
+  <span class='no'>to</span>,
+  <span class='no'>pts</span>,
+  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>authority_compliant</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_axis_order</a></span>()
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,6 +188,10 @@ return value; otherwise an error is reported and nothing is returned.</p></td>
     <tr>
       <th>warn</th>
       <td><p>logical; if <code>TRUE</code>, warn when non-finite values are generated</p></td>
+    </tr>
+    <tr>
+      <th>authority_compliant</th>
+      <td><p>logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)</p></td>
     </tr>
     </table>
 
