@@ -252,7 +252,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	using namespace Rcpp;
 
 	if (authority_compliant)
-		stop("authority_compliant = TRUE requires the new PROJ (proj.h) interface")
+		stop("authority_compliant = TRUE requires the new PROJ (proj.h) interface");
 	if (from_to.size() != 2)
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
