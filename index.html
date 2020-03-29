@@ -114,16 +114,16 @@
 <p><a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif"></a></p>
 <p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features access</a> for R. Package sf:</p>
 <ul>
-<li>provides simple features are <code>data.frames</code> or <code>tibbles</code> with a geometry list-column</li>
+<li>represents simple features as records in a <code>data.frame</code> or <code>tibble</code> with a geometry list-column</li>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
+<li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support geometrical operations including the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
 </li>
-<li>interfaces to <a href="http://www.gdal.org/">GDAL</a>, supporting all driver options, Date and DateTime (<code>POSIXct</code>) columns, and coordinate reference system transformations through <a href="http://proj4.org/">PROJ</a>
-</li>
+<li>interfaces to <a href="http://www.gdal.org/">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
+<li>interfaces to <a href="http://proj.org/">PRØJ</a> for coordinate reference system conversions and transformations</li>
 <li>uses <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">well-known-binary</a> serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS</li>
 <li>reads from and writes to spatial databases such as <a href="http://postgis.net/">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
 </li>
-<li>is extended by pkg <a href="https://github.com/r-spatial/lwgeom/">lwgeom</a> for further liblwgeom/PostGIS functions, including spherical geometry functions</li>
+<li>is extended by pkg <a href="https://github.com/r-spatial/lwgeom/">lwgeom</a> for further liblwgeom/PostGIS functions, including some spherical geometry functions</li>
 </ul>
 <p><a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg"></a></p>
 <p>(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)</p>
