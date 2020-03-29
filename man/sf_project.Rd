@@ -29,7 +29,7 @@ return value; otherwise an error is reported and nothing is returned.}
 \item{authority_compliant}{logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)}
 }
 \value{
-two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}; this matrix has a logical attribute \code{yx} that is \code{TRUE} when axes returned are x=lat, y=lon, and \code{FALSE} otherwise.
+two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 }
 \description{
 directly transform a set of coordinates
