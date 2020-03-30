@@ -90,7 +90,12 @@ jobs:
           library(remotes)
           deps <- readRDS("depends.Rds")
           deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
-          update(deps)
+          config_args <- ""
+          if (Sys.info()['sysname'] == "Darwin") {
+            config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
+          }
+          options("install.packages.compile.from.source" = "yes")
+          update(deps, configure.args = config_args)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
@@ -98,6 +103,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           install.packages("rgdal", type = "source", configure.args = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
+        shell: Rscript {0}
 
       - name: Check
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "${{ matrix.config.args }}"), error_on = "warning", check_dir = "check", build_args = "${{ matrix.config.build_args }}")
