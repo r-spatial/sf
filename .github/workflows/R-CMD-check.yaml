@@ -86,18 +86,14 @@ jobs:
           brew install udunits
           brew install gdal
 
-      - name: macOS install Rcpp/rgdal
-        if: runner.os == 'macOS'
-        run: |
-          r <- options("repos")
-          r["rccp_drat"] <- "https://RcppCore.github.io/drat"
-          rgdal_config <- "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/"
-          options(configure.args = c("rgdal" = rgdal_config), repos = r)
-          install.packages(c("Rcpp", "rgdal"), type = "source")
-        shell: Rscript {0}
-
       - name: Install dependencies
         run: |
+          if (Sys.info()['sysname'] == "Darwin") {
+            r <- options("repos")
+            r["rccp_drat"] <- "https://RcppCore.github.io/drat"
+            rgdal_config <- "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/"
+            options(configure.args = c("rgdal" = rgdal_config), repos = r)
+          }
           library(remotes)
           deps <- readRDS("depends.Rds")
           deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
