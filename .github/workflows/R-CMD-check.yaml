@@ -43,6 +43,12 @@ jobs:
       - name: Query dependencies
         run: |
           install.packages('remotes')
+          # Temporarily add Rcpp drat repo to get around Rcpp macOS issue
+          if (Sys.info()['sysname'] == "Darwin") {
+            r <- getOption("repos")
+            r["rccp_drat"] <- "https://RcppCore.github.io/drat"
+            options(repos = r)
+          }
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
         shell: Rscript {0}
 
@@ -81,18 +87,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if (Sys.info()['sysname'] == "Darwin") {
-            r <- options("repos")
-            r["rccp_drat"] <- "https://RcppCore.github.io/drat"
-            rgdal_config <- "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/"
-            options(configure.args = c("rgdal" = rgdal_config), repos = r)
-          }
           library(remotes)
           deps <- readRDS("depends.Rds")
           deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
           update(deps)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
+
+      - name: Install rgdal with configure
+        if: runner.os == 'macOS'
+        run: |
+          install.packages("rgdal", type = "source", configure.args = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
 
       - name: Check
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "${{ matrix.config.args }}"), error_on = "warning", check_dir = "check", build_args = "${{ matrix.config.build_args }}")
