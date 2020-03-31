@@ -84,8 +84,8 @@ jobs:
           brew install pkg-config
           brew install udunits
           brew install gdal
-          echo "::set-env name=PKG_CONFIG_PATH::/usr/local/lib/pkgconfig/"
-          echo "::set-env name=PROJ_LIB::/usr/local/opt/proj/share/proj/"
+          echo "PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/" >> .Renviron
+          echo "PROJ_LIB=/usr/local/opt/proj/share/proj/" >> .Renviron
 
       - name: Install dependencies
         run: |
