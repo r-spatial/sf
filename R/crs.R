@@ -339,9 +339,9 @@ is.na.crs = function(x) {
 #' @export
 #' @examples
 #' st_crs("EPSG:3857")$input
-#' st_crs("+init=epsg:3857")$proj4string
-#' st_crs("+init=epsg:3857 +units=m")$b     # numeric
-#' st_crs("+init=epsg:3857 +units=m")$units # character
+#' st_crs(3857)$proj4string
+#' st_crs(3857)$b     # numeric
+#' st_crs(3857)$units # character
 #' @details the \code{$} method for \code{crs} objects retrieves named elements
 #' using the GDAL interface; named elements include
 #' \code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
