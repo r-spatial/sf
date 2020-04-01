@@ -40,15 +40,26 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - name: Brew and macOS config
+        if: runner.os == 'macOS'
+        run: |
+          brew install pkg-config
+          brew install udunits
+          brew install gdal
+          echo "PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/" >> .Renviron
+          echo "PROJ_LIB=/usr/local/opt/proj/share/proj/" >> .Renviron
+          cat <<EOT >> .Rprofile
+          r <- getOption("repos")
+          r["rccp_drat"] <- "https://RcppCore.github.io/drat"
+          config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
+          options(configure.args = config_args,
+                  install.packages.compile.from.source = "yes",
+                  repos = r)
+          EOT
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
-          # Temporarily add Rcpp drat repo to get around Rcpp macOS issue
-          if (Sys.info()['sysname'] == "Darwin") {
-            r <- getOption("repos")
-            r["rccp_drat"] <- "https://RcppCore.github.io/drat"
-            options(repos = r)
-          }
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
         shell: Rscript {0}
 
@@ -78,25 +89,12 @@ jobs:
             libgeos-dev \
             libproj-dev
 
-      - name: Brew
-        if: runner.os == 'macOS'
-        run: |
-          brew install pkg-config
-          brew install udunits
-          brew install gdal
-          echo "PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/" >> .Renviron
-          echo "PROJ_LIB=/usr/local/opt/proj/share/proj/" >> .Renviron
 
       - name: Install dependencies
         run: |
           library(remotes)
           deps <- readRDS("depends.Rds")
           deps[["installed"]] <- vapply(deps[["package"]], remotes:::local_sha, character(1))
-          if (Sys.info()['sysname'] == "Darwin") {
-            config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
-            options(configure.args = config_args,
-                    install.packages.compile.from.source = "yes")
-          }
           update(deps)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
