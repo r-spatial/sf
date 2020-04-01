@@ -1,6 +1,6 @@
-# Action script of tests conducted for all platforms. The complete suite
-# of tests is described in .github/workflows/R-CMD-check-with-db.yaml
-
+# Run all tests including testing the database interaction, which is only supported
+# on linux at this time. Tests on multiple platforms are conducted in
+# .github/workflows/R-CMD-check.yaml
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
     branches:
       - master
 
-name: R-CMD-check
+name: R-CMD-check-with-db
 
 jobs:
   R-CMD-check:
@@ -21,12 +21,20 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.6'}
-          - {os: macOS-latest, r: '3.6'}
-          - {os: macOS-latest, r: 'devel'}
-          - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-latest, r: 'release'}
+
+    services:
+      postgres:
+        image: kartoza/postgis
+        ports:
+        - 5432:5432
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: postgis
+          POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
+          DEFAULT_ENCODING: "UTF8"
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -106,3 +114,7 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
+
+      - name: Test coverage
+        run: covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")
+        shell: Rscript {0}
