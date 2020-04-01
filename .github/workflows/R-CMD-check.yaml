@@ -50,6 +50,7 @@ jobs:
           echo "PROJ_LIB=/usr/local/opt/proj/share/proj/" >> .Renviron
           cat <<EOT >> .Rprofile
           r <- getOption("repos")
+          r["CRAN"] <- "https://cran.rstudio.com"
           r["rccp_drat"] <- "https://RcppCore.github.io/drat"
           config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
           options(configure.args = config_args,
