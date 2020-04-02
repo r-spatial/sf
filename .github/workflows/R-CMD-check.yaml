@@ -46,8 +46,12 @@ jobs:
           brew install pkg-config
           brew install udunits
           brew install gdal
-          echo "PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/" >> .Renviron
-          echo "PROJ_LIB=/usr/local/opt/proj/share/proj/" >> .Renviron
+          cat <<EOT >> .Renviron
+          PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
+          PROJ_LIB=/usr/local/opt/proj/share/proj/
+          # for installing XML package from source
+          XML_CONFIG=/usr/local/opt/libxml2/bin/xml2-config
+          EOT
           cat <<EOT >> .Rprofile
           r <- getOption("repos")
           r["CRAN"] <- "https://cran.rstudio.com"
