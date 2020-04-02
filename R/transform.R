@@ -222,7 +222,7 @@ st_to_s2 = function(x) {
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.
 #' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
-#' @param authority_compliant logical; handle axis order authority compliant (e.g. EPSG:4326 has x=lat, y=lon) or use visualisation order (x=lon, y=lat)
+#' @param authority_compliant logical; \code{TRUE} means handle axis order authority compliant (e.g. EPSG:4326 implying x=lat, y=lon), \code{FALSE} means use visualisation order (i.e. always x=lon, y=lat)
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
 sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, authority_compliant = st_axis_order()) {
