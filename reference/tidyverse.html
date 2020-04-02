@@ -398,7 +398,7 @@ Should be a character vector of length 2.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp6L49NN/temp_libpath64c667a0cdba/sf/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpXl6Cdt/temp_libpath620d2c6d1e23/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -426,7 +426,7 @@ Should be a character vector of length 2.</p></td>
 #&gt; CRS:            4267
 #&gt; # A tibble: 4 x 3
 #&gt;   area_cl    `mean(AREA)`                                               geometry
-#&gt; * &lt;fct&gt;             &lt;dbl&gt;                                     &lt;MULTIPOLYGON [°]&gt;
+#&gt;   &lt;fct&gt;             &lt;dbl&gt;                                     &lt;MULTIPOLYGON [°]&gt;
 #&gt; 1 (0,0.1]          0.0760 (((-77.96073 34.18924, -77.96587 34.24229, -77.97528 …
 #&gt; 2 (0.1,0.12]       0.112  (((-84.29104 35.21054, -84.22594 35.2616, -84.17973 3…
 #&gt; 3 (0.12,0.1…       0.134  (((-76.54427 34.58783, -76.55515 34.61066, -76.53775 …
