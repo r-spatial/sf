@@ -20,7 +20,9 @@
 \alias{format.crs}
 \alias{st_axis_order}
 \title{Retrieve coordinate reference system from object}
-\format{An object of class \code{crs} of length 2.}
+\format{
+An object of class \code{crs} of length 2.
+}
 \usage{
 st_crs(x, ...)
 

@@ -28,7 +28,9 @@
 \alias{NA_bbox_}
 \alias{format.bbox}
 \title{Return bounding of a simple feature or simple feature set}
-\format{An object of class \code{bbox} of length 4.}
+\format{
+An object of class \code{bbox} of length 4.
+}
 \usage{
 \method{is.na}{bbox}(x)
 

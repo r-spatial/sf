@@ -24,7 +24,9 @@
 \alias{st_m_range.numeric}
 \alias{NA_m_range_}
 \title{Return 'm' range of a simple feature or simple feature set}
-\format{An object of class \code{m_range} of length 2.}
+\format{
+An object of class \code{m_range} of length 2.
+}
 \usage{
 \method{is.na}{m_range}(x)
 
