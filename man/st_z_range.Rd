@@ -24,7 +24,9 @@
 \alias{st_z_range.numeric}
 \alias{NA_z_range_}
 \title{Return 'z' range of a simple feature or simple feature set}
-\format{An object of class \code{z_range} of length 2.}
+\format{
+An object of class \code{z_range} of length 2.
+}
 \usage{
 \method{is.na}{z_range}(x)
 
