@@ -135,9 +135,9 @@ library(dplyr)
 x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
 st_crs("EPSG:3857")$input
-st_crs("+init=epsg:3857")$proj4string
-st_crs("+init=epsg:3857 +units=m")$b     # numeric
-st_crs("+init=epsg:3857 +units=m")$units # character
+st_crs(3857)$proj4string
+st_crs(3857)$b     # numeric
+st_crs(3857)$units # character
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)
 # st_axis_order() only has effect in GDAL >= 2.5.0:
 st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
