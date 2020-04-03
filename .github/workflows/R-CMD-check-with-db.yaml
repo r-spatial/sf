@@ -1,4 +1,4 @@
-# Run all tests including testing the database interaction, which is only supported
+# Run all tests including testing the database interaction, which is only supported 
 # on linux at this time. Tests on multiple platforms are conducted in
 # .github/workflows/R-CMD-check.yaml
 on:
