@@ -325,11 +325,11 @@ CPL_write_wkb <- function(sfc, EWKB = FALSE) {
     .Call('_sf_CPL_write_wkb', PACKAGE = 'sf', sfc, EWKB)
 }
 
-CPL_get_z_range <- function(sf, depth = 0L) {
+CPL_get_z_range <- function(sf, depth) {
     .Call('_sf_CPL_get_z_range', PACKAGE = 'sf', sf, depth)
 }
 
-CPL_get_m_range <- function(sf, depth = 0L) {
+CPL_get_m_range <- function(sf, depth) {
     .Call('_sf_CPL_get_m_range', PACKAGE = 'sf', sf, depth)
 }
 
