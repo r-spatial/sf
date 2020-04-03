@@ -52,7 +52,7 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
 })
 
 test_that("as_Spatial can convert sf (#519)", {
-	h <- st_read(system.file("shape/nc.shp", package = "sf"))
+	h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 	u <- as(h, "Spatial")
 	s <- as_Spatial(h)
@@ -72,7 +72,7 @@ test_that("Can convert `XY` objects to sp", {
 
 test_that("Can't convert `M` dimension to sp", {
 	skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
-	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"))
+	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)
 	expect_error(as_Spatial(x), "not supported by sp")
 })
 
