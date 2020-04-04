@@ -154,6 +154,7 @@
 <a href="#version-0-9-1" class="anchor"></a>version 0.9-1<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>fix an invalid read bug in <code>st_m_range</code>; <a href='https://github.com/r-spatial/sf/issues/1332'>#1332</a></p></li>
 <li><p><code>st_crs(4326) == st_crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")</code> returns <code>TRUE</code> for GDAL &gt;= 3.0, irrespective authority compliance of axis order; see <a href='https://github.com/r-spatial/sf/issues/1331'>#1331</a> and <a href="https://github.com/ropensci/scrubr/issues/34" class="uri">https://github.com/ropensci/scrubr/issues/34</a></p></li>
 <li><p><code>sf_project</code> has a parameter <code>authority_compliant</code> to return coordinates in “visualisation order”; when <code>TRUE</code> it returns coordinates in authority compliant axis order (e.g. EPSG:4326 latitude longitude); default is <code><a href="../reference/st_crs.html">st_axis_order()</a></code>.</p></li>
 <li><p>fix test for Solaris and certain GDAL/PROJ versions</p></li>
