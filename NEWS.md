@@ -1,10 +1,10 @@
 # version 0.9-1
 
-* `st_crs(4326) == st_crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")` now returns `TRUE` for GDAL >= 3.0, irrespective authority compliance of axis order; see #1331 and https://github.com/ropensci/scrubr/issues/34
+* `st_crs(4326) == st_crs("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")` returns `TRUE` for GDAL >= 3.0, irrespective authority compliance of axis order; see #1331 and https://github.com/ropensci/scrubr/issues/34
 
-* `sf_project` has a parameter `authority_compliant` to return coordinates in "visualisation order"; when `TRUE` it returns coordinates in authority compliant axis order (e.g. EPSG:4326 latitude longitude); defaults to \code{st_axis_order()}.
+* `sf_project` has a parameter `authority_compliant` to return coordinates in "visualisation order"; when `TRUE` it returns coordinates in authority compliant axis order (e.g. EPSG:4326 latitude longitude); default is `st_axis_order()`.
 
-* fix test for Solaris
+* fix test for Solaris and certain GDAL/PROJ versions
 
 * fix error reading category table through GDAL; https://github.com/r-spatial/stars/issues/245
 
