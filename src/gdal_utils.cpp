@@ -158,9 +158,11 @@ Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterV
 		srcpt[i] = (const char *) src[i];
 	*/
 	std::vector<GDALDatasetH> srcpt(src.size());
-	for (int i = 0; i < src.size(); i++)
-		srcpt[i] = GDALOpenEx((const char *) src[i], GDAL_OF_RASTER | GA_ReadOnly, NULL, 
+	for (int i = 0; i < src.size(); i++) {
+		const char *name = src[i];
+		srcpt[i] = GDALOpenEx(name, GDAL_OF_RASTER | GA_ReadOnly, NULL, 
 			oo_char.data(), NULL);
+	}
 
 	GDALDatasetH result = GDALBuildVRT((const char *) dst[0], src.size(), srcpt.data(), NULL, opt, &err);
 
