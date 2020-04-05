@@ -167,10 +167,16 @@
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#macos" class="anchor"></a>MacOS</h3>
-<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent version of homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb">gdal formula</a>:</p>
+<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
-<p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R.</p>
+<p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> (<code>7.0.0</code>) on homebrew, installation requires additional configuration:</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sf"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)</pre></div>
+<p>Or the development version:</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
+<span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)</pre></div>
+<p>If you are using <code>sf</code> and <code>rgdal</code> together it is necessary to install <code>rgal</code> from source using this configuration:</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"rgdal"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span>))</pre></div>
 <p>Alternatively <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
@@ -181,18 +187,18 @@ brew install gdal</code></pre>
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
 <p>Dependencies for recent (non-LTS, later than bionic) versions of Ubuntu are available in the official repositories; install them with</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
 <p>To install the dependencies on LTS versions of Ubuntu (xenial, bionic), either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories and use:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="fu">sudo</span> apt-get update</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="fu">sudo</span> apt-get update</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
 <p>or install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
 </div>
 <div id="fedora" class="section level4">
 <h4 class="hasAnchor">
 <a href="#fedora" class="anchor"></a>Fedora</h4>
 <p>The following command installs all required dependencies:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel</a></code></pre></div>
 </div>
 <div id="arch" class="section level4">
 <h4 class="hasAnchor">
