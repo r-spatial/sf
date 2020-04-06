@@ -1,3 +1,9 @@
+# version 0.9-2
+
+* stop using `isFALSE` in `st_write()`; #1342
+
+* fix regression in `gdal_utils("translate", ...)` #1339
+
 # version 0.9-1
 
 * fix an invalid read bug in `st_m_range`; #1332
