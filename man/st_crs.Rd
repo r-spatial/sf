@@ -82,8 +82,8 @@ and \code{wkt} (length-1 character).
 Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 assumed to relate to an arbitrary Cartesian coordinate system.
 
-\code{st_axis_order} returns the (logical) current value, invisibly if it is
-being set.
+\code{st_axis_order} returns the (logical) current value if called without
+argument, or (invisibly) the previous value if it is being set.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object

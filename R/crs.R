@@ -435,8 +435,8 @@ st_crs.Spatial = function(x, ...) {
 #' indicates the usual GIS (display) order (longitude,latitude). This can be useful
 #' when data are read, or have to be written, with coordinates in authority compliant order.
 #' The return value is the current state of this (\code{FALSE}, by default).
-#' @return \code{st_axis_order} returns the (logical) current value, invisibly if it is
-#' being set.
+#' @return \code{st_axis_order} returns the (logical) current value if called without
+#' argument, or (invisibly) the previous value if it is being set.
 #' @export
 #' @examples
 #' pt = st_sfc(st_point(c(0, 60)), crs = 4326)
