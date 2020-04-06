@@ -245,8 +245,8 @@ if <code>x</code> is of class <code>sf</code> or <code>sfc</code>, return its <c
 and <code>wkt</code> (length-1 character).
 Elements may be <code>NA</code> valued; if all elements are <code>NA</code> the CRS is missing valued, and coordinates are
 assumed to relate to an arbitrary Cartesian coordinate system.</p>
-<p><code>st_axis_order</code> returns the (logical) current value, invisibly if it is
-being set.</p>
+<p><code>st_axis_order</code> returns the (logical) current value if called without
+argument, or (invisibly) the previous value if it is being set.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The *crs functions create, get, set or replace the <code>crs</code> attribute
