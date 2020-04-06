@@ -20,7 +20,9 @@
 \alias{format.crs}
 \alias{st_axis_order}
 \title{Retrieve coordinate reference system from object}
-\format{An object of class \code{crs} of length 2.}
+\format{
+An object of class \code{crs} of length 2.
+}
 \usage{
 st_crs(x, ...)
 
@@ -80,8 +82,8 @@ and \code{wkt} (length-1 character).
 Elements may be \code{NA} valued; if all elements are \code{NA} the CRS is missing valued, and coordinates are
 assumed to relate to an arbitrary Cartesian coordinate system.
 
-\code{st_axis_order} returns the (logical) current value, invisibly if it is
-being set.
+\code{st_axis_order} returns the (logical) current value if called without
+argument, or (invisibly) the previous value if it is being set.
 }
 \description{
 Retrieve coordinate reference system from sf or sfc object
@@ -133,9 +135,9 @@ library(dplyr)
 x = sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 x
 st_crs("EPSG:3857")$input
-st_crs("+init=epsg:3857")$proj4string
-st_crs("+init=epsg:3857 +units=m")$b     # numeric
-st_crs("+init=epsg:3857 +units=m")$units # character
+st_crs(3857)$proj4string
+st_crs(3857)$b     # numeric
+st_crs(3857)$units # character
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)
 # st_axis_order() only has effect in GDAL >= 2.5.0:
 st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)

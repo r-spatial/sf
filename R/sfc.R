@@ -97,7 +97,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE) {
 		} else if ( "XYZ" %in% u ) {
 			attr(lst, "z_range") = compute_z_range(lst)
 		} else if ("XYM" %in% u ) {
-			attr(lst, "m_range") = compute_z_range(lst) ## because it's the 3rd element
+			attr(lst, "m_range") = compute_m_range(lst)
 		}
 	}
 
@@ -276,9 +276,9 @@ st_geometry.sfc = function(obj, ...) obj
 #'
 #' Return geometry type of an object, as a factor
 #' @param x object of class \link{sf} or \link{sfc}
-#' @param by_geometry logical; if \code{TRUE}, return geometry type of each geometry, 
+#' @param by_geometry logical; if \code{TRUE}, return geometry type of each geometry,
 #' else return geometry type of the set
-#' @return a factor with the geometry type of each simple feature geometry 
+#' @return a factor with the geometry type of each simple feature geometry
 #' in \code{x}, or that of the whole set
 #' @export
 st_geometry_type = function(x, by_geometry = TRUE) {

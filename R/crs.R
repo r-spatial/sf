@@ -339,9 +339,9 @@ is.na.crs = function(x) {
 #' @export
 #' @examples
 #' st_crs("EPSG:3857")$input
-#' st_crs("+init=epsg:3857")$proj4string
-#' st_crs("+init=epsg:3857 +units=m")$b     # numeric
-#' st_crs("+init=epsg:3857 +units=m")$units # character
+#' st_crs(3857)$proj4string
+#' st_crs(3857)$b     # numeric
+#' st_crs(3857)$units # character
 #' @details the \code{$} method for \code{crs} objects retrieves named elements
 #' using the GDAL interface; named elements include
 #' \code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
@@ -435,8 +435,8 @@ st_crs.Spatial = function(x, ...) {
 #' indicates the usual GIS (display) order (longitude,latitude). This can be useful
 #' when data are read, or have to be written, with coordinates in authority compliant order.
 #' The return value is the current state of this (\code{FALSE}, by default).
-#' @return \code{st_axis_order} returns the (logical) current value, invisibly if it is
-#' being set.
+#' @return \code{st_axis_order} returns the (logical) current value if called without
+#' argument, or (invisibly) the previous value if it is being set.
 #' @export
 #' @examples
 #' pt = st_sfc(st_point(c(0, 60)), crs = 4326)

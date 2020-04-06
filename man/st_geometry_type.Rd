@@ -9,11 +9,11 @@ st_geometry_type(x, by_geometry = TRUE)
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
 
-\item{by_geometry}{logical; if \code{TRUE}, return geometry type of each geometry, 
+\item{by_geometry}{logical; if \code{TRUE}, return geometry type of each geometry,
 else return geometry type of the set}
 }
 \value{
-a factor with the geometry type of each simple feature geometry 
+a factor with the geometry type of each simple feature geometry
 in \code{x}, or that of the whole set
 }
 \description{

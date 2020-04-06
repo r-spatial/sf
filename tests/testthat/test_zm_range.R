@@ -147,13 +147,13 @@ test_that("XYM-only objects correctly calculate M (and not Z)", {
 
 	skip_if_not(sf_extSoftVersion()["GDAL"] > "2.1.0")
 
-	sf_m <- sf::st_read(system.file("/shape/storms_xyzm.shp", package = "sf"))
+	sf_m <- sf::st_read(system.file("/shape/storms_xyzm.shp", package = "sf"), quiet = TRUE)
 	m <- sf::st_coordinates( sf_m )
 
 	mmin <- min( m[, 3] ); mmax <- max( m[, 3] )
 	expect_true( all( sf::st_m_range( sf_m ) == c(mmin, mmax) ) )
 
-	sf_z <- sf::st_read(system.file("/shape/storms_xyz.shp", package = "sf"))
+	sf_z <- sf::st_read(system.file("/shape/storms_xyz.shp", package = "sf"), quiet = TRUE)
 
 	expect_true( all( sf::st_m_range( sf_m ) == sf::st_z_range( sf_z ) ) )
 

@@ -11,22 +11,28 @@ vec_restore.sfc = function(x, to, ...) {
 	# Ensure restoration of `n_empty` by `st_sfc()`
 	attr(x, "n_empty") = NULL
 
-	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
+	# x can have length 0, reset class manually
+	out <- st_sfc(x, crs = st_crs(to), precision = st_precision(to))
+	class(out) <- class(to)
+	out
 }
 
 #' vctrs methods for sf objects
 #' @name vctrs
 #' @export
+#' @export vec_ptype2.sfc
 #' @inheritParams vctrs::vec_ptype2
 vec_ptype2.sfc = function(x, y, ...) {
 	UseMethod("vec_ptype2.sfc", y)
 }
 #' @name vctrs
+#' @method vec_ptype2.sfc default
 #' @export
 vec_ptype2.sfc.default = function(x, y, ..., x_arg = "x", y_arg = "y") {
 	vctrs::vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 #' @name vctrs
+#' @method vec_ptype2.sfc sfc
 #' @export
 vec_ptype2.sfc.sfc = function(x, y, ...) {
 	crs = common_crs(x, y)

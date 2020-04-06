@@ -14,13 +14,14 @@
 
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
 
-* provides simple features are `data.frames` or `tibbles` with a geometry list-column
+* represents simple features as records in a `data.frame` or `tibble` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* interfaces to [GEOS](https://trac.osgeo.org/geos) to support the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
-* interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, Date and DateTime (`POSIXct`) columns, and coordinate reference system transformations through [PROJ](http://proj4.org/)
+* interfaces to [GEOS](https://trac.osgeo.org/geos) to support geometrical operations including the [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)
+* interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
+* interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversions and transformations
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
 * reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
-* is extended by pkg [lwgeom](https://github.com/r-spatial/lwgeom/) for further liblwgeom/PostGIS functions, including spherical geometry functions
+* is extended by pkg [lwgeom](https://github.com/r-spatial/lwgeom/) for further liblwgeom/PostGIS functions, including some spherical geometry functions
 
 <a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
 
@@ -60,14 +61,31 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-The easiest way to install `gdal` is using Homebrew. Recent version of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb):
+The easiest way to install `gdal` is using Homebrew. Recent versions of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
 brew install gdal
 ```
 
-Once gdal is installed, you will be able to install `sf` package from source in R.
+Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` (`7.0.0`) on homebrew, installation requires additional configuration:
+
+```r
+install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+```
+
+Or the development version:
+
+```r
+library(devtools)
+install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+```
+
+If you are using `sf` and `rgdal` together it is necessary to install `rgal` from source using this configuration:
+
+```r
+install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+```
 
 Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
 

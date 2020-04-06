@@ -376,7 +376,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
-		append = NA, delete_dsn = FALSE, delete_layer = isFALSE(append),
+		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
 		fid_column_name = NULL) {
 
 	if (!is.null(list(...)$update)) {

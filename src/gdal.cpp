@@ -27,6 +27,9 @@
 # endif
 #endif
 
+// global variable:
+bool axis_order_authority_compliant = false;
+
 //
 // Returns errors to R
 // Note only case 4 actually returns immediately
@@ -282,7 +285,14 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 		delete srs1;
 		return Rcpp::LogicalVector::create(false);
 	} // #nocov end
+#if GDAL_VERSION_MAJOR >= 3
+	const char *options[2] = { NULL, NULL };
+	if (!axis_order_authority_compliant)
+		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES";
+	bool b = (bool) srs1->IsSame(srs2, options);
+#else
 	bool b = (bool) srs1->IsSame(srs2);
+#endif
 	delete srs1;
 	delete srs2;
 	return Rcpp::LogicalVector::create(b);
@@ -593,12 +603,10 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 	return Rcpp::LogicalVector::create(withGEOS);
 }
 
-bool axis_order_authority_compliant = false;
-
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
-		Rcpp::stop("axis_order_authority_compliant should have length 0 or 1");
+		Rcpp::stop("argument authority_compliant should have length 0 or 1");
 	bool old_value = axis_order_authority_compliant;
 	if (authority_compliant.size() == 1)
 		axis_order_authority_compliant = authority_compliant[0];
