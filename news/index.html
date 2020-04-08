@@ -154,13 +154,14 @@
 <a href="#version-0-9-2" class="anchor"></a>version 0.9-2<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>stop using <code>isFALSE</code> in <code><a href="../reference/st_write.html">st_write()</a></code>; <a href='https://github.com/r-spatial/sf/issues/1342'>#1342</a></p></li>
-<li><p>fix regression in <code><a href="../reference/gdal_utils.html">gdal_utils("translate", ...)</a></code> <a href='https://github.com/r-spatial/sf/issues/1339'>#1339</a></p></li>
+<li><p><code>sf_project</code> handles <code>crs</code> objects when PROJ version is below 6, using proj.4 strings.</p></li>
+<li><p>avoid using <code>isFALSE</code> in <code><a href="../reference/st_write.html">st_write()</a></code>; <a href='https://github.com/r-spatial/sf/issues/1342'>#1342</a></p></li>
+<li><p>fix regression in <code><a href="../reference/gdal_utils.html">gdal_utils("translate", ...)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1339'>#1339</a></p></li>
 </ul>
 </div>
     <div id="version-0-9-1" class="section level1">
 <h1 class="page-header" data-toc-text="0.9-1">
-<a href="#version-0-9-1" class="anchor"></a>version 0.9-1<small> Unreleased </small>
+<a href="#version-0-9-1" class="anchor"></a>version 0.9-1<small> 2020-04-06 </small>
 </h1>
 <ul>
 <li><p>fix an invalid read bug in <code>st_m_range</code>; <a href='https://github.com/r-spatial/sf/issues/1332'>#1332</a></p></li>
