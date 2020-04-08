@@ -1,8 +1,10 @@
 # version 0.9-2
 
-* stop using `isFALSE` in `st_write()`; #1342
+* `sf_project` handles `crs` objects when PROJ version is below 6, using proj.4 strings.
 
-* fix regression in `gdal_utils("translate", ...)` #1339
+* avoid using `isFALSE` in `st_write()`; #1342
+
+* fix regression in `gdal_utils("translate", ...)`; #1339
 
 # version 0.9-1
 
