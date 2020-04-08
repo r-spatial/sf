@@ -10,6 +10,8 @@
 #'  docker start postgis
 skip_on_os("solaris")
 
+skip_if_not_installed("RPostgres")
+
 library(sf)
 library(DBI)
 library(RPostgres)
