@@ -47,7 +47,7 @@ Description: Support for simple features, a standardized way to
     data, to 'GEOS' for geometrical operations, and to 'PROJ' for
     projection conversions and datum transformations.
 License: GPL-2 | MIT + file LICENSE
-URL: https://github.com/r-spatial/sf/, https://r-spatial.github.io/sf/
+URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
 Depends:
     methods,
