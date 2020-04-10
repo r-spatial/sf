@@ -186,13 +186,15 @@ brew install gdal</code></pre>
 <div id="ubuntu" class="section level4">
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
-<p>Dependencies for recent (non-LTS, later than bionic) versions of Ubuntu are available in the official repositories; install them with</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
-<p>To install the dependencies on LTS versions of Ubuntu (xenial, bionic), either add <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> to the package repositories and use:</p>
+<p>Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y  \</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</a></code></pre></div>
+<p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="fu">sudo</span> apt-get update</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
-<p>or install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
+<p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
+<p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
 </div>
 <div id="fedora" class="section level4">
 <h4 class="hasAnchor">
