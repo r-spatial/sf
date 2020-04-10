@@ -94,12 +94,16 @@ Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017
 For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and Proj.4 (>= 4.8.0) are required.
 
 #### Ubuntu
-Dependencies for recent (non-LTS, later than bionic) versions of Ubuntu are available in the official repositories; install them with
+
+Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; install them with:
+
 ```sh
-sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+apt-get -y update && apt-get install -y  \
+  libudunits2-dev libgdal-dev libgeos-dev libproj-dev
 ```
 
-To install the dependencies on LTS versions of Ubuntu (xenial, bionic), either add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories and use:
+To get more up-to-date versions of dependencies such as GDAL, and to install `sf` on older versions of Ubuntu (e.g. Xenial), either add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories and install the packages as follows:
+
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
