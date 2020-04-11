@@ -158,7 +158,7 @@ GDALAllRegister();
 _EOCONF]
 
 AC_MSG_CHECKING(GDAL: linking with --libs only)
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 AC_MSG_RESULT(no)
@@ -170,7 +170,7 @@ if test "${gdalok}" = no; then
 AC_MSG_CHECKING(GDAL: linking with --libs and --dep-libs)
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
-${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
+${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 fi
@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
 _EOCONF]
 
 AC_MSG_CHECKING(GDAL: checking whether PROJ is available for linking:)
-${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no
 AC_MSG_RESULT(no)
@@ -424,7 +424,7 @@ int main() {
 _EOCONF]
   #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
   AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
-  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
   if test `echo $?` -ne 0 ; then
     proj6ok=no
     AC_MSG_RESULT(no)
@@ -450,7 +450,7 @@ fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
 
@@ -490,7 +490,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -538,7 +538,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -591,7 +591,7 @@ int main() {
 }
 _EOCONF]
 
-${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test [ -n "$proj_share_path" ] ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -729,7 +729,7 @@ _EOCONF]
 
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
 AC_MSG_CHECKING(geos: linking with ${GEOS_CLIBS})
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} ${LDFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
  geosok=no
  AC_MSG_RESULT(no)
@@ -740,7 +740,7 @@ fi
 
 if test "${geosok}" = no; then
   AC_MSG_CHECKING(geos: linking with ${GEOS_DEP_CLIBS})
-  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
   if test `echo $?` -ne 0 ; then
     geosok=no
     AC_MSG_RESULT(no)
