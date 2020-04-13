@@ -1,6 +1,8 @@
 # version 0.9-2
 
-* `sf_project` handles `crs` objects when PROJ version is below 6, using proj.4 strings.
+* fix line sampling for small densities; #1365
+
+* `sf_project` handles `crs` objects when PROJ version is below 6 using proj.4 string representations.
 
 * avoid using `isFALSE` in `st_write()`; #1342
 
