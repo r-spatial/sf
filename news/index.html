@@ -154,6 +154,8 @@
 <a href="#version-0-9-2" class="anchor"></a>version 0.9-2<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code><a href="../reference/st_crs.html">st_axis_order(TRUE)</a></code> gives and error if GDAL has version &lt; 2.5.0</p></li>
+<li><p>loading PROJ units <code>link</code>, <code>us_in</code>, <code>ind_yd</code>, <code>ind_ft</code>, and <code>ind_ch</code> into the udunits database is no longer done at package load time, but when function <code><a href="../reference/sf_project.html">sf_add_proj_units()</a></code> is called.</p></li>
 <li><p>fix line sampling for small densities; <a href='https://github.com/r-spatial/sf/issues/1365'>#1365</a></p></li>
 <li><p><code>sf_project</code> handles <code>crs</code> objects when PROJ version is below 6 using proj.4 string representations.</p></li>
 <li><p>avoid using <code>isFALSE</code> in <code><a href="../reference/st_write.html">st_write()</a></code>; <a href='https://github.com/r-spatial/sf/issues/1342'>#1342</a></p></li>
