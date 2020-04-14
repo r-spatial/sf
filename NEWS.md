@@ -1,5 +1,9 @@
 # version 0.9-2
 
+* `st_axis_order(TRUE)` gives and error if GDAL has version < 2.5.0
+
+* loading PROJ units `link`, `us_in`, `ind_yd`, `ind_ft`, and `ind_ch` into the udunits database is no longer done at package load time, but when function `sf_add_proj_units()` is called.
+
 * fix line sampling for small densities; #1365
 
 * `sf_project` handles `crs` objects when PROJ version is below 6 using proj.4 string representations.
