@@ -609,7 +609,7 @@ Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector autho
 		Rcpp::stop("argument authority_compliant should have length 0 or 1");
 #ifndef HAVE250
 	if (authority_compliant.size() == 1 && authority_compliant[0])
-		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required")
+		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required");
 #endif
 	bool old_value = axis_order_authority_compliant;
 	if (authority_compliant.size() == 1)
