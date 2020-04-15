@@ -38,8 +38,8 @@ fi
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
 : ${CXX=${CXX11} ${CXX11STD}}
-: ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
-: ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
+: ${CFLAGS=`"${RBIN}" CMD config CPICFLAGS`}
+: ${CPPFLAGS=`"${RBIN}" CMD config CXXPICFLAGS`}
 : ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
 # AC_SUBST([CC],["clang"])
 # AC_SUBST([CXX],["clang++"])
