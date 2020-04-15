@@ -1203,7 +1203,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 			round(rep(density, length.out = length(l)) * l)
 		} else
 			rep(n, length.out = length(l))
-		regular = function(n) { (1:n - 0.5)/n }
+		regular = function(n) { (seq_len(n) - 0.5)/n }
 		random = function(n) { sort(runif(n)) }
 		fn = switch(type,
 					regular = regular,

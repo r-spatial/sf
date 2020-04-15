@@ -134,22 +134,19 @@ Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs)
 	return out;
 }
 
-Rcpp::CharacterVector CPL_wkt_from_user_input(Rcpp::CharacterVector input) {
-	OGRSpatialReference *srs = new OGRSpatialReference;
-	srs = handle_axis_order(srs);
-	handle_error(srs->SetFromUserInput((const char *) input[0]));
-	Rcpp::CharacterVector out = wkt_from_spatial_reference(srs);
-	delete srs;
-	return(out);
-}
-
 Rcpp::List fix_old_style(Rcpp::List crs) {
 	Rcpp::CharacterVector n = crs.attr("names");
 	if (n[0] == "epsg") { // create new: // #nocov start
 		Rcpp::List ret(2);
 		Rcpp::CharacterVector proj4string = crs[1];
-		ret[0] = proj4string[0];
-		ret[1] = CPL_wkt_from_user_input(proj4string);
+		ret[0] = proj4string[0]; // $input
+
+		OGRSpatialReference *srs = new OGRSpatialReference;
+		srs = handle_axis_order(srs);
+		handle_error(srs->SetFromUserInput((const char *) proj4string[0]));
+		ret[1] = wkt_from_spatial_reference(srs); // $wkt
+		delete srs;
+
 		Rcpp::CharacterVector names(2);
 		names(0) = "input";
 		names(1) = "wkt";
@@ -607,6 +604,10 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
 		Rcpp::stop("argument authority_compliant should have length 0 or 1");
+#ifndef HAVE250
+	if (authority_compliant.size() == 1 && authority_compliant[0])
+		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required");
+#endif
 	bool old_value = axis_order_authority_compliant;
 	if (authority_compliant.size() == 1)
 		axis_order_authority_compliant = authority_compliant[0];

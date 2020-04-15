@@ -31,7 +31,10 @@
   key.length = 0.618,
   key.width = lcm(1.8),
   reset = TRUE,
-  logz = FALSE
+  logz = FALSE,
+  extent = x,
+  xlim = st_bbox(extent)[c(1, 3)],
+  ylim = st_bbox(extent)[c(2, 4)]
 )
 
 get_key_pos(x, ...)
@@ -174,6 +177,12 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
 \item{logz}{logical; if \code{TRUE}, use log10-scale for the attribute variable. In that case, \code{breaks} and \code{at} need to be given as log10-values; see examples.}
 
+\item{extent}{object with an \code{st_bbox} method to define plot extent; defaults to \code{x}}
+
+\item{xlim}{see \link{plot.window}}
+
+\item{ylim}{see \link{plot.window}}
+
 \item{pch}{plotting symbol}
 
 \item{cex}{symbol size}
@@ -193,10 +202,6 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 \item{border}{color of polygon border(s)}
 
 \item{rule}{see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions}
-
-\item{xlim}{see \link{plot.window}}
-
-\item{ylim}{see \link{plot.window}}
 
 \item{asp}{see below, and see \link{par}}
 

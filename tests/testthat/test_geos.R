@@ -1,5 +1,7 @@
 context("sf: geos tests")
 
+skip_if_not_installed("rgeos")
+
 test_that("st_relate works", {
   r1 = st_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
   library(sp)

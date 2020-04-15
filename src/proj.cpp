@@ -71,7 +71,7 @@ bool CPL_have_datum_files(SEXP foo) {
 }
 
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
+		bool keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
@@ -79,8 +79,6 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-	if (keep.size() != 1)
-		stop("keep should be a single integer"); // #nocov
 
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
 	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
@@ -107,7 +105,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
 
 	// transform:
-        if (keep[0] == 1) {
+        if (keep) {
             // use proj_trans() on individual points, making unprojectable points be NA
             PJ_COORD row, projected;
             for (int i = 0; i < pts.nrow(); i++) {
@@ -247,7 +245,7 @@ bool CPL_have_datum_files(SEXP foo) {
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
-		Rcpp::IntegerVector keep, bool warn = true, bool authority_compliant = false) {
+		bool keep, bool warn = true, bool authority_compliant = false) {
 
 	using namespace Rcpp;
 
@@ -257,8 +255,6 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		stop("from_to should be size 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
-        if (keep.size() != 1)
-                stop("keep should be a single integer"); // #nocov
 
 	projPJ fromPJ, toPJ;
 
@@ -283,7 +279,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 //	for (int i = 0; i < pts.nrow(); i++)
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
-        if (keep[0] == 1) {
+        if (keep) {
             // use proj_trans() on individual points, making unprojectable points be NA
             // FIXME: not tested, since author has no access to the old proj API.
             double thisx, thisy;

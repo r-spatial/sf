@@ -889,14 +889,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_proj_direct
-Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, Rcpp::IntegerVector keep, bool warn, bool authority_compliant);
+Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, bool keep, bool warn, bool authority_compliant);
 RcppExport SEXP _sf_CPL_proj_direct(SEXP from_toSEXP, SEXP ptsSEXP, SEXP keepSEXP, SEXP warnSEXP, SEXP authority_compliantSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type from_to(from_toSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type pts(ptsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type keep(keepSEXP);
+    Rcpp::traits::input_parameter< bool >::type keep(keepSEXP);
     Rcpp::traits::input_parameter< bool >::type warn(warnSEXP);
     Rcpp::traits::input_parameter< bool >::type authority_compliant(authority_compliantSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_proj_direct(from_to, pts, keep, warn, authority_compliant));

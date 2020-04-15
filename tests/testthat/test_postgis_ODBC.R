@@ -1,3 +1,4 @@
+skip_if_not_installed("RPostgres")
 library(sf)
 library(DBI)
 library(RPostgreSQL)
