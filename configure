@@ -3471,7 +3471,7 @@ _EOCONF
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: linking with --libs only" >&5
 $as_echo_n "checking GDAL: linking with --libs only... " >&6; }
-${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3486,7 +3486,7 @@ if test "${gdalok}" = no; then
 $as_echo_n "checking GDAL: linking with --libs and --dep-libs... " >&6; }
 LIBS="${LIBS} ${GDAL_DEP_LIBS}"
 gdalok=yes
-${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_test gdal_test.cpp ${LIBS} 2>> errors.txt
 if test `echo $?` -ne 0 ; then
 gdalok=no
 fi
@@ -3602,7 +3602,7 @@ _EOCONF
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available for linking:" >&5
 $as_echo_n "checking GDAL: checking whether PROJ is available for linking:... " >&6; }
-${CXX} ${CPPFLAGS} ${LDFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o gdal_proj gdal_proj.cpp ${LIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3848,7 +3848,7 @@ _EOCONF
   #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ: checking whether PROJ and sqlite3 are available for linking:" >&5
 $as_echo_n "checking PROJ: checking whether PROJ and sqlite3 are available for linking:... " >&6; }
-  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
   if test `echo $?` -ne 0 ; then
     proj6ok=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3876,7 +3876,7 @@ fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
-${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 
 proj_version=`./proj_conf_test`
 
@@ -3919,7 +3919,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -3970,7 +3970,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -4026,7 +4026,7 @@ int main() {
 }
 _EOCONF
 
-${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+${CC} ${CFLAGS} ${CPPFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
 if test  -n "$proj_share_path"  ; then
   PROJ_LIB="${proj_share_path}" ./proj_conf_test
   proj_share=`echo $?`
@@ -4242,7 +4242,7 @@ _EOCONF
 #echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_CLIBS}" >&5
 $as_echo_n "checking geos: linking with ${GEOS_CLIBS}... " >&6; }
-${CXX} ${CPPFLAGS} ${LDFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
  geosok=no
  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -4257,7 +4257,7 @@ fi
 if test "${geosok}" = no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking geos: linking with ${GEOS_DEP_CLIBS}" >&5
 $as_echo_n "checking geos: linking with ${GEOS_DEP_CLIBS}... " >&6; }
-  ${CXX} ${CPPFLAGS} ${LDFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
   if test `echo $?` -ne 0 ; then
     geosok=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
