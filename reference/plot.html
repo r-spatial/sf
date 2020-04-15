@@ -171,7 +171,10 @@ Plot sf object</p>
   <span class='kw'>key.length</span> <span class='kw'>=</span> <span class='fl'>0.618</span>,
   <span class='kw'>key.width</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>1.8</span>),
   <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>logz</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>logz</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>extent</span> <span class='kw'>=</span> <span class='no'>x</span>,
+  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)],
+  <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>)]
 )
 
 <span class='fu'>get_key_pos</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -353,6 +356,18 @@ Plot sf object</p>
       <td><p>logical; if <code>TRUE</code>, use log10-scale for the attribute variable. In that case, <code>breaks</code> and <code>at</code> need to be given as log10-values; see examples.</p></td>
     </tr>
     <tr>
+      <th>extent</th>
+      <td><p>object with an <code>st_bbox</code> method to define plot extent; defaults to <code>x</code></p></td>
+    </tr>
+    <tr>
+      <th>xlim</th>
+      <td><p>see <a href='https://rdrr.io/r/graphics/plot.window.html'>plot.window</a></p></td>
+    </tr>
+    <tr>
+      <th>ylim</th>
+      <td><p>see <a href='https://rdrr.io/r/graphics/plot.window.html'>plot.window</a></p></td>
+    </tr>
+    <tr>
       <th>pch</th>
       <td><p>plotting symbol</p></td>
     </tr>
@@ -391,14 +406,6 @@ Plot sf object</p>
     <tr>
       <th>rule</th>
       <td><p>see <a href='https://rdrr.io/r/graphics/polypath.html'>polypath</a>; for <code>winding</code>, exterior ring direction should be opposite that of the holes; with <code>evenodd</code>, plotting is robust against misspecified ring directions</p></td>
-    </tr>
-    <tr>
-      <th>xlim</th>
-      <td><p>see <a href='https://rdrr.io/r/graphics/plot.window.html'>plot.window</a></p></td>
-    </tr>
-    <tr>
-      <th>ylim</th>
-      <td><p>see <a href='https://rdrr.io/r/graphics/plot.window.html'>plot.window</a></p></td>
     </tr>
     <tr>
       <th>asp</th>
