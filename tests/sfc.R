@@ -352,14 +352,15 @@ subs_assign_sfc_sfg[1] <- st_point()
 expect_identical(st_is_empty(subs_assign_sfc_sfg), c(TRUE, FALSE))
 
 # subset assignment (vctrs_vctr)
-local({
-	vec_cast.sfc.test_vctr <- function(x, to, ...) {
-		st_as_sfc(unclass(x))
-	}
+vec_cast.sfc.test_vctr <- function(x, to, ...) {
+	st_as_sfc(unclass(x))
+}
 
-	test_vctr <- vctrs::new_vctr("POINT EMPTY", class = "test_vctr")
+test_vctr <- vctrs::new_vctr("POINT EMPTY", class = "test_vctr")
 
-	subs_assign_sfc_vctrs <- subs_assign_sfc
-	subs_assign_sfc_vctrs[1] <- test_vctr
-	expect_identical(st_is_empty(subs_assign_sfc_vctrs), c(TRUE, FALSE))
-})
+subs_assign_sfc_vctrs <- subs_assign_sfc
+subs_assign_sfc_vctrs[1] <- test_vctr
+expect_identical(st_is_empty(subs_assign_sfc_vctrs), c(TRUE, FALSE))
+
+# clean up method
+rm(vec_cast.sfc.test_vctr)
