@@ -337,3 +337,29 @@ out = merge(x, y, all.x=TRUE)
 class(out)
 
 st_as_sf(st_sfc(st_point(0:1)))
+
+# subset assignment
+subs_assign_sfc <- st_sfc(st_point(c(30, 10)), st_point(c(20, 20)))
+
+# subset assignment (sfc)
+subs_assign_sfc_sfc <- subs_assign_sfc
+subs_assign_sfc_sfc[1] <- st_sfc(st_point())
+expect_identical(st_is_empty(subs_assign_sfc_sfc), c(TRUE, FALSE))
+
+# subset assignment (sfg)
+subs_assign_sfc_sfg <- subs_assign_sfc
+subs_assign_sfc_sfg[1] <- st_point()
+expect_identical(st_is_empty(subs_assign_sfc_sfg), c(TRUE, FALSE))
+
+# subset assignment (vctrs_vctr)
+local({
+	vec_cast.sfc.test_vctr <- function(x, to, ...) {
+		st_as_sfc(unclass(x))
+	}
+
+	test_vctr <- vctrs::new_vctr("POINT EMPTY", class = "test_vctr")
+
+	subs_assign_sfc_vctrs <- subs_assign_sfc
+	subs_assign_sfc_vctrs[1] <- test_vctr
+	expect_identical(st_is_empty(subs_assign_sfc_vctrs), c(TRUE, FALSE))
+})

@@ -142,8 +142,12 @@ sfg_is_empty = function(x) {
 #' @export
 #"[<-.sfc" = function (x, i, j, value) {
 "[<-.sfc" = function (x, i, value) {
-	if (is.null(value) || inherits(value, "sfg"))
+	if (is.null(value) || inherits(value, "sfg")) {
 		value = list(value)
+	} else if(inherits(value, "vctrs_vctr")) {
+		value = vctrs::vec_cast(value, sf::st_sfc())
+	}
+
 	x = unclass(x) # becomes a list, but keeps attributes
 	ret = st_sfc(NextMethod())
 	structure(ret, n_empty = sum(vapply(ret, sfg_is_empty, TRUE)))
