@@ -145,7 +145,7 @@ sfg_is_empty = function(x) {
 	if (is.null(value) || inherits(value, "sfg")) {
 		value = list(value)
 	} else if(inherits(value, "vctrs_vctr")) {
-		value = vctrs::vec_cast(value, sf::st_sfc())
+		value = vctrs::vec_cast(value, vctrs::vec_ptype(x))
 	}
 
 	x = unclass(x) # becomes a list, but keeps attributes
