@@ -105,22 +105,22 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
 
 	// transform:
-        if (keep) {
-            // use proj_trans() on individual points, making unprojectable points be NA
-            PJ_COORD row, projected;
-            for (int i = 0; i < pts.nrow(); i++) {
-                row.lp.lam = x.data()[i].lp.lam;
-                row.lp.phi = x.data()[i].lp.phi;
-                projected = proj_trans(P, PJ_FWD, row);
-                x.data()[i].lp.lam = projected.lp.lam;
-                x.data()[i].lp.phi = projected.lp.phi;
-            }
-        } else {
-            // DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
-            if (proj_trans_array(P, PJ_FWD, x.size(), x.data())) {
-                proj_destroy(P);
-                stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
-            }
+	if (keep) {
+		// use proj_trans() on individual points, making unprojectable points be NA
+		PJ_COORD row, projected;
+		for (int i = 0; i < pts.nrow(); i++) {
+			row.lp.lam = x.data()[i].lp.lam;
+			row.lp.phi = x.data()[i].lp.phi;
+			projected = proj_trans(P, PJ_FWD, row);
+			x.data()[i].lp.lam = projected.lp.lam;
+			x.data()[i].lp.phi = projected.lp.phi;
+		}
+	} else {
+		// DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
+		if (proj_trans_array(P, PJ_FWD, x.size(), x.data())) {
+			proj_destroy(P);
+			stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+		}
 	}
 
 	// rad2deg?
@@ -225,18 +225,18 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 bool CPL_have_datum_files(SEXP foo) {
 
 #if PJ_VERSION <= 480
-    FILE *fp;
+	FILE *fp;
 #else
-    PAFile fp;
+	PAFile fp;
 #endif
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "conus", "rb");
+	projCtx ctx;
+	ctx = pj_get_default_ctx();
+	fp = pj_open_lib(ctx, "conus", "rb");
 	if (fp != NULL) {
 #if PJ_VERSION <= 480
-    	fclose(fp);
+		fclose(fp);
 #else
-    	pj_ctx_fclose(ctx, fp);
+		pj_ctx_fclose(ctx, fp);
 #endif
 		return true;
 	} else
@@ -272,41 +272,41 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	}
 	if (pj_is_latlong(fromPJ)) {
 		for (int i = 0; i < pts.nrow(); i++) {
-       		 xx[i] *= DEG_TO_RAD;
-       		 yy[i] *= DEG_TO_RAD;
+	   		 xx[i] *= DEG_TO_RAD;
+	   		 yy[i] *= DEG_TO_RAD;
 		}
 	}
 
 //	for (int i = 0; i < pts.nrow(); i++)
 //  		 Rcout << xx[i] << " " << yy[i] << std::endl;
-        if (keep) {
-            // use proj_trans() on individual points, making unprojectable points be NA
-            // FIXME: not tested, since author has no access to the old proj API.
-            double thisx, thisy;
-            for (int i = 0; i < pts.nrow(); i++) {
-                thisx = xx[i];
-                thisy = yy[i];
-                if (pj_transform(fromPJ, toPJ, 1, 0, &thisx, &thisy, NULL) != 0) {
-                    xx[i] = R_PosInf;
-                    yy[i] = R_PosInf;
-                } else {
-                    xx[i] = thisx;
-                    yy[i] = thisy;
-                }
-            }
-        } else {
-            // DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
-            if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
-                pj_free(fromPJ); pj_free(toPJ); // #nocov start
-                Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
-                stop("error"); // #nocov end
-            }
-        }
+	if (keep) {
+		// use proj_trans() on individual points, making unprojectable points be NA
+		// FIXME: not tested, since author has no access to the old proj API.
+		double thisx, thisy;
+		for (int i = 0; i < pts.nrow(); i++) {
+			thisx = xx[i];
+			thisy = yy[i];
+			if (pj_transform(fromPJ, toPJ, 1, 0, &thisx, &thisy, NULL) != 0) {
+				xx[i] = R_PosInf;
+				yy[i] = R_PosInf;
+			} else {
+				xx[i] = thisx;
+				yy[i] = thisy;
+			}
+		}
+	} else {
+   		// DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
+		if (pj_transform(fromPJ, toPJ, pts.nrow(), 0, xx.data(), yy.data(), NULL) != 0) {
+			pj_free(fromPJ); pj_free(toPJ); // #nocov start
+			Rcout << "error in pj_transform: " << pj_strerrno(*pj_get_errno_ref()) << std::endl;
+			stop("error"); // #nocov end
+		}
+	}
 	pj_free(fromPJ);
 	if (pj_is_latlong(toPJ)) {
 		for (int i = 0; i < pts.nrow(); i++) {
-       			 xx[i] *= RAD_TO_DEG;
-       			 yy[i] *= RAD_TO_DEG;
+	   			 xx[i] *= RAD_TO_DEG;
+	   			 yy[i] *= RAD_TO_DEG;
 		}
 	}
 	// copy to out matrix:
