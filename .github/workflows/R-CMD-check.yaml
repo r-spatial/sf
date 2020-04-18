@@ -53,13 +53,10 @@ jobs:
           XML_CONFIG=/usr/local/opt/libxml2/bin/xml2-config
           EOT
           cat <<EOT >> .Rprofile
+          config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
           r <- getOption("repos")
           r["CRAN"] <- "https://cran.rstudio.com"
-          r["rccp_drat"] <- "https://RcppCore.github.io/drat"
-          config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
-          options(configure.args = config_args,
-                  install.packages.compile.from.source = "yes",
-                  repos = r)
+          options(configure.args = config_args, repos = r)
           EOT
 
       - name: Query dependencies
