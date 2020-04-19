@@ -341,6 +341,11 @@ st_as_sf(st_sfc(st_point(0:1)))
 # subset assignment
 subs_assign_sfc <- st_sfc(st_point(c(30, 10)), st_point(c(20, 20)))
 
+# subset assignment (NULL)
+subs_assign_sfc_null <- subs_assign_sfc
+subs_assign_sfc_null[1] <- NULL
+expect_identical(st_is_empty(subs_assign_sfc_null), c(TRUE, FALSE))
+
 # subset assignment (sfc)
 subs_assign_sfc_sfc <- subs_assign_sfc
 subs_assign_sfc_sfc[1] <- st_sfc(st_point())

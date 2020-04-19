@@ -142,10 +142,10 @@ sfg_is_empty = function(x) {
 #' @export
 #"[<-.sfc" = function (x, i, j, value) {
 "[<-.sfc" = function (x, i, value) {
-	if (is.null(value) || inherits(value, "sfg")) {
+	if (is.null(value)) {
 		value = list(value)
-	} else if(inherits(value, "vctrs_vctr")) {
-		value = vctrs::vec_cast(value, vctrs::vec_ptype(x))
+	} else {
+		value = st_as_sf(value)
 	}
 
 	x = unclass(x) # becomes a list, but keeps attributes
@@ -574,4 +574,10 @@ st_as_sfc.blob = function(x, ...) {
 st_as_sfc.bbox = function(x, ...) {
 	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
 	st_sfc(box, crs = st_crs(x))
+}
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.sfg = function(x,...) {
+	st_sfc(x,...)
 }

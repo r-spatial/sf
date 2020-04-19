@@ -11,6 +11,7 @@
 \alias{st_as_sfc.raw}
 \alias{st_as_sfc.character}
 \alias{st_as_sfc.factor}
+\alias{st_as_sfc.sfg}
 \alias{st_as_sfc.SpatialPoints}
 \alias{st_as_sfc.SpatialPixels}
 \alias{st_as_sfc.SpatialMultiPoints}
@@ -48,6 +49,8 @@
 \method{st_as_sfc}{character}(x, crs = NA_integer_, ..., GeoJSON = FALSE)
 
 \method{st_as_sfc}{factor}(x, ...)
+
+\method{st_as_sfc}{sfg}(x, ...)
 
 st_as_sfc(x, ...)
 
