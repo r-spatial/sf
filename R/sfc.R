@@ -144,7 +144,7 @@ sfg_is_empty = function(x) {
 "[<-.sfc" = function (x, i, value) {
 	if (is.null(value)) {
 		value = list(value)
-	} else {
+	} else if (!rlang::is_bare_list(value)) {
 		value = st_as_sf(value)
 	}
 
