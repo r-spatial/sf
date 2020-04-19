@@ -142,10 +142,13 @@ sfg_is_empty = function(x) {
 #' @export
 #"[<-.sfc" = function (x, i, j, value) {
 "[<-.sfc" = function (x, i, value) {
+
+	# NULL becomes list(NULL), NA is left untouched
+	# all others are coerced to sfc using st_as_sfc
 	if (is.null(value)) {
 		value = list(value)
-	} else if (!rlang::is_bare_list(value)) {
-		value = st_as_sf(value)
+	} else if (!is.logical(value)) {
+		value = st_as_sfc(value)
 	}
 
 	x = unclass(x) # becomes a list, but keeps attributes
@@ -574,6 +577,12 @@ st_as_sfc.blob = function(x, ...) {
 st_as_sfc.bbox = function(x, ...) {
 	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
 	st_sfc(box, crs = st_crs(x))
+}
+
+#' @name st_as_sfc
+#' @export
+st_as_sfc.sfc = function(x,...) {
+	x
 }
 
 #' @name st_as_sfc

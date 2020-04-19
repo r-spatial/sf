@@ -356,8 +356,8 @@ subs_assign_sfc_sfg <- subs_assign_sfc
 subs_assign_sfc_sfg[1] <- st_point()
 expect_identical(st_is_empty(subs_assign_sfc_sfg), c(TRUE, FALSE))
 
-# subset assignment (vctrs_vctr)
-vec_cast.sfc.test_vctr <- function(x, to, ...) {
+# subset assignment (custom vctr)
+st_as_sfc.test_vctr <- function(x, to, ...) {
 	st_as_sfc(unclass(x))
 }
 
@@ -368,4 +368,4 @@ subs_assign_sfc_vctrs[1] <- test_vctr
 expect_identical(st_is_empty(subs_assign_sfc_vctrs), c(TRUE, FALSE))
 
 # clean up method
-rm(vec_cast.sfc.test_vctr)
+rm(st_as_sfc.test_vctr)
