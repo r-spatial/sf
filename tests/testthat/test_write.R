@@ -2,20 +2,25 @@ context("sf: write")
 
 data(meuse, package = "sp")
 meuse <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+drvs <- st_drivers()$name[sapply(st_drivers()$name,
+	function(x) is_driver_can(x, operation = "write"))] %>% as.character()
 
 test_that("sf can write to all writable formats", {
-    # write to all formats available
-    tf <- tempfile()
-    drvs <- st_drivers()$name[sapply(st_drivers()$name,
-		function(x) is_driver_can(x, operation = "write"))] %>% as.character()
-    excluded_drivers = c("gps", # requires options
-                         "gtm", # doesn't handle attributes
-                         "nc",  # requires appropriate datum -> but writes in 4326, see below
-                         "map", # doesn't support points
-						 "ods") # generates valgrind error
+	# write to all formats available
+	tf <- tempfile()
+	excluded_drivers = c("gps", # requires options
+				"gtm", # doesn't handle attributes
+				"nc",  # requires appropriate datum -> but writes in 4326, see below
+				"map", # doesn't support points
+				"ods") # generates valgrind error
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]), excluded_drivers)) {
         expect_silent(st_write(meuse, paste0(tf, ".", ext), quiet = TRUE))
 	}
+})
+
+test_that("sf can write to netcdf", {
+	skip_on_os("windows")
+	tf <- tempfile()
 	if ("netCDF" %in% drvs) {
 		expect_silent(st_write(st_transform(meuse, st_crs(4326)), paste0(tf, ".nc"), quiet = TRUE))
 	}
