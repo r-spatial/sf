@@ -415,7 +415,8 @@ format.crs = function(x, ...) {
 
 #' @export
 st_crs.Raster = function(x, ...) {
-	st_crs(x@crs) # nocov
+	crsobj <- raster::crs(x)
+	st_crs(crsobj) # nocov
 }
 
 #' @export
