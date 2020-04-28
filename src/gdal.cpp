@@ -355,10 +355,10 @@ Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input) {
 		crs(1) = Rcpp::CharacterVector::create(NA_STRING);
 	} else {
 		if (set_input) {
-			const char *cp;
 #if GDAL_VERSION_MAJOR >= 3
 			crs(0) = Rcpp::CharacterVector::create(ref->GetName());
 #else
+			const char *cp;
 			OGRSpatialReference ref_cp = *ref;
 			if (ref_cp.AutoIdentifyEPSG() == OGRERR_NONE && // ->AutoIdentifyEPSG() breaks if "this" is const
 					(cp = ref_cp.GetAuthorityCode(NULL)) != NULL)
