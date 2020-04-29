@@ -1,6 +1,6 @@
 # version 0.9-3
 
-* switch to GDAL 3.0.4, PROJ 6.3.1 and GEOS 3.8.0 for CRAN Windows binaries, thanks to Jeroen Ooms; #1275
+* switch to GDAL 3.0.4, PROJ 6.3.1 and GEOS 3.8.0 for CRAN Windows binaries, thanks to Jeroen Ooms' rwinlib work; #1275
 
 * `plot.sf` gains an `extent` argument to set the extent (xlim, ylim) of the plot; `extent` must be an object with an `st_bbox()` method, such as an `sf` object; #1193
 
