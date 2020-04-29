@@ -503,7 +503,7 @@ Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
 	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
 	std::vector<GeomPtr> out(gmv.size());
 #ifdef HAVE380
-	for (int i = 0; i < gmv.size(); i++)
+	for (size_t i = 0; i < gmv.size(); i++)
 		gmv[i] = geos_ptr(GEOSMakeValid_r(hGEOSCtxt, gmv[i].get()), hGEOSCtxt);
 #else
 	Rcpp::stop("this shouldn't happen: st_make_valid should use lwgeom");
