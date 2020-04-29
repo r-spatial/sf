@@ -275,7 +275,7 @@
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
 <span class="co">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</span>
 <span class="no">nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>))
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpZVwyJn/temp_libpath651d185f9d7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpHcSlLU/temp_libpathc0c3b63f76c/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -314,16 +314,16 @@
 <span class="co">## [31] st_crs                st_crs&lt;-              st_difference        </span>
 <span class="co">## [34] st_filter             st_geometry           st_geometry&lt;-        </span>
 <span class="co">## [37] st_interpolate_aw     st_intersection       st_intersects        </span>
-<span class="co">## [40] st_is                 st_join               st_line_merge        </span>
-<span class="co">## [43] st_m_range            st_make_valid         st_nearest_points    </span>
-<span class="co">## [46] st_node               st_normalize          st_point_on_surface  </span>
-<span class="co">## [49] st_polygonize         st_precision          st_reverse           </span>
-<span class="co">## [52] st_sample             st_segmentize         st_set_precision     </span>
-<span class="co">## [55] st_shift_longitude    st_simplify           st_snap              </span>
-<span class="co">## [58] st_sym_difference     st_transform          st_triangulate       </span>
-<span class="co">## [61] st_union              st_voronoi            st_wrap_dateline     </span>
-<span class="co">## [64] st_write              st_z_range            st_zm                </span>
-<span class="co">## [67] transform            </span>
+<span class="co">## [40] st_is_valid           st_is                 st_join              </span>
+<span class="co">## [43] st_line_merge         st_m_range            st_make_valid        </span>
+<span class="co">## [46] st_nearest_points     st_node               st_normalize         </span>
+<span class="co">## [49] st_point_on_surface   st_polygonize         st_precision         </span>
+<span class="co">## [52] st_reverse            st_sample             st_segmentize        </span>
+<span class="co">## [55] st_set_precision      st_shift_longitude    st_simplify          </span>
+<span class="co">## [58] st_snap               st_sym_difference     st_transform         </span>
+<span class="co">## [61] st_triangulate        st_union              st_voronoi           </span>
+<span class="co">## [64] st_wrap_dateline      st_write              st_z_range           </span>
+<span class="co">## [67] st_zm                 transform            </span>
 <span class="co">## see '?methods' for accessing help and source code</span></pre></body></html></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">nc.no_sf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">nc</span>)
@@ -390,16 +390,17 @@
 <span class="co">## [25] st_convex_hull        st_coordinates        st_crop              </span>
 <span class="co">## [28] st_crs                st_crs&lt;-              st_difference        </span>
 <span class="co">## [31] st_geometry           st_intersection       st_intersects        </span>
-<span class="co">## [34] st_is                 st_line_merge         st_m_range           </span>
-<span class="co">## [37] st_make_valid         st_nearest_points     st_node              </span>
-<span class="co">## [40] st_normalize          st_point_on_surface   st_polygonize        </span>
-<span class="co">## [43] st_precision          st_reverse            st_sample            </span>
-<span class="co">## [46] st_segmentize         st_set_precision      st_shift_longitude   </span>
-<span class="co">## [49] st_simplify           st_snap               st_sym_difference    </span>
-<span class="co">## [52] st_transform          st_triangulate        st_union             </span>
-<span class="co">## [55] st_voronoi            st_wrap_dateline      st_write             </span>
-<span class="co">## [58] st_z_range            st_zm                 str                  </span>
-<span class="co">## [61] summary               vec_cast.sfc          vec_ptype2.sfc       </span>
+<span class="co">## [34] st_is_valid           st_is                 st_line_merge        </span>
+<span class="co">## [37] st_m_range            st_make_valid         st_nearest_points    </span>
+<span class="co">## [40] st_node               st_normalize          st_point_on_surface  </span>
+<span class="co">## [43] st_polygonize         st_precision          st_reverse           </span>
+<span class="co">## [46] st_sample             st_segmentize         st_set_precision     </span>
+<span class="co">## [49] st_shift_longitude    st_simplify           st_snap              </span>
+<span class="co">## [52] st_sym_difference     st_transform          st_triangulate       </span>
+<span class="co">## [55] st_union              st_voronoi            st_wrap_dateline     </span>
+<span class="co">## [58] st_write              st_z_range            st_zm                </span>
+<span class="co">## [61] str                   summary               vec_cast.sfc         </span>
+<span class="co">## [64] vec_ptype2.sfc       </span>
 <span class="co">## see '?methods' for accessing help and source code</span></pre></body></html></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
@@ -559,7 +560,7 @@
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">filename</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>)
 <span class="no">nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">filename</span>)
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpZVwyJn/temp_libpath651d185f9d7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpHcSlLU/temp_libpathc0c3b63f76c/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -738,7 +739,7 @@
 <a href="#geometrycollection" class="anchor"></a>Geometrical operations</h2>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_query.html">st_is_valid</a></span>(<span class="no">nc</span>[<span class="fl">1</span>:<span class="fl">2</span>,])
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span>(<span class="no">nc</span>[<span class="fl">1</span>:<span class="fl">2</span>,])
 <span class="co">## [1] TRUE TRUE</span></pre></body></html></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="no">x</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="no">nc</span>, <span class="fl">32119</span>)
@@ -812,7 +813,7 @@
 <span class="no">x3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>))))
 <span class="fu"><a href="../reference/geos_query.html">st_is_simple</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">x1</span>))
 <span class="co">## [1] FALSE</span>
-<span class="fu"><a href="../reference/geos_query.html">st_is_valid</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">x2</span>,<span class="no">x3</span>))
+<span class="fu"><a href="../reference/valid.html">st_is_valid</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">x2</span>,<span class="no">x3</span>))
 <span class="co">## [1] FALSE FALSE</span></pre></body></html></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
 </div>
@@ -855,7 +856,7 @@
         <span class="kw">CNTY_ID</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">NAME</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">FIPS</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">FIPSNO</span> <span class="kw">=</span> <span class="st">"identity"</span>,
         <span class="kw">CRESS_ID</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">BIR74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">SID74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">NWBIR74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>,
         <span class="kw">BIR79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">SID79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">NWBIR79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>))
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpZVwyJn/temp_libpath651d185f9d7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpHcSlLU/temp_libpathc0c3b63f76c/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>

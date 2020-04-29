@@ -147,7 +147,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Dimension, simplicity, validity or is_empty queries on simple feature geometries</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/valid.R'><code>R/valid.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
     <div class="hidden name"><code>geos_query.Rd</code></div>
     </div>
 
@@ -159,9 +159,7 @@
 
 <span class='fu'>st_is_simple</span>(<span class='no'>x</span>)
 
-<span class='fu'>st_is_empty</span>(<span class='no'>x</span>)
-
-<span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='kw'>NA_on_exception</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_is_empty</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,14 +172,6 @@
       <th>NA_if_empty</th>
       <td><p>logical; if TRUE, return NA for empty geometries</p></td>
     </tr>
-    <tr>
-      <th>NA_on_exception</th>
-      <td><p>logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an <code>NA</code> rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.</p></td>
-    </tr>
-    <tr>
-      <th>reason</th>
-      <td><p>logical; if <code>TRUE</code>, return a character with, for each geometry, the reason for invalidity, <code>NA</code> on exception, or <code>"Valid Geometry"</code> otherwise.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -189,7 +179,6 @@
     <p>st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if <code>NA_if_empty</code> is <code>TRUE</code>, <code>NA</code> for empty geometries.</p>
 <p>st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)</p>
 <p>st_is_empty returns for each geometry whether it is empty</p>
-<p><code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(
@@ -201,8 +190,7 @@
         <span class='fu'><a href='st.html'>st_geometrycollection</a></span>())
 <span class='fu'>st_dimension</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1]  0  1  2 NA NA NA</div><div class='input'><span class='fu'>st_dimension</span>(<span class='no'>x</span>, <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 0 1 2 0 1 0</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
 <span class='fu'>st_is_simple</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))</div><div class='output co'>#&gt; [1] FALSE  TRUE</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
-<span class='fu'>st_is_empty</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(), <span class='fu'><a href='st.html'>st_linestring</a></span>()))</div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE</div><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span>)
-<span class='fu'>st_is_valid</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>st_is_valid</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>), <span class='no'>p1</span><span class='kw'>[[</span><span class='fl'>1</span>]]), <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Valid Geometry"         "Self-intersection[5 5]"</div></pre>
+<span class='fu'>st_is_empty</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(), <span class='fu'><a href='st.html'>st_linestring</a></span>()))</div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
