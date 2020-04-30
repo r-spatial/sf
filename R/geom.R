@@ -147,11 +147,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 					as.character(1:length(ret))
 				else
 					row.names(x)
-			sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-			if (! sparse)
-				as.matrix(sgbp)
-			else
-				sgbp
+			sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
 		} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
 			ret[[1]]
 	}

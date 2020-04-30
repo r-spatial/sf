@@ -3,22 +3,52 @@
 \name{s2}
 \alias{s2}
 \alias{st_as_s2}
+\alias{st_as_s2.sfc_MULTIPOLYGON}
+\alias{st_as_s2.sfc_POLYGON}
+\alias{st_as_s2.sfc_POINT}
+\alias{st_as_s2.sfc_LINESTRING}
+\alias{st_as_s2.sfc_MULTILINESTRING}
 \alias{st_as_s2.sfc}
+\alias{st_as_s2.sf}
+\alias{st_as_s2.sfg}
 \alias{st_as_sfc.S2Polygon}
+\alias{st_as_sfc.S2Polyline}
+\alias{st_as_sfc.S2Point}
 \alias{st_intersects.S2Polygon}
 \alias{st_is_valid.S2Polygon}
+\alias{st_is_valid.S2Polyline}
 \alias{st_area.S2Polygon}
 \title{functions for spherical geometry, using libs2 package}
 \usage{
 st_as_s2(x, ...)
 
-\method{st_as_s2}{sfc}(x, ..., oriented = FALSE)
+\method{st_as_s2}{sfc_MULTIPOLYGON}(x, ..., oriented = FALSE)
+
+\method{st_as_s2}{sfc_POLYGON}(x, ..., oriented = FALSE)
+
+\method{st_as_s2}{sfc_POINT}(x, ..., oriented = FALSE)
+
+\method{st_as_s2}{sfc_LINESTRING}(x, ..., oriented = FALSE)
+
+\method{st_as_s2}{sfc_MULTILINESTRING}(x, ...)
+
+\method{st_as_s2}{sfc}(x, ...)
+
+\method{st_as_s2}{sf}(x, ..., oriented = FALSE)
+
+\method{st_as_s2}{sfg}(x, ..., oriented = FALSE, crs = st_crs("EPSG:4326"))
 
 \method{st_as_sfc}{S2Polygon}(x, ...)
+
+\method{st_as_sfc}{S2Polyline}(x, ...)
+
+\method{st_as_sfc}{S2Point}(x, ...)
 
 \method{st_intersects}{S2Polygon}(x, y = x, sparse = TRUE, ...)
 
 \method{st_is_valid}{S2Polygon}(x, ...)
+
+\method{st_is_valid}{S2Polyline}(x, ...)
 
 \method{st_area}{S2Polygon}(x, ..., radius = units::set_units(6371008.8, "m", mode = "standard"))
 }
@@ -27,7 +57,7 @@ st_as_s2(x, ...)
 
 \item{...}{ignored}
 
-\item{oriented}{logical; are the polygon rings guaranteed to be oriented (CCW outer rings, CW holes)?}
+\item{oriented}{logical: are the polygon rings oriented (CCW outer rings, CW holes)?}
 
 \item{y}{object of class \code{S2Polygon}}
 
@@ -54,10 +84,19 @@ list(m+4,(.9*m0)+4)
 ))
 sf = st_sfc(mp, mp, crs = 'EPSG:4326')
 s2 = st_as_s2(sf)
+s2pts = st_as_s2(st_sfc(st_point(c(0,0)), st_point(c(2,2))), crs = 4326)
+ls = st_sfc(st_linestring(rbind(c(2,1), c(1,2), c(0,0), c(1,1))), crs = 4326)
+s2ls = st_as_s2(ls)
+mls = st_sfc(st_multilinestring(list(rbind(c(2,1), c(1,2)), rbind(c(0,0), c(1,1)))), crs = 4326)
+try(st_as_s2(mls))
+try(st_as_s2(st_multipoint(rbind(c(0,0), c(1,1)))))
 x = st_as_sfc(s2)
 all.equal(st_area(sf), st_area(x))
+st_as_sfc(s2ls)
+st_as_sfc(s2pts)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_is_valid(st_as_s2(nc[1:10,]))
+st_is_valid(s2ls)
 st_area(st_as_s2(nc[1:10,]))
 st_area(nc[1:10,])/st_area(st_as_s2(nc[1:10,]))
 }

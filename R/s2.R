@@ -34,25 +34,67 @@ st_crs.S2Polygon = function(x, ...) {
 st_as_s2 = function(x, ...) UseMethod("st_as_s2")
 
 #' @name s2
-#' @param oriented logical; are the polygon rings guaranteed to be oriented (CCW outer rings, CW holes)?
+#' @param oriented logical: are the polygon rings oriented (CCW outer rings, CW holes)?
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = FALSE) {
+st_as_s2.sfc_MULTIPOLYGON = function(x, ..., oriented = FALSE) {
 	crs = st_crs(x)
 	if (!st_is_longlat(x))
 		stop("st_as_s2 needs geographic coordinates; consider using st_transform to EPSG:4326")
 	load_libs2()
-	stopifnot(all(st_dimension(x) == 2))
-	x = st_cast(x, "MULTIPOLYGON") # FIXME: ?
 	x = lapply(x, unlist, recursive = FALSE)
 	ret = lapply(x, libs2::s2MakePolygon, oriented = oriented)
 	structure(ret, crs = crs, class = "S2Polygon")
 }
 
+#' @name s2
+#' @export
+st_as_s2.sfc_POLYGON = function(x, ..., oriented = FALSE) {
+	st_as_s2(st_cast(x, "MULTIPOLYGON"), ..., oriented = oriented)
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' s2pts = st_as_s2(st_sfc(st_point(c(0,0)), st_point(c(2,2))), crs = 4326)
+st_as_s2.sfc_POINT = function(x, ..., oriented = FALSE) {
+	load_libs2()
+	structure(lapply(x, libs2::s2MakePoint), crs = st_crs(x), class = "S2Point")
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' ls = st_sfc(st_linestring(rbind(c(2,1), c(1,2), c(0,0), c(1,1))), crs = 4326)
+#' s2ls = st_as_s2(ls)
+st_as_s2.sfc_LINESTRING = function(x, ..., oriented = FALSE) {
+	load_libs2()
+	structure(lapply(x, libs2::s2MakePolyline), crs = st_crs(x), class = "S2Polyline")
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' mls = st_sfc(st_multilinestring(list(rbind(c(2,1), c(1,2)), rbind(c(0,0), c(1,1)))), crs = 4326)
+#' try(st_as_s2(mls))
+st_as_s2.sfc_MULTILINESTRING = function(x, ...) {
+	stop("s2 does not have a MULTILINESTRING equivalent; st_cast to LINESTRING first?")
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' try(st_as_s2(st_multipoint(rbind(c(0,0), c(1,1)))))
+st_as_s2.sfc = function(x, ...) {
+	stop(paste("no st_as_s2 method available for objects of class", class(x)[1]))
+}
+
+#' @name s2
 #' @export
 st_as_s2.sf = function(x, ..., oriented = FALSE) {
 	st_as_s2(st_geometry(x), ..., oriented = oriented)
 }
 
+#' @name s2
 #' @export
 st_as_s2.sfg = function(x, ..., oriented = FALSE, crs = st_crs('EPSG:4326')) {
 	st_as_s2(st_geometry(x, crs = crs), ..., oriented = oriented)
@@ -74,12 +116,23 @@ st_as_sfc.S2Polygon = function(x, ...) {
 	st_sfc(lapply(libs2::s2GetPolygon(x), st_multipolygon), crs = st_crs(x))
 }
 
-#st_as_sfc.S2Points = function(x, ..., crs = st_crs(4326), radius = earth_radius) {
-#	x = x * radius
-#	st_zm(st_transform(
-#		st_sfc(lapply(1:nrow(x), function(i) st_point(x[i,])), crs = st_crs(s2_p4s)),
-#		crs))
-#}
+#' @name s2
+#' @export
+#' @examples
+#' st_as_sfc(s2ls)
+st_as_sfc.S2Polyline = function(x, ...) {
+	load_libs2()
+	st_sfc(lapply(libs2::s2GetPolyline(x), st_linestring), crs = st_crs(x))
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' st_as_sfc(s2pts)
+st_as_sfc.S2Point = function(x, ...) {
+	load_libs2()
+	st_sfc(lapply(libs2::s2GetPoint(x), st_point), crs = st_crs(x))
+}
 
 
 #' @name s2
@@ -89,23 +142,19 @@ st_as_sfc.S2Polygon = function(x, ...) {
 st_intersects.S2Polygon = function(x, y = x, sparse = TRUE, ...) {
 	load_libs2()
 	stopifnot(st_crs(x) == st_crs(y), inherits(y, "S2Polygon"))
-	sgbp = sgbp(libs2::s2Intersects(x, y), "intersects", 
-			region.id = as.character(seq_along(x)), ncol = length(y))
-	if (! sparse)
-		as.matrix(sgbp)
-	else
-		sgbp
+	sgbp(libs2::s2Intersects(x, y, TRUE), "intersects", 
+			region.id = as.character(seq_along(x)), ncol = length(y),
+			sparse)
 }
 
-##' s2_centroid(pole)
-#s2_centroid = function(x) {
-#	st_as_sfc(structure(s2::S2Polygons_centroid(st_as_s2(x)), class = "S2Points"),
-#		crs = st_crs(x))
-#}
-
-#s2_area = function(x) {
-#	s2::S2Polygons_area(st_as_s2(x)) * earth_radius^2
-#}
+#' @export
+st_intersects.S2Polyline = function(x, y = x, sparse = TRUE, ...) {
+	load_libs2()
+	stopifnot(st_crs(x) == st_crs(y), inherits(y, "S2Polyline"))
+	sgbp(libs2::s2Intersects(x, y, FALSE), "intersects", 
+			region.id = as.character(seq_along(x)), ncol = length(y),
+			sparse)
+}
 
 #' @name s2
 #' @export
@@ -114,7 +163,16 @@ st_intersects.S2Polygon = function(x, y = x, sparse = TRUE, ...) {
 #' st_is_valid(st_as_s2(nc[1:10,]))
 st_is_valid.S2Polygon = function(x, ...) {
 	load_libs2()
-	libs2::s2IsValid(x)
+	libs2::s2IsValid(x, TRUE)
+}
+
+#' @name s2
+#' @export
+#' @examples
+#' st_is_valid(s2ls)
+st_is_valid.S2Polyline = function(x, ...) {
+	load_libs2()
+	libs2::s2IsValid(x, FALSE)
 }
 
 #' @name s2

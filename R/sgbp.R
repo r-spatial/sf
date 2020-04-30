@@ -1,9 +1,13 @@
-sgbp = function(x, predicate, region.id, ncol) {
-	structure(x,
+sgbp = function(x, predicate, region.id, ncol, sparse = TRUE) {
+	ret = structure(x,
 		predicate = predicate,
 		region.id = region.id,
 		ncol = ncol,
 		class = "sgbp")
+	if (! sparse)
+		as.matrix(ret)
+	else
+		ret
 }
 
 #' Methods for dealing with sparse geometry binary predicate lists
