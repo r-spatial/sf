@@ -61,8 +61,10 @@ st_write(geom, "geom1.gpkg", layer = "foo")
 df <- data.frame(
     a = c(0, 1, NA, -Inf, Inf),
     b = c("a", "b", NA, "c", ""),
-    c = c(as.Date("2001-01-01"), NA, -99, 0, 1),
-    d = c(as.POSIXct("2001-01-01"), NA, -99, 0, 1),
+    c = c(as.Date("2001-01-01"),
+          as.Date(c(NA, -99, 0, 1), origin = "1970-01-01")),
+    d = c(as.POSIXct("2001-01-01"),
+          as.POSIXct(c(NA, -99, 0, 1), origin = "1970-01-01")),
     x = 1:5,
     y = 1:5)
 
