@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -257,7 +257,7 @@ POINT Z (6378137 0 0)
 > 
 > cbind(st_area(nc_tr[1:5,]), a$AREA)
            [,1]  [,2]
-[1,] 1760244757 0.114
+[1,] 1760244967 0.114
 [2,]  946435667 0.061
 [3,] 2202248253 0.143
 [4,] 1074351919 0.070
@@ -335,4 +335,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.712   0.015   0.718 
+  1.160   0.072   1.229 

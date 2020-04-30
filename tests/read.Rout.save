@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -51,8 +51,7 @@ Type 'q()' to quit R.
 +     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE, int64_as_string = TRUE)$AWATER)
 + }
 [1] 1028678842
-[1] 1028678842
-Levels: 1028678842
+[1] "1028678842"
 > 
 > # see https://github.com/edzer/sfr/issues/45 :
 > if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
@@ -366,4 +365,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.161   0.054   1.204 
+  1.502   0.090   1.590 
