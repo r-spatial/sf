@@ -70,6 +70,7 @@ Suggests:
     dplyr (>= 0.8-3),
     ggplot2,
     knitr,
+	libs2,
     lwgeom (>= 0.2-1),
     maps,
     mapview,
@@ -147,3 +148,4 @@ Collate:
     'm_range.R'
     'shift_longitude.R'
     'make_grid.R'
+    's2.R'

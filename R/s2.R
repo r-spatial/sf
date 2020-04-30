@@ -2,6 +2,14 @@
 # and the libs2 package:
 # https://github.com/r-spatial/libs2
 
+#' @export
+st_crs.S2Polygon = function(x, ...) {
+	crs = attr(x, "crs")
+	if (is.null(crs))
+		NA_crs_
+	else
+		crs
+}
 
 #' functions for spherical geometry, using libs2 package
 #' 
@@ -21,9 +29,8 @@
 #'	list(m+2),
 #'	list(m+4,(.9*m0)+4)
 #'	))
-#' sf = st_sfc(mp, mp)
-#' s2 = st_as_s2(s)
-#' s2 = list(s2MakePolygon(p, FALSE))
+#' sf = st_sfc(mp, mp, crs = 'EPSG:4326')
+#' s2 = st_as_s2(sf)
 st_as_s2 = function(x, ...) UseMethod("st_as_s2")
 
 #' @name s2
@@ -37,7 +44,7 @@ st_as_s2.sfc = function(x, ..., oriented = FALSE) {
 	stopifnot(all(st_dimension(x) == 2))
 	x = st_cast(x, "MULTIPOLYGON") # FIXME: ?
 	x = lapply(x, unlist, recursive = FALSE)
-	ret = lapply(x, s2MakePolygon, oriented = oriented)
+	ret = lapply(x, libs2::s2MakePolygon, oriented = oriented)
 	structure(ret, crs = crs, class = "S2Polygon")
 }
 
@@ -58,58 +65,65 @@ load_libs2 = function() {
 
 #' @name s2
 #' @export
-#' @param s2 object of class \code{S2Polygon}
+#' @param ... ignored
 #' @examples
 #' x = st_as_sfc(s2)
 #' all.equal(st_area(sf), st_area(x))
 st_as_sfc.S2Polygon = function(x, ...) {
-	st_sfc(lapply(s2GetPolygon(s2), st_multipolygon), crs = st_crs(x))
+	load_libs2()
+	st_sfc(lapply(libs2::s2GetPolygon(x), st_multipolygon), crs = st_crs(x))
 }
 
-
-
-#' @export
-st_as_sfc.S2Points = function(x, ..., crs = st_crs(4326), radius = earth_radius) {
-	x = x * radius
-	st_zm(st_transform(
-		st_sfc(lapply(1:nrow(x), function(i) st_point(x[i,])), crs = st_crs(s2_p4s)),
-		crs))
-}
+#st_as_sfc.S2Points = function(x, ..., crs = st_crs(4326), radius = earth_radius) {
+#	x = x * radius
+#	st_zm(st_transform(
+#		st_sfc(lapply(1:nrow(x), function(i) st_point(x[i,])), crs = st_crs(s2_p4s)),
+#		crs))
+#}
 
 
 #' @name s2
+#' @param y object of class \code{S2Polygon}
+#' @param sparse logical; see \link{st_intersects}
 #' @export
-st_intersects.S2Polygon = function(x, y = x) {
-	load_s2()
+st_intersects.S2Polygon = function(x, y = x, sparse = TRUE, ...) {
+	load_libs2()
 	stopifnot(st_crs(x) == st_crs(y), inherits(y, "S2Polygon"))
-	libs2::s2Intersect(x, y)
+	sgbp = sgbp(libs2::s2Intersects(x, y), "intersects", 
+			region.id = as.character(seq_along(x)), ncol = length(y))
+	if (! sparse)
+		as.matrix(sgbp)
+	else
+		sgbp
 }
 
-#' @name s2
-#' @export
-#' @details \code{s2_centroid} computes the spherical centroid of a set of polygons
-#' @examples
-#' demo(nc, echo = FALSE, ask = FALSE)
-#' s2_centroid(nc)
-#' pts = rbind(c(0,80), c(120,80), c(240,80), c(0,80))
-#' pole = st_sfc(st_polygon(list(pts)), crs = 4326)
-#' s2_centroid(pole)
+##' s2_centroid(pole)
 #s2_centroid = function(x) {
-#	load_s2()
 #	st_as_sfc(structure(s2::S2Polygons_centroid(st_as_s2(x)), class = "S2Points"),
 #		crs = st_crs(x))
 #}
 
-#' @name s2
-#' @export
-#' @details \code{s2_area} computes the area of a set of polygons, as a fraction of 4 * pi.
-#' @examples
-#' demo(nc, echo = FALSE, ask = FALSE)
-#' s2_area(nc)
 #s2_area = function(x) {
-#	load_s2()
 #	s2::S2Polygons_area(st_as_s2(x)) * earth_radius^2
 #}
 
-st_area.S2Polygon = function(x, ...) {
+#' @name s2
+#' @export
+#' @examples
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
+#' st_is_valid(st_as_s2(nc[1:10,]))
+st_is_valid.S2Polygon = function(x, ...) {
+	load_libs2()
+	libs2::s2IsValid(x)
+}
+
+#' @name s2
+#' @param radius numeric or \code{units}; radius of the (spherical) Earth.
+#' @export
+#' @examples
+#' st_area(st_as_s2(nc[1:10,]))
+#' st_area(nc[1:10,])/st_area(st_as_s2(nc[1:10,]))
+st_area.S2Polygon = function(x, ..., radius = units::set_units(6371008.8, "m", mode = "standard")) {
+	load_libs2()
+	libs2::s2GetArea(x) * (radius^2)
 }
