@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -147,7 +147,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-m_range:        zmin: NA zmax: NA
+m_range:        mmin: NA mmax: NA
 CRS:            NA
 First 5 geometries:
 POINT M EMPTY
@@ -219,7 +219,7 @@ Geometry set for 7 features  (with 7 geometries empty)
 geometry type:  GEOMETRY
 dimension:      XYM
 bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-m_range:        zmin: NA zmax: NA
+m_range:        mmin: NA mmax: NA
 CRS:            NA
 First 5 geometries:
 POINT M EMPTY
@@ -285,4 +285,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  0.413   0.034   0.437 
+  0.775   0.064   0.837 

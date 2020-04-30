@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -111,8 +111,8 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                      
 > x <- st_as_sf(meuse.grid) # don't print: CRS variations.
 Warning message:
-In make_crs(x) :
-  the following proj4string elements are ignored: +proj=sterea +lat_0=52.1561605555556 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs ; remove the +init=epsg:XXXX to undo this
+In CPL_crs_from_input(x) :
+  GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.
 > summary(st_as_sf(meuse.area))
           geometry
  POLYGON      :1  
@@ -177,4 +177,4 @@ geographic CRS: NAD27
 > 
 > proc.time()
    user  system elapsed 
-  2.525   0.043   2.560 
+  3.706   0.047   3.766 
