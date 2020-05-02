@@ -2,24 +2,50 @@
 % Please edit documentation in R/valid.R
 \name{valid}
 \alias{valid}
+\alias{st_is_valid}
+\alias{st_is_valid.sfc}
+\alias{st_is_valid.sf}
+\alias{st_is_valid.sfg}
 \alias{st_make_valid}
-\title{Make an invalid geometry valid}
+\alias{st_make_valid.sfg}
+\title{Check validity or make an invalid geometry valid}
 \usage{
+st_is_valid(x, ...)
+
+\method{st_is_valid}{sfc}(x, ..., NA_on_exception = TRUE, reason = FALSE)
+
+\method{st_is_valid}{sf}(x, ...)
+
+\method{st_is_valid}{sfg}(x, ...)
+
 st_make_valid(x)
+
+\method{st_make_valid}{sfg}(x)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
+
+\item{...}{passed on to sfc method}
+
+\item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
+
+\item{reason}{logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, \code{NA} on exception, or \code{"Valid Geometry"} otherwise.}
 }
 \value{
+\code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
+
 Object of the same class as \code{x}
 }
 \description{
-Make an invalid geometry valid
+Checks whether a geometry is valid, or makes an invalid geometry valid
 }
 \details{
 \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.
 }
 \examples{
+p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")
+st_is_valid(p1)
+st_is_valid(st_sfc(st_point(0:1), p1[[1]]), reason = TRUE)
 library(sf)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,1),c(0,1),c(0,0)))))
 suppressWarnings(st_is_valid(x))

@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -93,8 +93,10 @@ POINT (111319.5 111325.1)
 > 
 > st_axis_order()
 [1] FALSE
+> if (sf_extSoftVersion()["GDAL"] >= "2.5.0")
++   st_axis_order(TRUE)
 > st_axis_order(FALSE)
 > 
 > proc.time()
    user  system elapsed 
-  0.616   0.048   0.656 
+  0.888   0.044   0.928 

@@ -52,7 +52,7 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=7.0.0RC1
+ENV PROJ_VERSION=7.0.1RC1
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
@@ -60,8 +60,10 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	cmake \
 	libtiff5-dev
 
-RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN cd PROJ \
+#RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
+RUN wget http://download.osgeo.org/proj/proj-7.0.1RC1.tar.gz 
+RUN tar zxvf proj-7.0.1RC1.tar.gz
+RUN cd proj-7.0.1 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -83,8 +85,9 @@ RUN cd /usr/local/share/proj \
 
 # GDAL:
 
-ENV GDAL_VERSION 3.0.4
-ENV GDAL_VERSION_NAME 3.0.4
+# https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
+ENV GDAL_VERSION 3.1.0
+ENV GDAL_VERSION_NAME 3.1.0rc2
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -156,7 +159,7 @@ RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
 RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom"))'
+RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
 RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 RUN (cd sf; git pull)

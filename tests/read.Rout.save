@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.0 (2020-04-24) -- "Arbor Day"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -51,8 +51,7 @@ Type 'q()' to quit R.
 +     print(st_read(system.file("gpkg/tl.gpkg", package="sf"), quiet = TRUE, int64_as_string = TRUE)$AWATER)
 + }
 [1] 1028678842
-[1] 1028678842
-Levels: 1028678842
+[1] "1028678842"
 > 
 > # see https://github.com/edzer/sfr/issues/45 :
 > if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
@@ -170,8 +169,10 @@ Writing 2 features with 0 fields and geometry type Unknown (any).
 > df <- data.frame(
 +     a = c(0, 1, NA, -Inf, Inf),
 +     b = c("a", "b", NA, "c", ""),
-+     c = c(as.Date("2001-01-01"), NA, -99, 0, 1),
-+     d = c(as.POSIXct("2001-01-01"), NA, -99, 0, 1),
++     c = c(as.Date("2001-01-01"),
++           as.Date(c(NA, -99, 0, 1), origin = "1970-01-01")),
++     d = c(as.POSIXct("2001-01-01"),
++           as.POSIXct(c(NA, -99, 0, 1), origin = "1970-01-01")),
 +     x = 1:5,
 +     y = 1:5)
 > 
@@ -366,4 +367,8 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.161   0.054   1.204 
+<<<<<<< HEAD
+  1.502   0.090   1.590 
+=======
+  1.166   0.068   1.230 
+>>>>>>> gdal3
