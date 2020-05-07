@@ -1,4 +1,4 @@
-#' functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)
+#' functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)
 #'
 #' @param x character vector, possibly of length larger than 1 when more than one raster is read
 #' @param ... ignored
@@ -7,6 +7,7 @@
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
 #' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).
 #' @param RasterIO_parameters list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.
+#' @details These functions are exported for the single purpose of being used by package stars, they are not meant to be used directly and may change or disappear without prior notice or deprecation warnings.
 #' @name gdal
 #' @export
 gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
