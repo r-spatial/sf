@@ -2,6 +2,12 @@
 % Please edit documentation in R/s2.R
 \name{s2}
 \alias{s2}
+\alias{st_as_sfc.s2latlng}
+\alias{st_as_sfc.s2polyline}
+\alias{st_as_sfc.s2polygon}
+\alias{s2latlng.sfc}
+\alias{s2polyline.sfc}
+\alias{s2polygon.sfc}
 \alias{st_as_s2}
 \alias{st_as_s2.sfc_MULTIPOLYGON}
 \alias{st_as_s2.sfc_POLYGON}
@@ -11,7 +17,6 @@
 \alias{st_as_s2.sfc}
 \alias{st_as_s2.sf}
 \alias{st_as_s2.sfg}
-\alias{st_as_sfc.S2Polygon}
 \alias{st_as_sfc.S2Polyline}
 \alias{st_as_sfc.S2Point}
 \alias{st_intersects.S2Polygon}
@@ -20,11 +25,23 @@
 \alias{st_area.S2Polygon}
 \title{functions for spherical geometry, using libs2 package}
 \usage{
+\method{st_as_sfc}{s2latlng}(x, ...)
+
+\method{st_as_sfc}{s2polyline}(x, ...)
+
+\method{st_as_sfc}{s2polygon}(x, ...)
+
+s2latlng.sfc(x, ...)
+
+s2polyline.sfc(x, ...)
+
+s2polygon.sfc(x, ..., oriented = FALSE, check = TRUE)
+
 st_as_s2(x, ...)
 
-\method{st_as_s2}{sfc_MULTIPOLYGON}(x, ..., oriented = FALSE)
+\method{st_as_s2}{sfc_MULTIPOLYGON}(x, ..., oriented = FALSE, check = TRUE)
 
-\method{st_as_s2}{sfc_POLYGON}(x, ..., oriented = FALSE)
+\method{st_as_s2}{sfc_POLYGON}(x, ..., oriented = FALSE, check = TRUE)
 
 \method{st_as_s2}{sfc_POINT}(x, ..., oriented = FALSE)
 
@@ -34,11 +51,9 @@ st_as_s2(x, ...)
 
 \method{st_as_s2}{sfc}(x, ...)
 
-\method{st_as_s2}{sf}(x, ..., oriented = FALSE)
+\method{st_as_s2}{sf}(x, ..., oriented = FALSE, check = TRUE)
 
-\method{st_as_s2}{sfg}(x, ..., oriented = FALSE, crs = st_crs("EPSG:4326"))
-
-\method{st_as_sfc}{S2Polygon}(x, ...)
+\method{st_as_s2}{sfg}(x, ..., oriented = FALSE, check = TRUE, crs = st_crs("EPSG:4326"))
 
 \method{st_as_sfc}{S2Polyline}(x, ...)
 
@@ -55,9 +70,13 @@ st_as_s2(x, ...)
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{...}{ignored}
+\item{...}{passed on; might contain named argument crs}
 
-\item{oriented}{logical: are the polygon rings oriented (CCW outer rings, CW holes)?}
+\item{oriented}{logical, see \link[libs2]{s2polygon}}
+
+\item{check}{logical, see \link[libs2]{s2polygon}}
+
+\item{crs}{object of class \code{crs}}
 
 \item{y}{object of class \code{S2Polygon}}
 
@@ -90,8 +109,6 @@ s2ls = st_as_s2(ls)
 mls = st_sfc(st_multilinestring(list(rbind(c(2,1), c(1,2)), rbind(c(0,0), c(1,1)))), crs = 4326)
 try(st_as_s2(mls))
 try(st_as_s2(st_multipoint(rbind(c(0,0), c(1,1)))))
-x = st_as_sfc(s2)
-all.equal(st_area(sf), st_area(x))
 st_as_sfc(s2ls)
 st_as_sfc(s2pts)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
