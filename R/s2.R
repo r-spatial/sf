@@ -9,6 +9,8 @@ load_libs2 = function() {
 
 
 # from libs2 to sf:
+#' @export
+#' @name s2
 st_as_sfc.wk_wkb = function(x, ..., crs = NA_crs_) {
 	class(x) = "WKB"
 	st_set_crs(st_as_sfc(x, ...), crs)
@@ -35,7 +37,7 @@ st_as_sfc.s2polygon = function(x, ...) {
 	load_libs2()
 	ret = st_as_sfc(libs2::as_wkb(x), ...)
 	if (inherits(ret, "sfc_GEOMETRY"))
-		st_cast(ret, "MULTIPOLYGON")
+		st_cast(ret)
 	else
 		ret
 }
@@ -54,10 +56,11 @@ s2polyline.sfc = function(x, ...) {
 }
 
 #' @name s2
-s2polygon.sfc = function(x, ..., oriented = FALSE, check = TRUE) {
+#' @param omit_poles numeric; see \link[libs2]{s2polygon}
+s2polygon.sfc = function(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0.0) {
 	load_libs2()
 	libs2::s2polygon(structure(st_as_binary(x,...), class = "wk_wkb"), 
-		oriented = oriented, check = check)
+		oriented = oriented, check = check, omit_poles = omit_poles)
 }
 
 register_libs2_methods = function() {
@@ -107,17 +110,17 @@ st_as_s2 = function(x, ...) UseMethod("st_as_s2")
 #' @param oriented logical, see \link[libs2]{s2polygon}
 #' @param check logical, see \link[libs2]{s2polygon}
 #' @export
-st_as_s2.sfc_MULTIPOLYGON = function(x, ..., oriented = FALSE, check = TRUE) {
+st_as_s2.sfc_MULTIPOLYGON = function(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0.0) {
 	if (!st_is_longlat(x))
 		stop("st_as_s2 needs geographic coordinates; consider using st_transform to EPSG:4326")
-	ret = libs2::s2polygon(x, oriented = oriented, check = check)
+	ret = libs2::s2polygon(x, oriented = oriented, check = check, omit_poles = omit_poles)
 	structure(ret, crs = st_crs(x), class = c("S2Polygon", class(ret)))
 }
 
 #' @name s2
 #' @export
-st_as_s2.sfc_POLYGON = function(x, ..., oriented = FALSE, check = TRUE) {
-	st_as_s2(st_cast(x, "MULTIPOLYGON"), ..., oriented = oriented, check = check)
+st_as_s2.sfc_POLYGON = function(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0.0) {
+	st_as_s2(st_cast(x, "MULTIPOLYGON"), ..., oriented = oriented, check = check, omit_poles = omit_poles)
 }
 
 #' @name s2

@@ -2,6 +2,7 @@
 % Please edit documentation in R/s2.R
 \name{s2}
 \alias{s2}
+\alias{st_as_sfc.wk_wkb}
 \alias{st_as_sfc.s2latlng}
 \alias{st_as_sfc.s2polyline}
 \alias{st_as_sfc.s2polygon}
@@ -25,6 +26,8 @@
 \alias{st_area.S2Polygon}
 \title{functions for spherical geometry, using libs2 package}
 \usage{
+\method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
+
 \method{st_as_sfc}{s2latlng}(x, ...)
 
 \method{st_as_sfc}{s2polyline}(x, ...)
@@ -35,13 +38,13 @@ s2latlng.sfc(x, ...)
 
 s2polyline.sfc(x, ...)
 
-s2polygon.sfc(x, ..., oriented = FALSE, check = TRUE)
+s2polygon.sfc(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0)
 
 st_as_s2(x, ...)
 
-\method{st_as_s2}{sfc_MULTIPOLYGON}(x, ..., oriented = FALSE, check = TRUE)
+\method{st_as_s2}{sfc_MULTIPOLYGON}(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0)
 
-\method{st_as_s2}{sfc_POLYGON}(x, ..., oriented = FALSE, check = TRUE)
+\method{st_as_s2}{sfc_POLYGON}(x, ..., oriented = FALSE, check = TRUE, omit_poles = 0)
 
 \method{st_as_s2}{sfc_POINT}(x, ..., oriented = FALSE)
 
@@ -72,11 +75,13 @@ st_as_s2(x, ...)
 
 \item{...}{passed on; might contain named argument crs}
 
+\item{crs}{object of class \code{crs}}
+
 \item{oriented}{logical, see \link[libs2]{s2polygon}}
 
 \item{check}{logical, see \link[libs2]{s2polygon}}
 
-\item{crs}{object of class \code{crs}}
+\item{omit_poles}{numeric; see \link[libs2]{s2polygon}}
 
 \item{y}{object of class \code{S2Polygon}}
 
