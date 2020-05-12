@@ -31,12 +31,9 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(vapply(x, NotClosed, TRUE)))
 			stop("polygons not (all) closed")
-		class(x) = getClassDim(x, nc, dim, type)
-		return(x)
-	} else {
-		class(x) = getClassDim(x, nchar(dim), dim, type)
-		return(x)
-	}
+		structure(x, class = getClassDim(x, nc, dim, type))
+	} else
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
 # creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
@@ -50,12 +47,9 @@ MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(unlist(lapply(x, function(y) vapply(y, NotClosed, TRUE)))))
 			stop("polygons not (all) closed")
-		class(x) = getClassDim(x, nc, dim, type)
-		return(x)
-	} else {
-		class(x) = getClassDim(x, nchar(dim), dim, type)
-		return(x)
-	}
+		structure(x, class = getClassDim(x, nc, dim, type))
+	} else 
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
 #return "XY", "XYZ", "XYM", or "XYZM"
