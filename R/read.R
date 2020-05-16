@@ -424,8 +424,15 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	# this seems to be always a good idea:
 	dsn = enc2utf8(dsn)
 
-	geom = st_geometry(obj)
-	obj[[attr(obj, "sf_column")]] = NULL
+	# handle the case where obj does not have a geometry column:
+	if (write_geometries <- inherits(obj, "sf")) {
+		geom = st_geometry(obj)
+		obj[[attr(obj, "sf_column")]] = NULL
+	} else { # create fake geometries:
+		v = vector("list", nrow(obj))
+		v[seq_len(nrow(obj))] = list(st_point())
+		geom = st_sfc(v)
+	}
 
 	if (driver == "ESRI Shapefile") { # remove trailing .shp from layer name
 		layer = sub(".shp$", "", layer)
@@ -451,14 +458,16 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, fids, quiet, append, delete_dsn, delete_layer)
+		geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+		write_geometries)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, fids, quiet, append, delete_dsn, delete_layer) == 1)
+				geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+				write_geometries) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = append || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))
@@ -471,7 +480,11 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 #' @name st_write
 #' @export
 st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
-    st_write.sf(obj = st_as_sf(obj), dsn = dsn, layer = layer, ...)
+    sf = try(st_as_sf(obj), silent = TRUE)
+	if (!inherits(sf, "try-error"))
+    	st_write.sf(sf, dsn = dsn, layer = layer, ...)
+	else
+    	st_write.sf(obj, dsn = dsn, layer = layer, ...)
 }
 
 #' @name st_write
