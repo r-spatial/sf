@@ -1,6 +1,10 @@
+# version 0.9-4
+
+* `st_write` writes non-spatial tables when given a plain `data.frame` or `tbl_df`; #1345
+
 # version 0.9-3
 
-* `st_is_valid` is now a generic
+* `st_is_valid` is a generic
 
 * Windows CRAN binaries use GDAL 3.0.4, PROJ 6.3.1 and GEOS 3.8.0, thanks to Jeroen Ooms' rwinlib work; #1275
 
