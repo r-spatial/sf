@@ -10,7 +10,7 @@
 \alias{gdal_subdatasets}
 \alias{gdal_polygonize}
 \alias{gdal_rasterize}
-\title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)}
+\title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
 \usage{
 gdal_read(
   x,
@@ -116,9 +116,11 @@ named list with metadata items
 \code{gdal_subdatasets} returns a zero-length list if \code{file} does not have subdatasets, and else a named list with subdatasets.
 }
 \description{
-functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)
+functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)
 }
 \details{
+These functions are exported for the single purpose of being used by package stars, they are not meant to be used directly and may change or disappear without prior notice or deprecation warnings.
+
 gdal_inv_geotransform returns the inverse geotransform
 
 gdal_crs reads coordinate reference system from GDAL data set
