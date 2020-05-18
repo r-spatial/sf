@@ -1,5 +1,7 @@
 # version 0.9-4
 
+* `write_sf` and `read_sf` no longer warn when reading tables without geometries
+
 * `st_write` writes non-spatial tables when given a plain `data.frame` or `tbl_df`; #1345
 
 # version 0.9-3

@@ -143,8 +143,8 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		warning("no simple feature geometries present: returning a data.frame or tbl_df",
-			call. = FALSE)
+		if (! quiet) 
+			warning("no simple feature geometries present: returning a data.frame or tbl_df", call. = FALSE)
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
 					warning("list-column(s) present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
