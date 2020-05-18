@@ -260,7 +260,9 @@
     </tr>
     <tr>
       <th>x</th>
-      <td><p>tbls to join</p></td>
+      <td><p>A pair of data frames, data frame extensions (e.g. a tibble), or
+lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
+more details.</p></td>
     </tr>
     <tr>
       <th>do_union</th>
@@ -348,18 +350,25 @@
     </tr>
     <tr>
       <th>y</th>
-      <td><p>tbls to join</p></td>
+      <td><p>A pair of data frames, data frame extensions (e.g. a tibble), or
+lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
+more details.</p></td>
     </tr>
     <tr>
       <th>by</th>
-      <td><p>a character vector of variables to join by.  If <code>NULL</code>, the
-default, <code>*_join()</code> will do a natural join, using all variables with
-common names across the two tables. A message lists the variables so
-that you can check they're right (to suppress the message, simply
-explicitly list the variables that you want to join).</p>
-<p>To join by different variables on x and y use a named vector.
-For example, <code>by = c("a" = "b")</code> will match <code>x.a</code> to
-<code>y.b</code>.</p></td>
+      <td><p>A character vector of variables to join by.</p>
+<p>If <code>NULL</code>, the default, <code>*_join()</code> will perform a natural join, using all
+variables in common across <code>x</code> and <code>y</code>. A message lists the variables so that you
+can check they're correct; suppress the message by supplying <code>by</code> explicitly.</p>
+<p>To join by different variables on <code>x</code> and <code>y</code>, use a named vector.
+For example, <code>by = c("a" = "b")</code> will match <code>x$a</code> to <code>y$b</code>.</p>
+<p>To join by multiple variables, use a vector with length &gt; 1.
+For example, <code>by = c("a", "b")</code> will match <code>x$a</code> to <code>y$a</code> and <code>x$b</code> to
+<code>y$b</code>. Use a named vector to match different variables in <code>x</code> and <code>y</code>.
+For example, <code>by = c("a" = "b", "c" = "d")</code> will match <code>x$a</code> to <code>y$b</code> and
+<code>x$c</code> to <code>y$d</code>.</p>
+<p>To perform a cross-join, generating all combinations of <code>x</code> and <code>y</code>,
+use <code>by = character()</code>.</p></td>
     </tr>
     <tr>
       <th>copy</th>
@@ -389,7 +398,7 @@ Should be a character vector of length 2.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpgoEq3T/temp_libpath6a6655033a64/sf/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpvlYcQe/temp_libpath6a1a76a7d172/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

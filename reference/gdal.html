@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars) — gdal • sf</title>
+<title>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars) — gdal • sf</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars) — gdal" />
-<meta property="og:description" content="functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)" />
+<meta property="og:title" content="functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars) — gdal" />
+<meta property="og:description" content="functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,13 +146,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)</h1>
+    <h1>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/stars.R'><code>R/stars.R</code></a></small>
     <div class="hidden name"><code>gdal.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::st_stars)</p>
+    <p>functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)</p>
     </div>
 
     <pre class="usage"><span class='fu'>gdal_read</span>(
@@ -306,7 +306,8 @@
 <p><code>gdal_subdatasets</code> returns a zero-length list if <code>file</code> does not have subdatasets, and else a named list with subdatasets.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>gdal_inv_geotransform returns the inverse geotransform</p>
+    <p>These functions are exported for the single purpose of being used by package stars, they are not meant to be used directly and may change or disappear without prior notice or deprecation warnings.</p>
+<p>gdal_inv_geotransform returns the inverse geotransform</p>
 <p>gdal_crs reads coordinate reference system from GDAL data set</p>
 <p>get_metadata gets metadata of a raster layer</p>
 <p>gdal_subdatasets returns the subdatasets of a gdal dataset</p>
