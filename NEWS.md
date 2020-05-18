@@ -1,3 +1,7 @@
+# version 0.9-4
+
+* the default for `stringsAsFactors` in `st_read` and `st_sf` is FALSE for R version > 4.1.0
+
 # version 0.9-3
 
 * `st_is_valid` is now a generic
