@@ -272,7 +272,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	OGRSpatialReference *sref = NULL;
 	std::vector<OGRGeometry *> geomv; 
 	OGRwkbGeometryType wkbType;
-	if (! write_geometries) {
+	if (! write_geometries) { // write an aspatial table, see #1345
 		wkbType = wkbNone;
 		for (int i = 0; i < geom.size(); i++)
 			geomv.push_back(NULL);
