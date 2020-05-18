@@ -159,7 +159,7 @@
   ...,
   agr = NA_agr_,
   row.names,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = sf_stringsAsFactors(),
   crs,
   precision,
   sf_column_name = NULL,
@@ -190,7 +190,7 @@ print(x, ..., n = getOption("sf_max_print", default = 10))</pre>
     </tr>
     <tr>
       <th>stringsAsFactors</th>
-      <td><p>logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is <code>TRUE</code>, but this can be changed by setting <code><a href='https://rdrr.io/r/base/options.html'>options(stringsAsFactors = FALSE)</a></code>.</p></td>
+      <td><p>logical; see <a href='st_read.html'>st_read</a></p></td>
     </tr>
     <tr>
       <th>crs</th>
