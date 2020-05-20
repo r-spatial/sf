@@ -1,10 +1,14 @@
 # version 0.9-4
 
+* `write_sf` and `read_sf` no longer warn when reading tables without geometries
+
+* `st_write` writes non-spatial tables when given a plain `data.frame` or `tbl_df`; #1345
+
 * the default for `stringsAsFactors` in `st_read` and `st_sf` is FALSE for R version > 4.1.0
 
 # version 0.9-3
 
-* `st_is_valid` is now a generic
+* `st_is_valid` is a generic
 
 * Windows CRAN binaries use GDAL 3.0.4, PROJ 6.3.1 and GEOS 3.8.0, thanks to Jeroen Ooms' rwinlib work; #1275
 
