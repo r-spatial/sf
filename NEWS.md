@@ -4,6 +4,8 @@
 
 * `st_write` writes non-spatial tables when given a plain `data.frame` or `tbl_df`; #1345
 
+* the default for `stringsAsFactors` in `st_read` and `st_sf` is FALSE for R version > 4.1.0
+
 # version 0.9-3
 
 * `st_is_valid` is a generic
