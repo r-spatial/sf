@@ -464,7 +464,7 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 		sfc_MULTILINESTRING = st_multilinestring(dim = dim),
 		sfc_POLYGON = st_polygon(dim = dim),
 		sfc_MULTIPOLYGON = st_multipolygon(dim = dim),
-		st_geometrycollection(dim = dim))
+		st_geometrycollection(dims = dim))
 }
 
 #' retrieve coordinates in matrix form
