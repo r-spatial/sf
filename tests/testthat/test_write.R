@@ -149,7 +149,8 @@ test_that("non-spatial tables can be written to GPKG; #1345", {
   l = st_layers(system.file("gpkg/nospatial.gpkg", package = "sf"))
   expect_true(is.na(l$geomtype[[1]]))
   # demo:
-  a = data.frame(a = c(1L,-3L), b = c("foo", "bar"))
+  #a = data.frame(a = c(1L,-3L), b = c("foo", "bar"))
+  a = data.frame(a = c(1L,-3L), b = c(3.5, 7.33))
   expect_silent(write_sf(a, tf, 
            layer = "nonspatial_table1",
            driver = "GPKG",
