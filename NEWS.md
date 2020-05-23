@@ -1,5 +1,7 @@
 # version 0.9-4
 
+* empty geom generators take care of XYZ etc dim; #1400
+
 * `write_sf` and `read_sf` no longer warn when reading tables without geometries
 
 * `st_write` writes non-spatial tables when given a plain `data.frame` or `tbl_df`; #1345
