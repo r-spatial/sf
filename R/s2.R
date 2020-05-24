@@ -35,11 +35,14 @@ st_as_sfc.s2polyline = st_as_sfc_s2
 #' @export
 st_as_sfc.s2polygon = function(x, ...) {
 	load_libs2()
-	ret = st_as_sfc(libs2::as_wkb(x), ...)
-	if (inherits(ret, "sfc_GEOMETRY"))
-		st_cast(ret)
-	else
-		ret
+	st_cast(st_as_sfc(libs2::as_wkb(x), ...))
+}
+
+#' @name s2
+#' @export
+st_as_sfc.s2geography = function(x, ...) {
+	load_libs2()
+	st_cast(st_as_sfc(libs2::s2_asbinary(x, ...)))
 }
 
 # from sf to libs2:
