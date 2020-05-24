@@ -152,7 +152,8 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
-	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false) {
+	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false,
+	bool write_geometries = true) {
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
@@ -267,12 +268,20 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		} // #nocov end
 	}
 
-	Rcpp::CharacterVector clsv = geom.attr("class");
-	OGRwkbGeometryType wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
 	// read geometries:
 	OGRSpatialReference *sref = NULL;
-	std::vector<OGRGeometry *> geomv = ogr_from_sfc(geom, &sref);
-	sref = handle_axis_order(sref);
+	std::vector<OGRGeometry *> geomv; 
+	OGRwkbGeometryType wkbType;
+	if (! write_geometries) { // write an aspatial table, see #1345
+		wkbType = wkbNone;
+		for (int i = 0; i < geom.size(); i++)
+			geomv.push_back(NULL);
+	} else {
+		Rcpp::CharacterVector clsv = geom.attr("class");
+		wkbType = (OGRwkbGeometryType) make_type(clsv[0], dim[0], false, NULL, 0);
+		geomv = ogr_from_sfc(geom, &sref);
+		sref = handle_axis_order(sref);
+	}
 
 	// create layer:
 	options = create_options(lco, quiet);
@@ -294,15 +303,21 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 
 	// write feature attribute fields & geometries:
 	std::vector<OGRFieldType> fieldTypes = SetupFields(poLayer, obj, update_layer);
-	if (! quiet)
+	if (! quiet) {
 		Rcpp::Rcout << "Writing " << geomv.size() << " features with " << 
-			fieldTypes.size() << " fields and geometry type " << 
-			OGRGeometryTypeToName(wkbType) << "." << std::endl;
+			fieldTypes.size() << " fields";
+		if (write_geometries)
+			Rcpp::Rcout << " and geometry type " << OGRGeometryTypeToName(wkbType);
+		else
+			Rcpp::Rcout << " without geometries";
+		Rcpp::Rcout << "." << std::endl;
+	}
 
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
 		SetFields(poFeature, fieldTypes, obj, i, driver[0] == "ESRI Shapefile");
-		poFeature->SetGeometryDirectly(geomv[i]);
+		if (write_geometries)
+			poFeature->SetGeometryDirectly(geomv[i]);
 		if (fids.size() > (int) i)
 			poFeature->SetFID(std::stoll(Rcpp::as<std::string>(fids[i]), NULL, 10));
 		if (poLayer->CreateFeature(poFeature) != OGRERR_NONE) {

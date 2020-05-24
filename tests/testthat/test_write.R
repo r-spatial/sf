@@ -140,3 +140,28 @@ test_that("append errors work", {
   
   system(paste("chmod +w", f))
 })
+
+test_that("non-spatial tables can be written to GPKG; #1345", {
+  nc = system.file("gpkg/nc.gpkg", package = "sf")
+  tf = tempfile(fileext = ".gpkg")
+  file.copy(nc, tf)
+  # how does an aspatial layer look like? NA geometry_type
+  l = st_layers(system.file("gpkg/nospatial.gpkg", package = "sf"))
+  expect_true(is.na(l$geomtype[[1]]))
+  # demo:
+  #a = data.frame(a = c(1L,-3L), b = c("foo", "bar"))
+  a = data.frame(a = c(1L,-3L), b = c(3.5, 7.33))
+  expect_silent(write_sf(a, tf, 
+           layer = "nonspatial_table1",
+           driver = "GPKG",
+		   delete_layer = TRUE,
+           layer_options = "ASPATIAL_VARIANT=GPKG_ATTRIBUTES"))
+  l2 = st_layers(tf)
+  expect_true(is.na(l2$geomtype[[2]])) # hence is aspatial
+  a2 = as.data.frame(read_sf(tf, "nonspatial_table1"))
+  expect_identical(a, a2)
+  expect_output(
+		  expect_warning(st_read(tf, "nonspatial_table1"), 
+			  "no simple feature geometries present:"),
+	  "Reading layer `nonspatial_table1' from data source")
+})

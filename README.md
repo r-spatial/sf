@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![R build status](https://github.com/r-spatial/sf/workflows/R-CMD-check/badge.svg)](https://github.com/r-spatial/sf)
+[![R build status](https://github.com/r-spatial/sf/workflows/R-CMD-check/badge.svg)](https://github.com/r-spatial/sf/actions)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&svg=true)](https://ci.appveyor.com/project/edzerpebesma/sf)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg)](https://codecov.io/github/r-spatial/sf?branch=master)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
@@ -117,7 +117,7 @@ Another option, for advanced users, is to install dependencies from source; see 
 #### Fedora
 The following command installs all required dependencies:
 ```sh
-sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel udunits2-devel
+sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel sqlite-devel udunits2-devel
 ```
 
 #### Arch

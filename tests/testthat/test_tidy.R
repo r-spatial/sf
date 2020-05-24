@@ -14,9 +14,9 @@ test_that("filter to sfc works", {
                                 st_point(),
                                 st_linestring()))
   d = st_sf(tbl)
-  expect_identical(d %>% filter(!st_is_empty(geometry)) %>% st_cast("POINT"),
+  expect_identical(d %>% filter(!st_is_empty(geometry)) %>% st_cast(),
                    d[1, ])
-  expect_identical(d %>% filter(st_is(geometry, "POINT")) %>% st_cast("POINT"),
+  expect_identical(d %>% filter(st_is(geometry, "POINT")) %>% st_cast(),
                    d[1:2, ])
 })
 

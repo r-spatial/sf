@@ -11,7 +11,7 @@ st_sf(
   ...,
   agr = NA_agr_,
   row.names,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = sf_stringsAsFactors(),
   crs,
   precision,
   sf_column_name = NULL,
@@ -30,7 +30,7 @@ st_sf(
 
 \item{row.names}{row.names for the created \code{sf} object}
 
-\item{stringsAsFactors}{logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.}
+\item{stringsAsFactors}{logical; see \link{st_read}}
 
 \item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
