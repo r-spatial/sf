@@ -6,6 +6,7 @@
 \alias{st_as_sfc.s2latlng}
 \alias{st_as_sfc.s2polyline}
 \alias{st_as_sfc.s2polygon}
+\alias{st_as_sfc.s2geography}
 \alias{s2latlng.sfc}
 \alias{s2polyline.sfc}
 \alias{s2polygon.sfc}
@@ -33,6 +34,8 @@
 \method{st_as_sfc}{s2polyline}(x, ...)
 
 \method{st_as_sfc}{s2polygon}(x, ...)
+
+\method{st_as_sfc}{s2geography}(x, ...)
 
 s2latlng.sfc(x, ...)
 
