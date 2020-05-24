@@ -189,7 +189,10 @@ st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
 #' plot(st_geometry(wrld_moll), col = "transparent")
 #' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
 st_wrap_dateline.sfc = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
-	stopifnot(st_is_longlat(x))
+	if (is.na(st_crs(x)))
+		warning("crs not set: assuming geographic coordinates")
+	else
+		stopifnot(st_is_longlat(x))
 	stopifnot(is.character(options))
 	stopifnot(is.logical(quiet) && length(quiet) == 1)
 	st_sfc(CPL_wrap_dateline(x, options, quiet), crs = st_crs(x))
