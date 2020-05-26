@@ -52,7 +52,7 @@ st_agr.default = function(x = NA_character_, ...) {
 	stopifnot(is.character(value) || is.factor(value))
 	nv = setdiff(names(x), attr(x, "sf_column"))
 	if (length(value) == 0)
-		attr(x, "agr") = NA_agr_[0]
+		attr(x, "agr") = setNames(NA_agr_[0], character())
 	else if (! is.null(names(value)) && length(value) == 1) { 
 		# as in: st_agr(x) = c(Group.1 = "identity"): replace one particular named
 		if (!is.null(attr(x, "agr")))
