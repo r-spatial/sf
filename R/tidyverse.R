@@ -438,7 +438,6 @@ register_all_s3_methods = function() {
 	register_s3_method("spatstat", "as.psp", "sfc")
 	register_s3_method("spatstat", "as.psp", "sf")
 	register_vctrs_methods()
-	register_libs2_methods()
 }
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R

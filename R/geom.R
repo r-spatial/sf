@@ -48,12 +48,20 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 #' st_area(x)
 st_area = function(x, ...) UseMethod("st_area")
 
+#' @name geos_measures
+#' @param use_lwgeom logical; if \code{TRUE}, use liblwgeom functions, else use \code{libs2}
 #' @export
-st_area.sfc = function(x, ...) {
+st_area.sfc = function(x, ..., use_lwgeom = FALSE) {
 	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("package lwgeom required, please install it first")
-		lwgeom::st_geod_area(x)
+		if (use_lwgeom) {
+			if (! requireNamespace("lwgeom", quietly = TRUE))
+				stop("package lwgeom required, please install it first")
+			lwgeom::st_geod_area(x)
+		} else {
+			if (! requireNamespace("libs2", quietly = TRUE))
+				stop("package libs2 required, please install it first")
+			units::set_units(libs2::s2_area(st_as_s2(x), ...), m^2)
+		}
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
 		if (! is.na(st_crs(x))) {
@@ -66,10 +74,10 @@ st_area.sfc = function(x, ...) {
 }
 
 #' @export
-st_area.sf = function(x, ...) st_area(st_geometry(x, ...))
+st_area.sf = function(x, ...) st_area(st_geometry(x), ...)
 
 #' @export
-st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
+st_area.sfg = function(x, ...) st_area(st_geometry(x), ...)
 
 #' @name geos_measures
 #' @export
@@ -91,13 +99,19 @@ st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
 #' ))
 #'
 #' st_length(st_sfc(poly, mpoly))
-st_length = function(x) {
+st_length = function(x, ..., use_lwgeom = FALSE) {
 	x = st_geometry(x)
 
 	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("package lwgeom required, please install it first")
-		lwgeom::st_geod_length(x)
+		if (use_lwgeom) {
+			if (! requireNamespace("lwgeom", quietly = TRUE))
+				stop("package lwgeom required, please install it first")
+			lwgeom::st_geod_length(x)
+		} else {
+			if (! requireNamespace("libs2", quietly = TRUE))
+				stop("package libs2 required, please install it first")
+			set_units(libs2::s2_length(st_as_s2(x), ...), m)
+		}
 	} else {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
@@ -129,13 +143,27 @@ is_symmetric = function(operation, pattern) {
 # returning matrix, distance or relation string -- the work horse is:
 
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE) {
+		sparse = TRUE, prepared = FALSE, use_s2 = TRUE) {
 	if (missing(y))
 		y = x
 	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
-		message_longlat(paste0("st_", op))
+	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) {
+		if (use_s2 && !requireNamespace("libs2", quietly = TRUE))
+			stop("package libs2 required, please install it first")
+		fn_name = paste0("s2_", op)
+		if (use_s2 && fn_name %in% ls(getNamespace("libs2"))) { # returns:
+			fn = get(fn_name, envir = getNamespace("libs2"))
+			s2y = st_as_s2(y)
+			lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y)))
+			id = if (is.null(row.names(x)))
+					as.character(1:length(ret))
+				else
+					row.names(x)
+			return(sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse))
+		} else
+			message_longlat(paste0("st_", op))
+	}
 	if (prepared && is_symmetric(op, pattern) &&
 			length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
 			isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
@@ -174,7 +202,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @export
 st_distance = function(x, y, ..., dist_fun, by_element = FALSE, 
 		which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"), 
-		par = 0.0, tolerance = 0.0) {
+		par = 0.0, tolerance = 0.0, use_lwgeom = FALSE) {
 	if (missing(y))
 		y = x
 	else
@@ -187,21 +215,33 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 	y = st_geometry(y)
 
 	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("lwgeom required: install first?")
-		if (which != "Great Circle")
-			stop("for non-great circle distances, data should be projected; see st_transform()")
-		units(tolerance) = as_units("m")
-		if (by_element) {
-			crs = st_crs(x)
-			dist_ll = function(x, y, tolerance)
-				lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs),
-					tolerance = tolerance)
-			d = mapply(dist_ll, x, y, tolerance = tolerance)
-			units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
-			d
-		} else
-			lwgeom::st_geod_distance(x, y, tolerance)
+		if (use_lwgeom) {
+			if (! requireNamespace("lwgeom", quietly = TRUE))
+				stop("lwgeom required: install first?")
+			if (which != "Great Circle")
+				stop("for non-great circle distances, data should be projected; see st_transform()")
+			units(tolerance) = as_units("m")
+			if (by_element) {
+				crs = st_crs(x)
+				dist_ll = function(x, y, tolerance)
+					lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs),
+						tolerance = tolerance)
+				d = mapply(dist_ll, x, y, tolerance = tolerance)
+				units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
+				d
+			} else
+				lwgeom::st_geod_distance(x, y, tolerance)
+		} else {
+			if (! requireNamespace("libs2", quietly = TRUE))
+				stop("package libs2 required, please install it first")
+			if (by_element)
+				set_units(libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...), m)
+			else {
+				s2x = st_as_s2(x)
+				ret = sapply(st_as_s2(y), libs2::s2_distance, s2x, ...)
+				set_units(ret, m)
+			}
+		}
 	} else {
 		d = if (by_element)
 				mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
@@ -310,72 +350,72 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 
 #' @name geos_binary_pred
 #' @export
-st_touches		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared)
+st_touches		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("crosses", x, y, sparse = sparse, prepared = prepared)
+st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("crosses", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared)
+st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
+st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
 #' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 #'
 #' See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
-st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
+st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE, ...) {
 	if (! prepared)
 		stop("non-prepared geometries not supported for st_contains_properly")
-	st_geos_binop("contains_properly", x, y, sparse = sparse, prepared = TRUE)
+	st_geos_binop("contains_properly", x, y, sparse = sparse, prepared = TRUE, ...)
 }
 
 #' @name geos_binary_pred
 #' @export
-st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared)
+st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_equals		= function(x, y, sparse = TRUE, prepared = FALSE) {
+st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals")
-	st_geos_binop("equals", x, y, sparse = sparse)
+	st_geos_binop("equals", x, y, sparse = sparse, ...)
 }
 
 #' @name geos_binary_pred
 #' @export
-st_covers		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared)
+st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared)
+st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
 #' @export
 #' @param par numeric; parameter used for "equals_exact" (margin);
 #' @details \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
-st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
+st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE, ...) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals_exact")
-	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
+	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse, ...)
 }
 
 #' @name geos_binary_pred
 #' @export
 #' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-st_is_within_distance = function(x, y, dist, sparse = TRUE) {
+st_is_within_distance = function(x, y, dist, sparse = TRUE, ...) {
 	if (isTRUE(st_is_longlat(x))) {
 		if (missing(y))
 			y = x
@@ -398,7 +438,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 		if (! sparse)
 			st_distance(x, y) <= dist
 		else
-			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse)
+			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, ...)
 	}
 }
 

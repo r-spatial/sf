@@ -3,11 +3,14 @@
 \name{geos_measures}
 \alias{geos_measures}
 \alias{st_area}
+\alias{st_area.sfc}
 \alias{st_length}
 \alias{st_distance}
 \title{Compute geometric measurements}
 \usage{
 st_area(x, ...)
+
+\method{st_area}{sfc}(x, ..., use_lwgeom = FALSE)
 
 st_length(x)
 
@@ -26,6 +29,8 @@ st_distance(
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{...}{ignored}
+
+\item{use_lwgeom}{logical; if \code{TRUE}, use liblwgeom functions, else use \code{libs2}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
