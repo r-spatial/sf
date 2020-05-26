@@ -3,6 +3,26 @@
 #	 st_as_sf(NextMethod()) # nocov
 #}
 
+# This is currently only used in `bind_rows()` and `bind_cols()`
+# because sf overrides all default implementations
+dplyr_reconstruct.sf = function(data, template) {
+	sfc_name = attr(template, "sf_column")
+
+	# Return a bare data frame is the geometry column is no longer there
+	if (!sfc_name %in% names(data))
+		return(data)
+
+	prec = st_precision(template)
+	crs = st_crs(template)
+
+	st_as_sf(
+		data,
+		sf_column_name = sfc_name,
+		crs = crs,
+		precision = prec
+	)
+}
+
 group_split.sf <- function(.tbl, ..., keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
      lapply(dplyr::group_split(.tbl, ..., keep = keep), st_as_sf)
@@ -393,6 +413,13 @@ pillar_shaft.sfc <- function(x, ...) {
 }
 
 register_all_s3_methods = function() {
+	has_dplyr_1.0 =
+		requireNamespace("dplyr", quietly = TRUE) &&
+		utils::packageVersion("dplyr") >= "0.8.99.9000"
+
+	if (has_dplyr_1.0)
+		register_s3_method("dplyr", "dplyr_reconstruct", "sf")
+
 	register_s3_method("dplyr", "anti_join", "sf")
 	register_s3_method("dplyr", "arrange", "sf")
 	register_s3_method("dplyr", "distinct", "sf")

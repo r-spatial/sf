@@ -86,3 +86,97 @@ test_that("unnest works", {
   # Would use expect_equal, but doesn't work with geometry cols
   expect_identical(unnest_explicit, expected)
 })
+
+test_that("bind_rows() returns type of first input", {
+	skip_if_not_installed("dplyr", "0.8.99")
+
+	sf1 = st_sf(x = 1, y = st_sfc(st_point(0:1)))
+	sf2 = st_sf(z = st_sfc(st_point(2:3)), x = 2)
+
+	# Avoid as.data.frame.sfc() method
+	data_frame = function(...) {
+		df = tibble(...)
+		class(df) = "data.frame"
+		df
+	}
+
+	# Output is a data frame if first input is a data frame
+	out = bind_rows(data.frame(x = 1), sf2)
+	exp = data_frame(
+		x = c(1, 2),
+		z = st_sfc(NA, st_point(2:3))
+	)
+	expect_identical(out, exp)
+
+	out = bind_rows(sf1, data.frame(x = 1))
+	exp = st_as_sf(data_frame(
+		x = c(1, 1),
+		y = st_sfc(st_point(0:1), NA)
+	))
+	expect_identical(out, exp)
+
+	out = bind_rows(sf1, sf2)
+	exp = st_as_sf(data_frame(
+		x = c(1, 2),
+		y = st_sfc(st_point(0:1), NA),
+		z = st_sfc(NA, st_point(2:3))
+	))
+	expect_identical(out, exp)
+
+	out = bind_rows(sf2, sf1)
+	exp = st_as_sf(sf_column_name = "z", data_frame(
+		x = c(2, 1),
+		z = st_sfc(st_point(2:3), NA),
+		y = st_sfc(NA, st_point(0:1))
+	))
+	expect_identical(out, exp)
+})
+
+test_that("bind_cols() returns type of first input", {
+	skip_if_not_installed("dplyr", "0.8.99")
+
+	sf1 = st_sf(x = 1, y = st_sfc(st_point(0:1)))
+	sf2 = st_sf(z = st_sfc(st_point(2:3)), w = 2)
+
+	# Avoid as.data.frame.sfc() method
+	data_frame = function(...) {
+		df = tibble(...)
+		class(df) = "data.frame"
+		df
+	}
+
+	# Output is a data frame if first input is a data frame
+	out = bind_cols(data.frame(x = 1), sf2)
+	exp = data_frame(
+		x = 1,
+		w = 2,
+		z = st_sfc(st_point(2:3))
+	)
+	expect_identical(out, exp)
+
+	out = bind_cols(sf1, data.frame(w = 2))
+	exp = st_as_sf(data_frame(
+		x = 1,
+		w = 2,
+		y = st_sfc(st_point(0:1))
+	))
+	expect_identical(out, exp)
+
+	out = bind_cols(sf1, sf2)
+	exp = st_as_sf(data_frame(
+		x = 1,
+		w = 2,
+		y = st_sfc(st_point(0:1)),
+		z = st_sfc(st_point(2:3))
+	))
+	expect_identical(out, exp)
+
+	out = bind_cols(sf2, sf1)
+	exp = st_as_sf(data_frame(
+		w = 2,
+		x = 1,
+		z = st_sfc(st_point(2:3)),
+		y = st_sfc(st_point(0:1))
+	))
+	expect_identical(out, exp)
+})
