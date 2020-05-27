@@ -57,13 +57,33 @@ test_that("group/ungroup works", {
 })
 
 test_that("sample_n etc work", {
- tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
- d = st_sf(tbl)
- sample_n(d, 2)
- sample_frac(d, .5)
+	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
+	d = st_sf(tbl)
 
- # TODO: uncomment this when https://github.com/tidyverse/tidyr/pull/729 is merged
- d %>% group_by(a) %>% nest
+	set.seed(1)
+	expect_identical(sample_n(d, 2), d[c(1, 3), ])
+
+	set.seed(1)
+	expect_identical(sample_frac(d, .5), d[c(1, 3), ])
+})
+
+test_that("nest() works", {
+	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
+	d = st_sf(tbl)
+	out = d %>% group_by(a) %>% nest()
+
+	exp_data = list(d[1:2, "g"], d[3:4, "g"])
+
+	# Work around issues of tibble comparison in dplyr 0.8.5 (faulty
+	# all.equal.tbl_df() method)
+	if (utils::packageVersion("dplyr") < "0.8.99") {
+		dfs = lapply(out$data, function(x) st_sf(as.data.frame(x)))
+		exp_data = lapply(exp_data, function(x) st_sf(as.data.frame(x)))
+		expect_identical(dfs, exp_data)
+	} else {
+		exp = tibble(a = c(1, 2), data = exp_data) %>% group_by(a)
+		expect_identical(out, exp)
+	}
 })
 
 test_that("st_intersection of tbl returns tbl", {
