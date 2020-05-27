@@ -60,11 +60,15 @@ test_that("sample_n etc work", {
 	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
 	d = st_sf(tbl)
 
-	set.seed(1)
-	expect_identical(sample_n(d, 2), d[c(1, 3), ])
+	expect_sampled <- function(x) {
+		expect_true(inherits(x, c("sf", "tbl_df")))
+		expect_named(x, c("a", "g"))
+		expect_equal(nrow(x), 2)
+		expect_true(inherits(x$g, "sfc_POINT"))
+	}
 
-	set.seed(1)
-	expect_identical(sample_frac(d, .5), d[c(1, 3), ])
+	expect_sampled(sample_n(d, 2))
+	expect_sampled(sample_frac(d, .5))
 })
 
 test_that("nest() works", {
