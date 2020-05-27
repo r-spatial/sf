@@ -1,0 +1,55 @@
+---
+title: "7. The s2geometry library for spherical geometry in sf"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{7. The s2geometry library for spherical geometry in sf}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+This vignette describes how the s2geometry library (https://s2geometry.io)
+is used for geometrical operations on geographical coordinates.
+
+## Area
+
+```{r}
+library(sf)
+library(units)
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+a1 = st_area(nc)
+a2 = st_area(nc, use_lwgeom = TRUE)
+plot(a1, a2)
+abline(0, 1)
+summary((a1 - a2)/a1)
+```
+
+## Length
+```{r}
+nc_ls = st_cast(nc, "MULTILINESTRING")
+l1 = st_length(nc_ls)
+l2 = st_length(nc_ls, use_lwgeom = TRUE)
+plot(l1 , l2)
+abline(0, 1)
+summary((l1-l2)/l1)
+```
+
+
+## Distances
+```{r}
+d1 = st_distance(nc, nc[1:10,])
+d2 = st_distance(nc, nc[1:10,], use_lwgeom = TRUE)
+dim(d1)
+dim(d2)
+plot(as.vector(d1), as.vector(d2))
+abline(0, 1)
+summary(as.vector(d1)-as.vector(d2))
+```
