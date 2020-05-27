@@ -155,7 +155,9 @@ rename.sf <- function(.data, ...) {
 #' @examples
 #' nc %>% slice(1:2)
 slice.sf <- function(.data, ..., .dots) {
-	st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	class(.data) <- setdiff(class(.data), "sf")
+	sf_column <- attr(.data, "sf_column")
+	st_as_sf(NextMethod(), sf_column_name = sf_column)
 }
 
 #' @name tidyverse

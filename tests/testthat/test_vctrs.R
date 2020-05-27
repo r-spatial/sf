@@ -44,17 +44,14 @@ test_that("`precision` and `crs` attributes of `sfc` vectors are combined", {
 	expect_identical(st_precision(x), st_precision(out))
 	expect_identical(st_crs(x), st_crs(out))
 
+	# Used to fail because of incompatible precisions and crs when
+	# vctrs was using the ptype2 methods for `sfc`. It now uses
+	# `c.sfc()` instead.
+	skip_if_not_installed("vctrs", "0.3.0.9000")
+
 	y = st_sfc(st_point(c(0, 0)), precision = 1e-2, crs = 3857)
-	expect_error(vctrs::vec_c(x, y), "precisions not equal")
+	expect_identical(vctrs::vec_c(x, y), c(x, y))
 
 	y = st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 4326)
-	expect_error(vctrs::vec_c(x, y), "coordinate reference systems not equal")
-})
-
-test_that("`sfc` vectors have a common type", {
-	pt = st_sfc(st_point())
-	ln = st_sfc(st_linestring())
-	expect_identical(class(vctrs::vec_ptype2(pt, pt)), c("sfc_POINT", "sfc"))
-	expect_identical(class(vctrs::vec_ptype2(ln, ln)), c("sfc_LINESTRING", "sfc"))
-	expect_identical(class(vctrs::vec_ptype2(pt, ln)), c("sfc_GEOMETRY", "sfc"))
+	expect_identical(vctrs::vec_c(x, y), c(x, y))
 })
