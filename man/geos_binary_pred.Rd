@@ -21,27 +21,27 @@ st_intersects(x, y, sparse = TRUE, ...)
 
 st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE)
 
-st_touches(x, y, sparse = TRUE, prepared = TRUE)
+st_touches(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_crosses(x, y, sparse = TRUE, prepared = TRUE)
+st_crosses(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_within(x, y, sparse = TRUE, prepared = TRUE)
+st_within(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_contains(x, y, sparse = TRUE, prepared = TRUE)
+st_contains(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_contains_properly(x, y, sparse = TRUE, prepared = TRUE)
+st_contains_properly(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_overlaps(x, y, sparse = TRUE, prepared = TRUE)
+st_overlaps(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_equals(x, y, sparse = TRUE, prepared = FALSE)
+st_equals(x, y, sparse = TRUE, prepared = FALSE, ...)
 
-st_covers(x, y, sparse = TRUE, prepared = TRUE)
+st_covers(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_covered_by(x, y, sparse = TRUE, prepared = TRUE)
+st_covered_by(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE)
+st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)
 
-st_is_within_distance(x, y, dist, sparse = TRUE)
+st_is_within_distance(x, y, dist, sparse = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}

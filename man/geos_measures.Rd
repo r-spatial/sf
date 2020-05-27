@@ -12,7 +12,7 @@ st_area(x, ...)
 
 \method{st_area}{sfc}(x, ..., use_lwgeom = FALSE)
 
-st_length(x)
+st_length(x, ..., use_lwgeom = FALSE)
 
 st_distance(
   x,
@@ -22,7 +22,8 @@ st_distance(
   by_element = FALSE,
   which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"),
   par = 0,
-  tolerance = 0
+  tolerance = 0,
+  use_lwgeom = FALSE
 )
 }
 \arguments{
