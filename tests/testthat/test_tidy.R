@@ -109,6 +109,7 @@ test_that("unnest works", {
 
 test_that("bind_rows() returns type of first input", {
 	skip_if_not_installed("dplyr", "0.8.99")
+	skip_if_not_installed("vctrs", "0.3.0.9000")
 
 	sf1 = st_sf(x = 1, y = st_sfc(st_point(0:1)))
 	sf2 = st_sf(z = st_sfc(st_point(2:3)), x = 2)
