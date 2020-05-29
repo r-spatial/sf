@@ -42,7 +42,7 @@ st_as_sfc.s2polygon = function(x, ...) {
 #' @export
 st_as_sfc.s2geography = function(x, ...) {
 	load_libs2()
-	st_cast(st_as_sfc(libs2::s2_asbinary(x, ...)))
+	st_cast(st_as_sfc(libs2::s2_asbinary(x), ...))
 }
 
 #' functions for spherical geometry, using libs2 package
@@ -71,7 +71,12 @@ st_as_s2 = function(x, ...) UseMethod("st_as_s2")
 #' @export
 st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 
+#' @name s2
+#' @param oriented logical; if \code{FALSE}, polygons that
+#' cover more than half of the globe are inverted; if \code{TRUE}, no reversal
+#' takes place and it is assumed that the inside of the polygon is to the
+#' left of the polygon's path.
 #' @export
-st_as_s2.sfc = function(x, ...) {
-	libs2::s2geography(structure(st_as_binary(x), class = "wk_wkb"))
+st_as_s2.sfc = function(x, ..., oriented = FALSE) {
+	libs2::s2geography(structure(st_as_binary(x), class = "wk_wkb"), oriented = oriented)
 }

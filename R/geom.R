@@ -143,41 +143,43 @@ is_symmetric = function(operation, pattern) {
 # returning matrix, distance or relation string -- the work horse is:
 
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, use_s2 = TRUE) {
+		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED") {
 	if (missing(y))
 		y = x
 	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
 		stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize"))) {
-		if (use_s2 && !requireNamespace("libs2", quietly = TRUE))
+	if (!is.numeric(s2_model))
+		s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "within")) {
+		if (!requireNamespace("libs2", quietly = TRUE))
 			stop("package libs2 required, please install it first")
-		fn_name = paste0("s2_", op)
-		if (use_s2 && fn_name %in% ls(getNamespace("libs2"))) { # returns:
-			fn = get(fn_name, envir = getNamespace("libs2"))
-			s2y = st_as_s2(y)
-			lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y)))
-			id = if (is.null(row.names(x)))
-					as.character(1:length(ret))
-				else
-					row.names(x)
-			return(sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse))
-		} else
-			message_longlat(paste0("st_", op))
-	}
-	if (prepared && is_symmetric(op, pattern) &&
-			length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
-			isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
-		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
+		s2y = st_as_s2(y)
+		fn = get(paste0("s2_", op), envir = getNamespace("libs2"))
+		lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y, model = s2_model)))
+		id = if (is.null(row.names(x)))
+				as.character(seq_along(lst))
+			else
+				row.names(x)
+		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
 	} else {
-		ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-		if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-			id = if (is.null(row.names(x)))
-					as.character(1:length(ret))
-				else
-					row.names(x)
-			sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
-		} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-			ret[[1]]
+		if (longlat && !(op %in% c("equals", "equals_exact")))
+			message_longlat(paste0("st_", op))
+		if (prepared && is_symmetric(op, pattern) &&
+				length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
+				isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
+			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
+		} else {
+			ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+			if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+				id = if (is.null(row.names(x)))
+						as.character(seq_along(ret))
+					else
+						row.names(x)
+				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+			} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
+				ret[[1]]
+		}
 	}
 }
 
@@ -322,15 +324,15 @@ st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
 
 #' @export
 st_intersects.sfc = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @export
 st_intersects.sf = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @export
 st_intersects.sfg = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared, ...)
 
 
 #' @name geos_binary_pred
@@ -340,7 +342,7 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
 	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
 	# disjoint = !intersects :
 	if (sparse)
-		sgbp(lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
+		sgbp(lapply(int, function(g) setdiff(seq_along(st_geometry(y)), g)),
 			predicate = "disjoint",
 			ncol = attr(int, "ncol"),
 			region.id = attr(int, "region.id"))
@@ -429,7 +431,7 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE, ...) {
 					lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
 				else
 					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
-			sgbp(ret, predicate = "is_within_distance", region.id = 1:length(x), ncol = length(gy))
+			sgbp(ret, predicate = "is_within_distance", region.id = seq_along(x), ncol = length(gy))
 		} else
 			st_distance(x, y, tolerance = dist) <= dist
 	} else {
@@ -801,7 +803,7 @@ largest_ring = function(x) {
 	pols = st_cast(x, "POLYGON", warn = FALSE)
 	stopifnot(! is.null(attr(pols, "ids")))
 	areas = st_area(pols)
-	spl = split(areas, rep(1:length(x), attr(pols, "ids"))) # group by x
+	spl = split(areas, rep(seq_along(x), attr(pols, "ids"))) # group by x
 	l = c(0, head(cumsum(lengths(spl)), -1)) # 0-based indexes of first rings of a MULTIPOLYGON
 	i = l + sapply(spl, which.max)           # add relative index of largest ring
 	st_sfc(pols[i], crs = st_crs(x))
