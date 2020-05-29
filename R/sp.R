@@ -224,7 +224,7 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' as(st_geometry(nc), "Spatial")
 #' # back to sf
 #' as(spdf, "sf")
-as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
+as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 	if (inherits(from, "sf")) {
 		geom = st_geometry(from)
 		from[[attr(from, "sf_column")]] = NULL # remove sf column list
@@ -235,7 +235,7 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
 	}
 }
 
-.as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
+.as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 	if (cast)
 		from = st_cast(from)
 	zm = class(from[[1]])[1]
@@ -272,19 +272,19 @@ sfc2SpatialMultiPoints = function(from) {
 		proj4string = as(st_crs(from), "CRS"))
 }
 
-sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
+sfc2SpatialLines = function(from, IDs = paste0("ID", seq_along(from))) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
 	l = if (class(from)[1]  == "sfc_MULTILINESTRING")
 		lapply(from, function(x) sp::Lines(lapply(x, function(y) sp::Line(unclass(y))), "ID"))
 	else
 		lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
-	for (i in 1:length(from))
+	for (i in seq_along(from))
 		l[[i]]@ID = IDs[i]
 	sp::SpatialLines(l, proj4string = as(st_crs(from), "CRS"))
 }
 
-sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
+sfc2SpatialPolygons = function(from, IDs = paste0("ID", seq_along(from))) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
 	l = if (class(from)[1] == "sfc_MULTIPOLYGON")
@@ -297,7 +297,7 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 
 	# set comment: ?Polygons: "Exterior rings are coded zero, while interior rings are
 	# coded with the 1-based index of the exterior ring to which they belong.":
-	for (i in 1:length(from)) {
+	for (i in seq_along(from)) {
 		l[[i]]@ID = IDs[i]
 		if (class(from)[1] == "sfc_MULTIPOLYGON")
 			comm = get_comment(from[[i]])
@@ -311,7 +311,7 @@ sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
 get_comment = function(mp) { # for MULTIPOLYGON
 	l = lapply(mp, function(from) c(0, rep(1, length(from) - 1)))
 	offset = 0
-	for (i in 1:length(l)) {
+	for (i in seq_along(l)) {
 		l[[i]] = l[[i]] + offset
 		offset = offset + length(l[[i]])
 		l[[i]][1] = 0

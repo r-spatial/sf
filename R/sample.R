@@ -95,7 +95,7 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE) {
 		stop("size should be an integer")
 	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
-		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
+		ret = lapply(seq_along(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
 		res = st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,

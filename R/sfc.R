@@ -489,7 +489,7 @@ st_coordinates.sfc = function(x, ...) {
 
 	ret = switch(class(x)[1],
 		sfc_POINT = matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE,
-		     dimnames = list(1:length(x))),
+		     dimnames = list(seq_along(x))),
 		sfc_MULTIPOINT = ,
 		sfc_LINESTRING = coord_2(x),
 		sfc_MULTILINESTRING = ,
