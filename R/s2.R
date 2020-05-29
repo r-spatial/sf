@@ -10,6 +10,7 @@ load_libs2 = function() {
 
 # from libs2 to sf:
 #' @export
+#' @param crs coordinate reference system; object of class \code{crs}
 #' @name s2
 st_as_sfc.wk_wkb = function(x, ..., crs = NA_crs_) {
 	class(x) = "WKB"

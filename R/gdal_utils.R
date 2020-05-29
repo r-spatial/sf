@@ -15,6 +15,7 @@ resampling_method = function(option = "near") {
 		med = 10,
 		q1 = 11,
 		q3 = 12,
+		sum = 13,
 		stop(paste("unknown option:", options))
 	)
 }

@@ -9,6 +9,7 @@
 \alias{st_as_sfc.s2geography}
 \alias{st_as_s2}
 \alias{st_as_s2.sf}
+\alias{st_as_s2.sfc}
 \title{functions for spherical geometry, using libs2 package}
 \usage{
 \method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
@@ -24,11 +25,20 @@
 st_as_s2(x, ...)
 
 \method{st_as_s2}{sf}(x, ...)
+
+\method{st_as_s2}{sfc}(x, ..., oriented = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{...}{passed on; might contain named argument crs}
+
+\item{crs}{coordinate reference system; object of class \code{crs}}
+
+\item{oriented}{logical; if \code{FALSE}, polygons that
+cover more than half of the globe are inverted; if \code{TRUE}, no reversal
+takes place and it is assumed that the inside of the polygon is to the
+left of the polygon's path.}
 }
 \description{
 functions for spherical geometry, using the libs2 package based on the google s2geometry.io library

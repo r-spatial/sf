@@ -60,7 +60,7 @@ st_area.sfc = function(x, ..., use_lwgeom = FALSE) {
 		} else {
 			if (! requireNamespace("libs2", quietly = TRUE))
 				stop("package libs2 required, please install it first")
-			units::set_units(libs2::s2_area(st_as_s2(x), ...), m^2)
+			units::set_units(libs2::s2_area(st_as_s2(x), ...), "m^2", mode = "standard")
 		}
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
@@ -110,7 +110,7 @@ st_length = function(x, ..., use_lwgeom = FALSE) {
 		} else {
 			if (! requireNamespace("libs2", quietly = TRUE))
 				stop("package libs2 required, please install it first")
-			set_units(libs2::s2_length(st_as_s2(x), ...), m)
+			set_units(libs2::s2_length(st_as_s2(x), ...), "m", mode = "standard")
 		}
 	} else {
 		ret = CPL_length(x)
@@ -146,16 +146,19 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED") {
 	if (missing(y))
 		y = x
-	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
+	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
 		stopifnot(st_crs(x) == st_crs(y))
 	if (!is.numeric(s2_model))
 		s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
-	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "within")) {
+	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
+	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "covers", "within")) {
 		if (!requireNamespace("libs2", quietly = TRUE))
 			stop("package libs2 required, please install it first")
 		s2y = st_as_s2(y)
-		fn = get(paste0("s2_", op), envir = getNamespace("libs2"))
+		s2_op = op
+		if (op == "covers")
+			s2_op = "contains" # contains + s2_model = "OPEN" gives SFA's "covers"
+		fn = get(paste0("s2_", s2_op), envir = getNamespace("libs2"))
 		lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y, model = s2_model)))
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
@@ -168,7 +171,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		if (prepared && is_symmetric(op, pattern) &&
 				length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
 				isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
-			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
+			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, 
+				prepared = prepared))
 		} else {
 			ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
 			if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
@@ -237,11 +241,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 			if (! requireNamespace("libs2", quietly = TRUE))
 				stop("package libs2 required, please install it first")
 			if (by_element)
-				set_units(libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...), m)
+				set_units(libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...), 
+					"m", mode = "standard")
 			else {
 				s2x = st_as_s2(x)
 				ret = sapply(st_as_s2(y), libs2::s2_distance, s2x, ...)
-				set_units(ret, m)
+				set_units(ret, "m", mode = "standard")
 			}
 		}
 	} else {
@@ -366,9 +371,12 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
+#' @param s2_model character; polygon/polylin model; one of 
+#' "OPEN", "SEMI_OPEN", and "CLOSED"; see Details.
+#' @details for \code{s2_model}, see https://github.com/r-spatial/libs2/issues/32
 #' @export
-st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ...)
+st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "OPEN")
+	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
 
 #' @name geos_binary_pred
 #' @export
@@ -396,13 +404,18 @@ st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...) {
 
 #' @name geos_binary_pred
 #' @export
-st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ...)
+st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED")
+	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
+
 
 #' @name geos_binary_pred
 #' @export
-st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
+st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED") {
+	if (st_is_longlat(x) && s2_model %in% c("OPEN", "SEMI_OPEN", "CLOSED"))
+		!st_covers(y, x, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
+	else
+		st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
+}
 
 #' @name geos_binary_pred
 #' @export

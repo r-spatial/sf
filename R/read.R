@@ -643,6 +643,7 @@ extension_map <- list(
         "bna" = "BNA",
         "csv" = "CSV",
         "e00" = "AVCE00",
+        "fgb" = "FlatGeobuf",
         "gdb" = "OpenFileGDB",
         "geojson" = "GeoJSON",
         "gml" = "GML",
