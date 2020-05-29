@@ -25,7 +25,7 @@ jobs:
           - {os: macOS-latest, r: 'devel', args: '--install-args=\"--configure-args=--with-proj-lib=/usr/local/lib/\"", "--ignore-vignettes', build_args: "--no-build-vignettes"}
           - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
           - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-latest, r: 'release'}
+#         - {os: ubuntu-latest, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -65,13 +65,13 @@ jobs:
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
         shell: Rscript {0}
 
-#      - name: Cache R packages
-#        if: runner.os != 'Windows'
-#        uses: actions/cache@v1
-#        with:
-#          path: ${{ env.R_LIBS_USER }}
-#          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-#          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'

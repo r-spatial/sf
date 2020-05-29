@@ -19,7 +19,7 @@ st_read(dsn, layer, ...)
   geometry_column = 1L,
   type = 0,
   promote_to_multi = TRUE,
-  stringsAsFactors = default.stringsAsFactors(),
+  stringsAsFactors = sf_stringsAsFactors(),
   int64_as_string = FALSE,
   check_ring_dir = FALSE,
   fid_column_name = character(0),
@@ -82,9 +82,9 @@ of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be
-converted to factors?  The `factory-fresh' default is \code{TRUE} for
-\code{st_read} and \code{FALSE} for \code{read_sf}, but this can be changed
-globally by e.g. the R command \code{options(stringsAsFactors = FALSE)}.}
+  converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
+\code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
+\code{default.stringsAsFactors()}}
 
 \item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as
 string; if FALSE, they are returned as double and a warning is given when

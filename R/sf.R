@@ -193,7 +193,7 @@ list_column_to_sfc = function(x) {
 #' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param agr character vector; see details below.
 #' @param row.names row.names for the created \code{sf} object
-#' @param stringsAsFactors logical; logical: should character vectors be converted to factors?  The `factory-fresh' default is \code{TRUE}, but this can be changed by setting \code{options(stringsAsFactors = FALSE)}.
+#' @param stringsAsFactors logical; see \link{st_read}
 #' @param precision numeric; see \link{st_as_binary}
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
@@ -215,7 +215,7 @@ list_column_to_sfc = function(x) {
 #' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
-		stringsAsFactors = default.stringsAsFactors(), crs, precision,
+		stringsAsFactors = sf_stringsAsFactors(), crs, precision,
 		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))

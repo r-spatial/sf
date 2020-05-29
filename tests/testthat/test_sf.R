@@ -91,3 +91,10 @@ test_that("transform work", {
   expect_identical(st_crs(x), st_crs(x))
   expect_identical(x$elev^2, x2$elev2)
 })
+
+test_that("empty agr attribute is named after subset", {
+	sf = st_sf(data.frame(x = st_sfc(st_point(1:2))))
+	out = sf[, "geometry"]
+	agr = attr(out, "agr")
+	expect_identical(names(agr), character())
+})

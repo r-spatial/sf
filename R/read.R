@@ -1,3 +1,10 @@
+sf_stringsAsFactors = function() {
+	if (getRversion() < "4.1.0")
+		default.stringsAsFactors()
+	else
+		FALSE
+}
+
 set_utf8 = function(x) {
 	n = names(x)
 	Encoding(n) = "UTF-8"
@@ -44,9 +51,9 @@ set_utf8 = function(x) {
 #'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 #'   all to the Multi variety; defaults to \code{TRUE}
 #' @param stringsAsFactors logical; logical: should character vectors be
-#'   converted to factors?  The `factory-fresh' default is \code{TRUE} for
-#'   \code{st_read} and \code{FALSE} for \code{read_sf}, but this can be changed
-#'   globally by e.g. the R command \code{options(stringsAsFactors = FALSE)}.
+#'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
+#' \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
+#' \code{default.stringsAsFactors()}
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
 #'   string; if FALSE, they are returned as double and a warning is given when
 #'   precision is lost (i.e., values are larger than 2^53).
@@ -134,7 +141,8 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
-		stringsAsFactors = ifelse(as_tibble, FALSE, default.stringsAsFactors()), geometry_column = 1, as_tibble = FALSE) {
+		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()), 
+		geometry_column = 1, as_tibble = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 
@@ -143,8 +151,8 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		warning("no simple feature geometries present: returning a data.frame or tbl_df",
-			call. = FALSE)
+		if (! quiet) 
+			warning("no simple feature geometries present: returning a data.frame or tbl_df", call. = FALSE)
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
 					warning("list-column(s) present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
@@ -199,8 +207,8 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, type = 0,
-		promote_to_multi = TRUE, stringsAsFactors = default.stringsAsFactors(),
+st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, 
+		type = 0, promote_to_multi = TRUE, stringsAsFactors = sf_stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0),
 		drivers = character(0), wkt_filter = character(0)) {
 
@@ -424,8 +432,15 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	# this seems to be always a good idea:
 	dsn = enc2utf8(dsn)
 
-	geom = st_geometry(obj)
-	obj[[attr(obj, "sf_column")]] = NULL
+	# handle the case where obj does not have a geometry column:
+	if (write_geometries <- inherits(obj, "sf")) {
+		geom = st_geometry(obj)
+		obj[[attr(obj, "sf_column")]] = NULL
+	} else { # create fake geometries:
+		v = vector("list", nrow(obj))
+		v[seq_len(nrow(obj))] = list(st_point())
+		geom = st_sfc(v)
+	}
 
 	if (driver == "ESRI Shapefile") { # remove trailing .shp from layer name
 		layer = sub(".shp$", "", layer)
@@ -451,14 +466,16 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, fids, quiet, append, delete_dsn, delete_layer)
+		geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+		write_geometries)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, fids, quiet, append, delete_dsn, delete_layer) == 1)
+				geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+				write_geometries) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = append || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))
@@ -471,7 +488,11 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 #' @name st_write
 #' @export
 st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
-    st_write.sf(obj = st_as_sf(obj), dsn = dsn, layer = layer, ...)
+    sf = try(st_as_sf(obj), silent = TRUE)
+	if (!inherits(sf, "try-error"))
+    	st_write.sf(sf, dsn = dsn, layer = layer, ...)
+	else
+    	st_write.sf(obj, dsn = dsn, layer = layer, ...)
 }
 
 #' @name st_write
@@ -622,6 +643,7 @@ extension_map <- list(
         "bna" = "BNA",
         "csv" = "CSV",
         "e00" = "AVCE00",
+        "fgb" = "FlatGeobuf",
         "gdb" = "OpenFileGDB",
         "geojson" = "GeoJSON",
         "gml" = "GML",

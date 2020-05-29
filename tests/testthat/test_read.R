@@ -184,11 +184,11 @@ test_that("reading non-spatial table works", {
                   "data.frame"),
         "no simple feature geometries"
     )
-    expect_warning(
-        expect_is(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
-              "tbl_df"),
-        "no simple feature geometries"
-    )
+#   expect_warning(
+#       expect_is(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
+#             "tbl_df"),
+#       "no simple feature geometries"
+#   )
 })
 
 test_that("Missing data sources have useful error message (#967)", {

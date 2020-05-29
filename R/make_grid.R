@@ -3,7 +3,7 @@
 #' Create a square or hexagonal grid covering the geometry of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
-#' @param offset numeric of lengt 2; lower left corner coordinates (x, y) of the grid
+#' @param offset numeric of length 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
