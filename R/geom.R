@@ -248,7 +248,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				d
 			} else
 				lwgeom::st_geod_distance(x, y, tolerance)
-		} else {
+		} else { # use S2:
 			if (! requireNamespace("libs2", quietly = TRUE))
 				stop("package libs2 required, please install it first")
 			if (by_element)
@@ -257,6 +257,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 			else {
 				s2x = st_as_s2(x)
 				ret = sapply(st_as_s2(y), libs2::s2_distance, s2x, ...)
+				dim(ret) = c(length(x), length(y))
 				set_units(ret, "m", mode = "standard")
 			}
 		}
