@@ -143,7 +143,7 @@ is_symmetric = function(operation, pattern) {
 # returning matrix, distance or relation string -- the work horse is:
 
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED") {
+		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED", op_name = op) {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
@@ -151,20 +151,31 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 	if (!is.numeric(s2_model))
 		s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "covers", "within")) {
+	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "within", 
+			"covers", "covered_by")) {
 		if (!requireNamespace("libs2", quietly = TRUE))
 			stop("package libs2 required, please install it first")
 		s2y = st_as_s2(y)
-		s2_op = op
-		if (op == "covers")
-			s2_op = "contains" # contains + s2_model = "OPEN" gives SFA's "covers"
-		fn = get(paste0("s2_", s2_op), envir = getNamespace("libs2"))
+		# contains + s2_model = "CLOSED" gives SFA's "covers"
+		if (op == "covers") {
+			op_name = "covers"
+			op = "contains"
+		}
+		if (op == "covered_by") {
+			op_name = "covered_by"
+			op = "contains"
+		}
+		fn = get(paste0("s2_", op), envir = getNamespace("libs2"))
 		lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y, model = s2_model)))
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
 				row.names(x)
-		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+		ret = sgbp(lst, predicate = op_name, region.id = id, ncol = length(st_geometry(y)), sparse)
+		if (op_name == "covered_by")
+			t(!(ret))
+		else
+			ret
 	} else {
 		if (longlat && !(op %in% c("equals", "equals_exact")))
 			message_longlat(paste0("st_", op))
@@ -410,12 +421,9 @@ st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLO
 
 #' @name geos_binary_pred
 #' @export
-st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED") {
-	if (st_is_longlat(x) && s2_model %in% c("OPEN", "SEMI_OPEN", "CLOSED"))
-		!st_covers(y, x, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
-	else
-		st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
-}
+st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED")
+	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
+
 
 #' @name geos_binary_pred
 #' @export
