@@ -1018,11 +1018,31 @@ geos_op2_df = function(x, y, geoms) {
 
 # after checking identical crs,
 # call geos_op2 function op on x and y:
-geos_op2_geom = function(op, x, y) {
+geos_op2_geom = function(op, x, y, s2_model = "CLOSED") {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat(paste0("st_", op))
-	st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
+	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && s2_model > 0) {
+		if (! requireNamespace("libs2", quietly = TRUE))
+			stop("package libs2 required, please install it first")
+		fn = switch(op, intersection = libs2::s2_intersection, 
+				difference = libs2::s2_difference,
+				sym_difference = libs2::s2_symdifference,
+				union = libs2::s2_union, stop("invalid operator"))
+		x = st_geometry(x)
+		y = st_geometry(y)
+		s2x = st_as_s2(x)
+		s2y = st_as_s2(y)
+		lst = structure(unlist(lapply(s2x, fn, s2y, model = s2_model), recursive = FALSE),
+			class = class(s2x))
+		e = libs2::s2_isempty(lst)
+		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
+		structure(st_as_sfc(lst[!e], crs = st_crs(x)), idx = idx[!e,,drop = FALSE])
+	} else {
+		if (longlat)
+			message_longlat(paste0("st_", op))
+		st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
+	}
 }
 
 # return first sfg, or empty geometry in case of zero features

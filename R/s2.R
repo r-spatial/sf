@@ -36,14 +36,16 @@ st_as_sfc.s2polyline = st_as_sfc_s2
 #' @export
 st_as_sfc.s2polygon = function(x, ...) {
 	load_libs2()
-	st_cast(st_as_sfc(libs2::as_wkb(x), ...))
+	x = st_as_sfc(libs2::as_wkb(x), ...)
+	st_cast(x)
 }
 
 #' @name s2
 #' @export
 st_as_sfc.s2geography = function(x, ...) {
 	load_libs2()
-	st_cast(st_as_sfc(libs2::s2_asbinary(x), ...))
+	x = st_as_sfc(libs2::s2_asbinary(x), ...)
+	st_cast(x)
 }
 
 #' functions for spherical geometry, using libs2 package
