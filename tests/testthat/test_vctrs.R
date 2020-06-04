@@ -4,6 +4,12 @@ test_that("`sfc` vectors are treated as vectors", {
 	expect_true(vctrs::vec_is(st_sfc(st_point())))
 })
 
+test_that("`sfc` vectors can be sliced", {
+	x = st_sfc(st_point(1:2), st_point(3:4))
+	expect_identical(vctrs::vec_slice(x, 1), x[1])
+	expect_identical(vctrs::vec_slice(x, 0), x[0])
+})
+
 test_that("`n_empty` attribute of `sfc` vectors is restored", {
 	pt1 = st_sfc(st_point(c(NA_real_, NA_real_)))
 	pt2 = st_sfc(st_point(0:1))
