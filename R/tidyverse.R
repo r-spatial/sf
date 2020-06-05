@@ -148,7 +148,7 @@ select.sf <- function(.data, ...) {
 	}
 
 	ret = .data
-	class(ret) = "data.frame"
+	class(ret) = setdiff(class(ret), "sf")
 	ret = ret[loc]
 	names(ret) = names(loc)
 
