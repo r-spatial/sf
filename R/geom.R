@@ -251,15 +251,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 		} else { # use S2:
 			if (! requireNamespace("libs2", quietly = TRUE))
 				stop("package libs2 required, please install it first")
-			if (by_element)
-				set_units(libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...), 
-					"m", mode = "standard")
-			else {
-				s2x = st_as_s2(x)
-				ret = sapply(st_as_s2(y), libs2::s2_distance, s2x, ...)
-				dim(ret) = c(length(x), length(y))
-				set_units(ret, "m", mode = "standard")
-			}
+			ret = if (by_element)
+					libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...)
+				else
+					structure(sapply(st_as_s2(y), libs2::s2_distance, st_as_s2(x), ...),
+						dim = c(length(x), length(y)))
+			set_units(ret, "m", mode = "standard")
 		}
 	} else {
 		d = if (by_element)
