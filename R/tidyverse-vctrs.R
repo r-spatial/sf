@@ -11,10 +11,7 @@ vec_restore.sfc = function(x, to, ...) {
 	# Ensure restoration of `n_empty` by `st_sfc()`
 	attr(x, "n_empty") = NULL
 
-	# x can have length 0, reset class manually
-	out <- st_sfc(x, crs = st_crs(to), precision = st_precision(to))
-	class(out) <- class(to)
-	out
+	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
 }
 
 #' vctrs methods for sf objects

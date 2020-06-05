@@ -205,3 +205,17 @@ test_that("bind_cols() returns type of first input", {
 	))
 	expect_identical(out, exp)
 })
+
+test_that("can rename geometry column with `select()`", {
+	sf = st_sf(
+		x = 1,
+		geo = st_sfc(st_point(1:2)),
+		y = "foo"
+	)
+	out = dplyr::select(sf, foo = geo)
+	expect_identical(out, st_sf(foo = sf$geo))
+
+	# geometry column is sticky
+	out = dplyr::select(sf, y)
+	expect_identical(out, st_sf(geo = sf$geo, y = sf$y))
+})

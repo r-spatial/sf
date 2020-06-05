@@ -93,6 +93,7 @@ Suggests:
     testthat,
     tibble (>= 1.4.1),
     tidyr (>= 1.0-0),
+    tidyselect (>= 1.0.0),
     tmap (>= 2.0),
     vctrs
 LinkingTo: 
