@@ -123,19 +123,36 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
 
-	if (!requireNamespace("dplyr", quietly = TRUE))
-		stop("dplyr required: install that first") # nocov
+	if (!requireNamespace("tidyselect", quietly = TRUE))
+		stop("tidyselect required: install that first") # nocov
+	loc = tidyselect::eval_select(quote(c(...)), .data)
 
-	agr <- st_agr(.data)
-	class(.data) <- setdiff(class(.data), "sf")
-	sf_column <- attr(.data, "sf_column")
+	sf_column = attr(.data, "sf_column")
+	sf_column_loc = match(sf_column, names(.data))
 
-	if (!requireNamespace("rlang", quietly = TRUE))
-		stop("rlang required: install first?")
+	if (length(sf_column_loc) != 1 || is.na(sf_column_loc))
+		stop("internal error: can't find sf column") # nocov
 
-	ret <- dplyr::select(.data, ..., !! rlang::sym(sf_column))
-	vars <- setdiff(names(ret), sf_column)
-	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr[vars])
+	agr = st_agr(.data)
+	vars = names(.data)[setdiff(loc, sf_column_loc)]
+	new_agr = agr[vars]
+
+	sf_column_loc_loc = match(sf_column_loc, loc)
+	if (is.na(sf_column_loc_loc)) {
+		# The sf column was subsetted out, select it back in
+		loc = c(sf_column_loc, loc)
+		names(loc)[[1]] = sf_column
+	} else {
+		# The sf column was not subsetted out but it might have been renamed
+		sf_column = names(loc[sf_column_loc_loc])
+	}
+
+	ret = .data
+	class(ret) = "data.frame"
+	ret = ret[loc]
+	names(ret) = names(loc)
+
+	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), new_agr)
 }
 
 
