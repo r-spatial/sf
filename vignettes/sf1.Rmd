@@ -106,11 +106,11 @@ The following seven simple feature types are the most common, and are for instan
 
 Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes, NULL values or empty lists.
 
-The remaining geometries 10 are more rare, but increasingly find implementations:
+The remaining geometries 10 are rarer, but increasingly find implementations:
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
-| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1. |
+| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, i.e., the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greater than 1. |
 | `COMPOUNDCURVE` | A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component. |
 | `CURVEPOLYGON` | Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) ) |
 | `MULTICURVE` |  A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.  |
@@ -127,7 +127,7 @@ Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described 
 ## Coordinate reference system
 
 Coordinates can only be placed on the Earth's surface when their coordinate
-reference system (CRS) is known; this may be an spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
+reference system (CRS) is known; this may be a spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
 in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference
 system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
@@ -552,7 +552,7 @@ GDAL provides the
 creates, and has the following arguments to control update and delete:
 
 * `update=TRUE` causes an existing data source to be updated, if it
-exists; this options is by default `TRUE` for all database drivers,
+exists; this option is by default `TRUE` for all database drivers,
 where the database is updated by adding a table.
 * `delete_layer=TRUE` causes `st_write` try to open the the data
 source and delete the layer; no errors are given if the data source is
