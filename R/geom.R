@@ -157,25 +157,18 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 			stop("package libs2 required, please install it first")
 		s2y = st_as_s2(y)
 		# contains + s2_model = "CLOSED" gives SFA's "covers"
-		if (op == "covers") {
-			op_name = "covers"
-			op = "contains"
-		}
 		if (op == "covered_by") {
 			op_name = "covered_by"
-			op = "contains"
-		}
+			op = "coveredby"
+		} else
+			op_name = op
 		fn = get(paste0("s2_", op), envir = getNamespace("libs2"))
 		lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y, model = s2_model)))
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
 				row.names(x)
-		ret = sgbp(lst, predicate = op_name, region.id = id, ncol = length(st_geometry(y)), sparse)
-		if (op_name == "covered_by")
-			t(!(ret))
-		else
-			ret
+		sgbp(lst, predicate = op_name, region.id = id, ncol = length(st_geometry(y)), sparse)
 	} else {
 		if (longlat && !(op %in% c("equals", "equals_exact")))
 			message_longlat(paste0("st_", op))
