@@ -928,7 +928,6 @@ Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	}
 	Rcpp::IntegerVector out(gmv0.size());
 	for (size_t i = 0; i < gmv0.size(); i++) {
-		out[i] = NA_INTEGER;
 		if (!GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get()) && !tree_is_empty) {
 			item_g item, *ret_item;
 			item.id = 0; // is irrelevant
@@ -940,7 +939,8 @@ Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 				out[i] = ret_item->id; // the index (1-based) of nearest GEOM
 			else
 				Rcpp::stop("st_nearest_feature: GEOS exception");
-		}
+		} else
+			out[i] = NA_INTEGER;
 	}
 	CPL_geos_finish(hGEOSCtxt);
 
