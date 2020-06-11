@@ -38,9 +38,19 @@ st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 #' @name st_nearest_points
 st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat("st_nearest_points")
-	st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
+	if (isTRUE(st_is_longlat(x))) {
+		#message_longlat("st_nearest_points")
+		if (! requireNamespace("libs2", quietly = TRUE))
+			stop("package libs2 required, please install it first")
+		x_s2 = st_as_s2(x)
+		y_s2 = st_as_s2(y)
+		ret = if (pairwise)
+				libs2::s2_closestpoint(x_s2, y_s2)
+			else
+				do.call(c, lapply(x_s2, libs2::s2_closestpoint, y_s2))
+		st_as_sfc(ret, crs = st_crs(x))
+	} else
+		st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
 }
  
 #' @export
@@ -60,7 +70,8 @@ st_nearest_points.sf = function(x, y, ...) {
 #' get index of nearest feature
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param y object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in \code{y}
+#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in set \code{y}; 
+#' empty geometries result in \code{NA} indexes
 #' @seealso \link{st_nearest_points} for finding the nearest points for pairs of feature geometries
 #' @export
 #' @examples
@@ -94,7 +105,10 @@ st_nearest_points.sf = function(x, y, ...) {
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat("st_nearest_feature")
-	CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+	if (isTRUE(st_is_longlat(x))) {
+		x = st_as_s2(x)
+		y = st_as_s2(st_sfc(st_geometrycollection(st_geometry(y)), crs = st_crs(x)))
+		libs2::s2_nearestfeature(x, y)
+	} else
+		CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
 }
