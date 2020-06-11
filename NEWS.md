@@ -1,3 +1,7 @@
+# version 0.9-5
+
+* libs2 support for geometry predicates, transformers, nearest point/feature
+
 # version 0.9-4
 
 * empty geom generators take care of XYZ etc dim; #1400
