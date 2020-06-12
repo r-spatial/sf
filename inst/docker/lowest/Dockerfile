@@ -92,14 +92,14 @@ RUN	cd \
 	&& make install
 	
 RUN	cd \
-	&& wget http://download.osgeo.org/geos/geos-3.6.0.tar.bz2 \
-	&& bunzip2  geos-3.6.0.tar.bz2  \
-	&& tar xvf geos-3.6.0.tar  \
-	&& cd geos-3.6.0 \
+	&& wget http://download.osgeo.org/geos/geos-3.5.0.tar.bz2 \
+	&& bunzip2  geos-3.5.0.tar.bz2  \
+	&& tar xvf geos-3.5.0.tar  \
+	&& cd geos-3.5.0 \
 	&& ./configure \
 	&& make \
 	&& make install
-	
+
 RUN ldconfig
 
 RUN svn checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/

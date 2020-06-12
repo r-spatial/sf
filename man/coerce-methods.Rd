@@ -30,7 +30,7 @@ geometry-only object deriving from \code{Spatial}, of the appropriate class
 \code{sp} objects to \code{sf} and \code{sfc} with \code{as(x, "sf")}.
 }
 \details{
-\link[sp:sp]{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\verb{SpatialPoint*}).
+Package \code{sp} supports three dimensions for \code{POINT} and \code{MULTIPOINT} (\verb{SpatialPoint*}).
 Other geometries must be two-dimensional (\code{XY}). Dimensions can be dropped using
 \code{\link[=st_zm]{st_zm()}} with \code{what = "M"} or \code{what = "ZM"}.
 

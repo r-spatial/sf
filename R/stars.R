@@ -166,7 +166,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 
 #' @details gdal_crs reads coordinate reference system from GDAL data set
 #' @param file character; file name
-#' @return object of class \code{crs}, see \link[sf]{st_crs}.
+#' @return object of class \code{crs}, see \link{st_crs}.
 #' @name gdal
 #' @export
 gdal_crs = function(file, options = character(0)) {

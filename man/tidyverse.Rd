@@ -168,7 +168,7 @@ more details.}
 
 \item{extra}{see \link[tidyr]{separate}}
 
-\item{.preserve}{see \link[tidyr]{unnest}}
+\item{.preserve}{see \link[tidyr:nest]{unnest}}
 
 \item{y}{A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for

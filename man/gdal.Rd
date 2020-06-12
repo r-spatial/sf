@@ -109,7 +109,7 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 \item{sf}{object of class \code{sf}}
 }
 \value{
-object of class \code{crs}, see \link[sf]{st_crs}.
+object of class \code{crs}, see \link{st_crs}.
 
 named list with metadata items
 

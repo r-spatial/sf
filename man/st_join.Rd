@@ -35,7 +35,7 @@ st_filter(x, y, ...)
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 
 \item{left}{logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
-see also \link[dplyr]{left_join}}
+see also \link[dplyr:mutate-joins]{left_join}}
 
 \item{largest}{logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578}
 
