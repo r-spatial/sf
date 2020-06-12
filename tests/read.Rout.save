@@ -367,8 +367,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  1.502   0.090   1.590 
-=======
-  1.166   0.068   1.230 
->>>>>>> gdal3
+  1.320   0.047   1.357 

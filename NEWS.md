@@ -8,6 +8,8 @@
 
 * the default for `stringsAsFactors` in `st_read` and `st_sf` is `FALSE` for R version >= 4.1.0
 
+* the sf method for `dplyr::select()` now supports renaming the geometry column; #1415
+
 # version 0.9-3
 
 * `st_is_valid` is a generic
