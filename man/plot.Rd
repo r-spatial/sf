@@ -159,7 +159,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
 \item{main}{title for plot (\code{NULL} to remove)}
 
-\item{pal}{palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \code{sf.colors} is used}
+\item{pal}{palette function, similar to \link{rainbow}, or palette values; if omitted, \code{sf.colors} is used}
 
 \item{nbreaks}{number of colors breaks (ignored for \code{factor} or \code{character} variables)}
 

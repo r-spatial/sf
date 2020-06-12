@@ -2,7 +2,7 @@
 #'
 #' Bind rows (features) of sf objects
 #' @param ... objects to bind; note that for the rbind and cbind methods, all objects have to be of class \code{sf}; see \link{dotsMethods}
-#' @param deparse.level integer; see \link[base]{rbind}
+#' @param deparse.level integer; see \link{rbind}
 #' @name bind
 #' @details both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}.
 #' @export
@@ -40,7 +40,7 @@ rbind.sf = function(..., deparse.level = 1) {
 #' @param sf_column_name character; specifies active geometry; passed on to \link{st_sf}
 #' @return \code{cbind} called with multiple \code{sf} objects warns about multiple geometry columns present when the geometry column to use is not specified by using argument \code{sf_column_name}; see also \link{st_sf}.
 #' @export
-#' @details If you need to \code{cbind} e.g. a \code{data.frame} to an \code{sf}, use \link{data.frame} directly and use \link{st_sf} on its result, or use \link[dplyr]{bind_cols}; see examples.
+#' @details If you need to \code{cbind} e.g. a \code{data.frame} to an \code{sf}, use \link{data.frame} directly and use \link{st_sf} on its result, or use \link[dplyr:bind]{bind_cols}; see examples.
 #' @examples
 #' cbind(a,b,c) # warns
 #' if (require(dplyr))

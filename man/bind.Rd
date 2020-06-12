@@ -16,7 +16,7 @@ st_bind_cols(...)
 \arguments{
 \item{...}{objects to bind; note that for the rbind and cbind methods, all objects have to be of class \code{sf}; see \link{dotsMethods}}
 
-\item{deparse.level}{integer; see \link[base]{rbind}}
+\item{deparse.level}{integer; see \link{rbind}}
 
 \item{sf_column_name}{character; specifies active geometry; passed on to \link{st_sf}}
 }
@@ -31,7 +31,7 @@ Bind columns (variables) of sf objects
 \details{
 both \code{rbind} and \code{cbind} have non-standard method dispatch (see \link[base]{cbind}): the \code{rbind} or \code{cbind} method for \code{sf} objects is only called when all arguments to be binded are of class \code{sf}.
 
-If you need to \code{cbind} e.g. a \code{data.frame} to an \code{sf}, use \link{data.frame} directly and use \link{st_sf} on its result, or use \link[dplyr]{bind_cols}; see examples.
+If you need to \code{cbind} e.g. a \code{data.frame} to an \code{sf}, use \link{data.frame} directly and use \link{st_sf} on its result, or use \link[dplyr:bind]{bind_cols}; see examples.
 
 \code{st_bind_cols} is deprecated; use \code{cbind} instead.
 }

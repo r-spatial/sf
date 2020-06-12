@@ -71,7 +71,7 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' @param suffix length 2 character vector; see \link[base]{merge}
 #' @param ... arguments passed on to the \code{join} or \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}
 #' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
-#' see also \link[dplyr]{left_join}
+#' see also \link[dplyr:mutate-joins]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
 #' 
 #' @details alternative values for argument \code{join} are:

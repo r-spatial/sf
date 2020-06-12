@@ -23,9 +23,9 @@ dplyr_reconstruct.sf = function(data, template) {
 	)
 }
 
-group_split.sf <- function(.tbl, ..., keep = TRUE) {
+group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
-     lapply(dplyr::group_split(.tbl, ..., keep = keep), st_as_sf)
+     lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)
 }
 
 #' Tidyverse methods for sf objects (remove .sf suffix!)
@@ -384,7 +384,7 @@ unite.sf <- function(data, col, ..., sep = "_", remove = TRUE) {
 }
 
 #' @name tidyverse
-#' @param .preserve see \link[tidyr]{unnest}
+#' @param .preserve see \link[tidyr:nest]{unnest}
 unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov start
 	sf_column_name = attr(data, "sf_column", exact = TRUE)
