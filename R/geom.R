@@ -1012,7 +1012,7 @@ geos_op2_geom = function(op, x, y, s2_model = "CLOSED") {
 	stopifnot(st_crs(x) == st_crs(y))
 	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && s2_model > 0) {
+	if (longlat && s2_model >= 0) {
 		if (! requireNamespace("libs2", quietly = TRUE))
 			stop("package libs2 required, please install it first")
 		fn = switch(op, intersection = libs2::s2_intersection, 
