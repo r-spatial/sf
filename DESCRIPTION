@@ -70,7 +70,6 @@ Suggests:
     dplyr (>= 0.8-3),
     ggplot2,
     knitr,
-	libs2,
     lwgeom (>= 0.2-1),
     maps,
     mapview,
@@ -86,6 +85,7 @@ Suggests:
     RPostgres (>= 1.1.0),
     RPostgreSQL,
     RSQLite,
+    s2 (>= 0.99-0),
     sp (>= 1.2-4),
     spatstat,
     spatstat.utils,
@@ -95,7 +95,8 @@ Suggests:
     tidyr (>= 1.0-0),
     tidyselect (>= 1.0.0),
     tmap (>= 2.0),
-    vctrs
+    vctrs,
+    wk
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
@@ -104,6 +105,7 @@ Encoding: UTF-8
 RoxygenNote: 7.1.0
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0)
+Remotes: r-spatial/s2
 Collate: 
     'RcppExports.R'
     'init.R'

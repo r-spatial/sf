@@ -31,7 +31,7 @@ st_distance(
 
 \item{...}{ignored}
 
-\item{use_lwgeom}{logical; if \code{TRUE}, use liblwgeom functions, else use \code{libs2}}
+\item{use_lwgeom}{logical; if \code{TRUE}, use liblwgeom functions, else use \code{s2}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 

@@ -84,7 +84,7 @@ If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square
 
 Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 
-for \code{s2_model}, see https://github.com/r-spatial/libs2/issues/32
+for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
 
 `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 

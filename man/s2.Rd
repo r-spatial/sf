@@ -3,24 +3,15 @@
 \name{s2}
 \alias{s2}
 \alias{st_as_sfc.wk_wkb}
-\alias{st_as_sfc.s2latlng}
-\alias{st_as_sfc.s2polyline}
-\alias{st_as_sfc.s2polygon}
-\alias{st_as_sfc.s2geography}
+\alias{st_as_sfc.s2_geography}
 \alias{st_as_s2}
 \alias{st_as_s2.sf}
 \alias{st_as_s2.sfc}
-\title{functions for spherical geometry, using libs2 package}
+\title{functions for spherical geometry, using s2 package}
 \usage{
 \method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
 
-\method{st_as_sfc}{s2latlng}(x, ...)
-
-\method{st_as_sfc}{s2polyline}(x, ...)
-
-\method{st_as_sfc}{s2polygon}(x, ...)
-
-\method{st_as_sfc}{s2geography}(x, ...)
+\method{st_as_sfc}{s2_geography}(x, ...)
 
 st_as_s2(x, ...)
 
@@ -31,7 +22,7 @@ st_as_s2(x, ...)
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{...}{passed on; might contain named argument crs}
+\item{...}{passed on}
 
 \item{crs}{coordinate reference system; object of class \code{crs}}
 
@@ -41,7 +32,7 @@ takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}
 }
 \description{
-functions for spherical geometry, using the libs2 package based on the google s2geometry.io library
+functions for spherical geometry, using the s2 package based on the google s2geometry.io library
 }
 \details{
 \code{st_as_s2} converts an \code{sf} POLYGON object into a form readable by \code{s2}.

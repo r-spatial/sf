@@ -49,7 +49,7 @@ st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
 st_area = function(x, ...) UseMethod("st_area")
 
 #' @name geos_measures
-#' @param use_lwgeom logical; if \code{TRUE}, use liblwgeom functions, else use \code{libs2}
+#' @param use_lwgeom logical; if \code{TRUE}, use liblwgeom functions, else use \code{s2}
 #' @export
 st_area.sfc = function(x, ..., use_lwgeom = FALSE) {
 	if (isTRUE(st_is_longlat(x))) {
@@ -58,9 +58,9 @@ st_area.sfc = function(x, ..., use_lwgeom = FALSE) {
 				stop("package lwgeom required, please install it first")
 			lwgeom::st_geod_area(x)
 		} else {
-			if (! requireNamespace("libs2", quietly = TRUE))
-				stop("package libs2 required, please install it first")
-			units::set_units(libs2::s2_area(st_as_s2(x), ...), "m^2", mode = "standard")
+			if (! requireNamespace("s2", quietly = TRUE))
+				stop("package s2 required, please install it first")
+			units::set_units(s2::s2_area(st_as_s2(x), ...), "m^2", mode = "standard")
 		}
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
@@ -108,9 +108,9 @@ st_length = function(x, ..., use_lwgeom = FALSE) {
 				stop("package lwgeom required, please install it first")
 			lwgeom::st_geod_length(x)
 		} else {
-			if (! requireNamespace("libs2", quietly = TRUE))
-				stop("package libs2 required, please install it first")
-			set_units(libs2::s2_length(st_as_s2(x), ...), "m", mode = "standard")
+			if (! requireNamespace("s2", quietly = TRUE))
+				stop("package s2 required, please install it first")
+			set_units(s2::s2_length(st_as_s2(x), ...), "m", mode = "standard")
 		}
 	} else {
 		ret = CPL_length(x)
@@ -143,7 +143,7 @@ is_symmetric = function(operation, pattern) {
 # returning matrix, distance or relation string -- the work horse is:
 
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED", op_name = op) {
+		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED") {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
@@ -153,22 +153,17 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 	if (longlat && s2_model >= 0 && op %in% c("intersects", "contains", "within", 
 			"covers", "covered_by")) {
-		if (!requireNamespace("libs2", quietly = TRUE))
-			stop("package libs2 required, please install it first")
+		if (!requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
 		s2y = st_as_s2(y)
 		# contains + s2_model = "CLOSED" gives SFA's "covers"
-		if (op == "covered_by") {
-			op_name = "covered_by"
-			op = "coveredby"
-		} else
-			op_name = op
-		fn = get(paste0("s2_", op), envir = getNamespace("libs2"))
+		fn = get(paste0("s2_", op), envir = getNamespace("s2"))
 		lst = lapply(st_as_s2(x), function(z) which(fn(z, s2y, model = s2_model)))
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
 				row.names(x)
-		sgbp(lst, predicate = op_name, region.id = id, ncol = length(st_geometry(y)), sparse)
+		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
 	} else {
 		if (longlat && !(op %in% c("equals", "equals_exact")))
 			message_longlat(paste0("st_", op))
@@ -242,12 +237,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 			} else
 				lwgeom::st_geod_distance(x, y, tolerance)
 		} else { # use S2:
-			if (! requireNamespace("libs2", quietly = TRUE))
-				stop("package libs2 required, please install it first")
+			if (! requireNamespace("s2", quietly = TRUE))
+				stop("package s2 required, please install it first")
 			ret = if (by_element)
-					libs2::s2_distance(st_as_s2(x), st_as_s2(y), ...)
+					s2::s2_distance(st_as_s2(x), st_as_s2(y), ...)
 				else
-					structure(sapply(st_as_s2(y), libs2::s2_distance, st_as_s2(x), ...),
+					structure(sapply(st_as_s2(y), s2::s2_distance, st_as_s2(x), ...),
 						dim = c(length(x), length(y)))
 			set_units(ret, "m", mode = "standard")
 		}
@@ -375,7 +370,7 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 #' @name geos_binary_pred
 #' @param s2_model character; polygon/polylin model; one of 
 #' "OPEN", "SEMI_OPEN", and "CLOSED"; see Details.
-#' @details for \code{s2_model}, see https://github.com/r-spatial/libs2/issues/32
+#' @details for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
 #' @export
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "OPEN")
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
@@ -1013,19 +1008,19 @@ geos_op2_geom = function(op, x, y, s2_model = "CLOSED") {
 	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && s2_model >= 0) {
-		if (! requireNamespace("libs2", quietly = TRUE))
-			stop("package libs2 required, please install it first")
-		fn = switch(op, intersection = libs2::s2_intersection, 
-				difference = libs2::s2_difference,
-				sym_difference = libs2::s2_symdifference,
-				union = libs2::s2_union, stop("invalid operator"))
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		fn = switch(op, intersection = s2::s2_intersection, 
+				difference = s2::s2_difference,
+				sym_difference = s2::s2_sym_difference,
+				union = s2::s2_union, stop("invalid operator"))
 		x = st_geometry(x)
 		y = st_geometry(y)
 		s2x = st_as_s2(x)
 		s2y = st_as_s2(y)
 		lst = structure(unlist(lapply(s2x, fn, s2y, model = s2_model), recursive = FALSE),
 			class = class(s2x))
-		e = libs2::s2_isempty(lst)
+		e = s2::s2_is_empty(lst)
 		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
 		structure(st_as_sfc(lst[!e], crs = st_crs(x)), idx = idx[!e,,drop = FALSE])
 	} else {

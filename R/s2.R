@@ -1,56 +1,32 @@
 # see https://docs.google.com/presentation/d/1Hl4KapfAENAOf4gv-pSngKwvS_jwNVHRPZTTDzXXn6Q/view?pli=1#slide=id.i0
-# and the libs2 package:
-# https://github.com/r-spatial/libs2
+# and the r-spatial/s2 package:
+# https://github.com/r-spatial/s2
 
-load_libs2 = function() {
-	if (! requireNamespace("libs2", quietly = TRUE))
-		stop('package libs2 required, please install it first')
-}
-
-
-# from libs2 to sf:
+# from s2 to sf:
 #' @export
 #' @param crs coordinate reference system; object of class \code{crs}
+#' @param ... passed on
 #' @name s2
 st_as_sfc.wk_wkb = function(x, ..., crs = NA_crs_) {
 	class(x) = "WKB"
 	st_set_crs(st_as_sfc(x, ...), crs)
 }
 
-st_as_sfc_s2 = function(x, ...) {
-	load_libs2()
-	st_as_sfc(libs2::as_wkb(x), ...)
-}
-
-#' @name s2
-#' @param x object of the respective class
-#' @param ... passed on; might contain named argument crs
-#' @export
-st_as_sfc.s2latlng = st_as_sfc_s2
 
 #' @name s2
 #' @export
-st_as_sfc.s2polyline = st_as_sfc_s2
-
-#' @name s2
-#' @export
-st_as_sfc.s2polygon = function(x, ...) {
-	load_libs2()
-	x = st_as_sfc(libs2::as_wkb(x), ...)
+st_as_sfc.s2_geography = function(x, ...) {
+	if (! requireNamespace("s2", quietly = TRUE))
+		stop('package s2 required, please install it first')
+	if (! requireNamespace("wk", quietly = TRUE))
+		stop('package wk required, please install it first')
+	x = st_as_sfc(wk::as_wkb(x), ...)
 	st_cast(x)
 }
 
-#' @name s2
-#' @export
-st_as_sfc.s2geography = function(x, ...) {
-	load_libs2()
-	x = st_as_sfc(libs2::s2_asbinary(x), ...)
-	st_cast(x)
-}
-
-#' functions for spherical geometry, using libs2 package
+#' functions for spherical geometry, using s2 package
 #' 
-#' functions for spherical geometry, using the libs2 package based on the google s2geometry.io library
+#' functions for spherical geometry, using the s2 package based on the google s2geometry.io library
 #' @name s2 
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
@@ -81,5 +57,7 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 #' left of the polygon's path.
 #' @export
 st_as_s2.sfc = function(x, ..., oriented = FALSE) {
-	libs2::s2geography(structure(st_as_binary(x), class = "wk_wkb"), oriented = oriented)
+	if (! requireNamespace("s2", quietly = TRUE))
+		stop('package s2 required, please install it first')
+	s2::as_s2_geography(structure(st_as_binary(x), class = "wk_wkb"), oriented = oriented)
 }
