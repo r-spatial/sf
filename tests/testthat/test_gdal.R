@@ -86,6 +86,7 @@ test_that('gdal_utils work', {
   expect_true(gdal_utils("grid", points, tf))
   expect_true(gdal_utils("buildvrt", sd2, tf3))
   expect_true(gdal_utils("buildvrt", sd2, tf3, "-oo", "FOO=BAR")) # fake opening options
+  expect_error(gdal_utils("buildvrt", "foo.tif", tf3, "-oo", "FOO=BAR"), "cannot open source dataset")
   expect_true(gdal_utils("demprocessing", sd2, tf, processing = "hillshade"))
 })
 
