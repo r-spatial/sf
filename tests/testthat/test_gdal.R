@@ -85,6 +85,8 @@ test_that('gdal_utils work', {
   points = system.file("gpkg/nc.gpkg", package="sf")
   expect_true(gdal_utils("grid", points, tf))
   expect_true(gdal_utils("buildvrt", sd2, tf3))
+  expect_true(gdal_utils("buildvrt", sd2, tf3, "-oo", "FOO=BAR")) # fake opening options
+  expect_error(gdal_utils("buildvrt", "foo.tif", tf3, "-oo", "FOO=BAR"), "cannot open source dataset")
   expect_true(gdal_utils("demprocessing", sd2, tf, processing = "hillshade"))
 })
 

@@ -302,9 +302,6 @@ proj4string = function(x) {
 	crs_parameters(x, with_units = FALSE)[["proj4string"]]
 }
 
-is_crs = function(x) {
-	inherits(x, "crs")
-}
 
 #' @name st_as_text
 #' @param pretty logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system
