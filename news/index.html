@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
       </span>
     </div>
 
@@ -151,10 +151,14 @@
 
     <div id="version-0-9-4" class="section level1">
 <h1 class="page-header" data-toc-text="0.9-4">
-<a href="#version-0-9-4" class="anchor"></a>version 0.9-4<small> Unreleased </small>
+<a href="#version-0-9-4" class="anchor"></a>version 0.9-4<small> 2020-06-12 </small>
 </h1>
 <ul>
-<li>the default for <code>stringsAsFactors</code> in <code>st_read</code> and <code>st_sf</code> is FALSE for R version &gt; 4.1.0</li>
+<li><p>empty geom generators take care of XYZ etc dim; <a href='https://github.com/r-spatial/sf/issues/1400'>#1400</a></p></li>
+<li><p><code>write_sf</code> and <code>read_sf</code> no longer warn when reading tables without geometries</p></li>
+<li><p><code>st_write</code> writes non-spatial tables when given a plain <code>data.frame</code> or <code>tbl_df</code>; <a href='https://github.com/r-spatial/sf/issues/1345'>#1345</a></p></li>
+<li><p>the default for <code>stringsAsFactors</code> in <code>st_read</code> and <code>st_sf</code> is <code>FALSE</code> for R version &gt;= 4.1.0</p></li>
+<li><p>the sf method for <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> now supports renaming the geometry column; <a href='https://github.com/r-spatial/sf/issues/1415'>#1415</a></p></li>
 </ul>
 </div>
     <div id="version-0-9-3" class="section level1">
@@ -162,9 +166,9 @@
 <a href="#version-0-9-3" class="anchor"></a>version 0.9-3<small> 2020-05-04 </small>
 </h1>
 <ul>
-<li><p><code>st_is_valid</code> is now a generic</p></li>
+<li><p><code>st_is_valid</code> is a generic</p></li>
 <li><p>Windows CRAN binaries use GDAL 3.0.4, PROJ 6.3.1 and GEOS 3.8.0, thanks to Jeroen Ooms’ rwinlib work; <a href='https://github.com/r-spatial/sf/issues/1275'>#1275</a></p></li>
-<li><p><code>plot.sf</code> gains an <code>extent</code> argument to set the extent (xlim, ylim) of the plot; <code>extent</code> must be an object with an <code><a href="../reference/st_bbox.html">st_bbox()</a></code> method, such as an <code>sf</code> object; <a href='https://github.com/r-spatial/sf/issues/1193'>#1193</a></p></li>
+<li><p><code>plot.sf</code> gains an <code>extent</code> argument to set the extent (xlim, ylim) of the plot; <code>extent</code> must be an object with an <code><a href="../reference/st_bbox.html">st_bbox()</a></code> method, such as an <code>sf</code> or a <code>stars</code> object; <a href='https://github.com/r-spatial/sf/issues/1193'>#1193</a></p></li>
 </ul>
 </div>
     <div id="version-0-9-2" class="section level1">

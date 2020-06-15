@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
       </span>
     </div>
 
@@ -193,7 +193,7 @@
 </tbody>
 </table>
 <p>Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for <code>POINT</code> the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (<code>NA</code>) attributes, NULL values or empty lists.</p>
-<p>The remaining geometries 10 are more rare, but increasingly find implementations:</p>
+<p>The remaining geometries 10 are rarer, but increasingly find implementations:</p>
 <table class="table">
 <colgroup>
 <col width="7%">
@@ -206,7 +206,7 @@
 <tbody>
 <tr class="odd">
 <td><code>CIRCULARSTRING</code></td>
-<td>The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, ie the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greated than 1.</td>
+<td>The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, i.e., the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greater than 1.</td>
 </tr>
 <tr class="even">
 <td><code>COMPOUNDCURVE</code></td>
@@ -251,7 +251,7 @@
 <div id="coordinate-reference-system" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coordinate-reference-system" class="anchor"></a>Coordinate reference system</h2>
-<p>Coordinates can only be placed on the Earth’s surface when their coordinate reference system (CRS) is known; this may be an spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units">measurement unit</a>.</p>
+<p>Coordinates can only be placed on the Earth’s surface when their coordinate reference system (CRS) is known; this may be a spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units">measurement unit</a>.</p>
 </div>
 </div>
 <div id="how-simple-features-in-r-are-organized" class="section level1">
@@ -275,7 +275,7 @@
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
 <span class="co">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</span>
 <span class="no">nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>))
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpQNiPuO/temp_libpath61397ee1cbb7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpAyHYS3/temp_libpath35ca5baf5ca3/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -304,26 +304,26 @@
 <span class="co">##  [1] [                     [[&lt;-                  $&lt;-                  </span>
 <span class="co">##  [4] aggregate             as.data.frame         cbind                </span>
 <span class="co">##  [7] coerce                dbDataType            dbWriteTable         </span>
-<span class="co">## [10] identify              initialize            merge                </span>
-<span class="co">## [13] plot                  print                 rbind                </span>
-<span class="co">## [16] show                  slotsFromS3           st_agr               </span>
-<span class="co">## [19] st_agr&lt;-              st_area               st_as_sf             </span>
-<span class="co">## [22] st_bbox               st_boundary           st_buffer            </span>
-<span class="co">## [25] st_cast               st_centroid           st_collection_extract</span>
-<span class="co">## [28] st_convex_hull        st_coordinates        st_crop              </span>
-<span class="co">## [31] st_crs                st_crs&lt;-              st_difference        </span>
-<span class="co">## [34] st_filter             st_geometry           st_geometry&lt;-        </span>
-<span class="co">## [37] st_interpolate_aw     st_intersection       st_intersects        </span>
-<span class="co">## [40] st_is_valid           st_is                 st_join              </span>
-<span class="co">## [43] st_line_merge         st_m_range            st_make_valid        </span>
-<span class="co">## [46] st_nearest_points     st_node               st_normalize         </span>
-<span class="co">## [49] st_point_on_surface   st_polygonize         st_precision         </span>
-<span class="co">## [52] st_reverse            st_sample             st_segmentize        </span>
-<span class="co">## [55] st_set_precision      st_shift_longitude    st_simplify          </span>
-<span class="co">## [58] st_snap               st_sym_difference     st_transform         </span>
-<span class="co">## [61] st_triangulate        st_union              st_voronoi           </span>
-<span class="co">## [64] st_wrap_dateline      st_write              st_z_range           </span>
-<span class="co">## [67] st_zm                 transform            </span>
+<span class="co">## [10] filter                identify              initialize           </span>
+<span class="co">## [13] merge                 plot                  print                </span>
+<span class="co">## [16] rbind                 show                  slotsFromS3          </span>
+<span class="co">## [19] st_agr                st_agr&lt;-              st_area              </span>
+<span class="co">## [22] st_as_sf              st_bbox               st_boundary          </span>
+<span class="co">## [25] st_buffer             st_cast               st_centroid          </span>
+<span class="co">## [28] st_collection_extract st_convex_hull        st_coordinates       </span>
+<span class="co">## [31] st_crop               st_crs                st_crs&lt;-             </span>
+<span class="co">## [34] st_difference         st_filter             st_geometry          </span>
+<span class="co">## [37] st_geometry&lt;-         st_interpolate_aw     st_intersection      </span>
+<span class="co">## [40] st_intersects         st_is_valid           st_is                </span>
+<span class="co">## [43] st_join               st_line_merge         st_m_range           </span>
+<span class="co">## [46] st_make_valid         st_nearest_points     st_node              </span>
+<span class="co">## [49] st_normalize          st_point_on_surface   st_polygonize        </span>
+<span class="co">## [52] st_precision          st_reverse            st_sample            </span>
+<span class="co">## [55] st_segmentize         st_set_precision      st_shift_longitude   </span>
+<span class="co">## [58] st_simplify           st_snap               st_sym_difference    </span>
+<span class="co">## [61] st_transform          st_triangulate        st_union             </span>
+<span class="co">## [64] st_voronoi            st_wrap_dateline      st_write             </span>
+<span class="co">## [67] st_z_range            st_zm                 transform            </span>
 <span class="co">## see '?methods' for accessing help and source code</span></pre></body></html></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">nc.no_sf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">nc</span>)
@@ -560,7 +560,7 @@
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">filename</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>)
 <span class="no">nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">filename</span>)
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpQNiPuO/temp_libpath61397ee1cbb7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpAyHYS3/temp_libpath35ca5baf5ca3/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -629,7 +629,7 @@
 <p>GDAL provides the <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">crud</a> (create, read, update, delete) functions to persistent storage. <code>st_read</code> (or <code>read_sf</code>) are used for reading. <code>st_write</code> (or <code>write_sf</code>) creates, and has the following arguments to control update and delete:</p>
 <ul>
 <li>
-<code>update=TRUE</code> causes an existing data source to be updated, if it exists; this options is by default <code>TRUE</code> for all database drivers, where the database is updated by adding a table.</li>
+<code>update=TRUE</code> causes an existing data source to be updated, if it exists; this option is by default <code>TRUE</code> for all database drivers, where the database is updated by adding a table.</li>
 <li>
 <code>delete_layer=TRUE</code> causes <code>st_write</code> try to open the the data source and delete the layer; no errors are given if the data source is not present, or the layer does not exist in the data source.</li>
 <li>
@@ -856,7 +856,7 @@
         <span class="kw">CNTY_ID</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">NAME</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">FIPS</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">FIPSNO</span> <span class="kw">=</span> <span class="st">"identity"</span>,
         <span class="kw">CRESS_ID</span> <span class="kw">=</span> <span class="st">"identity"</span>, <span class="kw">BIR74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">SID74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">NWBIR74</span> <span class="kw">=</span> <span class="st">"aggregate"</span>,
         <span class="kw">BIR79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">SID79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>, <span class="kw">NWBIR79</span> <span class="kw">=</span> <span class="st">"aggregate"</span>))
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpQNiPuO/temp_libpath61397ee1cbb7/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpAyHYS3/temp_libpath35ca5baf5ca3/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
@@ -910,7 +910,7 @@
 </ul>
 <p>Further reading:</p>
 <ol style="list-style-type: decimal">
-<li>S. Scheider, B. Gräler, E. Pebesma, C. Stasch, 2016. Modelling spatio-temporal information generation. Int J of Geographic Information Science, 30 (10), 1980-2008. (<a href="http://pebesma.staff.ifgi.de/generativealgebra.pdf">pdf</a>)</li>
+<li>S. Scheider, B. Gräler, E. Pebesma, C. Stasch, 2016. Modelling spatio-temporal information generation. Int J of Geographic Information Science, 30 (10), 1980-2008. (<a href="https://www.tandfonline.com/doi/full/10.1080/13658816.2016.1151520">open access</a>)</li>
 <li>Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling &amp; Software, 51, (149–165, <a href="http://dx.doi.org/10.1016/j.envsoft.2013.09.006">open access</a>).</li>
 </ol>
 </div>

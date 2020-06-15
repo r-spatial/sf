@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
       </span>
     </div>
 
@@ -187,14 +187,14 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>st_combine</code> combines geometries without resolving borders, using <a href='st.html'>c.sfg</a> (analogous to <a href='https://rdrr.io/r/base/c.html'>c</a> for ordinary vectors).</p>
-<p>If <code>st_union</code> is called with a single argument, <code>x</code>, (with <code>y</code> missing) and <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned. If <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>. If <code>y</code> is provided, all elements of <code>x</code> and <code>y</code> are unioned, pairwise (and <code>by_feature</code> is ignored). The former corresponds to <a href='https://rdrr.io/pkg/rgeos/man/topo-bin-gUnion.html'>gUnaryUnion</a>, the latter to <a href='https://rdrr.io/pkg/rgeos/man/topo-bin-gUnion.html'>gUnion</a>.</p>
+<p>If <code>st_union</code> is called with a single argument, <code>x</code>, (with <code>y</code> missing) and <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned. If <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>. If <code>y</code> is provided, all elements of <code>x</code> and <code>y</code> are unioned, pairwise (and <code>by_feature</code> is ignored). The former corresponds to gUnaryUnion, the latter to gUnion.</p>
 <p>Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='geos_binary_ops.html'>st_intersection</a>, <a href='geos_binary_ops.html'>st_difference</a>, <a href='geos_binary_ops.html'>st_sym_difference</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpQNiPuO/temp_libpath61397ee1cbb7/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpAyHYS3/temp_libpath35ca5baf5ca3/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@
     <p>Create simple feature geometry list column, set class, and add coordinate reference system and precision</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>st_sfc</span>(<span class='no'>...</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>dim</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,6 +175,10 @@
     <tr>
       <th>check_ring_dir</th>
       <td><p>see <a href='st_read.html'>st_read</a></p></td>
+    </tr>
+    <tr>
+      <th>dim</th>
+      <td><p>character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries</p></td>
     </tr>
     </table>
 
