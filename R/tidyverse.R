@@ -431,6 +431,7 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+#nocov start
 register_all_s3_methods = function() {
 	has_dplyr_1.0 =
 		requireNamespace("dplyr", quietly = TRUE) &&
@@ -488,7 +489,6 @@ register_all_s3_methods = function() {
 
 # from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
 # Thu Apr 19 10:53:24 CEST 2018
-#nocov start
 register_s3_method <- function(pkg, generic, class, fun = NULL) {
   stopifnot(is.character(pkg), length(pkg) == 1)
   stopifnot(is.character(generic), length(generic) == 1)

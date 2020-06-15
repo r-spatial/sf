@@ -8,6 +8,8 @@ test_that("MtrxSet is being called", {
   pl1 = st_polygon(pts)
   expect_identical(st_as_text(pl1),
   "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
+  expect_identical(st_as_text(st_sfc(pl1, crs = 4326), EWKT=TRUE), 
+  "SRID=4326;POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (5 5, 5 6, 6 6, 6 5, 5 5))")
 })
 
 test_that("Dimension works", {

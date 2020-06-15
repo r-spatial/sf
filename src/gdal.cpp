@@ -84,12 +84,14 @@ void CPL_gdal_init()
     OGRRegisterAll();
 }
 
+// #nocov start
 // [[Rcpp::export]]
 void CPL_gdal_cleanup_all()
 {
     OGRCleanupAll();
     OSRCleanup();
 }
+// #nocov end
 
 // [[Rcpp::export]]
 const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
@@ -256,6 +258,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	return out;
 }
 
+/*
 int epsg_from_crs(Rcpp::List crs) {
 	const char *cp;
 	OGRSpatialReference *ref = OGRSrs_from_crs(crs);
@@ -266,6 +269,7 @@ int epsg_from_crs(Rcpp::List crs) {
 	} else
 		return(NA_INTEGER);
 }
+*/
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
@@ -603,10 +607,10 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
-		Rcpp::stop("argument authority_compliant should have length 0 or 1");
+		Rcpp::stop("argument authority_compliant should have length 0 or 1"); // #nocov
 #ifndef HAVE250
 	if (authority_compliant.size() == 1 && authority_compliant[0])
-		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required");
+		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required"); // #nocov
 #endif
 	bool old_value = axis_order_authority_compliant;
 	if (authority_compliant.size() == 1)

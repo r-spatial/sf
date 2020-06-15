@@ -81,3 +81,32 @@ test_that("CRS comparison uses ellipsoid and datum (#180)", {
 #test_that("Warning if trying to supply proj4 with numeric", {
 #    expect_warning(st_crs(2939, proj4text = "+random"), "`proj4text` is not used to validate crs")
 #})
+
+test_that("old-style crs are repaired", {
+  x = structure(list(proj4string = "+proj=longlat", epsg = 4326), class = "crs")
+  x_new = st_crs(x)
+  expect_warning(x$proj4string)
+})
+
+test_that("sp-style CRS objects are accepted", {
+  library(sp)
+  x = CRS("+proj=longlat")
+  x_crs = st_crs("+proj=longlat")
+  expect_equal(x_crs$wkt, st_crs(x)$wkt)
+  comment(x) = NULL
+  expect_equal(x_crs$wkt, st_crs(x)$wkt)
+})
+
+test_that("print.crs works", {
+  x = st_crs(4326)
+  print(x)
+  x$input = NA
+  print(x)
+})
+
+test_that("crs.Raster works", {
+  library(raster)
+  r = raster()
+  x = st_crs(r)
+  expect_equal(class(x), "crs")
+})

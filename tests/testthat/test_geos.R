@@ -26,6 +26,8 @@ test_that("CPL_geos_is_valid works", {
   expect_equal(p0, p1)
   expect_false(st_is_valid(p1))
   expect_equal(st_is_valid(p1, reason = TRUE), "Self-intersection[5 5]")
+  expect_warning(st_is_valid(p1, NA_on_exception = FALSE), "Self-intersection at or near point 5 5")
+  expect_false(st_is_valid(p1[[1]]))
 })
 
 test_that("geos ops give warnings and errors on longlat", {
