@@ -32,7 +32,7 @@ st_sf(
 
 \item{stringsAsFactors}{logical; see \link{st_read}}
 
-\item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
+\item{crs}{coordinate reference system, something suitable as input to \link{st_crs}}
 
 \item{precision}{numeric; see \link{st_as_binary}}
 
