@@ -31,4 +31,4 @@ test_that("s2 polygon creation", {
 #  expect_error(p <- s2polygon(i))
 #  expect_silent(i <- s2polyline(inner[1:3,]))
 #  expect_silent(p <- s2polygon(i))
-}
+})
