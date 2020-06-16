@@ -95,8 +95,7 @@ Suggests:
     tidyr (>= 1.0-0),
     tidyselect (>= 1.0.0),
     tmap (>= 2.0),
-    vctrs,
-    wk
+    vctrs
 LinkingTo: 
     Rcpp
 VignetteBuilder: 

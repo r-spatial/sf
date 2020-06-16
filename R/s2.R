@@ -15,13 +15,11 @@ st_as_sfc.wk_wkb = function(x, ..., crs = NA_crs_) {
 
 #' @name s2
 #' @export
-st_as_sfc.s2_geography = function(x, ...) {
+#' @param endian integer; 0 or 1: defaults to the endian of the native machine
+st_as_sfc.s2_geography = function(x, ..., crs = NA_crs_, endian = match(.Platform$endian, c("big", "little")) - 1L) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
-	if (! requireNamespace("wk", quietly = TRUE))
-		stop('package wk required, please install it first')
-	x = st_as_sfc(wk::as_wkb(x), ...)
-	st_cast(x)
+	st_cast(st_as_sfc(s2::s2_as_binary(x, endian = endian), ..., crs = crs))
 }
 
 #' functions for spherical geometry, using s2 package
@@ -59,5 +57,5 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 st_as_s2.sfc = function(x, ..., oriented = FALSE) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
-	s2::as_s2_geography(structure(st_as_binary(x), class = "wk_wkb"), oriented = oriented)
+	s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
 }

@@ -11,7 +11,12 @@
 \usage{
 \method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
 
-\method{st_as_sfc}{s2_geography}(x, ...)
+\method{st_as_sfc}{s2_geography}(
+  x,
+  ...,
+  crs = NA_crs_,
+  endian = match(.Platform$endian, c("big", "little")) - 1L
+)
 
 st_as_s2(x, ...)
 
@@ -25,6 +30,8 @@ st_as_s2(x, ...)
 \item{...}{passed on}
 
 \item{crs}{coordinate reference system; object of class \code{crs}}
+
+\item{endian}{integer; 0 or 1: defaults to the endian of the native machine}
 
 \item{oriented}{logical; if \code{FALSE}, polygons that
 cover more than half of the globe are inverted; if \code{TRUE}, no reversal
