@@ -218,5 +218,5 @@ tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 replotting the last map in non-interactive mode is as simple as:
 ```{r,eval=tmap_fixed}
 ttm()
-last_map()
+tmap_last()
 ```
