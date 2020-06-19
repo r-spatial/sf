@@ -61,30 +61,29 @@ Installing sf from source works under windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-The easiest way to install `gdal` is using Homebrew. Recent versions of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
+The easiest way to install `gdal` is using Homebrew. 
+Recent versions of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
 brew install gdal
 ```
 
-Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` (`7.0.0`) on homebrew, installation requires additional configuration:
+Alternatively, one can use the [osgeo4mac](https://github.com/OSGeo/homebrew-osgeo4mac) tap which comes with many formulas for spatial libraries.
+In this tap, the important formulas are named `osgeo-gdal` and `osgeo-proj`.
+After installation, you also need to link them via `brew link <formula>`.
+If this fails because of a conflicting `gdal`, unlink the conflicting formula first via `brew unlink`.
+
+Once gdal is installed, you will be able to install `sf` package from source in R.
 
 ```r
-install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install.packages("sf", type = "source")
 ```
 
-Or the development version:
+If you are using `sf` and `rgdal` together it is necessary to install `rgal` from source:
 
 ```r
-library(devtools)
-install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
-```
-
-If you are using `sf` and `rgdal` together it is necessary to install `rgal` from source using this configuration:
-
-```r
-install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+install.packages("rgdal", type = "source")
 ```
 
 Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
