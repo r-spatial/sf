@@ -3,7 +3,7 @@ sgbp = function(x, predicate, region.id, ncol, sparse = TRUE) {
 		predicate = predicate,
 		region.id = region.id,
 		ncol = ncol,
-		class = "sgbp")
+		class = c("sgbp", "list"))
 	if (! sparse)
 		as.matrix(ret)
 	else
