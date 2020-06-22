@@ -243,3 +243,10 @@ test_that("can rename geometry column with `rename()` (#1431)", {
 		st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
 	)
 })
+
+test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
+	sf = read_sf(system.file("shape/nc.shp", package = "sf"))
+	exp = sf[, c("NAME", "FIPS")]
+	expect_identical(dplyr::select(sf, NAME, FIPS), exp)
+	expect_identical(dplyr::transmute(sf, NAME, FIPS), exp)
+})
