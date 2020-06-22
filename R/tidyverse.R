@@ -161,11 +161,34 @@ select.sf <- function(.data, ...) {
 #' nc2 <- nc %>% rename(area = AREA)
 rename.sf <- function(.data, ...) {
 
-	if (!requireNamespace("dplyr", quietly = TRUE))
-		stop("dplyr required: install that first") # nocov
+	if (!requireNamespace("tidyselect", quietly = TRUE))
+		stop("tidyselect required: install that first") # nocov
+	loc = tidyselect::eval_rename(quote(c(...)), .data)
 
-	class(.data) <- setdiff(class(.data), "sf")
-	st_as_sf(dplyr::rename(.data, ...))
+	sf_column = attr(.data, "sf_column")
+	sf_column_loc = match(sf_column, names(.data))
+
+	if (length(sf_column_loc) != 1 || is.na(sf_column_loc))
+		stop("internal error: can't find sf column") # nocov
+
+	agr = st_agr(.data)
+	agr_loc = match(names(agr), names(.data))
+
+	if (anyNA(agr_loc))
+		stop("internal error: can't find `agr` columns") # nocov
+
+	vars_loc = loc[loc %in% agr_loc]
+	names(agr)[vars_loc] = names(vars_loc)
+
+	sf_column_loc_loc = match(sf_column_loc, loc)
+	if (!is.na(sf_column_loc_loc))
+		sf_column = names(loc[sf_column_loc_loc])
+
+	ret = .data
+	class(ret) = setdiff(class(ret), "sf")
+	names(ret)[loc] = names(loc)
+
+	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
 #' @name tidyverse
