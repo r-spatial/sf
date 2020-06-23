@@ -199,7 +199,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 #' @param warn logical; if \code{TRUE}, warn if attributes are assigned to sub-geometries
 #' @param do_split logical; if \code{TRUE}, allow splitting of geometries in sub-geometries
 #' @export
-#' @details the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf]{aggregate} or \link[sf]{summarise}.
+#' @details the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf:aggregate.sf]{aggregate} or \link[sf:tidyverse]{summarise}.
 st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 	geom = st_cast(st_geometry(x), to, group_or_split = do_split)
 	crs = st_crs(x)

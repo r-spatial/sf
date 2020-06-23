@@ -3,7 +3,7 @@ sgbp = function(x, predicate, region.id, ncol) {
 		predicate = predicate,
 		region.id = region.id,
 		ncol = ncol,
-		class = "sgbp")
+		class = c("sgbp", "list"))
 }
 
 #' Methods for dealing with sparse geometry binary predicate lists

@@ -7,7 +7,7 @@
 #' @param y ignored
 #' @param ... further specifications, see \link{plot_sf} and \link{plot} and details.
 #' @param main title for plot (\code{NULL} to remove)
-#' @param pal palette function, similar to \link[grDevices]{rainbow}, or palette values; if omitted, \code{sf.colors} is used
+#' @param pal palette function, similar to \link{rainbow}, or palette values; if omitted, \code{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
@@ -251,7 +251,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				if (length(main) && inherits(x[[main]], "units"))
 					main = make_unit_label(main, x[[main]])
 			}
-			localTitle <- function(..., col, bg, pch, cex, lty, lwd, axes, type, bgMap,
+			localTitle <- function(..., extent, col, bg, pch, cex, lty, lwd, axes, type, bgMap,
 					border, graticule, xlim, ylim, asp, bgc, xaxs, yaxs, lab, setParUsrBB,
 					expandBB, col_graticule, at, lon, lat, crs, datum, ndiscr, margin) # absorb
 				title(...)

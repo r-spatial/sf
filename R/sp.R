@@ -207,7 +207,7 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g.
 #' `GEOMETRY` objects with a mix of `POLYGON` and `MULTIPOLYGON` are cast to `MULTIPOLYGON`.
 #' @param IDs character vector with IDs for the `Spatial*` geometries
-#' @details [sp][sp::sp] supports three dimensions for `POINT` and `MULTIPOINT` (`SpatialPoint*`).
+#' @details Package \code{sp} supports three dimensions for `POINT` and `MULTIPOINT` (`SpatialPoint*`).
 #' Other geometries must be two-dimensional (`XY`). Dimensions can be dropped using
 #' [st_zm()] with `what = "M"` or `what = "ZM"`.
 #'
