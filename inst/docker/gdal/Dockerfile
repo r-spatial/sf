@@ -61,9 +61,9 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libtiff5-dev
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-7.0.1RC1.tar.gz 
-RUN tar zxvf proj-7.0.1RC1.tar.gz
-RUN cd proj-7.0.1 \
+RUN wget http://download.osgeo.org/proj/proj-7.1.0RC1.tar.gz
+RUN tar zxvf proj-7.1.0RC1.tar.gz
+RUN cd proj-7.1.0 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -73,21 +73,18 @@ RUN cd proj-7.0.1 \
   && cd ../.. \
   && ldconfig
 
-# install proj-datumgrid:
-RUN cd /usr/local/share/proj \
-  && wget http://download.osgeo.org/proj/proj-datumgrid-latest.zip \
-  && unzip -o proj-datumgrid*zip \
-  && rm proj-datumgrid*zip \
-  && wget https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip \
-  && unzip -o proj-datumgrid*zip \
-  && rm proj-datumgrid*zip \
-  && cd -
+# install proj-data:
+#RUN cd /usr/local/share/proj \
+#  && wget http://download.osgeo.org/proj/proj-data-1.1RC1.zip \
+#  && unzip -o proj-data*zip \
+#  && rm proj-data*zip \
+#  && cd -
 
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
 ENV GDAL_VERSION 3.1.0
-ENV GDAL_VERSION_NAME 3.1.0rc2
+ENV GDAL_VERSION_NAME 3.1.0
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \

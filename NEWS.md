@@ -1,6 +1,10 @@
-# version 0.9-5
+# verison 1.0-0
 
 * libs2 support for geometry predicates, transformers, nearest point/feature
+
+# version 0.9-5
+
+* proj units query adjusted to PROJ 7.1.0 release; #1434
 
 # version 0.9-4
 

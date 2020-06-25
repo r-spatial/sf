@@ -77,7 +77,11 @@ The \code{st_transform} method for \code{sfg} objects assumes that the CRS of th
 
 \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 
-PROJ >= 6 does not provide option \code{type = "datums"}. PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
+for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
+PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
+
+for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter} 
+variable as numeric, previous versions return a character vector containing a numeric expression.
 
 For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
 }

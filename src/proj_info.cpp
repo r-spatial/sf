@@ -70,6 +70,32 @@ Rcpp::List CPL_proj_info(int type) {
 			ans.attr("names") = Rcpp::CharacterVector::create("id", "to_meter",
 				"name");
 			int n = 0;
+#if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
+			PROJ_UNIT_INFO** units;
+			units = proj_get_units_from_database(nullptr, nullptr, "linear", false, nullptr);
+			for (int i = 0; units && units[i]; i++) {
+				if (units[i]->proj_short_name) 
+					n++;
+			}
+			Rcpp::CharacterVector ans0(n);
+			Rcpp::NumericVector ans1(n);
+			Rcpp::CharacterVector ans2(n);
+			int item = 0;
+			for (int i = 0; units && units[i]; i++) {
+				if (units[i]->proj_short_name) {
+					ans0[item] = units[i]->proj_short_name;
+					ans1[item] = units[i]->conv_factor;
+					ans2[item] = units[i]->name;
+					item++;
+				}
+				if (item >= n)
+					break;
+			}
+			proj_unit_list_destroy(units);
+			ans(0) = ans0;
+			ans(1) = ans1;
+			ans(2) = ans2;
+#else
 			const struct PJ_UNITS *lu;
 			for (lu = proj_list_units(); lu->id ; ++lu) 
 				n++;
@@ -86,6 +112,7 @@ Rcpp::List CPL_proj_info(int type) {
 			ans(0) = ans0;
 			ans(1) = ans1;
 			ans(2) = ans2;
+#endif
 			ret = ans;
 		} break;
 		case 4: {
