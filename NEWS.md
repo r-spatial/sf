@@ -1,3 +1,7 @@
+# version 0.9-5
+
+* proj units query adjusted to PROJ 7.1.0 release; #1434
+
 # version 0.9-4
 
 * empty geom generators take care of XYZ etc dim; #1400
