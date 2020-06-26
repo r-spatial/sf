@@ -30,6 +30,7 @@ jobs:
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       CRAN: ${{ matrix.config.cran }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       cache-version: v1
 
     steps:
