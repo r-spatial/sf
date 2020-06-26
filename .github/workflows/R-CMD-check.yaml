@@ -20,19 +20,20 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: windows-latest, r: '3.6'}
-          - {os: macOS-latest, r: '3.6', args: '--install-args=\"--configure-args=--with-proj-lib=/usr/local/lib/\"", "--ignore-vignettes', build_args: "--no-build-vignettes"}
-          - {os: macOS-latest, r: 'devel', args: '--install-args=\"--configure-args=--with-proj-lib=/usr/local/lib/\"", "--ignore-vignettes', build_args: "--no-build-vignettes"}
-          - {os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          # - {os: windows-latest, r: 'release'}
+          - {os: macOS-latest, r: 'release'}
+          - {os: macOS-latest, r: 'devel'}
+          - {os: ubuntu-16.04, r: 'oldrel', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: 'release', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
 #         - {os: ubuntu-latest, r: 'release'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       CRAN: ${{ matrix.config.cran }}
+      cache-version: v1
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
         with:
@@ -43,21 +44,9 @@ jobs:
       - name: Brew and macOS config
         if: runner.os == 'macOS'
         run: |
-          brew install pkg-config
-          brew install udunits
-          brew install gdal
-          cat <<EOT >> .Renviron
-          PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
-          PROJ_LIB=/usr/local/opt/proj/share/proj/
-          # for installing XML package from source
-          XML_CONFIG=/usr/local/opt/libxml2/bin/xml2-config
-          EOT
-          cat <<EOT >> .Rprofile
-          config_args <- c("sf" = "--with-proj-lib=/usr/local/lib/", "rgdal" = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
-          r <- getOption("repos")
-          r["CRAN"] <- "https://cran.rstudio.com"
-          options(configure.args = config_args, repos = r)
-          EOT
+          brew install pkg-config \
+            udunits \
+            gdal
 
       - name: Query dependencies
         run: |
@@ -70,8 +59,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
+          key: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-r-${{ matrix.config.r }}-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -91,7 +80,6 @@ jobs:
             libgeos-dev \
             libproj-dev
 
-
       - name: Install dependencies
         run: |
           library(remotes)
@@ -101,10 +89,9 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      - name: Install rgdal with configure
+      - name: Install rgdal from source
         if: runner.os == 'macOS'
-        run: |
-          install.packages("rgdal", type = "source", configure.args = "--with-proj-lib=/usr/local/lib/ --with-proj-include=/usr/local/include/")
+        run: install.packages("rgdal", type = "source")
         shell: Rscript {0}
 
       - name: Check
