@@ -114,6 +114,55 @@ Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g
 
 Another option, for advanced users, is to install dependencies from source; see e.g. an older [travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints.
 
+#### Ubuntu 20.04 LTS
+
+Find, where the openssl.cnf file by running from your command line:
+
+```sh
+openssl version -d
+```
+
+```sh
+sudo nano /usr/lib/ssl/openssl.cnf
+```
+
+Modify the config file as follows: 
+
+- add at the begining:
+
+```sh
+openssl_conf = default_conf
+```
+
+- add at the end:
+
+```sh
+[ default_conf ]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+
+system_default = ssl_default_sect
+
+[ssl_default_sect]
+MinProtocol = TLSv1.2
+CipherString = DEFAULT:@SECLEVEL=1
+```
+
+In RStudio install the following packages:
+
+```r
+install.packages("e1071")
+install.packages("classInt")
+install.packages("units")
+```
+
+Finally, install sf:
+
+```r
+install.packages("sf")
+```
+
 #### Fedora
 The following command installs all required dependencies:
 ```sh
