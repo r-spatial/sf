@@ -1,6 +1,8 @@
-# verison 1.0-0
+# version 1.0-0
 
-* libs2 support for geometry predicates, transformers, nearest point/feature
+* geometry predicates and transformers gain an ... argument to specify `s2::s2_options()`
+
+* s2 support for geometry predicates, transformers, nearest point/feature
 
 # version 0.9-5
 

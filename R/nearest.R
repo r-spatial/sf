@@ -38,7 +38,8 @@ st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 #' @name st_nearest_points
 st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x))) {
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
 		#message_longlat("st_nearest_points")
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
@@ -49,8 +50,11 @@ st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 			else
 				do.call(c, lapply(x_s2, s2::s2_closest_point, y_s2))
 		st_as_sfc(ret, crs = st_crs(x))
-	} else
+	} else {
+		if (longlat)
+			message_longlat("st_nearest_points")
 		st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
+	}
 }
  
 #' @export
@@ -105,12 +109,16 @@ st_nearest_points.sf = function(x, y, ...) {
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x))) {
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
 		x = st_as_s2(x)
 		y = st_as_s2(st_sfc(st_geometrycollection(st_geometry(y)), crs = st_crs(x)))
 		s2::s2_closest_feature(x, y)
-	} else
+	} else {
+		if (longlat)
+			message_longlat("st_nearest_points")
 		CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+	}
 }
