@@ -219,3 +219,27 @@ test_that("can rename geometry column with `select()`", {
 	out = dplyr::select(sf, y)
 	expect_identical(out, st_sf(geo = sf$geo, y = sf$y))
 })
+
+test_that("can rename geometry column with `rename()` (#1431)", {
+	geo_pt = st_sfc(st_point())
+	geo_ln = st_sfc(st_linestring())
+	sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+
+	expect_identical(
+		dplyr::rename(sf, y = x),
+		st_sf(y = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+	)
+
+	expect_identical(
+		dplyr::rename(sf, foo = geo1),
+		st_sf(x = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+	)
+	expect_identical(
+		dplyr::rename(sf, foo = geo1, y = x),
+		st_sf(y = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+	)
+	expect_identical(
+		dplyr::rename(sf, foo = geo1, y = x, bar = geo2),
+		st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
+	)
+})

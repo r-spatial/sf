@@ -8,6 +8,8 @@
 
 # version 0.9-5
 
+* `dplyr::rename()` now preserves the active geometry column even when it is renamed; #1431
+
 * proj units query adjusted to PROJ 7.1.0 release; #1434
 
 # version 0.9-4
