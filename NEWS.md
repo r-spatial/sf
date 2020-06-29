@@ -1,5 +1,7 @@
 # version 1.0-0
 
+* add `sf_use_s2()`, to toggle using the s2 package for spherical geometry
+
 * geometry predicates and transformers gain an ... argument to specify `s2::s2_options()`
 
 * s2 support for geometry predicates, transformers, nearest point/feature
