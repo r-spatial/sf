@@ -2,6 +2,7 @@
 % Please edit documentation in R/s2.R
 \name{s2}
 \alias{s2}
+\alias{sf_use_s2}
 \alias{st_as_sfc.wk_wkb}
 \alias{st_as_sfc.s2_geography}
 \alias{st_as_s2}
@@ -9,6 +10,8 @@
 \alias{st_as_s2.sfc}
 \title{functions for spherical geometry, using s2 package}
 \usage{
+sf_use_s2(use_s2)
+
 \method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
 
 \method{st_as_sfc}{s2_geography}(
@@ -25,6 +28,9 @@ st_as_s2(x, ...)
 \method{st_as_s2}{sfc}(x, ..., oriented = FALSE)
 }
 \arguments{
+\item{use_s2}{logical; if \code{TRUE}, use the s2 spherical geometry package
+for geographical coordinate operations}
+
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{...}{passed on}
@@ -37,6 +43,10 @@ st_as_s2(x, ...)
 cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}
+}
+\value{
+\code{sf_use_s2} returns the value of this variable before (re)setting it, 
+invisibly if \code{use_s2} is not missing.
 }
 \description{
 functions for spherical geometry, using the s2 package based on the google s2geometry.io library

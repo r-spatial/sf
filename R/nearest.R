@@ -110,7 +110,7 @@ st_nearest_feature = function(x, y) {
 			stop("package s2 required, please install it first")
 		x = st_as_s2(x)
 		y = st_as_s2(st_sfc(st_geometrycollection(st_geometry(y)), crs = st_crs(x)))
-		s2::s2_nearest_feature(x, y)
+		s2::s2_closest_feature(x, y)
 	} else
 		CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
 }

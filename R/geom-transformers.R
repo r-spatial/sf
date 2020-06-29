@@ -551,30 +551,31 @@ geos_op2_df = function(x, y, geoms) {
 
 # after checking identical crs,
 # call geos_op2 function op on x and y:
-geos_op2_geom = function(op, x, y, s2_model = "CLOSED") {
+geos_op2_geom = function(op, x, y, s2_model = "CLOSED", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
+	x = st_geometry(x)
+	y = st_geometry(y)
 	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && s2_model >= 0) {
+	if (longlat && sf_use_s2() && s2_model >= 0) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
 		fn = switch(op, intersection = s2::s2_intersection, 
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
-		x = st_geometry(x)
-		y = st_geometry(y)
 		s2x = st_as_s2(x)
 		s2y = st_as_s2(y)
-		lst = structure(unlist(lapply(s2x, fn, s2y, model = s2_model), recursive = FALSE),
-			class = class(s2x))
+		# to be optimized -- this doesn't index on y:
+		lst = structure(unlist(lapply(s2x, fn, s2y, s2::s2_options(model = s2_model, ...)),
+			recursive = FALSE), class = class(s2x))
 		e = s2::s2_is_empty(lst)
 		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
 		structure(st_as_sfc(lst[!e], crs = st_crs(x)), idx = idx[!e,,drop = FALSE])
 	} else {
 		if (longlat)
 			message_longlat(paste0("st_", op))
-		st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
+		st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
 	}
 }
 
@@ -592,10 +593,11 @@ get_first_sfg = function(x) {
 #' @name geos_binary_ops
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param ... arguments passed on to \link[s2]{s2_options}
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 #' @note To find whether pairs of simple feature geometries intersect, use
@@ -625,29 +627,31 @@ get_first_sfg = function(x) {
 #' i = st_intersection(sf) # all intersections
 #' plot(i["n.overlaps"])
 #' summary(i$n.overlaps - lengths(i$origins))
-st_intersection = function(x, y) UseMethod("st_intersection")
+st_intersection = function(x, y, ...) UseMethod("st_intersection")
 
 #' @export
-st_intersection.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("intersection", x, y))
+st_intersection.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("intersection", x, y, ...))
 
 #' @name geos_binary_ops
 #' @export
 #' @details When called with missing \code{y}, the \code{sfc} method for \code{st_intersection} returns all non-empty intersections of the geometries of \code{x}; an attribute \code{idx} contains a list-column with the indexes of contributing geometries.
-st_intersection.sfc = function(x, y) {
+st_intersection.sfc = function(x, y, ...) {
 	if (missing(y)) {
+		if (isTRUE(st_is_longlat(x)))
+			message_longlat("st_intersection")
 		ret = CPL_nary_intersection(x)
 		structure(st_sfc(ret), idx = attr(ret, "idx"))
 	} else
-		geos_op2_geom("intersection", x, y)
+		geos_op2_geom("intersection", x, y, ...)
 }
 
 #' @name geos_binary_ops
 #' @export
 #' @details when called with a missing \code{y}, the \code{sf} method for \code{st_intersection} returns an \code{sf} object with attributes taken from the contributing feature with lowest index; two fields are added: \code{n.overlaps} with the number of overlapping features in \code{x}, and a list-column \code{origins} with indexes of all overlapping features.
-st_intersection.sf = function(x, y) {
+st_intersection.sf = function(x, y, ...) {
 	if (missing(y)) {
-		geom = st_intersection(st_geometry(x))
+		geom = st_intersection(st_geometry(x), ...)
 		idx = attr(geom, "idx")
 		i = sapply(idx, function(i) i[1])
 		sf_column = attr(x, "sf_column")
@@ -666,11 +670,11 @@ st_intersection.sf = function(x, y) {
 #' @examples
 #' # A helper function that erases all of y from x:
 #' st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
-st_difference = function(x, y) UseMethod("st_difference")
+st_difference = function(x, y, ...) UseMethod("st_difference")
 
 #' @export
-st_difference.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("difference", x, y))
+st_difference.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("difference", x, y, ...))
 
 #' @name geos_binary_ops
 #' @export
@@ -680,16 +684,18 @@ st_difference.sfg = function(x, y)
 #' or contained fully inside geometries with higher priority are removed entirely.
 #' The \code{st_difference.sfc} method with a single argument returns an object with
 #' an \code{"idx"} attribute with the orginal index for returned geometries.
-st_difference.sfc = function(x, y) {
+st_difference.sfc = function(x, y, ...) {
 	if (missing(y)) {
+		if (isTRUE(st_is_longlat(x)))
+			message_longlat("st_difference")
 		ret = CPL_nary_difference(x)
 		structure(st_sfc(ret), ret = attr(ret, "idx"))
 	} else
-		geos_op2_geom("difference", x, y)
+		geos_op2_geom("difference", x, y, ...)
 }
 
 #' @export
-st_difference.sf = function(x, y) {
+st_difference.sf = function(x, y, ...) {
 	if (missing(y)) {
 		geom = st_difference(st_geometry(x))
 		sf_column = attr(x, "sf_column")
@@ -703,19 +709,19 @@ st_difference.sf = function(x, y) {
 
 #' @name geos_binary_ops
 #' @export
-st_sym_difference = function(x, y) UseMethod("st_sym_difference")
+st_sym_difference = function(x, y, ...) UseMethod("st_sym_difference")
 
 #' @export
-st_sym_difference.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("sym_difference", x, y))
+st_sym_difference.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("sym_difference", x, y, ...))
 
 #' @export
-st_sym_difference.sfc = function(x, y)
-	geos_op2_geom("sym_difference", x, y)
+st_sym_difference.sfc = function(x, y, ...)
+	geos_op2_geom("sym_difference", x, y, ...)
 
 #' @export
-st_sym_difference.sf = function(x, y)
-	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y))
+st_sym_difference.sf = function(x, y, ...)
+	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y, ...))
 
 #' @name geos_binary_ops
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}

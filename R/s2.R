@@ -2,6 +2,22 @@
 # and the r-spatial/s2 package:
 # https://github.com/r-spatial/s2
 
+#' @export
+#' @param use_s2 logical; if \code{TRUE}, use the s2 spherical geometry package
+#' for geographical coordinate operations
+#' @name s2
+#' @return \code{sf_use_s2} returns the value of this variable before (re)setting it, 
+#' invisibly if \code{use_s2} is not missing.
+sf_use_s2 = function(use_s2) {
+	ret_val = get(".sf.use_s2", envir = .sf_cache)
+	if (! missing(use_s2)) {
+		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
+		assign(".sf.use_s2", use_s2, envir=.sf_cache)
+		invisible(ret_val)
+	} else
+		ret_val
+}
+
 # from s2 to sf:
 #' @export
 #' @param crs coordinate reference system; object of class \code{crs}

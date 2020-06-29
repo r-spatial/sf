@@ -57,7 +57,7 @@ st_is_within_distance(x, y, dist, sparse = TRUE, ...)
 
 \item{sparse}{logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.}
 
-\item{...}{ignored}
+\item{...}{passed on to \link[s2]{s2_options}}
 
 \item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
 
