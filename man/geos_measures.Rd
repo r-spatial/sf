@@ -10,9 +10,9 @@
 \usage{
 st_area(x, ...)
 
-\method{st_area}{sfc}(x, ..., use_lwgeom = FALSE)
+\method{st_area}{sfc}(x, ...)
 
-st_length(x, ..., use_lwgeom = FALSE)
+st_length(x, ...)
 
 st_distance(
   x,
@@ -22,16 +22,13 @@ st_distance(
   by_element = FALSE,
   which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"),
   par = 0,
-  tolerance = 0,
-  use_lwgeom = FALSE
+  tolerance = 0
 )
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{...}{ignored}
-
-\item{use_lwgeom}{logical; if \code{TRUE}, use liblwgeom functions, else use \code{s2}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
