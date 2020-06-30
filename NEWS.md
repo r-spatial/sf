@@ -1,5 +1,7 @@
 # version 0.9-5
 
+* `dplyr::select()` now ensures the geometry column sticks to the back rather than the front of the data frame; #1425
+
 * `dplyr::rename()` now preserves the active geometry column even when it is renamed; #1431
 
 * proj units query adjusted to PROJ 7.1.0 release; #1434
