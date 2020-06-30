@@ -140,8 +140,8 @@ select.sf <- function(.data, ...) {
 	sf_column_loc_loc = match(sf_column_loc, loc)
 	if (is.na(sf_column_loc_loc)) {
 		# The sf column was subsetted out, select it back in
-		loc = c(sf_column_loc, loc)
-		names(loc)[[1]] = sf_column
+		loc = c(loc, sf_column_loc)
+		names(loc)[[length(loc)]] = sf_column
 	} else {
 		# The sf column was not subsetted out but it might have been renamed
 		sf_column = names(loc[sf_column_loc_loc])
