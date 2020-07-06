@@ -41,7 +41,7 @@ test_that("geos ops give warnings and errors on longlat", {
 
 	#expect_message(st_intersects(x,y))
 	#expect_message(st_disjoint(x,y))
-	expect_message(st_touches(x,y))
+	#expect_message(st_touches(x,y))
 	expect_message(st_crosses(x,y))
 	#expect_message(st_within(x,y))
 	#expect_message(st_contains(x,y))

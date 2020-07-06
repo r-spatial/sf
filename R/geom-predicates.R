@@ -22,7 +22,14 @@ is_symmetric = function(operation, pattern) {
 		isTRUE(operation %in% c("intersects", "touches", "overlaps", "disjoint", "equals"))
 }
 
-# binary, interfaced through GEOS:
+# binary, interfaced through GEOS or S2:
+
+# [1] X "s2_contains_matrix"    X "s2_covered_by_matrix"
+# [3] X "s2_covers_matrix"      X "s2_disjoint_matrix"
+# [5] "s2_distance_matrix"      "s2_dwithin_matrix"
+# [7] X "s2_equals_matrix"        X "s2_intersects_matrix"
+# [9] "s2_max_distance_matrix"  "s2_may_intersect_matrix"
+#[11] X "s2_touches_matrix"       X "s2_within_matrix"
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
@@ -35,15 +42,11 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2() && s2_model >= 0 && op %in% c("intersects", "contains", "within", 
-			"covers", "covered_by")) {
+			"covers", "covered_by", "disjoint", "equals", "touches")) {
 		if (!requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		s2y = st_as_s2(y)
-		# contains + s2_model = "CLOSED" gives SFA's "covers"
-		fn = get(paste0("s2_", op), envir = getNamespace("s2"))
-		# to be optimized: this doesn't build an index on y
-		lst = lapply(st_as_s2(x), function(z) 
-			which(fn(z, s2y, s2::s2_options(model = s2_model, ...))))
+		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
+		lst = fn(st_as_s2(x), st_as_s2(y), s2::s2_options(model = s2_model, ...)) # call function
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
