@@ -73,5 +73,9 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 st_as_s2.sfc = function(x, ..., oriented = FALSE) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
+	if (length(x) && nchar(class(x[[1]])[1]) > 2) { # Z, M, ZM:
+		message("st_as_s2(): dropping Z and/or M coordinate")
+		x = st_zm(x)
+	}
 	s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
 }
