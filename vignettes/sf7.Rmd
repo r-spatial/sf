@@ -158,8 +158,12 @@ s2_cap(fiji)
 s2_lat_lng_rect(c(fiji,aa))
 ```
 
+The cap reports a bounding cap (circle) as a mid point (lat, lng) and
+an angle around this point. The rect reports the `_lo` and `_hi` bounds
+of `lat` and `lng`, as well as its center (`_cnt`) values.
 Note that for Fiji, `lng_lo` being higher than `lng_hi` indicates that
-the region covers (crosses) the antimeridian.
+the region covers (crosses) the antimeridian; the `lng_cnt` values is
+not the mean of `lng_lo` and `lng_hi`.
 
 # Switching between S2 and GEOS
 
