@@ -23,7 +23,7 @@ sf_use_s2 = function(use_s2) {
 #' @param crs coordinate reference system; object of class \code{crs}
 #' @param ... passed on
 #' @name s2
-st_as_sfc.wk_wkb = function(x, ..., crs = NA_crs_) {
+st_as_sfc.wk_wkb = function(x, ..., crs = st_crs(4326)) {
 	class(x) = "WKB"
 	st_set_crs(st_as_sfc(x, ...), crs)
 }

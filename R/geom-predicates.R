@@ -26,7 +26,7 @@ is_symmetric = function(operation, pattern) {
 
 # [1] X "s2_contains_matrix"    X "s2_covered_by_matrix"
 # [3] X "s2_covers_matrix"      X "s2_disjoint_matrix"
-# [5] "s2_distance_matrix"      "s2_dwithin_matrix"
+# [5] X "s2_distance_matrix"      "s2_dwithin_matrix"
 # [7] X "s2_equals_matrix"        X "s2_intersects_matrix"
 # [9] "s2_max_distance_matrix"  "s2_may_intersect_matrix"
 #[11] X "s2_touches_matrix"       X "s2_within_matrix"

@@ -146,15 +146,14 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 	x = st_geometry(x)
 	y = st_geometry(y)
 
-	if (isTRUE(st_is_longlat(x))) {
+	if (isTRUE(st_is_longlat(x)) && which == "Great Circle") {
 		if (sf_use_s2()) {
 			if (! requireNamespace("s2", quietly = TRUE))
 				stop("package s2 required, please install it first")
 			ret = if (by_element)
 					s2::s2_distance(st_as_s2(x), st_as_s2(y), ...)
 				else
-					structure(sapply(st_as_s2(y), s2::s2_distance, st_as_s2(x), ...),
-						dim = c(length(x), length(y)))
+					s2::s2_distance_matrix(st_as_s2(x), st_as_s2(y), ...)
 			set_units(ret, "m", mode = "standard")
 		} else { # lwgeom:
 			if (! requireNamespace("lwgeom", quietly = TRUE))
