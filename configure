@@ -3860,7 +3860,7 @@ $as_echo "no" >&6; }
 $as_echo "yes" >&6; }
   fi
   if test "${proj6ok}" = no; then
-     as_fn_error $? "libproj not found in standard or given locations." "$LINENO" 5
+     as_fn_error $? "libproj or sqlite3 not found in standard or given locations." "$LINENO" 5
   fi
 
 cat > proj_conf_test.c <<_EOCONF
