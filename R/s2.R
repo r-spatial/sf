@@ -32,7 +32,8 @@ st_as_sfc.wk_wkb = function(x, ..., crs = st_crs(4326)) {
 #' @name s2
 #' @export
 #' @param endian integer; 0 or 1: defaults to the endian of the native machine
-st_as_sfc.s2_geography = function(x, ..., crs = NA_crs_, endian = match(.Platform$endian, c("big", "little")) - 1L) {
+st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
+		endian = match(.Platform$endian, c("big", "little")) - 1L) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
 	st_cast(st_as_sfc(s2::s2_as_binary(x, endian = endian), ..., crs = crs))

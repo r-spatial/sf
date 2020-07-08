@@ -109,6 +109,21 @@ nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
 s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # no second correction needed here:
 ```
 
+Here is an example where the oceans are computed as the difference
+from the full polygon,
+```{r}
+as_s2_geography(TRUE)
+```
+
+and the countries, and shown in an orthographic projection:
+```{r}
+co = s2_data_countries()
+oc = s2_difference(as_s2_geography(TRUE), s2_union_agg(co)) # oceans
+b = s2_buffer_cells(as_s2_geography("POINT(-30 52)"), 9800000) # visible half
+i = s2_intersection(b, oc) # visible ocean
+plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
+```
+
 ## Half-closed polygon boundaries 
 
 Polygons in `s2geometry` can be
