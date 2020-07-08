@@ -120,7 +120,11 @@ st_crs.CRS = function(x, ...) {
 		st_crs(x@projargs)
 	else {
 		ret = st_crs(comment(x))
-		ret$input = ret$Name
+		name = ret$Name
+		ret$input = if (name == "unknown")
+				x@projargs
+			else
+				name
 		ret
 	}
 }
