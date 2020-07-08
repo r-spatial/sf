@@ -12,12 +12,12 @@
 \usage{
 sf_use_s2(use_s2)
 
-\method{st_as_sfc}{wk_wkb}(x, ..., crs = NA_crs_)
+\method{st_as_sfc}{wk_wkb}(x, ..., crs = st_crs(4326))
 
 \method{st_as_sfc}{s2_geography}(
   x,
   ...,
-  crs = NA_crs_,
+  crs = st_crs(4326),
   endian = match(.Platform$endian, c("big", "little")) - 1L
 )
 

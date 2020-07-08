@@ -152,16 +152,15 @@ RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 RUN Rscript -e 'install.packages(c("XML"))'
 RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview"))'
 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN (cd sf; git pull)
+RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
-#RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-#RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-#RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
-#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
-
-#RUN (cd sf; git pull)
-#RUN R CMD build --no-build-vignettes --no-manual sf
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-
-CMD ["/bin/bash"]
+RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
+RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
+RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
+RUN echo echo
+RUN (cd stars; git pull)
+RUN R CMD build --no-manual stars
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
