@@ -7,6 +7,8 @@
 #' @param ... ignored
 #' @seealso \link{st_nearest_feature} for finding the nearest feature
 #' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
+#' @details in case \code{x} lies inside \code{y}, when using S2, the end points 
+#' are on polygon boundaries, when using GEOS the end point are identical to \code{x}.
 #' @examples
 #' r = sqrt(2)/10
 #' pt1 = st_point(c(.1,.1))
@@ -46,9 +48,9 @@ st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 		x_s2 = st_as_s2(x)
 		y_s2 = st_as_s2(y)
 		ret = if (pairwise)
-				s2::s2_closest_point(x_s2, y_s2)
+				s2::s2_minimum_clearance_line_between(x_s2, y_s2)
 			else
-				do.call(c, lapply(x_s2, s2::s2_closest_point, y_s2))
+				do.call(c, lapply(x_s2, s2::s2_minimum_clearance_line_between, y_s2))
 		st_as_sfc(ret, crs = st_crs(x))
 	} else {
 		if (longlat)
@@ -113,9 +115,7 @@ st_nearest_feature = function(x, y) {
 	if (longlat && sf_use_s2()) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		x = st_as_s2(x)
-		y = st_as_s2(st_sfc(st_geometrycollection(st_geometry(y)), crs = st_crs(x)))
-		s2::s2_closest_feature(x, y)
+		s2::s2_closest_feature(st_as_s2(x), st_as_s2(y))
 	} else {
 		if (longlat)
 			message_longlat("st_nearest_points")

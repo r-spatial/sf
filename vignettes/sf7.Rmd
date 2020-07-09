@@ -130,7 +130,7 @@ plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue
 Polygons in `s2geometry` can be
 * CLOSED: they contain their boundaries, and a point on the boundary intersects with the polygon
 * OPEN: they do not contain their boundaries, points on the boundary do not intersect with the polygon
-* HALF-CLOSED: they contain part of their boundaries, but no boundary of non-overlapping polygons is contained by more than one polygon.
+* SEMI-OPEN: they contain part of their boundaries, but no boundary of non-overlapping polygons is contained by more than one polygon.
 
 In principle the DE9-IM model deals with interior, boundary and
 exterior, and intersection predicates are sensitive to this (the
@@ -140,7 +140,7 @@ polygons form a polygon _coverage_ (no overlaps, but mostly common
 boundaries). This means that if we would count points by polygon,
 and some points fall _on_ shared polygon boundaries, we either miss
 them (_contains_) or we count them double (_covers_); this leads to
-bias or need for post-processing. Using HALF-CLOSED non-overlapping
+bias or need for post-processing. Using SEMI-OPEN non-overlapping
 polygons guarantees that every point is assigned to _maximally_
 one polygon in an intersection. This corresponds to e.g. how this
 would be handled in a grid (raster) coverage, where every grid cell
@@ -150,10 +150,10 @@ left sides.
 ```{r eval=EVAL}
 a = as_s2_geography("POINT(0 0)")
 b = as_s2_geography("POLYGON((0 0,1 0,1 1,0 1,0 0))")
-s2_intersects(a, b, s2_options(model = 0)) # OPEN
-s2_intersects(a, b, s2_options(model = 2)) # CLOSED
-s2_intersects(a, b, s2_options(model = 1)) # HALF-CLOSED: a toss
-s2_intersects(a, b) # default: HALF-CLOSED
+s2_intersects(a, b, s2_options(model = "open")) 
+s2_intersects(a, b, s2_options(model = "closed"))
+s2_intersects(a, b, s2_options(model = "semi-open")) # a toss
+s2_intersects(a, b) # default: semi-open
 ```
 
 ## Cap, enclosing rectangle
@@ -170,8 +170,8 @@ S2 has two alternatives: the cap and the `lat_lng_rect`:
 ```{r eval=EVAL}
 fiji = s2_data_countries("Fiji")
 aa = s2_data_countries("Antarctica")
-s2_cap(fiji)
-s2_lat_lng_rect(c(fiji,aa))
+s2_bounds_cap(fiji)
+s2_bounds_rect(c(fiji,aa))
 ```
 
 The cap reports a bounding cap (circle) as a mid point (lat, lng) and

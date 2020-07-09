@@ -33,15 +33,13 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, s2_model = "CLOSED", ...) {
+		sparse = TRUE, prepared = FALSE, s2_model = "closed", ...) {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
 		stopifnot(st_crs(x) == st_crs(y))
-	if (!is.numeric(s2_model))
-		s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2() && s2_model >= 0 && op %in% c("intersects", "contains", "within", 
+	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within", 
 			"covers", "covered_by", "disjoint", "equals", "touches")) {
 		if (!requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
@@ -189,7 +187,7 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 #' "OPEN", "SEMI_OPEN", and "CLOSED"; see Details.
 #' @details for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
 #' @export
-st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "OPEN")
+st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "open")
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
 
 #' @name geos_binary_pred
@@ -218,13 +216,13 @@ st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...) {
 
 #' @name geos_binary_pred
 #' @export
-st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED")
+st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
 	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
 
 
 #' @name geos_binary_pred
 #' @export
-st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED")
+st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
 	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
 
 

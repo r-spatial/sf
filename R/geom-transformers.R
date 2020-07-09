@@ -190,13 +190,22 @@ st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 
 #' @export
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
-	if (isTRUE(st_is_longlat(x)))
-		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
-	stopifnot(mode(preserveTopology) == 'logical')
+	ll = isTRUE(st_is_longlat(x))
+	if (ll && sf_use_s2()) {
+		if (!missing(preserveTopology))
+			warning("argument preserveTopology is ignored")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		st_as_sfc(s2::s2_simplify(st_as_s2(x), dTolerance), crs = st_crs(x))
+	} else {
+		stopifnot(mode(preserveTopology) == 'logical')
+		if (ll)
+			warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
 
-	st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
-		preserveTopology = rep(preserveTopology, length.out = length(x)),
-		dTolerance = rep(dTolerance, length.out = length(x))))
+		st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
+			preserveTopology = rep(preserveTopology, length.out = length(x)),
+			dTolerance = rep(dTolerance, length.out = length(x))))
+	}
 }
 
 #' @export
@@ -551,7 +560,7 @@ geos_op2_df = function(x, y, geoms) {
 
 # after checking identical crs,
 # call geos_op2 function op on x and y:
-geos_op2_geom = function(op, x, y, s2_model = "CLOSED", ...) {
+geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
