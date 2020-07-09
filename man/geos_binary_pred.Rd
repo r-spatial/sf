@@ -27,7 +27,7 @@ st_crosses(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 st_within(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_contains(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "OPEN")
+st_contains(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "open")
 
 st_contains_properly(x, y, sparse = TRUE, prepared = TRUE, ...)
 
@@ -35,7 +35,7 @@ st_overlaps(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 st_equals(x, y, sparse = TRUE, prepared = FALSE, ...)
 
-st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "CLOSED")
+st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
 
 st_covered_by(
   x,
@@ -43,7 +43,7 @@ st_covered_by(
   sparse = TRUE,
   prepared = TRUE,
   ...,
-  s2_model = "CLOSED"
+  s2_model = "closed"
 )
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)

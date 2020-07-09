@@ -30,6 +30,10 @@ an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pa
 \description{
 get nearest points between pairs of geometries
 }
+\details{
+in case \code{x} lies inside \code{y}, when using S2, the end points 
+are on polygon boundaries, when using GEOS the end point are identical to \code{x}.
+}
 \examples{
 r = sqrt(2)/10
 pt1 = st_point(c(.1,.1))
