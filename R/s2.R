@@ -12,6 +12,12 @@ sf_use_s2 = function(use_s2) {
 	ret_val = get(".sf.use_s2", envir = .sf_cache)
 	if (! missing(use_s2)) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
+		if (use_s2) {
+			if (!requireNamespace("s2", quietly = TRUE))
+				stop("package s2 not available: install it first?")
+			if (utils::packageVersion("s2") <= "1.0.0")
+				stop("package s2 insufficient version (<= 1.0.0): install it first?")
+		}
 		assign(".sf.use_s2", use_s2, envir=.sf_cache)
 		invisible(ret_val)
 	} else

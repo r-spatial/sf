@@ -37,7 +37,7 @@ pathGrob <- NULL
 		}
 	}
 	load_gdal() # nocov end
-	assign(".sf.use_s2", TRUE, envir=.sf_cache)
+	assign(".sf.use_s2", FALSE, envir=.sf_cache)
 }
 
 .onUnload = function(libname, pkgname) {
