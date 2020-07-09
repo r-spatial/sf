@@ -60,14 +60,14 @@
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
 st_buffer = function(x, dist, nQuadSegs = 30,
-					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
+					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	UseMethod("st_buffer")
 
 #' @export
 st_buffer.sfg = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle, 
-		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide))
+		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide, ...))
 
 .process_style_opts = function(endCapStyle, joinStyle, mitreLimit, singleSide) {
 	styls = list(with_styles = FALSE, endCapStyle = NA, joinStyle = NA, mitreLimit = NA)
@@ -89,47 +89,59 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, 
-						 singleSide = FALSE) {
-	if (isTRUE(st_is_longlat(x))) {
-		warning("st_buffer does not correctly buffer longitude/latitude data")
+						 singleSide = FALSE, ...) {
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
+		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
+				!missing(mitreLimit) || !missing(singleSide))
+			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
 		if (inherits(dist, "units"))
-			units(dist) = as_units("arc_degrees")
-		else
-			message("dist is assumed to be in decimal degrees (arc_degrees).")
-	} else if (inherits(dist, "units")) {
-		if (is.na(st_crs(x)))
-			stop("x does not have a crs set: can't convert units")
-		if (is.null(st_crs(x)$units))
-			stop("x has a crs without units: can't convert units")
-		units(dist) = crs_parameters(st_crs(x))$ud_unit
+			units(dist) = as_units("m")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), drop_units(dist), ...), crs = st_crs(x))
+	} else {
+		if (longlat) {
+			warning("st_buffer does not correctly buffer longitude/latitude data")
+			if (inherits(dist, "units"))
+				units(dist) = as_units("arc_degrees")
+			else
+				message("dist is assumed to be in decimal degrees (arc_degrees).")
+		} else if (inherits(dist, "units")) {
+			if (is.na(st_crs(x)))
+				stop("x does not have a crs set: can't convert units")
+			if (is.null(st_crs(x)$units))
+				stop("x has a crs without units: can't convert units")
+			units(dist) = crs_parameters(st_crs(x))$ud_unit
+		}
+		dist = rep(dist, length.out = length(x))
+		nQ = rep(nQuadSegs, length.out = length(x))
+		styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit, singleSide)
+		if (styles$with_styles) {
+			endCapStyle = rep(styles$endCapStyle, length.out = length(x))
+			joinStyle = rep(styles$joinStyle, length.out = length(x))
+			mitreLimit = rep(styles$mitreLimit, length.out = length(x))
+			singleSide = rep(as.logical(singleSide), length.out = length(x))
+			if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
+				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
+			if (any(dist < 0) && any(st_dimension(x) < 1))
+				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
+	
+			st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
+				endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
+				singleside = singleSide))
+		} else
+			st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
 	}
-	dist = rep(dist, length.out = length(x))
-	nQ = rep(nQuadSegs, length.out = length(x))
-	styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit, singleSide)
-	if (styles$with_styles) {
-		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
-		joinStyle = rep(styles$joinStyle, length.out = length(x))
-		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
-		singleSide = rep(as.logical(singleSide), length.out = length(x))
-		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
-			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
-		if (any(dist < 0) && any(st_dimension(x) < 1))
-			stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
-
-		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
-			endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
-			singleside = singleSide))
-	} else
-		st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
 }
 
 #' @export
 st_buffer.sf = function(x, dist, nQuadSegs = 30,
 						endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
-						singleSide = FALSE) {
+						singleSide = FALSE, ...) {
 	st_set_geometry(x, st_buffer(st_geometry(x), dist, nQuadSegs,
 							   endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
-							   singleSide = singleSide))
+							   singleSide = singleSide, ...))
 }
 
 #' @name geos_unary
