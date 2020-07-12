@@ -97,7 +97,7 @@ st_make_grid = function(x,
 
 	ret = st_sfc(ret, crs = crs)
 
-	if (missing(x))
+	if (missing(x) || all(n == 1))
 		ret
 	else if (what != "polygons" || min(st_dimension(x)) < 2)
 		ret[x]

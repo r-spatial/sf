@@ -40,6 +40,7 @@ fi
 : ${CXX=${CXX11} ${CXX11STD}}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
+: ${CXXFLAGS=`"${RBIN}" CMD config CXXFLAGS`}
 : ${LDFLAGS=`"${RBIN}" CMD config LDFLAGS`}
 # AC_SUBST([CC],["clang"])
 # AC_SUBST([CXX],["clang++"])
@@ -433,7 +434,7 @@ _EOCONF]
     AC_MSG_RESULT(yes)
   fi
   if test "${proj6ok}" = no; then
-     AC_MSG_ERROR([libproj not found in standard or given locations.])
+     AC_MSG_ERROR([libproj or sqlite3 not found in standard or given locations.])
   fi
 
 [cat > proj_conf_test.c <<_EOCONF

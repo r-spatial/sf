@@ -10,7 +10,7 @@
 \alias{coerce,crs,CRS-method}
 \title{Methods to coerce simple features to \verb{Spatial*} and \code{Spatial*DataFrame} objects}
 \usage{
-as_Spatial(from, cast = TRUE, IDs = paste0("ID", 1:length(from)))
+as_Spatial(from, cast = TRUE, IDs = paste0("ID", seq_along(from)))
 }
 \arguments{
 \item{from}{object of class \code{sf}, \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING},

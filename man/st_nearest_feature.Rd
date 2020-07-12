@@ -12,7 +12,8 @@ st_nearest_feature(x, y)
 \item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 }
 \value{
-for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in \code{y}
+for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in set \code{y}; 
+empty geometries result in \code{NA} indexes
 }
 \description{
 get index of nearest feature

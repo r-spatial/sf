@@ -1,410 +1,3 @@
-# unary, interfaced through GEOS:
-
-#' Dimension, simplicity, validity or is_empty queries on simple feature geometries
-#' @name geos_query
-#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param NA_if_empty logical; if TRUE, return NA for empty geometries
-#' @return st_dimension returns a numeric vector with 0 for points, 1 for lines, 2 for surfaces, and, if \code{NA_if_empty} is \code{TRUE}, \code{NA} for empty geometries.
-#' @export
-#' @examples
-#' x = st_sfc(
-#' 	st_point(0:1),
-#' 	st_linestring(rbind(c(0,0),c(1,1))),
-#' 	st_polygon(list(rbind(c(0,0),c(1,0),c(0,1),c(0,0)))),
-#' 	st_multipoint(),
-#' 	st_linestring(),
-#' 	st_geometrycollection())
-#' st_dimension(x)
-#' st_dimension(x, FALSE)
-st_dimension = function(x, NA_if_empty = TRUE)
-	CPL_gdal_dimension(st_geometry(x), NA_if_empty)
-
-#' @name geos_query
-#' @export
-#' @return st_is_simple returns a logical vector, indicating for each geometry whether it is simple (e.g., not self-intersecting)
-#' @examples
-#' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
-#' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
-
-#' @name geos_query
-#' @export
-#' @return st_is_empty returns for each geometry whether it is empty
-#' @examples
-#' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
-#' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
-st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
-
-#' @name geos_measures
-#' @export
-#' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
-#'
-#' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[lwgeom:geod]{st_geod_area} is used for area calculation.
-#' @examples
-#' b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
-#' b1 = b0 + 2
-#' b2 = b0 + c(-0.2, 2)
-#' x = st_sfc(b0, b1, b2)
-#' st_area(x)
-st_area = function(x, ...) UseMethod("st_area")
-
-#' @export
-st_area.sfc = function(x, ...) {
-	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("package lwgeom required, please install it first")
-		lwgeom::st_geod_area(x)
-	} else {
-		a = CPL_area(x) # ignores units: units of coordinates
-		if (! is.na(st_crs(x))) {
-			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
-			if (!is.null(to_m <- st_crs(x)$to_meter))
-				a = a * to_m^2
-		}
-		a
-	}
-}
-
-#' @export
-st_area.sf = function(x, ...) st_area(st_geometry(x, ...))
-
-#' @export
-st_area.sfg = function(x, ...) st_area(st_geometry(x, ...))
-
-#' @name geos_measures
-#' @export
-#' @return st_length returns the length of a \code{LINESTRING} or \code{MULTILINESTRING} geometry, using the coordinate reference system.  \code{POINT}, \code{MULTIPOINT}, \code{POLYGON} or \code{MULTIPOLYGON} geometries return zero.
-#' @seealso \link{st_dimension}, \link{st_cast} to convert geometry types
-#'
-#' @examples
-#' line = st_sfc(st_linestring(rbind(c(30,30), c(40,40))), crs = 4326)
-#' st_length(line)
-#'
-#' outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
-#' hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
-#' hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
-#'
-#' poly = st_polygon(list(outer, hole1, hole2))
-#' mpoly = st_multipolygon(list(
-#' 	list(outer, hole1, hole2),
-#' 	list(outer + 12, hole1 + 12)
-#' ))
-#'
-#' st_length(st_sfc(poly, mpoly))
-st_length = function(x) {
-	x = st_geometry(x)
-
-	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("package lwgeom required, please install it first")
-		lwgeom::st_geod_length(x)
-	} else {
-		ret = CPL_length(x)
-		ret[is.nan(ret)] = NA
-		crs = st_crs(x)
-		if (! is.na(crs)) {
-			units(ret) = crs_parameters(crs)$ud_unit
-			if (!is.null(to_m <- st_crs(x)$to_meter))
-				ret = ret * to_m
-		}
-		ret
-	}
-}
-
-message_longlat = function(caller) {
-	message(paste("although coordinates are longitude/latitude,",
-		caller, "assumes that they are planar"))
-}
-
-is_symmetric = function(operation, pattern) {
-	if (!is.na(pattern)) {
-		m = matrix(sapply(1:9, function(i) substr(pattern, i, i)), 3, 3)
-		isTRUE(all(m == t(m)))
-	} else
-		isTRUE(operation %in% c("intersects", "touches", "overlaps", "disjoint", "equals"))
-}
-
-# binary, interfaced through GEOS:
-
-# returning matrix, distance or relation string -- the work horse is:
-
-st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE) {
-	if (missing(y))
-		y = x
-	else if (!inherits(x, "sfg") && !inherits(y, "sfg"))
-		stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)) && !(op %in% c("equals", "equals_exact", "polygonize")))
-		message_longlat(paste0("st_", op))
-	if (prepared && is_symmetric(op, pattern) &&
-			length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
-			isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
-		t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, prepared = prepared))
-	} else {
-		ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-		if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-			id = if (is.null(row.names(x)))
-					as.character(1:length(ret))
-				else
-					row.names(x)
-			sgbp = sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)))
-			if (! sparse)
-				as.matrix(sgbp)
-			else
-				sgbp
-		} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-			ret[[1]]
-	}
-}
-
-#' Compute geometric measurements
-#'
-#' Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
-#' @name geos_measures
-#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
-#' @param ... ignored
-#' @param dist_fun deprecated
-#' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc. if \code{FALSE}, return the dense matrix with all pairwise distances.
-#' @param which character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
-#' @param par for \code{which} equal to \code{Hausdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
-#' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
-#' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length \code{x} or \code{y}, the shorter one being recycled. Distances involving empty geometries are \code{NA}.
-#' @details great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
-#' @examples
-#' p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
-#' st_distance(p, p)
-#' st_distance(p, p, by_element = TRUE)
-#' @export
-st_distance = function(x, y, ..., dist_fun, by_element = FALSE, 
-		which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"), 
-		par = 0.0, tolerance = 0.0) {
-	if (missing(y))
-		y = x
-	else
-		stopifnot(st_crs(x) == st_crs(y))
-
-	if (! missing(dist_fun))
-		stop("dist_fun is deprecated: lwgeom is used for distance calculation")
-
-	x = st_geometry(x)
-	y = st_geometry(y)
-
-	if (isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("lwgeom", quietly = TRUE))
-			stop("lwgeom required: install first?")
-		if (which != "Great Circle")
-			stop("for non-great circle distances, data should be projected; see st_transform()")
-		units(tolerance) = as_units("m")
-		if (by_element) {
-			crs = st_crs(x)
-			dist_ll = function(x, y, tolerance)
-				lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs),
-					tolerance = tolerance)
-			d = mapply(dist_ll, x, y, tolerance = tolerance)
-			units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
-			d
-		} else
-			lwgeom::st_geod_distance(x, y, tolerance)
-	} else {
-		d = if (by_element)
-				mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
-			else
-				CPL_geos_dist(x, y, which, par)
-		if (! is.na(st_crs(x)))
-			units(d) = crs_parameters(st_crs(x))$ud_unit
-		d
-	}
-}
-
-#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
-#'
-#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
-#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param pattern character; define the pattern to match to, see details.
-#' @param sparse logical; should a sparse matrix be returned (TRUE) or a dense matrix?
-#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of {0,1,2,F}, digits denoting dimensionality, F denoting not intersecting. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
-#' @export
-#' @examples
-#' p1 = st_point(c(0,0))
-#' p2 = st_point(c(2,2))
-#' pol1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0)))) - 0.5
-#' pol2 = pol1 + 1
-#' pol3 = pol1 + 2
-#' st_relate(st_sfc(p1, p2), st_sfc(pol1, pol2, pol3))
-#' sfc = st_sfc(st_point(c(0,0)), st_point(c(3,3)))
-#' grd = st_make_grid(sfc, n = c(3,3))
-#' st_intersects(grd)
-#' st_relate(grd, pattern = "****1****") # sides, not corners, internals
-#' st_relate(grd, pattern = "****0****") # only corners touch
-#' st_rook = function(a, b = a) st_relate(a, b, pattern = "F***1****")
-#' st_rook(grd)
-#' # queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
-#' st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
-st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
-	if (!is.na(pattern)) {
-		stopifnot(is.character(pattern) && length(pattern) == 1 && nchar(pattern) == 9)
-		st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse)
-	} else
-		st_geos_binop("relate", x, y, sparse = FALSE)
-}
-
-#' Geometric binary predicates on pairs of simple feature geometry sets
-#'
-#' Geometric binary predicates on pairs of simple feature geometry sets
-#' @name geos_binary_pred
-#' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
-#' @param y object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used
-#' @param sparse logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.
-#' @param ... ignored
-#' @param prepared logical; prepare geometry for x, before looping over y? See Details.
-#' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
-#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence \code{integer(0)} if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
-#' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
-#' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
-#'
-#' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
-#'
-#' Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
-#'
-#' @note For intersection on pairs of simple feature geometries, use
-#' the function \code{\link{st_intersection}} instead of \code{st_intersects}.
-#'
-#' @examples
-#' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
-#' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
-#' (lst = st_intersects(pts, pol))
-#' (mat = st_intersects(pts, pol, sparse = FALSE))
-#' # which points fall inside a polygon?
-#' apply(mat, 1, any)
-#' lengths(lst) > 0
-#' # which points fall inside the first polygon?
-#' st_intersects(pol, pts)[[1]]
-#' @export
-st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
-
-#' @export
-st_intersects.sfc = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
-
-#' @export
-st_intersects.sf = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
-
-#' @export
-st_intersects.sfg = function(x, y, sparse = TRUE, prepared = TRUE, ...)
-	st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
-
-
-#' @name geos_binary_pred
-#' @export
-st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
-	# st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared) -> didn't use STRtree
-	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
-	# disjoint = !intersects :
-	if (sparse)
-		sgbp(lapply(int, function(g) setdiff(1:length(st_geometry(y)), g)),
-			predicate = "disjoint",
-			ncol = attr(int, "ncol"),
-			region.id = attr(int, "region.id"))
-	else
-		!int
-}
-
-#' @name geos_binary_pred
-#' @export
-st_touches		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("crosses", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-st_within		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-st_contains		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-#' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
-#'
-#' See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
-st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE) {
-	if (! prepared)
-		stop("non-prepared geometries not supported for st_contains_properly")
-	st_geos_binop("contains_properly", x, y, sparse = sparse, prepared = TRUE)
-}
-
-#' @name geos_binary_pred
-#' @export
-st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-st_equals		= function(x, y, sparse = TRUE, prepared = FALSE) {
-	if (prepared)
-		stop("prepared geometries not supported for st_equals")
-	st_geos_binop("equals", x, y, sparse = sparse)
-}
-
-#' @name geos_binary_pred
-#' @export
-st_covers		= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-st_covered_by	= function(x, y, sparse = TRUE, prepared = TRUE)
-	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared)
-
-#' @name geos_binary_pred
-#' @export
-#' @param par numeric; parameter used for "equals_exact" (margin);
-#' @details \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
-st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE) {
-	if (prepared)
-		stop("prepared geometries not supported for st_equals_exact")
-	st_geos_binop("equals_exact", x, y, par = par, sparse = sparse)
-}
-
-#' @name geos_binary_pred
-#' @export
-#' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-st_is_within_distance = function(x, y, dist, sparse = TRUE) {
-	if (isTRUE(st_is_longlat(x))) {
-		if (missing(y))
-			y = x
-		gx = st_geometry(x)
-		gy = st_geometry(y)
-		units(dist) = as_units("m")
-		if (sparse) {
-			if (! requireNamespace("lwgeom", quietly = TRUE))
-				stop("lwgeom required: install first?")
-			ret = if (utils::packageVersion("lwgeom") <= "0.1-2")
-					lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
-				else
-					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
-			sgbp(ret, predicate = "is_within_distance", region.id = 1:length(x), ncol = length(gy))
-		} else
-			st_distance(x, y, tolerance = dist) <= dist
-	} else {
-		if (! is.na(st_crs(x)))
-			units(dist) = crs_parameters(st_crs(x))$ud_unit # might convert
-		if (! sparse)
-			st_distance(x, y) <= dist
-		else
-			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse)
-	}
-}
 
 # unary, returning geometries
 
@@ -467,14 +60,14 @@ st_is_within_distance = function(x, y, dist, sparse = TRUE) {
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
 st_buffer = function(x, dist, nQuadSegs = 30,
-					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
+					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	UseMethod("st_buffer")
 
 #' @export
 st_buffer.sfg = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE)
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle, 
-		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide))
+		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide, ...))
 
 .process_style_opts = function(endCapStyle, joinStyle, mitreLimit, singleSide) {
 	styls = list(with_styles = FALSE, endCapStyle = NA, joinStyle = NA, mitreLimit = NA)
@@ -496,47 +89,59 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, 
-						 singleSide = FALSE) {
-	if (isTRUE(st_is_longlat(x))) {
-		warning("st_buffer does not correctly buffer longitude/latitude data")
+						 singleSide = FALSE, ...) {
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
+		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
+				!missing(mitreLimit) || !missing(singleSide))
+			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
 		if (inherits(dist, "units"))
-			units(dist) = as_units("arc_degrees")
-		else
-			message("dist is assumed to be in decimal degrees (arc_degrees).")
-	} else if (inherits(dist, "units")) {
-		if (is.na(st_crs(x)))
-			stop("x does not have a crs set: can't convert units")
-		if (is.null(st_crs(x)$units))
-			stop("x has a crs without units: can't convert units")
-		units(dist) = crs_parameters(st_crs(x))$ud_unit
+			units(dist) = as_units("m")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), drop_units(dist), ...), crs = st_crs(x))
+	} else {
+		if (longlat) {
+			warning("st_buffer does not correctly buffer longitude/latitude data")
+			if (inherits(dist, "units"))
+				units(dist) = as_units("arc_degrees")
+			else
+				message("dist is assumed to be in decimal degrees (arc_degrees).")
+		} else if (inherits(dist, "units")) {
+			if (is.na(st_crs(x)))
+				stop("x does not have a crs set: can't convert units")
+			if (is.null(st_crs(x)$units))
+				stop("x has a crs without units: can't convert units")
+			units(dist) = crs_parameters(st_crs(x))$ud_unit
+		}
+		dist = rep(dist, length.out = length(x))
+		nQ = rep(nQuadSegs, length.out = length(x))
+		styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit, singleSide)
+		if (styles$with_styles) {
+			endCapStyle = rep(styles$endCapStyle, length.out = length(x))
+			joinStyle = rep(styles$joinStyle, length.out = length(x))
+			mitreLimit = rep(styles$mitreLimit, length.out = length(x))
+			singleSide = rep(as.logical(singleSide), length.out = length(x))
+			if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
+				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
+			if (any(dist < 0) && any(st_dimension(x) < 1))
+				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
+	
+			st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
+				endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
+				singleside = singleSide))
+		} else
+			st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
 	}
-	dist = rep(dist, length.out = length(x))
-	nQ = rep(nQuadSegs, length.out = length(x))
-	styles = .process_style_opts(endCapStyle, joinStyle, mitreLimit, singleSide)
-	if (styles$with_styles) {
-		endCapStyle = rep(styles$endCapStyle, length.out = length(x))
-		joinStyle = rep(styles$joinStyle, length.out = length(x))
-		mitreLimit = rep(styles$mitreLimit, length.out = length(x))
-		singleSide = rep(as.logical(singleSide), length.out = length(x))
-		if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
-			stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
-		if (any(dist < 0) && any(st_dimension(x) < 1))
-			stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
-
-		st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
-			endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
-			singleside = singleSide))
-	} else
-		st_sfc(CPL_geos_op("buffer", x, dist, nQ, numeric(0), logical(0)))
 }
 
 #' @export
 st_buffer.sf = function(x, dist, nQuadSegs = 30,
 						endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
-						singleSide = FALSE) {
+						singleSide = FALSE, ...) {
 	st_set_geometry(x, st_buffer(st_geometry(x), dist, nQuadSegs,
 							   endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
-							   singleSide = singleSide))
+							   singleSide = singleSide, ...))
 }
 
 #' @name geos_unary
@@ -597,13 +202,22 @@ st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
 
 #' @export
 st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
-	if (isTRUE(st_is_longlat(x)))
-		warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
-	stopifnot(mode(preserveTopology) == 'logical')
+	ll = isTRUE(st_is_longlat(x))
+	if (ll && sf_use_s2()) {
+		if (!missing(preserveTopology))
+			warning("argument preserveTopology is ignored")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		st_as_sfc(s2::s2_simplify(st_as_s2(x), dTolerance), crs = st_crs(x))
+	} else {
+		stopifnot(mode(preserveTopology) == 'logical')
+		if (ll)
+			warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
 
-	st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
-		preserveTopology = rep(preserveTopology, length.out = length(x)),
-		dTolerance = rep(dTolerance, length.out = length(x))))
+		st_sfc(CPL_geos_op("simplify", x, numeric(0), integer(0),
+			preserveTopology = rep(preserveTopology, length.out = length(x)),
+			dTolerance = rep(dTolerance, length.out = length(x))))
+	}
 }
 
 #' @export
@@ -765,7 +379,7 @@ largest_ring = function(x) {
 	pols = st_cast(x, "POLYGON", warn = FALSE)
 	stopifnot(! is.null(attr(pols, "ids")))
 	areas = st_area(pols)
-	spl = split(areas, rep(1:length(x), attr(pols, "ids"))) # group by x
+	spl = split(areas, rep(seq_along(x), attr(pols, "ids"))) # group by x
 	l = c(0, head(cumsum(lengths(spl)), -1)) # 0-based indexes of first rings of a MULTIPOLYGON
 	i = l + sapply(spl, which.max)           # add relative index of largest ring
 	st_sfc(pols[i], crs = st_crs(x))
@@ -958,11 +572,32 @@ geos_op2_df = function(x, y, geoms) {
 
 # after checking identical crs,
 # call geos_op2 function op on x and y:
-geos_op2_geom = function(op, x, y) {
+geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat(paste0("st_", op))
-	st_sfc(CPL_geos_op2(op, st_geometry(x), st_geometry(y)), crs = st_crs(x))
+	x = st_geometry(x)
+	y = st_geometry(y)
+	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2() && s2_model >= 0) {
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		fn = switch(op, intersection = s2::s2_intersection, 
+				difference = s2::s2_difference,
+				sym_difference = s2::s2_sym_difference,
+				union = s2::s2_union, stop("invalid operator"))
+		s2x = st_as_s2(x)
+		s2y = st_as_s2(y)
+		# to be optimized -- this doesn't index on y:
+		lst = structure(unlist(lapply(s2x, fn, s2y, s2::s2_options(model = s2_model, ...)),
+			recursive = FALSE), class = class(s2x))
+		e = s2::s2_is_empty(lst)
+		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
+		structure(st_as_sfc(lst[!e], crs = st_crs(x)), idx = idx[!e,,drop = FALSE])
+	} else {
+		if (longlat)
+			message_longlat(paste0("st_", op))
+		st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+	}
 }
 
 # return first sfg, or empty geometry in case of zero features
@@ -979,10 +614,11 @@ get_first_sfg = function(x) {
 #' @name geos_binary_ops
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param ... arguments passed on to \link[s2]{s2_options}
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details A spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 #' @note To find whether pairs of simple feature geometries intersect, use
@@ -1012,29 +648,31 @@ get_first_sfg = function(x) {
 #' i = st_intersection(sf) # all intersections
 #' plot(i["n.overlaps"])
 #' summary(i$n.overlaps - lengths(i$origins))
-st_intersection = function(x, y) UseMethod("st_intersection")
+st_intersection = function(x, y, ...) UseMethod("st_intersection")
 
 #' @export
-st_intersection.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("intersection", x, y))
+st_intersection.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("intersection", x, y, ...))
 
 #' @name geos_binary_ops
 #' @export
 #' @details When called with missing \code{y}, the \code{sfc} method for \code{st_intersection} returns all non-empty intersections of the geometries of \code{x}; an attribute \code{idx} contains a list-column with the indexes of contributing geometries.
-st_intersection.sfc = function(x, y) {
+st_intersection.sfc = function(x, y, ...) {
 	if (missing(y)) {
+		if (isTRUE(st_is_longlat(x)))
+			message_longlat("st_intersection")
 		ret = CPL_nary_intersection(x)
 		structure(st_sfc(ret), idx = attr(ret, "idx"))
 	} else
-		geos_op2_geom("intersection", x, y)
+		geos_op2_geom("intersection", x, y, ...)
 }
 
 #' @name geos_binary_ops
 #' @export
 #' @details when called with a missing \code{y}, the \code{sf} method for \code{st_intersection} returns an \code{sf} object with attributes taken from the contributing feature with lowest index; two fields are added: \code{n.overlaps} with the number of overlapping features in \code{x}, and a list-column \code{origins} with indexes of all overlapping features.
-st_intersection.sf = function(x, y) {
+st_intersection.sf = function(x, y, ...) {
 	if (missing(y)) {
-		geom = st_intersection(st_geometry(x))
+		geom = st_intersection(st_geometry(x), ...)
 		idx = attr(geom, "idx")
 		i = sapply(idx, function(i) i[1])
 		sf_column = attr(x, "sf_column")
@@ -1053,11 +691,11 @@ st_intersection.sf = function(x, y) {
 #' @examples
 #' # A helper function that erases all of y from x:
 #' st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
-st_difference = function(x, y) UseMethod("st_difference")
+st_difference = function(x, y, ...) UseMethod("st_difference")
 
 #' @export
-st_difference.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("difference", x, y))
+st_difference.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("difference", x, y, ...))
 
 #' @name geos_binary_ops
 #' @export
@@ -1067,16 +705,18 @@ st_difference.sfg = function(x, y)
 #' or contained fully inside geometries with higher priority are removed entirely.
 #' The \code{st_difference.sfc} method with a single argument returns an object with
 #' an \code{"idx"} attribute with the orginal index for returned geometries.
-st_difference.sfc = function(x, y) {
+st_difference.sfc = function(x, y, ...) {
 	if (missing(y)) {
+		if (isTRUE(st_is_longlat(x)))
+			message_longlat("st_difference")
 		ret = CPL_nary_difference(x)
 		structure(st_sfc(ret), ret = attr(ret, "idx"))
 	} else
-		geos_op2_geom("difference", x, y)
+		geos_op2_geom("difference", x, y, ...)
 }
 
 #' @export
-st_difference.sf = function(x, y) {
+st_difference.sf = function(x, y, ...) {
 	if (missing(y)) {
 		geom = st_difference(st_geometry(x))
 		sf_column = attr(x, "sf_column")
@@ -1090,19 +730,19 @@ st_difference.sf = function(x, y) {
 
 #' @name geos_binary_ops
 #' @export
-st_sym_difference = function(x, y) UseMethod("st_sym_difference")
+st_sym_difference = function(x, y, ...) UseMethod("st_sym_difference")
 
 #' @export
-st_sym_difference.sfg = function(x, y)
-	get_first_sfg(geos_op2_geom("sym_difference", x, y))
+st_sym_difference.sfg = function(x, y, ...)
+	get_first_sfg(geos_op2_geom("sym_difference", x, y, ...))
 
 #' @export
-st_sym_difference.sfc = function(x, y)
-	geos_op2_geom("sym_difference", x, y)
+st_sym_difference.sfc = function(x, y, ...)
+	geos_op2_geom("sym_difference", x, y, ...)
 
 #' @export
-st_sym_difference.sf = function(x, y)
-	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y))
+st_sym_difference.sf = function(x, y, ...)
+	geos_op2_df(x, y, geos_op2_geom("sym_difference", x, y, ...))
 
 #' @name geos_binary_ops
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}

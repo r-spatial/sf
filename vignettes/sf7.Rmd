@@ -1,0 +1,250 @@
+---
+title: "7. Spherical geometry in sf using s2geometry"
+author: "Edzer Pebesma and Dewey Dunnington"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{7. The s2geometry library for spherical geometry in sf}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+EVAL = !inherits(try(sf_use_s2(TRUE), silent=TRUE), "try-error")
+```
+This vignette describes what spherical geometry implies, and how
+package `sf` uses the s2geometry library (https://s2geometry.io)
+for geometrical measures, predicates and transformations.
+
+Spatial coordinates either refer to _projected_ (or Cartesian)
+coordinates, meaning that they are associated to points on a flat
+space, or to unprojected or _geographic_ coordinates, when they
+refer to angles (latitude, longitude) pointing to locations on a
+sphere (or ellipsoid). The flat space is also referred to as R2,
+the sphere as S2.
+
+Package `sf` implements _simple features_, a standard for point,
+line, and polygon geometries where geometries are built from points
+(nodes) connected by straight lines (edges). The simple feature
+standard does not say much about its suitability for dealing with
+geographic coordinates, but the topological relational system it
+builds upon ([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refer
+to R2, the two-dimensional flat space. 
+
+Yet, more and more data are routinely served or exchanged using
+geographic coordinates. Using software that assumes an R2, flat
+space may work for some problems, and although `sf` up to version 0.9-x
+had some functions in place for spherical/ellipsoidal computations
+(from package `lwgeom`, for computing area,
+length, distance, and for segmentizing), it has also happily warned 
+the user that it is doing R2, flat computations with such coordinates with messages like
+```
+although coordinates are longitude/latitude, st_intersects assumes that they are planar
+```
+hinting to the responsibility of the user to take care of potential
+problems. Doing this however leaves ambiguities, e.g. whether 
+`LINESTRING(-179 0,179 0)`
+
+* passes through `POINT(0 0)`, or
+* passes through `POINT(180 0)`
+
+and whether it is
+* a straight line, cutting through the Earth's surface, or
+* a curved line following the Earth's surface
+
+Starting with `sf` version 1.0, `sf` uses the new package `s2`
+(Dunnington, Pebesma, Rubak 2020) for spherical geometry, which
+has functions for computing pretty much all measures, predicates
+and transformations _on the sphere_. This means:
+
+* no more hodge-podge of some functions working on R2, with annoying messages, some on the ellipsoid
+* a considerable speed increase for some functions
+* no computations on the ellipsoid (which are considered more accurate, but are also slower)
+
+The `s2` package is really a wrapper around the C++
+[s2geometry](https://s2geometry.io) library which was written by
+Google, and which is used in many of its products (e.g. Google
+Maps, Google Earth Engine, Bigquery GIS) and has been translated
+in several programming other languages.
+
+# Fundamental differences
+
+Compared to geometry on R2, and DE9-IM, the `s2` package brings a
+few fundamentally new concepts, which are discussed first.
+
+## Polygons on S2 divide the sphere in two parts
+
+On the sphere (S2), any polygon defines two areas; when following the
+exterior ring, we need to define what is inside, and the definition
+is _the left side of the enclosing edges_. This also means that
+we can flip a polygon (by inverting the edge order) to obtain the
+other part of the globe, and that in addition to an empty polygon
+(the empty set) we can have the full polygon (the entire globe).
+
+Simple feature geometries should obey a ring direction too: exterior
+rings should be counter clockwise, interior (hole) rings should
+be clockwise, but in some sense this is obsolete as the difference
+between exterior ring and interior rings is defined by their position
+(exterior, followed by zero or more interior). `sf::read_sf` has an
+argument `check_ring_dir` that checks, and corrects, ring directions
+and many (legacy) datasets have wrong ring directions. With wrong
+ring directions, many things still work.
+
+For S2, ring direction is essential. For that reason, `st_as_s2`
+has an argument `oriented = FALSE`, which will check and correct
+ring directions, assuming that all exterior rings occupy an area
+smaller than half the globe:
+```{r eval=EVAL}
+library(sf)
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf")) # wrong ring directions
+library(s2)
+s2_area(st_as_s2(nc, oriented = FALSE)[1:3]) # corrects ring direction, correct area:
+s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # wrong direction: Earth's surface minus area
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
+s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # no second correction needed here:
+```
+
+Here is an example where the oceans are computed as the difference
+from the full polygon,
+```{r eval=EVAL}
+as_s2_geography(TRUE)
+```
+
+and the countries, and shown in an orthographic projection:
+```{r eval=EVAL}
+co = s2_data_countries()
+oc = s2_difference(as_s2_geography(TRUE), s2_union_agg(co)) # oceans
+b = s2_buffer_cells(as_s2_geography("POINT(-30 52)"), 9800000) # visible half
+i = s2_intersection(b, oc) # visible ocean
+plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
+```
+
+## Half-closed polygon boundaries 
+
+Polygons in `s2geometry` can be
+* CLOSED: they contain their boundaries, and a point on the boundary intersects with the polygon
+* OPEN: they do not contain their boundaries, points on the boundary do not intersect with the polygon
+* SEMI-OPEN: they contain part of their boundaries, but no boundary of non-overlapping polygons is contained by more than one polygon.
+
+In principle the DE9-IM model deals with interior, boundary and
+exterior, and intersection predicates are sensitive to this (the
+difference between _contains_ and _covers_ is all about boundaries).
+DE9-IM however cannot uniquely assign points to polygons when
+polygons form a polygon _coverage_ (no overlaps, but mostly common
+boundaries). This means that if we would count points by polygon,
+and some points fall _on_ shared polygon boundaries, we either miss
+them (_contains_) or we count them double (_covers_); this leads to
+bias or need for post-processing. Using SEMI-OPEN non-overlapping
+polygons guarantees that every point is assigned to _maximally_
+one polygon in an intersection. This corresponds to e.g. how this
+would be handled in a grid (raster) coverage, where every grid cell
+(typically) only contains its upper-left corner and its upper and
+left sides.
+
+```{r eval=EVAL}
+a = as_s2_geography("POINT(0 0)")
+b = as_s2_geography("POLYGON((0 0,1 0,1 1,0 1,0 0))")
+s2_intersects(a, b, s2_options(model = "open")) 
+s2_intersects(a, b, s2_options(model = "closed"))
+s2_intersects(a, b, s2_options(model = "semi-open")) # a toss
+s2_intersects(a, b) # default: semi-open
+```
+
+## Cap, enclosing rectangle
+
+Computing the minimum and maximum values over coordinate ranges,
+as `sf` does with `st_bbox()`, is of limited value for spherical
+coordinates because
+
+* small regions covering the antimeridian end up with a huge longitude range
+* regions including a pole will end up with a latitude range not extending to +/- 90
+
+S2 has two alternatives: the cap and the `lat_lng_rect`:
+
+```{r eval=EVAL}
+fiji = s2_data_countries("Fiji")
+aa = s2_data_countries("Antarctica")
+s2_bounds_cap(fiji)
+s2_bounds_rect(c(fiji,aa))
+```
+
+The cap reports a bounding cap (circle) as a mid point (lat, lng) and
+an angle around this point. The rect reports the `_lo` and `_hi` bounds
+of `lat` and `lng`, as well as its center (`_cnt`) values.
+Note that for Fiji, `lng_lo` being higher than `lng_hi` indicates that
+the region covers (crosses) the antimeridian; the `lng_cnt` values is
+not the mean of `lng_lo` and `lng_hi`.
+
+# Switching between S2 and GEOS
+
+The two-dimensional R2 library that was formerly used by `sf` is
+[GEOS](https://trac.osgeo.org/geos/), and `sf` can be instrumented to
+use GEOS or `sf`. First we will ask if `s2` is being used by default:
+```{r eval=EVAL}
+sf_use_s2()
+```
+then we can switch it of (and use GEOS) by
+```{r eval=EVAL}
+sf_use_s2(FALSE)
+```
+and switch it on (and use S2) by
+```{r eval=EVAL}
+sf_use_s2(TRUE)
+```
+
+
+
+# Measures
+
+## Area
+```{r eval=EVAL}
+library(sf)
+library(units)
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+sf_use_s2(TRUE)
+a1 = st_area(nc)
+sf_use_s2(FALSE)
+a2 = st_area(nc)
+plot(a1, a2)
+abline(0, 1)
+summary((a1 - a2)/a1)
+```
+
+## Length
+```{r eval=EVAL}
+nc_ls = st_cast(nc, "MULTILINESTRING")
+l1 = st_length(nc_ls)
+l2 = st_length(nc_ls, use_lwgeom = TRUE)
+plot(l1 , l2)
+abline(0, 1)
+summary((l1-l2)/l1)
+```
+
+
+## Distances
+```{r eval=EVAL}
+d1 = st_distance(nc, nc[1:10,])
+d2 = st_distance(nc, nc[1:10,], use_lwgeom = TRUE)
+dim(d1)
+dim(d2)
+plot(as.vector(d1), as.vector(d2))
+abline(0, 1)
+summary(as.vector(d1)-as.vector(d2))
+```
+
+# Predicates
+
+# Transformations
+
+## References
+
+* Dewey Dunnington, Edzer Pebesma and Ege Rubak, 2020. s2:
+Spherical Geometry Operators Using the S2 Geometry Library.
+https://r-spatial.github.io/s2/, https://github.com/r-spatial/s2
+

@@ -7,6 +7,8 @@
 #' @param ... ignored
 #' @seealso \link{st_nearest_feature} for finding the nearest feature
 #' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
+#' @details in case \code{x} lies inside \code{y}, when using S2, the end points 
+#' are on polygon boundaries, when using GEOS the end point are identical to \code{x}.
 #' @examples
 #' r = sqrt(2)/10
 #' pt1 = st_point(c(.1,.1))
@@ -38,9 +40,23 @@ st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 #' @name st_nearest_points
 st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat("st_nearest_points")
-	st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
+		#message_longlat("st_nearest_points")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		x_s2 = st_as_s2(x)
+		y_s2 = st_as_s2(y)
+		ret = if (pairwise)
+				s2::s2_minimum_clearance_line_between(x_s2, y_s2)
+			else
+				do.call(c, lapply(x_s2, s2::s2_minimum_clearance_line_between, y_s2))
+		st_as_sfc(ret, crs = st_crs(x))
+	} else {
+		if (longlat)
+			message_longlat("st_nearest_points")
+		st_sfc(CPL_geos_nearest_points(x, st_geometry(y), pairwise), crs = st_crs(x))
+	}
 }
  
 #' @export
@@ -60,7 +76,8 @@ st_nearest_points.sf = function(x, y, ...) {
 #' get index of nearest feature
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param y object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in \code{y}
+#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in set \code{y}; 
+#' empty geometries result in \code{NA} indexes
 #' @seealso \link{st_nearest_points} for finding the nearest points for pairs of feature geometries
 #' @export
 #' @examples
@@ -94,7 +111,14 @@ st_nearest_points.sf = function(x, y, ...) {
 #' plot(ls, col = 5:8, add = TRUE)
 st_nearest_feature = function(x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
-	if (isTRUE(st_is_longlat(x)))
-		message_longlat("st_nearest_feature")
-	CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		s2::s2_closest_feature(st_as_s2(x), st_as_s2(y))
+	} else {
+		if (longlat)
+			message_longlat("st_nearest_points")
+		CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+	}
 }

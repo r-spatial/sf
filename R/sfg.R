@@ -24,19 +24,16 @@ Mtrx = function(x, dim = "XYZ", type) {
 MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 	stopifnot(is.list(x))
 	if (length(x) > 0) { # list()
+		lapply(x, valid_numeric_matrix)
 		nc = unique(vapply(x, ncol, 0L))
 		if (length(nc) != 1)
 			stop("matrices have unequal numbers of columns")
-		lapply(x, valid_numeric_matrix)
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(vapply(x, NotClosed, TRUE)))
 			stop("polygons not (all) closed")
-		class(x) = getClassDim(x, nc, dim, type)
-		return(x)
-	} else {
-		class(x) = getClassDim(x, nchar(dim), dim, type)
-		return(x)
-	}
+		structure(x, class = getClassDim(x, nc, dim, type))
+	} else
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
 # creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
@@ -50,12 +47,9 @@ MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 		NotClosed = function(y) any(y[1, ] != y[nrow(y), ])
 		if (needClosed && any(unlist(lapply(x, function(y) vapply(y, NotClosed, TRUE)))))
 			stop("polygons not (all) closed")
-		class(x) = getClassDim(x, nc, dim, type)
-		return(x)
-	} else {
-		class(x) = getClassDim(x, nchar(dim), dim, type)
-		return(x)
-	}
+		structure(x, class = getClassDim(x, nc, dim, type))
+	} else 
+		structure(x, class = getClassDim(x, nchar(dim), dim, type))
 }
 
 #return "XY", "XYZ", "XYM", or "XYZM"

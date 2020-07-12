@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.9-4
+Version: 0.9-5
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -45,7 +45,8 @@ Authors@R:
 Description: Support for simple features, a standardized way to
     encode spatial vector data. Binds to 'GDAL' for reading and writing
     data, to 'GEOS' for geometrical operations, and to 'PROJ' for
-    projection conversions and datum transformations.
+    projection conversions and datum transformations. Optionally uses the 's2'
+    package for spherical geometry operations on geographic coordinates.
 License: GPL-2 | MIT + file LICENSE
 URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf/
 BugReports: https://github.com/r-spatial/sf/issues/
@@ -85,6 +86,7 @@ Suggests:
     RPostgres (>= 1.1.0),
     RPostgreSQL,
     RSQLite,
+    s2 (>= 1.0.0),
     sp (>= 1.2-4),
     spatstat,
     spatstat.utils,
@@ -100,7 +102,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0)
 Collate: 
@@ -117,7 +119,9 @@ Collate:
     'wkb.R'
     'wkt.R'
     'plot.R'
-    'geom.R'
+    'geom-measures.R'
+    'geom-predicates.R'
+    'geom-transformers.R'
     'transform.R'
     'sp.R'
     'grid.R'
@@ -148,3 +152,4 @@ Collate:
     'm_range.R'
     'shift_longitude.R'
     'make_grid.R'
+    's2.R'

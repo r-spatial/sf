@@ -50,5 +50,5 @@ if (utils::packageVersion("ggplot2") > "2.2.1") {
 }
 
 library(maps) #421
-wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
-plot(wrld2, graticule = TRUE)
+(wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
+try(plot(wrld2, graticule = TRUE))

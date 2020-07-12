@@ -99,6 +99,10 @@ get_lengths = function(x) {
 #' Features that can't be cast to a single  MULTI* geometry are return as a
 #' GEOMETRYCOLLECTION
 st_cast_sfc_default = function(x) {
+
+	if (length(x) == 0)
+		return(x)
+
 	if (!identical(unique(vapply(x, function(w) class(w)[3L], "")), "sfg"))
 		stop("list item(s) not of class sfg") # sanity check
 
@@ -116,7 +120,7 @@ st_cast_sfc_default = function(x) {
 			x <- lapply(x, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
 			class(x) <- c("sfc_MULTIPOLYGON", "sfc")
 		}
-	} else if (cls == "GEOMETRYCOLLECTION") {
+	} else if (cls == "GEOMETRYCOLLECTION" && !any(st_is_empty(x))) { # FIXME: do sth better in case of empty?
 		ids = get_lengths(x)
 		x <- do.call(st_sfc, unlist(x, recursive = FALSE))
 	}

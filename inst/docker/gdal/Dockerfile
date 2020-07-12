@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu bionic-cran35/  " >> /etc/apt/sources.list
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/" >> /etc/apt/sources.list
+
 RUN apt-key  adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
 RUN apt-get update
@@ -52,7 +53,7 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=7.0.1RC1
+ENV PROJ_VERSION=7.1.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
@@ -61,9 +62,9 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libtiff5-dev
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-7.0.1RC1.tar.gz 
-RUN tar zxvf proj-7.0.1RC1.tar.gz
-RUN cd proj-7.0.1 \
+RUN wget http://download.osgeo.org/proj/proj-7.1.0.tar.gz
+RUN tar zxvf proj-7.1.0.tar.gz
+RUN cd proj-7.1.0 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -73,21 +74,18 @@ RUN cd proj-7.0.1 \
   && cd ../.. \
   && ldconfig
 
-# install proj-datumgrid:
-RUN cd /usr/local/share/proj \
-  && wget http://download.osgeo.org/proj/proj-datumgrid-latest.zip \
-  && unzip -o proj-datumgrid*zip \
-  && rm proj-datumgrid*zip \
-  && wget https://download.osgeo.org/proj/proj-datumgrid-europe-latest.zip \
-  && unzip -o proj-datumgrid*zip \
-  && rm proj-datumgrid*zip \
-  && cd -
+# install proj-data:
+#RUN cd /usr/local/share/proj \
+#  && wget http://download.osgeo.org/proj/proj-data-1.1RC1.zip \
+#  && unzip -o proj-data*zip \
+#  && rm proj-data*zip \
+#  && cd -
 
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.1.0
-ENV GDAL_VERSION_NAME 3.1.0rc2
+ENV GDAL_VERSION 3.1.1
+ENV GDAL_VERSION_NAME 3.1.1
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -108,9 +106,8 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 #  && ldconfig
 
 # GEOS:
-#ENV GEOS_VERSION 3.6.2
-ENV GEOS_VERSION 3.8.0
-#
+ENV GEOS_VERSION 3.8.1
+
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
   && tar xf geos*tar \
@@ -152,18 +149,18 @@ RUN R CMD INSTALL stars
 
 RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 # after rgdal:
+RUN Rscript -e 'install.packages(c("XML"))'
 RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview"))'
-
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
-
-#RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
-CMD ["/bin/bash"]
+RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
+RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
+RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
+RUN echo echo
+RUN (cd stars; git pull)
+RUN R CMD build --no-manual stars
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 

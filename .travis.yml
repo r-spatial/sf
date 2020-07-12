@@ -18,6 +18,7 @@ latex: false
 
 r_github_packages:
   - r-spatial/stars
+  - r-spatial/s2
 
 #  - r-dbi/DBI
 #  - r-dbi/RPostgres

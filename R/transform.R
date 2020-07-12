@@ -143,7 +143,11 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 #' @export
 #' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 #'
-#' PROJ >= 6 does not provide option \code{type = "datums"}. PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
+#' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
+#' PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
+#'
+#' for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter} 
+#' variable as numeric, previous versions return a character vector containing a numeric expression.
 #' @examples
 #' sf_proj_info("datum")
 sf_proj_info = function(type = "proj", path) {
@@ -189,7 +193,10 @@ st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
 #' plot(st_geometry(wrld_moll), col = "transparent")
 #' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
 st_wrap_dateline.sfc = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
-	stopifnot(st_is_longlat(x))
+	if (is.na(st_crs(x)))
+		warning("crs not set: assuming geographic coordinates")
+	else
+		stopifnot(st_is_longlat(x))
 	stopifnot(is.character(options))
 	stopifnot(is.logical(quiet) && length(quiet) == 1)
 	st_sfc(CPL_wrap_dateline(x, options, quiet), crs = st_crs(x))

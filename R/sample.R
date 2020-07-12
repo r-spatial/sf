@@ -58,10 +58,11 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' plot(st_sample(x, 1000), add = TRUE)
 #' x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
 #'	 crs=st_crs(4326))
-#' if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
-#'   p = st_sample(x, 1000)
-#'   st_sample(p, 3)
-#' }
+#' # FIXME:
+#' #if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
+#' #  p = st_sample(x, 1000)
+#' #  st_sample(p, 3)
+#' #}
 #' # hexagonal:
 #' sfc = st_sfc(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,0)))))
 #' plot(sfc)
