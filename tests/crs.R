@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(sf))
+options(rgdal_show_exportToProj4_warnings = "none")
 suppressWarnings(st_crs(-1))
 suppressWarnings(st_crs(999999))
 inherits(try(st_crs("error"), silent = TRUE), "try-error")

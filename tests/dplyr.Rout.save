@@ -1,5 +1,5 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -29,6 +29,7 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
+> options(dplyr.summarise.inform=FALSE)
 > read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
 + 	st_transform(3857) -> nc
 > nc %>% filter(AREA > .1) %>% plot()
@@ -283,4 +284,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.884   0.048   2.930 
+  3.233   0.065   3.286 

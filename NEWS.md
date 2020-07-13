@@ -1,10 +1,8 @@
 # version 0.9-5
 
-* Support for spherical geometry operators (predicates, transformers, nearest point/feature) for geographic coordinates in package `s2` is now by default switched off, and can be switched on by `sf_use_s2(TRUE)`; see https://www.r-spatial.org/r/2020/06/17/s2.html and vignette sf7. It is planned to be switched on by default in sf 1.0-0.
+* Only when package `s2` >= 1.0.1 is available: support for spherical geometry operators (predicates, transformers, measures, nearest point/feature) for geographic coordinates in package `s2` is now by default switched off, and can be switched on by `sf_use_s2(TRUE)`; see https://www.r-spatial.org/r/2020/06/17/s2.html and vignette sf7. It is planned to be switched on by default in sf 1.0-0.
 
 * drop Z and/or M coordinate in `st_as_s2()`, with message
-
-* add `sf_use_s2()`, to toggle using the s2 package for spherical geometry
 
 * geometry predicates and transformers gain an ... argument to pass `s2::s2_options()`
 

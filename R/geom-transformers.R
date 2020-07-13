@@ -15,6 +15,7 @@
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
+#' @param ... passed on to \code{s2_buffer_cells}
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},

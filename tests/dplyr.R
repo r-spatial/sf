@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(sf))
 
 library(dplyr)
+options(dplyr.summarise.inform=FALSE)
 read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
 	st_transform(3857) -> nc
 nc %>% filter(AREA > .1) %>% plot()
