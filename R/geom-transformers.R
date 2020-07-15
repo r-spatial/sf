@@ -93,14 +93,16 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
-				!missing(mitreLimit) || !missing(singleSide))
-			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
-		if (inherits(dist, "units"))
-			units(dist) = as_units("m")
+#		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
+#				!missing(mitreLimit) || !missing(singleSide))
+#			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
+		if (inherits(dist, "units")) {
+			units(dist) = as_units("m") # make sure has dimension length, possibly convert
+			dist = drop_units(dist)
+		}
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), drop_units(dist), ...), crs = st_crs(x))
+		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, ...), crs = st_crs(x))
 	} else {
 		if (longlat) {
 			warning("st_buffer does not correctly buffer longitude/latitude data")
