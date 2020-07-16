@@ -26,10 +26,10 @@ is_symmetric = function(operation, pattern) {
 
 # [1] X "s2_contains_matrix"    X "s2_covered_by_matrix"
 # [3] X "s2_covers_matrix"      X "s2_disjoint_matrix"
-# [5] X "s2_distance_matrix"      "s2_dwithin_matrix"
-# [7] X "s2_equals_matrix"        X "s2_intersects_matrix"
-# [9] "s2_max_distance_matrix"  "s2_may_intersect_matrix"
-#[11] X "s2_touches_matrix"       X "s2_within_matrix"
+# [5] X "s2_distance_matrix"    X "s2_dwithin_matrix"
+# [7] X "s2_equals_matrix"      X "s2_intersects_matrix"
+# [9] "s2_max_distance_matrix"    "s2_may_intersect_matrix"
+#[11] X "s2_touches_matrix"     X "s2_within_matrix"
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
@@ -117,7 +117,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{http://r-spatial.org/r/2017/06/22/spatial-index.html}.
-#' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and \code{st_is_within_distance} do not.
+#' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 #'
 #' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
 #'
@@ -239,29 +239,31 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE, ...) {
 #' @name geos_binary_pred
 #' @export
 #' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-st_is_within_distance = function(x, y, dist, sparse = TRUE, ...) {
-	if (isTRUE(st_is_longlat(x))) {
-		if (missing(y))
-			y = x
-		gx = st_geometry(x)
-		gy = st_geometry(y)
-		units(dist) = as_units("m")
-		if (sparse) {
-			if (! requireNamespace("lwgeom", quietly = TRUE))
-				stop("lwgeom required: install first?")
-			ret = if (utils::packageVersion("lwgeom") <= "0.1-2")
-					lapply(seq_along(gx), function(i) which(st_distance(gx[i], gy, tolerance = dist) <= dist))
-				else
-					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
-			sgbp(ret, predicate = "is_within_distance", region.id = seq_along(x), ncol = length(gy))
-		} else
-			st_distance(x, y, tolerance = dist) <= dist
-	} else {
-		if (! is.na(st_crs(x)))
-			units(dist) = crs_parameters(st_crs(x))$ud_unit # might convert
-		if (! sparse)
-			st_distance(x, y) <= dist
-		else
+st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
+
+	ret = if (isTRUE(st_is_longlat(x))) {
+			units(dist) = as_units("m") # might convert
+			r = if (sf_use_s2()) {
+				if (!requireNamespace("s2", quietly = TRUE))
+					stop("package s2 required, please install it first")
+				if (inherits(dist, "units"))
+					dist = drop_units(dist)
+				s2::s2_dwithin_matrix(st_as_s2(x), st_as_s2(y), dist, ...)
+			} else {
+				if (!requireNamespace("lwgeom", quietly = TRUE) || 
+						utils::packageVersion("lwgeom") <= "0.1-2")
+					stop("lwgeom > 0.1-2 required: install first?")
+				lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
+			}
+			sgbp(r, predicate = "is_within_distance", region.id = seq_along(x), 
+				ncol = length(st_geometry(y)))
+		} else {
+			if (! is.na(st_crs(x)))
+				units(dist) = crs_parameters(st_crs(x))$ud_unit # might convert
 			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, ...)
-	}
+		}
+	if (!sparse)
+		as.matrix(ret)
+	else
+		ret
 }
