@@ -96,12 +96,15 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
 		if (inherits(dist, "units")) {
+			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
+				return(st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, radius = 1, ...),
+					crs = st_crs(x)))
 			units(dist) = as_units("m") # make sure has dimension length, possibly convert
 			dist = drop_units(dist)
 		}
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, ...), crs = st_crs(x))
 	} else {
 		if (longlat) {
