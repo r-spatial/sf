@@ -754,7 +754,11 @@ st_sym_difference.sf = function(x, y, ...)
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}
 #' @example
 #' poly = st_polygon(list(cbind(c(0, 0, 1, 1, 0), c(0, 1, 1, 0, 0))))
-#' lines = st_multilinestring(list(cbind(c(0, 1), c(1, 1.05)), cbind(c(0, 1), c(0, -.05))))
+#' lines = st_multilinestring(list(
+#'   cbind(c(0, 1), c(1, 1.05)),
+#'   cbind(c(0, 1), c(0, -.05)),
+#'   cbind(c(1, .95, 1), c(1.05, .5, -.05))
+#' ))
 #' snapped = st_snap(poly, lines, tolerance=.1)
 #' plot(snapped, col='red')
 #' plot(poly, border='green', add=TRUE)
