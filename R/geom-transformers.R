@@ -13,7 +13,7 @@
 #' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
 #' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
-#' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+#' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
 #' @param ... passed on to \code{s2_buffer_cells}
 #' @return an object of the same class of \code{x}, with manipulated geometry.
@@ -67,7 +67,7 @@ st_buffer = function(x, dist, nQuadSegs = 30,
 #' @export
 st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
-	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle, 
+	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle,
 		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide, ...))
 
 .process_style_opts = function(endCapStyle, joinStyle, mitreLimit, singleSide) {
@@ -89,7 +89,7 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 }
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, 
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
@@ -132,7 +132,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 			if (any(dist < 0) && any(st_dimension(x) < 1))
 				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
-	
+
 			st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
 				endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
 				singleside = singleSide))
@@ -587,7 +587,7 @@ geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
 	if (longlat && sf_use_s2() && s2_model >= 0) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		fn = switch(op, intersection = s2::s2_intersection, 
+		fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
@@ -752,6 +752,13 @@ st_sym_difference.sf = function(x, y, ...)
 
 #' @name geos_binary_ops
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}
+#' @example
+#' poly = st_polygon(list(cbind(c(0, 0, 1, 1, 0), c(0, 1, 1, 0, 0))))
+#' lines = st_multilinestring(list(cbind(c(0, 1), c(1, 1.05)), cbind(c(0, 1), c(0, -.05))))
+#' snapped = st_snap(poly, lines, tolerance=.1)
+#' plot(snapped, col='red')
+#' plot(poly, border='green', add=TRUE)
+#' plot(lines, lwd=2, col='blue', add=TRUE)
 #' @export
 st_snap = function(x, y, tolerance) UseMethod("st_snap")
 
