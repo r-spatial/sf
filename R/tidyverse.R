@@ -359,7 +359,9 @@ nest.sf = function (.data, ...) {
 
 	class(.data) <- setdiff(class(.data), "sf")
 	ret = tidyr::nest(.data, ...)
-	ret[["data"]] = lapply(ret[["data"]], st_as_sf, sf_column_name = attr(.data, "sf_column"))
+	lst = which(sapply(ret, inherits, "list"))[1]
+	# re-sf:
+	ret[[lst]] = lapply(ret[[lst]], st_as_sf, sf_column_name = attr(.data, "sf_column"))
 	ret
 }
 
