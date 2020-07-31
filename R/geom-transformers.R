@@ -5,7 +5,7 @@
 #'
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
-#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
