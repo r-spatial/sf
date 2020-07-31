@@ -117,6 +117,30 @@ CPL_gdaltranslate <- function(src, dst, options, oo) {
     .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options, oo)
 }
 
+CPL_gdalvectortranslate <- function(src, dst, options, oo, doo) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options, oo, doo)
+}
+
+CPL_gdalbuildvrt <- function(src, dst, options, oo) {
+    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options, oo)
+}
+
+CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename, oo) {
+    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename, oo)
+}
+
+CPL_gdalnearblack <- function(src, dst, options, oo, doo) {
+    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options, oo, doo)
+}
+
+CPL_gdalgrid <- function(src, dst, options, oo) {
+    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options, oo)
+}
+
+CPL_gdal_warper <- function(infile, outfile, options, oo, doo) {
+    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo)
+}
+
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, append, delete_dsn = FALSE, delete_layer = FALSE, write_geometries = TRUE) {
     .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, append, delete_dsn, delete_layer, write_geometries)
 }

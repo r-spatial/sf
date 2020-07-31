@@ -110,7 +110,7 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 		return 1; // #nocov
 	GDALDatasetH result = GDALTranslate((const char *) dst[0], src_pt, opt, &err);
 	GDALTranslateOptionsFree(opt);
-	/* see https://github.com/r-spatial/sf/issues/1352: */
+	// see https://github.com/r-spatial/sf/issues/1352:
 	if (result != NULL)
 		GDALClose(result);
 	if (src_pt != NULL)
