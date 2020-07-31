@@ -1,5 +1,7 @@
 # version 0.9-6
 
+* fix `gdal_utils("translate")` locking input file; #1452
+
 * `st_make_grid` no longer selects cells intersecting with `x`; #1447
 
 * use `s2::s2_dwithin_matrix` in `st_is_within_distance`; #1367
