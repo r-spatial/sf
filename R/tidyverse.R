@@ -172,7 +172,7 @@ rename.sf <- function(.data, ...) {
 		stop("internal error: can't find sf column") # nocov
 
 	agr = st_agr(.data)
-	agr_loc = match(names(agr), names(.data))
+	agr_loc = match(names(agr), setdiff(names(.data), sf_column))
 
 	if (anyNA(agr_loc))
 		stop("internal error: can't find `agr` columns") # nocov
