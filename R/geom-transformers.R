@@ -752,6 +752,20 @@ st_sym_difference.sf = function(x, y, ...)
 
 #' @name geos_binary_ops
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}
+#' @details \code{st_snap} snaps the vertices and segments of a geometry to another geometry's vertices. If \code{y} contains more than one geometry, its geometries are merged into a collection before snapping to that collection.
+#' 
+#' (from the GEOS docs:) "A snap distance tolerance is used to control where snapping is performed. Snapping one geometry to another can improve robustness for overlay operations by eliminating nearly-coincident edges (which cause problems during noding and intersection calculation). Too much snapping can result in invalid topology being created, so the number and location of snapped vertices is decided using heuristics to determine when it is safe to snap. This can result in some potential snaps being omitted, however."
+#' @example
+#' poly = st_polygon(list(cbind(c(0, 0, 1, 1, 0), c(0, 1, 1, 0, 0))))
+#' lines = st_multilinestring(list(
+#'  cbind(c(0, 1), c(1, 1.05)),
+#'  cbind(c(0, 1), c(0, -.05)),
+#'  cbind(c(1, .95, 1), c(1.05, .5, -.05))
+#' ))
+#' snapped = st_snap(poly, lines, tolerance=.1)
+#' plot(snapped, col='red')
+#' plot(poly, border='green', add=TRUE)
+#' plot(lines, lwd=2, col='blue', add=TRUE)
 #' @export
 st_snap = function(x, y, tolerance) UseMethod("st_snap")
 

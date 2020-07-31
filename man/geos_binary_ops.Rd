@@ -54,6 +54,10 @@ numbers in the argument to \code{x}; geometries that are empty
 or contained fully inside geometries with higher priority are removed entirely.
 The \code{st_difference.sfc} method with a single argument returns an object with
 an \code{"idx"} attribute with the orginal index for returned geometries.
+
+\code{st_snap} snaps the vertices and segments of a geometry to another geometry's vertices. If \code{y} contains more than one geometry, its geometries are merged into a collection before snapping to that collection.
+
+(from the GEOS docs:) "A snap distance tolerance is used to control where snapping is performed. Snapping one geometry to another can improve robustness for overlay operations by eliminating nearly-coincident edges (which cause problems during noding and intersection calculation). Too much snapping can result in invalid topology being created, so the number and location of snapped vertices is decided using heuristics to determine when it is safe to snap. This can result in some potential snaps being omitted, however."
 }
 \note{
 To find whether pairs of simple feature geometries intersect, use
