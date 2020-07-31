@@ -1,6 +1,6 @@
 #' Create a regular tesselation over the bounding box of an sf or sfc object
 #'
-#' Create a square or hexagonal grid covering the geometry of an sf or sfc object
+#' Create a square or hexagonal grid covering the bounding box of the geometry of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
 #' @param cellsize target cellsize
 #' @param offset numeric of length 2; lower left corner coordinates (x, y) of the grid
@@ -11,8 +11,6 @@
 #' @param flat_topped logical; if \code{TRUE} generate flat topped hexagons, else generate pointy topped
 #' @return Object of class \code{sfc} (simple feature geometry list column) with, depending on \code{what} and \code{square},
 #' square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
-#' @details to obtain a grid covering the bounding box of a set of geometries, 
-#' pass \code{st_as_sfc(st_bbox(x))} for argument \code{x}
 #' @examples
 #' plot(st_make_grid(what = "centers"), axes = TRUE)
 #' plot(st_make_grid(what = "corners"), add = TRUE, col = 'green', pch=3)
@@ -22,6 +20,12 @@
 #' # non-default offset:
 #' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(0, .05 / (sqrt(3)/2))))
 #' plot(sfc, add = TRUE)
+#' nc = read_sf(system.file("shape/nc.shp", package="sf"))
+#' g = st_make_grid(nc)
+#' plot(g)
+#' plot(st_geometry(nc), add = TRUE)
+#' # g[nc] selects cells that intersect with nc:
+#' plot(g[nc], col = '#ff000088', add = TRUE)
 #' @export
 st_make_grid = function(x,
 		cellsize = c(diff(st_bbox(x)[c(1,3)]), diff(st_bbox(x)[c(2,4)]))/n,
@@ -95,15 +99,7 @@ st_make_grid = function(x,
 	} else
 		stop("unknown value of `what'")
 
-	ret = st_sfc(ret, crs = crs)
-
-	if (missing(x) || all(n == 1))
-		ret
-	else if (what != "polygons" || min(st_dimension(x)) < 2)
-		ret[x]
-	else
-		ret[lengths(st_relate(ret, x, "2********")) > 0] 
-			# overlap dim at least equal to the mininmum of that of x geoms
+	st_sfc(ret, crs = crs)
 }
 
 

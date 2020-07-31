@@ -37,11 +37,7 @@ Object of class \code{sfc} (simple feature geometry list column) with, depending
 square or hexagonal polygons, corner points of these polygons, or center points of these polygons.
 }
 \description{
-Create a square or hexagonal grid covering the geometry of an sf or sfc object
-}
-\details{
-to obtain a grid covering the bounding box of a set of geometries, 
-pass \code{st_as_sfc(st_bbox(x))} for argument \code{x}
+Create a square or hexagonal grid covering the bounding box of the geometry of an sf or sfc object
 }
 \examples{
 plot(st_make_grid(what = "centers"), axes = TRUE)
@@ -52,4 +48,10 @@ plot(sfc, add = TRUE)
 # non-default offset:
 plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(0, .05 / (sqrt(3)/2))))
 plot(sfc, add = TRUE)
+nc = read_sf(system.file("shape/nc.shp", package="sf"))
+g = st_make_grid(nc)
+plot(g)
+plot(st_geometry(nc), add = TRUE)
+# g[nc] selects cells that intersect with nc:
+plot(g[nc], col = '#ff000088', add = TRUE)
 }
