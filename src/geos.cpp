@@ -589,6 +589,13 @@ Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false, bool is_coverage = false) {
 
+#ifndef HAVE380
+	if (is_coverage) {
+		Rcpp::warning("ignoring 'is_coverage = TRUE' which requires GEOS version 3.8 or greater");
+		is_coverage = false;
+	}
+#endif
+
 	if (sfc.size() == 0)
 		return sfc; // #nocov
 
