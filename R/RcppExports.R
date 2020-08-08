@@ -173,8 +173,8 @@ CPL_geos_normalize <- function(sfc) {
     .Call('_sf_CPL_geos_normalize', PACKAGE = 'sf', sfc)
 }
 
-CPL_geos_union <- function(sfc, by_feature = FALSE) {
-    .Call('_sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature)
+CPL_geos_union <- function(sfc, by_feature = FALSE, is_coverage = FALSE) {
+    .Call('_sf_CPL_geos_union', PACKAGE = 'sf', sfc, by_feature, is_coverage)
 }
 
 CPL_geos_snap <- function(sfc0, sfc1, tolerance) {

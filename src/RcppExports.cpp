@@ -558,14 +558,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_union
-Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature);
-RcppExport SEXP _sf_CPL_geos_union(SEXP sfcSEXP, SEXP by_featureSEXP) {
+Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature, bool is_coverage);
+RcppExport SEXP _sf_CPL_geos_union(SEXP sfcSEXP, SEXP by_featureSEXP, SEXP is_coverageSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
     Rcpp::traits::input_parameter< bool >::type by_feature(by_featureSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_union(sfc, by_feature));
+    Rcpp::traits::input_parameter< bool >::type is_coverage(is_coverageSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_union(sfc, by_feature, is_coverage));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1183,7 +1184,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
     {"_sf_CPL_geos_is_empty", (DL_FUNC) &_sf_CPL_geos_is_empty, 1},
     {"_sf_CPL_geos_normalize", (DL_FUNC) &_sf_CPL_geos_normalize, 1},
-    {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 2},
+    {"_sf_CPL_geos_union", (DL_FUNC) &_sf_CPL_geos_union, 3},
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 11},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
