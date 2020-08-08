@@ -67,7 +67,7 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
 
-\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
 
 \item{...}{ignored}

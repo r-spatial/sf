@@ -8,7 +8,7 @@
 \usage{
 st_combine(x)
 
-st_union(x, y, ..., by_feature = FALSE)
+st_union(x, y, ..., by_feature = FALSE, is_coverage = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}

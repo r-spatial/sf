@@ -1,5 +1,7 @@
 # version 0.9-6
 
+* `st_union` gains an argument `is_coverage`, which, when set to `TRUE`, leads to much faster unioning in case features form a coverage (polygons don't overlap); #1462 by Don Baston
+
 * fix `gdal_utils("translate")` locking input file; #1452
 
 * `st_make_grid` no longer selects cells intersecting with `x`; #1447
