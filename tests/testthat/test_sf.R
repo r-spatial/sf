@@ -27,6 +27,13 @@ test_that("we can create points sf from data.frame", {
   expect_identical(class(meuse_sf), c("sf", "data.frame"))
 })
 
+test_that("st_as_sf responds to as_tibble = TRUE", {
+	data(meuse, package = "sp") # load data.frame from sp
+	meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, as_tibble = TRUE)
+	expect_identical(class(meuse_sf), c("sf", "tbl_df", "tbl", "data.frame"))
+})
+
+
 test_that("st_zm works", {
   pt = st_point(1:2)
   ptz = st_point(1:3, "XYZ")
