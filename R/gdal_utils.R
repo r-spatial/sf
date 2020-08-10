@@ -111,12 +111,11 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 
-	if (util == "info") {
+	if (util %in% c("info", "mdiminfo")) {
 		if (! quiet)
 			cat(ret)
 		invisible(ret)
-	} else {
-		# ret indicates error:
+	} else { # ret indicates error:
 		if (ret)
 			stop(paste0("gdal_utils ", util, ": an error occured"))
 		invisible(! ret) # success
