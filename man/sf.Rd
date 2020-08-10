@@ -16,7 +16,8 @@ st_sf(
   precision,
   sf_column_name = NULL,
   check_ring_dir = FALSE,
-  sfc_last = TRUE
+  sfc_last = TRUE,
+  as_tibble = FALSE
 )
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
@@ -42,6 +43,8 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 \item{check_ring_dir}{see \link{st_read}}
 
 \item{sfc_last}{logical; if \code{TRUE}, \code{sfc} columns are always put last, otherwise column order is left unmodified.}
+
+\item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
 \item{x}{object of class \code{sf}}
 

@@ -23,7 +23,8 @@ st_as_sf(x, ...)
   dim = "XYZ",
   remove = TRUE,
   na.fail = TRUE,
-  sf_column_name = NULL
+  sf_column_name = NULL,
+  as_tibble = FALSE
 )
 
 \method{st_as_sf}{sf}(x, ...)
@@ -59,6 +60,8 @@ st_as_sf(x, ...)
 
 \item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
 there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
+
+\item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
 \item{fill}{logical; the value for \code{fill} that was used in the call to \link[maps]{map}.}
 
