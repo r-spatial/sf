@@ -257,8 +257,7 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 		return 1; // #nocov
 	std::vector <char *> options_char = create_options(options, true);
 	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
-	//char *ret_val = GDALMultiDimInfo(ds, opt);
-	char *ret_val = GDALMultiDimInfo(ds, NULL);
+	char *ret_val = GDALMultiDimInfo(ds, opt);
 	GDALMultiDimInfoOptionsFree(opt);
 	GDALClose(ds);
 	Rcpp::CharacterVector ret(1);
