@@ -88,6 +88,9 @@ data(meuse, package = "sp")
 meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 meuse_sf[1:3,]
 summary(meuse_sf)
+# Use as_tibble = TRUE to return a tibble instead of a data.frame
+muse_tib = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant", as_tibble = TRUE)
+muse_tib[1:3,]
 library(sp)
 x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 x1 = 0.1 * x + 0.1
