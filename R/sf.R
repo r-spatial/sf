@@ -15,6 +15,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
+#' @param as_tibble logical; should the returned table be of class tibble or data.frame?
 #' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #'
@@ -35,7 +36,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
-		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL) {
+		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL, as_tibble = FALSE) {
 	if (! missing(wkt)) {
 		if (remove)
 			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
@@ -61,7 +62,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (remove)
 			x = x[-coords]
 	}
-	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name)
+	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name, as_tibble = as_tibble)
 }
 
 #' @name st_as_sf
@@ -199,6 +200,7 @@ list_column_to_sfc = function(x) {
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param sfc_last logical; if \code{TRUE}, \code{sfc} columns are always put last, otherwise column order is left unmodified.
 #' @param check_ring_dir see \link{st_read}
+#' @param as_tibble logical; should the returned table be of class tibble or data.frame?
 #' @details \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.
 #'
 #' When a single value is provided to \code{agr}, it is cascaded across all input columns; otherwise, a named vector like \code{c(feature1='constant', ...)} will set \code{agr} value to \code{'constant'} for the input column named \code{feature1}. See \code{demo(nc)} for a worked example of this.
@@ -216,7 +218,8 @@ list_column_to_sfc = function(x) {
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
 		stringsAsFactors = sf_stringsAsFactors(), crs, precision,
-		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE) {
+		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE,
+		as_tibble = FALSE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
 		x = x[[1L]]
@@ -268,6 +271,13 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			cbind(data.frame(row.names = row.names),
 				as.data.frame(x[-all_sfc_columns],
 					stringsAsFactors = stringsAsFactors, optional = TRUE))
+
+	df = if (!isTRUE(as_tibble)) # no worries:
+		df
+	else if (length(df) == 0) # ONLY one sfc
+		tibble::tibble(df)
+	else
+		df = tibble::new_tibble(df, nrow = nrow(df))
 
 	if (check_ring_dir) { # process:
 		for (i in seq_along(all_sfc_names))
