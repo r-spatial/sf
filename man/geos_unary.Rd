@@ -24,7 +24,8 @@ st_buffer(
   endCapStyle = "ROUND",
   joinStyle = "ROUND",
   mitreLimit = 1,
-  singleSide = FALSE
+  singleSide = FALSE,
+  ...
 )
 
 st_boundary(x)
@@ -52,7 +53,7 @@ st_node(x)
 st_segmentize(x, dfMaxLength, ...)
 }
 \arguments{
-\item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
+\item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
 \item{dist}{numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
@@ -66,8 +67,10 @@ st_segmentize(x, dfMaxLength, ...)
 
 \item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
 
-\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+\item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
+
+\item{...}{ignored}
 
 \item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.}
 
@@ -76,8 +79,6 @@ in which case negative \code{dist} values give buffers on the right-hand side, p
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
-
-\item{...}{ignored}
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 

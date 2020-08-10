@@ -2,6 +2,7 @@
 #openOGRLayer("PG:dbname=postgis" , "meuse2")
 
 suppressPackageStartupMessages(library(sf))
+options(rgdal_show_exportToProj4_warnings = "none")
 outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)

@@ -5,7 +5,7 @@
 #'
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
-#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
@@ -13,8 +13,9 @@
 #' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
 #' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
-#' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries, 
+#' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
+#' @param ... passed on to \code{s2_buffer_cells}
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
@@ -66,7 +67,7 @@ st_buffer = function(x, dist, nQuadSegs = 30,
 #' @export
 st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
-	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle, 
+	get_first_sfg(st_buffer(st_sfc(x), dist, nQuadSegs = nQuadSegs, endCapStyle = endCapStyle,
 		joinStyle = joinStyle, mitreLimit = mitreLimit, singleSide = singleSide, ...))
 
 .process_style_opts = function(endCapStyle, joinStyle, mitreLimit, singleSide) {
@@ -88,18 +89,23 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 }
 #' @export
 st_buffer.sfc = function(x, dist, nQuadSegs = 30,
-						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, 
+						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
-				!missing(mitreLimit) || !missing(singleSide))
-			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
-		if (inherits(dist, "units"))
-			units(dist) = as_units("m")
+#		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
+#				!missing(mitreLimit) || !missing(singleSide))
+#			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), drop_units(dist), ...), crs = st_crs(x))
+		if (inherits(dist, "units")) {
+			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
+				return(st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, radius = 1, ...),
+					crs = st_crs(x)))
+			units(dist) = as_units("m") # make sure has dimension length, possibly convert
+			dist = drop_units(dist)
+		}
+		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, ...), crs = st_crs(x))
 	} else {
 		if (longlat) {
 			warning("st_buffer does not correctly buffer longitude/latitude data")
@@ -126,7 +132,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
 			if (any(dist < 0) && any(st_dimension(x) < 1))
 				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
-	
+
 			st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
 				endCapStyle = endCapStyle, joinStyle = joinStyle, mitreLimit = mitreLimit,
 				singleside = singleSide))
@@ -581,7 +587,7 @@ geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
 	if (longlat && sf_use_s2() && s2_model >= 0) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		fn = switch(op, intersection = s2::s2_intersection, 
+		fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
@@ -746,6 +752,20 @@ st_sym_difference.sf = function(x, y, ...)
 
 #' @name geos_binary_ops
 #' @param tolerance tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}
+#' @details \code{st_snap} snaps the vertices and segments of a geometry to another geometry's vertices. If \code{y} contains more than one geometry, its geometries are merged into a collection before snapping to that collection.
+#'
+#' (from the GEOS docs:) "A snap distance tolerance is used to control where snapping is performed. Snapping one geometry to another can improve robustness for overlay operations by eliminating nearly-coincident edges (which cause problems during noding and intersection calculation). Too much snapping can result in invalid topology being created, so the number and location of snapped vertices is decided using heuristics to determine when it is safe to snap. This can result in some potential snaps being omitted, however."
+#' @example
+#' poly = st_polygon(list(cbind(c(0, 0, 1, 1, 0), c(0, 1, 1, 0, 0))))
+#' lines = st_multilinestring(list(
+#'  cbind(c(0, 1), c(1, 1.05)),
+#'  cbind(c(0, 1), c(0, -.05)),
+#'  cbind(c(1, .95, 1), c(1.05, .5, -.05))
+#' ))
+#' snapped = st_snap(poly, lines, tolerance=.1)
+#' plot(snapped, col='red')
+#' plot(poly, border='green', add=TRUE)
+#' plot(lines, lwd=2, col='blue', add=TRUE)
 #' @export
 st_snap = function(x, y, tolerance) UseMethod("st_snap")
 
@@ -770,6 +790,7 @@ st_snap.sf = function(x, y, tolerance)
 #' @name geos_combine
 #' @export
 #' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features
+#' @param is_coverage logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg} (optional)
 #' @param ... ignored
 #' @seealso \link{st_intersection}, \link{st_difference}, \link{st_sym_difference}
@@ -780,29 +801,29 @@ st_snap.sf = function(x, y, tolerance)
 #' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
-st_union = function(x, y, ..., by_feature = FALSE) UseMethod("st_union")
+st_union = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) UseMethod("st_union")
 
 #' @export
-st_union.sfg = function(x, y, ..., by_feature = FALSE) {
+st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	out = if (missing(y)) # unary union, possibly by_feature:
-		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
+		st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 	else
 		st_union(st_geometry(x), st_geometry(y))
 	get_first_sfg(out)
 }
 
 #' @export
-st_union.sfc = function(x, y, ..., by_feature = FALSE) {
+st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	if (missing(y)) # unary union, possibly by_feature:
-		st_sfc(CPL_geos_union(st_geometry(x), by_feature))
+		st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 	else
 		geos_op2_geom("union", x, y)
 }
 
 #' @export
-st_union.sf = function(x, y, ..., by_feature = FALSE) {
+st_union.sf = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	if (missing(y)) { # unary union, possibly by_feature:
-		geom = st_sfc(CPL_geos_union(st_geometry(x), by_feature))
+		geom = st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 		if (by_feature)
 			st_set_geometry(x, geom)
 		else

@@ -21,3 +21,21 @@ if (sf_extSoftVersion()["GEOS"] >= "3.6.1") {
   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
   print(all.equal(nf1, nf2))
 }
+
+set.seed(131)
+n = 1000
+pts = st_as_sf(data.frame(x = runif(n), y = runif(n)), coords = c("x", "y"), crs = 4326)
+# unit square in degrees: 111 x 111 km
+
+size = 15000 
+w <- st_is_within_distance(pts[1,], pts, size)[[1]]
+
+bs = units::set_units(size / s2::s2_earth_radius_meters(), rad)
+b1 = st_buffer(pts[1,], bs)
+b2 = st_buffer(pts[1,], size)
+all.equal(b1, b2)
+
+#plot(pts)
+#plot(pts[1,], add = TRUE, pch = 16, cex = 2, col = 'blue')
+#plot(st_buffer(pts[1,], bs), add = TRUE)
+#plot(pts[w,], add = TRUE, col = 'red')

@@ -1,5 +1,5 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> options(rgdal_show_exportToProj4_warnings = "none")
 > suppressWarnings(st_crs(-1))
 Coordinate Reference System: NA
 > suppressWarnings(st_crs(999999))
@@ -99,4 +100,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.888   0.044   0.928 
+  0.818   0.076   0.885 

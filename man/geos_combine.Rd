@@ -8,7 +8,7 @@
 \usage{
 st_combine(x)
 
-st_union(x, y, ..., by_feature = FALSE)
+st_union(x, y, ..., by_feature = FALSE, is_coverage = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
@@ -18,6 +18,8 @@ st_union(x, y, ..., by_feature = FALSE)
 \item{...}{ignored}
 
 \item{by_feature}{logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features}
+
+\item{is_coverage}{logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 }
 \value{
 \code{st_combine} returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.

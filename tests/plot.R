@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(sf))
+options(rgdal_show_exportToProj4_warnings = "none")
 library(dplyr)
 
 # plot linestrings:

@@ -118,8 +118,8 @@ summary(st_as_sf(meuse.area))
 summary(st_as_sf(meuse.riv))
 summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
-summary(st_as_sf(pol.grd))
-summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+# summary(st_as_sf(pol.grd))
+# summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 if (require(spatstat)) {
   g = st_as_sf(gorillas)
   # select only the points:

@@ -1,5 +1,5 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -19,6 +19,7 @@ Type 'q()' to quit R.
 > #openOGRLayer("PG:dbname=postgis" , "meuse2")
 > 
 > suppressPackageStartupMessages(library(sf))
+> options(rgdal_show_exportToProj4_warnings = "none")
 > outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
 > hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 > hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
@@ -110,9 +111,6 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                      
                      
 > x <- st_as_sf(meuse.grid) # don't print: CRS variations.
-Warning message:
-In CPL_crs_from_input(x) :
-  GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.
 > summary(st_as_sf(meuse.area))
           geometry
  POLYGON      :1  
@@ -177,4 +175,4 @@ geographic CRS: NAD27
 > 
 > proc.time()
    user  system elapsed 
-  3.706   0.047   3.766 
+  3.792   0.059   3.843 

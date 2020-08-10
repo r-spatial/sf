@@ -7,6 +7,8 @@
 # because sf overrides all default implementations
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
+	if (inherits(template, "tbl_df"))
+		data = dplyr::as_tibble(data)
 
 	# Return a bare data frame is the geometry column is no longer there
 	if (!sfc_name %in% names(data))
@@ -84,10 +86,10 @@ ungroup.sf <- function(x, ...) {
 		stopifnot(length(geom) == nrow(x))
 		x[[ sf_column_name ]] = geom
 	}
-	structure(x, 
+	structure(x,
 		sf_column = sf_column_name,
 		agr = agr,
-		class = c("sf", class(x))) 
+		class = c("sf", class(x)))
 }
 
 
@@ -172,7 +174,7 @@ rename.sf <- function(.data, ...) {
 		stop("internal error: can't find sf column") # nocov
 
 	agr = st_agr(.data)
-	agr_loc = match(names(agr), names(.data))
+	agr_loc = match(names(agr), setdiff(names(.data), sf_column))
 
 	if (anyNA(agr_loc))
 		stop("internal error: can't find `agr` columns") # nocov
@@ -204,9 +206,9 @@ slice.sf <- function(.data, ..., .dots) {
 #' @aliases summarise
 #' @param do_union logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.
 #' @return an object of class \link{sf}
-#' @details 
+#' @details
 #' In case one or more of the arguments (expressions) in the \code{summarise} call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of \code{do_union}.
-#' 
+#'
 #' In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 #' @examples
 #' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
@@ -359,7 +361,9 @@ nest.sf = function (.data, ...) {
 
 	class(.data) <- setdiff(class(.data), "sf")
 	ret = tidyr::nest(.data, ...)
-	ret[["data"]] = lapply(ret[["data"]], st_as_sf, sf_column_name = attr(.data, "sf_column"))
+	lst = which(sapply(ret, inherits, "list"))[1]
+	# re-sf:
+	ret[[lst]] = lapply(ret[[lst]], st_as_sf, sf_column_name = attr(.data, "sf_column"))
 	ret
 }
 
