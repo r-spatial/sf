@@ -253,7 +253,7 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 		Rcpp::CharacterVector oo) { 
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
-	GDALMultiDimInfoOptions* opt = *GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
+	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
 	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
 	if (ds == NULL)
 		return 1; // #nocov
@@ -272,7 +272,7 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
-	GDALMultiDimTranslateOptions* opt =  GDALMultiDimTranslateOptionsNew(options_char.data(), NULL);
+	GDALMultiDimTranslateOptions* opt = GDALMultiDimTranslateOptionsNew(options_char.data(), NULL);
 
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
