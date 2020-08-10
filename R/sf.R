@@ -34,6 +34,9 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 #' meuse_sf[1:3,]
 #' summary(meuse_sf)
+#' # Use as_tibble = TRUE to return a tibble instead of a data.frame
+#' muse_tib = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant", as_tibble = TRUE)
+#' muse_tib[1:3,]
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL, as_tibble = FALSE) {
