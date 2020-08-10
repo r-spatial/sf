@@ -251,19 +251,20 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
 		Rcpp::CharacterVector oo) { 
-	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
-	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
 	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
 	if (ds == NULL)
 		return 1; // #nocov
-	char *ret_val = GDALMultiDimInfo(ds, opt);
+	std::vector <char *> options_char = create_options(options, true);
+	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
+	//char *ret_val = GDALMultiDimInfo(ds, opt);
+	char *ret_val = GDALMultiDimInfo(ds, NULL);
 	GDALMultiDimInfoOptionsFree(opt);
 	GDALClose(ds);
 	Rcpp::CharacterVector ret(1);
 	if (ret_val != NULL) {
 		ret[0] = ret_val; // copies?
-		// CPLFree(ret_val);
+		CPLFree(ret_val);
 	} else
 		Rcpp::stop("GDALMultiDimInfo returned NULL");
 	return ret;
