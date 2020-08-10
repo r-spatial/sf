@@ -354,9 +354,15 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	// get color table, attribute table, and min/max values:
 	List colorTables(poDataset->GetRasterCount());
 	List attributeTables(poDataset->GetRasterCount());
+	CharacterVector descriptions(poDataset->GetRasterCount());
 	NumericMatrix ranges(poDataset->GetRasterCount(), 4);
 	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 		poBand = poDataset->GetRasterBand(i + 1);
+		const char *md = poBand->GetMetadataItem("BANDNAME", NULL);
+		if (md == NULL)
+			descriptions(i) = poBand->GetDescription();
+		else
+			descriptions(i) = md;
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
 		if (poBand->GetCategoryNames() != NULL)
@@ -443,6 +449,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["attribute_tables"] = attributeTables,
 		_["color_tables"] = colorTables,
 		_["ranges"] = ranges,
+		_["descriptions"] = descriptions,
 		_["default_geotransform"] = default_geotransform
 	);
 	if (read_data) {
