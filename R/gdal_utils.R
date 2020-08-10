@@ -106,7 +106,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo),
 			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo),
 			grid = CPL_gdalgrid(source, destination, options, oo),
-			mdiminfo = CPL_gdalmdiminfo(source, oo),
+			mdiminfo = CPL_gdalmdiminfo(source, options, oo),
 			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
