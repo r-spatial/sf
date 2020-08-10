@@ -258,9 +258,11 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	if (ds == NULL)
 		return 1; // #nocov
 	char *ret_val = GDALMultiDimInfo(ds, opt);
-	Rcpp::CharacterVector ret = ret_val; // copies
-	CPLFree(ret_val);
 	GDALMultiDimInfoOptionsFree(opt);
+	Rcpp::CharacterVector ret(1);
+	if (ret_val != NULL)
+		ret[0] = ret_val; // copies?
+	CPLFree(ret_val);
 	GDALClose(ds);
 	return ret;
 }
