@@ -23,10 +23,10 @@ resampling_method = function(option = "near") {
 
 #' Native interface to gdal utils
 #' @name gdal_utils
-#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}
-#' @param source character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one
+#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1)
+#' @param source character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one
 #' @param destination character; name of output layer
-#' @param options character; raster layer read options
+#' @param options character; options for the utility
 #' @param quiet logical; if \code{TRUE}, suppress printing of output for \code{info}
 #' @param processing character; processing options for \code{demprocessing}
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
@@ -106,6 +106,8 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo),
 			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo),
 			grid = CPL_gdalgrid(source, destination, options, oo),
+			mdiminfo = CPL_gdalmdiminfo(source, oo),
+			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 

@@ -246,6 +246,64 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	return result == NULL || err;
 }
 
+// gdal >= 3.1: mdim utils:
+#if ((GDAL_VERSION_MAJOR == 3 && GDAL_VERSION_MINOR >= 1) || GDAL_VERSION_MAJOR > 3)
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
+		Rcpp::CharacterVector oo) { 
+	std::vector <char *> options_char = create_options(options, true);
+	std::vector <char *> oo_char = create_options(oo, true);
+	GDALMultiDimInfoOptions* opt = *GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
+	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
+	if (ds == NULL)
+		return 1; // #nocov
+	char *ret_val = GDALMultiDimInfo(ds, opt);
+	Rcpp::CharacterVector ret = ret_val; // copies
+	CPLFree(ret_val);
+	GDALMultiDimInfoOptionsFree(opt);
+	GDALClose(ds);
+	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+
+	int err = 0;
+	std::vector <char *> options_char = create_options(options, true);
+	std::vector <char *> oo_char = create_options(oo, true);
+	GDALMultiDimTranslateOptions* opt =  GDALMultiDimTranslateOptionsNew(options_char.data(), NULL);
+
+	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
+		NULL, oo_char.data(), NULL);
+	if (src_pt == NULL)
+		return 1; // #nocov
+	std::vector<GDALDatasetH> srcpt(src.size());
+	for (int i = 0; i < src.size(); i++) {
+		srcpt[i] = GDALOpenEx((const char *) src[i], GDAL_OF_RASTER | GA_ReadOnly, NULL, 
+			oo_char.data(), NULL);
+		if (srcpt[i] == NULL)
+			Rcpp::stop("cannot open source dataset");
+	}
+	GDALDatasetH result = GDALMultiDimTranslate((const char *) dst[0], NULL, srcpt.size(), srcpt.data(), opt, &err);
+	GDALMultiDimTranslateOptionsFree(opt);
+	if (result != NULL)
+		GDALClose(result);
+	for (int i = 0; i < src.size(); i++)
+		GDALClose(srcpt[i]);
+	return result == NULL || err;
+}
+#else
+Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
+		Rcpp::CharacterVector oo) {
+	Rcpp::stop("GDAL version >= 3.1 required for mdiminfo");
+}
+Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+	Rcpp::stop("GDAL version >= 3.1 required for mdimtranslate");
+}
+#endif
+
 #else
 #include "Rcpp.h"
 
@@ -294,6 +352,16 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
+}
+
+Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
+		Rcpp::CharacterVector oo) {
+	Rcpp::stop("GDAL version >= 3.1 required for mdiminfo");
+}
+
+Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+	Rcpp::stop("GDAL version >= 3.1 required for mdimtranslate");
 }
 #endif
 
