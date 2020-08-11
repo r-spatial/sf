@@ -837,7 +837,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @name stars
 #' @export
 #' @param key.width ignore
-.image_scale_factor = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
+.image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
 	..., axes = FALSE, key.width, key.length) {
 
 	n = length(z)
