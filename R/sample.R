@@ -98,7 +98,7 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_no
 	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
-		res = st_set_crs(do.call(c, ret), st_crs(x))
+		st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,
 					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
@@ -106,15 +106,15 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_no
 					 st_poly_sample(x, size = size, ..., type = type))
 		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
-			if(diff > 0) { # too few points
+			if (diff > 0) { # too few points
 				res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
 				res = c(res, res_additional)
 			} else if (diff < 0) { # too many points
 				res = res[1:size]
 			}
 		}
+		res
 	}
-	res
 }
 
 #' @export
@@ -124,8 +124,16 @@ st_sample.sfg = function(x, size, ...) {
 }
 
 st_poly_sample = function(x, size, ..., type = "random",
-                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]]) {
+                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
+						  by_polygon = FALSE) {
 
+	if (by_polygon && inherits(x, "sfc_MULTIPOLYGON")) { # recurse into polygons:
+		sum_a = units::drop_units(sum(st_area(x)))
+		x = lapply(suppressWarnings(st_cast(st_geometry(x), "POLYGON")), st_sfc, crs = st_crs(x))
+		a = sapply(x, st_area)
+		ret = mapply(st_poly_sample, x, size = size * a / sum_a, type = type, ...)
+		return(do.call(c, ret))
+	}
 	if (type %in% c("hexagonal", "regular", "random")) {
 
 		if (isTRUE(st_is_longlat(x))) {
@@ -139,8 +147,13 @@ st_poly_sample = function(x, size, ..., type = "random",
 		a1 = as.numeric(sum(st_area(x)))
 		# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
 		# for instance has 0 st_area
-		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0)
-			size = round(size * a0 / a1)
+		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) {
+			r = round(size * a0 / a1)
+			size = if (r == 0)
+					rbinom(1, 1, size * a0 / a1)
+				else
+					r
+		}
 		bb = st_bbox(x)
 
 		pts = if (type == "hexagonal") {
