@@ -11,7 +11,14 @@ st_sample(x, size, ...)
 
 \method{st_sample}{sf}(x, size, ...)
 
-\method{st_sample}{sfc}(x, size, ..., type = "random", exact = TRUE)
+\method{st_sample}{sfc}(
+  x,
+  size,
+  ...,
+  type = "random",
+  exact = TRUE,
+  warn_if_not_integer = TRUE
+)
 
 \method{st_sample}{sfg}(x, size, ...)
 }
@@ -28,6 +35,8 @@ or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{sp
 \item{exact}{logical; should the length of output be exactly
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
+
+\item{warn_if_not_integer}{logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries

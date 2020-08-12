@@ -17,6 +17,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #'
 #' @param x object of class \code{sf} or \code{sfc}
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
+#' @param warn_if_not_integer logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer
 #' @param ... passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)
 #' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
 #' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).
@@ -90,10 +91,10 @@ st_sample.sf = function(x, size, ...) st_sample(st_geometry(x), size, ...)
 
 #' @export
 #' @name st_sample
-st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE) {
+st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_not_integer = TRUE) {
 
-	if (!missing(size) && any(size %% 1 != 0))
-		stop("size should be an integer")
+	if (!missing(size) && warn_if_not_integer && any(size %% 1 != 0))
+		warning("size is not an integer")
 	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
 		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))

@@ -1,5 +1,7 @@
 # version 0.9-6
 
+* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning
+
 * `gdal_utils` adds utils `mdiminfo` and `mdimtranslate` (requires GDAL >= 3.1)
 
 * `st_union` gains an argument `is_coverage`, which, when set to `TRUE`, leads to much faster unioning in case features form a coverage (polygons don't overlap); #1462 by Don Baston
