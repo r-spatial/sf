@@ -44,9 +44,9 @@ an \code{sfc} object containing the sampled \code{POINT} geometries
 \description{
 Sample points on or in (sets of) spatial features.
 By default, returns a pre-specified number of points that is equal to
-\code{size} (if \code{type = "random"}) or an approximation of
-\code{size} (for other sampling types). \code{spatstat} methods are
-interfaced and do not use the \code{size} argument.
+\code{size} (if \code{type = "random"} and \code{exact = TRUE}) or an approximation of
+\code{size} otherwise. \code{spatstat} methods are
+interfaced and do not use the \code{size} argument, see examples.
 }
 \details{
 The function is vectorised: it samples \code{size} points across all geometries in

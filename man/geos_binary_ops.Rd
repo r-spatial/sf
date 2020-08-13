@@ -90,6 +90,16 @@ plot(i["n.overlaps"])
 summary(i$n.overlaps - lengths(i$origins))
 # A helper function that erases all of y from x:
 st_erase = function(x, y) st_difference(x, st_union(st_combine(y)))
+poly = st_polygon(list(cbind(c(0, 0, 1, 1, 0), c(0, 1, 1, 0, 0))))
+lines = st_multilinestring(list(
+ cbind(c(0, 1), c(1, 1.05)),
+ cbind(c(0, 1), c(0, -.05)),
+ cbind(c(1, .95, 1), c(1.05, .5, -.05))
+))
+snapped = st_snap(poly, lines, tolerance=.1)
+plot(snapped, col='red')
+plot(poly, border='green', add=TRUE)
+plot(lines, lwd=2, col='blue', add=TRUE)
 }
 \seealso{
 \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.

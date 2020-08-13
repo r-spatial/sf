@@ -1,6 +1,8 @@
 # version 0.9-6
 
-* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning
+* `st_sample` gains an argument, `by_polygon`, to more clevery sample `MULTIPOLYGON` geometries
+
+* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning and handles values of size that would round to zero
 
 * `gdal_utils` adds utils `mdiminfo` and `mdimtranslate` (requires GDAL >= 3.1)
 
