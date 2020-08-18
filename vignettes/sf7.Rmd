@@ -39,6 +39,18 @@ s2_available = !inherits(try(sf_use_s2(TRUE), silent=TRUE), "try-error")
 s2_available
 ```
 
+Attach the `s2` package as follows:
+
+```{r}
+library(s2)
+```
+
+
+Most of the package's functions start with `s2_` in the same way that most `sf`
+function names start with `st_`.
+
+# Projected and geographic coordinates
+
 Spatial coordinates either refer to _projected_ (or Cartesian)
 coordinates, meaning that they are associated to points on a flat
 space, or to unprojected or _geographic_ coordinates, when they
@@ -118,9 +130,7 @@ has an argument `oriented = FALSE`, which will check and correct
 ring directions, assuming that all exterior rings occupy an area
 smaller than half the globe:
 ```{r eval=s2_available}
-library(sf)
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf")) # wrong ring directions
-library(s2)
 s2_area(st_as_s2(nc, oriented = FALSE)[1:3]) # corrects ring direction, correct area:
 s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # wrong direction: Earth's surface minus area
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
@@ -128,19 +138,27 @@ s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # no second correction needed here:
 ```
 
 Here is an example where the oceans are computed as the difference
-from the full polygon,
+from the full polygon representing the globe,
 ```{r eval=s2_available}
-as_s2_geography(TRUE)
+g = as_s2_geography(TRUE)
+g
 ```
 
 and the countries, and shown in an orthographic projection:
 ```{r eval=s2_available}
 co = s2_data_countries()
-oc = s2_difference(as_s2_geography(TRUE), s2_union_agg(co)) # oceans
+oc = s2_difference(g, s2_union_agg(co)) # oceans
 b = s2_buffer_cells(as_s2_geography("POINT(-30 52)"), 9800000) # visible half
 i = s2_intersection(b, oc) # visible ocean
 plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
 ```
+
+We can from this calculate the proportion of the Earth's surface covered by oceans:
+
+```{r}
+s2_area(oc) / s2_area(g)
+```
+
 
 ## Half-closed polygon boundaries 
 
