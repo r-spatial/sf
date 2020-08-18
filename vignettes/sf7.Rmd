@@ -15,6 +15,7 @@ vignette: >
 ---
 
 ```{r echo=FALSE, include=FALSE}
+library(sf)
 knitr::opts_chunk$set(collapse = TRUE)
 EVAL = !inherits(try(sf_use_s2(TRUE), silent=TRUE), "try-error")
 ```
