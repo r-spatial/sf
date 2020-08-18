@@ -277,6 +277,78 @@ summary(as.vector(d1)-as.vector(d2))
 
 # Transformations
 
+## Buffers
+
+Buffers can be calculated for features with geographic coordinates as follows,
+using an unprojected object representing the UK as an example:
+
+```{r eval=s2_available, fig.show='hold', out.width="50%"}
+uk = s2_data_countries("United Kingdom")
+class(uk)
+uk_sfc = st_as_sfc(uk) 
+uk_buffer = s2_buffer_cells(uk, distance = 20000)
+uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
+uk_buffer3 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
+class(uk_buffer)
+plot(uk_sfc)
+plot(st_as_sfc(uk_buffer))
+plot(st_as_sfc(uk_buffer2))
+plot(st_as_sfc(uk_buffer3))
+```
+
+```{r, echo=FALSE, eval=FALSE}
+uk_sf = st_as_sf(uk) # fails, should this not work?
+```
+
+The plots above show that you can adjust the level of spatial precision in the 
+results of s2 buffer operations with the `max_cells` argument, set to 1000 by default.
+Deciding on an appropriate value is a balance between excessive detail increasing
+computational resources (represented by `uk_buffer2`, bottom left) and
+excessive simplification (bottom right).
+
+To achieve a similar result you could first transform the result and then use
+the `st_buffer()` function from `sf`. A simple benchmark shows the
+computational efficiency of the `s2` geometry engine in comparison
+with transforming and then creating buffers:
+
+```{r}
+# the sf way
+system.time({
+  uk_projected = st_transform(uk_sfc, 27700)
+  uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
+})
+# sf way with few than the 30 segments in the buffer
+system.time({
+  uk_projected = st_transform(uk_sfc, 27700)
+  uk_buffer_sf2 = st_buffer(uk_projected, dist = 20000, nQuadSegs = 4)
+})
+# s2 with default cell size
+system.time({
+  uk_buffer = s2_buffer_cells(uk, distance = 20000)
+})
+# s2 with 10000 cells
+system.time({
+  uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
+})
+# s2 with 100 cells
+system.time({
+  uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
+})
+```
+
+The result of the previous benchmarks emphasise the point that there are
+trade-offs between geographic resolution and computational resources,
+something that web developers working on geographic services
+such as Google Maps understand well.
+In this case the default setting of 1000 cells, which runs slightly faster than
+the default transform -> buffer workflow, is probably appropriate given the
+low resolution of the input geometry representing the UK.
+
+As discussed in the [`sf` issue tracker](https://github.com/r-spatial/sf/issues/1367),
+deciding on workflows and 
+selecting appropriate levels of level of geographic resolution can
+be an iterative process.
+
 ## References
 
 * Dewey Dunnington, Edzer Pebesma and Ege Rubak, 2020. s2:
