@@ -18,13 +18,7 @@ format.sfc = function(x, ..., width = 30) {
 #' Create simple feature geometry list column, set class, and add coordinate reference system and precision
 #'
 #' @name sfc
-#' @alias sfc_POINT
-#' @alias sfc_LINESTRING
-#' @alias sfc_POLYGON
-#' @alias sfc_MULTIPOINT
-#' @alias sfc_MULTILINESTRING
-#' @alias sfc_MULTIPOLYGON
-#' @alias sfc_GEOMETRYCOLLECTION
+#' @aliases sfc_POINT sfc_LINESTRING sfc_POLYGON sfc_MULTIPOINT sfc_MULTILINESTRING sfc_MULTIPOLYGON sfc_GEOMETRYCOLLECTION
 #' @param ... zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.
 #' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}

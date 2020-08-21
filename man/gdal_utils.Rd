@@ -15,13 +15,13 @@ gdal_utils(
 )
 }
 \arguments{
-\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}}
+\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1)}
 
-\item{source}{character; name of input layer(s); for \code{warp} or \code{buidvrt} this can be more than one}
+\item{source}{character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one}
 
 \item{destination}{character; name of output layer}
 
-\item{options}{character; raster layer read options}
+\item{options}{character; options for the utility}
 
 \item{quiet}{logical; if \code{TRUE}, suppress printing of output for \code{info}}
 

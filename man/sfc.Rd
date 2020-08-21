@@ -3,6 +3,13 @@
 \name{sfc}
 \alias{sfc}
 \alias{st_sfc}
+\alias{sfc_POINT}
+\alias{sfc_LINESTRING}
+\alias{sfc_POLYGON}
+\alias{sfc_MULTIPOINT}
+\alias{sfc_MULTILINESTRING}
+\alias{sfc_MULTIPOLYGON}
+\alias{sfc_GEOMETRYCOLLECTION}
 \title{Create simple feature geometry list column}
 \usage{
 st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)

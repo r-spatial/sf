@@ -28,7 +28,6 @@
 .image_scale_factor(
   z,
   col,
-  breaks = NULL,
   key.pos,
   add.axis = TRUE,
   ...,

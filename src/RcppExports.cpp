@@ -435,6 +435,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_gdalmdiminfo
+Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, Rcpp::CharacterVector oo);
+RcppExport SEXP _sf_CPL_gdalmdiminfo(SEXP objSEXP, SEXP optionsSEXP, SEXP ooSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdalmdiminfo(obj, options, oo));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdalmdimtranslate
+Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst, Rcpp::CharacterVector options, Rcpp::CharacterVector oo);
+RcppExport SEXP _sf_CPL_gdalmdimtranslate(SEXP srcSEXP, SEXP dstSEXP, SEXP optionsSEXP, SEXP ooSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type src(srcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dst(dstSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdalmdimtranslate(src, dst, options, oo));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_gdal_warper
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile, Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo);
 RcppExport SEXP _sf_CPL_gdal_warper(SEXP infileSEXP, SEXP outfileSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP dooSEXP) {
@@ -1175,6 +1202,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 6},
     {"_sf_CPL_gdalnearblack", (DL_FUNC) &_sf_CPL_gdalnearblack, 5},
     {"_sf_CPL_gdalgrid", (DL_FUNC) &_sf_CPL_gdalgrid, 4},
+    {"_sf_CPL_gdalmdiminfo", (DL_FUNC) &_sf_CPL_gdalmdiminfo, 3},
+    {"_sf_CPL_gdalmdimtranslate", (DL_FUNC) &_sf_CPL_gdalmdimtranslate, 4},
     {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 5},
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 14},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},

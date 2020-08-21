@@ -137,6 +137,14 @@ CPL_gdalgrid <- function(src, dst, options, oo) {
     .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options, oo)
 }
 
+CPL_gdalmdiminfo <- function(obj, options, oo) {
+    .Call('_sf_CPL_gdalmdiminfo', PACKAGE = 'sf', obj, options, oo)
+}
+
+CPL_gdalmdimtranslate <- function(src, dst, options, oo) {
+    .Call('_sf_CPL_gdalmdimtranslate', PACKAGE = 'sf', src, dst, options, oo)
+}
+
 CPL_gdal_warper <- function(infile, outfile, options, oo, doo) {
     .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo)
 }
