@@ -116,7 +116,8 @@ st_crs.bbox = function(x, ...) {
 #' @name st_crs
 #' @export
 st_crs.CRS = function(x, ...) {
-	if (is.null(comment(x)))
+	if (is.null(comment(x)) || (CPL_proj_version() < "6.0.0" || 
+                CPL_gdal_version() < "3.0.0"))
 		st_crs(x@projargs)
 	else {
 		ret = st_crs(comment(x))
