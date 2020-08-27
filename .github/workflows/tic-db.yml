@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - master
-  pull_request:b
+  pull_request:
   # for now, CRON jobs only run on the default branch of the repo (i.e. usually on master)
   schedule:
     # * is a special character in YAML so you have to quote this string
