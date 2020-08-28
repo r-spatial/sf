@@ -16,11 +16,40 @@ vignette: >
 
 ```{r echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
-EVAL = !inherits(try(sf_use_s2(TRUE), silent=TRUE), "try-error")
 ```
+
+# Introduction
+
 This vignette describes what spherical geometry implies, and how
 package `sf` uses the s2geometry library (https://s2geometry.io)
 for geometrical measures, predicates and transformations.
+The code in this vignette only run if `s2` has been installed, e.g. with
+
+```{r, eval=FALSE}
+install.packages("s2")
+```
+
+and is available.
+After `sf` has been attached, you can check if `s2` is available
+as follows:
+
+```{r}
+library(sf)
+s2_available = !inherits(try(sf_use_s2(TRUE), silent=TRUE), "try-error")
+s2_available
+```
+
+Attach the `s2` package as follows:
+
+```{r}
+library(s2)
+```
+
+
+Most of the package's functions start with `s2_` in the same way that most `sf`
+function names start with `st_`.
+
+# Projected and geographic coordinates
 
 Spatial coordinates either refer to _projected_ (or Cartesian)
 coordinates, meaning that they are associated to points on a flat
@@ -100,10 +129,8 @@ For S2, ring direction is essential. For that reason, `st_as_s2`
 has an argument `oriented = FALSE`, which will check and correct
 ring directions, assuming that all exterior rings occupy an area
 smaller than half the globe:
-```{r eval=EVAL}
-library(sf)
+```{r eval=s2_available}
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf")) # wrong ring directions
-library(s2)
 s2_area(st_as_s2(nc, oriented = FALSE)[1:3]) # corrects ring direction, correct area:
 s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # wrong direction: Earth's surface minus area
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
@@ -111,19 +138,27 @@ s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # no second correction needed here:
 ```
 
 Here is an example where the oceans are computed as the difference
-from the full polygon,
-```{r eval=EVAL}
-as_s2_geography(TRUE)
+from the full polygon representing the globe,
+```{r eval=s2_available}
+g = as_s2_geography(TRUE)
+g
 ```
 
 and the countries, and shown in an orthographic projection:
-```{r eval=EVAL}
+```{r eval=s2_available}
 co = s2_data_countries()
-oc = s2_difference(as_s2_geography(TRUE), s2_union_agg(co)) # oceans
+oc = s2_difference(g, s2_union_agg(co)) # oceans
 b = s2_buffer_cells(as_s2_geography("POINT(-30 52)"), 9800000) # visible half
 i = s2_intersection(b, oc) # visible ocean
 plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
 ```
+
+We can from this calculate the proportion of the Earth's surface covered by oceans:
+
+```{r}
+s2_area(oc) / s2_area(g)
+```
+
 
 ## Half-closed polygon boundaries 
 
@@ -147,7 +182,7 @@ would be handled in a grid (raster) coverage, where every grid cell
 (typically) only contains its upper-left corner and its upper and
 left sides.
 
-```{r eval=EVAL}
+```{r eval=s2_available}
 a = as_s2_geography("POINT(0 0)")
 b = as_s2_geography("POLYGON((0 0,1 0,1 1,0 1,0 0))")
 s2_intersects(a, b, s2_options(model = "open")) 
@@ -167,7 +202,7 @@ coordinates because
 
 S2 has two alternatives: the cap and the `lat_lng_rect`:
 
-```{r eval=EVAL}
+```{r eval=s2_available}
 fiji = s2_data_countries("Fiji")
 aa = s2_data_countries("Antarctica")
 s2_bounds_cap(fiji)
@@ -186,15 +221,15 @@ not the mean of `lng_lo` and `lng_hi`.
 The two-dimensional R2 library that was formerly used by `sf` is
 [GEOS](https://trac.osgeo.org/geos/), and `sf` can be instrumented to
 use GEOS or `sf`. First we will ask if `s2` is being used by default:
-```{r eval=EVAL}
+```{r eval=s2_available}
 sf_use_s2()
 ```
 then we can switch it of (and use GEOS) by
-```{r eval=EVAL}
+```{r eval=s2_available}
 sf_use_s2(FALSE)
 ```
 and switch it on (and use S2) by
-```{r eval=EVAL}
+```{r eval=s2_available}
 sf_use_s2(TRUE)
 ```
 
@@ -203,7 +238,7 @@ sf_use_s2(TRUE)
 # Measures
 
 ## Area
-```{r eval=EVAL}
+```{r eval=s2_available}
 library(sf)
 library(units)
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
@@ -217,7 +252,7 @@ summary((a1 - a2)/a1)
 ```
 
 ## Length
-```{r eval=EVAL}
+```{r eval=s2_available}
 nc_ls = st_cast(nc, "MULTILINESTRING")
 l1 = st_length(nc_ls)
 l2 = st_length(nc_ls, use_lwgeom = TRUE)
@@ -228,7 +263,7 @@ summary((l1-l2)/l1)
 
 
 ## Distances
-```{r eval=EVAL}
+```{r eval=s2_available}
 d1 = st_distance(nc, nc[1:10,])
 d2 = st_distance(nc, nc[1:10,], use_lwgeom = TRUE)
 dim(d1)
@@ -241,6 +276,78 @@ summary(as.vector(d1)-as.vector(d2))
 # Predicates
 
 # Transformations
+
+## Buffers
+
+Buffers can be calculated for features with geographic coordinates as follows,
+using an unprojected object representing the UK as an example:
+
+```{r eval=s2_available, fig.show='hold', out.width="50%"}
+uk = s2_data_countries("United Kingdom")
+class(uk)
+uk_sfc = st_as_sfc(uk) 
+uk_buffer = s2_buffer_cells(uk, distance = 20000)
+uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
+uk_buffer3 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
+class(uk_buffer)
+plot(uk_sfc)
+plot(st_as_sfc(uk_buffer))
+plot(st_as_sfc(uk_buffer2))
+plot(st_as_sfc(uk_buffer3))
+```
+
+```{r, echo=FALSE, eval=FALSE}
+uk_sf = st_as_sf(uk) # fails, should this not work?
+```
+
+The plots above show that you can adjust the level of spatial precision in the 
+results of s2 buffer operations with the `max_cells` argument, set to 1000 by default.
+Deciding on an appropriate value is a balance between excessive detail increasing
+computational resources (represented by `uk_buffer2`, bottom left) and
+excessive simplification (bottom right).
+
+To achieve a similar result you could first transform the result and then use
+the `st_buffer()` function from `sf`. A simple benchmark shows the
+computational efficiency of the `s2` geometry engine in comparison
+with transforming and then creating buffers:
+
+```{r}
+# the sf way
+system.time({
+  uk_projected = st_transform(uk_sfc, 27700)
+  uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
+})
+# sf way with few than the 30 segments in the buffer
+system.time({
+  uk_projected = st_transform(uk_sfc, 27700)
+  uk_buffer_sf2 = st_buffer(uk_projected, dist = 20000, nQuadSegs = 4)
+})
+# s2 with default cell size
+system.time({
+  uk_buffer = s2_buffer_cells(uk, distance = 20000)
+})
+# s2 with 10000 cells
+system.time({
+  uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
+})
+# s2 with 100 cells
+system.time({
+  uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
+})
+```
+
+The result of the previous benchmarks emphasise the point that there are
+trade-offs between geographic resolution and computational resources,
+something that web developers working on geographic services
+such as Google Maps understand well.
+In this case the default setting of 1000 cells, which runs slightly faster than
+the default transform -> buffer workflow, is probably appropriate given the
+low resolution of the input geometry representing the UK.
+
+As discussed in the [`sf` issue tracker](https://github.com/r-spatial/sf/issues/1367),
+deciding on workflows and 
+selecting appropriate levels of level of geographic resolution can
+be an iterative process.
 
 ## References
 
