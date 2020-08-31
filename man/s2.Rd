@@ -5,6 +5,7 @@
 \alias{sf_use_s2}
 \alias{st_as_sfc.wk_wkb}
 \alias{st_as_sfc.s2_geography}
+\alias{st_as_sf.s2_geography}
 \alias{st_as_s2}
 \alias{st_as_s2.sf}
 \alias{st_as_s2.sfc}
@@ -20,6 +21,8 @@ sf_use_s2(use_s2)
   crs = st_crs(4326),
   endian = match(.Platform$endian, c("big", "little")) - 1L
 )
+
+\method{st_as_sf}{s2_geography}(x, ..., crs = st_crs(4326))
 
 st_as_s2(x, ...)
 
