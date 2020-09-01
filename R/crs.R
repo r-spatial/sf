@@ -164,7 +164,9 @@ st_crs.default = function(x, ...) NA_crs_
 make_crs = function(x) {
 
 	if (inherits(x, "CRS")) {
-		x = if (!is.null(comment(x)))
+		x = if (is.null(comment(x)) || (CPL_proj_version() < "6.0.0" || 
+                    CPL_gdal_version() < "3.0.0"))
+
 				comment(x) # WKT2
 			else
 				x@projargs
