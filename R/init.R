@@ -1,13 +1,13 @@
-#' @importFrom utils head tail object.size str
-#' @importFrom stats runif aggregate na.omit setNames
+#' @importFrom utils head object.size str tail
+#' @importFrom stats aggregate na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
-#' @importFrom methods as slotNames new slot
-#' @importFrom grid convertUnit current.viewport linesGrob pathGrob pointsGrob polylineGrob unit viewport nullGrob convertHeight convertWidth
+#' @importFrom methods as new slot slotNames
+#' @importFrom grid convertHeight convertUnit convertWidth current.viewport linesGrob nullGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
-#' @importFrom grDevices rgb dev.size
+#' @importFrom grDevices dev.size rgb
 #' @importFrom Rcpp evalCpp
-#' @importFrom DBI dbConnect dbDisconnect dbWriteTable dbGetQuery dbSendQuery dbReadTable dbExecute
-#' @importFrom units as_units set_units make_unit_label drop_units
+#' @importFrom DBI dbConnect dbDisconnect dbExecute dbGetQuery dbReadTable dbSendQuery dbWriteTable
+#' @importFrom units as_units drop_units make_unit_label set_units
 #' @importFrom classInt classIntervals
 #' @useDynLib sf
 NULL

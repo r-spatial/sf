@@ -45,6 +45,13 @@ st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
 	st_cast(st_as_sfc(s2::s2_as_binary(x, endian = endian), ..., crs = crs))
 }
 
+#' @name s2
+#' @export
+st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
+	st_sf(geometry = st_as_sfc(x, ..., crs = crs))
+}
+
+
 #' functions for spherical geometry, using s2 package
 #' 
 #' functions for spherical geometry, using the s2 package based on the google s2geometry.io library
