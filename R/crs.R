@@ -167,9 +167,9 @@ make_crs = function(x) {
 		x = if (is.null(comment(x)) || (CPL_proj_version() < "6.0.0" || 
                     CPL_gdal_version() < "3.0.0"))
 
-				comment(x) # WKT2
-			else
 				x@projargs
+			else
+				comment(x) # WKT2
 	}
 	if (is.numeric(x) && !is.na(x))
 		x = paste0("EPSG:", x)
