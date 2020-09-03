@@ -330,7 +330,10 @@ CRS_from_crs = function(from) {
 			sp::CRS(NA_character_)
 		else
 			sp::CRS(from$proj4string)
-	if (!is.null(from$wkt) && !is.na(from$wkt))
-		comment(ret) = from$wkt
+        if (CPL_proj_version() >= "6.0.0" && 
+                    CPL_gdal_version() >= "3.0.0") {
+	    if (!is.null(from$wkt) && !is.na(from$wkt))
+		comment(ret) = comment(sp::CRS(SRS_string=from$wkt))
+        }
 	ret
 }
