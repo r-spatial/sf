@@ -1,8 +1,10 @@
 # version 0.9-6
 
-* `st_sample` gains an argument, `by_polygon`, to more clevery sample `MULTIPOLYGON` geometries
+* resolve GDAL/PROJ version vulnerabilities in CRS-crs conversion; #1479
 
-* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning and handles values of size that would round to zero
+* `st_sample` gains an argument, `by_polygon`, to more clevery sample `MULTIPOLYGON` geometries; #1480
+
+* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning and handles values of size that would round to zero; #1480
 
 * `gdal_utils` adds utils `mdiminfo` and `mdimtranslate` (requires GDAL >= 3.1)
 
