@@ -196,11 +196,11 @@ GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
 GDAL_MOD_VER=`echo $GDAL_VERSION | cut -d "." -f2`
 if test "${GDAL_MAJ_VER}" = 2 ; then
   if test "${GDAL_MOD_VER}" -ge 5 ; then
-    GDAL_GE_250="yes" 
+    GDAL_GE_250="yes"
   fi
-else 
+else
   if test "${GDAL_MAJ_VER}" -ge 3 ; then
-    GDAL_GE_250="yes" 
+    GDAL_GE_250="yes"
   fi
 fi
 
