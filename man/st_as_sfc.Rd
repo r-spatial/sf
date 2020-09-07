@@ -90,7 +90,7 @@ Convert foreign geometry object to an sfc object
 When converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 
 If \code{x} is a character vector, it should be a vector containing
-\href{http://www.opengeospatial.org/standards/wkt-crs}{well-known-text}, or
+\href{https://www.ogc.org/standards/wkt-crs}{well-known-text}, or
 \href{http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT}{Postgis EWKT} or
 GeoJSON representations of a single geometry for each vector element.
 

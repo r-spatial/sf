@@ -17,7 +17,8 @@ st_sample(x, size, ...)
   ...,
   type = "random",
   exact = TRUE,
-  warn_if_not_integer = TRUE
+  warn_if_not_integer = TRUE,
+  by_polygon = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
@@ -32,11 +33,13 @@ st_sample(x, size, ...)
 \item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
 or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).}
 
-\item{exact}{logical; should the length of output be exactly
-the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
-when \code{type = "random"}.}
+\item{exact}{logical; should the length of output be exactly}
 
 \item{warn_if_not_integer}{logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer}
+
+\item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480https://github.com/r-spatial/sf/issues/1480
+the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
+when \code{type = "random"}.}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries

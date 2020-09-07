@@ -19,13 +19,13 @@ if (file.exists("nc.shp"))
 	file.remove("nc.shp", "nc.dbf", "nc.shx")
 ```
 
-[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](http://www.opengeospatial.org/standards/sfa) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
+[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](https://www.ogc.org/standards/sfa) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
 
 The standard is widely implemented in spatial
 databases (such as PostGIS), commercial GIS (e.g., [ESRI
-ArcGIS](http://www.esri.com/)) and forms the vector data basis for
-libraries such as [GDAL](http://www.gdal.org/). A subset of
-simple features forms the [GeoJSON](http://geojson.org/) standard.
+ArcGIS](https://www.esri.com/en-us/home)) and forms the vector data basis for
+libraries such as [GDAL](https://gdal.org/). A subset of
+simple features forms the [GeoJSON](https://geojson.org/) standard.
 
 R has well-supported classes for storing spatial
 data ([sp](https://CRAN.R-project.org/package=sp))
@@ -34,7 +34,7 @@ and interfacing to the above mentioned environments
 [rgeos](https://CRAN.R-project.org/package=rgeos)), but has so far lacked a
 complete implementation of simple features, making conversions
 at times convoluted, inefficient or incomplete. The package
-[sf](http://github.com/r-spatial/sf) tries to fill this gap, and aims
+[sf](https://github.com/r-spatial/sf) tries to fill this gap, and aims
 at succeeding [sp](https://CRAN.R-project.org/package=sp) in the
 long term.
 
@@ -71,7 +71,7 @@ features are based on 2D geometry with linear interpolation between
 vertices._"  We will see soon that the same standard will extend
 its coverage beyond 2D and beyond linear interpolation. Here, we
 take simple features as the data structures and operations described
-in the [standard](http://www.opengeospatial.org/standards/sfa).
+in the [standard](https://www.ogc.org/standards/sfa).
 
 ## Dimensions
 
@@ -488,7 +488,7 @@ write_sf(nc, "nc.shp") # silently overwrites
 The `dsn` and `layer` arguments to `st_read` and `st_write`
 denote a data source name and optionally a layer name.  Their exact
 interpretation as well as the options they support vary per driver,
-the [GDAL driver documentation](http://www.gdal.org/ogr_formats.html)
+the [GDAL driver documentation](https://gdal.org/ogr_formats.html)
 is best consulted for this.  For instance, a PostGIS table in
 database `postgis` might be read by
 

@@ -22,6 +22,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
 #' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
+#' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480https://github.com/r-spatial/sf/issues/1480
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -91,7 +92,8 @@ st_sample.sf = function(x, size, ...) st_sample(st_geometry(x), size, ...)
 
 #' @export
 #' @name st_sample
-st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_not_integer = TRUE) {
+st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_not_integer = TRUE,
+		by_polygon = FALSE) {
 
 	if (!missing(size) && warn_if_not_integer && any(size %% 1 != 0))
 		warning("size is not an integer")
@@ -103,11 +105,12 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_no
 		res = switch(max(st_dimension(x)) + 1,
 					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
 					 st_ll_sample(st_cast(x, "LINESTRING"), size = size, ..., type = type),
-					 st_poly_sample(x, size = size, ..., type = type))
+					 st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon))
 		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if (diff > 0) { # too few points
-				res_additional = st_sample_exact(x = x, size = diff, ..., type = type)
+				res_additional = st_sample_exact(x = x, size = diff, ..., 
+					type = type, by_polygon = by_polygon)
 				res = c(res, res_additional)
 			} else if (diff < 0) { # too many points
 				res = res[1:size]
@@ -248,11 +251,11 @@ hex_grid_points = function(obj, pt, dx) {
 	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }
 
-st_sample_exact = function(x, size, ..., type) {
+st_sample_exact = function(x, size, ..., type, by_polygon) {
 	random_pt = st_sample(x = x, size = size, ..., type = type, exact = FALSE)
 	while (length(random_pt) < size) {
 		diff = size - length(random_pt)
-		random_pt_new = st_sample(x, size = diff, ..., type, exact = FALSE)
+		random_pt_new = st_sample(x, size = diff, ..., type, exact = FALSE, by_polygon = by_polygon)
 		random_pt = c(random_pt, random_pt_new)
 	}
 	if(length(random_pt) > size) {

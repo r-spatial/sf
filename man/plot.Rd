@@ -264,7 +264,7 @@ projected (coordinates are long/lat), the aspect is by default set to
 implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equirectangular projection}.
 
 non-categorical colors from \code{sf.colors} were taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults
-If categorical is \code{TRUE}, default colors are from \url{http://www.colorbrewer2.org/} (if n < 9, Set2, else Set3).
+If categorical is \code{TRUE}, default colors are from \url{https://colorbrewer2.org/} (if n < 9, Set2, else Set3).
 }
 \examples{
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)

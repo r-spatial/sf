@@ -73,6 +73,14 @@ CPL_axis_order_authority_compliant <- function(authority_compliant) {
     .Call('_sf_CPL_axis_order_authority_compliant', PACKAGE = 'sf', authority_compliant)
 }
 
+CPL_get_proj_search_paths <- function(paths) {
+    .Call('_sf_CPL_get_proj_search_paths', PACKAGE = 'sf', paths)
+}
+
+CPL_set_proj_search_paths <- function(paths) {
+    .Call('_sf_CPL_set_proj_search_paths', PACKAGE = 'sf', paths)
+}
+
 CPL_area <- function(sfc) {
     .Call('_sf_CPL_area', PACKAGE = 'sf', sfc)
 }

@@ -1,4 +1,5 @@
 #include <gdal.h>
+#include <gdal_version.h>
 #include <gdal_alg.h>
 #include <gdal_priv.h> // GDALDriver
 #include <ogr_api.h>
@@ -16,16 +17,6 @@
 #include "gdal.h"
 #include "wkb.h"
 #include "gdal_sf_pkg.h"
-
-#if GDAL_VERSION_MAJOR == 2
-# if GDAL_VERSION_MINOR >= 5
-#  define HAVE250
-# endif
-#else
-# if GDAL_VERSION_MAJOR > 2
-#  define HAVE250
-# endif
-#endif
 
 // global variable:
 bool axis_order_authority_compliant = false;
@@ -608,7 +599,7 @@ Rcpp::LogicalVector CPL_gdal_with_geos() {
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
 		Rcpp::stop("argument authority_compliant should have length 0 or 1"); // #nocov
-#ifndef HAVE250
+#if GDAL_VERSION_NUM < 2050000
 	if (authority_compliant.size() == 1 && authority_compliant[0])
 		Rcpp::stop("For setting axis order compliancy, GDAL >= 2.5.0 is required"); // #nocov
 #endif
@@ -619,7 +610,7 @@ Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector autho
 }
 
 OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
-#ifdef HAVE250
+#if GDAL_VERSION_NUM >= 2050000
 	if (sr != NULL) {
 		if (!axis_order_authority_compliant)
 			sr->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
@@ -628,4 +619,28 @@ OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
 	}
 #endif
 	return sr;
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths) {
+#if GDAL_VERSION_NUM >= 3000300
+	char **cp = OSRGetPROJSearchPaths();
+	Rcpp::CharacterVector ret = charpp2CV(cp);
+	CSLDestroy(cp);
+	return ret;
+#else
+	Rcpp::Rcout << GDAL_VERSION_NUM << std::endl;
+	Rcpp::stop("GDAL >= 3.0.3 required");
+#endif
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_set_proj_search_paths(Rcpp::CharacterVector paths) {
+#if GDAL_VERSION_NUM >= 3000000
+	std::vector <char *> paths_char = create_options(paths, true);
+	OSRSetPROJSearchPaths(paths_char.data());
+#else
+	Rcpp::stop("GDAL >= 3.0.0 required");
+#endif
+	return paths;
 }

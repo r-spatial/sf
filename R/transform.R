@@ -253,3 +253,13 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE,
 	CPL_proj_direct(c(proj_from_crs(from), proj_from_crs(to)), as.matrix(pts), 
 			keep, warn, authority_compliant)
 }
+
+#' Get or set the PROJ search paths
+#' @param paths the search path to be set; omit if no paths need to be set
+#' @return the search path (possibly after setting to paths)
+#' @export
+sf_proj_search_paths = function(paths = character(0)) {
+	if (length(paths))
+		CPL_set_proj_search_paths(paths);
+	CPL_get_proj_search_paths(character(0));
+}

@@ -1,5 +1,9 @@
 # version 0.9-6
 
+* `sf_proj_search_paths()` retrieves and sets the proj search path (if GDAL > 3.0.3)
+
+* when loading sf, `sf_use_s2` is set to `FALSE` unless environment variable `_SF_USE_S2` equals `true`
+
 * resolve GDAL/PROJ version vulnerabilities in CRS-crs conversion; #1479
 
 * `st_sample` gains an argument, `by_polygon`, to more clevery sample `MULTIPOLYGON` geometries; #1480

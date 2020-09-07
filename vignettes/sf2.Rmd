@@ -26,7 +26,7 @@ formats (text, [sp](https://cran.r-project.org/package=sp))
 ## Reading and writing through GDAL
 
 The Geospatial Data Abstraction Library
-([GDAL](http://www.gdal.org/)) is the swiss army knife for spatial
+([GDAL](https://gdal.org/)) is the swiss army knife for spatial
 data: it reads and writes vector and raster data from and to practically
 every file format, or database, of significance. Package `sf` reads
 and writes using GDAL by the functions `st_read` and `st_write`.
@@ -216,7 +216,7 @@ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
 
 In case the table exists and the option is not specified, the driver
 will give an error. Driver-specific options are documented in the
-driver manual of [gdal](http://www.gdal.org/ogr_formats.html). Multiple options can be
+driver manual of [gdal](https://gdal.org/ogr_formats.html). Multiple options can be
 given by multiple strings in `options`.
 
 For `st_read`, there is only `options`; for `st_write`, one needs

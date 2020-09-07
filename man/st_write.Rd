@@ -75,7 +75,7 @@ Database Connection}
 
 \item{driver}{character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
-are found at \url{http://www.gdal.org/ogr_formats.html}.}
+are found at \url{https://gdal.org/ogr_formats.html}.}
 
 \item{dataset_options}{character; driver dependent dataset creation options;
 multiple options supported.}
