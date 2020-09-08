@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -78,6 +78,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -101,7 +104,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="sf3_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>3. Manipulating Simple Feature Geometries</h1>
@@ -130,44 +133,51 @@
 <a href="#for-single-geometries" class="anchor"></a>For single geometries</h3>
 <p>For single geometries, <code>st_cast</code> will</p>
 <ol style="list-style-type: decimal">
-<li>convert from XX to MULTIXX, e.g. <code>LINESTRING</code> to <code>MULTILINESTRING</code>
+<li>convert from XX to MULTIXX, e.g. <code>LINESTRING</code> to <code>MULTILINESTRING</code>
 </li>
 <li>convert from MULTIXX to XX if MULTIXX has length one (else, it will still convert but warn about loss of information)</li>
 <li>convert from MULTIXX to XX if MULTIXX does not have length one, but it will warn about the loss of information</li>
 <li>convert GEOMETRYCOLLECTION of length one to its component if</li>
 </ol>
 <p>Examples of the first three types are</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
-<span class="co">## Linking to GEOS 3.5.0, GDAL 2.2.2, PROJ 4.8.0</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>))
-<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>)) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"MULTIPOINT"</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://r-spatial.github.io/sf">sf</a></span>)
+<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.0</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>))
+<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>)) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"MULTIPOINT"</span>)
 <span class="co">## MULTIPOINT ((1 1))</span>
-<span class="fu"><a href="../reference/st.html">st_multipoint</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<span class="fu"><a href="../reference/st.html">st_multipoint</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
 <span class="co">## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only</span>
 <span class="co">## POINT (1 1)</span>
-<span class="fu"><a href="../reference/st.html">st_multipoint</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<span class="fu"><a href="../reference/st.html">st_multipoint</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>))) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
 <span class="co">## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only</span>
-<span class="co">## POINT (1 1)</span></pre></body></html></div>
+<span class="co">## POINT (1 1)</span>
+</pre></div>
 <p>Examples of the fourth type are</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>)))) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
-<span class="co">## POINT (1 1)</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>)))) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="st">"POINT"</span>)
+<span class="co">## POINT (1 1)</span>
+</pre></div>
 </div>
 <div id="for-collections-of-geometry-sfc-and-simple-feature-collections-sf" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-collections-of-geometry-sfc-and-simple-feature-collections-sf" class="anchor"></a>For collections of geometry (sfc) and simple feature collections (sf)</h3>
 <p>It should be noted here that when reading geometries using <code>st_read</code>, the <code>type</code> argument can be used to control the class of the returned geometry:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">shp</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">shp</span>, <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)))
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw">shp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, package=<span class="st">"sf"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">shp</span>, quiet = <span class="fl">TRUE</span>)))
 <span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">shp</span>, <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="fl">3</span>)))
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">shp</span>, quiet = <span class="fl">TRUE</span>, type = <span class="fl">3</span>)))
 <span class="co">## [1] "sfc_POLYGON" "sfc"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="no">shp</span>, <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="fl">1</span>)))
-<span class="co">## [1] "sfc_GEOMETRY" "sfc"</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="kw">shp</span>, quiet = <span class="fl">TRUE</span>, type = <span class="fl">1</span>)))
+<span class="co">## [1] "sfc_GEOMETRY" "sfc"</span>
+</pre></div>
 <p>This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> geometries, leading to a <code>GEOMETRY</code> as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost.</p>
 <p>When functions return objects with mixed geometry type (<code>GEOMETRY</code>), downstream functions such as <code>st_write</code> may have difficulty handling them. For some of these cases, <code>st_cast</code> may help modifying their type. For sets of geometry objects (<code>sfc</code>) and simple feature sets (<code>sf),</code>st_cast` can be used by specifying the target type, or without specifying it.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">ls</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))
-<span class="no">mls</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))
-(<span class="no">sfc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">ls</span>,<span class="no">mls</span>))
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))
+<span class="kw">mls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))
+(<span class="kw">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">ls</span>,<span class="kw">mls</span>))
 <span class="co">## Geometry set for 2 features </span>
 <span class="co">## geometry type:  GEOMETRY</span>
 <span class="co">## dimension:      XY</span>
@@ -175,7 +185,7 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">## LINESTRING (0 0, 1 1, 2 1)</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
-<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="no">sfc</span>, <span class="st">"MULTILINESTRING"</span>)
+<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw">sfc</span>, <span class="st">"MULTILINESTRING"</span>)
 <span class="co">## Geometry set for 2 features </span>
 <span class="co">## geometry type:  MULTILINESTRING</span>
 <span class="co">## dimension:      XY</span>
@@ -183,8 +193,8 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">## MULTILINESTRING ((0 0, 1 1, 2 1))</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
-<span class="no">sf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(<span class="kw">a</span> <span class="kw">=</span> <span class="fl">5</span>:<span class="fl">4</span>, <span class="kw">geom</span> <span class="kw">=</span> <span class="no">sfc</span>)
-<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="no">sf</span>, <span class="st">"MULTILINESTRING"</span>)
+<span class="kw">sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(a = <span class="fl">5</span><span class="op">:</span><span class="fl">4</span>, geom = <span class="kw">sfc</span>)
+<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw">sf</span>, <span class="st">"MULTILINESTRING"</span>)
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## geometry type:  MULTILINESTRING</span>
 <span class="co">## dimension:      XY</span>
@@ -192,17 +202,19 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">##   a                           geom</span>
 <span class="co">## 1 5 MULTILINESTRING ((0 0, 1 1,...</span>
-<span class="co">## 2 4 MULTILINESTRING ((2 2, 1 3)...</span></pre></body></html></div>
+<span class="co">## 2 4 MULTILINESTRING ((2 2, 1 3)...</span>
+</pre></div>
 <p>When no target type is given, <code>st_cast</code> tries to be smart for two cases:</p>
 <ol style="list-style-type: decimal">
 <li>if the class of the object is <code>GEOMETRY</code>, and all elements are of identical type, and</li>
 <li>if all elements are length-one <code>GEOMETRYCOLLECTION</code> objects, in which case <code>GEOMETRYCOLLECTION</code> objects are replaced by their content (which may be a <code>GEOMETRY</code> mix again)</li>
 </ol>
 <p>Examples are:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">ls</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))
-<span class="no">mls1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))
-<span class="no">mls2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))))
-(<span class="no">sfc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">ls</span>,<span class="no">mls1</span>,<span class="no">mls2</span>))
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))
+<span class="kw">mls1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))
+<span class="kw">mls2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))))
+(<span class="kw">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">ls</span>,<span class="kw">mls1</span>,<span class="kw">mls2</span>))
 <span class="co">## Geometry set for 3 features </span>
 <span class="co">## geometry type:  GEOMETRY</span>
 <span class="co">## dimension:      XY</span>
@@ -211,15 +223,15 @@
 <span class="co">## LINESTRING (0 0, 1 1, 2 1)</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
 <span class="co">## MULTILINESTRING ((4 4, 4 3), (2 2, 2 1, 3 1))</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">sfc</span>[<span class="fl">2</span>:<span class="fl">3</span>])
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="kw">sfc</span>[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>])
 <span class="co">## [1] "sfc_MULTILINESTRING" "sfc"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="no">sfc</span>[<span class="fl">2</span>:<span class="fl">3</span>]))
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw">sfc</span>[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>]))
 <span class="co">## [1] "sfc_MULTILINESTRING" "sfc"</span>
 
-<span class="no">gc1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))))
-<span class="no">gc2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))))
-<span class="no">gc3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))))))
-(<span class="no">sfc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">gc1</span>,<span class="no">gc2</span>,<span class="no">gc3</span>))
+<span class="kw">gc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>)))))
+<span class="kw">gc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>))))))
+<span class="kw">gc3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">3</span>)), <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))))))
+(<span class="kw">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">gc1</span>,<span class="kw">gc2</span>,<span class="kw">gc3</span>))
 <span class="co">## Geometry set for 3 features </span>
 <span class="co">## geometry type:  GEOMETRYCOLLECTION</span>
 <span class="co">## dimension:      XY</span>
@@ -228,43 +240,48 @@
 <span class="co">## GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1, 2 1))</span>
 <span class="co">## GEOMETRYCOLLECTION (MULTILINESTRING ((2 2, 1 3)...</span>
 <span class="co">## GEOMETRYCOLLECTION (MULTILINESTRING ((4 4, 4 3)...</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="no">sfc</span>))
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw">sfc</span>))
 <span class="co">## [1] "sfc_GEOMETRY" "sfc"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="no">sfc</span>), <span class="st">"MULTILINESTRING"</span>))
-<span class="co">## [1] "sfc_MULTILINESTRING" "sfc"</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="fu"><a href="../reference/st_cast.html">st_cast</a></span>(<span class="kw">sfc</span>), <span class="st">"MULTILINESTRING"</span>))
+<span class="co">## [1] "sfc_MULTILINESTRING" "sfc"</span>
+</pre></div>
 </div>
 </div>
 <div id="affine-transformations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#affine-transformations" class="anchor"></a>Affine transformations</h2>
 <p>Affine transformations are transformations of the type <span class="math inline">\(f(x) = xA + b\)</span>, where matrix <span class="math inline">\(A\)</span> is used to flatten, scale and/or rotate, and <span class="math inline">\(b\)</span> to translate <span class="math inline">\(x\)</span>. Low-level examples are:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r">(<span class="no">p</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">2</span>)))
+<div class="sourceCode" id="cb6"><pre class="downlit">
+(<span class="kw">p</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">2</span>)))
 <span class="co">## POINT (0 2)</span>
-<span class="no">p</span> + <span class="fl">1</span>
+<span class="kw">p</span> <span class="op">+</span> <span class="fl">1</span>
 <span class="co">## POINT (1 3)</span>
-<span class="no">p</span> + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>)
+<span class="kw">p</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>)
 <span class="co">## POINT (1 4)</span>
-<span class="no">p</span> + <span class="no">p</span>
+<span class="kw">p</span> <span class="op">+</span> <span class="kw">p</span>
 <span class="co">## POINT (0 4)</span>
-<span class="no">p</span> * <span class="no">p</span>
+<span class="kw">p</span> <span class="op">*</span> <span class="kw">p</span>
 <span class="co">## POINT (0 4)</span>
-<span class="no">rot</span> <span class="kw">=</span> <span class="kw">function</span>(<span class="no">a</span>) <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span>(<span class="no">a</span>), <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span>(<span class="no">a</span>), -<span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span>(<span class="no">a</span>), <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span>(<span class="no">a</span>)), <span class="fl">2</span>, <span class="fl">2</span>)
-<span class="no">p</span> * <span class="fu">rot</span>(<span class="no">pi</span>/<span class="fl">4</span>)
+<span class="kw">rot</span> <span class="op">=</span> <span class="fu">function</span>(<span class="kw">a</span>) <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span>(<span class="kw">a</span>), <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span>(<span class="kw">a</span>), <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span>(<span class="kw">a</span>), <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span>(<span class="kw">a</span>)), <span class="fl">2</span>, <span class="fl">2</span>)
+<span class="kw">p</span> <span class="op">*</span> <span class="fu">rot</span>(<span class="kw">pi</span><span class="op">/</span><span class="fl">4</span>)
 <span class="co">## POINT (1.414214 1.414214)</span>
-<span class="no">p</span> * <span class="fu">rot</span>(<span class="no">pi</span>/<span class="fl">2</span>)
+<span class="kw">p</span> <span class="op">*</span> <span class="fu">rot</span>(<span class="kw">pi</span><span class="op">/</span><span class="fl">2</span>)
 <span class="co">## POINT (2 1.224647e-16)</span>
-<span class="no">p</span> * <span class="fu">rot</span>(<span class="no">pi</span>)
-<span class="co">## POINT (2.449294e-16 -2)</span></pre></body></html></div>
+<span class="kw">p</span> <span class="op">*</span> <span class="fu">rot</span>(<span class="kw">pi</span>)
+<span class="co">## POINT (2.449294e-16 -2)</span>
+</pre></div>
 <p>Just to make the point, we can for instance rotate the counties of North Carolina 90 degrees clockwise around their centroid, and shrink them to 75% of their original size:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">nc</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"sf"</span>), <span class="kw">quiet</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="no">ncg</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="no">nc</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">ncg</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="no">cntrd</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="no">ncg</span>)
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, package=<span class="st">"sf"</span>), quiet = <span class="fl">TRUE</span>)
+<span class="kw">ncg</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw">nc</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">ncg</span>, border = <span class="st">'grey'</span>)
+<span class="kw">cntrd</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="kw">ncg</span>)
 <span class="co">## Warning in st_centroid.sfc(ncg): st_centroid does not give correct centroids for</span>
 <span class="co">## longitude/latitude data</span>
-<span class="no">ncg2</span> <span class="kw">=</span> (<span class="no">ncg</span> - <span class="no">cntrd</span>) * <span class="fu">rot</span>(<span class="no">pi</span>/<span class="fl">2</span>) * <span class="fl">.75</span> + <span class="no">cntrd</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">ncg2</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">cntrd</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'red'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cex</span> <span class="kw">=</span> <span class="fl">.5</span>)</pre></body></html></div>
+<span class="kw">ncg2</span> <span class="op">=</span> (<span class="kw">ncg</span> <span class="op">-</span> <span class="kw">cntrd</span>) <span class="op">*</span> <span class="fu">rot</span>(<span class="kw">pi</span><span class="op">/</span><span class="fl">2</span>) <span class="op">*</span> <span class="fl">.75</span> <span class="op">+</span> <span class="kw">cntrd</span>
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">ncg2</span>, add = <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">cntrd</span>, col = <span class="st">'red'</span>, add = <span class="fl">TRUE</span>, cex = <span class="fl">.5</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 <div id="coordinate-reference-systems-conversion-and-transformation" class="section level2">
@@ -274,62 +291,81 @@
 <h3 class="hasAnchor">
 <a href="#getting-and-setting-coordinate-reference-systems-of-sf-objects" class="anchor"></a>Getting and setting coordinate reference systems of sf objects</h3>
 <p>The coordinate reference system of objects of class <code>sf</code> or <code>sfc</code> is obtained by <code>st_crs</code>, and replaced by <code>st_crs&lt;-</code>:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
-<span class="no">geom</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>)), <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">11</span>,<span class="fl">12</span>)))
-<span class="no">s</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(<span class="kw">a</span> <span class="kw">=</span> <span class="fl">15</span>:<span class="fl">16</span>, <span class="kw">geometry</span> <span class="kw">=</span> <span class="no">geom</span>)
-<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="no">s</span>)
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://r-spatial.github.io/sf">sf</a></span>)
+<span class="kw">geom</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>)), <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">11</span>,<span class="fl">12</span>)))
+<span class="kw">s</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(a = <span class="fl">15</span><span class="op">:</span><span class="fl">16</span>, geometry = <span class="kw">geom</span>)
+<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="kw">s</span>)
 <span class="co">## Coordinate Reference System: NA</span>
-<span class="no">s1</span> <span class="kw">=</span> <span class="no">s</span>
-<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="no">s1</span>) <span class="kw">&lt;-</span> <span class="fl">4326</span>
-<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="no">s1</span>)
+<span class="kw">s1</span> <span class="op">=</span> <span class="kw">s</span>
+<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="kw">s1</span>) <span class="op">&lt;-</span> <span class="fl">4326</span>
+<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="kw">s1</span>)
 <span class="co">## Coordinate Reference System:</span>
 <span class="co">##   User input: EPSG:4326 </span>
 <span class="co">##   wkt:</span>
-<span class="co">## GEOGCS["WGS 84",</span>
-<span class="co">##     DATUM["WGS_1984",</span>
-<span class="co">##         SPHEROID["WGS 84",6378137,298.257223563,</span>
-<span class="co">##             AUTHORITY["EPSG","7030"]],</span>
-<span class="co">##         AUTHORITY["EPSG","6326"]],</span>
+<span class="co">## GEOGCRS["WGS 84",</span>
+<span class="co">##     DATUM["World Geodetic System 1984",</span>
+<span class="co">##         ELLIPSOID["WGS 84",6378137,298.257223563,</span>
+<span class="co">##             LENGTHUNIT["metre",1]]],</span>
 <span class="co">##     PRIMEM["Greenwich",0,</span>
-<span class="co">##         AUTHORITY["EPSG","8901"]],</span>
-<span class="co">##     UNIT["degree",0.0174532925199433,</span>
-<span class="co">##         AUTHORITY["EPSG","9122"]],</span>
-<span class="co">##     AUTHORITY["EPSG","4326"]]</span>
-<span class="no">s2</span> <span class="kw">=</span> <span class="no">s</span>
-<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="no">s2</span>) <span class="kw">&lt;-</span> <span class="st">"+proj=longlat +datum=WGS84"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="no">s1</span>, <span class="no">s2</span>)
-<span class="co">## [1] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span></pre></body></html></div>
+<span class="co">##         ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##     CS[ellipsoidal,2],</span>
+<span class="co">##         AXIS["geodetic latitude (Lat)",north,</span>
+<span class="co">##             ORDER[1],</span>
+<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##         AXIS["geodetic longitude (Lon)",east,</span>
+<span class="co">##             ORDER[2],</span>
+<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##     USAGE[</span>
+<span class="co">##         SCOPE["unknown"],</span>
+<span class="co">##         AREA["World"],</span>
+<span class="co">##         BBOX[-90,-180,90,180]],</span>
+<span class="co">##     ID["EPSG",4326]]</span>
+<span class="kw">s2</span> <span class="op">=</span> <span class="kw">s</span>
+<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span>(<span class="kw">s2</span>) <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=WGS84"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span>(<span class="kw">s1</span>, <span class="kw">s2</span>)
+<span class="co">## [1] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span>
+<span class="co">## [2] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"wkt\": 1 string mismatch &gt;"</span>
+</pre></div>
 <p>an alternative, more pipe-friendly version of <code>st_crs&lt;-</code> is</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">s1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">4326</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="kw">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">4326</span>)
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: 0 ymin: 1 xmax: 11 ymax: 12</span>
-<span class="co">## CRS:            EPSG:4326</span>
+<span class="co">## geographic CRS: WGS 84</span>
 <span class="co">##    a      geometry</span>
 <span class="co">## 1 15   POINT (0 1)</span>
-<span class="co">## 2 16 POINT (11 12)</span></pre></body></html></div>
+<span class="co">## 2 16 POINT (11 12)</span>
+</pre></div>
 </div>
 <div id="coordinate-reference-system-transformations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#coordinate-reference-system-transformations" class="anchor"></a>Coordinate reference system transformations</h3>
 <p>If we change the coordinate reference system from one non-missing value into another non-missing value, the crs is is changed without modifying any coordinates, but a warning is issued that this did not reproject values:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">s3</span> <span class="kw">&lt;-</span> <span class="no">s1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">4326</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">3857</span>)
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="kw">s3</span> <span class="op">&lt;-</span> <span class="kw">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">4326</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">3857</span>)
 <span class="co">## Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span>
-<span class="co">## that</span></pre></body></html></div>
+<span class="co">## that</span>
+</pre></div>
 <p>A cleaner way to do this that better expresses intention and does not generate this warning is to first wipe the CRS by assigning it a missing value, and then setting it to the intended value.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">s3</span> <span class="kw">&lt;-</span> <span class="no">s1</span>  <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">NA</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">3857</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="kw">s3</span> <span class="op">&lt;-</span> <span class="kw">s1</span>  <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">NA</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span>(<span class="fl">3857</span>)
+</pre></div>
 <p>To carry out a coordinate conversion or transformation, we use <code>st_transform</code></p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">s3</span> <span class="kw">&lt;-</span> <span class="no">s1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="fl">3857</span>)
-<span class="no">s3</span>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="kw">s3</span> <span class="op">&lt;-</span> <span class="kw">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="fl">3857</span>)
+<span class="kw">s3</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708</span>
-<span class="co">## CRS:            EPSG:3857</span>
+<span class="co">## projected CRS:  WGS 84 / Pseudo-Mercator</span>
 <span class="co">##    a                geometry</span>
 <span class="co">## 1 15      POINT (0 111325.1)</span>
-<span class="co">## 2 16 POINT (1224514 1345708)</span></pre></body></html></div>
+<span class="co">## 2 16 POINT (1224514 1345708)</span>
+</pre></div>
 <p>for which we see that coordinates are actually modified (projected).</p>
 </div>
 </div>
@@ -338,206 +374,244 @@
 <a href="#geometrical-operations" class="anchor"></a>Geometrical operations</h2>
 <p>All geometrical operations <code>st_op(x)</code> or <code>st_op2(x,y)</code> work both for <code>sf</code> objects as well as <code>sfc</code> objects <code>x</code> and <code>y</code>; since the operations work on the geometries, the non-geometries parts of an <code>sf</code> object are simply discarded. Also, all binary operations <code>st_op2(x,y)</code> called with a single argument, as <code>st_op2(x)</code>, are handled as <code>st_op2(x,x)</code>.</p>
 <p>We will illustrate the geometrical operations on a very simple dataset:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">b0</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>))))
-<span class="no">b1</span> <span class="kw">=</span> <span class="no">b0</span> + <span class="fl">2</span>
-<span class="no">b2</span> <span class="kw">=</span> <span class="no">b0</span> + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">0.2</span>, <span class="fl">2</span>)
-<span class="no">x</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">b0</span>, <span class="no">b1</span>, <span class="no">b2</span>)
-<span class="no">a0</span> <span class="kw">=</span> <span class="no">b0</span> * <span class="fl">0.8</span>
-<span class="no">a1</span> <span class="kw">=</span> <span class="no">a0</span> * <span class="fl">0.5</span> + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>, <span class="fl">0.7</span>)
-<span class="no">a2</span> <span class="kw">=</span> <span class="no">a0</span> + <span class="fl">1</span>
-<span class="no">a3</span> <span class="kw">=</span> <span class="no">b0</span> * <span class="fl">0.5</span> + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>, -<span class="fl">0.5</span>)
-<span class="no">y</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">a0</span>,<span class="no">a1</span>,<span class="no">a2</span>,<span class="no">a3</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'red'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">y</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'green'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="kw">b0</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>))))
+<span class="kw">b1</span> <span class="op">=</span> <span class="kw">b0</span> <span class="op">+</span> <span class="fl">2</span>
+<span class="kw">b2</span> <span class="op">=</span> <span class="kw">b0</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">2</span>)
+<span class="kw">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">b0</span>, <span class="kw">b1</span>, <span class="kw">b2</span>)
+<span class="kw">a0</span> <span class="op">=</span> <span class="kw">b0</span> <span class="op">*</span> <span class="fl">0.8</span>
+<span class="kw">a1</span> <span class="op">=</span> <span class="kw">a0</span> <span class="op">*</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>, <span class="fl">0.7</span>)
+<span class="kw">a2</span> <span class="op">=</span> <span class="kw">a0</span> <span class="op">+</span> <span class="fl">1</span>
+<span class="kw">a3</span> <span class="op">=</span> <span class="kw">b0</span> <span class="op">*</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>, <span class="op">-</span><span class="fl">0.5</span>)
+<span class="kw">y</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">a0</span>,<span class="kw">a1</span>,<span class="kw">a2</span>,<span class="kw">a3</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, border = <span class="st">'red'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">y</span>, border = <span class="st">'green'</span>, add = <span class="fl">TRUE</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <div id="unary-operations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#unary-operations" class="anchor"></a>Unary operations</h3>
 <p><code>st_is_valid</code> returns whether polygon geometries are topologically valid:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">b0</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>))))
-<span class="no">b1</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,-<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,-<span class="fl">1</span>))))
-<span class="fu"><a href="../reference/valid.html">st_is_valid</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="no">b0</span>,<span class="no">b1</span>))
-<span class="co">## [1]  TRUE FALSE</span></pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="kw">b0</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>))))
+<span class="kw">b1</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="op">-</span><span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>))))
+<span class="fu"><a href="../reference/valid.html">st_is_valid</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="kw">b0</span>,<span class="kw">b1</span>))
+<span class="co">## [1]  TRUE FALSE</span>
+</pre></div>
 <p>and <code>st_is_simple</code> whether line geometries are simple:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">s</span> <span class="kw">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))),
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="kw">s</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))), 
     <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>))))
-<span class="fu"><a href="../reference/geos_query.html">st_is_simple</a></span>(<span class="no">s</span>)
-<span class="co">## [1]  TRUE FALSE</span></pre></body></html></div>
+<span class="fu"><a href="../reference/geos_query.html">st_is_simple</a></span>(<span class="kw">s</span>)
+<span class="co">## [1]  TRUE FALSE</span>
+</pre></div>
 <p><code>st_area</code> returns the area of polygon geometries, <code>st_length</code> the length of line geometries:</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_measures.html">st_area</a></span>(<span class="no">x</span>)
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="fu"><a href="../reference/geos_measures.html">st_area</a></span>(<span class="kw">x</span>)
 <span class="co">## [1] 4 4 4</span>
 <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>))))
 <span class="co">## [1] 0</span>
 <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))), <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>)))))
 <span class="co">## [1] 2.414214 1.000000</span>
 <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span>(<span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))),<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>))))) <span class="co"># ignores 2nd part!</span>
-<span class="co">## [1] 2.414214</span></pre></body></html></div>
+<span class="co">## [1] 2.414214</span>
+</pre></div>
 </div>
 <div id="binary-operations-distance-and-relate" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binary-operations-distance-and-relate" class="anchor"></a>Binary operations: distance and relate</h3>
 <p><code>st_distance</code> computes the shortest distance matrix between geometries; this is a dense matrix:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span>(<span class="no">x</span>,<span class="no">y</span>)
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span>(<span class="kw">x</span>,<span class="kw">y</span>)
 <span class="co">##           [,1] [,2] [,3]     [,4]</span>
 <span class="co">## [1,] 0.0000000  0.6    0 0.500000</span>
 <span class="co">## [2,] 0.2828427  0.0    0 1.000000</span>
-<span class="co">## [3,] 0.2000000  0.8    0 1.220656</span></pre></body></html></div>
+<span class="co">## [3,] 0.2000000  0.8    0 1.220656</span>
+</pre></div>
 <p><code>st_relate</code> returns a dense character matrix with the DE9-IM relationships between each pair of geometries:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/st_relate.html">st_relate</a></span>(<span class="no">x</span>,<span class="no">y</span>)
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="fu"><a href="../reference/st_relate.html">st_relate</a></span>(<span class="kw">x</span>,<span class="kw">y</span>)
 <span class="co">##      [,1]        [,2]        [,3]        [,4]       </span>
 <span class="co">## [1,] "212FF1FF2" "FF2FF1212" "212101212" "FF2FF1212"</span>
 <span class="co">## [2,] "FF2FF1212" "212101212" "212101212" "FF2FF1212"</span>
-<span class="co">## [3,] "FF2FF1212" "FF2FF1212" "212101212" "FF2FF1212"</span></pre></body></html></div>
-<p>element [i,j] of this matrix has nine characters, referring to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(E\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
+<span class="co">## [3,] "FF2FF1212" "FF2FF1212" "212101212" "FF2FF1212"</span>
+</pre></div>
+<p>element [i,j] of this matrix has nine characters, referring to relationship between x[i] and y[j], encoded as <span class="math inline">\(I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y\)</span> where <span class="math inline">\(I\)</span> refers to interior, <span class="math inline">\(B\)</span> to boundary, and <span class="math inline">\(E\)</span> to exterior, and e.g. <span class="math inline">\(B_xI_y\)</span> the dimensionality of the intersection of the the boundary <span class="math inline">\(B_x\)</span> of x[i] and the interior <span class="math inline">\(I_y\)</span> of y[j], which is one of {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F) no intersection, respectively.</p>
 </div>
 <div id="binary-logical-operations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binary-logical-operations" class="anchor"></a>Binary logical operations:</h3>
 <p>Binary logical operations return either a sparse matrix</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="no">x</span>,<span class="no">y</span>)
+<div class="sourceCode" id="cb19"><pre class="downlit">
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">x</span>,<span class="kw">y</span>)
 <span class="co">## Sparse geometry binary predicate list of length 3, where the predicate was `intersects'</span>
 <span class="co">##  1: 1, 3</span>
 <span class="co">##  2: 2, 3</span>
-<span class="co">##  3: 3</span></pre></body></html></div>
+<span class="co">##  3: 3</span>
+</pre></div>
 <p>or a dense matrix</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="no">x</span>, <span class="no">x</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">x</span>, <span class="kw">x</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##      [,1]  [,2]  [,3]</span>
 <span class="co">## [1,] TRUE  TRUE  TRUE</span>
 <span class="co">## [2,] TRUE  TRUE FALSE</span>
 <span class="co">## [3,] TRUE FALSE  TRUE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2] [,3]  [,4]</span>
 <span class="co">## [1,]  TRUE FALSE TRUE FALSE</span>
 <span class="co">## [2,] FALSE  TRUE TRUE FALSE</span>
-<span class="co">## [3,] FALSE FALSE TRUE FALSE</span></pre></body></html></div>
+<span class="co">## [3,] FALSE FALSE TRUE FALSE</span>
+</pre></div>
 <p>where list element <code>i</code> of a sparse matrix contains the indices of the <code>TRUE</code> elements in row <code>i</code> of the the dense matrix. For large geometry sets, dense matrices take up a lot of memory and are mostly filled with <code>FALSE</code> values, hence the default is to return a sparse matrix.</p>
 <p><code>st_intersects</code> returns for every geometry pair whether they intersect (dense matrix), or which elements intersect (sparse). Note that the function <code>st_intersection</code> in this package returns a geometry for the intersection instead of logicals as in <code>st_intersects</code> (see the next section of this vignette).</p>
 <p>Other binary predicates include (using sparse for readability):</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="../reference/geos_binary_pred.html">st_disjoint</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb21"><pre class="downlit">
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_disjoint</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3] [,4]</span>
 <span class="co">## [1,] FALSE  TRUE FALSE TRUE</span>
 <span class="co">## [2,]  TRUE FALSE FALSE TRUE</span>
 <span class="co">## [3,]  TRUE  TRUE FALSE TRUE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_crosses</a></span>(<span class="no">s</span>, <span class="no">s</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_crosses</a></span>(<span class="kw">s</span>, <span class="kw">s</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]</span>
 <span class="co">## [1,] FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_within</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_within</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_contains</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_contains</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,]  TRUE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_overlaps</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_overlaps</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2] [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE TRUE FALSE</span>
 <span class="co">## [2,] FALSE  TRUE TRUE FALSE</span>
 <span class="co">## [3,] FALSE FALSE TRUE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_equals</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_equals</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_covers</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_covers</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,]  TRUE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_covered_by</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_covered_by</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_covered_by</a></span>(<span class="no">y</span>, <span class="no">y</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_covered_by</a></span>(<span class="kw">y</span>, <span class="kw">y</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,]  TRUE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE  TRUE FALSE FALSE</span>
 <span class="co">## [3,] FALSE FALSE  TRUE FALSE</span>
 <span class="co">## [4,] FALSE FALSE FALSE  TRUE</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_equals_exact</a></span>(<span class="no">x</span>, <span class="no">y</span>,<span class="fl">0.001</span>, <span class="kw">sparse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_equals_exact</a></span>(<span class="kw">x</span>, <span class="kw">y</span>,<span class="fl">0.001</span>, sparse = <span class="fl">FALSE</span>)
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,] FALSE FALSE FALSE FALSE</span>
 <span class="co">## [2,] FALSE FALSE FALSE FALSE</span>
-<span class="co">## [3,] FALSE FALSE FALSE FALSE</span></pre></body></html></div>
+<span class="co">## [3,] FALSE FALSE FALSE FALSE</span>
+</pre></div>
 </div>
 <div id="operations-returning-a-geometry" class="section level3">
 <h3 class="hasAnchor">
 <a href="#operations-returning-a-geometry" class="anchor"></a>Operations returning a geometry</h3>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">u</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">x</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">u</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="kw">u</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">x</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">u</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>), <span class="kw">mar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>,<span class="fl">4</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">u</span>, <span class="fl">0.2</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">u</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'red'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">u</span>, <span class="fl">0.2</span>), <span class="kw">border</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">u</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'red'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="no">u</span>, -<span class="fl">0.2</span>), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb23"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>), mar = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>,<span class="fl">4</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">u</span>, <span class="fl">0.2</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">u</span>, border = <span class="st">'red'</span>, add = <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">u</span>, <span class="fl">0.2</span>), border = <span class="st">'grey'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">u</span>, border = <span class="st">'red'</span>, add = <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">u</span>, <span class="op">-</span><span class="fl">0.2</span>), add = <span class="fl">TRUE</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_boundary</a></span>(<span class="no">x</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb24"><pre class="downlit">
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_boundary</a></span>(<span class="kw">x</span>))
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">2</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(<span class="no">x</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(<span class="no">u</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb25"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fl">2</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(<span class="kw">x</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_convex_hull</a></span>(<span class="kw">u</span>))
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))</pre></body></html></div>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="no">x</span>), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'red'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="no">u</span>), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'red'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb26"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))
+</pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="kw">x</span>), add = <span class="fl">TRUE</span>, col = <span class="st">'red'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span>(<span class="kw">u</span>), add = <span class="fl">TRUE</span>, col = <span class="st">'red'</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 <p>The intersection of two geometries is the geometry covered by both; it is obtained by <code>st_intersection</code>:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">y</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">x</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">y</span>)), <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'red'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb28"><pre class="downlit">
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">y</span>, add = <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">x</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">y</span>)), add = <span class="fl">TRUE</span>, col = <span class="st">'red'</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-28-1.png" width="700"> Note that the function <code>st_intersects</code> returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).</p>
 <p>To get <em>everything but</em> the intersection, use <code>st_difference</code> or st_sym_difference`:</p>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>), <span class="kw">mar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'#ff333388'</span>);
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">y</span>, <span class="kw">add</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">col</span><span class="kw">=</span><span class="st">'#33ff3388'</span>)
+<div class="sourceCode" id="cb29"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>), mar = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>))
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, col = <span class="st">'#ff333388'</span>); 
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">y</span>, add=<span class="fl">TRUE</span>, col=<span class="st">'#33ff3388'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"x: red, y: green"</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">x</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">y</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="st">'lightblue'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, border = <span class="st">'grey'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">x</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">y</span>)), col = <span class="st">'lightblue'</span>, add = <span class="fl">TRUE</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"difference(x,y)"</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">y</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">x</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="st">'lightblue'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, border = <span class="st">'grey'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">y</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">x</span>)), col = <span class="st">'lightblue'</span>, add = <span class="fl">TRUE</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"difference(y,x)"</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">border</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_sym_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">y</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="no">x</span>)), <span class="kw">col</span> <span class="kw">=</span> <span class="st">'lightblue'</span>, <span class="kw">add</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"sym_difference(x,y)"</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, border = <span class="st">'grey'</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/geos_binary_ops.html">st_sym_difference</a></span>(<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">y</span>),<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span>(<span class="kw">x</span>)), col = <span class="st">'lightblue'</span>, add = <span class="fl">TRUE</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"sym_difference(x,y)"</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 <p>Function <code>st_segmentize</code> adds points to straight line sections of a lines or polygon object:</p>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>),<span class="kw">mar</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>))
-<span class="no">pts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))
-<span class="no">ls</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="no">pts</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">ls</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="no">pts</span>)
-<span class="no">ls.seg</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_segmentize</a></span>(<span class="no">ls</span>, <span class="fl">0.3</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">ls.seg</span>)
-<span class="no">pts</span> <span class="kw">=</span> <span class="no">ls.seg</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="no">pts</span>)
-<span class="no">pol</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>))))
-<span class="no">pol.seg</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_segmentize</a></span>(<span class="no">pol</span>, <span class="fl">0.3</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">pol.seg</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="no">pol.seg</span><span class="kw">[[</span><span class="fl">1</span>]])</pre></body></html></div>
+<div class="sourceCode" id="cb30"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>),mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>))
+<span class="kw">pts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>))
+<span class="kw">ls</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span>(<span class="kw">pts</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">ls</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">pts</span>)
+<span class="kw">ls.seg</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_segmentize</a></span>(<span class="kw">ls</span>, <span class="fl">0.3</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">ls.seg</span>)
+<span class="kw">pts</span> <span class="op">=</span> <span class="kw">ls.seg</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">pts</span>)
+<span class="kw">pol</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">1</span>),<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>))))
+<span class="kw">pol.seg</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_segmentize</a></span>(<span class="kw">pol</span>, <span class="fl">0.3</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">pol.seg</span>, col = <span class="st">'grey'</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">pol.seg</span>[[<span class="fl">1</span>]])
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
 <p>Function <code>st_polygonize</code> polygonizes a multilinestring, as far as the points form a closed polygon:</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>),<span class="kw">mar</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>))
-<span class="no">mls</span> <span class="kw">=</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>),,<span class="fl">2</span>,<span class="kw">byrow</span><span class="kw">=</span><span class="fl">TRUE</span>)))
-<span class="no">x</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_polygonize</a></span>(<span class="no">mls</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">mls</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'grey'</span>)
+<div class="sourceCode" id="cb31"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(mfrow=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>),mar=<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>))
+<span class="kw">mls</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>),,<span class="fl">2</span>,byrow=<span class="fl">TRUE</span>)))
+<span class="kw">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_polygonize</a></span>(<span class="kw">mls</span>)
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">mls</span>, col = <span class="st">'grey'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"multilinestring"</span>)
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="no">x</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">'grey'</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"polygon"</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">x</span>, col = <span class="st">'grey'</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span>(<span class="st">"polygon"</span>)
+</pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
 </div>
 </div>
@@ -558,7 +632,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

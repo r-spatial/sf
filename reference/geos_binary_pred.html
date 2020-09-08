@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Geometric binary predicates on pairs of simple feature geometry sets</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-predicates.R'><code>R/geom-predicates.R</code></a></small>
     <div class="hidden name"><code>geos_binary_pred.Rd</code></div>
     </div>
 
@@ -155,31 +158,38 @@
     <p>Geometric binary predicates on pairs of simple feature geometry sets</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_intersects</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_intersects</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_disjoint</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_disjoint</span>(<span class='kw'>x</span>, y = <span class='kw'>x</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_touches</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_touches</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_crosses</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_crosses</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_within</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_within</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_contains</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_contains</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>, s2_model = <span class='st'>"open"</span>)
 
-<span class='fu'>st_contains_properly</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_contains_properly</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_overlaps</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_overlaps</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_equals</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_equals</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_covers</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_covers</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>TRUE</span>, <span class='kw'>...</span>, s2_model = <span class='st'>"closed"</span>)
 
-<span class='fu'>st_covered_by</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_covered_by</span>(
+  <span class='kw'>x</span>,
+  y = <span class='kw'>x</span>,
+  sparse = <span class='fl'>TRUE</span>,
+  prepared = <span class='fl'>TRUE</span>,
+  <span class='kw'>...</span>,
+  s2_model = <span class='st'>"closed"</span>
+)
 
-<span class='fu'>st_equals_exact</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>par</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prepared</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_equals_exact</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>par</span>, sparse = <span class='fl'>TRUE</span>, prepared = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_is_within_distance</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>dist</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>st_is_within_distance</span>(<span class='kw'>x</span>, y = <span class='kw'>x</span>, <span class='kw'>dist</span>, sparse = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,11 +208,16 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>ignored</p></td>
+      <td><p>passed on to <a href='https://rdrr.io/pkg/s2/man/s2_options.html'>s2_options</a></p></td>
     </tr>
     <tr>
       <th>prepared</th>
       <td><p>logical; prepare geometry for x, before looping over y? See Details.</p></td>
+    </tr>
+    <tr>
+      <th>s2_model</th>
+      <td><p>character; polygon/polylin model; one of 
+"OPEN", "SEMI_OPEN", and "CLOSED"; see Details.</p></td>
     </tr>
     <tr>
       <th>par</th>
@@ -216,14 +231,15 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href='sgbp.html'>sgbp</a></code> with a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence <code><a href='https://rdrr.io/r/base/integer.html'>integer(0)</a></code> if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code><a href='https://rdrr.io/r/base/apply.html'>apply(mat, 1, any)</a></code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
+    <p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href='sgbp.html'>sgbp</a></code> with a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence a zero-length integer vector if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code><a href='https://rdrr.io/r/base/apply.html'>apply(mat, 1, any)</a></code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If <code>prepared</code> is <code>TRUE</code>, and <code>x</code> contains POINT geometries and <code>y</code> contains polygons, then the polygon geometries are prepared, rather than the points.</p>
 <p>For most predicates, a spatial index is built on argument <code>x</code>; see <a href='http://r-spatial.org/r/2017/06/22/spatial-index.html'>http://r-spatial.org/r/2017/06/22/spatial-index.html</a>.
-Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code> <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_contains_properly</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code> and <code>st_covered_by</code> all build spatial indexes for more efficient geometry calculations. <code>st_relate</code>, <code>st_equals_exact</code>, and <code>st_is_within_distance</code> do not.</p>
+Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code> <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_contains_properly</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code> and <code>st_covered_by</code> all build spatial indexes for more efficient geometry calculations. <code>st_relate</code>, <code>st_equals_exact</code>, and do not; <code>st_is_within_distance</code> uses a spatial index for geographic coordinates when <code><a href='s2.html'>sf_use_s2()</a></code> is true.</p>
 <p>If <code>y</code> is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.</p>
 <p>Sparse geometry binary predicate (<code><a href='sgbp.html'>sgbp</a></code>) lists have the following attributes: <code>region.id</code> with the <code>row.names</code> of <code>x</code> (if any, else <code>1:n</code>), <code>ncol</code> with the number of features in <code>y</code>, and <code>predicate</code> with the name of the predicate used.</p>
+<p>for <code>s2_model</code>, see https://github.com/r-spatial/s2/issues/32</p>
 <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
 <p>See also <a href='st_relate.html'>st_relate</a> and <a href='https://en.wikipedia.org/wiki/DE-9IM'>https://en.wikipedia.org/wiki/DE-9IM</a> for a more detailed description of the underlying algorithms.</p>
 <p><code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.</p>
@@ -233,17 +249,22 @@ Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_tou
 the function <code><a href='geos_binary_ops.html'>st_intersection</a></code> instead of <code>st_intersects</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.5</span>, <span class='fl'>1.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>2.5</span>)))
-<span class='no'>pol</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
-(<span class='no'>lst</span> <span class='kw'>=</span> <span class='fu'>st_intersects</span>(<span class='no'>pts</span>, <span class='no'>pol</span>))</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 3, where the predicate was `intersects'
+    <pre class="examples"><div class='input'><span class='kw'>pts</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.5</span>, <span class='fl'>1.5</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.5</span>, <span class='fl'>2.5</span>)))
+<span class='kw'>pol</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
+(<span class='kw'>lst</span> <span class='op'>=</span> <span class='fu'>st_intersects</span>(<span class='kw'>pts</span>, <span class='kw'>pol</span>))
+</div><div class='output co'>#&gt; Sparse geometry binary predicate list of length 3, where the predicate was `intersects'
 #&gt;  1: 1
 #&gt;  2: 1
-#&gt;  3: (empty)</div><div class='input'>(<span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'>st_intersects</span>(<span class='no'>pts</span>, <span class='no'>pol</span>, <span class='kw'>sparse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='output co'>#&gt;       [,1]
+#&gt;  3: (empty)</div><div class='input'>(<span class='kw'>mat</span> <span class='op'>=</span> <span class='fu'>st_intersects</span>(<span class='kw'>pts</span>, <span class='kw'>pol</span>, sparse = <span class='fl'>FALSE</span>))
+</div><div class='output co'>#&gt;       [,1]
 #&gt; [1,]  TRUE
 #&gt; [2,]  TRUE
 #&gt; [3,] FALSE</div><div class='input'><span class='co'># which points fall inside a polygon?</span>
-<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>mat</span>, <span class='fl'>1</span>, <span class='no'>any</span>)</div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lengths.html'>lengths</a></span>(<span class='no'>lst</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span></div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='co'># which points fall inside the first polygon?</span>
-<span class='fu'>st_intersects</span>(<span class='no'>pol</span>, <span class='no'>pts</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; [1] 1 2</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>mat</span>, <span class='fl'>1</span>, <span class='kw'>any</span>)
+</div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lengths.html'>lengths</a></span>(<span class='kw'>lst</span>) <span class='op'>&gt;</span> <span class='fl'>0</span>
+</div><div class='output co'>#&gt; [1]  TRUE  TRUE FALSE</div><div class='input'><span class='co'># which points fall inside the first polygon?</span>
+<span class='fu'>st_intersects</span>(<span class='kw'>pol</span>, <span class='kw'>pts</span>)[[<span class='fl'>1</span>]]
+</div><div class='output co'>#&gt; [1] 1 2</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -259,7 +280,7 @@ the function <code><a href='geos_binary_ops.html'>st_intersection</a></code> ins
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

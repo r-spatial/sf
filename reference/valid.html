@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,21 +158,21 @@
     <p>Checks whether a geometry is valid, or makes an invalid geometry valid</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_is_valid</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>NA_on_exception</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_is_valid</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, NA_on_exception = <span class='fl'>TRUE</span>, reason = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_is_valid</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_is_valid</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_is_valid</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_make_valid</span>(<span class='no'>x</span>)
+<span class='fu'>st_make_valid</span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_make_valid</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>st_make_valid</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,11 +204,16 @@
     <p><code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code> if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span>)
-<span class='fu'>st_is_valid</span>(<span class='no'>p1</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>st_is_valid</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>), <span class='no'>p1</span><span class='kw'>[[</span><span class='fl'>1</span>]]), <span class='kw'>reason</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Valid Geometry"         "Self-intersection[5 5]"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sf</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0.5</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
-<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(<span class='fu'>st_is_valid</span>(<span class='no'>x</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>y</span> <span class='kw'>=</span> <span class='fu'>st_make_valid</span>(<span class='no'>x</span>)
-<span class='fu'>st_is_valid</span>(<span class='no'>y</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='no'>y</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span>()</div><div class='output co'>#&gt; Geometry set for 2 features 
+    <pre class="examples"><div class='input'><span class='kw'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span>)
+<span class='fu'>st_is_valid</span>(<span class='kw'>p1</span>)
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>st_is_valid</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>), <span class='kw'>p1</span>[[<span class='fl'>1</span>]]), reason = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] "Valid Geometry"         "Self-intersection[5 5]"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://r-spatial.github.io/sf'>sf</a></span>)
+<span class='kw'>x</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0.5</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
+<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(<span class='fu'>st_is_valid</span>(<span class='kw'>x</span>))
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='kw'>y</span> <span class='op'>=</span> <span class='fu'>st_make_valid</span>(<span class='kw'>x</span>)
+<span class='fu'>st_is_valid</span>(<span class='kw'>y</span>)
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='kw'>y</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span>()
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  GEOMETRY
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
@@ -225,7 +233,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

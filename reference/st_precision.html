@@ -81,7 +81,7 @@ Set precision" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@ Set precision" />
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -157,11 +160,11 @@ Set precision" />
 <p>Set precision</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_precision</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>st_precision</span>(<span class='kw'>x</span>)
 
-<span class='fu'>st_set_precision</span>(<span class='no'>x</span>, <span class='no'>precision</span>)
+<span class='fu'>st_set_precision</span>(<span class='kw'>x</span>, <span class='kw'>precision</span>)
 
-<span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+<span class='fu'>st_precision</span>(<span class='kw'>x</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,9 +193,11 @@ Set precision" />
     <div class='dont-index'><p><a href='st_as_binary.html'>st_as_binary</a> for an explanation of what setting precision does, and the examples therein.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>pi</span>, <span class='no'>pi</span>)))
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>st_precision</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='fl'>0.01</span>
-<span class='fu'>st_precision</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 0.01</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>pi</span>, <span class='kw'>pi</span>)))
+<span class='fu'>st_precision</span>(<span class='kw'>x</span>)
+</div><div class='output co'>#&gt; [1] 0</div><div class='input'><span class='fu'>st_precision</span>(<span class='kw'>x</span>) <span class='op'>&lt;-</span> <span class='fl'>0.01</span>
+<span class='fu'>st_precision</span>(<span class='kw'>x</span>)
+</div><div class='output co'>#&gt; [1] 0.01</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +213,7 @@ Set precision" />
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

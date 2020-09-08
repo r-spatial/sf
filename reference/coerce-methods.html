@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Methods to coerce simple features to <code>Spatial*</code> and <code>Spatial*DataFrame</code> objects — as • sf</title>
+<title>Methods to coerce simple features to Spatial* and Spatial*DataFrame objects — as • sf</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Methods to coerce simple features to <code>Spatial*</code> and <code>Spatial*DataFrame</code> objects — as" />
+<meta property="og:title" content="Methods to coerce simple features to Spatial* and Spatial*DataFrame objects — as" />
 <meta property="og:description" content="as_Spatial() allows to convert sf and sfc to Spatial*DataFrame and
 Spatial* for sp compatibility. You can also use as(x, &quot;Spatial&quot;) To transform
 sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
@@ -82,7 +82,7 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -122,6 +122,9 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -159,7 +162,7 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
 <code>sp</code> objects to <code>sf</code> and <code>sfc</code> with <code>as(x, "sf")</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_Spatial</span>(<span class='no'>from</span>, <span class='kw'>cast</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>IDs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"ID"</span>, <span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>from</span>)))</pre>
+    <pre class="usage"><span class='fu'>as_Spatial</span>(<span class='kw'>from</span>, cast = <span class='fl'>TRUE</span>, IDs = <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"ID"</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='kw'>from</span>)))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,17 +194,19 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 <p>For converting simple features (i.e., <code>sf</code> objects) to their <code>Spatial</code> counterpart, use <code>as(obj, "Spatial")</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='co'># convert to SpatialPolygonsDataFrame</span>
-<span class='no'>spdf</span> <span class='kw'>&lt;-</span> <span class='fu'>as_Spatial</span>(<span class='no'>nc</span>)
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='co'># convert to SpatialPolygonsDataFrame</span>
+<span class='kw'>spdf</span> <span class='op'>&lt;-</span> <span class='fu'>as_Spatial</span>(<span class='kw'>nc</span>)
 <span class='co'># identical to</span>
-<span class='no'>spdf</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='no'>nc</span>, <span class='st'>"Spatial"</span>)
+<span class='kw'>spdf</span> <span class='op'>&lt;-</span> <span class='fu'>as</span>(<span class='kw'>nc</span>, <span class='st'>"Spatial"</span>)
 <span class='co'># convert to SpatialPolygons</span>
-<span class='fu'>as</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='st'>"Spatial"</span>)</div><div class='output co'>#&gt; An object of class "SpatialPolygons"
+<span class='fu'>as</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>), <span class='st'>"Spatial"</span>)
+</div><div class='output co'>#&gt; An object of class "SpatialPolygons"
 #&gt; Slot "polygons":
 #&gt; [[1]]
 #&gt; An object of class "Polygons"
@@ -6391,15 +6396,14 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 #&gt; y  33.88199  36.58965
 #&gt; 
 #&gt; Slot "proj4string":
-#&gt; CRS arguments:
-#&gt;  +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66
-#&gt; +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat 
+#&gt; CRS arguments: +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='co'># back to sf</span>
-<span class='fu'>as</span>(<span class='no'>spdf</span>, <span class='st'>"sf"</span>)</div><div class='output co'>#&gt; Simple feature collection with 100 features and 14 fields
+<span class='fu'>as</span>(<span class='kw'>spdf</span>, <span class='st'>"sf"</span>)
+</div><div class='output co'>#&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            unknown
+#&gt; geographic CRS: NAD27
 #&gt; First 10 features:
 #&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 #&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
@@ -6438,7 +6442,7 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

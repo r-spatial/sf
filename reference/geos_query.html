@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Dimension, simplicity, validity or is_empty queries on simple feature geometries</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-measures.R'><code>R/geom-measures.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/geom-predicates.R'><code>R/geom-predicates.R</code></a></small>
     <div class="hidden name"><code>geos_query.Rd</code></div>
     </div>
 
@@ -155,11 +158,11 @@
     <p>Dimension, simplicity, validity or is_empty queries on simple feature geometries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_dimension</span>(<span class='no'>x</span>, <span class='kw'>NA_if_empty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>st_dimension</span>(<span class='kw'>x</span>, NA_if_empty = <span class='fl'>TRUE</span>)
 
-<span class='fu'>st_is_simple</span>(<span class='no'>x</span>)
+<span class='fu'>st_is_simple</span>(<span class='kw'>x</span>)
 
-<span class='fu'>st_is_empty</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>st_is_empty</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,16 +184,20 @@
 <p>st_is_empty returns for each geometry whether it is empty</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(
-        <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>),
-        <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))),
-        <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))),
-        <span class='fu'><a href='st.html'>st_multipoint</a></span>(),
-        <span class='fu'><a href='st.html'>st_linestring</a></span>(),
-        <span class='fu'><a href='st.html'>st_geometrycollection</a></span>())
-<span class='fu'>st_dimension</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1]  0  1  2 NA NA NA</div><div class='input'><span class='fu'>st_dimension</span>(<span class='no'>x</span>, <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 0 1 2 0 1 0</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
-<span class='fu'>st_is_simple</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))</div><div class='output co'>#&gt; [1] FALSE  TRUE</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
-<span class='fu'>st_is_empty</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(), <span class='fu'><a href='st.html'>st_linestring</a></span>()))</div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(
+  <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>),
+  <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))),
+  <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))),
+  <span class='fu'><a href='st.html'>st_multipoint</a></span>(),
+  <span class='fu'><a href='st.html'>st_linestring</a></span>(),
+  <span class='fu'><a href='st.html'>st_geometrycollection</a></span>())
+<span class='fu'>st_dimension</span>(<span class='kw'>x</span>)
+</div><div class='output co'>#&gt; [1]  0  1  2 NA NA NA</div><div class='input'><span class='fu'>st_dimension</span>(<span class='kw'>x</span>, <span class='fl'>FALSE</span>)
+</div><div class='output co'>#&gt; [1] 0 1 2 0 1 0</div><div class='input'><span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
+<span class='fu'>st_is_simple</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>))))
+</div><div class='output co'>#&gt; [1] FALSE  TRUE</div><div class='input'><span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)))
+<span class='fu'>st_is_empty</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>ls</span>, <span class='fu'><a href='st.html'>st_point</a></span>(), <span class='fu'><a href='st.html'>st_linestring</a></span>()))
+</div><div class='output co'>#&gt; [1] FALSE  TRUE  TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -206,7 +213,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

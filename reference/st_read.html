@@ -83,7 +83,7 @@ Well-Know Binary geometries to sfc" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -123,6 +123,9 @@ Well-Know Binary geometries to sfc" />
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -161,39 +164,39 @@ geometry type(s)</p>
 Well-Know Binary geometries to sfc</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_read</span>(<span class='no'>dsn</span>, <span class='no'>layer</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_read</span>(<span class='kw'>dsn</span>, <span class='kw'>layer</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for character</span>
 <span class='fu'>st_read</span>(
-  <span class='no'>dsn</span>,
-  <span class='no'>layer</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>query</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>promote_to_multi</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>sf_stringsAsFactors</span>(),
-  <span class='kw'>int64_as_string</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>check_ring_dir</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fid_column_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>drivers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>wkt_filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>)
+  <span class='kw'>dsn</span>,
+  <span class='kw'>layer</span>,
+  <span class='kw'>...</span>,
+  query = <span class='fl'>NA</span>,
+  options = <span class='kw'>NULL</span>,
+  quiet = <span class='fl'>FALSE</span>,
+  geometry_column = <span class='fl'>1L</span>,
+  type = <span class='fl'>0</span>,
+  promote_to_multi = <span class='fl'>TRUE</span>,
+  stringsAsFactors = <span class='fu'>sf_stringsAsFactors</span>(),
+  int64_as_string = <span class='fl'>FALSE</span>,
+  check_ring_dir = <span class='fl'>FALSE</span>,
+  fid_column_name = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
+  drivers = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
+  wkt_filter = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>)
 )
 
-<span class='fu'>read_sf</span>(<span class='no'>...</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>as_tibble</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>read_sf</span>(<span class='kw'>...</span>, quiet = <span class='fl'>TRUE</span>, stringsAsFactors = <span class='fl'>FALSE</span>, as_tibble = <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for DBIObject</span>
 <span class='fu'>st_read</span>(
-  <span class='kw'>dsn</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>layer</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>query</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>as_tibble</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>geometry_column</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  dsn = <span class='kw'>NULL</span>,
+  layer = <span class='kw'>NULL</span>,
+  query = <span class='kw'>NULL</span>,
+  EWKB = <span class='fl'>TRUE</span>,
+  quiet = <span class='fl'>TRUE</span>,
+  as_tibble = <span class='fl'>FALSE</span>,
+  geometry_column = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -353,12 +356,14 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <div class='dont-index'><p><a href='st_layers.html'>st_layers</a>, <a href='st_drivers.html'>st_drivers</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span></div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID    
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>nc</span>) <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span>
+</div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID    
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  
 #&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  
 #&gt;  Median :0.1205   Median :1.609   Median :1982   Median :1982  
@@ -388,67 +393,71 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt;  Max.   :57.00   Max.   :11631.0                      </div><div class='input'>
 <span class='co'>## only three fields by select clause</span>
 <span class='co'>## only two features by where clause</span>
-<span class='no'>nc_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>),
-                     <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+<span class='kw'>nc_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>),
+                     query = <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.06555 ymin: 34.82742 xmax: -78.49929 ymax: 35.50912
-#&gt; CRS:            4267</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sp</span>)
-  <span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span>(<span class='no'>meuse</span>, <span class='kw'>ask</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>echo</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='no'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
-       <span class='kw'>layer_options</span> <span class='kw'>=</span> <span class='st'>"OVERWRITE=true"</span>))
-  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>st_meuse</span> <span class='kw'>&lt;-</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
-  <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"st_meuse"</span>))
-    <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>st_meuse</span>)
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)
+  <span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span>(<span class='kw'>meuse</span>, ask = <span class='fl'>FALSE</span>, echo = <span class='fl'>FALSE</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='st_write.html'>st_write</a></span>(<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw'>meuse</span>), <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
+       layer_options = <span class='st'>"OVERWRITE=true"</span>))
+  <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='kw'>st_meuse</span> <span class='op'>&lt;-</span> <span class='fu'>st_read</span>(<span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>))
+  <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"st_meuse"</span>))
+    <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>st_meuse</span>)
 }
 
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## note that we need special escaping of layer  within single quotes (nc.gpkg)</span>
 <span class='co'>## and that geom needs to be included in the select, otherwise we don't detect it</span>
-<span class='no'>layer</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_layers.html'>st_layers</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>))$<span class='no'>name</span>[<span class='fl'>1</span>]
-<span class='no'>nc_gpkg_sql</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"sf"</span>),
-   <span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class='no'>layer</span>))
+<span class='kw'>layer</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_layers.html'>st_layers</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package = <span class='st'>"sf"</span>))<span class='op'>$</span><span class='kw'>name</span>[<span class='fl'>1</span>]
+<span class='kw'>nc_gpkg_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package = <span class='st'>"sf"</span>),
+   query = <span class='fu'><a href='https://rdrr.io/r/base/sprintf.html'>sprintf</a></span>(<span class='st'>"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class='kw'>layer</span>))
 }
 <span class='co'># spatial filter, as wkt:</span>
-<span class='no'>wkt</span> <span class='kw'>=</span> <span class='fu'><a href='st_as_text.html'>st_as_text</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]))
+<span class='kw'>wkt</span> <span class='op'>=</span> <span class='fu'><a href='st_as_text.html'>st_as_text</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,]))
 <span class='co'># filter by (bbox overlaps of) first feature geometry:</span>
-<span class='fu'>read_sf</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='kw'>wkt_filter</span> <span class='kw'>=</span> <span class='no'>wkt</span>)</div><div class='output co'>#&gt; Simple feature collection with 4 features and 14 fields
+<span class='fu'>read_sf</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package=<span class='st'>"sf"</span>), wkt_filter = <span class='kw'>wkt</span>)
+</div><div class='output co'>#&gt; Simple feature collection with 4 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965
-#&gt; CRS:            4267
-#&gt; # A tibble: 4 x 15
+#&gt; geographic CRS: NAD27
+#&gt; <span style='color: #555555;'># A tibble: 4 x 15</span><span>
 #&gt;    AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74
-#&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
-#&gt; 1 0.081      1.29  1880    1880 Wata… 37189  37189       95  1323     1      17
-#&gt; 2 0.114      1.44  1825    1825 Ashe  37009  37009        5  1091     1      10
-#&gt; 3 0.199      1.98  1874    1874 Wilk… 37193  37193       97  3146     4     200
-#&gt; 4 0.061      1.23  1827    1827 Alle… 37005  37005        3   487     0      10
-#&gt; # … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,
-#&gt; #   geom &lt;MULTIPOLYGON [°]&gt;</div><div class='input'><span class='co'># read geojson from string:</span>
-<span class='no'>geojson_txt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> 0.081      1.29  </span><span style='text-decoration: underline;'>1</span><span>880    </span><span style='text-decoration: underline;'>1</span><span>880 Wata… 37189  </span><span style='text-decoration: underline;'>37</span><span>189       95  </span><span style='text-decoration: underline;'>1</span><span>323     1      17
+#&gt; </span><span style='color: #555555;'>2</span><span> 0.114      1.44  </span><span style='text-decoration: underline;'>1</span><span>825    </span><span style='text-decoration: underline;'>1</span><span>825 Ashe  37009  </span><span style='text-decoration: underline;'>37</span><span>009        5  </span><span style='text-decoration: underline;'>1</span><span>091     1      10
+#&gt; </span><span style='color: #555555;'>3</span><span> 0.199      1.98  </span><span style='text-decoration: underline;'>1</span><span>874    </span><span style='text-decoration: underline;'>1</span><span>874 Wilk… 37193  </span><span style='text-decoration: underline;'>37</span><span>193       97  </span><span style='text-decoration: underline;'>3</span><span>146     4     200
+#&gt; </span><span style='color: #555555;'>4</span><span> 0.061      1.23  </span><span style='text-decoration: underline;'>1</span><span>827    </span><span style='text-decoration: underline;'>1</span><span>827 Alle… 37005  </span><span style='text-decoration: underline;'>37</span><span>005        3   487     0      10
+#&gt; </span><span style='color: #555555;'># … with 4 more variables: BIR79 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, SID79 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, NWBIR79 </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   geom </span><span style='color: #555555;font-style: italic;'>&lt;MULTIPOLYGON [°]&gt;</span><span></div><div class='input'><span class='co'># read geojson from string:</span>
+<span class='kw'>geojson_txt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>read_sf</span>(<span class='no'>geojson_txt</span>)
-<span class='no'>x</span></div><div class='output co'>#&gt; Simple feature collection with 1 feature and 0 fields
+<span class='kw'>x</span> <span class='op'>=</span> <span class='fu'>read_sf</span>(<span class='kw'>geojson_txt</span>)
+<span class='kw'>x</span>
+</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 0 fields
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6
-#&gt; CRS:            4326
-#&gt; # A tibble: 1 x 1
+#&gt; geographic CRS: WGS 84
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 1</span><span>
 #&gt;                                                         geometry
-#&gt;                                                 &lt;MULTIPOINT [°]&gt;
-#&gt; 1 ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RPostgreSQL</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span>(), <span class='kw'>dbname</span> <span class='kw'>=</span> <span class='st'>"postgis"</span>))
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"conn"</span>) <span class='kw'>&amp;&amp;</span> !<span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='no'>conn</span>, <span class='st'>"try-error"</span>)) {
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='st'>"meuse"</span>, <span class='kw'>query</span> <span class='kw'>=</span> <span class='st'>"select * from meuse limit 3;"</span>)
-  <span class='no'>x</span> <span class='kw'>=</span> <span class='fu'>st_read</span>(<span class='no'>conn</span>, <span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>"public.meuse"</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
-  <span class='fu'>dbDisconnect</span>(<span class='no'>conn</span>)
+#&gt;                                                 </span><span style='color: #555555;font-style: italic;'>&lt;MULTIPOINT [°]&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/tomoakin/RPostgreSQL'>RPostgreSQL</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='kw'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span>(), dbname = <span class='st'>"postgis"</span>))
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"conn"</span>) <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span>(<span class='kw'>conn</span>, <span class='st'>"try-error"</span>)) {
+  <span class='kw'>x</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='kw'>conn</span>, <span class='st'>"meuse"</span>, query = <span class='st'>"select * from meuse limit 3;"</span>)
+  <span class='kw'>x</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='kw'>conn</span>, table = <span class='st'>"public.meuse"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='kw'>x</span>)) <span class='co'># SRID resolved by the database, not by GDAL!</span>
+  <span class='fu'>dbDisconnect</span>(<span class='kw'>conn</span>)
  }
-}</div></pre>
+}
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -464,7 +473,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

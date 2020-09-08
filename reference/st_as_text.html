@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -156,15 +159,15 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for crs</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>pretty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_as_text</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, pretty = <span class='fl'>FALSE</span>)
 
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_text</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>st_as_text</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_text</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_as_text</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, EWKT = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,12 +193,14 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The returned WKT representation of simple feature geometry conforms to the
-<a href='http://www.opengeospatial.org/standards/sfa'>simple features access</a> specification and extensions,
-<a href='http://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>known as EWKT</a>, supported by
+<a href='https://www.ogc.org/standards/sfa'>simple features access</a> specification and extensions,
+<a href='https://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT'>known as EWKT</a>, supported by
 PostGIS and other simple features implementations for addition of SRID to a WKT string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>90</span>,<span class='fl'>40</span>)), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>), <span class='kw'>EWKT</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "SRID=4326;POINT (-90 40)"</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>))
+</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div><div class='input'><span class='fu'>st_as_text</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>90</span>,<span class='fl'>40</span>)), crs = <span class='fl'>4326</span>), EWKT = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] "SRID=4326;POINT (-90 40)"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -211,7 +216,7 @@ PostGIS and other simple features implementations for addition of SRID to a WKT 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

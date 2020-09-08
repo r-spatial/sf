@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,28 +158,28 @@
     <p>Convert sfc object to an WKB object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_as_binary</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_as_binary</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
 <span class='fu'>st_as_binary</span>(
-  <span class='no'>x</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
-  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>x</span>, <span class='st'>"precision"</span>),
-  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>...</span>,
+  EWKB = <span class='fl'>FALSE</span>,
+  endian = <span class='kw'>.Platform</span><span class='op'>$</span><span class='kw'>endian</span>,
+  pureR = <span class='fl'>FALSE</span>,
+  precision = <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='kw'>x</span>, <span class='st'>"precision"</span>),
+  hex = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>st_as_binary</span>(
-  <span class='no'>x</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='no'>.Platform</span>$<span class='no'>endian</span>,
-  <span class='kw'>EWKB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>pureR</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>hex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>...</span>,
+  endian = <span class='kw'>.Platform</span><span class='op'>$</span><span class='kw'>endian</span>,
+  EWKB = <span class='fl'>FALSE</span>,
+  pureR = <span class='fl'>FALSE</span>,
+  hex = <span class='fl'>FALSE</span>,
+  srid = <span class='fl'>0</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -223,19 +226,23 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># examples of setting precision:</span>
-<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>1</span>/<span class='fl'>6</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>1000</span>) <span class='kw'>%&gt;%</span> <span class='no'>st_as_binary</span> <span class='kw'>%&gt;%</span> <span class='no'>st_as_sfc</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span>)) <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(precision = <span class='fl'>1000</span>) <span class='op'>%&gt;%</span> <span class='kw'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='kw'>st_as_sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.333 0.167)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>1</span>/<span class='fl'>6</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>precision</span> <span class='kw'>=</span>  <span class='fl'>100</span>) <span class='kw'>%&gt;%</span> <span class='no'>st_as_binary</span> <span class='kw'>%&gt;%</span> <span class='no'>st_as_sfc</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.333 0.167)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span>)) <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(precision =  <span class='fl'>100</span>) <span class='op'>%&gt;%</span> <span class='kw'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='kw'>st_as_sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0.33 ymin: 0.17 xmax: 0.33 ymax: 0.17
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.33 0.17)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1e6</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>1</span>/<span class='fl'>6</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0.01</span>) <span class='kw'>%&gt;%</span> <span class='no'>st_as_binary</span> <span class='kw'>%&gt;%</span> <span class='no'>st_as_sfc</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.33 0.17)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span>)) <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(precision = <span class='fl'>0.01</span>) <span class='op'>%&gt;%</span> <span class='kw'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='kw'>st_as_sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 333300 ymin: 166700 xmax: 333300 ymax: 166700
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (333300 166700)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1e6</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>1</span>/<span class='fl'>6</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>0.001</span>) <span class='kw'>%&gt;%</span> <span class='no'>st_as_binary</span> <span class='kw'>%&gt;%</span> <span class='no'>st_as_sfc</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (333300 166700)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span>(<span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span>)) <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(precision = <span class='fl'>0.001</span>) <span class='op'>%&gt;%</span> <span class='kw'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='kw'>st_as_sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 333000 ymin: 167000 xmax: 333000 ymax: 167000
@@ -255,7 +262,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

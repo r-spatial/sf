@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Sample points on a linear geometry</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-transformers.R'><code>R/geom-transformers.R</code></a></small>
     <div class="hidden name"><code>st_line_sample.Rd</code></div>
     </div>
 
@@ -155,7 +158,7 @@
     <p>Sample points on a linear geometry</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_line_sample</span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='no'>density</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"regular"</span>, <span class='kw'>sample</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>st_line_sample</span>(<span class='kw'>x</span>, <span class='kw'>n</span>, <span class='kw'>density</span>, type = <span class='st'>"regular"</span>, sample = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,41 +187,49 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
-        <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>0</span>))))
-<span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+    <pre class="examples"><div class='input'><span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
+  <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>0</span>))))
+<span class='fu'>st_line_sample</span>(<span class='kw'>ls</span>, density = <span class='fl'>1</span>)
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0.5))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.5 0), (1.5 0), (2.5 0), (3.5 0),...</span></div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
- <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>st_line_sample</span>(<span class='no'>ls</span>, <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>)) <span class='co'># error</span></div><div class='output co'>#&gt; Error in st_line_sample(ls, density = 1/1000) : 
-#&gt;   st_line_sample for longitude/latitude not supported; use st_segmentize?</div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>5</span>) <span class='co'># five points for each line</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0.5))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0.5 0), (1.5 0), (2.5 0), (3.5 0),...</span></div><div class='input'><span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))),
+ <span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>,<span class='fl'>0</span>))), crs = <span class='fl'>4326</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>st_line_sample</span>(<span class='kw'>ls</span>, density = <span class='fl'>1</span><span class='op'>/</span><span class='fl'>1000</span>)) <span class='co'># error</span>
+</div><div class='output co'>#&gt; Error in st_line_sample(ls, density = 1/1000) : 
+#&gt;   st_line_sample for longitude/latitude not supported; use st_segmentize?</div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), n = <span class='fl'>5</span>) <span class='co'># five points for each line</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10018.75 ymax: 100192.6
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 11132.51), (0 33397.54), (0 5566...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((1113.195 -7.081155e-10), (3339.585...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)) <span class='co'># one and three points</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 10018.75 ymax: 100192.6
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 11132.51), (0 33397.54), (0 5566...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((1113.195 0), (3339.585 0), (5565.9...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), n = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)) <span class='co'># one and three points</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 9276.624 ymax: 55662.57
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 55662.57))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((1855.325 -7.081155e-10), (5565.975...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>1000</span>) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 9276.624 ymax: 55662.57
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 55662.57))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((1855.325 0), (5565.975 0), (9276.6...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), density = <span class='fl'>1</span><span class='op'>/</span><span class='fl'>1000</span>) <span class='co'># one per km</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((505.9977 -7.081155e-10), (1517.993...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>1000</span>, <span class='fl'>1</span>/<span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 10625.95 ymax: 110823.7
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((505.9977 0), (1517.993 0), (2529.9...</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), density = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>/</span><span class='fl'>1000</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>10000</span>)) <span class='co'># one per km, one per 10 km</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 5565.975 ymax: 110823.7
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((5565.975 -7.081155e-10))</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>density</span> <span class='kw'>=</span> <span class='kw pkg'>units</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>/<span class='no'>km</span>)) <span class='co'># one per km</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 5565.975 ymax: 110823.7
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((5565.975 0))</span></div><div class='input'><span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), density = <span class='kw'>units</span>::<span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>/</span><span class='kw'>km</span>)) <span class='co'># one per km</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 10625.95 ymax: 110823.7
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((505.9977 -7.081155e-10), (1517.993...</span></div><div class='input'><span class='co'># five equidistant points including start and end:</span>
-<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='no'>ls</span>, <span class='fl'>3857</span>), <span class='kw'>sample</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 10625.95 ymax: 110823.7
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 501.4646), (0 1504.394), (0 2507...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((505.9977 0), (1517.993 0), (2529.9...</span></div><div class='input'><span class='co'># five equidistant points including start and end:</span>
+<span class='fu'>st_line_sample</span>(<span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='kw'>ls</span>, <span class='fl'>3857</span>), sample = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>1</span>))
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: -7.081155e-10 xmax: 11131.95 ymax: 111325.1
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 -7.081155e-10), (0 27831.29), (0...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 -7.081155e-10), (2782.987 -7.081...</span></div></pre>
+#&gt; bbox:           xmin: 0 ymin: 0 xmax: 11131.95 ymax: 111325.1
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0), (0 27831.29), (0 55662.57), ...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOINT ((0 0), (2782.987 0), (5565.975 0), ...</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -234,7 +245,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

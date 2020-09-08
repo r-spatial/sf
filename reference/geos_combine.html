@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Combine or union feature geometries</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-transformers.R'><code>R/geom-transformers.R</code></a></small>
     <div class="hidden name"><code>geos_combine.Rd</code></div>
     </div>
 
@@ -155,9 +158,9 @@
     <p>Combine several feature geometries into one, without unioning or resolving internal boundaries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_combine</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>st_combine</span>(<span class='kw'>x</span>)
 
-<span class='fu'>st_union</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>by_feature</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_union</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, by_feature = <span class='fl'>FALSE</span>, is_coverage = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,6 +181,10 @@
       <th>by_feature</th>
       <td><p>logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features</p></td>
     </tr>
+    <tr>
+      <th>is_coverage</th>
+      <td><p>logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -194,16 +201,19 @@
     <div class='dont-index'><p><a href='geos_binary_ops.html'>st_intersection</a>, <a href='geos_binary_ops.html'>st_difference</a>, <a href='geos_binary_ops.html'>st_sym_difference</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='fu'>st_combine</span>(<span class='no'>nc</span>)</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'>st_combine</span>(<span class='kw'>nc</span>)
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='no'>nc</span>))</div><div class='img'><img src='geos_combine-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; geographic CRS: NAD27</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='kw'>nc</span>))
+</div><div class='img'><img src='geos_combine-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -219,7 +229,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

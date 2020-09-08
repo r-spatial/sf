@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,23 +158,23 @@
     <p>spatial join, spatial filter</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>join</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_join</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>join</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sf</span>
 <span class='fu'>st_join</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='kw'>join</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>suffix</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
-  <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  join = <span class='kw'>st_intersects</span>,
+  <span class='kw'>...</span>,
+  suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>),
+  left = <span class='fl'>TRUE</span>,
+  largest = <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>st_filter</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+<span class='fu'>st_filter</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_filter</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>.predicate</span> <span class='kw'>=</span> <span class='no'>st_intersects</span>)</pre>
+<span class='fu'>st_filter</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, .predicate = <span class='kw'>st_intersects</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -234,11 +237,12 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 </ul><p>A left join returns all records of the <code>x</code> object with <code>y</code> fields for non-matched records filled with <code>NA</code> values; an inner join returns only records that spatially match.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>a</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
- <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>))))
-<span class='no'>b</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>11</span>:<span class='fl'>14</span>,
- <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>10</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>))))
-<span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>)</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
+    <pre class="examples"><div class='input'><span class='kw'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(a = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
+ geom = <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>))))
+<span class='kw'>b</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(a = <span class='fl'>11</span><span class='op'>:</span><span class='fl'>14</span>,
+ geom = <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>10</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>2</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>))))
+<span class='fu'>st_join</span>(<span class='kw'>a</span>, <span class='kw'>b</span>)
+</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
@@ -247,7 +251,8 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 #&gt; 1     1  NA POINT (1 1)
 #&gt; 2     2  12 POINT (2 2)
 #&gt; 2.1   2  13 POINT (2 2)
-#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>, <span class='kw'>left</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
+#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='fu'>st_join</span>(<span class='kw'>a</span>, <span class='kw'>b</span>, left = <span class='fl'>FALSE</span>)
+</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 2 ymin: 2 xmax: 3 ymax: 3
@@ -256,7 +261,8 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 #&gt; 2     2  12 POINT (2 2)
 #&gt; 2.1   2  13 POINT (2 2)
 #&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span>
-<span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>.</span>$<span class='no'>a.x</span>), <span class='no'>mean</span>)</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
+<span class='fu'>st_join</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>.</span><span class='op'>$</span><span class='kw'>a.x</span>), <span class='kw'>mean</span>)
+</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
 #&gt; Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
@@ -265,35 +271,44 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 #&gt;   Group.1 a.x  a.y    geometry
 #&gt; 1       1   1   NA POINT (1 1)
 #&gt; 2       2   2 12.5 POINT (2 2)
-#&gt; 3       3   3 14.0 POINT (3 3)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'>st_join</span>(<span class='no'>a</span>, <span class='no'>b</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>a.x</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='tidyverse.html'>summarise</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>a.y</span>))</div><div class='output co'>#&gt; <span class='message'>`summarise()` ungrouping output (override with `.groups` argument)</span></div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
+#&gt; 3       3   3 14.0 POINT (3 3)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
+<span class='fu'>st_join</span>(<span class='kw'>a</span>, <span class='kw'>b</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>a.x</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='tidyverse.html'>summarise</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>a.y</span>))
+</div><div class='output co'>#&gt; <span class='message'>`summarise()` ungrouping output (override with `.groups` argument)</span></div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
-#&gt; CRS:            NA
-#&gt; # A tibble: 3 x 3
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'cli':</span>
+#&gt; <span class='message'>  method     from    </span>
+#&gt; <span class='message'>  print.boxx spatstat</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span><span>
 #&gt;     a.x `mean(a.y)`    geom
-#&gt;   &lt;int&gt;       &lt;dbl&gt; &lt;POINT&gt;
-#&gt; 1     1        NA     (1 1)
-#&gt; 2     2        12.5   (2 2)
-#&gt; 3     3        14     (3 3)</div><div class='input'><span class='co'># example of largest = TRUE:</span>
-<span class='no'>nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>)), <span class='fl'>2264</span>)</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;POINT&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>     1        </span><span style='color: #BB0000;'>NA</span><span>     (1 1)
+#&gt; </span><span style='color: #555555;'>2</span><span>     2        12.5   (2 2)
+#&gt; </span><span style='color: #555555;'>3</span><span>     3        14     (3 3)</div><div class='input'><span class='co'># example of largest = TRUE:</span>
+<span class='kw'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span>(<span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>)), <span class='fl'>2264</span>)                
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='no'>gr</span> <span class='kw'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(
-    <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='no'>LETTERS</span>[<span class='fl'>10</span>:<span class='fl'>1</span>])[,<span class='fl'>2</span>:<span class='fl'>1</span>], <span class='fl'>1</span>, <span class='no'>paste0</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>" "</span>),
-    <span class='kw'>geom</span> <span class='kw'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>nc</span>))))
-<span class='no'>gr</span>$<span class='no'>col</span> <span class='kw'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='fl'>10</span>, <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.3</span>)
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='kw'>gr</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(
+    label = <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='kw'>LETTERS</span>[<span class='fl'>10</span><span class='op'>:</span><span class='fl'>1</span>])[,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>1</span>], <span class='fl'>1</span>, <span class='kw'>paste0</span>, collapse = <span class='st'>" "</span>),
+    geom = <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>nc</span>))))
+<span class='kw'>gr</span><span class='op'>$</span><span class='kw'>col</span> <span class='op'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span>(<span class='fl'>10</span>, categorical = <span class='fl'>TRUE</span>, alpha = <span class='fl'>.3</span>)
 <span class='co'># cut, to check, NA's work out:</span>
-<span class='no'>gr</span> <span class='kw'>=</span> <span class='no'>gr</span>[-(<span class='fl'>1</span>:<span class='fl'>30</span>),]
-<span class='no'>nc_j</span> <span class='kw'>&lt;-</span> <span class='fu'>st_join</span>(<span class='no'>nc</span>, <span class='no'>gr</span>, <span class='kw'>largest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='co'># the two datasets:</span>
-<span class='no'>opar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>4</span>))
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc_j</span>))
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>gr</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>gr</span>$<span class='no'>col</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='no'>gr</span>)), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>gr</span>$<span class='no'>label</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='co'># the joined dataset:</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc_j</span>), <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'black'</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>nc_j</span>$<span class='no'>col</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='no'>nc_j</span>)), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>nc_j</span>$<span class='no'>label</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>.8</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>gr</span>), <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='st_join-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='no'>opar</span>)</div></pre>
+<span class='kw'>gr</span> <span class='op'>=</span> <span class='kw'>gr</span>[<span class='op'>-</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>),]
+<span class='kw'>nc_j</span> <span class='op'>&lt;-</span> <span class='fu'>st_join</span>(<span class='kw'>nc</span>, <span class='kw'>gr</span>, largest = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='co'># the two datasets:</span>
+<span class='kw'>opar</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(mfrow = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>), mar = <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>4</span>))
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc_j</span>))
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>gr</span>), add = <span class='fl'>TRUE</span>, col = <span class='kw'>gr</span><span class='op'>$</span><span class='kw'>col</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='kw'>gr</span>)), labels = <span class='kw'>gr</span><span class='op'>$</span><span class='kw'>label</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='co'># the joined dataset:</span>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc_j</span>), border = <span class='st'>'black'</span>, col = <span class='kw'>nc_j</span><span class='op'>$</span><span class='kw'>col</span>)
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span>(<span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='kw'>nc_j</span>)), labels = <span class='kw'>nc_j</span><span class='op'>$</span><span class='kw'>label</span>, cex = <span class='fl'>.8</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>gr</span>), border = <span class='st'>'green'</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='st_join-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>opar</span>)
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -309,7 +324,7 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

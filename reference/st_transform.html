@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,38 +158,38 @@
     <p>Transform or convert coordinates of simple feature</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='no'>crs</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_transform</span>(<span class='kw'>x</span>, <span class='kw'>crs</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
 <span class='fu'>st_transform</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
-  <span class='no'>...</span>,
-  <span class='kw'>aoi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>pipeline</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>partial</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  crs = <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='kw'>x</span>),
+  <span class='kw'>...</span>,
+  aoi = <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>0</span>),
+  pipeline = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
+  reverse = <span class='fl'>FALSE</span>,
+  partial = <span class='fl'>TRUE</span>,
+  check = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+<span class='fu'>st_transform</span>(<span class='kw'>x</span>, crs = <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='kw'>x</span>), <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_transform</span>(<span class='no'>x</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+<span class='fu'>st_transform</span>(<span class='kw'>x</span>, crs = <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='kw'>x</span>), <span class='kw'>...</span>)
 
-<span class='fu'>sf_proj_info</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"proj"</span>, <span class='no'>path</span>)
+<span class='fu'>sf_proj_info</span>(type = <span class='st'>"proj"</span>, <span class='kw'>path</span>)
 
-<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='no'>options</span>, <span class='no'>quiet</span>)
+<span class='fu'>st_wrap_dateline</span>(<span class='kw'>x</span>, <span class='kw'>options</span>, <span class='kw'>quiet</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_wrap_dateline</span>(<span class='kw'>x</span>, options = <span class='st'>"WRAPDATELINE=YES"</span>, quiet = <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>st_wrap_dateline</span>(<span class='kw'>x</span>, options = <span class='st'>"WRAPDATELINE=YES"</span>, quiet = <span class='fl'>TRUE</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_wrap_dateline</span>(<span class='no'>x</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>st_wrap_dateline</span>(<span class='kw'>x</span>, options = <span class='st'>"WRAPDATELINE=YES"</span>, quiet = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -248,81 +251,71 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
 <p>Projecting to projections not supported by GDAL may be done by <a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a>, part of package lwgeom.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
 <p><code>sf_proj_info</code> lists the available projections, ellipses, datums, units, or data search path of the PROJ library when <code>type</code> is equal to proj, ellps, datum, units or path; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>).</p>
-<p>PROJ &gt;= 6 does not provide option <code>type = "datums"</code>. PROJ &lt; 6 does not provide the option <code>type = "prime_meridians"</code>.</p>
+<p>for PROJ &gt;= 6, <code>sf_proj_info</code> does not provide option <code>type = "datums"</code>. 
+PROJ &lt; 6 does not provide the option <code>type = "prime_meridians"</code>.</p>
+<p>for PROJ &gt;= 7.1.0, the "units" query of <code>sf_proj_info</code> returns the <code>to_meter</code> 
+variable as numeric, previous versions return a character vector containing a numeric expression.</p>
 <p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a> and <a href='https://github.com/r-spatial/sf/issues/541'>https://github.com/r-spatial/sf/issues/541</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>,<span class='fl'>52</span>))
-<span class='no'>p2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>30</span>,<span class='fl'>20</span>))
-<span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='no'>sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+    <pre class="examples"><div class='input'><span class='kw'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>,<span class='fl'>52</span>))
+<span class='kw'>p2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>30</span>,<span class='fl'>20</span>))
+<span class='kw'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>p1</span>, <span class='kw'>p2</span>, crs = <span class='fl'>4326</span>)
+<span class='kw'>sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -30 ymin: 20 xmax: 7 ymax: 52
-#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='fl'>3857</span>)</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='kw'>sfc</span>, <span class='fl'>3857</span>)
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
-#&gt; CRS:            EPSG:3857</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-3339585 2273031)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>a</span><span class='kw'>=</span><span class='fl'>2</span>:<span class='fl'>1</span>, <span class='kw'>geom</span><span class='kw'>=</span><span class='no'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-3339585 2273031)</span></div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='sf.html'>st_sf</a></span>(a=<span class='fl'>2</span><span class='op'>:</span><span class='fl'>1</span>, geom=<span class='kw'>sfc</span>), <span class='st'>"+init=epsg:3857"</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span></div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -3339585 ymin: 2273031 xmax: 779236.4 ymax: 6800125
-#&gt; CRS:            +init=epsg:3857
+#&gt; projected CRS:  WGS 84 / Pseudo-Mercator
 #&gt;   a                     geom
 #&gt; 1 2 POINT (779236.4 6800125)
-#&gt; 2 1 POINT (-3339585 2273031)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='fl'>3857</span>, <span class='kw'>aoi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>280</span>,-<span class='fl'>90</span>,<span class='fl'>180</span>,<span class='fl'>90</span>)))</div><div class='output co'>#&gt; Error in CPL_transform(x, crs, aoi, pipeline, reverse) : 
-#&gt;   pipeline or area of interest require GDAL &gt;= 3</div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"GDAL"</span>] <span class='kw'>&gt;=</span> <span class='st'>"3.0.0"</span>) {
-  <span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='kw'>pipeline</span> <span class='kw'>=</span>
-          <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>) <span class='co'># reverse axes</span>
-  <span class='fu'>st_transform</span>(<span class='no'>sfc</span>, <span class='kw'>pipeline</span> <span class='kw'>=</span>
-          <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># also reverse axes</span>
+#&gt; 2 1 POINT (-3339585 2273031)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>st_transform</span>(<span class='kw'>sfc</span>, <span class='fl'>3857</span>, aoi = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>280</span>,<span class='op'>-</span><span class='fl'>90</span>,<span class='fl'>180</span>,<span class='fl'>90</span>)))
+</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: Invalid dfWestLongitudeDeg</span></div><div class='output co'>#&gt; Error in CPL_transform(x, crs, aoi, pipeline, reverse) : 
+#&gt;   values for area of interest not accepted</div><div class='input'><span class='co'>if</span> (<span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span>()[<span class='st'>"GDAL"</span>] <span class='op'>&gt;=</span> <span class='st'>"3.0.0"</span>) {
+  <span class='fu'>st_transform</span>(<span class='kw'>sfc</span>, pipeline =
+    <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>) <span class='co'># reverse axes</span>
+  <span class='fu'>st_transform</span>(<span class='kw'>sfc</span>, pipeline =
+    <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span>, reverse = <span class='fl'>TRUE</span>) <span class='co'># also reverse axes</span>
 }
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 20 ymin: -30 xmax: 52 ymax: 7
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (52 7)</span></div><div class='output co'>#&gt; <span class='message'>POINT (20 -30)</span></div><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='no'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area from long/lat</span></div><div class='output co'>#&gt; 1137394863 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span></div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span></div><div class='output co'>#&gt; 12244955726 [US_survey_foot^2]</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>units</span>)</div><div class='output co'>#&gt; <span class='message'>udunits system database from /usr/share/xml/udunits</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='no'>m</span>^<span class='fl'>2</span>)</div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='no'>p1</span>, <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>sf_proj_info</span>(<span class='st'>"datum"</span>)</div><div class='output co'>#&gt;             name  ellipse
-#&gt; 1          WGS84    WGS84
-#&gt; 2         GGRS87    GRS80
-#&gt; 3          NAD83    GRS80
-#&gt; 4          NAD27   clrk66
-#&gt; 5        potsdam   bessel
-#&gt; 6       carthage  clark80
-#&gt; 7  hermannskogel   bessel
-#&gt; 8          ire65 mod_airy
-#&gt; 9         nzgd49     intl
-#&gt; 10        OSGB36     airy
-#&gt;                                                        definition
-#&gt; 1                                                   towgs84=0,0,0
-#&gt; 2                                    towgs84=-199.87,74.79,246.62
-#&gt; 3                                                   towgs84=0,0,0
-#&gt; 4               nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat
-#&gt; 5                 towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7
-#&gt; 6                                        towgs84=-263.0,6.0,431.0
-#&gt; 7                                      towgs84=653.0,-212.0,449.0
-#&gt; 8      towgs84=482.530,-130.596,564.557,-1.042,-0.214,-0.631,8.15
-#&gt; 9              towgs84=59.47,-5.04,187.44,0.47,-0.1,1.024,-4.5993
-#&gt; 10 towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894
-#&gt;                             description
-#&gt; 1                                      
-#&gt; 2  Greek_Geodetic_Reference_System_1987
-#&gt; 3             North_American_Datum_1983
-#&gt; 4             North_American_Datum_1927
-#&gt; 5           Potsdam Rauenberg 1950 DHDN
-#&gt; 6                 Carthage 1934 Tunisia
-#&gt; 7                         Hermannskogel
-#&gt; 8                          Ireland 1965
-#&gt; 9       New Zealand Geodetic Datum 1949
-#&gt; 10                            Airy 1830</div><div class='input'><span class='fu'>st_wrap_dateline</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>179</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>179</span>,<span class='fl'>0</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>))</div><div class='output co'>#&gt; Geometry set for 1 feature 
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,]) <span class='co'># area from long/lat</span>
+</div><div class='output co'>#&gt; 1137388604 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>32119</span>)) <span class='co'># NC state plane, m</span>
+</div><div class='output co'>#&gt; 1137590142 [m^2]</div><div class='input'><span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)) <span class='co'># NC state plane, US foot</span>
+</div><div class='output co'>#&gt; 12244869403 [US_survey_foot^2]</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/r-quantities/units'>units</a></span>)
+</div><div class='output co'>#&gt; <span class='message'>udunits system database from /Users/runner/work/_temp/Library/units/share/udunits</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span>(<span class='fu'><a href='geos_measures.html'>st_area</a></span>(<span class='fu'>st_transform</span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,], <span class='fl'>2264</span>)), <span class='kw'>m</span><span class='op'>^</span><span class='fl'>2</span>)
+</div><div class='output co'>#&gt; 1137590142 [m^2]</div><div class='input'><span class='fu'>st_transform</span>(<span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(<span class='kw'>p1</span>, proj4string = <span class='st'>"+init=epsg:4326"</span>), <span class='st'>"+init=epsg:3857"</span>)
+</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>sf_proj_info</span>(<span class='st'>"datum"</span>)
+</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='fu'>st_wrap_dateline</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>179</span>,<span class='fl'>0</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>179</span>,<span class='fl'>0</span>))), crs = <span class='fl'>4326</span>))
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  MULTILINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -180 ymin: 0 xmax: 180 ymax: 0
-#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>maps</span>)
-<span class='no'>wrld</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw pkg'>maps</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(<span class='st'>"world"</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))
-<span class='no'>wrld_wrap</span> <span class='kw'>&lt;-</span> <span class='fu'>st_wrap_dateline</span>(<span class='no'>wrld</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"WRAPDATELINE=YES"</span>, <span class='st'>"DATELINEOFFSET=180"</span>),
-   <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='input'><span class='no'>wrld_moll</span> <span class='kw'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='no'>wrld_wrap</span>, <span class='st'>"+proj=moll"</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>wrld_moll</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"transparent"</span>)</div><div class='img'><img src='st_transform-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>maps</span>)
+<span class='kw'>wrld</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw'>maps</span>::<span class='fu'><a href='https://rdrr.io/pkg/maps/man/map.html'>map</a></span>(<span class='st'>"world"</span>, fill = <span class='fl'>TRUE</span>, plot = <span class='fl'>FALSE</span>))
+<span class='kw'>wrld_wrap</span> <span class='op'>&lt;-</span> <span class='fu'>st_wrap_dateline</span>(<span class='kw'>wrld</span>, options = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"WRAPDATELINE=YES"</span>, <span class='st'>"DATELINEOFFSET=180"</span>),
+   quiet = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='input'><span class='kw'>wrld_moll</span> <span class='op'>&lt;-</span> <span class='fu'>st_transform</span>(<span class='kw'>wrld_wrap</span>, <span class='st'>"+proj=moll"</span>)
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>wrld_moll</span>), col = <span class='st'>"transparent"</span>)
+</div><div class='img'><img src='st_transform-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -338,7 +331,7 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

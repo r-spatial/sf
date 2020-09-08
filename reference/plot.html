@@ -81,7 +81,7 @@ Plot sf object" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -121,6 +121,9 @@ Plot sf object" />
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -159,146 +162,146 @@ Plot sf object</p>
 
     <pre class="usage"><span class='co'># S3 method for sf</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='no'>main</span>,
-  <span class='kw'>pal</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nbreaks</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='st'>"pretty"</span>,
-  <span class='kw'>max.plot</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"sf_max.plot"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]])) <span class='fl'>9</span> <span class='kw'>else</span> <span class='no'>n</span>,
-  <span class='kw'>key.pos</span> <span class='kw'>=</span> <span class='fu'>get_key_pos</span>(<span class='no'>x</span>, <span class='no'>...</span>),
-  <span class='kw'>key.length</span> <span class='kw'>=</span> <span class='fl'>0.618</span>,
-  <span class='kw'>key.width</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>1.8</span>),
-  <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>logz</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>extent</span> <span class='kw'>=</span> <span class='no'>x</span>,
-  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)],
-  <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>)]
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  <span class='kw'>main</span>,
+  pal = <span class='kw'>NULL</span>,
+  nbreaks = <span class='fl'>10</span>,
+  breaks = <span class='st'>"pretty"</span>,
+  max.plot = <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='kw'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(<span class='st'>"sf_max.plot"</span>)[[<span class='fl'>1</span>]])) <span class='fl'>9</span> <span class='co'>else</span> <span class='kw'>n</span>,
+  key.pos = <span class='fu'>get_key_pos</span>(<span class='kw'>x</span>, <span class='kw'>...</span>),
+  key.length = <span class='fl'>0.618</span>,
+  key.width = <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>1.8</span>),
+  reset = <span class='fl'>TRUE</span>,
+  logz = <span class='fl'>FALSE</span>,
+  extent = <span class='kw'>x</span>,
+  xlim = <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)],
+  ylim = <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>extent</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>)]
 )
 
-<span class='fu'>get_key_pos</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>get_key_pos</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc_POINT</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"p"</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  pch = <span class='fl'>1</span>,
+  cex = <span class='fl'>1</span>,
+  col = <span class='fl'>1</span>,
+  bg = <span class='fl'>0</span>,
+  lwd = <span class='fl'>1</span>,
+  lty = <span class='fl'>1</span>,
+  type = <span class='st'>"p"</span>,
+  add = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sfc_MULTIPOINT</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"p"</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  pch = <span class='fl'>1</span>,
+  cex = <span class='fl'>1</span>,
+  col = <span class='fl'>1</span>,
+  bg = <span class='fl'>0</span>,
+  lwd = <span class='fl'>1</span>,
+  lty = <span class='fl'>1</span>,
+  type = <span class='st'>"p"</span>,
+  add = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sfc_LINESTRING</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>plot</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, lty = <span class='fl'>1</span>, lwd = <span class='fl'>1</span>, col = <span class='fl'>1</span>, pch = <span class='fl'>1</span>, type = <span class='st'>"l"</span>, add = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sfc_CIRCULARSTRING</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc_MULTILINESTRING</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>plot</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, lty = <span class='fl'>1</span>, lwd = <span class='fl'>1</span>, col = <span class='fl'>1</span>, pch = <span class='fl'>1</span>, type = <span class='st'>"l"</span>, add = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sfc_POLYGON</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  lty = <span class='fl'>1</span>,
+  lwd = <span class='fl'>1</span>,
+  col = <span class='fl'>NA</span>,
+  cex = <span class='fl'>1</span>,
+  pch = <span class='fl'>NA</span>,
+  border = <span class='fl'>1</span>,
+  add = <span class='fl'>FALSE</span>,
+  rule = <span class='st'>"evenodd"</span>
 )
 
 <span class='co'># S3 method for sfc_MULTIPOLYGON</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  lty = <span class='fl'>1</span>,
+  lwd = <span class='fl'>1</span>,
+  col = <span class='fl'>NA</span>,
+  border = <span class='fl'>1</span>,
+  add = <span class='fl'>FALSE</span>,
+  rule = <span class='st'>"evenodd"</span>
 )
 
 <span class='co'># S3 method for sfc_GEOMETRYCOLLECTION</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  pch = <span class='fl'>1</span>,
+  cex = <span class='fl'>1</span>,
+  bg = <span class='fl'>0</span>,
+  lty = <span class='fl'>1</span>,
+  lwd = <span class='fl'>1</span>,
+  col = <span class='fl'>1</span>,
+  border = <span class='fl'>1</span>,
+  add = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sfc_GEOMETRY</span>
 <span class='fu'>plot</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>pch</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>bg</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='geos_query.html'>st_dimension</a></span>(<span class='no'>x</span>) <span class='kw'>==</span> <span class='fl'>2</span>, <span class='fl'>NA</span>, <span class='fl'>1</span>),
-  <span class='kw'>border</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  pch = <span class='fl'>1</span>,
+  cex = <span class='fl'>1</span>,
+  bg = <span class='fl'>0</span>,
+  lty = <span class='fl'>1</span>,
+  lwd = <span class='fl'>1</span>,
+  col = <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='geos_query.html'>st_dimension</a></span>(<span class='kw'>x</span>) <span class='op'>==</span> <span class='fl'>2</span>, <span class='fl'>NA</span>, <span class='fl'>1</span>),
+  border = <span class='fl'>1</span>,
+  add = <span class='fl'>FALSE</span>
 )
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>plot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>plot</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='fu'>plot_sf</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>bgc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"bg"</span>),
-  <span class='no'>...</span>,
-  <span class='no'>xaxs</span>,
-  <span class='no'>yaxs</span>,
-  <span class='no'>lab</span>,
-  <span class='kw'>setParUsrBB</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>bgMap</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>expandBB</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
-  <span class='kw'>graticule</span> <span class='kw'>=</span> <span class='no'>NA_crs_</span>,
-  <span class='kw'>col_graticule</span> <span class='kw'>=</span> <span class='st'>"grey"</span>,
-  <span class='no'>border</span>
+  <span class='kw'>x</span>,
+  xlim = <span class='kw'>NULL</span>,
+  ylim = <span class='kw'>NULL</span>,
+  asp = <span class='fl'>NA</span>,
+  axes = <span class='fl'>FALSE</span>,
+  bgc = <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"bg"</span>),
+  <span class='kw'>...</span>,
+  <span class='kw'>xaxs</span>,
+  <span class='kw'>yaxs</span>,
+  <span class='kw'>lab</span>,
+  setParUsrBB = <span class='fl'>FALSE</span>,
+  bgMap = <span class='kw'>NULL</span>,
+  expandBB = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
+  graticule = <span class='kw'>NA_crs_</span>,
+  col_graticule = <span class='st'>"grey"</span>,
+  <span class='kw'>border</span>
 )
 
-<span class='fu'>sf.colors</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cutoff.tails</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>sf.colors</span>(n = <span class='fl'>10</span>, cutoff.tails = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.35</span>, <span class='fl'>0.2</span>), alpha = <span class='fl'>1</span>, categorical = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -490,21 +493,30 @@ projected (coordinates are long/lat), the aspect is by default set to
 (the mean of <code>ylim</code>, which defaults to the y range of bounding box). This
 implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Equirectangular projection</a>.</p>
 <p>non-categorical colors from <code>sf.colors</code> were taken from <a href='https://rdrr.io/pkg/sp/man/bpy.colors.html'>bpy.colors</a>, with modified <code>cutoff.tails</code> defaults
-If categorical is <code>TRUE</code>, default colors are from <a href='http://www.colorbrewer2.org/'>http://www.colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
+If categorical is <code>TRUE</code>, default colors are from <a href='https://colorbrewer2.org/'>https://colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>), <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package=<span class='st'>"sf"</span>), quiet = <span class='fl'>TRUE</span>)
 <span class='co'># plot single attribute, auto-legend:</span>
-<span class='fu'>plot</span>(<span class='no'>nc</span>[<span class='st'>"SID74"</span>])</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot multiple:</span>
-<span class='fu'>plot</span>(<span class='no'>nc</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"SID74"</span>, <span class='st'>"SID79"</span>)]) <span class='co'># better use ggplot2::geom_sf to facet and get a single legend!</span></div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span>
-<span class='fu'>plot</span>(<span class='no'>nc</span>[<span class='st'>"SID74"</span>], <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>)), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># log10 z-scale:</span>
-<span class='fu'>plot</span>(<span class='no'>nc</span>[<span class='st'>"SID74"</span>], <span class='kw'>logz</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span>), <span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span>))</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># and we need to reset the plotting device after that, e.g. by</span>
+<span class='fu'>plot</span>(<span class='kw'>nc</span>[<span class='st'>"SID74"</span>])
+</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot multiple:</span>
+<span class='fu'>plot</span>(<span class='kw'>nc</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"SID74"</span>, <span class='st'>"SID79"</span>)]) <span class='co'># better use ggplot2::geom_sf to facet and get a single legend!</span>
+</div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span>
+<span class='fu'>plot</span>(<span class='kw'>nc</span>[<span class='st'>"SID74"</span>], reset = <span class='fl'>FALSE</span>)
+</div><div class='input'><span class='fu'>plot</span>(<span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>)), add = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># log10 z-scale:</span>
+<span class='fu'>plot</span>(<span class='kw'>nc</span>[<span class='st'>"SID74"</span>], logz = <span class='fl'>TRUE</span>, breaks = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span>), at = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span>))
+</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># and we need to reset the plotting device after that, e.g. by</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span>(<span class='fl'>1</span>)
 <span class='co'># when plotting only geometries, the reset=FALSE is not needed:</span>
-<span class='fu'>plot</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'>plot</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>)[<span class='fl'>1</span>], <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># add a custom legend to an arbitray plot:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>widths</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>2</span>)))
+<span class='fu'>plot</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>))
+</div><div class='input'><span class='fu'>plot</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>)[<span class='fl'>1</span>], col = <span class='st'>'red'</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># add a custom legend to an arbitray plot:</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, ncol = <span class='fl'>2</span>), widths = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>2</span>)))
 <span class='fu'>plot</span>(<span class='fl'>1</span>)
-<span class='fu'><a href='stars.html'>.image_scale</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'>sf.colors</span>(<span class='fl'>9</span>), <span class='kw'>key.length</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>8</span>), <span class='kw'>key.pos</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>10</span>)</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
+<span class='fu'><a href='stars.html'>.image_scale</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, col = <span class='fu'>sf.colors</span>(<span class='fl'>9</span>), key.length = <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span>(<span class='fl'>8</span>), key.pos = <span class='fl'>4</span>, at = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>)
+</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>sf.colors</span>(<span class='fl'>10</span>)
+</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
 #&gt;  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -521,7 +533,7 @@ If categorical is <code>TRUE</code>, default colors are from <a href='http://www
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

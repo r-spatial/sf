@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,7 +158,7 @@
     <p>Areal-weighted interpolation of polygon data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_interpolate_aw</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>extensive</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>st_interpolate_aw</span>(<span class='kw'>x</span>, <span class='kw'>to</span>, <span class='kw'>extensive</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,15 +183,22 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp7PkSgx/temp_libpath629247204a2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpsCyg3G/temp_libpath3d3273c39736/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='no'>g</span> <span class='kw'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='no'>nc</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>,<span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar</span></div><div class='input'><span class='no'>a1</span> <span class='kw'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='no'>nc</span>[<span class='st'>"BIR74"</span>], <span class='no'>g</span>, <span class='kw'>extensive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>a1</span>$<span class='no'>BIR74</span>) / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>nc</span>$<span class='no'>BIR74</span>) <span class='co'># not close to one: property is assumed spatially intensive</span></div><div class='output co'>#&gt; [1] 1.436176</div><div class='input'><span class='no'>a2</span> <span class='kw'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='no'>nc</span>[<span class='st'>"BIR74"</span>], <span class='no'>g</span>, <span class='kw'>extensive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='co'># verify mass preservation (pycnophylactic) property:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>a2</span>$<span class='no'>BIR74</span>) / <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>nc</span>$<span class='no'>BIR74</span>)</div><div class='output co'>#&gt; [1] 1.000038</div><div class='input'><span class='no'>a1</span>$<span class='no'>intensive</span> <span class='kw'>=</span> <span class='no'>a1</span>$<span class='no'>BIR74</span>
-<span class='no'>a1</span>$<span class='no'>extensive</span> <span class='kw'>=</span> <span class='no'>a2</span>$<span class='no'>BIR74</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>a1</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"intensive"</span>, <span class='st'>"extensive"</span>)], <span class='kw'>key.pos</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='st_interpolate_aw-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='kw'>g</span> <span class='op'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span>(<span class='kw'>nc</span>, n = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>,<span class='fl'>10</span>))
+<span class='kw'>a1</span> <span class='op'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='kw'>nc</span>[<span class='st'>"BIR74"</span>], <span class='kw'>g</span>, extensive = <span class='fl'>FALSE</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>a1</span><span class='op'>$</span><span class='kw'>BIR74</span>) <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>nc</span><span class='op'>$</span><span class='kw'>BIR74</span>) <span class='co'># not close to one: property is assumed spatially intensive</span>
+</div><div class='output co'>#&gt; [1] 1.436169</div><div class='input'><span class='kw'>a2</span> <span class='op'>=</span> <span class='fu'>st_interpolate_aw</span>(<span class='kw'>nc</span>[<span class='st'>"BIR74"</span>], <span class='kw'>g</span>, extensive = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_interpolate_aw assumes attributes are constant over areas of x</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='input'><span class='co'># verify mass preservation (pycnophylactic) property:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>a2</span><span class='op'>$</span><span class='kw'>BIR74</span>) <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>nc</span><span class='op'>$</span><span class='kw'>BIR74</span>)
+</div><div class='output co'>#&gt; [1] 1.000013</div><div class='input'><span class='kw'>a1</span><span class='op'>$</span><span class='kw'>intensive</span> <span class='op'>=</span> <span class='kw'>a1</span><span class='op'>$</span><span class='kw'>BIR74</span>
+<span class='kw'>a1</span><span class='op'>$</span><span class='kw'>extensive</span> <span class='op'>=</span> <span class='kw'>a2</span><span class='op'>$</span><span class='kw'>BIR74</span>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>a1</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"intensive"</span>, <span class='st'>"extensive"</span>)], key.pos = <span class='fl'>4</span>)
+</div><div class='img'><img src='st_interpolate_aw-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -204,7 +214,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -158,12 +161,12 @@
     <pre class="usage"><span class='fu'>sf_add_proj_units</span>()
 
 <span class='fu'>sf_project</span>(
-  <span class='no'>from</span>,
-  <span class='no'>to</span>,
-  <span class='no'>pts</span>,
-  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>authority_compliant</span> <span class='kw'>=</span> <span class='fu'><a href='st_crs.html'>st_axis_order</a></span>()
+  <span class='kw'>from</span>,
+  <span class='kw'>to</span>,
+  <span class='kw'>pts</span>,
+  keep = <span class='fl'>FALSE</span>,
+  warn = <span class='fl'>TRUE</span>,
+  authority_compliant = <span class='fu'><a href='st_crs.html'>st_axis_order</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -219,7 +222,7 @@ return value; otherwise an error is reported and nothing is returned.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

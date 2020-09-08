@@ -21,7 +21,8 @@
 <meta property="og:description" content="Support for simple features, a standardized way to
     encode spatial vector data. Binds to GDAL for reading and writing
     data, to GEOS for geometrical operations, and to PROJ for
-    projection conversions and datum transformations.">
+    projection conversions and datum transformations. Optionally uses the s2
+    package for spherical geometry operations on geographic coordinates.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -41,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -80,6 +81,9 @@
     </li>
     <li>
       <a href="articles/sf6.html">6. Miscellaneous</a>
+    </li>
+    <li>
+      <a href="articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
     </li>
   </ul>
 </li>
@@ -154,11 +158,15 @@
 <h2 class="hasAnchor">
 <a href="#installing" class="anchor"></a>Installing</h2>
 <p>Install either from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sf"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sf"</span>)
+</pre></div>
 <p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
 <p>Install development versions from github with</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
-<span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">devtools</span>)
+<span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>)
+</pre></div>
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
@@ -171,12 +179,18 @@
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
 <p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> (<code>7.0.0</code>) on homebrew, installation requires additional configuration:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sf"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sf"</span>, configure.args = <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)
+</pre></div>
 <p>Or the development version:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
-<span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">devtools</span>)
+<span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>, configure.args = <span class="st">"--with-proj-lib=/usr/local/lib/"</span>)
+</pre></div>
 <p>If you are using <code>sf</code> and <code>rgdal</code> together it is necessary to install <code>rgal</code> from source using this configuration:</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"rgdal"</span>, <span class="kw">configure.args</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span>))</pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"rgdal"</span>, configure.args = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span>))
+</pre></div>
 <p>Alternatively <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
 </div>
 <div id="linux" class="section level3">
@@ -187,12 +201,11 @@ brew install gdal</code></pre>
 <h4 class="hasAnchor">
 <a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
 <p>Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y  \</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
 <p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="fu">sudo</span> apt-get update</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </span></code></pre></div>
 <p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
 <p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
 </div>
@@ -200,7 +213,7 @@ brew install gdal</code></pre>
 <h4 class="hasAnchor">
 <a href="#fedora" class="anchor"></a>Fedora</h4>
 <p>The following command installs all required dependencies:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel sqlite-devel udunits2-devel</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
 </div>
 <div id="arch" class="section level4">
 <h4 class="hasAnchor">
@@ -231,7 +244,7 @@ pacaur/yaourt/whatever -S udunits</code></pre>
 <a href="#contributing" class="anchor"></a>Contributing</h2>
 <ul>
 <li>Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.</li>
-<li>When contributing pull requests, please adhere to the package style (in package code use <code>=</code> rather than <code>&lt;-</code>; don’t change indentation; tab stops of 4 spaces are preferred)</li>
+<li>When contributing pull requests, please adhere to the package style (in package code use <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code> rather than <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code>; don’t change indentation; tab stops of 4 spaces are preferred)</li>
 <li>This project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
 </ul>
 </div>
@@ -282,8 +295,8 @@ pacaur/yaourt/whatever -S udunits</code></pre>
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/r-spatial/sf/actions"><img src="https://github.com/r-spatial/sf/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/edzerpebesma/sf"><img src="https://ci.appveyor.com/api/projects/status/github/r-spatial/sf?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://github.com/r-spatial/sf/actions"><img src="https://github.com/r-spatial/sf/workflows/tic/badge.svg?branch=master" alt="tic"></a></li>
+<li><a href="https://github.com/r-spatial/sf/actions"><img src="https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=master" alt="tic-db"></a></li>
 <li><a href="https://codecov.io/github/r-spatial/sf?branch=master"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg" alt="Coverage Status"></a></li>
 <li><a href="http://www.gnu.org/licenses/gpl-2.0.html"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="https://cran.r-project.org/package=sf"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
@@ -301,7 +314,7 @@ pacaur/yaourt/whatever -S udunits</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

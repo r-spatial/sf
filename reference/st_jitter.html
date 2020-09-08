@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,7 +158,7 @@
     <p>jitter geometries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_jitter</span>(<span class='no'>x</span>, <span class='no'>amount</span>, <span class='kw'>factor</span> <span class='kw'>=</span> <span class='fl'>0.002</span>)</pre>
+    <pre class="usage"><span class='fu'>st_jitter</span>(<span class='kw'>x</span>, <span class='kw'>amount</span>, factor = <span class='fl'>0.002</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,8 +182,13 @@
     <p>jitters coordinates with an amount such that <code><a href='https://rdrr.io/r/stats/Uniform.html'>runif(1, -amount, amount)</a></code> is added to the coordinates. x- and y-coordinates are jittered independently but all coordinates of a single geometry are jittered with the same amount, meaning that the geometry shape does not change. For longlat data, a latitude correction is made such that jittering in East and North directions are identical in distance in the center of the bounding box of <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>read_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))
-<span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>pts</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_jitter</span>(<span class='no'>pts</span>, <span class='fl'>.05</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>)</div><div class='img'><img src='st_jitter-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_jitter</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>), <span class='kw'>factor</span> <span class='kw'>=</span> <span class='fl'>.01</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'#ff8888'</span>)</div><div class='img'><img src='st_jitter-2.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>read_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package=<span class='st'>"sf"</span>))
+<span class='kw'>pts</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_centroid</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>))
+</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid does not give correct centroids for longitude/latitude data</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>pts</span>)
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_jitter</span>(<span class='kw'>pts</span>, <span class='fl'>.05</span>), add = <span class='fl'>TRUE</span>, col = <span class='st'>'red'</span>)
+</div><div class='img'><img src='st_jitter-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>))
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_jitter</span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>), factor = <span class='fl'>.01</span>), add = <span class='fl'>TRUE</span>, col = <span class='st'>'#ff8888'</span>)
+</div><div class='img'><img src='st_jitter-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -196,7 +204,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

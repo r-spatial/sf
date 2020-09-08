@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Create a regular tesselation over the bounding box of an sf or sfc object — st_make_grid" />
-<meta property="og:description" content="Create a square or hexagonal grid covering the geometry of an sf or sfc object" />
+<meta property="og:description" content="Create a square or hexagonal grid covering the bounding box of the geometry of an sf or sfc object" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -152,18 +155,18 @@
     </div>
 
     <div class="ref-description">
-    <p>Create a square or hexagonal grid covering the geometry of an sf or sfc object</p>
+    <p>Create a square or hexagonal grid covering the bounding box of the geometry of an sf or sfc object</p>
     </div>
 
     <pre class="usage"><span class='fu'>st_make_grid</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>)]))/<span class='no'>n</span>,
-  <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='no'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"xmin"</span>, <span class='st'>"ymin"</span>)],
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>10</span>),
-  <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span>(<span class='no'>x</span>)) <span class='no'>NA_crs_</span> <span class='kw'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='no'>x</span>),
-  <span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"polygons"</span>,
-  <span class='kw'>square</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>flat_topped</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>x</span>,
+  cellsize = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>)]), <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span>(<span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>)]))<span class='op'>/</span><span class='kw'>n</span>,
+  offset = <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>x</span>)[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"xmin"</span>, <span class='st'>"ymin"</span>)],
+  n = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>10</span>),
+  crs = <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span>(<span class='kw'>x</span>)) <span class='kw'>NA_crs_</span> <span class='co'>else</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span>(<span class='kw'>x</span>),
+  what = <span class='st'>"polygons"</span>,
+  square = <span class='fl'>TRUE</span>,
+  flat_topped = <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -207,15 +210,23 @@
 
     <p>Object of class <code>sfc</code> (simple feature geometry list column) with, depending on <code>what</code> and <code>square</code>,
 square or hexagonal polygons, corner points of these polygons, or center points of these polygons.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>to obtain a grid covering the bounding box of a set of geometries, 
-pass <code><a href='st_as_sfc.html'>st_as_sfc(st_bbox(x))</a></code> for argument <code>x</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"centers"</span>), <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>what</span> <span class='kw'>=</span> <span class='st'>"corners"</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='img'><img src='st_make_grid-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>sfc</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='no'>sfc</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>square</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>sfc</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='st_make_grid-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># non-default offset:</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='no'>sfc</span>, <span class='kw'>cellsize</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>square</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.05</span> / (<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fl'>3</span>)/<span class='fl'>2</span>))))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>sfc</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='st_make_grid-3.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(what = <span class='st'>"centers"</span>), axes = <span class='fl'>TRUE</span>)
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(what = <span class='st'>"corners"</span>), add = <span class='fl'>TRUE</span>, col = <span class='st'>'green'</span>, pch=<span class='fl'>3</span>)
+</div><div class='img'><img src='st_make_grid-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)))))
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>sfc</span>, cellsize = <span class='fl'>.1</span>, square = <span class='fl'>FALSE</span>))
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>sfc</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='st_make_grid-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># non-default offset:</span>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_make_grid</span>(<span class='kw'>sfc</span>, cellsize = <span class='fl'>.1</span>, square = <span class='fl'>FALSE</span>, offset = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.05</span> <span class='op'>/</span> (<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fl'>3</span>)<span class='op'>/</span><span class='fl'>2</span>))))
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>sfc</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='img'><img src='st_make_grid-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>read_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
+<span class='kw'>g</span> <span class='op'>=</span> <span class='fu'>st_make_grid</span>(<span class='kw'>nc</span>)
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>g</span>)
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>), add = <span class='fl'>TRUE</span>)
+</div><div class='input'><span class='co'># g[nc] selects cells that intersect with nc:</span>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>g</span>[<span class='kw'>nc</span>], col = <span class='st'>'#ff000088'</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='img'><img src='st_make_grid-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -231,7 +242,7 @@ pass <code><a href='st_as_sfc.html'>st_as_sfc(st_bbox(x))</a></code> for argumen
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

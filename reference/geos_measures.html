@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute geometric measurements</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom.R'><code>R/geom.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/geom-measures.R'><code>R/geom-measures.R</code></a></small>
     <div class="hidden name"><code>geos_measures.Rd</code></div>
     </div>
 
@@ -155,19 +158,22 @@
     <p>Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_area</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_area</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>st_length</span>(<span class='no'>x</span>)
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_area</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+
+<span class='fu'>st_length</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='fu'>st_distance</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='no'>...</span>,
-  <span class='no'>dist_fun</span>,
-  <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>which</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span>(<span class='fu'><a href='st_is_longlat.html'>st_is_longlat</a></span>(<span class='no'>x</span>)), <span class='st'>"Great Circle"</span>, <span class='st'>"Euclidean"</span>),
-  <span class='kw'>par</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  <span class='kw'>x</span>,
+  <span class='kw'>y</span>,
+  <span class='kw'>...</span>,
+  <span class='kw'>dist_fun</span>,
+  by_element = <span class='fl'>FALSE</span>,
+  which = <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span>(<span class='fu'><a href='st_is_longlat.html'>st_is_longlat</a></span>(<span class='kw'>x</span>)), <span class='st'>"Great Circle"</span>, <span class='st'>"Euclidean"</span>),
+  par = <span class='fl'>0</span>,
+  tolerance = <span class='fl'>0</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -221,27 +227,32 @@
     <div class='dont-index'><p><a href='geos_query.html'>st_dimension</a>, <a href='st_cast.html'>st_cast</a> to convert geometry types</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>b0</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,-<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>,-<span class='fl'>1</span>))))
-<span class='no'>b1</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fl'>2</span>
-<span class='no'>b2</span> <span class='kw'>=</span> <span class='no'>b0</span> + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>0.2</span>, <span class='fl'>2</span>)
-<span class='no'>x</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b0</span>, <span class='no'>b1</span>, <span class='no'>b2</span>)
-<span class='fu'>st_area</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='no'>line</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='fu'>st_length</span>(<span class='no'>line</span>)</div><div class='output co'>#&gt; 1434649 [m]</div><div class='input'>
-<span class='no'>outer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>hole1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='no'>hole2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>),<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>2</span>, <span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
+    <pre class="examples"><div class='input'><span class='kw'>b0</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>))))
+<span class='kw'>b1</span> <span class='op'>=</span> <span class='kw'>b0</span> <span class='op'>+</span> <span class='fl'>2</span>
+<span class='kw'>b2</span> <span class='op'>=</span> <span class='kw'>b0</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>2</span>)
+<span class='kw'>x</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>b0</span>, <span class='kw'>b1</span>, <span class='kw'>b2</span>)
+<span class='fu'>st_area</span>(<span class='kw'>x</span>)
+</div><div class='output co'>#&gt; [1] 4 4 4</div><div class='input'><span class='kw'>line</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>30</span>,<span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>40</span>,<span class='fl'>40</span>))), crs = <span class='fl'>4326</span>)
+<span class='fu'>st_length</span>(<span class='kw'>line</span>)
+</div><div class='output co'>#&gt; 1434649 [m]</div><div class='input'>
+<span class='kw'>outer</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>0</span>),ncol=<span class='fl'>2</span>, byrow=<span class='fl'>TRUE</span>)
+<span class='kw'>hole1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>1</span>),ncol=<span class='fl'>2</span>, byrow=<span class='fl'>TRUE</span>)
+<span class='kw'>hole2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>5</span>,<span class='fl'>5</span>,<span class='fl'>5</span>),ncol=<span class='fl'>2</span>, byrow=<span class='fl'>TRUE</span>)
 
-<span class='no'>poly</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>))
-<span class='no'>mpoly</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>outer</span>, <span class='no'>hole1</span>, <span class='no'>hole2</span>),
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>outer</span> + <span class='fl'>12</span>, <span class='no'>hole1</span> + <span class='fl'>12</span>)
+<span class='kw'>poly</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>outer</span>, <span class='kw'>hole1</span>, <span class='kw'>hole2</span>))
+<span class='kw'>mpoly</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>outer</span>, <span class='kw'>hole1</span>, <span class='kw'>hole2</span>),
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>outer</span> <span class='op'>+</span> <span class='fl'>12</span>, <span class='kw'>hole1</span> <span class='op'>+</span> <span class='fl'>12</span>)
 ))
 
-<span class='fu'>st_length</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>poly</span>, <span class='no'>mpoly</span>))</div><div class='output co'>#&gt; [1] 0 0</div><div class='input'><span class='no'>p</span> <span class='kw'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>)))
-<span class='fu'>st_distance</span>(<span class='no'>p</span>, <span class='no'>p</span>)</div><div class='output co'>#&gt;      [,1] [,2] [,3]
+<span class='fu'>st_length</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>poly</span>, <span class='kw'>mpoly</span>))
+</div><div class='output co'>#&gt; [1] 0 0</div><div class='input'><span class='kw'>p</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>0</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>)))
+<span class='fu'>st_distance</span>(<span class='kw'>p</span>, <span class='kw'>p</span>)
+</div><div class='output co'>#&gt;      [,1] [,2] [,3]
 #&gt; [1,]    0    1    2
 #&gt; [2,]    1    0    1
-#&gt; [3,]    2    1    0</div><div class='input'><span class='fu'>st_distance</span>(<span class='no'>p</span>, <span class='no'>p</span>, <span class='kw'>by_element</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0 0 0</div></pre>
+#&gt; [3,]    2    1    0</div><div class='input'><span class='fu'>st_distance</span>(<span class='kw'>p</span>, <span class='kw'>p</span>, by_element = <span class='fl'>TRUE</span>)
+</div><div class='output co'>#&gt; [1] 0 0 0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -257,7 +268,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>

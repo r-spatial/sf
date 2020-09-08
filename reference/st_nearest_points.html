@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
       </span>
     </div>
 
@@ -120,6 +120,9 @@
     <li>
       <a href="../articles/sf6.html">6. Miscellaneous</a>
     </li>
+    <li>
+      <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -155,16 +158,16 @@
     <p>get nearest points between pairs of geometries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_nearest_points</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>st_nearest_points</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_nearest_points</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>, <span class='kw'>pairwise</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>st_nearest_points</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, pairwise = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_nearest_points</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+<span class='fu'>st_nearest_points</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_nearest_points</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>st_nearest_points</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,32 +193,46 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>an <a href='sfc.html'>sfc</a> object with all two-point <code>LINESTRING</code> geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to <code>POINT</code> geometries.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>in case <code>x</code> lies inside <code>y</code>, when using S2, the end points 
+are on polygon boundaries, when using GEOS the end point are identical to <code>x</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='st_nearest_feature.html'>st_nearest_feature</a> for finding the nearest feature</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>r</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fl'>2</span>)/<span class='fl'>10</span>
-<span class='no'>pt1</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>,<span class='fl'>.1</span>))
-<span class='no'>pt2</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.9</span>,<span class='fl'>.9</span>))
-<span class='no'>pt3</span> <span class='kw'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.9</span>,<span class='fl'>.1</span>))
-<span class='no'>b1</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='no'>pt1</span>, <span class='no'>r</span>)
-<span class='no'>b2</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='no'>pt2</span>, <span class='no'>r</span>)
-<span class='no'>b3</span> <span class='kw'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='no'>pt3</span>, <span class='no'>r</span>)
-(<span class='no'>ls0</span> <span class='kw'>=</span> <span class='fu'>st_nearest_points</span>(<span class='no'>b1</span>, <span class='no'>b2</span>)) <span class='co'># sfg</span></div><div class='output co'>#&gt; Geometry set for 1 feature 
+    <pre class="examples"><div class='input'><span class='kw'>r</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='fl'>2</span>)<span class='op'>/</span><span class='fl'>10</span>
+<span class='kw'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>,<span class='fl'>.1</span>))
+<span class='kw'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.9</span>,<span class='fl'>.9</span>))
+<span class='kw'>pt3</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.9</span>,<span class='fl'>.1</span>))
+<span class='kw'>b1</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='kw'>pt1</span>, <span class='kw'>r</span>)
+<span class='kw'>b2</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='kw'>pt2</span>, <span class='kw'>r</span>)
+<span class='kw'>b3</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='kw'>pt3</span>, <span class='kw'>r</span>)
+(<span class='kw'>ls0</span> <span class='op'>=</span> <span class='fu'>st_nearest_points</span>(<span class='kw'>b1</span>, <span class='kw'>b2</span>)) <span class='co'># sfg</span>
+</div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0.2 ymin: 0.2 xmax: 0.8 ymax: 0.8
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2 0.2, 0.8 0.8)</span></div><div class='input'>(<span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'>st_nearest_points</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b1</span>), <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b2</span>, <span class='no'>b3</span>))) <span class='co'># sfc</span></div><div class='output co'>#&gt; Geometry set for 2 features 
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2 0.2, 0.8 0.8)</span></div><div class='input'>(<span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'>st_nearest_points</span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>b1</span>), <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>b2</span>, <span class='kw'>b3</span>))) <span class='co'># sfc</span>
+</div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0.2 ymin: 0.1 xmax: 0.8 ymax: 0.8
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2 0.2, 0.8 0.8)</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2414214 0.1, 0.7585786 0.1)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>b1</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>.2</span>,<span class='fl'>1.2</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>.2</span>,<span class='fl'>1.2</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'green'</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='no'>b2</span>, <span class='no'>b3</span>), <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>'blue'</span>)</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>ls</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>)</div><div class='img'><img src='st_nearest_points-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='no'>nc</span> <span class='kw'>=</span> <span class='fu'><a href='st_read.html'>read_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"sf"</span>))
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='no'>nc</span>))</div><div class='input'><span class='no'>ls</span> <span class='kw'>=</span> <span class='fu'>st_nearest_points</span>(<span class='no'>nc</span>[<span class='fl'>1</span>,], <span class='no'>nc</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>ls</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'red'</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='no'>pts</span> <span class='kw'>=</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='no'>ls</span>, <span class='st'>"POINT"</span>) <span class='co'># gives all start &amp; end points</span>
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2 0.2, 0.8 0.8)</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (0.2414214 0.1, 0.7585786 0.1)</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>b1</span>, xlim = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>.2</span>,<span class='fl'>1.2</span>), ylim = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>.2</span>,<span class='fl'>1.2</span>), col = <span class='fl'>NA</span>, border = <span class='st'>'green'</span>)
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>b2</span>, <span class='kw'>b3</span>), add = <span class='fl'>TRUE</span>, col = <span class='fl'>NA</span>, border = <span class='st'>'blue'</span>)
+</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>ls</span>, add = <span class='fl'>TRUE</span>, col = <span class='st'>'red'</span>)
+</div><div class='img'><img src='st_nearest_points-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>read_sf</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"gpkg/nc.gpkg"</span>, package=<span class='st'>"sf"</span>))
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>))
+</div><div class='input'><span class='kw'>ls</span> <span class='op'>=</span> <span class='fu'>st_nearest_points</span>(<span class='kw'>nc</span>[<span class='fl'>1</span>,], <span class='kw'>nc</span>)
+</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>ls</span>, col = <span class='st'>'red'</span>, add = <span class='fl'>TRUE</span>)
+</div><div class='input'><span class='kw'>pts</span> <span class='op'>=</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='kw'>ls</span>, <span class='st'>"POINT"</span>) <span class='co'># gives all start &amp; end points</span>
 <span class='co'># starting, "from" points, corresponding to x:</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>pts</span>[<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>2</span>)], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'blue'</span>)</div><div class='input'><span class='co'># ending, "to" points, corresponding to y:</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='no'>pts</span>[<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>2</span>, <span class='fl'>200</span>, <span class='fl'>2</span>)], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>'green'</span>)</div><div class='img'><img src='st_nearest_points-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>pts</span>[<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>2</span>)], add = <span class='fl'>TRUE</span>, col = <span class='st'>'blue'</span>)
+</div><div class='input'><span class='co'># ending, "to" points, corresponding to y:</span>
+<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>pts</span>[<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>2</span>, <span class='fl'>200</span>, <span class='fl'>2</span>)], add = <span class='fl'>TRUE</span>, col = <span class='st'>'green'</span>)
+</div><div class='img'><img src='st_nearest_points-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -232,7 +249,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
