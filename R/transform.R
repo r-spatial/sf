@@ -258,8 +258,8 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE,
 #' @param paths the search path to be set; omit if no paths need to be set
 #' @return the search path (possibly after setting to paths)
 #' @export
-sf_proj_search_paths = function(paths = character(0)) {
-	if (length(paths))
-		CPL_set_proj_search_paths(paths);
+sf_proj_search_paths = function(paths = NULL) {
+	if (!is.null(paths))
+		CPL_set_proj_search_paths(as.character(paths));
 	CPL_get_proj_search_paths(character(0));
 }

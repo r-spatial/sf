@@ -629,7 +629,6 @@ Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths) {
 	CSLDestroy(cp);
 	return ret;
 #else
-	Rcpp::Rcout << GDAL_VERSION_NUM << std::endl;
 	Rcpp::stop("GDAL >= 3.0.3 required");
 #endif
 }
@@ -637,8 +636,11 @@ Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths) {
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_set_proj_search_paths(Rcpp::CharacterVector paths) {
 #if GDAL_VERSION_NUM >= 3000000
-	std::vector <char *> paths_char = create_options(paths, true);
-	OSRSetPROJSearchPaths(paths_char.data());
+	std::vector <char *> paths_char;
+	if (paths.size()) {
+		paths_char = create_options(paths, true);
+		OSRSetPROJSearchPaths(paths_char.data());
+	}
 #else
 	Rcpp::stop("GDAL >= 3.0.0 required");
 #endif
