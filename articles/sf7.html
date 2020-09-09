@@ -128,7 +128,7 @@
 <p>and is available. After <code>sf</code> has been attached, you can check if <code>s2</code> is available as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://r-spatial.github.io/sf">sf</a></span>)
-<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.0</span>
+<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.1</span>
 <span class="kw">s2_available</span> <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html">inherits</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/try.html">try</a></span>(<span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span>(<span class="fl">TRUE</span>), silent=<span class="fl">TRUE</span>), <span class="st">"try-error"</span>)
 <span class="kw">s2_available</span>
 <span class="co">## [1] TRUE</span>
@@ -374,25 +374,25 @@
   <span class="kw">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">uk_projected</span>, dist = <span class="fl">20000</span>, nQuadSegs = <span class="fl">4</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.044   0.002   0.047</span>
+<span class="co">##   0.050   0.002   0.052</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.029   0.000   0.029</span>
+<span class="co">##   0.031   0.000   0.030</span>
 <span class="co"># s2 with 10000 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>, max_cells = <span class="fl">10000</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.270   0.003   0.274</span>
+<span class="co">##   0.290   0.002   0.292</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>, max_cells = <span class="fl">100</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.003   0.000   0.004</span>
+<span class="co">##   0.005   0.000   0.005</span>
 </pre></div>
 <p>The result of the previous benchmarks emphasise the point that there are trade-offs between geographic resolution and computational resources, something that web developers working on geographic services such as Google Maps understand well. In this case the default setting of 1000 cells, which runs slightly faster than the default transform -&gt; buffer workflow, is probably appropriate given the low resolution of the input geometry representing the UK.</p>
 </div>
