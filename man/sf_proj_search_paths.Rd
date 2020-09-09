@@ -4,7 +4,7 @@
 \alias{sf_proj_search_paths}
 \title{Get or set the PROJ search paths}
 \usage{
-sf_proj_search_paths(paths = character(0))
+sf_proj_search_paths(paths = NULL)
 }
 \arguments{
 \item{paths}{the search path to be set; omit if no paths need to be set}
