@@ -370,7 +370,7 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 #endif
 
 // #nocov start
-// https://www.gdal.org/warptut.html :
+// https://gdal.org/tutorials/warp_tut.html
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
 		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
@@ -391,10 +391,18 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
     psWarpOptions->hSrcDS = hSrcDS;
     psWarpOptions->hDstDS = hDstDS;
 
-    psWarpOptions->nBandCount = 0;
+	if (GDALGetRasterCount(hSrcDS) != GDALGetRasterCount(hDstDS))
+		Rcpp::stop("warper: source and destination should have the same number of bands");
 
-	if (GDALGetRasterCount(hSrcDS) > GDALGetRasterCount(hDstDS))
-		Rcpp::stop("warper: source has more bands than destination");
+	psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
+    psWarpOptions->panSrcBands =
+        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+    psWarpOptions->panDstBands =
+        (int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
+	for (size_t i = 0; i < psWarpOptions->nBandCount; i++) {
+    	psWarpOptions->panSrcBands[i] = i + 1;
+    	psWarpOptions->panDstBands[i] = i + 1;
+	}
 
     psWarpOptions->padfSrcNoDataReal = (double *) CPLMalloc(sizeof(double) * GDALGetRasterCount(hSrcDS));
     psWarpOptions->padfDstNoDataReal = (double *) CPLMalloc(sizeof(double) * GDALGetRasterCount(hSrcDS));
