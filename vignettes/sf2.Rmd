@@ -1,5 +1,6 @@
 ---
 title: "2. Reading, Writing and Converting Simple Features"
+author: "Edzer Pebesma"
 output:
   html_document:
     toc: true

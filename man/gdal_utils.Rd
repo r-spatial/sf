@@ -9,7 +9,7 @@ gdal_utils(
   source,
   destination,
   options = character(0),
-  quiet = FALSE,
+  quiet = !(util \%in\% c("info", "mdiminfo")),
   processing = character(0),
   colorfilename = character(0)
 )
@@ -23,7 +23,7 @@ gdal_utils(
 
 \item{options}{character; options for the utility}
 
-\item{quiet}{logical; if \code{TRUE}, suppress printing of output for \code{info}}
+\item{quiet}{logical; if \code{TRUE}, suppress printing the output for \code{info} and \code{mdiminfo}, and suppress printing progress}
 
 \item{processing}{character; processing options for \code{demprocessing}}
 

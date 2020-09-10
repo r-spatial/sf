@@ -1,5 +1,9 @@
 # version 0.9-6
 
+* non-info `gdal_utils` print (GDAL-style) progress bar if `quiet = FALSE`
+
+* fix `CPL_gdal_warper` for multi bands, see  https://github.com/r-spatial/stars/issues/320
+
 * `sf_proj_search_paths()` retrieves and sets the proj search path (if GDAL > 3.0.3)
 
 * when loading sf, `sf_use_s2` is set to `FALSE` unless environment variable `_SF_USE_S2` equals `true`

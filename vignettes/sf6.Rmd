@@ -1,5 +1,6 @@
 ---
 title: "6. Miscellaneous"
+author: "Edzer Pebesma"
 output:
   html_document:
     toc: true

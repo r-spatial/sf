@@ -113,48 +113,48 @@ CPL_gdalinfo <- function(obj, options, oo) {
     .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options, oo)
 }
 
-CPL_gdalwarp <- function(src, dst, options, oo, doo) {
-    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options, oo, doo)
+CPL_gdalwarp <- function(src, dst, options, oo, doo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalwarp', PACKAGE = 'sf', src, dst, options, oo, doo, quiet)
 }
 
-CPL_gdalrasterize <- function(src, dst, options, oo, doo, overwrite = FALSE) {
-    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options, oo, doo, overwrite)
+CPL_gdalrasterize <- function(src, dst, options, oo, doo, overwrite = FALSE, quiet = TRUE) {
+    .Call('_sf_CPL_gdalrasterize', PACKAGE = 'sf', src, dst, options, oo, doo, overwrite, quiet)
 }
 
-CPL_gdaltranslate <- function(src, dst, options, oo) {
-    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options, oo)
+CPL_gdaltranslate <- function(src, dst, options, oo, quiet = TRUE) {
+    .Call('_sf_CPL_gdaltranslate', PACKAGE = 'sf', src, dst, options, oo, quiet)
 }
 
-CPL_gdalvectortranslate <- function(src, dst, options, oo, doo) {
-    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options, oo, doo)
+CPL_gdalvectortranslate <- function(src, dst, options, oo, doo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalvectortranslate', PACKAGE = 'sf', src, dst, options, oo, doo, quiet)
 }
 
-CPL_gdalbuildvrt <- function(src, dst, options, oo) {
-    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options, oo)
+CPL_gdalbuildvrt <- function(src, dst, options, oo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalbuildvrt', PACKAGE = 'sf', src, dst, options, oo, quiet)
 }
 
-CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename, oo) {
-    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename, oo)
+CPL_gdaldemprocessing <- function(src, dst, options, processing, colorfilename, oo, quiet = TRUE) {
+    .Call('_sf_CPL_gdaldemprocessing', PACKAGE = 'sf', src, dst, options, processing, colorfilename, oo, quiet)
 }
 
-CPL_gdalnearblack <- function(src, dst, options, oo, doo) {
-    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options, oo, doo)
+CPL_gdalnearblack <- function(src, dst, options, oo, doo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalnearblack', PACKAGE = 'sf', src, dst, options, oo, doo, quiet)
 }
 
-CPL_gdalgrid <- function(src, dst, options, oo) {
-    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options, oo)
+CPL_gdalgrid <- function(src, dst, options, oo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalgrid', PACKAGE = 'sf', src, dst, options, oo, quiet)
 }
 
 CPL_gdalmdiminfo <- function(obj, options, oo) {
     .Call('_sf_CPL_gdalmdiminfo', PACKAGE = 'sf', obj, options, oo)
 }
 
-CPL_gdalmdimtranslate <- function(src, dst, options, oo) {
-    .Call('_sf_CPL_gdalmdimtranslate', PACKAGE = 'sf', src, dst, options, oo)
+CPL_gdalmdimtranslate <- function(src, dst, options, oo, quiet = TRUE) {
+    .Call('_sf_CPL_gdalmdimtranslate', PACKAGE = 'sf', src, dst, options, oo, quiet)
 }
 
-CPL_gdal_warper <- function(infile, outfile, options, oo, doo) {
-    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo)
+CPL_gdal_warper <- function(infile, outfile, options, oo, doo, quiet = TRUE) {
+    .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo, quiet)
 }
 
 CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, quiet, append, delete_dsn = FALSE, delete_layer = FALSE, write_geometries = TRUE) {

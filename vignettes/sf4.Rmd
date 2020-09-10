@@ -1,5 +1,6 @@
 ---
 title: "4. Manipulating Simple Features"
+author: "Edzer Pebesma"
 output:
   html_document:
     toc: true

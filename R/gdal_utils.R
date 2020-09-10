@@ -27,7 +27,7 @@ resampling_method = function(option = "near") {
 #' @param source character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; options for the utility
-#' @param quiet logical; if \code{TRUE}, suppress printing of output for \code{info}
+#' @param quiet logical; if \code{TRUE}, suppress printing the output for \code{info} and \code{mdiminfo}, and suppress printing progress
 #' @param processing character; processing options for \code{demprocessing}
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
@@ -71,7 +71,8 @@ resampling_method = function(option = "near") {
 #' st_read(in_file)
 #' }
 gdal_utils = function(util = "info", source, destination, options = character(0),
-		quiet = FALSE, processing = character(0), colorfilename = character(0)) {
+		quiet = !(util %in% c("info", "mdiminfo")),
+		processing = character(0), colorfilename = character(0)) {
 
 #	if ("-co" %in% options)
 #		options["-co" == options] = "-oo"
@@ -91,23 +92,27 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	if ("-doo" %in% options) # -oo indicating opening options
 		stop("-doo options not (yet) supported; consider raising an issue") # nocov
 
+	quiet = as.logical(quiet)
+
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options, oo),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo),
-			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)), oo, doo), # nocov
+			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
+				oo, doo, quiet), # nocov
 			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
-				CPL_gdalrasterize(source, destination, options, oo, doo, overwrite)
+				CPL_gdalrasterize(source, destination, options, oo, doo, overwrite, quiet)
 			}, # nocov end
-			translate = CPL_gdaltranslate(source, destination, options, oo),
-			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo),
-			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo),
-			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo),
-			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo),
-			grid = CPL_gdalgrid(source, destination, options, oo),
+			translate = CPL_gdaltranslate(source, destination, options, oo, quiet),
+			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, quiet),
+			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo, quiet),
+			demprocessing = CPL_gdaldemprocessing(source, destination, options, 
+				processing, colorfilename, oo, quiet),
+			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo, quiet),
+			grid = CPL_gdalgrid(source, destination, options, oo, quiet),
 			mdiminfo = CPL_gdalmdiminfo(source, options, oo),
-			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo),
+			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo, quiet),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 

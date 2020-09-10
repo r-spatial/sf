@@ -12,8 +12,39 @@
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"
 
-#if (!(GDAL_VERSION_MAJOR == 2 && GDAL_VERSION_MINOR < 1))
+#if GDAL_VERSION_NUM >= 2010000
 # include "gdal_utils.h" // requires >= 2.1
+
+/* modified from GDALTermProgress: */
+int CPL_STDCALL GDALRProgress( double dfComplete,
+                                  CPL_UNUSED const char * pszMessage,
+                                  CPL_UNUSED void * pProgressArg )
+{
+    const int nThisTick = std::min(40, std::max(0,
+        static_cast<int>(dfComplete * 40.0) ));
+
+    // Have we started a new progress run?
+    static int nLastTick = -1;
+    if( nThisTick < nLastTick && nLastTick >= 39 )
+        nLastTick = -1;
+
+    if( nThisTick <= nLastTick )
+        return TRUE;
+
+    while( nThisTick > nLastTick )
+    {
+        ++nLastTick;
+        if( nLastTick % 4 == 0 )
+            Rprintf("%d", (nLastTick / 4) * 10 );
+        else
+            Rprintf("." );
+    }
+
+    if( nThisTick == 40 )
+        Rprintf(" - done.\n" );
+
+    return TRUE;
+}
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
@@ -36,7 +67,8 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		bool quiet = true) {
 
 	int err = 0;
 
@@ -51,6 +83,12 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	std::vector <char *> options_char = create_options(options, true);
 	GDALWarpAppOptions* opt = GDALWarpAppOptionsNew(options_char.data(), NULL);
 
+	if (! quiet) {
+		GDALWarpAppOptionsSetProgress(opt, GDALRProgress, NULL);
+#if GDAL_VERSION_NUM >= 2030000
+		GDALWarpAppOptionsSetQuiet(opt, 0);
+#endif
+	}
 	GDALDatasetH result = GDALWarp(dst_ds == NULL ? (const char *) dst[0] : NULL, dst_ds, 
 		src.size(), src_pt.data(), opt, &err);
 	GDALWarpAppOptionsFree(opt);
@@ -65,13 +103,15 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool overwrite = false) {
+		bool overwrite = false, bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALRasterizeOptions* opt =  GDALRasterizeOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALRasterizeOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
 	if (src_pt == NULL)
@@ -97,13 +137,15 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALTranslateOptions* opt =  GDALTranslateOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
 	if (src_pt == NULL)
@@ -120,12 +162,15 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALVectorTranslateOptions* opt =  GDALVectorTranslateOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALVectorTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_VECTOR | GA_ReadOnly, NULL, 
 		oo_char.data(), NULL);
@@ -146,11 +191,13 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALBuildVRTOptions* opt = GDALBuildVRTOptionsNew(options_char.data(), NULL);
+	if (! quiet)
+		GDALBuildVRTOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH result = NULL;
 	if (oo.size()) { 
 		// to understand why we don't always take this path, read: 
@@ -180,14 +227,16 @@ Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterV
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector processing, Rcpp::CharacterVector colorfilename,
-		Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector processing, 
+		Rcpp::CharacterVector colorfilename, Rcpp::CharacterVector oo, bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDEMProcessingOptions* opt =  GDALDEMProcessingOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALDEMProcessingOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
 	if (src_pt == NULL)
@@ -206,7 +255,8 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, 
+		bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
@@ -214,6 +264,8 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 	std::vector <char *> doo_char = create_options(doo, true); // open options
 	GDALNearblackOptions* opt =  GDALNearblackOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALNearblackOptionsSetProgress(opt, GDALRProgress, NULL);
 	// GDALDatasetH src_pt = GDALOpen((const char *) src[0], GA_ReadOnly);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, NULL, oo_char.data(), NULL);
 	GDALDatasetH dst_pt = GDALOpenEx((const char *) dst[0], GDAL_OF_RASTER | GA_Update, NULL, doo_char.data(), NULL);
@@ -228,13 +280,16 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo,
+		bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALGridOptions* opt =  GDALGridOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALGridOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_ALL | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
 	GDALDatasetH result = GDALGrid((const char *) dst[0], src_pt, opt, &err);
@@ -247,7 +302,7 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 }
 
 // gdal >= 3.1: mdim utils:
-#if ((GDAL_VERSION_MAJOR == 3 && GDAL_VERSION_MINOR >= 1) || GDAL_VERSION_MAJOR > 3)
+#if GDAL_VERSION_NUM >= 3010000
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
 		Rcpp::CharacterVector oo) { 
@@ -271,13 +326,15 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
 
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALMultiDimTranslateOptions* opt = GDALMultiDimTranslateOptionsNew(options_char.data(), NULL);
 
+	if (! quiet)
+		GDALMultiDimTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
 		NULL, oo_char.data(), NULL);
 	if (src_pt == NULL)
@@ -303,7 +360,7 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	Rcpp::stop("GDAL version >= 3.1 required for mdiminfo");
 }
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
 	Rcpp::stop("GDAL version >= 3.1 required for mdimtranslate");
 }
 #endif
@@ -373,7 +430,8 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 // https://gdal.org/tutorials/warp_tut.html
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
-		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		bool quiet = true) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDatasetH  hSrcDS, hDstDS;
@@ -392,7 +450,7 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 	psWarpOptions->hDstDS = hDstDS;
 
 	if (GDALGetRasterCount(hSrcDS) != GDALGetRasterCount(hDstDS))
-		Rcpp::stop("warper: source and destination should have the same number of bands");
+		Rcpp::stop("warper: source and destination must have the same number of bands");
 
 	psWarpOptions->nBandCount = GDALGetRasterCount(hSrcDS);
 	psWarpOptions->panSrcBands =
@@ -427,8 +485,10 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 			memcpy(&(psWarpOptions->padfDstNoDataReal[i]), &d, sizeof(double));
 	}
 
-	// psWarpOptions->pfnProgress = GDALTermProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
-	psWarpOptions->pfnProgress = GDALDummyProgress;
+	if (quiet)
+		psWarpOptions->pfnProgress = GDALDummyProgress;
+	else
+		psWarpOptions->pfnProgress = GDALRProgress; // 0...10...20...30...40...50...60...70...80...90...100 - done.
 	// Establish reprojection transformer.
 	if (options.size() == 1)
 		psWarpOptions->eResampleAlg = (GDALResampleAlg) options[0];
