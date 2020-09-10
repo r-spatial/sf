@@ -157,6 +157,8 @@
 <a href="#version-09-6" class="anchor"></a>version 0.9-6<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>non-info <code>gdal_utils</code> print (GDAL-style) progress bar if <code>quiet = FALSE</code></p></li>
+<li><p>fix <code>CPL_gdal_warper</code> for multi bands, see <a href="https://github.com/r-spatial/stars/issues/320" class="uri">https://github.com/r-spatial/stars/issues/320</a></p></li>
 <li><p><code><a href="../reference/sf_proj_search_paths.html">sf_proj_search_paths()</a></code> retrieves and sets the proj search path (if GDAL &gt; 3.0.3)</p></li>
 <li><p>when loading sf, <code>sf_use_s2</code> is set to <code>FALSE</code> unless environment variable <code>_SF_USE_S2</code> equals <code>true</code></p></li>
 <li><p>resolve GDAL/PROJ version vulnerabilities in CRS-crs conversion; <a href='https://github.com/r-spatial/sf/issues/1479'>#1479</a></p></li>

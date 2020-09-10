@@ -163,7 +163,7 @@
   <span class='kw'>source</span>,
   <span class='kw'>destination</span>,
   options = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
-  quiet = <span class='fl'>FALSE</span>,
+  quiet = <span class='op'>!</span>(<span class='kw'>util</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"info"</span>, <span class='st'>"mdiminfo"</span>)),
   processing = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>),
   colorfilename = <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>)
 )</pre>
@@ -189,7 +189,7 @@
     </tr>
     <tr>
       <th>quiet</th>
-      <td><p>logical; if <code>TRUE</code>, suppress printing of output for <code>info</code></p></td>
+      <td><p>logical; if <code>TRUE</code>, suppress printing the output for <code>info</code> and <code>mdiminfo</code>, and suppress printing progress</p></td>
     </tr>
     <tr>
       <th>processing</th>
@@ -244,7 +244,7 @@
 <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='kw'>in_file</span>)
 }
 </div><div class='output co'>#&gt; Driver: GTiff/GeoTIFF
-#&gt; Files: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp1OpFxS/temp_libpath464e4e29fd6f/sf/tif/geomatrix.tif
+#&gt; Files: /private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmptHsKW5/temp_libpath34383aa0197f/sf/tif/geomatrix.tif
 #&gt; Size is 20, 20
 #&gt; Coordinate System is:
 #&gt; PROJCRS["WGS 84 / UTM zone 11N",
@@ -303,14 +303,14 @@
 #&gt; Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)
 #&gt; Band 1 Block=20x20 Type=Byte, ColorInterp=Gray
 #&gt;     Computed Min/Max=74.000,255.000
-#&gt; Reading layer `storms_xyz' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp1wnyfW/file529d484dbda.gpkg' using driver `GPKG'
+#&gt; Reading layer `storms_xyz' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbSWlE5/file3a5e5d9c78f8.gpkg' using driver `GPKG'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ
 #&gt; bbox:           xmin: -5785269 ymin: -8509454 xmax: 25097160 ymax: 15846560
 #&gt; z_range:        zmin: 924 zmax: 1017
 #&gt; projected CRS:  NAD83 / North Carolina (ftUS)
-#&gt; Reading layer `storms_xyz' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp1OpFxS/temp_libpath464e4e29fd6f/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+#&gt; Reading layer `storms_xyz' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmptHsKW5/temp_libpath34383aa0197f/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ
