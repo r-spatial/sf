@@ -20,3 +20,4 @@ NOTES
 ^\.ccache$
 ^\.github$
 ^tic\.R$
+vignettes.awk

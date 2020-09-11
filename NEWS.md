@@ -1,8 +1,8 @@
 # version 0.9-6
 
-* non-info `gdal_utils` print (GDAL-style) progress bar if `quiet = FALSE`
+* `gdal_utils` print (GDAL-style) progress bar if `quiet = FALSE` (except for `info` and `mdiminfo`)
 
-* fix `CPL_gdal_warper` for multi bands, see  https://github.com/r-spatial/stars/issues/320
+* fix `CPL_gdal_warper` for multi bands; https://github.com/r-spatial/stars/issues/320
 
 * `sf_proj_search_paths()` retrieves and sets the proj search path (if GDAL > 3.0.3)
 
@@ -12,7 +12,7 @@
 
 * `st_sample` gains an argument, `by_polygon`, to more clevery sample `MULTIPOLYGON` geometries; #1480
 
-* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning and handles values of size that would round to zero; #1480
+* `st_sample` accepts non-integer sample sizes, with a (suppressable) warning and handles values of sizes that would round to zero; #1480
 
 * `gdal_utils` adds utils `mdiminfo` and `mdimtranslate` (requires GDAL >= 3.1)
 
