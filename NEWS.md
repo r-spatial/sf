@@ -1,3 +1,9 @@
+# version 0.9-7
+
+* add (dynamically loaded) `as_wkb` methods for `sf`, `sfc` and `sfg`
+
+* `st_as_s2` transforms non-longlat objects to EPSG:4326 first
+
 # version 0.9-6
 
 * `gdal_utils` print (GDAL-style) progress bar if `quiet = FALSE` (except for `info` and `mdiminfo`)
