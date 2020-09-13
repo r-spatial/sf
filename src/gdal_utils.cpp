@@ -457,7 +457,7 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 		(int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
 	psWarpOptions->panDstBands =
 		(int *) CPLMalloc(sizeof(int) * psWarpOptions->nBandCount );
-	for (size_t i = 0; i < psWarpOptions->nBandCount; i++) {
+	for (int i = 0; i < psWarpOptions->nBandCount; i++) {
 		psWarpOptions->panSrcBands[i] = i + 1;
 		psWarpOptions->panDstBands[i] = i + 1;
 	}

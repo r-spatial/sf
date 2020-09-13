@@ -100,12 +100,12 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 			stop("package s2 required, please install it first")
 		if (inherits(dist, "units")) {
 			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
-				return(st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, radius = 1, ...),
+				return(st_as_sfc(s2::s2_buffer_cells(x, dist, radius = 1, ...),
 					crs = st_crs(x)))
 			units(dist) = as_units("m") # make sure has dimension length, possibly convert
 			dist = drop_units(dist)
 		}
-		st_as_sfc(s2::s2_buffer_cells(st_as_s2(x), dist, ...), crs = st_crs(x))
+		st_as_sfc(s2::s2_buffer_cells(x, dist, ...), crs = st_crs(x))
 	} else {
 		if (longlat) {
 			warning("st_buffer does not correctly buffer longitude/latitude data")
@@ -214,7 +214,7 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 			warning("argument preserveTopology is ignored")
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
-		st_as_sfc(s2::s2_simplify(st_as_s2(x), dTolerance), crs = st_crs(x))
+		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
 		stopifnot(mode(preserveTopology) == 'logical')
 		if (ll)
@@ -582,23 +582,21 @@ geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
-	s2_model = switch(as.character(s2_model), OPEN = 0, SEMI_OPEN = 1, CLOSED = 2, -1)
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2() && s2_model >= 0) {
+	if (longlat && sf_use_s2()) {
 		if (! requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
 		fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
-		s2x = st_as_s2(x)
-		s2y = st_as_s2(y)
 		# to be optimized -- this doesn't index on y:
-		lst = structure(unlist(lapply(s2x, fn, s2y, s2::s2_options(model = s2_model, ...)),
-			recursive = FALSE), class = class(s2x))
+		lst = structure(unlist(lapply(x, fn, y, s2::s2_options(model = s2_model, ...)),
+			recursive = FALSE), class = "s2_geography")
 		e = s2::s2_is_empty(lst)
 		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
-		structure(st_as_sfc(lst[!e], crs = st_crs(x)), idx = idx[!e,,drop = FALSE])
+		lst = st_as_sfc(lst, crs = st_crs(x))
+		structure(lst[!e], idx = idx[!e,,drop = FALSE])
 	} else {
 		if (longlat)
 			message_longlat(paste0("st_", op))
@@ -814,16 +812,23 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 
 #' @export
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
-	if (missing(y)) # unary union, possibly by_feature:
-		st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
-	else
+	if (missing(y)) { # unary union, possibly by_feature:
+		ll = isTRUE(st_is_longlat(x))
+		if (ll && sf_use_s2() && !by_feature)
+			st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
+		else {
+			if (ll)
+				warning("st_union does not correctly union longitude/latitude data")
+			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
+		}
+	} else
 		geos_op2_geom("union", x, y)
 }
 
 #' @export
 st_union.sf = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	if (missing(y)) { # unary union, possibly by_feature:
-		geom = st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
+		geom = st_union(st_geometry(x), ..., by_feature = by_feature, is_coverage = is_coverage)
 		if (by_feature)
 			st_set_geometry(x, geom)
 		else

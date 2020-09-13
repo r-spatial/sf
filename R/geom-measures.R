@@ -39,7 +39,7 @@ st_area.sfc = function(x, ...) {
 		if (sf_use_s2()) {
 			if (! requireNamespace("s2", quietly = TRUE))
 				stop("package s2 required, please install it first")
-			units::set_units(s2::s2_area(st_as_s2(x), ...), "m^2", mode = "standard")
+			units::set_units(s2::s2_area(x, ...), "m^2", mode = "standard")
 		} else {
 			if (! requireNamespace("lwgeom", quietly = TRUE))
 				stop("package lwgeom required, please install it first")
@@ -89,7 +89,7 @@ st_length = function(x, ...) {
 		if (sf_use_s2()) {
 			if (! requireNamespace("s2", quietly = TRUE))
 				stop("package s2 required, please install it first")
-			set_units(s2::s2_length(st_as_s2(x), ...), "m", mode = "standard")
+			set_units(s2::s2_length(x, ...), "m", mode = "standard")
 		} else {
 			if (! requireNamespace("lwgeom", quietly = TRUE))
 				stop("package lwgeom required, please install it first")
@@ -151,9 +151,9 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 			if (! requireNamespace("s2", quietly = TRUE))
 				stop("package s2 required, please install it first")
 			ret = if (by_element)
-					s2::s2_distance(st_as_s2(x), st_as_s2(y), ...)
+					s2::s2_distance(x, y, ...)
 				else
-					s2::s2_distance_matrix(st_as_s2(x), st_as_s2(y), ...)
+					s2::s2_distance_matrix(x, y, ...)
 			set_units(ret, "m", mode = "standard")
 		} else { # lwgeom:
 			if (! requireNamespace("lwgeom", quietly = TRUE))

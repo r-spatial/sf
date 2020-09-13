@@ -44,7 +44,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		if (!requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required, please install it first")
 		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
-		lst = fn(st_as_s2(x), st_as_s2(y), s2::s2_options(model = s2_model, ...)) # call function
+		lst = fn(x, y, s2::s2_options(model = s2_model, ...)) # call function
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
@@ -248,7 +248,7 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 					stop("package s2 required, please install it first")
 				if (inherits(dist, "units"))
 					dist = drop_units(dist)
-				s2::s2_dwithin_matrix(st_as_s2(x), st_as_s2(y), dist, ...)
+				s2::s2_dwithin_matrix(x, y, dist, ...)
 			} else {
 				if (!requireNamespace("lwgeom", quietly = TRUE) || 
 						utils::packageVersion("lwgeom") <= "0.1-2")
