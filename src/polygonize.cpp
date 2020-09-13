@@ -38,6 +38,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	}
 
 	const char *wkt = poDataset->GetProjectionRef();
+
 	GDALRasterBand *poBand = NULL;
 	if (poDataset->GetRasterCount() > 0)
 		poBand = poDataset->GetRasterBand( 1 );
@@ -75,14 +76,17 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		Rcpp::Rcout << "Creating dataset " <<  vector_dsn[0] << " failed." << std::endl; // #nocov
 		Rcpp::stop("Creation failed.\n"); // #nocov
 	}
-	OGRSpatialReference *sr = new OGRSpatialReference;
-	sr = handle_axis_order(sr);
-	char **ppt = (char **) &wkt;
+	OGRSpatialReference *sr = NULL;
+	if (wkt != NULL && *wkt != '\0') {
+		sr = new OGRSpatialReference;
+		sr = handle_axis_order(sr);
+		char **ppt = (char **) &wkt;
 #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-	sr->importFromWkt(ppt);
+		sr->importFromWkt(ppt);
 #else
-	sr->importFromWkt( (const char**) ppt);
+		sr->importFromWkt( (const char**) ppt);
 #endif
+	}
 	OGRLayer *poLayer = poDS->CreateLayer("raster", sr, wkbMultiPolygon, NULL);
 	delete sr;
 
