@@ -1,6 +1,13 @@
 pandoc: 2.7.3
-pkgdown: 1.6.0
+pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: []
-last_built: 2020-09-12T04:44Z
+articles:
+  sf1: sf1.html
+  sf2: sf2.html
+  sf3: sf3.html
+  sf4: sf4.html
+  sf5: sf5.html
+  sf6: sf6.html
+  sf7: sf7.html
+last_built: 2020-09-13T04:44Z
 
