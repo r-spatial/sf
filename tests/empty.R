@@ -77,7 +77,7 @@ st_polygon(list(), "XYZM"),
 st_multipolygon(list(), "XYZM"),
 st_geometrycollection(dim = "XYZM")))
 
-st_as_sfc(st_as_binary(e1, pureR = TRUE))
+st_as_sfc(st_as_binary(st_set_precision(e1, 0.0), pureR = TRUE))
 st_as_sfc(st_as_binary(e1, pureR = FALSE))
 st_as_sfc(st_as_binary(e2, pureR = FALSE))
 st_as_sfc(st_as_binary(e3, pureR = FALSE))

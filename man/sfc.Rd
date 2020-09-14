@@ -12,7 +12,13 @@
 \alias{sfc_GEOMETRYCOLLECTION}
 \title{Create simple feature geometry list column}
 \usage{
-st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)
+st_sfc(
+  ...,
+  crs = NA_crs_,
+  precision = st_precision(),
+  check_ring_dir = FALSE,
+  dim
+)
 }
 \arguments{
 \item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}

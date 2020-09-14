@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.9-6
+Version: 0.9-7
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -153,3 +153,4 @@ Collate:
     'shift_longitude.R'
     'make_grid.R'
     's2.R'
+    'precision.R'

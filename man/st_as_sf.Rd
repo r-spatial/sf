@@ -23,7 +23,8 @@ st_as_sf(x, ...)
   dim = "XYZ",
   remove = TRUE,
   na.fail = TRUE,
-  sf_column_name = NULL
+  sf_column_name = NULL,
+  precision = st_precision()
 )
 
 \method{st_as_sf}{sf}(x, ...)
@@ -43,7 +44,7 @@ st_as_sf(x, ...)
 \arguments{
 \item{x}{object to be converted into an object class \code{sf}}
 
-\item{...}{passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}}
+\item{...}{passed on to \link{st_sf}, might included named arguments \code{crs}}
 
 \item{agr}{character vector; see details section of \link{st_sf}}
 
@@ -57,7 +58,9 @@ st_as_sf(x, ...)
 
 \item{na.fail}{logical; if \code{TRUE}, raise an error if coordinates contain missing values}
 
-\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case
+\item{sf_column_name}{character; name of the active list-column with simple feature geometries; in case}
+
+\item{precision}{numeric; precision value to use, see \link{st_precision}
 there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.}
 
 \item{fill}{logical; the value for \code{fill} that was used in the call to \link[maps]{map}.}

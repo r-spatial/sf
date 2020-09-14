@@ -1,11 +1,11 @@
 suppressPackageStartupMessages(library(sf))
 round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 	if (inherits(x, "sfg"))
-		x = st_sfc(x)
+		x = st_sfc(x, precision = 0.0)
 	wkb = st_as_binary(x, EWKB = EWKB, pureR = pureR)
 	class(wkb) = "WKB"
 	# print(wkb)
-	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
+	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR, precision = 0.0)
 	a = all.equal(x, y)
 	if (length(a) == 1 && is.logical(a) && a)
 		TRUE

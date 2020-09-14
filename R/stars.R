@@ -87,7 +87,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # convert x/y gdal dimensions into a list of points, or a list of square polygons
 #' @export
 st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = seq_len(prod(dim(x))),
-		geotransform) {
+		geotransform, precision = st_precision()) {
 
 	if (is.na(as_points))
 		stop("as_points should be set to TRUE (`points') or FALSE (`polygons')")
@@ -158,9 +158,10 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	dims = dim(x) + !as_points
 	if (use_cpp)
 		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
-			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
+			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc),
+			precision = precision)
 	else
-		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
+		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys, precision = precision, ...)
 }
 
 

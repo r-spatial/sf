@@ -38,6 +38,7 @@ pathGrob <- NULL
 	}
 	load_gdal() # nocov end
 	assign(".sf.use_s2", Sys.getenv("_SF_USE_S2") == "true", envir=.sf_cache)
+	assign(".sf.precision", 1.0e8, envir=.sf_cache)
 }
 
 .onUnload = function(libname, pkgname) {

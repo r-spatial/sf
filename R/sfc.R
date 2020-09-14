@@ -36,7 +36,7 @@ format.sfc = function(x, ..., width = 30) {
 #' (sfc = st_sfc(pt1, pt2))
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
-st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim) {
+st_sfc = function(..., crs = NA_crs_, precision = st_precision(), check_ring_dir = FALSE, dim) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -231,7 +231,7 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 #		if (!is.na(crs$epsg))
 #			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
 	}
-	if (attr(x, "precision") != 0.0) {
+	if (attr(x, "precision") != st_precision()) {
 		cat(paste0("precision:      "))
 		if (attr(x, "precision") < 0.0)
 			cat("float (single precision)\n")
@@ -384,79 +384,6 @@ st_zm.matrix <- function(x, ..., drop = TRUE, what = "ZM")  {
 		stop("this combination of drop and what is not implemented")
 }
 
-#' Get precision
-#'
-#' @param x object of class \code{sfc} or \code{sf}
-#' @export
-st_precision <- function(x) {
-  UseMethod("st_precision")
-}
-
-#' @export
-st_precision.sf <- function(x) {
-  x <- st_geometry(x)
-  st_precision(x)
-}
-
-#' @export
-st_precision.sfc <- function(x) {
-  attr(x, "precision")
-}
-
-#' Set precision
-#'
-#' @name st_precision
-#' @param precision numeric, or object of class \code{units} with distance units (but see details); see \link{st_as_binary} for how to do this.
-#' @details If \code{precision} is a \code{units} object, the object on which we set precision must have a coordinate reference system with compatible distance units.
-#'
-#' Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
-#'
-#' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
-#'
-#' @seealso \link{st_as_binary} for an explanation of what setting precision does, and the examples therein.
-#' @examples
-#' x <- st_sfc(st_point(c(pi, pi)))
-#' st_precision(x)
-#' st_precision(x) <- 0.01
-#' st_precision(x)
-#' @export
-st_set_precision <- function(x, precision) {
-    UseMethod("st_set_precision")
-}
-
-#' @export
-st_set_precision.sfc <- function(x, precision) {
-    if (length(precision) != 1) {
-        stop("Precision applies to all dimensions and must be of length 1.", call. = FALSE)
-    }
-
-	if (inherits(precision, "units")) {
-		u = st_crs(x, parameters=TRUE)$ud_unit
-		if (is.null(u) || !inherits(u, "units"))
-			stop("cannot use precision expressed as units when target object has no units (CRS) set")
-		units(precision) = 1/u # convert
-		precision = as.numeric(precision)
-	}
-
-    if (is.na(precision) || !is.numeric(precision)) {
-        stop("Precision must be numeric", call. = FALSE)
-    }
-    structure(x, precision = precision)
-}
-
-#' @export
-st_set_precision.sf <- function(x, precision) {
-    st_geometry(x) <- st_set_precision(st_geometry(x), precision)
-    return(x)
-}
-
-#' @name st_precision
-#' @param value precision value
-#' @export
-"st_precision<-" <- function(x, value) {
-    st_set_precision(x, value)
-}
-
 typed_empty = function(cls, ncol = 2, dim = "XY") {
 	switch(cls[1],
 		sfc_POINT = st_point(rep(NA_real_, ncol), dim = dim),
@@ -553,12 +480,12 @@ check_ring_dir = function(x) {
 st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 
 	if (length(x) == 0)
-		return(st_sfc(crs = crs))
+		return(st_sfc(crs = crs, ...))
 
 	if (is.raw(x[[1]]))
 		st_as_sfc.WKB(as_wkb(x), ..., crs = crs)
 	else if (inherits(x[[1]], "sfg"))
-		st_sfc(x, crs = crs)
+		st_sfc(x, crs = crs, ...)
 	else if (is.character(x[[1]])) { # hex wkb or wkt:
 		ch12 = substr(x[[1]], 1, 2)
 		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
@@ -579,5 +506,5 @@ st_as_sfc.blob = function(x, ...) {
 #' @export
 st_as_sfc.bbox = function(x, ...) {
 	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-	st_sfc(box, crs = st_crs(x))
+	st_sfc(box, crs = st_crs(x), ...)
 }

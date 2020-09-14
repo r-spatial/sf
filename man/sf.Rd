@@ -13,7 +13,7 @@ st_sf(
   row.names,
   stringsAsFactors = sf_stringsAsFactors(),
   crs,
-  precision,
+  precision = st_precision(),
   sf_column_name = NULL,
   check_ring_dir = FALSE,
   sfc_last = TRUE

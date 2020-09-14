@@ -14,8 +14,9 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
+#' @param precision numeric; precision value to use, see \link{st_precision}
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
-#' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
+#' @param ... passed on to \link{st_sf}, might included named arguments \code{crs}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #'
 #' @examples
@@ -35,7 +36,8 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' summary(meuse_sf)
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
-		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL) {
+		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL,
+		precision = st_precision()) {
 	if (! missing(wkt)) {
 		if (remove)
 			x[[wkt]] = st_as_sfc(as.character(x[[wkt]]))
@@ -47,7 +49,7 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 			stop("missing values in coordinates not allowed")
 		classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
 		x$geometry = structure( points_rcpp(as.matrix(cc), dim),
-			n_empty = 0L, precision = 0, crs = NA_crs_,
+			n_empty = 0L, precision = precision, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(cc[[1]], na.rm = TRUE),
 				ymin = min(cc[[2]], na.rm = TRUE),
@@ -215,7 +217,7 @@ list_column_to_sfc = function(x) {
 #' df <- st_sf(id = 1:nrows, geometry = geometry)
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
-		stringsAsFactors = sf_stringsAsFactors(), crs, precision,
+		stringsAsFactors = sf_stringsAsFactors(), crs, precision = st_precision(),
 		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
@@ -278,7 +280,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			df[[ all_sfc_names[i] ]] = x[[ all_sfc_columns[i] ]]
 	}
 
-	if (! missing(precision))
+	if (! missing(precision) || is.null(attr(df[[sfc_name]], "precision")))
 		attr(df[[sfc_name]], "precision") = precision
 
 	# add attributes:
