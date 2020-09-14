@@ -1,6 +1,8 @@
 # version 0.9-7
 
-* add (dynamically loaded) `as_wkb` methods for `sf`, `sfc` and `sfg`
+* `st_as_sf.stars` with `merge = TRUE` now works if crs is `NA`; #1389
+
+* add (dynamically loaded) `as_wkb` methods for `sf`, `sfc` and `sfg`, making `st_as_s2()` unnecessary
 
 * `st_as_s2` transforms non-longlat objects to EPSG:4326 first
 
