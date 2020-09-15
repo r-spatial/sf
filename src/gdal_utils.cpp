@@ -12,9 +12,6 @@
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"
 
-#if GDAL_VERSION_NUM >= 2010000
-# include "gdal_utils.h" // requires >= 2.1
-
 /* modified from GDALTermProgress: */
 int CPL_STDCALL GDALRProgress( double dfComplete,
                                   CPL_UNUSED const char * pszMessage,
@@ -45,6 +42,9 @@ int CPL_STDCALL GDALRProgress( double dfComplete,
 
     return TRUE;
 }
+
+#if GDAL_VERSION_NUM >= 2010000
+# include "gdal_utils.h" // requires >= 2.1
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
