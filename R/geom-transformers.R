@@ -818,7 +818,7 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 			st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
 		else {
 			if (ll)
-				warning("st_union does not correctly union longitude/latitude data")
+				message_longlat("st_union")
 			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 		}
 	} else
