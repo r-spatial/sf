@@ -43,6 +43,8 @@ as_wkb.sf = function(x, ...) {
 }
 
 as_wkb.sfc = function(x, ...) {
+	if (!is.na(st_crs(x)) && !st_is_longlat(x))
+		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
 	structure(st_as_binary(x), class = "wk_wkb")
 }
 
@@ -100,7 +102,7 @@ st_as_s2.sfc = function(x, ..., oriented = FALSE) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
-		x = st_transform("EPSG:4326")
+		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
 	if (length(x) && nchar(class(x[[1]])[1]) > 2) { # Z, M, ZM:
 		message("st_as_s2(): dropping Z and/or M coordinate")
 		x = st_zm(x)
