@@ -157,7 +157,8 @@
 <a href="#version-09-7" class="anchor"></a>version 0.9-7<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>add (dynamically loaded) <code>as_wkb</code> methods for <code>sf</code>, <code>sfc</code> and <code>sfg</code></p></li>
+<li><p><code>st_as_sf.stars</code> with <code>merge = TRUE</code> now works if crs is <code>NA</code>; <a href='https://github.com/r-spatial/sf/issues/1389'>#1389</a></p></li>
+<li><p>add (dynamically loaded) <code>as_wkb</code> methods for <code>sf</code>, <code>sfc</code> and <code>sfg</code>, making <code><a href="../reference/s2.html">st_as_s2()</a></code> unnecessary</p></li>
 <li><p><code>st_as_s2</code> transforms non-longlat objects to EPSG:4326 first</p></li>
 </ul>
 </div>
