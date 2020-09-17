@@ -357,7 +357,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpMLjyBT/temp_libpath398a36551cd0/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaLpLr1/temp_libpath33787f7ac932/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -395,7 +395,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='co'>## only two features by where clause</span>
 <span class='kw'>nc_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>),
                      query = <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span>)
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpMLjyBT/temp_libpath398a36551cd0/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpaLpLr1/temp_libpath33787f7ac932/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
