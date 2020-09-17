@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* `plot.sf` adds `key.pos=0` option to run the logic behind the key without plotting it; #1487
+
 * fix bug in `select.sf` when selected variables were renamed; #1483
 
 * `st_as_sf.stars` with `merge = TRUE` now works if crs is `NA`; #1389
