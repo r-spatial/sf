@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* `st_as_wkb` takes `srid` from `wkt` field of `crs` when `input` field doesn't contain it; #1490
+
 * `plot.sf` adds `key.pos=0` option to run the logic behind the key without plotting it; #1487
 
 * fix bug in `select.sf` when selected variables were renamed; #1483
