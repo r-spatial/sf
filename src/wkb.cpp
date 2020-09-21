@@ -689,6 +689,11 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 	long value = strtol(inp, &remainder, 10);
 	if (*remainder == '\0') // success:
 		srid = (int) value;
+	else {
+		int i = srid_from_crs(crs);
+		if (i != NA_INTEGER)
+			srid = i; // else leave 0
+	}
 
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::checkUserInterrupt();

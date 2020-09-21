@@ -249,8 +249,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	return out;
 }
 
-/*
-int epsg_from_crs(Rcpp::List crs) {
+int srid_from_crs(Rcpp::List crs) {
 	const char *cp;
 	OGRSpatialReference *ref = OGRSrs_from_crs(crs);
 	if (ref && ref->AutoIdentifyEPSG() == OGRERR_NONE &&
@@ -260,7 +259,6 @@ int epsg_from_crs(Rcpp::List crs) {
 	} else
 		return(NA_INTEGER);
 }
-*/
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
