@@ -570,6 +570,14 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 				}
 			}
 		}
+		// set descriptions:
+		if (x.attr("descriptions") != R_NilValue) {
+			Rcpp::CharacterVector descriptions = x.attr("descriptions");
+			for (int band = 1; band <= dims(2); band++) {
+				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+				poBand->SetDescription(descriptions(band-1));
+			}
+		}
 
 	} else { // no create, update:
 		if ((poDstDS = (GDALDataset *) GDALOpen(fname[0], GA_Update)) == NULL) // #nocov
