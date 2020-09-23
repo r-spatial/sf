@@ -159,7 +159,7 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = new OGRSpatialReference;
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM <= 2020000
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
@@ -505,10 +505,10 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
 			Rcpp::stop("pipeline value not accepted");
 	}
+	unset_error_handler(); // FIXME: is this always a good idea?
 	OGRCoordinateTransformation *ct =
-		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest,
-			// (const OGRCoordinateTransformationOptions *)
-			*options);
+		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, *options);
+	set_error_handler();
 	delete options;
 #else
 	if (pipeline.size() || AOI.size())
