@@ -171,6 +171,9 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 // [[Rcpp::export]]
 Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
+	char *cp = NULL;
+	unset_error_handler();
+
 	OGRSpatialReference *srs = OGRSrs_from_crs(crs);
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
@@ -206,16 +209,21 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(5) = Rcpp::LogicalVector::create(srs->IsVertical());
 	names(5) = "IsVertical";
 
-	char *cp;
-	srs->exportToPrettyWkt(&cp);
-	out(6) = Rcpp::CharacterVector::create(cp);
+	// wkt pretty:
+	if (srs->exportToPrettyWkt(&cp) == OGRERR_NONE) {
+		out(6) = Rcpp::CharacterVector::create(cp);
+		CPLFree(cp);
+	} else
+		out(6) = "";
 	names(6) = "WktPretty";
-	CPLFree(cp);
 
-	srs->exportToWkt(&cp);
-	out(7) = Rcpp::CharacterVector::create(cp);
+	// wkt:
+	if (srs->exportToWkt(&cp) == OGRERR_NONE) {
+		out(7) = Rcpp::CharacterVector::create(cp);
+		CPLFree(cp);
+	} else
+		out(7) = "";
 	names(7) = "Wkt";
-	CPLFree(cp);
 
 #if GDAL_VERSION_MAJOR >= 3
 	out(8) = Rcpp::CharacterVector::create(srs->GetName());
@@ -243,6 +251,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(11) = Rcpp::LogicalVector(yx);
 	names(11) = "yx";
 
+	set_error_handler();
+
 	delete srs;
 	out.attr("names") = names;
 	out.attr("class") = "crs_parameters";
@@ -251,13 +261,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
 int srid_from_crs(Rcpp::List crs) {
 	const char *cp;
+	int ret_val = NA_INTEGER;
+	unset_error_handler();
 	OGRSpatialReference *ref = OGRSrs_from_crs(crs);
 	if (ref && ref->AutoIdentifyEPSG() == OGRERR_NONE &&
 			(cp = ref->GetAuthorityCode(NULL)) != NULL) {
 		ref->Release();
-		return(atoi(cp));
-	} else
-		return(NA_INTEGER);
+		ret_val = atoi(cp);
+	} 
+	set_error_handler();
+	return(ret_val);
 }
 
 // [[Rcpp::export]]

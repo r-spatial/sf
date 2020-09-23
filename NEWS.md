@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* `st_transform` no longer warns on conversions like `"+proj=ob_tran +o_proj=longlat +o_lat_p=45 +o_lon_p=30"`
+
 * `st_as_wkb` takes `srid` from `wkt` field of `crs` when `input` field doesn't contain it; #1490
 
 * `plot.sf` adds `key.pos=0` option to run the logic behind the key without plotting it; #1487
