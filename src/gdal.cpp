@@ -159,7 +159,8 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = new OGRSpatialReference;
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
-#if GDAL_VERSION_NUM <= 2020000
+#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+// #if GDAL_VERSION_NUM <= 2020000
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
