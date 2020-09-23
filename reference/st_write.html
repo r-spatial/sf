@@ -333,26 +333,26 @@ handled with care; the former may erase complete directories or databases.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp1lkATh/temp_libpath2f9b733ac3ec/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpAnfsSB/temp_libpath32be70602a9f/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'>st_write</span>(<span class='kw'>nc</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"/"</span>, <span class='st'>"nc.shp"</span>))
-</div><div class='output co'>#&gt; Writing layer `nc' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmpt93lDR/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Writing layer `nc' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp5F71WS/nc.shp' using driver `ESRI Shapefile'
 #&gt; Writing 100 features with 14 fields and geometry type Multi Polygon.</div><div class='input'><span class='fu'>st_write</span>(<span class='kw'>nc</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"/"</span>, <span class='st'>"nc.shp"</span>), delete_layer = <span class='fl'>TRUE</span>) <span class='co'># overwrites</span>
 </div><div class='output co'>#&gt; Deleting layer `nc' using driver `ESRI Shapefile'
-#&gt; Writing layer `nc' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmpt93lDR/nc.shp' using driver `ESRI Shapefile'
+#&gt; Writing layer `nc' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp5F71WS/nc.shp' using driver `ESRI Shapefile'
 #&gt; Writing 100 features with 14 fields and geometry type Multi Polygon.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>meuse</span>, package = <span class='st'>"sp"</span>) <span class='co'># loads data.frame from sp</span>
 <span class='kw'>meuse_sf</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw'>meuse</span>, coords = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), crs = <span class='fl'>28992</span>)
 <span class='co'># writes X and Y as columns:</span>
 <span class='fu'>st_write</span>(<span class='kw'>meuse_sf</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"/"</span>, <span class='st'>"meuse.csv"</span>), layer_options = <span class='st'>"GEOMETRY=AS_XY"</span>)
-</div><div class='output co'>#&gt; Writing layer `meuse' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmpt93lDR/meuse.csv' using driver `CSV'
+</div><div class='output co'>#&gt; Writing layer `meuse' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp5F71WS/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_XY 
 #&gt; Writing 155 features with 12 fields and geometry type Point.</div><div class='input'><span class='fu'>st_write</span>(<span class='kw'>meuse_sf</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='st'>"/"</span>, <span class='st'>"meuse.csv"</span>), layer_options = <span class='st'>"GEOMETRY=AS_WKT"</span>,
   delete_dsn=<span class='fl'>TRUE</span>) <span class='co'># overwrites</span>
-</div><div class='output co'>#&gt; Deleting source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmpt93lDR/meuse.csv' using driver `CSV'
-#&gt; Writing layer `meuse' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmpt93lDR/meuse.csv' using driver `CSV'
+</div><div class='output co'>#&gt; Deleting source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp5F71WS/meuse.csv' using driver `CSV'
+#&gt; Writing layer `meuse' to data source `/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp5F71WS/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_WKT 
 #&gt; Writing 155 features with 12 fields and geometry type Point.</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)
