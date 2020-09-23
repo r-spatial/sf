@@ -677,22 +677,26 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 			Rcpp::stop("sfc_GEOMETRY has no classes attribute; please file an issue"); // #nocov
 	}
 
-	// get SRID from crs[["input"]], either of the form "4326" or "XXXX:4326" with arbitrary XXXX string
-	Rcpp::List crs = sfc.attr("crs");
-	Rcpp::CharacterVector input = crs(0);
-	char *inp = input[0];
-	char *remainder = NULL;
-	// check for ":", and move one beyond:
-	if ((remainder = strstr(inp, ":")) != NULL)
-		inp = remainder + 1;
 	int srid = 0;
-	long value = strtol(inp, &remainder, 10);
-	if (*remainder == '\0') // success:
-		srid = (int) value;
-	else {
-		int i = srid_from_crs(crs);
-		if (i != NA_INTEGER)
-			srid = i; // else leave 0
+	if (EWKB) { 
+		// get SRID from crs[["input"]], either of the form "4326" 
+		// or "XXXX:4326" with arbitrary XXXX string,
+		// or else from the wkt field of the crs using srid_from_crs()
+		Rcpp::List crs = sfc.attr("crs");
+		Rcpp::CharacterVector input = crs(0);
+		char *inp = input[0];
+		char *remainder = NULL;
+		// check for ":", and move one beyond:
+		if ((remainder = strstr(inp, ":")) != NULL)
+			inp = remainder + 1;
+		long value = strtol(inp, &remainder, 10);
+		if (*remainder == '\0') // strtol() succeeded:
+			srid = (int) value;
+		else {
+			int i = srid_from_crs(crs);
+			if (i != NA_INTEGER)
+				srid = i; // else leave 0
+		}
 	}
 
 	for (int i = 0; i < sfc.size(); i++) {
