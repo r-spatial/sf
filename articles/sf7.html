@@ -227,15 +227,15 @@
 <span class="co">## [1] FALSE</span>
 </pre></div>
 </div>
-<div id="cap-enclosing-rectangle" class="section level2">
+<div id="bounding-cap-bounding-rectangle" class="section level2">
 <h2 class="hasAnchor">
-<a href="#cap-enclosing-rectangle" class="anchor"></a>Cap, enclosing rectangle</h2>
-<p>Computing the minimum and maximum values over coordinate ranges, as <code>sf</code> does with <code><a href="../reference/st_bbox.html">st_bbox()</a></code>, is of limited value for spherical coordinates because</p>
+<a href="#bounding-cap-bounding-rectangle" class="anchor"></a>Bounding cap, bounding rectangle</h2>
+<p>Computing the minimum and maximum values over coordinate ranges, as <code>sf</code> does with <code><a href="../reference/st_bbox.html">st_bbox()</a></code>, is of limited value for spherical coordinates because due the the spherical space, the <em>area covered</em> is not necessarily covered by the coordinate range. Two examples:</p>
 <ul>
-<li>small regions covering the antimeridian end up with a huge longitude range</li>
+<li>small regions covering the antimeridian (longitude +/- 180) end up with a huge longitude range, which doesn’t make <em>clear</em> the antimeridian is spanned</li>
 <li>regions including a pole will end up with a latitude range not extending to +/- 90</li>
 </ul>
-<p>S2 has two alternatives: the cap and the <code>lat_lng_rect</code>:</p>
+<p>S2 has two alternatives: the bounding cap and the bounding rectangle:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="kw">fiji</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_data_tbl_countries.html">s2_data_countries</a></span>(<span class="st">"Fiji"</span>)
 <span class="kw">aa</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_data_tbl_countries.html">s2_data_countries</a></span>(<span class="st">"Antarctica"</span>)
@@ -247,7 +247,7 @@
 <span class="co">## 1  177.285 -18.28799 -179.7933 -16.02088</span>
 <span class="co">## 2 -180.000 -90.00000  180.0000 -63.27066</span>
 </pre></div>
-<p>The cap reports a bounding cap (circle) as a mid point (lat, lng) and an angle around this point. The rect reports the <code>_lo</code> and <code>_hi</code> bounds of <code>lat</code> and <code>lng</code> coordinates. Note that for Fiji, <code>lng_lo</code> being higher than <code>lng_hi</code> indicates that the region covers (crosses) the antimeridian.</p>
+<p>The cap reports a bounding cap (circle) as a mid point (lat, lng) and an angle around this point. The bounding rectangle reports the <code>_lo</code> and <code>_hi</code> bounds of <code>lat</code> and <code>lng</code> coordinates. Note that for Fiji, <code>lng_lo</code> being higher than <code>lng_hi</code> indicates that the region covers (crosses) the antimeridian.</p>
 </div>
 </div>
 <div id="switching-between-s2-and-geos" class="section level1">
@@ -333,15 +333,32 @@
 <div id="predicates" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predicates" class="anchor"></a>Predicates</h1>
+<p>All unary and binary predicates are available in <code>s2</code>, except for <code>st_relate</code> with a pattern. In addition, when using the <code>s2</code> predicates</p>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span>(<span class="fl">FALSE</span>)
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">nc</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,], <span class="kw">nc</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,]) <span class="co"># self-intersections + neighbours</span>
+<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="co">## Sparse geometry binary predicate list of length 3, where the predicate was `intersects'</span>
+<span class="co">##  1: 1, 2</span>
+<span class="co">##  2: 1, 2, 3</span>
+<span class="co">##  3: 2, 3</span>
+<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">nc</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,], <span class="kw">nc</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,], s2_model = <span class="st">"semi-open"</span>) <span class="co"># only self-intersections</span>
+<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="co">## Sparse geometry binary predicate list of length 3, where the predicate was `intersects'</span>
+<span class="co">##  1: 1, 2</span>
+<span class="co">##  2: 1, 2, 3</span>
+<span class="co">##  3: 2, 3</span>
+</pre></div>
 </div>
 <div id="transformations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#transformations" class="anchor"></a>Transformations</h1>
+<p><code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> are available as <code>s2</code> equivalents. N-ary instersection and difference are not (yet) present; cascaded union is present; unioning by feature does not work with <code>s2</code>.</p>
 <div id="buffers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#buffers" class="anchor"></a>Buffers</h2>
 <p>Buffers can be calculated for features with geographic coordinates as follows, using an unprojected object representing the UK as an example:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
+<div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="kw">uk</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_data_tbl_countries.html">s2_data_countries</a></span>(<span class="st">"United Kingdom"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="kw">uk</span>)
 <span class="co">## [1] "s2_geography" "s2_xptr"</span>
@@ -357,24 +374,24 @@
 <span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span>(<span class="kw">uk_buffer3</span>))
 <span class="kw">uk_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span>(<span class="kw">uk</span>) 
 </pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-17-1.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-17-2.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-17-3.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-17-4.png" width="50%"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-18-1.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-2.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-3.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-4.png" width="50%"></p>
 <p>The plots above show that you can adjust the level of spatial precision in the results of s2 buffer operations with the <code>max_cells</code> argument, set to 1000 by default. Deciding on an appropriate value is a balance between excessive detail increasing computational resources (represented by <code>uk_buffer2</code>, bottom left) and excessive simplification (bottom right). Note that buffers created with s2 <em>always</em> follow s2 cell boundaries, they are never smooth. Hence, choosing a large number for <code>max_cells</code> leads to seemingly smooth but, zoomed in, very complex buffers.</p>
 <p>To achieve a similar result you could first transform the result and then use the <code><a href="../reference/geos_unary.html">st_buffer()</a></code> function from <code>sf</code>. A simple benchmark shows the computational efficiency of the <code>s2</code> geometry engine in comparison with transforming and then creating buffers:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
+<div class="sourceCode" id="cb22"><pre class="downlit">
 <span class="co"># the sf way</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="kw">uk_sfc</span>, <span class="fl">27700</span>)
   <span class="kw">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">uk_projected</span>, dist = <span class="fl">20000</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.056   0.004   0.060</span>
+<span class="co">##   0.057   0.004   0.061</span>
 <span class="co"># sf way with few than the 30 segments in the buffer</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="kw">uk_sfc</span>, <span class="fl">27700</span>)
   <span class="kw">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">uk_projected</span>, dist = <span class="fl">20000</span>, nQuadSegs = <span class="fl">4</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.041   0.002   0.042</span>
+<span class="co">##   0.044   0.002   0.046</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>)
@@ -386,13 +403,13 @@
   <span class="kw">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>, max_cells = <span class="fl">10000</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.297   0.003   0.304</span>
+<span class="co">##   0.301   0.003   0.308</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>({
   <span class="kw">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/s2/man/s2_boundary.html">s2_buffer_cells</a></span>(<span class="kw">uk</span>, distance = <span class="fl">20000</span>, max_cells = <span class="fl">100</span>)
 })
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.004   0.000   0.004</span>
+<span class="co">##   0.003   0.000   0.004</span>
 </pre></div>
 <p>The result of the previous benchmarks emphasise the point that there are trade-offs between geographic resolution and computational resources, something that web developers working on geographic services such as Google Maps understand well. In this case the default setting of 1000 cells, which runs slightly faster than the default transform -&gt; buffer workflow, is probably appropriate given the low resolution of the input geometry representing the UK.</p>
 </div>
