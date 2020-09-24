@@ -267,8 +267,8 @@ int srid_from_crs(Rcpp::List crs) {
 	OGRSpatialReference *ref = OGRSrs_from_crs(crs);
 	if (ref && ref->AutoIdentifyEPSG() == OGRERR_NONE &&
 			(cp = ref->GetAuthorityCode(NULL)) != NULL) {
-		ref->Release();
 		ret_val = atoi(cp);
+		ref->Release();
 	} 
 	set_error_handler();
 	return(ret_val);
