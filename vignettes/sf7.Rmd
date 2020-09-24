@@ -198,16 +198,17 @@ s2_intersects(a, b, s2_options(model = "semi-open")) # a toss
 s2_intersects(a, b) # default: semi-open
 ```
 
-## Cap, enclosing rectangle
+## Bounding cap, bounding rectangle
 
 Computing the minimum and maximum values over coordinate ranges,
 as `sf` does with `st_bbox()`, is of limited value for spherical
-coordinates because
+coordinates because due the the spherical space, the _area covered_
+is not necessarily covered by the coordinate range. Two examples:
 
-* small regions covering the antimeridian end up with a huge longitude range
+* small regions covering the antimeridian (longitude +/- 180) end up with a huge longitude range, which doesn't make _clear_ the antimeridian is spanned
 * regions including a pole will end up with a latitude range not extending to +/- 90
 
-S2 has two alternatives: the cap and the `lat_lng_rect`:
+S2 has two alternatives: the bounding cap and the bounding rectangle:
 
 ```{r eval=s2_available}
 fiji = s2_data_countries("Fiji")
@@ -216,11 +217,11 @@ s2_bounds_cap(fiji)
 s2_bounds_rect(c(fiji,aa))
 ```
 
-The cap reports a bounding cap (circle) as a mid point (lat, lng) and
-an angle around this point. The rect reports the `_lo` and `_hi` bounds
-of `lat` and `lng` coordinates.  Note that for Fiji, `lng_lo` being
-higher than `lng_hi` indicates that the region covers (crosses)
-the antimeridian.
+The cap reports a bounding cap (circle) as a mid point (lat, lng)
+and an angle around this point. The bounding rectangle reports the
+`_lo` and `_hi` bounds of `lat` and `lng` coordinates.  Note that
+for Fiji, `lng_lo` being higher than `lng_hi` indicates that the
+region covers (crosses) the antimeridian.
 
 # Switching between S2 and GEOS
 
@@ -282,7 +283,20 @@ summary(as.vector(d1)-as.vector(d2))
 
 # Predicates
 
+All unary and binary predicates are available in `s2`, except for
+`st_relate` with a pattern. In addition, when using the `s2` predicates
+```{r}
+sf_use_s2(FALSE)
+st_intersects(nc[1:3,], nc[1:3,]) # self-intersections + neighbours
+st_intersects(nc[1:3,], nc[1:3,], s2_model = "semi-open") # only self-intersections
+```
+
 # Transformations
+
+`st_intersection`, `st_union`, `st_difference` and
+`st_sym_difference` are available as `s2` equivalents. N-ary
+instersection and difference are not (yet) present; cascaded union
+is present; unioning by feature does not work with `s2`.
 
 ## Buffers
 
