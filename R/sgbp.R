@@ -64,6 +64,25 @@ dim.sgbp = function(x) {
 	c(length(x), attr(x, "ncol"))
 }
 
+#' @name sgbp
+#' @export
+`%*%` <- function(x, y) UseMethod("%*%")
+
+#' @name sgbp
+#' @export
+`%*%.sgbp` <- function(sgbp, mat) {
+	ret = lapply(sgbp, function(x) mat[x, ])
+	
+	if(dim(mat)[2] == 1){
+		ret = lapply(ret, function(x) sum(x))
+	} else {
+		ret = lapply(ret, function(x) colSums(x))	
+	}
+	
+	ret = do.call(rbind, ret)
+	return(ret)
+}
+
 #' @export
 Ops.sgbp = function(e1, e2) {
 	if (.Generic != "!")
