@@ -158,89 +158,89 @@
     <p>Tidyverse methods for sf objects. Geometries are sticky, use <a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a> to let <code>dplyr</code>'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>filter.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>)
+    <pre class="usage"><span class='fu'>filter.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span><span class='op'>)</span>
 
-<span class='fu'>arrange.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>)
+<span class='fu'>arrange.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span><span class='op'>)</span>
 
-<span class='fu'>group_by.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, add = <span class='fl'>FALSE</span>)
+<span class='fu'>group_by.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, add <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>ungroup.sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>ungroup.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>mutate.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>)
+<span class='fu'>mutate.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span><span class='op'>)</span>
 
-<span class='fu'>transmute.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>)
+<span class='fu'>transmute.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span><span class='op'>)</span>
 
-<span class='fu'>select.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>)
+<span class='fu'>select.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>rename.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>)
+<span class='fu'>rename.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>slice.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>)
+<span class='fu'>slice.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span><span class='op'>)</span>
 
-<span class='fu'>summarise.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, <span class='kw'>.dots</span>, do_union = <span class='fl'>TRUE</span>)
+<span class='fu'>summarise.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, <span class='va'>.dots</span>, do_union <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>distinct.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>, .keep_all = <span class='fl'>FALSE</span>)
+<span class='fu'>distinct.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span>, .keep_all <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>gather.sf</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>key</span>,
-  <span class='kw'>value</span>,
-  <span class='kw'>...</span>,
-  na.rm = <span class='fl'>FALSE</span>,
-  convert = <span class='fl'>FALSE</span>,
-  factor_key = <span class='fl'>FALSE</span>
-)
+<span class='fu'>gather.sf</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>key</span>,
+  <span class='va'>value</span>,
+  <span class='va'>...</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  convert <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  factor_key <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>spread.sf</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>key</span>,
-  <span class='kw'>value</span>,
-  fill = <span class='fl'>NA</span>,
-  convert = <span class='fl'>FALSE</span>,
-  drop = <span class='fl'>TRUE</span>,
-  sep = <span class='kw'>NULL</span>
-)
+<span class='fu'>spread.sf</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>key</span>,
+  <span class='va'>value</span>,
+  fill <span class='op'>=</span> <span class='cn'>NA</span>,
+  convert <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  drop <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  sep <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>sample_n.sf</span>(<span class='kw'>tbl</span>, <span class='kw'>size</span>, replace = <span class='fl'>FALSE</span>, weight = <span class='kw'>NULL</span>, .env = <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>())
+<span class='fu'>sample_n.sf</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>size</span>, replace <span class='op'>=</span> <span class='cn'>FALSE</span>, weight <span class='op'>=</span> <span class='cn'>NULL</span>, .env <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>sample_frac.sf</span>(
-  <span class='kw'>tbl</span>,
-  size = <span class='fl'>1</span>,
-  replace = <span class='fl'>FALSE</span>,
-  weight = <span class='kw'>NULL</span>,
-  .env = <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>()
-)
+<span class='fu'>sample_frac.sf</span><span class='op'>(</span>
+  <span class='va'>tbl</span>,
+  size <span class='op'>=</span> <span class='fl'>1</span>,
+  replace <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  weight <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .env <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>nest.sf</span>(<span class='kw'>.data</span>, <span class='kw'>...</span>)
+<span class='fu'>nest.sf</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>separate.sf</span>(
-  <span class='kw'>data</span>,
-  <span class='kw'>col</span>,
-  <span class='kw'>into</span>,
-  sep = <span class='st'>"[^[:alnum:]]+"</span>,
-  remove = <span class='fl'>TRUE</span>,
-  convert = <span class='fl'>FALSE</span>,
-  extra = <span class='st'>"warn"</span>,
-  fill = <span class='st'>"warn"</span>,
-  <span class='kw'>...</span>
-)
+<span class='fu'>separate.sf</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>col</span>,
+  <span class='va'>into</span>,
+  sep <span class='op'>=</span> <span class='st'>"[^[:alnum:]]+"</span>,
+  remove <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  convert <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  extra <span class='op'>=</span> <span class='st'>"warn"</span>,
+  fill <span class='op'>=</span> <span class='st'>"warn"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>separate_rows.sf</span>(<span class='kw'>data</span>, <span class='kw'>...</span>, sep = <span class='st'>"[^[:alnum:]]+"</span>, convert = <span class='fl'>FALSE</span>)
+<span class='fu'>separate_rows.sf</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span>, sep <span class='op'>=</span> <span class='st'>"[^[:alnum:]]+"</span>, convert <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>unite.sf</span>(<span class='kw'>data</span>, <span class='kw'>col</span>, <span class='kw'>...</span>, sep = <span class='st'>"_"</span>, remove = <span class='fl'>TRUE</span>)
+<span class='fu'>unite.sf</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>col</span>, <span class='va'>...</span>, sep <span class='op'>=</span> <span class='st'>"_"</span>, remove <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>unnest.sf</span>(<span class='kw'>data</span>, <span class='kw'>...</span>, .preserve = <span class='kw'>NULL</span>)
+<span class='fu'>unnest.sf</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span>, .preserve <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>inner_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)
+<span class='fu'>inner_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>left_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)
+<span class='fu'>left_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>right_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)
+<span class='fu'>right_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>full_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)
+<span class='fu'>full_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>semi_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)
+<span class='fu'>semi_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>anti_join.sf</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, by = <span class='kw'>NULL</span>, copy = <span class='fl'>FALSE</span>, suffix = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>".x"</span>, <span class='st'>".y"</span>), <span class='kw'>...</span>)</pre>
+<span class='fu'>anti_join.sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, by <span class='op'>=</span> <span class='cn'>NULL</span>, copy <span class='op'>=</span> <span class='cn'>FALSE</span>, suffix <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".x"</span>, <span class='st'>".y"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -400,29 +400,29 @@ Should be a character vector of length 2.</p></td>
 <p><code>nest</code> assumes that a simple feature geometry list-column was among the columns that were nested.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
-<span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpBz9UdW/temp_libpath32a36767c938/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+<span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdIuoDf/temp_libpath34ce28e45012/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; geographic CRS: NAD27</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw'>AREA</span> <span class='op'>&gt;</span> <span class='fl'>.1</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>AREA</span> <span class='op'>&gt;</span> <span class='fl'>.1</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all</span></div><div class='img'><img src='tidyverse-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot 10 smallest counties in grey:</span>
-<span class='fu'><a href='st_geometry.html'>st_geometry</a></span>(<span class='kw'>nc</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>()
-</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>AREA</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='kw'>AREA</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(add = <span class='fl'>TRUE</span>, col = <span class='st'>'grey'</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='st'>"the ten counties with smallest area"</span>)
-</div><div class='img'><img src='tidyverse-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>nc</span><span class='op'>$</span><span class='kw'>area_cl</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='kw'>nc</span><span class='op'>$</span><span class='kw'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
-<span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>area_cl</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()
-</div><div class='output co'>#&gt; [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"</div><div class='input'><span class='kw'>nc2</span> <span class='op'>&lt;-</span> <span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(area10 = <span class='kw'>AREA</span><span class='op'>/</span><span class='fl'>10</span>)
-<span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(AREA = <span class='kw'>AREA</span><span class='op'>/</span><span class='fl'>10</span>, geometry = <span class='kw'>geometry</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()
-</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span>(AREA = <span class='kw'>AREA</span><span class='op'>/</span><span class='fl'>10</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()
-</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>()
-</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>, <span class='kw'>geometry</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>()
-</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()
-</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>, <span class='kw'>geometry</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>()
-</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='kw'>nc2</span> <span class='op'>&lt;-</span> <span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span>(area = <span class='kw'>AREA</span>)
-<span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>)
+<span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>AREA</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>AREA</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span>add <span class='op'>=</span> <span class='cn'>TRUE</span>, col <span class='op'>=</span> <span class='st'>'grey'</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span><span class='op'>(</span><span class='st'>"the ten counties with smallest area"</span><span class='op'>)</span>
+</div><div class='img'><img src='tidyverse-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>nc</span><span class='op'>$</span><span class='va'>area_cl</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>$</span><span class='va'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>area_cl</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"</div><div class='input'><span class='va'>nc2</span> <span class='op'>&lt;-</span> <span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>area10 <span class='op'>=</span> <span class='va'>AREA</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span><span class='op'>(</span>AREA <span class='op'>=</span> <span class='va'>AREA</span><span class='op'>/</span><span class='fl'>10</span>, geometry <span class='op'>=</span> <span class='va'>geometry</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>transmute</a></span><span class='op'>(</span>AREA <span class='op'>=</span> <span class='va'>AREA</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span>, <span class='va'>geometry</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "SID74"    "SID79"    "geometry"</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span>, <span class='va'>geometry</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='va'>nc2</span> <span class='op'>&lt;-</span> <span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>area <span class='op'>=</span> <span class='va'>AREA</span><span class='op'>)</span>
+<span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 2 features and 15 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -433,9 +433,9 @@ Should be a character vector of length 2.</p></td>
 #&gt; 2 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0
 #&gt;   NWBIR74 BIR79 SID79 NWBIR79    area_cl                       geometry
 #&gt; 1      10  1364     0      19 (0.1,0.12] MULTIPOLYGON (((-81.47276 3...
-#&gt; 2      10   542     3      12    (0,0.1] MULTIPOLYGON (((-81.23989 3...</div><div class='input'><span class='kw'>nc</span><span class='op'>$</span><span class='kw'>area_cl</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='kw'>nc</span><span class='op'>$</span><span class='kw'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span>))
-<span class='kw'>nc.g</span> <span class='op'>&lt;-</span> <span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>area_cl</span>)
-<span class='kw'>nc.g</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>AREA</span>))
+#&gt; 2      10   542     3      12    (0,0.1] MULTIPOLYGON (((-81.23989 3...</div><div class='input'><span class='va'>nc</span><span class='op'>$</span><span class='va'>area_cl</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>$</span><span class='va'>AREA</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.1</span>, <span class='fl'>.12</span>, <span class='fl'>.15</span>, <span class='fl'>.25</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>nc.g</span> <span class='op'>&lt;-</span> <span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>area_cl</span><span class='op'>)</span>
+<span class='va'>nc.g</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>AREA</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>`summarise()` ungrouping output (override with `.groups` argument)</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -447,23 +447,23 @@ Should be a character vector of length 2.</p></td>
 #&gt; </span><span style='color: #555555;'>1</span><span> (0,0.1]          0.076</span><span style='text-decoration: underline;'>0</span><span> (((-77.96073 34.18924, -77.96587 34.24229, -77.97528 …
 #&gt; </span><span style='color: #555555;'>2</span><span> (0.1,0.12]       0.112  (((-84.29104 35.21054, -84.22594 35.2616, -84.17973 3…
 #&gt; </span><span style='color: #555555;'>3</span><span> (0.12,0.1…       0.134  (((-76.54427 34.58783, -76.55515 34.61066, -76.53775 …
-#&gt; </span><span style='color: #555555;'>4</span><span> (0.15,0.2…       0.190  (((-78.02592 34.32877, -78.01131 34.31261, -78.00702 …</div><div class='input'><span class='kw'>nc.g</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>AREA</span>)) <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span>(col = <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span>(<span class='fl'>3</span><span class='op'>:</span><span class='fl'>6</span> <span class='op'>/</span> <span class='fl'>7</span>))
-</div><div class='output co'>#&gt; <span class='message'>`summarise()` ungrouping output (override with `.groups` argument)</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='img'><img src='tidyverse-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='kw'>as.data.frame</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span>(<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='kw'>AREA</span>))
+#&gt; </span><span style='color: #555555;'>4</span><span> (0.15,0.2…       0.190  (((-78.02592 34.32877, -78.01131 34.31261, -78.00702 …</div><div class='input'><span class='va'>nc.g</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>AREA</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span>col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/gray.html'>grey</a></span><span class='op'>(</span><span class='fl'>3</span><span class='op'>:</span><span class='fl'>6</span> <span class='op'>/</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>`summarise()` ungrouping output (override with `.groups` argument)</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='img'><img src='tidyverse-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='va'>as.data.frame</span> <span class='op'>%&gt;%</span> <span class='fu'>summarise</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>AREA</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   mean(AREA)
-#&gt; 1    0.12626</div><div class='input'><span class='kw'>nc</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>), ] <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>() <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>()
-</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://tidyr.tidyverse.org'>tidyr</a></span>)
-<span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, <span class='op'>-</span><span class='kw'>geometry</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>()
+#&gt; 1    0.12626</div><div class='input'><span class='va'>nc</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>, <span class='op'>]</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 100</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span><span class='op'>)</span>
+<span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span><span class='op'>(</span><span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, <span class='op'>-</span><span class='va'>geometry</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      VAR                 SID                  geometry  
 #&gt;  Length:200         Min.   : 0.000   MULTIPOLYGON :200  
 #&gt;  Class :character   1st Qu.: 2.000   epsg:4267    :  0  
 #&gt;  Mode  :character   Median : 5.000   +proj=long...:  0  
 #&gt;                     Mean   : 7.515                      
 #&gt;                     3rd Qu.: 9.000                      
-#&gt;                     Max.   :57.000                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://tidyr.tidyverse.org'>tidyr</a></span>)
-<span class='kw'>nc</span><span class='op'>$</span><span class='kw'>row</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span> <span class='co'># needed for spread to work</span>
-<span class='kw'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>SID74</span>, <span class='kw'>SID79</span>, <span class='kw'>geometry</span>, <span class='kw'>row</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span>(<span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, <span class='op'>-</span><span class='kw'>geometry</span>, <span class='op'>-</span><span class='kw'>row</span>) <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/spread.html'>spread</a></span>(<span class='kw'>VAR</span>, <span class='kw'>SID</span>) <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>()
+#&gt;                     Max.   :57.000                      </div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span><span class='op'>)</span>
+<span class='va'>nc</span><span class='op'>$</span><span class='va'>row</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span> <span class='co'># needed for spread to work</span>
+<span class='va'>nc</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SID74</span>, <span class='va'>SID79</span>, <span class='va'>geometry</span>, <span class='va'>row</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/gather.html'>gather</a></span><span class='op'>(</span><span class='st'>"VAR"</span>, <span class='st'>"SID"</span>, <span class='op'>-</span><span class='va'>geometry</span>, <span class='op'>-</span><span class='va'>row</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/spread.html'>spread</a></span><span class='op'>(</span><span class='va'>VAR</span>, <span class='va'>SID</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 6 features and 3 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -475,12 +475,12 @@ Should be a character vector of length 2.</p></td>
 #&gt; 3   3     5     6 MULTIPOLYGON (((-80.45634 3...
 #&gt; 4   4     1     2 MULTIPOLYGON (((-76.00897 3...
 #&gt; 5   5     9     3 MULTIPOLYGON (((-77.21767 3...
-#&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='kw'>storms.sf</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span>(<span class='kw'>storms</span>, coords = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"long"</span>, <span class='st'>"lat"</span>), crs = <span class='fl'>4326</span>)
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>storms.sf</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='kw'>name</span>, <span class='kw'>year</span>) <span class='op'>%&gt;%</span> <span class='kw'>nest</span>
-<span class='kw'>trs</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span>(<span class='kw'>x</span><span class='op'>$</span><span class='kw'>data</span>, <span class='fu'>function</span>(<span class='kw'>tr</span>) <span class='fu'><a href='st_cast.html'>st_cast</a></span>(<span class='fu'><a href='geos_combine.html'>st_combine</a></span>(<span class='kw'>tr</span>), <span class='st'>"LINESTRING"</span>)[[<span class='fl'>1</span>]]) <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='sfc.html'>st_sfc</a></span>(crs = <span class='fl'>4326</span>)
-<span class='kw'>trs.sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(<span class='kw'>x</span>[,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>], <span class='kw'>trs</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='kw'>trs.sf</span>[<span class='st'>"year"</span>], axes = <span class='fl'>TRUE</span>)
+#&gt; 6   6     7     5 MULTIPOLYGON (((-76.74506 3...</div><div class='input'><span class='va'>storms.sf</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>storms</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"long"</span>, <span class='st'>"lat"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>storms.sf</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>year</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>nest</span>
+<span class='va'>trs</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>data</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>tr</span><span class='op'>)</span> <span class='fu'><a href='st_cast.html'>st_cast</a></span><span class='op'>(</span><span class='fu'><a href='geos_combine.html'>st_combine</a></span><span class='op'>(</span><span class='va'>tr</span><span class='op'>)</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
+<span class='va'>trs.sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>trs</span><span class='op'>)</span>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>trs.sf</span><span class='op'>[</span><span class='st'>"year"</span><span class='op'>]</span>, axes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='tidyverse-4.png' alt='' width='700' height='433' /></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

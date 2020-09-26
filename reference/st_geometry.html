@@ -159,24 +159,24 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for sfc</span>
-<span class='fu'>st_geometry</span>(<span class='kw'>obj</span>, <span class='kw'>...</span>)
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>st_geometry</span>(<span class='kw'>obj</span>, <span class='kw'>...</span>)
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_geometry</span>(<span class='kw'>obj</span>, <span class='kw'>...</span>)
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_geometry</span>(<span class='kw'>obj</span>, <span class='kw'>...</span>)
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_geometry</span>(<span class='kw'>obj</span>, <span class='kw'>...</span>)
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>st_geometry</span>(<span class='kw'>x</span>) <span class='op'>&lt;-</span> <span class='kw'>value</span>
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
-<span class='fu'>st_set_geometry</span>(<span class='kw'>x</span>, <span class='kw'>value</span>)
+<span class='fu'>st_set_geometry</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>value</span><span class='op'>)</span>
 
-<span class='fu'>st_drop_geometry</span>(<span class='kw'>x</span>)</pre>
+<span class='fu'>st_drop_geometry</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,24 +210,24 @@
 <p><code>st_drop_geometry</code> drops the geometry of its argument, and reclasses it accordingly</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>df</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(a = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>)
-<span class='kw'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>)), <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>,<span class='fl'>11</span>)))
-<span class='fu'>st_geometry</span>(<span class='kw'>sfc</span>)
+    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>11</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 4 xmax: 10 ymax: 11
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (3 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (10 11)</span></div><div class='input'><span class='fu'>st_geometry</span>(<span class='kw'>df</span>) <span class='op'>&lt;-</span> <span class='kw'>sfc</span>
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='kw'>df</span>)
-</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='fu'>st_geometry</span>(<span class='kw'>df</span>)
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (3 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (10 11)</span></div><div class='input'><span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>sfc</span>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sf"         "data.frame"</div><div class='input'><span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 4 xmax: 10 ymax: 11
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (3 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (10 11)</span></div><div class='input'><span class='fu'>st_geometry</span>(<span class='kw'>df</span>) <span class='op'>&lt;-</span> <span class='kw'>sfc</span> <span class='co'># replaces</span>
-<span class='fu'>st_geometry</span>(<span class='kw'>df</span>) <span class='op'>&lt;-</span> <span class='kw'>NULL</span> <span class='co'># remove geometry, coerce to data.frame</span>
-<span class='kw'>sf</span> <span class='op'>&lt;-</span> <span class='fu'>st_set_geometry</span>(<span class='kw'>df</span>, <span class='kw'>sfc</span>) <span class='co'># set geometry, return sf</span>
-<span class='fu'>st_set_geometry</span>(<span class='kw'>sf</span>, <span class='kw'>NULL</span>) <span class='co'># remove geometry, coerce to data.frame</span>
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (3 4)</span></div><div class='output co'>#&gt; <span class='message'>POINT (10 11)</span></div><div class='input'><span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>sfc</span> <span class='co'># replaces</span>
+<span class='fu'>st_geometry</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='cn'>NULL</span> <span class='co'># remove geometry, coerce to data.frame</span>
+<span class='va'>sf</span> <span class='op'>&lt;-</span> <span class='fu'>st_set_geometry</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>sfc</span><span class='op'>)</span> <span class='co'># set geometry, return sf</span>
+<span class='fu'>st_set_geometry</span><span class='op'>(</span><span class='va'>sf</span>, <span class='cn'>NULL</span><span class='op'>)</span> <span class='co'># remove geometry, coerce to data.frame</span>
 </div><div class='output co'>#&gt;   a
 #&gt; 1 1
 #&gt; 2 2</div></pre>

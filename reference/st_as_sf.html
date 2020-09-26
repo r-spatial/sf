@@ -158,41 +158,41 @@
     <p>Convert foreign object to an sf object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>st_as_sf</span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>...</span>,
-  agr = <span class='kw'>NA_agr_</span>,
-  <span class='kw'>coords</span>,
-  <span class='kw'>wkt</span>,
-  dim = <span class='st'>"XYZ"</span>,
-  remove = <span class='fl'>TRUE</span>,
-  na.fail = <span class='fl'>TRUE</span>,
-  sf_column_name = <span class='kw'>NULL</span>
-)
+<span class='fu'>st_as_sf</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>...</span>,
+  agr <span class='op'>=</span> <span class='va'>NA_agr_</span>,
+  <span class='va'>coords</span>,
+  <span class='va'>wkt</span>,
+  dim <span class='op'>=</span> <span class='st'>"XYZ"</span>,
+  remove <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  na.fail <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  sf_column_name <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for Spatial</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for map</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, fill = <span class='fl'>TRUE</span>, group = <span class='fl'>TRUE</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, fill <span class='op'>=</span> <span class='cn'>TRUE</span>, group <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for ppp</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for psp</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lpp</span>
-<span class='fu'>st_as_sf</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -249,20 +249,20 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     <p>setting argument <code>wkt</code> annihilates the use of argument <code>coords</code>. If <code>x</code> contains a column called "geometry", <code>coords</code> will result in overwriting of this column by the <a href='sfc.html'>sfc</a> geometry list-column.  Setting <code>wkt</code> will replace this column with the geometry list-column, unless <code>remove_coordinates</code> is <code>FALSE</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>1</span>))
-<span class='kw'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>))
-<span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>pt1</span>, <span class='kw'>pt2</span>)
+    <pre class="examples"><div class='input'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 0 ymin: 1 xmax: 1 ymax: 1
-#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='kw'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(a = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>)
-<span class='kw'>d</span><span class='op'>$</span><span class='kw'>geom</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>pt1</span>, <span class='kw'>pt2</span>)
-<span class='kw'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>d</span>)
-<span class='kw'>d</span><span class='op'>$</span><span class='kw'>geom</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span>)
-<span class='kw'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>d</span>, wkt = <span class='st'>"geom"</span>)
-<span class='kw'>d</span><span class='op'>$</span><span class='kw'>geom2</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='kw'>pt1</span>, <span class='kw'>pt2</span>)
-<span class='fu'>st_as_sf</span>(<span class='kw'>d</span>) <span class='co'># should warn</span>
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
+<span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
+<span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span><span class='op'>)</span>
+<span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span>, wkt <span class='op'>=</span> <span class='st'>"geom"</span><span class='op'>)</span>
+<span class='va'>d</span><span class='op'>$</span><span class='va'>geom2</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='co'># should warn</span>
 </div><div class='output co'>#&gt; Simple feature collection with 2 features and 2 fields
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
@@ -270,9 +270,9 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; CRS:            NA
 #&gt;   a       geom       geom2
 #&gt; 1 1 POINT(0 0) POINT (0 1)
-#&gt; 2 2 POINT(0 1) POINT (1 1)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>meuse</span>, package = <span class='st'>"sp"</span>)
-<span class='kw'>meuse_sf</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>meuse</span>, coords = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"x"</span>, <span class='st'>"y"</span>), crs = <span class='fl'>28992</span>, agr = <span class='st'>"constant"</span>)
-<span class='kw'>meuse_sf</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,]
+#&gt; 2 2 POINT(0 1) POINT (1 1)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse</span>, package <span class='op'>=</span> <span class='st'>"sp"</span><span class='op'>)</span>
+<span class='va'>meuse_sf</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>28992</span>, agr <span class='op'>=</span> <span class='st'>"constant"</span><span class='op'>)</span>
+<span class='va'>meuse_sf</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,<span class='op'>]</span>
 </div><div class='output co'>#&gt; Simple feature collection with 3 features and 12 fields
 #&gt; Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity
 #&gt; geometry type:  POINT
@@ -286,7 +286,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;                geometry
 #&gt; 1 POINT (181072 333611)
 #&gt; 2 POINT (181025 333558)
-#&gt; 3 POINT (181165 333537)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>meuse_sf</span>)
+#&gt; 3 POINT (181165 333537)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse_sf</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
@@ -310,40 +310,40 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA's   : 1                                       </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/edzer/sp'>sp</a></span>)
-<span class='kw'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span>))
-<span class='kw'>x1</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span>
-<span class='kw'>x2</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>0.4</span>
-<span class='kw'>x3</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>0.7</span>
-<span class='kw'>y</span> <span class='op'>=</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='kw'>y1</span> <span class='op'>=</span> <span class='kw'>x1</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='kw'>y3</span> <span class='op'>=</span> <span class='kw'>x3</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='kw'>m</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>0</span>), <span class='fl'>5</span>, <span class='fl'>2</span>, byrow = <span class='fl'>TRUE</span>)
-<span class='kw'>z</span> <span class='op'>=</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='kw'>m</span>
-<span class='kw'>z1</span> <span class='op'>=</span> <span class='kw'>x1</span> <span class='op'>+</span> <span class='kw'>m</span>
-<span class='kw'>z2</span> <span class='op'>=</span> <span class='kw'>x2</span> <span class='op'>+</span> <span class='kw'>m</span>
-<span class='kw'>z3</span> <span class='op'>=</span> <span class='kw'>x3</span> <span class='op'>+</span> <span class='kw'>m</span>
-<span class='kw'>p1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>x</span>[<span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,]), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>x2</span>), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>x3</span>),
-   <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>y</span>[<span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,]), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>y1</span>), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>x1</span>), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>y3</span>)), <span class='st'>"ID1"</span>)
-<span class='kw'>p2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>( <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>z</span>[<span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,]), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>z2</span>), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>z3</span>), <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span>(<span class='kw'>z1</span>)),
-  <span class='st'>"ID2"</span>)
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://r-forge.r-project.org/projects/rgeos'>"rgeos"</a></span>)) {
-  <span class='kw'>r</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/comment-functions.html'>createSPComment</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>p1</span>,<span class='kw'>p2</span>)))
-  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='kw'>r</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='kw'>r</span><span class='op'>@</span>polygons[[<span class='fl'>1</span>]])
-  <span class='fu'><a href='https://rdrr.io/r/base/scan.html'>scan</a></span>(text = <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span>(<span class='kw'>r</span><span class='op'>@</span>polygons[[<span class='fl'>1</span>]]), quiet = <span class='fl'>TRUE</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://r-spatial.github.io/sf'>sf</a></span>)
-  <span class='kw'>a</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>r</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>a</span>)
-}
+#&gt;  NA's   : 1                                       </div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>x1</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span>
+<span class='va'>x2</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.4</span>
+<span class='va'>x3</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.7</span>
+<span class='va'>y</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>3</span>
+<span class='va'>y1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='fl'>3</span>
+<span class='va'>y3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='fl'>3</span>
+<span class='va'>m</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fl'>5</span>, <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>z</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>m</span>
+<span class='va'>z1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>m</span>
+<span class='va'>z2</span> <span class='op'>=</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='va'>m</span>
+<span class='va'>z3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='va'>m</span>
+<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x3</span><span class='op'>)</span>,
+   <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y3</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"ID1"</span><span class='op'>)</span>
+<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z3</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z1</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='st'>"ID2"</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://r-forge.r-project.org/projects/rgeos/'>"rgeos"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>r</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/comment-functions.html'>createSPComment</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>p1</span>,<span class='va'>p2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/scan.html'>scan</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
+  <span class='va'>a</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-5, (SVN revision 640)</span>
 #&gt; <span class='message'> GEOS runtime version: 3.8.1-CAPI-1.13.3 </span>
 #&gt; <span class='message'> Linking to sp version: 1.4-2 </span>
 #&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
 #&gt;  MULTIPOLYGON:2  
-#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span>(<span class='kw'>meuse</span>, ask = <span class='fl'>FALSE</span>, echo = <span class='fl'>FALSE</span>)
+#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span><span class='op'>(</span><span class='va'>meuse</span>, ask <span class='op'>=</span> <span class='cn'>FALSE</span>, echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on Bessel 1841 ellipsoid in CRS definition,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>meuse</span>))
+#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
 #&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
 #&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
@@ -367,7 +367,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  Fw     :10   Mean   : 290.3                      
 #&gt;  Ab     : 8   3rd Qu.: 450.0                      
 #&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA's   : 1                                       </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>meuse.grid</span>))
+#&gt;  NA's   : 1                                       </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
 #&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
 #&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
@@ -381,26 +381,26 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt;  +proj=ster...:   0  
 #&gt;                      
 #&gt;                      
-#&gt;                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>meuse.area</span>))
+#&gt;                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.area</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>meuse.riv</span>))
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.riv</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           geometry
 #&gt;  POLYGON      :1  
 #&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='fu'>st_as_sf</span>(<span class='fu'><a href='as.html'>as</a></span>(<span class='kw'>meuse.riv</span>, <span class='st'>"SpatialLines"</span>)))
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.riv</span>, <span class='st'>"SpatialLines"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           geometry
 #&gt;  LINESTRING   :1  
 #&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='kw'>pol.grd</span> <span class='op'>=</span> <span class='fu'><a href='as.html'>as</a></span>(<span class='kw'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span>)
+#&gt;  +proj=ster...:0  </div><div class='input'><span class='va'>pol.grd</span> <span class='op'>=</span> <span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span><span class='op'>)</span>
 <span class='co'># summary(st_as_sf(pol.grd))</span>
 <span class='co'># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://www.spatstat.org'>spatstat</a></span>)) {
-  <span class='kw'>g</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span>(<span class='kw'>gorillas</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://www.spatstat.org'>spatstat</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>g</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>gorillas</span><span class='op'>)</span>
   <span class='co'># select only the points:</span>
-  <span class='kw'>g</span>[<span class='fu'><a href='st_is.html'>st_is</a></span>(<span class='kw'>g</span>, <span class='st'>"POINT"</span>),]
-}
+  <span class='va'>g</span><span class='op'>[</span><span class='fu'><a href='st_is.html'>st_is</a></span><span class='op'>(</span><span class='va'>g</span>, <span class='st'>"POINT"</span><span class='op'>)</span>,<span class='op'>]</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.data</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘nlme’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:dplyr’:</span>
 #&gt; <span class='message'></span>
@@ -423,11 +423,11 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; 8  point major    dry 2006-02-01 POINT (583167.2 676730.5)
 #&gt; 9  point major    dry 2006-02-03 POINT (583584.5 677207.1)
 #&gt; 10 point major    dry 2006-02-13 POINT (583117.8 676850.3)
-#&gt; 11 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://www.spatstat.org'>spatstat</a></span>)) {
- <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>chicago</span>)
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>chicago</span>)[<span class='st'>"label"</span>])
- <span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_as_sf</span>(<span class='kw'>chicago</span>)[<span class='op'>-</span><span class='fl'>1</span>,<span class='st'>"label"</span>])
-}
+#&gt; 11 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://www.spatstat.org'>spatstat</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span>
+ <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
+ <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span>,<span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='img'><img src='st_as_sf-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='st_as_sf-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

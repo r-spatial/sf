@@ -182,7 +182,7 @@
 <li><p><code>st_union</code> gains an argument <code>is_coverage</code>, which, when set to <code>TRUE</code>, leads to much faster unioning in case features form a coverage (polygons don’t overlap); <a href='https://github.com/r-spatial/sf/issues/1462'>#1462</a> by Don Baston</p></li>
 <li><p>fix <code><a href="../reference/gdal_utils.html">gdal_utils("translate")</a></code> locking input file; <a href='https://github.com/r-spatial/sf/issues/1452'>#1452</a></p></li>
 <li><p><code>st_make_grid</code> no longer selects cells intersecting with <code>x</code>; <a href='https://github.com/r-spatial/sf/issues/1447'>#1447</a></p></li>
-<li><p>use <code><a href="https://rdrr.io/pkg/s2/man/s2_closest_feature.html">s2::s2_dwithin_matrix</a></code> in <code>st_is_within_distance</code>; <a href='https://github.com/r-spatial/sf/issues/1367'>#1367</a></p></li>
+<li><p>use <code><a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html">s2::s2_dwithin_matrix</a></code> in <code>st_is_within_distance</code>; <a href='https://github.com/r-spatial/sf/issues/1367'>#1367</a></p></li>
 </ul>
 </div>
     <div id="version-09-5" class="section level1">
@@ -192,7 +192,7 @@
 <ul>
 <li><p>Only when package <code>s2</code> &gt;= 1.0.1 is available: support for spherical geometry operators (predicates, transformers, measures, nearest point/feature) for geographic coordinates in package <code>s2</code> is now by default switched off, and can be switched on by <code><a href="../reference/s2.html">sf_use_s2(TRUE)</a></code>; see <a href="https://www.r-spatial.org/r/2020/06/17/s2.html" class="uri">https://www.r-spatial.org/r/2020/06/17/s2.html</a> and vignette sf7. It is planned to be switched on by default in sf 1.0-0.</p></li>
 <li><p>drop Z and/or M coordinate in <code><a href="../reference/s2.html">st_as_s2()</a></code>, with message</p></li>
-<li><p>geometry predicates and transformers gain an … argument to pass <code><a href="https://rdrr.io/pkg/s2/man/s2_options.html">s2::s2_options()</a></code></p></li>
+<li><p>geometry predicates and transformers gain an … argument to pass <code><a href="https://r-spatial.github.io/s2/reference/s2_options.html">s2::s2_options()</a></code></p></li>
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> now ensures the geometry column sticks to the back rather than the front of the data frame; <a href='https://github.com/r-spatial/sf/issues/1425'>#1425</a></p></li>
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/rename.html">dplyr::rename()</a></code> now preserves the active geometry column even when it is renamed; <a href='https://github.com/r-spatial/sf/issues/1431'>#1431</a></p></li>
 <li><p>proj units query adjusted to PROJ 7.1.0 release; <a href='https://github.com/r-spatial/sf/issues/1434'>#1434</a></p></li>
@@ -496,7 +496,7 @@
 <li><p><code>plot.sf</code> and <code>st_as_grob</code> (used by ggplot2) are robust against misspecified ring directions (holes that have the same direction as the exterior rings), by using <code>rule = "evenodd"</code>; <a href='https://github.com/r-spatial/sf/issues/540'>#540</a></p></li>
 <li><p>functions depending on <code>liblwgeom</code> (<code>st_make_valid</code>, <code>st_geohash</code>, <code>st_plit</code>) have been moved to their own package, <a href="https://github.com/r-spatial/lwgeom" class="uri">https://github.com/r-spatial/lwgeom</a>; argument <code>use_gdal</code> of <code>st_transform</code> has been deprecated, instead one can use <code><a href="https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html">lwgeom::st_transform_proj</a></code>; sf no longer tries to link to liblwgeom; <a href='https://github.com/r-spatial/sf/issues/509'>#509</a>, <a href='https://github.com/r-spatial/sf/issues/537'>#537</a>, <a href='https://github.com/r-spatial/sf/issues/487'>#487</a></p></li>
 <li><p><code>st_read</code>, <code>st_sf</code> and <code>st_sfc</code> gain a parameter <code>check_ring_dir</code> (default: <code>FALSE</code>) that checks ring directions and corrects to: exterior counter clockwise, holes clockwise, when seen from above.</p></li>
-<li><p>get rid of <code><a href="https://rdrr.io/pkg/classInt/man/classIntervals.html">classInt::classIntervals</a></code> warning if number of unique values is smaller than the number of breaks asked for</p></li>
+<li><p>get rid of <code><a href="https://r-spatial.github.io/classInt/reference/classIntervals.html">classInt::classIntervals</a></code> warning if number of unique values is smaller than the number of breaks asked for</p></li>
 </ul>
 </div>
     <div id="version-05-5" class="section level1">
@@ -510,7 +510,7 @@
 <li><p><code>st_as_sfc</code> can read EWKT; <a href='https://github.com/r-spatial/sf/issues/530'>#530</a></p></li>
 <li><p>argument <code>max.plot</code> takes its default from <code><a href="https://rdrr.io/r/base/options.html">options(sf_max.plot=n)</a></code>, if present; <a href='https://github.com/r-spatial/sf/issues/516'>#516</a></p></li>
 <li><p><code>plot.sf</code> gets an arguments <code>pal</code> to specify a color palette function; <a href='https://github.com/r-spatial/sf/issues/526'>#526</a></p></li>
-<li><p><code>plot.sf</code> gets arguments <code>breaks</code> and <code>nbreaks</code>; add support for <code><a href="https://rdrr.io/pkg/classInt/man/classIntervals.html">classInt::classIntervals</a></code> styles for finding class intervals (using <code>breaks</code>)</p></li>
+<li><p><code>plot.sf</code> gets arguments <code>breaks</code> and <code>nbreaks</code>; add support for <code><a href="https://r-spatial.github.io/classInt/reference/classIntervals.html">classInt::classIntervals</a></code> styles for finding class intervals (using <code>breaks</code>)</p></li>
 <li><p>add <code>st_as_sf</code> methods for <code>ppp</code>, <code>lpp</code> and <code>psp</code> objects from spatstat.</p></li>
 <li><p>allow for direct route to proj.4 ignoring GDAL (requiring liblwgeom); <a href='https://github.com/r-spatial/sf/issues/509'>#509</a>, <a href='https://github.com/r-spatial/sf/issues/511'>#511</a></p></li>
 <li><p>add <code>print</code> method for <code>crs</code> objects; <a href='https://github.com/r-spatial/sf/issues/517'>#517</a></p></li>
@@ -705,7 +705,7 @@
 <li><p>import and export <code>magrittr::%&gt;%</code></p></li>
 <li><p>support ggplot’ing geometrycollections</p></li>
 <li><p>drop C++11 requirement, allowing build for older R versions</p></li>
-<li><p>add <code>st_proj_info</code>, modelled after <code><a href="https://rdrr.io/pkg/rgdal/man/projInfo.html">rgdal::projInfo</a></code></p></li>
+<li><p>add <code>st_proj_info</code>, modelled after <code><a href="http://rgdal.r-forge.r-project.org/reference/projInfo.html">rgdal::projInfo</a></code></p></li>
 <li><p>overwriting datasets with <code>st_write</code> is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.</p></li>
 <li><p><code>st_write</code> gains an argument, <code>update</code>, which when <code>TRUE</code> will try to append to existing datasets (<a href='https://github.com/r-spatial/sf/issues/204'>#204</a>)</p></li>
 <li><p>added list of corresponding function for migration from sp, rgdal and rgeos to sf at <a href="https://github.com/edzer/sfr/wiki/migrating" class="uri">https://github.com/edzer/sfr/wiki/migrating</a></p></li>

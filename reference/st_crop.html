@@ -158,13 +158,13 @@
     <p>crop an sf object to a specific rectangle</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_crop</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_crop</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, <span class='kw'>xmin</span>, <span class='kw'>ymin</span>, <span class='kw'>xmax</span>, <span class='kw'>ymax</span>)
+<span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span>, <span class='va'>xmin</span>, <span class='va'>ymin</span>, <span class='va'>xmax</span>, <span class='va'>ymax</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>st_crop</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,13 +204,13 @@
     <p>setting arguments <code>xmin</code>, <code>ymin</code>, <code>xmax</code> and <code>ymax</code> implies that argument <code>y</code> gets ignored.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>box</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(xmin = <span class='fl'>0</span>, ymin = <span class='fl'>0</span>, xmax = <span class='fl'>1</span>, ymax = <span class='fl'>1</span>)
-<span class='kw'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span>(<span class='fu'><a href='geos_unary.html'>st_buffer</a></span>(<span class='fu'><a href='st.html'>st_point</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.5</span>)), <span class='fl'>.6</span>))
-<span class='kw'>pol_sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span>(a=<span class='fl'>1</span>, geom=<span class='kw'>pol</span>)
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_crop</span>(<span class='kw'>pol</span>, <span class='kw'>box</span>))
-</div><div class='img'><img src='st_crop-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_crop</span>(<span class='kw'>pol_sf</span>, <span class='fu'><a href='st_bbox.html'>st_bbox</a></span>(<span class='kw'>box</span>)))
+    <pre class="examples"><div class='input'><span class='va'>box</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fl'>0</span>, ymin <span class='op'>=</span> <span class='fl'>0</span>, xmax <span class='op'>=</span> <span class='fl'>1</span>, ymax <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_buffer</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>pol_sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span>, geom<span class='op'>=</span><span class='va'>pol</span><span class='op'>)</span>
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>pol</span>, <span class='va'>box</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='st_crop-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>pol_sf</span>, <span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>box</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='img'><img src='st_crop-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># alternative:</span>
-<span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_crop</span>(<span class='kw'>pol</span>, xmin = <span class='fl'>0</span>, ymin = <span class='fl'>0</span>, xmax = <span class='fl'>1</span>, ymax = <span class='fl'>1</span>))
+<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_crop</span><span class='op'>(</span><span class='va'>pol</span>, xmin <span class='op'>=</span> <span class='fl'>0</span>, ymin <span class='op'>=</span> <span class='fl'>0</span>, xmax <span class='op'>=</span> <span class='fl'>1</span>, ymax <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='img'><img src='st_crop-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

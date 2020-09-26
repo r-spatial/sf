@@ -126,17 +126,17 @@
 </ul>
 <p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identical to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://r-spatial.github.io/sf">sf</a></span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.1</span>
-<span class="kw">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, package=<span class="st">"sf"</span>))
-<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpBz9UdW/temp_libpath32a36767c938/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdIuoDf/temp_libpath34ce28e45012/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="co">## geographic CRS: NAD27</span>
-<span class="kw">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span>(<span class="kw">nc</span>, <span class="fl">2264</span>)
-<span class="kw">nc</span>[<span class="fl">1</span>,]
+<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">2264</span><span class="op">)</span>
+<span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>
 <span class="co">## Simple feature collection with 1 feature and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -145,12 +145,11 @@
 <span class="co">##    AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
 <span class="co">## 1 0.114     1.442  1825    1825 Ashe 37009  37009        5  1091     1      10</span>
 <span class="co">##   BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">## 1  1364     0      19 MULTIPOLYGON (((1270813 913...</span>
-</pre></div>
+<span class="co">## 1  1364     0      19 MULTIPOLYGON (((1270813 913...</span></pre></div>
 <p>prints the first record.</p>
 <p>Many of the tidyverse/dplyr verbs have methods for <code>sf</code> objects. This means that given that both <code>sf</code> and <code>dplyr</code> are loaded, manipulations such as selecting a single attribute will return an <code>sf</code> object:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="co">## </span>
 <span class="co">## Attaching package: 'dplyr'</span>
 <span class="co">## The following objects are masked from 'package:stats':</span>
@@ -159,7 +158,7 @@
 <span class="co">## The following objects are masked from 'package:base':</span>
 <span class="co">## </span>
 <span class="co">##     intersect, setdiff, setequal, union</span>
-<span class="kw">nc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">NWBIR74</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">2</span>)
+<span class="va">nc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">NWBIR74</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -167,42 +166,38 @@
 <span class="co">## projected CRS:  NAD83 / North Carolina (ftUS)</span>
 <span class="co">##   NWBIR74                       geometry</span>
 <span class="co">## 1      10 MULTIPOLYGON (((1270813 913...</span>
-<span class="co">## 2      10 MULTIPOLYGON (((1340553 959...</span>
-</pre></div>
+<span class="co">## 2      10 MULTIPOLYGON (((1340553 959...</span></pre></div>
 <p>which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to <code>data.frame</code> first, this drops geometry list-columns:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">nc</span> <span class="op">%&gt;%</span> <span class="kw">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">NWBIR74</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fl">2</span>)
+<span class="va">nc</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">NWBIR74</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="co">##   NWBIR74</span>
 <span class="co">## 1      10</span>
-<span class="co">## 2      10</span>
-</pre></div>
+<span class="co">## 2      10</span></pre></div>
 <div id="subsetting-feature-sets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subsetting-feature-sets" class="anchor"></a>Subsetting feature sets</h2>
 <p>We can subset feature sets by using the square bracket notation</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">nc</span>[<span class="fl">1</span>, <span class="st">"NWBIR74"</span>]
+<span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"NWBIR74"</span><span class="op">]</span>
 <span class="co">## Simple feature collection with 1 feature and 1 field</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: 1193283 ymin: 913326.4 xmax: 1340553 ymax: 1044143</span>
 <span class="co">## projected CRS:  NAD83 / North Carolina (ftUS)</span>
 <span class="co">##   NWBIR74                       geometry</span>
-<span class="co">## 1      10 MULTIPOLYGON (((1270813 913...</span>
-</pre></div>
+<span class="co">## 1      10 MULTIPOLYGON (((1270813 913...</span></pre></div>
 <p>and use the <code>drop</code> argument to drop geometries:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">nc</span>[<span class="fl">1</span>, <span class="st">"NWBIR74"</span>, drop = <span class="fl">TRUE</span>]
+<span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"NWBIR74"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span>
 <span class="co">## [1] 10</span>
 <span class="co">## attr(,"class")</span>
-<span class="co">## [1] "numeric"</span>
-</pre></div>
+<span class="co">## [1] "numeric"</span></pre></div>
 <p>but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">Ashe</span> <span class="op">=</span> <span class="kw">nc</span>[<span class="kw">nc</span><span class="op">$</span><span class="kw">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,]
-<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="kw">Ashe</span>)
+<span class="va">Ashe</span> <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,<span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">Ashe</span><span class="op">)</span>
 <span class="co">## [1] "sf"         "data.frame"</span>
-<span class="kw">nc</span>[<span class="kw">Ashe</span>,]
+<span class="va">nc</span><span class="op">[</span><span class="va">Ashe</span>,<span class="op">]</span>
 <span class="co">## Simple feature collection with 4 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -217,12 +212,11 @@
 <span class="co">## 1       10  1364     0      19 MULTIPOLYGON (((1270813 913...</span>
 <span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
 <span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
-<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span>
-</pre></div>
+<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></pre></div>
 <p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection by using predicate <code>st_touches</code> (overlapping features don’t touch):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">Ashe</span> <span class="op">=</span> <span class="kw">nc</span>[<span class="kw">nc</span><span class="op">$</span><span class="kw">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,]
-<span class="kw">nc</span>[<span class="kw">Ashe</span>, op = <span class="kw">st_touches</span>]
+<span class="va">Ashe</span> <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,<span class="op">]</span>
+<span class="va">nc</span><span class="op">[</span><span class="va">Ashe</span>, op <span class="op">=</span> <span class="va">st_touches</span><span class="op">]</span>
 <span class="co">## Simple feature collection with 3 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -235,11 +229,10 @@
 <span class="co">##    NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
 <span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
 <span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
-<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span>
-</pre></div>
+<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></pre></div>
 <p>using <code>dplyr</code>, we can do the same by calling the predicate directly:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">nc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lengths.html">lengths</a></span>(<span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span>(<span class="kw">.</span>, <span class="kw">Ashe</span>)) <span class="op">&gt;</span> <span class="fl">0</span>)
+<span class="va">nc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html">lengths</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">Ashe</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 3 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -252,16 +245,15 @@
 <span class="co">##   NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
 <span class="co">## 1      10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
 <span class="co">## 2     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
-<span class="co">## 3      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span>
-</pre></div>
+<span class="co">## 3      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></pre></div>
 </div>
 <div id="aggregating-or-summarizing-feature-sets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aggregating-or-summarizing-feature-sets" class="anchor"></a>Aggregating or summarizing feature sets</h2>
 <p>Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with <code>Ashe</code> to the remaining ones. We can do this by</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="kw">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregate.sf.html">aggregate</a></span>(<span class="kw">nc</span>[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SID74"</span>, <span class="st">"BIR74"</span>)], <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(Ashe_nb = <span class="fu"><a href="https://rdrr.io/r/base/lengths.html">lengths</a></span>(<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span>(<span class="kw">nc</span>, <span class="kw">Ashe</span>)) <span class="op">&gt;</span> <span class="fl">0</span>), <span class="kw">sum</span>)
-(<span class="kw">a</span> <span class="op">&lt;-</span> <span class="kw">a</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(frac74 = <span class="kw">SID74</span> <span class="op">/</span> <span class="kw">BIR74</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">frac74</span>))
+<span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregate.sf.html">aggregate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SID74"</span>, <span class="st">"BIR74"</span><span class="op">)</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Ashe_nb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lengths.html">lengths</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">Ashe</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span>
+<span class="op">(</span><span class="va">a</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>frac74 <span class="op">=</span> <span class="va">SID74</span> <span class="op">/</span> <span class="va">BIR74</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">frac74</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## geometry type:  GEOMETRY</span>
 <span class="co">## dimension:      XY</span>
@@ -270,9 +262,8 @@
 <span class="co">##         frac74                       geometry</span>
 <span class="co">## 1 0.0020406588 MULTIPOLYGON (((2314392 161...</span>
 <span class="co">## 2 0.0009922276 POLYGON ((1402673 837726.8,...</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="kw">a</span>[<span class="fl">2</span>], col = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span>(<span class="fl">.8</span>), <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span>(<span class="fl">.5</span>)))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw">Ashe</span>), border = <span class="st">'#ff8888'</span>, add = <span class="fl">TRUE</span>, lwd = <span class="fl">2</span>)
-</pre></div>
+<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fl">.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">Ashe</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">'#ff8888'</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
 <div id="joining-two-feature-sets-based-on-attributes" class="section level2">
@@ -280,9 +271,9 @@
 <a href="#joining-two-feature-sets-based-on-attributes" class="anchor"></a>Joining two feature sets based on attributes</h2>
 <p>The usual join verbs base R (<code>merge</code>) and of dplyr (<code>left_join</code>, etc) work for <code>sf</code> objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a <code>data.frame</code> (or similar), not an <code>sf</code> object:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(a = <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom = <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)), <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>))))
-<span class="kw">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(a = <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/sp/man/merge.html">merge</a></span>(<span class="kw">x</span>, <span class="kw">y</span>)
+<span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/sp/man/merge.html">merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 1 feature and 1 field</span>
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
@@ -290,7 +281,7 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">##   a    geometry</span>
 <span class="co">## 1 2 POINT (1 1)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/sp/man/merge.html">merge</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, all = <span class="fl">TRUE</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/sp/man/merge.html">merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 3 features and 1 field (with 1 geometry empty)</span>
 <span class="co">## geometry type:  GEOMETRY</span>
 <span class="co">## dimension:      XY</span>
@@ -300,7 +291,7 @@
 <span class="co">## 1 1              POINT (0 0)</span>
 <span class="co">## 2 2              POINT (1 1)</span>
 <span class="co">## 3 3 GEOMETRYCOLLECTION EMPTY</span>
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span>(<span class="kw">x</span>, <span class="kw">y</span>)
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 <span class="co">## Joining, by = "a"</span>
 <span class="co">## Simple feature collection with 2 features and 1 field (with 1 geometry empty)</span>
 <span class="co">## geometry type:  POINT</span>
@@ -309,25 +300,23 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">##   a        geom</span>
 <span class="co">## 1 2 POINT (1 1)</span>
-<span class="co">## 2 3 POINT EMPTY</span>
-</pre></div>
+<span class="co">## 2 3 POINT EMPTY</span></pre></div>
 </div>
 <div id="joining-two-feature-sets-based-on-geometries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#joining-two-feature-sets-based-on-geometries" class="anchor"></a>Joining two feature sets based on geometries</h2>
 <p>For joining based on spatial intersections (of any kind), <code>st_join</code> is used:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span>(a = <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, geom = <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span>(<span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1</span>)), <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">2</span>)), <span class="fu"><a href="../reference/st.html">st_point</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">3</span>))))
-<span class="kw">y</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span>(<span class="kw">x</span>, <span class="fl">0.1</span>)
-<span class="kw">x</span> <span class="op">=</span> <span class="kw">x</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,]
-<span class="kw">y</span> <span class="op">=</span> <span class="kw">y</span>[<span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,]
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw">x</span>), xlim = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>, <span class="fl">3.5</span>))
-<span class="fu"><a href="../reference/plot.html">plot</a></span>(<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span>(<span class="kw">y</span>), add = <span class="fl">TRUE</span>)
-</pre></div>
+<span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, geom <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">0.1</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">=</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span>
+<span class="va">y</span> <span class="op">=</span> <span class="va">y</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
+<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">3.5</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>The join method is a left join, retaining all records of the first attribute:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="fu"><a href="../reference/st_join.html">st_join</a></span>(<span class="kw">x</span>, <span class="kw">y</span>)
+<span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 2 fields</span>
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
@@ -336,7 +325,7 @@
 <span class="co">##   a.x a.y        geom</span>
 <span class="co">## 1   1  NA POINT (1 1)</span>
 <span class="co">## 2   2   2 POINT (2 2)</span>
-<span class="fu"><a href="../reference/st_join.html">st_join</a></span>(<span class="kw">y</span>, <span class="kw">x</span>)
+<span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 2 fields</span>
 <span class="co">## geometry type:  POLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -344,12 +333,11 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">##   a.x a.y                           geom</span>
 <span class="co">## 2   2   2 POLYGON ((2.1 2, 2.099863 1...</span>
-<span class="co">## 3   3  NA POLYGON ((3.1 3, 3.099863 2...</span>
-</pre></div>
+<span class="co">## 3   3  NA POLYGON ((3.1 3, 3.099863 2...</span></pre></div>
 <p>and the geometry retained is that of the first argument.</p>
 <p>The spatial join predicate can be controlled with any function compatible to <code>st_intersects</code> (the default), e.g.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="../reference/st_join.html">st_join</a></span>(<span class="kw">x</span>, <span class="kw">y</span>, join = <span class="kw">st_covers</span>) <span class="co"># no matching y records: points don't cover circles</span>
+<span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="va">st_covers</span><span class="op">)</span> <span class="co"># no matching y records: points don't cover circles</span>
 <span class="co">## Simple feature collection with 2 features and 2 fields</span>
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
@@ -358,7 +346,7 @@
 <span class="co">##   a.x a.y        geom</span>
 <span class="co">## 1   1  NA POINT (1 1)</span>
 <span class="co">## 2   2  NA POINT (2 2)</span>
-<span class="fu"><a href="../reference/st_join.html">st_join</a></span>(<span class="kw">y</span>, <span class="kw">x</span>, join = <span class="kw">st_covers</span>) <span class="co"># matches for those circles covering a point</span>
+<span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, join <span class="op">=</span> <span class="va">st_covers</span><span class="op">)</span> <span class="co"># matches for those circles covering a point</span>
 <span class="co">## Simple feature collection with 2 features and 2 fields</span>
 <span class="co">## geometry type:  POLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -366,8 +354,7 @@
 <span class="co">## CRS:            NA</span>
 <span class="co">##   a.x a.y                           geom</span>
 <span class="co">## 2   2   2 POLYGON ((2.1 2, 2.099863 1...</span>
-<span class="co">## 3   3  NA POLYGON ((3.1 3, 3.099863 2...</span>
-</pre></div>
+<span class="co">## 3   3  NA POLYGON ((3.1 3, 3.099863 2...</span></pre></div>
 </div>
   </div>
 

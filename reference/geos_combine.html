@@ -158,9 +158,9 @@
     <p>Combine several feature geometries into one, without unioning or resolving internal boundaries</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_combine</span>(<span class='kw'>x</span>)
+    <pre class="usage"><span class='fu'>st_combine</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='fu'>st_union</span>(<span class='kw'>x</span>, <span class='kw'>y</span>, <span class='kw'>...</span>, by_feature = <span class='fl'>FALSE</span>, is_coverage = <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>st_union</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>...</span>, by_feature <span class='op'>=</span> <span class='cn'>FALSE</span>, is_coverage <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,18 +201,18 @@
     <div class='dont-index'><p><a href='geos_binary_ops.html'>st_intersection</a>, <a href='geos_binary_ops.html'>st_difference</a>, <a href='geos_binary_ops.html'>st_sym_difference</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"shape/nc.shp"</span>, package=<span class='st'>"sf"</span>))
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpBz9UdW/temp_libpath32a36767c938/sf/shape/nc.shp' using driver `ESRI Shapefile'
+    <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpdIuoDf/temp_libpath34ce28e45012/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'>st_combine</span>(<span class='kw'>nc</span>)
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'>st_combine</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; geographic CRS: NAD27</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span>(<span class='fu'>st_union</span>(<span class='kw'>nc</span>))
+#&gt; geographic CRS: NAD27</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_union</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_union assumes that they are planar</span></div><div class='img'><img src='geos_combine-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
