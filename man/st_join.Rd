@@ -30,7 +30,7 @@ st_filter(x, y, ...)
 
 \item{join}{geometry predicate function with the same profile as \link{st_intersects}; see details}
 
-\item{...}{arguments passed on to the \code{join} or \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}}
+\item{...}{for \code{st_join}: arguments passed on to the \code{join} function or to \code{st_intersection} when \code{largest} is \code{TRUE}; for \code{st_filter} arguments passed on to the \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}}
 
 \item{suffix}{length 2 character vector; see \link[base]{merge}}
 

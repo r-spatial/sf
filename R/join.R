@@ -69,7 +69,7 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' @param y object of class \code{sf}
 #' @param join geometry predicate function with the same profile as \link{st_intersects}; see details
 #' @param suffix length 2 character vector; see \link[base]{merge}
-#' @param ... arguments passed on to the \code{join} or \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}
+#' @param ... for \code{st_join}: arguments passed on to the \code{join} function or to \code{st_intersection} when \code{largest} is \code{TRUE}; for \code{st_filter} arguments passed on to the \code{.predicate} function, e.g. \code{prepared}, or a pattern for \link{st_relate}
 #' @param left logical; if \code{TRUE} return the left join, otherwise an inner join; see details.
 #' see also \link[dplyr:mutate-joins]{left_join}
 #' @param largest logical; if \code{TRUE}, return \code{x} features augmented with the fields of \code{y} that have the largest overlap with each of the features of \code{x}; see https://github.com/r-spatial/sf/issues/578
@@ -134,7 +134,7 @@ st_join.sf = function(x, y, join = st_intersects, ..., suffix = c(".x", ".y"),
 	i = if (largest) {
 		x$.grp_a = seq_len(nrow(x))
 		y$.grp_b = seq_len(nrow(y))
-		st_intersection(x, y)
+		st_intersection(x, y, ...)
 	} else 
 		join(x, y, ...)
 
