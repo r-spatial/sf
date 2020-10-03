@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* `st_as_text` method for `crs` objects can return projjson (if GDAL >= 3.1.0 and PROJ > 6.2.0)
+
 * `st_transform` no longer warns on conversions like `"+proj=ob_tran +o_proj=longlat +o_lat_p=45 +o_lon_p=30"`
 
 * `st_as_wkb` takes `srid` from `wkt` field of `crs` when `input` field doesn't contain it; #1490

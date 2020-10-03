@@ -7,7 +7,7 @@
 \alias{st_as_text.sfc}
 \title{Return Well-known Text representation of simple feature geometry or coordinate reference system}
 \usage{
-\method{st_as_text}{crs}(x, ..., pretty = FALSE)
+\method{st_as_text}{crs}(x, ..., projjson = FALSE, pretty = FALSE)
 
 st_as_text(x, ...)
 
@@ -19,6 +19,8 @@ st_as_text(x, ...)
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{crs}}
 
 \item{...}{modifiers; in particular \code{digits} can be passed to control the number of digits used}
+
+\item{projjson}{logical; if TRUE, return projjson form (requires GDAL 3.1 and PROJ 6.2), else return well-known-text form}
 
 \item{pretty}{logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system}
 

@@ -160,7 +160,7 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
 #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-// #if GDAL_VERSION_NUM <= 2020000
+// #if GDAL_VERSION_NUM <= 2020000 FIXME: breaks on gh actions
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
@@ -179,8 +179,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(12);
-	Rcpp::CharacterVector names(12);
+	Rcpp::List out(13);
+	Rcpp::CharacterVector names(13);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -251,6 +251,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	bool yx = srs->EPSGTreatsAsLatLong() || srs->EPSGTreatsAsNorthingEasting();
 	out(11) = Rcpp::LogicalVector(yx);
 	names(11) = "yx";
+
+	// ProjJson:
+#if GDAL_VERSION_NUM > 3010000
+	if (srs->exportToPROJJSON(&cp, NULL) == OGRERR_NONE) {
+		out(12) = Rcpp::CharacterVector::create(cp);
+		CPLFree(cp);
+	} else
+		out(12) = "";
+#endif
+	names(12) = "ProjJson";
 
 	set_error_handler();
 

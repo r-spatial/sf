@@ -311,14 +311,22 @@ proj4string = function(x) {
 
 
 #' @name st_as_text
+#' @param projjson logical; if TRUE, return projjson form (requires GDAL 3.1 and PROJ 6.2), else return well-known-text form
 #' @param pretty logical; if TRUE, print human-readable well-known-text representation of a coordinate reference system
 #' @export
-st_as_text.crs = function(x, ..., pretty = FALSE) {
-	if (is.na(x)) return(NA)
-	if (pretty)
-		crs_parameters(x)$WktPretty
-	else
-		crs_parameters(x)$Wkt
+st_as_text.crs = function(x, ..., projjson = FALSE, pretty = FALSE) {
+	if (is.na(x))
+		NA_character_
+	else if (projjson) {
+		if (sf_extSoftVersion()["GDAL"] < "3.1.0" || sf_extSoftVersion()["proj.4"] < "6.2.0")
+			stop("ProjJson requires GDAL >= 3.1.0 and PROJ >= 6.2.0")
+		crs_parameters(x)$ProjJson
+	} else { # wkt:
+		if (pretty)
+			crs_parameters(x)$WktPretty
+		else
+			crs_parameters(x)$Wkt
+	}
 }
 
 
