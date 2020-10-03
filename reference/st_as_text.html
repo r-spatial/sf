@@ -159,7 +159,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for crs</span>
-<span class='fu'>st_as_text</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, pretty <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>st_as_text</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, projjson <span class='op'>=</span> <span class='cn'>FALSE</span>, pretty <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='fu'>st_as_text</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -179,6 +179,10 @@
     <tr>
       <th>...</th>
       <td><p>modifiers; in particular <code>digits</code> can be passed to control the number of digits used</p></td>
+    </tr>
+    <tr>
+      <th>projjson</th>
+      <td><p>logical; if TRUE, return projjson form (requires GDAL 3.1 and PROJ 6.2), else return well-known-text form</p></td>
     </tr>
     <tr>
       <th>pretty</th>

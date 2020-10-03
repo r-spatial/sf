@@ -157,6 +157,7 @@
 <a href="#version-09-7" class="anchor"></a>version 0.9-7<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>st_as_text</code> method for <code>crs</code> objects can return projjson (if GDAL &gt;= 3.1.0 and PROJ &gt; 6.2.0)</p></li>
 <li><p><code>st_transform</code> no longer warns on conversions like <code>"+proj=ob_tran +o_proj=longlat +o_lat_p=45 +o_lon_p=30"</code></p></li>
 <li><p><code>st_as_wkb</code> takes <code>srid</code> from <code>wkt</code> field of <code>crs</code> when <code>input</code> field doesn’t contain it; <a href='https://github.com/r-spatial/sf/issues/1490'>#1490</a></p></li>
 <li><p><code>plot.sf</code> adds <code>key.pos=0</code> option to run the logic behind the key without plotting it; <a href='https://github.com/r-spatial/sf/issues/1487'>#1487</a></p></li>
