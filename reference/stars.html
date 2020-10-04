@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-7</span>
       </span>
     </div>
 
@@ -158,7 +158,7 @@
     <p>functions only exported to be used internally by stars</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.get_layout</span><span class='op'>(</span><span class='va'>bb</span>, <span class='va'>n</span>, <span class='va'>total_size</span>, <span class='va'>key.pos</span>, <span class='va'>key.length</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>.get_layout</span><span class='op'>(</span><span class='va'>bb</span>, <span class='va'>n</span>, <span class='va'>total_size</span>, <span class='va'>key.pos</span>, <span class='va'>key.length</span>, mfrow <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>.degAxis</span><span class='op'>(</span><span class='va'>side</span>, <span class='va'>at</span>, <span class='va'>labels</span>, <span class='va'>...</span>, <span class='va'>lon</span>, <span class='va'>lat</span>, <span class='va'>ndiscr</span>, <span class='va'>reset</span><span class='op'>)</span>
 
@@ -208,6 +208,10 @@
     <tr>
       <th>key.length</th>
       <td><p>ignore</p></td>
+    </tr>
+    <tr>
+      <th>mfrow</th>
+      <td><p>length-2 integer vector with number of rows, columns</p></td>
     </tr>
     <tr>
       <th>side</th>
