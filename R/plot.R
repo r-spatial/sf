@@ -667,25 +667,32 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param n ignore
 #' @param total_size ignore
 #' @param key.length ignore
-.get_layout = function(bb, n, total_size, key.pos, key.length) {
+#' @param mfrow length-2 integer vector with number of rows, columns
+.get_layout = function(bb, n, total_size, key.pos, key.length, mfrow = NULL) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1, it will be a return value, "optimally" placed
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
 	if (isTRUE(st_is_longlat(bb)))
 		asp = asp / cos(mean(bb[c(2,4)]) * pi /180)
-	size = function(nrow, n, asp) {
-		ncol = ceiling(n / nrow)
-		xsize = total_size[1] / ncol
-		ysize = xsize  * asp
-		if (xsize * ysize * n > prod(total_size)) {
-			ysize = total_size[2] / nrow
-			xsize = ysize / asp
+	if (is.null(mfrow)) {
+		size = function(nrow, n, asp) {
+			ncol = ceiling(n / nrow)
+			xsize = total_size[1] / ncol
+			ysize = xsize  * asp
+			if (xsize * ysize * n > prod(total_size)) {
+				ysize = total_size[2] / nrow
+				xsize = ysize / asp
+			}
+			xsize * ysize
 		}
-		xsize * ysize
+		sz = vapply(1:n, function(x) size(x, n, asp), 0.0)
+		nrow = which.max(sz)
+		ncol = ceiling(n / nrow)
+	} else {
+		stopifnot(is.numeric(mfrow), length(mfrow) == 2)
+		nrow = mfrow[1]
+		ncol = mfrow[2]
 	}
-	sz = vapply(1:n, function(x) size(x, n, asp), 0.0)
-	nrow = which.max(sz)
-	ncol = ceiling(n / nrow)
 
 	ret = list()
 	ret$mfrow = c(nrow, ncol)
