@@ -471,17 +471,17 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 	for (int i = 0; i < GDALGetRasterCount(hSrcDS); i++) {
 		poBand = GDALGetRasterBand(hSrcDS, i + 1);
 		GDALGetRasterNoDataValue(poBand, &success);
-		if (success)
+		if (success) {
 			psWarpOptions->padfSrcNoDataReal[i] = GDALGetRasterNoDataValue(poBand, &success);
-			// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
-		else
+			// Rcpp::Rcout << "1: " << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		 } else
 			memcpy(&(psWarpOptions->padfSrcNoDataReal[i]), &d, sizeof(double));
 		poBand = GDALGetRasterBand(hDstDS, i + 1);
 		GDALGetRasterNoDataValue(poBand, &success);
-		if (success)
-			psWarpOptions->padfDstNoDataReal[0] = GDALGetRasterNoDataValue(poBand, &success);
-			// Rcpp::Rcout << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
-		else // NaN:
+		if (success) {
+			psWarpOptions->padfDstNoDataReal[i] = GDALGetRasterNoDataValue(poBand, &success);
+			// Rcpp::Rcout << "2: " << GDALGetRasterNoDataValue(poBand, &success) << std::endl;
+		} else // NaN:
 			memcpy(&(psWarpOptions->padfDstNoDataReal[i]), &d, sizeof(double));
 	}
 
