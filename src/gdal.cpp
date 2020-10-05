@@ -278,8 +278,9 @@ int srid_from_crs(Rcpp::List crs) {
 	if (ref && ref->AutoIdentifyEPSG() == OGRERR_NONE &&
 			(cp = ref->GetAuthorityCode(NULL)) != NULL) {
 		ret_val = atoi(cp);
+	}
+	if (ref != NULL)
 		ref->Release();
-	} 
 	set_error_handler();
 	return(ret_val);
 }
