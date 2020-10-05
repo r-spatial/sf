@@ -1085,6 +1085,18 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// CPL_extract
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy);
+RcppExport SEXP _sf_CPL_extract(SEXP inputSEXP, SEXP xySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type xy(xySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_extract(input, xy));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_read_wkb
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
@@ -1283,6 +1295,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_inv_geotransform", (DL_FUNC) &_sf_CPL_inv_geotransform, 1},
     {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 6},
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 12},
+    {"_sf_CPL_extract", (DL_FUNC) &_sf_CPL_extract, 2},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_CPL_get_z_range", (DL_FUNC) &_sf_CPL_get_z_range, 2},

@@ -333,6 +333,10 @@ CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s,
     invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create, only_create))
 }
 
+CPL_extract <- function(input, xy) {
+    .Call('_sf_CPL_extract', PACKAGE = 'sf', input, xy)
+}
+
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
     .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }

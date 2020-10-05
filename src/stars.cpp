@@ -608,3 +608,49 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	GDALClose( (GDALDatasetH) poDstDS );
 	return;
 }
+
+// [[Rcpp::export]]
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy) {
+	// mostly taken from gdal/apps/gdallocationinfo.cpp
+    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(input[0], GA_ReadOnly,
+		NULL, NULL, NULL);
+    if (poDataset == NULL) {
+		Rcout << "trying to read file: " << input[0] << std::endl; // #nocov
+        stop("file not found"); // #nocov
+	}
+
+	NumericMatrix ret(xy.nrow(), poDataset->GetRasterCount());
+
+	double gt[6];
+	poDataset->GetGeoTransform(gt);
+	double gt_inv[6];
+	int retval = GDALInvGeoTransform(gt, gt_inv);
+
+	for (int j = 0; j < poDataset->GetRasterCount(); j++) {
+		GDALRasterBand *poBand = poDataset->GetRasterBand(j+1);
+		int bSuccess;
+		double dfOffset = poBand->GetOffset(&bSuccess);
+		double dfScale  = poBand->GetScale(&bSuccess);
+		for (int i = 0; i < xy.nrow(); i++) {
+			double dfGeoX = xy(i, 0);
+			double dfGeoY = xy(i, 1);
+			int iPixel = static_cast<int>(floor( gt_inv[0] + gt_inv[1] * dfGeoX + gt_inv[2] * dfGeoY));
+			int iLine  = static_cast<int>(floor( gt_inv[3] + gt_inv[4] * dfGeoX + gt_inv[5] * dfGeoY));
+			double pixel;
+			if (iPixel < 0 || iLine < 0
+            	|| iPixel >= poDataset->GetRasterXSize()
+            	|| iLine  >= poDataset->GetRasterYSize()) {
+				pixel = NA_REAL;
+			} else {
+				if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
+                              &pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
+					stop("Error reading!");
+			}
+			if (dfOffset != 0.0 || dfScale != 1.0)
+				double pixel = pixel * dfScale + dfOffset;
+			ret(i, j) = pixel;
+		}
+	}
+	GDALClose(poDataset);
+	return ret;
+}

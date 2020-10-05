@@ -10,6 +10,7 @@
 \alias{gdal_subdatasets}
 \alias{gdal_polygonize}
 \alias{gdal_rasterize}
+\alias{gdal_extract}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
 \usage{
 gdal_read(
@@ -62,6 +63,8 @@ gdal_polygonize(
 )
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
+
+gdal_extract(f, pts)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -107,6 +110,10 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 \item{connect8}{logical; if \code{TRUE} use 8 connection algorithm, rather than 4}
 
 \item{sf}{object of class \code{sf}}
+
+\item{f}{gdal raster data source filename}
+
+\item{pts}{points matrix}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.

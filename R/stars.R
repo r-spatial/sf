@@ -286,3 +286,11 @@ gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character
 	gdal_write(x, file = file, driver = driver, geotransform = gt)
 	CPL_rasterize(file, driver, st_geometry(sf), as.double(as.data.frame(sf)[[1]]), options, NA_real_);
 }
+
+#' @export
+#' @name gdal
+#' @param f gdal raster data source filename
+#' @param pts points matrix
+gdal_extract = function(f, pts) {
+	CPL_extract(f, pts)
+}
