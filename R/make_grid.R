@@ -107,7 +107,6 @@ st_make_grid = function(x,
 ## - covers a bounding box st_bbox(obj)
 ## - contains pt
 ## - has x spacing dx: the shortest distance between x coordinates with identical y coordinate
-## - selects geometries intersecting with obj
 make_hex_grid = function(obj, pt, dx, what, flat_topped = TRUE) {
 
 	dy = sqrt(3) * dx / 2
