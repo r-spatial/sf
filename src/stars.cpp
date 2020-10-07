@@ -165,16 +165,17 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		if (has_offset)
 			offset = poBand->GetOffset(NULL);
 		units[i] = poBand->GetUnitType();
-		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
-			for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
-					j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
-					j++) {
-				if (equals_na(vec[j], nodatavalue[0], poBand->GetRasterDataType()))
-					vec[j] = NA_REAL; // #nocov
-				else
-					vec[j] = (vec[j] * scale) + offset;
-			}
+		// if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) { 
+		// outcommented because of NaN handling, https://github.com/r-spatial/stars/issues/333
+		for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
+				j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
+				j++) {
+			if (equals_na(vec[j], nodatavalue[0], poBand->GetRasterDataType()))
+				vec[j] = NA_REAL; // #nocov
+			else
+				vec[j] = (vec[j] * scale) + offset;
 		}
+		// }
 		checkUserInterrupt();
 	}
 	vec.attr("units") = units;
