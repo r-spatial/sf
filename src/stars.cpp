@@ -607,7 +607,8 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 }
 
 double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line, 
-						int iPixel, int iLine, double RasterXSize, double RasterYSize) {
+						int iPixel, int iLine, double RasterXSize, double RasterYSize,
+						int na_set, double na_value) {
 
 	double pixels[4];
 	double dY  = Line - iLine; // [0, 1) over a raster cell
@@ -642,10 +643,14 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0) != CE_None)
 		stop("Error reading!");
 	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
-	return 	pixels[0] * (1-dX) * (1-dY) +
-			pixels[1] * dX     * (1-dY) +
-			pixels[2] * (1-dX) * dY +
-			pixels[3] * dX     * dY;
+	if (na_set && pixels[0] == na_value || pixels[1] == na_value ||
+			pixels[2] == na_value || pixels[3] == na_value)
+		return na_value;
+	else
+		return	pixels[0] * (1-dX) * (1-dY) +
+				pixels[1] * dX     * (1-dY) +
+				pixels[2] * (1-dX) * dY +
+				pixels[3] * dX     * dY;
 }
 
 // [[Rcpp::export]]
@@ -684,20 +689,19 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 			int iPixel = static_cast<int>(floor( Pixel ));
 			int iLine  = static_cast<int>(floor( Line ));
 			double pixel;
-			if (iPixel < 0 || iLine < 0
-				|| iPixel >= poDataset->GetRasterXSize()
-				|| iLine  >= poDataset->GetRasterYSize()) { // outside bbox:
+			if (iPixel < 0 || iLine < 0 ||
+					iPixel >= poDataset->GetRasterXSize() ||
+					iLine  >= poDataset->GetRasterYSize()) // outside bbox:
 				pixel = NA_REAL;
-			} else { // read pixel:
-				if (interpolate) {
+			else { // read pixel:
+				if (interpolate)
 					// stop("interpolate not implemented");
 					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
-						poDataset->GetRasterXSize(), poDataset->GetRasterYSize());
-				} else {
-					if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
+						poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
+						nodata_set, nodata);
+				else if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
 						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
-						stop("Error reading!");
-				}
+					stop("Error reading!");
 				if (nodata_set && pixel == nodata)
 					pixel = NA_REAL;
 				else if (dfOffset != 0.0 || dfScale != 1.0)

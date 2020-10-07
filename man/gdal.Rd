@@ -64,7 +64,7 @@ gdal_polygonize(
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 
-gdal_extract(f, pts)
+gdal_extract(f, pts, bilinear = FALSE)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -114,6 +114,8 @@ gdal_extract(f, pts)
 \item{f}{gdal raster data source filename}
 
 \item{pts}{points matrix}
+
+\item{bilinear}{logical; use bilinear interpolation, rather than nearest neighbor?}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.
