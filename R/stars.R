@@ -291,6 +291,6 @@ gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character
 #' @name gdal
 #' @param f gdal raster data source filename
 #' @param pts points matrix
-gdal_extract = function(f, pts) {
-	CPL_extract(f, pts)
+gdal_extract = function(f, pts, bilinear = FALSE) {
+	CPL_extract(f, pts, as.logical(bilinear))
 }

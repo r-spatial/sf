@@ -75,14 +75,14 @@ List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 	NumericVector gt_r(6);
 	for (int i = 0; i < 6; i++)
 		gt_r(i) = gt[i];
-	ret(2) =  gt_r;
+	ret(2) = gt_r;
 
 	double gt_inv[6];
 	int retval = GDALInvGeoTransform(gt, gt_inv);
 	NumericVector gt_r_inv(6);
 	for (int i = 0; i < 6; i++)
 		gt_r_inv(i) = retval ? gt_inv[i] : NA_REAL;
-	ret(3) =  gt_r_inv;
+	ret(3) = gt_r_inv;
 
 	ret.attr("names") = CharacterVector::create("nbands", "crs", "gt", "gt_inv");
 
@@ -166,9 +166,6 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 			offset = poBand->GetOffset(NULL);
 		units[i] = poBand->GetUnitType();
 		if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
-
-
-			// for (R_xlen_t j = 0; j < Rf_xlength(vec); j++)
 			for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
 					j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
 					j++) {
@@ -288,18 +285,18 @@ List get_rat(GDALRasterAttributeTable *tbl) {
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
 		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
 // reads and returns data set metadata, and if read_data is true, adds data array
-    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
+	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
 		NULL);
-    if (poDataset == NULL) {
+	if (poDataset == NULL) {
 		Rcout << "trying to read file: " << fname[0] << std::endl; // #nocov
-        stop("file not found"); // #nocov
+		stop("file not found"); // #nocov
 	}
 
 	CharacterVector Driver = CharacterVector::create(
-        poDataset->GetDriver()->GetDescription(),
-        poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ));
+		poDataset->GetDriver()->GetDescription(),
+		poDataset->GetDriver()->GetMetadataItem( GDAL_DMD_LONGNAME ));
 
 	/*
 	if (poDataset->GetRasterCount() == 0)
@@ -609,14 +606,57 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	return;
 }
 
+double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line, 
+						int iPixel, int iLine, double RasterXSize, double RasterYSize) {
+
+	double pixels[4];
+	double dY  = Line - iLine; // [0, 1) over a raster cell
+	double dX  = Pixel - iPixel; // [0, 1) over a raster cell
+	if ((dY < 0.5 && iLine > 0) || (iLine == RasterYSize - 1)) // where to start reading
+		iLine -= 1;
+	if ((dX < 0.5 && iPixel > 0) || (iPixel == RasterXSize - 1))
+		iPixel -= 1;
+
+	// x:
+	if (Pixel < 0.5)
+		dX = 0.0;
+	else if (Pixel > RasterXSize - 0.5)
+		dX = 1.0;
+	else if (dX < 0.5)
+		dX += 0.5;
+	else
+		dX -= 0.5;
+
+	// y:
+	if (Line < 0.5)
+		dY = 0.0;
+	else if (Line > RasterYSize - 0.5)
+		dY = 1.0;
+	else if (dY < 0.5)
+		dY += 0.5;
+	else
+		dY -= 0.5;
+
+	// read:
+	if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 2, 2,
+			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0) != CE_None)
+		stop("Error reading!");
+	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
+	return 	pixels[0] * (1-dX) * (1-dY) +
+			pixels[1] * dX     * (1-dY) +
+			pixels[2] * (1-dX) * dY +
+			pixels[3] * dX     * dY;
+}
+
 // [[Rcpp::export]]
-NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy) {
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpolate = false) {
 	// mostly taken from gdal/apps/gdallocationinfo.cpp
-    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(input[0], GA_ReadOnly,
+
+	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(input[0], GA_ReadOnly,
 		NULL, NULL, NULL);
-    if (poDataset == NULL) {
+	if (poDataset == NULL) {
 		Rcout << "trying to read file: " << input[0] << std::endl; // #nocov
-        stop("file not found"); // #nocov
+		stop("file not found"); // #nocov
 	}
 
 	NumericMatrix ret(xy.nrow(), poDataset->GetRasterCount());
@@ -631,23 +671,38 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy) {
 		int bSuccess;
 		double dfOffset = poBand->GetOffset(&bSuccess);
 		double dfScale  = poBand->GetScale(&bSuccess);
+		double nodata = NA_REAL;
+		int nodata_set = 0;
+		poBand->GetNoDataValue(&nodata_set);
+		if (nodata_set)
+			nodata = poBand->GetNoDataValue(NULL);
 		for (int i = 0; i < xy.nrow(); i++) {
 			double dfGeoX = xy(i, 0);
 			double dfGeoY = xy(i, 1);
-			int iPixel = static_cast<int>(floor( gt_inv[0] + gt_inv[1] * dfGeoX + gt_inv[2] * dfGeoY));
-			int iLine  = static_cast<int>(floor( gt_inv[3] + gt_inv[4] * dfGeoX + gt_inv[5] * dfGeoY));
+			double Pixel = gt_inv[0] + gt_inv[1] * dfGeoX + gt_inv[2] * dfGeoY;
+			double Line  = gt_inv[3] + gt_inv[4] * dfGeoX + gt_inv[5] * dfGeoY;
+			int iPixel = static_cast<int>(floor( Pixel ));
+			int iLine  = static_cast<int>(floor( Line ));
 			double pixel;
 			if (iPixel < 0 || iLine < 0
-            	|| iPixel >= poDataset->GetRasterXSize()
-            	|| iLine  >= poDataset->GetRasterYSize()) {
+				|| iPixel >= poDataset->GetRasterXSize()
+				|| iLine  >= poDataset->GetRasterYSize()) { // outside bbox:
 				pixel = NA_REAL;
-			} else {
-				if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
-                              &pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
-					stop("Error reading!");
+			} else { // read pixel:
+				if (interpolate) {
+					// stop("interpolate not implemented");
+					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
+						poDataset->GetRasterXSize(), poDataset->GetRasterYSize());
+				} else {
+					if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
+						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
+						stop("Error reading!");
+				}
+				if (nodata_set && pixel == nodata)
+					pixel = NA_REAL;
+				else if (dfOffset != 0.0 || dfScale != 1.0)
+					pixel = pixel * dfScale + dfOffset;
 			}
-			if (dfOffset != 0.0 || dfScale != 1.0)
-				double pixel = pixel * dfScale + dfOffset;
 			ret(i, j) = pixel;
 		}
 	}
