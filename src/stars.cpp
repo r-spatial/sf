@@ -646,7 +646,7 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 	if (na_set && pixels[0] == na_value || pixels[1] == na_value ||
 			pixels[2] == na_value || pixels[3] == na_value)
 		return na_value;
-	else
+	else // https://en.wikipedia.org/wiki/Bilinear_interpolation#Unit_square
 		return	pixels[0] * (1-dX) * (1-dY) +
 				pixels[1] * dX     * (1-dY) +
 				pixels[2] * (1-dX) * dY +
