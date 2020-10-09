@@ -393,14 +393,21 @@ largest_ring = function(x) {
 
 #' @export
 st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
-	if (isTRUE(st_is_longlat(x)))
-		warning("st_centroid does not give correct centroids for longitude/latitude data")
 	if (of_largest_polygon) {
 		multi = which(sapply(x, inherits, what = "MULTIPOLYGON") & lengths(x) > 1)
 		if (length(multi))
 			x[multi] = largest_ring(x[multi])
 	}
-	st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
+	longlat = isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2()) {
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required, please install it first")
+		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
+	} else { 
+		if (longlat)
+			warning("st_centroid does not give correct centroids for longitude/latitude data")
+		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
+	}
 }
 
 #' @export

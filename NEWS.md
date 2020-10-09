@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* use `s2_centroid` for geographical coordinates if `sf_use_s2()` is `TRUE`.
+
 * `st_as_text` method for `crs` objects can return projjson (if GDAL >= 3.1.0 and PROJ > 6.2.0)
 
 * `st_transform` no longer warns on conversions like `"+proj=ob_tran +o_proj=longlat +o_lat_p=45 +o_lon_p=30"`

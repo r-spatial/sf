@@ -183,8 +183,8 @@ st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
-#' @param s2_model character; polygon/polylin model; one of 
-#' "OPEN", "SEMI_OPEN", and "CLOSED"; see Details.
+#' @param s2_model character; polygon/polyline model; one of 
+#' "open", "semi-open" or "closed"; see Details.
 #' @details for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
 #' @export
 st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "open")
