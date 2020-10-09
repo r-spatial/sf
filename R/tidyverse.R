@@ -77,6 +77,13 @@ ungroup.sf <- function(x, ...) {
 	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
+#' @name tidyverse
+rowwise.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
 .re_sf = function(x, sf_column_name, agr, geom = NULL) {
 	stopifnot(!inherits(x, "sf"), !missing(sf_column_name), !missing(agr))
 	# non-geom attribute names
@@ -481,6 +488,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "mutate", "sf")
 	register_s3_method("dplyr", "rename", "sf")
 	register_s3_method("dplyr", "right_join", "sf")
+	register_s3_method("dplyr", "rowwise", "sf")
 	register_s3_method("dplyr", "sample_frac", "sf")
 	register_s3_method("dplyr", "sample_n", "sf")
 	register_s3_method("dplyr", "select", "sf")

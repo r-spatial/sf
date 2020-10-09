@@ -6,6 +6,7 @@
 \alias{arrange.sf}
 \alias{group_by.sf}
 \alias{ungroup.sf}
+\alias{rowwise.sf}
 \alias{mutate.sf}
 \alias{transmute.sf}
 \alias{select.sf}
@@ -38,6 +39,8 @@ arrange.sf(.data, ..., .dots)
 group_by.sf(.data, ..., add = FALSE)
 
 ungroup.sf(x, ...)
+
+rowwise.sf(x, ...)
 
 mutate.sf(.data, ..., .dots)
 
