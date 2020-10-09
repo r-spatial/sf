@@ -61,8 +61,8 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 
 \item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
 
-\item{s2_model}{character; polygon/polylin model; one of 
-"OPEN", "SEMI_OPEN", and "CLOSED"; see Details.}
+\item{s2_model}{character; polygon/polyline model; one of 
+"open", "semi-open" or "closed"; see Details.}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 
