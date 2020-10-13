@@ -111,10 +111,14 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 
 #' @export
 st_interpolate_aw.sf = function(x, to, extensive, ...) {
-	if (!inherits(to, "sf") && !inherits(to, "sfc"))
-		stop("st_interpolate_aw requires geometries in argument to")
+	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
+		to <- try(st_as_sf(to))
+		if (inherits(to, "try-error"))
+			stop("st_interpolate_aw requires geometries in argument to")
+	}
+
 	if (! all_constant(x))
-		warning("st_interpolate_aw assumes attributes are constant over areas of x")
+		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to))
 	idx = attr(i, "idx")
 
@@ -124,21 +128,24 @@ st_interpolate_aw.sf = function(x, to, extensive, ...) {
 	two_d = which(st_dimension(i) == 2)
 	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
 
-	x$...area_s = unclass(st_area(x))
-	st_geometry(x) = NULL # sets back to data.frame
-	x = x[idx[,1], ]      # create st table
-	x$...area_st = unclass(st_area(i))
+	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
+	area_i = st_area(i)
+	x_st$...area_st = unclass(area_i)
 
-	target = sapply(split(st_area(i), idx[, 2]), sum)
-	df = data.frame(area = target, idx = as.integer(names(target)))
-	x$...area_t = merge(data.frame(idx = idx[,2]), df)$area
-
-	x = if (extensive)
-		lapply(x, function(v) v * x$...area_st / x$...area_s)
-	else
-		lapply(x, function(v) v * x$...area_st / x$...area_t)
-	x = aggregate(x, list(idx[,2]), sum)
-	df = st_sf(x, geometry = st_geometry(to)[x$Group.1])
-	df$...area_t = df$...area_st = df$...area_s = NULL
+	x_st = if (extensive) {
+			# compute area_s:
+			x_st$...area_s = unclass(st_area(x))[idx[,1]]
+			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_s)
+		} else {
+			# compute area_t:
+			target = sapply(split(area_i, idx[, 2]), sum) # and not st_area(to)?
+			df = data.frame(area = target, idx = as.integer(names(target)))
+			x_st$...area_t = merge(data.frame(idx = idx[,2]), df)$area
+			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_t)
+		}
+	x_st = aggregate(x_st, list(idx[,2]), sum)
+	df = st_sf(x_st, geometry = st_geometry(to)[x_st$Group.1])
+	# clean up:
+	df$...area_t = df$...area_st = df$...area_s = df$Group.1 = NULL
 	st_set_agr(df, "aggregate")
 }
