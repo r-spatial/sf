@@ -211,11 +211,10 @@ test_that("st_difference works with partially overlapping geometries", {
 	expect_equal(length(out1), 3)
 	expect_equal(nrow(out2), 3)
 	expect_equal(out1[[1]][[1]], correct_geom[[1]][[1]])
-	expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
-	expect_equal(out1[[3]][[1]], correct_geom[[3]][[1]])
-	#expect_equal(out2[[1]][[1]], correct_geom[[1]][[1]])
-	#expect_equal(out2[[2]][[1]], correct_geom[[2]][[1]])
-	#expect_equal(out2[[3]][[1]], correct_geom[[3]][[1]])
+	if (sf_extSoftVersion()["GEOS"] < "3.9.0") {
+	  expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
+	  expect_equal(out1[[3]][[1]], correct_geom[[3]][[1]])
+	}
 })
 
 test_that("st_difference works with fully contained geometries", {
