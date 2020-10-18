@@ -135,7 +135,8 @@ st_read.default = function(dsn, layer, ...) {
 		tr <- try(dsn <- as.character(dsn))
 		if (dsn_is_null || inherits(tr, "try-error"))
 			stop(paste("no st_read method available for objects of class", paste(class_dsn, collapse = ", ")))
-		else st_read.character(dsn, layer, ...)
+		else
+			st_read.character(dsn, layer, ...)
 	}
 }
 
