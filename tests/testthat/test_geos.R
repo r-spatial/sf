@@ -189,10 +189,17 @@ test_that("st_difference works with partially overlapping geometries", {
 	pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
 	in1 = st_sfc(list(pl1, pl2, pl3))
 	in2 = st_sf(order = c("A", "B", "C"), geometry = st_sfc(list(pl1, pl2, pl3), crs = 4326), agr = "constant")
-	correct_geom = st_sfc(list(
+	if (sf_extSoftVersion()["GEOS"] < "3.9.0") {
+	    correct_geom = st_sfc(list(
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0.5, 0, 1, 2, 1.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 1, 0.5), ncol = 2))),
 		st_polygon(list(matrix(c(0.75, 0, 1, 2, 1.25, 1, 0.75, 1.25, 1.25, 2.5, 1.25, 1.25, 1.5, 1.25), ncol = 2)))))
+        } else {
+	    correct_geom = st_sfc(list(
+		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
+		st_polygon(list(matrix(c(0, 1, 2, 1.5, 1, 0.5, 0, 0.5, 1.5, 0.5, 0.5, 1, 0.5, 0.5), ncol = 2))),
+		st_polygon(list(matrix(c(0, 1, 2, 1.25, 1, 0.75, 0, 1.25, 2.5, 1.25, 1.25, 1.5, 1.25, 1.25), ncol = 2)))))
+        }
 	# erase overlaps
 	out1 = st_difference(in1)
 	out2 = st_difference(in2)
@@ -211,10 +218,8 @@ test_that("st_difference works with partially overlapping geometries", {
 	expect_equal(length(out1), 3)
 	expect_equal(nrow(out2), 3)
 	expect_equal(out1[[1]][[1]], correct_geom[[1]][[1]])
-	if (sf_extSoftVersion()["GEOS"] < "3.9.0") {
-	  expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
-	  expect_equal(out1[[3]][[1]], correct_geom[[3]][[1]])
-	}
+	expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
+	expect_equal(out1[[3]][[1]], correct_geom[[3]][[1]])
 })
 
 test_that("st_difference works with fully contained geometries", {
