@@ -238,7 +238,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
 
-#' extract temporary zip directory
+# extract temporary zip directory
 proc_zip <- function(dsn){
 	# create unique directory so it can be deleted
 	tmp <- paste0(tempdir(),"/shp")
