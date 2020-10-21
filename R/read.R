@@ -241,7 +241,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 # extract temporary zip directory
 proc_zip <- function(dsn){
 	# create unique directory so it can be deleted
-	tmp <- paste0(tempdir(),"/shp")
+	tmp <- tempfile()
 	utils::unzip(dsn, exdir = tmp)
 	dsn <- tmp
 	return (dsn)
