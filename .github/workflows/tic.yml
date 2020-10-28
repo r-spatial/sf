@@ -86,6 +86,10 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt install libcurl4-openssl-dev
 
+      - name: "[Custom] [Stage] [Linux] Install pkgdown system lib req"
+        if: runner.os == 'Linux' && matrix.config.r == 'release'
+        run: sudo apt install libharfbuzz-dev libfribidi-dev
+
       - name: "[Custom block] [Linux] Install spatial libraries"
         if: runner.os == 'Linux'
         run: sudo apt install libgdal-dev libproj-dev libgeos-dev libudunits2-dev
