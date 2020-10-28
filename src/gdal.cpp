@@ -301,8 +301,11 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 		return Rcpp::LogicalVector::create(false);
 	} // #nocov end
 #if GDAL_VERSION_MAJOR >= 3
-	const char *options[2] = { NULL, NULL };
-	if (!axis_order_authority_compliant)
+	const char *options[3] = { NULL, NULL, NULL };
+	if (axis_order_authority_compliant) {
+		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=NO";
+		options[1] = "CRITERION=EQUIVALENT";
+	} else
 		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES";
 	bool b = (bool) srs1->IsSame(srs2, options);
 #else
