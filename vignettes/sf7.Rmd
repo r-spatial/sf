@@ -9,7 +9,7 @@ output:
       smooth_scroll: false
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{7. The s2geometry library for spherical geometry in sf}
+  %\VignetteIndexEntry{7. Spherical geometry in sf using s2geometry}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

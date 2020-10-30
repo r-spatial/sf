@@ -194,6 +194,7 @@ Package `mapview` creates interactive maps in html pages, using package `leaflet
 
 ```{r,eval=user_edzer_or_travis}
 library(mapview)
+mapviewOptions(fgb = FALSE)
 mapview(nc["BIR74"], col.regions = sf.colors(10))
 ```
 
