@@ -65,6 +65,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
   && apt-get install -y autoconf
 
 RUN git clone --depth 1 https://github.com/libgeos/geos.git
+RUN (cd geos; git pull)
 RUN (cd geos; libtoolize --force)
 RUN (cd geos; aclocal)
 RUN (cd geos; autoheader)
@@ -98,8 +99,8 @@ RUN cd proj-7.1.0 \
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.1.1
-ENV GDAL_VERSION_NAME 3.1.1
+ENV GDAL_VERSION 3.2.0
+ENV GDAL_VERSION_NAME 3.2.0rc1
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
