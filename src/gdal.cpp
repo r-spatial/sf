@@ -131,14 +131,18 @@ Rcpp::List fix_old_style(Rcpp::List crs) {
 	Rcpp::CharacterVector n = crs.attr("names");
 	if (n[0] == "epsg") { // create new: // #nocov start
 		Rcpp::List ret(2);
+		ret[0] = NA_STRING;
+		ret[1] = NA_STRING;
 		Rcpp::CharacterVector proj4string = crs[1];
-		ret[0] = proj4string[0]; // $input
+		if (! Rcpp::CharacterVector::is_na(proj4string[0])) {
+			ret[0] = proj4string[0]; // $input
 
-		OGRSpatialReference *srs = new OGRSpatialReference;
-		srs = handle_axis_order(srs);
-		handle_error(srs->SetFromUserInput((const char *) proj4string[0]));
-		ret[1] = wkt_from_spatial_reference(srs); // $wkt
-		delete srs;
+			OGRSpatialReference *srs = new OGRSpatialReference;
+			srs = handle_axis_order(srs);
+			handle_error(srs->SetFromUserInput((const char *) proj4string[0]));
+			ret[1] = wkt_from_spatial_reference(srs); // $wkt
+			delete srs;
+		}
 
 		Rcpp::CharacterVector names(2);
 		names(0) = "input";
@@ -301,8 +305,11 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 		return Rcpp::LogicalVector::create(false);
 	} // #nocov end
 #if GDAL_VERSION_MAJOR >= 3
-	const char *options[2] = { NULL, NULL };
-	if (!axis_order_authority_compliant)
+	const char *options[3] = { NULL, NULL, NULL };
+	if (axis_order_authority_compliant) {
+		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=NO";
+		options[1] = "CRITERION=STRICT";
+	} else
 		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES";
 	bool b = (bool) srs1->IsSame(srs2, options);
 #else
