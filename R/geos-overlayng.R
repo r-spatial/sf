@@ -1,6 +1,6 @@
 # nocov start
 is_overlayng <- function() {
-  	pl1 = st_polygon(list(matrix(c(0, 0, 2, 0, 1, 1, 0 ,0), byrow = TRUE, ncol=2)))
+	pl1 = st_polygon(list(matrix(c(0, 0, 2, 0, 1, 1, 0 ,0), byrow = TRUE, ncol=2)))
 	pl2 = st_polygon(list(matrix(c(0, 0.5, 2, 0.5, 1, 1.5, 0, 0.5), byrow = TRUE, ncol = 2)))
 	pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
 	in1 = st_sfc(list(pl1, pl2, pl3))
