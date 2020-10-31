@@ -281,7 +281,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.3, PROJ 7.1.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpL0FtTJ/temp_libpath363f3053af45/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmponHJ8g/temp_libpath397a7e252e2f/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -597,7 +597,7 @@
 <div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpL0FtTJ/temp_libpath363f3053af45/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmponHJ8g/temp_libpath397a7e252e2f/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
@@ -684,18 +684,18 @@
 <div id="benchmarks" class="section level3">
 <h3 class="hasAnchor">
 <a href="#benchmarks" class="anchor"></a>Benchmarks</h3>
-<p>Benchmarks show that <code><a href="../reference/st_read.html">st_read()</a></code> is faster than <code><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">rgdal::readOGR()</a></code>, for example:</p>
+<p>Benchmarks show that <code><a href="../reference/st_read.html">st_read()</a></code> is faster than <code><a href="https://rdrr.io/pkg/rgdal/man/readOGR.html">rgdal::readOGR()</a></code>, for example:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit">
-<span class="va">shp_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"."</span>, layer <span class="op">=</span> <span class="st">"biketrails"</span><span class="op">)</span>
+<span class="va">shp_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgdal/man/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"."</span>, layer <span class="op">=</span> <span class="st">"biketrails"</span><span class="op">)</span>
 <span class="va">shp_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"biketrails.shp"</span><span class="op">)</span>
 <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">kmz_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"BikePaths.kmz"</span><span class="op">)</span>
+  <span class="va">kmz_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgdal/man/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"BikePaths.kmz"</span><span class="op">)</span>
   <span class="va">kmz_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"BikePaths.kmz"</span><span class="op">)</span>
 <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
     <span class="va">kmz_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span>
     <span class="va">kmz_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span>
 <span class="op">}</span>
-<span class="va">kml_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span>
+<span class="va">kml_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rgdal/man/readOGR.html">readOGR</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span>
 <span class="va">kml_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span>
 <span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span><span class="fu">shp_read_sp</span><span class="op">(</span><span class="op">)</span>, <span class="fu">shp_read_sf</span><span class="op">(</span><span class="op">)</span>,
                                <span class="fu">kmz_read_sp</span><span class="op">(</span><span class="op">)</span>, <span class="fu">kmz_read_sf</span><span class="op">(</span><span class="op">)</span>,
@@ -716,7 +716,7 @@
  1178.42358    10    d
   189.29191    10  b   
    26.20221    10 a    </code></pre>
-<p>This shows that <code><a href="../reference/st_read.html">sf::st_read()</a></code> is substantially faster than <code><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">rgdal::readOGR()</a></code>: by a factor of 14-18 for the Shapefile and KML files, and more than a factor of 4 for the KMZ file used in this benchmark, respectively.</p>
+<p>This shows that <code><a href="../reference/st_read.html">sf::st_read()</a></code> is substantially faster than <code><a href="https://rdrr.io/pkg/rgdal/man/readOGR.html">rgdal::readOGR()</a></code>: by a factor of 14-18 for the Shapefile and KML files, and more than a factor of 4 for the KMZ file used in this benchmark, respectively.</p>
 </div>
 <div id="connection-to-spatial-databases" class="section level3">
 <h3 class="hasAnchor">
@@ -923,7 +923,7 @@
         CNTY_ID <span class="op">=</span> <span class="st">"identity"</span>, NAME <span class="op">=</span> <span class="st">"identity"</span>, FIPS <span class="op">=</span> <span class="st">"identity"</span>, FIPSNO <span class="op">=</span> <span class="st">"identity"</span>,
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpL0FtTJ/temp_libpath363f3053af45/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmponHJ8g/temp_libpath397a7e252e2f/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
