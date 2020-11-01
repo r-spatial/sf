@@ -128,30 +128,32 @@ Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs)
 }
 
 Rcpp::List fix_old_style(Rcpp::List crs) {
+	if (crs.attr("names") == R_NilValue)
+		Rcpp::stop("invalid crs object: no names");
 	Rcpp::CharacterVector n = crs.attr("names");
+	if (n.length() != 2)
+		Rcpp::stop("invalid crs object: wrong length");
 	if (n[0] == "epsg") { // create new: // #nocov start
 		Rcpp::List ret(2);
 		ret[0] = NA_STRING;
 		ret[1] = NA_STRING;
-		Rcpp::CharacterVector proj4string = crs[1];
+		Rcpp::CharacterVector proj4string = crs(1);
 		if (! Rcpp::CharacterVector::is_na(proj4string[0])) {
-			ret[0] = proj4string[0]; // $input
-
+			ret[0] = proj4string[0]; // copy to $input
 			OGRSpatialReference *srs = new OGRSpatialReference;
 			srs = handle_axis_order(srs);
-			handle_error(srs->SetFromUserInput((const char *) proj4string[0]));
-			ret[1] = wkt_from_spatial_reference(srs); // $wkt
+			handle_error(srs->SetFromUserInput((const char *) proj4string(0)));
+			ret[1] = wkt_from_spatial_reference(srs); // copy to $wkt
 			delete srs;
 		}
-
 		Rcpp::CharacterVector names(2);
 		names(0) = "input";
 		names(1) = "wkt";
 		ret.attr("names") = names;
 		ret.attr("class") = "crs";
-		return ret; // #nocov end
-	} else
-		return crs;
+		crs = ret; // #nocov end
+	}
+	return crs;
 }
 
 OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
