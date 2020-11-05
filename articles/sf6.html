@@ -124,19 +124,19 @@
 <h1 class="hasAnchor">
 <a href="#what-is-this-epsg-code-all-about" class="anchor"></a>What is this EPSG code all about?</h1>
 <p>EPSG stands for a maintained, well-understood set of spatial reference systems, maintained by the International Association of Oil &amp; Gass Producers (IOGP). From R, we can get access to the EPSG dataset programmatically (as a <code>data.frame</code>) by:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/make_EPSG.html">make_EPSG</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/make_EPSG.html">make_EPSG</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>see also the first vignette.</p>
 </div>
 <div id="how-does-sf-deal-with-secondary-geometry-columns" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-does-sf-deal-with-secondary-geometry-columns" class="anchor"></a>How does <code>sf</code> deal with secondary geometry columns?</h1>
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.3, PROJ 7.1.1</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
+<span class="co">## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 7.2.0</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span><span class="op">(</span><span class="va">nc</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">## Reading layer `nc.gpkg' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpzjmtSv/temp_libpath362145079113/sf/gpkg/nc.gpkg' using driver `GPKG'</span>
+<span class="co">## Reading layer `nc.gpkg' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpAq1mZw/temp_libpath2a7975521c/sf/gpkg/nc.gpkg' using driver `GPKG'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
@@ -163,14 +163,14 @@
 <span class="co">## 2      10   542     3      12 MULTIPOLYGON (((-81.23989 3...</span>
 <span class="co">##                        geom2</span>
 <span class="co">## 1  POINT (-81.49826 36.4314)</span>
-<span class="co">## 2 POINT (-81.12515 36.49101)</span></pre></div>
+<span class="co">## 2 POINT (-81.12515 36.49101)</span></code></pre></div>
 <p>We can switch the active geometry by using <code>st_geometry&lt;-</code> or <code>st_set_geometry</code>, as in</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="sf6_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"geom2"</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"geom2"</span>
+<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="sf6_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 </div>
 <div id="does-st_simplify-preserve-topology" class="section level1">
@@ -182,11 +182,11 @@
 <h1 class="hasAnchor">
 <a href="#why-do-dplyr-verbs-not-work-for-sf-objects" class="anchor"></a>Why do dplyr verbs not work for <code>sf</code> objects?</h1>
 <p>They do! However, many developers like to write scripts that never load packages but address all functions by the <code>sf::</code> prefix, as in</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">i</span> <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">sf1</span>, <span class="va">sf2</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">i</span> <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">sf1</span>, <span class="va">sf2</span><span class="op">)</span></code></pre></div>
 <p>This works up to the moment that a <code>dplyr</code> generic like <code>select</code> for an <code>sf</code> object is needed: should one call <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select</a></code> (won’t know it should search in package <code>sf</code>) or <code><a href="https://dplyr.tidyverse.org/reference/select.html">sf::select</a></code> (which doesn’t exist)? Neither works. One should in this case simply load <code>sf</code>, e.g. by</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="what-is-this-errorwarningmessage-about" class="section level1">
 <h1 class="hasAnchor">
@@ -196,14 +196,14 @@
 <a href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar" class="anchor"></a><em>although coordinates are longitude/latitude, xxx assumes that they are planar</em>
 </h2>
 <p>Most (but not all) of the geometry calculating routines used by <code>sf</code> come from the <a href="https://trac.osgeo.org/geos/">GEOS</a> library. This library considers coordinates in a two-dimensional, flat, Euclidian space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">polygon</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">120</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">240</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">polygon</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">120</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">240</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
         crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="va">pole</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">90</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="va">pole</span><span class="op">)</span>
 <span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">## Sparse geometry binary predicate list of length 1, where the predicate was `intersects'</span>
-<span class="co">##  1: (empty)</span></pre></div>
+<span class="co">##  1: (empty)</span></code></pre></div>
 <p>which gives a wrong result (no intersection).</p>
 </div>
 <div id="st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data" class="section level2">
@@ -211,11 +211,11 @@
 <a href="#st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data" class="anchor"></a><em>st_centroid does not give correct centroids for longitude/latitude data</em>
 </h2>
 <p>Similar to the above, centroids are computed assuming flat, 2D space:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">polygon</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">polygon</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="co">## Warning in st_centroid.sfc(polygon): st_centroid does not give correct centroids</span>
 <span class="co">## for longitude/latitude data</span>
-<span class="co">## POINT (120 80)</span></pre></div>
+<span class="co">## POINT (120 80)</span></code></pre></div>
 <p>where the centroid should have been the pole.</p>
 </div>
 <div id="dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-" class="section level2">
@@ -223,15 +223,15 @@
 <a href="#dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-" class="anchor"></a><em>dist is assumed to be in decimal degrees (arc_degrees).</em>
 </h2>
 <p>This message indicates that <code>sf</code> assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="va">buf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="fl">1</span><span class="op">)</span>
 <span class="co">## Warning in st_buffer.sfc(polygon, 1): st_buffer does not correctly buffer</span>
 <span class="co">## longitude/latitude data</span>
 <span class="co">## dist is assumed to be in decimal degrees (arc_degrees).</span>
 <span class="va">buf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/set_units.html">set_units</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Warning in st_buffer.sfc(polygon, units::set_units(1, degree)): st_buffer does</span>
-<span class="co">## not correctly buffer longitude/latitude data</span></pre></div>
+<span class="co">## not correctly buffer longitude/latitude data</span></code></pre></div>
 </div>
 </div>
   </div>
