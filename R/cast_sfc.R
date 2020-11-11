@@ -54,7 +54,7 @@ close_polygon_or_multipolygon = function(x, to) {
 			m = rbind(m, m[1,])
 		if (nrow(m) < 4)
 			stop("polygons require at least 4 points")
-		m
+		unclass(m)
 	}
 	add_attributes(
 		if (to_col == 2)
@@ -168,9 +168,10 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			stop("use smaller steps for st_cast; first cast to MULTILINESTRING or POLYGON?")
 	} else if (from_col < to_col) { # "horizontal", to the right: group
 		ret = if (from_col == 0)
-			lapply(unname(split(x, ids)), function(y) structure(do.call(rbind, y), class = class(x[[1]])))
-		else
-			lapply(unname(split(x, ids)), function(y) structure(y, class = class(x[[1]])))
+				lapply(unname(split(x, ids)), function(y) structure(do.call(rbind, y), 
+					class = class(x[[1]])))
+			else
+				lapply(unname(split(x, ids)), function(y) structure(y, class = class(x[[1]])))
 		ret = copy_sfc_attributes_from(x, ret)
 		reclass(ret, to, need_close(to))
 	} else if (from_col == 3 && to == "MULTILINESTRING") {
