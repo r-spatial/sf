@@ -183,6 +183,8 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>st_drivers</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                          name
+#&gt; ESRIC                   ESRIC
+#&gt; FITS                     FITS
 #&gt; PCIDSK                 PCIDSK
 #&gt; netCDF                 netCDF
 #&gt; PDS4                     PDS4
@@ -190,10 +192,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; JP2OpenJPEG       JP2OpenJPEG
 #&gt; PDF                       PDF
 #&gt; MBTiles               MBTiles
+#&gt; BAG                       BAG
 #&gt; EEDA                     EEDA
+#&gt; OGCAPI                 OGCAPI
 #&gt; ESRI Shapefile ESRI Shapefile
 #&gt; MapInfo File     MapInfo File
 #&gt; UK .NTF               UK .NTF
+#&gt; LVBAG                   LVBAG
 #&gt; OGR_SDTS             OGR_SDTS
 #&gt; S57                       S57
 #&gt; DGN                       DGN
@@ -271,6 +276,8 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; AVCE00                 AVCE00
 #&gt; HTTP                     HTTP
 #&gt;                                                                    long_name
+#&gt; ESRIC                                                     Esri Compact Cache
+#&gt; FITS                                         Flexible Image Transport System
 #&gt; PCIDSK                                                  PCIDSK Database File
 #&gt; netCDF                                            Network Common Data Format
 #&gt; PDS4                                            NASA Planetary Data System 4
@@ -278,10 +285,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; JP2OpenJPEG                       JPEG-2000 driver based on OpenJPEG library
 #&gt; PDF                                                           Geospatial PDF
 #&gt; MBTiles                                                              MBTiles
+#&gt; BAG                                               Bathymetry Attributed Grid
 #&gt; EEDA                                                   Earth Engine Data API
+#&gt; OGCAPI                                                                OGCAPI
 #&gt; ESRI Shapefile                                                ESRI Shapefile
 #&gt; MapInfo File                                                    MapInfo File
 #&gt; UK .NTF                                                              UK .NTF
+#&gt; LVBAG                                            Kadaster LV BAG Extract 2.0
 #&gt; OGR_SDTS                                                                SDTS
 #&gt; S57                                                           IHO S-57 (ENC)
 #&gt; DGN                                                         Microstation DGN
@@ -359,6 +369,8 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; AVCE00                                         Arc/Info E00 (ASCII) Coverage
 #&gt; HTTP                                                   HTTP Fetching Wrapper
 #&gt;                write  copy is_raster is_vector   vsi
+#&gt; ESRIC          FALSE FALSE      TRUE      TRUE  TRUE
+#&gt; FITS            TRUE FALSE      TRUE      TRUE FALSE
 #&gt; PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE
 #&gt; netCDF          TRUE  TRUE      TRUE      TRUE FALSE
 #&gt; PDS4            TRUE  TRUE      TRUE      TRUE  TRUE
@@ -366,10 +378,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE  TRUE
 #&gt; PDF             TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; MBTiles         TRUE  TRUE      TRUE      TRUE  TRUE
+#&gt; BAG             TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; EEDA           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; OGCAPI         FALSE FALSE      TRUE      TRUE  TRUE
 #&gt; ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; UK .NTF        FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; LVBAG          FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; OGR_SDTS       FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; S57             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; DGN             TRUE FALSE     FALSE      TRUE  TRUE
