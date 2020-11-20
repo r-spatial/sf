@@ -127,7 +127,7 @@ Get gdal, proj and geos from the main repos and udunits from the AUR:
 
 ```
 pacman -S gdal proj geos
-pacaur/yaourt/whatever -S udunits
+yay/pacaur/yaourt/whatever -S udunits
 ```
 
 #### Other
