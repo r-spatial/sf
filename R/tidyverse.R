@@ -213,6 +213,7 @@ slice.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @aliases summarise
 #' @param do_union logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.
+#' @param is_coverage logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
 #' @return an object of class \link{sf}
 #' @details
 #' In case one or more of the arguments (expressions) in the \code{summarise} call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of \code{do_union}.
@@ -224,7 +225,7 @@ slice.sf <- function(.data, ..., .dots) {
 #' nc.g %>% summarise(mean(AREA))
 #' nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
 #' nc %>% as.data.frame %>% summarise(mean(AREA))
-summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
+summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	precision = st_precision(.data)
 	crs = st_crs(.data)
@@ -241,7 +242,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 				i = dplyr::group_indices(.data)
 				# geom = st_geometry(.data)
 				geom = if (do_union)
-						lapply(sort(unique(i)), function(x) st_union(geom[i == x]))
+						lapply(sort(unique(i)), function(x) st_union(geom[i == x]), is_coverage = is_coverage)
 					else
 						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
 				geom = unlist(geom, recursive = FALSE)
@@ -250,7 +251,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE) {
 				do.call(st_sfc, c(geom, crs = list(crs), precision = precision))
 			} else { # single group:
 				if (do_union)
-					st_union(geom)
+					st_union(geom, is_coverage = is_coverage)
 				else
 					st_combine(geom)
 			}
