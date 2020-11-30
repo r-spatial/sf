@@ -242,7 +242,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 				i = dplyr::group_indices(.data)
 				# geom = st_geometry(.data)
 				geom = if (do_union)
-						lapply(sort(unique(i)), function(x) st_union(geom[i == x]), is_coverage = is_coverage)
+						lapply(sort(unique(i)), function(x) st_union(geom[i == x], is_coverage = is_coverage))
 					else
 						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
 				geom = unlist(geom, recursive = FALSE)
