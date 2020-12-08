@@ -70,7 +70,7 @@ Rcpp::List CPL_proj_info(int type) {
 			ans.attr("names") = Rcpp::CharacterVector::create("id", "to_meter",
 				"name");
 			int n = 0;
-#elif ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
+#if ((PROJ_VERSION_MAJOR == 7 && PROJ_VERSION_MINOR >= 1) || PROJ_VERSION_MAJOR > 7)
 			PROJ_UNIT_INFO** units;
 			units = proj_get_units_from_database(nullptr, nullptr, "linear", false, nullptr);
 			for (int i = 0; units && units[i]; i++) {
