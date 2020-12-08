@@ -234,6 +234,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 	ret = NextMethod()
 	if (!missing(do_union))
 		ret$do_union = NULL
+	if (!missing(is_coverage))
+		ret$is_coverage = NULL
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
 		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
@@ -242,7 +244,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 				i = dplyr::group_indices(.data)
 				# geom = st_geometry(.data)
 				geom = if (do_union)
-						lapply(sort(unique(i)), function(x) st_union(geom[i == x]), is_coverage = is_coverage)
+						lapply(sort(unique(i)), function(x) st_union(geom[i == x], is_coverage = is_coverage))
 					else
 						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
 				geom = unlist(geom, recursive = FALSE)
