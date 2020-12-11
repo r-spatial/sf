@@ -134,6 +134,8 @@
 
 * allow for PROJ >= 7; #1254
 
+* `st_geometry_type` accepts `by_geometry` argument; #1264
+
 # version 0.8-1
 
 * `st_as_sf.map` no longer requires `maptools` and `sp`; dropped dependency on maptools.
