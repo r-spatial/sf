@@ -120,10 +120,22 @@ st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 #' @export
 st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
-		lapply(x@lines,
-			function(y) st_multilinestring(lapply(y@Lines, function(z) z@coords)))
+		lapply(x@lines, function(y) {
+                    crd_list <- lapply(y@Lines, function(z) z@coords)
+                    crd_list1 <- lapply(crd_list, function(z) {
+                         if (nrow(z) < 2L) res <- z[0,]
+                         else res <- z
+                         res
+                    })
+                    st_multilinestring(crd_list1)
+                })
 	else
-		lapply(x@lines, function(y) st_linestring(y@Lines[[1]]@coords))
+		lapply(x@lines, function(y) {
+                    crds = y@Lines[[1]]@coords
+                    if (nrow(crds) < 2L) res = st_linestring()
+                    else res = st_linestring(crds)
+                    res
+                })
 	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string),
 		precision = precision))), x)
 }
