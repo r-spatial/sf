@@ -248,7 +248,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	names(9) = "proj4string";
 
 	// epsg
-	if (srs->GetAuthorityCode(NULL) != NULL)
+	if (srs->GetAuthorityCode(NULL) != NULL && strcmp(srs->GetAuthorityName(NULL), "EPSG") == 0)
 		out(10) = Rcpp::IntegerVector::create(atoi(srs->GetAuthorityCode(NULL)));
 	else
 		out(10) = Rcpp::IntegerVector::create(NA_INTEGER);
