@@ -62,9 +62,9 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libtiff5-dev
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-7.1.0.tar.gz
-RUN tar zxvf proj-7.1.0.tar.gz
-RUN cd proj-7.1.0 \
+RUN wget http://download.osgeo.org/proj/proj-7.2.0.tar.gz
+RUN tar zxvf proj-7.2.0.tar.gz
+RUN cd proj-7.2.0 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -84,8 +84,8 @@ RUN cd proj-7.1.0 \
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.1.1
-ENV GDAL_VERSION_NAME 3.1.1
+ENV GDAL_VERSION 3.2.0
+ENV GDAL_VERSION_NAME 3.2.0
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -106,7 +106,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 #  && ldconfig
 
 # GEOS:
-ENV GEOS_VERSION 3.8.1
+ENV GEOS_VERSION 3.9.0
 
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -150,17 +150,17 @@ RUN R CMD INSTALL stars
 RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 # after rgdal:
 RUN Rscript -e 'install.packages(c("XML"))'
-RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview"))'
+RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview", "s2"))'
 
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
-RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
-RUN echo echo
-RUN (cd stars; git pull)
-RUN R CMD build --no-manual stars
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
+#RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
+#RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
+#RUN echo echo
+#RUN (cd stars; git pull)
+#RUN R CMD build --no-manual stars
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
