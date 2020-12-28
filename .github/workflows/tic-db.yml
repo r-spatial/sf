@@ -90,7 +90,7 @@ jobs:
 
       - name: "[Stage] [Linux] Install curl"
         if: runner.os == 'Linux'
-        run: sudo apt install libcurl4-openssl-dev
+        run: sudo apt install libcurl4-openssl-dev libgit2-dev
 
       - name: "[Custom block] [Linux] Install spatial libraries"
         if: runner.os == 'Linux'
