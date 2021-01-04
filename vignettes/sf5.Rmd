@@ -16,7 +16,8 @@ vignette: >
 
 ```{r echo=FALSE, include=FALSE}
 tmap_fixed = TRUE
-user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
+#user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
+user_edzer_or_travis = FALSE
 ```
 This vignette describes the functions in `sf` that can help to plot 
 simple features. It tries to be complete about the plot methods 

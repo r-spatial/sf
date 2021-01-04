@@ -1,5 +1,7 @@
 # version 0.9-7
 
+* n-ary `st_intersection` skips failing geometries, rather than returning an error; #1549
+
 * use `s2_centroid` for geographical coordinates if `sf_use_s2()` is `TRUE`.
 
 * `st_as_text` method for `crs` objects can return projjson (if GDAL >= 3.1.0 and PROJ > 6.2.0)
