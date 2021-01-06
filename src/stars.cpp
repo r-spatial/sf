@@ -644,8 +644,8 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0) != CE_None)
 		stop("Error reading!");
 	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
-	if (na_set && pixels[0] == na_value || pixels[1] == na_value ||
-			pixels[2] == na_value || pixels[3] == na_value)
+	if (na_set && (pixels[0] == na_value || pixels[1] == na_value ||
+			pixels[2] == na_value || pixels[3] == na_value))
 		return na_value;
 	else // https://en.wikipedia.org/wiki/Bilinear_interpolation#Unit_square
 		return	pixels[0] * (1-dX) * (1-dY) +
@@ -670,7 +670,8 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	double gt[6];
 	poDataset->GetGeoTransform(gt);
 	double gt_inv[6];
-	int retval = GDALInvGeoTransform(gt, gt_inv);
+	// int retval = GDALInvGeoTransform(gt, gt_inv);
+	GDALInvGeoTransform(gt, gt_inv);
 
 	for (int j = 0; j < poDataset->GetRasterCount(); j++) {
 		GDALRasterBand *poBand = poDataset->GetRasterBand(j+1);
