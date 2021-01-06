@@ -671,7 +671,8 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	poDataset->GetGeoTransform(gt);
 	double gt_inv[6];
 	// int retval = GDALInvGeoTransform(gt, gt_inv);
-	GDALInvGeoTransform(gt, gt_inv);
+	if (! GDALInvGeoTransform(gt, gt_inv))
+		stop("geotransform not invertible");
 
 	for (int j = 0; j < poDataset->GetRasterCount(); j++) {
 		GDALRasterBand *poBand = poDataset->GetRasterBand(j+1);
