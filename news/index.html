@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-8</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -131,7 +131,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-spatial/sf/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -154,9 +154,10 @@
 
     <div id="version-09-7" class="section level1">
 <h1 class="page-header" data-toc-text="0.9-7">
-<a href="#version-09-7" class="anchor"></a>version 0.9-7<small> Unreleased </small>
+<a href="#version-09-7" class="anchor"></a>version 0.9-7<small> 2021-01-06 </small>
 </h1>
 <ul>
+<li><p>n-ary <code>st_intersection</code> skips failing geometries, rather than returning an error; <a href='https://github.com/r-spatial/sf/issues/1549'>#1549</a></p></li>
 <li><p>use <code>s2_centroid</code> for geographical coordinates if <code><a href="../reference/s2.html">sf_use_s2()</a></code> is <code>TRUE</code>.</p></li>
 <li><p><code>st_as_text</code> method for <code>crs</code> objects can return projjson (if GDAL &gt;= 3.1.0 and PROJ &gt; 6.2.0)</p></li>
 <li><p><code>st_transform</code> no longer warns on conversions like <code>"+proj=ob_tran +o_proj=longlat +o_lat_p=45 +o_lon_p=30"</code></p></li>
@@ -266,6 +267,7 @@
 <li><p>add <code>st_reverse</code> methods to reverse points in a linestring (requires GEOS &gt;= 3.7.0); <a href='https://github.com/r-spatial/sf/issues/1246'>#1246</a></p></li>
 <li><p><code>st_make_grid</code> returns grid cells or points that intersect with the target geometry, not its bounding box; <a href='https://github.com/r-spatial/sf/issues/1260'>#1260</a></p></li>
 <li><p>allow for PROJ &gt;= 7; <a href='https://github.com/r-spatial/sf/issues/1254'>#1254</a></p></li>
+<li><p><code>st_geometry_type</code> accepts <code>by_geometry</code> argument; <a href='https://github.com/r-spatial/sf/issues/1264'>#1264</a></p></li>
 </ul>
 </div>
     <div id="version-08-1" class="section level1">
