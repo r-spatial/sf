@@ -16,7 +16,8 @@ vignette: >
 
 ```{r echo=FALSE, include=FALSE}
 tmap_fixed = TRUE
-user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
+#user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
+user_edzer_or_travis = FALSE
 ```
 This vignette describes the functions in `sf` that can help to plot 
 simple features. It tries to be complete about the plot methods 
@@ -195,7 +196,7 @@ Package `mapview` creates interactive maps in html pages, using package `leaflet
 ```{r,eval=user_edzer_or_travis}
 library(mapview)
 mapviewOptions(fgb = FALSE)
-mapview(nc["BIR74"], col.regions = sf.colors(10))
+mapview(nc["BIR74"], col.regions = sf.colors(10), fgb = FALSE)
 ```
 
 gives a map which is interactive: you can zoom and pan, and query features by clicking on them.

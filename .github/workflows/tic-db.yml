@@ -90,11 +90,11 @@ jobs:
 
       - name: "[Stage] [Linux] Install curl"
         if: runner.os == 'Linux'
-        run: sudo apt install libcurl4-openssl-dev
+        run: sudo apt-get install libcurl4-openssl-dev libgit2-dev
 
       - name: "[Custom block] [Linux] Install spatial libraries"
         if: runner.os == 'Linux'
-        run: sudo apt install libgdal-dev libproj-dev libgeos-dev libudunits2-dev
+        run: sudo apt-get install libgdal-dev libproj-dev libgeos-dev libudunits2-dev
 
       - name: "[Custom block] [macOS] Install spatial libraries"
         if: runner.os == 'macOS'
