@@ -1,3 +1,5 @@
+# version 0.9-8
+
 # version 0.9-7
 
 * n-ary `st_intersection` skips failing geometries, rather than returning an error; #1549
