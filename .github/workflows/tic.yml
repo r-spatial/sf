@@ -23,9 +23,9 @@ jobs:
         config:
           # use a different tic template type if you do not want to build on all listed platforms
           #- { os: windows-latest, r: "release" }
-          - { os: macOS-latest, r: "release", pkgdown: "true", latex: "true" }
+          #- { os: macOS-latest, r: "release", pkgdown: "true", latex: "true" }
           - { os: ubuntu-latest, r: "devel" }
-          - { os: ubuntu-latest, r: "release" }
+          - { os: ubuntu-latest, r: "release", pkgdown: "true" }
 
     env:
       # otherwise remotes::fun() errors cause the build to fail. Example: Unavailability of binaries
