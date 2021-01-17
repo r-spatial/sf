@@ -26,7 +26,9 @@ which_sfc_col = function(cls) {
 		MULTIPOLYGON = 3,
 		MULTICURVE = 3,
 		GEOMETRYCOLLECTION = 4,
+		COMPOUNDCURVE = 4,
 		MULTISURFACE = 4,
+		CURVEPOLYGON = 4,
 		GEOMETRY = 5,
 		stop(paste("st_cast for", cls, "not supported"))
 	)
@@ -140,6 +142,7 @@ copy_sfc_attributes_from = function(x, ret) {
 #' @param ... ignored
 #' @export
 #' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
+#' @details When converting a GEOMETRYCOLLECTION to COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON, the user is responsible for the validity of the resulting object: no checks are being carried out by the software.
 #'
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))

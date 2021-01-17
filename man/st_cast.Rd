@@ -75,6 +75,8 @@ In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "PO
 Cast geometry to another type: either simplify, or cast explicitly
 }
 \details{
+When converting a GEOMETRYCOLLECTION to COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON, the user is responsible for the validity of the resulting object: no checks are being carried out by the software.
+
 the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf:aggregate.sf]{aggregate} or \link[sf:tidyverse]{summarise}.
 }
 \examples{
