@@ -1,3 +1,7 @@
+# version 0.9-8
+
+* allow to `st_cast` COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON to GEOMETRYCOLLECTION (and back); 
+
 # version 0.9-7
 
 * n-ary `st_intersection` skips failing geometries, rather than returning an error; #1549
