@@ -17,7 +17,7 @@
 #'   # select only the points:
 #'   g[st_is(g, "POINT"),]
 #' }
-st_as_sf.ppp = function(x, ...) {
+st_as_sf.ppp = function(x, ..., as_tibble = FALSE) {
   if (!requireNamespace("spatstat", quietly = TRUE))
     stop("package spatstat required, please install it first") # nocov
   # window:
@@ -33,9 +33,10 @@ st_as_sf.ppp = function(x, ...) {
   if (spatstat::is.marked(x)) {
 	# add marks:
     m = as.data.frame(spatstat::marks(x))
-	cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+	ret = cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+	st_sf(ret, as_tibble = as_tibble)
   } else
-  	ret
+  	st_sf(ret, as_tibble = as_tibble)
 }
 
 
