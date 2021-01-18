@@ -42,7 +42,7 @@ st_as_sf.ppp = function(x, ..., as_tibble = FALSE) {
 
 #' @name st_as_sf
 #' @export
-st_as_sf.psp = function(x, ...) {
+st_as_sf.psp = function(x, ..., as_tibble = FALSE) {
 	if (!requireNamespace("spatstat", quietly = TRUE))
 		stop("package spatstat required, please install it first")
 	# line segments:
@@ -56,9 +56,10 @@ st_as_sf.psp = function(x, ...) {
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 	if (spatstat::is.marked(x)) { # add marks:
 		m = as.data.frame(spatstat::marks(x))
-		cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+		ret = cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+		st_sf(ret, as_tibble = as_tibble)
 	} else
-		ret
+		st_sf(ret, as_tibble = as_tibble)
 }
 
 # 111117 from psp to SpatialLines, Rolf Turner, Adrian Baddeley, Mathieu Rajerison
