@@ -83,7 +83,7 @@ st_as_sfc.psp <- function(x, ...) {
 #'  plot(st_as_sf(chicago)["label"])
 #'  plot(st_as_sf(chicago)[-1,"label"])
 #' }
-st_as_sf.lpp = function(x, ...) {
+st_as_sf.lpp = function(x, ..., as_tibble = FALSE) {
 	if (!requireNamespace("spatstat", quietly = TRUE))
 		stop("package spatstat required, please install it first")
 	# lines, polygon:
@@ -94,7 +94,7 @@ st_as_sf.lpp = function(x, ...) {
 	sf = rbind(linework_sf, st_sf(label = rep("point", NROW(m)), geom = pointwork))
 	# de-select point coordinates
 	m = as.data.frame(x$data)[c(rep(NA,nrow(linework_sf)),seq_len(nrow(m))), -(1:2)]
-	structure(cbind.sf(sf, m), row.names = seq_len(nrow(m)))
+	st_sf(structure(cbind.sf(sf, m), row.names = seq_len(nrow(m))), as_tibble = as_tibble)
 }
 
 # as.ppp etc methods: from maptools/pkg/R/spatstat1.R
