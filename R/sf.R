@@ -217,7 +217,8 @@ list_column_to_sfc = function(x) {
 #' @export
 st_sf = function(..., agr = NA_agr_, row.names,
 		stringsAsFactors = sf_stringsAsFactors(), crs, precision,
-		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE) {
+		sf_column_name = NULL, check_ring_dir = FALSE, sfc_last = TRUE,
+		as_tibble = FALSE) {
 	x = list(...)
 	if (length(x) == 1L && (inherits(x[[1L]], "data.frame") || (is.list(x) && !inherits(x[[1L]], "sfc"))))
 		x = x[[1L]]
