@@ -15,6 +15,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
+#' @param as_tibble logical; should the returned table be of class tibble or data.frame?
 #' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
 #'
