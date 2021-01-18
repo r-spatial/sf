@@ -52,7 +52,10 @@ rbind.sf = function(..., deparse.level = 1) {
 #' dplyr::bind_cols(c, df)
 cbind.sf = function(..., deparse.level = 1, sf_column_name = NULL) {
 	# TODO: handle st_agr?
-	st_sf(data.frame(...), sf_column_name = sf_column_name)
+	if(any(vapply(list(...), inherits, TRUE, what = "tbl_df")) & all(vapply(list(...), inherits, TRUE, what = "data.frame"))){
+		st_sf(tibble(...), sf_column_name = sf_column_name)
+	} else
+		st_sf(data.frame(...), sf_column_name = sf_column_name)
 }
 
 #' @name bind
