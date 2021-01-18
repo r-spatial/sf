@@ -620,11 +620,11 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 		iPixel -= 1;
 
 	// x:
-	if (Pixel < 0.5)
+	if (Pixel < 0.5) // border:
 		dX = 0.0;
 	else if (Pixel > RasterXSize - 0.5)
 		dX = 1.0;
-	else if (dX < 0.5)
+	else if (dX < 0.5) // shift to pixel center:
 		dX += 0.5;
 	else
 		dX -= 0.5;
