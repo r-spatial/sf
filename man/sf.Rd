@@ -16,7 +16,8 @@ st_sf(
   precision,
   sf_column_name = NULL,
   check_ring_dir = FALSE,
-  sfc_last = TRUE
+  sfc_last = TRUE,
+  as_tibble = FALSE
 )
 
 \method{[}{sf}(x, i, j, ..., drop = FALSE, op = st_intersects)
