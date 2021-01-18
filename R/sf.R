@@ -271,6 +271,13 @@ st_sf = function(..., agr = NA_agr_, row.names,
 				as.data.frame(x[-all_sfc_columns],
 					stringsAsFactors = stringsAsFactors, optional = TRUE))
 
+	df = if (!isTRUE(as_tibble)) # no worries:
+		df
+	else if (length(df) == 0) # ONLY one sfc
+		tibble::tibble(df)
+	else
+		df = tibble::new_tibble(df, nrow = nrow(df))
+
 	if (check_ring_dir) { # process:
 		for (i in seq_along(all_sfc_names))
 			df[[ all_sfc_names[i] ]] = st_sfc(x[[ all_sfc_columns[i] ]],
