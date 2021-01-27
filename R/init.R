@@ -10,6 +10,7 @@
 #' @importFrom units as_units drop_units make_unit_label set_units
 #' @importFrom classInt classIntervals
 #' @useDynLib sf
+#' @export sf
 NULL
 
 #' @importFrom magrittr %>%
