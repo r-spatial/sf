@@ -16,6 +16,7 @@ NULL
 #' @export
 magrittr::`%>%`
 
+#' @exportClass sf
 setOldClass("sf")
 setOldClass(c("sfc_POINT", "sfc"))
 setOldClass(c("sfc_MULTIPOINT", "sfc"))
