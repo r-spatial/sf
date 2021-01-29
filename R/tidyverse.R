@@ -234,6 +234,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 	ret = NextMethod()
 	if (!missing(do_union))
 		ret$do_union = NULL
+	if (!missing(is_coverage))
+		ret$is_coverage = NULL
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
 		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
