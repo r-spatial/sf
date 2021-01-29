@@ -129,6 +129,8 @@ st_interpolate_aw.sf = function(x, to, extensive, ...) {
 	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
 
 	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
+	if (any(!sapply(x_st, is.numeric)))
+		stop("x contains non-numeric column(s)")
 	area_i = st_area(i)
 	x_st$...area_st = unclass(area_i)
 
