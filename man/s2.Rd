@@ -33,6 +33,10 @@ for geographical coordinate operations}
 
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
+\item{...}{passed on}
+
+\item{crs}{coordinate reference system; object of class \code{crs}}
+
 \item{endian}{integer; 0 or 1: defaults to the endian of the native machine}
 
 \item{oriented}{logical; if \code{FALSE}, polygons that

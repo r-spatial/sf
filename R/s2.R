@@ -3,6 +3,8 @@
 # https://github.com/r-spatial/s2
 
 #' @export
+#' @param crs coordinate reference system; object of class \code{crs}
+#' @param ... passed on
 #' @param use_s2 logical; if \code{TRUE}, use the s2 spherical geometry package
 #' for geographical coordinate operations
 #' @name s2
