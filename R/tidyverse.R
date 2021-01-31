@@ -523,9 +523,6 @@ register_all_s3_methods = function() {
 	register_s3_method("spatstat", "as.psp", "sfc_MULTILINESTRING")
 	register_s3_method("spatstat", "as.psp", "sfc")
 	register_s3_method("spatstat", "as.psp", "sf")
-	register_s3_method("wk", "as_wkb", "sf")
-	register_s3_method("wk", "as_wkb", "sfc")
-	register_s3_method("wk", "as_wkb", "sfg")
 	register_vctrs_methods()
 }
 

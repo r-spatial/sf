@@ -6,7 +6,7 @@
 #' @param use_s2 logical; if \code{TRUE}, use the s2 spherical geometry package
 #' for geographical coordinate operations
 #' @name s2
-#' @return \code{sf_use_s2} returns the value of this variable before (re)setting it, 
+#' @return \code{sf_use_s2} returns the value of this variable before (re)setting it,
 #' invisibly if \code{use_s2} is not missing.
 sf_use_s2 = function(use_s2) {
 	ret_val = get(".sf.use_s2", envir = .sf_cache)
@@ -22,30 +22,6 @@ sf_use_s2 = function(use_s2) {
 		invisible(ret_val)
 	} else
 		ret_val
-}
-
-# from s2 to sf:
-#' @export
-#' @param crs coordinate reference system; object of class \code{crs}
-#' @param ... passed on
-#' @name s2
-st_as_sfc.wk_wkb = function(x, ..., crs = st_crs(4326)) {
-	class(x) = "WKB"
-	st_set_crs(st_as_sfc(x, ...), crs)
-}
-
-as_wkb.sfg = function(x, ...) {
-	as_wkb.sfc(st_sfc(x, crs = "EPSG:4326"))
-}
-
-as_wkb.sf = function(x, ...) {
-	as_wkb.sfc(st_geometry(x), ...)
-}
-
-as_wkb.sfc = function(x, ...) {
-	if (!is.na(st_crs(x)) && !st_is_longlat(x))
-		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
-	structure(st_as_binary(x), class = "wk_wkb")
 }
 
 
@@ -65,11 +41,10 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 	st_sf(geometry = st_as_sfc(x, ..., crs = crs))
 }
 
-
 #' functions for spherical geometry, using s2 package
-#' 
+#'
 #' functions for spherical geometry, using the s2 package based on the google s2geometry.io library
-#' @name s2 
+#' @name s2
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @export
 #' @details \code{st_as_s2} converts an \code{sf} POLYGON object into a form readable by \code{s2}.
@@ -79,8 +54,8 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 #' m0 = m[5:1,]
 #' mp = st_multipolygon(list(
 #'	list(m, 0.8 * m0, 0.01 * m1 + 0.9),
-#'	list(0.7* m, 0.6*m0), 
-#'	list(0.5 * m0), 
+#'	list(0.7* m, 0.6*m0),
+#'	list(0.5 * m0),
 #'	list(m+2),
 #'	list(m+4,(.9*m0)+4)
 #'	))
