@@ -1,11 +1,11 @@
-VERSION = 3.0.4
+VERSION = 3.2.1
 RWINLIB = ../windows/gdal3-$(VERSION)
 TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
 
 PKG_CPPFLAGS =\
-	-I$(RWINLIB)/include/gdal-3.0.4 \
-	-I$(RWINLIB)/include/geos-3.8.0 \
-	-I$(RWINLIB)/include/proj-6.3.1 \
+	-I$(RWINLIB)/include/gdal-3.2.1 \
+	-I$(RWINLIB)/include/geos-3.9.0 \
+	-I$(RWINLIB)/include/proj-7.2.1 \
 	-DHAVE_PROJ_H
 
 PKG_LIBS = \
@@ -18,7 +18,7 @@ PKG_LIBS = \
 	-lmfhdf -lhdf -lxdr -lpcre \
 	-lopenjp2 -ljasper -lpng -ljpeg -ltiff -lgeotiff -lgif -lxml2 -llzma -lz \
 	-lodbc32 -lodbccp32 -liconv -lpsapi -lwldap32 -lsecur32 -lgdi32 -lnormaliz \
-	-lcrypto -lcrypt32 -lws2_32
+	-lcrypto -lcrypt32 -lws2_32 -lshlwapi
 
 all: clean winlibs
 
