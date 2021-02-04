@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
@@ -7,7 +7,9 @@ MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 RUN apt-get update && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/  " >> /etc/apt/sources.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" >> /etc/apt/sources.list
+
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
 RUN apt-get update
@@ -31,15 +33,16 @@ RUN apt-get install -y texinfo \
        texlive-extra-utils \
        texlive-fonts-extra \
        texlive-fonts-recommended \
-       texlive-generic-recommended \
        texlive-latex-base \
        texlive-latex-extra \
        texlive-latex-recommended
 
+# texlive-generic-recommended \
+
 # stuff for the tmaptools/rmapshaper/geojsonio etc stack:
-RUN apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler libcairo2-dev pandoc pandoc-citeproc 
-RUN add-apt-repository -y ppa:opencpu/jq
-RUN apt-get update
+RUN apt-get install -y libv8-dev libprotobuf-dev protobuf-compiler libcairo2-dev pandoc pandoc-citeproc 
+#RUN add-apt-repository -y ppa:opencpu/jq
+#RUN apt-get update
 RUN apt-get install -y libjq-dev
 
 ## Check out & build R-devel:
@@ -47,10 +50,13 @@ RUN apt-get install -y subversion
 
 RUN cd /tmp && svn co https://svn.r-project.org/R/trunk R-devel
 
+RUN apt-get install -y rsync
 RUN /tmp/R-devel/tools/rsync-recommended
 ## Build and install according the standard 'recipe' I emailed/posted years ago
 
 RUN apt-get install -y libreadline-dev libbz2-dev
+#RUN apt-get install -y gfortran
+RUN apt-get install -y r-base-dev
 
 RUN cd /tmp/R-devel \
 	&& R_PAPERSIZE=letter \
