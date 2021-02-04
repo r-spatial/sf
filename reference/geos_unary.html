@@ -177,6 +177,8 @@
 
 <span class='fu'>st_triangulate</span><span class='op'>(</span><span class='va'>x</span>, dTolerance <span class='op'>=</span> <span class='fl'>0</span>, bOnlyEdges <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
+<span class='fu'>st_inscribed_circle</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>dTolerance</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='fu'>st_voronoi</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>envelope</span>, dTolerance <span class='op'>=</span> <span class='fl'>0</span>, bOnlyEdges <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='fu'>st_polygonize</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
@@ -270,6 +272,11 @@ See <a href='https://postgis.net/docs/ST_Buffer.html'>postgis.net/docs/ST_Buffer
 <p><code>st_convex_hull</code> creates the convex hull of a set of points</p>
 <p><code>st_simplify</code> simplifies lines by removing vertices</p>
 <p><code>st_triangulate</code> triangulates set of points (not constrained). <code>st_triangulate</code> requires GEOS version 3.4 or above</p>
+<p><code>st_inscribed_circle</code> returns the maximum inscribed circle for polygon geometries. 
+For <code>st_inscribed_circle</code>, if <code>nQuadSegs</code> is 0 a 2-point LINESTRING is returned with the
+center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
+<code>nQuadSegs</code> controls the number of points per quadrant to approximate the circle.
+<code>st_inscribed_circle</code> requires GEOS version 3.9 or above</p>
 <p><code>st_voronoi</code> creates voronoi tesselation. <code>st_voronoi</code> requires GEOS version 3.5 or above</p>
 <p><code>st_polygonize</code> creates polygon from lines that form a closed ring. In case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
 <p><code>st_line_merge</code> merges lines. In case of <code>st_line_merge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
@@ -318,7 +325,7 @@ See <a href='https://postgis.net/docs/ST_Buffer.html'>postgis.net/docs/ST_Buffer
 </div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>l2</span>, col <span class='op'>=</span> <span class='st'>'blue'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='geos_unary-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>op</span><span class='op'>)</span>
 <span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpWqcQnU/temp_libpath6d9819fbfd5a/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpdWa8fr/temp_libpath4d6256c00de0/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
