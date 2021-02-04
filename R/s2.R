@@ -43,6 +43,16 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 	st_sf(geometry = st_as_sfc(x, ..., crs = crs))
 }
 
+# dynamically exported in tidyverse.R
+as_s2_geography.sfc <- function(x, ..., oriented = FALSE) {
+	st_as_s2.sfc(x, ..., oriented = oriented)
+}
+
+# dynamically exported in tidyverse.R
+as_s2_geography.sf <- function(x, ..., oriented = FALSE) {
+	st_as_s2.sf(x, ..., oriented = oriented)
+}
+
 #' functions for spherical geometry, using s2 package
 #'
 #' functions for spherical geometry, using the s2 package based on the google s2geometry.io library
