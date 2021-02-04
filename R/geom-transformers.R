@@ -263,6 +263,9 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+#' For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
+#' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
+#' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
 #' \code{st_inscribed_circle} requires GEOS version 3.9 or above
 st_inscribed_circle = function(x, dTolerance, ...)
 	UseMethod("st_inscribed_circle")
@@ -272,9 +275,8 @@ st_inscribed_circle.sfg = function(x, dTolerance, ...) {
 	get_first_sfg(st_inscribed_circle(st_sfc(x), dTolerance, ...))
 }
 
-
 #' @export
-st_inscribed_circle = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, nQuadSegs = 30) {
+st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, ..., nQuadSegs = 30) {
 	if (CPL_geos_version() >= "3.9.0") {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_inscribed_circle does not work correctly for longitude/latitude data")
