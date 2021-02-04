@@ -1,6 +1,6 @@
 
-R version 3.4.2 (2017-09-28) -- "Short Summer"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -67,9 +67,26 @@ Type 'q()' to quit R.
 + }
 > 
 > library(maps) #421
-> wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE ))
-> plot(wrld2, graticule = TRUE)
+> (wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
+Simple feature collection with 253 features and 1 field
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: 0 ymin: -89.99001 xmax: 360 ymax: 83.59961
+geographic CRS: WGS 84
+First 10 features:
+                     ID                           geom
+1                 Aruba MULTIPOLYGON (((290.1009 12...
+2           Afghanistan MULTIPOLYGON (((74.89131 37...
+3                Angola MULTIPOLYGON (((23.9665 -10...
+4              Anguilla MULTIPOLYGON (((296.9988 18...
+5               Albania MULTIPOLYGON (((20.06396 42...
+6               Finland MULTIPOLYGON (((20.61133 60...
+7               Andorra MULTIPOLYGON (((1.706055 42...
+8  United Arab Emirates MULTIPOLYGON (((53.92783 24...
+9             Argentina MULTIPOLYGON (((295.4508 -5...
+10              Armenia MULTIPOLYGON (((45.55235 40...
+> try(plot(wrld2, graticule = TRUE))
 > 
 > proc.time()
    user  system elapsed 
-  2.660   0.320   2.697 
+  1.450   0.050   1.491 

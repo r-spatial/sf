@@ -1,5 +1,5 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
    GEOS    GDAL  proj.4 
-"3.8.0" "3.0.4" "7.0.0" 
+"3.9.0" "3.2.1" "7.2.1" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -580,9 +580,9 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:            NA
    a b x    geometry
-1 NA 2 a POINT EMPTY
-2  1 5 b POINT (0 0)
-3  2 6 c POINT (1 1)
+1  1 5 b POINT (0 0)
+2  2 6 c POINT (1 1)
+3 NA 2 a POINT EMPTY
 > full_join(a, b)
 Joining, by = "b"
 Simple feature collection with 4 features and 3 fields (with 1 geometry empty)
@@ -723,7 +723,6 @@ geographic CRS: WGS 84
 > x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
 > #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 >   (p <- st_sample(x, 10))
-although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
@@ -742,32 +741,26 @@ POINT (76.1712 32.1029)
 > p <- st_sample(x, 10)
 > x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
 +  crs=st_crs(4326))
-> if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
-+   (p <- st_sample(x, 10))
-although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
-Geometry set for 10 features 
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: -148.196 ymin: -51.7878 xmax: 164.644 ymax: 79.4122
-geographic CRS: WGS 84
-First 5 geometries:
-POINT (-148.196 72.3139)
-POINT (143.075 54.9954)
-POINT (-143.112 25.5397)
-POINT (-89.2235 -18.4014)
-POINT (-104.569 79.4122)
+> #FIXME:
+> # if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
+> #   (p <- st_sample(x, 10))
 > pt = st_multipoint(matrix(1:20,,2))
 > st_sample(p, 3)
 Geometry set for 1 feature 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: -112.989 ymin: -51.7878 xmax: 53.2886 ymax: 79.4122
+bbox:           xmin: 41.0557 ymin: 27.8024 xmax: 80.9558 ymax: 65.5424
 CRS:            NA
-MULTIPOINT ((-104.569 79.4122), (-112.989 30.33...
+MULTIPOINT ((57.2118 52.329), (80.9558 65.5424)...
 > try(st_sample(p, 3.3))
-Error in st_sample.sfc(p, 3.3) : size should be an integer
+Geometry set for 1 feature 
+geometry type:  MULTIPOINT
+dimension:      XY
+bbox:           xmin: 19.3415 ymin: 9.17624 xmax: 80.9558 ymax: 65.5424
+CRS:            NA
+MULTIPOINT ((19.3415 18.6622), (57.1389 9.17624...
+Warning message:
+In st_sample.sfc(p, 3.3) : size is not an integer
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 +  st_linestring(rbind(c(0,0),c(.1,0))),
 +  st_linestring(rbind(c(0,1),c(.1,1))),
@@ -776,24 +769,24 @@ Error in st_sample.sfc(p, 3.3) : size should be an integer
 Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 0.0875734 ymax: 1
+bbox:           xmin: 0 ymin: 0 xmax: 0.0914728 ymax: 1
 CRS:            NA
-MULTIPOINT ((0 0.40852), (0 0.415459), (0 0.999...
-MULTIPOINT ((0.00320272 0), (0.0642832 0), (0.0...
-MULTIPOINT ((0.0147658 1), (0.0201495 1), (0.04...
+MULTIPOINT ((0 0.137868), (0 0.777635), (0 0.40...
+MULTIPOINT ((0.0914728 0), (0.073852 0), (0.003...
+MULTIPOINT ((0.0488222 1), (0.0716508 1), (0.08...
 MULTIPOINT EMPTY
 > st_sample(nc[1:2,], size = c(10,20))
 Geometry set for 30 features 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 1200740 ymin: 942550 xmax: 1425790 ymax: 1036860
+bbox:           xmin: 1216510 ymin: 935867 xmax: 1428880 ymax: 1031510
 projected CRS:  NAD83 / North Carolina (ftUS)
 First 5 geometries:
-POINT (1228809 1011255)
-POINT (1233859 956721)
-POINT (1260039 1007661)
-POINT (1271553 1021505)
-POINT (1222552 980314)
+POINT (1264558 935867)
+POINT (1256623 949384)
+POINT (1222665 972639)
+POINT (1333530 968278)
+POINT (1310838 958645)
 > # try with LINES, LongLat, should generate a warning:
 > nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 although coordinates are longitude/latitude, st_sample assumes that they are planar
@@ -801,23 +794,23 @@ although coordinates are longitude/latitude, st_sample assumes that they are pla
 Geometry set for 2 features 
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: -81.7408 ymin: 36.2735 xmax: -80.9188 ymax: 36.5821
+bbox:           xmin: -81.6893 ymin: 36.2492 xmax: -80.914 ymax: 36.5726
 geographic CRS: WGS 84
-MULTIPOINT ((-81.3308 36.5204), (-81.5205 36.58...
-MULTIPOINT ((-81.3127 36.4804), (-81.2655 36.43...
+MULTIPOINT ((-81.2401 36.3717), (-81.6893 36.36...
+MULTIPOINT ((-81.2629 36.4076), (-81.1374 36.56...
 > st_sample(ls, 80, type = "regular")
 Geometry set for 4 features  (with 1 geometry empty)
 geometry type:  MULTIPOINT
 dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 0.0987443 ymax: 1
+bbox:           xmin: 0 ymin: 0 xmax: 0.095454 ymax: 1
 CRS:            NA
-MULTIPOINT ((0 0.00373519), (0 0.0187353), (0 0...
-MULTIPOINT ((0.00874356 0), (0.0237437 0), (0.0...
-MULTIPOINT ((0.0137444 1), (0.0287446 1), (0.04...
+MULTIPOINT ((0 0.0104441), (0 0.0254442), (0 0....
+MULTIPOINT ((0.000452334 0), (0.0154525 0), (0....
+MULTIPOINT ((0.00545321 1), (0.0204533 1), (0.0...
 MULTIPOINT EMPTY
 > p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = FALSE))
 > lengths(p_sample)
- [1] 106 107 111  92  95 122  86 105 105 101
+ [1] 104 106 110  96  98 120  87 105 104  99
 > p_sample_exact = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = TRUE))
 > lengths(p_sample_exact)
  [1] 100 100 100 100 100 100 100 100 100 100
@@ -827,6 +820,13 @@ MULTIPOINT EMPTY
 > 
 > #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
 > class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
+New names:
+* AREA -> AREA...1
+* PERIMETER -> PERIMETER...2
+* CNTY_ -> CNTY_...3
+* AREA -> AREA...16
+* PERIMETER -> PERIMETER...17
+* ...
 [1] "sf"         "data.frame"
 > class(rbind(nc, nc))
 [1] "sf"         "data.frame"
@@ -856,13 +856,16 @@ POINT EMPTY
 Geometry set for 1 feature 
 geometry type:  POINT
 dimension:      XY
-bbox:           xmin: 0.0102133 ymin: 1.06372 xmax: 0.0102133 ymax: 1.06372
+bbox:           xmin: -0.0500922 ymin: 0.992953 xmax: -0.0500922 ymax: 0.992953
 CRS:            NA
-POINT (0.0102133 1.06372)
+POINT (-0.0500922 0.992953)
 > 
 > # st_bbox:
 > library(sp)
 > demo(meuse, ask = FALSE, echo = FALSE)
+Warning message:
+In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
+  Discarded datum Amersfoort in Proj4 definition
 > suppressWarnings(st_bbox(meuse))
   xmin   ymin   xmax   ymax 
 178605 329714 181390 333611 
@@ -1032,14 +1035,14 @@ geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:            NA
-POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
 > st_crop(pol, st_bbox(box))
 Geometry set for 1 feature 
 geometry type:  POLYGON
 dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:            NA
-POLYGON ((1 0.0849179, 0.983044 0.0650651, 0.95...
+POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
 > st_crop(pol_sf, box)
 Simple feature collection with 1 feature and 1 field
 geometry type:  POLYGON
@@ -1047,7 +1050,7 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:            NA
   a                           geom
-1 1 POLYGON ((1 0.0849179, 0.98...
+1 1 POLYGON ((0 0.915082, 0.016...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > st_crop(pol_sf, st_bbox(box))
@@ -1057,7 +1060,7 @@ dimension:      XY
 bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:            NA
   a                           geom
-1 1 POLYGON ((1 0.0849179, 0.98...
+1 1 POLYGON ((0 0.915082, 0.016...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -1132,4 +1135,4 @@ CRS:            NA
 > 
 > proc.time()
    user  system elapsed 
-  6.032   0.160   6.217 
+  4.116   0.107   4.217 

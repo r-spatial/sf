@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -47,16 +47,16 @@ bbox:           xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
 CRS:            NA
 First 10 features:
     label group season       date                           geom
-NA window  <NA>   <NA>       <NA> POLYGON ((584712 674237.1, ...
-1   point major    dry 2006-01-06      POINT (582518.4 676886.2)
-2   point major    dry 2006-01-10        POINT (581823 677422.7)
-3   point major    dry 2006-01-15        POINT (582131 676937.9)
-4   point major    dry 2006-01-24        POINT (582111.9 677420)
-5   point minor    dry 2006-01-27      POINT (582585.1 677509.7)
-6   point major    dry 2006-01-28      POINT (582302.3 677521.6)
-7   point major    dry 2006-02-01      POINT (583167.2 676730.5)
-8   point major    dry 2006-02-03      POINT (583584.5 677207.1)
-9   point major    dry 2006-02-13      POINT (583117.8 676850.3)
+1  window  <NA>   <NA>       <NA> POLYGON ((584712 674237.1, ...
+2   point major    dry 2006-01-06      POINT (582518.4 676886.2)
+3   point major    dry 2006-01-10        POINT (581823 677422.7)
+4   point major    dry 2006-01-15        POINT (582131 676937.9)
+5   point major    dry 2006-01-24        POINT (582111.9 677420)
+6   point minor    dry 2006-01-27      POINT (582585.1 677509.7)
+7   point major    dry 2006-01-28      POINT (582302.3 677521.6)
+8   point major    dry 2006-02-01      POINT (583167.2 676730.5)
+9   point major    dry 2006-02-03      POINT (583584.5 677207.1)
+10  point major    dry 2006-02-13      POINT (583117.8 676850.3)
 > marks(g) = NULL
 > st_as_sf(g)
 Simple feature collection with 648 features and 1 field
@@ -107,10 +107,10 @@ First 10 features:
 > # st_sample going the spatstat way
 > x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
 > try(pts <- st_sample(x, type = "thomas"))
-Error in st_poly_sample(x, size = size, ..., type = type) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   rthomas is not an exported function from spatstat.
 > try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
-Error in st_poly_sample(x, size = size, ..., type = type) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
 Error : 'scale' should be a single number
@@ -302,4 +302,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.022   0.126   2.145 
+  1.869   0.089   1.951 

@@ -1,5 +1,5 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -84,6 +84,7 @@ Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > u = st_union(b) 
+although coordinates are longitude/latitude, st_union assumes that they are planar
 > 
 > x <- st_intersection(st_geometry(a), st_geometry(u))
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
@@ -95,6 +96,7 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > 
 > x = st_union(a, st_union(b))
 although coordinates are longitude/latitude, st_union assumes that they are planar
+although coordinates are longitude/latitude, st_union assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -104,6 +106,7 @@ Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a, st_union(b))
+although coordinates are longitude/latitude, st_union assumes that they are planar
 although coordinates are longitude/latitude, st_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
@@ -114,6 +117,7 @@ Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a, st_union(b))
+although coordinates are longitude/latitude, st_union assumes that they are planar
 although coordinates are longitude/latitude, st_sym_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
@@ -335,4 +339,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.160   0.072   1.229 
+  1.003   0.043   1.039 

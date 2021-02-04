@@ -1,5 +1,5 @@
 
-R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -165,8 +165,10 @@ dimension:      XY
 bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 geographic CRS: NAD27
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
-[1] "Names: 1 string mismatch"                                  
-[2] "Attributes: < Component \"sf_column\": 1 string mismatch >"
+[1] "Names: 1 string mismatch"                                                               
+[2] "Attributes: < Component \"sf_column\": 1 string mismatch >"                             
+[3] "Component 15: Attributes: < Component \"crs\": Component \"input\": 1 string mismatch >"
+[4] "Component 15: Attributes: < Component \"crs\": Component \"wkt\": 1 string mismatch >"  
 > st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 [1] TRUE
 > 
@@ -175,4 +177,4 @@ geographic CRS: NAD27
 > 
 > proc.time()
    user  system elapsed 
-  3.792   0.059   3.843 
+  4.041   0.068   4.101 
