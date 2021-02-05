@@ -34,7 +34,7 @@ jobs:
 
       - name: "[Stage] Dependencies"
         run: |
-            sudo apt install libcurl4-openssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev
+            sudo apt install libcurl4-openssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libgit2-dev
             Rscript -e "if (!requireNamespace('remotes')) install.packages('remotes', type = 'source')"
             Rscript -e "remotes::install_github('ropensci/tic', dependencies = TRUE)"
 
@@ -51,4 +51,3 @@ jobs:
           commit-message: "update tic templates"
           body: "{tic} templates can be updated :rocket: :robot:"
           branch: update-tic
-          base: master

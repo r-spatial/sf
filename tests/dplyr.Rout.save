@@ -1,5 +1,5 @@
 
-R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -90,10 +90,10 @@ projected CRS:  WGS 84 / Pseudo-Mercator
 # A tibble: 4 x 3
   area_cl    `mean(AREA)`                                               geometry
   <fct>             <dbl>                                     <MULTIPOLYGON [m]>
-1 (0,0.1]          0.0760 (((-8678517 4054264, -8679088 4061405, -8680136 40615…
-2 (0.1,0.12]       0.112  (((-9383227 4192541, -9375980 4199500, -9370835 41966…
-3 (0.12,0.1…       0.134  (((-8520830 4108031, -8522040 4111119, -8520104 41115…
-4 (0.15,0.2…       0.190  (((-8685774 4073056, -8684147 4070879, -8683670 40671…
+1 (0,0.1]          0.0760 (((-9349959 4195534, -9351260 4199567, -9354263 42037…
+2 (0.1,0.12]       0.112  (((-9355589 4200996, -9354263 4203717, -9351260 41995…
+3 (0.12,0.1…       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 41833…
+4 (0.15,0.2…       0.190  (((-9173717 4227806, -9181049 4224455, -9186013 42243…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -176,6 +176,10 @@ POINT (111319.5 111325.1)
 > nc.merc <- st_transform(nc, 32119) # NC State Plane
 > suppressPackageStartupMessages(library(units))
 > install_symbolic_unit("person")
+Warning message:
+'install_symbolic_unit' is deprecated.
+Use 'install_unit' instead.
+See help("Deprecated") 
 > person = as_units("person")
 > nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
 > 
@@ -196,7 +200,7 @@ projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
-1 2.593234e-06 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88, 6485…
+1 2.593234e-06 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
@@ -206,7 +210,7 @@ projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(new_dens)`                                                      geometry
       [person/m^2]                                            <MULTIPOLYGON [m]>
-1     2.589362e-06 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, 70…
+1     2.589362e-06 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
@@ -218,7 +222,7 @@ projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `sum(area * dens)`                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((705429.2 49248.34, 705861.5 27435.66, 698897.7 18679.88…
+1             329962 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, …
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 geometry type:  MULTIPOLYGON
@@ -228,7 +232,7 @@ projected CRS:  NAD83 / North Carolina
 # A tibble: 1 x 2
   `sum(A * new_dens…                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((724644.4 62316.58, 714305.9 49733.25, 711692 35996.55, …
+1             329962 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, …
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -284,4 +288,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  3.233   0.065   3.286 
+  2.483   0.056   2.533 

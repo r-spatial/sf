@@ -1,5 +1,5 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
 Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -157,7 +157,7 @@ attribute(s):
  Max.   :0.241  
  NA's   :30904  
 dimension(s):
-  from  to   offset      delta refsys point values    
+  from  to   offset      delta refsys point values x/y
 x    1 461 -84.3239  0.0192484  NAD27 FALSE   NULL [x]
 y    1 141  36.5896 -0.0192484  NAD27 FALSE   NULL [y]
 Simple feature collection with 34097 features and 1 field
@@ -211,6 +211,10 @@ First 10 features:
 8  0.114 POINT (-81.52321 36.58003)
 9  0.114 POINT (-81.50396 36.58003)
 10 0.114 POINT (-81.48471 36.58003)
+
+
+
+
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -228,4 +232,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.344   0.103   1.438 
+  1.378   0.061   1.437 

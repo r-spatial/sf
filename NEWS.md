@@ -1,4 +1,12 @@
+# version 0.9-8
+
+* `st_inscribed_circle' computes the maximum inscribed circle for polygons (requires GEOS >= 3.9.0)
+
+* allow to `st_cast` COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON to GEOMETRYCOLLECTION (and back); #1573
+
 # version 0.9-7
+
+* n-ary `st_intersection` skips failing geometries, rather than returning an error; #1549
 
 * use `s2_centroid` for geographical coordinates if `sf_use_s2()` is `TRUE`.
 

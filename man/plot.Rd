@@ -145,7 +145,8 @@ plot_sf(
   expandBB = c(0, 0, 0, 0),
   graticule = NA_crs_,
   col_graticule = "grey",
-  border
+  border,
+  extent = x
 )
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)

@@ -257,9 +257,48 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 
 #' @export
 st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_geometry(x) <- st_triangulate(st_geometry(x), dTolerance, bOnlyEdges)
-	x
+	st_set_geometry(x, st_triangulate(st_geometry(x), dTolerance, bOnlyEdges))
 }
+
+#' @name geos_unary
+#' @export
+#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+#' For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
+#' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
+#' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
+#' \code{st_inscribed_circle} requires GEOS version 3.9 or above
+st_inscribed_circle = function(x, dTolerance, ...)
+	UseMethod("st_inscribed_circle")
+
+#' @export
+st_inscribed_circle.sfg = function(x, dTolerance, ...) {
+	get_first_sfg(st_inscribed_circle(st_sfc(x), dTolerance, ...))
+}
+
+#' @export
+st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, ..., nQuadSegs = 30) {
+	if (CPL_geos_version() >= "3.9.0") {
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_inscribed_circle does not work correctly for longitude/latitude data")
+		nQ = rep(nQuadSegs, length.out = length(x))
+		ret = st_sfc(CPL_geos_op("inscribed_circle", x, nQ, integer(0),
+			dTolerance = rep(as.double(dTolerance), length.out = length(x)), logical(0),
+			bOnlyEdges = as.integer(FALSE)))
+		if (any(nQuadSegs > 0)) {
+			pts = st_cast(ret, "POINT")
+			idx = seq(1, length(pts) * 2, by = 2)
+			ret = st_buffer(pts[idx], st_length(st_set_crs(ret, NA_crs_)), nQuadSegs = nQuadSegs)
+		} 
+		ret
+	} else
+		stop("for st_inscribed_circle, GEOS version 3.9.0 or higher is required")
+}
+
+#' @export
+st_inscribed_circle.sf = function(x, dTolerance, ...) {
+	st_set_geometry(x, st_inscribed_circle(st_geometry(x), dTolerance), ...)
+}
+
 
 #' @name geos_unary
 #' @export
@@ -585,7 +624,8 @@ geos_op2_df = function(x, y, geoms) {
 
 # after checking identical crs,
 # call geos_op2 function op on x and y:
-geos_op2_geom = function(op, x, y, s2_model = "closed", ...) {
+# DE-9IM compliant should use model = "closed", more robust seems:
+geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)

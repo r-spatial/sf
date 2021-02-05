@@ -118,6 +118,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				nbreaks = length(breaks) - 1
 			}
 		}
+		if (missing(nbreaks) && is.numeric(breaks))
+			nbreaks = length(breaks) - 1
 
 		# loop over each map to plot:
 		lapply(cols, function(cname) plot(x[, cname], main = cname,
@@ -549,14 +551,14 @@ plot.sfg = function(x, ...) {
 #'
 plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = par("bg"), ...,
     xaxs, yaxs, lab, setParUsrBB = FALSE, bgMap = NULL, expandBB = c(0,0,0,0), graticule = NA_crs_,
-	col_graticule = 'grey', border) {
+	col_graticule = 'grey', border, extent = x) {
 
 # sp's bbox: matrix
 #   min max
 # x
 # y
 
-	bbox = matrix(st_bbox(x), 2, dimnames = list(c("x", "y"), c("min", "max")))
+	bbox = matrix(st_bbox(extent), 2, dimnames = list(c("x", "y"), c("min", "max")))
 	# expandBB: 1=below, 2=left, 3=above and 4=right.
 	expBB = function(lim, expand) c(lim[1] - expand[1] * diff(lim), lim[2] + expand[2] * diff(lim))
 	if (is.null(xlim))
