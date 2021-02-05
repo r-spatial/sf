@@ -81,7 +81,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
 #' # spatstat example:
-#' if (require(spatstat.linnet)) {
+#' if (require(spatstat.core)) {
 #'  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
 #'  # for spatstat.core::rThomas(), set type = "Thomas":
 #'  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
@@ -183,11 +183,11 @@ st_poly_sample = function(x, size, ..., type = "random",
 		}
 		pts[x]
 	} else { # try to go into spatstat
-		if (!requireNamespace("spatstat.linnet", quietly = TRUE))
-			stop("package spatstat required, please install it first")
-		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat")), silent = TRUE)
+		if (!requireNamespace("spatstat.core", quietly = TRUE))
+			stop("package spatstat.core required, please install it (or the full spatstat package) first")
+		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat.core")), silent = TRUE)
 		if (inherits(spatstat_fun, "try-error"))
-			stop(paste0("r", type), " is not an exported function from spatstat.")
+			stop(paste0("r", type), " is not an exported function from spatstat.core.")
 		pts = try(spatstat_fun(..., win = spatstat.geom::as.owin(x)), silent = TRUE)
 		if (inherits(pts, "try-error"))
 			stop("The spatstat function ", paste0("r", type),

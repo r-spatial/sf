@@ -113,7 +113,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 st_sample(ls, 80)
 plot(st_sample(ls, 80))
 # spatstat example:
-if (require(spatstat.linnet)) {
+if (require(spatstat.core)) {
  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
  # for spatstat.core::rThomas(), set type = "Thomas":
  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
