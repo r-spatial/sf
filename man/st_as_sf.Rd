@@ -125,7 +125,7 @@ if (require(spatstat.geom)) {
   # select only the points:
   g[st_is(g, "POINT"),]
 }
-if (require(spatstat.geom)) {
+if (require(spatstat.linnet)) {
  data(chicago)
  plot(st_as_sf(chicago)["label"])
  plot(st_as_sf(chicago)[-1,"label"])

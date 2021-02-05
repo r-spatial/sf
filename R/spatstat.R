@@ -76,14 +76,14 @@ st_as_sfc.psp <- function(x, ...) {
 #' @name st_as_sf
 #' @export
 #' @examples
-#' if (require(spatstat.geom)) {
+#' if (require(spatstat.linnet)) {
 #'  data(chicago)
 #'  plot(st_as_sf(chicago)["label"])
 #'  plot(st_as_sf(chicago)[-1,"label"])
 #' }
 st_as_sf.lpp = function(x, ...) {
-	if (!requireNamespace("spatstat.geom", quietly = TRUE))
-		stop("package spatstat.geom required, please install it (or the full spatstat package) first")
+	if (!requireNamespace("spatstat.linnet", quietly = TRUE))
+		stop("package spatstat.linnet required, please install it (or the full spatstat package) first")
 	# lines, polygon:
 	linework_sf = st_as_sf(spatstat.geom::as.psp(spatstat.geom::domain(x)))
 	# points:
