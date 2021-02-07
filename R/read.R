@@ -347,8 +347,7 @@ abbreviate_shapefile_names = function(x) {
 #' \code{delete_dsn} and \code{delete_layer} should be
 #' handled with care; the former may erase complete directories or databases.
 #' @seealso \link{st_drivers}
-#' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc},
-#' it is returned as an \code{sf} object.
+#' @return \code{obj}, invisibly
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, paste0(tempdir(), "/", "nc.shp"))
@@ -377,6 +376,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 		st_write.sf(st_sf(geom = obj), dsn, ...)
 	else
 		st_write.sf(st_sf(geom = obj), dsn, layer, ...)
+	invisible(obj)
 }
 
 #' @name st_write
@@ -387,6 +387,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
 		fid_column_name = NULL) {
 
+	ret = obj
 	if (!is.null(list(...)$update)) {
 		.Deprecated("append", old = "update") # deprecated at 0.9-0
 		if (is.na(append))
@@ -482,17 +483,18 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		if (!file.remove(tmp))
 			warning(paste("removing", tmp, "failed"))
 	} # nocov end
-	invisible(obj)
+	invisible(ret)
 }
 
 #' @name st_write
 #' @export
 st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
-    sf = try(st_as_sf(obj), silent = TRUE)
+	sf = try(st_as_sf(obj), silent = TRUE)
 	if (!inherits(sf, "try-error"))
-    	st_write.sf(sf, dsn = dsn, layer = layer, ...)
+		st_write.sf(sf, dsn = dsn, layer = layer, ...)
 	else
-    	st_write.sf(obj, dsn = dsn, layer = layer, ...)
+		st_write.sf(obj, dsn = dsn, layer = layer, ...)
+	invisible(obj)
 }
 
 #' @name st_write

@@ -121,8 +121,7 @@ to PostgreSQL. See \code{dbDataType()} for details.}
 if \code{FALSE}, uses Well-Known Text (WKT). Defaults to \code{TRUE} (WKB).}
 }
 \value{
-\code{obj}, invisibly; in case \code{obj} is of class \code{sfc},
-it is returned as an \code{sf} object.
+\code{obj}, invisibly
 }
 \description{
 Write simple features object to file or database

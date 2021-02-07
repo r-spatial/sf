@@ -1,5 +1,7 @@
 # version 0.9-8
 
+* `st_write` returns obj, invisibly; #1597
+
 * fix regression in n-ary `st_intersection()`, #1595, introduced at #1549
 
 * `st_inscribed_circle` computes the maximum inscribed circle for polygons (requires GEOS >= 3.9.0)
