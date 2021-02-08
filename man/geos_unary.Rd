@@ -199,6 +199,7 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  plot(pts["id"], pch = 16) # ID is color
  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
  plot(st_geometry(pts), add = TRUE)
+ layout(matrix(1)) # reset plot layout
 }
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 st_polygonize(st_sfc(mls))

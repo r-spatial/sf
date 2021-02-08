@@ -335,6 +335,7 @@ st_inscribed_circle.sf = function(x, dTolerance, ...) {
 #'  plot(pts["id"], pch = 16) # ID is color
 #'  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
 #'  plot(st_geometry(pts), add = TRUE)
+#'  layout(matrix(1)) # reset plot layout
 #' }
 st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_voronoi")
