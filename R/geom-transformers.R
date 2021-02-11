@@ -175,8 +175,9 @@ st_boundary.sf = function(x) {
 #' @details \code{st_convex_hull} creates the convex hull of a set of points
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' plot(st_convex_hull(nc))
-#' plot(nc, border = grey(.5))
+#' nc_g = st_geometry(nc)
+#' plot(st_convex_hull(nc_g))
+#' plot(nc_g, border = grey(.5), add = TRUE)
 st_convex_hull = function(x)
 	UseMethod("st_convex_hull")
 
@@ -267,6 +268,13 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
 #' \code{st_inscribed_circle} requires GEOS version 3.9 or above
+#' @examples
+#' if (sf_extSoftVersion()["GEOS"] >= "3.9.0") {
+#'   nc_t = st_transform(nc, 'EPSG:2264')
+#'   x = st_inscribed_circle(st_geometry(nc_t))
+#'   plot(st_geometry(nc_t), asp = 1, col = grey(.9))
+#'   plot(x, add = TRUE, col = '#ff9999')
+#' }
 st_inscribed_circle = function(x, dTolerance, ...)
 	UseMethod("st_inscribed_circle")
 
@@ -327,6 +335,7 @@ st_inscribed_circle.sf = function(x, dTolerance, ...) {
 #'  plot(pts["id"], pch = 16) # ID is color
 #'  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
 #'  plot(st_geometry(pts), add = TRUE)
+#'  layout(matrix(1)) # reset plot layout
 #' }
 st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_voronoi")
@@ -407,8 +416,8 @@ st_line_merge.sf = function(x) {
 #' @export
 #' @details \code{st_centroid} gives the centroid of a geometry
 #' @examples
-#' plot(nc, axes = TRUE)
-#' plot(st_centroid(nc), add = TRUE, pch = 3)
+#' plot(nc_g, axes = TRUE)
+#' plot(st_centroid(nc_g), add = TRUE, pch = 3, col = 'red')
 #' mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 #' plot(mp)
 #' plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
@@ -465,8 +474,8 @@ st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
 #' @export
 #' @details \code{st_point_on_surface} returns a point guaranteed to be on the (multi)surface.
 #' @examples
-#' plot(nc, axes = TRUE)
-#' plot(st_point_on_surface(nc), add = TRUE, pch = 3)
+#' plot(nc_g, axes = TRUE)
+#' plot(st_point_on_surface(nc_g), add = TRUE, pch = 3, col = 'red')
 st_point_on_surface = function(x)
 	UseMethod("st_point_on_surface")
 

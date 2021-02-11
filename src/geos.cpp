@@ -1142,13 +1142,17 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 				// iterate over items in query and erase overlapping areas in geom
 				for (size_t j = 0; j < tree_sel.size(); j++) {
 					size_t k = tree_sel[j];
-					GeomPtr inters = nullptr;
+					GeomPtr inters = geos_ptr(GEOSIntersection_r(hGEOSCtxt, out[k].get(), geom.get()), hGEOSCtxt);
 					if (geom.get() != nullptr) {
-						inters = geos_ptr(GEOSIntersection_r(hGEOSCtxt, out[k].get(), geom.get()), hGEOSCtxt);
 						if (inters == nullptr)
 							errors++;
-						if (inters != nullptr && !chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
-							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); // cut out inters from out[k]
+						else if (!chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
+							// cut out inters from geom:
+							geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt); 
+							if (geom == nullptr)
+								Rcpp::stop("GEOS exception"); // #nocov
+							// cut out inters from out[k]:
+							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); 
 							if (g == nullptr)
 								Rcpp::warning("GEOS difference returns NULL"); // #nocov
 							else {

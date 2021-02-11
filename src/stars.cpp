@@ -194,7 +194,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 }
 
 int get_from_list(List lst, const char *name, int otherwise) {
-	if (lst.containsElementNamed(name)) {
+	if (lst.containsElementNamed(name) && lst[name] != R_NilValue) {
 		IntegerVector ret = lst[name]; // #nocov
 		return(ret[0]);                // #nocov
 	} else
