@@ -325,9 +325,12 @@ abbreviate_shapefile_names = function(x) {
 #' multiple options supported.
 #' @param layer_options character; driver dependent layer creation options;
 #' multiple options supported.
-#' @param quiet logical; suppress info on name, driver, size and spatial reference
-#' @param factorsAsCharacter logical; convert \code{factor} objects into
-#' character strings (default), else into numbers by \code{as.numeric}.
+#' @param quiet logical; suppress info on name, driver, size and spatial
+#'   reference
+#' @param factorsAsCharacter logical; convert \code{factor} levels to character
+#'   strings (\code{TRUE}, default), otherwise into numbers when
+#'   factorsAsCharacter is \code{FALSE}. For database connections,
+#'   \code{factorsAsCharacter} is always \code{TRUE}.
 #' @param append logical; should we append to an existing layer, or replace it?
 #' if \code{TRUE} append, if \code{FALSE} replace.
 #' The default for \code{st_write} is \code{NA} which raises an error if the layer exists.

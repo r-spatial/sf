@@ -14,7 +14,6 @@
   overwrite = FALSE,
   append = FALSE,
   field.types = NULL,
-  factorsAsCharacter = TRUE,
   binary = TRUE
 )
 
@@ -27,7 +26,6 @@
   overwrite = FALSE,
   append = FALSE,
   field.types = NULL,
-  factorsAsCharacter = TRUE,
   binary = TRUE
 )
 }

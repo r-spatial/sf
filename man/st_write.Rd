@@ -57,10 +57,13 @@ multiple options supported.}
 \item{layer_options}{character; driver dependent layer creation options;
 multiple options supported.}
 
-\item{quiet}{logical; suppress info on name, driver, size and spatial reference}
+\item{quiet}{logical; suppress info on name, driver, size and spatial
+reference}
 
-\item{factorsAsCharacter}{logical; convert \code{factor} objects into
-character strings (default), else into numbers by \code{as.numeric}.}
+\item{factorsAsCharacter}{logical; convert \code{factor} levels to character
+strings (\code{TRUE}, default), otherwise into numbers when
+factorsAsCharacter is \code{FALSE}. For database connections,
+\code{factorsAsCharacter} is always \code{TRUE}.}
 
 \item{append}{logical; should we append to an existing layer, or replace it?
 if \code{TRUE} append, if \code{FALSE} replace.
