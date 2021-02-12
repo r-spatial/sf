@@ -88,7 +88,7 @@ Suggests:
     RSQLite,
     s2 (>= 1.0.1),
     sp (>= 1.2-4),
-    spatstat.geom, spatstat.core, spatstat.linnet,
+    spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
     spatstat.utils,
     stars (>= 0.2-0),
     testthat,
