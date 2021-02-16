@@ -59,7 +59,7 @@
 #' # summary(st_as_sf(pol.grd))
 #' # summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 #' @export
-st_as_sf.Spatial = function(x, ...) {
+st_as_sf.Spatial = function(x, ..., as_tibble = FALSE) {
 	if ("data" %in% slotNames(x))
 		df = x@data
 	else
@@ -70,6 +70,8 @@ st_as_sf.Spatial = function(x, ...) {
 		stop("package sp required, please install it first")
 	if (sp::gridded(x) && sp::fullgrid(x))
 		sp::fullgrid(x) = FALSE
+	if (isTRUE(as_tibble))
+		df = as_tibble(df)
 	df$geometry = st_as_sfc(sp::geometry(x), ...)
 	st_as_sf(df)
 }

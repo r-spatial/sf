@@ -81,6 +81,26 @@ test_that("st_as_sf bulk points work", {
 
 })
 
+test_that("st_as_sf.Spatial(as_tibble = TRUE) works", {
+	meuse_sp <- SpatialPointsDataFrame(cbind(1:5, 1:5), data.frame(a = 1:5))
+	meuse_sf <- st_as_sf(meuse_sp, as_tibble = TRUE)
+	expect_identical(class(meuse_sf), c("sf", "tbl_df", "tbl", "data.frame"))
+})
+
+test_that("st_as_sf.ppp(as_tibble = TRUE) works", {
+	data(gorillas, package = "spatstat.data")
+	meuse_ppp <- gorillas
+	meuse_sf <- st_as_sf(meuse_ppp, as_tibble = TRUE)
+	expect_identical(class(meuse_sf), c("sf", "tbl_df", "tbl", "data.frame"))
+})
+
+test_that("st_as_sf.lpp(as_tibble = TRUE) works", {
+	data(chicago, package = "spatstat.data")
+	meuse_ppp <- chicago
+	meuse_sf <- st_as_sf(meuse_ppp, as_tibble = TRUE)
+	expect_identical(class(meuse_sf), c("sf", "tbl_df", "tbl", "data.frame"))
+})
+
 test_that("transform work", {
   data(meuse, package = "sp")
   x  = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
