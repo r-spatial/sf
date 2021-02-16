@@ -18,7 +18,7 @@ sf_proj_network(enable = FALSE, url = character(0))
 \item{url}{character; use this to specify and override the default proj network CDN}
 }
 \value{
-`sf_proj_search_paths()` returns the search path (possibly after setting to paths)
+`sf_proj_search_paths()` returns the search path (possibly after setting it)
 
 `sf_proj_network` when called without arguments returns a logical indicating whether
 network search of datum grids is enabled, when called with arguments it returns a character

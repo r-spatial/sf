@@ -14,6 +14,81 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
+// [[Rcpp::export]]
+Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
+	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy = -1.0) {
+#if PROJ_VERSION_MAJOR >= 7
+	if (crs.size() != 2)
+		Rcpp::stop("length 2 character vector expected");
+	const char *auth = NULL;
+	if (authority.size())
+		auth = authority[0];
+	PJ_OPERATION_FACTORY_CONTEXT *factory_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, auth);
+	if (accuracy >= 0.0)
+		proj_operation_factory_context_set_desired_accuracy(PJ_DEFAULT_CTX, factory_ctx, accuracy);
+	if (AOI.size() == 4)
+		proj_operation_factory_context_set_area_of_interest(PJ_DEFAULT_CTX, factory_ctx, 
+			AOI[0], AOI[1], AOI[2], AOI[3]);
+	else if (Use.size() == 1) {
+		if (Use[0] == "NONE")
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_NONE);
+		else if (Use[0] == "BOTH")
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_BOTH);
+		else if (Use[0] == "INTERSECTION")
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_INTERSECTION);
+		else if (Use[0] == "SMALLEST")
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_SMALLEST);
+		else
+			Rcpp::stop("unknown value for Use");
+	}
+	// FIXME:
+	// handle many more constraining options
+
+	PJ *source_crs = proj_create(PJ_DEFAULT_CTX, crs[0]);
+	if (source_crs == NULL)
+		Rcpp::stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+	PJ *target_crs = proj_create(PJ_DEFAULT_CTX, crs[1]);
+	if (target_crs == NULL)
+		Rcpp::stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+
+	PJ_OBJ_LIST *obj_list = proj_create_operations(PJ_DEFAULT_CTX, source_crs, target_crs, factory_ctx);
+	int n = proj_list_get_count(obj_list);
+	Rcpp::CharacterVector id(n);
+	Rcpp::CharacterVector description(n);
+	Rcpp::CharacterVector definition(n);
+	Rcpp::LogicalVector   has_inverse(n);
+	Rcpp::NumericVector   acc(n);
+	for (int i = 0; i < n; i++) {
+		PJ *pj = proj_list_get(PJ_DEFAULT_CTX, obj_list, i);
+		PJ_PROJ_INFO info = proj_pj_info(pj);
+		description(i) = info.description;
+		definition(i) = info.definition;
+		id(i) = info.id;
+		has_inverse(i) = info.has_inverse != 0;
+		if (info.accuracy == -1.0)
+			acc(i) = NA_REAL;
+		else
+			acc(i) = info.accuracy;
+	}
+	// int sug = proj_get_suggested_operation(PJ_DEFAULT_CTX, *obj_list, PJ_DIRECTION direction, PJ_COORD coord)
+
+	Rcpp::DataFrame df = Rcpp::DataFrame::create( 
+		Rcpp::Named("id") = id,
+		Rcpp::Named("description") = description,
+		Rcpp::Named("definition") = definition,
+		Rcpp::Named("has_inverse") = has_inverse,
+		Rcpp::Named("accuracy") = acc);
+
+	proj_destroy(source_crs);
+	proj_destroy(target_crs);
+	proj_operation_factory_context_destroy(factory_ctx);
+#else
+	Rcpp::stop("PROJ 7 required");
+	return Rcpp::DataFrame::create();
+#endif
+	return df;
+}
+
 Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
 	return Rcpp::CharacterVector(proj_info().searchpath);
 }
@@ -175,6 +250,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #if PJ_VERSION >= 600
 # define PROJ6 1
 #endif
+
+Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
+	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy = -1.0) {
+
+	Rcpp::stop("PROJ 7 required");
+	return DataFrame::create();
+}
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {

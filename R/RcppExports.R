@@ -265,6 +265,10 @@ CPL_proj_h <- function(b = FALSE) {
     .Call('_sf_CPL_proj_h', PACKAGE = 'sf', b)
 }
 
+CPL_get_pipelines <- function(crs, authority, AOI, Use, accuracy = -1.0) {
+    .Call('_sf_CPL_get_pipelines', PACKAGE = 'sf', crs, authority, AOI, Use, accuracy)
+}
+
 CPL_is_network_enabled <- function(b = FALSE) {
     .Call('_sf_CPL_is_network_enabled', PACKAGE = 'sf', b)
 }

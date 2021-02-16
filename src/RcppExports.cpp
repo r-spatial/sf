@@ -872,6 +872,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_get_pipelines
+Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy);
+RcppExport SEXP _sf_CPL_get_pipelines(SEXP crsSEXP, SEXP authoritySEXP, SEXP AOISEXP, SEXP UseSEXP, SEXP accuracySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type crs(crsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type authority(authoritySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type AOI(AOISEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type Use(UseSEXP);
+    Rcpp::traits::input_parameter< double >::type accuracy(accuracySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_pipelines(crs, authority, AOI, Use, accuracy));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_is_network_enabled
 Rcpp::LogicalVector CPL_is_network_enabled(bool b);
 RcppExport SEXP _sf_CPL_is_network_enabled(SEXP bSEXP) {
@@ -1291,6 +1306,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
+    {"_sf_CPL_get_pipelines", (DL_FUNC) &_sf_CPL_get_pipelines, 5},
     {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_enable_network", (DL_FUNC) &_sf_CPL_enable_network, 2},
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},
