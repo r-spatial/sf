@@ -26,6 +26,22 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #endif
 }
 
+Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
+#if PROJ_VERSION_MAJOR >= 7
+	if (enable) {
+		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
+		if (url.size())
+			proj_context_set_url_endpoint(PJ_DEFAULT_CTX, url[0]);
+		return Rcpp::CharacterVector::create(proj_context_get_url_endpoint(PJ_DEFAULT_CTX));
+	} else { // disable:
+		proj_context_set_enable_network(PJ_DEFAULT_CTX, 0);
+		return Rcpp::CharacterVector::create();
+	}
+#else
+	return Rcpp::CharacterVector::create();
+#endif
+}
+
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
 	const char *cp = data_dir.c_str();
 	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
@@ -166,6 +182,23 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
 #else
 	return Rcpp::LogicalVector::create(false);
+#endif
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
+#if PROJ_VERSION_MAJOR >= 7
+	if (enable) {
+		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
+		if (url.size())
+			proj_context_set_url_endpoint(PJ_DEFAULT_CTX, url[0]);
+		return Rcpp::CharacterVector::create(proj_context_get_url_endpoint(PJ_DEFAULT_CTX));
+	} else { // disable:
+		proj_context_set_enable_network(PJ_DEFAULT_CTX, 0);
+		return Rcpp::CharacterVector::create();
+	}
+#else
+	return Rcpp::CharacterVector::create();
 #endif
 }
 
