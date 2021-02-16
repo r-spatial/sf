@@ -1,5 +1,7 @@
 # version 0.9-8
 
+* `sf_proj_network()` reports whether PROJ uses network (CDN) grids, can switch it on or off, and can set the CDN url.
+
 * `st_write` returns obj, invisibly; #1597
 
 * fix regression in n-ary `st_intersection()`, #1595, introduced at #1549
