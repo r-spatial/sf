@@ -82,11 +82,11 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	proj_destroy(source_crs);
 	proj_destroy(target_crs);
 	proj_operation_factory_context_destroy(factory_ctx);
+	return df;
 #else
-	Rcpp::stop("PROJ 7 required");
+	Rcpp::warning("PROJ >= 7 required");
 	return Rcpp::DataFrame::create();
 #endif
-	return df;
 }
 
 Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
