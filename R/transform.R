@@ -254,12 +254,31 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE,
 			keep, warn, authority_compliant)
 }
 
-#' Get or set the PROJ search paths
+#' Manage PROJ settings
+#' 
+#' Manage PROJ search path and network settings
 #' @param paths the search path to be set; omit if no paths need to be set
-#' @return the search path (possibly after setting to paths)
+#' @return `sf_proj_search_paths()` returns the search path (possibly after setting it)
+#' @name proj_tools
 #' @export
-sf_proj_search_paths = function(paths = NULL) {
-	if (!is.null(paths))
-		CPL_set_proj_search_paths(as.character(paths));
-	CPL_get_proj_search_paths(character(0));
+sf_proj_search_paths = function(paths = character(0)) {
+	if (length(paths) == 0)
+		CPL_get_proj_search_paths(paths) # get
+	else
+		CPL_set_proj_search_paths(as.character(paths)) # set
+}
+
+#' Get or set the PROJ search paths
+#' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility
+#' @param url character; use this to specify and override the default proj network CDN 
+#' @return `sf_proj_network` when called without arguments returns a logical indicating whether
+#' network search of datum grids is enabled, when called with arguments it returns a character
+#' vector with the URL of the CDN used (or specified with `url`).
+#' @name proj_tools
+#' @export
+sf_proj_network = function(enable = FALSE, url = character(0)) {
+	if (missing(enable) && missing(url))
+		CPL_is_network_enabled()
+	else 
+		CPL_enable_network(url, enable)
 }
