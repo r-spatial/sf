@@ -24,23 +24,25 @@ Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 		}
 		break;
 
-		case 1: // list of matrices:
-		for (decltype(n) i = 0; i < n; i++) {
-			Rcpp::NumericMatrix m = sf[i];
-			auto rows = m.nrow();
-
-			if (i == 0) { // initialize:
-				if (rows == 0)
-					return bb;
-					// Rcpp::stop("CPL_get_bbox: invalid geometry");
-				bb[0] = bb[2] = m(0,0);
-				bb[1] = bb[3] = m(0,1);
-			}
-			for (decltype(rows) j = 0; j < rows; j++) {
-				bb[0] = std::min(m(j,0),bb[0]);
-				bb[1] = std::min(m(j,1),bb[1]);
-				bb[2] = std::max(m(j,0),bb[2]);
-				bb[3] = std::max(m(j,1),bb[3]);
+		case 1: { // list of matrices:
+			bool initialised = false;
+			for (decltype(n) i = 0; i < n; i++) {
+				Rcpp::NumericMatrix m = sf[i];
+				auto rows = m.nrow();
+	
+				if (rows > 0) { // non-empty:
+					if (! initialised) { // initialize:
+						bb[0] = bb[2] = m(0,0);
+						bb[1] = bb[3] = m(0,1);
+						initialised = true;
+					}
+					for (decltype(rows) j = 0; j < rows; j++) {
+						bb[0] = std::min(m(j,0),bb[0]);
+						bb[1] = std::min(m(j,1),bb[1]);
+						bb[2] = std::max(m(j,0),bb[2]);
+						bb[3] = std::max(m(j,1),bb[3]);
+					}
+				}
 			}
 		}
 		break;

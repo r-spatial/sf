@@ -54,22 +54,24 @@ Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 		}
 		break;
 
-	case 1: // list of matrices:
-		for (decltype(n) i = 0; i < n; i++) {
-			Rcpp::NumericMatrix m = sf[i];
-			int pos = get_z_position(m);
-			auto rows = m.nrow();
-
-			if (i == 0) { // initialize:
-				if (rows == 0)
-					return bb; // #nocov
-				// Rcpp::stop("CPL_get_zbox: invalid geometry");
-				bb[0] = m(0,pos);
-				bb[1] = m(0,pos);
-			}
-			for (decltype(rows) j = 0; j < rows; j++) {
-				bb[0] = std::min(m(j,pos),bb[0]);
-				bb[1] = std::max(m(j,pos),bb[1]);
+	case 1: { // list of matrices:
+			bool initialised = false;
+			for (decltype(n) i = 0; i < n; i++) {
+				Rcpp::NumericMatrix m = sf[i];
+				int pos = get_z_position(m);
+				auto rows = m.nrow();
+	
+				if (rows > 0) {
+					if (! initialised) { // initialize:
+						bb[0] = m(0,pos);
+						bb[1] = m(0,pos);
+						initialised = true;
+					}
+					for (decltype(rows) j = 0; j < rows; j++) {
+						bb[0] = std::min(m(j,pos),bb[0]);
+						bb[1] = std::max(m(j,pos),bb[1]);
+					}
+				}
 			}
 		}
 		break;
@@ -114,22 +116,24 @@ Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 		}
 		break;
 
-	case 1: // list of matrices:
-		for (decltype(n) i = 0; i < n; i++) {
-			Rcpp::NumericMatrix m = sf[i];
-			int pos = get_m_position(m);
-			auto rows = m.nrow();
-
-			if (i == 0) { // initialize:
-				if (rows == 0)
-					return bb; // #nocov
-				// Rcpp::stop("CPL_get_zbox: invalid geometry");
-				bb[0] = m(0,pos);
-				bb[1] = m(0,pos);
-			}
-			for (decltype(rows) j = 0; j < rows; j++) {
-				bb[0] = std::min(m(j,pos),bb[0]);
-				bb[1] = std::max(m(j,pos),bb[1]);
+	case 1: { // list of matrices:
+			bool initialised = false;
+			for (decltype(n) i = 0; i < n; i++) {
+				Rcpp::NumericMatrix m = sf[i];
+				int pos = get_m_position(m);
+				auto rows = m.nrow();
+	
+				if (rows > 0) {
+					if (! initialised) { // initialize:
+						bb[0] = m(0,pos);
+						bb[1] = m(0,pos);
+						initialised = true;
+					}
+					for (decltype(rows) j = 0; j < rows; j++) {
+						bb[0] = std::min(m(j,pos),bb[0]);
+						bb[1] = std::max(m(j,pos),bb[1]);
+					}
+				}
 			}
 		}
 		break;
