@@ -16,7 +16,11 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 
 // [[Rcpp::export]]
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
-	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy = -1.0) {
+	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
+	Rcpp::CharacterVector grid_availability,
+	double accuracy = -1.0,
+	bool strict_containment = false
+	) {
 #if PROJ_VERSION_MAJOR >= 7
 	if (crs.size() != 2)
 		Rcpp::stop("length 2 character vector expected");
@@ -43,6 +47,38 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	}
 	// FIXME:
 	// handle many more constraining options
+	if (strict_containment)
+		proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX, factory_ctx,
+			PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+	else
+		proj_operation_factory_context_set_spatial_criterion(PJ_DEFAULT_CTX, factory_ctx,
+			PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
+
+	// PROJ_GRID_AVAILABILITY_USE
+	if (grid_availability.size() == 1) {
+		if (grid_availability[0] == "USED")
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+				PROJ_GRID_AVAILABILITY_USED_FOR_SORTING); // Grid availability is only used for sorting results. Operations where some grids are missing will be sorted last.
+		else if (grid_availability[0] == "DISCARD")
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
+PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID); // Completely discard an operation if a required grid is missing.
+		else if (grid_availability[0] == "IGNORED")
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
+PROJ_GRID_AVAILABILITY_IGNORED); // Ignore grid availability at all. Results will be presented as if all grids were available.
+		else if (grid_availability[0] == "AVAILABLE")
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
+PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grids known to PROJ (that is registered in the grid_alternatives table of its database) were available. Used typically when networking is enabled.
+		else
+			Rcpp::stop("Unknown value for grid_availability");
+	}
+
+/*
+	void proj_operation_factory_context_set_allow_use_intermediate_crs(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, PROJ_INTERMEDIATE_CRS_USE use);
+
+	void proj_operation_factory_context_set_discard_superseded(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, int discard)
+
+	void proj_operation_factory_context_set_allow_ballpark_transformations(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, int allow);
+*/
 
 	PJ *source_crs = proj_create(PJ_DEFAULT_CTX, crs[0]);
 	if (source_crs == NULL)
@@ -50,6 +86,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	PJ *target_crs = proj_create(PJ_DEFAULT_CTX, crs[1]);
 	if (target_crs == NULL)
 		Rcpp::stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+
 
 	PJ_OBJ_LIST *obj_list = proj_create_operations(PJ_DEFAULT_CTX, source_crs, target_crs, factory_ctx);
 	int n = proj_list_get_count(obj_list);
@@ -69,6 +106,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 			acc(i) = NA_REAL;
 		else
 			acc(i) = info.accuracy;
+		proj_destroy(pj);
 	}
 	// int sug = proj_get_suggested_operation(PJ_DEFAULT_CTX, *obj_list, PJ_DIRECTION direction, PJ_COORD coord)
 
