@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get or set the PROJ search paths — sf_proj_search_paths • sf</title>
+<title>Manage PROJ settings — proj_tools • sf</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Get or set the PROJ search paths — sf_proj_search_paths" />
-<meta property="og:description" content="Get or set the PROJ search paths" />
+<meta property="og:title" content="Manage PROJ settings — proj_tools" />
+<meta property="og:description" content="Manage PROJ search path and network settings" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -149,16 +149,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get or set the PROJ search paths</h1>
+    <h1>Manage PROJ settings</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/transform.R'><code>R/transform.R</code></a></small>
-    <div class="hidden name"><code>sf_proj_search_paths.Rd</code></div>
+    <div class="hidden name"><code>proj_tools.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get or set the PROJ search paths</p>
+    <p>Manage PROJ search path and network settings</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sf_proj_search_paths</span><span class='op'>(</span>paths <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sf_proj_search_paths</span><span class='op'>(</span>paths <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>sf_proj_network</span><span class='op'>(</span>enable <span class='op'>=</span> <span class='cn'>FALSE</span>, url <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,11 +169,22 @@
       <th>paths</th>
       <td><p>the search path to be set; omit if no paths need to be set</p></td>
     </tr>
+    <tr>
+      <th>enable</th>
+      <td><p>logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility</p></td>
+    </tr>
+    <tr>
+      <th>url</th>
+      <td><p>character; use this to specify and override the default proj network CDN</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the search path (possibly after setting to paths)</p>
+    <p>`sf_proj_search_paths()` returns the search path (possibly after setting to paths)</p>
+<p>`sf_proj_network` when called without arguments returns a logical indicating whether
+network search of datum grids is enabled, when called with arguments it returns a character
+vector with the URL of the CDN used (or specified with `url`).</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

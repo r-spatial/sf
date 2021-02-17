@@ -143,7 +143,7 @@
 <p>Examples of the first three types are</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.7.1, GDAL 2.2.3, PROJ 4.9.3</span>
+<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="st">"MULTIPOINT"</span><span class="op">)</span>
 <span class="co">## MULTIPOINT ((1 1))</span>
@@ -297,20 +297,29 @@
 <span class="co">## Coordinate Reference System:</span>
 <span class="co">##   User input: EPSG:4326 </span>
 <span class="co">##   wkt:</span>
-<span class="co">## GEOGCS["WGS 84",</span>
-<span class="co">##     DATUM["WGS_1984",</span>
-<span class="co">##         SPHEROID["WGS 84",6378137,298.257223563,</span>
-<span class="co">##             AUTHORITY["EPSG","7030"]],</span>
-<span class="co">##         AUTHORITY["EPSG","6326"]],</span>
+<span class="co">## GEOGCRS["WGS 84",</span>
+<span class="co">##     DATUM["World Geodetic System 1984",</span>
+<span class="co">##         ELLIPSOID["WGS 84",6378137,298.257223563,</span>
+<span class="co">##             LENGTHUNIT["metre",1]]],</span>
 <span class="co">##     PRIMEM["Greenwich",0,</span>
-<span class="co">##         AUTHORITY["EPSG","8901"]],</span>
-<span class="co">##     UNIT["degree",0.0174532925199433,</span>
-<span class="co">##         AUTHORITY["EPSG","9122"]],</span>
-<span class="co">##     AUTHORITY["EPSG","4326"]]</span>
+<span class="co">##         ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##     CS[ellipsoidal,2],</span>
+<span class="co">##         AXIS["geodetic latitude (Lat)",north,</span>
+<span class="co">##             ORDER[1],</span>
+<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##         AXIS["geodetic longitude (Lon)",east,</span>
+<span class="co">##             ORDER[2],</span>
+<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="co">##     USAGE[</span>
+<span class="co">##         SCOPE["unknown"],</span>
+<span class="co">##         AREA["World"],</span>
+<span class="co">##         BBOX[-90,-180,90,180]],</span>
+<span class="co">##     ID["EPSG",4326]]</span>
 <span class="va">s2</span> <span class="op">=</span> <span class="va">s</span>
 <span class="fu"><a href="../reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">s2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=WGS84"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">s2</span><span class="op">)</span>
-<span class="co">## [1] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span></code></pre></div>
+<span class="co">## [1] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span>
+<span class="co">## [2] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"wkt\": 1 string mismatch &gt;"</span></code></pre></div>
 <p>an alternative, more pipe-friendly version of <code>st_crs&lt;-</code> is</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span>
@@ -318,7 +327,7 @@
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: 0 ymin: 1 xmax: 11 ymax: 12</span>
-<span class="co">## CRS:            EPSG:4326</span>
+<span class="co">## geographic CRS: WGS 84</span>
 <span class="co">##    a      geometry</span>
 <span class="co">## 1 15   POINT (0 1)</span>
 <span class="co">## 2 16 POINT (11 12)</span></code></pre></div>
@@ -342,7 +351,7 @@
 <span class="co">## geometry type:  POINT</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708</span>
-<span class="co">## CRS:            EPSG:3857</span>
+<span class="co">## projected CRS:  WGS 84 / Pseudo-Mercator</span>
 <span class="co">##    a                geometry</span>
 <span class="co">## 1 15      POINT (0 111325.1)</span>
 <span class="co">## 2 16 POINT (1224514 1345708)</span></code></pre></div>

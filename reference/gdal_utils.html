@@ -244,33 +244,50 @@
 <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='va'>in_file</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; Driver: GTiff/GeoTIFF
-#&gt; Files: /tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/tif/geomatrix.tif
+#&gt; Files: /tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/tif/geomatrix.tif
 #&gt; Size is 20, 20
 #&gt; Coordinate System is:
-#&gt; PROJCS["WGS 84 / UTM zone 11N",
-#&gt;     GEOGCS["WGS 84",
-#&gt;         DATUM["WGS_1984",
-#&gt;             SPHEROID["WGS 84",6378137,298.257223563,
-#&gt;                 AUTHORITY["EPSG","7030"]],
-#&gt;             AUTHORITY["EPSG","6326"]],
+#&gt; PROJCRS["WGS 84 / UTM zone 11N",
+#&gt;     BASEGEOGCRS["WGS 84",
+#&gt;         DATUM["World Geodetic System 1984",
+#&gt;             ELLIPSOID["WGS 84",6378137,298.257223563,
+#&gt;                 LENGTHUNIT["metre",1]]],
 #&gt;         PRIMEM["Greenwich",0,
-#&gt;             AUTHORITY["EPSG","8901"]],
-#&gt;         UNIT["degree",0.0174532925199433,
-#&gt;             AUTHORITY["EPSG","9122"]],
-#&gt;         AUTHORITY["EPSG","4326"]],
-#&gt;     PROJECTION["Transverse_Mercator"],
-#&gt;     PARAMETER["latitude_of_origin",0],
-#&gt;     PARAMETER["central_meridian",-117],
-#&gt;     PARAMETER["scale_factor",0.9996],
-#&gt;     PARAMETER["false_easting",500000],
-#&gt;     PARAMETER["false_northing",0],
-#&gt;     UNIT["metre",1,
-#&gt;         AUTHORITY["EPSG","9001"]],
-#&gt;     AXIS["Easting",EAST],
-#&gt;     AXIS["Northing",NORTH],
-#&gt;     AUTHORITY["EPSG","32611"]]
+#&gt;             ANGLEUNIT["degree",0.0174532925199433]],
+#&gt;         ID["EPSG",4326]],
+#&gt;     CONVERSION["UTM zone 11N",
+#&gt;         METHOD["Transverse Mercator",
+#&gt;             ID["EPSG",9807]],
+#&gt;         PARAMETER["Latitude of natural origin",0,
+#&gt;             ANGLEUNIT["degree",0.0174532925199433],
+#&gt;             ID["EPSG",8801]],
+#&gt;         PARAMETER["Longitude of natural origin",-117,
+#&gt;             ANGLEUNIT["degree",0.0174532925199433],
+#&gt;             ID["EPSG",8802]],
+#&gt;         PARAMETER["Scale factor at natural origin",0.9996,
+#&gt;             SCALEUNIT["unity",1],
+#&gt;             ID["EPSG",8805]],
+#&gt;         PARAMETER["False easting",500000,
+#&gt;             LENGTHUNIT["metre",1],
+#&gt;             ID["EPSG",8806]],
+#&gt;         PARAMETER["False northing",0,
+#&gt;             LENGTHUNIT["metre",1],
+#&gt;             ID["EPSG",8807]]],
+#&gt;     CS[Cartesian,2],
+#&gt;         AXIS["(E)",east,
+#&gt;             ORDER[1],
+#&gt;             LENGTHUNIT["metre",1]],
+#&gt;         AXIS["(N)",north,
+#&gt;             ORDER[2],
+#&gt;             LENGTHUNIT["metre",1]],
+#&gt;     USAGE[
+#&gt;         SCOPE["unknown"],
+#&gt;         AREA["World - N hemisphere - 120°W to 114°W - by country"],
+#&gt;         BBOX[0,-120,84,-114]],
+#&gt;     ID["EPSG",32611]]
+#&gt; Data axis to CRS axis mapping: 1,2
 #&gt; PROJ.4 string is:
-#&gt; '+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs '
+#&gt; '+proj=utm +zone=11 +datum=WGS84 +units=m +no_defs'
 #&gt; GeoTransform =
 #&gt;   1841001.75, 1.5, -5
 #&gt;   1144003.25, -5, -1.5
@@ -286,14 +303,14 @@
 #&gt; Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)
 #&gt; Band 1 Block=20x20 Type=Byte, ColorInterp=Gray
 #&gt;     Computed Min/Max=74.000,255.000
-#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpxrQXjS/file570d25ca959f.gpkg' using driver `GPKG'
+#&gt; Reading layer `storms_xyz' from data source `/tmp/RtmpKGmD3N/filef14819d1ef3b.gpkg' using driver `GPKG'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ
 #&gt; bbox:           xmin: -5785269 ymin: -8509454 xmax: 25097160 ymax: 15846560
-#&gt; z_range:        zmin: 3031.49 zmax: 3336.608
-#&gt; CRS:            2264
-#&gt; Reading layer `storms_xyz' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
+#&gt; z_range:        zmin: 924 zmax: 1017
+#&gt; projected CRS:  NAD83 / North Carolina (ftUS)
+#&gt; Reading layer `storms_xyz' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/storms_xyz.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 71 features and 0 fields
 #&gt; geometry type:  LINESTRING
 #&gt; dimension:      XYZ

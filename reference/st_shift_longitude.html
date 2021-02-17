@@ -207,7 +207,7 @@
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; CRS:            EPSG:4326</div><div class='output co'>#&gt; <span class='message'>POINT (190 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'>
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (190 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'>
 <span class='co'>## sf</span>
 <span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geometry <span class='op'>=</span> <span class='va'>sfc</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>st_shift_longitude</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
@@ -215,7 +215,7 @@
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; CRS:            EPSG:4326
+#&gt; geographic CRS: WGS 84
 #&gt;   id       geometry
 #&gt; 1  1 POINT (190 50)
 #&gt; 2  2 POINT (170 50)</div></pre>

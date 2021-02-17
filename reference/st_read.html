@@ -357,12 +357,12 @@ that reside in the same directory, only one of them having extension <code>.shp<
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span> <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span>
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span> <span class='co'># note that AREA was computed using Euclidian area on lon/lat degrees</span>
 </div><div class='output co'>#&gt;       AREA          PERIMETER         CNTY_         CNTY_ID    
 #&gt;  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  
 #&gt;  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  
@@ -395,12 +395,12 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='co'>## only two features by where clause</span>
 <span class='va'>nc_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>,
                      query <span class='op'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; geometry type:  POLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.06555 ymin: 34.82742 xmax: -78.49929 ymax: 35.50912
-#&gt; CRS:            4267</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>meuse</span>, ask <span class='op'>=</span> <span class='cn'>FALSE</span>, echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
   <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'><a href='st_write.html'>st_write</a></span><span class='op'>(</span><span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span>, <span class='st'>"PG:dbname=postgis"</span>, <span class='st'>"meuse"</span>,
@@ -425,7 +425,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='output co'>#&gt; <span class='error'>Error in gsub(finish, start, ..., fixed = TRUE): zero-length pattern</span></div><div class='input'><span class='co'># read geojson from string:</span>
+#&gt; geographic CRS: NAD27</div><div class='output co'>#&gt; <span class='error'>Error in gsub(finish, start, ..., fixed = TRUE): zero-length pattern</span></div><div class='input'><span class='co'># read geojson from string:</span>
 <span class='va'>geojson_txt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>=</span> <span class='fu'>read_sf</span><span class='op'>(</span><span class='va'>geojson_txt</span><span class='op'>)</span>
@@ -434,7 +434,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; geometry type:  MULTIPOINT
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6
-#&gt; CRS:            4326</div><div class='output co'>#&gt; <span class='error'>Error in gsub(finish, start, ..., fixed = TRUE): zero-length pattern</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='error'>Error in gsub(finish, start, ..., fixed = TRUE): zero-length pattern</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tomoakin/RPostgreSQL'>RPostgreSQL</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='va'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>dbConnect</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span><span class='op'>(</span><span class='op'>)</span>, dbname <span class='op'>=</span> <span class='st'>"postgis"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span><span class='op'>(</span><span class='st'>"conn"</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='st'>"try-error"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>

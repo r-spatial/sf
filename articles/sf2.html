@@ -137,17 +137,17 @@
 <p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.7.1, GDAL 2.2.3, PROJ 4.9.3</span>
+<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">fname</span>
-<span class="co">## [1] "/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp"</span>
+<span class="co">## [1] "/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp"</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span></code></pre></div>
+<span class="co">## geographic CRS: NAD27</span></code></pre></div>
 <p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html">setwd()</a></code> and use file name without path.</p>
 <p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
@@ -188,12 +188,12 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## geometry type:  MULTIPOLYGON</span>
 <span class="co">## dimension:      XY</span>
 <span class="co">## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## CRS:            4267</span></code></pre></div>
+<span class="co">## geographic CRS: NAD27</span></code></pre></div>
 </div>
 <div id="using-st_write" class="section level3">
 <h3 class="hasAnchor">
@@ -491,7 +491,7 @@
 <span class="co">## [1,]         5         5</span>
 <span class="co">## [2,]         6         9</span>
 <span class="co">## Coordinate Reference System (CRS) arguments: +proj=longlat +datum=WGS84</span>
-<span class="co">## +no_defs +ellps=WGS84 +towgs84=0,0,0</span></code></pre></div>
+<span class="co">## +no_defs</span></code></pre></div>
 </div>
 </div>
   </div>

@@ -195,12 +195,12 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmp2SjTPn/temp_libpath4e9923771c66/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmpycyx3N/temp_libpathe91e528e8832/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            4267</div><div class='input'><span class='co'># convert to SpatialPolygonsDataFrame</span>
+#&gt; geographic CRS: NAD27</div><div class='input'><span class='co'># convert to SpatialPolygonsDataFrame</span>
 <span class='va'>spdf</span> <span class='op'>&lt;-</span> <span class='fu'>as_Spatial</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span>
 <span class='co'># identical to</span>
 <span class='va'>spdf</span> <span class='op'>&lt;-</span> <span class='fu'>as</span><span class='op'>(</span><span class='va'>nc</span>, <span class='st'>"Spatial"</span><span class='op'>)</span>
@@ -6396,16 +6396,14 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 #&gt; y  33.88199  36.58965
 #&gt; 
 #&gt; Slot "proj4string":
-#&gt; CRS arguments:
-#&gt;  +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66
-#&gt; +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat 
+#&gt; CRS arguments: +proj=longlat +datum=NAD27 +no_defs 
 #&gt; </div><div class='input'><span class='co'># back to sf</span>
 <span class='fu'>as</span><span class='op'>(</span><span class='va'>spdf</span>, <span class='st'>"sf"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; CRS:            +proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat
+#&gt; geographic CRS: NAD27 (with axis order normalized for visualization)
 #&gt; First 10 features:
 #&gt;     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
 #&gt; 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
